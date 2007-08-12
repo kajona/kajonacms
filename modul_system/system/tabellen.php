@@ -1,0 +1,388 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007 by Kajona, www.kajona.de                                                                   *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*                                                                                                       *
+*   tabellen.php                                                                                        *
+*   Tables of the system / database schema                                                              *
+*   This file is for documentational purposes only                                                      *
+*                                                                                                       *
+*-------------------------------------------------------------------------------------------------------*
+*   $Id$                                                 *
+*********************************************************************************************************
+
+
+V 2.1.x:
+
+//--_system----------------------------------------------------------------------------------------------
+	system_id				= Table primary key and heart of the system
+	system_prev_id			= Key to connect to the level above
+	system_module_nr		= Number of the corresponding module
+	system_sort				= Sorting the records
+	system_lm_user			= User who last modified the record
+	system_lm_time			= Time the record was last edited
+	system_lock_id			= ID of user currently locking the record
+	system_lock_time        = After which time locked records should be unlocked automatically?
+	system_status			= Status of the record: 0 = false, 1 = true
+	system_comment			= Short comment for humans to identify the record
+
+//--_system_date-----------------------------------------------------------------------------------------
+	system_date_id			= Table primary key & reference to systemId
+	system_date_start		= Startdate of the record
+	system_date_end			= Enddate of the record
+	system_date_special		= Specialdate of the record, e.g. archive-starts
+
+//--_system_right----------------------------------------------------------------------------------------
+	right_id				= Table primary key & reference to systemId
+	right_comment			= Short comment for humans to identify the record
+	right_inherit			= Flag to set the inheritance of rights to on / off -> 0 || 1
+   	right_view	 			= Groups allowing to view the record
+   	right_edit 				= Groups allowing to edit the record
+   	right_delete			= Groups allowing to delete the record
+   	right_right				= Groups allowing to modifiy the rights of an record
+   	right_right1 			= for special purposes, groupwise
+   	right_right2 			= for special purposes, groupwise
+   	right_right3  			= for special purposes, groupwise
+   	right_right4    		= for special purposes, groupwise
+   	right_right5  			= for special purposes, groupwise
+
+//--_system_module---------------------------------------------------------------------------------------
+	module_id				= Table primary key & reference to systemId
+	module_nr				= modules' unique nr
+	module_name				= name of the module
+	module_filenameportal	= filename of portal-class
+	module_xmlfilenameportal= filename of xml portal-class
+	module_classnameportal	= classname of portal-class
+	module_filenameadmin	= filename of admin-class
+	module_xmlfilenameadmin	= filename of xml admin-class
+	module_classnameadmin	= classname of admin-class
+	module_version			= Installed version
+	module_date				= Installation-date
+	module_navigation		= Module appears in the admin-list: 0 = false, 1 = true
+
+//--_system_config---------------------------------------------------------------------------------------
+    system_config_id        = table primary key
+    system_config_name      = name of the constant
+    system_config_value     = value of the constant
+    system_config_type      = type of the constant 0 = bool, 1 = int, 2 = string, 3 = seite
+    system_config_module    = module id constant belonging to
+
+//--_user------------------------------------------------------------------------------------------------
+	user_id         		= Table primary key
+   	user_username			= username
+   	user_pass				= passwort
+   	user_email              = email address
+   	user_forename           = forename
+   	user_name				= surname
+   	user_street           	= street
+   	user_postal             = postal code
+   	user_city            	= city
+   	user_tel               	= phone number
+   	user_mobile             = mobile number
+   	user_date				= date of birth
+   	user_logins             = number of logins
+   	user_lastlogin  		= date of last login
+	user_active				= active / inactive
+	user_admin				= allowed for admin?
+	user_portal				= allowed for portal?
+	user_admin_skin			= Skin for the admin-area
+	user_admin_language     = Language selected by the user for the admin
+
+//--_user_group------------------------------------------------------------------------------------------
+	group_id				= table primary key, ID of the group
+	group_name				= Groupname, prim key
+
+//--_user_group_members----------------------------------------------------------------------------------
+	group_member_group_id	= ID of the corresponding group
+	group_member_user_id	= ID of the corresponding user
+
+//--_user_log--------------------------------------------------------------------------------------------
+	user_log_id				= table primary key
+	user_log_userid			= userid
+	user_log_date			= time of login
+	user_log_status			= successfull login?
+	user_log_ip				= ip of remote host
+
+//--_page------------------------------------------------------------------------------------------------
+	page_id					= Table primary key & reference to systemId
+	page_name				= Pagetitle
+
+//--_page_properties-------------------------------------------------------------------------------------
+    pageproperties_id                 = table primary key
+	pageproperties_browsername        = name to display in browserwindow
+	pageproperties_keywords			 = Keywords to describe this site
+	pageproperties_description		 = Description of the page
+	pageproperties_template			 = Template used fpr this site
+	pageproperties_seostring          = String to add for SEO
+	pageproperties_language           = language, the properties belong to
+
+
+//--_element---------------------------------------------------------------------------------------------
+	element_id				= Table primary key
+	element_name			= Name of the element
+	element_class_portal	= class handling the element in portal
+	element_class_admin		= class handling the element in admin
+	element_repeat			= bit: element repeatable?
+	element_cachetime       = Time until the elemente reloads a cached site. -1 = infinite
+
+//--_page_element----------------------------------------------------------------------------------------
+	page_element_id							= Table primary key
+	page_element_placeholder_placeholder	= Complete name of the placeholder
+	page_element_placeholder_name 			= Name of the placeholder
+	page_element_placeholder_element		= Element of the placeholder
+	page_element_placeholder_title			= Internal title of the placeholder
+	page_element_placeholder_language       = Language of the placholders' content
+
+//--_page_cache------------------------------------------------------------------------------------------
+    page_cache_id           = Table primary key
+    page_cache_name         = Name of the cached site
+    page_cache_checksum	    = Checksum to identify the page
+    page_cache_createtime   = Time of creation
+    page_cache_releasetime  = Time the page gets invalid
+    page_cache_userid       = ID of the user the page belonges to
+    page_cache_content      = The page itself
+
+//--_navigation------------------------------------------------------------------------------------------
+	navigation_id			= Table primary key
+	navigation_name			= Title of the navigationpoint
+	navigation_page_e		= External page for the link
+	navigation_page_i		= Internal page for the link
+	navigation_target		= Target of the link
+	navigation_image		= Image to use for this navigation point
+
+//--_filemananger----------------------------------------------------------------------------------------
+	filemanager_id                 = Table primary key
+	filemanager_path               = Path to repo
+	filemanager_name               = Title of repo
+	filemanager_upload_filter      = Files allowedfor upload
+	filemanager_view_filter        = Files allowed to view
+
+//--_guestbook_book--------------------------------------------------------------------------------------
+	guestbook_id			= table primary key
+	guestbook_title		    = title of the guestbook
+	guestbook_moderated		= moderated guestbook, 0 = false, 1 = true
+
+//--_guestbook_post--------------------------------------------------------------------------------------
+	guestbook_post_id		= table primary key
+	guestbook_post_name		= name of the poster
+	guestbook_post_email	= mail address of poster
+	guestbook_post_page		= website of poster
+	guestbook_post_text		= text of posting
+	guestbook_post_date		= timestamp of posting
+
+//--_stats_data------------------------------------------------------------------------------------------
+	stats_id				= table primary key
+	stats_ip				= visitors ip
+	stats_hostname          = ip resolved to hostname
+	stats_date				= timestamp
+	stats_page				= requested page
+	stats_language          = pages' language
+	stats_referer			= visitors referrer
+	stats_browser			= visitors browser-signature
+	stats_session           = Session-ID of the request
+
+//--_news_category---------------------------------------------------------------------------------------
+	news_cat_id	       		= table primary key
+	news_cat_title			= name of the category
+
+//--_news------------------------------------------------------------------------------------------------
+	//Systemfields
+	news_id					= table primary key
+	news_title				= name of the news
+	news_hits               = Field to count the number of views
+
+	//content
+	news_intro			    = short introduction
+	news_text	     		= text of the news
+	news_image				= image of the news
+
+//--_news_feed-------------------------------------------------------------------------------------------
+    news_feed_id            = table primary key
+    news_feed_title         = Title of feed
+    news_feed_link          = Link to the main page
+    news_feed_desc          = Description of the feed / channel
+    news_feed_page          = Page to create the detailview
+    news_feed_cat           = Id of the cat to display
+    news_feed_hits          = Hits on the link
+
+//--_news_member-----------------------------------------------------------------------------------------
+	newsmem_id				= Tabellen primaray key
+	newsmem_news			= ID of the News
+	newsmem_category		= ID of the category
+
+//_gallery_gallery---------------------------------------------------------------------------------------
+	gallery_id				= table primary key
+	gallery_path			= startpath of the gallery
+	gallery_title           = title of the gallery
+
+//_gallery_pic-------------------------------------------------------------------------------------------
+	pic_id					= Tabellen primary key
+	pic_name				= title of the image
+	pic_filename       		= filename of picture
+	pic_description    		= description of pic
+	pic_subtitle            = subtitle of the image
+	pic_size       			= filesize of pic
+	pic_hits				= views of pic
+	pic_type				= 0 => pic, 1 => folder
+
+//--_downloads_file-------------------------------------------------------------------------------------------
+	downloads_id			= table primary key
+	downloads_name			= title of the file
+	downloads_filename	    = name in filesystem
+	downloads_description	= description of file
+	downloads_size		    = filesize of file
+	downloads_hits			= number of donwloads
+	downloads_type			= 0 => file, 1 => folder
+	downloads_max_kb		= Max Speed to download, 0 = unlimited
+
+//--_downloads_log---------------------------------------------------------------------------------------
+	downloads_log_id		= table primary key
+	downloads_log_date		= timestamp
+	downloads_log_file		= system-id of the requested file
+	downloads_log_user		= userid of the user
+	downloads_log_ip		= IP of the user
+
+//--_downloads_archive------------------------------------------------------------------------------------
+	archive_id		        = table primary key
+	archive_path	        = root of the archive
+	archive_title           = title of the archive
+
+
+//--_languages-------------------------------------------------------------------------------------------
+    language_id             = table primary key
+    language_name           = Name of the language
+    language_default        = Bool-flag if language is default language
+
+
+//--_faqs_category---------------------------------------------------------------------------------------
+	faqs_cat_id	       		= table primary key
+	faqs_cat_title			= name of the category
+
+//--_faqs------------------------------------------------------------------------------------------------
+	//Systemfields
+	faqs_id					= table primary key
+	faqs_question			= the question
+	faqs_answer             = the answer
+
+//--_faqs_member-----------------------------------------------------------------------------------------
+	faqsmem_id				= table primary key
+	faqsmem_faqs			= ID of the faq
+	faqsmem_category		= ID of the category
+
+//--_search_log------------------------------------------------------------------------------------------
+    search_log_id           = table primary key
+    serach_log_date         = timestamp
+    search_log_query        = searchterm
+
+//--_postacomment----------------------------------------------------------------------------------------
+	postacomment_id			= table primary key
+	postacomment_date		= date the post was sent
+	postacomment_page		= page the post is assignes to
+	postacomment_language	= language of the page the post is assigned to
+	postacomment_systemid	= systemid the post is assigned to
+	postacomment_username	= username of the posts' poster
+	postacomment_title		= title of the post
+	postacomment_comment	= message of the post
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!! ALL ELEMENT TABLES NEED THE ROW content_id AS primary key !!!!!!!!!!!!!!!!!!!!
+
+//--_element_absatz--------------------------------------------------------------------------------------
+	content_id				= table primary key
+	absatz_titel			= Title of the pargraph
+	absatz_inhalt			= Text of the paragraph
+	absatz_link				= Link
+	absatz_bild				= Picture
+
+//--_element_bild----------------------------------------------------------------------------------------
+	content_id				= table primary key
+	bild_titel				= Titel des Bildes
+	bild_link				= Link zum Bild
+	bild_bild				= Bild
+
+//--_element_navigation----------------------------------------------------------------------------------
+	content_id		       	= table primary key
+	navigation_id           = ID of the selected navigation
+	navigation_template		= template used to print the navigation
+	navigation_css			= CSS-class used for this navigation
+	navigation_mode         = mode of the navigation: tree || sitemap
+
+//--_element_guestbook-----------------------------------------------------------------------------------
+	content_id				= table primary key
+	guestbook_id			= Id of the wanted guestbook
+	guestbook_template		= template to print the posts
+	guestbook_amount		= number of posts per page
+
+//--_element_formular------------------------------------------------------------------------------------
+	content_id				= table primary key
+	formular_class			= formular-class
+	formular_email			= recipient address
+	formular_success		= text shown in case of success
+	formular_error			= text shown in case of an error
+
+//--_element_search--------------------------------------------------------------------------------------
+	content_id				= table primary key
+	search_template			= template to print the search
+	search_amount		    = Number of hits per page
+	search_page             = (optional) page to load the list
+
+//--_element_news----------------------------------------------------------------------------------------
+	content_id				= table primary key
+	news_category		    = category to display
+	news_view		       	= list or detail-view
+	news_mode	     		= archive or regular view
+	news_detailspage		= page to load details
+	news_template			= template
+
+
+//--_element_gallery-------------------------------------------------------------------------------------
+	content_id				= table primary key
+	gallery_id			    = selected gallery
+	gallery_mode            = 0 = standard, 1 = random
+	gallery_template		= template to layout
+	gallery_maxh_p			= height preview
+	gallery_maxh_d			= height detail
+	gallery_maxw_p			= width preview
+	gallery_maxw_d			= width detail
+	gallery_nrow	      	= pictures per row
+	gallery_text			= text to embedd
+	gallery_text_x			= X Pos text
+	gallery_text_y			= Y Pos text
+
+//--_element_downloads-----------------------------------------------------------------------------------
+	content_id				= table primary key
+	download_id				= assigend archive
+	download_template		= template to layout
+
+//--_element_portallogin---------------------------------------------------------------------------------
+	content_id				= table primary key
+    portallogin_template    = Template to load
+    portallogin_error       = Page to load in case of error
+    portallogin_success     = Page to load in case of success
+    portallogin_logout_success = Page to load after logout
+
+//--_element_tellafriend---------------------------------------------------------------------------------
+	content_id				= table primary key
+    tellafriend_template    = Template to load
+    tellafriend_error       = Page to load in case of errors
+    tellafriend_success     = Page to load in case of success
+
+//--_element_faqs----------------------------------------------------------------------------------------
+	content_id				= table primary key
+	faqs_category		    = category to display
+	faqs_template			= template
+
+//--_element_universal-----------------------------------------------------------------------------------
+    content_id              = table primary key
+    char1                   = character field 1
+    char2                   = character field 2
+    char3                   = character field 3
+    int1                    = int field 1
+    int2                    = int field 2
+    int3                    = int field 3
+    text                    = text field
+
+*/
+?>

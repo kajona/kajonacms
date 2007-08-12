@@ -1,0 +1,349 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007 by Kajona, www.kajona.de                                                                   *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+* 																										*
+* 	class_modul_user_user.php                                                                           *
+* 	Model for the user                                                                                  *
+*																										*
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$                                   *
+********************************************************************************************************/
+
+include_once(_systempath_."/class_model.php");
+include_once(_systempath_."/interface_model.php");
+
+/**
+ * Model for a user
+ * Note: Users do not use the classical system-id relation, so no entry in the system-table
+ *
+ * @package modul_system
+ */
+class class_modul_user_user extends class_model implements interface_model  {
+
+    private $strUsername = "";
+    private $strPass = "";
+    private $strEmail = "";
+    private $strForename = "";
+    private $strName = "";
+    private $strStreet = "";
+    private $strPostal = "";
+    private $strCity = "";
+    private $strTel = "";
+    private $strMobile = "";
+    private $strDate = "";
+    private $intLogins = 0;
+    private $intLastlogin = 0;
+    private $intActive = 0;
+    private $intAdmin = 0;
+    private $intPortal = 0;
+    private $strAdminskin = "";
+    private $strAdminlanguage = "";
+
+
+    /**
+     * Constructor to create a valid object
+     *
+     * @param string $strSystemid (use "" on new objets)
+     * @param bool $bitLoadPassword
+     */
+    public function __construct($strSystemid = "", $bitLoadPassword = false) {
+        $arrModul["name"] 				= "modul_user";
+		$arrModul["author"] 			= "sidler@mulchprod.de";
+		$arrModul["moduleId"] 			= _user_modul_id_;
+		$arrModul["table"]       		= _dbprefix_."user";
+		$arrModul["modul"]				= "user";
+
+		//base class
+		parent::__construct($arrModul, $strSystemid);
+
+		//init current object
+		if($strSystemid != "")
+		    $this->initObject($bitLoadPassword);
+    }
+
+    /**
+     * Initialises the current object, if a systemid was given
+     *
+     * @param bool $bitPassword Should the password be loaded, too?
+     */
+    public function initObject($bitPassword = false) {
+        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString($this->arrModule["table"])." WHERE user_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+        $arrRow = $this->objDB->getRow($strQuery);
+
+        if(count($arrRow) > 0) {
+            $this->setStrUsername($arrRow["user_username"]);
+            // Excluded due to update-problems
+            if($bitPassword)
+                $this->setStrPass($arrRow["user_pass"]);
+
+
+            $this->setStrEmail($arrRow["user_email"]);
+            $this->setStrForename($arrRow["user_forename"]);
+            $this->setStrName($arrRow["user_name"]);
+            $this->setStrStreet($arrRow["user_street"]);
+            $this->setStrPostal($arrRow["user_postal"]);
+            $this->setStrCity($arrRow["user_city"]);
+            $this->setStrTel($arrRow["user_tel"]);
+            $this->setStrMobile($arrRow["user_mobile"]);
+            $this->setStrDate($arrRow["user_date"]);
+            $this->setIntLogins($arrRow["user_logins"]);
+            $this->setIntLastLogin($arrRow["user_lastlogin"]);
+            $this->setIntActive($arrRow["user_active"]);
+            $this->setIntAdmin($arrRow["user_admin"]);
+            $this->setIntPortal($arrRow["user_portal"]);
+            $this->setStrAdminskin($arrRow["user_admin_skin"]);
+            $this->setStrAdminlanguage($arrRow["user_admin_language"]);
+            $this->setSystemid($arrRow["user_id"]);
+        }
+    }
+
+    /**
+     * Updates the current object to the database
+     * <b>ATTENTION</b> If you don't want to update the password, set it to "" before!
+     *
+     * @return bool
+     */
+    public function updateObjectToDb($bitHtmlEntities = true) {
+           $strQuery = "UPDATE "._dbprefix_."user SET
+					user_username='".$this->objDB->dbsafeString($this->getStrUsername(), $bitHtmlEntities)."',
+					".($this->getStrPass() != "" ? "user_pass='".$this->objSession->encryptPassword($this->getStrPass(), $bitHtmlEntities)."'," : "")."
+					user_email='".$this->objDB->dbsafeString($this->getStrEmail(), $bitHtmlEntities)."',
+					user_forename='".$this->objDB->dbsafeString($this->getStrForename(), $bitHtmlEntities)."',
+					user_name='".$this->objDB->dbsafeString($this->getStrName(), $bitHtmlEntities)."',
+					user_street='".$this->objDB->dbsafeString($this->getStrStreet(), $bitHtmlEntities)."',
+					user_postal='".$this->objDB->dbsafeString($this->getStrPostal(), $bitHtmlEntities)."',
+					user_city='".$this->objDB->dbsafeString($this->getStrCity(), $bitHtmlEntities)."',
+					user_tel='".$this->objDB->dbsafeString($this->getStrTel(), $bitHtmlEntities)."',
+					user_mobile='".$this->objDB->dbsafeString($this->getStrMobile(), $bitHtmlEntities)."',
+					user_date='".$this->objDB->dbsafeString($this->getStrDate(), $bitHtmlEntities)."',
+					user_active=".(int)$this->getIntActive().",
+					user_admin=".(int)$this->getIntAdmin().",
+					user_portal=".(int)$this->getIntPortal().",
+					user_admin_skin='".$this->objDB->dbsafeString($this->getStrAdminskin(), $bitHtmlEntities)."',
+					user_admin_language='".$this->objDB->dbsafeString($this->getStrAdminlanguage(), $bitHtmlEntities)."',
+					user_logins = ".(int)$this->getIntLogins().",
+					user_lastlogin = ".(int)$this->getIntLastLogin()."
+					WHERE user_id = '".$this->objDB->dbsafeString($this->getSystemid(), $bitHtmlEntities)."'";
+
+           class_logger::getInstance()->addLogRow("updated user ".$this->getStrUsername(), class_logger::$levelInfo);
+
+           return $this->objDB->_query($strQuery);
+    }
+
+    /**
+     * Saves the current object as a new user to the database
+     *
+     * @return bool
+     */
+    public function saveObjectToDb() {
+        //Start TX
+		$this->objDB->transactionBegin();
+		//Get a new Userid
+		$strUserid = generateSystemid();
+		$this->setSystemid($strUserid);
+		$strQuery = "INSERT INTO "._dbprefix_."user
+					SET user_id = '".$this->objDB->dbsafeString($strUserid)."',
+					user_username='".$this->objDB->dbsafeString($this->getStrUsername())."',
+					user_pass='".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
+					user_email='".$this->objDB->dbsafeString($this->getStrEmail())."',
+					user_forename='".$this->objDB->dbsafeString($this->getStrForename())."',
+					user_name='".$this->objDB->dbsafeString($this->getStrName())."',
+					user_street='".$this->objDB->dbsafeString($this->getStrStreet())."',
+					user_postal='".$this->objDB->dbsafeString($this->getStrPostal())."',
+					user_city='".$this->objDB->dbsafeString($this->getStrCity())."',
+					user_tel='".$this->objDB->dbsafeString($this->getStrTel())."',
+					user_mobile='".$this->objDB->dbsafeString($this->getStrMobile())."',
+					user_date='".$this->objDB->dbsafeString($this->getStrDate())."',
+					user_active=".(int)$this->getIntActive().",
+					user_admin=".(int)$this->getIntAdmin().",
+					user_portal=".(int)$this->getIntPortal().",
+					user_admin_skin='".$this->objDB->dbsafeString($this->getStrAdminskin())."',
+					user_admin_language='".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
+					user_logins = 0,
+					user_lastlogin = 0";
+
+		class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
+
+		if($this->objDB->_query($strQuery)) {
+			$this->objDB->transactionCommit();
+			return true;
+		}
+		else {
+			$this->objDB->transactionRollback();
+			return false;
+		}
+    }
+
+    /**
+     * Fetches all available users an returns them in an array
+     *
+     * @return mixed
+     */
+    public static function getAllUsers() {
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user ORDER BY user_username ASC";
+        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
+
+		return $arrReturn;
+    }
+
+    /** Fetches all available active users with the given username an returns them in an array
+     *
+     * @param string $strName
+     * @return mixed
+     */
+    public static function getAllUsersByName($strName) {
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user
+                      WHERE user_username='".class_carrier::getInstance()->getObjDB()->dbsafeString($strName)."'
+					    AND user_active = 1";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"], true);
+
+		return $arrReturn;
+    }
+
+    /**
+     * Deletes a user from the systems
+     *
+     * @param string $strUserid
+     * @return bool
+     */
+    public static function deleteUser($strUserid) {
+        class_logger::getInstance()->addLogRow("deleted user with id ".$strUserid, class_logger::$levelInfo);
+        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strUserid)."'";
+        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+    }
+
+// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+
+    public function getStrUsername() {
+        return $this->strUsername;
+    }
+    public function getStrPass() {
+        return $this->strPass;
+    }
+    public function getStrEmail() {
+        return $this->strEmail;
+    }
+    public function getStrForename() {
+        return $this->strForename;
+    }
+    public function getStrName() {
+        return $this->strName;
+    }
+    public function getStrStreet() {
+        return $this->strStreet;
+    }
+    public function getStrPostal() {
+        return $this->strPostal;
+    }
+    public function getStrCity() {
+        return $this->strCity;
+    }
+    public function getStrTel() {
+        return $this->strTel;
+    }
+    public function getStrMobile() {
+        return $this->strMobile;
+    }
+    public function getStrDate() {
+        return $this->strDate;
+    }
+    public function getIntLogins() {
+        return $this->intLogins;
+    }
+    public function getIntLastLogin() {
+        return $this->intLastlogin;
+    }
+    public function getIntActive() {
+        return $this->intActive;
+    }
+    public function getIntAdmin() {
+        return $this->intAdmin;
+    }
+    public function getIntPortal() {
+        return $this->intPortal;
+    }
+    public function getStrAdminskin() {
+        return $this->strAdminskin;
+    }
+    public function getStrAdminlanguage() {
+        return $this->strAdminlanguage;
+    }
+
+
+    public function setStrUsername($strUsername) {
+        $this->strUsername = $strUsername;
+    }
+    public function setStrPass($strPass) {
+        $this->strPass = $strPass;
+    }
+    public function setStrEmail($strEmail) {
+        $this->strEmail = $strEmail;
+    }
+    public function setStrForename($strForename) {
+        $this->strForename = $strForename;
+    }
+    public function setStrName($strName) {
+        $this->strName = $strName;
+    }
+    public function setStrStreet($strStreet) {
+        $this->strStreet = $strStreet;
+    }
+    public function setStrPostal($strPostal) {
+        $this->strPostal = $strPostal;
+    }
+    public function setStrCity($strCity) {
+        $this->strCity = $strCity;
+    }
+    public function setStrTel($strTel) {
+        $this->strTel = $strTel;
+    }
+    public function setStrMobile($strMobile) {
+        $this->strMobile = $strMobile;
+    }
+    public function setStrDate($strDate) {
+        $this->strDate = $strDate;
+    }
+    public function setIntLogins($intLogins) {
+        if($intLogins == "")
+            $intLogins = 0;
+        $this->intLogins = $intLogins;
+    }
+    public function setIntLastLogin($intLastLogin) {
+        if($intLastLogin == "")
+            $intLastLogin = 0;
+        $this->intLastlogin = $intLastLogin;
+    }
+    public function setIntActive($intActive) {
+        if($intActive == "")
+            $intActive = 0;
+        $this->intActive = $intActive;
+    }
+    public function setIntAdmin($intAdmin) {
+        if($intAdmin == "")
+            $intAdmin = 0;
+        $this->intAdmin = $intAdmin;
+    }
+    public function setIntPortal($intPortal) {
+        if($intPortal == "")
+            $intPortal = 0;
+        $this->intPortal = $intPortal;
+    }
+    public function setStrAdminskin($strAdminskin) {
+        $this->strAdminskin = $strAdminskin;
+    }
+    public function setStrAdminlanguage($strAdminlanguage) {
+        $this->strAdminlanguage = $strAdminlanguage;
+    }
+
+}
+?>

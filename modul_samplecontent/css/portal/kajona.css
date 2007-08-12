@@ -1,0 +1,783 @@
+
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007 by Kajona, www.kajona.de                                                                   *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*																										*
+* 	kajona.php																							*
+* 	Samplecontent CSS-Styles																			*
+*																										*
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: kajona.php 1615 2007-07-09 23:10:59Z sidler $									                *
+********************************************************************************************************/
+
+
+
+/*
+	NOTE:------------------------------------------------------------------------------------------------
+	  |   Use _webpath_ as constant containing the current webpath.
+      |
+	  |   This is just a sample file! Modify it to your needs.
+	  |   If you don't use _webpath_ or the function IEOther("IE", "Other"), we
+	  |   recommend to use a static css-file like this one.
+	  |	  IF you need IEOther()) or _webpath_ use a php-file using the following pattern 
+	  |   instead of a static css-file:
+	  |   <?php
+	  |		require_once("../../system/functions.php");
+      |		header("Content-type: text/css");
+	  |		echo " all your css stuff goes here ";
+	  |	  ?>	
+	  \--------------------------------------------------------------------------------------------------
+*/
+
+
+
+/* C A L E N D A R  O V E R L A Y */
+#calendarOverlay {
+	position: absolute;
+	width: 200px;
+	z-index: 1000;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	background: #FFFFFF;
+	background-image: url('../../portal/pics/kajona/back.gif');
+	background-repeat: repeat-x;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+	text-align: center;
+	height: 100%;
+}
+
+a, a:link, a:visited {
+     text-decoration: underline;
+     color: #737373;
+}
+
+a:hover, a:active, a:focus {
+     text-decoration: underline;
+     color: #000000;
+}
+
+img {
+	border: none;
+}
+
+td {
+	text-align: left;
+	vertical-align: top;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+}
+
+/* L O G I N P A G E */
+#loginBox {
+	margin: 0 auto 0 auto;
+	padding-top: 50px;
+	width: 373px;
+	text-align: left;
+}
+
+#loginBox .logo {
+	background: url('../../portal/pics/kajona/login_logo.gif') top left no-repeat;
+	width: 178px;
+	height: 51px;
+}
+
+#loginBox .topRight {
+	background: url('../../portal/pics/kajona/login_box_topright.gif') top right no-repeat;
+	margin: 0 0 0 48px;
+	padding: 0;
+	width: 325px;
+}
+
+#loginBox .topLeft {
+	background: url('../../portal/pics/kajona/login_box_topleft.gif') top left no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#loginBox .bottomRight {
+	background: url('../../portal/pics/kajona/login_box_bottomright.gif') bottom right no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#loginBox .bottomLeft {
+	background: url('../../portal/pics/kajona/login_box_bottomleft.gif') bottom left no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#loginBox .content {
+	margin: 0;
+	padding: 55px 20px 20px 20px;
+}
+
+#loginBox .content label {
+	display: block;
+	float: left;
+	width: 60px;
+	height: 20px;
+	padding-top: 2px;
+}
+
+#loginBox .content br {
+	clear: both;
+}
+
+#loginBox .content p {
+	margin: 0;
+	padding: 0;
+}
+
+#loginBox .content p.error {
+	color: #ff0000;
+	margin-top: 10px;
+}
+
+#loginBox .copyright {
+	text-align: right;
+	color: #c2c2c2;
+	margin-right: 10px;
+}
+
+#loginBox .copyright a, #loginBox .copyright a:link {
+	 text-align: right;
+     text-decoration: none;
+     color: #c2c2c2;
+}
+
+#loginBox .copyright a:visited {
+     text-decoration: none;
+     color: #c2c2c2;
+}
+
+#loginBox .copyright a:hover, #loginBox .copyright a:active, #loginBox .copyright a:focus {
+     text-decoration: none;
+     color: #737373;
+}
+
+
+/* L O G O */
+
+#logo {
+	background-image: url('../../portal/pics/kajona/logo.gif');
+	background-position: bottom;
+	background-repeat: no-repeat;
+	width: 326px;
+	height: 74px;
+}
+
+#logoSpacer {
+	height: 50px;
+}
+
+#poweredBy {
+	background-color: #ffffff;
+	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-repeat: repeat-y;
+	background-position: right;
+	text-align: center;
+}
+
+#naviContainer {
+    background-color: #ffffff;
+	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-repeat: repeat-y;
+	background-position: right;
+    background-color: #ffffff;
+    border: none;
+}
+
+/* S T A T U S B O X */
+
+#statusBoxHeader {
+	background-image: url('../../portal/pics/kajona/statusbox_header.gif');
+	width: 150px;
+	height: 5px;
+}
+
+#statusBox {
+	background-image: url('../../portal/pics/kajona/statusbox_back.gif');
+	width: 150px;
+	height: 75px;
+}
+
+#statusBox .boxContent {
+	margin-left: 10px;
+}
+
+
+/* F O O T E R */
+#footerLeftCorner {
+	background-image: url('../../portal/pics/kajona/footer_left.gif');
+	background-repeat: no-repeat;
+	background-position: right;
+	height: 18px;
+}
+
+#footerLeft {
+	background-image: url('../../portal/pics/kajona/footer_left_back.gif');
+	background-repeat: no-repeat;
+	width: 150px;
+	height: 18px;
+	text-align: center;
+}
+
+#footerRight {
+	background-color: #ffffff;
+	background-image: url('../../portal/pics/kajona/footer_middle_back.gif');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	height: 18px;
+}
+
+#footerRight div {
+	width: 600px;
+	height: 1px;
+}
+
+#footerRightCorner {
+	background-image: url('../../portal/pics/kajona/footer_right.gif');
+	background-repeat: no-repeat;
+	background-position: left;
+	width: 8px;
+	height: 18px;
+}
+
+/* C O P Y R I G H T */
+
+#copyright {
+	text-align: right;
+	color: #c2c2c2;
+	padding-right: 10px;
+}
+
+#copyright a, #copyright a:link, #copyright a:visited {
+	 text-align: right;
+     text-decoration: none;
+     color: #c2c2c2;
+}
+
+#copyright a:hover, #copyright a:active, #copyright a:focus {
+     text-decoration: none;
+     color: #737373;
+}
+
+
+/* C O N T E N T */
+#contentTopRightTop {
+	background-image: url('../../portal/pics/kajona/content_top_right_top.gif');
+	background-repeat: no-repeat;
+	background-position: bottom;
+	width: 8px;
+	height: 24px;
+}
+
+#contentTopRight {
+	background-color: #ffffff;
+	background-image: url('../../portal/pics/kajona/content_right.gif');
+	background-repeat: repeat-y;
+	background-position: right;
+	width: 8px;
+}
+
+#contentTopRight div {
+	background-image: url('../../portal/pics/kajona/content_top_right.gif');
+	background-repeat: no-repeat;
+	width: 8px;
+	height: 5px;
+}
+
+#content {
+	background-color: #ffffff;
+	background-repeat: no-repeat;
+	background-position: top right;
+	padding-left: 30px;
+	padding-right: 20px;
+	text-align: left;
+	width: 650px;
+}
+
+
+/* H E A D L I N E S */
+h1 {
+	text-align: right;
+	color: #c2c2c2;
+	font-size: 22px;
+	font-weight: normal;
+	margin-top: 13px;
+	padding-right: 55px;
+}
+
+h2 {
+    font-size: 17px;
+}
+
+h3 {
+    font-size: 13px;
+}
+
+
+/* F O R M S */
+#content form label {
+	display: block;
+	float: left;
+	width: 30%;
+	height: 20px;
+	padding: 2px 0 0 0;
+}
+
+#content form br {
+	clear: both;
+}
+
+.inputText, .inputTextShort, .inputDate {
+	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-repeat: repeat-x;
+	padding: 0;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 180px;
+	height: 16px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+}
+
+.inputTextShort {
+	width: 120px;
+}
+
+.inputDate {
+	width: 30px;
+}
+
+.inputTextarea {
+	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-repeat: repeat-x;
+	padding: 0;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 180px;
+	height: 50px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+}
+
+.inputTextareaLarge {
+	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-repeat: repeat-x;
+	padding: 0;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 400px;
+	height:250px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+}
+
+.inputDropdown {
+	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-repeat: repeat-x;
+	padding: 0;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 182px;
+	height: 16px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+}
+
+.inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
+	color: #000000;
+}
+
+.button, .buttonShort {
+	background-image: url('../../portal/pics/kajona/forms_button_back.gif');
+	background-repeat: repeat-x;
+	padding: 0 0 3px 15px;
+	margin: 8px 0 0 0;
+	display: block;
+	float: left;
+	width: 182px;
+	height: 18px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #737373;
+	text-align: left;
+	cursor: pointer;
+}
+
+.buttonShort {
+	width: 122px;
+}
+
+.button:hover, .buttonShort:hover, .button:focus, .buttonShort:focus {
+	color: #000000;
+}
+
+
+/* N A V I G A T I O N */
+
+#portalNavi {
+	background-image: url('../../portal/pics/kajona/modulenavi_back.gif');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	height: 24px;
+	text-align: right;
+	vertical-align: bottom;
+	padding: 0 0 4px 0;
+}
+
+#portalNavi ul {
+    list-style-type: none;
+    display: inline;
+}
+
+#portalNavi li {
+    display: inline;
+}
+
+#portalNavi a, #portalNavi a:link, #portalNavi a:visited {
+     text-decoration: none;
+}
+
+#portalNavi a:hover, #portalNavi a:active, #portalNavi a:focus {
+     text-decoration: none;
+}
+
+#moduleActionNaviThree {
+	background-image: url('../../portal/pics/kajona/navi_three_back.gif');
+	background-repeat: repeat-y;
+	background-position: right;
+	width: 176px;
+}
+
+#moduleActionNaviThree div {
+	background-image: url('../../portal/pics/kajona/navi_three.gif');
+	background-repeat: no-repeat;
+	width: 176px;
+	height: 264px;
+}
+
+#mainNavi {
+	background-color: #ffffff;
+	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-repeat: repeat-y;
+	background-position: right;
+}
+
+#mainNavi ul {
+	margin: 10px 0 10px 0;
+	padding: 0px;
+	list-style-type: none;
+}
+
+#mainNavi ul li {
+}
+
+#mainNavi ul li a {
+	background-image: url('../../portal/pics/kajona/moduleactionnavi_disabled_back.gif');
+	text-decoration: none;
+	display: block;
+	width: 150px;
+	height: 17px;
+	text-indent: 10px;
+}
+
+#mainNavi ul li a, #mainNavi ul li a:link, #mainNavi ul li a:visited {
+     text-decoration: none;
+}
+
+#mainNavi ul li a:hover, #mainNavi ul li a:active, #mainNavi ul li a:focus {
+     text-decoration: none;
+}
+
+#mainNavi ul li a.navi-1-active, #mainNavi ul li a.navi-2-active, #mainNavi ul li a.navi-3-active {
+	color: #000000;
+}
+
+#mainNavi ul.level2 {
+	margin: 0px 0 0px 0;
+	padding: 0px;
+	list-style-type: none;
+	font-size: 10px;
+}
+
+#mainNavi ul.level2 li {
+}
+
+#mainNavi ul.level2 li a {
+	background-image: url('../../portal/pics/kajona/moduleactionnavi_disabled_back_level2.gif');
+	text-decoration: none;
+	display: block;
+	width: 150px;
+	height: 17px;
+	text-indent: 20px;
+}
+
+#sitemapNavi {
+    padding-left: 0px;
+    line-height: 20px;
+    width: 80%;
+}
+
+#sitemapNavi ul.sitemap-1 {
+    list-style-type: none;
+    padding-left: 0px;
+
+}
+
+#sitemapNavi ul.sitemap-1 li {
+    border: 1px solid #E8E8E8;
+    border-bottom: none;
+    background-color: #E8E8E8;
+    margin-left: 0px;
+    text-indent: 5px;
+}
+
+#sitemapNavi ul.sitemap-1 li:hover {
+    background-color: #C4F3C4;
+}
+
+#sitemapNavi ul.sitemap-2 {
+    list-style-type: none;
+    margin-bottom: 10px;
+    border: 1px solid #E8E8E8;
+    padding: 0px;
+    margin-left: 0px;
+}
+
+#sitemapNavi ul.sitemap-2 li {
+    border: none;
+    background-color: #ffffff;
+    text-indent: 40px;
+    margin-left: 0px;
+}
+
+#sitemapNavi ul.sitemap-2 li:hover {
+    border: none;
+    background-color: #E8E8E8;
+}
+
+#sitemapNavi ul.sitemap-3 {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#sitemapNavi ul.sitemap-3 li {
+    text-indent: 80px;
+    margin-left: 0px;
+}
+
+#sitemapNavi ul.sitemap-3 li:hover {
+    background-color: #E8E8E8;
+}
+
+#sitemapNavi ul.sitemap-4 {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+}
+
+#sitemapNavi ul.sitemap-4 li{
+    text-indent: 120px;
+    margin-left: 0px;
+}
+
+#sitemapNavi ul.sitemap-4 li:hover {
+    background-color: #E8E8E8;
+}
+
+
+
+/* N E W S */
+.newsList {
+    border: 1px solid #ffffff;
+}
+.newsListHeader {
+    background-color: #f0f0f0;
+}
+.newsListTitle {
+    float: left;
+    background-image: url('../../portal/pics/kajona/news_button.gif');
+    background-repeat: no-repeat;
+    text-indent: 15px;
+}
+.newsListTitle h3{
+    font-size: 11px;
+    font-weight: normal;
+    margin: 0px;
+}
+.newsListMore {
+    float: right;
+}
+.newsListTeaser {
+    background-color: #3bec3b;
+}
+.newsListTeaser div {
+    margin-left: 10px;
+    background-color: #ffffff;
+    padding-left: 5px;
+}
+.newsDetail, .newsDetail p {
+}
+.newsDetail h3 {
+    font-weight: bold;
+}
+.newsTeaser {
+    margin-top: 20px;
+    font-style: italic;
+
+}
+.newsDetail img {
+    margin: 5px;
+}
+
+/* C O M M O N */
+.cleaner {
+    clear: both;
+}
+
+/* L I S T S */
+.portalList {
+	width: 80%;
+}
+
+.portalListRow1 {
+	height: 22px;
+	background-color: #f0f0f0;
+}
+
+.portalListRow1:hover, .portalListRow1:hover td {
+	background-color: #c4f3c4;
+	color: #000000;
+}
+
+.portalListRow1 td{
+	vertical-align: middle;
+}
+
+.portalListRow1 .image {
+	padding-left: 2px;
+	padding-right: 3px;
+}
+
+.portalListRow1 .title {
+	width: 100%;
+    padding-left: 2px;
+	padding-right: 5px;
+}
+
+.portalListRow1 .center {
+	white-space: nowrap;
+	padding-right: 5px;
+}
+
+.portalListRow1 .actions {
+	white-space: nowrap;
+	vertical-align: middle;
+    text-align: right;
+}
+
+.portalListRow2 {
+    height: 22px;
+}
+.portalListRow2 .description {
+	vertical-align: middle;
+    text-align: left;
+    padding-left: 2px;
+}
+
+.portalListRow1 .actions img {
+	margin-right: 2px;
+}
+
+/* S E A R C H */
+.searchHighlight {
+	background-color: #ffff00;
+}
+
+/* F A Q S */
+.faqCategory {
+    padding-bottom: 20px;
+}
+
+.faqCategory .faqCategoryTitle {
+    font-style: italic;
+}
+
+.faqCategory .faqCategoryTitle h3 {
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 2px;
+}
+
+.faqFaq {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 2px;
+}
+
+.faqFaq .faqFaqAnswer {
+    margin: 2px;
+}
+
+.faqFaq .faqFaqQuestion {
+    background-color: #f0f0f0;
+
+}
+
+/* P O S T A C O M M E N T */
+
+#postaCommentForm {
+	display: hidden;
+	margin-bottom: 5px;	
+}
+
+.pacComment {
+	border: 1px solid #cccccc;
+	margin-bottom: 5px;	
+}
+
+.pacHeader {
+	background-color: #f0f0f0;
+}
+
+.pacName {
+	float: left;
+	padding: 1px 1px 0 1px;
+}
+
+.pacDate {
+	float: right;
+	padding: 1px 1px 0 1px;
+}
+
+.pacSubject {
+	clear:both;
+	padding: 0 1px 1px 1px;	
+}
+
+.pacText {
+	padding: 1px;	
+}

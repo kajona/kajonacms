@@ -1,0 +1,71 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007 by Kajona, www.kajona.de                                                                   *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+* 																										*
+* 	texte_languages_en.php																				*
+* 	Admin language file for module_languages															*
+*																										*
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$                                       *
+********************************************************************************************************/
+
+// --- Module texts -------------------------------------------------------------------------------------
+$text["modul_titel"]				= "Languages";
+$text["modul_rechte"]               = "Module permissions";
+$text["modul_liste"]                = "List";
+$text["modul_anlegen"]              = "Create language";
+$text["modul_assign"]               = "Assign contents";
+$text["assign_hint"]                = "Using this action, all page elements and page properties not yet assigned to a language (and so not visible in the admin-backend)
+                                       can be assigned to the current default-language. If there are records already exisiting for the target language, the respective,
+                                       not yet assigned record is skipped.";
+
+$text["assign_work"]                = "Assign now";
+$text["assign_pagesprop_true"]      = "Assigning page properties was successfull";
+$text["assign_pagesprop_false"]     = "An error occured while assigning page properties";
+$text["assign_pagesel_true"]        = "Assigning the page elements was successfull";
+$text["assign_pagesel_false"]       = "An error occured while assigning page elements";
+$text["assign_no_default"]          = "Please define a default-language first!";
+
+$text["liste_leer"]                 = "No languages available";
+
+$text["fehler_recht"]               = "Not enough permissions to perform this action";
+
+$text["lang_aktiv"]                 = "active";
+$text["lang_inaktiv"]               = "incative";
+
+$text["language_bearbeiten"]        = "Edit language";
+$text["language_loeschen"]          = "Delete language";
+$text["language_status"]            = "Change status (is ";
+$text["language_rechte"]            = "Change permissions";
+
+$text["lang_save"]                  = "Save";
+$text["language_name"]              = "Language:";
+
+$text["default"]                    = "Yes";
+$text["nondefault"]                 = "No";
+$text["language_default"]           = "Default-language:";
+
+$text["lang_de"]                    = "German";
+$text["lang_en"]                    = "English";
+$text["lang_fr"]                    = "French";
+$text["lang_ru"]                    = "Russian";
+
+$text["language_existing"]          = "The language already exists";
+
+$text["delete_question"]            = ": Really delete this language?<br />";
+$text["delete_link"]                = "Delete";
+
+
+// --- Quickhelp texts ----------------------------------------------------------------------------------
+
+$text["quickhelp_list"]             = "All languages created can be found in this list.
+                                       To change the systems default-language, the basic data of the future default-language have to be
+                                       changed.";
+$text["quickhelp_newLanguage"]      = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />
+                                       To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$text["quickhelp_editLanguage"]     = $text["quickhelp_newLanguage"];
+
+?>

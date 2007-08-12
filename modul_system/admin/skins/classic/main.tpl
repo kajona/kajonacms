@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Kajona Admin, www.kajona.de</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+%%head%%
+<link href="_skinwebpath_/css.php" rel="stylesheet" type="text/css">
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+<script language="Javascript" type="text/javascript">
+	window.onload=function(){enableTooltips("showTooltip")};
+</script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/lang/calendar-de.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar-setup.js"></script>
+</head>
+
+<body>
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#FFFFFF">
+    <td colspan="3" >
+		<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-image: url(_skinwebpath_/header.png); background-repeat: no-repeat;">
+	 	 <tr>
+			<td><img src="_skinwebpath_/trans.gif" width="18" height="80"></td>
+	     </tr>
+	   </table>
+
+	</td>
+  </tr>
+  <tr>
+    <td width="210" valign="top" class="text2_padding" style="padding-left: 2px;"><img src="_skinwebpath_/trans.gif" width="210" height="10">%%login%%<br />%%mainnavi%%
+    <br /><img src="_skinwebpath_/trans.gif" width="210" height="10"></td>
+    <td align="center" valign="top" class="text1"><img src="_skinwebpath_/trans.gif" width="400" height="10"><br />
+        <table width="95%"  border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="modulhead" align="left">%%moduletitle%%</td>
+  </tr>
+    <tr>
+       <td class="modullinie"></td>
+  </tr>
+  <tr>
+    <td class="modulaktionen" align="left">%%modulenavi%%</td>
+  </tr>
+  <tr>
+    <td></td>
+  </tr>
+  <tr>
+    <td><table width="100%" class="listenframe">
+        <tr>
+        <td align="right">%%quickhelp%%</td>
+      </tr>
+        <tr>
+          <td class="text1" align="left"><br />%%content%%</td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+        <br />
+    <img src="_skinwebpath_/trans.gif" width="400" height="10"> </td>
+    <td width="10" align="center" valign="top"><img src="_skinwebpath_/trans.gif" width="10" height="75"></td>
+  </tr>
+   <tr bgcolor="#FFFFFF">
+    <td colspan="4" height="5"></td>
+  </tr>
+  <tr bgcolor="#000099">
+    <td colspan="4" height="1"></td>
+  </tr>
+  <tr bgcolor="#FFFFFF">
+    <td colspan="4"><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/index.php?c=7" target="_blank">Support</a></div></td>
+  </tr>
+</table>
+</body>
+</html>
