@@ -259,14 +259,14 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strQuery = "UPDATE "._dbprefix_."element_absatz
                             SET absatz_titel = 'Herzlichen Glückwunsch!',
                                 absatz_inhalt ='Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
-                                                Für weitere Informationen und Support besuchen Sie unsere Webseite: www.kajona.de'
+                                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."element_absatz
                                 SET absatz_titel = 'Congratulations!',
                                     absatz_inhalt ='This installation of Kajona was successful. Have fun using Kajona!<br />
-                                                     For further information, support or proposals, please visit our website: www.kajona.de'
+                                                     For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
