@@ -39,7 +39,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 
 		//Base class
 		parent::__construct($arrModul);
-		var_dump($this->getParam("pe"));
 	}
 
 	/**
@@ -55,14 +54,14 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    try {
     		if($strAction == "list")
     			$strReturn = $this->actionList();
-    			
+
     		if($strAction == "editPost")
     			$strReturn = $this->actionEditPost();
     		if($strAction == "savePost") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSavePost();
     			    if($strReturn == "") {
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list").($this->getParam("pe") == "1" ? "&peClose=".$this->getParam("pe") : "");
+                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list".($this->getParam("pe") == "1" ? "&peClose=".$this->getParam("pe") : ""));
     			    }
     		    }
     		    else {
@@ -108,7 +107,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "savePost") {
-            
+
             $arrReturn["postacomment_username"] = "string";
             $arrReturn["postacomment_comment"] = "string";
         }
@@ -129,25 +128,25 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strReturn = "";
             $intI = 0;
-            
+
             //a small filter would be nice...
             $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=list");
-            
+
             $arrPages = array();
             $arrPages[""] = "---";
             foreach(class_modul_pages_page::getAllPages() as $objOnePage)
                 $arrPages[$objOnePage->getSystemid()] = $objOnePage->getStrName();
-                
+
             $strReturn .= $this->objToolkit->formInputDropdown("filterId", $arrPages, $this->getText("postacomment_filter"), $this->getParam("filterId"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("postacomment_dofilter"));
             $strReturn .= $this->objToolkit->formClose();
-            
+
             $strReturn .= $this->objToolkit->divider();
-            
+
     		//Load all posts
             include_once(_systempath_."/class_array_section_iterator.php");
 		    $objPost = new class_modul_postacomment_post();
-		    
+
     		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator($objPost->getNumberOfPostsAvailable($this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -177,7 +176,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     			 		$strStatus = $this->getText("status_inactive");
     			 		$strStatusImage = "icon_disabled.gif";
     			 	}
-    			 	
+
     			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
     			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
                     $strAction = "";
@@ -189,9 +188,9 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "postStatus", "&systemid=".$objOnePost->getSystemid(), "", $strStatus, $strStatusImage));
     		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), "icon_key.gif"));
-    		   		    
+
     		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
-    		   		
+
     		   		//create the content of the details rows
     		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrUsername(), 40)." | ".uniStrTrim($objOnePost->getStrTitle(), 60), "", "", $intI);
     		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrComment(), 100), "", "", $intI++);
@@ -216,7 +215,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 		return $strReturn;
 	}
 
-	
+
 	/**
 	 * Shows the warning before deleting a post or deletes a post
 	 *
@@ -246,7 +245,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Shows a form to edit the current post
 	 *
@@ -254,13 +253,12 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 */
 	private function actionEditPost() {
 	    $strReturn = "";
-	    var_dump($this->getParam("pe"));
 	    //Rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_postacomment_post($this->getSystemid());
-            
+
             $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=savePost".($this->getParam("pe") == "1" ? "&amp;pe=".$this->getParam("pe") : ""));
-            
+
             if(count($this->getValidationErrors()) == 0) {
                 $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $objPost->getStrUsername() );
                 $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $objPost->getStrTitle() );
@@ -274,10 +272,10 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             }
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             if($this->getParam("pe") == "1")
-                $strReturn .= $this->objToolkit->formInputHidden("pe", "dddddd");
+                $strReturn .= $this->objToolkit->formInputHidden("pe", "1");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
-			
+
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -285,14 +283,14 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Saves a modified post to the db
 	 *
 	 * @return string, "" in case of success
 	 */
 	private function actionSavePost() {
-	    var_dump($this->getParam("pe"));
+
 	    $strReturn = "";
 	    if($this->objRights->rightEdit($this->getSystemid())) {
         	$objPost = new class_modul_postacomment_post($this->getSystemid());
@@ -301,12 +299,12 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         	$objPost->setStrTitle($this->getParam("postacomment_title"));
         	if(!$objPost->updateObjectToDb())
         	    throw new class_exception("Error saving post to db", class_exception::$level_ERROR);
-        	$objPost->setEditDate();            
+        	$objPost->setEditDate();
 	    }
 		else
 			$strReturn .= $this->getText("fehler_recht");
-			
-		return $strReturn;	
+
+		return $strReturn;
 	}
 
 
