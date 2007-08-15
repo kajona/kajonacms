@@ -85,7 +85,7 @@ function reloadCaptcha(imageID) {
 }
 
 //--- LITTLE HELPERS ------------------------------------------------------------------------------------
-function addCss(file){
+function addCss(file) {
 	var l=document.createElement("link");
 	l.setAttribute("type", "text/css");
 	l.setAttribute("rel", "stylesheet");
@@ -102,3 +102,28 @@ function toggle(id) {
         document.getElementById(id).style.display='none';
     }
 }
+
+function kajonaAjaxHelper() {
+	var bitAjaxBaseLoaded;
+
+	this.addJavascriptFile = function (file) {
+		var l=document.createElement("script");
+		l.setAttribute("type", "text/javascript");
+		l.setAttribute("language", "javascript");
+		l.setAttribute("src", file);
+		document.getElementsByTagName("head")[0].appendChild(l);
+	}
+	
+	this.loadAjaxBase = function () {
+		if(this.bitAjaxBaseLoaded == null) {
+			this.addJavascriptFile('portal/scripts/yui/yahoo/yahoo.js');
+			this.addJavascriptFile('portal/scripts/yui/event/event.js');
+			this.addJavascriptFile('portal/scripts/yui/connection/connection.js');
+			this.bitAjaxBaseLoaded = true;
+		}
+		else {
+			alert("already loaded");
+		}
+	}
+}
+kajonaAjaxHelper = new kajonaAjaxHelper();

@@ -39,6 +39,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 
 		//Base class
 		parent::__construct($arrModul);
+		var_dump($this->getParam("pe"));
 	}
 
 	/**
@@ -60,8 +61,9 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		if($strAction == "savePost") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSavePost();
-    			    if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"));
+    			    if($strReturn == "") {
+                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list").($this->getParam("pe") == "1" ? "&peClose=".$this->getParam("pe") : "");
+    			    }
     		    }
     		    else {
    		            $strReturn = $this->actionEditPost();
@@ -252,11 +254,12 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 */
 	private function actionEditPost() {
 	    $strReturn = "";
+	    var_dump($this->getParam("pe"));
 	    //Rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_postacomment_post($this->getSystemid());
             
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=savePost");
+            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=savePost".($this->getParam("pe") == "1" ? "&amp;pe=".$this->getParam("pe") : ""));
             
             if(count($this->getValidationErrors()) == 0) {
                 $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $objPost->getStrUsername() );
@@ -271,7 +274,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             }
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             if($this->getParam("pe") == "1")
-                $strReturn .= $this->objToolkit->formInputHidden("pe", "1");
+                $strReturn .= $this->objToolkit->formInputHidden("pe", "dddddd");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
 			
@@ -289,6 +292,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 * @return string, "" in case of success
 	 */
 	private function actionSavePost() {
+	    var_dump($this->getParam("pe"));
 	    $strReturn = "";
 	    if($this->objRights->rightEdit($this->getSystemid())) {
         	$objPost = new class_modul_postacomment_post($this->getSystemid());
