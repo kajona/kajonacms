@@ -9,7 +9,7 @@
 * 	Admin-class of the postacomment element																*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_element_postacomment.php 1487 2007-04-10 19:34:56Z sidler $                              *
+*	$Id$                              *
 ********************************************************************************************************/
 //Base-Class
 include_once(_adminpath_."/class_element_admin.php");

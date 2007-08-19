@@ -8,7 +8,7 @@
 * 	class_modul_postacomment_portal_xml.php  															*
 * 	portalclass of the postacomment, xml stuff															*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_modul_postacomment_portal_xml.php 1487 2007-04-10 19:34:56Z sidler $						*
+*	$Id$						*
 ********************************************************************************************************/
 
 //Include der Mutter-Klasse

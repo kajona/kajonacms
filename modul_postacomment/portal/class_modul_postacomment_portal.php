@@ -8,7 +8,7 @@
 * 	class_modul_postacomment_portal.php																	*
 * 	portalclass of the postacomment																		*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_modul_postacomment_portal.php 1487 2007-04-10 19:34:56Z sidler $							*
+*	$Id$							*
 ********************************************************************************************************/
 
 //Include der Mutter-Klasse
