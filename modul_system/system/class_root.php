@@ -531,7 +531,6 @@ abstract class class_root {
 	 * @return void
 	 */
 	public function setPosition($strIdToShift, $strDirection = "upwards") {
-		$strReturn = "";
 		//Load all elements on the same level, so at first get the prev id
 		$strPrevID = $this->getPrevId($strIdToShift);
 		$strQuery = "SELECT *
@@ -582,6 +581,103 @@ abstract class class_root {
 			}
 		}
 	}
+	
+	/**
+	 * Sets the position of systemid using a given value.
+	 *
+	 * @param string $strIdToSet
+	 * @param int $intPosition
+	 */
+	public function setAbsolutePosition($strIdToSet, $intPosition) {
+		$strReturn = "";
+		
+		//to have a better array-like handling, decrease pos by one.
+		//remind to add at the end when saving to db 
+		$intPosition--;
+		
+		//Load all elements on the same level, so at first get the prev id
+		$strPrevID = $this->getPrevId($strIdToSet);
+		$strQuery = "SELECT *
+						 FROM "._dbprefix_."system
+						 WHERE system_prev_id='".$this->objDB->dbsafeString($strPrevID)."'
+						 ORDER BY system_sort ASC, system_comment ASC";
+
+		//No caching here to allow mutliple shiftings per request
+		$arrElements = $this->objDB->getArray($strQuery, false);
+		
+		//more than one record to set?
+		if(count($arrElements) <= 1)
+			return;
+			
+		//sensless new pos?
+		if($intPosition < 0 || $intPosition >= count($arrElements))	
+		    return;
+			
+		//create inital sorts?
+		if($arrElements[0]["system_sort"] == 0) {
+		    $this->setPosition($arrElements[0]["system_id"], "downwards");
+		    $this->setPosition($arrElements[0]["system_id"], "upwards");
+		    $this->objDB->flushQueryCache();
+		}
+		
+		//searching the current element to get to know, if element should be
+		//sorted up- or downwards
+		$bitSortDown = false;
+		$bitSortUp = false;
+		$intHitKey = 0;
+		for($intI = 0; $intI < count($arrElements); $intI++) {
+			if($arrElements[$intI]["system_id"] == $strIdToSet) {
+				if($intI < $intPosition)
+					$bitSortDown = true;
+				if($intI >= $intPosition+1)	
+					$bitSortUp = true;
+					
+				$intHitKey = $intI;	
+			}
+		}
+		
+		//sort up?
+		if($bitSortUp) {
+			//move the record to be shifted to the wanted pos
+			$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=".((int)$intPosition+1)."
+								WHERE system_id='".dbsafeString($strIdToSet)."'";
+			$this->objDB->_query($strQuery);
+			
+			//start at the pos to be reached a move all one down
+			for($intI = 0; $intI < count($arrElements); $intI++) {
+				//move all other one pos down, except the last in the interval:
+				//already moved...
+				if($intI >= $intPosition && $intI < $intHitKey) {
+					$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=system_sort+1
+								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
+					$this->objDB->_query($strQuery);
+				}
+			}
+		}
+		
+		if($bitSortDown) {
+			//move the record to be shifted to the wanted pos
+			$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=".((int)$intPosition+1)."
+								WHERE system_id='".dbsafeString($strIdToSet)."'";
+			$this->objDB->_query($strQuery);
+			
+			//start at the pos to be reached a move all one down
+			for($intI = 0; $intI < count($arrElements); $intI++) {
+				//move all other one pos down, except the last in the interval:
+				//already moved...
+				if($intI > $intHitKey && $intI <= $intPosition) {
+					$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=system_sort-1
+								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
+					$this->objDB->_query($strQuery);
+				}
+			}
+		}
+	}
+	
 
 	/**
 	 * Return a complete SystemRecord

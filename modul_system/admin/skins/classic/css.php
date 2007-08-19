@@ -74,6 +74,13 @@ img {
 	width: 180px;
 }
 
+.adminList {
+	padding: 0px;
+	margin: 0px;
+	bullet: none;
+	list-style: none;
+}
+
 .adminListRow1 {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;

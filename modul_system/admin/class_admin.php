@@ -381,6 +381,17 @@ abstract class class_admin {
 	}
 
 	/**
+	 * Sets the position of systemid using a given value.
+	 *
+	 * @param string $strIdToSet
+	 * @param int $intPosition
+	 */
+	public function setAbsolutePosition($strIdToSet, $intPosition) {
+		return $this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
+	}
+	
+	
+	/**
 	 * Return a complete SystemRecord
 	 *
 	 * @param string $strSystemid

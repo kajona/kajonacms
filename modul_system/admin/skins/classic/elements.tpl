@@ -22,83 +22,115 @@ templates!
 
 Optional Element to start a list
 <list_header>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<ul class="adminList">
 </list_header>
 
 Optional Element to close a list
 <list_footer>
-</table>
+</ul>
 </list_footer>
 
 Row in a list containing 2 Elements, NO leading picture
 Part 1 - every 2nd entry
 <list_row_2_1>
-<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
-	<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="79%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
+		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="79%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2_2>
-<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
-	<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="79%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
+		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="79%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2_2>
 
 Row in a list containing 2 Elements and a leading picture
 Part 1 - every 2nd entry
 <list_row_2image_1>
-<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
-	<td>%%image%%</td>
-	<td width="50%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="50%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
+		<td>%%image%%</td>
+		<td width="50%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="50%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2image_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2image_2>
-<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
-	<td>%%image%%</td>
-	<td width="50%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="50%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
+		<td>%%image%%</td>
+		<td width="50%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="50%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2image_2>
 
 Row in a list containing 2 Elements, NO leading picture, 2nd variation
 Used rather for info-lists than for edit-lists, e.g. the systeminfos
 Part 1 - every 2nd entry
 <list_row_2_1_b>
-<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
-	<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="79%" align="left">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
+		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="79%" align="left">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2_1_b>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2_2_b>
-<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
-	<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="79%" align="left">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
+		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="79%" align="left">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_2_2_b>
 
 Row in a list containing 3 Elements AND A LEADING IMAGE
 Part 1 - every 2nd entry
 <list_row_3_1>
-<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
-	<td>%%image%%</td>
-	<td width="41%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="40%" align="left">%%center%%</td>
-    <td width="19%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
+		<td>%%image%%</td>
+		<td width="41%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="40%" align="left">%%center%%</td>
+	    <td width="19%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li> 
 </list_row_3_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_3_2>
-<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
-	<td>%%image%%</td>
-	<td width="41%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
-    <td width="40%" align="left">%%center%%</td>
-    <td width="19%" align="right">%%actions%%</td>
- </tr>
+<li>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
+		<td>%%image%%</td>
+		<td width="41%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
+	    <td width="40%" align="left">%%center%%</td>
+	    <td width="19%" align="right">%%actions%%</td>
+	 </tr>
+ </table>
+</li>
 </list_row_3_2>
 
 Divider to split up a page in logical sections
