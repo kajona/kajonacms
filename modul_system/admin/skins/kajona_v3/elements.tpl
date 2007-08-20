@@ -8,7 +8,7 @@
 * 	Elements-File for the kajona-v3 skin																*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$															*
+*	$Id$											*
 ********************************************************************************************************/
 
 This skin-file is used for the Kajona v3 admin skin and can be used as a sample file to create
@@ -25,10 +25,19 @@ Optional Element to start a list
 <table cellpadding="0" cellspacing="0" class="adminList">
 </list_header>
 
+<dragable_list_header>
+<table cellpadding="0" cellspacing="0" class="adminList">
+</dragable_list_header>
+
 Optional Element to close a list
 <list_footer>
 </table>
 </list_footer>
+
+<dragable_list_footer>
+</table>
+</dragable_list_footer>
+
 
 Row in a list containing 2 Elements, NO leading picture
 Part 1 - every 2nd entry

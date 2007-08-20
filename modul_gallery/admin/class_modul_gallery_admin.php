@@ -481,7 +481,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			//Load all files
 			$arrFiles = class_modul_gallery_pic::loadFilesDB($this->getSystemid());
 
-			$strReturn .= $this->objToolkit->listHeader();
+			$strListID = generateSystemid();
+			$strReturn .= $this->objToolkit->dragableListHeader($strListID);
 			//maybe, a link one level up is neede
 			$strTemp = $this->getPrevId($this->getSystemid());
 			$intI = 0;
@@ -546,7 +547,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			else
 				$strReturn .= $this->objToolkit->listRow2($this->getText("liste_bilder_leer"), "", $intI++);
 
-			$strReturn .= $this->objToolkit->listFooter();
+			$strReturn .= $this->objToolkit->dragableListFooter($strListID);
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

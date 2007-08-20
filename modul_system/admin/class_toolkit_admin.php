@@ -487,6 +487,17 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
 		return $this->objTemplate->fillTemplate(array(), $strTemplateID);
 	}
+	
+    /**
+	 * Returns the htmlcode needed to start a proper list, supporting drag n drop to
+	 * reorder list-items
+	 *
+	 * @return string
+	 */
+	public function dragableListHeader($strListId) {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
+		return $this->objTemplate->fillTemplate(array("listid" => $strListId), $strTemplateID);
+	}
 
 	/**
 	 * Returns the code to finish the opened list
@@ -496,6 +507,16 @@ class class_toolkit_admin extends class_toolkit {
 	public function listFooter() {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_footer");
 		return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+	}
+	
+    /**
+	 * Returns the code to finish the opened list
+	 *
+	 * @return string
+	 */
+	public function dragableListFooter($strListId) {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_footer");
+		return $this->objTemplate->fillTemplate(array("listid" => $strListId), $strTemplateID);
 	}
 
 	/**
@@ -514,6 +535,7 @@ class class_toolkit_admin extends class_toolkit {
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_2".$strType);
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
+		$arrTemplate["listitemid"] = generateSystemid();
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -535,6 +557,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["image"] = $strImage;
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
+		$arrTemplate["listitemid"] = generateSystemid();
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -557,6 +580,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["center"] = $strCenter;
 		$arrTemplate["actions"] = $strActions;
+		$arrTemplate["listitemid"] = generateSystemid();
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 

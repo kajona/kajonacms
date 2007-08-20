@@ -8,7 +8,7 @@
 * 	Elements-File for the kajona-classic skin															*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$											*
+*	$Id$											    *
 ********************************************************************************************************/
 
 This skin-file is used for the Kajona admin classic skin and can be used as a sample file to create
@@ -25,15 +25,30 @@ Optional Element to start a list
 <ul class="adminList">
 </list_header>
 
+<dragable_list_header>
+<script type="text/javascript">
+	kajonaAjaxHelper.loadDragNDropBase();
+</script>
+<ul class="adminList" id="%%listid%%">
+</dragable_list_header>
+
 Optional Element to close a list
 <list_footer>
 </ul>
 </list_footer>
 
+<dragable_list_footer>
+</ul>
+<script type="text/javascript">
+var listId = "%%listid%%";
+</script>
+<script type="text/javascript" src="_skinwebpath_/dragdrophelper.js"></script>
+</dragable_list_footer>
+
 Row in a list containing 2 Elements, NO leading picture
 Part 1 - every 2nd entry
 <list_row_2_1>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
 		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
@@ -42,9 +57,9 @@ Part 1 - every 2nd entry
  </table>
 </li> 
 </list_row_2_1>
-Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
+Part 2 - every 2nd entry. Useful if different css-classes are used every single row
 <list_row_2_2>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
 		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
@@ -57,7 +72,7 @@ Part 2 - every 2nd entry. Usefull if different css-classes are used every single
 Row in a list containing 2 Elements and a leading picture
 Part 1 - every 2nd entry
 <list_row_2image_1>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
 		<td>%%image%%</td>
@@ -69,7 +84,7 @@ Part 1 - every 2nd entry
 </list_row_2image_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2image_2>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
 		<td>%%image%%</td>
@@ -84,7 +99,7 @@ Row in a list containing 2 Elements, NO leading picture, 2nd variation
 Used rather for info-lists than for edit-lists, e.g. the systeminfos
 Part 1 - every 2nd entry
 <list_row_2_1_b>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
 		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
@@ -95,7 +110,7 @@ Part 1 - every 2nd entry
 </list_row_2_1_b>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2_2_b>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
 		<td width="21%"><img src="_skinwebpath_/trans.gif" width="3" height="5">%%title%%</td>
@@ -108,7 +123,7 @@ Part 2 - every 2nd entry. Usefull if different css-classes are used every single
 Row in a list containing 3 Elements AND A LEADING IMAGE
 Part 1 - every 2nd entry
 <list_row_3_1>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow1" onmouseover="this.className='adminListRow1Over'" onmouseout="this.className='adminListRow1'">
 		<td>%%image%%</td>
@@ -121,7 +136,7 @@ Part 1 - every 2nd entry
 </list_row_3_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_3_2>
-<li>
+<li id="%%listitemid%%">
  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr class="adminListRow2" onmouseover="this.className='adminListRow2Over'" onmouseout="this.className='adminListRow2'">
 		<td>%%image%%</td>

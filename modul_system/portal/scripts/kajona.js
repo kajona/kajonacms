@@ -103,27 +103,23 @@ function toggle(id) {
     }
 }
 
-function kajonaAjaxHelper() {
-	var bitAjaxBaseLoaded;
+var kajonaAjaxHelper = {
+	bitAjaxBaseLoaded : null,
 
-	this.addJavascriptFile = function (file) {
+	addJavascriptFile : function (file) {
 		var l=document.createElement("script");
 		l.setAttribute("type", "text/javascript");
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
 		document.getElementsByTagName("head")[0].appendChild(l);
-	}
+	},
 	
-	this.loadAjaxBase = function () {
+	loadAjaxBase : function () {
 		if(this.bitAjaxBaseLoaded == null) {
 			this.addJavascriptFile('portal/scripts/yui/yahoo/yahoo.js');
 			this.addJavascriptFile('portal/scripts/yui/event/event.js');
 			this.addJavascriptFile('portal/scripts/yui/connection/connection.js');
 			this.bitAjaxBaseLoaded = true;
 		}
-		else {
-			alert("already loaded");
-		}
-	}
+	},
 }
-kajonaAjaxHelper = new kajonaAjaxHelper();

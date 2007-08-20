@@ -103,6 +103,7 @@ img {
 	border: 1px solid black;
 	background-color: #cfcfcf;
 	height: 15px;
+	cursor: move;
 }
 
 .adminListRow2 {
@@ -127,6 +128,7 @@ img {
 	border: none;
 	background-color: #cfcfcf;
 	height: 15px;
+	cursor: move;
 }
 
 .listActions {
