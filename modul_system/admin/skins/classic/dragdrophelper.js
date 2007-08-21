@@ -26,6 +26,7 @@
 		   //load items in list
 		   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 		   for(i=0;i<arrayListItems.length;i=i+1) {
+		   		Dom.setStyle(arrayListItems[i], "cursor", "move");
 		 		new kajona.dragndroplist.DDList(arrayListItems[i].id);
 		   }
     	},
@@ -33,6 +34,7 @@
 	       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 		   for(i=0;i<arrayListItems.length;i=i+1) {
 		 		if(arrayListItems[i].id == idOfRow) {
+					
 		 			return i+1;
 		 		}  
 		   }

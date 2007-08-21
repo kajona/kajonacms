@@ -27,20 +27,20 @@ checkMousePosition = function (e) {
 	}
 }
 
-function objMover() {
-	this.mousePressed=0;
-	this.objPosX=0;
-	this.objPosY=0;
-	this.diffX=0;
-	this.diffY=0;
+var objMover = {
+	mousePressed : 0,
+	objPosX:0,
+	objPosY:0,
+	diffX:0,
+	diffY:0,
 
-	this.setMousePressed = function (obj){
+	setMousePressed : function (obj){
 	    objToMove=obj;
 	    objDiffX=currentMouseXPos - objToMove.offsetLeft;
 		objDiffY=currentMouseYPos - objToMove.offsetTop;
-	}
+	},
 
-	this.unsetMousePressed = function (){
+	unsetMousePressed : function (){
         objToMove=null;
 	}
 }
@@ -176,6 +176,6 @@ var kajonaAdminAjax = {
 	
 	setAbsolutePosition : function (systemIdToMove, intNewPos) {
 		//alert('move '+systemIdToMove+' to '+intNewPos);
-	},
+	}
 	
 }

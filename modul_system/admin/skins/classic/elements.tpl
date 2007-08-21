@@ -786,12 +786,11 @@ The language switch sourrounds the buttons
         }
 
         //Register mover for the help-layer
-        var objMoverI = new objMover();
 		document.onmousemove = checkMousePosition;
-		document.onmouseup=objMoverI.unsetMousePressed;
+		document.onmouseup = objMover.unsetMousePressed;
     </script>
     <div id="quickhelp" style=" width: 400px; display: none; background: #ffffff; border: 1px solid #000099;"
-           onmousedown="objMoverI.setMousePressed(this)" onmouseup="objMoverI.unsetMousePressed()" >
+           onmousedown="objMover.setMousePressed(this)" onmouseup="objMover.unsetMousePressed()" >
         <div style="height: 20px;"><table width="100%"><tr><td align="left" class="modulheadkurz">%%title%%</td></tr></table></div>
         <div style="height: 20px;"><table width="100%"><tr><td align="right"><a href="#" onclick="hideQuickHelp();">[X]</a></td></tr></table></div>
         <div style="/* height: 220px; */padding: 5px;  text-align: left; margin-right: 20px;">%%text%%</div>
