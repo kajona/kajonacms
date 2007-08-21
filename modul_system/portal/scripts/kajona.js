@@ -121,5 +121,5 @@ var kajonaAjaxHelper = {
 			this.addJavascriptFile('portal/scripts/yui/connection/connection.js');
 			this.bitAjaxBaseLoaded = true;
 		}
-	},
+	}
 }
