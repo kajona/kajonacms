@@ -40,7 +40,9 @@ Optional Element to close a list
 <dragable_list_footer>
 </ul>
 <script type="text/javascript">
-var listId = "%%listid%%";
+if(arrayListIds == null)
+	var arrayListIds = new Array("%%listid%%");
+//var listId = "%%listid%%";
 </script>
 <script type="text/javascript" src="_skinwebpath_/dragdrophelper.js"></script>
 </dragable_list_footer>

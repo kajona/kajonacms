@@ -6,9 +6,13 @@
 /**
  * 
  * This file includes a script to be used to make lists drag n dropable.
- * At the moment, only one list per page is supported.
+ * The array arrayListIds is parsed, all li-elements are added
  * See the YUI dragdrop-list-example for further infos
  */
+
+if(arrayListIds == null)
+	var arrayListIds = new Array();
+
 
 (function() {
 	var Dom = YAHOO.util.Dom;
@@ -21,22 +25,40 @@
 	//Basic functions
 	kajona.dragndroplist.DDApp = {
     	init: function() {
-           //basic dnd list				
-           new YAHOO.util.DDTarget(listId);
-		   //load items in list
-		   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
-		   for(i=0;i<arrayListItems.length;i=i+1) {
-		   		Dom.setStyle(arrayListItems[i], "cursor", "move");
-		 		new kajona.dragndroplist.DDList(arrayListItems[i].id);
+		   //iterate over all lists available
+		   for(l=0; l<arrayListIds.length; l++) {
+		   	   listId = arrayListIds[l];
+	           //basic dnd list				
+	           new YAHOO.util.DDTarget(listId);
+			   //load items in list
+			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
+			   for(i=0;i<arrayListItems.length;i=i+1) {
+			   		Dom.setStyle(arrayListItems[i], "cursor", "move");
+		 			new kajona.dragndroplist.DDList(arrayListItems[i].id);
+		   	   }
 		   }
     	},
 	    getCurrentPos : function(idOfRow) {
-	       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
-		   for(i=0;i<arrayListItems.length;i=i+1) {
-		 		if(arrayListItems[i].id == idOfRow) {
-					
-		 			return i+1;
-		 		}  
+		   for(l=0; l<arrayListIds.length; l++) {
+		   	   listId = arrayListIds[l];	
+		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
+			   for(i=0;i<arrayListItems.length;i=i+1) {
+			 		if(arrayListItems[i].id == idOfRow) {
+			 			return i+1;
+			 		}  
+			   }
+		   }
+	    },
+		
+		getCurrentList : function(idOfRow) {
+		   for(l=0; l<arrayListIds.length; l++) {
+		   	   listId = arrayListIds[l];	
+		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
+			   for(i=0;i<arrayListItems.length;i=i+1) {
+			 		if(arrayListItems[i].id == idOfRow) {
+			 			return listId;
+			 		}  
+			   }
 		   }
 	    }
 	};
@@ -82,7 +104,7 @@
 	            });
 	        a.animate();
 	        //save new pos to backend
-	        kajonaAdminAjax.setAbsolutePosition(this.id, kajona.dragndroplist.DDApp.getCurrentPos(this.id));
+	        kajonaAdminAjax.setAbsolutePosition(this.id, kajona.dragndroplist.DDApp.getCurrentPos(this.id), kajona.dragndroplist.DDApp.getCurrentList(this.id));
 	    },
 	
 	    onDragDrop: function(e, id) {

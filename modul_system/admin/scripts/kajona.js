@@ -141,8 +141,8 @@ function checkRightMatrix() {
 }
 
 var kajonaAjaxHelper =  {
-	bitAjaxBaseLoaded : null,
-	bitDndBaseLoaded: null,
+	bitAjaxBaseLoaded : false,
+	bitDndBaseLoaded: false,
 
 	addJavascriptFile : function (file) {
 		var l=document.createElement("script");
@@ -150,21 +150,23 @@ var kajonaAjaxHelper =  {
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
 		document.getElementsByTagName("head")[0].appendChild(l);
+			
 	},
 	
 	loadAjaxBase : function () {
-		if(this.bitAjaxBaseLoaded == null) {
+		if(!this.bitAjaxBaseLoaded) {
 			this.addJavascriptFile('admin/scripts/yui/utilities/utilities.js');
 			this.addJavascriptFile('admin/scripts/yui/yahoo/yahoo.js');
 			this.addJavascriptFile('admin/scripts/yui/event/event.js');
 			this.addJavascriptFile('admin/scripts/yui/connection/connection.js');
 			this.bitAjaxBaseLoaded = true;
+			
 		}
 	},
 	
 	loadDragNDropBase : function () {
 		this.loadAjaxBase();
-		if(this.bitDndBaseLoaded == null) {
+		if(!this.bitDndBaseLoaded) {
 			this.addJavascriptFile('admin/scripts/yui/dom/dom.js');
 			this.addJavascriptFile('admin/scripts/yui/dragdrop/dragdrop.js');
 			this.bitDndBaseLoaded = true;
@@ -174,8 +176,8 @@ var kajonaAjaxHelper =  {
 
 var kajonaAdminAjax = {
 	
-	setAbsolutePosition : function (systemIdToMove, intNewPos) {
-		//alert('move '+systemIdToMove+' to '+intNewPos);
+	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
+		//alert('move '+systemIdToMove+' to '+intNewPos+' / '+strIdOfList);
 	}
 	
 }
