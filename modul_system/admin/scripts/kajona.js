@@ -82,7 +82,7 @@ function addCss(file){
 	l.setAttribute("type", "text/css");
 	l.setAttribute("rel", "stylesheet");
 	l.setAttribute("href", file);
-	document.getElementsByTagName("head")[0].appendChild(l);
+	document.getElementsByTagName("head").item(0).appendChild(l);
 }
 
 function addDownloadInput(idOfPrototype, nameOfCounterId) {
@@ -105,6 +105,15 @@ function addDownloadInput(idOfPrototype, nameOfCounterId) {
     var protoNode = document.getElementById(idOfPrototype)
     protoNode.parentNode.insertBefore(newNode, protoNode);
 
+}
+
+function in_array(needle, haystack) {
+    for (var i = 0; i < haystack.length; i++) {
+        if (haystack[i] == needle) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //--- RIGHTS-STUFF --------------------------------------------------------------------------------------
@@ -141,38 +150,57 @@ function checkRightMatrix() {
 }
 
 var kajonaAjaxHelper =  {
-	bitAjaxBaseLoaded : false,
-	bitDndBaseLoaded: false,
+	
+	arrayFilesToLoad : new Array(),
+	arrayFilesLoaded : new Array(),
+	bitPastOnload : false,
+	
+	onLoadHandlerFinal : function() {
+		for(i=0;i<this.arrayFilesToLoad.length;i++) {
+			if(this.arrayFilesToLoad[i] != null)
+				this.addJavascriptFile(this.arrayFilesToLoad[i]);
+		}
+		this.bitPastOnload = true;
+	},
 
 	addJavascriptFile : function (file) {
 		var l=document.createElement("script");
 		l.setAttribute("type", "text/javascript");
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
-		document.getElementsByTagName("head")[0].appendChild(l);
-			
+		document.getElementsByTagName("head").item(0).appendChild(l);	
+		intCount = this.arrayFilesLoaded.length;
+		this.arrayFilesLoaded[(intCount+1)] = file;
 	},
 	
 	loadAjaxBase : function () {
-		if(!this.bitAjaxBaseLoaded) {
-			this.addJavascriptFile('admin/scripts/yui/utilities/utilities.js');
-			this.addJavascriptFile('admin/scripts/yui/yahoo/yahoo.js');
-			this.addJavascriptFile('admin/scripts/yui/event/event.js');
-			this.addJavascriptFile('admin/scripts/yui/connection/connection.js');
-			this.bitAjaxBaseLoaded = true;
-			
-		}
+		this.addFileToLoad('admin/scripts/yui/utilities/utilities.js');
+		this.addFileToLoad('admin/scripts/yui/yahoo/yahoo.js');
+		this.addFileToLoad('admin/scripts/yui/event/event.js');
+		this.addFileToLoad('admin/scripts/yui/connection/connection.js');
 	},
+	
 	
 	loadDragNDropBase : function () {
 		this.loadAjaxBase();
-		if(!this.bitDndBaseLoaded) {
-			this.addJavascriptFile('admin/scripts/yui/dom/dom.js');
-			this.addJavascriptFile('admin/scripts/yui/dragdrop/dragdrop.js');
-			this.bitDndBaseLoaded = true;
+		this.addFileToLoad('admin/scripts/yui/dom/dom.js');
+		this.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
+		this.bitDndBaseLoaded = true;
+	},
+	
+	addFileToLoad : function(fileName) {
+		if(this.bitPastOnload) {
+			if(!in_array(fileName, this.arrayFilesLoaded)) {
+				this.addJavascriptFile(fileName);
+			}
+		}
+		else {
+			intCount = this.arrayFilesToLoad.length;
+			this.arrayFilesToLoad[(intCount+1)] = fileName;
 		}
 	}
 }
+
 
 var kajonaAdminAjax = {
 	
@@ -181,3 +209,4 @@ var kajonaAdminAjax = {
 	}
 	
 }
+

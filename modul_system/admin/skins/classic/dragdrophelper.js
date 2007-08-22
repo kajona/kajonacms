@@ -148,5 +148,7 @@ if(arrayListIds == null)
 	    }
 	});
 
-	Event.onDOMReady(kajona.dragndroplist.DDApp.init, kajona.dragndroplist.DDApp, true);
+	//and init the app
+	kajona.dragndroplist.DDApp.init();
 })();
+

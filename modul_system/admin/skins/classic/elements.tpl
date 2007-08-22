@@ -42,9 +42,9 @@ Optional Element to close a list
 <script type="text/javascript">
 if(arrayListIds == null)
 	var arrayListIds = new Array("%%listid%%");
-//var listId = "%%listid%%";
+
+kajonaAjaxHelper.addFileToLoad("_skinwebpath_/dragdrophelper.js");
 </script>
-<script type="text/javascript" src="_skinwebpath_/dragdrophelper.js"></script>
 </dragable_list_footer>
 
 Row in a list containing 2 Elements, NO leading picture

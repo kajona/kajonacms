@@ -93,6 +93,15 @@ function addCss(file) {
 	document.getElementsByTagName("head")[0].appendChild(l);
 }
 
+function in_array(needle, haystack) {
+    for (var i = 0; i < haystack.length; i++) {
+        if (haystack[i] == needle) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function toggle(id) {
 	style = document.getElementById(id).style.display;
 	if (style=='none') 	{
@@ -103,23 +112,50 @@ function toggle(id) {
     }
 }
 
-var kajonaAjaxHelper = {
-	bitAjaxBaseLoaded : null,
+
+var kajonaAjaxHelper =  {
+	
+	arrayFilesToLoad : new Array(),
+	arrayFilesLoaded : new Array(),
+	bitPastOnload : false,
+	
+	onLoadHandlerFinal : function() {
+		alert('load');
+		for(i=0;i<this.arrayFilesToLoad.length;i++) {
+			if(this.arrayFilesToLoad[i] != null)
+				this.addJavascriptFile(this.arrayFilesToLoad[i]);
+		}
+		this.bitPastOnload = true;
+	},
 
 	addJavascriptFile : function (file) {
 		var l=document.createElement("script");
 		l.setAttribute("type", "text/javascript");
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
-		document.getElementsByTagName("head")[0].appendChild(l);
+		document.getElementsByTagName("head").item(0).appendChild(l);	
+		intCount = this.arrayFilesLoaded.length;
+		this.arrayFilesLoaded[(intCount+1)] = file;
+		alert('loaded' +file);
 	},
 	
 	loadAjaxBase : function () {
-		if(this.bitAjaxBaseLoaded == null) {
-			this.addJavascriptFile('portal/scripts/yui/yahoo/yahoo.js');
-			this.addJavascriptFile('portal/scripts/yui/event/event.js');
-			this.addJavascriptFile('portal/scripts/yui/connection/connection.js');
-			this.bitAjaxBaseLoaded = true;
+		this.addFileToLoad('portal/scripts/yui/yahoo/yahoo.js');
+		this.addFileToLoad('portal/scripts/yui/event/event.js');
+		this.addFileToLoad('portal/scripts/yui/connection/connection.js');
+	},
+	
+	
+	addFileToLoad : function(fileName) {
+		
+		if(this.bitPastOnload) {
+			if(!in_array(fileName, this.arrayFilesLoaded)) {
+				this.addJavascriptFile(fileName);
+			}
+		}
+		else {
+			intCount = this.arrayFilesToLoad.length;
+			this.arrayFilesToLoad[(intCount+1)] = fileName;
 		}
 	}
 }

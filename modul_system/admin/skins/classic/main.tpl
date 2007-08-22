@@ -9,7 +9,10 @@
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
 <script language="Javascript" type="text/javascript">
-	window.onload=function(){enableTooltips("showTooltip")};
+	window.onload=function(){
+		enableTooltips("showTooltip");
+		kajonaAjaxHelper.onLoadHandlerFinal();
+	};
 </script>
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar.js"></script>
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/lang/calendar-de.js"></script>
