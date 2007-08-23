@@ -37,7 +37,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 		$arrModule["moduleId"] 			= _system_modul_id_;
 		$arrModule["modul"]				= "system";
 
-		parent::__construct($arrModule, array());
+		parent::__construct($arrModule);
 	}
 
 
@@ -63,7 +63,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 * @return string
 	 */
 	private function actionSetAbsolutePosition() {
-	    $strReturn = "in action, move: ".$this->getSystemid();
+	    $strReturn = "in action, move: ".$this->getSystemid()." - ";
 
 		//check permissions
 		if($this->objRights->rightEdit($this->getSystemid())) {
