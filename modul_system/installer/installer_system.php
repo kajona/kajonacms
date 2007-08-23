@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.2.1";
+		$arrModul["version"] 			= "3.0.2.2";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -257,7 +257,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Now we have to register module by module
 
 		//The Systemkernel
-		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "", "class_system_admin", "class_system_admin.php", $this->arrModule["version"], true );
+		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "", "class_system_admin", "class_system_admin.php", $this->arrModule["version"], true, "", "class_modul_system_admin_xml.php" );
 		//The Rightsmodule
 		$strRightID = $this->registerModule("right", _system_modul_id_, "", "", "class_right_admin", "class_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
@@ -407,7 +407,7 @@ class class_installer_system extends class_installer_base implements interface_i
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2") {
+        if($arrModul["module_version"] == "3.0.2" || $arrModul["module_version"] == "3.0.2.1") {
             $strReturn .= $this->update_302_302x();
         }
 
@@ -557,18 +557,24 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	private function update_302_302x() {
 	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.2 to 3.0.2.1...\n";
+	    $strReturn .= "Updating 3.0.2 to 3.0.2.2...\n";
 
 	    //new constant for nr of rows in admin
 	    $strReturn .= "Registering nr of rows constant...\n";
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 
+	    //add systems' xml-handler
+	    $strReturn .= "Registering system xml handler...\n";
+	    $objSystemModule = class_modul_system_module::getModuleByName("system");
+	    $objSystemModule->setStrXmlNameAdmin("class_modul_system_admin_xml.php");
+	    if(!$objSystemModule->updateObjectToDb())
+	        $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.2.1");
-        $this->updateModuleVersion("right", "3.0.2.1");
-        $this->updateModuleVersion("user", "3.0.2.1");
-        $this->updateModuleVersion("filemanager", "3.0.2.1");
+	    $this->updateModuleVersion("system", "3.0.2.2");
+        $this->updateModuleVersion("right", "3.0.2.2");
+        $this->updateModuleVersion("user", "3.0.2.2");
+        $this->updateModuleVersion("filemanager", "3.0.2.2");
 
 	    return $strReturn;
 	}

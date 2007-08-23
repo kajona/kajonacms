@@ -85,9 +85,31 @@ class class_modul_system_module extends class_model implements interface_model  
 
     /**
      * Updates the current object to the database
+     * @return bool
      */
     public function updateObjectToDb() {
-
+        $this->objDB->transactionBegin();
+        $strQuery = "UPDATE ".$this->arrModule["table"]." SET
+					  module_name ='".dbsafeString($this->getStrName())."',
+					  module_filenameportal ='".dbsafeString($this->getStrNamePortal())."',
+					  module_xmlfilenameportal ='".dbsafeString($this->getStrXmlNamePortal())."',
+					  module_classnameportal ='".dbsafeString($this->getStrClassPortal())."',
+					  module_filenameadmin ='".dbsafeString($this->getStrNameAdmin())."',
+					  module_xmlfilenameadmin ='".dbsafeString($this->getStrXmlNameAdmin())."',
+					  module_classnameadmin ='".dbsafeString($this->getStrClassAdmin())."',
+					  module_version ='".dbsafeString($this->getStrVersion())."',
+					  module_date ='".dbsafeString($this->getIntDate())."',
+					  module_navigation ='".dbsafeString($this->getIntNavigation())."'
+					WHERE module_id = '".dbsafeString($this->getSystemid())."'				
+					";
+        if($this->objDB->_query($strQuery)) {
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            $this->objDB->transactionRollback();
+            return false;
+        }
     }
 
     /**

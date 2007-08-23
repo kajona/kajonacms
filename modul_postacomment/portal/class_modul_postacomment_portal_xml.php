@@ -36,7 +36,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	public function __construct() {
 		$arrModule["name"] 				= "modul_postacomment";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 			= _suche_modul_id_;
+		$arrModule["moduleId"] 			= _postacomment_modul_id_;
 		$arrModule["modul"]				= "postacomment";
 
 		parent::__construct($arrModule, array());
