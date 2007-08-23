@@ -11,9 +11,6 @@
 
 <script type="text/javascript" language="javascript">
 
-//load needed scripts
-kajonaAjaxHelper.loadAjaxBase();
-
 var postacommentCallback =
 {
   success: function(o) { submitPostacommentForm.setResponseText(o); },
@@ -24,7 +21,8 @@ function submitPostacommentForm()  {
 	var connectionObject;
 	
 	this.submit = function() {
-	
+		//ok, further scripts needed. load now.
+		kajonaAjaxHelper.loadAjaxBase();	
 		//create a new ajax request. collect data.
 		var comment_name = document.getElementById('comment_name').value;
 		var comment_subject = document.getElementById('comment_subject').value;
