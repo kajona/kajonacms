@@ -49,7 +49,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 */
 	public function action($strAction) {
         $strReturn = "";
-        if($strAction == "setAbsoultePosition")
+        if($strAction == "setAbsolutePosition")
             $strReturn .= $this->actionSetAbsolutePosition();
 
         return $strReturn;
@@ -63,18 +63,18 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 * @return string
 	 */
 	private function actionSetAbsolutePosition() {
-	    $strReturn = "";
-
-	    $strXMLContent = "";
+	    $strReturn = "in action, move: ".$this->getSystemid();
 
 		//check permissions
 		if($this->objRights->rightEdit($this->getSystemid())) {
 		    $intNewPos = $this->getParam("listPos");
 		    if($intNewPos != "")
-		        $this->setAbsolutePosition($this->getSystemid());
+		        $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
+		        
+		    $strReturn .= "<success />";    
 		}
 		else
-		    $strReturn = "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
 
         return $strReturn;
 	}

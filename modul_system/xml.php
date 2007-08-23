@@ -31,12 +31,36 @@ else
  * @package modul_system
  */
 class class_xml {
+    
+    /**
+	 * class db
+	 *
+	 * @var class_db
+	 */
+	private $objDB;
+
+	/**
+	 * class template
+	 *
+	 * @var class_template
+	 */
+	private $objTemplate;
+
+	/**
+	 * class session
+	 *
+	 * @var class_session
+	 */
+	private $objSession;
 
     public function __construct() {
         //init the system
         include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
-
+		$this->objDB = $objCarrier->getObjDb();
+		$this->objTemplate = $objCarrier->getObjTemplate();
+		$this->objSession = $objCarrier->getObjSession();
+		
 		include_once(_systempath_."/class_modul_system_module.php");
     }
 
@@ -80,10 +104,19 @@ class class_xml {
             $objModule = class_modul_system_module::getModuleByName($strModule);
             if($objModule != null) {
                 if(_admin_) {
-                    //Load the admin-part
-                    if($objModule->getStrXmlNameAdmin() != "") {
-                        $strContent = "";
+                    if($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
+                        //Load the admin-part
+                        if($objModule->getStrXmlNameAdmin() != "") {
+                            //try to include the class and create an instance of it
+                            include_once(_adminpath_."/".$objModule->getStrXmlNameAdmin());
+                            $strClassname = str_replace(".php", "", $objModule->getStrXmlNameAdmin());
+                            $objModuleRequested = new $strClassname();
+                            $strContent = $objModuleRequested->action($strAction);
+                        }
                     }
+                    else {
+					    throw new class_exception("Sorry, but you don't have the needed permissions to access the admin-area", class_exception::$level_FATALERROR);
+					}
                 }
                 else {
                     //Load the portal parts
