@@ -107,13 +107,27 @@ function addDownloadInput(idOfPrototype, nameOfCounterId) {
 
 }
 
-function in_array(needle, haystack) {
+function inArray(needle, haystack) {
     for (var i = 0; i < haystack.length; i++) {
         if (haystack[i] == needle) {
             return true;
         }
     }
     return false;
+}
+
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+    if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			if(oldonload) {
+				oldonload();
+			}
+			func();
+		};
+	}
 }
 
 //--- RIGHTS-STUFF --------------------------------------------------------------------------------------
@@ -156,11 +170,11 @@ var kajonaAjaxHelper =  {
 	bitPastOnload : false,
 	
 	onLoadHandlerFinal : function() {
-		for(i=0;i<this.arrayFilesToLoad.length;i++) {
-			if(this.arrayFilesToLoad[i] != null)
-				this.addJavascriptFile(this.arrayFilesToLoad[i]);
+		for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
+			if(kajonaAjaxHelper.arrayFilesToLoad[i] != null)
+				kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
 		}
-		this.bitPastOnload = true;
+		kajonaAjaxHelper.bitPastOnload = true;
 	},
 
 	addJavascriptFile : function (file) {
@@ -169,38 +183,40 @@ var kajonaAjaxHelper =  {
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
 		document.getElementsByTagName("head").item(0).appendChild(l);	
-		intCount = this.arrayFilesLoaded.length;
-		this.arrayFilesLoaded[(intCount+1)] = file;
+		intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
+		kajonaAjaxHelper.arrayFilesLoaded[(intCount+1)] = file;
+		alert('loaded '+file);
 	},
 	
 	loadAjaxBase : function () {
-		this.addFileToLoad('admin/scripts/yui/utilities/utilities.js');
-		this.addFileToLoad('admin/scripts/yui/yahoo/yahoo.js');
-		this.addFileToLoad('admin/scripts/yui/event/event.js');
-		this.addFileToLoad('admin/scripts/yui/connection/connection.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/utilities/utilities.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/event/event.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection.js');
 	},
 	
 	
 	loadDragNDropBase : function () {
-		this.loadAjaxBase();
-		this.addFileToLoad('admin/scripts/yui/dom/dom.js');
-		this.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
-		this.bitDndBaseLoaded = true;
+		kajonaAjaxHelper.loadAjaxBase();
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
+		kajonaAjaxHelper.bitDndBaseLoaded = true;
 	},
 	
 	addFileToLoad : function(fileName) {
-		if(this.bitPastOnload) {
-			if(!in_array(fileName, this.arrayFilesLoaded)) {
-				this.addJavascriptFile(fileName);
+		if(kajonaAjaxHelper.bitPastOnload) {
+			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesLoaded)) {
+				kajonaAjaxHelper.addJavascriptFile(fileName);
 			}
 		}
 		else {
-			intCount = this.arrayFilesToLoad.length;
-			this.arrayFilesToLoad[(intCount+1)] = fileName;
+			intCount = kajonaAjaxHelper.arrayFilesToLoad.length;
+			kajonaAjaxHelper.arrayFilesToLoad[(intCount+1)] = fileName;
 		}
 	}
-}
+};
 
+addLoadEvent(kajonaAjaxHelper.onLoadHandlerFinal);
 
 var kajonaAdminAjax = {
 	
@@ -208,5 +224,5 @@ var kajonaAdminAjax = {
 		//alert('move '+systemIdToMove+' to '+intNewPos+' / '+strIdOfList);
 	}
 	
-}
+};
 
