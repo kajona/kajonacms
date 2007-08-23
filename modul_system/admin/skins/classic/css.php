@@ -74,11 +74,9 @@ img {
 	width: 180px;
 }
 
-.adminList {
-	padding: 0px;
-	margin: 0px;
-	bullet: none;
-	list-style: none;
+.dragList {
+	border-spacing: 0px;
+	
 }
 
 .adminListRow1 {

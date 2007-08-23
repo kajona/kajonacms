@@ -185,7 +185,6 @@ var kajonaAjaxHelper =  {
 		document.getElementsByTagName("head").item(0).appendChild(l);	
 		intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
 		kajonaAjaxHelper.arrayFilesLoaded[(intCount+1)] = file;
-		alert('loaded '+file);
 	},
 	
 	loadAjaxBase : function () {
