@@ -487,7 +487,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_header");
 		return $this->objTemplate->fillTemplate(array(), $strTemplateID);
 	}
-	
+
     /**
 	 * Returns the htmlcode needed to start a proper list, supporting drag n drop to
 	 * reorder list-items
@@ -508,7 +508,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_footer");
 		return $this->objTemplate->fillTemplate(array(), $strTemplateID);
 	}
-	
+
     /**
 	 * Returns the code to finish the opened list
 	 *
@@ -526,16 +526,19 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param string $strActions
 	 * @param int $intCount, used to determing the class needed
 	 * @param string $strType to react on special cases
+	 * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
 	 * @return string
 	 */
-	public function listRow2($strName, $strActions, $intCount, $strType = "") {
+	public function listRow2($strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
 		if($intCount % 2 == 0)
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_1".$strType);
 		else
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_2".$strType);
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
-		$arrTemplate["listitemid"] = generateSystemid();
+		if($strListitemID == "")
+		    $strListitemID = generateSystemid();
+		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -547,9 +550,10 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param string $strActions
 	 * @param int $intCount, used to determing the class needed
 	 * @param string $strType to react on special cases
+	 * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
 	 * @return string
 	 */
-	public function listRow2Image($strImage, $strName, $strActions, $intCount, $strType = "") {
+	public function listRow2Image($strImage, $strName, $strActions, $intCount, $strType = "", $strListitemID = "") {
 		if($intCount % 2 == 0)
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2image_1".$strType);
 		else
@@ -557,7 +561,9 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["image"] = $strImage;
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
-		$arrTemplate["listitemid"] = generateSystemid();
+		if($strListitemID == "")
+		    $strListitemID = generateSystemid();
+		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -569,9 +575,10 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param string $strActions
 	 * @param string $strImage
 	 * @param int $intCount, used to determing the class needed
+	 * @param string $strListitemID id of row-entry, e.g. to use in ajax elements
 	 * @return string
 	 */
-	public function listRow3($strName, $strCenter, $strActions, $strImage, $intCount) {
+	public function listRow3($strName, $strCenter, $strActions, $strImage, $intCount, $strListitemID = "") {
 		if($intCount % 2 == 0)
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_3_1");
 		else
@@ -580,7 +587,9 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["center"] = $strCenter;
 		$arrTemplate["actions"] = $strActions;
-		$arrTemplate["listitemid"] = generateSystemid();
+		if($strListitemID == "")
+		    $strListitemID = generateSystemid();
+		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 

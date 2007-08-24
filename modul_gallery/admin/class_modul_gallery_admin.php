@@ -536,11 +536,11 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
                     // if no folder, attach a thumbnail-tooltip
                     if ($objOneFile->getIntType() == 1) {
-                        $strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic), $intI++);
+                        $strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic), $intI++, $objOneFile->getSystemid());
                     } else {
     			   		$strImage = "<img src=\\'"._webpath_."/image.php?image=".$objOneFile->getStrFilename()."&maxWidth=100&maxHeight=100\\' />";
 
-    					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic, $strImage, true), $intI++);
+    					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic, $strImage, true), $intI++, $objOneFile->getSystemid());
                     }
 				}
 			}

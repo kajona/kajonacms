@@ -164,11 +164,11 @@ function checkRightMatrix() {
 }
 
 var kajonaAjaxHelper =  {
-	
+
 	arrayFilesToLoad : new Array(),
 	arrayFilesLoaded : new Array(),
 	bitPastOnload : false,
-	
+
 	onLoadHandlerFinal : function() {
 		for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
 			if(kajonaAjaxHelper.arrayFilesToLoad[i] != null)
@@ -182,26 +182,26 @@ var kajonaAjaxHelper =  {
 		l.setAttribute("type", "text/javascript");
 		l.setAttribute("language", "javascript");
 		l.setAttribute("src", file);
-		document.getElementsByTagName("head").item(0).appendChild(l);	
+		document.getElementsByTagName("head").item(0).appendChild(l);
 		intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
 		kajonaAjaxHelper.arrayFilesLoaded[(intCount+1)] = file;
 	},
-	
+
 	loadAjaxBase : function () {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/utilities/utilities.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/event/event.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection.js');
 	},
-	
-	
+
+
 	loadDragNDropBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
 		kajonaAjaxHelper.bitDndBaseLoaded = true;
 	},
-	
+
 	addFileToLoad : function(fileName) {
 		if(kajonaAjaxHelper.bitPastOnload) {
 			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesLoaded)) {
@@ -223,22 +223,31 @@ var regularCallback = {
 };
 
 var kajonaAdminAjax = {
-	
+
 	connectionObject : null,
-	
+
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
 		//load ajax libs
 		kajonaAjaxHelper.loadAjaxBase();
-		
+
 		var postTarget = 'xml.php?admin=1&module=system&action=setAbsolutePosition';
-		
+
 		//concat to send all values
 		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos;
-		
+
 		if(kajonaAdminAjax.connectionObject == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.connectionObject)) {
 			kajonaAdminAjax.connectionObject = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
 		}
 	}
-	
+
 };
 
+var kajonaStatusDiplay = {
+    messageOK : function(strMessage) {
+
+    },
+
+    messageError : function(strMesasge) {
+
+    }
+}

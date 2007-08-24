@@ -4,7 +4,7 @@
 //       $Id: kajona.js 1631 2007-07-21 12:42:52Z sidler $
 
 /**
- * 
+ *
  * This file includes a script to be used to make lists drag n dropable.
  * The array arrayListIds is parsed, all tr-elements are added
  * See the YUI dragdrop-list-example for further infos
@@ -28,15 +28,15 @@ if(arrayTableIds == null)
 		   //iterate over all lists available
 		   for(l=0; l<arrayTableIds.length; l++) {
 		   	   listId = arrayTableIds[l];
-	           //basic dnd list				
+	           //basic dnd list
 	           new YAHOO.util.DDTarget(listId);
 			   //load items in list
 			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
-				  
+
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-			       if(arrayListItems[i].id != null) {		
+			       if(arrayListItems[i].id != null) {
 			   		  Dom.setStyle(arrayListItems[i], "cursor", "move");
 		 			  new kajona.dragndroplist.DDList(arrayListItems[i].id);
 			       }
@@ -45,28 +45,33 @@ if(arrayTableIds == null)
     	},
 	    getCurrentPos : function(idOfRow) {
 		   for(l=0; l<arrayTableIds.length; l++) {
-		   	   listId = arrayTableIds[l];	
+		   	   listId = arrayTableIds[l];
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
+
+		   	   var intCounter = 1;
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-			 		if(arrayListItems[i].id == idOfRow) {
-			 			return i+1;
-			 		}  
+			       if(arrayListItems[i].id != null) {
+			 	       if(arrayListItems[i].id == idOfRow) {
+			 		      return intCounter;
+			 		   }
+			 		   intCounter++;
+			       }
 			   }
 		   }
 	    },
-		
+
 		getCurrentList : function(idOfRow) {
 		   for(l=0; l<arrayTableIds.length; l++) {
-		   	   listId = arrayTableIds[l];	
+		   	   listId = arrayTableIds[l];
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
 			   for(i=0;i<arrayListItems.length;i=i+1) {
 			 		if(arrayListItems[i].id == idOfRow) {
 			 			return listId;
-			 		}  
+			 		}
 			   }
 		   }
 	    }
@@ -81,7 +86,7 @@ if(arrayTableIds == null)
 	};
 
 	YAHOO.extend(kajona.dragndroplist.DDList, YAHOO.util.DDProxy, {
-	
+
 	    startDrag: function(x, y) {
 	        // make the proxy look like the source element
 	        var dragEl = this.getDragEl();
@@ -91,35 +96,35 @@ if(arrayTableIds == null)
 			//jump the inner element up until an tr-element
 			while(!clickEl.nodeName.toLowerCase() == "tr")
 				clickEl = clickEl.parentNode;
-			
+
 			//get table-node
 			var parentNode = clickEl.parentNode;
 			if(parentNode.nodeName.toLowerCase() == "tbody")
 				parentNode = parentNode.parentNode;
 			//make a regular table out of it and make it look like the original
-			dragEl.innerHTML = "<table "+ 
+			dragEl.innerHTML = "<table "+
 						         " class=\""+parentNode.getAttribute('class')+"\""+
 								 " width=\""+parentNode.getAttribute('width')+"\""+
 								 " border=\""+parentNode.getAttribute('border')+"\""+
-								 " ><tr"+ 
+								 " ><tr"+
 						         " class=\""+clickEl.getAttribute('class')+"\""+
 								 ">" +clickEl.innerHTML+ "</tr></table>";
-							 
+
 	    },
-	
+
 	    endDrag: function(e) {
 	        var srcEl = this.getEl();
 	        var proxy = this.getDragEl();
 	        // Show the proxy element and animate it to the src element's location
 	        Dom.setStyle(proxy, "visibility", "");
-	        var a = new YAHOO.util.Motion( 
-	            proxy, { 
-	                points: { 
+	        var a = new YAHOO.util.Motion(
+	            proxy, {
+	                points: {
 	                    to: Dom.getXY(srcEl)
 	                }
-	            }, 
-	            0.2, 
-	            YAHOO.util.Easing.easeOut 
+	            },
+	            0.2,
+	            YAHOO.util.Easing.easeOut
 	        )
 	        var proxyid = proxy.id;
 	        var thisid = this.id;
@@ -132,11 +137,11 @@ if(arrayTableIds == null)
 	        //save new pos to backend
 	        kajonaAdminAjax.setAbsolutePosition(this.id, kajona.dragndroplist.DDApp.getCurrentPos(this.id), kajona.dragndroplist.DDApp.getCurrentList(this.id));
 	    },
-	
+
 	    onDragDrop: function(e, id) {
 	        if (DDM.interactionInfo.drop.length === 1) {
-	            var pt = DDM.interactionInfo.point; 
-	            var region = DDM.interactionInfo.sourceRegion; 
+	            var pt = DDM.interactionInfo.point;
+	            var region = DDM.interactionInfo.sourceRegion;
 	            if (!region.intersect(pt)) {
 	                var destEl = Dom.get(id);
 	                var destDD = DDM.getDDById(id);
@@ -146,7 +151,7 @@ if(arrayTableIds == null)
 	            }
 	        }
 	    },
-	
+
 	    onDrag: function(e) {
 	        var y = Event.getPageY(e);
 	        if (y < this.lastY) {
@@ -156,7 +161,7 @@ if(arrayTableIds == null)
 	        }
 	        this.lastY = y;
 	    },
-	
+
 	    onDragOver: function(e, id) {
 	        var srcEl = this.getEl();
 	        var destEl = Dom.get(id);
