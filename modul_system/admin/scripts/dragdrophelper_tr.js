@@ -19,6 +19,8 @@ if(arrayTableIds == null)
 	var Event = YAHOO.util.Event;
 	var DDM = YAHOO.util.DragDropMgr;
 
+	var posBeforeMove = -1;
+
 	//create namespaces
 	var kajona = { };
 	kajona.dragndroplist = {};
@@ -91,6 +93,9 @@ if(arrayTableIds == null)
 	        // make the proxy look like the source element
 	        var dragEl = this.getDragEl();
 	        var clickEl = this.getEl();
+			//save the start-pos
+			posBeforeMove = kajona.dragndroplist.DDApp.getCurrentPos(clickEl.id);
+			
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
 			//jump the inner element up until an tr-element
@@ -134,8 +139,10 @@ if(arrayTableIds == null)
 	                Dom.setStyle(thisid, "visibility", "");
 	            });
 	        a.animate();
-	        //save new pos to backend
-	        kajonaAdminAjax.setAbsolutePosition(this.id, kajona.dragndroplist.DDApp.getCurrentPos(this.id), kajona.dragndroplist.DDApp.getCurrentList(this.id));
+	        //save new pos to backend?
+			var posAfterMove = kajona.dragndroplist.DDApp.getCurrentPos(this.id);
+			if(posAfterMove != posBeforeMove)
+	        	kajonaAdminAjax.setAbsolutePosition(this.id, posAfterMove, kajona.dragndroplist.DDApp.getCurrentList(this.id));
 	    },
 
 	    onDragDrop: function(e, id) {
