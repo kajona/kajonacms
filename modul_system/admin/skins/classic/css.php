@@ -498,5 +498,43 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
     z-index: 2000;
 }
 
+
+
+.jsStatusBoxMessage {
+	background-color: #ffffff;
+	margin: 2px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	text-align: left;
+	color: #FFFFFF;
+	border: 1px solid #000099;
+}
+
+.jsStatusBoxError {
+	background-color: #FFFFFF;
+	margin: 2px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	text-align: left;
+	color: #FFFFFF;
+	border: 1px solid #F80800;
+}
+
+.jsHeader {
+	background-position: left top;
+	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+    color: #FFFFFF;
+    font-size: 11px;
+	padding-left: 2px;
+}
+
+#jsStatusBoxContent {
+	padding: 2px;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+    color: #000000;
+    font-size: 11px;
+}
+
 ";
 ?>

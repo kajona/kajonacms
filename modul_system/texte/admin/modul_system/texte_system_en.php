@@ -193,6 +193,7 @@ $text["about_part3"]                = "<h2>Credits</h2>
                                        </ul>
                                        ";
 
+$text["setAbsolutePosOk"]           = "Saving position succeeded";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
