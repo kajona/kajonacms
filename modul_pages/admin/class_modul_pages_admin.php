@@ -357,10 +357,19 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$strReturn = "";
 		//Check the rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-			//load all pages
-			$arrPages = class_modul_pages_page::getAllPages();
 			$intI = 0;
 
+			//showing a list using the pageview
+			include_once(_systempath_."/class_array_section_iterator.php");
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_pages_page::getNumberOfPagesAvailable());
+		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+		    $objArraySectionIterator->setArraySection(class_modul_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+		    $arrPages = $objArraySectionIterator->getArrayExtended();
+    		$arrPageViews = $this->objToolkit->getPageview($arrPages, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "pages", "listAll", "", _admin_nr_of_rows_);
+            $arrPages = $arrPageViews["elements"];
+			
 			foreach($arrPages as $objPage) {
 			 	//Get the status
 			 	$status = $objPage->getStatus();
@@ -393,6 +402,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if(uniStrlen($strReturn) != 0)
 			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
 
+			if(count($arrPages) > 0)
+			    $strReturn .= $arrPageViews["pageview"];
+			        
 			if(count($arrPages) == 0)
 				$strReturn .= $this->getText("liste_seiten_leer");
 

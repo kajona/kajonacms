@@ -265,21 +265,43 @@ class class_modul_pages_page extends class_model implements interface_model  {
     /**
 	 * Loads all pages known by the system
 	 *
+	 * @param int $intStart
+	 * @param int $intEnd
 	 * @return mixed class_modul_pages_page
 	 * @static
 	 */
-	public static function getAllPages() {
+	public static function getAllPages($intStart = 0, $intEnd = 0) {
 		$strQuery = "SELECT system_id
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
 					WHERE system_id = page_id
 					ORDER BY page_name ASC";
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+		if($intStart == 0 && $intEnd == 0)
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		else
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+		        
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_pages_page($arrOneId["system_id"]);
 
 		return $arrReturn;
+	}
+	
+	/**
+	 * Fetches the total number of pages available
+	 *
+	 * @return unknown
+	 */
+	public static function getNumberOfPagesAvailable() {
+	    $strQuery = "SELECT COUNT(*)
+					FROM "._dbprefix_."page,
+					"._dbprefix_."system
+					WHERE system_id = page_id
+					ORDER BY page_name ASC";
+		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+		return $arrRow["COUNT(*)"];
 	}
 
 	/**
