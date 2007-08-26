@@ -941,5 +941,30 @@ body.folderView .listActions a {
     text-decoration: none;
 }
 
+/* J S   S T A T U S   B O X */
+
+.jsStatusBoxMessage {
+	background-color: #f0f0f0;
+	margin: 2px;
+	border: 1px solid #e3e3e3;
+}
+
+.jsStatusBoxError {
+	background-color: #f0f0f0;
+	margin: 2px;
+	text-align: left;
+	border: 1px solid #F80800;
+}
+
+.jsHeader {
+	padding-left: 2px;
+}
+
+#jsStatusBoxContent {
+	padding: 2px;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
 ";
 ?>

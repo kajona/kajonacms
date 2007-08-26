@@ -227,7 +227,6 @@ var regularCallback = {
 };
 
 var kajonaAdminAjax = {
-
 	connectionObject : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
@@ -236,13 +235,11 @@ var kajonaAdminAjax = {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
 
 		var postTarget = 'xml.php?admin=1&module=system&action=setAbsolutePosition';
-
-		//concat to send all values
 		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos;
 
 		if(kajonaAdminAjax.connectionObject == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.connectionObject)) {
 			kajonaAdminAjax.connectionObject = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
 		}
 	}
-
+	
 };

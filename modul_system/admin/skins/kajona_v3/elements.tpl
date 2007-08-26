@@ -25,8 +25,20 @@ Optional Element to start a list
 <table cellpadding="0" cellspacing="0" class="adminList">
 </list_header>
 
+Header to use when creating drag n dropable lists. places an id an loads the needed js-scripts in the
+background using the ajaxHelper.
+Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
-<table cellpadding="0" cellspacing="0" class="adminList">
+<script type="text/javascript">
+	kajonaAjaxHelper.loadDragNDropBase();
+	if(arrayTableIds == null)
+        var arrayTableIds = new Array("%%listid%%");
+    else
+        arrayTableIds[(arrayTableIds.length +1)] = "%%listid%%"; 	
+        
+    kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_tr.js");
+</script>
+<table cellspacing="0" cellpadding="0" id="%%listid%%" class="adminList">
 </dragable_list_header>
 
 Optional Element to close a list
@@ -42,7 +54,7 @@ Optional Element to close a list
 Row in a list containing 2 Elements, NO leading picture
 Part 1 - every 2nd entry
 <list_row_2_1>
-<tr class="adminListRow1">
+<tr id="%%listitemid%%" class="adminListRow1">
 	<td class="title">%%title%%</td>
     <td class="actions">%%actions%%</td>
  </tr>
@@ -58,7 +70,7 @@ Part 2 - every 2nd entry. Usefull if different css-classes are used every single
 Row in a list containing 2 Elements and a leading picture
 Part 1 - every 2nd entry
 <list_row_2image_1>
-<tr class="adminListRow1">
+<tr id="%%listitemid%%" class="adminListRow1">
 	<td class="image">%%image%%</td>
 	<td class="title">%%title%%</td>
     <td class="actions">%%actions%%</td>
@@ -66,7 +78,7 @@ Part 1 - every 2nd entry
 </list_row_2image_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2image_2>
-<tr class="adminListRow2">
+<tr id="%%listitemid%%" class="adminListRow2">
 	<td class="image">%%image%%</td>
 	<td class="title">%%title%%</td>
     <td class="actions">%%actions%%</td>
@@ -84,7 +96,7 @@ Part 1 - every 2nd entry
 </list_row_2_1_b>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2_2_b>
-<tr class="adminListRow2">
+<tr id="%%listitemid%%" class="adminListRow2">
 	<td class="title" style="width: 30%;">%%title%%</td>
     <td class="centerWrap">%%actions%%</td>
  </tr>
@@ -93,7 +105,7 @@ Part 2 - every 2nd entry. Usefull if different css-classes are used every single
 Row in a list containing 3 Elements AND A LEADING IMAGE
 Part 1 - every 2nd entry
 <list_row_3_1>
-<tr class="adminListRow1">
+<tr id="%%listitemid%%" class="adminListRow1">
 	<td class="image">%%image%%</td>
 	<td class="title">%%title%%</td>
 	<td class="center">%%center%%</td>
@@ -102,7 +114,7 @@ Part 1 - every 2nd entry
 </list_row_3_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_3_2>
-<tr class="adminListRow2">
+<tr id="%%listitemid%%" class="adminListRow2">
 	<td class="image">%%image%%</td>
 	<td class="title">%%title%%</td>
 	<td class="center">%%center%%</td>

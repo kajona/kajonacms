@@ -12,8 +12,9 @@
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
 	<script language="Javascript" type="text/javascript">
-		window.onload=function(){enableTooltips("showTooltip")};
-	</script>
+    	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
+    	addLoadEvent(enableTooltipsWrapper);
+    </script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/lang/calendar-de.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar-setup.js"></script>
@@ -64,6 +65,6 @@
 		</tr>
 	</tbody>
 </table>
-
+<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
 </body>
 </html>
