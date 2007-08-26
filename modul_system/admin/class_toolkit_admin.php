@@ -536,8 +536,6 @@ class class_toolkit_admin extends class_toolkit {
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_2".$strType);
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
-		if($strListitemID == "")
-		    $strListitemID = generateSystemid();
 		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
@@ -561,8 +559,6 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["image"] = $strImage;
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
-		if($strListitemID == "")
-		    $strListitemID = generateSystemid();
 		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
@@ -587,8 +583,6 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["center"] = $strCenter;
 		$arrTemplate["actions"] = $strActions;
-		if($strListitemID == "")
-		    $strListitemID = generateSystemid();
 		$arrTemplate["listitemid"] = $strListitemID;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}

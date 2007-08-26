@@ -162,6 +162,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	private function actionList() {
 		$strReturn = "";
+		
 		//rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 		    $intI = 0;
@@ -210,12 +211,13 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			//start with a path-navigation
     			$strReturn .= $this->getPathNavigation();
                 $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
-    			$strReturn .= $this->objToolkit->listHeader();
+                $strListID = generateSystemid();
+    			$strReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
     			$strPrevID = $this->getPrevId($this->getSystemid());
     			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID, $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
     			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
-                //Ansd loop through the regular points
+                //And loop through the regular points
     			foreach($arrNavigations as $objOneNavigation) {
     				//check rights
     				if($this->objRights->rightView($objOneNavigation->getSystemid())) {
@@ -244,12 +246,13 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), "icon_key.gif"));
-    		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++);
+    		    		    
+    		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
     				}
     	  		}
     	  		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
     	  		    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
-    	  		$strReturn .= $this->objToolkit->listFooter();
+    	  		$strReturn .= $this->objToolkit->dragableListFooter($strListID);
     		}
 		}
 		else

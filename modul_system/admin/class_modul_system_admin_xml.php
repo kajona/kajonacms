@@ -71,6 +71,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 		    if($intNewPos != "")
 		        $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
 		        
+		    $this->setEditDate($this->getSystemid());    
+		        
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setAbsolutePosOk")."</message>";    
 		}
 		else

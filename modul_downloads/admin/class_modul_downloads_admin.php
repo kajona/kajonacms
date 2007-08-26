@@ -236,11 +236,12 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightView($this->getSystemid())) {
+		    $strListId = generateSystemid();
 		    //path navi
 		    $strReturn .= $this->generatePathnavi();
 			//Load files
 			$arrFiles = class_modul_downloads_file::getFilesDB($this->getSystemid());
-			$strReturn .= $this->objToolkit->listHeader();
+			$strReturn .= $this->objToolkit->dragableListHeader($strListId);
 			//linkto jump one level up
 			$intI = 0;
 			if($this->getPrevId() != "0") {
@@ -287,13 +288,13 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), "icon_key.gif"));
 
-					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strImage, $strText), $intI++);
+					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strImage, $strText), $intI++, $objOneFile->getSystemid());
 				}
 			}
 			else
 			    $strReturn .= $this->objToolkit->listRow2($this->getText("liste_leer_dl"), "", $intI++);
 
-			$strReturn .= $this->objToolkit->listFooter();
+			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

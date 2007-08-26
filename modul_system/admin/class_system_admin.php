@@ -140,11 +140,12 @@ class class_system_admin extends class_admin implements interface_admin {
 	 */
 	private function actionModuleList() {
 		$strReturn = "";
+		$strListId = generateSystemid();
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Loading the modules
 			$arrModules = class_modul_system_module::getAllModules();
 			$intI = 0;
-			$strReturn .= $this->objToolkit->listHeader();
+			$strReturn .= $this->objToolkit->dragableListHeader($strListId);
 			foreach($arrModules as $objSingleModule) {
 				$strActions = "";
 				$strCenter = "V ".$objSingleModule->getStrVersion()." &nbsp;(".timeToString($objSingleModule->getIntDate(), true).")";
@@ -170,9 +171,9 @@ class class_system_admin extends class_admin implements interface_admin {
 		   		    if($this->objRights->rightRight($intModuleSystemID))
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("modul_rechte"), "icon_key.gif"));
 		   		}
-		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif"), $intI++);
+		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif"), $intI++, $objSingleModule->getSystemid());
 			}
-			$strReturn .= $this->objToolkit->listFooter();
+			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

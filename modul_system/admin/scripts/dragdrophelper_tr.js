@@ -38,7 +38,7 @@ if(arrayTableIds == null)
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
 
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-			       if(arrayListItems[i].id != null) {
+			       if(arrayListItems[i].id != null && arrayListItems[i].id != "") {
 			   		  Dom.setStyle(arrayListItems[i], "cursor", "move");
 		 			  new kajona.dragndroplist.DDList(arrayListItems[i].id);
 			       }
@@ -54,7 +54,7 @@ if(arrayTableIds == null)
 
 		   	   var intCounter = 1;
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-			       if(arrayListItems[i].id != null) {
+			       if(arrayListItems[i].id != null && arrayListItems[i].id != "") {
 			 	       if(arrayListItems[i].id == idOfRow) {
 			 		      return intCounter;
 			 		   }
