@@ -10,7 +10,7 @@
  * - div,   id: jsStatusBox    				the box to be animated
  * 		 class: jsStatusBoxMessage			class in case of an informal message
  * 		 class: jsStatusBoxError		    class in case of an error message
- * - div, id: jsStatusBoxContent			the box to place the message-content into
+ * - div,   id: jsStatusBoxContent			the box to place the message-content into
  * 
  * Pass a xml-response from a kajona-server to displayXMLMessage() to star the logic
  * or use messageOK() / messageError() passing a regular string
@@ -87,7 +87,7 @@ var kajonaStatusDisplay = {
 		var newY = screenHeight - divHeight - 10;
 		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
 		//start fade-in handler		
-		kajonaStatusDisplay.fadeIn(statusBox);
+		kajonaStatusDisplay.fadeIn();
 	},
 	
 	fadeIn : function () {
