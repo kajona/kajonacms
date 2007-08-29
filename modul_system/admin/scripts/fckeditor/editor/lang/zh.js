@@ -1,20 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: zh.js
- * 	Chinese Traditional language file.
- * 
- * File Authors:
- * 		Zak Fong (zakfong@yahoo.com.tw)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Chinese Traditional language file.
  */
 
 var FCKLang =
@@ -130,7 +134,7 @@ SelectionFieldProp	: "清單/選單屬性",
 TextareaProp		: "文字區域屬性",
 FormProp			: "表單屬性",
 
-FontFormats			: "一般;格式化;地址;標題 1;標題 2;標題 3;標題 4;標題 5;標題 6;段落 (DIV)",
+FontFormats			: "本文;已格式化;位址;標題 1;標題 2;標題 3;標題 4;標題 5;標題 6;本文 (DIV)",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "處理 XHTML 中，請稍候…",
@@ -225,7 +229,7 @@ DlgLnkURL			: "URL",
 DlgLnkAnchorSel		: "請選擇錨點",
 DlgLnkAnchorByName	: "依錨點名稱",
 DlgLnkAnchorById	: "依元件 ID",
-DlgLnkNoAnchors		: "<本文件尚無可用之錨點>",
+DlgLnkNoAnchors		: "<本文件尚無可用之錨點>",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "電子郵件",
 DlgLnkEMailSubject	: "郵件主旨",
 DlgLnkEMailBody		: "郵件內容",
@@ -258,6 +262,7 @@ DlgLnkPopTop		: "右",
 DlnLnkMsgNoUrl		: "請輸入欲連結的 URL",
 DlnLnkMsgNoEMail	: "請輸入電子郵件位址",
 DlnLnkMsgNoAnchor	: "請選擇錨點",
+DlnLnkMsgInvPopName	: "快顯名稱必須以「英文字母」為開頭，且不得含有空白",
 
 // Color Dialog
 DlgColorTitle		: "請選擇顏色",
@@ -332,7 +337,6 @@ DlgReplaceReplAllBtn	: "全部取代",
 DlgReplaceWordChk		: "全字相符",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "瀏覽器的安全性設定不允許編輯器自動執行貼上動作。請使用快捷鍵 (Ctrl+V) 貼上。",
 PasteErrorCut	: "瀏覽器的安全性設定不允許編輯器自動執行剪下動作。請使用快捷鍵 (Ctrl+X) 剪下。",
 PasteErrorCopy	: "瀏覽器的安全性設定不允許編輯器自動執行複製動作。請使用快捷鍵 (Ctrl+C) 複製。",
 
@@ -340,6 +344,7 @@ PasteAsText		: "貼為純文字格式",
 PasteFromWord	: "自 Word 貼上",
 
 DlgPasteMsg2	: "請使用快捷鍵 (<strong>Ctrl+V</strong>) 貼到下方區域中並按下 <strong>確定</strong>",
+DlgPasteSec		: "Because of your browser security settings, the editor is not able to access your clipboard data directly. You are required to paste it again in this window.",	//MISSING
 DlgPasteIgnoreFont		: "移除字型設定",
 DlgPasteRemoveStyles	: "移除樣式設定",
 DlgPasteCleanBox		: "清除文字區域",
@@ -374,8 +379,11 @@ DlgSpellManyChanges		: "拼字檢查完成：更改了 %1 個單字",
 IeSpellDownload			: "尚未安裝拼字檢查元件。您是否想要現在下載？",
 
 // Button Dialog
-DlgButtonText	: "顯示文字 (值)",
-DlgButtonType	: "類型",
+DlgButtonText		: "顯示文字 (值)",
+DlgButtonType		: "類型",
+DlgButtonTypeBtn	: "按鈕 (Button)",
+DlgButtonTypeSbm	: "送出 (Submit)",
+DlgButtonTypeRst	: "重設 (Reset)",
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "名稱",
@@ -424,6 +432,7 @@ DlgHiddenValue	: "值",
 // Bulleted List Dialog
 BulletedListProp	: "項目清單屬性",
 NumberedListProp	: "編號清單屬性",
+DlgLstStart			: "起始編號",
 DlgLstType			: "清單類型",
 DlgLstTypeCircle	: "圓圈",
 DlgLstTypeDisc		: "圓點",
@@ -446,6 +455,15 @@ DlgDocLangDirLTR	: "由左而右 (LTR)",
 DlgDocLangDirRTL	: "由右而左 (RTL)",
 DlgDocLangCode		: "語言代碼",
 DlgDocCharSet		: "字元編碼",
+DlgDocCharSetCE		: "中歐語系",
+DlgDocCharSetCT		: "正體中文 (Big5)",
+DlgDocCharSetCR		: "斯拉夫文",
+DlgDocCharSetGR		: "希臘文",
+DlgDocCharSetJP		: "日文",
+DlgDocCharSetKR		: "韓文",
+DlgDocCharSetTR		: "土耳其文",
+DlgDocCharSetUN		: "Unicode (UTF-8)",
+DlgDocCharSetWE		: "西歐語系",
 DlgDocCharSetOther	: "其他字元編碼",
 
 DlgDocDocType		: "文件類型",
@@ -475,12 +493,12 @@ DlgTemplatesTitle	: "內容樣版",
 DlgTemplatesSelMsg	: "請選擇欲開啟的樣版<br> (原有的內容將會被清除):",
 DlgTemplatesLoading	: "讀取樣版清單中，請稍候…",
 DlgTemplatesNoTpl	: "(無樣版)",
+DlgTemplatesReplace	: "取代原有內容",
 
 // About Dialog
 DlgAboutAboutTab	: "關於",
 DlgAboutBrowserInfoTab	: "瀏覽器資訊",
 DlgAboutLicenseTab	: "許可證",
 DlgAboutVersion		: "版本",
-DlgAboutLicense		: "依據 GNU 較寬鬆公共許可證(LGPL)發佈",
 DlgAboutInfo		: "想獲得更多資訊請至 "
-}
+};

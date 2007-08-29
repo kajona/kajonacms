@@ -21,7 +21,7 @@ FCKConfig.ToolbarSets["kajona"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Table','Rule','SpecialChar','UniversalKey'],
+	['Image','Table','Rule','SpecialChar'],
 	'/',
 	['FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']
@@ -36,7 +36,7 @@ FCKConfig.ToolbarSets["standard"] = [
 	['Source','Save','-','Cut','Copy','Paste','PasteText','PasteWord','-','SpellCheck'],
 	['Undo','Redo','-','RemoveFormat'],['FitWindow'],
 	['Link','Unlink','Anchor'],
-	['Image','Table','Rule','SpecialChar','UniversalKey'],
+	['Image','Table','Rule','SpecialChar'],
 	'/',
 	['FontName','FontSize'],
 	['Bold','Italic','Underline','StrikeThrough','Subscript','Superscript'],

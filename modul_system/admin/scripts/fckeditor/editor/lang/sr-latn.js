@@ -1,20 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: sr-latn.js
- * 	Serbian (Latin) language file.
- * 
- * File Authors:
- * 		Zoran Subic (zoran@tf.zr.ac.yu)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Serbian (Latin) language file.
  */
 
 var FCKLang =
@@ -130,7 +134,7 @@ SelectionFieldProp	: "Osobine izbornog polja",
 TextareaProp		: "Osobine zone teksta",
 FormProp			: "Osobine forme",
 
-FontFormats			: "Normal;Formatirano;Adresa;Naslov 1;Naslov 2;Naslov 3;Naslov 4;Naslov 5;Naslov 6",
+FontFormats			: "Normal;Formatirano;Adresa;Naslov 1;Naslov 2;Naslov 3;Naslov 4;Naslov 5;Naslov 6",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "Obradujem XHTML. Malo strpljenja...",
@@ -225,7 +229,7 @@ DlgLnkURL			: "URL",
 DlgLnkAnchorSel		: "Odaberi sidro",
 DlgLnkAnchorByName	: "Po nazivu sidra",
 DlgLnkAnchorById	: "Po Id-ju elementa",
-DlgLnkNoAnchors		: "<Nema dostupnih sidra>",
+DlgLnkNoAnchors		: "<Nema dostupnih sidra>",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "E-Mail adresa",
 DlgLnkEMailSubject	: "Naslov",
 DlgLnkEMailBody		: "Sadržaj poruke",
@@ -258,6 +262,7 @@ DlgLnkPopTop		: "Od vrha ekrana (px)",
 DlnLnkMsgNoUrl		: "Unesite URL linka",
 DlnLnkMsgNoEMail	: "Otkucajte adresu elektronske pote",
 DlnLnkMsgNoAnchor	: "Odaberite sidro",
+DlnLnkMsgInvPopName	: "The popup name must begin with an alphabetic character and must not contain spaces",	//MISSING
 
 // Color Dialog
 DlgColorTitle		: "Odaberite boju",
@@ -332,7 +337,6 @@ DlgReplaceReplAllBtn	: "Zameni sve",
 DlgReplaceWordChk		: "Uporedi cele reci",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "Sigurnosna podešavanja Vašeg pretraživača ne dozvoljavaju operacije automatskog lepljenja teksta. Molimo Vas da koristite prečicu sa tastature (Ctrl+V).",
 PasteErrorCut	: "Sigurnosna podešavanja Vašeg pretraživača ne dozvoljavaju operacije automatskog isecanja teksta. Molimo Vas da koristite prečicu sa tastature (Ctrl+X).",
 PasteErrorCopy	: "Sigurnosna podešavanja Vašeg pretraživača ne dozvoljavaju operacije automatskog kopiranja teksta. Molimo Vas da koristite prečicu sa tastature (Ctrl+C).",
 
@@ -340,6 +344,7 @@ PasteAsText		: "Zalepi kao čist tekst",
 PasteFromWord	: "Zalepi iz Worda",
 
 DlgPasteMsg2	: "Molimo Vas da zalepite unutar donje povrine koristeći tastaturnu prečicu (<STRONG>Ctrl+V</STRONG>) i da pritisnete <STRONG>OK</STRONG>.",
+DlgPasteSec		: "Because of your browser security settings, the editor is not able to access your clipboard data directly. You are required to paste it again in this window.",	//MISSING
 DlgPasteIgnoreFont		: "Ignoriši definicije fontova",
 DlgPasteRemoveStyles	: "Ukloni definicije stilova",
 DlgPasteCleanBox		: "Obriši sve",
@@ -374,8 +379,11 @@ DlgSpellManyChanges		: "Provera spelovanja završena: %1 reč(i) je izmenjeno",
 IeSpellDownload			: "Provera spelovanja nije instalirana. Da li želite da je skinete sa Interneta?",
 
 // Button Dialog
-DlgButtonText	: "Tekst (vrednost)",
-DlgButtonType	: "Tip",
+DlgButtonText		: "Tekst (vrednost)",
+DlgButtonType		: "Tip",
+DlgButtonTypeBtn	: "Button",	//MISSING
+DlgButtonTypeSbm	: "Submit",	//MISSING
+DlgButtonTypeRst	: "Reset",	//MISSING
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "Naziv",
@@ -424,6 +432,7 @@ DlgHiddenValue	: "Vrednost",
 // Bulleted List Dialog
 BulletedListProp	: "Osobine nenabrojive liste",
 NumberedListProp	: "Osobine nabrojive liste",
+DlgLstStart			: "Start",	//MISSING
 DlgLstType			: "Tip",
 DlgLstTypeCircle	: "Krug",
 DlgLstTypeDisc		: "Disc",	//MISSING
@@ -446,6 +455,15 @@ DlgDocLangDirLTR	: "Sleva nadesno (LTR)",
 DlgDocLangDirRTL	: "Zdesna nalevo (RTL)",
 DlgDocLangCode		: "Šifra jezika",
 DlgDocCharSet		: "Kodiranje skupa karaktera",
+DlgDocCharSetCE		: "Central European",	//MISSING
+DlgDocCharSetCT		: "Chinese Traditional (Big5)",	//MISSING
+DlgDocCharSetCR		: "Cyrillic",	//MISSING
+DlgDocCharSetGR		: "Greek",	//MISSING
+DlgDocCharSetJP		: "Japanese",	//MISSING
+DlgDocCharSetKR		: "Korean",	//MISSING
+DlgDocCharSetTR		: "Turkish",	//MISSING
+DlgDocCharSetUN		: "Unicode (UTF-8)",	//MISSING
+DlgDocCharSetWE		: "Western European",	//MISSING
 DlgDocCharSetOther	: "Ostala kodiranja skupa karaktera",
 
 DlgDocDocType		: "Zaglavlje tipa dokumenta",
@@ -475,12 +493,12 @@ DlgTemplatesTitle	: "Obrasci za sadržaj",
 DlgTemplatesSelMsg	: "Molimo Vas da odaberete obrazac koji ce biti primenjen na stranicu (trenutni sadržaj ce biti obrisan):",
 DlgTemplatesLoading	: "Učitavam listu obrazaca. Malo strpljenja...",
 DlgTemplatesNoTpl	: "(Nema definisanih obrazaca)",
+DlgTemplatesReplace	: "Replace actual contents",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "O editoru",
 DlgAboutBrowserInfoTab	: "Informacije o pretraživacu",
 DlgAboutLicenseTab	: "License",	//MISSING
 DlgAboutVersion		: "verzija",
-DlgAboutLicense		: "Licencirano pod uslovima GNU Lesser General Public License",
 DlgAboutInfo		: "Za više informacija posetite"
-}
+};

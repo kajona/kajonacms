@@ -1,21 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: pl.js
- * 	Polish language file.
- * 
- * File Authors:
- * 		Jakub Boesche (jboesche@gazeta.pl)
- * 		Maciej Bochynski (maciej.bochynski@lubman.pl)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Polish language file.
  */
 
 var FCKLang =
@@ -131,7 +134,7 @@ SelectionFieldProp	: "Właściwości listy wyboru",
 TextareaProp		: "Właściwości obszaru tekstowego",
 FormProp			: "Właściwości formularza",
 
-FontFormats			: "Normalny;Tekst sformatowany;Adres;Nagłówek 1;Nagłówek 2;Nagłówek 3;Nagłówek 4;Nagłówek 5;Nagłówek 6",
+FontFormats			: "Normalny;Tekst sformatowany;Adres;Nagłówek 1;Nagłówek 2;Nagłówek 3;Nagłówek 4;Nagłówek 5;Nagłówek 6",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "Przetwarzanie XHTML. Proszę czekać...",
@@ -226,7 +229,7 @@ DlgLnkURL			: "Adres URL",
 DlgLnkAnchorSel		: "Wybierz etykietę",
 DlgLnkAnchorByName	: "Wg etykiety",
 DlgLnkAnchorById	: "Wg identyfikatora elementu",
-DlgLnkNoAnchors		: "<W dokumencie nie zdefiniowano żadnych etykiet>",
+DlgLnkNoAnchors		: "<W dokumencie nie zdefiniowano żadnych etykiet>",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "Adres e-mail",
 DlgLnkEMailSubject	: "Temat",
 DlgLnkEMailBody		: "Treść",
@@ -259,6 +262,7 @@ DlgLnkPopTop		: "Pozycja w pionie",
 DlnLnkMsgNoUrl		: "Podaj adres URL",
 DlnLnkMsgNoEMail	: "Podaj adres e-mail",
 DlnLnkMsgNoAnchor	: "Wybierz etykietę",
+DlnLnkMsgInvPopName	: "The popup name must begin with an alphabetic character and must not contain spaces",	//MISSING
 
 // Color Dialog
 DlgColorTitle		: "Wybierz kolor",
@@ -333,7 +337,6 @@ DlgReplaceReplAllBtn	: "Zastąp wszystko",
 DlgReplaceWordChk		: "Całe słowa",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "Ustawienia bezpieczeństwa Twojej przeglądarki nie pozwalają na automatyczne wklejanie tekstu. Użyj skrótu klawiszowego Ctrl+V.",
 PasteErrorCut	: "Ustawienia bezpieczeństwa Twojej przeglądarki nie pozwalają na automatyczne wycinanie tekstu. Użyj skrótu klawiszowego Ctrl+X.",
 PasteErrorCopy	: "Ustawienia bezpieczeństwa Twojej przeglądarki nie pozwalają na automatyczne kopiowanie tekstu. Użyj skrótu klawiszowego Ctrl+C.",
 
@@ -341,6 +344,7 @@ PasteAsText		: "Wklej jako czysty tekst",
 PasteFromWord	: "Wklej z Worda",
 
 DlgPasteMsg2	: "Proszę wkleić w poniższym polu używając klawiaturowego skrótu (<STRONG>Ctrl+V</STRONG>) i kliknąć <STRONG>OK</STRONG>.",
+DlgPasteSec		: "Because of your browser security settings, the editor is not able to access your clipboard data directly. You are required to paste it again in this window.",	//MISSING
 DlgPasteIgnoreFont		: "Ignoruj definicje 'Font Face'",
 DlgPasteRemoveStyles	: "Usuń definicje Stylów",
 DlgPasteCleanBox		: "Wyczyść",
@@ -375,8 +379,11 @@ DlgSpellManyChanges		: "Sprawdzanie zakończone: zmieniono %l słów",
 IeSpellDownload			: "Słownik nie jest zainstalowany. Chcesz go ściągnąć?",
 
 // Button Dialog
-DlgButtonText	: "Tekst (Wartość)",
-DlgButtonType	: "Typ",
+DlgButtonText		: "Tekst (Wartość)",
+DlgButtonType		: "Typ",
+DlgButtonTypeBtn	: "Button",	//MISSING
+DlgButtonTypeSbm	: "Submit",	//MISSING
+DlgButtonTypeRst	: "Reset",	//MISSING
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "Nazwa",
@@ -425,6 +432,7 @@ DlgHiddenValue	: "Wartość",
 // Bulleted List Dialog
 BulletedListProp	: "Właściwości listy punktowanej",
 NumberedListProp	: "Właściwości listy numerowanej",
+DlgLstStart			: "Start",	//MISSING
 DlgLstType			: "Typ",
 DlgLstTypeCircle	: "Koło",
 DlgLstTypeDisc		: "Dysk",
@@ -447,6 +455,15 @@ DlgDocLangDirLTR	: "Od lewej do prawej (LTR)",
 DlgDocLangDirRTL	: "Od prawej do lewej (RTL)",
 DlgDocLangCode		: "Kod języka",
 DlgDocCharSet		: "Kodowanie znaków",
+DlgDocCharSetCE		: "Central European",	//MISSING
+DlgDocCharSetCT		: "Chinese Traditional (Big5)",	//MISSING
+DlgDocCharSetCR		: "Cyrillic",	//MISSING
+DlgDocCharSetGR		: "Greek",	//MISSING
+DlgDocCharSetJP		: "Japanese",	//MISSING
+DlgDocCharSetKR		: "Korean",	//MISSING
+DlgDocCharSetTR		: "Turkish",	//MISSING
+DlgDocCharSetUN		: "Unicode (UTF-8)",	//MISSING
+DlgDocCharSetWE		: "Western European",	//MISSING
 DlgDocCharSetOther	: "Inne kodowanie znaków",
 
 DlgDocDocType		: "Nagłowek typu dokumentu",
@@ -476,12 +493,12 @@ DlgTemplatesTitle	: "Szablony zawartości",
 DlgTemplatesSelMsg	: "Wybierz szablon do otwarcia w edytorze<br>(obecna zawartość okna edytora zostanie utracona):",
 DlgTemplatesLoading	: "Ładowanie listy szablonów. Proszę czekać...",
 DlgTemplatesNoTpl	: "(Brak zdefiniowanych szablonów)",
+DlgTemplatesReplace	: "Replace actual contents",	//MISSING
 
 // About Dialog
 DlgAboutAboutTab	: "O ...",
 DlgAboutBrowserInfoTab	: "O przeglądarce",
 DlgAboutLicenseTab	: "Licencja",
 DlgAboutVersion		: "wersja",
-DlgAboutLicense		: "na licencji GNU Lesser General Public License",
 DlgAboutInfo		: "Więcej informacji uzyskasz pod adresem"
-}
+};

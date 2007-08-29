@@ -1,21 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: hu.js
- * 	Hungarian language file.
- * 
- * File Authors:
- * 		Varga Zsolt (meridian@netteszt.hu)
- * 		Géza Szűcs (flextor@flextor.hu)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Hungarian language file.
  */
 
 var FCKLang =
@@ -131,7 +134,7 @@ SelectionFieldProp	: "Legördülő lista tulajdonságai",
 TextareaProp		: "Szövegterület tulajdonságai",
 FormProp			: "Űrlap tulajdonságai",
 
-FontFormats			: "Normál;Formázott;Címsor;Fejléc 1;Fejléc 2;Fejléc 3;Fejléc 4;Fejléc 5;Fejléc 6;Bekezdés (DIV)",
+FontFormats			: "Normál;Formázott;Címsor;Fejléc 1;Fejléc 2;Fejléc 3;Fejléc 4;Fejléc 5;Fejléc 6;Bekezdés (DIV)",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "XHTML feldolgozása. Kérem várjon...",
@@ -226,7 +229,7 @@ DlgLnkURL			: "Webcím",
 DlgLnkAnchorSel		: "Horgony választása",
 DlgLnkAnchorByName	: "Horgony név szerint",
 DlgLnkAnchorById	: "Azonosító szerint",
-DlgLnkNoAnchors		: "<Nincs horgony a dokumentumban>",
+DlgLnkNoAnchors		: "<Nincs horgony a dokumentumban>",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "E-Mail cím",
 DlgLnkEMailSubject	: "Üzenet tárgya",
 DlgLnkEMailBody		: "Üzenet",
@@ -259,6 +262,7 @@ DlgLnkPopTop		: "Felső pozíció",
 DlnLnkMsgNoUrl		: "Adja meg a hivatkozás webcímét",
 DlnLnkMsgNoEMail	: "Adja meg az E-Mail címet",
 DlnLnkMsgNoAnchor	: "Válasszon egy horgonyt",
+DlnLnkMsgInvPopName	: "A felbukkanó ablak neve alfanumerikus karakterrel kezdôdjön, valamint ne tartalmazzon szóközt",
 
 // Color Dialog
 DlgColorTitle		: "Színválasztás",
@@ -333,7 +337,6 @@ DlgReplaceReplAllBtn	: "Az összes cseréje",
 DlgReplaceWordChk		: "csak ha ez a teljes szó",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "A böngésző biztonsági beállításai nem engedélyezik a szerkesztőnek, hogy végrehajtsa a beillesztés műveletet. Használja az alábbi billentyűkombinációt (Ctrl+V).",
 PasteErrorCut	: "A böngésző biztonsági beállításai nem engedélyezik a szerkesztőnek, hogy végrehajtsa a kivágás műveletet. Használja az alábbi billentyűkombinációt (Ctrl+X).",
 PasteErrorCopy	: "A böngésző biztonsági beállításai nem engedélyezik a szerkesztőnek, hogy végrehajtsa a másolás műveletet. Használja az alábbi billentyűkombinációt (Ctrl+X).",
 
@@ -341,6 +344,7 @@ PasteAsText		: "Beillesztés formázatlan szövegként",
 PasteFromWord	: "Beillesztés Word-ből",
 
 DlgPasteMsg2	: "Másolja be az alábbi mezőbe a <STRONG>Ctrl+V</STRONG> billentyűk lenyomásával, majd nyomjon <STRONG>Rendben</STRONG>-t.",
+DlgPasteSec		: "Because of your browser security settings, the editor is not able to access your clipboard data directly. You are required to paste it again in this window.",	//MISSING
 DlgPasteIgnoreFont		: "Betű formázások megszüntetése",
 DlgPasteRemoveStyles	: "Stílusok eltávolítása",
 DlgPasteCleanBox		: "Törlés",
@@ -375,8 +379,11 @@ DlgSpellManyChanges		: "Helyesírás-ellenőrzés kész: %1 szó cserélve",
 IeSpellDownload			: "A helyesírás-ellenőrző nincs telepítve. Szeretné letölteni most?",
 
 // Button Dialog
-DlgButtonText	: "Szöveg (Érték)",
-DlgButtonType	: "Típus",
+DlgButtonText		: "Szöveg (Érték)",
+DlgButtonType		: "Típus",
+DlgButtonTypeBtn	: "Gomb",
+DlgButtonTypeSbm	: "Küldés",
+DlgButtonTypeRst	: "Alaphelyzet",
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "Név",
@@ -425,6 +432,7 @@ DlgHiddenValue	: "Érték",
 // Bulleted List Dialog
 BulletedListProp	: "Felsorolás tulajdonságai",
 NumberedListProp	: "Számozás tulajdonságai",
+DlgLstStart			: "Start",
 DlgLstType			: "Formátum",
 DlgLstTypeCircle	: "Kör",
 DlgLstTypeDisc		: "Lemez",
@@ -447,6 +455,15 @@ DlgDocLangDirLTR	: "Balról jobbra",
 DlgDocLangDirRTL	: "Jobbról balra",
 DlgDocLangCode		: "Nyelv kód",
 DlgDocCharSet		: "Karakterkódolás",
+DlgDocCharSetCE		: "Közép-Európai",
+DlgDocCharSetCT		: "Kínai Tradicionális (Big5)",
+DlgDocCharSetCR		: "Cyrill",
+DlgDocCharSetGR		: "Görög",
+DlgDocCharSetJP		: "Japán",
+DlgDocCharSetKR		: "Koreai",
+DlgDocCharSetTR		: "Török",
+DlgDocCharSetUN		: "Unicode (UTF-8)",
+DlgDocCharSetWE		: "Nyugat-Európai",
 DlgDocCharSetOther	: "Más karakterkódolás",
 
 DlgDocDocType		: "Dokumentum típus fejléc",
@@ -476,12 +493,12 @@ DlgTemplatesTitle	: "Elérhető sablonok",
 DlgTemplatesSelMsg	: "Válassza ki melyik sablon nyíljon meg a szerkesztőben<br>(a jelenlegi tartalom elveszik):",
 DlgTemplatesLoading	: "Sablon lista betöltése. Kis türelmet...",
 DlgTemplatesNoTpl	: "(Nincs sablon megadva)",
+DlgTemplatesReplace	: "Kicseréli a jelenlegi tartalmat",
 
 // About Dialog
 DlgAboutAboutTab	: "Névjegy",
 DlgAboutBrowserInfoTab	: "Böngésző információ",
 DlgAboutLicenseTab	: "Licensz",
 DlgAboutVersion		: "verzió",
-DlgAboutLicense		: "GNU Lesser General Public License szabadalom alá tartozik",
 DlgAboutInfo		: "További információkért látogasson el ide:"
-}
+};

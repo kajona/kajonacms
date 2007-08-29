@@ -1,21 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: ar.js
- * 	Arabic language file.
- * 
- * File Authors:
- * 		Abdul-Aziz Abdul-Kareem Al-Oraij (http://aziz.oraij.com)
- * 		Abu Faisal (http://www.24at24.com)
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Arabic language file.
  */
 
 var FCKLang =
@@ -131,7 +134,7 @@ SelectionFieldProp	: "خصائص القائمة المنسدلة",
 TextareaProp		: "خصائص ناحية النص",
 FormProp			: "خصائص النموذج",
 
-FontFormats			: "عادي;منسّق;دوس;العنوان 1;العنوان  2;العنوان  3;العنوان  4;العنوان  5;العنوان  6",
+FontFormats			: "عادي;منسّق;دوس;العنوان 1;العنوان  2;العنوان  3;العنوان  4;العنوان  5;العنوان  6",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "إنتظر قليلاً ريثما تتم   معالَجة‏ XHTML. لن يستغرق طويلاً...",
@@ -226,7 +229,7 @@ DlgLnkURL			: "الموقع",
 DlgLnkAnchorSel		: "اختر علامة مرجعية",
 DlgLnkAnchorByName	: "حسب اسم العلامة",
 DlgLnkAnchorById	: "حسب تعريف العنصر",
-DlgLnkNoAnchors		: "<لا يوجد علامات مرجعية في هذا المستند>",
+DlgLnkNoAnchors		: "<لا يوجد علامات مرجعية في هذا المستند>",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "عنوان بريد إلكتروني",
 DlgLnkEMailSubject	: "موضوع الرسالة",
 DlgLnkEMailBody		: "محتوى الرسالة",
@@ -259,6 +262,7 @@ DlgLnkPopTop		: "التمركز للأعلى",
 DlnLnkMsgNoUrl		: "فضلاً أدخل عنوان الموقع الذي يشير إليه الرابط",
 DlnLnkMsgNoEMail	: "فضلاً أدخل عنوان البريد الإلكتروني",
 DlnLnkMsgNoAnchor	: "فضلاً حدد العلامة المرجعية المرغوبة",
+DlnLnkMsgInvPopName	: "اسم النافذة المنبثقة يجب أن يبدأ بحرف أبجدي دون مسافات",
 
 // Color Dialog
 DlgColorTitle		: "اختر لوناً",
@@ -333,7 +337,6 @@ DlgReplaceReplAllBtn	: "إستبدال الكل",
 DlgReplaceWordChk		: "الكلمة بالكامل فقط",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "الإعدادات الأمنية للمتصفح الذي تستخدمه تمنع اللصق التلقائي. فضلاً إستخدم لوحة المفاتيح لفعل ذلك (Ctrl+V).",
 PasteErrorCut	: "الإعدادات الأمنية للمتصفح الذي تستخدمه تمنع القص التلقائي. فضلاً إستخدم لوحة المفاتيح لفعل ذلك (Ctrl+X).",
 PasteErrorCopy	: "الإعدادات الأمنية للمتصفح الذي تستخدمه تمنع النسخ التلقائي. فضلاً إستخدم لوحة المفاتيح لفعل ذلك (Ctrl+C).",
 
@@ -341,6 +344,7 @@ PasteAsText		: "لصق كنص بسيط",
 PasteFromWord	: "لصق من وورد",
 
 DlgPasteMsg2	: "الصق داخل الصندوق بإستخدام زرّي (<STRONG>Ctrl+V</STRONG>) في لوحة المفاتيح، ثم اضغط زر  <STRONG>موافق</STRONG>.",
+DlgPasteSec		: "Because of your browser security settings, the editor is not able to access your clipboard data directly. You are required to paste it again in this window.",	//MISSING
 DlgPasteIgnoreFont		: "تجاهل تعريفات أسماء الخطوط",
 DlgPasteRemoveStyles	: "إزالة تعريفات الأنماط",
 DlgPasteCleanBox		: "نظّف محتوى الصندوق",
@@ -375,8 +379,11 @@ DlgSpellManyChanges		: "تم إكمال التدقيق الإملائي: تم ت
 IeSpellDownload			: "المدقق الإملائي (الإنجليزي) غير مثبّت. هل تود تحميله الآن؟",
 
 // Button Dialog
-DlgButtonText	: "القيمة/التسمية",
-DlgButtonType	: "نوع الزر",
+DlgButtonText		: "القيمة/التسمية",
+DlgButtonType		: "نوع الزر",
+DlgButtonTypeBtn	: "زر",
+DlgButtonTypeSbm	: "إرسال",
+DlgButtonTypeRst	: "إعادة تعيين",
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "الاسم",
@@ -425,6 +432,7 @@ DlgHiddenValue	: "القيمة",
 // Bulleted List Dialog
 BulletedListProp	: "خصائص التعداد النقطي",
 NumberedListProp	: "خصائص التعداد الرقمي",
+DlgLstStart			: "البدء عند",
 DlgLstType			: "النوع",
 DlgLstTypeCircle	: "دائرة",
 DlgLstTypeDisc		: "قرص",
@@ -447,7 +455,16 @@ DlgDocLangDirLTR	: "اليسار لليمين (LTR)",
 DlgDocLangDirRTL	: "اليمين لليسار (RTL)",
 DlgDocLangCode		: "رمز اللغة",
 DlgDocCharSet		: "ترميز الحروف",
-DlgDocCharSetOther	: "ترميز حروف آخر",
+DlgDocCharSetCE		: "أوروبا الوسطى",
+DlgDocCharSetCT		: "الصينية التقليدية (Big5)",
+DlgDocCharSetCR		: "السيريلية",
+DlgDocCharSetGR		: "اليونانية",
+DlgDocCharSetJP		: "اليابانية",
+DlgDocCharSetKR		: "الكورية",
+DlgDocCharSetTR		: "التركية",
+DlgDocCharSetUN		: "Unicode (UTF-8)",
+DlgDocCharSetWE		: "أوروبا الغربية",
+DlgDocCharSetOther	: "ترميز آخر",
 
 DlgDocDocType		: "ترويسة نوع  الصفحة",
 DlgDocDocTypeOther	: "ترويسة نوع  صفحة أخرى",
@@ -476,12 +493,12 @@ DlgTemplatesTitle	: "قوالب المحتوى",
 DlgTemplatesSelMsg	: "اختر القالب الذي تود وضعه في المحرر <br>(سيتم فقدان المحتوى الحالي):",
 DlgTemplatesLoading	: "جاري تحميل قائمة القوالب، الرجاء الإنتظار...",
 DlgTemplatesNoTpl	: "(لم يتم تعريف أي قالب)",
+DlgTemplatesReplace	: "استبدال المحتوى",
 
 // About Dialog
 DlgAboutAboutTab	: "نبذة",
 DlgAboutBrowserInfoTab	: "معلومات متصفحك",
 DlgAboutLicenseTab	: "الترخيص",
 DlgAboutVersion		: "الإصدار",
-DlgAboutLicense		: "مرخّص بحسب قانون  GNU LGPL",
 DlgAboutInfo		: "لمزيد من المعلومات تفضل بزيارة"
-}
+};

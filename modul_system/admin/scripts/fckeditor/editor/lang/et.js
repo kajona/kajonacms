@@ -1,21 +1,24 @@
 ﻿/*
- * FCKeditor - The text editor for internet
- * Copyright (C) 2003-2006 Frederico Caldeira Knabben
- * 
- * Licensed under the terms of the GNU Lesser General Public License:
- * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
- * For further information visit:
- * 		http://www.fckeditor.net/
- * 
- * "Support Open Source software. What about a donation today?"
- * 
- * File Name: et.js
- * 	Estonian language file.
- * 
- * File Authors:
- * 		Kristjan Kivikangur (kristjan@ttrk.ee)
- * 		Gustav Kaskema
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Estonian language file.
  */
 
 var FCKLang =
@@ -131,7 +134,7 @@ SelectionFieldProp	: "Valiklahtri omadused",
 TextareaProp		: "Tekstiala omadused",
 FormProp			: "Vormi omadused",
 
-FontFormats			: "Tavaline;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6",
+FontFormats			: "Tavaline;Vormindatud;Aadress;Pealkiri 1;Pealkiri 2;Pealkiri 3;Pealkiri 4;Pealkiri 5;Pealkiri 6;Tavaline (DIV)",		//REVIEW : Check _getfontformat.html
 
 // Alerts and Messages
 ProcessingXHTML		: "Töötlen XHTML. Palun oota...",
@@ -142,7 +145,7 @@ UnknownToolbarItem	: "Tundmatu tööriistariba üksus \"%1\"",
 UnknownCommand		: "Tundmatu käsunimi \"%1\"",
 NotImplemented		: "Käsku ei täidetud",
 UnknownToolbarSet	: "Tööriistariba \"%1\" ei eksisteeri",
-NoActiveX			: "Sinu interneti sirvija turvalisuse seaded võivad limiteerida mõningaid tekstirdaktori kasutus võimalusi. Sa peaksid võimaldama valiku \"Run ActiveX controls and plug-ins\" oma sirvija seadetes. Muidu võid sa täheldada vigu tekstiredaktori töös ja märgata puuduvaid funktsioone.",
+NoActiveX			: "Sinu veebisirvija turvalisuse seaded võivad limiteerida mõningaid tekstirdaktori kasutus võimalusi. Sa peaksid võimaldama valiku \"Run ActiveX controls and plug-ins\" oma sirvija seadetes. Muidu võid sa täheldada vigu tekstiredaktori töös ja märgata puuduvaid funktsioone.",
 BrowseServerBlocked : "Ressursside sirvija avamine ebaõnnestus. Võimalda pop-up akende avanemine.",
 DialogBlocked		: "Ei olenud võimalik avada dialoogi akent. Võimalda pop-up akende avanemine.",
 
@@ -226,7 +229,7 @@ DlgLnkURL			: "URL",
 DlgLnkAnchorSel		: "Vali ankur",
 DlgLnkAnchorByName	: "Ankru nime järgi",
 DlgLnkAnchorById	: "Elemendi id järgi",
-DlgLnkNoAnchors		: "<Selles dokumendis ei ole ankruid>",
+DlgLnkNoAnchors		: "(Selles dokumendis ei ole ankruid)",		//REVIEW : Change < and > with ( and )
 DlgLnkEMail			: "E-posti aadress",
 DlgLnkEMailSubject	: "Sõnumi teema",
 DlgLnkEMailBody		: "Sõnumi tekst",
@@ -259,6 +262,7 @@ DlgLnkPopTop		: "Ülemine asukoht",
 DlnLnkMsgNoUrl		: "Palun kirjuta lingi URL",
 DlnLnkMsgNoEMail	: "Palun kirjuta E-Posti aadress",
 DlnLnkMsgNoAnchor	: "Palun vali ankur",
+DlnLnkMsgInvPopName	: "Hüpikakna nimi peab algama alfabeetilise tähega ja ei tohi sisaldada tühikuid",
 
 // Color Dialog
 DlgColorTitle		: "Vali värv",
@@ -333,14 +337,14 @@ DlgReplaceReplAllBtn	: "Asenda kõik",
 DlgReplaceWordChk		: "Otsi terviklike sõnu",
 
 // Paste Operations / Dialog
-PasteErrorPaste	: "Sinu interneti sirvija turvaseaded ei luba redaktoril automaatselt kleepida. Palun kasutage selleks klaviatuuri klahvikombinatsiooni (Ctrl+V).",
-PasteErrorCut	: "Sinu interneti sirvija turvaseaded ei luba redaktoril automaatselt lõigata. Palun kasutage selleks klaviatuuri klahvikombinatsiooni (Ctrl+X).",
-PasteErrorCopy	: "Sinu interneti sirvija turvaseaded ei luba redaktoril automaatselt kopeerida. Palun kasutage selleks klaviatuuri klahvikombinatsiooni (Ctrl+C).",
+PasteErrorCut	: "Sinu veebisirvija turvaseaded ei luba redaktoril automaatselt lõigata. Palun kasutage selleks klaviatuuri klahvikombinatsiooni (Ctrl+X).",
+PasteErrorCopy	: "Sinu veebisirvija turvaseaded ei luba redaktoril automaatselt kopeerida. Palun kasutage selleks klaviatuuri klahvikombinatsiooni (Ctrl+C).",
 
 PasteAsText		: "Kleebi tavalise tekstina",
 PasteFromWord	: "Kleebi Wordist",
 
 DlgPasteMsg2	: "Palun kleebi järgnevasse kasti kasutades klaviatuuri klahvikombinatsiooni (<STRONG>Ctrl+V</STRONG>) ja vajuta seejärel <STRONG>OK</STRONG>.",
+DlgPasteSec		: "Sinu veebisirvija turvaseadete tõttu, ei oma redaktor otsest ligipääsu lõikelaua andmetele. Sa pead kleepima need uuesti siia aknasse.",
 DlgPasteIgnoreFont		: "Ignoreeri kirja definitsioone",
 DlgPasteRemoveStyles	: "Eemalda stiilide definitsioonid",
 DlgPasteCleanBox		: "Puhasta ära kast",
@@ -375,8 +379,11 @@ DlgSpellManyChanges		: "Õigekirja kontroll sooritatud: %1 sõna muudetud",
 IeSpellDownload			: "Õigekirja kontrollija ei ole installeeritud. Soovid sa selle alla laadida?",
 
 // Button Dialog
-DlgButtonText	: "Tekst (väärtus)",
-DlgButtonType	: "Tüüp",
+DlgButtonText		: "Tekst (väärtus)",
+DlgButtonType		: "Tüüp",
+DlgButtonTypeBtn	: "Nupp",
+DlgButtonTypeSbm	: "Saada",
+DlgButtonTypeRst	: "Lähtesta",
 
 // Checkbox and Radio Button Dialogs
 DlgCheckboxName		: "Nimi",
@@ -425,6 +432,7 @@ DlgHiddenValue	: "Väärtus",
 // Bulleted List Dialog
 BulletedListProp	: "Täpitud loetelu omadused",
 NumberedListProp	: "Nummerdatud loetelu omadused",
+DlgLstStart			: "Alusta",
 DlgLstType			: "Tüüp",
 DlgLstTypeCircle	: "Ring",
 DlgLstTypeDisc		: "Ketas",
@@ -447,6 +455,15 @@ DlgDocLangDirLTR	: "Vasakult paremale (LTR)",
 DlgDocLangDirRTL	: "Paremalt vasakule (RTL)",
 DlgDocLangCode		: "Keele kood",
 DlgDocCharSet		: "Märgistiku kodeering",
+DlgDocCharSetCE		: "Kesk-Euroopa",
+DlgDocCharSetCT		: "Hiina traditsiooniline (Big5)",
+DlgDocCharSetCR		: "Kirillisa",
+DlgDocCharSetGR		: "Kreeka",
+DlgDocCharSetJP		: "Jaapani",
+DlgDocCharSetKR		: "Korea",
+DlgDocCharSetTR		: "Türgi",
+DlgDocCharSetUN		: "Unicode (UTF-8)",
+DlgDocCharSetWE		: "Lääne-Euroopa",
 DlgDocCharSetOther	: "Ülejäänud märgistike kodeeringud",
 
 DlgDocDocType		: "Dokumendi tüüppäis",
@@ -476,12 +493,12 @@ DlgTemplatesTitle	: "Sisu šabloonid",
 DlgTemplatesSelMsg	: "Palun vali šabloon, et avada see redaktoris<br />(praegune sisu läheb kaotsi):",
 DlgTemplatesLoading	: "Laen šabloonide nimekirja. Palun oota...",
 DlgTemplatesNoTpl	: "(Ühtegi šablooni ei ole defineeritud)",
+DlgTemplatesReplace	: "Asenda tegelik sisu",
 
 // About Dialog
 DlgAboutAboutTab	: "Teave",
-DlgAboutBrowserInfoTab	: "Interneti sirvija info",
+DlgAboutBrowserInfoTab	: "Veebisirvija info",
 DlgAboutLicenseTab	: "Litsents",
 DlgAboutVersion		: "versioon",
-DlgAboutLicense		: "Litsenseeritud GNU Lesser General Public License litsentsiga",
 DlgAboutInfo		: "Täpsema info saamiseks mine"
-}
+};
