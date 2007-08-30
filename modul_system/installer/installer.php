@@ -16,7 +16,7 @@ include_once("../system/includes.php");
 
 
 /**
- * Class representing an installer.
+ * Class representing a graphical installer.
  * Loads all subinstallers
  *
  * @author sidler@mulchprod.de

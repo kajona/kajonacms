@@ -12,8 +12,8 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-require_once(_realpath_."/installer/class_installer_base.php");
-require_once(_realpath_."/installer/interface_installer.php");
+require_once(_systempath_."/class_installer_base.php");
+require_once(_systempath_."/interface_installer.php");
 include_once(_systempath_."/class_modul_pages_element.php");
 
 /**

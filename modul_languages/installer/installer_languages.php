@@ -12,8 +12,8 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
-require_once(_realpath_."/installer/class_installer_base.php");
-require_once(_realpath_."/installer/interface_installer.php");
+require_once(_systempath_."/class_installer_base.php");
+require_once(_systempath_."/interface_installer.php");
 
 /**
  * Class providing an installer for the language module
