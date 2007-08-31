@@ -247,6 +247,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
         $this->strTarget = $strTarget;
     }
     public function setStrImage($strImage) {
+        $strImage = uniStrReplace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
 
