@@ -331,7 +331,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$arrTemp["href"] = getLinkPortalRaw($arrTemp["page_intern"], $arrTemp["page_extern"], "", "", "");
 		$arrTemp["target"] = $objPointData->getStrTarget();
 		if($objPointData->getStrImage() != "")
-			$arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" />", "" , "", 0, $strCss);
+			$arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>", "" , "", 0, $strCss);
 
 		//Load the correct template
 		$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
