@@ -219,7 +219,7 @@ class class_modul_pages extends class_portal {
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
     		    //Load tooltips
 		        $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/tooltips.js\"></script>";
-                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">window.onload=function(){enableTooltips(\"showTooltip\")};</script>";
+                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
     		    //The toolbar has to be added right after the body-tag - to generate correct html-code
@@ -234,7 +234,7 @@ class class_modul_pages extends class_portal {
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"portalEditorEnable();\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
                 //Load tooltips
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/tooltips.js\"></script>";
-                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">window.onload=function(){enableTooltips(\"showTooltip\")};</script>";
+                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
@@ -245,7 +245,7 @@ class class_modul_pages extends class_portal {
     		    $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body")+$intTemp) .$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body")+$intTemp) ;
             }
         }
-
+        
 		//save the generated Page to the cache
 		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage)
 		   $this->objPagecache->savePageToCache($strPagename, $intMaxCachetime, $this->objSession->getUserID(), $strPageContent);

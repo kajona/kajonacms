@@ -10,6 +10,8 @@
 %%postacomment_list%%
 
 <script type="text/javascript" language="javascript">
+//ok, further scripts needed. load now, to be set up, if user posts
+kajonaAjaxHelper.loadAjaxBase();	
 
 var postacommentCallback =
 {
@@ -21,8 +23,7 @@ function submitPostacommentForm()  {
 	var connectionObject;
 	
 	this.submit = function() {
-		//ok, further scripts needed. load now.
-		kajonaAjaxHelper.loadAjaxBase();	
+		
 		//create a new ajax request. collect data.
 		var comment_name = document.getElementById('comment_name').value;
 		var comment_subject = document.getElementById('comment_subject').value;
@@ -55,7 +56,6 @@ function submitPostacommentForm()  {
 	
 }
 submitPostacommentForm = new submitPostacommentForm();
-
 </script>
 </postacomment_list>
 
