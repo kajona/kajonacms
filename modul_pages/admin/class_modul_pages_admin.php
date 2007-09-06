@@ -369,7 +369,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    $arrPages = $objArraySectionIterator->getArrayExtended();
     		$arrPageViews = $this->objToolkit->getPageview($arrPages, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "pages", "listAll", "", _admin_nr_of_rows_);
             $arrPages = $arrPageViews["elements"];
-			
+
 			foreach($arrPages as $objPage) {
 			 	//Get the status
 			 	$status = $objPage->getStatus();
@@ -404,7 +404,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			if(count($arrPages) > 0)
 			    $strReturn .= $arrPageViews["pageview"];
-			        
+
 			if(count($arrPages) == 0)
 				$strReturn .= $this->getText("liste_seiten_leer");
 
@@ -902,6 +902,60 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			if(count($arrElements) == 0)
 		    	$strReturn .= $this->getText("elemente_liste_leer");
+
+
+		    // ------------------------------------------------------------------------------------------
+		    // any element-installers of elements not yet installed?
+		    $arrElementsToInstall = array();
+		    include_once(_systempath_."/class_filesystem.php");
+    		$objFilesystem = new class_filesystem();
+    		//Ladend der Dateien
+    		$arrInstallers = $objFilesystem->getFilelist("/installer");
+
+    		foreach($arrInstallers as $intKey => $strFile)
+    			if(strpos($strFile, ".php") === false || strpos($strFile, "installer_element") === false)
+    				unset($arrInstallers[$intKey]);
+
+    		if(count($arrInstallers) > 0) {
+    		    asort($arrInstallers);
+    		    //Loading each installer
+        		foreach($arrInstallers as $strInstaller) {
+        			include_once(_realpath_."/installer/".$strInstaller);
+        			//Creating an object....
+        			$strClass = "class_".str_replace(".php", "", $strInstaller);
+        			$objInstaller = new $strClass();
+
+        			$objSystem = class_modul_system_module::getModuleByName("system");
+        			if($objInstaller instanceof interface_installer ) {
+                		$bitNeededSysversionInstalled = true;
+                	    //check, if a min version of the system is needed
+                		if($objInstaller->getMinSystemVersion() != "") {
+                		    //the systems version to compare to
+
+                		    if(version_compare($objInstaller->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+                		        $bitNeededSysversionInstalled = false;
+                		    }
+                		}
+
+                		if($bitNeededSysversionInstalled && $objInstaller->hasPostInstalls()) {
+                		    $arrElementsToInstall[str_replace(".php", "", $strInstaller)] = $objInstaller->getArrModule("name_lang");
+                		}
+        			}
+        		}
+    		}
+
+    		//any installers remaining?
+    		if(count($arrElementsToInstall) > 0 ) {
+    		    $strReturn .= $this->objToolkit->divider();
+                $strReturn .= $this->objToolkit->getTextRow($this->getText("element_installer_hint"));
+    		    $strReturn .= $this->objToolkit->listHeader();
+    		    foreach ($arrElementsToInstall as $strKey => $strInstaller) {
+    		    	$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $strInstaller, $this->objToolkit->listButton(getLinkAdmin("pages", "installElement", "&elementName=".$strKey, $this->getText("element_install"), $this->getText("element_install"), "icon_install.gif")), $intI++);
+    		    }
+
+    		    $strReturn .= $this->objToolkit->listFooter();
+    		}
+
 
 		}
 		else

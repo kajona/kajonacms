@@ -312,6 +312,10 @@ class class_template {
 	 * @param string $strArea
 	 */
 	public function setArea($strArea) {
+	    //when coming from the installer, do nothing, plz. installer uses force-option when loading templates
+	    if($strArea == "installer")
+	       return;
+
 		//If we are in the admin-area, we have to add the current skin
 		if($strArea == "admin") {
 			//We need the session-object

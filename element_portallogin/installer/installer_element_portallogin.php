@@ -52,9 +52,13 @@ class class_installer_element_portallogin extends class_installer_base implement
 		    return false;
 		}
 
-	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='portallogin'";
-	    $arrRow = $this->objDB->getRow($strQuery);
-        if(isset($arrRow["COUNT(*)"]) && $arrRow["COUNT(*)"] == 0)
+	     //check, if not already existing
+		try {
+		    $objElement = class_modul_pages_element::getElement("portallogin");
+		}
+		catch (class_exception $objEx)  {
+		}
+        if($objElement == null)
             return true;
 
         return false;

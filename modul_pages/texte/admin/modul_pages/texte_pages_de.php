@@ -77,6 +77,8 @@ $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuf√
 $text["fehler_name"]				= "Kein Seitenname angegeben";
 
 $text["element_bearbeiten"]			= "Element bearbeiten";
+$text["element_install"]            = "Element installieren";
+$text["element_installer_hint"]     = "Gefundene Installer noch nicht installierter Elemente:";
 $text["element_anlegen"]			= "Element anlegen";
 $text["element_anlegen_fehler"]		= "Fehler beim Anlegen des Elements";
 $text["element_bearbeiten_fehler"]	= "Fehler beim Bearbeiten des Elements";

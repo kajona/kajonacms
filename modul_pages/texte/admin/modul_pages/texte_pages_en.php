@@ -77,6 +77,8 @@ $text["fehler_recht"]				= "Not enough permissions to perform this action";
 $text["fehler_name"]				= "No page name provided";
 
 $text["element_bearbeiten"]			= "Edit element";
+$text["element_install"]            = "Install element";
+$text["element_installer_hint"]     = "Installers found of elements not yet installed:";
 $text["element_anlegen"]			= "Create element";
 $text["element_anlegen_fehler"]		= "An error occured while creating page element";
 $text["element_bearbeiten_fehler"]	= "An error occured while saving page element";

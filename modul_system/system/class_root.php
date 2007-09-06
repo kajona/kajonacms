@@ -581,7 +581,7 @@ abstract class class_root {
 			}
 		}
 	}
-	
+
 	/**
 	 * Sets the position of systemid using a given value.
 	 *
@@ -590,11 +590,11 @@ abstract class class_root {
 	 */
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
 		$strReturn = "";
-		
+
 		//to have a better array-like handling, decrease pos by one.
-		//remind to add at the end when saving to db 
+		//remind to add at the end when saving to db
 		$intPosition--;
-		
+
 		//Load all elements on the same level, so at first get the prev id
 		$strPrevID = $this->getPrevId($strIdToSet);
 		$strQuery = "SELECT *
@@ -604,22 +604,22 @@ abstract class class_root {
 
 		//No caching here to allow mutliple shiftings per request
 		$arrElements = $this->objDB->getArray($strQuery, false);
-		
+
 		//more than one record to set?
 		if(count($arrElements) <= 1)
 			return;
-			
+
 		//sensless new pos?
-		if($intPosition < 0 || $intPosition >= count($arrElements))	
+		if($intPosition < 0 || $intPosition >= count($arrElements))
 		    return;
-			
+
 		//create inital sorts?
 		if($arrElements[0]["system_sort"] == 0) {
 		    $this->setPosition($arrElements[0]["system_id"], "downwards");
 		    $this->setPosition($arrElements[0]["system_id"], "upwards");
 		    $this->objDB->flushQueryCache();
 		}
-		
+
 		//searching the current element to get to know, if element should be
 		//sorted up- or downwards
 		$bitSortDown = false;
@@ -629,13 +629,13 @@ abstract class class_root {
 			if($arrElements[$intI]["system_id"] == $strIdToSet) {
 				if($intI < $intPosition)
 					$bitSortDown = true;
-				if($intI >= $intPosition+1)	
+				if($intI >= $intPosition+1)
 					$bitSortUp = true;
-					
-				$intHitKey = $intI;	
+
+				$intHitKey = $intI;
 			}
 		}
-		
+
 		//sort up?
 		if($bitSortUp) {
 			//move the record to be shifted to the wanted pos
@@ -643,7 +643,7 @@ abstract class class_root {
 								SET system_sort=".((int)$intPosition+1)."
 								WHERE system_id='".dbsafeString($strIdToSet)."'";
 			$this->objDB->_query($strQuery);
-			
+
 			//start at the pos to be reached a move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
@@ -656,14 +656,14 @@ abstract class class_root {
 				}
 			}
 		}
-		
+
 		if($bitSortDown) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=".((int)$intPosition+1)."
 								WHERE system_id='".dbsafeString($strIdToSet)."'";
 			$this->objDB->_query($strQuery);
-			
+
 			//start at the pos to be reached a move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
@@ -677,7 +677,7 @@ abstract class class_root {
 			}
 		}
 	}
-	
+
 
 	/**
 	 * Return a complete SystemRecord
@@ -745,14 +745,14 @@ abstract class class_root {
 		$bit2 = true;
 		$bit3 = true;
 		$bit4 = true;
-		
+
 		//try to call other modules, maybe wanting to delete anything in addition, if the current record
 		//is going to be deleted
 		$bit4 = $this->additionalCallsOnDeletion($strSystemid);
-		
+
 		//Start a tx before deleting anything
 		$this->objDB->transactionBegin();
-		
+
 		$strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
 		$bit1 = $this->objDB->_query($strQuery);
 
@@ -767,7 +767,7 @@ abstract class class_root {
 		}
 
 		$bitResult = $bit1 && $bit2 && $bit3 && $bit4;
-		
+
 		//end tx
 		if($bitResult) {
 		    $this->objDB->transactionCommit();
@@ -778,13 +778,13 @@ abstract class class_root {
 		    class_logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", class_logger::$levelWarning);
 		}
 
-		
+
 		return $bitResult;
 	}
-	
-	
+
+
 	/**
-	 * Calls other model-classes to be able to do additional cleanups, if a systemrecord is deleted 
+	 * Calls other model-classes to be able to do additional cleanups, if a systemrecord is deleted
 	 * by invoking class_root::deleteSystemRecord before.
 	 * To be called, a model-class has to overwrite class_model::doAdditionalCleanupsOnDeletion
 	 *
@@ -794,29 +794,29 @@ abstract class class_root {
 	 */
 	private function additionalCallsOnDeletion($strSystemid) {
 	    $bitReturn = true;
-	    
+
 	    //Look up classes extending class_model
 	    include_once(_systempath_."/class_filesystem.php");
 	    $objFilesystem = new class_filesystem();
 	    $arrFiles = $objFilesystem->getFilelist(_systempath_, array(".php"));
-	    
+
 	    foreach ($arrFiles as $strOneFile) {
 	        //just match classes starting with "class_modul"
 	        if(strpos($strOneFile, "class_modul") !== false) {
 	            //include class
 	            include_once(_systempath_."/".$strOneFile);
-	            
+
 	            $strClassname = uniStrReplace(".php", "", $strOneFile);
 	            //create instance
 	            $objModel = new $strClassname;
 	            if ($objModel instanceof class_model) {
 	                if(method_exists($objModel, "doAdditionalCleanupsOnDeletion"))
 	                    $bitReturn &= $objModel->doAdditionalCleanupsOnDeletion($strSystemid);
-	                    
+
 	            }
 	        }
 	    }
-	    
+
 	    return $bitReturn;
 	}
 
