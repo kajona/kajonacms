@@ -38,6 +38,10 @@ class class_installer_element_portallogin extends class_installer_base implement
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
+	
+    public function getMinSystemVersion() {
+	    return "3.0.2";
+	}
 
 	public function hasPostInstalls() {
 	    //needed: pages

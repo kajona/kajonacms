@@ -82,6 +82,15 @@ abstract class class_installer_base extends class_root {
 		    $strReturn .= $this->getText("installer_modules_needed", "system", "admin").substr($strNeeded, 0, -2);
 		    return $strReturn."<br />";
 		}
+		
+		//check, if a min version of the system is needed
+		if($this->getMinSystemVersion() != "") {
+		    //the systems version to compare to
+		    $objSystem = class_modul_system_module::getModuleByName("system");
+		    if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+		        return $strReturn.$this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
+		    }
+		}
 
 		//ok, all needed modules are installed. check if update or install-link should be generated
 		//or, no link ;)
@@ -131,6 +140,15 @@ abstract class class_installer_base extends class_root {
 
 		if(strpos($this->arrModule["name"], "element") !== false)
 		    $objModule = true;
+		    
+	    //check, if a min version of the system is needed
+		if($this->getMinSystemVersion() != "") {
+		    //the systems version to compare to
+		    $objSystem = class_modul_system_module::getModuleByName("system");
+		    if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+		        return $strReturn.$this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
+		    }
+		}    
 
 		if($objModule != null && $this->hasPostInstalls()) {
 		    //install link

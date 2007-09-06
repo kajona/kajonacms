@@ -31,6 +31,13 @@ interface interface_installer {
      *
      */
     public function getNeededModules();
+    
+    /**
+     * Returns the version of the system-module needed as a minimum
+     * Return an empty string, if no min version is needed
+     *
+     */
+    public function getMinSystemVersion();
 
     /**
      * Does the hard work: installs the module and registers needed constants

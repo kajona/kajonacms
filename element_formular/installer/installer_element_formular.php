@@ -39,6 +39,10 @@ class class_installer_element_formular extends class_installer_base implements i
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
+	
+    public function getMinSystemVersion() {
+	    return "3.0.2";
+	}
 
 	public function hasPostInstalls() {
 	    //needed: pages

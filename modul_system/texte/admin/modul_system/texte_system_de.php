@@ -268,6 +268,7 @@ $text["installer_config_write"]      = "In config.php speichern";
 
 $text["installer_modules_found"]     = "<b>Installation/Update der Module</b><br /><br />Gefundene Module:<br /><br />";
 $text["installer_modules_needed"]    = "Zur Installation benötigte Module: ";
+$text["installer_systemversion_needed"] = "Minimal benötigte Systemversion: ";
 
 $text["installer_elements_found"]    = "<b>Installation der Seitenelemente</b><br /><br />Gefundene Seitenelemente:<br /><br />";
 

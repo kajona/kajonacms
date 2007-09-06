@@ -52,6 +52,10 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function getNeededModules() {
 	    return array("system");
 	}
+	
+    public function getMinSystemVersion() {
+	    return "3.0.2";
+	}
 
 	public function hasPostInstalls() {
 		//check, if elements not already existing

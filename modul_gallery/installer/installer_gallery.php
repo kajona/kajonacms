@@ -53,9 +53,12 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         return false;
 	}
+	
+    public function getMinSystemVersion() {
+	    return "3.0.2";
+	}
 
-
-   public function install() {
+    public function install() {
        $strReturn = "";
 
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";

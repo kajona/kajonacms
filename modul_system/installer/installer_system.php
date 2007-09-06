@@ -48,6 +48,10 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 
+	public function getMinSystemVersion() {
+	    return "";
+	}
+	
 	public function getNeededModules() {
 	    return array();
 	}

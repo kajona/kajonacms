@@ -40,6 +40,10 @@ class class_installer_downloads extends class_installer_base implements interfac
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
+	
+    public function getMinSystemVersion() {
+	    return "3.0.2";
+	}
 
 	public function hasPostInstalls() {
 	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='downloads'";
