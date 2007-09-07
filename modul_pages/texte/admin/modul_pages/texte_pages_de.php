@@ -217,7 +217,9 @@ $text["quickhelp_newPage"]			= "Mit Hilfe dieses Formulars können die Grunddate
 $text["quickhelp_newFolder"]		= "Zum Anlegen oder Umbenennen eines Ordners kann hier der Name des Ordners definiert werden.";
 $text["quickhelp_editFolder"]		= $text["quickhelp_newFolder"];
 $text["quickhelp_listElements"]		= "In dieser Liste befinden sich alle momentam im System verfügbaren Seitenelemente.<br />
-									   Der Name des Elements enstpricht hierbei dem hinteren Teil eines Platzhalters im Template.";
+									   Der Name des Elements enstpricht hierbei dem hinteren Teil eines Platzhalters im Template.<br />
+									   Findet das System Installer von Elementen, die bisher noch nicht installiert sind, so werden diese am
+									   Ende der Liste zu Installation angeboten.";
 $text["quickhelp_newElement"]		= "Dieses Formular dient zum Anlegen und Bearbeiten der Grunddaten von Seitenelementen. Hierfür stehen die
 									   folgenden Eingabefelder zur Verfügung:<br />
 									   <ul>

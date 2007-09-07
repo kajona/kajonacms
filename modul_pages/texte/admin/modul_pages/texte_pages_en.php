@@ -214,7 +214,9 @@ $text["quickhelp_newPage"]			= "This form is used to create or edit a page.<br /
 $text["quickhelp_newFolder"]		= "To create or rename a folder, a folder name can be set here.";
 $text["quickhelp_editFolder"]		= $text["quickhelp_newFolder"];
 $text["quickhelp_listElements"]		= "This list contains all page elements currently available.<br />
-									   The name of the element matches the last part of a placeholder in a template.";
+									   The name of the element matches the last part of a placeholder in a template.<br />
+									   If the system finds installers of elements not yet installed, those elements are provided at the end
+									   of the list to be installed.";
 $text["quickhelp_newElement"]		= "This form is used to create or modify the basic data of page elements. Therefore, you are able to set the following fields:<br />
 									   <ul>
 									    <li>Name: Title of the element</li>

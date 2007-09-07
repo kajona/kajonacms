@@ -151,6 +151,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     			$strReturn = $this->actionElementNew();
     		if($strAction == "editElement")
     			$strReturn = $this->actionElementNew("edit");
+    		if($strAction == "installElement") {
+    		    $strReturn = $this->actionInstallElement();
+    		    if($strReturn == "")
+    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=listElements");
+    		}
     		if($strAction == "saveElement") {
     		    if($this->validateForm() & !$this->checkElementExisting()) {
         			$strReturn = $this->actionSaveElement();
@@ -909,7 +914,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    $arrElementsToInstall = array();
 		    include_once(_systempath_."/class_filesystem.php");
     		$objFilesystem = new class_filesystem();
-    		//Ladend der Dateien
+    		//load installers available
     		$arrInstallers = $objFilesystem->getFilelist("/installer");
 
     		foreach($arrInstallers as $intKey => $strFile)
@@ -1042,6 +1047,42 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
+		}
+		else
+			$strReturn .= $this->getText("fehler_recht");
+
+		return $strReturn;
+	}
+
+	/**
+	 * Tries to install the passed element by using the elements' installer placed in the
+	 * /installer-folder
+	 *
+	 * @return string, "" in case of success
+	 */
+	private function actionInstallElement() {
+        $strReturn = "";
+		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $strElementToInstall = $this->getParam("elementName");
+
+            include_once(_systempath_."/class_filesystem.php");
+    		$objFilesystem = new class_filesystem();
+    		//load installers available
+    		$arrInstallers = $objFilesystem->getFilelist("/installer");
+
+    		foreach($arrInstallers as $intKey => $strFile) {
+    			if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
+                    include_once(_realpath_."/installer/".$strFile);
+        			//Creating an object....
+        			$strClass = "class_".str_replace(".php", "", $strFile);
+        			$objInstaller = new $strClass();
+
+        			$strInstallLog = $objInstaller->doPostInstall();
+        			$strInstallLog .= "Done.\n";
+        			$strReturn .= $this->objToolkit->getPreformatted(array($strInstallLog));
+    			    break;
+    			}
+    		}
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
