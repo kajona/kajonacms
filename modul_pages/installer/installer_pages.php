@@ -24,7 +24,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
 
-		$arrModule["version"] 		= "3.0.2";
+		$arrModule["version"] 		= "3.0.2.1";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -52,7 +52,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	public function getNeededModules() {
 	    return array("system");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.0.2";
 	}
@@ -171,7 +171,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages", "class_modul_pages.php", "class_modul_pages_admin", "class_modul_pages_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages", "class_modul_pages.php", "class_modul_pages_admin", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
 		//The pages_content
 		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "", "class_modul_pages_content_admin", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
@@ -318,6 +318,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_301_302();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.2") {
+            $strReturn .= $this->update_302_30x();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -454,6 +459,26 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateModuleVersion("pages", "3.0.2");
         $this->updateModuleVersion("pages_content", "3.0.2");
         $this->updateModuleVersion("folderview", "3.0.2");
+
+	    return $strReturn;
+	}
+
+	private function update_302_30x() {
+	    $strReturn = "";
+
+	    $strReturn .= "Updating 3.0.1 to 3.0.2.1...\n";
+
+	    //add pages' xml-handler
+	    $strReturn .= "Registering system xml handler...\n";
+	    $objSystemModule = class_modul_system_module::getModuleByName("pages");
+	    $objSystemModule->setStrXmlNameAdmin("class_modul_pages_admin_xml.php");
+	    if(!$objSystemModule->updateObjectToDb())
+	        $strReturn .= "An error occured!\n";
+
+	    $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("pages", "3.0.2.1");
+        $this->updateModuleVersion("pages_content", "3.0.2.1");
+        $this->updateModuleVersion("folderview", "3.0.2.1");
 
 	    return $strReturn;
 	}
