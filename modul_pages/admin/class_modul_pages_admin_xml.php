@@ -18,6 +18,7 @@ include_once(_adminpath_."/class_admin.php");
 include_once(_adminpath_."/interface_xml_admin.php");
 //model
 include_once(_systempath_."/class_modul_system_common.php");
+include_once(_systempath_."/class_modul_pages_page.php");
 
 /**
  * admin-class of the pages-module
@@ -65,9 +66,16 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 	 */
 	private function actionGetPagesByFilter() {
 		$strReturn = "";
+        $strFilter = $this->getParam("filter");
+        $arrPages = class_modul_pages_page::getAllPages(0, 0, $strFilter);
 
-
-
+        $strReturn .= "<pages>\n";
+        foreach ($arrPages as $objOnePage) {
+            $strReturn .= "  <page>\n";
+            $strReturn .= "    <title>".xmlSafeString($objOnePage->getStrName())."</title>\n";
+            $strReturn .= "  </page>\n";
+        }
+        $strReturn .= "</pages>\n";
 		return $strReturn;
 	}
 

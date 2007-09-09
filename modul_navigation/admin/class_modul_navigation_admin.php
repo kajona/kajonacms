@@ -339,7 +339,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
-                $strReturn .= $this->objToolkit->formInputText("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=navigation_page_i", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"), "inputText" );
                 $strReturn .= $this->objToolkit->formInputText("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"));
                 $strReturn .= $this->objToolkit->formInputText("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), "inputText", getLinkAdminPopup("folderview", "list", "&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=navigation_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));

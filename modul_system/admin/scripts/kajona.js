@@ -200,11 +200,19 @@ var kajonaAjaxHelper =  {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
 	},
-	
+
 	loadAnimationBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation.js');
 	},
+
+	loadAutocompleteBase : function () {
+		kajonaAjaxHelper.loadAjaxBase();
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/autocomplete/autocomplete.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-beta.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
+	},
+
 
 	addFileToLoad : function(fileName) {
 		if(kajonaAjaxHelper.bitPastOnload) {
@@ -227,7 +235,8 @@ var regularCallback = {
 };
 
 var kajonaAdminAjax = {
-	connectionObject : null,
+	posConn : null,
+	pagesConn : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
 		//load ajax libs
@@ -237,9 +246,9 @@ var kajonaAdminAjax = {
 		var postTarget = 'xml.php?admin=1&module=system&action=setAbsolutePosition';
 		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos;
 
-		if(kajonaAdminAjax.connectionObject == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.connectionObject)) {
-			kajonaAdminAjax.connectionObject = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
+		if(kajonaAdminAjax.posConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.posConn)) {
+			kajonaAdminAjax.posConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
 		}
 	}
-	
+
 };

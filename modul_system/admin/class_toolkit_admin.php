@@ -335,6 +335,61 @@ class class_toolkit_admin extends class_toolkit {
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
 	}
 
+   /**
+	 * Returns a regular text-input field
+	 *
+	 * @param string $strName
+	 * @param string $strTitle
+	 * @param string $strValue
+	 * @param string $strClass
+	 * @return string
+	 */
+	public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
+		$arrTemplate["name"] = $strName;
+		$arrTemplate["value"] = $strValue;
+		$arrTemplate["title"] = $strTitle;
+		$arrTemplate["class"] = $strClass;
+		$arrTemplate["opener"] = getLinkAdminPopup("folderview",
+		                                           "pagesFolderBrowser",
+		                                           "&pages=1&form_element=".$strName,
+		                                           class_carrier::getInstance()->getObjText()->getText("browser", "system", "admin"),
+		                                           class_carrier::getInstance()->getObjText()->getText("browser", "system", "admin"),
+		                                           "icon_externalBrowser.gif",
+		                                           500,
+		                                           500,
+		                                           "ordneransicht");
+
+
+		$arrTemplate["ajaxScript"] = "
+		<script type=\"text/javascript\" language=\"Javascript\">
+            kajonaAjaxHelper.loadAjaxBase();
+            kajonaAjaxHelper.loadAutocompleteBase();
+            function setUp".$strName."() {
+                //wait until the libs have loaded
+                if(typeof YAHOO == \"undefined\") {
+                    window.setTimeout(\"setUp".$strName."()\", 1000);
+                    return;
+                }
+
+                var pageDataSource = new YAHOO.widget.DS_XHR(\"xml.php\", [\"page\", \"title\"]);
+                pageDataSource.queryMatchCase = false;
+                pageDataSource.scriptQueryParam = \"filter\";
+                pageDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+                pageDataSource.scriptQueryAppend = \"admin=1&module=pages&action=getPagesByFilter\";
+
+                var page%%name%%autocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource);
+                page%%name%%autocomplete.allowBrowserAutocomplete = false;
+                page%%name%%autocomplete.useShadow = false;
+
+            }
+            addLoadEvent(setUp".$strName.");
+		</script>
+		";
+
+		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+	}
+
 	/**
 	 * Returns a text-input field as textarea
 	 *

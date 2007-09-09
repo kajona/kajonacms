@@ -76,7 +76,7 @@ img {
 
 .dragList {
 	border-spacing: 0px;
-	
+
 }
 
 .adminListRow1 {
@@ -534,6 +534,49 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	font-family: Arial, Verdana, Helvetica, sans-serif;
     color: #000000;
     font-size: 11px;
+}
+
+/* A U T O C O M P L E T E */
+.ac_container {
+    position:relative;
+}
+
+/* styles for results container */
+.ac_container .ac_results {
+    position:absolute;
+    top:1.6em;
+    width:180px;
+}
+
+/* styles for header/body/footer wrapper within container */
+.ac_container .yui-ac-content {
+    position:absolute;
+    width:100%;
+    border:1px solid #000099;
+    background:#ffffff;
+    overflow:hidden;
+    z-index:9050;
+}
+
+/* styles for results list */
+.ac_container .yui-ac-content ul{
+    margin:0;
+    padding:0;
+    width:100%;
+}
+
+/* styles for result item */
+.ac_container .yui-ac-content li {
+    margin:0;
+    padding:2px 5px;
+    cursor:default;
+    white-space:nowrap;
+}
+
+
+/* styles for highlighted result item */
+.ac_container .yui-ac-content li.yui-ac-highlight {
+	background-color: #CFD0FF;
 }
 
 ";

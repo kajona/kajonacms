@@ -267,14 +267,16 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	 *
 	 * @param int $intStart
 	 * @param int $intEnd
+	 * @param string $intFilter
 	 * @return mixed class_modul_pages_page
 	 * @static
 	 */
-	public static function getAllPages($intStart = 0, $intEnd = 0) {
+	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "") {
 		$strQuery = "SELECT system_id
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
 					WHERE system_id = page_id
+					".($strFilter != "" ? " AND page_name like '".dbsafeString($strFilter)."%'" : "" )."
 					ORDER BY page_name ASC";
 
 		if($intStart == 0 && $intEnd == 0)
