@@ -47,7 +47,7 @@ class class_element_bild extends class_element_admin implements interface_admin_
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
 		$strReturn .= $this->objToolkit->formInputText("bild_titel", $this->getText("bild_titel"), (isset($arrElementData["bild_titel"]) ? $arrElementData["bild_titel"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("bild_link", $this->getText("bild_link"), (isset($arrElementData["bild_link"]) ? $arrElementData["bild_link"] : "" ), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=bild_link", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("bild_link", $this->getText("bild_link"), (isset($arrElementData["bild_link"]) ? $arrElementData["bild_link"] : "" ));
 		$strReturn .= $this->objToolkit->formInputText("bild_bild", $this->getText("bild_bild"), (isset($arrElementData["bild_bild"]) ? $arrElementData["bild_bild"] : "" ), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=bild_bild", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 		return $strReturn;
 	}

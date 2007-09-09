@@ -19,7 +19,7 @@ include_once(_adminpath_."/interface_admin_element.php");
 
 /**
  * Class to handle the admin-stuff of the portallogin-element
- * 
+ *
  * @package modul_pages
  *
  */
@@ -62,9 +62,9 @@ class class_element_portallogin extends class_element_admin implements interface
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getText("portallogin_template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("portallogin_error", $this->getText("portallogin_error"), (isset($arrElementData["portallogin_error"]) ? $arrElementData["portallogin_error"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=portallogin_error", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		$strReturn .= $this->objToolkit->formInputText("portallogin_success", $this->getText("portallogin_success"), (isset($arrElementData["portallogin_success"]) ? $arrElementData["portallogin_success"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=portallogin_success", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		$strReturn .= $this->objToolkit->formInputText("portallogin_logout_success", $this->getText("portallogin_logout_success"), (isset($arrElementData["portallogin_logout_success"]) ? $arrElementData["portallogin_logout_success"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=portallogin_logout_success", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_error", $this->getText("portallogin_error"), (isset($arrElementData["portallogin_error"]) ? $arrElementData["portallogin_error"] : ""));
+		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_success", $this->getText("portallogin_success"), (isset($arrElementData["portallogin_success"]) ? $arrElementData["portallogin_success"] : ""));
+		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_logout_success", $this->getText("portallogin_logout_success"), (isset($arrElementData["portallogin_logout_success"]) ? $arrElementData["portallogin_logout_success"] : ""));
 
 		return $strReturn;
 	}

@@ -162,7 +162,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	private function actionList() {
 		$strReturn = "";
-		
+
 		//rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 		    $intI = 0;
@@ -246,7 +246,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), "icon_key.gif"));
-    		    		    
+
     		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
     				}
     	  		}
@@ -339,7 +339,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
-                $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"), "inputText" );
+                $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"));
                 $strReturn .= $this->objToolkit->formInputText("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"));
                 $strReturn .= $this->objToolkit->formInputText("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), "inputText", getLinkAdminPopup("folderview", "list", "&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=navigation_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
@@ -362,7 +362,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $objPoint->getStrName());
-                $strReturn .= $this->objToolkit->formInputText("navigation_page_i", $this->getText("navigation_page_i"), $objPoint->getStrPageI(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=navigation_page_i", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $objPoint->getStrPageI() );
                 $strReturn .= $this->objToolkit->formInputText("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE());
                 $strReturn .= $this->objToolkit->formInputText("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=navigation_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));

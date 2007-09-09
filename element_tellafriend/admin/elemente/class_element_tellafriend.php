@@ -60,8 +60,8 @@ class class_element_tellafriend extends class_element_admin implements interface
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("tellafriend_template", $arrTemplatesDD, $this->getText("tellafriend_template"), (isset($arrElementData["tellafriend_template"]) ? $arrElementData["tellafriend_template"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("tellafriend_error", $this->getText("tellafriend_error"), (isset($arrElementData["tellafriend_error"]) ? $arrElementData["tellafriend_error"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=tellafriend_error", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		$strReturn .= $this->objToolkit->formInputText("tellafriend_success", $this->getText("tellafriend_success"), (isset($arrElementData["tellafriend_success"]) ? $arrElementData["tellafriend_success"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=tellafriend_success", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_error", $this->getText("tellafriend_error"), (isset($arrElementData["tellafriend_error"]) ? $arrElementData["tellafriend_error"] : ""));
+		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_success", $this->getText("tellafriend_success"), (isset($arrElementData["tellafriend_success"]) ? $arrElementData["tellafriend_success"] : ""));
 
 		return $strReturn;
 	}

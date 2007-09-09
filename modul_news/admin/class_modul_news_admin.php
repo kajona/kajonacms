@@ -679,7 +679,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $this->getParam("feed_urltitle"));
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $this->getParam("feed_link"));
                 $strReturn .= $this->objToolkit->formInputText("feed_desc", $this->getText("feed_desc"), $this->getParam("feed_desc"));
-                $strReturn .= $this->objToolkit->formInputText("feed_page", $this->getText("feed_page"), $this->getParam("feed_page"), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=feed_page", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputPageSelector("feed_page", $this->getText("feed_page"), $this->getParam("feed_page"));
                 //Dropdown with all cats
                 $arrNewsCats = class_modul_news_category::getCategories();
                 $arrCatsDD = array();
@@ -736,7 +736,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $objFeed->getStrUrlTitle());
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $objFeed->getStrLink());
                 $strReturn .= $this->objToolkit->formInputText("feed_desc", $this->getText("feed_desc"), $objFeed->getStrDesc());
-                $strReturn .= $this->objToolkit->formInputText("feed_page", $this->getText("feed_page"), $objFeed->getStrPage(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=feed_page", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputPageSelector("feed_page", $this->getText("feed_page"), $objFeed->getStrPage());
                 //Dropdown with all cats
                 $arrNewsCats = class_modul_news_category::getCategories();
                 $arrCatsDD = array();

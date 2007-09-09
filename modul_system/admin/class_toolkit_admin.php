@@ -361,14 +361,15 @@ class class_toolkit_admin extends class_toolkit {
 		                                           "ordneransicht");
 
 
+        $strNameCleaned = uniStrReplace(array("", "[", "]"), array("_", "bo", "bc"), $strName);
 		$arrTemplate["ajaxScript"] = "
 		<script type=\"text/javascript\" language=\"Javascript\">
             kajonaAjaxHelper.loadAjaxBase();
             kajonaAjaxHelper.loadAutocompleteBase();
-            function setUp".$strName."() {
+            function setUp".$strNameCleaned."() {
                 //wait until the libs have loaded
                 if(typeof YAHOO == \"undefined\") {
-                    window.setTimeout(\"setUp".$strName."()\", 1000);
+                    window.setTimeout(\"setUp".$strNameCleaned."()\", 1000);
                     return;
                 }
 
@@ -383,7 +384,7 @@ class class_toolkit_admin extends class_toolkit {
                 page%%name%%autocomplete.useShadow = false;
 
             }
-            addLoadEvent(setUp".$strName.");
+            addLoadEvent(setUp".$strNameCleaned.");
 		</script>
 		";
 

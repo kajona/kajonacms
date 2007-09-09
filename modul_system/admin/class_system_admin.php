@@ -304,7 +304,7 @@ class class_system_admin extends class_admin implements interface_admin {
                         $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getStrName()."]", $arrDD, $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                     elseif ($objOneSetting->getIntType() == 3) {
-                        $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getStrName()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=set[".$objOneSetting->getStrName()."]", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                        $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getStrName()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                     else {
                         $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getStrName()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());

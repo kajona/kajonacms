@@ -18,7 +18,7 @@ include_once(_adminpath_."/class_element_admin.php");
 include_once(_adminpath_."/interface_admin_element.php");
 /**
  * Class representing the seach element on the admin side
- * 
+ *
  * @package modul_search
  *
  */
@@ -53,7 +53,7 @@ class class_element_search extends class_element_admin implements interface_admi
 
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputText("search_amount", $this->getText("search_amount"), (isset($arrElementData["search_amount"]) ? $arrElementData["search_amount"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("search_page", $this->getText("search_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=search_page", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("search_page", $this->getText("search_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ));
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();

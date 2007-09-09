@@ -52,7 +52,7 @@ class class_element_absatz extends class_element_admin implements interface_admi
 		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
 		$strReturn .= $this->objToolkit->formWysiwygEditor("absatz_inhalt", $this->getText("absatz_inhalt"), (isset($arrElementData["absatz_inhalt"]) ? $arrElementData["absatz_inhalt"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("absatz_bild", $this->getText("absatz_bild"), (isset($arrElementData["absatz_bild"]) ? $arrElementData["absatz_bild"] : ""), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=absatz_bild", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		$strReturn .= $this->objToolkit->formInputText("absatz_link", $this->getText("absatz_link"), (isset($arrElementData["absatz_link"]) ? $arrElementData["absatz_link"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=absatz_link", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("absatz_link", $this->getText("absatz_link"), (isset($arrElementData["absatz_link"]) ? $arrElementData["absatz_link"] : ""));
 		return $strReturn;
 	}
 

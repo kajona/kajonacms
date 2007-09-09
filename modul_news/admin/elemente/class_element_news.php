@@ -20,7 +20,7 @@ include_once(_systempath_."/class_modul_news_category.php");
 
 /**
  * Class representing the admin-part of the news element
- * 
+ *
  * @package modul_news
  *
  */
@@ -58,7 +58,7 @@ class class_element_news extends class_element_admin implements interface_admin_
 
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputDropdown("news_category", $arrCats, $this->getText("news_category"), (isset($arrElementData["news_category"]) ? $arrElementData["news_category"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("news_detailspage", $this->getText("news_detailspage"), (isset($arrElementData["news_detailspage"]) ? $arrElementData["news_detailspage"] : ""), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&pages=1&form_element=news_detailspage", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputPageSelector("news_detailspage", $this->getText("news_detailspage"), (isset($arrElementData["news_detailspage"]) ? $arrElementData["news_detailspage"] : ""));
 
 		$arrView = array( 0 => $this->getText("news_view_list"),
 					      1 => $this->getText("news_view_detail"));
