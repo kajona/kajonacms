@@ -34,8 +34,8 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 	if(arrayTableIds == null)
         var arrayTableIds = new Array("%%listid%%");
     else
-        arrayTableIds[(arrayTableIds.length +1)] = "%%listid%%"; 	
-        
+        arrayTableIds[(arrayTableIds.length +1)] = "%%listid%%";
+
     kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_tr.js");
 </script>
 <table cellspacing="0" cellpadding="0" id="%%listid%%" class="adminList">
@@ -262,6 +262,19 @@ function is called after selecting a date, e.g. to hide the calendar
 	<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script>
 	%%calendarCommands%%
 </input_date_simple>
+
+A page-selector.
+If you want to use ajax to load a list of proposals on entering a char,
+place ajaxScript before the closing input_pageselector-tag and make sure, that you
+have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
+"ac_results" inside the "ac_container", to generate a resultlist
+<input_pageselector>
+  <div class="ac_container">
+     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
+     <div id="%%name%%_container" class="ac_results"></div>
+  </div><br />
+%%ajaxScript%%
+</input_pageselector>
 
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------

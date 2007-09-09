@@ -966,5 +966,47 @@ body.folderView .listActions a {
     font-size: 11px;
 }
 
+/* A U T O C O M P L E T E */
+.ac_container {
+    position:relative;
+}
+
+/* styles for results container */
+.ac_container .ac_results {
+    position:absolute;
+    top:1.6em;
+    width:100%;
+}
+
+/* styles for header/body/footer wrapper within container */
+.ac_container .yui-ac-content {
+    position:absolute;
+    width:100%;
+    border:1px solid #e3e3e3;
+    background:#ffffff;
+    overflow:hidden;
+    z-index:9050;
+}
+
+/* styles for results list */
+.ac_container .yui-ac-content ul{
+    margin:0;
+    padding:0;
+    width:100%;
+}
+
+/* styles for result item */
+.ac_container .yui-ac-content li {
+    margin:0;
+    padding:2px 5px;
+    cursor:default;
+    white-space:nowrap;
+}
+
+
+/* styles for highlighted result item */
+.ac_container .yui-ac-content li.yui-ac-highlight {
+	background-color: #f0f0f0;
+}
 ";
 ?>
