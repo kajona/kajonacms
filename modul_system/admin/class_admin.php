@@ -95,7 +95,7 @@ abstract class class_admin {
 		$arrModul["p_name"] 			= "modul_admin";
 		$arrModul["p_author"] 			= "sidler@mulchprod.de";
 		$arrModul["p_nummer"] 			= _system_modul_id_;
-		
+
 		//default-template: main.tpl
 		if(!key_exists("template", $arrModul))
 		    $arrModul["template"] 		= "/main.tpl";
@@ -197,7 +197,7 @@ abstract class class_admin {
 	public final function getAction() {
 	    return (string)$this->strAction;
 	}
-	
+
 
 // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
@@ -389,8 +389,8 @@ abstract class class_admin {
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
 		return $this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
 	}
-	
-	
+
+
 	/**
 	 * Return a complete SystemRecord
 	 *
@@ -690,14 +690,72 @@ abstract class class_admin {
 	 */
 	private function getOutputModuleActionsNavi() {
 		if($this->objSession->isLoggedin()) {
+		    $arrItems = $this->getOutputModuleNavi();
+		    $arrFinalItems = array();
+		    //build array of final items
+		    foreach($arrItems as $arrOneItem) {
+		        $bitAdd = false;
+		        switch ($arrOneItem[0]) {
+		        	case "view":
+                        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "edit":
+                        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "delete":
+                        if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right":
+                        if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right1":
+                        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right2":
+                        if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right3":
+                        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right4":
+                        if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "right5":
+                        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"])))
+                            $bitAdd = true;
+		        		break;
+		        	case "":
+		        	    $bitAdd = true;
+		        	    break;
+		        	default:
+		        		break;
+		        }
+
+		        if($bitAdd || $arrOneItem[1] == "")
+                    $arrFinalItems[] = $arrOneItem[1];
+		    }
+
 			//Pass to the skin-object
-            return $this->objToolkit->getAdminModuleActionNavi($this->getOutputModuleNavi());
+            return $this->objToolkit->getAdminModuleActionNavi($arrFinalItems);
 		}
 	}
 
 
 	/**
 	 * Writes the ModuleNavi, overwrite if needed
+	 * Use two-dim arary:
+	 * array[
+	 *     array["right", "link"],
+	 *     array["right", "link"]
+	 * ]
 	 *
 	 * @return array array containing all links
 	 */

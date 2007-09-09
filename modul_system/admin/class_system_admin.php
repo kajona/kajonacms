@@ -108,25 +108,17 @@ class class_system_admin extends class_admin implements interface_admin {
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-	    if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi")."";
-		if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin("right", "change", "&systemid=0",  $this->getText("modul_rechte_root"), "", "", true, "adminnavi")."";
-		$arrReturn[] = "";
-		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "moduleList", "", $this->getText("module_liste"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getText("system_info"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "dbSettings", "", $this->getText("db_settings"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi") ."";
-		$arrReturn[] = "";
-		$arrReturn[] = getLinkAdmin($this->arrModule["modul"], "about", "", $this->getText("about"), "", "", true, "adminnavi") ."";
+	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0",  $this->getText("modul_rechte_root"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("", "");
+  	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "moduleList", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getText("system_info"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "dbSettings", "", $this->getText("db_settings"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("", "");
+		$arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getText("about"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 

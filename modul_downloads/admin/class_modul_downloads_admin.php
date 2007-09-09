@@ -147,19 +147,14 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-        if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi")."";
-        $arrReturn[] = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-	        $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "newArchive", "", $this->getText("archiv_neu"), "", "", true, "adminnavi") ."";
-	    if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-     	    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getText("archive_masssync"), "", "", true, "adminnavi") ."";
-	    $arrReturn[] = "";
-	    if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getText("logbuch"), "", "", true, "adminnavi") ."";
-
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newArchive", "", $this->getText("archiv_neu"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("", "");
+     	$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getText("archive_masssync"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("", "");
+  	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getText("logbuch"), "", "", true, "adminnavi"));
 		return $arrReturn;
     }
 

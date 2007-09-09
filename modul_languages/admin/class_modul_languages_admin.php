@@ -97,16 +97,12 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-	    if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi")."";
-        $arrReturn[] = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi") ."";
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi") ."";
-		$arrReturn[] = "";
-		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-		    $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "assignNullElements", "", $this->getText("modul_assign"), "", "", true, "adminnavi") ."";
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("", "");
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "assignNullElements", "", $this->getText("modul_assign"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 

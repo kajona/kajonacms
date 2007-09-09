@@ -159,23 +159,18 @@ class class_user_admin extends class_admin implements interface_admin {
     public function getOutputContent() {
         return $this->strTemp;
     }
-    
+
     public function getOutputModuleNavi() {
         $arrReturn = array();
-        if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi")."";
-        $arrReturn[] = "";
-        $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("user_liste"), "", "", true, "adminnavi") ."";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), "", "", true, "adminnavi") ."";
-        $arrReturn[] = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "grouplist", "", $this->getText("gruppen_liste"), "", "", true, "adminnavi") ."";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), "", "", true, "adminnavi") ."";
-        $arrReturn[] = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin($this->arrModule["modul"], "loginlog", "", $this->getText("loginlog"), "", "", true, "adminnavi") ."";
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("user_liste"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "grouplist", "", $this->getText("gruppen_liste"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "loginlog", "", $this->getText("loginlog"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 

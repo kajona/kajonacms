@@ -99,17 +99,10 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-
-	    if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
-            $arrReturn[] = getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi")."";
-        $arrReturn[] = "";
-        //Link to the worker-tasks
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $arrReturn[] = getLinkAdmin("stats", "worker", "",  $this->getText("modul_worker"), "", "", true, "adminnavi")."";
-            $arrReturn[] = "";
-        }
-
-
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
+        $arrReturn[] = array("right1",getLinkAdmin("stats", "worker", "",  $this->getText("modul_worker"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("", "");
         //Load all plugins available and create the navigation
         include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
@@ -121,7 +114,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
             $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjText());
             if($objPlugin instanceof interface_admin_statsreports && $this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
-                $arrReturn[] = getLinkAdmin($this->arrModule["modul"], $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi") ."";
+                $arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], $objPlugin->getReportCommand(), "", $objPlugin->getReportTitle(), "", "", true, "adminnavi"));
         }
 
         return $arrReturn;
