@@ -81,10 +81,11 @@ var kajonaStatusDisplay = {
 		//place the element at the right bottom of the page
 		var screenWidth = YAHOO.util.Dom.getViewportWidth();
 		var screenHeight = YAHOO.util.Dom.getViewportHeight();
+		var scrollHeight = YAHOO.util.Dom.getDocumentScrollTop();
 		var divWidth = statusBox.offsetWidth;
 		var divHeight = statusBox.offsetHeight;
 		var newX = screenWidth - divWidth - 10;
-		var newY = screenHeight - divHeight - 10;
+		var newY = screenHeight - divHeight - 10 + scrollHeight;
 		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
 		//start fade-in handler		
 		kajonaStatusDisplay.fadeIn();
