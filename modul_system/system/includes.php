@@ -24,17 +24,17 @@
 //---Include Section 1-----------------------------------------------------------------------------------
 	//Functions to have fun & check for mb-string
 	if(!@include_once(_realpath_."/system/functions.php"))
-		die("Error including functions");
+		rawIncludeError("./system/functions.php");
 
 	//Exception-Handler
 	if(!@include_once(_realpath_."/system/class_exception.php"))
-		die("Error including functions");
+		rawIncludeError("global exception handler");
 	//register global exception handler for exceptions thrown but not catched (bad style ;) )
 	@set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 	//Include the logging-engine
     if(!@include_once(_realpath_."/system/class_logger.php"))
-		die("Error including logging-engine");
+		rawIncludeError("logging engine");
 
 
 //---The Path on web-------------------------------------------------------------------------------------
@@ -55,12 +55,12 @@
 	//Modul-Constants
 	foreach(scandir(_realpath_."/system/config/") as $strDirEntry ) {
 	   if(preg_match("/modul\_([a-z])+\_id\.php/", $strDirEntry))
-	       include_once(_realpath_."/system/config/".$strDirEntry);
+	       @include_once(_realpath_."/system/config/".$strDirEntry);
 	}
 
 	//The Carrier-Class
 	if(!@include_once(_realpath_."/system/class_carrier.php"))
-		die("Error including the carrier-class");
+		rawIncludeError("carrier-class");
 
 
 ?>
