@@ -74,5 +74,9 @@ echo "
 	font-size: 11px;
 }
 
+#pe_classicskin img {
+	border: none;
+}
+
 ";
 ?>

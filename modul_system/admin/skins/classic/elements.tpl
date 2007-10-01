@@ -705,7 +705,7 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
-    <div style="border: none; background-color: #EFEFEF; z-index: 1000; ">
+    <div style="border: none; background-color: #EFEFEF; z-index: 1000; " id="pe_classicskin">
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr style="font-family: verdana, arial; font-size: 10px; white-space: nowrap;">
                 <td rowspan="2" style="font-family: verdana, arial; font-size: 20px; font-weight: bold; font-style: italic; ">
