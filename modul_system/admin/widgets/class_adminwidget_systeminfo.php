@@ -5,34 +5,17 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
-* 	module.php																							*
-* 	Modulesnumbers       																				*
-*	Assigns numbers to each module. Don't change them after installation, otherwise the db-schema     	*
-*	gets invalid!																						*
+* 	class_adminwidget_systeminfo.php																	*
+* 	widget showing a few infos about the current system													*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                         *
+*	$Id: class_adminwidget_systeminfo.php 1565 2007-06-14 09:54:52Z sidler $	                        *
 ********************************************************************************************************/
 
-//Modul-id des Systems
-	define(	"_system_modul_id_", 						0);
+class class_adminwidget_systeminfo extends class_adminwidget implements interface_adminwidget {
+    
+}
 
-//Modul-id des Login-Moduls
-	define(	"_login_modul_id_", 						0);
-
-//Modul-id der Dateisystem-Verwaltung
-	define( "_filesystem_modul_id_",					0);
-
-//ID der User-Verwaltung
-	define(	"_user_modul_id_",							15);
-
-//ID der Rechte-Verwaltung
-	define(	"_rechte_modul_id_",						20);
-
-//ID des Gaestebuch-Moduls
-	define( "_filemanager_modul_id_",					40);
-	
-//ID of dashboard
-    define( "_dashboard_modul_id_",                     90);	
 
 ?>
+ 
