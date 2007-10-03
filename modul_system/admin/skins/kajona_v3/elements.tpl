@@ -324,7 +324,7 @@ Part to display the login status, user is logged in
 <div>
 	<div class="boxContent">
 		<strong>%%name%%</strong>
-		<ul><li><a href="%%profile%%">%%profileTitle%%</a></li><li><a href="%%logout%%">%%logoutTitle%%</a></li></ul>
+		<ul><li><a href="%%dashboard%%">%%dashboardTitle%%</a></li><li><a href="%%profile%%">%%profileTitle%%</a></li><li><a href="%%logout%%">%%logoutTitle%%</a></li></ul>
 	</div>
 </div>
 </logout_form>

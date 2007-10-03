@@ -412,6 +412,9 @@ Part to display the login status, user is logged in
       <tr>
         <td style="padding-left: 10px">%%name%%</td>
       </tr>
+      <tr>
+	    <td><a href="%%dashboard%%" class="adminModuleNavi"><div class="moduleNavi" onmouseover="this.className='moduleNaviSelected'" onmouseout="this.className='moduleNavi'">%%dashboardTitle%%</div></a></td>
+	  </tr>
 	  <tr>
 	    <td><a href="%%profile%%" class="adminModuleNavi"><div class="moduleNavi" onmouseover="this.className='moduleNaviSelected'" onmouseout="this.className='moduleNavi'">%%profileTitle%%</div></a></td>
 	  </tr>

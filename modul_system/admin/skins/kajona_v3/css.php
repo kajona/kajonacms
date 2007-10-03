@@ -197,7 +197,7 @@ td {
 #statusBox {
 	background-image: url('"._skinwebpath_."/statusbox_back.gif');
 	width: 150px;
-	height: 55px;
+	height: 70px;
 }
 
 #statusBox .boxContent {

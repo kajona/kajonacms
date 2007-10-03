@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.2.3";
+		$arrModul["version"] 			= "3.0.3";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -267,9 +267,10 @@ class class_installer_system extends class_installer_base implements interface_i
 		//The Usermodule
 		$strUserID = $this->registerModule("user", _user_modul_id_, "", "", "class_user_admin", "class_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
-		$strUserID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "", "class_modul_filemanager_admin", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
-
-
+		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "", "class_modul_filemanager_admin", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
+        //the dashboard
+        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false);
+        
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -414,6 +415,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.2" || $arrModul["module_version"] == "3.0.2.1" || $arrModul["module_version"] == "3.0.2.2") {
             $strReturn .= $this->update_302_302x();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.2.3") {
+            $strReturn .= $this->update_302x_303();
         }
 
         return $strReturn."\n\n";
@@ -586,5 +592,25 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	    return $strReturn;
 	}
+	
+    private function update_302x_303() {
+	    $strReturn = "";
+	    $strReturn .= "Updating 3.0.2.2 to 3.0.3...\n";
+
+	    $strReturn .= "Registering new module dashboard...\n";
+	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false);
+	    
+        $strReturn .= "Updating module-versions...\n";
+	    $this->updateModuleVersion("system", "3.0.3");
+        $this->updateModuleVersion("right", "3.0.3");
+        $this->updateModuleVersion("user", "3.0.3");
+        $this->updateModuleVersion("filemanager", "3.0.3");
+        $this->updateModuleVersion("dashboard", "3.0.3");
+        
+
+	    return $strReturn;
+	}
+	
+	
 }
 ?>

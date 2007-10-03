@@ -92,7 +92,7 @@ class class_index  {
 		if(issetGet("module"))
 			$strModule = getGet("module");
 		else
-			$strModule = "pages";
+			$strModule = "dashboard";
 
 		if(issetGet("action"))
 			$strAction = getGet("action");

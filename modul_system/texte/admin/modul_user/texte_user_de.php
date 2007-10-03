@@ -131,6 +131,7 @@ $text["lang_en"]                    = "Englisch";
 $text["login_statusTitle"]          = "Angemeldet als:";
 $text["login_profileTitle"]         = "Benutzer bearbeiten";
 $text["login_logoutTitle"]          = "Abmelden";
+$text["login_dashboard"]            = "Startseite";
 
 $text["login_loginTitle"]           = "Anmelden";
 $text["login_loginUser"]            = "Benutzer";
