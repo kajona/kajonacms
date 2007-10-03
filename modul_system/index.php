@@ -101,6 +101,15 @@ class class_index  {
 
 		$strModule = htmlspecialchars($strModule);
 		$strAction = htmlspecialchars($strAction);
+		
+		//Redirect to https?
+		if(_admin_only_https_ == "true") {
+		    if(!issetServer("HTTPS")) {
+                //reload to https
+                header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                die("Reloading using https...");       
+		    }
+		}
 
 		if($strModule != "login") {
 			$objModulData  = $this->getModuleData($strModule);

@@ -278,8 +278,8 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText, $s
 		$strParams = str_replace("&", "&amp;", $strParams);
 
 	if($bitPortalEditor)
-    $strParams .= "&amp;pe=1";
-
+        $strParams .= "&amp;pe=1";
+        
 	if($strImage != "") {
 		if($strAlt == "")
 			$strAlt = $strAction;

@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.2.2";
+		$arrModul["version"] 			= "3.0.2.3";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -306,8 +306,9 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $this->registerConstant("_user_selfedit_", "true", class_modul_system_setting::$int_TYPE_BOOL, _user_modul_id_);
 
 	    //3.1: nr of rows in admin
-	    $strReturn .= "Registering nr of rows constant...\n";
+	    //$strReturn .= "Registering nr of rows constant...\n";
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
         //Create an root-record for the tree
@@ -411,7 +412,7 @@ class class_installer_system extends class_installer_base implements interface_i
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2" || $arrModul["module_version"] == "3.0.2.1") {
+        if($arrModul["module_version"] == "3.0.2" || $arrModul["module_version"] == "3.0.2.1" || $arrModul["module_version"] == "3.0.2.2") {
             $strReturn .= $this->update_302_302x();
         }
 
@@ -566,7 +567,9 @@ class class_installer_system extends class_installer_base implements interface_i
 	    //new constant for nr of rows in admin
 	    $strReturn .= "Registering nr of rows constant...\n";
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
-
+        $strReturn .= "Registering admin https flag...\n";
+	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+	    
 	    //add systems' xml-handler
 	    $strReturn .= "Registering system xml handler...\n";
 	    $objSystemModule = class_modul_system_module::getModuleByName("system");
@@ -575,10 +578,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	        $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.2.2");
-        $this->updateModuleVersion("right", "3.0.2.2");
-        $this->updateModuleVersion("user", "3.0.2.2");
-        $this->updateModuleVersion("filemanager", "3.0.2.2");
+	    $this->updateModuleVersion("system", "3.0.2.3");
+        $this->updateModuleVersion("right", "3.0.2.3");
+        $this->updateModuleVersion("user", "3.0.2.3");
+        $this->updateModuleVersion("filemanager", "3.0.2.3");
+        
 
 	    return $strReturn;
 	}

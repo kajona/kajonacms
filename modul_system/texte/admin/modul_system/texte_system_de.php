@@ -130,6 +130,8 @@ $text["_system_output_gzip_"]               = "GZIP-Kompression der Ausgaben:";
 $text["_system_output_gzip_hint"]           = "Aktiviert das Komprimieren der Ausgaben per gzip, bevor diese an den Client gesendet werden.";
 $text["_admin_nr_of_rows_"]                 = "Anzahl Datensätze pro Seite:";
 $text["_admin_nr_of_rows_hint"]             = "Anzahl an Datensätzen in den Admin-Listen, sofern das Modul dies unterstützt. Kann von einem Modul überschrieben werden!";
+$text["_admin_only_https_"]                 = "Admin nur per https:";
+$text["_admin_only_https_hint"]             = "Forciert die Verwendung von https im Adminbereich. Der Webserver muss hierfür https unterstützen.";
 
 
 $text["errorintro"]                 = "Bitte alle benötigten Felder ausfüllen!";
