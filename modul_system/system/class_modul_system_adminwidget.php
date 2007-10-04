@@ -47,6 +47,31 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     public function updateObjectToDb() {
         
     }
+    
+    /**
+     * Looks up all widgets available in the filesystem.
+     * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
+     * includes all files to be able to work on the immediatelly
+     *
+     * @return array
+     */
+    public function getListOfWidgetsAvailable() {
+        $arrReturn = array();
+        
+        include_once(_systempath_."/class_filesystem.php");
+        $objFilesystem = new class_filesystem();
+        
+        $arrFiles = $objFilesystem->getFilelist("/admin/widgets/", array(".php"));
+        
+        foreach($arrFiles as $strOneFile) {
+            if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
+                $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
+                include_once(_adminpath_."/widgets/".$strOneFile);
+            }
+        }
+        
+        return $arrReturn;
+    }
 }
 
 
