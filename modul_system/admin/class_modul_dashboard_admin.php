@@ -9,7 +9,7 @@
 * 	The dashboard is the start-page when loading the admin. Holds a few widgets.						*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_modul_dashboard_admin.php 1565 2007-06-14 09:54:52Z sidler $	                            *
+*	$Id$	                            *
 ********************************************************************************************************/
 
 include_once(_adminpath_."/class_admin.php");
