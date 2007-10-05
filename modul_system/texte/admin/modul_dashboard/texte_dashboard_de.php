@@ -17,6 +17,8 @@
 $text["modul_titel"]				= "Übersicht";
 $text["moduleRights"]               = "Rechte";
 $text["addWidget"]                  = "Widget hinzufügen";
+$text["errorSavingWidget"]          = "Fehler beim Speichern des Widgets";
+
 
 $text["widget"]                     = "Widget:";
 $text["addWidgetNextStep"]          = "Weiter";
@@ -24,4 +26,5 @@ $text["column"]                     = "Spalte:";
 $text["column1"]                    = "Spalte 1";
 $text["column2"]                    = "Spalte 2";
 $text["column3"]                    = "Spalte 3";
+
 ?>

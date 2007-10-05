@@ -16,7 +16,8 @@
 
 $text["modul_titel"]				= "Overview";
 $text["moduleRights"]               = "Permissions";
-$text["addWidget"]                  = "Widget hinzufügen";
+$text["addWidget"]                  = "Add widget";
+$text["errorSavingWidget"]          = "Error saving the widget";
 
 $text["widget"]                     = "Widget:";
 $text["addWidgetNextStep"]          = "Next";

@@ -21,6 +21,8 @@
 abstract class class_adminwidget {
 
     private $arrModule = array();
+    private $arrFields = array();
+    private $arrPersistenceKeys = array();
     
     /**
      * instance of class_db
@@ -56,6 +58,16 @@ abstract class class_adminwidget {
     	$this->objTexte = class_carrier::getInstance()->getObjText();
     	
     }
+    
+    /**
+     * Use this method to tell the widgets whicht keys of the $arrFields should
+     * be loaded from and be persitsted to the database
+     *
+     * @param array $arrKeys
+     */
+    protected final function setPersistenceKeys($arrKeys) {
+        $this->arrPersistenceKeys = $arrKeys;
+    }
 
     /**
      * This method invokes the rendering of the widget. Calls
@@ -78,6 +90,49 @@ abstract class class_adminwidget {
     }
     
     /**
+     * Returns the current fields as a serialized array.
+     *
+     * @return string
+     */
+    public final function getFieldsAsString() {
+        $arrFieldsToPersist = array();
+        foreach($this->arrPersistenceKeys as $strOneKey) {
+            $arrFieldsToPersist[$strOneKey] = $this->getFieldValue($strOneKey);
+        }
+        
+        $strArraySerialized = serialize($arrFieldsToPersist);
+        return $strArraySerialized;
+    }
+    
+    /**
+     * Takes the current fields serialized and retransforms the contents
+     *
+     * @param string $strContent
+     */
+    public final function setFieldsAsString($strContent) {
+        $arrFieldsToLoad = unserialize($strContent);
+        foreach($this->arrPersistenceKeys as $strOneKey) {
+            if(isset($arrFieldsToLoad[$strOneKey])) {
+                $this->setFieldValue($strOneKey, $arrFieldsToLoad[$strOneKey]);   
+            }
+        }
+    }
+
+    /**
+     * Pass an array of values. The method looks for fields to be loaded into
+     * the internal arrays.
+     *
+     * @param array $arrFields
+     */
+    public final function loadFieldsFromArray($arrFields) {
+        foreach($this->arrPersistenceKeys as $strOneKey) {
+            if(isset($arrFields[$strOneKey])) {
+                $this->setFieldValue($strOneKey, $arrFields[$strOneKey]);   
+            }
+        }
+    }
+    
+    /**
      * Loads a text-fragement from the textfiles
      *
      * @param string $strKey
@@ -85,6 +140,29 @@ abstract class class_adminwidget {
      */
     public final function getText($strKey) {
         return $this->objTexte->getText($strKey, "adminwidget", "admin");
+    }
+    
+    /**
+     * Looks up a value in the fields-array
+     *
+     * @param string $strFieldName
+     * @return mixed
+     */
+    protected final function getFieldValue($strFieldName) {
+        if(isset($this->arrFields[$strFieldName]))
+            return $this->arrFields[$strFieldName];
+        else
+            return "";    
+    }
+    
+    /**
+     * Sets the value of a given field
+     *
+     * @param string $strFieldName
+     * @param mixed $mixedValue
+     */
+    protected final function setFieldValue($strFieldName, $mixedValue) {
+        $this->arrFields[$strFieldName] = $mixedValue;
     }
 }
 

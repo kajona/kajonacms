@@ -13,6 +13,9 @@
 ********************************************************************************************************/
 
 $text["sysinfo_name"]                        = "Systeminformation";
+$text["sysinfo_checkboxphp"]                 = "Show PHP information";
+$text["sysinfo_checkboxserver"]              = "Show server information";
+$text["sysinfo_checkboxkajona"]              = "Show kajona information";
 
 
 ?>

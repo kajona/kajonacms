@@ -15,6 +15,7 @@
 include_once(_adminpath_."/class_admin.php");
 include_once(_adminpath_."/interface_admin.php");
 include_once(_systempath_."/class_modul_system_adminwidget.php");
+include_once(_systempath_."/class_modul_dashboard_widget.php");
 
 
 class class_modul_dashboard_admin extends class_admin implements interface_admin {
@@ -119,6 +120,38 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
 	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
 	            $strReturn .= $this->objToolkit->formClose();
+	        }
+	        //step 3: save all to the database
+	        else if($this->getParam("step") == "3") {
+	            //instantiate the concrete widget
+	            $strWidgetClass = $this->getParam("widget");
+	            include_once(_adminpath_."/widgets/".$strWidgetClass.".php");
+	            $objWidget = new $strWidgetClass();
+	            
+	            //let it process its fields
+	            $objWidget->loadFieldsFromArray($this->getAllParams());
+	            
+	            //instantiate a model-widget
+	            $objSystemWidget = new class_modul_system_adminwidget();
+	            $objSystemWidget->setStrClass($strWidgetClass);
+	            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
+	            
+	            //and save the widget itself
+	            if($objSystemWidget->saveObjectToDb()) {
+                    $strWidgetId = $objSystemWidget->getSystemid();
+                    //and save the dashboard-entry
+                    $objDashboard = new class_modul_dashboard_widget();
+                    $objDashboard->setStrColumn($this->getParam("column"));
+                    $objDashboard->setStrUser($this->objSession->getUserID());
+                    $objDashboard->setStrWidgetId($strWidgetId);
+                    if($objDashboard->saveObjectToDb()) {
+                        return "";
+                    }
+                    else
+                        return $this->getText("errorSavingWidget");
+                }
+                else
+                    return $this->getText("errorSavingWidget");    
 	        }
 	        
 	    }

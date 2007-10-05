@@ -253,10 +253,38 @@ class class_installer_system extends class_installer_base implements interface_i
                         `filemanager_view_filter` VARCHAR( 255 ) ,
                         PRIMARY KEY ( `filemanager_id` )
                         ) ";
-
+		
 		if(!$this->objDB->createTable($strQuery))
 			$strReturn .= "An error occured! ...\n";
 
+        //dashboard & widgets ---------------------------------------------------------------------------			
+		$strReturn .= "Installing table adminwidget...\n";
+		
+		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
+                        `dashboard_id` VARCHAR( 20 ) NULL ,
+                        `dashboard_column` VARCHAR( 255 ) NULL ,
+                        `dashboard_user` VARCHAR( 20 ) NULL ,
+                        `dashboard_widgetid` VARCHAR( 20 ) NULL ,
+                        PRIMARY KEY ( `dashboard_id` )
+                        ) ";
+		
+		if(!$this->objDB->createTable($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+		$strReturn .= "Installing table dashboard...\n";
+		
+		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
+                        `adminwidget_id` VARCHAR( 20 ) NULL ,
+                        `adminwidget_class` VARCHAR( 255 ) NULL ,
+                        `adminwidget_content` TEXT NULL ,
+                        PRIMARY KEY ( `adminwidget_id` )
+                        )";
+		
+		if(!$this->objDB->createTable($strQuery))
+			$strReturn .= "An error occured! ...\n";
+			
+			
+			
 
 		//Now we have to register module by module
 
@@ -596,6 +624,28 @@ class class_installer_system extends class_installer_base implements interface_i
     private function update_302x_303() {
 	    $strReturn = "";
 	    $strReturn .= "Updating 3.0.2.2 to 3.0.3...\n";
+	    
+	    $strReturn .= "Installing table adminwidget...\n";
+		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
+                        `dashboard_id` VARCHAR( 20 ) NULL ,
+                        `dashboard_column` VARCHAR( 255 ) NULL ,
+                        `dashboard_user` VARCHAR( 20 ) NULL ,
+                        `dashboard_widgetid` VARCHAR( 20 ) NULL ,
+                        PRIMARY KEY ( `dashboard_id` )
+                        ) ";
+		
+		if(!$this->objDB->createTable($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+		$strReturn .= "Installing table dashboard...\n";
+		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
+                        `adminwidget_id` VARCHAR( 20 ) NULL ,
+                        `adminwidget_class` VARCHAR( 255 ) NULL ,
+                        `adminwidget_content` TEXT NULL ,
+                        PRIMARY KEY ( `adminwidget_id` )
+                        )";
+		if(!$this->objDB->createTable($strQuery))
+			$strReturn .= "An error occured! ...\n";
 
 	    $strReturn .= "Registering new module dashboard...\n";
 	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false);

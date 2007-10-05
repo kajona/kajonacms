@@ -9,7 +9,7 @@
 * 	interface to be implemented by all adminwidgets														*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                        *
+*	$Id$	                                *
 ********************************************************************************************************/
 
 /**
@@ -30,7 +30,7 @@ interface interface_adminwidget {
     
     /**
      * This method is called, when the widget should generate it's content.
-     * Return the completet content using the methods provided by the base class.
+     * Return the complete content using the methods provided by the base class.
      * Do NOT use the toolkit right here! 
      *
      * @return string

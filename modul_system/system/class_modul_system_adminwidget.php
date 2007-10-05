@@ -9,7 +9,7 @@
 * 	Class to manage the various widgets available 														*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                        *
+*	$Id$	                        *
 ********************************************************************************************************/
 
 include_once(_systempath_."/class_model.php");
@@ -22,15 +22,21 @@ include_once(_systempath_."/interface_model.php");
  */
 class class_modul_system_adminwidget extends class_model implements interface_model {
     
+    private $strClass = "";
+    private $strContent = "";
+    
+    
 	/**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
         $arrModul["name"] 				= "modul_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
+		$arrModul["table"]              = _dbprefix_."adminwidget";
+		$arrModul["modul"]              = "system";
 
 		//base class
 		parent::__construct($arrModul, $strSystemid);
@@ -46,6 +52,36 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     
     public function updateObjectToDb() {
         
+    }
+    
+    public function deleteObjectFromDb() {
+       //TODO: MUST BE IMPLEMENTED! CALLED BY VIEW
+    }
+    
+    /**
+     * Saves an adminwidget to the database.
+     *
+     */
+    public function saveObjectToDb() {
+        
+        $this->objDB->transactionBegin();
+
+        $strWidgetId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "widget: ".$this->strClass);
+        $this->setSystemid($strWidgetId);
+        
+        class_logger::getInstance()->addLogRow("new widget ".$this->getSystemid(), class_logger::$levelInfo);
+        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+                    (adminwidget_id, adminwidget_class, adminwidget_content) VALUES
+                    ('".dbsafeString($strWidgetId)."', '".dbsafeString($this->getStrClass())."', '".dbsafeString($this->getStrContent())."')";
+
+        if($this->objDB->_query($strQuery)) {
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            $this->objDB->transactionRollback();
+            return false;
+        }
     }
     
     /**
@@ -72,6 +108,23 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         
         return $arrReturn;
     }
+    
+//--- GETTERS / SETTERS ---------------------------------------------------------------------------------
+
+    public function setStrClass($strClass) {
+        $this->strClass = $strClass;
+    }
+    public function setStrContent($strContent) {
+        $this->strContent = $strContent;
+    }
+    
+    public function getStrClass() {
+        return $this->strClass;
+    }
+    public function getStrContent() {
+        return $this->strContent;
+    }
+    
 }
 
 
