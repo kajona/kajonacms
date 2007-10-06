@@ -73,7 +73,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         $this->setEditDate();
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET adminwidget_class = '".dbsafeString($this->getStrClass())."',
-                       adminwidget_content = '".dbsafeString($this->getStrContent())."',
+                       adminwidget_content = '".dbsafeString($this->getStrContent(), false)."'
                  WHERE adminwidget_id = '".dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }

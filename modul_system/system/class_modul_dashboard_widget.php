@@ -63,6 +63,9 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         
     }
     
+    /**
+     * Updates the current widget to the db
+     */
     public function updateObjectToDb() {
         class_logger::getInstance()->addLogRow("updated dashboard ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setEditDate();
@@ -72,6 +75,26 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
                        dashboard_widgetid = '".dbsafeString($this->getStrWidgetId())."'
                  WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
+    }
+    
+    /**
+     * Deletes the current object and the assigned widget from the db
+     *
+     * @return bool
+     */
+    public function deleteObjectFromDb() {
+        if($this->getWidgetmodelForCurrentEntry()->deleteObjectFromDb()) {
+            class_logger::getInstance()->addLogRow("deleted dashboardentry ".$this->getSystemid(), class_logger::$levelInfo);
+    	    $objRoot = new class_modul_system_common();
+    	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
+                                 WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
+            if($this->objDB->_query($strQuery)) {
+                if($objRoot->deleteSystemRecord($this->getSystemid()))
+                    return true;
+            }
+        }
+
+        return false;
     }
     
     /**

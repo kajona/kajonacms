@@ -1157,7 +1157,11 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function getDashboardWidgetEncloser($strDashboardEntryId, $strWidgetContent) {
-        return "<li id=\"".$strDashboardEntryId."\">".$strWidgetContent."</li>";
+         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_encloser");
+        $arrTemplate = array();
+        $arrTemplate["entryid"] = $strDashboardEntryId;
+        $arrTemplate["content"] = $strWidgetContent;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
     
     /**
@@ -1166,15 +1170,24 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strSystemid
      * @param string $strName
      * @param string $strContent
+     * @param string $strEditLink
+     * @param string $strDeleteLink
      * @return string
      */
-    public function getAdminwidget($strSystemid, $strName, $strContent) {
+    public function getAdminwidget($strSystemid, $strName, $strContent, $strEditLink = "", $strDeleteLink = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_widget");
         $arrTemplate = array();
         $arrTemplate["widget_name"] = $strName;
         $arrTemplate["widget_content"] = $strContent;
         $arrTemplate["widget_id"] = $strSystemid;
+        $arrTemplate["widget_edit"] = $strEditLink;
+        $arrTemplate["widget_delete"] = $strDeleteLink;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+    
+    public function adminwidgetText($strText) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_text");
+        return $this->objTemplate->fillTemplate(array("text" => $strText), $strTemplateID);
     }
     
 }

@@ -49,7 +49,22 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      * @return string
      */
     public function getWidgetOutput() {
-        return "sysinfos";
+        $strReturn = "";
+        //check wich infos to produce
+        if($this->getFieldValue("php") == "checked") {
+            $strReturn .= $this->widgetText($this->getText("sysinfo_php_version").PHP_VERSION);
+            $strReturn .= $this->widgetText($this->getText("sysinfo_php_memlimit").bytesToString(ini_get("memory_limit"), true));
+        }
+        if($this->getFieldValue("server") == "checked") {
+            $strReturn .= $this->widgetText($this->getText("sysinfo_server_system").php_uname("s")." ".php_uname("r"));
+            $strReturn .= $this->widgetText($this->getText("sysinfo_server_diskspace").bytesToString(disk_total_space(_realpath_)));
+            $strReturn .= $this->widgetText($this->getText("sysinfo_server_diskspacef").bytesToString(disk_free_space(_realpath_)));
+        }
+        if($this->getFieldValue("kajona") == "checked") {
+            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_version").class_modul_system_module::getModuleByName("system")->getStrVersion());
+            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_nrOfModules").count(class_modul_system_module::getAllModules()));
+        }
+        return $strReturn;
     }
     
     

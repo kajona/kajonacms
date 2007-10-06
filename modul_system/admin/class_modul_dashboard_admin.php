@@ -51,6 +51,20 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        else
 	            $this->strOutput = $strResponse;    
 	    }
+	    else if($strAction == "deleteWidget") {
+	        $strResponse = $this->actionDeleteWidget();
+	        if($strResponse == "")
+	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	        else
+	            $this->strOutput = $strResponse;
+	    }
+	    else if($strAction == "editWidget") {
+	        $strResponse = $this->actionEditWidget();
+	        if($strResponse == "")
+	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	        else
+	            $this->strOutput = $strResponse;
+	    }
 	}
 	
     
@@ -84,16 +98,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
     	        $strWidgetContent = "";
 	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName) as $objOneSystemmodel) {
-    	            $objConcreteWidget = $objOneSystemmodel->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
-    	            
-    	            $strGeneratedContent = $objConcreteWidget->generateWidgetOutput();
-    	            $strWidgetId = $objConcreteWidget->getSystemid();
-    	            $strWidgetName = $objConcreteWidget->getWidgetName();
-    	            
-    	            $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
-    	                                    $objOneSystemmodel->getSystemid(), $this->objToolkit->getAdminwidget($strWidgetId, $strWidgetName, $strGeneratedContent)
-    	                                 );
-    	            
+    	            $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
     	        }
     	        
     	        $strColumnContent .= $strWidgetContent;
@@ -107,6 +112,34 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        $strReturn = $this->getText("fehler_recht");
 	        
 	    return $strReturn;    
+	}
+	
+	/**
+	 * Creates the layout of a dashboard-entry. loads the widget to fetch the contents of the concrete widget.
+	 *
+	 * @param class_modul_dashboard_widget $objDashboardWidget
+	 * @return string
+	 */
+	private function layoutAdminWidget($objDashboardWidget) {
+	    $strWidgetContent = "";
+	    
+	    $objConcreteWidget = $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+    	            
+        $strGeneratedContent = $objConcreteWidget->generateWidgetOutput();
+        $strWidgetId = $objConcreteWidget->getSystemid();
+        $strWidgetName = $objConcreteWidget->getWidgetName();
+        
+        $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
+                                $objDashboardWidget->getSystemid(), $this->objToolkit->getAdminwidget(
+                                        $strWidgetId, 
+                                        $strWidgetName, 
+                                        $strGeneratedContent,
+                                        getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif"),
+                                        getLinkAdmin("dashboard", "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("deleteWidget"), "icon_ton.gif")
+                                )
+                             );
+                             
+        return $strWidgetContent;                     
 	}
 	
 	/**
@@ -197,6 +230,78 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        $strReturn = $this->getText("fehler_recht");
 	    
 	    return $strReturn;    
+	}
+	
+	/**
+	 * Deletes a widget from the dashboard
+	 *
+	 * @return string "" in case of success
+	 */
+	private function actionDeleteWidget() {
+	    $strReturn = "";
+		//Rights
+		if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+			if($this->getParam("widgetDeleteFinal") == "") {
+			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+				$strName = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName();
+				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("widgetDeleteQuestion")
+				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deleteWidget&amp;systemid="
+				               .$this->getSystemid()."&amp;widgetDeleteFinal=1\">"
+				               .$this->getText("widgetDeleteLink"));
+			}
+			elseif($this->getParam("widgetDeleteFinal") == "1") {
+			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+			    if(!$objDashboardwidget->deleteObjectFromDb())
+			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+			}
+		}
+		else
+			$strReturn .= $this->getText("fehler_recht");
+
+		return $strReturn;
+	}
+	
+	/**
+	 * Creates the form to edit a widget (NOT the dashboard entry!)
+	 *
+	 * @return string "" in case of success
+	 */
+	private function actionEditWidget() {
+	    $strReturn = "";
+		//Rights
+		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+			if($this->getParam("saveWidget") == "") {
+			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+				$objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+	            
+	            //ask the widget to generate its form-parts and wrap our elements around
+	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=dashboard&amp;action=editWidget");
+	            $strReturn .= $objWidget->getEditForm();
+	            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+	            $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
+	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetSave"));
+	            $strReturn .= $this->objToolkit->formClose();
+			}
+			elseif($this->getParam("saveWidget") == "1") {
+			    //the dashboard entry
+			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+			    //widgets model
+			    $objSystemWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry();
+                //the concrete widget			    
+			    $objConcreteWidget = $objSystemWidget->getConcreteAdminwidget();
+			    $objConcreteWidget->loadFieldsFromArray($this->getAllParams());
+			    
+	            $objSystemWidget->setStrContent($objConcreteWidget->getFieldsAsString());
+	            if(!$objSystemWidget->updateObjectToDb())
+	                throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
+			}
+		}
+		else
+			$strReturn .= $this->getText("fehler_recht");
+
+		return $strReturn;
 	}
 }
 

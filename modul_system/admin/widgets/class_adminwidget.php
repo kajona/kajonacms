@@ -77,11 +77,7 @@ abstract class class_adminwidget {
      * @return string
      */
     public final function generateWidgetOutput() {
-        $strReturn = "";
-        $strReturn .= "widget start";
-        $strReturn .= $this->getWidgetOutput();
-        $strReturn .= "widget end";
-        return $strReturn;
+        return $this->getWidgetOutput();
     }
     
     /**
@@ -188,6 +184,11 @@ abstract class class_adminwidget {
         return $this->strSytemid;   
     }
     
+//--- Layout/Content functions --------------------------------------------------------------------------
+
+    public final function widgetText($strText) {
+        return $this->objToolkit->adminwidgetText($strText);
+    }
 }
 
 

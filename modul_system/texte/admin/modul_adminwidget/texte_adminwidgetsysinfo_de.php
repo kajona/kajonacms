@@ -17,4 +17,13 @@ $text["sysinfo_checkboxphp"]                 = "PHP Informationen anzeigen";
 $text["sysinfo_checkboxserver"]              = "Server Informationen anzeigen";
 $text["sysinfo_checkboxkajona"]              = "Kajona Informationen anzeigen";
 
+$text["sysinfo_php_version"]                 = "PHP Version: ";
+$text["sysinfo_php_memlimit"]                = "PHP Memory Limit: ";
+$text["sysinfo_server_system"]               = "System: ";
+$text["sysinfo_server_diskspace"]            = "Gesamter Plattenplatz: ";
+$text["sysinfo_server_diskspacef"]           = "Freier Plattenplatz: ";
+$text["sysinfo_kajona_version"]              = "Kajona Version: ";
+$text["sysinfo_kajona_nrOfModules"]          = "Anzahl Kajonamodule: ";
+
+
 ?>

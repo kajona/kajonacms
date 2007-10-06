@@ -21,6 +21,11 @@ $text["errorSavingWidget"]          = "Fehler beim Speichern des Widgets";
 $text["fehler_recht"]               = "Keine ausreichende Rechte";
 $text["setDashboardPosition"]       = "Speichern der Position erfolgreich";
 
+$text["editWidget"]                 = "Widget bearbeiten";
+$text["deleteWidget"]               = "Widget löschen";                
+$text["widgetDeleteQuestion"]       = " - Widget wirklich löschen?";
+$text["widgetDeleteLink"]           = "Löschen";
+
 
 $text["widget"]                     = "Widget:";
 $text["addWidgetNextStep"]          = "Weiter";

@@ -737,10 +737,14 @@ The language switch sourrounds the buttons
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
 
 <adminwidget_widget>
-<div style="border: 1px solid #cccccc">
-	<div style="background-color: #cccccc;">%%widget_name%%</div>
+<div style="border: 1px solid #cccccc; width: 250px; margin-bottom: 20px;">
+	<div style="background-color: #cccccc;">
+		<div style="float: left;">%%widget_name%%</div>
+		<div style="float: right;">%%widget_edit%% %%widget_delete%%</div>
+		<div style="clear: both;"></div>
+	</div>
 	<div>%%widget_content%%</div>
-	<div>Skin Maintainer: Please layout!</div>
+	<div style="color: red;">Skin Maintainer: Please layout!</div>
 </div>
 </adminwidget_widget>
 
@@ -755,9 +759,17 @@ The language switch sourrounds the buttons
         kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
 	</script>
 	
-	<ul id="%%column_id%%">
+	<ul id="%%column_id%%" style="padding: 0 0 5px 0; margin: none; list-style: none; width: 260px;">
 </dashboard_column_header>
 
 <dashboard_column_footer>
 	</ul>
 </dashboard_column_footer>
+
+<dashboard_encloser>
+	<li id="%%entryid%%" style="padding: 0; margin: 0;">%%content%%</li>
+</dashboard_encloser>
+
+<adminwidget_text>
+<div>%%text%%</div>
+</adminwidget_text>
