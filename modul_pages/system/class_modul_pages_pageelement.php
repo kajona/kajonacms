@@ -216,6 +216,36 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		return $arrReturn;
     }
+    
+/**
+     * Loads all Elements on the given ignoring both, status and language
+     *
+     * @param string $strPageId
+     * @param bool $bitJustActive
+     * @param string $strLanguage
+     * @return mixed
+     * @static
+     */
+    public static function getAllElementsOnPage($strPageId) {
+
+        $strQuery = "SELECT system_id
+						 FROM "._dbprefix_."page_element,
+						      "._dbprefix_."element,
+						      "._dbprefix_."system
+						 WHERE system_prev_id='".dbsafeString($strPageId)."'
+						   AND page_element_placeholder_element = element_name
+						   AND system_id = page_element_id
+						 ORDER BY page_element_placeholder_placeholder ASC,
+						 		system_sort ASC";
+
+		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+		$arrReturn = array();
+		foreach($arrIds as $arrOneId)
+		    $arrReturn[] = new class_modul_pages_pageelement($arrOneId["system_id"]);
+
+		return $arrReturn;
+    }
 
     /**
 	 * Shifts an element up or down

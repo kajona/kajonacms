@@ -314,6 +314,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     				    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
 		    		if($this->objRights->rightEdit($strSystemid))
 	    				$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
+	    			if($this->objRights->rightEdit($strSystemid))
+		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));	
 		    		if($this->objRights->rightDelete($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
 		    		if($this->objRights->rightEdit($strSystemid))
@@ -382,6 +384,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
+	    		if($this->objRights->rightEdit($objPage->getSystemid()))
+		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
 	    		if($this->objRights->rightDelete($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))

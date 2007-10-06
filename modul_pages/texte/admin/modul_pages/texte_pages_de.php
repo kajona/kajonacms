@@ -52,6 +52,7 @@ $text["seite_loeschen_link"]		= "Löschen";
 $text["seite_loeschen_erfolg"]		= "Seite erfolgreich gelöscht";
 $text["seite_rechte"]				= "Rechte bearbeiten";
 $text["seite_vorschau"]				= "Vorschau anzeigen";
+$text["seite_copy"]                 = "Seite kopieren";
 $text["lastuserTitle"]				= "Letzter Autor:";
 $text["lasteditTitle"]				= "Letzte Änderung:";
 $text["pageNameTitle"]				= "Seitenname:";

@@ -373,7 +373,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    $objDB = class_carrier::getInstance()->getObjDB();
 	    $objRoot = new class_modul_system_common($strSystemid);
 	    //Get all Elements belonging to this page
-		$arrElements = class_modul_pages_pageelement::getElementsOnPage($strSystemid);
+		$arrElements = class_modul_pages_pageelement::getAllElementsOnPage($strSystemid);
 
 		//Start the transaction
 		$objDB->transactionBegin();
