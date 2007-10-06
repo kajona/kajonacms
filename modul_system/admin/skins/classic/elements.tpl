@@ -828,3 +828,43 @@ The language switch sourrounds the buttons
 <pageview_list_item_active>
 <b><a href="%%href%%" >[ %%pageNr%% ]</a></b>&nbsp;
 </pageview_list_item_active>
+
+---------------------------------------------------------------------------------------------------------
+-- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
+
+<adminwidget_widget>
+<div class="adminwidget">
+	<div class="adminwidgetHeader">
+		<div class="adminwidgetHeaderTitle">%%widget_name%%</div>
+		<div style="float: right;">%%widget_edit%% %%widget_delete%%</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div class="adminwidgetContent">%%widget_content%%</div>
+</div>
+</adminwidget_widget>
+
+<dashboard_column_header>
+	<script type="text/javascript">
+    	kajonaAjaxHelper.loadDragNDropBase();
+    	if(arrayListIds == null)
+            var arrayListIds = new Array("%%column_id%%");
+        else
+            arrayListIds[(arrayListIds.length)] = "%%column_id%%";
+    
+        kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
+	</script>
+	
+	<ul id="%%column_id%%">
+</dashboard_column_header>
+
+<dashboard_column_footer>
+	</ul>
+</dashboard_column_footer>
+
+<dashboard_encloser>
+	<li id="%%entryid%%">%%content%%</li>
+</dashboard_encloser>
+
+<adminwidget_text>
+<div>%%text%%</div>
+</adminwidget_text>

@@ -579,5 +579,55 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	background-color: #CFD0FF;
 }
 
+.dashBoard {
+	border: none;
+	width: 100%;
+	font-family: Arial, Verdana, Helvetica, sans-serif;
+    color: #000000;
+    font-size: 11px;
+}
+
+.dashBoard td {
+	vertical-align: top;
+}
+
+.adminwidget {
+	border: 1px solid #000099;
+}
+
+.adminwidgetHeader {
+	background-position: left top;
+	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	color: #FFFFFF;
+    font-size: 12px;
+}
+
+.adminwidgetHeaderTitle {
+	padding: 4px 0 0 2px;
+	float: left;
+	background-position: left top;
+	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	color: #FFFFFF;
+    font-size: 12px;
+}
+
+.adminwidgetContent {
+	padding: 2px;
+}
+
+.dashBoard ul {
+	padding: 0 0 10px 0; 
+	margin: none; 
+	list-style: none; 
+	width: 260px;
+}
+
+.dashBoard ul li {
+	padding: 0; 
+	margin: 0 0 10px 0; 
+}
+
+
+
 ";
 ?>
