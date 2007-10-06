@@ -18,23 +18,30 @@ if(arrayListIds == null)
 	var Dom = YAHOO.util.Dom;
 	var Event = YAHOO.util.Event;
 	var DDM = YAHOO.util.DragDropMgr;
+	
+	var posBeforeMove = -1;
+	var ulBeforeMove = -1;
 
 	//create namespaces
 	var kajona = { };
-	kajona.dragndroplist = {};
+	kajona.dragndroplistDashboard = {};
 	//Basic functions
-	kajona.dragndroplist.DDApp = {
+	kajona.dragndroplistDashboard.DDApp = {
     	init: function() {
 		   //iterate over all lists available
 		   for(l=0; l<arrayListIds.length; l++) {
 		   	   listId = arrayListIds[l];
+		   	   if(listId == null)
+		   	      continue;
+		   	      
 	           //basic dnd list				
 	           new YAHOO.util.DDTarget(listId);
+			   
 			   //load items in list
 			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
 			   		Dom.setStyle(arrayListItems[i], "cursor", "move");
-		 			new kajona.dragndroplist.DDList(arrayListItems[i].id);
+		 			new kajona.dragndroplistDashboard.DDList(arrayListItems[i].id);
 		   	   }
 		   }
     	},
@@ -53,6 +60,9 @@ if(arrayListIds == null)
 		getCurrentList : function(idOfRow) {
 		   for(l=0; l<arrayListIds.length; l++) {
 		   	   listId = arrayListIds[l];	
+		   	   if(listId == null)
+		   	      continue;
+		   	      
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
 			 		if(arrayListItems[i].id == idOfRow) {
@@ -63,20 +73,25 @@ if(arrayListIds == null)
 	    }
 	};
 
-	kajona.dragndroplist.DDList = function(id, sGroup, config) {
-	    kajona.dragndroplist.DDList.superclass.constructor.call(this, id, sGroup, config);
+	kajona.dragndroplistDashboard.DDList = function(id, sGroup, config) {
+	    kajona.dragndroplistDashboard.DDList.superclass.constructor.call(this, id, sGroup, config);
 	    var el = this.getDragEl();
 	    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
 	    this.goingUp = false;
 	    this.lastY = 0;
 	};
 
-	YAHOO.extend(kajona.dragndroplist.DDList, YAHOO.util.DDProxy, {
+	YAHOO.extend(kajona.dragndroplistDashboard.DDList, YAHOO.util.DDProxy, {
 	
 	    startDrag: function(x, y) {
 	        // make the proxy look like the source element
 	        var dragEl = this.getDragEl();
 	        var clickEl = this.getEl();
+			
+			//save the start-pos and ul
+			posBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(clickEl.id);
+			ulBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(clickEl.id);
+			
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
 	    },
@@ -103,8 +118,12 @@ if(arrayListIds == null)
 	                Dom.setStyle(thisid, "visibility", "");
 	            });
 	        a.animate();
-	        //save new pos to backend
-	        kajonaAdminAjax.setAbsolutePosition(this.id, kajona.dragndroplist.DDApp.getCurrentPos(this.id), kajona.dragndroplist.DDApp.getCurrentList(this.id));
+	        
+			//save new pos to backend, if pos changed or li changed
+			var posAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id);
+			var ulAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id);
+			if(posAfterMove != posBeforeMove || ulBeforeMove != ulAfterMove)
+	        	kajonaAdminAjax.setDashboardPos(this.id, kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id), kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id));
 	    },
 	
 	    onDragDrop: function(e, id) {
@@ -149,6 +168,6 @@ if(arrayListIds == null)
 	});
 
 	//and init the app
-	kajona.dragndroplist.DDApp.init();
+	kajona.dragndroplistDashboard.DDApp.init();
 })();
 

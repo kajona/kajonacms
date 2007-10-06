@@ -49,7 +49,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
      * @return string
      */
     public function getWidgetOutput() {
-        
+        return "sysinfos";
     }
     
     

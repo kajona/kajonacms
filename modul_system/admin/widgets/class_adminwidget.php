@@ -23,6 +23,7 @@ abstract class class_adminwidget {
     private $arrModule = array();
     private $arrFields = array();
     private $arrPersistenceKeys = array();
+    private $strSytemid = "";
     
     /**
      * instance of class_db
@@ -76,7 +77,11 @@ abstract class class_adminwidget {
      * @return string
      */
     public final function generateWidgetOutput() {
-        $strWidgetContent = $this->getWidgetOutput();
+        $strReturn = "";
+        $strReturn .= "widget start";
+        $strReturn .= $this->getWidgetOutput();
+        $strReturn .= "widget end";
+        return $strReturn;
     }
     
     /**
@@ -164,8 +169,26 @@ abstract class class_adminwidget {
     protected final function setFieldValue($strFieldName, $mixedValue) {
         $this->arrFields[$strFieldName] = $mixedValue;
     }
+    
+    /**
+     * Sets the systemid of the current widget
+     *
+     * @param string $strSystemid
+     */
+    public final function setSystemid($strSystemid) {
+        $this->strSytemid = $strSystemid;
+    }
+
+    /**
+     * Returns the systemid of the current widget
+     *
+     * @return string
+     */
+    public final function getSystemid() {
+        return $this->strSytemid;   
+    }
+    
 }
 
 
 ?>
- 

@@ -20,6 +20,8 @@ include_once(_systempath_."/class_modul_dashboard_widget.php");
 
 class class_modul_dashboard_admin extends class_admin implements interface_admin {
     
+    private $arrColumnsOnDashboard = array("column1", "column2", "column3");
+    
 	/**
 	 * Constructor
 	 *
@@ -43,7 +45,11 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        $this->strOutput = $this->actionList();
 	    }    
 	    else if($strAction == "addWidgetToDashboard") {
-	        $this->strOutput = $this->actionAddWidgetToDashboard();    
+	        $strResponse = $this->actionAddWidgetToDashboard();
+	        if($strResponse == "")
+	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	        else
+	            $this->strOutput = $strResponse;    
 	    }
 	}
 	
@@ -67,7 +73,40 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 * @return string
 	 */
 	private function actionList() {
-	    return "The widgets will go here...";
+	    $strReturn = "";
+	    //check needed permissions
+	    if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+	        //load the widgets for each column. currently supporting 3 columns on the dashboard.
+	        $objDashboardmodel = new class_modul_dashboard_widget();
+	        $arrColumns = array();
+	        //build each row
+	        foreach($this->arrColumnsOnDashboard as $strColumnName) {
+	            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
+    	        $strWidgetContent = "";
+	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName) as $objOneSystemmodel) {
+    	            $objConcreteWidget = $objOneSystemmodel->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
+    	            
+    	            $strGeneratedContent = $objConcreteWidget->generateWidgetOutput();
+    	            $strWidgetId = $objConcreteWidget->getSystemid();
+    	            $strWidgetName = $objConcreteWidget->getWidgetName();
+    	            
+    	            $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
+    	                                    $objOneSystemmodel->getSystemid(), $this->objToolkit->getAdminwidget($strWidgetId, $strWidgetName, $strGeneratedContent)
+    	                                 );
+    	            
+    	        }
+    	        
+    	        $strColumnContent .= $strWidgetContent;
+    	        $strColumnContent .= $this->objToolkit->getDashboardColumnFooter();
+    	        $arrColumns[] = $strColumnContent;
+	        }
+	        $strReturn .= $this->objToolkit->getMainDashboard($arrColumns);
+	        
+	    }
+	    else
+	        $strReturn = $this->getText("fehler_recht");
+	        
+	    return $strReturn;    
 	}
 	
 	/**
@@ -93,9 +132,8 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            }
 	            
 	            $arrColumnsAvailable = array();
-	            $arrColumnsAvailable[1] = $this->getText("column1");
-	            $arrColumnsAvailable[2] = $this->getText("column2");
-	            $arrColumnsAvailable[3] = $this->getText("column3");
+	            foreach ($this->arrColumnsOnDashboard as $strOneColumn)
+	                $arrColumnsAvailable[$strOneColumn] = $this->getText($strOneColumn);
 	            
 	            
 	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=dashboard&amp;action=addWidgetToDashboard");
@@ -118,7 +156,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
 	            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
 	            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
+	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetSave"));
 	            $strReturn .= $this->objToolkit->formClose();
 	        }
 	        //step 3: save all to the database

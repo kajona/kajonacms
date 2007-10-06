@@ -18,10 +18,13 @@ $text["modul_titel"]				= "Übersicht";
 $text["moduleRights"]               = "Rechte";
 $text["addWidget"]                  = "Widget hinzufügen";
 $text["errorSavingWidget"]          = "Fehler beim Speichern des Widgets";
+$text["fehler_recht"]               = "Keine ausreichende Rechte";
+$text["setDashboardPosition"]       = "Speichern der Position erfolgreich";
 
 
 $text["widget"]                     = "Widget:";
 $text["addWidgetNextStep"]          = "Weiter";
+$text["addWidgetSave"]              = "Speichern";
 $text["column"]                     = "Spalte:";
 $text["column1"]                    = "Spalte 1";
 $text["column2"]                    = "Spalte 2";

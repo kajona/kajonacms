@@ -297,7 +297,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //The filemanagermodule
 		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "", "class_modul_filemanager_admin", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
         //the dashboard
-        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false);
+        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
         
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
@@ -648,7 +648,7 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
 	    $strReturn .= "Registering new module dashboard...\n";
-	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false);
+	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", class_modul_dashboard_admin_xml.php);
 	    
         $strReturn .= "Updating module-versions...\n";
 	    $this->updateModuleVersion("system", "3.0.3");

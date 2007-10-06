@@ -14,6 +14,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/class_modul_system_common.php");
 
 /**
  * Class to represent a single adminwidget
@@ -46,16 +47,52 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
 		    $this->initObject();
     }
     
+    /**
+     * Inits the object by loading the values from the db
+     *
+     */
     public function initObject() {
+        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
+        						   "._dbprefix_."system 
+        				WHERE system_id = adminwidget_id
+        				  AND system_id = '".dbsafeString($this->getSystemid())."'";
         
+        $arrRow = $this->objDB->getRow($strQuery);
+        if(count($arrRow) > 0) {
+            $this->setStrClass($arrRow["adminwidget_class"]);
+            $this->setStrContent($arrRow["adminwidget_content"]);
+        }
     }
     
+    /**
+     * Updates the values of the current widget to the db
+     *
+     */
     public function updateObjectToDb() {
-        
+        class_logger::getInstance()->addLogRow("updated adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->setEditDate();
+        $strQuery = "UPDATE ".$this->arrModule["table"]."
+                   SET adminwidget_class = '".dbsafeString($this->getStrClass())."',
+                       adminwidget_content = '".dbsafeString($this->getStrContent())."',
+                 WHERE adminwidget_id = '".dbsafeString($this->getSystemid())."'";
+        return $this->objDB->_query($strQuery);
     }
     
+    /**
+     * Deletes the current object from the database
+     *
+     * @return bool
+     */
     public function deleteObjectFromDb() {
-       //TODO: MUST BE IMPLEMENTED! CALLED BY VIEW
+        class_logger::getInstance()->addLogRow("deleted adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
+	    $objRoot = new class_modul_system_common();
+	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
+                             WHERE adminwidget_id = '".dbsafeString($this->getSystemid())."'";
+        if($this->objDB->_query($strQuery)) {
+            if($objRoot->deleteSystemRecord($this->getSystemid()))
+                return true;
+        }
+        return false;
     }
     
     /**
@@ -72,7 +109,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         class_logger::getInstance()->addLogRow("new widget ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                     (adminwidget_id, adminwidget_class, adminwidget_content) VALUES
-                    ('".dbsafeString($strWidgetId)."', '".dbsafeString($this->getStrClass())."', '".dbsafeString($this->getStrContent())."')";
+                    ('".dbsafeString($strWidgetId)."', '".dbsafeString($this->getStrClass())."', '".dbsafeString($this->getStrContent(), false)."')";
 
         if($this->objDB->_query($strQuery)) {
             $this->objDB->transactionCommit();
@@ -107,6 +144,20 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         }
         
         return $arrReturn;
+    }
+    
+    /**
+     * Creates the concrete widget represented by this model-element
+     *
+     * @return class_adminwidget
+     */
+    public function getConcreteAdminwidget() {
+        include_once(_adminpath_."/widgets/".$this->getStrClass().".php");
+        $objWidget = new $this->strClass();
+        //Pass the field-values
+        $objWidget->setFieldsAsString($this->getStrContent());
+        $objWidget->setSystemid($this->getSystemid());
+        return $objWidget;
     }
     
 //--- GETTERS / SETTERS ---------------------------------------------------------------------------------

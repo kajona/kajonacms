@@ -1113,5 +1113,69 @@ class class_toolkit_admin extends class_toolkit {
         return $arrReturn;
     }
 
+    
+/*"*****************************************************************************************************/
+// --- Admnwidget / Dashboard ---------------------------------------------------------------------------
+
+    
+    public function getMainDashboard($arrColumn) {
+        $strReturn = "<table class=\"dashBoard\"><tr>";
+        foreach ($arrColumn as $strOneColumn)
+            $strReturn .= "<td>".$strOneColumn."</td>";
+        $strReturn .= "</tr></table>";
+        return $strReturn;
+    }
+    
+    /**
+     * Generates the header for a column on the dashboard.
+     * Inits the ajax-componentes for this list
+     *
+     * @param string $strColumnId
+     * @return string
+     */
+    public function getDashboardColumnHeader($strColumnId) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_header");
+        return $this->objTemplate->fillTemplate(array("column_id" => $strColumnId), $strTemplateID);
+    }
+    
+    /**
+     * The footer of a dashboard column.
+     *
+     * @return string
+     */
+    public function getDashboardColumnFooter() {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_footer");
+        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+    }
+    
+    /**
+     * The widget-enclose is the code-fragment to be built around the widget itself.
+     * Used to handle the widget on the current column.
+     *
+     * @param string $strDashboardEntryId
+     * @param string $strWidgetContent
+     * @return string
+     */
+    public function getDashboardWidgetEncloser($strDashboardEntryId, $strWidgetContent) {
+        return "<li id=\"".$strDashboardEntryId."\">".$strWidgetContent."</li>";
+    }
+    
+    /**
+     * Builds the widget out of its main components.
+     *
+     * @param string $strSystemid
+     * @param string $strName
+     * @param string $strContent
+     * @return string
+     */
+    public function getAdminwidget($strSystemid, $strName, $strContent) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_widget");
+        $arrTemplate = array();
+        $arrTemplate["widget_name"] = $strName;
+        $arrTemplate["widget_content"] = $strContent;
+        $arrTemplate["widget_id"] = $strSystemid;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+    
 }
 ?>

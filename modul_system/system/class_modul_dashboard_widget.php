@@ -14,6 +14,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/class_modul_system_adminwidget.php");
 
 /**
  * Class to represent a single adminwidget
@@ -48,11 +49,29 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     }
     
     public function initObject() {
+        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
+        						   "._dbprefix_."system 
+        				WHERE system_id = dashboard_id
+        				  AND system_id = '".dbsafeString($this->getSystemid())."'";
+        
+        $arrRow = $this->objDB->getRow($strQuery);
+        if(count($arrRow) > 0) {
+            $this->setStrUser($arrRow["dashboard_user"]);
+            $this->setStrColumn($arrRow["dashboard_column"]);
+            $this->setStrWidgetId($arrRow["dashboard_widgetid"]);
+        }
         
     }
     
     public function updateObjectToDb() {
-        
+        class_logger::getInstance()->addLogRow("updated dashboard ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->setEditDate();
+        $strQuery = "UPDATE ".$this->arrModule["table"]."
+                   SET dashboard_user = '".dbsafeString($this->getStrUser())."',
+                       dashboard_column = '".dbsafeString($this->getStrColumn())."',
+                       dashboard_widgetid = '".dbsafeString($this->getStrWidgetId())."'
+                 WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
+        return $this->objDB->_query($strQuery);
     }
     
     /**
@@ -80,6 +99,43 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $this->objDB->transactionRollback();
             return false;
         }
+    }
+    
+    /**
+     * Looks up the widgets placed in a given column and
+     * returns a list of instances
+     *
+     * @param string $strColumn
+     * @return array of class_modul_system_adminwidget
+     */
+    public function getWidgetsForColumn($strColumn) {
+        $strQuery = "SELECT system_id
+        			  FROM ".$this->arrModule["table"].", 
+        			  	   "._dbprefix_."system 
+        			 WHERE dashboard_user = '".dbsafeString($this->objSession->getUserID())."'
+        			   AND dashboard_column = '".dbsafeString($strColumn)."'
+        			   AND dashboard_id = system_id ";
+        $arrRows = $this->objDB->getArray($strQuery);
+        $arrReturn = array();
+        if(count($arrRows) > 0) {
+            foreach ($arrRows as $arrOneRow) {
+            	$arrReturn[] = new class_modul_dashboard_widget($arrOneRow["system_id"]);
+            }
+            
+        }
+        return $arrReturn;
+    }
+    
+    
+    /**
+     * Returns the correpsponding instance of class_modul_system_adminwidget.
+     * User class_modul_system_adminwidget::getConcreteAdminwidget() to obtain
+     * an instance of the real widget
+     *
+     * @return class_modul_system_adminwidget
+     */
+    public function getWidgetmodelForCurrentEntry() {
+        return new class_modul_system_adminwidget($this->getStrWidgetId());
     }
     
     

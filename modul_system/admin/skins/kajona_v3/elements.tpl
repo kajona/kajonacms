@@ -34,7 +34,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 	if(arrayTableIds == null)
         var arrayTableIds = new Array("%%listid%%");
     else
-        arrayTableIds[(arrayTableIds.length +1)] = "%%listid%%";
+        arrayTableIds[(arrayTableIds.length)] = "%%listid%%";
 
     kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_tr.js");
 </script>
@@ -732,3 +732,32 @@ The language switch sourrounds the buttons
 <pageview_list_item_active>
 <b><a href="%%href%%" >[ %%pageNr%% ]</a></b>&nbsp;
 </pageview_list_item_active>
+
+---------------------------------------------------------------------------------------------------------
+-- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
+
+<adminwidget_widget>
+<div style="border: 1px solid #cccccc">
+	<div style="background-color: #cccccc;">%%widget_name%%</div>
+	<div>%%widget_content%%</div>
+	<div>Skin Maintainer: Please layout!</div>
+</div>
+</adminwidget_widget>
+
+<dashboard_column_header>
+	<script type="text/javascript">
+    	kajonaAjaxHelper.loadDragNDropBase();
+    	if(arrayListIds == null)
+            var arrayListIds = new Array("%%column_id%%");
+        else
+            arrayListIds[(arrayListIds.length)] = "%%column_id%%";
+    
+        kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
+	</script>
+	
+	<ul id="%%column_id%%">
+</dashboard_column_header>
+
+<dashboard_column_footer>
+	</ul>
+</dashboard_column_footer>

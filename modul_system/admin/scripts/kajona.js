@@ -194,7 +194,6 @@ var kajonaAjaxHelper =  {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection.js');
 	},
 
-
 	loadDragNDropBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
@@ -221,8 +220,9 @@ var kajonaAjaxHelper =  {
 			}
 		}
 		else {
-			intCount = kajonaAjaxHelper.arrayFilesToLoad.length;
-			kajonaAjaxHelper.arrayFilesToLoad[(intCount+1)] = fileName;
+			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesToLoad)) {
+				kajonaAjaxHelper.arrayFilesToLoad[kajonaAjaxHelper.arrayFilesToLoad.length] = fileName;
+			}
 		}
 	}
 };
@@ -237,6 +237,7 @@ var regularCallback = {
 var kajonaAdminAjax = {
 	posConn : null,
 	pagesConn : null,
+	dashboardConn : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
 		//load ajax libs
@@ -248,6 +249,19 @@ var kajonaAdminAjax = {
 
 		if(kajonaAdminAjax.posConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.posConn)) {
 			kajonaAdminAjax.posConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
+		}
+	},
+	
+	setDashboardPos : function (systemIdToMove, intNewPos, strIdOfList) {
+		//load ajax libs
+		kajonaAjaxHelper.loadAjaxBase();
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
+
+		var postTarget = 'xml.php?admin=1&module=dashboard&action=setDashboardPosition';
+		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos+'&listId='+strIdOfList;
+
+		if(kajonaAdminAjax.dashboardConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.dashboardConn)) {
+			kajonaAdminAjax.dashboardConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
 		}
 	}
 

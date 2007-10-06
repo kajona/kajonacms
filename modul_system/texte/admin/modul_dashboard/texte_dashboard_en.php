@@ -18,9 +18,12 @@ $text["modul_titel"]				= "Overview";
 $text["moduleRights"]               = "Permissions";
 $text["addWidget"]                  = "Add widget";
 $text["errorSavingWidget"]          = "Error saving the widget";
+$text["fehler_recht"]               = "Not enough permissions";
+$text["setDashboardPosition"]       = "New position saved successful";
 
 $text["widget"]                     = "Widget:";
 $text["addWidgetNextStep"]          = "Next";
+$text["addWidgetSave"]              = "Save";
 $text["column"]                     = "Column:";
 $text["column1"]                    = "Column 1";
 $text["column2"]                    = "Column 2";
