@@ -596,19 +596,23 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 }
 
 .adminwidgetHeader {
-	background-position: left top;
-	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
-	color: #FFFFFF;
-    font-size: 12px;
+
 }
 
 .adminwidgetHeaderTitle {
-	padding: 4px 0 0 2px;
-	float: left;
+	padding: 2px 0 2px 2px;
 	background-position: left top;
 	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
 	color: #FFFFFF;
-    font-size: 12px;
+    font-size: 11px;
+    width: 205px;
+    float: left;
+}
+
+.adminwidgetHeaderActions {
+	text-align: right;
+	float: right;
+	margin: 1px 1px 0 0;
 }
 
 .adminwidgetContent {

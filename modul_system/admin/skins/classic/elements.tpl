@@ -836,7 +836,7 @@ The language switch sourrounds the buttons
 <div class="adminwidget">
 	<div class="adminwidgetHeader">
 		<div class="adminwidgetHeaderTitle">%%widget_name%%</div>
-		<div style="float: right;">%%widget_edit%% %%widget_delete%%</div>
+		<div class="adminwidgetHeaderActions">%%widget_edit%% %%widget_delete%%</div>
 		<div style="clear: both;"></div>
 	</div>
 	<div class="adminwidgetContent">%%widget_content%%</div>
