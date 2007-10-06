@@ -88,9 +88,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
     		}
     		//merge both
 		    $arrRow = array_merge($arrRow, $arrPropRow);
-		}
 
-		if(count($arrRow) > 0) {
     		$this->setStrBrowsername($arrRow["pageproperties_browsername"]);
     		$this->setStrDesc($arrRow["pageproperties_description"]);
     		$this->setStrKeywords($arrRow["pageproperties_keywords"]);
@@ -109,29 +107,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
     public function saveObjectToDb($strFolderid = "0") {
         //Befor saving to database, filter special chars
 		$strDescription = htmlToString($this->getStrDesc());
-		//Filter blanks out of pagename
-		$strName = str_replace(" ", "_", $this->getStrName());
-
-		//Pagename already existing?
-		$strQuery = "SELECT COUNT(*)
-					FROM ".$this->arrModule["table"]."
-					WHERE page_name='".$this->objDB->dbsafeString($strName)."'";
-		$arrTemp = $this->objDB->getRow($strQuery);
-
-		$intNumbers = $arrTemp["COUNT(*)"];
-		if($intNumbers != 0) {
-			$intCount = 1;
-			while($intNumbers != 0) {
-				$strTemp = $strName."_".$intCount;
-				$strQuery = "SELECT COUNT(*)
-							FROM ".$this->arrModule["table"] ."
-							WHERE page_name='".$this->objDB->dbsafeString($strTemp)."'";
-				$arrTemp = $this->objDB->getRow($strQuery);
-				$intNumbers = $arrTemp["COUNT(*)"];
-				$intCount++;
-			}
-			$strName = $strTemp;
-		}
+		$strName = $this->generateNonexistingPagename($this->getStrName());
 
 		//Start the transaction
 		$this->objDB->transactionBegin();
@@ -261,6 +237,8 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		else
 		  return false;
     }
+    
+    
 
     /**
 	 * Loads all pages known by the system
@@ -445,6 +423,108 @@ class class_modul_pages_page extends class_model implements interface_model  {
             }
         }
 	    return true;
+	}
+	
+	
+	/**
+	 * Does a deep copy of the current page.
+	 * Inlcudes all page-elements created on the page
+	 * and all languages.
+	 *
+	 * @return bool
+	 */
+	public function copyPage() {
+	    class_logger::getInstance()->addLogRow("copy page ".$this->getSystemid(), class_logger::$levelInfo);
+	    //working directly on the db is much more easier than handling this stuff by objects
+	    $strSourcePage = $this->getSystemid();
+	    
+	    //load basic page properties
+	    $arrBasicSourcePage = $this->objDB->getRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_id = '".dbsafeString($strSourcePage)."'");
+	    
+	    //and load an array of corresponding pageproperties
+	    $arrBasicSourceProperties = $this->objDB->getArray("SELECT * FROM ".$this->arrModule["table2"]." WHERE pageproperties_id = '".dbsafeString($strSourcePage)."'");
+	    
+	    //create the new systemid
+	    $strIdOfNewPage = generateSystemid();
+	    
+	    //start the copy-process
+	    $this->objDB->transactionBegin();
+	    
+	    //copy the rights and systemrecord
+	    $objCommon = new class_modul_system_common($this->getSystemid());
+	    if(!$objCommon->copyCurrentSystemrecord($strIdOfNewPage)) {
+	        $this->objDB->transactionRollback();
+	        return false;
+	    }
+	    
+	    //create the foregin record in our table
+	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+	    			(page_id, page_name) VALUES 
+	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"]))."')";
+	    if(!$this->objDB->_query($strQuery)) {
+	        $this->objDB->transactionRollback();
+	        return false;
+	    }
+	    
+	    //insert all pageprops in all languages
+	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
+	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]." 
+	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES 
+	        ('".dbsafeString($strIdOfNewPage)."', 
+	        '".dbsafeString($arrOneProperty["pageproperties_browsername"])."', 
+	        '".dbsafeString($arrOneProperty["pageproperties_keywords"])."',
+	        '".dbsafeString($arrOneProperty["pageproperties_description"])."',
+	        '".dbsafeString($arrOneProperty["pageproperties_template"])."',
+	        '".dbsafeString($arrOneProperty["pageproperties_seostring"])."',
+	        '".dbsafeString($arrOneProperty["pageproperties_language"])."')";
+	        
+	        if(!$this->objDB->_query($strQuery)) {
+	            $this->objDB->transactionRollback();
+	            return false;
+	        }
+	    }
+	    
+	    //ok. so now load all elements on the source page and copy them, too
+	    $arrElementsOnSource = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
+	    if(count($arrElementsOnSource) > 0) {
+    	    foreach ($arrElementsOnSource as $objOneSourceElement) {
+    	        if(!$objOneSourceElement->copyElementToPage($strIdOfNewPage)) {
+    	            $this->objDB->transactionRollback();
+    	            return false;
+    	        }
+    	    }
+	    }
+	    
+	    //if we reach up here, we've done it. commit and quit ;)
+	    $this->objDB->transactionCommit();
+	    return true;
+	}
+	
+	public function generateNonexistingPagename($strName) {
+	    //Filter blanks out of pagename
+		$strName = str_replace(" ", "_", $this->getStrName());
+
+		//Pagename already existing?
+		$strQuery = "SELECT COUNT(*)
+					FROM ".$this->arrModule["table"]."
+					WHERE page_name='".$this->objDB->dbsafeString($strName)."'";
+		$arrTemp = $this->objDB->getRow($strQuery);
+
+		$intNumbers = $arrTemp["COUNT(*)"];
+		if($intNumbers != 0) {
+			$intCount = 1;
+			while($intNumbers != 0) {
+				$strTemp = $strName."_".$intCount;
+				$strQuery = "SELECT COUNT(*)
+							FROM ".$this->arrModule["table"] ."
+							WHERE page_name='".$this->objDB->dbsafeString($strTemp)."'";
+				$arrTemp = $this->objDB->getRow($strQuery);
+				$intNumbers = $arrTemp["COUNT(*)"];
+				$intCount++;
+			}
+			$strName = $strTemp;
+		}
+		return $strName;
 	}
 
 

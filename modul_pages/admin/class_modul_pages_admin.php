@@ -110,6 +110,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     			if($strReturn == "")
     				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
     		}
+    		if($strAction == "copyPage") {
+    		    $strReturn = $this->actionCopyPage();
+    			if($strReturn == "")
+    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
+    		}
 
     		// -- Folders ------------------------------
     		if($strAction == "newFolder")
@@ -315,7 +320,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    		if($this->objRights->rightEdit($strSystemid))
 	    				$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
 	    			if($this->objRights->rightEdit($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));	
+		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));	
 		    		if($this->objRights->rightDelete($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
 		    		if($this->objRights->rightEdit($strSystemid))
@@ -678,6 +683,26 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	} //actionDeletePageFinal
 
+	/**
+	 * Invokes a deep copy of the current page
+	 *
+	 * @return string "" in case of success
+	 */
+	private function actionCopyPage() {
+	    $strReturn = "";
+		//System-Id zur Rechtepruefung ermitteln
+		if($this->objRights->rightEdit($this->getSystemid())) {
+		    $objPage = new class_modul_pages_page($this->getSystemid());
+			if(!$objPage->copyPage())
+                throw new class_exception("Error while copying the page!", class_exception::$level_ERROR);
+
+		}
+		else
+			$strReturn = $this->getText("fehler_recht");
+
+		return $strReturn;
+	}
+	
 
 	/**
 	 * Changes the status of a page
@@ -1200,7 +1225,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $strReturn;
 	}
-
+	
+	
 // -- Helferfunktionen ----------------------------------------------------------------------------------
 
     public function actionFlushCache() {

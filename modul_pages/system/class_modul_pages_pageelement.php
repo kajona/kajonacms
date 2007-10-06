@@ -177,6 +177,82 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     }
 
     /**
+     * Makes a copy of the current element and saves it attached to the given page.
+     * This copy includes the records in the elements' foreign tables
+     *
+     * @param string $strNewPage
+     * @return bool
+     */
+    public function copyElementToPage($strNewPage) {
+        class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->objDB->transactionBegin();
+        
+        $strIdOfNewPageelement = generateSystemid();
+        
+        //working directly on the db is much easier right here!
+        //start by making a copy of the sysrecords, attaching them to the new page
+        $objCommon = new class_modul_system_common($this->getSystemid());
+        $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
+        
+        //fetch data of the current element
+        $arrCurrentElement = $this->objDB->getRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_element_id = '".dbsafeString($this->getSystemid())."'");
+        
+        //save data as foreign data of the new record
+        $strQuery = "INSERT INTO ".$this->arrModule["table"]." 
+        			(page_element_id, page_element_placeholder_placeholder, page_element_placeholder_name, page_element_placeholder_element, page_element_placeholder_title, page_element_placeholder_language) VALUES 
+        			(
+        			'".dbsafeString($strIdOfNewPageelement)."', 
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_placeholder"])."', 
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_name"])."',
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_element"])."',
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_title"])."',
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_language"])."')";
+        
+        if(!$this->objDB->_query($strQuery)) {
+            $this->objDB->transactionRollback();
+            return false;
+        }
+        
+        //now the tricky part - the elements content-table...
+        //get elements table-name
+        include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
+		$strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+		$objElement = new $strElementClass();
+		//Fetch the table
+		$strElementTable = $objElement->getTable();
+		
+		//load the old row
+		$arrContentRow = $this->objDB->getRow("SELECT * FROM ".$strElementTable." WHERE content_id = '".dbsafeString($this->getSystemid())."'");
+        //dont keep numeric indicees
+		foreach($arrContentRow as $strKey => $strContent) {
+	        if(!is_string($strKey))
+	            unset($arrContentRow[$strKey]);
+		}
+		
+		//build the new inserts
+		$strQuery = "INSERT INTO ".$strElementTable." 
+		(".implode(",", array_keys($arrContentRow)).") VALUES ( '".dbsafeString($strIdOfNewPageelement)."'";
+		//add the other contents
+		foreach($arrContentRow as $strKey => $strContent) {
+		    if($strKey == "content_id")
+		        continue;
+
+		    $strQuery .= ", '".dbsafeString($strContent)."'";    
+		}
+		$strQuery .= ")";
+		
+        if(!$this->objDB->_query($strQuery)) {
+            $this->objDB->transactionRollback();
+            return false;
+        }		
+
+        //ok, all done. return.
+        $this->objDB->transactionCommit();
+        return true;
+    }
+    
+    
+    /**
      * Loads all Elements on the given page known by the systems, so db-sided, not template-sided
      *
      * @param string $strPageId
@@ -217,12 +293,12 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		return $arrReturn;
     }
     
-/**
+    
+    
+	/**
      * Loads all Elements on the given ignoring both, status and language
      *
      * @param string $strPageId
-     * @param bool $bitJustActive
-     * @param string $strLanguage
      * @return mixed
      * @static
      */
