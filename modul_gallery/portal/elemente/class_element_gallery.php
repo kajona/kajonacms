@@ -50,7 +50,7 @@ class class_element_gallery extends class_element_portal implements interface_po
         $objGalleryModule = class_modul_system_module::getModuleByName("gallery");
 		if($objGalleryModule != null) {
     		require_once(_portalpath_."/".$objGalleryModule->getStrNamePortal());
-    		$strClassName = $objGalleryModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objGalleryModule->getStrNamePortal());
     		$objGallery = new $strClassName($this->arrElementData);
             $strReturn = $objGallery->action();
 		}

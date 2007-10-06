@@ -47,7 +47,7 @@ class class_element_search extends class_element_portal implements interface_por
 		$objSearchModule = class_modul_system_module::getModuleByName("search");
 		if($objSearchModule != null) {
     		require_once(_portalpath_."/".$objSearchModule->getStrNamePortal());
-    		$strClassName = $objSearchModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objSearchModule->getStrNamePortal());
     		$objSearch = new $strClassName($this->arrElementData);
             $strReturn = $objSearch->action();
 		}

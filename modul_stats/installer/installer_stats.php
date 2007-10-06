@@ -111,7 +111,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 
 		//register module
-		$strUserID = $this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal", "class_modul_stats_portal.php", "class_modul_stats_admin", "class_modul_stats_admin.php", $this->arrModule["version"], true);
+		$strUserID = $this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal.php", "class_modul_stats_admin.php", $this->arrModule["version"], true);
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log

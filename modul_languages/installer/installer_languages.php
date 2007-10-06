@@ -75,8 +75,8 @@ class class_installer_languages extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal", "class_modul_languages_portal.php",
-		                                      "class_modul_languages_admin", "class_modul_languages_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php",
+		                                      "class_modul_languages_admin.php", $this->arrModule["version"] , true);
 
 		return $strReturn;
 

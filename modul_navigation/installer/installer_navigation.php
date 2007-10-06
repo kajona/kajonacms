@@ -87,7 +87,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 			$strReturn .= "An error occured! ...\n";
 
 		//register the module
-		$strSystemID = $this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal", "class_modul_navigation_portal.php", "class_modul_navigation_admin", "class_modul_navigation_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal.php", "class_modul_navigation_admin.php", $this->arrModule["version"] , true);
 
 		return $strReturn;
 

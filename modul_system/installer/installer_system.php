@@ -120,10 +120,8 @@ class class_installer_system extends class_installer_base implements interface_i
 						`module_name` VARCHAR( 100 ) NOT NULL ,
 						`module_filenameportal` VARCHAR( 254 ) ,
 						`module_xmlfilenameportal` VARCHAR( 254 ) ,
-						`module_classnameportal` VARCHAR( 254 ) ,
 						`module_filenameadmin` VARCHAR( 254 ) ,
 						`module_xmlfilenameadmin` VARCHAR( 254 ) ,
-						`module_classnameadmin` VARCHAR( 254 ) ,
 						`module_version` VARCHAR( 50 ) ,
 						`module_date` INT ,
 						`module_navigation` INT( 1 ) NOT NULL ,
@@ -289,15 +287,15 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Now we have to register module by module
 
 		//The Systemkernel
-		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "", "class_system_admin", "class_system_admin.php", $this->arrModule["version"], true, "", "class_modul_system_admin_xml.php" );
+		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "class_system_admin.php", $this->arrModule["version"], true, "", "class_modul_system_admin_xml.php" );
 		//The Rightsmodule
-		$strRightID = $this->registerModule("right", _system_modul_id_, "", "", "class_right_admin", "class_right_admin.php", $this->arrModule["version"], false );
+		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
-		$strUserID = $this->registerModule("user", _user_modul_id_, "", "", "class_user_admin", "class_user_admin.php", $this->arrModule["version"], true );
+		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
-		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "", "class_modul_filemanager_admin", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
+		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
         //the dashboard
-        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
+        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
         
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
@@ -623,7 +621,7 @@ class class_installer_system extends class_installer_base implements interface_i
 	
     private function update_302x_303() {
 	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.2.2 to 3.0.3...\n";
+	    $strReturn .= "Updating 3.0.2.3 to 3.0.3...\n";
 	    
 	    $strReturn .= "Installing table adminwidget...\n";
 		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
@@ -648,7 +646,14 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
 	    $strReturn .= "Registering new module dashboard...\n";
-	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "", "class_modul_dashboard_admin", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", class_modul_dashboard_admin_xml.php);
+	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", class_modul_dashboard_admin_xml.php);
+	    
+	    $strReturn .= "Removing classnames from module-table...\n";
+	    $strQuery = "ALTER TABLE `"._dbprefix_."system_module`
+                        DROP `module_classnameportal`,
+                        DROP `module_classnameadmin`;";
+	    if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
 	    
         $strReturn .= "Updating module-versions...\n";
 	    $this->updateModuleVersion("system", "3.0.3");

@@ -80,9 +80,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		//register the module
 		$strSystemID = $this->registerModule("postacomment", 
 		                                     _postacomment_modul_id_, 
-		                                     "class_modul_postacomment_portal", 
 		                                     "class_modul_postacomment_portal.php", 
-		                                     "class_modul_postacomment_admin", 
 		                                     "class_modul_postacomment_admin.php", 
 		                                     $this->arrModule["version"], 
 		                                     true, 

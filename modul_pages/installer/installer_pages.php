@@ -171,11 +171,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages", "class_modul_pages.php", "class_modul_pages_admin", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
 		//The pages_content
-		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "", "class_modul_pages_content_admin", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
+		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
-		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "", "class_folderview", "class_folderview.php", $this->arrModule["version"] , false);
+		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "class_folderview.php", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatewechsel_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);

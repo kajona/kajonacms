@@ -279,9 +279,7 @@ abstract class class_installer_base extends class_root {
 	 *
 	 * @param string $strName
 	 * @param int $intModuleNr
-	 * @param string $strClassPortal
 	 * @param string $strFilePortal
-	 * @param string $strClassAdmin
 	 * @param string $strFileAdmin
 	 * @param string $strVersion
 	 * @param bool $bitNavi
@@ -289,7 +287,7 @@ abstract class class_installer_base extends class_root {
 	 * @param string $strXmlAdmin
 	 * @return string the new SystemID of the record
 	 */
-	protected function registerModule($strName, $intModuleNr, $strClassPortal, $strFilePortal, $strClassAdmin, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
+	protected function registerModule($strName, $intModuleNr, $strFilePortal, $strFileAdmin, $strVersion, $bitNavi, $strXmlPortal = "", $strXmlAdmin = "") {
 		//We need 3 Steps:
 		// 	1: New SystemID
 		//	2: New SystemRecord
@@ -306,10 +304,8 @@ abstract class class_installer_base extends class_root {
 						module_nr = ".(int)$intModuleNr.",
 						module_filenameportal = '".$this->objDB->dbsafeString($strFilePortal)."',
 						module_xmlfilenameportal = '".$this->objDB->dbsafeString($strXmlPortal)."',
-						module_classnameportal= '".$this->objDB->dbsafeString($strClassPortal)."',
 						module_filenameadmin = '".$this->objDB->dbsafeString($strFileAdmin)."',
 						module_xmlfilenameadmin = '".$this->objDB->dbsafeString($strXmlAdmin)."',
-						module_classnameadmin = '".$this->objDB->dbsafeString($strClassAdmin)."',
 						module_version = '".$this->objDB->dbsafeString($strVersion)."',
 						module_date = ".(int)time().",
 						module_navigation = ".( $bitNavi ? 1 : 0)."";

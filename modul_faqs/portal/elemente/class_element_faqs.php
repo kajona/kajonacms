@@ -51,7 +51,7 @@ class class_element_faqs extends class_element_portal implements interface_porta
 		$objFaqsModule = class_modul_system_module::getModuleByName("faqs");
 		if($objFaqsModule != null) {
     		require_once(_portalpath_."/".$objFaqsModule->getStrNamePortal());
-    		$strClassName = $objFaqsModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objFaqsModule->getStrNamePortal());
     		$objFaqs = new $strClassName($this->arrElementData);
             $strReturn = $objFaqs->action();
 		}

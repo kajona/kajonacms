@@ -79,7 +79,7 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		$strReturn .= "Registering module...\n";
 		//register the module
-		$strSystemID = $this->registerModule("search", _suche_modul_id_, "class_modul_search_portal", "class_modul_search_portal.php", "", "", $this->arrModule["version"] , false, "class_modul_search_portal_xml.php");
+		$strSystemID = $this->registerModule("search", _suche_modul_id_, "class_modul_search_portal.php", "", $this->arrModule["version"] , false, "class_modul_search_portal_xml.php");
 
 		return $strReturn;
 

@@ -106,7 +106,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal", "class_modul_downloads_portal.php", "class_modul_downloads_admin", "class_modul_downloads_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log

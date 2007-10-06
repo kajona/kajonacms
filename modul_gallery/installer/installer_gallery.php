@@ -97,7 +97,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 
 		//register the module
-		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal", "class_modul_gallery_portal.php", "class_modul_gallery_admin", "class_modul_gallery_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_bildergalerie_bildtypen_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _bildergalerie_modul_id_);

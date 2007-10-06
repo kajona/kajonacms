@@ -72,7 +72,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 		//Register the module
         $strReturn .= "\nRegistering module\n";
-        $strSystemID = $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", "", "", $this->arrModule["version"] , false);
+        $strSystemID = $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
 
         //Module-Pages
         $strReturn .= "Module Pages...\n";

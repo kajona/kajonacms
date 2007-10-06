@@ -114,7 +114,7 @@ class class_index  {
 		if($strModule != "login") {
 			$objModulData  = $this->getModuleData($strModule);
 			//Module existing?
-			if($objModulData != null && $objModulData->getStrClassAdmin() != "" && $objModulData->getStrNameAdmin() != "") {
+			if($objModulData != null && $objModulData->getStrNameAdmin() != "") {
 				if(_admin_) {
 					if($this->objSession->isLoggedin()) {
 						if($this->objSession->isAdmin()) {
@@ -131,7 +131,7 @@ class class_index  {
 
 							include_once(_adminpath_."/".$objModulData->getStrNameAdmin());
 							//creating an instance of the wanted module
-							$strClassname = $objModulData->getStrClassAdmin();
+							$strClassname = uniStrReplace(".php", "", $objModulData->getStrNameAdmin());
 							$objModule = new $strClassname();
 							if(!$objModule instanceof interface_admin || !$objModule instanceof class_admin )
 							    throw new class_exception("Module not implementing interface_admin", class_exception::$level_FATALERROR);
@@ -193,7 +193,7 @@ class class_index  {
 		$objStatsModul = $this->getModuleData("stats");
 		if($objStatsModul != null && $objStatsModul->getStrNamePortal() != "") {
 			include_once(_portalpath_."/".$objStatsModul->getStrNamePortal());
-			$strClassname = $objStatsModul->getStrClassPortal();
+			$strClassname = uniStrReplace(".php", "", $objStatsModul->getStrNamePortal());
 			$objStats = new $strClassname();
 			$objStats->insertStat();
 		}
@@ -203,9 +203,9 @@ class class_index  {
 		$objPagesModule = $this->getModuleData("pages");
 
 		//Create Object the object
-		if($objPagesModule != null && $objPagesModule->getStrNamePortal() != "" && $objPagesModule->getStrClassPortal() != "") {
+		if($objPagesModule != null && $objPagesModule->getStrNamePortal() != "") {
 			include_once(_portalpath_."/".$objPagesModule->getStrNamePortal());
-			$strClassname = $objPagesModule->getStrClassPortal();
+			$strClassname = uniStrReplace(".php", "", $objPagesModule->getStrNamePortal());
 			$objPages = new $strClassname();
 			//Clean up the cache
 			if(_pages_cacheenabled_ == "true")

@@ -120,7 +120,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 
 		//register the module
-		$strSystemID = $this->registerModule("news", _news_modul_id_, "class_modul_news_portal", "class_modul_news_portal.php", "class_modul_news_admin", "class_modul_news_admin.php", $this->arrModule["version"] , true, "class_modul_news_portal_xml.php");
+		$strSystemID = $this->registerModule("news", _news_modul_id_, "class_modul_news_portal.php", "class_modul_news_admin.php", $this->arrModule["version"] , true, "class_modul_news_portal_xml.php");
 
 
 		$strReturn .= "Registering system-constants...\n";

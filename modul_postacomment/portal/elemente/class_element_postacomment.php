@@ -51,7 +51,7 @@ class class_element_postacomment extends class_element_portal implements interfa
 		$objpostacommentModule = class_modul_system_module::getModuleByName("postacomment");
 		if($objpostacommentModule != null) {
     		require_once(_portalpath_."/".$objpostacommentModule->getStrNamePortal());
-    		$strClassName = $objpostacommentModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objpostacommentModule->getStrNamePortal());
     		$objpostacomment = new $strClassName($this->arrElementData);
             $strReturn = $objpostacomment->action();
 		}

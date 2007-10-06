@@ -51,7 +51,7 @@ class class_element_news extends class_element_portal implements interface_porta
 		$objNewsModule = class_modul_system_module::getModuleByName("news");
 		if($objNewsModule != null) {
     		require_once(_portalpath_."/".$objNewsModule->getStrNamePortal());
-    		$strClassName = $objNewsModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objNewsModule->getStrNamePortal());
     		$objNews = new $strClassName($this->arrElementData);
             $strReturn = $objNews->action();
 		}

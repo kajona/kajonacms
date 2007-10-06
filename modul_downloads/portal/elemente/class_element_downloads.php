@@ -49,7 +49,7 @@ class class_element_downloads extends class_element_portal implements interface_
         $objDownloadsModule = class_modul_system_module::getModuleByName("downloads");
 		if($objDownloadsModule != null) {
     		require_once(_portalpath_."/".$objDownloadsModule->getStrNamePortal());
-    		$strClassName = $objDownloadsModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objDownloadsModule->getStrNamePortal());
     		$objDownloads = new $strClassName($this->arrElementData);
             $strReturn = $objDownloads->action();
 		}

@@ -26,10 +26,8 @@ class class_modul_system_module extends class_model implements interface_model  
     private $strName = "";
     private $strNamePortal = "";
     private $strXmlNamePortal = "";
-    private $strClassPortal = "";
     private $strNameAdmin = "";
     private $strXmlNameAdmin = "";
-    private $strClassAdmin = "";
     private $strVersion = "";
     private $intDate = "";
     private $intNavigation = "";
@@ -73,10 +71,8 @@ class class_modul_system_module extends class_model implements interface_model  
         $this->setStrName($arrRow["module_name"]);
         $this->setStrNamePortal($arrRow["module_filenameportal"]);
         $this->setStrXmlNamePortal($arrRow["module_xmlfilenameportal"]);
-        $this->setStrClassPortal($arrRow["module_classnameportal"]);
         $this->setStrNameAdmin($arrRow["module_filenameadmin"]);
         $this->setStrXmlNameAdmin($arrRow["module_xmlfilenameadmin"]);
-        $this->setStrClassAdmin($arrRow["module_classnameadmin"]);
         $this->setStrVersion($arrRow["module_version"]);
         $this->setIntDate($arrRow["module_date"]);
         $this->setIntNavigation($arrRow["module_navigation"]);
@@ -93,10 +89,8 @@ class class_modul_system_module extends class_model implements interface_model  
 					  module_name ='".dbsafeString($this->getStrName())."',
 					  module_filenameportal ='".dbsafeString($this->getStrNamePortal())."',
 					  module_xmlfilenameportal ='".dbsafeString($this->getStrXmlNamePortal())."',
-					  module_classnameportal ='".dbsafeString($this->getStrClassPortal())."',
 					  module_filenameadmin ='".dbsafeString($this->getStrNameAdmin())."',
 					  module_xmlfilenameadmin ='".dbsafeString($this->getStrXmlNameAdmin())."',
-					  module_classnameadmin ='".dbsafeString($this->getStrClassAdmin())."',
 					  module_version ='".dbsafeString($this->getStrVersion())."',
 					  module_date ='".dbsafeString($this->getIntDate())."',
 					  module_navigation ='".dbsafeString($this->getIntNavigation())."'
@@ -205,17 +199,11 @@ class class_modul_system_module extends class_model implements interface_model  
     public function getStrXmlNamePortal() {
         return $this->strXmlNamePortal;
     }
-    public function getStrClassPortal() {
-        return $this->strClassPortal;
-    }
     public function getStrNameAdmin() {
         return $this->strNameAdmin;
     }
     public function getStrXmlNameAdmin() {
         return $this->strXmlNameAdmin;
-    }
-    public function getStrClassAdmin() {
-        return $this->strClassAdmin;
     }
     public function getStrVersion() {
         return $this->strVersion;
@@ -239,17 +227,11 @@ class class_modul_system_module extends class_model implements interface_model  
     public function setStrXmlNamePortal($strXmlPortal) {
         $this->strXmlNamePortal = $strXmlPortal;
     }
-    public function setStrClassPortal($strClass) {
-        $this->strClassPortal = $strClass;
-    }
     public function setStrNameAdmin($strAdmin) {
         $this->strNameAdmin = $strAdmin;
     }
     public function setStrXmlNameAdmin($strXmlAdmin) {
         $this->strXmlNameAdmin = $strXmlAdmin;
-    }
-    public function setStrClassAdmin($strClass) {
-        $this->strClassAdmin = $strClass;
     }
     public function setStrVersion($strVersion) {
         $this->strVersion = $strVersion;

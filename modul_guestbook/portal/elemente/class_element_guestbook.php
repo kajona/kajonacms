@@ -47,7 +47,7 @@ class class_element_guestbook extends class_element_portal implements interface_
         $objGBModule = class_modul_system_module::getModuleByName("guestbook");
 		if($objGBModule != null) {
     		require_once(_portalpath_."/".$objGBModule->getStrNamePortal());
-    		$strClassName = $objGBModule->getStrClassPortal();
+    		$strClassName = uniStrReplace(".php", "", $objGBModule->getStrNamePortal());
     		$objGuestbook= new $strClassName($this->arrElementData);
             $strReturn = $objGuestbook->action();
 		}

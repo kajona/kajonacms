@@ -47,7 +47,7 @@ class class_element_formular extends class_element_portal implements interface_p
 		//Load the data
 
 		require_once(_portalpath_."/forms/".$this->arrElementData["formular_class"]);
-		$strClassname = str_replace(".php", "", $this->arrElementData["formular_class"]);
+		$strClassname = uniStrReplace(".php", "", $this->arrElementData["formular_class"]);
 		$objForm = new $strClassname($this->arrElementData);
         $strReturn = $objForm->action();
 

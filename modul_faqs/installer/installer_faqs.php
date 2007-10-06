@@ -100,7 +100,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 
 		//register the module
-		$strSystemID = $this->registerModule("faqs", _faqs_modul_id_, "class_modul_faqs_portal", "class_modul_faqs_portal.php", "class_modul_faqs_admin", "class_modul_faqs_admin.php", $this->arrModule["version"], true);
+		$strSystemID = $this->registerModule("faqs", _faqs_modul_id_, "class_modul_faqs_portal.php", "class_modul_faqs_admin.php", $this->arrModule["version"], true);
 
 
 		$strReturn .= "Registering system-constants...\n";

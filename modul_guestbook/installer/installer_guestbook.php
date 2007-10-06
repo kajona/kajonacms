@@ -94,7 +94,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("guestbook", _gaestebuch_modul_id_, "class_modul_guestbook_portal", "class_modul_guestbook_portal.php", "class_modul_guestbook_admin", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("guestbook", _gaestebuch_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_guestbook_suche_seite_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _gaestebuch_modul_id_);
