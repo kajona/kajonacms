@@ -55,7 +55,20 @@ function submitPostacommentForm()  {
 	}
 	
 }
+
 submitPostacommentForm = new submitPostacommentForm();
+
+function postacommentSubmitWrapper() {
+
+	if(typeof YAHOO == "undefined") {
+        window.setTimeout(postacommentSubmitWrapper(), 1000);
+        return;
+    }
+    
+    submitPostacommentForm.submit();
+}
+
+
 </script>
 </postacomment_list>
 
@@ -85,7 +98,7 @@ submitPostacommentForm = new submitPostacommentForm();
     			<div><label for="kajonaCaptcha"></label><img id="kajonaCaptcha" src="_webpath_/image.php?image=kajonaCaptcha&amp;maxWidth=180" /></div><br />
     			<div><label for="form_captcha">Code*:</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" /></div><br />
     			<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="Neuer Code" class="button" /></div><br /><br />
-    			<div><label for="Submit"></label><input type="button" name="Submit" value="Senden" class="button" onclick="submitPostacommentForm.submit();" /></div><br />
+    			<div><label for="Submit"></label><input type="button" name="Submit" value="Senden" class="button" onclick="postacommentSubmitWrapper();" /></div><br />
     			<input type="hidden" id="comment_template" value="%%comment_template%%" />
     			<input type="hidden" id="comment_systemid" value="%%comment_systemid%%" />
     			<input type="hidden" id="comment_page" value="%%comment_page%%" />
