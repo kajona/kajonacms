@@ -26,6 +26,16 @@ if(arrayTableIds == null)
 	kajona.dragndroplist = {};
 	//Basic functions
 	kajona.dragndroplist.DDApp = {
+	
+		saveInit : function() {
+			if(typeof YAHOO == "undefined") {
+                window.setTimeout(kajona.dragndroplist.DDApp.saveInit(), 1000);
+                return;
+            }
+            
+            kajona.dragndroplist.DDApp.init();
+		},
+	
     	init: function() {
 		   //iterate over all lists available
 		   for(l=0; l<arrayTableIds.length; l++) {
@@ -187,6 +197,6 @@ if(arrayTableIds == null)
 	});
 
 	//and init the app
-	kajona.dragndroplist.DDApp.init();
+	kajona.dragndroplist.DDApp.saveInit();
 })();
 

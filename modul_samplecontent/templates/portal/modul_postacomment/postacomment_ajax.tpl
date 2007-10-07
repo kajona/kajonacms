@@ -23,7 +23,7 @@ function submitPostacommentForm()  {
 	var connectionObject;
 	
 	this.submit = function() {
-		
+	
 		//create a new ajax request. collect data.
 		var comment_name = document.getElementById('comment_name').value;
 		var comment_subject = document.getElementById('comment_subject').value;
@@ -36,7 +36,7 @@ function submitPostacommentForm()  {
 						+'&form_captcha='+form_captcha+'&comment_template='+comment_template;
 						
 		//show loading-message
-		this.setLoadingIcon();				
+		this.setLoadingIcon();			
 		
 		if(this.connectionObject == null || !YAHOO.util.Connect.isCallInProgress(this.connectionObject)) {
 			this.connectionObject = YAHOO.util.Connect.asyncRequest('POST', post_target, postacommentCallback, post_body);
