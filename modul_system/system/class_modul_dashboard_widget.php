@@ -137,7 +137,8 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         			  	   "._dbprefix_."system 
         			 WHERE dashboard_user = '".dbsafeString($this->objSession->getUserID())."'
         			   AND dashboard_column = '".dbsafeString($strColumn)."'
-        			   AND dashboard_id = system_id ";
+        			   AND dashboard_id = system_id 
+        	     ORDER BY system_sort ASC ";
         $arrRows = $this->objDB->getArray($strQuery);
         $arrReturn = array();
         if(count($arrRows) > 0) {

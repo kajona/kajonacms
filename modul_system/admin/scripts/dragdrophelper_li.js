@@ -48,13 +48,18 @@ if(arrayListIds == null)
 		   	   }
 		   }
     	},
+    	
+    	//this method behaves in a special way: count ALL widgets
+    	//up till the searched one, because all widgets belong to the dashboard-module, not the column
 	    getCurrentPos : function(idOfRow) {
+	       posCounter = 0;
 		   for(l=0; l<arrayListIds.length; l++) {
 		   	   listId = arrayListIds[l];	
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
+			   		posCounter++;
 			 		if(arrayListItems[i].id == idOfRow) {
-			 			return i+1;
+			 			return posCounter;
 			 		}  
 			   }
 		   }
