@@ -12,10 +12,12 @@
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
 	<script language="Javascript" type="text/javascript">
-		window.onload=function() {
-			document.getElementById('name').focus();
-			enableTooltips("showTooltip");
-		}
+		function loginStartup() { document.getElementById('name').focus(); 	enableTooltips("showTooltip"); }
+    	addLoadEvent(loginStartup);
+		kajonaAjaxHelper.loadAjaxBase();
+  		kajonaAjaxHelper.loadAutocompleteBase();
+  		kajonaAjaxHelper.loadAnimationBase()
+  		kajonaAjaxHelper.loadDragNDropBase();
 	</script>
 	%%head%%
 </head>

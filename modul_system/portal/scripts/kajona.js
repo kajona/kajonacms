@@ -152,9 +152,9 @@ var kajonaAjaxHelper =  {
 	},
 	
 	loadAjaxBase : function () {
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/yahoo/yahoo.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/event/event.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/connection/connection.js');
+		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/yahoo/yahoo-min.js');
+		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/event/event-min.js');
+		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/connection/connection-min.js');
 	},
 	
 	

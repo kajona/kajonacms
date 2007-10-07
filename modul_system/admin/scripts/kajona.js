@@ -189,27 +189,27 @@ var kajonaAjaxHelper =  {
 
 	loadAjaxBase : function () {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/utilities/utilities.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/event/event.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/event/event-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection-min.js');
 	},
 
 	loadDragNDropBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop-min.js');
 	},
 
 	loadAnimationBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
 	},
 
 	loadAutocompleteBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/autocomplete/autocomplete.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-beta.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/autocomplete/autocomplete-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-beta-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom-min.js');
 	},
 
 

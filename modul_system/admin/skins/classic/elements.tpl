@@ -34,7 +34,7 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 	if(arrayTableIds == null)
         var arrayTableIds = new Array("%%listid%%");
     else
-        arrayTableIds[(arrayTableIds.length +1)] = "%%listid%%";
+        arrayTableIds[(arrayTableIds.length +0)] = "%%listid%%";
 
     kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_tr.js");
 </script>
@@ -849,7 +849,7 @@ The language switch sourrounds the buttons
     	if(arrayListIds == null)
             var arrayListIds = new Array("%%column_id%%");
         else
-            arrayListIds[(arrayListIds.length)] = "%%column_id%%";
+            arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
     
         kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
 	</script>

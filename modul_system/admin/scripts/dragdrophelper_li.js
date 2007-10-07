@@ -198,7 +198,7 @@ if(arrayListIds == null)
 	        	kajona.dragndroplistDashboard.DDApp.resetUlBackground(destEl);	
 	        }
 	        
-	    },
+	    }
 	    
 	});
 
