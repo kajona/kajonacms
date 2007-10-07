@@ -129,7 +129,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
         $strSql = "DELETE FROM "._dbprefix_."downloads_log
 			           WHERE downloads_log_date < '".(int)$intOlderDate."'";
 
-		return $objDB = class_carrier::getInstance()->getObjDB()->_query($strSql);
+		return class_carrier::getInstance()->getObjDB()->_query($strSql);
 	}
 }
 

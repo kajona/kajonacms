@@ -116,7 +116,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 *
 	 * @return int
 	 */
-	private function getHits() {
+	public function getHits() {
 		$intReturn = 0;
 		$strQuery = "SELECT count(*)
 						FROM ".$this->arrModule["table"]."
@@ -136,7 +136,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 * @param int $intEnd
 	 * @return int
 	 */
-	private function getHitsForOnePeriod($intStart, $intEnd) {
+	public function getHitsForOnePeriod($intStart, $intEnd) {
 		$strQuery = "SELECT stats_date, COUNT(*) as number
 						FROM ".$this->arrModule["table"]."
 						WHERE stats_date >= ".(int)$intStart."
@@ -153,7 +153,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 *
 	 * @return int
 	 */
-	private function getVisitors() {
+	public function getVisitors() {
 		$intReturn = 0;
 		$strQuery = "SELECT stats_ip , stats_browser
 						FROM ".$this->arrModule["table"]."
@@ -202,7 +202,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 *
 	 * @return int
 	 */
-	private function getNumberOfCurrentUsers() {
+	public function getNumberOfCurrentUsers() {
 		$strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM ".$this->arrModule["table"]."
 					  WHERE stats_date >= ".(int)(time() - _stats_zeitraum_online_)."

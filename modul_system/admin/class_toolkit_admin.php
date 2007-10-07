@@ -1185,9 +1185,25 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
     
+    /**
+     * Generates a text-row in a widget
+     *
+     * @param string $strText
+     * @return string
+     */
     public function adminwidgetText($strText) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText), $strTemplateID);
+    }
+    
+    /**
+     * Generate a separator / divider in a widget
+     *
+     * @return string
+     */
+    public function adminwidgetSeparator() {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_separator");
+        return $this->objTemplate->fillTemplate(array(""), $strTemplateID);
     }
     
 }

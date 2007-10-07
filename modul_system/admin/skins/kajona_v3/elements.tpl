@@ -773,3 +773,11 @@ The language switch sourrounds the buttons
 <adminwidget_text>
 <div>%%text%%</div>
 </adminwidget_text>
+
+<adminwidget_separator>
+<table cellpadding="0" cellspacing="0" style="width: 100%;">
+	<tr>
+  		<td class="divider">&nbsp;</td>
+	</tr>
+</table>
+</adminwidget_separator>

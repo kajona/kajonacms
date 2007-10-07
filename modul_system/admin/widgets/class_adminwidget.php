@@ -186,8 +186,24 @@ abstract class class_adminwidget {
     
 //--- Layout/Content functions --------------------------------------------------------------------------
 
-    public final function widgetText($strText) {
+    /**
+     * Use this method to place a formatted text in the widget
+     *
+     * @param string $strText
+     * @return string
+     */
+    protected final function widgetText($strText) {
         return $this->objToolkit->adminwidgetText($strText);
+    }
+    
+    /**
+     * Use this method to generate a separator / divider to split up 
+     * the widget in logical sections.
+     *
+     * @return string
+     */
+    protected final function widgetSeparator() {
+        return $this->objToolkit->adminwidgetSeparator();
     }
 }
 
