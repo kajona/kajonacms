@@ -759,7 +759,7 @@ The language switch sourrounds the buttons
         kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
 	</script>
 	
-	<ul id="%%column_id%%" style="padding: 0 0 5px 0; margin: none; list-style: none; width: 260px;">
+	<ul id="%%column_id%%" style="padding: 0 0 10px 0; margin: 0; list-style: none; width: 260px;">
 </dashboard_column_header>
 
 <dashboard_column_footer>

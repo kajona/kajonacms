@@ -21,6 +21,9 @@ if(arrayListIds == null)
 	
 	var posBeforeMove = -1;
 	var ulBeforeMove = -1;
+	
+	var backgroundColor = "#FFFFFF";
+	var paddingBottom = "0";
 
 	//create namespaces
 	var kajona = { };
@@ -70,6 +73,11 @@ if(arrayListIds == null)
 			 		}  
 			   }
 		   }
+	    },
+	    
+	    resetUlBackground: function(destEl) {
+	    	Dom.setStyle(destEl, "background-color", backgroundColor);
+	    	Dom.setStyle(destEl, "padding-bottom", paddingBottom);
 	    }
 	};
 
@@ -91,6 +99,8 @@ if(arrayListIds == null)
 			//save the start-pos and ul
 			posBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(clickEl.id);
 			ulBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(clickEl.id);
+			backgroundColor = Dom.getStyle(ulBeforeMove, "background-color");
+			paddingBottom = Dom.getStyle(ulBeforeMove, "padding-bottom");
 			
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
@@ -119,7 +129,10 @@ if(arrayListIds == null)
 	            });
 	        a.animate();
 	        
-			//save new pos to backend, if pos changed or li changed
+	        //reset the color of the target-ul
+	        kajona.dragndroplistDashboard.DDApp.resetUlBackground(kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id));	
+	        
+			//save new pos to backend, if pos changed or ul changed
 			var posAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id);
 			var ulAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id);
 			if(posAfterMove != posBeforeMove || ulBeforeMove != ulAfterMove)
@@ -164,7 +177,24 @@ if(arrayListIds == null)
 	            }
 	            DDM.refreshCache();
 	        }
-	    }
+	        //highlight uls
+	        if (destEl.nodeName.toLowerCase() == "ul") {
+	        	Dom.setStyle(destEl, "background-color", "#efefef");
+	        	Dom.setStyle(destEl, "padding-bottom", "50px");
+	        }
+	        
+	    },
+	    
+	    onDragOut: function(e, id) {
+	        var srcEl = this.getEl();
+	        var destEl = Dom.get(id);
+	        //highlight uls
+	        if (destEl.nodeName.toLowerCase() == "ul") {
+	        	kajona.dragndroplistDashboard.DDApp.resetUlBackground(destEl);	
+	        }
+	        
+	    },
+	    
 	});
 
 	//and init the app
