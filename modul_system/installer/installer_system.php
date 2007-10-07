@@ -333,10 +333,9 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $this->registerConstant("_user_selfedit_", "true", class_modul_system_setting::$int_TYPE_BOOL, _user_modul_id_);
 
 	    //3.1: nr of rows in admin
-	    //$strReturn .= "Registering nr of rows constant...\n";
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-
+        $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -654,6 +653,9 @@ class class_installer_system extends class_installer_base implements interface_i
                         DROP `module_classnameadmin`;";
 	    if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
+            
+        $strReturn .= "Register db-cache constant...\n";    
+        $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);    
 	    
         $strReturn .= "Updating module-versions...\n";
 	    $this->updateModuleVersion("system", "3.0.3");

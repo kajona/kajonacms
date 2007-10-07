@@ -132,6 +132,7 @@ $text["_admin_nr_of_rows_"]                 = "Anzahl Datensätze pro Seite:";
 $text["_admin_nr_of_rows_hint"]             = "Anzahl an Datensätzen in den Admin-Listen, sofern das Modul dies unterstützt. Kann von einem Modul überschrieben werden!";
 $text["_admin_only_https_"]                 = "Admin nur per https:";
 $text["_admin_only_https_hint"]             = "Forciert die Verwendung von https im Adminbereich. Der Webserver muss hierfür https unterstützen.";
+$text["_system_use_dbcache_"]               = "Datenbankcache aktiv:";
 
 
 $text["errorintro"]                 = "Bitte alle benötigten Felder ausfüllen!";

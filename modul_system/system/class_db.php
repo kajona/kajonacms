@@ -176,6 +176,12 @@ class class_db {
 		//Increasing global counter
 		$this->intNumber++;
 
+		if(defined("_system_use_dbcache_")) {
+		    if(_system_use_dbcache_ == "false") {
+		        $bitCache = false;
+		    }
+		}
+		
 		if($bitCache) {
 			$strQueryMd5 = md5($strQuery);
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
@@ -221,6 +227,12 @@ class class_db {
         $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd);
         //Increasing global counter
 		$this->intNumber++;
+		
+        if(defined("_system_use_dbcache_")) {
+		    if(_system_use_dbcache_ == "false") {
+		        $bitCache = false;
+		    }
+		}
 
 		if($bitCache) {
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
