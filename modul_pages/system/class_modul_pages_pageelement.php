@@ -223,23 +223,34 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		
 		//load the old row
 		$arrContentRow = $this->objDB->getRow("SELECT * FROM ".$strElementTable." WHERE content_id = '".dbsafeString($this->getSystemid())."'");
-        //dont keep numeric indicees
-		foreach($arrContentRow as $strKey => $strContent) {
-	        if(!is_string($strKey))
-	            unset($arrContentRow[$strKey]);
-		}
+        
+		//load the Columns of the table
+		$arrColumns = $this->objDB->getColumnsOfTable($strElementTable);
 		
-		//build the new inserts
-		$strQuery = "INSERT INTO ".$strElementTable." 
-		(".implode(",", array_keys($arrContentRow)).") VALUES ( '".dbsafeString($strIdOfNewPageelement)."'";
-		//add the other contents
-		foreach($arrContentRow as $strKey => $strContent) {
-		    if($strKey == "content_id")
-		        continue;
+		//build the new insert
+		$strQuery = "INSERT INTO ".$strElementTable." ( ";
+		foreach ($arrColumns as $arrOneColumn)
+            $strQuery .= " `".$arrOneColumn["columnName"]."`,";
 
-		    $strQuery .= ", '".dbsafeString($strContent)."'";    
-		}
-		$strQuery .= ")";
+        //remove last comma    
+        $strQuery = uniSubstr($strQuery, 0, -1);
+        $strQuery .= ") VALUES ( ";
+        foreach ($arrColumns as $arrOneColumn) {
+            if($arrOneColumn["columnName"] == "content_id") {
+                $strQuery .= " '".dbsafeString($strIdOfNewPageelement)."',";
+            }
+            else if(strpos($arrOneColumn["columnType"], "int") !== false) {
+                $intValue = $arrContentRow[$arrOneColumn["columnName"]];
+                if($intValue == "")
+                    $intValue = "NULL";
+                $strQuery .= "".dbsafeString($intValue).",";
+            }
+            else {
+                $strQuery .= "'".dbsafeString($arrContentRow[$arrOneColumn["columnName"]])."',";
+            }
+        }
+        $strQuery = uniSubstr($strQuery, 0, -1);
+        $strQuery .= ")";
 		
         if(!$this->objDB->_query($strQuery)) {
             $this->objDB->transactionRollback();

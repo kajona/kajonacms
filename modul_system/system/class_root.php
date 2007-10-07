@@ -589,6 +589,7 @@ abstract class class_root {
 	 * @param int $intPosition
 	 */
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
+	    class_logger::getInstance()->addLogRow("move ".$strIdToSet." to new pos ".$intPosition, class_logger::$levelInfo);
 		$strReturn = "";
 
 		//to have a better array-like handling, decrease pos by one.

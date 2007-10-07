@@ -419,6 +419,18 @@ class class_db {
 		}
 		return $arrReturn;
 	}
+	
+	/**
+     * Looks up the columns of the given table.
+     * Should return an array for each row consting of:
+     * array ("columnName", "columnType")
+     *
+     * @param string $strTableName
+     * @return array
+     */
+    public function getColumnsOfTable($strTableName) {
+        return $this->objDbDriver->getColumnsOfTable($strTableName);
+    }
 
 	/**
      * Used to send a create table statement to the database-driver

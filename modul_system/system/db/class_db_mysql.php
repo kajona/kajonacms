@@ -145,6 +145,26 @@ class class_db_mysql implements interface_db_driver {
 		$arrTemp = $this->getArray("SHOW TABLE STATUS", false);
 		return $arrTemp;
     }
+    
+	/**
+     * Looks up the columns of the given table.
+     * Should return an array for each row consting of:
+     * array ("columnName", "columnType")
+     *
+     * @param string $strTableName
+     * @return array
+     */
+    public function getColumnsOfTable($strTableName) {
+        $arrReturn = array();
+        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".$strTableName, false);
+        foreach ($arrTemp as $arrOneColumn) {
+            $arrReturn[] = array(
+                        "columnName" => $arrOneColumn["Field"],
+                        "columnType" => $arrOneColumn["Type"],
+            );
+        }
+        return $arrReturn;
+    }
 
     /**
      * Used to send a create table statement to the database

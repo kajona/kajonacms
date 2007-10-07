@@ -80,6 +80,16 @@ interface interface_db_driver {
      * @return array
      */
     public function getTables();
+    
+    /**
+     * Looks up the columns of the given table.
+     * Should return an array for each row consting of:
+     * array ("columnName", "columnType")
+     *
+     * @param string $strTableName
+     * @return array
+     */
+    public function getColumnsOfTable($strTableName);
 
     /**
      * Used to send a create table statement to the database
