@@ -8,7 +8,7 @@
 * 	class_modul_dashboard_admin_xml.php  																*
 * 	adminclass of the dashboard, xml stuff																*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_modul_dashboard_admin_xml.php 1706 2007-08-26 19:51:38Z sidler $							*
+*	$Id$							*
 ********************************************************************************************************/
 
 //Include der Mutter-Klasse

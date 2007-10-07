@@ -9,7 +9,7 @@
 * 	widget showing a few entries from the downloads log													*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_adminwidget_downloads.php 1735 2007-10-05 19:45:00Z sidler $	                       	 	*
+*	$Id$	                       	 	*
 ********************************************************************************************************/
 
 include_once(_adminpath_."/widgets/class_adminwidget.php");
