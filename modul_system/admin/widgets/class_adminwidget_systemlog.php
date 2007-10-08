@@ -52,7 +52,8 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
         $arrLogEntries = explode("\n", $strLogContent);
         $arrLogEntries = array_reverse($arrLogEntries);
         
-        for($intI = 0; $intI <= $this->getFieldValue("nrofrows") && $intI < 10; $intI++ ) {
+        
+        for($intI = 0; $intI <= $this->getFieldValue("nrofrows") && $intI < 10 && $intI < count($arrLogEntries); $intI++ ) {
             $strLog = $arrLogEntries[$intI];
             $strLog = uniStrReplace(array("INFO", "ERROR", "WARNING"), array("<span style=\"color: green\">INFO</span>", 
             																"<span style=\"color: red\">ERROR</span>", 
