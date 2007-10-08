@@ -645,7 +645,7 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";
 
 	    $strReturn .= "Registering new module dashboard...\n";
-	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", class_modul_dashboard_admin_xml.php);
+	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
 	    
 	    $strReturn .= "Removing classnames from module-table...\n";
 	    $strQuery = "ALTER TABLE `"._dbprefix_."system_module`
