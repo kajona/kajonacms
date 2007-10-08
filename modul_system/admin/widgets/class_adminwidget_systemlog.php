@@ -1,4 +1,4 @@
-<?php
+<?php 
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007 by Kajona, www.kajona.de                                                                   *
@@ -77,4 +77,3 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
 
 
 ?>
- 
