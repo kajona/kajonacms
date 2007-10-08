@@ -122,6 +122,7 @@ class class_copy
     		}
 
     		file_put_contents($this->str_pfad."/copy.log", $this->str_log);
+    		$this->updateConfig($this->str_system_pfad."/system/config.php");
         }
 	}
 
@@ -154,6 +155,7 @@ class class_copy
     		chmod($this->str_pfad."/kajona", 0777);
 
     		file_put_contents($this->str_pfad."/copy_down.log", $this->str_log);
+    		$this->updateConfig($this->str_pfad."/kajona/system/config.php");
         }
 	}
 
@@ -192,6 +194,7 @@ class class_copy
 				chmod($str_ordner_2, 0777);
 			}
 			$this->copy_out($str_ordner."/".$str_modul_ordner, $str_modul, $int_ebene++);
+
 		}
 	}
 
@@ -359,6 +362,20 @@ class class_copy
 		}
 
 		return $arr_return;
+	}
+
+
+	public function updateConfig($strFile) {
+	    $strContent = file_get_contents($strFile);
+	    $strSearch = "/\[\'debuglevel\'\]\s* = 0/";
+	    $strReplace = "['debuglevel'] = 1";
+	    $strContent = preg_replace($strSearch, $strReplace, $strContent);
+
+	    $strSearch = "/\[\'debuglogging\'\]\s* = 1/";
+	    $strReplace = "['debuglogging'] = 2";
+	    $strContent = preg_replace($strSearch, $strReplace, $strContent);
+
+	    file_put_contents($strFile, $strContent);
 	}
 }
 
