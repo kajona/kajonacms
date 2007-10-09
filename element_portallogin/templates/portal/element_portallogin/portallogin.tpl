@@ -1,23 +1,13 @@
 <portallogin_loginform>
-<form name="form1" method="post" action="%%action%%">
-  <table width="100%"  border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td>%%username%%</td>
-      <td><input type="text" name="portallogin_username" value="" /></td>
-    </tr>
-    <tr>
-      <td>%%password%%</td>
-      <td><input type="password" name="portallogin_password" value="" /></td>
-    </tr>
-    <tr>
-      <td><input type="hidden" name="action" value="%%portallogin_action%%" /></td>
-      <td><input type="submit" name="Submit" value="%%login%%" /></td>
-    </tr>
-  </table>
+<form name="formContact" method="post" action="%%action%%" accept-charset="UTF-8">
+	<div><label for="portallogin_username">%%username%%</label><input type="text" name="portallogin_username" id="portallogin_username" value="%%portallogin_username%%" class="inputText" /></div><br />
+	<div><label for="portallogin_password">%%password%%</label><input type="password" name="portallogin_password" id="portallogin_password" value="%%portallogin_password%%" class="inputText" /></div><br />
+	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%login%%" class="button" /></div><br />
+	<input type="hidden" name="action" value="%%portallogin_action%%" />
 </form>
 </portallogin_loginform>
 
 <portallogin_status>
-Logged in as: %%username%%<br />
-%%logoutlink%%
+<p>Logged in as: %%username%%</p>
+<p>%%logoutlink%%</p>
 </portallogin_status>
