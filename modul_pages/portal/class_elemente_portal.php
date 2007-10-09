@@ -120,7 +120,7 @@ class class_element_portal extends class_portal {
 	    $strEditorDiv = "";
         $strReturn = "";
 
-        if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid)) {
+        if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
             if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true" ) {
                 $strModule = "pages_content";

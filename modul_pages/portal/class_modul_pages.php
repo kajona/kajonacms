@@ -191,7 +191,7 @@ class class_modul_pages extends class_portal {
 		$strPageContent = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //add the portaleditor toolbar
-        if(_pages_portaleditor_ == "true" && $objPageData->rightEdit()) {
+        if(_pages_portaleditor_ == "true" && $objPageData->rightEdit() && $this->objSession->isAdmin()) {
 
     		if(!defined("skinwebpath_"))
     		    define("_skinwebpath_", _webpath_."/admin/skins/".$this->objSession->getAdminSkin());
