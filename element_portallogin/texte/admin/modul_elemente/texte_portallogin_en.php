@@ -14,7 +14,7 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 $text["portallogin_template"]                   = "Template:";
-$text["portallogin_error"]                      = "Page in case of success (optional):";
-$text["portallogin_success"]                    = "Page in case of an error (optional):";
+$text["portallogin_error"]                      = "Page in case of an error (optional):";
+$text["portallogin_success"]                    = "Page in case of success (optional):";
 $text["portallogin_logout_success"]             = "Page after logging out (optional):";
 ?>
