@@ -31,7 +31,7 @@ checkLoc()
 		#echo $i
 		if [ $i != "stats.sh" ] && [ $i != "copy.log" ] && [ $i != "copy_down.log" ] && [ $i != "copy.php" ] && [ $i != "local_backup.sh" ]
 		then
-			if [ -d "$1$i" ] && [ "$i" != ".svn" ]
+			if [ -d "$1$i" ] && [ "$i" != ".svn" ] && [ "$i" != "kajona" ]
 			then
 				checkLoc "$1$i/"
 				
@@ -79,7 +79,7 @@ checkNrFiles()
 	do
 		if [ $i != "stats.sh" ] && [ $i != "copy.log" ] && [ $i != "copy_down.log" ] && [ $i != "copy.php" ] && [ $i != "local_backup.sh" ]
 		then
-			if [ -d "$1$i" ] && [ "$i" != ".svn" ]
+			if [ -d "$1$i" ] && [ "$i" != ".svn" ] && [ "$i" != "kajona" ]
 			then
 				checkNrFiles "$1$i/"
 			fi
