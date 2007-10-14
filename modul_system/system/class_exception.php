@@ -79,6 +79,9 @@ class class_exception extends Exception {
             $strMailtext .= "Callstack / Backtrace:\n\n";
             $strMailtext .= $arrStack = $this->getTraceAsString();
             $strMailtext .= "\n\n";
+            $strMailtext .= "Sourcehost: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
+            $strMailtext .= "Querystring: ".getServer("REQUEST_URI")."\n";
+            $strMailtext .= "\n\n";
             $strMailtext .= "If you dont't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
 
