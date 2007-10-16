@@ -163,6 +163,68 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     }
     
     
+    /**
+     * Creates an initial set of widgets to be displayed to new users.
+     * NOTE: Low-level variant!
+     *
+     * @param string $strUserid
+     * @return bool
+     */
+    public function createInitialWidgetsForUser($strUserid) {
+        $bitReturn = true;
+
+        //instantiate a model-widget
+        $objSystemWidget1 = new class_modul_system_adminwidget();
+        $objSystemWidget1->setStrClass("class_adminwidget_systeminfo");
+        $objSystemWidget1->setStrContent("a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
+        
+        $objSystemWidget2 = new class_modul_system_adminwidget();
+        $objSystemWidget2->setStrClass("class_adminwidget_note");
+        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.1\";}");
+        
+        $objSystemWidget3 = new class_modul_system_adminwidget();
+        $objSystemWidget3->setStrClass("class_adminwidget_systemlog");
+        $objSystemWidget3->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"5\";}");
+        
+        //and save the widget itself
+        if($objSystemWidget1->saveObjectToDb()) {
+            $strWidgetId = $objSystemWidget1->getSystemid();
+            //and save the dashboard-entry
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->setStrColumn("column1");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrWidgetId($strWidgetId);
+            if(!$objDashboard->saveObjectToDb()) 
+                $bitReturn = false;    
+        }   
+
+        //and save the widget itself
+        if($objSystemWidget2->saveObjectToDb()) {
+            $strWidgetId = $objSystemWidget2->getSystemid();
+            //and save the dashboard-entry
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->setStrColumn("column2");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrWidgetId($strWidgetId);
+            if(!$objDashboard->saveObjectToDb()) 
+                $bitReturn = false;    
+        }   
+        
+        //and save the widget itself
+        if($objSystemWidget3->saveObjectToDb()) {
+            $strWidgetId = $objSystemWidget3->getSystemid();
+            //and save the dashboard-entry
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->setStrColumn("column3");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrWidgetId($strWidgetId);
+            if(!$objDashboard->saveObjectToDb()) 
+                $bitReturn = false;    
+        }   
+        
+        return $bitReturn;
+    }
+    
     
 //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 

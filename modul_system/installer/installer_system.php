@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.3";
+		$arrModul["version"] 			= "3.0.4";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -399,6 +399,10 @@ class class_installer_system extends class_installer_base implements interface_i
 					('".$strAdminID."','".$strUserID."')";
 		$this->objDB->_query($strQuery);
 		$strReturn .= "Registered Admin in Admin-Group...\n";
+		
+		//try to create a default-dashboard for the admin
+        $objDashboard = new class_modul_dashboard_widget();
+        $objDashboard->createInitialWidgetsForUser($strUserIDs);
 
 		return $strReturn;
 	}
@@ -445,6 +449,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.2.3") {
             $strReturn .= $this->update_302x_303();
+        }
+        
+	   $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.3") {
+            $strReturn .= $this->update_303_304();
         }
 
         return $strReturn."\n\n";
@@ -666,6 +675,33 @@ class class_installer_system extends class_installer_base implements interface_i
         
 
 	    return $strReturn;
+	}
+	
+	private function update_303_304() {
+	    $strReturn = "";
+        $strReturn .= "Updating 3.0.3 to 3.0.4...\n";
+        
+        $strReturn .= "Creating default dashboard for existing users...\n";
+        include_once(_systempath_."/class_modul_dashboard_widget.php");
+        include_once(_systempath_."/class_modul_user_user.php");
+        $objDashboard = new class_modul_dashboard_widget();
+        
+        $arrUsers = class_modul_user_user::getAllUsers();
+        foreach($arrUsers as $objOneUser) {
+            $strReturn .= " found ".$objOneUser->getStrUsername()."\n";
+            $objDashboard->createInitialWidgetsForUser($objOneUser->getSystemid());
+        }
+        
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("system", "3.0.4");
+        $this->updateModuleVersion("right", "3.0.4");
+        $this->updateModuleVersion("user", "3.0.4");
+        $this->updateModuleVersion("filemanager", "3.0.4");
+        $this->updateModuleVersion("dashboard", "3.0.4");
+        
+
+        return $strReturn;
 	}
 	
 	

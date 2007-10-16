@@ -405,6 +405,10 @@ class class_user_admin extends class_admin implements interface_admin {
                                 throw new class_exception($this->getText("fehler_speichern"), class_exception::$level_ERROR);
                             }
                             else {
+                                //try to create a default-dashboard
+                                include_once(_systempath_."/class_modul_dashboard_widget.php");
+                                $objDashboard = new class_modul_dashboard_widget();
+                                $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
                                 return "";
                             }
 
