@@ -115,6 +115,7 @@ $text["ordner_name_parent"]			= "Parent folder:";
 $text["template"]					= "Template:";
 $text["browsername"]                = "Browser title:";
 $text["seostring"]                  = "SEO-URL-Keywords:";
+$text["templateNotSelectedBefore"]  = "ATTENTIION: No template was selected for this page!";
 
 $text["element_name"]				= "Name:";
 $text["element_admin"]				= "Admin-class:";

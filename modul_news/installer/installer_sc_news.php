@@ -150,6 +150,28 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objNewsFeed->updateObjectToDb(false);
             $strNewsFeedId = $objNewsFeed->getSystemid();
             $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
+            
+            $strReturn .= "Creating navigation entries...\n";
+            include_once(_systempath_."/class_modul_navigation_tree.php");
+            include_once(_systempath_."/class_modul_navigation_point.php");
+            $arrNavis = class_modul_navigation_tree::getAllNavis();
+            if(count($arrNavis) > 0) {
+                $objNavi = $arrNavis[0];
+                $strTreeId = $objNavi->getSystemid();
+            }
+            
+            $objNaviPoint = new class_modul_navigation_point();
+            $objNaviPoint->setStrName("News");
+            $objNaviPoint->setStrPageI("");
+            $objNaviPoint->saveObjectToDb($strTreeId);
+            $strNewsPointID = $objNaviPoint->getSystemid();
+            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+    
+            $objNaviPoint = new class_modul_navigation_point();
+            $objNaviPoint->setStrName("Details");
+            $objNaviPoint->setStrPageI("newsdetails");
+            $objNaviPoint->saveObjectToDb($strNewsPointID);
+            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
 
         return $strReturn;
     }

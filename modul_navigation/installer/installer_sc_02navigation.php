@@ -55,34 +55,7 @@ class class_installer_sc_navigation implements interface_sc_installer  {
         $objNaviPoint->setStrPageI("index");
         $objNaviPoint->saveObjectToDb($strTreeId);
         $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        $objNaviPoint = new class_modul_navigation_point();
-        $objNaviPoint->setStrName("News");
-        $objNaviPoint->setStrPageI("");
-        $objNaviPoint->saveObjectToDb($strTreeId);
-        $strNewsPointID = $objNaviPoint->getSystemid();
-        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-
-        $objModuleNews = class_modul_system_module::getModuleByName("news");
-        if($objModuleNews != null) {
-            $objNaviPoint = new class_modul_navigation_point();
-            $objNaviPoint->setStrName("Details");
-            $objNaviPoint->setStrPageI("newsdetails");
-            $objNaviPoint->saveObjectToDb($strNewsPointID);
-            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        }
-
-        $objModuleNews = class_modul_system_module::getModuleByName("guestbook");
-        if($objModuleNews != null) {
-            $objNaviPoint = new class_modul_navigation_point();
-            if($this->strContentLanguage == "de")
-                $objNaviPoint->setStrName("Gästebuch");
-            else
-                $objNaviPoint->setStrName("Guestbook");
-            $objNaviPoint->setStrPageI("guestbook");
-            $objNaviPoint->saveObjectToDb($strTreeId);
-            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        }
-
+        
 
         if($this->strMasterID != "") {
             $strReturn .= "Adding navigation to master page\n";

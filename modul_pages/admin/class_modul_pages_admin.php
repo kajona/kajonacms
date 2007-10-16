@@ -478,6 +478,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 						$arrTemplatesDD[$strTemplate] = $strTemplate;
 					}
 				}
+				
+				//if no template was selected before, show a warning. can occur when having created new languages
+				if($objPage->getStrTemplate() == "")
+				    $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();

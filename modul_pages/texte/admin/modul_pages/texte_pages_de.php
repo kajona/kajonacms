@@ -116,6 +116,7 @@ $text["ordner_name_parent"]			= "Übergeordneter Ordner:";
 $text["template"]					= "Template:";
 $text["browsername"]                = "Browsertitel:";
 $text["seostring"]                  = "SEO-URL-Keywords:";
+$text["templateNotSelectedBefore"]  = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 
 $text["element_name"]				= "Name:";
 $text["element_admin"]				= "Admin-Klasse:";

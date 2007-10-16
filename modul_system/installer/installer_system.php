@@ -401,8 +401,9 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strReturn .= "Registered Admin in Admin-Group...\n";
 		
 		//try to create a default-dashboard for the admin
+		include_once(_systempath_."/class_modul_dashboard_widget.php");
         $objDashboard = new class_modul_dashboard_widget();
-        $objDashboard->createInitialWidgetsForUser($strUserIDs);
+        $objDashboard->createInitialWidgetsForUser($strUserID);
 
 		return $strReturn;
 	}
