@@ -21,7 +21,7 @@ include_once(_systempath_."/class_modul_pages_page.php");
  *
  * @package modul_navigation
  */
-class class_installer_sc_navigation implements interface_sc_installer  {
+class class_installer_sc_02navigation implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
