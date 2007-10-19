@@ -32,21 +32,28 @@ class class_db {
 	 */
 	private $objDbDriver = null;                //An object of the db-driver defined in the configs
 	private static $objDB = null;               //An object of this class
-	
+
 	/**
 	 * The number of tranactions currently opened
 	 *
 	 * @var int
 	 */
 	private $intNumberOfOpenTransactions = 0;    //The number of tranactions opened
-	
+
 	/**
-	 * Set to true, if a rollback is requested, but there are still open tx. 
+	 * Set to true, if a rollback is requested, but there are still open tx.
 	 * In this case, the tx is rolled back, when the enclosing tx is finished
 	 *
 	 * @var bool
 	 */
-	private $bitCurrentTxIsDirty = false;       
+	private $bitCurrentTxIsDirty = false;
+
+	/**
+	 * Indicates, whether php escaped quotes or not
+	 *
+	 * @var bool
+	 */
+	private $bitMagicQuotesGPC = false;
 
 
 	/**
@@ -61,6 +68,8 @@ class class_db {
 
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
+
+		$this->bitMagicQuotesGPC = (get_magic_quotes_gpc() == 0);
 
 		//Load the defined db-driver
 		$strDriver = $this->objConfig->getConfig("dbdriver");
@@ -77,8 +86,8 @@ class class_db {
 		    //throw new class_exception("No db-driver defined!", class_exception::$level_FATALERROR);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Destructor.
 	 * Handles the closing of remaining tx and closes the db-connection
@@ -86,7 +95,7 @@ class class_db {
 	public function __destruct() {
 	    if($this->intNumberOfOpenTransactions != 0) {
 	        //something bad happend. rollback, plz
-	        $this->objDbDriver->transactionRollback();   
+	        $this->objDbDriver->transactionRollback();
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
 	    if($this->objDbDriver !== null)
@@ -181,7 +190,7 @@ class class_db {
 		        $bitCache = false;
 		    }
 		}
-		
+
 		if($bitCache) {
 			$strQueryMd5 = md5($strQuery);
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
@@ -227,7 +236,7 @@ class class_db {
         $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd);
         //Increasing global counter
 		$this->intNumber++;
-		
+
         if(defined("_system_use_dbcache_")) {
 		    if(_system_use_dbcache_ == "false") {
 		        $bitCache = false;
@@ -325,10 +334,10 @@ class class_db {
 	        //just start a new tx, if no other tx is open
 	        if($this->intNumberOfOpenTransactions == 0)
 		        $this->objDbDriver->transactionBegin();
-		        
+
 	        //increase tx-counter
 	        $this->intNumberOfOpenTransactions++;
-	        
+
 	    }
 	}
 
@@ -338,7 +347,7 @@ class class_db {
 	 */
 	public function transactionCommit() {
 	    if($this->objDbDriver != null) {
-	        
+
 	        //check, if the current tx is allowed to be commited
 	        if($this->intNumberOfOpenTransactions == 1) {
 	            //so, this is the last remaining tx. Commit or rollback?
@@ -346,14 +355,14 @@ class class_db {
 		            $this->objDbDriver->transactionCommit();
 	            }
 		        else {
-		            $this->objDbDriver->transactionRollback(); 
+		            $this->objDbDriver->transactionRollback();
 		            $this->bitCurrentTxIsDirty = false;
 		        }
 
 		        //decrement counter
-		        $this->intNumberOfOpenTransactions--;    
+		        $this->intNumberOfOpenTransactions--;
 	        }
-	        else { 
+	        else {
 	            $this->intNumberOfOpenTransactions--;
 	        }
 
@@ -366,7 +375,7 @@ class class_db {
 	 */
 	public function transactionRollback() {
 	    if($this->objDbDriver != null) {
-	        
+
 		    if($this->intNumberOfOpenTransactions == 1) {
 	            //so, this is the last remaining tx. rollback anyway
 	            $this->objDbDriver->transactionRollback();
@@ -380,7 +389,7 @@ class class_db {
 	            //decrement the number of open tx
 	            $this->intNumberOfOpenTransactions--;
 	        }
-	        
+
 	    }
 	}
 
@@ -419,7 +428,7 @@ class class_db {
 		}
 		return $arrReturn;
 	}
-	
+
 	/**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -588,7 +597,7 @@ class class_db {
 	 */
 	public function dbsafeString($strString, $bitHtmlEntitites = true) {
 	    //already escaped by php?
-	    if(get_magic_quotes_gpc() == 0) {
+	    if($this->bitMagicQuotesGPC) {
 	       $strString = addslashes($strString);
 	    }
 
