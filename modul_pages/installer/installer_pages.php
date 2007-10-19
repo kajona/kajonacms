@@ -9,7 +9,7 @@
 * 	Installer of the pages-module																		*																										*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                     *
+*   $Id$                                         *
 ********************************************************************************************************/
 
 require_once(_systempath_."/class_installer_base.php");
@@ -24,7 +24,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
 
-		$arrModule["version"] 		= "3.0.2.1";
+		$arrModule["version"] 		= "3.0.9";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -54,7 +54,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
     public function getMinSystemVersion() {
-	    return "3.0.2";
+	    return "3.0.9";
 	}
 
 	public function hasPostInstalls() {
@@ -320,7 +320,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.2") {
-            $strReturn .= $this->update_302_30x();
+            $strReturn .= $this->update_302_309();
         }
 
         return $strReturn."\n\n";
@@ -463,10 +463,10 @@ class class_installer_pages extends class_installer_base implements interface_in
 	    return $strReturn;
 	}
 
-	private function update_302_30x() {
+	private function update_302_309() {
 	    $strReturn = "";
 
-	    $strReturn .= "Updating 3.0.1 to 3.0.2.1...\n";
+	    $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
 
 	    //add pages' xml-handler
 	    $strReturn .= "Registering system xml handler...\n";
@@ -476,9 +476,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 	        $strReturn .= "An error occured!\n";
 
 	    $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.2.1");
-        $this->updateModuleVersion("pages_content", "3.0.2.1");
-        $this->updateModuleVersion("folderview", "3.0.2.1");
+        $this->updateModuleVersion("pages", "3.0.9");
+        $this->updateModuleVersion("pages_content", "3.0.9");
+        $this->updateModuleVersion("folderview", "3.0.9");
 
 	    return $strReturn;
 	}

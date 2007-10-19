@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.4";
+		$arrModul["version"] 			= "3.0.9";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -443,20 +443,10 @@ class class_installer_system extends class_installer_base implements interface_i
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2" || $arrModul["module_version"] == "3.0.2.1" || $arrModul["module_version"] == "3.0.2.2") {
-            $strReturn .= $this->update_302_302x();
+        if($arrModul["module_version"] == "3.0.2") {
+            $strReturn .= $this->update_302_309();
         }
         
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2.3") {
-            $strReturn .= $this->update_302x_303();
-        }
-        
-	   $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.3") {
-            $strReturn .= $this->update_303_304();
-        }
-
         return $strReturn."\n\n";
 	}
 
@@ -601,9 +591,9 @@ class class_installer_system extends class_installer_base implements interface_i
 	    return $strReturn;
 	}
 
-	private function update_302_302x() {
+	private function update_302_309() {
 	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.2 to 3.0.2.2...\n";
+	    $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
 
 	    //new constant for nr of rows in admin
 	    $strReturn .= "Registering nr of rows constant...\n";
@@ -617,72 +607,44 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $objSystemModule->setStrXmlNameAdmin("class_modul_system_admin_xml.php");
 	    if(!$objSystemModule->updateObjectToDb())
 	        $strReturn .= "An error occured!\n";
-
-        $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.2.3");
-        $this->updateModuleVersion("right", "3.0.2.3");
-        $this->updateModuleVersion("user", "3.0.2.3");
-        $this->updateModuleVersion("filemanager", "3.0.2.3");
-        
-
-	    return $strReturn;
-	}
-	
-    private function update_302x_303() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.2.3 to 3.0.3...\n";
-	    
+	        
+	        
 	    $strReturn .= "Installing table adminwidget...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
+        $strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
                         `dashboard_id` VARCHAR( 20 ) NULL ,
                         `dashboard_column` VARCHAR( 255 ) NULL ,
                         `dashboard_user` VARCHAR( 20 ) NULL ,
                         `dashboard_widgetid` VARCHAR( 20 ) NULL ,
                         PRIMARY KEY ( `dashboard_id` )
                         ) ";
-		
-		if(!$this->objDB->createTable($strQuery))
-			$strReturn .= "An error occured! ...\n";
+        
+        if(!$this->objDB->createTable($strQuery))
+            $strReturn .= "An error occured! ...\n";
 
-		$strReturn .= "Installing table dashboard...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
+        $strReturn .= "Installing table dashboard...\n";
+        $strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
                         `adminwidget_id` VARCHAR( 20 ) NULL ,
                         `adminwidget_class` VARCHAR( 255 ) NULL ,
                         `adminwidget_content` TEXT NULL ,
                         PRIMARY KEY ( `adminwidget_id` )
                         )";
-		if(!$this->objDB->createTable($strQuery))
-			$strReturn .= "An error occured! ...\n";
+        if(!$this->objDB->createTable($strQuery))
+            $strReturn .= "An error occured! ...\n";
 
-	    $strReturn .= "Registering new module dashboard...\n";
-	    $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
-	    
-	    $strReturn .= "Removing classnames from module-table...\n";
-	    $strQuery = "ALTER TABLE `"._dbprefix_."system_module`
+        $strReturn .= "Registering new module dashboard...\n";
+        $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
+        
+        $strReturn .= "Removing classnames from module-table...\n";
+        $strQuery = "ALTER TABLE `"._dbprefix_."system_module`
                         DROP `module_classnameportal`,
                         DROP `module_classnameadmin`;";
-	    if(!$this->objDB->_query($strQuery))
+        if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
             
         $strReturn .= "Register db-cache constant...\n";    
         $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);    
-	    
-        $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.3");
-        $this->updateModuleVersion("right", "3.0.3");
-        $this->updateModuleVersion("user", "3.0.3");
-        $this->updateModuleVersion("filemanager", "3.0.3");
-        $this->updateModuleVersion("dashboard", "3.0.3");
-        
 
-	    return $strReturn;
-	}
-	
-	private function update_303_304() {
-	    $strReturn = "";
-        $strReturn .= "Updating 3.0.3 to 3.0.4...\n";
-        
-        $strReturn .= "Creating default dashboard for existing users...\n";
+	    $strReturn .= "Creating default dashboard for existing users...\n";
         include_once(_systempath_."/class_modul_dashboard_widget.php");
         include_once(_systempath_."/class_modul_user_user.php");
         $objDashboard = new class_modul_dashboard_widget();
@@ -692,17 +654,16 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= " found ".$objOneUser->getStrUsername()."\n";
             $objDashboard->createInitialWidgetsForUser($objOneUser->getSystemid());
         }
-        
-        
+
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("system", "3.0.4");
-        $this->updateModuleVersion("right", "3.0.4");
-        $this->updateModuleVersion("user", "3.0.4");
-        $this->updateModuleVersion("filemanager", "3.0.4");
-        $this->updateModuleVersion("dashboard", "3.0.4");
+	    $this->updateModuleVersion("system", "3.0.9");
+        $this->updateModuleVersion("right", "3.0.9");
+        $this->updateModuleVersion("user", "3.0.9");
+        $this->updateModuleVersion("filemanager", "3.0.9");
+        $this->updateModuleVersion("dashboard", "3.0.9");
         
 
-        return $strReturn;
+	    return $strReturn;
 	}
 	
 	

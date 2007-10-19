@@ -30,7 +30,7 @@ class class_installer {
 	private $strForwardLink = "";
 	private $strBackwardLink = "";
 
-	private $strVersion = "V 3.0.2";
+	private $strVersion = "V 3.0.9";
 
 	/**
 	 * Instance of template-engine

@@ -28,7 +28,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.2";
+		$arrModule["version"] 		= "3.0.9";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -48,7 +48,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.2";
+	    return "3.0.9";
 	}
 
 	public function hasPostInstalls() {
@@ -173,6 +173,11 @@ class class_installer_stats extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.0.1") {
             $strReturn .= $this->update_301_302();
         }
+        
+	$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.2") {
+            $strReturn .= $this->update_302_309();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -259,6 +264,16 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         return $strReturn;
 	}
+	
+    private function update_302_309() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.0.3 to 3.0.9...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.0.9");
+
+        return $strReturn;
+    }
 
 
 

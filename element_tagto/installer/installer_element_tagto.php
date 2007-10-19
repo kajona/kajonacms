@@ -28,7 +28,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.2";
+		$arrModule["version"] 		= "3.0.9";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -40,7 +40,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.2";
+	    return "3.0.9";
 	}
 
 	public function hasPostInstalls() {

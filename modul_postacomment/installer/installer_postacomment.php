@@ -24,7 +24,7 @@ require_once(_systempath_."/class_modul_pages_element.php");
 class class_installer_postacomment extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.0.3";
+		$arrModule["version"] 		  = "3.0.9";
 		$arrModule["name"] 			  = "postacomment";
 		$arrModule["class_admin"]  	  = "class_modul_postacomment_admin";
 		$arrModule["file_admin"] 	  = "class_modul_postacomment_admin.php";
@@ -42,7 +42,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.2";
+	    return "3.0.9";
 	}
 
 	public function hasPostInstalls() {
