@@ -75,8 +75,12 @@ class class_element_portallogin extends class_element_portal implements interfac
 
 		if(!$this->objSession->isLoggedin())
 		    $strReturn .= $this->loginForm();
-		else
-		    $strReturn .= $this->statusArea();
+		else {
+		    if($this->getParam("action") == "portalEditProfile")
+		        $strReturn .= $this->editUserData();
+		    else
+		        $strReturn .= $this->statusArea();
+		}
 
 
 
@@ -114,7 +118,73 @@ class class_element_portallogin extends class_element_portal implements interfac
         $arrTemplate = array();
         $arrTemplate["username"] = $this->objSession->getUsername();
         $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("logoutlink"), "portalLogout");
+        $arrTemplate["editprofilelink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("editprofilelink"), "portalEditProfile");
 	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	}
+	
+	private function editUserData() {
+	    
+	    $arrErrors = array();
+	    $bitForm = true;
+	    //what to do?
+	    if($this->getParam("submitUserForm") != "") {
+	        if($this->getParam("password") != "") {
+	            if($this->getParam("password") != $this->getParam("password2"))
+	               $arrErrors[] = $this->getText("passwordsUnequal");
+	        }
+	        
+	        if(!checkEmailaddress($this->getParam("email")))
+               $arrErrors[] = $this->getText("invalidEmailadress");
+                   
+	        if(count($arrErrors) == 0)
+               $bitForm = false;  
+	    }
+	    
+	    if($bitForm) {
+    	    $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform");
+            $arrTemplate = array();
+            
+            include_once(_systempath_."/class_modul_user_user.php");
+            $objUser = new class_modul_user_user($this->objSession->getUserID());
+            
+            $arrTemplate["usernameTitle"]= $this->getText("usernameTitle");
+            $arrTemplate["username"] = $objUser->getStrUsername();
+            $arrTemplate["passwordTitle"] = $this->getText("passwordTitle");
+            $arrTemplate["passwordTitle2"] = $this->getText("passwordTitle2");
+            $arrTemplate["emailTitle"] = $this->getText("emailTitle");
+            $arrTemplate["email"] = $objUser->getStrEmail();
+            $arrTemplate["forenameTitle"] = $this->getText("forenameTitle");
+            $arrTemplate["forename"] = $objUser->getStrForename();
+            $arrTemplate["nameTitle"] = $this->getText("nameTitle");
+            $arrTemplate["name"] = $objUser->getStrName();
+            
+            
+            $arrTemplate["submitTitle"] = $this->getText("userDataSubmit");
+            $arrTemplate["formaction"] = _indexpath_."?page=".$this->getPagename()."&amp;action=portalEditProfile";
+            
+            $arrTemplate["formErrors"] = "";
+            if(count($arrErrors) > 0) {
+                foreach ($arrErrors as $strOneError) {
+                    $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
+                    $arrTemplate["formErrors"] .= "".$this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                }
+            }
+    	    
+    	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	    }
+	    else {
+	        include_once(_systempath_."/class_modul_user_user.php");
+            $objUser = new class_modul_user_user($this->objSession->getUserID());
+
+            $objUser->setStrEmail($this->getParam("email"));
+            $objUser->setStrForename($this->getParam("forename"));
+            $objUser->setStrName($this->getParam("name"));
+            $objUser->setStrPass($this->getParam("password"));
+            
+            $objUser->updateObjectToDb();
+            header("Location: "._indexpath_."?page=".$this->getPagename());
+            
+	    }
 	}
 
 

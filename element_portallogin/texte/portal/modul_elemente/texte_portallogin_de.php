@@ -9,7 +9,7 @@
 * 	Portal language file for element_portallogin														*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                        *
+*	$Id$                                *
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
@@ -17,4 +17,17 @@ $text["username"]                             = "Benutzername:";
 $text["password"]                             = "Passwort:";
 $text["login"]                                = "Login";
 $text["logoutlink"]                           = "Logout";
+$text["editprofilelink"]                      = "Profil bearbeiten";
+
+$text["usernameTitle"]                        = "Benutzername:";
+$text["passwordTitle"]                        = "Passwort:";
+$text["passwordTitle2"]                       = "Passwort:";
+$text["emailTitle"]                           = "E-Mail*:";
+$text["forenameTitle"]                        = "Vorname:";
+$text["nameTitle"]                            = "Nachname:";
+$text["userDataSubmit"]                       = "Speichern";
+
+$text["invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
+$text["passwordsUnequal"]                     = "Passwörter unterschiedlich.";
+
 ?>

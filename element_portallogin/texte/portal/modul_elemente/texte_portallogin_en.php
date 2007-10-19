@@ -17,4 +17,16 @@ $text["username"]                             = "Username:";
 $text["password"]                             = "Password:";
 $text["login"]                                = "Login";
 $text["logoutlink"]                           = "Logout";
+$text["editprofilelink"]                      = "Edit profile";
+
+$text["usernameTitle"]                        = "Username:";
+$text["passwordTitle"]                        = "Password:";
+$text["passwordTitle2"]                       = "Password:";
+$text["emailTitle"]                           = "Email*:";
+$text["forenameTitle"]                        = "Forename:";
+$text["nameTitle"]                            = "Name:";
+$text["userDataSubmit"]                       = "Save";
+
+$text["invalidEmailadress"]                   = "No valid mailadress.";
+$text["passwordsUnequal"]                     = "Passwords not equal.";
 ?>
