@@ -21,7 +21,7 @@ include_once(_systempath_."/class_modul_system_common.php");
  *
  * @package modul_filemanager
  */
-class class_modul_filemanager_repo extends class_root implements interface_model  {
+class class_modul_filemanager_repo extends class_model implements interface_model  {
 
     private $strPath = "";
     private $strName = "";
