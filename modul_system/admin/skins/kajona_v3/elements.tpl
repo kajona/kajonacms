@@ -761,12 +761,13 @@ The language switch sourrounds the buttons
 <dashboard_column_header>
 	<script type="text/javascript">
     	kajonaAjaxHelper.loadDragNDropBase();
+    	kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
     	if(arrayListIds == null)
             var arrayListIds = new Array("%%column_id%%");
         else
             arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
     
-        kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
+        
 	</script>
 	
 	<ul id="%%column_id%%" style="padding: 0 0 10px 0; margin: 0; list-style: none; width: 260px;">

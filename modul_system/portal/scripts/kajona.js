@@ -134,22 +134,27 @@ var kajonaAjaxHelper =  {
 	bitPastOnload : false,
 	
 	onLoadHandlerFinal : function() {
-		for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
-			if(kajonaAjaxHelper.arrayFilesToLoad[i] != null)
-				kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
-		}
-		kajonaAjaxHelper.bitPastOnload = true;
-	},
+        for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
+            if(kajonaAjaxHelper.arrayFilesToLoad[i] != null) {
+                kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
+                kajonaAjaxHelper.arrayFilesToLoad[i] = null;
+            }
+        }
+        kajonaAjaxHelper.bitPastOnload = true;
+    },
 
-	addJavascriptFile : function (file) {
-		var l=document.createElement("script");
-		l.setAttribute("type", "text/javascript");
-		l.setAttribute("language", "javascript");
-		l.setAttribute("src", file);
-		document.getElementsByTagName("head").item(0).appendChild(l);	
-		intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
-		kajonaAjaxHelper.arrayFilesLoaded[(intCount+1)] = file;
-	},
+    addJavascriptFile : function (file) {
+        if(inArray(file, kajonaAjaxHelper.arrayFilesLoaded)) {
+           return;
+        }
+        var l=document.createElement("script");
+        l.setAttribute("type", "text/javascript");
+        l.setAttribute("language", "javascript");
+        l.setAttribute("src", file);
+        document.getElementsByTagName("head").item(0).appendChild(l);
+        intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
+        kajonaAjaxHelper.arrayFilesLoaded[intCount] = file;
+    },
 	
 	loadAjaxBase : function () {
 		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/yahoo/yahoo-min.js');

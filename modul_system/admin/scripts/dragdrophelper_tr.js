@@ -13,7 +13,6 @@
 if(arrayTableIds == null)
 	var arrayTableIds = new Array();
 
-
 (function() {
 	var Dom = YAHOO.util.Dom;
 	var Event = YAHOO.util.Event;
