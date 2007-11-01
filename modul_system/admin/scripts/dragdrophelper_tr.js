@@ -119,8 +119,9 @@ if(arrayTableIds == null)
 			//make a regular table out of it and make it look like the original
 			dragEl.innerHTML = "<table "+
 						         " class=\""+parentNode.getAttribute('class')+"\""+
-								 " width=\""+parentNode.getAttribute('width')+"\""+
-								 " border=\""+parentNode.getAttribute('border')+"\""+
+								 " width=\""+(parentNode.getAttribute('width') != null ? parentNode.getAttribute('width') : "100%" )+"\""+
+								 " border=\""+(parentNode.getAttribute('border') != null ? parentNode.getAttribute('border') : "0" )+"\""+
+								 " cellpadding=\"0\" cellspacing=\"0\" "+
 								 " ><tr"+
 						         " class=\""+clickEl.getAttribute('class')+"\""+
 								 ">" +clickEl.innerHTML+ "</tr></table>";
