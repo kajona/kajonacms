@@ -489,8 +489,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$objNews->setIntDateSpecial($arrDates["archive"]);
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
-                foreach($arrParams["cat"] as $strCatID => $strValue) {
-                    $arrCats[$strCatID] = $strValue;
+                if(count($arrParams["cat"]) > 0) {
+                    foreach($arrParams["cat"] as $strCatID => $strValue) {
+                        $arrCats[$strCatID] = $strValue;
+                    }
                 }
                 $objNews->setArrCats($arrCats);
 
@@ -512,8 +514,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$objNews->setIntDateSpecial($arrDates["archive"]);
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
-                foreach($arrParams["cat"] as $strCatID => $strValue) {
-                    $arrCats[$strCatID] = $strValue;
+                if(count($arrParams["cat"]) > 0) {
+                    foreach($arrParams["cat"] as $strCatID => $strValue) {
+                        $arrCats[$strCatID] = $strValue;
+                    }
                 }
                 $objNews->setArrCats($arrCats);
                 if(!$objNews->updateObjectToDb())
