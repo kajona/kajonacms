@@ -460,7 +460,7 @@ h2 {
 	margin-top: 13px;
 }
 
-/* Q U I C K H E L P */
+/* Q U I C K H E L P, D A S H B O A R D */
 .quickHelpButton {
 	text-align: right;
 	margin: 50px 0 0 0;
@@ -490,7 +490,7 @@ h2 {
      text-decoration: none;
 }
 
-#quickHelp {
+#quickHelp, .adminwidget {
 	display: none;
 	text-align: left;
 	width: 400px;
@@ -500,78 +500,103 @@ h2 {
 	user-select: none;
 }
 
-#quickHelp .hd .title {
+.adminwidget {
+    display: block;
+    width: 250px;
+}
+
+#quickHelp .hd .title, .adminwidget .hd .title {
 	float: left;
 	text-indent: 25px;
 	text-transform: uppercase;
 	padding-top: 5px;
 }
 
-#quickHelp .hd .c {
+.adminwidget .hd .title {
+    text-indent: 5px;
+}
+
+#quickHelp .hd .c, .adminwidget .hd .c {
 	text-align: right;
 	line-height: 22px;
 	height: 22px;
 }
 
-#quickHelp .hd .c a {
+.adminwidget .hd .c {
+    text-align: right;
+    line-height: 22px;
+    height: 22px;
+    padding-right: 5px;
+}
+
+#quickHelp .hd .c a, .adminwidget .hd .c a {
 	margin-right: 7px;
 }
 
-#quickHelp .hd .clear {
+.adminwidget .hd .c a {
+    margin-right: 1px;
+}
+
+#quickHelp .hd .clear, .adminwidget .hd .clear {
 	clear: both;
 }
 
-#quickHelp .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	font-size: 1px; /* ensure minimum height */
 	height: 22px;
 }
 
-#quickHelp .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	height: 14px;
 }
 
-#quickHelp .hd {
+#quickHelp .hd, .adminwidget .hd {
 	background: transparent url('"._skinwebpath_."/quickhelp_topleft.png') no-repeat 0px 0px;
 	margin-right: 7px; /* space for right corner */
 	cursor: move;
 }
 
-#quickHelp .hd .c {
+.adminwidget .hd {
+    background: transparent url('"._skinwebpath_."/adminwidget_topleft.png') no-repeat 0px 0px;
+}
+
+
+#quickHelp .hd .c, .adminwidget .hd .c {
 	background: transparent url('"._skinwebpath_."/quickhelp_topright.png') no-repeat right 0px;
 	margin-right: -7px; /* pull right corner back over empty space (from above margin) */
 }
 
-#quickHelp .bd {
+#quickHelp .bd, .adminwidget .bd {
 	background: transparent url('"._skinwebpath_."/quickhelp_middleleft.png') repeat-y 0px 0px;
 	margin-right: 6px;
 }
 
-#quickHelp .bd .c {
+#quickHelp .bd .c, .adminwidget .bd .c {
 	background: transparent url('"._skinwebpath_."/quickhelp_middleright.png') repeat-y right 0px;
 	margin-right: -6px;
 }
 
-#quickHelp .bd .c .spacer {
+#quickHelp .bd .c .spacer, .adminwidget .bd .c .spacer {
 	height: 5px;
 }
 
-#quickHelp .bd .c .s {
+#quickHelp .bd .c .s, .adminwidget .bd .c .s {
 	margin: 0px 8px 0px 4px;
 	background: #000 url(ms.jpg) repeat-x 0px 0px;
 	padding: 1em;
 }
 
-#quickHelp .ft {
+#quickHelp .ft, .adminwidget .ft {
 	background: transparent url('"._skinwebpath_."/quickhelp_bottomleft.png') no-repeat 0px 0px;
 	margin-right: 7px;
 }
 
-#quickHelp .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	background: transparent url('"._skinwebpath_."/quickhelp_bottomright.png') no-repeat right 0px;
 	margin-right: -7px;
 }
 
-#quickHelp p {
+#quickHelp p, .adminwidget p, .adminwidget .bd .c div {
 	margin: 0;
 	padding: 0 10px 0px 10px;
 }

@@ -833,7 +833,7 @@ The language switch sourrounds the buttons
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
 
 <adminwidget_widget>
-<div class="adminwidget">
+<div class="adminwidget" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;">
 	<div class="adminwidgetHeader">
 		<div class="adminwidgetHeaderTitle">%%widget_name%%</div>
 		<div class="adminwidgetHeaderActions">%%widget_edit%% %%widget_delete%%</div>

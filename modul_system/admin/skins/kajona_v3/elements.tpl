@@ -737,15 +737,25 @@ The language switch sourrounds the buttons
 -- WIDGETS / DASHBOAORD  --------------------------------------------------------------------------------
 
 <adminwidget_widget>
-<div style="border: 1px solid #cccccc; width: 250px; margin-bottom: 20px;">
-	<div style="background-color: #cccccc;">
-		<div style="float: left;">%%widget_name%%</div>
-		<div style="float: right;">%%widget_edit%% %%widget_delete%%</div>
-		<div style="clear: both;"></div>
-	</div>
-	<div>%%widget_content%%</div>
-	<div style="color: red;">Skin Maintainer: Please layout!</div>
-</div>
+    <div class="adminwidget">
+            <div class="hd">
+                <div class="title">%%widget_name%%</div>
+                <div class="c">%%widget_edit%% %%widget_delete%%</div>
+                <div class="clear"></div>
+            </div>
+            <div class="bd">
+                <div class="c">
+                    <div class="spacer"></div>
+                    <p>
+                        %%widget_content%%
+                    </p>
+                    <div class="spacer"></div>
+                </div>
+            </div>
+            <div class="ft">
+                <div class="c"></div>
+            </div>
+    </div>
 </adminwidget_widget>
 
 <dashboard_column_header>
