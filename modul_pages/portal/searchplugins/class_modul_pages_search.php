@@ -27,13 +27,13 @@ include_once(_portalpath_."/searchplugins/interface_search_plugin.php");
 class class_modul_pages_search extends class_portal implements interface_search_plugin  {
 
     private $arrTableConfig = array();
-    private $strSearchterm = "";
+    private $arrSearchterm;
     private $arrHits = array();
 
-    public function  __construct($strSearchterm, $strSearchtermRaw) {
+    public function  __construct($arrSearchterm, $strSearchtermRaw) {
         parent::__construct();
 
-        $this->strSearchterm = $strSearchterm;
+        $this->arrSearchterm = $arrSearchterm;
 
         $arrSearch = array();
 
@@ -78,7 +78,8 @@ class class_modul_pages_search extends class_portal implements interface_search_
 			$arrWhere = array();
 			//Build an or-statemement out of the columns
 			foreach($arrColumnConfig as $strColumn) {
-				$arrWhere[] = $strColumn.$this->strSearchterm;
+			    foreach ($this->arrSearchterm as $strOneSeachterm)
+				    $arrWhere[] = $strColumn.$strOneSeachterm;
 			}
 			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
@@ -102,7 +103,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 						   AND   ".$strWhere."
 						 ORDER BY page_element_placeholder_placeholder ASC,
 						 		system_sort ASC";
-
+            
 			$arrPages = $this->objDB->getArray($strQuery);
 
 			//register the found pages
@@ -133,7 +134,8 @@ class class_modul_pages_search extends class_portal implements interface_search_
 			$arrWhere = array();
 			//Build an or-statemement out of the columns
 			foreach($arrColumnConfig as $strColumn) {
-				$arrWhere[] = $strColumn.$this->strSearchterm;
+				$arrWhere[] = $strColumn.$this->arrSearchterm[0];
+				$arrWhere[] = $strColumn.$this->arrSearchterm[1];
 			}
 			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 

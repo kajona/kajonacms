@@ -87,11 +87,12 @@ class class_modul_search_commons extends class_model implements interface_model 
 	    if(uniStrlen($strSearchterm) == 0)
 	       return array();
 	       
-	       
 	    //log the query
 	    class_modul_search_log::generateLogEntry($strSearchterm);
 
-	    $strSearchtermDB = " LIKE '%".dbsafeString($strSearchterm)."%' ";
+	    $arrSearchtermPlugin = array();
+	    $arrSearchtermPlugin[] = " LIKE ('%".dbsafeString($strSearchterm, false)."%')  ";
+	    $arrSearchtermPlugin[] = " LIKE ('%".dbsafeString(html_entity_decode($strSearchterm, ENT_COMPAT, "UTF-8"), false)."%')  ";
         $arrHits = array();
 		//Read the config
 		$arrSearch = array();
@@ -105,7 +106,7 @@ class class_modul_search_commons extends class_model implements interface_model 
 		    if($strOnePlugin != "interface_search_plugin.php") {
 		        include_once(_portalpath_."/searchplugins/".$strOnePlugin);
 		        $strClassname = str_replace(".php", "", $strOnePlugin);
-		        $objPlugin = new $strClassname($strSearchtermDB, $strSearchterm);
+		        $objPlugin = new $strClassname($arrSearchtermPlugin, $strSearchterm);
 		        if($objPlugin instanceof interface_search_plugin) {
                     $arrTempResults = $objPlugin->doSearch();
 

@@ -23,14 +23,14 @@ include_once(_portalpath_."/searchplugins/interface_search_plugin.php");
 class class_modul_faqs_search extends class_portal implements interface_search_plugin  {
 
     private $arrTableConfig = array();
-    private $strSearchterm = "";
+    private $arrSearchterm;
     private $strSearchtermRaw = "";
     private $arrHits = array();
 
-    public function __construct($strSearchterm, $strSearchtermRaw) {
+    public function __construct($arrSearchterm, $strSearchtermRaw) {
         parent::__construct();
 
-        $this->strSearchterm = $strSearchterm;
+        $this->arrSearchterm = $arrSearchterm;
         $this->strSearchtermRaw = $strSearchtermRaw;
 
         $arrSearch = array();
@@ -57,7 +57,8 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 			$arrWhere = array();
 			//Build an or-statemement out of the columns
 			foreach($arrColumnConfig as $strColumn) {
-				$arrWhere[] = $strColumn.$this->strSearchterm;
+				foreach ($this->arrSearchterm as $strOneSeachterm)
+                    $arrWhere[] = $strColumn.$strOneSeachterm;
 			}
 			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
