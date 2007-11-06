@@ -21,6 +21,7 @@ $text["systemcheck_no"]                          = "Nein";
 
 $text["systemcheck_php_safemode"]                = "Safemode: ";
 $text["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
+$text["systemcheck_php_regglobal"]               = "Register global: ";
 $text["systemcheck_kajona_installer"]            = "/installer vorhanden: ";
 $text["systemcheck_kajona_configper"]            = "Schreibrechte auf config.php: ";
 $text["systemcheck_kajona_debugper"]             = "Schreibrechte auf /debug: ";

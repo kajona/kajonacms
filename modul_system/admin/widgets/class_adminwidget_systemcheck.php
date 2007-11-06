@@ -53,6 +53,9 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
         if($this->getFieldValue("php") == "checked") {
             $strReturn .= $this->widgetText($this->getText("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getText("systemcheck_yes") : $this->getText("systemcheck_no") ));
             $strReturn .= $this->widgetText($this->getText("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getText("systemcheck_yes") : $this->getText("systemcheck_no") ));
+            $strReturn .= $this->widgetText($this->getText("systemcheck_php_regglobal").(ini_get("register_globals") ? 
+                         "<span style=\"color: red\">".$this->getText("systemcheck_yes")."</span>" : 
+                         "<span style=\"color: green\">".$this->getText("systemcheck_no")."</span>" ));
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
