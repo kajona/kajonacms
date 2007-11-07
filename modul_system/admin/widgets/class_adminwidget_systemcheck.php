@@ -9,7 +9,7 @@
 * 	widget showing a few infos about the current system													*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_adminwidget_systemcheck.php 1791 2007-10-08 06:29:06Z sidler $	                        *
+*	$Id$	                        *
 ********************************************************************************************************/
 
 include_once(_adminpath_."/widgets/class_adminwidget.php");
