@@ -2,6 +2,7 @@
 <p>%%pathnavigation%%</p>
 <p>%%folderlist%%</p>
 <p>%%piclist%%</p>
+<p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
 <folderlist>

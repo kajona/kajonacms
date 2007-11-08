@@ -40,7 +40,8 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		$arrModule["modul"]			= "elemente";
 
 		$arrModule["tableColumns"]  = "gallery_id|char,gallery_mode|number,gallery_template|char,gallery_maxh_p|number,gallery_maxh_d|number,gallery_maxh_m|number,";
-		$arrModule["tableColumns"]  .= "gallery_maxw_p|number,gallery_maxw_d|number,gallery_maxw_m|number,gallery_nrow|number,gallery_text|char,gallery_text_x|number,gallery_text_y|number";
+		$arrModule["tableColumns"] .= "gallery_maxw_p|number,gallery_maxw_d|number,gallery_maxw_m|number,gallery_nrow|number,gallery_text|char,gallery_text_x|number,";
+		$arrModule["tableColumns"] .= "gallery_text_y|number,gallery_imagesperpage|number";
 
 		parent::__construct($arrModule);
 	}
@@ -87,6 +88,8 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_p", $this->getText("gallery_maxh_p"), (isset($arrElementData["gallery_maxh_p"]) ? $arrElementData["gallery_maxh_p"] : ""));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_nrow"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_nrow", $this->getText("gallery_nrow"), (isset($arrElementData["gallery_nrow"]) ? $arrElementData["gallery_nrow"] : ""));
+		$strReturn .= $this->objToolkit->formTextRow($this->getText("gallery_imagesperpage_hint"));
+		$strReturn .= $this->objToolkit->formInputText("gallery_imagesperpage", $this->getText("gallery_imagesperpage"), (isset($arrElementData["gallery_imagesperpage"]) ? $arrElementData["gallery_imagesperpage"] : ""));
 
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_detail"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_d", $this->getText("gallery_maxw_d"), (isset($arrElementData["gallery_maxw_d"]) ? $arrElementData["gallery_maxw_d"] : ""));

@@ -145,6 +145,59 @@ class class_modul_gallery_pic extends class_model implements interface_model  {
         }
         return $arrReturn;
 	}
+	
+    /**
+     * Loads all files ( & folders) under the given systemid available in the db but using section limitations
+     *
+     * @param string $strPrevID
+     * @param bool $bitFilesOnly
+     * @param bool $bitActiveOnly
+     * @param int $intStart
+     * @param int $intEnd
+     * @return mixed
+     * @static
+     */
+    public static  function loadFilesDBSection($strPrevID, $bitFilesOnly = false, $bitActiveOnly = false, $intStart, $intEnd) {
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system,
+                              "._dbprefix_."gallery_pic
+                    WHERE system_id = pic_id
+                      AND system_prev_id = '".dbsafeString($strPrevID)."'
+                        ".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
+                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
+                        ORDER BY system_sort ASC,
+                            pic_type DESC,
+                            pic_name ASC";
+        $arrIds  = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+
+        $arrReturn = array();
+        foreach($arrIds as $arrOneId) {
+            $arrReturn[] = new class_modul_gallery_pic($arrOneId["system_id"]);
+        }
+        return $arrReturn;
+    }
+    
+    /**
+     * Counts the number of files returnd by the corresponding query
+     *
+     * @param string $strPrevID
+     * @param bool $bitFilesOnly
+     * @param bool $bitActiveOnly
+     * @return int
+     * @static
+     */
+    public static function getFileCount($strPrevID, $bitFilesOnly = false, $bitActiveOnly = false) {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system,
+                              "._dbprefix_."gallery_pic
+                    WHERE system_id = pic_id
+                      AND system_prev_id = '".dbsafeString($strPrevID)."'
+                        ".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
+                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
+                        ORDER BY system_sort ASC,
+                            pic_type DESC,
+                            pic_name ASC";
+        $arrIds  = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        return $arrIds["COUNT(*)"];
+    }
 
 	/**
 	 * Loads the folders under the given systemid

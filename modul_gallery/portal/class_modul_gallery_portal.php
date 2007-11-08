@@ -80,13 +80,39 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getParam("action") != "imageFolder") {
 		    $this->setSystemid($this->arrElementData["gallery_id"]);
 		}
-		//Load all Images & Folder
-		$arrImages = class_modul_gallery_pic::loadFilesDB($this->getSystemid(), false, true);
+		
+		
+		$bitPageview = false;
+		//load using the pageview?
+		if($this->arrElementData["gallery_imagesperpage"] > 1) {
+		    $bitPageview = true;
+		    include_once(_systempath_."/class_array_section_iterator.php");
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_gallery_pic::getFileCount($this->getSystemid(), false, true));
+            $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["gallery_imagesperpage"]);
+            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setArraySection(class_modul_gallery_pic::loadFilesDBSection($this->getSystemid(), false, true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+        
+		    $arrImages = $objArraySectionIterator->getArrayExtended();
+		    $arrTempImages = $this->objToolkit->pager($this->arrElementData["gallery_imagesperpage"], 
+		                                              ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), 
+		                                              $this->getText("forwardlink"), 
+		                                              $this->getText("backlink"), 
+		                                              $this->getParam("action"), 
+		                                              ($this->getParam("page") != "" ? $this->getParam("page") : ""), 
+		                                              $arrImages,
+		                                              "&systemid=".$this->getSystemid());
+		    $arrImages = $arrTempImages["arrData"];
+		}
+		else {
+		    //Load all Images & Folder
+            $arrImages = class_modul_gallery_pic::loadFilesDB($this->getSystemid(), false, true);
+		}
 
 		//Loop over every item and collect them
 		$arrTemplate  = array();
 		$arrTemplate["folderlist"] = "";
 		$arrTemplate["piclist"] = "";
+		
         $arrTemplateImage = array();
 		if(count($arrImages) > 0) {
 		    $intImageCounter = 0;
@@ -147,6 +173,11 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			$strReturn = $this->getText("liste_leer");
 
 		//and load the sourrounding template
+		if($bitPageview) {
+		    $arrTemplate["link_forward"] = $arrTempImages["strForward"];
+            $arrTemplate["link_pages"] = $arrTempImages["strPages"];
+            $arrTemplate["link_back"] = $arrTempImages["strBack"];
+		}
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "list");
 		$arrTemplate["pathnavigation"] = $this->generatePathnavi();
 		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

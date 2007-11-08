@@ -125,6 +125,7 @@ class class_installer_gallery extends class_installer_base implements interface_
                         `gallery_maxh_m` INT,
                         `gallery_maxw_m` INT,
                         `gallery_nrow` INT,
+                        `gallery_imagesperpage` INT,
                         `gallery_text` VARCHAR( 255 ) ,
                         `gallery_text_x` INT,
                         `gallery_text_y` INT,
@@ -241,8 +242,8 @@ class class_installer_gallery extends class_installer_base implements interface_
         if(in_array(_dbprefix_."element_gallery", $arrTables)) {
             $strReturn .= "Altering gallery-element-table...\n";
             $strQuery = "ALTER TABLE `"._dbprefix_."element_gallery` 
-                            ADD `gallery_maxh_m` INT  ,
-                            ADD `gallery_maxw_m` INT ;";
+                            ADD `gallery_imagesperpage` INT NULL ,
+                            ADD `gallery_maxw_m` INT NULL;";
             if(!$this->objDB->_query($strQuery))
                 $strReturn .= "An error occured!!!\n";
         }
@@ -257,6 +258,12 @@ class class_installer_gallery extends class_installer_base implements interface_
         //Run the updates
         $strReturn = "";
         $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
+        $strReturn .= "Altering gallery-element-table...\n";
+        $strQuery = "ALTER TABLE `"._dbprefix_."element_gallery` 
+                        ADD `gallery_imagesperpage` INT NULL;";
+        
+        if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!!!\n";    
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("gallery", "3.0.9");
