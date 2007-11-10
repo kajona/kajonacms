@@ -186,6 +186,10 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $objSystemWidget3->setStrClass("class_adminwidget_systemlog");
         $objSystemWidget3->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"5\";}");
         
+        $objSystemWidget4 = new class_modul_system_adminwidget();
+        $objSystemWidget4->setStrClass("class_adminwidget_systemcheck");
+        $objSystemWidget4->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
+        
         //and save the widget itself
         if($objSystemWidget1->saveObjectToDb()) {
             $strWidgetId = $objSystemWidget1->getSystemid();
@@ -221,6 +225,18 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             if(!$objDashboard->saveObjectToDb()) 
                 $bitReturn = false;    
         }   
+        
+        //and save the widget itself
+        if($objSystemWidget4->saveObjectToDb()) {
+            $strWidgetId = $objSystemWidget4->getSystemid();
+            //and save the dashboard-entry
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->setStrColumn("column3");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrWidgetId($strWidgetId);
+            if(!$objDashboard->saveObjectToDb()) 
+                $bitReturn = false;    
+        }
         
         return $bitReturn;
     }
