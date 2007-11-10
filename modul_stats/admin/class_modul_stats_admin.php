@@ -154,7 +154,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
                         $arrImage = array($arrImage);
                     foreach($arrImage as $strImage) {
                         if($strImage != "") {
-                    	   $strReturn .= $this->objToolkit->getGraphContainer($strImage);
+                    	   $strReturn .= $this->objToolkit->getGraphContainer($strImage."?reload=".time());
                         }
                     }
 
