@@ -52,6 +52,7 @@
                 %%lm_lastmodified%%
                 %%faqs_faqs%%
                 %%comments_postacomment%%
+                %%rssfeed_rssfeed%%
 			</td>
 			<td id="contentTopRight"><div></div></td>
 		</tr>
