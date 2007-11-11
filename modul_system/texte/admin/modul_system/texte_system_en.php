@@ -169,7 +169,7 @@ $text["update_nofilefound"]         = "The list of updates failed to load.<br />
 $text["update_invalidXML"]          = "The servers response was erroneous. Please try again.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.0.2, Codename \"strandbar\"<br /><br />
+                                       Kajona V 3.1.0 ALPHA (3.0.9), Codename \"kangaroo\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        For further information, support or proposals, please visit our website.<br />
@@ -192,6 +192,7 @@ $text["about_part3"]                = "<h2>Credits</h2>
                                        <li>DHTML / JavaScript Calendar:<br />Dynarch, <a href=\"http://www.dynarch.com/projects/calendar/\" target=\"_blank\">http://www.dynarch.com/projects/calendar/</a></li>
                                        <li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li>
                                        <li>IP-to-Country Database:<br />WebHosting.Info (http://www.webhosting.info), <a href=\"http://ip-to-country.webhosting.info\" target=\"_blank\">http://ip-to-country.webhosting.info</a></li>
+                                       <li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li>
                                        </ul>
                                        ";
 
