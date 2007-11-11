@@ -477,6 +477,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//woah, we are soooo great
 			$strElementTableColumns = $objElement->getArrModule("tableColumns");
 			if($strElementTableColumns != "") {
+			    
+			    //open new tx
+			    $this->objDB->transactionBegin();
+			    
                 $arrTableRows = explode(",", $strElementTableColumns);
                 if(count($arrTableRows) > 0) {
                     $arrInserts = array();
@@ -487,9 +491,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                         $strTableColumnName = $arrTemp[0];
                         $strTableColumnDatatype = $arrTemp[1];
                         if ($strTableColumnDatatype == "number")
-                            $arrInserts[] = " ".$strTableColumnName." = ".(int)$this->objDB->dbsafeString($this->getParam($strTableColumnName))." ";
+                            $arrInserts[] = " `".$strTableColumnName."` = ".(int)$this->objDB->dbsafeString($this->getParam($strTableColumnName))." ";
                         elseif ($strTableColumnDatatype == "char")
-                            $arrInserts[] = " ".$strTableColumnName." = '".$this->objDB->dbsafeString($this->getParam($strTableColumnName))."' ";
+                            $arrInserts[] = " `".$strTableColumnName."` = '".$this->objDB->dbsafeString($this->getParam($strTableColumnName))."' ";
                     }
 
                     $strRowUpdates = implode(", ", $arrInserts);
@@ -498,8 +502,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                       .$strRowUpdates.
                     " WHERE content_id='".$this->getSystemid()."'";
 
-                    if(!$this->objDB->_query($strUpdateQuery))
+                    if(!$this->objDB->_query($strUpdateQuery)) {
                         $strReturn .= "Error updating element data.";
+                        $this->objDB->transactionRollback();
+                    }
+                    else
+                        $this->objDB->transactionCommit();
                 }
                 else
                     return "Element has invalid tableRows value!!!";
