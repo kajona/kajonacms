@@ -104,12 +104,12 @@ class class_modul_search_portal extends class_portal implements interface_portal
         $arrHitsSorted = $objSearchCommons->doSearch($this->strSearchterm);
 
 		//Resize Array to wanted size
-		$arrHitsFilter = $this->objToolkit->pager($this->arrElementData["search_amount"], ($this->getParam("pv") != "" ? (int)$this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "search", ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()), $arrHitsSorted, "&searchterm=".$this->strSearchterm);
+		$arrHitsFilter = $this->objToolkit->pager($this->arrElementData["search_amount"], ($this->getParam("pv") != "" ? (int)$this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "search", ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()), $arrHitsSorted, "&searchterm=".urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8")));
 
         $strRowTempalteID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
 		foreach($arrHitsFilter["arrData"] as $strPage => $arrHit) {
 			if(!isset($arrHit["pagelink"]))
-				$arrRow["page_link"] = getLinkPortal($arrHit["pagename"], "", "_self", $arrHit["pagename"], "", "&highlight=".$this->strSearchterm."#".strtolower($this->strSearchterm));
+				$arrRow["page_link"] = getLinkPortal($arrHit["pagename"], "", "_self", $arrHit["pagename"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8"))."#".strtolower(urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8"))));
 			else
 				$arrRow["page_link"] = $arrHit["pagelink"];
 			$arrRow["page_description"] = $arrHit["description"];
