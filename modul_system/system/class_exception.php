@@ -114,7 +114,9 @@ class class_exception extends Exception {
 
 	        $strErrormessage .= "</div></body></html>";
 	        print $strErrormessage;
-	        //Execution has to stopped here!
+	        //close remaining txs
+	        class_carrier::getInstance()->getObjDB()->__destruct();
+	        //Execution has to be stopped here!
 	        die();
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
@@ -135,6 +137,8 @@ class class_exception extends Exception {
 	               $strErrormessage .= "Please inform the administration about the error above.";
     	        $strErrormessage .= "</div></body></html>";
     	        print $strErrormessage;
+    	        //close remaining txs
+                class_carrier::getInstance()->getObjDB()->__destruct();
     	        //if error was displayed, stop execution
     	        die();
             }
