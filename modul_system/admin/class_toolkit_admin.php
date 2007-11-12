@@ -379,7 +379,7 @@ class class_toolkit_admin extends class_toolkit {
                 pageDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
                 pageDataSource.scriptQueryAppend = \"admin=1&module=pages&action=getPagesByFilter\";
 
-                var page%%name%%autocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource);
+                var page%%name%%autocomplete = new YAHOO.widget.AutoComplete(\"input_".$strName."\", \"input_".$strName."_container\", pageDataSource);
                 page%%name%%autocomplete.allowBrowserAutocomplete = false;
                 page%%name%%autocomplete.useShadow = false;
 
