@@ -993,7 +993,7 @@ body.folderView .listActions a {
 
 /* A U T O C O M P L E T E */
 .ac_container {
-	position:relative;
+	position: relative;
 }
 
 /* styles for results container */
@@ -1003,6 +1003,11 @@ body.folderView .listActions a {
 	width: 178px;
 	left: 30%;
 	margin-left: 2px;
+}
+
+/* ie6-styles for results container */
+* html .ac_container .ac_results {
+	left: -186px;
 }
 
 /* styles for header/body/footer wrapper within container */
@@ -1034,7 +1039,6 @@ body.folderView .listActions a {
 	background-color: #f0f0f0;
 
 }
-
 
 /* styles for highlighted result item */
 .ac_container .yui-ac-content li.yui-ac-highlight {
