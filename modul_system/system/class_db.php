@@ -48,13 +48,6 @@ class class_db {
 	 */
 	private $bitCurrentTxIsDirty = false;
 
-	/**
-	 * Indicates, whether php escaped quotes or not
-	 *
-	 * @var bool
-	 */
-	private $bitMagicQuotesGPC = false;
-
 
 	/**
 	 * Constructor
@@ -597,9 +590,10 @@ class class_db {
 	 */
 	public function dbsafeString($strString, $bitHtmlEntitites = true) {
 	    //already escaped by php?
-	    if($this->bitMagicQuotesGPC) {
-	       $strString = addslashes($strString);
+	    if(get_magic_quotes_gpc() == 1) {
+	       $strString = stripslashes($strString);
 	    }
+	    $strString = addslashes($strString);
 
 	    if($bitHtmlEntitites) {
 	        $strString = htmlentities($strString, ENT_COMPAT, "UTF-8");
