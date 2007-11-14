@@ -157,7 +157,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         }
         
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.9") {
+        if($arrModul["module_version"] == "3.0.2") {
             $strReturn .= $this->update_302_309();
         }
 

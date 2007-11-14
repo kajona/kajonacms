@@ -172,6 +172,11 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_301_302();
         }
 
+	$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.2") {
+            $strReturn .= $this->update_302_309();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -207,6 +212,18 @@ class class_installer_downloads extends class_installer_base implements interfac
         //Update the module-records
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.0.2");
+
+        return $strReturn;
+	}
+
+    	private function update_302_309() {
+	    //Run the updates
+	    $strReturn = "";
+        $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
+
+        //Update the module-records
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.0.9");
 
         return $strReturn;
 	}
