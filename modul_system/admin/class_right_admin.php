@@ -59,7 +59,7 @@ class class_right_admin extends class_admin implements interface_admin {
     				$strUrlHistory = $this->getHistory(0);
     				$arrHistory = explode("&", $strUrlHistory);
     				if($arrHistory[1] != "module=rights") {
-    					$this->adminReload(_indexpath_."?".$arrHistory[0]."&".$arrHistory[1]."");
+    					$this->adminReload(_indexpath_."?".$this->getHistory(0));
     				}
     			}
     		}
@@ -87,6 +87,7 @@ class class_right_admin extends class_admin implements interface_admin {
 	 * @return string
 	 */
 	private function actionChange() {
+		var_dump($strUrlHistory = $this->getHistory(0));
 		$strReturn = "";
 		$strSystemID = "";
 		//Determing the systemid
