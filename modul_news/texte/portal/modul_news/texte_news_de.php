@@ -18,4 +18,6 @@ $text["news_mehr"]							= "Weiter...";
 
 $text["fehler_recht"]						= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 
+$text["news_list_empty"]					= "Momentan keine News vorhanden.";
+
 ?>

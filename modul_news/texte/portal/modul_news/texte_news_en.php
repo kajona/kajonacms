@@ -18,4 +18,6 @@ $text["news_mehr"]							= "read more...";
 
 $text["fehler_recht"]						= "Not enough permissions to perform this action";
 
+$text["news_list_empty"]					= "No news available.";
+
 ?>

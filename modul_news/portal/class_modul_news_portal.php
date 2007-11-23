@@ -77,32 +77,37 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $this->arrElementData["news_category"]);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
 		//Check rights
-		foreach($arrNews as $objOneNews) {
-			if($this->objRights->rightView($objOneNews->getSystemid())) {
-			    $strOneNews = "";
-				//generate a link to the details
-				$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"),"newsDetail", "", $objOneNews->getSystemid());
-				$arrOneNews["news_start_date"] = timeToString($objOneNews->getIntDateStart(), false);
-				$arrOneNews["news_id"] = $objOneNews->getSystemid();
-				$arrOneNews["news_title"] = $objOneNews->getStrTitle();
-				$arrOneNews["news_intro"] = $objOneNews->getStrIntro();
-				$arrOneNews["news_text"] = $objOneNews->getStrNewstext();
-				$arrOneNews["news_image"] = $objOneNews->getStrImage();
-				$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
-
-				//Add pe code
-			    include_once(_portalpath_."/class_elemente_portal.php");
-			    $arrPeConfig = array(
-			                              "pe_module" => "news",
-			                              "pe_action_edit" => "editNewscontent",
-			                              "pe_action_edit_params" => "&systemid=".$objOneNews->getSystemid(),
-			                              "pe_action_new" => "newNews",
-			                              "pe_action_new_params" => "",
-			                              "pe_action_delete" => "deleteNews",
-			                              "pe_action_delete_params" => "&systemid=".$objOneNews->getSystemid()
-			                        );
-			    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig, true);
+		if(count($arrNews) > 0) {
+			foreach($arrNews as $objOneNews) {
+				if($this->objRights->rightView($objOneNews->getSystemid())) {
+				    $strOneNews = "";
+					//generate a link to the details
+					$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"),"newsDetail", "", $objOneNews->getSystemid());
+					$arrOneNews["news_start_date"] = timeToString($objOneNews->getIntDateStart(), false);
+					$arrOneNews["news_id"] = $objOneNews->getSystemid();
+					$arrOneNews["news_title"] = $objOneNews->getStrTitle();
+					$arrOneNews["news_intro"] = $objOneNews->getStrIntro();
+					$arrOneNews["news_text"] = $objOneNews->getStrNewstext();
+					$arrOneNews["news_image"] = $objOneNews->getStrImage();
+					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
+	
+					//Add pe code
+				    include_once(_portalpath_."/class_elemente_portal.php");
+				    $arrPeConfig = array(
+				                              "pe_module" => "news",
+				                              "pe_action_edit" => "editNewscontent",
+				                              "pe_action_edit_params" => "&systemid=".$objOneNews->getSystemid(),
+				                              "pe_action_new" => "newNews",
+				                              "pe_action_new_params" => "",
+				                              "pe_action_delete" => "deleteNews",
+				                              "pe_action_delete_params" => "&systemid=".$objOneNews->getSystemid()
+				                        );
+				    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig, true);
+				}
 			}
+		}
+		else {
+			$strReturn .= $this->getText("news_list_empty");
 		}
 		return $strReturn;
 	}
