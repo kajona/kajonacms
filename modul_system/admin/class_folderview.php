@@ -321,7 +321,7 @@ class class_folderview extends class_admin  implements interface_admin {
 		//Load the list of pagelements available on the page
 		if($strPageid != "0") {
 		    $strReturn .= $this->objToolkit->divider();
-            $arrPageelements = class_modul_pages_pageelement::getElementsOnPage($strPageid, true);
+            $arrPageelements = class_modul_pages_pageelement::getElementsOnPage($strPageid, true, $this->objSession->getAdminLanguage());
             $objPage = new class_modul_pages_page($strPageid);
             if(count($arrPageelements) > 0) {
                 $strReturn .= $this->objToolkit->listHeader();
