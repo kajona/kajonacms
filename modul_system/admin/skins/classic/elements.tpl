@@ -206,7 +206,7 @@ Dropdown
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
       <td width="30%" class="listecontent" align="right">%%title%%</td>
-      <td><select name="%%name%%" id="select_%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></td>
+      <td><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></td>
     </tr>
 </table>
 </input_dropdown>
@@ -224,7 +224,7 @@ Checkbox
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
       <td width="30%" class="listecontent" align="right">%%title%%</td>
-      <td><div align="left"><input name="%%name%%" type="checkbox" id="checkbox_%%name%%" value="checked" %%checked%% /></div></td>
+      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="checked" %%checked%% /></div></td>
     </tr>
 </table>
 </input_checkbox>
@@ -239,7 +239,7 @@ Regular Text-Field
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><input name="%%name%%" type="text" id="input_%%name%%" value="%%value%%" class="%%class%%" %%readonly%% /> %%opener%%</td>
+		<td><input name="%%name%%" type="text" id="%%name%%" value="%%value%%" class="%%class%%" %%readonly%% /> %%opener%%</td>
 	</tr>
 </table>
 </input_text>
@@ -249,7 +249,7 @@ Textarea
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><textarea name="%%name%%" id="textarea_%%name%%" class="%%class%%">%%value%%</textarea></td>
+		<td><textarea name="%%name%%" id="%%name%%" class="%%class%%">%%value%%</textarea></td>
 	</tr>
 </table>
 </input_textarea>
@@ -259,7 +259,7 @@ Regular Password-Field
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><input name="%%name%%" type="password" id="password_%%name%%" value="%%value%%" class="%%class%%" /></td>
+		<td><input name="%%name%%" type="password" id="%%name%%" value="%%value%%" class="%%class%%" /></td>
 	</tr>
 </table>
 </input_password>
@@ -269,7 +269,7 @@ Upload-Field
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><input name="%%name%%" type="file" id="file_%%name%%" class="%%class%%" /></td>
+		<td><input name="%%name%%" type="fil	e" id="%%name%%" class="%%class%%" /></td>
 	</tr>
 </table>
 </input_upload>
@@ -327,8 +327,8 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
 		<td>
 		  <div class="ac_container">
-		     <input name="%%name%%" type="text" id="input_%%name%%" value="%%value%%" class="%%class%%" /> %%opener%%
-		     <div id="input_%%name%%_container" class="ac_results"></div>
+		     <input name="%%name%%" type="text" id="%%name%%" value="%%value%%" class="%%class%%" /> %%opener%%
+		     <div id="%%name%%_container" class="ac_results"></div>
 		  </div>
 		</td>
 	</tr>
@@ -591,7 +591,7 @@ The textarea-field to replace by the editor. If the editor can't be loaded, a pl
 <table cellpadding="0" cellspacing="0" border="0" width="90%">
 	<tr>
 		<td class="text" valign="top" width="30%" align="right">%%title%%</td>
-		<td><textarea name="%%name%%" id="wysiwyg_%%name%%" class="wysiwyg">%%content%%</textarea></td>
+		<td><textarea name="%%name%%" id="%%name%%" class="wysiwyg">%%content%%</textarea></td>
 	</tr>
 </table>
 </wysiwyg_fckedit>

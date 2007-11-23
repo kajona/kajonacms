@@ -201,7 +201,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 Dropdown
 <input_dropdown>
-	<div><label for="select_%%name%%">%%title%% </label><select name="%%name%%" id="select_%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></div><br />
+	<div><label for="%%name%%">%%title%% </label><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></div><br />
 </input_dropdown>
 
 <input_dropdown_row>
@@ -214,7 +214,7 @@ Dropdown
 
 Checkbox
 <input_checkbox>
-	<div><label for="checkbox_%%name%%">%%title%% </label><input name="%%name%%" value="checked" type="checkbox" id="checkbox_%%name%%" %%checked%% /></div><br />
+	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="checked" type="checkbox" id="%%name%%" %%checked%% /></div><br />
 </input_checkbox>
 
 Regular Hidden-Field
@@ -224,27 +224,27 @@ Regular Hidden-Field
 
 Regular Text-Field
 <input_text>
-	<div><label for="input_%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="input_%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div><br />
+	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div><br />
 </input_text>
 
 Textarea
 <input_textarea>
-	<div><label for="textarea_%%name%%">%%title%% </label><textarea name="%%name%%" id="textarea_%%name%%" class="%%class%%">%%value%%</textarea></div><br />
+	<div><label for="%%name%%">%%title%% </label><textarea name="%%name%%" id="%%name%%" class="%%class%%">%%value%%</textarea></div><br />
 </input_textarea>
 
 Regular Password-Field
 <input_password>
-	<div><label for="password_%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="password" id="password_%%name%%" class="%%class%%" %%readonly%% /></div><br />
+	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="password" id="%%name%%" class="%%class%%" %%readonly%% /></div><br />
 </input_password>
 
 Upload-Field
 <input_upload>
-	<div><label for="file_%%name%%">%%title%% </label><input name="%%name%%" type="file" id="file_%%name%%" class="%%class%%" /></div><br />
+	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /></div><br />
 </input_upload>
 
 Regular Submit-Button
 <input_submit>
-	<div><label for="submit_%%name%%">&nbsp;</label><input type="submit" name="%%name%%" value="%%value%%" class="%%class%%" %%eventhandler%% /></div><br />
+	<div><label for="%%name%%">&nbsp;</label><input type="submit" name="%%name%%" value="%%value%%" class="%%class%%" %%eventhandler%% /></div><br />
 </input_submit>
 
 An easy date-selector
@@ -270,8 +270,8 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 "ac_results" inside the "ac_container", to generate a resultlist
 <input_pageselector>
   <div class="ac_container">
-     <div><label for="input_%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="input_%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
-     <div id="input_%%name%%_container" class="ac_results"></div>
+     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
+     <div id="%%name%%_container" class="ac_results"></div>
   </div><br />
 %%ajaxScript%%
 </input_pageselector>
@@ -481,7 +481,7 @@ NOTE: This section not just defines the layout, it also inits the wysiwyg editor
 
 The textarea-field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
 <wysiwyg_fckedit>
-<div><label for="wysiwyg_%%name%%">%%title%%</label><textarea name="%%name%%" id="wysiwyg_%%name%%" class="inputWysiwyg">%%content%%</textarea></div><br />
+<div><label for="%%name%%">%%title%%</label><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg">%%content%%</textarea></div><br />
 </wysiwyg_fckedit>
 
 A few settings to customize the editor. Up to now, those are:
