@@ -32,6 +32,11 @@
 			<td id="moduleNavi">
 				<div>
 					%%mainnavi%%
+				</div> <a href="javascript:showMenu();" id="showMenuLink">show</a>
+				<div id="moduleNaviHidden" >
+					<ul id="naviCollectorUl">
+						<li><a href="javascript:hideMenu();">[X]</a></li>
+					</ul>
 				</div>
 			</td>
 			<td id="contentTopRightTop"></td>
@@ -66,5 +71,66 @@
 	</tbody>
 </table>
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
+<script type="text/javascript">
+
+kajonaAjaxHelper.loadDragNDropBase();
+kajonaAjaxHelper.loadAnimationBase();
+
+function naviPreSetup() {
+
+		if(typeof YAHOO == "undefined") {
+             window.setTimeout('naviPreSetup()', 1000);
+             return;
+        }
+        naviSetup();
+}
+
+
+function naviSetup() {
+	
+	var list = YAHOO.util.Dom.get('adminModuleNaviUl');
+	//alert(list.id+" size "+YAHOO.util.Dom.getChildren(list).length);
+		
+	var arrayChildren = YAHOO.util.Dom.getChildren(list);
+	var intNrOfTabsToRemove = arrayChildren.length - 6;
+	
+	while(intNrOfTabsToRemove > 1) {
+		
+		if(arrayChildren[intNrOfTabsToRemove].id == 'selected' && intNrOfTabsToRemove >= 2)
+			intNrOfTabsToRemove--;
+			
+		nodeToMove = arrayChildren[intNrOfTabsToRemove];
+		
+		
+		document.getElementById('naviCollectorUl').appendChild(nodeToMove.cloneNode(true));
+		document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
+		
+		intNrOfTabsToRemove--;
+		
+	}
+
+}
+
+function showMenu() {
+	YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "block");
+	//get xy coords
+	arrCoords = YAHOO.util.Dom.getXY(YAHOO.util.Dom.get('showMenuLink'));
+	YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], -200 ], false);
+	
+	var attributes = { 
+        points: { to: [arrCoords[0], arrCoords[1] ] } 
+	};
+	
+	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 2);
+	animObject.animate();
+}
+
+function hideMenu() {
+	YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");
+}
+
+addLoadEvent(naviPreSetup);
+
+</script>
 </body>
 </html>

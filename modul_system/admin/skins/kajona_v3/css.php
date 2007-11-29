@@ -294,6 +294,37 @@ html>body #moduleNavi ul span {
     color: #000000;
 }
 
+#moduleNaviHidden {
+	display: none;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: 1px solid red;
+}
+
+#moduleNaviHidden ul {
+	list-style: none;
+	background: none;
+	display: list-item;
+	position: static;
+	float: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+#moduleNaviHidden ul span {
+	background: none;
+}
+
+#moduleNaviHidden ul li {
+	background: none;
+	display: list-item;
+	position: static;
+	float: none;
+	margin: 0px;
+	padding: 0px;
+}
+
 
 /* M O D U L E A C T I O N N A V I */
 

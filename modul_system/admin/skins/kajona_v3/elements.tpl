@@ -496,7 +496,7 @@ Width, Height
 
 The sourrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
 <modulenavi_main>
-    <ul>
+    <ul id="adminModuleNaviUl">
     	%%rows%%
 	</ul>
 </modulenavi_main>
