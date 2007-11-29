@@ -43,7 +43,7 @@
 			    <div id="statusBox">%%login%%</div>
 			    <div id="moduleActionNavi">%%modulenavi%%</div>
 			</td>
-			<td id="content" style="background-image: url('_skinwebpath_/header/%%module_id%%.gif');">
+			<td id="contentMain" style="background-image: url('_skinwebpath_/header/%%module_id%%.gif');">
 				<h1>%%moduletitle%%</h1>
 				%%quickhelp%%
 				<div id="contentBox">

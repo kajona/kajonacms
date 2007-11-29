@@ -429,14 +429,14 @@ html>body #moduleNavi ul span {
 	height: 5px;
 }
 
-#content {
+#contentMain {
 	background-color: #ffffff;
 	background-repeat: no-repeat;
 	background-position: top right;
 	text-align: right;
 }
 
-#content #contentBox {
+#contentMain #contentBox {
 	margin-left: 30px;
 	margin-right: 20px;
 	text-align: left;
@@ -689,7 +689,7 @@ body.folderView .adminList, body.portalEditor .adminList {
 
 
 /* F O R M S */
-#content form label, body.portalEditor form label {
+#contentMain form label, body.portalEditor form label {
 	display: block;
 	float: left;
 	width: 30%;
@@ -697,7 +697,7 @@ body.folderView .adminList, body.portalEditor .adminList {
 	padding: 3px 0 0 0;
 }
 
-* html #content form label, * html body.portalEditor form label {
+* html #contentMain form label, * html body.portalEditor form label {
 	height: 22px;
 }
 
