@@ -873,6 +873,7 @@ class class_toolkit_admin extends class_toolkit {
 	public function getAdminModuleNavi($arrModules, $strCurrent) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main");
 		$strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row");
+		$strTemplateRowHiddenID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_hidden");
 		$strTemplateRowIDFirst = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_first");
 		$strTemplateRowIDLast = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_last");
 		$strTemplateRowSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "modulenavi_main_row_selected");
@@ -896,8 +897,19 @@ class class_toolkit_admin extends class_toolkit {
 			        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDFirst);
 			    elseif ($intCount == $intMax)
 			        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDLast);
-			    else
-			        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
+			    else {
+			    	//allow to hide modules if too much given 
+			    	if($intCount >= 7) {
+			    		$strTemp = $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowHiddenID);
+			    		if($strTemp == "")
+			    			$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
+			    		else
+			    			$strRows .= $strTemp;	
+			    	}
+			    	else
+			    		$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);	
+			    }
+			        
 			}
 
 			$intCount++;

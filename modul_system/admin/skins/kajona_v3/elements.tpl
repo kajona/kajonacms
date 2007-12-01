@@ -507,6 +507,10 @@ Possible: %%name%%, %%link%%, %%href%%
 <li><span><a href="%%href%%">%%name%%</a></span></li>
 </modulenavi_main_row>
 
+<modulenavi_main_row_hidden>
+<li class="adminModuleNaviHidden"><span><a href="%%href%%">%%name%%</a></span></li>
+</modulenavi_main_row_hidden>
+
 <modulenavi_main_row_selected>
 <li id="selected"><span><a href="%%href%%">%%name%%</a></span></li>
 </modulenavi_main_row_selected>

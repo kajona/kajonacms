@@ -92,20 +92,18 @@ function naviSetup() {
 	//alert(list.id+" size "+YAHOO.util.Dom.getChildren(list).length);
 		
 	var arrayChildren = YAHOO.util.Dom.getChildren(list);
-	var intNrOfTabsToRemove = arrayChildren.length - 6;
 	
-	while(intNrOfTabsToRemove > 1) {
+	for(intI = 0; intI < arrayChildren.length; intI++) {
+	
+		if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
 		
-		if(arrayChildren[intNrOfTabsToRemove].id == 'selected' && intNrOfTabsToRemove >= 2)
-			intNrOfTabsToRemove--;
-			
-		nodeToMove = arrayChildren[intNrOfTabsToRemove];
+			nodeToMove = arrayChildren[intI];
 		
+			YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
+			document.getElementById('naviCollectorUl').appendChild(nodeToMove.cloneNode(true));
+			document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
 		
-		document.getElementById('naviCollectorUl').appendChild(nodeToMove.cloneNode(true));
-		document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
-		
-		intNrOfTabsToRemove--;
+		}
 		
 	}
 
@@ -121,7 +119,7 @@ function showMenu() {
         points: { to: [arrCoords[0], arrCoords[1] ] } 
 	};
 	
-	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 2);
+	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 1);
 	animObject.animate();
 }
 

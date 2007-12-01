@@ -294,12 +294,16 @@ html>body #moduleNavi ul span {
     color: #000000;
 }
 
+#moduleNavi ul li.adminModuleNaviHidden {
+	display: none;
+}
+
 #moduleNaviHidden {
 	display: none;
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	border: 1px solid red;
+	border: 1px solid #00e800;
 }
 
 #moduleNaviHidden ul {
@@ -317,12 +321,21 @@ html>body #moduleNavi ul span {
 }
 
 #moduleNaviHidden ul li {
-	background: none;
+	background: #ffffff;
 	display: list-item;
 	position: static;
 	float: none;
+	padding: 0 10px 0 10px;
 	margin: 0px;
-	padding: 0px;
+}
+
+#moduleNaviHidden ul li:hover {
+	background: #f0f0f0;
+	display: list-item;
+	position: static;
+	float: none;
+	padding: 0 10px 0 10px;
+	margin: 0px;
 }
 
 
