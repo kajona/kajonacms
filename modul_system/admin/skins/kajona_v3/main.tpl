@@ -32,10 +32,11 @@
 			<td id="moduleNavi">
 				<div>
 					%%mainnavi%%
-				</div> <a href="javascript:showMenu();" id="showMenuLink">show</a>
+					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img src="_skinwebpath_/modulenavi_more.png" /></a>
+				</div> 
 				<div id="moduleNaviHidden" >
 					<ul id="naviCollectorUl">
-						<li><a href="javascript:hideMenu();">[X]</a></li>
+						<li style="text-align: right"><a href="javascript:hideMenu();">[X]</a></li>
 					</ul>
 				</div>
 			</td>

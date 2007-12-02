@@ -177,7 +177,7 @@ td {
 	background-image: url('"._skinwebpath_."/logo.gif');
 	background-position: bottom;
 	background-repeat: no-repeat;
-	width: 326px;
+	width: 296px;
 	height: 74px;
 }
 
@@ -345,13 +345,13 @@ html>body #moduleNavi ul span {
 	background-image: url('"._skinwebpath_."/navi_three_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
-	width: 176px;
+	width: 146px;
 }
 
 #moduleActionNaviThree div {
 	background-image: url('"._skinwebpath_."/navi_three.gif');
 	background-repeat: no-repeat;
-	width: 176px;
+	width: 146px;
 	height: 264px;
 }
 
