@@ -75,7 +75,9 @@ interface interface_db_driver {
     public function getError();
 
     /**
-     * Returns ALL tables in the database currently connected to
+     * Returns ALL tables in the database currently connected to.
+     * The method should return an array using the following keys:
+     * name => Table name
      *
      * @return array
      */
