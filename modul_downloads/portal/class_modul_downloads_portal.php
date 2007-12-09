@@ -92,13 +92,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
 
-
-						//calculate a md5 hash, but just if requested
-						$arrPlaceholders = $this->objTemplate->getElements($strTememplateID);
-						foreach ($arrPlaceholders as $arrOnePlaceholder)
-						    if($arrOnePlaceholder["placeholder"] == "file_md5sum")
-						        $arrTemplate["file_md5sum"] = $objOneFile->getMd5Sum();
-
 						//could we get a preview (e.g. if its an image)?
 						$strSuffix = uniSubstr($objOneFile->getFilename(), uniStrrpos($objOneFile->getFilename(), "."));
 						if($strSuffix == ".jpg" || $strSuffix == ".gif" || $strSuffix == ".png")
