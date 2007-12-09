@@ -346,6 +346,11 @@ abstract class class_installer_base extends class_root {
 	 * @param int $intModule
 	 */
 	public function registerConstant($strName, $strValue, $intType, $intModule) {
+		
+		//register to current runtime env?
+		if(!defined($strName))
+			define($strName, $strValue);
+		
 	    include_once(_systempath_."/class_modul_system_setting.php");
 	    if(!class_modul_system_setting::checkConfigExisting($strName)) {
     	    $objConstant = new class_modul_system_setting("");
