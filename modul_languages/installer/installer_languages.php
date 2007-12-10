@@ -61,17 +61,14 @@ class class_installer_languages extends class_installer_base implements interfac
 
 		//news cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table languages...\n";
+		
+		$arrFields = array();
+		$arrFields["language_id"] 		= array("char20", false);
+		$arrFields["language_name"] 	= array("char254", true);
+		$arrFields["language_default"]  = array("int", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."languages` (
-                        `language_id` VARCHAR( 20 ) NOT NULL ,
-                        `language_name` VARCHAR( 255 ) ,
-                        `language_default` INT( 2 ) ,
-                         PRIMARY KEY ( `language_id` )
-                    ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
 			$strReturn .= "An error occured! ...\n";
-
 
 
 		//register the module

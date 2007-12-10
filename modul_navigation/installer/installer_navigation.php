@@ -72,18 +72,16 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 		//navigation-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table navigation...\n";
+		
+		$arrFields = array();
+		$arrFields["navigation_id"] 		= array("char20", false);
+		$arrFields["navigation_name"] 		= array("char254", true);
+		$arrFields["navigation_page_e"] 	= array("char254", true);
+		$arrFields["navigation_page_i"] 	= array("char254", true);
+		$arrFields["navigation_target"] 	= array("char254", true);
+		$arrFields["navigation_image"] 		= array("char254", true);
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."navigation` (
-						`navigation_id` VARCHAR( 41 ) NOT NULL ,
-						`navigation_name` VARCHAR( 200 ) NOT NULL ,
-						`navigation_page_e` VARCHAR( 255 ) ,
-						`navigation_page_i` VARCHAR( 200 ) ,
-						`navigation_target` VARCHAR( 100 ) ,
-						`navigation_image` VARCHAR( 255 ) ,
-						PRIMARY KEY ( `navigation_id` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("navigation", $arrFields, array("navigation_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//register the module
@@ -97,15 +95,15 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$strReturn = "";
 
 		$strReturn .= "Installing navigation-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_navigation` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `navigation_id` VARCHAR( 20 ) ,
-                        `navigation_template` VARCHAR( 255 ) ,
-                        `navigation_css` VARCHAR( 255 ) ,
-                        `navigation_mode` VARCHAR( 50 ) ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 			= array("char20", false);
+		$arrFields["navigation_id"] 		= array("char20", true);
+		$arrFields["navigation_template"] 	= array("char254", true);
+		$arrFields["navigation_css"] 		= array("char254", true);
+		$arrFields["navigation_mode"] 		= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

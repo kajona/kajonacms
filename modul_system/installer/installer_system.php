@@ -70,215 +70,181 @@ class class_installer_system extends class_installer_base implements interface_i
 		// System table ---------------------------------------------------------------------------------
 		$strReturn .= "Installing table system...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."system` (
-						`system_id` VARCHAR( 21 ) NOT NULL ,
-						`system_prev_id` VARCHAR( 21 ) NOT NULL ,
-						`system_module_nr` SMALLINT( 3 ) NOT NULL ,
-						`system_sort` INT default 0,
-						`system_lm_user` VARCHAR( 41 ) ,
-						`system_lm_time` INT ,
-						`system_lock_id` VARCHAR( 21 ) default 0 ,
-						`system_lock_time` INT ,
-						`system_status` SMALLINT( 2 ) ,
-						`system_comment` VARCHAR( 254 ) ,
-						PRIMARY KEY ( `system_id` ) ,
-						INDEX ( `system_prev_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["system_id"] 		= array("char20", false);
+		$arrFields["system_prev_id"] 	= array("char20", false);
+		$arrFields["system_module_nr"] 	= array("int", false);
+		$arrFields["system_sort"] 		= array("int", true);
+		$arrFields["system_lm_user"] 	= array("char20", true);
+		$arrFields["system_lm_time"] 	= array("int", true);
+		$arrFields["system_lock_id"] 	= array("char20", true);
+		$arrFields["system_lock_time"] 	= array("int", true);
+		$arrFields["system_status"] 	= array("int", true);
+		$arrFields["system_comment"]	= array("char254", true);
+		
+		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Rights table ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_right...\n";
+		
+		$arrFields = array();
+		$arrFields["right_id"] 		= array("char20", false);
+		$arrFields["right_comment"] = array("char254", true);
+		$arrFields["right_inherit"] = array("int", true);
+		$arrFields["right_view"] 	= array("char254", true);
+		$arrFields["right_edit"] 	= array("char254", true);
+		$arrFields["right_delete"] 	= array("char254", true);
+		$arrFields["right_right"] 	= array("char254", true);
+		$arrFields["right_right1"] 	= array("char254", true);
+		$arrFields["right_right2"] 	= array("char254", true);
+		$arrFields["right_right3"] 	= array("char254", true);
+		$arrFields["right_right4"] 	= array("char254", true);
+		$arrFields["right_right5"] 	= array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."system_right` (
-						`right_id` VARCHAR( 41 ) NOT NULL ,
-						`right_comment` VARCHAR( 254 ) ,
-						`right_inherit` SMALLINT( 2 ) ,
-						`right_view` VARCHAR( 254 ) ,
-						`right_edit` VARCHAR( 254 ) ,
-						`right_delete` VARCHAR( 254 ) ,
-						`right_right` VARCHAR( 254 ) ,
-						`right_right1` VARCHAR( 254 ) ,
-						`right_right2` VARCHAR( 254 ) ,
-						`right_right3` VARCHAR( 254 ) ,
-						`right_right4` VARCHAR( 254 ) ,
-						`right_right5` VARCHAR( 254 ) ,
-						PRIMARY KEY ( `right_id` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		// Modul table ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_module...\n";
+		
+		$arrFields = array();
+		$arrFields["module_id"] 			    = array("char20", false);
+		$arrFields["module_nr"]					= array("int", false);
+		$arrFields["module_name"] 				= array("char254", false);
+		$arrFields["module_filenameportal"] 	= array("char254", true);
+		$arrFields["module_xmlfilenameportal"] 	= array("char254", true);
+		$arrFields["module_filenameadmin"] 		= array("char254", true);
+		$arrFields["module_xmlfilenameadmin"] 	= array("char254", true);
+		$arrFields["module_version"] 			= array("char254", true);
+		$arrFields["module_date"] 				= array("int", true);
+		$arrFields["module_navigation"] 		= array("int", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."system_module` (
-						`module_id` VARCHAR( 41 ) NOT NULL ,
-						`module_nr` SMALLINT( 3 ) NOT NULL ,
-						`module_name` VARCHAR( 100 ) NOT NULL ,
-						`module_filenameportal` VARCHAR( 254 ) ,
-						`module_xmlfilenameportal` VARCHAR( 254 ) ,
-						`module_filenameadmin` VARCHAR( 254 ) ,
-						`module_xmlfilenameadmin` VARCHAR( 254 ) ,
-						`module_version` VARCHAR( 50 ) ,
-						`module_date` INT ,
-						`module_navigation` INT( 1 ) NOT NULL ,
-						PRIMARY KEY ( `module_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("system_module", $arrFields, array("module_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		// Date table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_date...\n";
-
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."system_date` (
-						`system_date_id` VARCHAR( 41 ) NOT NULL ,
-						`system_date_start` INT,
-						`system_date_end` INT,
-						`system_date_special` INT,
-						PRIMARY KEY ( `system_date_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["system_date_id"] 		= array("char20", false);
+		$arrFields["system_date_start"]		= array("int", true);
+		$arrFields["system_date_end"] 		= array("int", true);
+		$arrFields["system_date_special"] 	= array("int", true);
+		
+		if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		// Config table ---------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_config...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."system_config` (
-						`system_config_id` VARCHAR( 20 ) NOT NULL ,
-						`system_config_name` VARCHAR( 255 ),
-						`system_config_value` VARCHAR( 255 ),
-						`system_config_type` INT,
-						`system_config_module` INT,
-						PRIMARY KEY ( `system_config_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["system_config_id"] 		= array("char20", false);
+		$arrFields["system_config_name"]	= array("char254", true);
+		$arrFields["system_config_value"] 	= array("char254", true);
+		$arrFields["system_config_type"] 	= array("int", true);
+		$arrFields["system_config_module"] 	= array("int", true);
+		
+		if(!$this->objDB->createTable("system_config", $arrFields, array("system_config_id")))
 			$strReturn .= "An error occured! ...\n";
-
 
 
 		// User table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table user...\n";
+		
+		$arrFields = array();
+		$arrFields["user_id"] 			= array("char20", false);
+		$arrFields["user_username"]		= array("char254", true);
+		$arrFields["user_pass"] 		= array("char254", true);
+		$arrFields["user_email"] 		= array("char254", true);
+		$arrFields["user_forename"] 	= array("char254", true);
+		$arrFields["user_name"] 		= array("char254", true);
+		$arrFields["user_street"] 		= array("char254", true);
+		$arrFields["user_postal"] 		= array("char254", true);
+		$arrFields["user_city"] 		= array("char254", true);
+		$arrFields["user_tel"] 			= array("char254", true);
+		$arrFields["user_mobile"] 		= array("char254", true);
+		$arrFields["user_date"] 		= array("char254", true);
+		$arrFields["user_logins"] 		= array("int", true);
+		$arrFields["user_lastlogin"] 	= array("int", true);
+		$arrFields["user_active"] 		= array("int", true);
+		$arrFields["user_admin"] 		= array("int", true);
+		$arrFields["user_portal"] 		= array("int", true);
+		$arrFields["user_admin_skin"] 	= array("char254", true);
+		$arrFields["user_admin_language"]=array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."user` (
-					`user_id` VARCHAR( 41 ) NOT NULL ,
-					`user_username` VARCHAR( 254 ) NOT NULL ,
-					`user_pass` VARCHAR( 254 ) NOT NULL ,
-					`user_email` VARCHAR( 254 ) ,
-					`user_forename` VARCHAR( 254 ) ,
-					`user_name` VARCHAR( 254 ) ,
-					`user_street` VARCHAR( 254 ) ,
-					`user_postal` VARCHAR( 254 ) ,
-					`user_city` VARCHAR( 254 ) ,
-					`user_tel` VARCHAR( 254 ) ,
-					`user_mobile` VARCHAR( 254 ) ,
-					`user_date` VARCHAR( 254 ) ,
-					`user_logins` INT,
-					`user_lastlogin` INT,
-					`user_active` SMALLINT( 2 ) ,
-					`user_admin` SMALLINT( 2 ) ,
-					`user_portal` SMALLINT( 2 ) ,
-					`user_admin_skin` VARCHAR( 255 ) ,
-					`user_admin_language` VARCHAR( 255 ) ,
-					PRIMARY KEY ( `user_id` )
-					) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		// User group table -----------------------------------------------------------------------------
 		$strReturn .= "Installing table user_group...\n";
+		
+		$arrFields = array();
+		$arrFields["group_id"] 			= array("char20", false);
+		$arrFields["group_name"]		= array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."user_group` (
-						`group_id` VARCHAR( 41 ) NOT NULL ,
-						`group_name` VARCHAR( 254 ) NOT NULL ,
-						PRIMARY KEY ( `group_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		// User group_members table ---------------------------------------------------------------------
 		$strReturn .= "Installing table user_group_members...\n";
+		
+		$arrFields = array();
+		$arrFields["group_member_group_id"] 	= array("char20", false);
+		$arrFields["group_member_user_id"]		= array("char20", false);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."user_group_members` (
-						`group_member_group_id` VARCHAR( 41 ) NOT NULL ,
-						`group_member_user_id` VARCHAR( 41 ) NOT NULL ,
-						PRIMARY KEY ( `group_member_group_id` , `group_member_user_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("user_group_members", $arrFields, array("group_member_group_id", "group_member_user_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		// User log table -------------------------------------------------------------------------------
 		$strReturn .= "Installing table user_log...\n";
+		
+		$arrFields = array();
+		$arrFields["user_log_id"] 		= array("char20", false);
+		$arrFields["user_log_userid"]	= array("char254", true);
+		$arrFields["user_log_date"] 	= array("int", true);
+		$arrFields["user_log_status"] 	= array("int", true);
+		$arrFields["user_log_ip"] 		= array("char20", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."user_log` (
-						`user_log_id` VARCHAR( 41 ) NOT NULL ,
-						`user_log_userid` VARCHAR( 41 ) NOT NULL ,
-						`user_log_date` INT NOT NULL ,
-						`user_log_status` SMALLINT( 2 ) NOT NULL ,
-						`user_log_ip` VARCHAR( 20 ) NOT NULL ,
-						PRIMARY KEY ( `user_log_id` )
-						) ";
-
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Filemanager -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table filemanager...\n";
-
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."filemanager` (
-                        `filemanager_id` VARCHAR( 20 ) NOT NULL ,
-                        `filemanager_path` VARCHAR( 255 ) ,
-                        `filemanager_name` VARCHAR( 255 ) ,
-                        `filemanager_upload_filter` VARCHAR( 255 ) ,
-                        `filemanager_view_filter` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `filemanager_id` )
-                        ) ";
 		
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["filemanager_id"] 			= array("char20", false);
+		$arrFields["filemanager_path"]			= array("char254", true);
+		$arrFields["filemanager_name"] 			= array("char254", true);
+		$arrFields["filemanager_upload_filter"] = array("char254", true);
+		$arrFields["filemanager_view_filter"] 	= array("char254", true);
+
+		if(!$this->objDB->createTable("filemanager", $arrFields, array("filemanager_id")))
 			$strReturn .= "An error occured! ...\n";
 
         //dashboard & widgets ---------------------------------------------------------------------------			
-		$strReturn .= "Installing table adminwidget...\n";
-		
-		$strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
-                        `dashboard_id` VARCHAR( 20 ) NULL ,
-                        `dashboard_column` VARCHAR( 255 ) NULL ,
-                        `dashboard_user` VARCHAR( 20 ) NULL ,
-                        `dashboard_widgetid` VARCHAR( 20 ) NULL ,
-                        PRIMARY KEY ( `dashboard_id` )
-                        ) ";
-		
-		if(!$this->objDB->createTable($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
 		$strReturn .= "Installing table dashboard...\n";
 		
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
-                        `adminwidget_id` VARCHAR( 20 ) NULL ,
-                        `adminwidget_class` VARCHAR( 255 ) NULL ,
-                        `adminwidget_content` TEXT NULL ,
-                        PRIMARY KEY ( `adminwidget_id` )
-                        )";
+		$arrFields = array();
+		$arrFields["dashboard_id"] 			= array("char20", false);
+		$arrFields["dashboard_column"]		= array("char254", true);
+		$arrFields["dashboard_user"] 		= array("char20", true);
+		$arrFields["dashboard_widgetid"] 	= array("char20", true);
 		
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
+			$strReturn .= "An error occured! ...\n";
+
+		$strReturn .= "Installing table adminwidget...\n";
+		
+		$arrFields = array();
+		$arrFields["adminwidget_id"] 		= array("char20", false);
+		$arrFields["adminwidget_class"]		= array("char254", true);
+		$arrFields["adminwidget_content"] 	= array("text", true);
+		
+		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
 			$strReturn .= "An error occured! ...\n";
 			
 			
@@ -609,27 +575,28 @@ class class_installer_system extends class_installer_base implements interface_i
 	        $strReturn .= "An error occured!\n";
 	        
 	        
-	    $strReturn .= "Installing table adminwidget...\n";
-        $strQuery = "CREATE TABLE IF NOT EXISTS`"._dbprefix_."dashboard` (
-                        `dashboard_id` VARCHAR( 20 ) NULL ,
-                        `dashboard_column` VARCHAR( 255 ) NULL ,
-                        `dashboard_user` VARCHAR( 20 ) NULL ,
-                        `dashboard_widgetid` VARCHAR( 20 ) NULL ,
-                        PRIMARY KEY ( `dashboard_id` )
-                        ) ";
-        
-        if(!$this->objDB->createTable($strQuery))
-            $strReturn .= "An error occured! ...\n";
+	    //dashboard & widgets ---------------------------------------------------------------------------			
+		$strReturn .= "Installing table dashboard...\n";
+		
+		$arrFields = array();
+		$arrFields["dashboard_id"] 			= array("char20", false);
+		$arrFields["dashboard_column"]		= array("char254", true);
+		$arrFields["dashboard_user"] 		= array("char20", true);
+		$arrFields["dashboard_widgetid"] 	= array("char20", true);
+		
+		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
+			$strReturn .= "An error occured! ...\n";
 
-        $strReturn .= "Installing table dashboard...\n";
-        $strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."adminwidget` (
-                        `adminwidget_id` VARCHAR( 20 ) NULL ,
-                        `adminwidget_class` VARCHAR( 255 ) NULL ,
-                        `adminwidget_content` TEXT NULL ,
-                        PRIMARY KEY ( `adminwidget_id` )
-                        )";
-        if(!$this->objDB->createTable($strQuery))
-            $strReturn .= "An error occured! ...\n";
+		$strReturn .= "Installing table adminwidget...\n";
+		
+		$arrFields = array();
+		$arrFields["adminwidget_id"] 		= array("char20", false);
+		$arrFields["adminwidget_class"]		= array("char254", true);
+		$arrFields["adminwidget_content"] 	= array("text", true);
+		
+		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
+			$strReturn .= "An error occured! ...\n";    
+	        
 
         $strReturn .= "Registering new module dashboard...\n";
         $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");

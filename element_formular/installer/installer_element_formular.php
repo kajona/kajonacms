@@ -70,16 +70,15 @@ class class_installer_element_formular extends class_installer_base implements i
 
 		//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_formular` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `formular_class` VARCHAR( 255 ) ,
-                        `formular_email` VARCHAR( 255 ) ,
-                        `formular_success` TEXT,
-                        `formular_error` TEXT,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 		= array("char20", false);
+		$arrFields["formular_class"] 	= array("char254", true);
+		$arrFields["formular_email"] 	= array("char254", true);
+		$arrFields["formular_success"] 	= array("text", true);
+		$arrFields["formular_error"] 	= array("text", true);
+		
+		if(!$this->objDB->createTable("element_formular", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

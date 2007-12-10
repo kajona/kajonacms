@@ -96,13 +96,26 @@ interface interface_db_driver {
     /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
-     * add db-specific commands
+     * add db-specific commands.
+     * The array of fields should have the following structure
+     * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
+     * whereas datatype is one of the following:
+     * 		int
+     * 		double
+     * 		char10
+     * 		char20
+     * 		char100
+     * 		char254
+     * 		text 
      *
-     * @param string $strQuery
+     * @param string $strName
+     * @param array $arrFields array of fields / columns
+     * @param array $arrKeys array of primary keys
+     * @param array $arrIndices array of additional indices
      * @param bool $bitTxSafe Should the table support transactions?
      * @return bool
      */
-    public function createTable($strQuery, $bitTxSafe = true);
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true);
 
 
     /**

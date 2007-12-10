@@ -98,7 +98,7 @@ class class_db {
 	/**
 	 * Method to get an instance of the db-class
 	 *
-	 * @return unknown
+	 * @return class_db
 	 */
 	public static function getInstance() {
 		if(self::$objDB == null) {
@@ -155,7 +155,7 @@ class class_db {
 	 * @param string $strQuery
 	 * @param int $intNr
 	 * @param bool $bitCache
-	 * @return mixed
+	 * @return array
 	 */
 	public function getRow($strQuery, $intNr = 0, $bitCache = true) {
 			$arrTemp = $this->getArray($strQuery, $bitCache);
@@ -171,7 +171,7 @@ class class_db {
 	 *
 	 * @param string $strQuery
 	 * @param bool $bitCache
-	 * @return mixed
+	 * @return array
 	 */
 	public function getArray($strQuery, $bitCache = true) {
 		$strQuery = $this->processQuery($strQuery);
@@ -435,16 +435,33 @@ class class_db {
     }
 
 	/**
-     * Used to send a create table statement to the database-driver
+     * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
-     * add db-specific commands
+     * add db-specific commands.
+     * The array of fields should have the following structure
+     * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
+     * whereas datatype is one of the following:
+     * 		int
+     * 		double
+     * 		char10
+     * 		char20
+     * 		char100
+     * 		char254
+     * 		text
      *
-     * @param string $strQuery
-     * @param bool $bitTxSafe
+     * @param string $strName
+     * @param array $arrFields array of fields / columns
+     * @param array $arrKeys array of primary keys
+     * @param array $arrIndices array of additional indices
+     * @param bool $bitTxSafe Should the table support transactions?
      * @return bool
      */
-    public function createTable($strQuery, $bitTxSafe = true) {
-        return $this->objDbDriver->createTable($strQuery, $bitTxSafe);
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+        $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
+        if(!$bitReturn)
+        	$this->getError($strQuery);
+        	
+        return $bitReturn;	
     }
 
 	/**

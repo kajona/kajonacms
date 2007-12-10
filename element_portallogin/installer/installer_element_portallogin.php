@@ -72,16 +72,15 @@ class class_installer_element_portallogin extends class_installer_base implement
 
        	//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_portallogin` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `portallogin_template` VARCHAR( 255 ) NULL ,
-                        `portallogin_error` VARCHAR( 255 ) NULL ,
-                        `portallogin_success` VARCHAR( 255 ) NULL ,
-                        `portallogin_logout_success` VARCHAR( 255 ) NULL ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 				= array("char20", false);
+		$arrFields["portallogin_template"] 		= array("char254", true);
+		$arrFields["portallogin_error"] 		= array("char254", true);
+		$arrFields["portallogin_success"] 		= array("char254", true);
+		$arrFields["portallogin_logout_success"]= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_portallogin", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

@@ -62,40 +62,34 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 		//faqs cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_category...\n";
+		
+		$arrFields = array();
+		$arrFields["faqs_cat_id"] 		= array("char20", false);
+		$arrFields["faqs_cat_title"]	= array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."faqs_category` (
-                        `faqs_cat_id` VARCHAR( 20 ) NOT NULL ,
-                        `faqs_cat_title` VARCHAR( 255 ) ,
-                         PRIMARY KEY ( `faqs_cat_id` )
-                    ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("faqs_category", $arrFields, array("faqs_cat_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//faqs----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."faqs` (
-                        `faqs_id` VARCHAR( 20 ) NOT NULL ,
-                        `faqs_question` TEXT ,
-                        `faqs_answer` TEXT ,
-                        PRIMARY KEY ( `faqs_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["faqs_id"] 		= array("char20", false);
+		$arrFields["faqs_question"]	= array("text", true);
+		$arrFields["faqs_answer"]	= array("text", true);
+		
+		if(!$this->objDB->createTable("faqs", $arrFields, array("faqs_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//faqs_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_member...\n";
+		
+		$arrFields = array();
+		$arrFields["faqsmem_id"] 		= array("char20", false);
+		$arrFields["faqsmem_faq"]		= array("char20", false);
+		$arrFields["faqsmem_category"]	= array("char20", false);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."faqs_member` (
-                        `faqsmem_id` VARCHAR( 20 ) NOT NULL ,
-                        `faqsmem_faq` VARCHAR( 20 ) NOT NULL ,
-                        `faqsmem_category` VARCHAR( 20 ) NOT NULL ,
-                        PRIMARY KEY ( `faqsmem_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("faqs_member", $arrFields, array("faqsmem_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -116,13 +110,13 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 		//Table for page-element
 		$strReturn .= "Installing faqs-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_faqs` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `faqs_category` VARCHAR( 20 ) ,
-                        `faqs_template` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 	= array("char20", false);
+		$arrFields["faqs_category"]	= array("char20", true);
+		$arrFields["faqs_template"]	= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_faqs", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

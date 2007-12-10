@@ -90,82 +90,72 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Pages -----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages...\n";
+		
+		$arrFields = array();
+		$arrFields["page_id"] 		= array("char20", false);
+		$arrFields["page_name"] 	= array("char254", true);
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."page` (
-						`page_id` VARCHAR( 41 ) NOT NULL ,
-						`page_name` VARCHAR( 254 ) ,
-						PRIMARY KEY ( `page_id` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("page", $arrFields, array("page_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Pages_properties ------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages_properties...\n";
+		
+		$arrFields = array();
+		$arrFields["pageproperties_id"] 		= array("char20", false);
+		$arrFields["pageproperties_browsername"]= array("char254", true);
+		$arrFields["pageproperties_keywords"] 	= array("char254", true);
+		$arrFields["pageproperties_description"]= array("char254", true);
+		$arrFields["pageproperties_template"] 	= array("char254", true);
+		$arrFields["pageproperties_seostring"] 	= array("char254", true);
+		$arrFields["pageproperties_language"] 	= array("char20", true);
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."page_properties` (
-						`pageproperties_id` VARCHAR( 41 ) NOT NULL ,
-						`pageproperties_browsername` VARCHAR( 255 ) ,
-						`pageproperties_keywords` VARCHAR( 254 ) ,
-						`pageproperties_description` VARCHAR( 254 ) ,
-						`pageproperties_template` VARCHAR( 120 ) ,
-						`pageproperties_seostring` VARCHAR( 255 ) ,
-						`pageproperties_language` VARCHAR( 100 ) ,
-						PRIMARY KEY ( `pageproperties_id`, `pageproperties_language` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
 
 		//elementtable-----------------------------------------------------------------------------------
 		$strReturn .= "Installing table element...\n";
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."element` (
-						`element_id` VARCHAR( 41 ) NOT NULL ,
-						`element_name` VARCHAR( 180 ) ,
-						`element_class_portal` VARCHAR( 120 )  ,
-						`element_class_admin` VARCHAR( 120 ) ,
-						`element_repeat` SMALLINT( 2 ) ,
-						`element_cachetime` INT DEFAULT '-1' NOT NULL,
-						PRIMARY KEY ( `element_id` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["element_id"] 			= array("char20", false);
+		$arrFields["element_name"]			= array("char254", true);
+		$arrFields["element_class_portal"] 	= array("char254", true);
+		$arrFields["element_class_admin"]	= array("char254", true);
+		$arrFields["element_repeat"] 		= array("int", true);
+		$arrFields["element_cachetime"] 	= array("int", false, "-1");
+		
+		if(!$this->objDB->createTable("element", $arrFields, array("element_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		//pageelementtable-------------------------------------------------------------------------------
 		$strReturn .= "Installing table page_element...\n";
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."page_element` (
-						`page_element_id` VARCHAR( 41 ) NOT NULL ,
-						`page_element_placeholder_placeholder` VARCHAR( 250 ) ,
-						`page_element_placeholder_name` VARCHAR( 250 ) ,
-						`page_element_placeholder_element` VARCHAR( 250 ) ,
-						`page_element_placeholder_title` VARCHAR( 250 ) ,
-						`page_element_placeholder_language` VARCHAR( 100 ) ,
-						PRIMARY KEY ( `page_element_id` )
-						) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["page_element_id"] 					= array("char20", false);
+		$arrFields["page_element_placeholder_placeholder"]=array("char254", true);
+		$arrFields["page_element_placeholder_name"] 	= array("char254", true);
+		$arrFields["page_element_placeholder_element"]	= array("char254", true);
+		$arrFields["page_element_placeholder_title"] 	= array("char254", true);
+		$arrFields["page_element_placeholder_language"] = array("char20", true);
+		
+		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		//page_cache_table-------------------------------------------------------------------------------
 		$strReturn .= "Installing table page_cache...\n";
 
-		$strQuery = "CREATE TABLE `"._dbprefix_."page_cache` (
-                        `page_cache_id` VARCHAR( 20 ) NOT NULL ,
-                        `page_cache_name` VARCHAR( 255 ) ,
-                        `page_cache_checksum` VARCHAR( 100 ) ,
-                        `page_cache_createtime` INT,
-                        `page_cache_releasetime` INT,
-                        `page_cache_userid` VARCHAR( 20 ) ,
-                        `page_cache_content` TEXT,
-                        PRIMARY KEY ( `page_cache_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["page_cache_id"] 		= array("char20", false);
+		$arrFields["page_cache_name"]		= array("char254", true);
+		$arrFields["page_cache_checksum"] 	= array("char254", true);
+		$arrFields["page_cache_createtime"]	= array("int", true);
+		$arrFields["page_cache_releasetime"]= array("int", true);
+		$arrFields["page_cache_userid"] 	= array("char20", true);
+		$arrFields["page_cache_content"] 	= array("text", true);
+		
+		if(!$this->objDB->createTable("page_cache", $arrFields, array("page_cache_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Now we have to register module by module
@@ -199,16 +189,15 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Table for paragraphes
 		$strReturn .= "Installing paragraph table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_absatz` (
-					`content_id` VARCHAR( 20 ) NOT NULL ,
-					`absatz_titel` VARCHAR( 255 ) ,
-					`absatz_inhalt` TEXT,
-					`absatz_link` VARCHAR( 255 ) ,
-					`absatz_bild` VARCHAR( 255 ) ,
-					PRIMARY KEY ( `content_id` )
-					) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 	= array("char20", false);
+		$arrFields["absatz_titel"]	= array("char254", true);
+		$arrFields["absatz_inhalt"] = array("text", true);
+		$arrFields["absatz_link"]	= array("char254", true);
+		$arrFields["absatz_bild"]	= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_absatz", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -244,15 +233,14 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Table for images
 		$strReturn .= "Installing image table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_bild` (
-					  `content_id` varchar(20) NOT NULL default '',
-					  `bild_titel` varchar(255) default NULL,
-					  `bild_link` varchar(255) default NULL,
-					  `bild_bild` varchar(255) default NULL,
-					  PRIMARY KEY  (`content_id`)
-					) ";
+		
+		$arrFields = array();
+		$arrFields["content_id"] 	= array("char20", false);
+		$arrFields["bild_titel"]	= array("char254", true);
+		$arrFields["bild_link"] 	= array("char254", true);
+		$arrFields["bild_bild"]		= array("char254", true);
 
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("element_bild", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -272,18 +260,18 @@ class class_installer_pages extends class_installer_base implements interface_in
 		}
 
 		$strReturn .= "Installing universal element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_universal` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `char1` VARCHAR( 254 ) NULL ,
-                        `char2` VARCHAR( 254 ) NULL ,
-                        `char3` VARCHAR( 254 ) NULL ,
-                        `int1` INT NULL ,
-                        `int2` INT NULL ,
-                        `int3` INT NULL ,
-                        `text` TEXT NULL ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"]= array("char20", false);
+		$arrFields["char1"]		= array("char254", true);
+		$arrFields["char2"] 	= array("char254", true);
+		$arrFields["char3"]		= array("char254", true);
+		$arrFields["int1"]		= array("int", true);
+		$arrFields["int2"]		= array("int", true);
+		$arrFields["int3"]		= array("int", true);
+		$arrFields["text"]		= array("text", true);
+		
+		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		return $strReturn;
@@ -343,12 +331,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Creating new page-table...\n";
-        $strQuery = "CREATE TABLE `"._dbprefix_."page` (
-						`page_id` VARCHAR( 41 ) NOT NULL ,
-						`page_name` VARCHAR( 254 ) ,
-						PRIMARY KEY ( `page_id` )
-						) ";
-		if(!$this->objDB->createTable($strQuery))
+        $arrFields = array();
+		$arrFields["page_id"] 		= array("char20", false);
+		$arrFields["page_name"] 	= array("char254", true);
+
+		if(!$this->objDB->createTable("pages", $arrFields, array("page_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Resorting existing pages...\n";
@@ -441,18 +428,17 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	    $strReturn .= "Creating universal element-table...\n";
 
-	    $strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_universal` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `char1` VARCHAR( 254 ) NULL ,
-                        `char2` VARCHAR( 254 ) NULL ,
-                        `char3` VARCHAR( 254 ) NULL ,
-                        `int1` INT NULL ,
-                        `int2` INT NULL ,
-                        `int3` INT NULL ,
-                        `text` TEXT NULL ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["content_id"]= array("char20", false);
+		$arrFields["char1"]		= array("char254", true);
+		$arrFields["char2"] 	= array("char254", true);
+		$arrFields["char3"]		= array("char254", true);
+		$arrFields["int1"]		= array("int", true);
+		$arrFields["int2"]		= array("int", true);
+		$arrFields["int3"]		= array("int", true);
+		$arrFields["text"]		= array("text", true);
+		
+		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";

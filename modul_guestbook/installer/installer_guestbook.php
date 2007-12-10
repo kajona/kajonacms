@@ -66,30 +66,26 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		//guestbook-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_book...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."guestbook_book` (
-                          `guestbook_id` varchar(20) NOT NULL default '',
-                          `guestbook_title` varchar(255) default NULL,
-                          `guestbook_moderated` smallint(2) default NULL,
-                          PRIMARY KEY  (`guestbook_id`)
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["guestbook_id"] 		  = array("char20", false);
+		$arrFields["guestbook_title"] 	  = array("char254", true);
+		$arrFields["guestbook_moderated"] = array("int", true);
+		
+		if(!$this->objDB->createTable("guestbook_book", $arrFields, array("guestbook_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//guestbook_post----------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_post...\n";
+		
+		$arrFields = array();
+		$arrFields["guestbook_post_id"]   = array("char20", false);
+		$arrFields["guestbook_post_name"] = array("char254", true);
+		$arrFields["guestbook_post_email"]= array("char254", true);
+		$arrFields["guestbook_post_page"] = array("char254", false);
+		$arrFields["guestbook_post_text"] = array("text", true);
+		$arrFields["guestbook_post_date"] = array("int", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."guestbook_post` (
-                        `guestbook_post_id` VARCHAR( 20 ) NOT NULL ,
-                        `guestbook_post_name` VARCHAR( 255 ) ,
-                        `guestbook_post_email` VARCHAR( 255 ) ,
-                        `guestbook_post_page` VARCHAR( 255 ) ,
-                        `guestbook_post_text` TEXT,
-                        `guestbook_post_date` INT( 40 ) ,
-                          PRIMARY KEY  (`guestbook_post_id`)
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("guestbook_post", $arrFields, array("guestbook_post_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -108,14 +104,14 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 		//Table for page-element
 		$strReturn .= "Installing guestbook-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_guestbook` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `guestbook_id` VARCHAR( 20 ) ,
-                        `guestbook_template` VARCHAR( 255 ) ,
-                        `guestbook_amount` INT,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"]   		= array("char20", false);
+		$arrFields["guestbook_id"] 		= array("char20", true);
+		$arrFields["guestbook_template"]= array("char254", true);
+		$arrFields["guestbook_amount"] 	= array("int", false);
+		
+		if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

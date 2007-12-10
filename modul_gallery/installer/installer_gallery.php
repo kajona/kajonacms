@@ -66,33 +66,29 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 		//gallery ---------------------------------------------------------------------------------------
 		$strReturn .= "Installing table gallery_gallery...\n";
+		
+		$arrFields = array();
+		$arrFields["gallery_id"] 	= array("char20", false);
+		$arrFields["gallery_path"] 	= array("char254", true);
+		$arrFields["gallery_title"] = array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."gallery_gallery` (
-                        `gallery_id` VARCHAR( 20 ) NOT NULL ,
-                        `gallery_path` VARCHAR( 255 ) ,
-                        `gallery_title` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `gallery_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("gallery_gallery", $arrFields, array("gallery_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//gallery_pic -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table gallery_pic...\n";
+		
+		$arrFields = array();
+		$arrFields["pic_id"] 			= array("char20", false);
+		$arrFields["pic_name"] 			= array("char254", true);
+		$arrFields["pic_filename"] 		= array("char254", true);
+		$arrFields["pic_description"] 	= array("text", true);
+		$arrFields["pic_subtitle"] 		= array("char254", true);
+		$arrFields["pic_size"] 			= array("int", true);
+		$arrFields["pic_hits"] 			= array("int", true);
+		$arrFields["pic_type"] 			= array("int", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."gallery_pic` (
-                        `pic_id` VARCHAR( 20 ) NOT NULL ,
-                        `pic_name` VARCHAR( 255 ) ,
-                        `pic_filename` VARCHAR( 255 ) ,
-                        `pic_description` TEXT ,
-                        `pic_subtitle` VARCHAR( 255 ) ,
-                        `pic_size` INT,
-                        `pic_hits` INT,
-                        `pic_type` INT( 2 ) ,
-                        PRIMARY KEY ( `pic_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("gallery_pic", $arrFields, array("pic_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -113,26 +109,25 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 		//Table for page-element
 		$strReturn .= "Installing gallery-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_gallery` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `gallery_id` VARCHAR( 20 ) ,
-                        `gallery_mode` INT ,
-                        `gallery_template` VARCHAR( 255 ) ,
-                        `gallery_maxh_p` INT,
-                        `gallery_maxh_d` INT,
-                        `gallery_maxw_p` INT,
-                        `gallery_maxw_d` INT,
-                        `gallery_maxh_m` INT,
-                        `gallery_maxw_m` INT,
-                        `gallery_nrow` INT,
-                        `gallery_imagesperpage` INT,
-                        `gallery_text` VARCHAR( 255 ) ,
-                        `gallery_text_x` INT,
-                        `gallery_text_y` INT,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 			= array("char20", false);
+		$arrFields["gallery_id"] 			= array("char20", true);
+		$arrFields["gallery_mode"] 			= array("int", true);
+		$arrFields["gallery_template"] 		= array("char254", true);
+		$arrFields["gallery_maxh_p"] 		= array("int", true);
+		$arrFields["gallery_maxh_d"] 		= array("int", true);
+		$arrFields["gallery_maxw_p"] 		= array("int", true);
+		$arrFields["gallery_maxw_d"] 		= array("int", true);
+		$arrFields["gallery_maxh_m"] 		= array("int", true);
+		$arrFields["gallery_maxw_m"] 		= array("int", true);
+		$arrFields["gallery_nrow"] 			= array("int", true);
+		$arrFields["gallery_imagesperpage"] = array("int", true);
+		$arrFields["gallery_text"] 			= array("char254", true);
+		$arrFields["gallery_text_x"] 		= array("int", true);
+		$arrFields["gallery_text_y"] 		= array("int", true);
+		
+		if(!$this->objDB->createTable("element_gallery", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

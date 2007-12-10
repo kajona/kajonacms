@@ -61,19 +61,17 @@ class class_installer_postacomment extends class_installer_base implements inter
 		//postacomment ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table postacomment...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."postacomment` (
-                        `postacomment_id` VARCHAR( 20 ) NOT NULL ,
-                        `postacomment_date` INT NULL ,
-                        `postacomment_page` VARCHAR( 255 ) NULL ,
-						`postacomment_language` VARCHAR( 5 ) NULL ,
-                        `postacomment_systemid` VARCHAR( 20 ) NULL ,
-                        `postacomment_username` VARCHAR( 255 ) NULL ,
-                        `postacomment_title` VARCHAR( 255 ) NULL ,
-                        `postacomment_comment` TEXT NULL ,
-                        PRIMARY KEY ( `postacomment_id` )
-                    ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["postacomment_id"] 		= array("char20", false);
+		$arrFields["postacomment_date"] 	= array("int", true);
+		$arrFields["postacomment_page"] 	= array("char254", true);
+		$arrFields["postacomment_language"] = array("char20", true);
+		$arrFields["postacomment_systemid"] = array("char20", true);
+		$arrFields["postacomment_username"] = array("char254", true);
+		$arrFields["postacomment_title"] 	= array("char254", true);
+		$arrFields["postacomment_comment"] 	= array("text", true);
+		
+		if(!$this->objDB->createTable("postacomment", $arrFields, array("postacomment_id")))
 			$strReturn .= "An error occured! ...\n";
 
 

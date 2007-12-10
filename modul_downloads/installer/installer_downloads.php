@@ -61,47 +61,41 @@ class class_installer_downloads extends class_installer_base implements interfac
 		//downloads_file-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table downloads_file...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."downloads_file` (
-                            `downloads_id` VARCHAR( 20 ) NOT NULL ,
-                            `downloads_name` VARCHAR( 255 ) ,
-                            `downloads_filename` VARCHAR( 255 ) ,
-                            `downloads_description` TEXT,
-                            `downloads_size` INT,
-                            `downloads_hits` INT,
-                            `downloads_type` INT( 2 ) ,
-                            `downloads_max_kb` INT,
-                            PRIMARY KEY ( `downloads_id` )
-                            ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		$arrFields = array();
+		$arrFields["downloads_id"] 			= array("char20", false);
+		$arrFields["downloads_name"] 		= array("char254", true);
+		$arrFields["downloads_filename"] 	= array("char254", true);
+		$arrFields["downloads_description"] = array("text", true);
+		$arrFields["downloads_size"] 		= array("int", true);
+		$arrFields["downloads_hits"]	 	= array("int", true);
+		$arrFields["downloads_type"]	 	= array("int", true);
+		$arrFields["downloads_max_kb"] 		= array("int", true);
+		
+		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//downloads_log----------------------------------------------------------------------------------
 		$strReturn .= "Installing table downloads_log...\n";
+		
+		$arrFields = array();
+		$arrFields["downloads_log_id"] 		= array("char20", false);
+		$arrFields["downloads_log_date"] 	= array("int", true);
+		$arrFields["downloads_log_file"] 	= array("char254", true);
+		$arrFields["downloads_log_user"] 	= array("char20", true);
+		$arrFields["downloads_log_ip"] 		= array("char20", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."downloads_log` (
-                        `downloads_log_id` VARCHAR( 20 ) NOT NULL ,
-                        `downloads_log_date` INT,
-                        `downloads_log_file` VARCHAR( 255 ) ,
-                        `downloads_log_user` VARCHAR( 20 ) ,
-                        `downloads_log_ip` VARCHAR( 20 ) ,
-                        PRIMARY KEY ( `downloads_log_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("downloads_log", $arrFields, array("downloads_log_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//downloads_archive----------------------------------------------------------------------------------
 		$strReturn .= "Installing table downloads_archive...\n";
-
-		$strQuery = "CREATE TABLE `"._dbprefix_."downloads_archive` (
-                        `archive_id` VARCHAR( 20 ) NOT NULL ,
-                        `archive_path` VARCHAR( 255 ) ,
-                        `archive_title` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `archive_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["archive_id"] 		= array("char20", false);
+		$arrFields["archive_path"] 		= array("char254", true);
+		$arrFields["archive_title"] 	= array("char254", true);
+		
+		if(!$this->objDB->createTable("downloads_archive", $arrFields, array("archive_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -121,13 +115,13 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 		//Table for page-element
 		$strReturn .= "Installing downloads-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_downloads` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `download_id` VARCHAR( 20 ) ,
-                        `download_template` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 		= array("char20", false);
+		$arrFields["download_id"] 		= array("char20", true);
+		$arrFields["download_template"] = array("char254", true);
+		
+		if(!$this->objDB->createTable("element_downloads", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

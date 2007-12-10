@@ -169,19 +169,80 @@ class class_db_mysql implements interface_db_driver {
     /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
-     * add db-specific commands
+     * add db-specific commands.
+     * The array of fields should have the following structure
+     * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
+     * whereas datatype is one of the following:
+     * 		int
+     * 		double
+     * 		char10
+     * 		char20
+     * 		char100
+     * 		char254
+     * 		text
      *
-     * @param string $strQuery
-     * @param bool $bitTxSafe
+     * @param string $strName
+     * @param array $arrFields array of fields / columns
+     * @param array $arrKeys array of primary keys
+     * @param array $arrIndices array of additional indices
+     * @param bool $bitTxSafe Should the table support transactions?
      * @return bool
      */
-    public function createTable($strQuery, $bitTxSafe = true) {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+    	$strQuery = "";
+    	
+    	//build the mysql code
+    	$strQuery .= "CREATE TABLE IF NOT EXISTS `"._dbprefix_.$strName."` ( \n";
+    	
+    	//loop the fields
+    	foreach($arrFields as $strFieldName => $arrColumnSettings) {
+    		$strQuery .= " `".$strFieldName."` ";
+    		
+    		if($arrColumnSettings[0] == "int")
+    			$strQuery .= " INT ";
+    		elseif($arrColumnSettings[0] == "double")
+    			$strQuery .= " DOUBLE ";	
+    		elseif($arrColumnSettings[0] == "char10")
+    			$strQuery .= " VARCHAR( 10 ) ";	
+    		elseif($arrColumnSettings[0] == "char20")
+    			$strQuery .= " VARCHAR( 20 ) ";
+    		elseif($arrColumnSettings[0] == "char100")
+    			$strQuery .= " VARCHAR( 100 ) ";	
+    		elseif($arrColumnSettings[0] == "char254")
+    			$strQuery .= " VARCHAR( 254 ) ";
+    		elseif($arrColumnSettings[0] == "text")
+    			$strQuery .= " TEXT ";
+    		else
+    			$strQuery .= " VARCHAR( 254 ) ";
+    			
+    		//any default?	
+    		if(isset($arrColumnSettings[2]))
+    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";	
+
+    		//nullable?
+    		if($arrColumnSettings[1] === true) {
+    			$strQuery .= " NULL , \n";
+    		}
+    		else {
+    			$strQuery .= " NOT NULL , \n";
+    		}	
+    				
+    	}
+
+    	//primary keys
+    	$strQuery .= " PRIMARY KEY ( `".implode("` , `", $arrKeys)."` ) \n";
+    	
+    	if(count($arrIndices) > 0)
+    		$strQuery .= ", INDEX ( `".implode("` , `", $arrIndices)."` ) \n ";
+    	
+    	
+    	$strQuery .= ") ";
+    	
         if(!$bitTxSafe)
-            $strCreateAddon = " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
-        else
-            $strCreateAddon = " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+            $strQuery .= " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+        else    
+            $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
             
-        $strQuery = $strQuery.$strCreateAddon;
         return $this->_query($strQuery);
     }
 

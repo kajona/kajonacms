@@ -68,35 +68,31 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 		//Stats table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table stats...\n";
+		
+		$arrFields = array();
+		$arrFields["stats_id"] 		= array("char20", false);
+		$arrFields["stats_ip"] 		= array("char20", true);
+		$arrFields["stats_hostname"]= array("char254", true);
+		$arrFields["stats_date"] 	= array("int", true);
+		$arrFields["stats_page"] 	= array("char254", true);
+		$arrFields["stats_language"]= array("char10", true);
+		$arrFields["stats_referer"] = array("char254", true);
+		$arrFields["stats_browser"] = array("char254", true);
+		$arrFields["stats_session"] = array("char100", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."stats_data` (
-                        `stats_id` VARCHAR( 20 ) NOT NULL ,
-                        `stats_ip` VARCHAR( 20 ) ,
-                        `stats_hostname` VARCHAR( 255 ) ,
-                        `stats_date` INT,
-                        `stats_page` VARCHAR( 100 ) ,
-                        `stats_language` VARCHAR( 10 ) ,
-                        `stats_referer` VARCHAR( 255 ) ,
-                        `stats_browser` VARCHAR( 255 ) ,
-                        `stats_session` VARCHAR( 100 ) ,
-                        PRIMARY KEY ( `stats_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("stats_data", $arrFields, array("stats_id"), array("stats_date"), false))
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Installing table ip2country...\n";
+        
+        $arrFields = array();
+		$arrFields["ip_from"] 		= array("double", false);
+		$arrFields["ip_to"] 		= array("double", false);
+		$arrFields["country_code2"] = array("char10", false);
+		$arrFields["country_code3"] = array("char10", false);
+		$arrFields["country_name"] 	= array("char100", false);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."stats_ip2country` (
-                        `ip_from` DOUBLE NOT NULL ,
-                        `ip_to` DOUBLE NOT NULL ,
-                        `country_code2` VARCHAR( 2 ) NOT NULL ,
-                        `country_code3` VARCHAR( 3 ) NOT NULL ,
-                        `country_name` VARCHAR( 50 ) NOT NULL ,
-                        PRIMARY KEY ( `ip_from` , `ip_to` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery, false))
+		if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip_from", "ip_to"), array(), false))
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Importing ip2country data...\n"	;
@@ -236,17 +232,16 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         $strReturn .= "Installing table ip2country...\n";
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."stats_ip2country` (
-                        `ip_from` DOUBLE NOT NULL ,
-                        `ip_to` DOUBLE NOT NULL ,
-                        `country_code2` VARCHAR( 2 ) NOT NULL ,
-                        `country_code3` VARCHAR( 3 ) NOT NULL ,
-                        `country_name` VARCHAR( 50 ) NOT NULL ,
-                        PRIMARY KEY ( `ip_from` , `ip_to` )
-                        ) ";
+		$arrFields = array();
+		$arrFields["ip_from"] 		= array("double", false);
+		$arrFields["ip_to"] 		= array("double", false);
+		$arrFields["country_code2"] = array("char10", false);
+		$arrFields["country_code3"] = array("char10", false);
+		$arrFields["country_name"] 	= array("char100", false);
 
-		if(!$this->objDB->createTable($strQuery, false))
+		if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip_from", "ip_to"), array(), false))
 			$strReturn .= "An error occured! ...\n";
+
 
 		$strReturn .= "Importing ip2country data...\n"	;
 		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_1.csv");

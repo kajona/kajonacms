@@ -68,13 +68,13 @@ class class_installer_search extends class_installer_base implements interface_i
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
 		//Tabellen anlegen
 		$strReturn .= "Installing search-log table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."search_log` (
-                        `search_log_id` VARCHAR( 20 ) NOT NULL ,
-                        `search_log_date` INT ,
-                        `search_log_query` VARCHAR( 255 ),
-                        PRIMARY KEY ( `search_log_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["search_log_id"] 	= array("char20", false);
+		$arrFields["search_log_date"] 	= array("int", true);
+		$arrFields["search_log_query"] 	= array("char254", true);
+		
+		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Registering module...\n";
@@ -90,14 +90,14 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		//Table for page-element
 		$strReturn .= "Installing search-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_search` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `search_template` VARCHAR( 255 ) ,
-                        `search_amount` INT,
-                        `search_page` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 		= array("char20", false);
+		$arrFields["search_template"] 	= array("char254", true);
+		$arrFields["search_amount"] 	= array("int", true);
+		$arrFields["search_page"] 		= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_search", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -205,13 +205,13 @@ class class_installer_search extends class_installer_base implements interface_i
         
         //Tabellen anlegen
 		$strReturn .= "Installing search-log table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."search_log` (
-                        `search_log_id` VARCHAR( 20 ) NOT NULL ,
-                        `search_log_date` INT ,
-                        `search_log_query` VARCHAR( 255 ),
-                        PRIMARY KEY ( `search_log_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["search_log_id"] 	= array("char20", false);
+		$arrFields["search_log_date"] 	= array("int", true);
+		$arrFields["search_log_query"] 	= array("char254", true);
+		
+		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
 			$strReturn .= "An error occured! ...\n";
 
 

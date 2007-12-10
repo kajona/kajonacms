@@ -74,15 +74,14 @@ class class_installer_element_tellafriend extends class_installer_base implement
 
 		//Table for page-element
 		$strReturn .= "Installing tellafriend-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_tellafriend` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `tellafriend_template` VARCHAR( 255 )  NULL ,
-                        `tellafriend_error` VARCHAR( 255 )  NULL ,
-                        `tellafriend_success` VARCHAR( 255 ) NULL ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 			= array("char20", false);
+		$arrFields["tellafriend_template"] 	= array("char254", true);
+		$arrFields["tellafriend_error"] 	= array("char254", true);
+		$arrFields["tellafriend_success"] 	= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_tellafriend", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element

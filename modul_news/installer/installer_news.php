@@ -62,60 +62,53 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//news cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_category...\n";
+		
+		$arrFields = array();
+		$arrFields["news_cat_id"] 		= array("char20", false);
+		$arrFields["news_cat_title"] 	= array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."news_category` (
-                        `news_cat_id` VARCHAR( 20 ) NOT NULL ,
-                        `news_cat_title` VARCHAR( 255 ) ,
-                         PRIMARY KEY ( `news_cat_id` )
-                    ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("news_category", $arrFields, array("news_cat_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//news----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news...\n";
+		
+		$arrFields = array();
+		$arrFields["news_id"] 		= array("char20", false);
+		$arrFields["news_title"] 	= array("char254", true);
+		$arrFields["news_hits"] 	= array("int", true, "0");
+		$arrFields["news_intro"] 	= array("text", true);
+		$arrFields["news_text"] 	= array("text", true);
+		$arrFields["news_image"] 	= array("char254", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."news` (
-                        `news_id` VARCHAR( 20 ) NOT NULL ,
-                        `news_title` VARCHAR( 255 ) ,
-                        `news_hits` INT DEFAULT '0' ,
-                        `news_intro` TEXT,
-                        `news_text` TEXT,
-                        `news_image` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `news_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("news", $arrFields, array("news_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//news_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_member...\n";
+		
+		$arrFields = array();
+		$arrFields["newsmem_id"] 		= array("char20", false);
+		$arrFields["newsmem_news"]	 	= array("char20", true);
+		$arrFields["newsmem_category"]  = array("char20", true);
 
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."news_member` (
-                        `newsmem_id` VARCHAR( 20 ) NOT NULL ,
-                        `newsmem_news` VARCHAR( 20 ) NOT NULL ,
-                        `newsmem_category` VARCHAR( 20 ) NOT NULL ,
-                        PRIMARY KEY ( `newsmem_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		if(!$this->objDB->createTable("news_member", $arrFields, array("newsmem_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//news_feed--------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_feed...\n";
-		$strQuery = "CREATE TABLE `"._dbprefix_."news_feed` (
-                        `news_feed_id` VARCHAR( 20 ) NOT NULL ,
-                        `news_feed_title` VARCHAR( 255 )  ,
-                        `news_feed_urltitle` VARCHAR( 255 ) ,
-                        `news_feed_link` VARCHAR( 255 )  ,
-                        `news_feed_desc` VARCHAR( 255 )  ,
-                        `news_feed_page` VARCHAR( 255 )  ,
-                        `news_feed_cat` VARCHAR( 20 )  ,
-                        `news_feed_hits` INT  ,
-                        PRIMARY KEY ( `news_feed_id` )
-                        ) ";
-
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["news_feed_id"] 		= array("char20", false);
+		$arrFields["news_feed_title"] 	= array("char254", true);
+		$arrFields["news_feed_urltitle"]= array("char254", true);
+		$arrFields["news_feed_link"] 	= array("char254", true);
+		$arrFields["news_feed_desc"] 	= array("char254", true);
+		$arrFields["news_feed_page"] 	= array("char254", true);
+		$arrFields["news_feed_cat"] 	= array("char20", true);
+		$arrFields["news_feed_hits"] 	= array("int", true);
+		
+		if(!$this->objDB->createTable("news_feed", $arrFields, array("news_feed_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -136,16 +129,16 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//Table for page-element
 		$strReturn .= "Installing news-element table...\n";
-		$strQuery = "CREATE TABLE IF NOT EXISTS `"._dbprefix_."element_news` (
-                        `content_id` VARCHAR( 20 ) NOT NULL ,
-                        `news_category` VARCHAR( 20 ) ,
-                        `news_view` INT( 2 ) ,
-                        `news_mode` INT( 2 ) ,
-                        `news_detailspage` VARCHAR( 255 ) ,
-                        `news_template` VARCHAR( 255 ) ,
-                        PRIMARY KEY ( `content_id` )
-                        ) ";
-		if(!$this->objDB->createTable($strQuery))
+		
+		$arrFields = array();
+		$arrFields["content_id"] 		= array("char20", false);
+		$arrFields["news_category"] 	= array("char20", true);
+		$arrFields["news_view"] 		= array("int", true);
+		$arrFields["news_mode"] 		= array("int", true);
+		$arrFields["news_detailspage"] 	= array("char254", true);
+		$arrFields["news_template"] 	= array("char254", true);
+		
+		if(!$this->objDB->createTable("element_news", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
