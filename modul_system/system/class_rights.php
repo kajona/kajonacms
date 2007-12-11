@@ -599,10 +599,10 @@ class class_rights {
 
 		$strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_group_members AS member,
-						     "._dbprefix_."user as user
-						WHERE member.group_member_user_id = user.user_id
+						     "._dbprefix_."user as users
+						WHERE member.group_member_user_id = users.user_id
 							AND member.group_member_group_id = '"._admin_gruppe_id_."'
-							AND user.user_id='".dbsafeString($strUserid)."'";
+							AND users.user_id='".dbsafeString($strUserid)."'";
 		$arrRow = $this->objDb->getRow($strQuery);
 
 		if($arrRow["COUNT(*)"] == 1)

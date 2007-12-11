@@ -436,8 +436,8 @@ abstract class class_root {
 		if($strSystemid == 0)
 			$strSystemid = $this->getSystemid();
 		$strQuery = "SELECT user_username
-					FROM "._dbprefix_."system AS system,
-					"._dbprefix_."user AS user
+					FROM "._dbprefix_."system ,
+					"._dbprefix_."user
 					WHERE user_id = system_lm_user
 						AND system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
 		$arrRow = $this->objDB->getRow($strQuery);
