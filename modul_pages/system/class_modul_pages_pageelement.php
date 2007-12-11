@@ -556,6 +556,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         return $objElement->getContentTitle();
     }
     public function getStrLockId() {
+    	if($this->strLockId == "")
+    		return "0";
+    	
         return $this->strLockId;
     }
     public function getStrClassPortal() {

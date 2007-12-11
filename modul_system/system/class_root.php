@@ -376,6 +376,9 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$arrRow = $this->getSystemRecord($strSystemid);
+		if($arrRow["system_lock_id"] == "")
+			$arrRow["system_lock_id"] = "0";
+			
 		return $arrRow["system_lock_id"];
 	}
 
