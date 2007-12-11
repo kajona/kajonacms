@@ -87,7 +87,7 @@ class class_right_admin extends class_admin implements interface_admin {
 	 * @return string
 	 */
 	private function actionChange() {
-		var_dump($strUrlHistory = $this->getHistory(0));
+		
 		$strReturn = "";
 		$strSystemID = "";
 		//Determing the systemid

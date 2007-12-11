@@ -406,7 +406,7 @@ class class_db {
         				if($bitAll)
         					$arrReturn[] =  $arrTable;
         				else
-        					$arrReturn[] =  $arrTable[0];
+        					$arrReturn[] =  $arrTable["name"];
         			}
         		}
     		}
@@ -415,7 +415,7 @@ class class_db {
     		        if($bitAll)
     					$arrReturn[] =  $arrTable;
     				else
-    					$arrReturn[] =  $arrTable[0];
+    					$arrReturn[] =  $arrTable["name"];
     		    }
     		}
 		}

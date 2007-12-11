@@ -29,7 +29,7 @@ class class_db_postgres implements interface_db_driver {
     private $strDbName = "";
     private $intPort = "";
     private $strDumpBin = "pg_dump";              //Binary to dump db (if not in path, add the path here)
-    private $strRestoreBin = "postgres";          //Binary to dump db (if not in path, add the path here)
+    private $strRestoreBin = "psql";          //Binary to dump db (if not in path, add the path here)
 
    /**
      * This method makes sure to connect to the database properly
@@ -321,16 +321,18 @@ class class_db_postgres implements interface_db_driver {
      * @param array $arrTables
      */
     public function dbExport($strFilename, $arrTables) {
-    	/** TODO **/
+    	/** TODO include drop tables **/
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(" ", $arrTables);
         $strParamPass = "";
 
+        /*
         if ($this->strPass != "") {
         	$strParamPass = " -p".$this->strPass;
         }
+		*/
 
-        $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
+        $strCommand = $this->strDumpBin." -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." > \"".$strFilename."\"";
 		//Now do a systemfork
 		$intTemp = "";
 		$strResult = system($strCommand, $intTemp);
@@ -347,12 +349,12 @@ class class_db_postgres implements interface_db_driver {
     	/** TODO **/
         $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
-
+		/*
         if ($this->strPass != "") {
             $strParamPass = " -p".$this->strPass;
         }
-
-        $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+		*/
+        $strCommand = $this->strRestoreBin." -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
 	    return $intTemp == 0;
