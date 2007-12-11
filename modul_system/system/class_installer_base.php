@@ -298,17 +298,21 @@ abstract class class_installer_base extends class_root {
 
 		$strSystemid = $this->createSystemRecord($strPrevId, "Module ".$strName." System Knot", true, $intModuleNr);
 
-		$strQuery = "INSERT INTO "._dbprefix_."system_module SET
-						module_id = '".$this->objDB->dbsafeString($strSystemid)."',
-						module_name = '".$this->objDB->dbsafeString($strName)."',
-						module_nr = ".(int)$intModuleNr.",
-						module_filenameportal = '".$this->objDB->dbsafeString($strFilePortal)."',
-						module_xmlfilenameportal = '".$this->objDB->dbsafeString($strXmlPortal)."',
-						module_filenameadmin = '".$this->objDB->dbsafeString($strFileAdmin)."',
-						module_xmlfilenameadmin = '".$this->objDB->dbsafeString($strXmlAdmin)."',
-						module_version = '".$this->objDB->dbsafeString($strVersion)."',
-						module_date = ".(int)time().",
-						module_navigation = ".( $bitNavi ? 1 : 0)."";
+		$strQuery = "INSERT INTO "._dbprefix_."system_module 
+						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin, 
+						module_xmlfilenameadmin, module_version ,module_date, module_navigation) 
+					VALUES (
+						'".$this->objDB->dbsafeString($strSystemid)."',
+						'".$this->objDB->dbsafeString($strName)."',
+						".(int)$intModuleNr.",
+						'".$this->objDB->dbsafeString($strFilePortal)."',
+						'".$this->objDB->dbsafeString($strXmlPortal)."',
+						'".$this->objDB->dbsafeString($strFileAdmin)."',
+						'".$this->objDB->dbsafeString($strXmlAdmin)."',
+						'".$this->objDB->dbsafeString($strVersion)."',
+						".(int)time().",
+						".( $bitNavi ? 1 : 0)."
+					 )";
 		$this->objDB->_query($strQuery);
 
 		class_logger::getInstance()->addLogRow("New module registered: ".$strSystemid. "(".$strName.")", class_logger::$levelInfo);

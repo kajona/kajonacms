@@ -230,7 +230,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		//build the new insert
 		$strQuery = "INSERT INTO ".$strElementTable." ( ";
 		foreach ($arrColumns as $arrOneColumn)
-            $strQuery .= " `".$arrOneColumn["columnName"]."`,";
+            $strQuery .= " ".$this->objDB->encloseColumnName($arrOneColumn["columnName"]).",";
 
         //remove last comma    
         $strQuery = uniSubstr($strQuery, 0, -1);

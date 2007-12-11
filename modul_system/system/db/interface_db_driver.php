@@ -165,6 +165,15 @@ interface interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename);
+    
+    /**
+     * Allows the db-driver to add database-specific surrounding to column-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColum
+     * @return string
+     */
+    public function encloseColumnName($strColumn);
 }
 
 

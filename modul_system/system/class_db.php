@@ -402,7 +402,7 @@ class class_db {
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
         		foreach($arrTemp as $arrTable) {
-        			if(uniStrpos($arrTable["Name"], _dbprefix_) !== false) {
+        			if(uniStrpos($arrTable["name"], _dbprefix_) !== false) {
         				if($bitAll)
         					$arrReturn[] =  $arrTable;
         				else
@@ -626,6 +626,18 @@ class class_db {
 	public function flushQueryCache() {
 	    $this->arrQueryCache = array();
 	}
+	
+	
+	/**
+     * Allows the db-driver to add database-specific surrounding to column-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColumn
+     * @return string
+     */
+    public function encloseColumnName($strColumn) {
+    	return $this->objDbDriver->encloseColumnName($strColumn);
+    }
 
 } //class_db
 ?>

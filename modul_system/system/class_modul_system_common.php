@@ -171,13 +171,13 @@ class class_modul_system_common extends class_model implements interface_model  
         (system_id, system_prev_id, system_module_nr, system_sort, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES 
         	('".dbsafeString($strNewSystemid)."', 
         	'".dbsafeString($strNewSystemPrevId)."', 
-        	'".dbsafeString($arrSystemRow["system_module_nr"])."',
-        	'".dbsafeString($arrSystemRow["system_sort"])."',
+        	".dbsafeString($arrSystemRow["system_module_nr"]).",
+        	".(dbsafeString($arrSystemRow["system_sort"]) != "" ? dbsafeString($arrSystemRow["system_sort"]) : 0 ).",
         	'".dbsafeString($arrSystemRow["system_lm_user"])."',
-        	'".dbsafeString($arrSystemRow["system_lm_time"])."',
+        	".dbsafeString($arrSystemRow["system_lm_time"]).",
         	'".dbsafeString($arrSystemRow["system_lock_id"])."',
-        	'".dbsafeString($arrSystemRow["system_lock_time"])."',
-        	'".dbsafeString($arrSystemRow["system_status"])."',
+        	".(dbsafeString($arrSystemRow["system_lock_time"]) != "" ? dbsafeString($arrSystemRow["system_lock_time"]) : 0).",
+        	".dbsafeString($arrSystemRow["system_status"]).",
         	'".dbsafeString($arrSystemRow["system_comment"])."')"; 
         
         if($this->objDB->_query($strQuerySystem)) {

@@ -146,6 +146,9 @@ class class_db_mysqli implements interface_db_driver {
      */
     public function getTables() {
 		$arrTemp = $this->getArray("SHOW TABLE STATUS", false);
+    	foreach($arrTemp as $intKey => $arrOneTemp) {
+			$arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
+		}
 		return $arrTemp;
     }
     
@@ -159,7 +162,7 @@ class class_db_mysqli implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".$strTableName, false);
+        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".dbsafeString($strTableName), false);
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                         "columnName" => $arrOneColumn["Field"],
@@ -289,6 +292,17 @@ class class_db_mysqli implements interface_db_driver {
         $arrReturn["dbclient"] = mysqli_get_client_info($this->linkDB);
         $arrReturn["dbconnection"] = mysqli_get_host_info($this->linkDB);
         return $arrReturn;
+    }
+    
+	/**
+     * Allows the db-driver to add database-specific surrounding to column-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColumn
+     * @return string
+     */
+    public function encloseColumnName($strColumn) {
+    	return "`".$strColumn."`";
     }
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------

@@ -109,7 +109,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$arrFields["content_id"]   		= array("char20", false);
 		$arrFields["guestbook_id"] 		= array("char20", true);
 		$arrFields["guestbook_template"]= array("char254", true);
-		$arrFields["guestbook_amount"] 	= array("int", false);
+		$arrFields["guestbook_amount"] 	= array("int", true);
 		
 		if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";

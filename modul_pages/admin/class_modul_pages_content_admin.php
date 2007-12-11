@@ -491,9 +491,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                         $strTableColumnName = $arrTemp[0];
                         $strTableColumnDatatype = $arrTemp[1];
                         if ($strTableColumnDatatype == "number")
-                            $arrInserts[] = " `".$strTableColumnName."` = ".(int)$this->objDB->dbsafeString($this->getParam($strTableColumnName))." ";
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($this->getParam($strTableColumnName))." ";
                         elseif ($strTableColumnDatatype == "char")
-                            $arrInserts[] = " `".$strTableColumnName."` = '".$this->objDB->dbsafeString($this->getParam($strTableColumnName))."' ";
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($this->getParam($strTableColumnName))."' ";
                     }
 
                     $strRowUpdates = implode(", ", $arrInserts);

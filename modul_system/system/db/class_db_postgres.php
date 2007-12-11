@@ -53,7 +53,7 @@ class class_db_postgres implements interface_db_driver {
 		$this->strDbName = $strDbName;
 		$this->intPort = $intPort;
 
-		$this->linkDB = pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
+		$this->linkDB = @pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
 				
 		if($this->linkDB !== false) {
 			$this->_query("SET client_encoding='UTF8'");
@@ -68,7 +68,7 @@ class class_db_postgres implements interface_db_driver {
      * Closes the connection to the database
      */
     public function dbclose() {
-        pg_close($this->linkDB);
+        @pg_close($this->linkDB);
     }
 
     /**
@@ -78,7 +78,7 @@ class class_db_postgres implements interface_db_driver {
      * @return bool
      */
     public function _query($strQuery) {
-		$bitReturn = pg_query($this->linkDB, $strQuery);
+		$bitReturn = @pg_query($this->linkDB, $strQuery);
         return $bitReturn;
     }
 
@@ -94,7 +94,12 @@ class class_db_postgres implements interface_db_driver {
 		$resultSet = @pg_query($this->linkDB, $strQuery);
 		if(!$resultSet)
 			return false;
-		while($arrRow = pg_fetch_array($resultSet)) {
+		while($arrRow = @pg_fetch_array($resultSet)) {
+			//conversions to remain compatible:
+			//   count --> COUNT(*)
+			if(isset($arrRow["count"]))
+				$arrRow["COUNT(*)"] = $arrRow["count"];
+				
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -125,7 +130,7 @@ class class_db_postgres implements interface_db_driver {
      * @return string
      */
     public function getError() {
-		$strError = pg_last_error($this->linkDB);
+		$strError = @pg_last_error($this->linkDB);
 		return $strError;
     }
 
@@ -136,7 +141,7 @@ class class_db_postgres implements interface_db_driver {
      */
     public function getTables() {
 		$arrTemp = $this->getArray(
-				"SELECT table_name as name 
+				"SELECT *, table_name as name 
 				   FROM information_schema.tables 
 				   WHERE table_schema = 'public'"
 		, false);
@@ -153,35 +158,109 @@ class class_db_postgres implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".$strTableName, false);
+        $arrTemp = $this->getArray("
+			        	SELECT *  
+						FROM information_schema.columns 
+						WHERE table_schema = 'public'
+						AND table_name = '".dbsafeString($strTableName)."'"
+        );
+        
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
-                        "columnName" => $arrOneColumn["Field"],
-                        "columnType" => $arrOneColumn["Type"],
+                        "columnName" => $arrOneColumn["column_name"],
+                        "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : $arrOneColumn["data_type"]),
             );
+            
         }
+        
         return $arrReturn;
     }
 
     /**
      * Used to send a create table statement to the database
      * By passing the query through this method, the driver can
-     * add db-specific commands
+     * add db-specific commands.
+     * The array of fields should have the following structure
+     * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
+     * whereas datatype is one of the following:
+     * 		int
+     * 		double
+     * 		char10
+     * 		char20
+     * 		char100
+     * 		char254
+     * 		text
      *
-     * @param string $strQuery
-     * @param bool $bitTxSafe
+     * @param string $strName
+     * @param array $arrFields array of fields / columns
+     * @param array $arrKeys array of primary keys
+     * @param array $arrIndices array of additional indices
+     * @param bool $bitTxSafe Should the table support transactions?
      * @return bool
      */
-    public function createTable($strQuery, $bitTxSafe = true) {
-        //nothing to do here
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+    	$strQuery = "";
+    	
+    	//loop over existing tables to check, if the table already exists
+    	$arrTables = $this->getTables();
+    	foreach ($arrTables as $arrOneTable) {
+    		if($arrOneTable["name"] == _dbprefix_.$strName)
+    			return true;
+    	}
+    	
+    	//build the mysql code
+    	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
+    	
+    	//loop the fields
+    	foreach($arrFields as $strFieldName => $arrColumnSettings) {
+    		$strQuery .= " ".$strFieldName." ";
+    		
+    		if($arrColumnSettings[0] == "int")
+    			$strQuery .= " INT ";
+    		elseif($arrColumnSettings[0] == "double")
+    			$strQuery .= " NUMERIC ";	
+    		elseif($arrColumnSettings[0] == "char10")
+    			$strQuery .= " VARCHAR( 10 ) ";	
+    		elseif($arrColumnSettings[0] == "char20")
+    			$strQuery .= " VARCHAR( 20 ) ";
+    		elseif($arrColumnSettings[0] == "char100")
+    			$strQuery .= " VARCHAR( 100 ) ";	
+    		elseif($arrColumnSettings[0] == "char254")
+    			$strQuery .= " VARCHAR( 254 ) ";
+    		elseif($arrColumnSettings[0] == "text")
+    			$strQuery .= " TEXT ";
+    		else
+    			$strQuery .= " VARCHAR( 254 ) ";
+    			
+    		//any default?	
+    		if(isset($arrColumnSettings[2]))
+    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";	
+
+    		//nullable?
+    		if($arrColumnSettings[1] === true) {
+    			$strQuery .= " NULL ";
+    		}
+    		else {
+    			$strQuery .= " NOT NULL ";
+    		}
+
+    		/** TODO: add support for indexes **/
+    		
+    		$strQuery .= " , \n";
+    				
+    	}
+
+    	//primary keys
+    	$strQuery .= " PRIMARY KEY ( ".implode(" , ", $arrKeys)." ) \n";
+    	
+    	
+    	$strQuery .= ") ";
     	/*
-    	if(!$bitTxSafe)
-            $strCreateAddon = "";
+        if(!$bitTxSafe)
+            $strQuery .= " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
         else    
-            $strCreateAddon = "";
-            
-        $strQuery = $strQuery.$strCreateAddon;
-		*/
+            $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+        */    
         return $this->_query($strQuery);
     }
 
@@ -191,10 +270,8 @@ class class_db_postgres implements interface_db_driver {
      */
     public function transactionBegin() {
         //Autocommit 0 setzten
-		$strQuery = "SET AUTOCOMMIT = 0";
-		$strQuery2 = "BEGIN";
+		$strQuery = "BEGIN";
 		$this->_query($strQuery);
-		$this->_query($strQuery2);
     }
 
     /**
@@ -203,9 +280,7 @@ class class_db_postgres implements interface_db_driver {
      */
     public function transactionCommit() {
         $str_query = "COMMIT";
-		$str_query2 = "SET AUTOCOMMIT = 1";
 		$this->_query($str_query);
-		$this->_query($str_query2);
     }
 
     /**
@@ -214,18 +289,27 @@ class class_db_postgres implements interface_db_driver {
      */
     public function transactionRollback() {
         $strQuery = "ROLLBACK";
-		$strQuery2 = "SET AUTOCOMMIT = 1";
 		$this->_query($strQuery);
-		$this->_query($strQuery2);
     }
 
     public function getDbInfo() {
-    	$arrInfo = pg_version($this->linkDB);
+    	$arrInfo = @pg_version($this->linkDB);
         $arrReturn["dbdriver"] = "postgres-extension";
         $arrReturn["dbserver"] = "postgres ".$arrInfo["server"];
         $arrReturn["dbclient"] = $arrInfo["client"];
         $arrReturn["dbconnection"] = $arrInfo["protocol"];
         return $arrReturn;
+    }
+    
+	/**
+     * Allows the db-driver to add database-specific surrounding to column-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColumn
+     * @return string
+     */
+    public function encloseColumnName($strColumn) {
+    	return $strColumn;
     }
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------
@@ -237,6 +321,7 @@ class class_db_postgres implements interface_db_driver {
      * @param array $arrTables
      */
     public function dbExport($strFilename, $arrTables) {
+    	/** TODO **/
         $strFilename = _realpath_.$strFilename;
         $strTables = implode(" ", $arrTables);
         $strParamPass = "";
@@ -259,6 +344,7 @@ class class_db_postgres implements interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename) {
+    	/** TODO **/
         $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
 
@@ -271,6 +357,8 @@ class class_db_postgres implements interface_db_driver {
         $strResult = system($strCommand, $intTemp);
 	    return $intTemp == 0;
     }
+    
+    
 
 }
 
