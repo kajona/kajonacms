@@ -29,7 +29,7 @@ class class_db_postgres implements interface_db_driver {
     private $strDbName = "";
     private $intPort = "";
     private $strDumpBin = "pg_dump";              //Binary to dump db (if not in path, add the path here)
-    private $strRestoreBin = "psql";          //Binary to dump db (if not in path, add the path here)
+    private $strRestoreBin = "psql";          //Binary to restore db (if not in path, add the path here)
 
    /**
      * This method makes sure to connect to the database properly
@@ -321,9 +321,9 @@ class class_db_postgres implements interface_db_driver {
      * @param array $arrTables
      */
     public function dbExport($strFilename, $arrTables) {
-    	/** TODO include drop tables **/
+    	
         $strFilename = _realpath_.$strFilename;
-        $strTables = implode(" ", $arrTables);
+        $strTables = "-t ".implode(" -t ", $arrTables);
         $strParamPass = "";
 
         /*
@@ -332,7 +332,7 @@ class class_db_postgres implements interface_db_driver {
         }
 		*/
 
-        $strCommand = $this->strDumpBin." -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." > \"".$strFilename."\"";
+        $strCommand = $this->strDumpBin." --clean -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
 		//Now do a systemfork
 		$intTemp = "";
 		$strResult = system($strCommand, $intTemp);
@@ -346,7 +346,7 @@ class class_db_postgres implements interface_db_driver {
      * @return bool
      */
     public function dbImport($strFilename) {
-    	/** TODO **/
+    	
         $strFilename = _realpath_.$strFilename;
         $strParamPass = "";
 		/*
@@ -354,7 +354,7 @@ class class_db_postgres implements interface_db_driver {
             $strParamPass = " -p".$this->strPass;
         }
 		*/
-        $strCommand = $this->strRestoreBin." -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        $strCommand = $this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
 	    return $intTemp == 0;
