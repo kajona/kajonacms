@@ -87,13 +87,12 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setStartDate($intStartDate) {
-    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
-                            SET system_date_start = ".dbsafeString($intStartDate).",
-                                system_date_id = '".dbsafeString($this->getSystemid())."'";
+            				(system_date_start, system_date_id) VALUES 
+            				(".dbsafeString($intStartDate).", '".dbsafeString($this->getSystemid())."')";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
@@ -110,13 +109,12 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setEndDate($intEndDate) {
-    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
-                            SET system_date_end = ".dbsafeString($intEndDate).",
-                                system_date_id = '".dbsafeString($this->getSystemid())."'";
+            				(system_date_end, system_date_id) VALUES                 
+            				(".dbsafeString($intEndDate).", '".dbsafeString($this->getSystemid())."' )";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
@@ -133,13 +131,12 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setSpecialDate($intSpecialDate) {
-    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
-                            SET system_date_special = ".dbsafeString($intSpecialDate).",
-                                system_date_id = '".dbsafeString($this->getSystemid())."'";
+            				(system_date_special, system_date_id) VALUES 
+            				(".dbsafeString($intSpecialDate).", '".dbsafeString($this->getSystemid())."')";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
