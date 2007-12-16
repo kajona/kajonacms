@@ -130,7 +130,8 @@ class class_installer_stats extends class_installer_base implements interface_in
         $objCsv->createArrayFromFile();
         $arrData = $objCsv->getArrData();
         $strReturn .= "Importing ".count($arrData)." records...\n";
-        //import....
+        //import.... but as a single transaction (yepp, even if the table itself is not supporting tx)
+        $this->objDB->transactionBegin();
         foreach ($arrData as $arrOneRecord) {
         	$strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
         	            (ip_from, ip_to, country_code2, country_code3, country_name) VALUES
@@ -139,7 +140,7 @@ class class_installer_stats extends class_installer_base implements interface_in
         	$this->objDB->_query($strQuery);
         	$this->objDB->flushQueryCache();
         }
-
+		$this->objDB->transactionCommit();
         return $strReturn;
     }
 
