@@ -87,6 +87,7 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setStartDate($intStartDate) {
+    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
@@ -109,6 +110,7 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setEndDate($intEndDate) {
+    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
@@ -131,6 +133,7 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function setSpecialDate($intSpecialDate) {
+    	/** TODO SQL CODE **/
         //check, if an insert or an update is needed
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
