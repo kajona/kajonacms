@@ -144,26 +144,39 @@ class class_modul_user_user extends class_model implements interface_model  {
 		//Get a new Userid
 		$strUserid = generateSystemid();
 		$this->setSystemid($strUserid);
-		$strQuery = "INSERT INTO "._dbprefix_."user
-					SET user_id = '".$this->objDB->dbsafeString($strUserid)."',
-					user_username='".$this->objDB->dbsafeString($this->getStrUsername())."',
-					user_pass='".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
-					user_email='".$this->objDB->dbsafeString($this->getStrEmail())."',
-					user_forename='".$this->objDB->dbsafeString($this->getStrForename())."',
-					user_name='".$this->objDB->dbsafeString($this->getStrName())."',
-					user_street='".$this->objDB->dbsafeString($this->getStrStreet())."',
-					user_postal='".$this->objDB->dbsafeString($this->getStrPostal())."',
-					user_city='".$this->objDB->dbsafeString($this->getStrCity())."',
-					user_tel='".$this->objDB->dbsafeString($this->getStrTel())."',
-					user_mobile='".$this->objDB->dbsafeString($this->getStrMobile())."',
-					user_date='".$this->objDB->dbsafeString($this->getStrDate())."',
-					user_active=".(int)$this->getIntActive().",
-					user_admin=".(int)$this->getIntAdmin().",
-					user_portal=".(int)$this->getIntPortal().",
-					user_admin_skin='".$this->objDB->dbsafeString($this->getStrAdminskin())."',
-					user_admin_language='".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
-					user_logins = 0,
-					user_lastlogin = 0";
+		$strQuery = "INSERT INTO "._dbprefix_."user (
+					user_id, user_username, 
+					user_pass, user_email, user_forename,
+					user_name, 	user_street,
+					user_postal, user_city,
+					user_tel, user_mobile,
+					user_date, user_active,
+					user_admin, user_portal,
+					user_admin_skin, user_admin_language,
+					user_logins, user_lastlogin
+					
+					) VALUES (
+					
+					'".$this->objDB->dbsafeString($strUserid)."',
+					'".$this->objDB->dbsafeString($this->getStrUsername())."',
+					'".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
+					'".$this->objDB->dbsafeString($this->getStrEmail())."',
+					'".$this->objDB->dbsafeString($this->getStrForename())."',
+					'".$this->objDB->dbsafeString($this->getStrName())."',
+					'".$this->objDB->dbsafeString($this->getStrStreet())."',
+					'".$this->objDB->dbsafeString($this->getStrPostal())."',
+					'".$this->objDB->dbsafeString($this->getStrCity())."',
+					'".$this->objDB->dbsafeString($this->getStrTel())."',
+					'".$this->objDB->dbsafeString($this->getStrMobile())."',
+					'".$this->objDB->dbsafeString($this->getStrDate())."',
+					".(int)$this->getIntActive().",
+					".(int)$this->getIntAdmin().",
+					".(int)$this->getIntPortal().",
+					'".$this->objDB->dbsafeString($this->getStrAdminskin())."',
+					'".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
+					0,
+					0
+					)";
 
 		class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
 
