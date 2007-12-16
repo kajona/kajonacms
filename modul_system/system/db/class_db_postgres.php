@@ -115,10 +115,10 @@ class class_db_postgres implements interface_db_driver {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: postgres limit: start, nr of records, so:
+        //calculate the end-value: 
         $intEnd = $intEnd - $intStart +1;
         //add the limits to the query
-        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
+        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
         //and load the array
         return $this->getArray($strQuery);
     }
