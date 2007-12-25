@@ -186,6 +186,10 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText , $strAl
 	//optimizing params
 	if($strParams != "")
 		$strParams = str_replace("&", "&amp;", $strParams);
+		
+	//urlencoding
+    $strModule = urlencode($strModule);
+    $strAction = urlencode($strAction);	
 
 	if($strImage != "") {
 		if($strAlt == "")
@@ -218,6 +222,10 @@ function getLinkAdminHref($strModule, $strAction, $strParams = "") {
 	//optimizing params
 	if($strParams != "")
 		$strParams = str_replace("&", "&amp;", $strParams);
+		
+	//urlencoding
+    $strModule = urlencode($strModule);
+    $strAction = urlencode($strAction);	
 
 	$strLink = ""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."";
 
@@ -243,6 +251,10 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
 	$strLink = "";
 	//Wenn Parameter gegeben sind, diese aufbereiten)
 	$strParams = str_replace("&", "&amp;", $strParams);
+	
+	//urlencoding
+    $strModule = urlencode($strModule);
+    $strAction = urlencode($strAction);
 
 	//Admin?
 	if(_admin_) {
@@ -276,6 +288,10 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
 function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText, $strAlt="", $strImage="", $intHeight = "500", $intWidth = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
 	if($strParams != "")
 		$strParams = str_replace("&", "&amp;", $strParams);
+		
+	//urlencoding
+    $strModule = urlencode($strModule);
+    $strAction = urlencode($strAction);
 
 	if($bitPortalEditor)
         $strParams .= "&amp;pe=1";
@@ -410,6 +426,11 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $st
 
 	if($strTarget == "")
 		$strTarget = "_self";
+		
+	//urlencoding
+	$strPageI = urlencode($strPageI);
+	$strAction = urlencode($strAction);
+	//$strParams = urlencode($strParams);    	
 
 	//languages installed?
 	include_once(_systempath_."/class_modul_system_module.php");
@@ -479,6 +500,11 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 	if($strPageI == "" && $strPageE != "")
 		$bitInternal = false;
 	$strParams = str_replace("&", "&amp;", $strParams);
+	
+	//urlencoding
+    $strPageI = urlencode($strPageI);
+    $strAction = urlencode($strAction);
+    //$strParams = urlencode($strParams);
 
 	//languages installed?
 	$strLanguage = "";
