@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.9";
+		$arrModul["version"] 			= "3.0.95";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -413,6 +413,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_302_309();
         }
         
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.9") {
+            $strReturn .= $this->update_309_3095();
+        }
+        
         return $strReturn."\n\n";
 	}
 
@@ -628,6 +633,21 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("user", "3.0.9");
         $this->updateModuleVersion("filemanager", "3.0.9");
         $this->updateModuleVersion("dashboard", "3.0.9");
+        
+
+	    return $strReturn;
+	}
+	
+	private function update_309_3095() {
+	    $strReturn = "";
+	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+	    $this->updateModuleVersion("system", "3.0.95");
+        $this->updateModuleVersion("right", "3.0.95");
+        $this->updateModuleVersion("user", "3.0.95");
+        $this->updateModuleVersion("filemanager", "3.0.95");
+        $this->updateModuleVersion("dashboard", "3.0.95");
         
 
 	    return $strReturn;

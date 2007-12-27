@@ -170,7 +170,7 @@ $text["update_nofilefound"]         = "Die Liste der Updates konnte nicht gelade
 $text["update_invalidXML"]          = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.0 ALPHA (3.0.9), Codename \"kangaroo\"<br /><br />
+                                       Kajona V 3.1.0 BETA (3.0.95), Codename \"kangaroo\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />
@@ -259,7 +259,7 @@ $text["installer_login_save"]       = "Benutzer anlegen";
 $text["installer_config_intro"]     = "<b>Datenbankeinstellungen erfassen</b><br /><br />";
 $text["installer_config_intro"]     .= "Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config.php.<br />";
 $text["installer_config_intro"]     .= "Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br />";
-$text["installer_config_intro"]     .= "<br />Für den Fall, dass sie einen dieser Werte leer lassen wollten, bearbeiten Sie bitte manuell die Datei /system/config.php mit einem Texteditor, näheres hierzu im Handbuch.<br />";
+$text["installer_config_intro"]     .= "<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config.php manuell mit einem Texteditor, Näheres hierzu im Handbuch.<br />";
 $text["installer_config_intro"]     .= "<br /><b>ACHTUNG:</b> Der PostgreSQL Treiber befindet sich noch im Alpha-Stadium und sollte nur in Test-Umgebungen verwendet werden.<br /><br />";
 $text["installer_config_dbhostname"] = "Datenbankserver:";
 $text["installer_config_dbusername"] = "Datenbankbenutzer:";

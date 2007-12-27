@@ -24,7 +24,7 @@ require_once(_systempath_."/class_modul_pages_element.php");
 class class_installer_postacomment extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.0.9";
+		$arrModule["version"] 		  = "3.0.95";
 		$arrModule["name"] 			  = "postacomment";
 		$arrModule["class_admin"]  	  = "class_modul_postacomment_admin";
 		$arrModule["file_admin"] 	  = "class_modul_postacomment_admin.php";
@@ -130,8 +130,23 @@ class class_installer_postacomment extends class_installer_base implements inter
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
+        
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.9") {
+            $strReturn .= $this->update_309_3095();
+        }
 
         return $strReturn."\n\n";
+	}
+	
+	private function update_309_3095() {
+	    $strReturn = "";
+	    $strReturn .= "Updating 3.0.9 to 3.0.95..\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("postacomment", "3.0.95");
+
+	    return $strReturn;
 	}
 
 

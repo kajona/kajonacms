@@ -112,7 +112,7 @@ abstract class class_installer_base extends class_root {
 		else {
 		    //updates available?
 		    if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<"))
-				$strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]."</a>";
+				$strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
 
 			return $strReturn."<br />";
 		}

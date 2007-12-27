@@ -169,7 +169,7 @@ $text["update_nofilefound"]         = "The list of updates failed to load.<br />
 $text["update_invalidXML"]          = "The servers response was erroneous. Please try again.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.0 ALPHA (3.0.9), Codename \"kangaroo\"<br /><br />
+                                       Kajona V 3.1.0 BETA (3.0.95), Codename \"kangaroo\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        For further information, support or proposals, please visit our website.<br />

@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_gallery extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.9";
+		$arrModule["version"] 		= "3.0.95";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["class_admin"] 	= "class_modul_gallery_admin";
 		$arrModule["file_admin"] 	= "class_modul_gallery_admin.php";
@@ -191,6 +191,11 @@ class class_installer_gallery extends class_installer_base implements interface_
         if($arrModul["module_version"] == "3.0.2") {
             $strReturn .= $this->update_302_309();
         }
+        
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.9") {
+            $strReturn .= $this->update_309_3095();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -262,6 +267,17 @@ class class_installer_gallery extends class_installer_base implements interface_
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("gallery", "3.0.9");
+
+        return $strReturn;
+    }
+    
+	private function update_309_3095() {
+        //Run the updates
+        $strReturn = "";
+        $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.0.95");
 
         return $strReturn;
     }

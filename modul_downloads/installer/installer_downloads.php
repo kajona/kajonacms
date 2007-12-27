@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_downloads extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.9";
+		$arrModule["version"] 		= "3.0.95";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -166,9 +166,14 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_301_302();
         }
 
-	$arrModul = $this->getModuleData($this->arrModule["name"], false);
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.2") {
             $strReturn .= $this->update_302_309();
+        }
+        
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.9") {
+            $strReturn .= $this->update_309_3095();
         }
 
         return $strReturn."\n\n";
@@ -210,7 +215,7 @@ class class_installer_downloads extends class_installer_base implements interfac
         return $strReturn;
 	}
 
-    	private function update_302_309() {
+    private function update_302_309() {
 	    //Run the updates
 	    $strReturn = "";
         $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
@@ -218,6 +223,17 @@ class class_installer_downloads extends class_installer_base implements interfac
         //Update the module-records
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.0.9");
+
+        return $strReturn;
+	}
+	
+	private function update_309_3095() {
+	    $strReturn = "";
+        $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
+
+        //Update the module-records
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.0.95");
 
         return $strReturn;
 	}

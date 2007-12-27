@@ -30,7 +30,7 @@ class class_installer {
 	private $strForwardLink = "";
 	private $strBackwardLink = "";
 
-	private $strVersion = "V 3.0.9";
+	private $strVersion = "V 3.0.95";
 
 	/**
 	 * Instance of template-engine
@@ -497,7 +497,7 @@ class class_installer {
         //Load the conig to parse it
         $strConfig = file_get_contents(_systempath_."/config.php");
         //check all needed values
-        if(  uniStrpos($strConfig, "%%defaulthost%%") !== false
+        if(   uniStrpos($strConfig, "%%defaulthost%%") !== false
            || uniStrpos($strConfig, "%%defaultusername%%") !== false
            || uniStrpos($strConfig, "%%defaultpassword%%") !== false
            || uniStrpos($strConfig, "%%defaultdbname%%") !== false
