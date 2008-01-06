@@ -62,6 +62,9 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ? 
                         "<span style=\"color: red\">".$this->getText("systemcheck_yes")."</span>" : 
                         "<span style=\"color: green\">".$this->getText("systemcheck_no")."</span>"));
+            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_debug").(is_dir(_realpath_."/debug") ? 
+                        "<span style=\"color: red\">".$this->getText("systemcheck_yes")."</span>" : 
+                        "<span style=\"color: green\">".$this->getText("systemcheck_no")."</span>"));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_configper").( is_writable(_systempath_."/config.php") ? 
                         "<span style=\"color: red\">".$this->getText("systemcheck_yes")."</span>" : 
                         "<span style=\"color: green\">".$this->getText("systemcheck_no")."</span>"));

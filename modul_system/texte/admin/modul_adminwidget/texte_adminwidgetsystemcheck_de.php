@@ -23,9 +23,10 @@ $text["systemcheck_php_safemode"]                = "Safemode: ";
 $text["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
 $text["systemcheck_php_regglobal"]               = "Register global: ";
 $text["systemcheck_kajona_installer"]            = "/installer vorhanden: ";
+$text["systemcheck_kajona_debug"]                = "/debug vorhanden: ";
 $text["systemcheck_kajona_configper"]            = "Schreibrechte auf config.php: ";
-$text["systemcheck_kajona_debugper"]             = "Schreibrechte auf /debug: ";
-$text["systemcheck_kajona_dbdumpsper"]           = "Schreibrechte auf /dbdumps: ";
+$text["systemcheck_kajona_debugper"]             = "Schreibrechte auf /system/debug: ";
+$text["systemcheck_kajona_dbdumpsper"]           = "Schreibrechte auf /system/dbdumps: ";
 $text["systemcheck_kajona_piccacheper"]          = "Schreibrechte auf "._bildergalerie_cachepfad_.": ";
 
 ?>
