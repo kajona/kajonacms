@@ -117,7 +117,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		               FROM "._dbprefix_."system_module,
 		                    "._dbprefix_."system
 		              WHERE module_id = system_id
-		           ORDER BY system_sort ASC, module_nr";
+		           ORDER BY system_sort ASC, system_comment ASC";
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -185,7 +185,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		              WHERE module_navigation = 1
 		                AND system_status = 1
 		                AND module_id = system_id
-		              ORDER BY system_sort ASC, module_nr";
+		              ORDER BY system_sort ASC, system_comment ASC";
 		return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 	}
 
