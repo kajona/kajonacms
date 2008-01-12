@@ -117,10 +117,10 @@ function showMenu() {
 	YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], -200 ], false);
 	
 	var attributes = { 
-        points: { to: [arrCoords[0], arrCoords[1] ] } 
+        points: { to: [arrCoords[0], arrCoords[1]-10 ] } 
 	};
 	
-	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 1);
+	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 0.5);
 	animObject.animate();
 }
 
