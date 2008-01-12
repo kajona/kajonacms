@@ -25,9 +25,9 @@ class class_texte {
 	 *
 	 * @var string
 	 */
-	private $strLanguage = "de";
+	private $strLanguage = "en";
 
-	private $strFallbackLanguage = "de";
+	private $strFallbackLanguage = "en";
 	private $arrTexts;
 
 	private static $objText = null;
