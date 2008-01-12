@@ -50,9 +50,17 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrElement("postacomment");
         $objPagelement->saveObjectToDb($strPostacommentPageID, "comments_postacomment", _dbprefix_."element_universal", "first");
         $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_universal
-                        SET char1 ='postacomment_classic.tpl'
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
+        
+        if($this->strContentLanguage == "de") {
+	        $strQuery = "UPDATE "._dbprefix_."element_universal
+	                        SET char1 ='postacomment_classic_de.tpl'
+	                        WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+	        $strQuery = "UPDATE "._dbprefix_."element_universal
+	                        SET char1 ='postacomment_classic_en.tpl'
+	                        WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
         if($this->objDB->_query($strQuery))
             $strReturn .= "Postacomment element created.\n";
         else

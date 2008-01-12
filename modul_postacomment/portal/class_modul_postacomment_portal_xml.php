@@ -81,7 +81,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
         		$arrForm["comment_subject"] = $this->getParam("comment_subject");
         		$arrForm["comment_message"] = $this->getParam("comment_message");
         		$arrForm["comment_template"] = $this->getParam("comment_template");
-        		$arrForm["comment_systemid"] = $this->getParam("systemid");
+        		$arrForm["comment_systemid"] = $this->getParam("comment_systemid");
 		        $arrForm["comment_page"] = $this->getParam("comment_page");
         		$arrForm["validation_errors"] = $this->strErrors;
         		$strXMLContent .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
@@ -163,7 +163,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	        $bitReturn = false;
 	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
 	    }
-	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha")) {
+	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
 	        $bitReturn = false;
 	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
 	    }

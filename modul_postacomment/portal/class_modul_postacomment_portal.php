@@ -191,7 +191,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	        $bitReturn = false;
 	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
 	    }
-	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha")) {
+	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
 	        $bitReturn = false;
 	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
 	    }
