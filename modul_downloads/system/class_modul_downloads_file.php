@@ -220,7 +220,7 @@ class class_modul_downloads_file extends class_model implements interface_model 
 		//Files from filesystem
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrFilesystem = $objFilesystem->getCompleteList($strPath, array(), array(), array(".", "..", ".svn"));
+		$arrFilesystem = $objFilesystem->getCompleteList($strPath, array(), array(".htaccess"), array(".", "..", ".svn"));
 		//Sync both arrays
 		//start witht the files
 		foreach($arrFilesystem["files"] as $intKeyFs => $arrOneFileFilesystem) {
