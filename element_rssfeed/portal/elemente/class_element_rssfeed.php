@@ -75,9 +75,17 @@ class class_element_rssfeed extends class_element_portal implements interface_po
         		    $arrTemplate["feed_description"] = $arrFeed["rss"][0]["channel"][0]["description"][0]["value"];
         		    $intCounter = 0;
         		    foreach ($arrFeed["rss"][0]["channel"][0]["item"] as $arrOneItem) {
+        		    	
+        		      $strDate = (isset($arrOneItem["pubDate"][0]["value"]) ? $arrOneItem["pubDate"][0]["value"] : "");
+                        if($strDate != "") {
+                            $intDate = strtotime($strDate);
+                            if($intDate > 0) {
+                                $strDate = timeToString($intDate);
+                            }
+                        }
         		        
         		        $arrMessage = array();
-        		        $arrMessage["post_date"] = (isset($arrOneItem["pubDate"][0]["value"]) ? $arrOneItem["pubDate"][0]["value"] : "");
+        		        $arrMessage["post_date"] = $strDate;
         		        $arrMessage["post_title"] = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
         		        $arrMessage["post_description"] = (isset($arrOneItem["description"][0]["value"]) ? $arrOneItem["description"][0]["value"] : "");
         		        $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["value"]) ? $arrOneItem["link"][0]["value"] : "");
@@ -101,8 +109,16 @@ class class_element_rssfeed extends class_element_portal implements interface_po
                     
                     foreach ($arrFeed["feed"][0]["entry"] as $arrOneItem) {
                         
+                    	$strDate = (isset($arrOneItem["updated"][0]["value"]) ? $arrOneItem["updated"][0]["value"] : "");
+                    	if($strDate != "") {
+                    		$intDate = strtotime($strDate);
+                    		if($intDate > 0) {
+                    			$strDate = timeToString($intDate);
+                    		}
+                    	}
+                    	
                         $arrMessage = array();
-                        $arrMessage["post_date"] = (isset($arrOneItem["updated"][0]["value"]) ? $arrOneItem["updated"][0]["value"] : "");
+                        $arrMessage["post_date"] = $strDate;
                         $arrMessage["post_title"] = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                         $arrMessage["post_description"] = (isset($arrOneItem["summary"][0]["value"]) ? $arrOneItem["summary"][0]["value"] : "");
                         $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");

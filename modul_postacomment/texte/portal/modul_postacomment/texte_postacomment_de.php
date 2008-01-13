@@ -19,4 +19,5 @@ $text["validation_name"]                    = "Bitte Namen angeben";
 $text["validation_message"]                 = "Bitte Nachricht angeben";
 $text["validation_code"]                    = "Bitte korrekten Code angeben";
 
+
 ?>

@@ -12,5 +12,7 @@
 *	$Id$                                        *
 ********************************************************************************************************/
 
+$text["rssfeed_errorloading"]                       = "Error loading the feed.";
+$text["rssfeed_errorparsing"]                       = "Error while parsing the feed.";
 
 ?>
