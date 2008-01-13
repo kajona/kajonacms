@@ -252,10 +252,6 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
 	//Wenn Parameter gegeben sind, diese aufbereiten)
 	$strParams = str_replace("&", "&amp;", $strParams);
 	
-	//urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);
-
 	//Admin?
 	if(_admin_) {
 		if($strImage != "") {
