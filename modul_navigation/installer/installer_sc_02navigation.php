@@ -41,12 +41,20 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         
         
         $strReturn = "";
-        $strReturn .= "Creating new navigation-tree\n";
+        $strReturn .= "Creating new mainnavigation-tree\n";
         include_once(_systempath_."/class_modul_navigation_tree.php");
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("mainnavigation");
         $objNaviTree->saveObjectToDb();
         $strTreeId = $objNaviTree->getSystemid();
+        $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
+        
+        $strReturn .= "Creating new portalnavigation-tree\n";
+        include_once(_systempath_."/class_modul_navigation_tree.php");
+        $objNaviTree = new class_modul_navigation_tree();
+        $objNaviTree->setStrName("portalnavigation");
+        $objNaviTree->saveObjectToDb();
+        $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
         $strReturn .= "Creating navigation points\n";
         include_once(_systempath_."/class_modul_navigation_point.php");
@@ -54,11 +62,11 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
         $objNaviPoint->saveObjectToDb($strTreeId);
-        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+        
         
 
         if($this->strMasterID != "") {
-            $strReturn .= "Adding navigation to master page\n";
+            $strReturn .= "Adding mainnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
             $objPagelement = new class_modul_pages_pageelement();
@@ -70,13 +78,33 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id='".dbsafeString($strTreeId)."',
                                 navigation_template = 'mainnavi.tpl',
-                                navigation_css = 'navi',
+                                navigation_css = '',
                                 navigation_mode = 'tree'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
             if($this->objDB->_query($strQuery))
                 $strReturn .= "Navigation element created.\n";
             else
                 $strReturn .= "Error creating navigation element.\n";
+                
+            $strReturn .= "Adding portalnavigation to master page\n";
+            $strReturn .= "ID of master page: ".$this->strMasterID."\n";
+
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
+            $objPagelement->setStrName("masterportalnavi");
+            $objPagelement->setStrElement("navigation");
+            $objPagelement->saveObjectToDb($this->strMasterID, "masterportalnavi_navigation", _dbprefix_."element_navigation", "first");
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_navigation
+                            SET navigation_id='".dbsafeString($strTreePortalId)."',
+                                navigation_template = 'portalnavi.tpl',
+                                navigation_css = '',
+                                navigation_mode = 'tree'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= "Navigation element created.\n";
+            else
+                $strReturn .= "Error creating navigation element.\n";    
         }
 
         return $strReturn;

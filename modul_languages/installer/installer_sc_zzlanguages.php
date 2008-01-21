@@ -24,6 +24,8 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
+    
+    private $strMasterID = "";
 
     /**
      * Does the hard work: installs the module and registers needed constants
@@ -31,6 +33,11 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
      */
     public function install() {
         $strReturn = "";
+        
+        //search the master page
+        $objMaster = class_modul_pages_page::getPageByName("master");
+        if($objMaster != null)
+            $this->strMasterID = $objMaster->getSystemid();
 
         $strReturn .= "Creating new default-language\n";
             include_once(_systempath_."/class_modul_languages_language.php");
@@ -56,6 +63,19 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                     class_modul_pages_page::assignNullProperties("en");
                 if(include_once(_systempath_."/class_modul_pages_pageelement.php"))
                     class_modul_pages_pageelement::assignNullElements("en");
+            }
+            
+            if($this->strMasterID != "") {
+	            $strReturn .= "Adding languageswitch to master page\n";
+	            $strReturn .= "ID of master page: ".$this->strMasterID."\n";
+	
+	            $objPagelement = new class_modul_pages_pageelement();
+	            $objPagelement->setStrPlaceholder("masterswitch_languageswitch");
+	            $objPagelement->setStrName("masterswitch");
+	            $objPagelement->setStrElement("languageswitch");
+	            $objPagelement->saveObjectToDb($this->strMasterID, "masterswitch_languageswitch", "", "first");
+	            $strElementId = $objPagelement->getSystemid();
+	            $strReturn .= "Element created.\n";
             }
 
         return $strReturn;

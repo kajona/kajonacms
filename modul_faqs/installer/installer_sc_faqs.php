@@ -106,11 +106,9 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $strReturn .= "Creating navigation entries...\n";
         include_once(_systempath_."/class_modul_navigation_tree.php");
         include_once(_systempath_."/class_modul_navigation_point.php");
-        $arrNavis = class_modul_navigation_tree::getAllNavis();
-        if(count($arrNavis) > 0) {
-            $objNavi = $arrNavis[0];
-            $strTreeId = $objNavi->getSystemid();
-        }
+        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+        $strTreeId = $objNavi->getSystemid();
+        
             
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("FAQs");

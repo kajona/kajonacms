@@ -121,6 +121,29 @@ class class_modul_navigation_tree extends class_model implements interface_model
 
         return $arrReturn;
     }
+    
+
+    /**
+     * Looks up a navigation by its name
+     *
+     * @param string $strName
+     * @return class_modul_navigation_tree
+     * @static 
+     */
+    public static function getNavigationByName($strName) {
+        $strQuery = "SELECT system_id
+                     FROM "._dbprefix_."navigation, "._dbprefix_."system
+                     WHERE system_id = navigation_id
+                     AND system_prev_id = '0'
+                     AND navigation_name = '".dbsafeString($strName)."'
+                     ORDER BY system_sort ASC, system_comment ASC";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        if(isset($arrRow["system_id"]))
+            return new class_modul_navigation_tree($arrRow["system_id"]);
+        else
+            return null;    
+
+    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

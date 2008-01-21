@@ -88,11 +88,9 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         
         include_once(_systempath_."/class_modul_navigation_tree.php");
         include_once(_systempath_."/class_modul_navigation_point.php");
-        $arrNavis = class_modul_navigation_tree::getAllNavis();
-        if(count($arrNavis) > 0) {
-            $objNavi = $arrNavis[0];
-            $strTreeId = $objNavi->getSystemid();
-        }
+        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+        $strTreeId = $objNavi->getSystemid();
+        
         $objNaviPoint = new class_modul_navigation_point();
         if($this->strContentLanguage == "de")
             $objNaviPoint->setStrName("Gästebuch");

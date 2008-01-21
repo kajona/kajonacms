@@ -40,9 +40,9 @@ class class_installer_sc_search implements interface_sc_installer  {
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
-        $strReturn .= "Creating searchresults page\n";
+        $strReturn .= "Creating search page\n";
             $objPage = new class_modul_pages_page();
-            $objPage->setStrName("searchresults");
+            $objPage->setStrName("search");
 
             if($this->strContentLanguage == "de")
                 $objPage->setStrBrowsername("Suchergebnisse");
@@ -95,25 +95,26 @@ class class_installer_sc_search implements interface_sc_installer  {
             else
                 $strReturn .= "Error creating headline element.\n";
 
-            if($this->strMasterID != "") {
-                $strReturn .= "Adding search to master page\n";
-                $strReturn .= "ID of master page: ".$this->strMasterID."\n";
-                $objPagelement = new class_modul_pages_pageelement();
-                $objPagelement->setStrPlaceholder("mastersearch_search");
-                $objPagelement->setStrName("mastersearch");
-                $objPagelement->setStrElement("search");
-                $objPagelement->saveObjectToDb($this->strMasterID, "mastersearch_search", _dbprefix_."element_search", "first");
-                $strElementId = $objPagelement->getSystemid();
-                $strQuery = "UPDATE "._dbprefix_."element_search
-                                SET search_template = 'search.tpl',
-                                    search_amount = 6,
-                                    search_page = 'searchresults'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-                if($this->objDB->_query($strQuery))
-                    $strReturn .= "Search element created.\n";
-                else
-                    $strReturn .= "Error creating search element.\n";
-            }
+            $strReturn .= "Creating navigation point.\n";    
+            include_once(_systempath_."/class_modul_navigation_tree.php");
+	        include_once(_systempath_."/class_modul_navigation_point.php");
+	        $arrNavis = class_modul_navigation_tree::getAllNavis();
+	        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
+	        $strTreeId = $objNavi->getSystemid();
+	        
+	        $objNaviPoint = new class_modul_navigation_point();
+	        if($this->strContentLanguage == "de") {
+	            $objNaviPoint->setStrName("Suche");
+	        }
+	        else {
+	        	$objNaviPoint->setStrName("Search");
+	        }
+	            
+	        $objNaviPoint->setStrPageI("search");
+	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";    
+
+            
         return $strReturn;
     }
     
