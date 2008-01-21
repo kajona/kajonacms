@@ -82,7 +82,8 @@ class class_element_languageswitch extends class_element_portal implements inter
                //and the link
                //add html code to modify the lool and feel of the buttons (e.g. <img src=\"language_".$objOneLanguage->getStrName().".gif\" />
                 $strReturn .= "<a href=\""._indexpath_."?".$strQueryString."\">"
-                              .$this->getText("lang_".$objOneLanguage->getStrName())
+                              //.$this->getText("lang_".$objOneLanguage->getStrName())
+                              .$objOneLanguage->getStrName()
                               ."</a>";
             }
         }

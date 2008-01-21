@@ -55,13 +55,13 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviTree->setStrName("portalnavigation");
         $objNaviTree->saveObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
-        $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
+        $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
         $strReturn .= "Creating navigation points\n";
         include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
-        $objNaviPoint->saveObjectToDb($strTreeId);
+        $objNaviPoint->saveObjectToDb($strTreePortalId);
         
         
 

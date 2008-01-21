@@ -38,6 +38,20 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         $objMaster = class_modul_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
+            
+        if($this->strMasterID != "") {
+                $strReturn .= "Adding languageswitch to master page\n";
+                $strReturn .= "ID of master page: ".$this->strMasterID."\n";
+    
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("masterswitch_languageswitch");
+                $objPagelement->setStrName("masterswitch");
+                $objPagelement->setStrElement("languageswitch");
+                $objPagelement->saveObjectToDb($this->strMasterID, "masterswitch_languageswitch", "", "first");
+                $strElementId = $objPagelement->getSystemid();
+                $strReturn .= "ID of element: ".$strElementId."\n";
+                $strReturn .= "Element created.\n";
+         }    
 
         $strReturn .= "Creating new default-language\n";
             include_once(_systempath_."/class_modul_languages_language.php");
@@ -75,6 +89,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 	            $objPagelement->setStrElement("languageswitch");
 	            $objPagelement->saveObjectToDb($this->strMasterID, "masterswitch_languageswitch", "", "first");
 	            $strElementId = $objPagelement->getSystemid();
+	            $strReturn .= "ID of element: ".$strElementId."\n";
 	            $strReturn .= "Element created.\n";
             }
 
