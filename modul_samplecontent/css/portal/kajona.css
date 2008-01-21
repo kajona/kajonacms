@@ -265,6 +265,21 @@ h3 {
     color: #737373;
 }
 
+.inputTextareaLarge {
+    background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+    background-repeat: repeat-x;
+    padding: 0;
+    margin: 0 3px 0 0;
+    display: block;
+    float: left;
+    width: 300px;
+    height:150px;
+    border: 1px solid #c2c2c2;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #737373;
+}
+
 .inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
     color: #000000;
 }
@@ -289,4 +304,119 @@ h3 {
 .button:hover, .buttonShort:hover, .button:focus, .buttonShort:focus {
     color: #000000;
 }
+
+/* N E W S */
+.newsList {
+    border: 1px solid #ffffff;
+}
+.newsListHeader {
+    background-color: #f0f0f0;
+}
+.newsListTitle {
+    float: left;
+    background-image: url('../../portal/pics/kajona/news_button.gif');
+    background-repeat: no-repeat;
+    text-indent: 15px;
+}
+.newsListTitle h3{
+    font-size: 11px;
+    font-weight: normal;
+    margin: 0px;
+}
+.newsListMore {
+    float: right;
+}
+.newsListTeaser {
+    background-color: #3bec3b;
+}
+.newsListTeaser div {
+    margin-left: 10px;
+    background-color: #ffffff;
+    padding-left: 5px;
+}
+.newsDetail, .newsDetail p {
+}
+.newsDetail h3 {
+    font-weight: bold;
+}
+.newsTeaser {
+    margin-top: 20px;
+    font-style: italic;
+
+}
+.newsDetail img {
+    margin: 5px;
+}
+
+
+
+/* S E A R C H */
+.searchHighlight {
+    background-color: #ffff00;
+}
+
+/* F A Q S */
+.faqCategory {
+    padding-bottom: 20px;
+}
+
+.faqCategory .faqCategoryTitle {
+    font-style: italic;
+}
+
+.faqCategory .faqCategoryTitle h3 {
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 2px;
+}
+
+.faqFaq {
+    border: 1px solid #f0f0f0;
+    margin-bottom: 2px;
+}
+
+.faqFaq .faqFaqAnswer {
+    margin: 2px;
+}
+
+.faqFaq .faqFaqQuestion {
+    background-color: #f0f0f0;
+
+}
+
+/* P O S T A C O M M E N T */
+
+#postaCommentForm {
+    display: hidden;
+    margin-bottom: 5px; 
+}
+
+.pacComment {
+    border: 1px solid #cccccc;
+    margin-bottom: 5px; 
+}
+
+.pacHeader {
+    background-color: #f0f0f0;
+}
+
+.pacName {
+    float: left;
+    padding: 1px 1px 0 1px;
+}
+
+.pacDate {
+    float: right;
+    padding: 1px 1px 0 1px;
+}
+
+.pacSubject {
+    clear:both;
+    padding: 0 1px 1px 1px; 
+}
+
+.pacText {
+    padding: 1px;   
+}
+
 
