@@ -439,3 +439,58 @@ h3 {
 }
 
 
+/* L I S T S */
+.portalList {
+    width: 80%;
+}
+
+.portalListRow1 {
+    height: 22px;
+    background-color: #f0f0f0;
+}
+
+.portalListRow1:hover, .portalListRow1:hover td {
+    background-color: #c4f3c4;
+    color: #000000;
+}
+
+.portalListRow1 td{
+    vertical-align: middle;
+}
+
+.portalListRow1 .image {
+    padding-left: 2px;
+    padding-right: 3px;
+}
+
+.portalListRow1 .title {
+    width: 100%;
+    padding-left: 2px;
+    padding-right: 5px;
+}
+
+.portalListRow1 .center {
+    white-space: nowrap;
+    padding-right: 5px;
+}
+
+.portalListRow1 .actions {
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.portalListRow2 {
+    height: 22px;
+}
+.portalListRow2 .description {
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 2px;
+}
+
+.portalListRow1 .actions img {
+    margin-right: 2px;
+}
+
+

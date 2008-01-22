@@ -56,6 +56,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviTree->saveObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
+        
         $strReturn .= "Creating navigation points\n";
         include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
@@ -106,6 +107,66 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             else
                 $strReturn .= "Error creating navigation element.\n";    
         }
+        
+        $strReturn .= "Creating simple sitemap...\n";
+        $objPage = new class_modul_pages_page();
+        $objPage->setStrName("sitemap");
+        $objPage->setStrBrowsername("Sitemap");
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->saveObjectToDb();
+        $strSitemapId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strSitemapId."\n";
+        $strReturn .= "Adding sitemap to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("sitemap_navigation");
+        $objPagelement->setStrName("sitemap");
+        $objPagelement->setStrElement("navigation");
+        $objPagelement->saveObjectToDb($strSitemapId, "sitemap_navigation", _dbprefix_."element_navigation", "first");
+        $strElementId = $objPagelement->getSystemid();
+        $strQuery = "UPDATE "._dbprefix_."element_navigation
+                        SET navigation_id='".dbsafeString($strTreeId)."',
+                            navigation_template = 'sitemap.tpl',
+                            navigation_css = '',
+                            navigation_mode = 'sitemap'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Sitemapelement created.\n";
+        else
+            $strReturn .= "Error creating sitemapelement.\n";
+
+        $strReturn .= "Adding headline-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("headline_row");
+        $objPagelement->setStrName("headline");
+        $objPagelement->setStrElement("row");
+        $objPagelement->saveObjectToDb($strSitemapId, "headline_row", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+        $strQuery = "UPDATE "._dbprefix_."element_absatz
+                        SET absatz_titel = 'Sitemap'
+                      WHERE content_id = '".dbsafeString($strElementId)."'";
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Headline element created.\n";
+        else
+            $strReturn .= "Error creating headline element.\n";
+            
+        $strReturn .= "Creating navigation points\n";
+        include_once(_systempath_."/class_modul_navigation_point.php");
+        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint->setStrName("Sitemap");
+        $objNaviPoint->setStrPageI("sitemap");
+        $objNaviPoint->saveObjectToDb($strTreePortalId);  
+        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";  
+        
+        include_once(_systempath_."/class_modul_navigation_point.php");
+        $objNaviPoint = new class_modul_navigation_point();
+        if($this->strContentLanguage == "de")
+            $objNaviPoint->setStrName("Impressum");
+        else    
+            $objNaviPoint->setStrName("Imprint");
+        $objNaviPoint->setStrPageI("imprint");
+        $objNaviPoint->saveObjectToDb($strTreePortalId);
+        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";    
+                    
 
         return $strReturn;
     }

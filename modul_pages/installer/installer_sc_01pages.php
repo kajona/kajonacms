@@ -9,7 +9,7 @@
 *   Interface of the pages samplecontent                                                                *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                              *
+*   $Id$                                    *
 ********************************************************************************************************/
 
 
@@ -206,8 +206,89 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
+            
+            
+            
+            
+            
+        $strReturn .= "Creating imprint-site...\n";
+        include_once(_systempath_."/class_modul_pages_page.php");
+        $objPage = new class_modul_pages_page();
+        $objPage->setStrName("imprint");
+        if($this->strContentLanguage == "de")
+            $objPage->setStrBrowsername("Impressum");
+        else
+            $objPage->setStrBrowsername("Imprint");
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        $objPage->saveObjectToDb($strFolderID);
+        $strImprintPageId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strImprintPageId."\n";
+        $strReturn .= "Adding headline-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("headline_row");
+        $objPagelement->setStrName("headline");
+        $objPagelement->setStrElement("row");
+        $objPagelement->saveObjectToDb($strImprintPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Impressum'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Imprint'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
 
-        return $strReturn;
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Headline element created.\n";
+        else
+            $strReturn .= "Error creating headline element.\n";
+
+        $strReturn .= "Adding paragraph-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrName("text");
+        $objPagelement->setStrElement("paragraph");
+        $objPagelement->saveObjectToDb($strImprintPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+
+
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                        SET absatz_titel = 'Impressum',
+                           absatz_inhalt ='Bitte tragen Sie hier ihre Kontaktdaten ein.<br />
+                                           Nachname, Name<br />
+                                           Straße und Hausnummer<br />
+                                           PLZ, Ort<br />
+                                           Telefon<br />
+                                           E-Mail<br />
+                                           <br />
+                                           Site powered by <a href=\"http://www.kajona.de\">Kajona³</a><br /><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /><br />
+                                           '
+                      WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+             $strQuery = "UPDATE "._dbprefix_."element_absatz
+                        SET absatz_titel = 'Imprint',
+                           absatz_inhalt ='Please provide your contact data.<br />
+                                           Name, Forename<br />
+                                           Street<br />
+                                           Zip-Code, City<br />
+                                           Phone<br />
+                                           Mail<br />
+                                           <br />
+                                           Site powered by <a href=\"http://www.kajona.de\">Kajona³</a><br /><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /><br />
+                                           '
+                      WHERE content_id = '".dbsafeString($strElementId)."'";
+        }  
+        
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Headline element created.\n";
+        else
+            $strReturn .= "Error creating headline element.\n";
+
         return $strReturn;
     }
     
