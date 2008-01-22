@@ -19,6 +19,7 @@
 
     <div id="logoHeaderHeader">
         <div id="headerLogo"></div>
+        <div id="headerLogoR"></div>
         <div class="clenaer"></div>
     </div>
     <div id="imageHeader"></div>
