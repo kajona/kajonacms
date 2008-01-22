@@ -306,7 +306,7 @@ h3 {
 }
 
 .button, .buttonShort {
-    background-image: url('../../portal/pics/kajona/forms_button_back.gif');
+    background-image: url('../../portal/pics/kajona/forms_button_back_31.gif');
     background-repeat: repeat-x;
     padding: 0 0 3px 15px;
     margin: 8px 0 0 0;
@@ -335,7 +335,7 @@ h3 {
 }
 .newsListTitle {
     float: left;
-    background-image: url('../../portal/pics/kajona/news_button.gif');
+    background-image: url('../../portal/pics/kajona/news_button_31.gif');
     background-repeat: no-repeat;
     text-indent: 15px;
 }
@@ -348,7 +348,7 @@ h3 {
     float: right;
 }
 .newsListTeaser {
-    background-color: #3bec3b;
+    background-color: #246b39;
 }
 .newsListTeaser div {
     margin-left: 10px;
