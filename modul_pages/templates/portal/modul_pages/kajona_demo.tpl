@@ -51,12 +51,9 @@
                 %%formular_form|tellafriend%%
                 %%results_search%%
                 %%sitemap_navigation%%
-                %%login_portallogin%%
-                %%switch_languageswitch%%
-                %%lm_lastmodified%%
                 %%faqs_faqs%%
                 %%comments_postacomment%%
-                %%rssfeed_rssfeed%%
+                %%mixed_rssfeed|imagelightbox|portallogin|lastmodified%%
             </div>
             <div class="cleaner"></div>
         </div>
