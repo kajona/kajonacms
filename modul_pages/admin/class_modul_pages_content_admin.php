@@ -96,8 +96,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")));
     		}
 
-    		//add a pathnavigation
-    		$strReturn = $this->getPathNavigation().$strReturn;
+    		//add a pathnavigation when not in pe mode
+    		if($this->getParam("pe") != 1) {
+    		    $strReturn = $this->getPathNavigation().$strReturn;
+    		}
 
 		}
 		catch (class_exception $objException) {
@@ -121,21 +123,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 	public function getOutputModuleNavi() {
 	    return array();
-		//return array($this->getPathNavigation());
-		/*
-		//And the page-data
-		$arrPage = $this->loadPageData($this->getSystemid());
-		$strPageID = $this->getSystemid();
-		if(!isset($arrPage["page_name"])) {
-			$arrPage = $this->loadPageData($this->getPrevId($this->getSystemid()));
-			$strPageID = $this->getPrevId();
-		}
-		$strUnlockID = $this->getSystemid();
-		*/
-
-		//return $this->getText("inhalte_navi2").getLinkAdmin("pages", "list", "&unlockid=".$strUnlockID, $this->getText("inhalte_liste"), $this->getText("inhalte_liste"))." &gt; "
-		//		.getLinkAdmin("pages_content", "list", "&systemid=".$strPageID."&unlockid=".$strUnlockID, $arrPage["page_name"] )." &gt; "
-		//		.$this->getText("inhalte_element");
 	}
 
 
