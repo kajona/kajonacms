@@ -42,6 +42,9 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objDownloads->saveObjectToDb();
         $strDownloadsID = $objDownloads->getSystemid();
         
+        $strReturn .= "Modify rights to allow guests to download files...\n";
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_gaeste_gruppe_id_, $strDownloadsID, "right2");
+        
         $strReturn .= "Sync downloads..\n";
         class_modul_downloads_file::syncRecursive($objDownloads->getSystemid(), $objDownloads->getPath());
         

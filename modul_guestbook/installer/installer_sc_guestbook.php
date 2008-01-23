@@ -62,7 +62,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $strQuery = "UPDATE "._dbprefix_."element_guestbook
                         SET guestbook_id='".dbsafeString($strGuestbookID)."',
                             guestbook_template = 'guestbook.tpl',
-                            guestbook_amount = '7'
+                            guestbook_amount = '5'
                         WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
             $strReturn .= "Guestbookelement created.\n";
