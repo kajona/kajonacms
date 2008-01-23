@@ -1,6 +1,6 @@
 <list>
   %%link_newentry%%<br />
-  %%link_back%% - %%link_pages%% - %%link_forward%%</p>
+  <p>%%link_back%% - %%link_pages%% - %%link_forward%%</p>
 <p>%%liste_posts%%</p>
 </list>
 
