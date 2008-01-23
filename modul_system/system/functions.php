@@ -423,10 +423,17 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $st
 	if($strTarget == "")
 		$strTarget = "_self";
 		
+	//any anchors set to the page?
+	$strAnchor = "";
+	if(uniStrpos($strPageI, "#") !== false) {
+		//get anchor, remove anchor from link
+		$strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#")+1));
+		$strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));	
+	}
+		
 	//urlencoding
 	$strPageI = urlencode($strPageI);
 	$strAction = urlencode($strAction);
-	//$strParams = urlencode($strParams);    	
 
 	//languages installed?
 	include_once(_systempath_."/class_modul_system_module.php");
@@ -449,25 +456,41 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $st
                 $strAddKeys = saveUrlEncode($objPage->getStrSeostring());
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
+                    
                 //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
+                $strHref = "href=\"";   
                 //but: special case: just pagename & language
                 if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
-                    $strHref = "href=\"".$strPageI.".".$strLanguage.".html\"";
+                    $strHref .= $strPageI.".".$strLanguage.".html";
                 elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html\"";
+                    $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
                 elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
                 elseif($strSystemid != "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
                 else
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
+                    
+                    
+                // add anchor if given
+                if($strAnchor != "")
+                    $strHref .= "#".$strAnchor; 
+                    
+                $strHref .= "\"";    
+                       
                 $bitRegularLink = false;
             }
 	    }
 
 	    //no, please create a common link
 	    if($bitRegularLink)
-		    $strHref = "href=\"_indexpath_?".($strPageI != "" ? "page=".$strPageI : "" )."".($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). ($strAction != "" ? "&amp;action=".$strAction : "").($strLanguage != "" ? "&amp;language=".$strLanguage : "").($strParams != "" ? $strParams : "" )."\"";
+		    $strHref = "href=\"_indexpath_?".
+		                  ($strPageI != "" ? "page=".$strPageI : "" )."".
+		                  ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). 
+		                  ($strAction != "" ? "&amp;action=".$strAction : "").
+		                  ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
+		                  ($strParams != "" ? $strParams : "" ).
+		                  ($strAnchor != "" ? "#".$strAnchor : "")."\"";
 	}
 	else {
 		$strHref = "href=\"".$strPageE."\"";
@@ -497,6 +520,14 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 		$bitInternal = false;
 	$strParams = str_replace("&", "&amp;", $strParams);
 	
+    // any anchors set to the page?
+    $strAnchor = "";
+    if(uniStrpos($strPageI, "#") !== false) {
+        //get anchor, remove anchor from link
+        $strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#")+1));
+        $strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#")); 
+    }
+	
 	//urlencoding
     $strPageI = urlencode($strPageI);
     $strAction = urlencode($strAction);
@@ -524,23 +555,35 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
                 //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
+                $strHref = "";
                 //but: special case: just pagename & language
                 if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
-                    $strHref = "href=\"".$strPageI.".".$strLanguage.".html\"";
+                    $strHref .= $strPageI.".".$strLanguage.".html";
                 elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html\"";
+                    $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
                 elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
                 elseif($strSystemid != "" && $strLanguage == "")
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
                 else
-                    $strHref = "href=\"".$strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html\"";
+                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
+                    
+                // add anchor if given
+                if($strAnchor != "")
+                    $strHref .= "#".$strAnchor; 
+                    
+                    
                 $bitRegularLink = false;
             }
 	    }
 
         if($bitRegularLink)
-		    $strHref = "_indexpath_?".($strPageI != "" ? "page=".$strPageI : "" )."".($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). ($strAction != "" ? "&amp;action=".$strAction : "").($strLanguage != "" ? "&amp;language=".$strLanguage : "").($strParams != "" ? $strParams : "" )."";
+		    $strHref = "_indexpath_?".($strPageI != "" ? "page=".$strPageI : "" )."".
+		                              ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). 
+		                              ($strAction != "" ? "&amp;action=".$strAction : "").
+		                              ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
+		                              ($strParams != "" ? $strParams : "" ).
+		                              ($strAnchor != "" ? "#".$strAnchor : "")."";
 	}
 	else {
 		$strHref = $strPageE;
