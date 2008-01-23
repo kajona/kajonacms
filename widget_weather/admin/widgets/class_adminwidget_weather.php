@@ -9,7 +9,7 @@
 * 	widget showing a few infos about the current weather	    										*																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_adminwidget_weather.php 1884 2007-12-26 15:04:48Z sidler $	                            *
+*	$Id$	                            *
 ********************************************************************************************************/
 
 include_once(_adminpath_."/widgets/class_adminwidget.php");
