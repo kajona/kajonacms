@@ -9,7 +9,7 @@
 * 	Portaleditor CSS-Styles																				*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                                    *
+*	$Id$	                                    *
 ********************************************************************************************************/
 
 //Header senden
@@ -42,7 +42,15 @@ echo "
 
 /* P O R T A L E D I T O R   T O O L B A R */
 
-
+#pe_classicskin {
+    white-space: nowrap;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    border: none; 
+    background-color: #EFEFEF; 
+    z-index: 1000; 
+}
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
 .peContainerOut {
@@ -72,6 +80,12 @@ echo "
 	border: 1px solid black;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
+}
+
+a.pe_link {
+    font-size: 11px;
+    font-weight: normal;
+    color: #000000;
 }
 
 #pe_classicskin img {

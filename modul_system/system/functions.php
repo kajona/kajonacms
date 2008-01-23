@@ -305,7 +305,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText, $s
 	if($strImage == "" && $strText != "") {
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\"#\" onclick=\"javascript:window.open('"._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\">".$strText."</a>";
+		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." onclick=\"javascript:window.open('"._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\">".$strText."</a>";
 	}
 	return $strLink;
 }
