@@ -46,6 +46,10 @@ class class_modul_pages_search extends class_portal implements interface_search_
 		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_titel";
 		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_bild";
 		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_link";
+		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char1";
+		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char2";
+		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char3";
+		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "text";
 
 		//Pagedata
         $arrSearch["page"] = array();
