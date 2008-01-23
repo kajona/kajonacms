@@ -348,7 +348,7 @@ h3 {
     float: right;
 }
 .newsListTeaser {
-    background-color: #246b39;
+    background-color: #32b059;
 }
 .newsListTeaser div {
     margin-left: 10px;
@@ -404,7 +404,6 @@ h3 {
 }
 
 /* P O S T A C O M M E N T */
-
 #postaCommentForm {
     display: hidden;
     margin-bottom: 5px; 
@@ -450,7 +449,7 @@ h3 {
 }
 
 .portalListRow1:hover, .portalListRow1:hover td {
-    background-color: #A4E892;
+    background-color: #DFDFDF;
     color: #000000;
 }
 
