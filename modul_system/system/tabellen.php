@@ -10,7 +10,7 @@
 *   This file is for documentational purposes only                                                      *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                                 *
+*   $Id$                                                *
 *********************************************************************************************************
 
 
@@ -374,6 +374,12 @@ V 2.1.x:
     portallogin_error       = Page to load in case of error
     portallogin_success     = Page to load in case of success
     portallogin_logout_success = Page to load after logout
+
+//--_element_portalregistration--------------------------------------------------------------------------
+    content_id                     = table primary key
+    portalregistration_template    = Template to load
+    portalregistration_group       = Group to add the new users
+    portalregistration_success     = Page to load after a successfull registration
 
 //--_element_tellafriend---------------------------------------------------------------------------------
 	content_id				= table primary key
