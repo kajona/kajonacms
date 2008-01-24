@@ -8,7 +8,7 @@
 * 	class_element_formular.php																			*
 * 	Portal-class of the portallogin element															    *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                   *
+*	$Id$                               *
 ********************************************************************************************************/
 
 //base-class
@@ -72,9 +72,11 @@ class class_element_portallogin extends class_element_portal implements interfac
 		        header("Location: "._indexpath_."?page=".$this->getPagename());
 		    }
 		}
+		
 
-		if(!$this->objSession->isLoggedin())
-		    $strReturn .= $this->loginForm();
+		if(!$this->objSession->isLoggedin()) {
+	        $strReturn .= $this->loginForm();
+		}
 		else {
 		    if($this->getParam("action") == "portalEditProfile")
 		        $strReturn .= $this->editUserData();
@@ -90,7 +92,7 @@ class class_element_portallogin extends class_element_portal implements interfac
 
     /**
      * Creates a form to login
-     * The template MUST provide at least the following html-input-elements:
+     * The template has to provide at least the following html-input-elements:
      * portallogin_username, portallogin_password, action (hidden)
      *
      * @return string
@@ -122,6 +124,12 @@ class class_element_portallogin extends class_element_portal implements interfac
 	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 	
+	
+	/**
+	 * Creates a form to edit a users data
+	 *
+	 * @return string
+	 */
 	private function editUserData() {
 	    
 	    $arrErrors = array();
@@ -186,7 +194,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             
 	    }
 	}
-
+	
 
     /**
      * Tries to log the user with the given credentials into the system.
