@@ -48,6 +48,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 		    $this->strContentLanguage = "en";
 		else
 		    $this->strContentLanguage = "de";
+		    
 	}
 
 	public function getNeededModules() {

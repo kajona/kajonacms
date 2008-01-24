@@ -52,6 +52,8 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPage->setStrName("gallery");
         $objPage->setStrBrowsername("Gallery");
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb();
 
         $strGalleryPageId = $objPage->getSystemid();

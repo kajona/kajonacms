@@ -32,7 +32,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
      *
      */
     public function install() {
-        $strReturn = "";
+    	
         $strReturn = "";
 
         $strReturn .= "Creating index-site...\n";
@@ -48,6 +48,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
@@ -133,6 +135,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("master");
         $objPage->setStrTemplate("master.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb($strFolderID);
         $this->strMasterID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strMasterID."\n";
@@ -150,6 +154,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb($strFolderID);
         $strErrorPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
@@ -220,6 +226,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $objPage->setStrBrowsername("Imprint");
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb($strFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";

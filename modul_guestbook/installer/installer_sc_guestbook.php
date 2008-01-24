@@ -48,6 +48,8 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPage->setStrName("guestbook");
         $objPage->setStrBrowsername("Guestbook");
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb();
 
         $strGuestbookpageID = $objPage->getSystemid();

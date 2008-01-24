@@ -403,8 +403,8 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	public static function assignNullProperties($strTargetLanguage) {
         //Load all non-assigned props
         $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
-        $arrPropIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
-
+        $arrPropIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery); 
+        
         foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];
             $strCountQuery = "SELECT COUNT(*)
@@ -412,6 +412,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
                                WHERE pageproperties_language = '".dbsafeString($strTargetLanguage)."'
                                  AND pageproperties_id = '".dbsafeString($strId)."'";
             $arrCount = class_carrier::getInstance()->getObjDB()->getRow($strCountQuery);
+            
             if((int)$arrCount["COUNT(*)"] == 0) {
                 $strUpdate = "UPDATE "._dbprefix_."page_properties
                               SET pageproperties_language = '".dbsafeString($strTargetLanguage)."'

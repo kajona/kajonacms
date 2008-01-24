@@ -77,6 +77,7 @@ class class_installer {
 		  //init correct text-file handling as in admins
 		  $this->objTexte->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
+        
 	}
 
 

@@ -39,6 +39,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPage->setStrName("postacomment");
         $objPage->setStrBrowsername("Postacomment Sample");
         $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");        
         $objPage->saveObjectToDb();
 
         $strPostacommentPageID = $objPage->getSystemid();
