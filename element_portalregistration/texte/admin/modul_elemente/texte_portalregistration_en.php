@@ -16,4 +16,5 @@
 $text["portalregistration_template"]                   = "Template:";
 $text["portalregistration_group"]                      = "Assigned group:";
 $text["portalregistration_success"]                    = "Page in case of success (optional):";
+
 ?>

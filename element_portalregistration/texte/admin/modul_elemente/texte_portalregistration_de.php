@@ -16,4 +16,6 @@
 $text["portalregistration_template"]                   = "Template:";
 $text["portalregistration_success"]                    = "Seite im Erfolgsfall (optional):";
 $text["portalregistration_group"]                      = "Zugehörige Gruppe:";
+
+
 ?>

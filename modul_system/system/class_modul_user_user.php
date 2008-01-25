@@ -208,12 +208,13 @@ class class_modul_user_user extends class_model implements interface_model  {
     /** Fetches all available active users with the given username an returns them in an array
      *
      * @param string $strName
+     * @param boolean $bitOnlyActive
      * @return mixed
      */
-    public static function getAllUsersByName($strName) {
+    public static function getAllUsersByName($strName, $bitOnlyActive = true) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user
                       WHERE user_username='".class_carrier::getInstance()->getObjDB()->dbsafeString($strName)."'
-					    AND user_active = 1";
+					    ".($bitOnlyActive ? " AND user_active = 1 " : "" );
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
