@@ -50,6 +50,8 @@ class class_element_portalregistration extends class_element_admin implements in
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
 
+		$strReturn .= $this->objToolkit->formTextRow($this->getText("portalregistration_hint"));
+		
 		//Build the form
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");

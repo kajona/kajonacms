@@ -26,4 +26,17 @@ $text["pr_passwordsUnequal"]                     = "Passwörter unterschiedlich.
 $text["pr_noUsername"]                           = "Kein Benutzername angegeben.";
 $text["pr_usernameGiven"]                        = "Benutzername exisitert bereits. Bitte einen anderen wählen.";
 
+$text["pr_register_suc"]                         = "Sie erhalten in wenigen Minuten eine E-Mail mit einem Aktivierungslink. Verwenden Sie diesen, um 
+                                                    Ihre Anmeldung zu vervollständigen.";
+
+$text["pr_errorLoggedin"]                        = "Sie sind angemeldet. Diese Funktion steht nur abgemeldeten Benutzern zur Verfügung.";
+
+$text["pr_email_subject"]                        = "Aktivierung des Benutzerkontos";
+
+$text["pr_email_body"]                           = "Bitte verwenden Sie den nachstehenden Link, um ihre Anmeldung zu vervollständigen. <br />
+                                                    Danach können Sie sich am Portal anmelden. Sollte der Link nicht anzuklicken sein, kopieren Sie
+                                                    diesen bitte in die Adresszeile Ihres Browsers.<br /><br />";
+
+$text["pr_email_footer"]                         = "<br /><br />Vielen Dank.";
+
 ?>

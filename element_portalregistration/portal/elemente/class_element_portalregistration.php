@@ -17,9 +17,10 @@ require_once(_portalpath_."/class_elemente_portal.php");
 require_once(_portalpath_."/interface_portal_element.php");
 
 include_once(_systempath_."/class_modul_user_user.php");
+include_once(_systempath_."/class_modul_user_group.php");
 
 /**
- * Portal Element to load the login-form, or a small "status" area, providing an logout link
+ * Portal Element to allow users to register themself
  *
  * @package modul_pages
  */
@@ -52,7 +53,7 @@ class class_element_portalregistration extends class_element_portal implements i
 	        $strReturn = $this->editUserData();
 		}
 		else {
-		    $strReturn = $this->getText("portalregistration_errorLoggedin");
+		    $strReturn = $this->getText("pr_errorLoggedin");
 		}
 
 		return $strReturn;
@@ -133,9 +134,27 @@ class class_element_portalregistration extends class_element_portal implements i
 	        $objUser->setIntAdmin(0);
 	        $objUser->setIntPortal(1);
 	        
+	        
 	        if($objUser->saveObjectToDb()) {
+	        	//group assignments
+                class_modul_user_group::addUserToGroups($objUser,array($this->arrElementData["portalregistration_group"]));
+	        	//create a mail to allow the user to activate itself
+	        	
+                $strMailContent = $this->getText("pr_email_body");
+                $strTemp = getLinkPortalRaw($this->getPagename(), "", "portalCompleteRegistration", "&id=".$objUser->getSystemid());
+                $strMailContent .= "<a href=\"".$strTemp."\">".$strTemp."</a>";
+                $strMailContent .= $this->getText("pr_email_footer");
+	        	
+                include_once(_systempath_."/class_mail.php");
+                $objMail = new class_mail();
+                $objMail->setSubject($this->getText("pr_email_subject"));
+                $objMail->setHtml($strMailContent);
+                $objMail->addTo($this->getParam("email"));
 	        	
 	        }
+	        
+	        
+	        return $this->getText("pr_register_suc");
             
 	    }
 	}

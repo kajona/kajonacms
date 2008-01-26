@@ -17,4 +17,7 @@ $text["portalregistration_template"]                   = "Template:";
 $text["portalregistration_group"]                      = "Assigned group:";
 $text["portalregistration_success"]                    = "Page in case of success (optional):";
 
+$text["portalregistration_hint"]                       = "Users created via this element are inactive by default.<br />  
+                                                          Users can activate themself using the automatically sent mail.<br />  
+                                                          A hint about this should be placed on the page.";
 ?>
