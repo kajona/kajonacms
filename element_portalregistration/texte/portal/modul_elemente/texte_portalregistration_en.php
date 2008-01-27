@@ -25,6 +25,8 @@ $text["pr_invalidEmailadress"]                   = "No valid mailadress.";
 $text["pr_passwordsUnequal"]                     = "Passwords not equal.";
 $text["pr_noUsername"]                           = "No username provided.";
 $text["pr_usernameGiven"]                        = "Username already exists. Please choose another one.";
+$text["pr_captcha"]                              = "No valid code.";
+
 
 $text["pr_errorLoggedin"]                        = "You are logged in. This function is available to loggout out users only.";
 
@@ -33,10 +35,13 @@ $text["pr_register_suc"]                         = "Within a few minutes, you wi
 
 $text["pr_email_subject"]                        = "Account activation";
 
-$text["pr_email_body"]                           = "Please use the following link to complete your registration. <br />
-                                                    Afterwards you can log in at the portal. If you can't click the link,
-                                                    please copy it into your browsers' adress bar.<br /><br />";
+$text["pr_email_body"]                           = "Please use the following link to complete your registration. <br />";
+$text["pr_email_body"]                           .= "Afterwards you can log in at the portal. If you can't click the link,";
+$text["pr_email_body"]                           .= "please copy it into your browsers' adress bar.<br /><br />";
 
 $text["pr_email_footer"]                         = "<br /><br />Thanks.";
+
+$text["pr_completionSuccess"]                    = "Activation succeeded. You can now log in at the portal.";
+$text["pr_completionErrorStatus"]                = "This account can't be activated.";
 
 ?>

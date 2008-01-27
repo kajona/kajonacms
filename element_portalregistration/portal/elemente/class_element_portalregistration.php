@@ -50,7 +50,10 @@ class class_element_portalregistration extends class_element_portal implements i
 		$strReturn = "";
 
 		if(!$this->objSession->isLoggedin()) {
-	        $strReturn = $this->editUserData();
+			if($this->getParam("action") == "portalCompleteRegistration")
+			    $strReturn .= $this->completeRegistration();
+			else    
+	            $strReturn = $this->editUserData();
 		}
 		else {
 		    $strReturn = $this->getText("pr_errorLoggedin");
@@ -59,6 +62,37 @@ class class_element_portalregistration extends class_element_portal implements i
 		return $strReturn;
 	}
 
+	
+	/**
+	 * Completes the registration process of a new user by activating the account
+	 *
+	 * @return string
+	 */
+	private function completeRegistration() {
+	   $strReturn = "";
+	   
+	   if($this->getSystemid() != "") {
+	       $objUser = new class_modul_user_user($this->getParam("systemid"));
+	       
+	       if($objUser->getStrEmail() != "") {
+	           if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0) {
+	               $objUser->setIntActive(1);
+	               $objUser->setStrPass("");
+	               if($objUser->updateObjectToDb()) {
+	                   $strReturn .= $this->getText("pr_completionSuccess");
+	                   if($this->arrElementData["portalregistration_success"] != "")
+	                       header("Location: "._indexpath_."?page=".$this->arrElementData["portalregistration_success"]);
+	               }
+	           }
+	           else
+	               $strReturn .= $this->getText("pr_completionErrorStatus");
+	       }
+	       else
+	           $strReturn .= $this->getText("pr_completionErrorStatus");
+	   }
+
+	   return $strReturn;
+	}
 
 	/**
 	 * Creates a form to collect a users data
@@ -85,6 +119,10 @@ class class_element_portalregistration extends class_element_portal implements i
 	        
 	        if(!checkEmailaddress($this->getParam("email")))
                $arrErrors[] = $this->getText("pr_invalidEmailadress");
+               
+		    //Check captachcode
+	        if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode()) 
+	            $arrErrors[] = $this->getText("pr_captcha");
                    
 	        if(count($arrErrors) == 0)
                $bitForm = false;  
@@ -141,15 +179,22 @@ class class_element_portalregistration extends class_element_portal implements i
 	        	//create a mail to allow the user to activate itself
 	        	
                 $strMailContent = $this->getText("pr_email_body");
-                $strTemp = getLinkPortalRaw($this->getPagename(), "", "portalCompleteRegistration", "&id=".$objUser->getSystemid());
-                $strMailContent .= "<a href=\"".$strTemp."\">".$strTemp."</a>";
+                $strTemp = getLinkPortalRaw($this->getPagename(), "", "portalCompleteRegistration", "&systemid=".$objUser->getSystemid());
+                $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
                 $strMailContent .= $this->getText("pr_email_footer");
+                
+                $this->objTemplate->setTemplate($strMailContent);
+                $this->objTemplate->fillConstants();
+                $this->objTemplate->deletePlaceholder();
+                $strMailContent = $this->objTemplate->getTemplate();
 	        	
                 include_once(_systempath_."/class_mail.php");
                 $objMail = new class_mail();
                 $objMail->setSubject($this->getText("pr_email_subject"));
                 $objMail->setHtml($strMailContent);
                 $objMail->addTo($this->getParam("email"));
+                
+                $objMail->sendMail();
 	        	
 	        }
 	        

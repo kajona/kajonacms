@@ -9,6 +9,9 @@
     <div><label for="email">%%emailTitle%%</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div><br />
     <div><label for="forename">%%forenameTitle%%</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div><br />
     <div><label for="name">%%nameTitle%%</label><input type="text" name="name" id="name" value="%%name%%" class="inputText" /></div><br />
+    <div><label for="kajonaCaptcha"></label><img id="kajonaCaptcha" src="_webpath_/image.php?image=kajonaCaptcha&maxWidth=180" /></div><br />
+    <div><label for="form_captcha">Code*:</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" /></div><br />
+    <div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="Neuer Code" class="button" /></div><br /><br />
     <div><label for="Submit"></label><input type="submit" name="Submit" value="%%submitTitle%%" class="button" /></div><br />
     <input type="hidden" name="submitUserForm" value="1" /> 
 </form>
