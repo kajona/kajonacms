@@ -558,7 +558,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage = new class_modul_pages_page("");
 			    $objPage->setStrBrowsername($strBrowsername);
 			    $objPage->setStrDesc($strDescription);
-			    $objPage->setStrName($strName);
+			    $objPage->setStrName(strtolower($strName));
 			    $objPage->setStrTemplate($strTemplate);
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($strSeostring);
@@ -608,7 +608,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage = new class_modul_pages_page($strPageid);
 			    $objPage->setStrBrowsername($strBrowsername);
 			    $objPage->setStrDesc($strDescription);
-			    $objPage->setStrName($strName);
+			    $objPage->setStrName(strtolower($strName));
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($strSeostring);
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
