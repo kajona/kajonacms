@@ -89,6 +89,9 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					$arrOneNews["news_intro"] = $objOneNews->getStrIntro();
 					$arrOneNews["news_text"] = $objOneNews->getStrNewstext();
 					$arrOneNews["news_image"] = $objOneNews->getStrImage();
+					//reset more link?
+                    if(uniStrlen($arrOneNews["news_text"]) == 0)
+                        $arrOneNews["news_more_link"] = "";
 					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
 	
 					//Add pe code
@@ -130,7 +133,8 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			$arrNews["news_title"] = $objNews->getStrTitle();
 			$arrNews["news_intro"] = $objNews->getStrIntro();
 			$arrNews["news_text"] = $objNews->getStrNewstext();
-			$arrNews["news_image"] = $objNews->getStrImage();
+			if($objNews->getStrImage() != "")
+                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&maxWidth=400&maxHeight=400\" >";
 			$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
 
 			//Add pe code

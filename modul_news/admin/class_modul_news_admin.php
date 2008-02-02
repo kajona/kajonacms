@@ -604,7 +604,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		//Rights
 		if($this->objRights->rightRight1($this->getSystemid())) {
 			$objNews = new class_modul_news_news($this->getSystemid());
-			$objNews->setStrImage($this->getParam("news_image"));
+			$objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
 			$objNews->setStrIntro($this->getParam("news_intro"));
 			$objNews->setStrNewstext($this->getParam("news_text"));
 			if(!$objNews->updateObjectToDb(false))
