@@ -201,7 +201,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$bitReturn = true;
 
 		//Check captachcode
-		if($this->getParam("gb_post_captcha") != $this->objSession->getCaptchaCode())
+		if($this->getParam("gb_post_captcha") != $this->objSession->getCaptchaCode() || $this->getParam("gb_post_captcha") == "")
 			$bitReturn = false;
 
 		//Check mailaddress
