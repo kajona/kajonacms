@@ -92,8 +92,9 @@ $text["_stats_anzahl_liste_hint"]    = "The number of rows to be shown in lists"
 
 $text["worker_intro"]                = "Here you can start different maintenance tasks. Those can take up a long time during execution.<br />";
 
-$text["task_lookup"]                 = "Resolve IP-addresses";
+$text["task_lookup"]                 = "Resolve IP-addresses (IP -> Hostname)";
 $text["task_lookupReset"]            = "Reset erroneous hostnames";
+$text["task_ip2c"]                   = "Resolve origin countries of ip-addresses";
 $text["task_exportToCsv"]            = "Export data to CSV-file";
 
 $text["task_csvExportIntro"]         = "With this task, existing records from the database can be exported to a CSV-file. Those records are being deleted
@@ -121,6 +122,10 @@ $text["interval_60days"]             = "60 days";
 
 
 $text["intro_worker_lookup"]         = "Current task: Resolve IP-addresses. <br />Number of addresses to process: ";
+$text["intro_worker_lookupip2c"]     = "Current tals: Resolve IP-addresses by country.<br />
+                                        Therefore the PHP-option 'allow_url_fopen' has to be enabled.<br />
+                                        Number of addresses to process: "; 
+$text["ip2c_urlfopen"]               = "The PHP-option 'allow_url_fopen' is disbaled. The addresses cannot be resolved.";
 $text["progress_worker_lookup"]      = "Progress:";
 $text["worker_lookup_end"]           = "Execution finished. All addresses have been processed.";
 $text["worker_lookupReset_end"]      = "Execution finished. All erroneous hostnames have been resetted.";

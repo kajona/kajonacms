@@ -93,8 +93,9 @@ $text["_stats_anzahl_liste_hint"]    = "Legt die Anzahl an Zeilen in den Statist
 $text["worker_intro"]                = "Hier können verschiedene Wartungs-Tasks gestartet werden. Diese können bei der Ausführung längere
                                         Zeit in Anspruch nehmen.<br />";
 
-$text["task_lookup"]                 = "IP-Adressen auflösen";
+$text["task_lookup"]                 = "IP-Adressen auflösen (IP -> Hostname)";
 $text["task_lookupReset"]            = "Fehlerhafte Hostnames zurücksetzten";
+$text["task_ip2c"]                   = "IP-Adressen nach Ursprungsländern auflösen";
 $text["task_exportToCsv"]            = "Daten in eine CSV-Datei exportieren";
 
 $text["task_csvExportIntro"]         = "Mit diesem Task werden in der Datenbank vorhandene Daten in eine CSV-Datei exportiert und anschließend aus der
@@ -124,6 +125,10 @@ $text["interval_60days"]             = "60 Tage";
 
 
 $text["intro_worker_lookup"]         = "Aktueller Vorgang: IP-Adressen auflösen<br />Anzahl zu verarbeitender Adressen: ";
+$text["intro_worker_lookupip2c"]     = "Aktueller Vorgang: IP-Adressen nach Ländern auflösen.<br />
+                                        Hierfür muss die PHP-Option 'allow_url_fopen' aktiviert sein.<br />
+                                        Anzahl zu verarbeitender Adressen: "; 
+$text["ip2c_urlfopen"]               = "Die PHP-Option 'allow_url_fopen' ist deaktiviert. Die Adressen können nicht aufgelöst werden.";
 $text["progress_worker_lookup"]      = "Fortschritt:";
 $text["worker_lookup_end"]           = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
 $text["worker_lookupReset_end"]      = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";

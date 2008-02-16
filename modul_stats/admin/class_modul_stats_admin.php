@@ -28,6 +28,8 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	private $intDateStart;
 	private $intDateEnd;
 	private $intInterval;
+	
+	private $strIp2cServer = "http://ip2c.kajona.de/ip2c.php";
 
 	/**
 	 * Constructor
@@ -263,6 +265,9 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
                 if($strTask == "lookupReset")
                     $strReturn .= $this->doHostnameLookupReset();
+                    
+                if($strTask == "ip2c")
+                    $strReturn .= $this->doIp2cLookup();    
 
                 if($strTask == "exportToCsv")
                     $strReturn .= $this->exportDataToCsv();
@@ -279,6 +284,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookup") ." (".$intIpsOpen.")", $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookup", $this->getText("task_lookup"), "Run", "icon_accept.gif")), $intI++);
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookupReset"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookupReset", $this->getText("task_lookupReset"), "Run", "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_ip2c"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=ip2c", $this->getText("task_ip2c"), "Run", "icon_accept.gif")), $intI++);
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_exportToCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=exportToCsv", $this->getText("task_exportToCsv"), "Run", "icon_accept.gif")), $intI++);
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_importFromCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=importFromCsv", $this->getText("task_importFromCsv"), "Run", "icon_accept.gif")), $intI++);
 
@@ -381,6 +387,61 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
        return $strReturn;
     }
+    
+    private function doIp2cLookup() {
+    	 $strReturn = "";
+        if(!$this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
+            return $this->getText("fehler_recht");
+
+        $objWorker = new class_modul_stats_worker("");
+        
+    	//determin the number of ips to lookup
+        $arrIpToLookup = $objWorker->getArrayOfIp2cLookups();
+
+        if(count($arrIpToLookup) == 0) {
+            return $this->objToolkit->getTextRow($this->getText("worker_lookup_end"));
+        }
+        
+        //url_fopen allowed?
+        if($this->objConfig->getPhpIni("allow_url_fopen") != 1)
+            return $this->objToolkit->warningBox($this->getText("ip2c_urlfopen"));
+
+        //check, if we did anything before
+        if($this->getParam("totalCount") == "")
+            $this->setParam("totalCount", count($arrIpToLookup));
+
+        $strReturn .= $this->objToolkit->getTextRow($this->getText("intro_worker_lookupip2c"). $this->getParam("totalCount"));
+
+        //Lookup 10 Ips an load the page again
+        for($intI = 0; $intI < 10; $intI++) {
+            if(isset($arrIpToLookup[$intI])) {
+                $strIP = $arrIpToLookup[$intI]["stats_ip"];
+                
+                $strQuery = $this->strIp2cServer."?ip=".urlencode($strIP)."&domain=".urlencode(_webpath_)."&checksum=".md5(urldecode(_webpath_).$strIP);
+                
+                $strCountry = @file_get_contents($strQuery);
+                
+                $objWorker->saveIp2CountryRecord($strIP, $strCountry);
+
+            }
+        }
+
+        //and Create a small progress-info
+        $intTotal = $this->getParam("totalCount");
+        $floatOnePercent = 100 / $intTotal;
+        //and multiply it with the alredy looked up ips
+        $intLookupsDone = ((int)$intTotal - count($arrIpToLookup)) * $floatOnePercent;
+        $intLookupsDone = round($intLookupsDone, 2);
+        if($intLookupsDone < 0)
+            $intLookupsDone = 0;
+
+        $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
+        $strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
+        header("Refresh: 0; "._indexpath_."?admin=1&module=stats&action=worker&task=ip2c&totalCount=".$this->getParam("totalCount")."");
+
+
+        return $strReturn;
+    }
 
     private function doHostnameLookups() {
         $strReturn = "";
@@ -389,8 +450,6 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
 
         $objWorker = new class_modul_stats_worker("");
-
-
 
         //Load all IPs to lookup
         $arrIpToLookup = $objWorker->hostnameLookupIpsToLookup();

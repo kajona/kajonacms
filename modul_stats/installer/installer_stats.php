@@ -28,7 +28,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -86,24 +86,11 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn .= "Installing table ip2country...\n";
         
         $arrFields = array();
-		$arrFields["ip_from"] 		= array("double", false);
-		$arrFields["ip_to"] 		= array("double", false);
-		$arrFields["country_code2"] = array("char10", false);
-		$arrFields["country_code3"] = array("char10", false);
-		$arrFields["country_name"] 	= array("char100", false);
+		$arrFields["ip2c_ip"] 		= array("char20", false);
+		$arrFields["ip2c_name"] 	= array("char100", false);
 
-		if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip_from", "ip_to"), array(), false))
+		if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip2c_ip"), array(), false))
 			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Importing ip2country data...\n"	;
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_1.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_2.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_3.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_4.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_5.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_6.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_7.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_8.csv");
 
 
 		//register module
@@ -120,29 +107,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	public function postInstall() {
     }
 
-    private function importIp2CountryData($strFilename) {
-        $strReturn = "";
-        include_once(_systempath_."/class_csv.php");
-        $objCsv = new class_csv();
-        $objCsv->setStrFilename($strFilename);
-        $objCsv->setTextEncloser("\"");
-        $objCsv->setArrMapping(array(0 => "ip_from", 1 => "ip_to", 2 => "country_code2", 3 => "country_code3", 4 => "country_name"));
-        $objCsv->createArrayFromFile();
-        $arrData = $objCsv->getArrData();
-        $strReturn .= "Importing ".count($arrData)." records...\n";
-        //import.... but as a single transaction (yepp, even if the table itself is not supporting tx)
-        $this->objDB->transactionBegin();
-        foreach ($arrData as $arrOneRecord) {
-        	$strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
-        	            (ip_from, ip_to, country_code2, country_code3, country_name) VALUES
-        	            (".$arrOneRecord["ip_from"].", ".$arrOneRecord["ip_to"].", '".$arrOneRecord["country_code2"]."',
-        	            '".$arrOneRecord["country_code3"]."', '".dbsafeString($arrOneRecord["country_name"])."')";
-        	$this->objDB->_query($strQuery);
-        	$this->objDB->flushQueryCache();
-        }
-		$this->objDB->transactionCommit();
-        return $strReturn;
-    }
+    
 
 	public function update() {
 	    $strReturn = "";
@@ -179,6 +144,11 @@ class class_installer_stats extends class_installer_base implements interface_in
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.95") {
+            $strReturn .= $this->update_3095_310();
         }
 
         return $strReturn."\n\n";
@@ -249,17 +219,6 @@ class class_installer_stats extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
 
-		$strReturn .= "Importing ip2country data...\n"	;
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_1.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_2.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_3.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_4.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_5.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_6.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_7.csv");
-		$strReturn .= $this->importIp2CountryData("/installer/ip2country_full_8.csv");
-
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.0.2");
 
@@ -282,6 +241,32 @@ class class_installer_stats extends class_installer_base implements interface_in
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.0.95");
+
+        return $strReturn;
+    }
+    
+    private function update_3095_310() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
+        
+        $strReturn .= "Removing old ip2country table...\n";
+        $strQuery = "DROP TABLE "._dbprefix_."stats_ip2country";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ... \n";
+        
+        $strReturn .= "Creating new ip2country cache-table...\n";
+       
+        
+        $arrFields = array();
+        $arrFields["ip2c_ip"]       = array("char20", false);
+        $arrFields["ip2c_name"]     = array("char100", false);
+
+        if(!$this->objDB->createTable("stats_ip2country", $arrFields, array("ip2c_ip"), array(), false))
+            $strReturn .= "An error occured! ...\n";
+        
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.1.0");
 
         return $strReturn;
     }

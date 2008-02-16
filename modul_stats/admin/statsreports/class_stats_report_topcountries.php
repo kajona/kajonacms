@@ -139,10 +139,9 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 		$intCounter = 0;
 		foreach ($arrTemp as $arrOneRecord) {
 
-		    $strQuery = "SELECT country_name
+		    $strQuery = "SELECT ip2c_name as country_name
 						   FROM ".$this->arrModule["table2"]."
-						  WHERE ip_from <= ".ip2long($arrOneRecord["stats_ip"])."
-                            AND ip_to >= ".ip2long($arrOneRecord["stats_ip"])."";
+						  WHERE ip2c_ip = '".$arrOneRecord["stats_ip"]."'";
 
 		    $arrRow = $this->objDB->getRow($strQuery);
 

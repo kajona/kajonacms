@@ -144,6 +144,40 @@ class class_modul_stats_worker extends class_model implements interface_model  {
         return $arrTemp["anzahl"];
     }
     
+    /**
+     * Looks up the number of ip not yet resolved to a country
+     *
+     * @return array
+     */
+    public function getArrayOfIp2cLookups() {
+    	$strQuery = "SELECT distinct stats_ip 
+                       FROM "._dbprefix_."stats_data 
+                            LEFT JOIN "._dbprefix_."stats_ip2country  
+                                   ON (stats_ip = ip2c_ip)  
+                      WHERE ip2c_name IS NULL
+                         OR ip2c_name = ''
+                        AND ip2c_name != 'na'
+                   GROUP BY stats_ip";
+    	
+    	return $this->objDB->getArray($strQuery);
+        
+    }
+    
+    /**
+     * Saves a tuple of an ip and country to the cache-table
+     *
+     * @param string $strIp
+     * @param string $strCountry
+     * @return bool
+     */
+    public function saveIp2CountryRecord($strIp, $strCountry) {
+    	$strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
+    	               (ip2c_ip, ip2c_name) VALUES 
+    	               ('".dbsafeString($strIp)."', '".dbsafeString($strCountry)."')";
+    	
+    	return $this->objDB->_query($strQuery);
+    }
+    
     
     /**
      * Imports data into the database given as a csv-file
