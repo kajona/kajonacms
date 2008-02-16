@@ -8,7 +8,7 @@
 * 	class_element_bild.php																				*
 * 	Portal-class of the picture element																	*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                       *
+*	$Id$                                      *
 ********************************************************************************************************/
 
 //Base Class
@@ -48,13 +48,26 @@ class class_element_bild extends class_element_portal implements interface_porta
 		$strReturn = "";
 		$strTitle = "";
 		$strImage = "";
-		$strReturn .= "<p>\n";
 		//Titel gegeben?
 		if($this->arrElementData["bild_titel"] != "")
 			$strTitle .= $this->arrElementData["bild_titel"] ;
 		//Bild?
-		if($this->arrElementData["bild_bild"] != "")
-			$strImage .= "<img src=\""._webpath_.$this->arrElementData["bild_bild"]."\" alt=\"".$strTitle."\" />";
+		if($this->arrElementData["bild_bild"] != "") {
+			//scale the image?
+			$intMaxWidth = 0;
+			$intMaxHeight = 0;
+			
+			if($this->arrElementData["bild_x"] != "" && $this->arrElementData["bild_x"] != 0)
+		        $intMaxWidth = (int)$this->arrElementData["bild_x"];
+		        
+		    if($this->arrElementData["bild_y"] != "" && $this->arrElementData["bild_y"] != 0)
+                $intMaxHeight = (int)$this->arrElementData["bild_y"];
+                
+            if($intMaxHeight > 0 || $intMaxWidth > 0)    
+			    $strImage .= "<img src=\""._webpath_."/image.php?image=".urlencode($this->arrElementData["bild_bild"])."&maxWidth=".$intMaxWidth."&maxHeight=".$intMaxHeight."\" alt=\"".$strTitle."\" />";
+			else    
+			    $strImage .= "<img src=\""._webpath_.$this->arrElementData["bild_bild"]."\" alt=\"".$strTitle."\" />";
+		}
 
 		//Link?
 		if($this->arrElementData["bild_link"] != "") {
@@ -68,7 +81,6 @@ class class_element_bild extends class_element_portal implements interface_porta
 		else
 			$strReturn .= $strImage.$strTitle;
 
-		$strReturn .="</p>\n";
 		$strReturn = "<div class=\"bild\">".$strReturn."</div>";
 
 		return $strReturn;

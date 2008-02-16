@@ -9,7 +9,7 @@
 * 	Admin language file for module_pages image page-element												*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$																						*
+*	$Id$	    									*
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
@@ -17,5 +17,8 @@ $text["browser"]				= "Open browser";
 $text["bild_titel"]				= "Title:";
 $text["bild_link"]				= "Link:";
 $text["bild_bild"]				= "Image:";
+$text["bild_x"]                 = "Maximum width:";
+$text["bild_y"]                 = "Maximum height:";
+$text["bild_xy_hint"]           = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";
 
 ?>

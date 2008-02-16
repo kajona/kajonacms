@@ -49,6 +49,11 @@ class class_element_bild extends class_element_admin implements interface_admin_
 		$strReturn .= $this->objToolkit->formInputText("bild_titel", $this->getText("bild_titel"), (isset($arrElementData["bild_titel"]) ? $arrElementData["bild_titel"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("bild_link", $this->getText("bild_link"), (isset($arrElementData["bild_link"]) ? $arrElementData["bild_link"] : "" ));
 		$strReturn .= $this->objToolkit->formInputText("bild_bild", $this->getText("bild_bild"), (isset($arrElementData["bild_bild"]) ? $arrElementData["bild_bild"] : "" ), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=bild_bild", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formTextRow($this->getText("bild_xy_hint"));
+		$strReturn .= $this->objToolkit->formInputText("bild_x", $this->getText("bild_x"), (isset($arrElementData["bild_x"]) ? $arrElementData["bild_x"] : "" ));
+		$strReturn .= $this->objToolkit->formTextRow($this->getText("bild_xy_hint"));
+		$strReturn .= $this->objToolkit->formInputText("bild_y", $this->getText("bild_y"), (isset($arrElementData["bild_y"]) ? $arrElementData["bild_y"] : "" ));
+		
 		return $strReturn;
 	}
 
@@ -78,7 +83,9 @@ class class_element_bild extends class_element_admin implements interface_admin_
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
 				bild_titel = '".dbsafeString($this->getParam("bild_titel"))."',
 				bild_link = '".dbsafeString($this->getParam("bild_link"))."',
-				bild_bild = '".dbsafeString($strImage)."'
+				bild_bild = '".dbsafeString($strImage)."',
+				bild_x = ".(int)dbsafeString($this->getParam("bild_x")).",
+				bild_y = ".(int)dbsafeString($this->getParam("bild_y"))."
 				WHERE content_id='".dbsafeString($strSystemid)."'";
 
 		if($this->objDB->_query($strQuery))

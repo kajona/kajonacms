@@ -24,7 +24,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
 
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -239,6 +239,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["bild_titel"]	= array("char254", true);
 		$arrFields["bild_link"] 	= array("char254", true);
 		$arrFields["bild_bild"]		= array("char254", true);
+		$arrFields["bild_x"]        = array("int", true);
+		$arrFields["bild_y"]        = array("int", true);
 
 		if(!$this->objDB->createTable("element_bild", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -314,6 +316,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.95") {
+            $strReturn .= $this->update_3095_310();
         }
 
         return $strReturn."\n\n";
@@ -486,6 +493,33 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	    return $strReturn;
 	}
+	
+    private function update_3095_310() {
+        $strReturn = "";
+
+        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
+        
+        $strReturn .= "Searching for image-element to alter...\n";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
+        $arrRow = $this->objDB->getRow($strQuery);
+        if($arrRow["COUNT(*)"] != 0) {
+        	$strSql = "ALTER TABLE `kajona_element_bild`   
+        	                   ADD `bild_x` INT NULL ,
+                               ADD `bild_y` INT NULL ";
+        	
+        	if(!$this->objDB->_query($strSql))
+        	   $strReturn .= "An error occured!\n";
+        }
+            
+        
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("pages", "3.1.0");
+        $this->updateModuleVersion("pages_content", "3.1.0");
+        $this->updateModuleVersion("folderview", "3.1.0");
+
+        return $strReturn;
+    }
 
 }
 ?>
