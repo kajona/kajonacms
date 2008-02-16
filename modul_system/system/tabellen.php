@@ -183,6 +183,10 @@ V 2.1.x:
 	stats_browser			= visitors browser-signature
 	stats_session           = Session-ID of the request
 
+//--_stats_ip2country------------------------------------------------------------------------------------
+    ip2c_ip                 = ip, primary key
+    ip2c_name               = name of the country    
+
 //--_news_category---------------------------------------------------------------------------------------
 	news_cat_id	       		= table primary key
 	news_cat_title			= name of the category
@@ -310,9 +314,11 @@ V 2.1.x:
 
 //--_element_bild----------------------------------------------------------------------------------------
 	content_id				= table primary key
-	bild_titel				= Titel des Bildes
-	bild_link				= Link zum Bild
-	bild_bild				= Bild
+	bild_titel				= title / alt tag
+	bild_link				= additional link
+	bild_bild				= image
+    bild_x                  = max width
+    bild_y                  = max height
 
 //--_element_navigation----------------------------------------------------------------------------------
 	content_id		       	= table primary key
