@@ -100,7 +100,8 @@ final class class_session {
 
 	/**
 	 * Returns the captcha code generated the last time.
-	 * the code is being reset, so later requests will fail!
+	 * the code is being reset, so later requests will return a new systemid
+	 * forcing the comparison to fail.
 	 *
 	 * @return string
 	 */
@@ -108,6 +109,9 @@ final class class_session {
 	    $strCode = $this->getSession("kajonaCaptchaCode");
 	    //reset code
 	    $this->setSession("kajonaCaptchaCode", "");
+	    if($strCode == "")
+	       $strCode = generateSystemid();
+	       
 	    return $strCode;
 	}
 
