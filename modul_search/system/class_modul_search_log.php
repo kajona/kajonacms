@@ -68,9 +68,14 @@ class class_modul_search_log extends class_model implements interface_model  {
      * @static 
      */
     public static function generateLogEntry($strSeachterm) {
+    	
+    	include_once(_systempath_."/class_modul_system_common.php");
+        $objCommon = new class_modul_system_common();
+        $strLanguage = $objCommon->getStrPortalLanguage();
+    	
         $strQuery = "INSERT INTO "._dbprefix_."search_log 
-                    (search_log_id, search_log_date, search_log_query) VALUES
-                    ('".dbsafeString(generateSystemid())."', ".(int)time().", '".dbsafeString($strSeachterm)."'  )";
+                    (search_log_id, search_log_date, search_log_query, search_log_language) VALUES
+                    ('".dbsafeString(generateSystemid())."', ".(int)time().", '".dbsafeString($strSeachterm)."', '".dbsafeString($strLanguage)."'  )";
         
         return class_carrier::getInstance()->getObjDB()->_query($strQuery);
     }

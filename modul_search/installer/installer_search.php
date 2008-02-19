@@ -27,7 +27,7 @@ class class_installer_search extends class_installer_base implements interface_i
 	 *
 	 */
     public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "search";
 		$arrModule["class_admin"] 	= "";
 		$arrModule["file_admin"] 	= "";
@@ -70,9 +70,10 @@ class class_installer_search extends class_installer_base implements interface_i
 		$strReturn .= "Installing search-log table...\n";
 		
 		$arrFields = array();
-		$arrFields["search_log_id"] 	= array("char20", false);
-		$arrFields["search_log_date"] 	= array("int", true);
-		$arrFields["search_log_query"] 	= array("char254", true);
+		$arrFields["search_log_id"] 	  = array("char20", false);
+		$arrFields["search_log_date"] 	  = array("int", true);
+		$arrFields["search_log_query"] 	  = array("char254", true);
+		$arrFields["search_log_language"] = array("char10", true);
 		
 		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -154,6 +155,11 @@ class class_installer_search extends class_installer_base implements interface_i
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.95") {
+            $strReturn .= $this->update_3095_310();
         }
 
         return $strReturn."\n\n";
@@ -243,6 +249,23 @@ class class_installer_search extends class_installer_base implements interface_i
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.0.95");
+
+        return $strReturn;
+    }
+    
+    private function update_3095_310() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
+        
+        $strReturn .= "Altering log-table...\n";
+        
+        $strQuery = "ALTER TABLE `"._dbprefix_."search_log` ADD `search_log_language` VARCHAR( 10 ) NULL ";
+        
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "3.1.0");
 
         return $strReturn;
     }

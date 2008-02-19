@@ -91,12 +91,14 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 			$arrLogs[$intKey][0] = $intI;
             $arrLogs[$intKey][1] = timeToString($arrOneLog["search_log_date"]);
             $arrLogs[$intKey][2] = $arrOneLog["search_log_query"];
+            $arrLogs[$intKey][3] = $arrOneLog["search_log_language"];
         }
     	//Create a data-table
     	$arrHeader = array();
         $arrHeader[0] = "#";
         $arrHeader[1] = $this->objTexts->getText("header_date", "search", "admin");
         $arrHeader[2] = $this->objTexts->getText("header_query", "search", "admin");
+        $arrHeader[3] = $this->objTexts->getText("header_language", "search", "admin");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
 
 		return $strReturn;
@@ -108,7 +110,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 	 * @return mixed
 	 */
 	private function getLogbookData() {
-		$strQuery = "SELECT search_log_date, search_log_query
+		$strQuery = "SELECT search_log_date, search_log_query, search_log_language
 					  FROM ".$this->arrModule["table"]."
 					  WHERE search_log_date >= ".(int)$this->intDateStart."
 					    AND search_log_date <= ".(int)$this->intDateEnd."

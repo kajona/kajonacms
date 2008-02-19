@@ -17,5 +17,6 @@
 $text["stats_title"]            = "Suchanfragen";
 $text["header_date"]            = "Datum";
 $text["header_query"]           = "Suchbegriff";
+$text["header_language"]        = "Sprache";
 
 ?>

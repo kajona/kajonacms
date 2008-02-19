@@ -9,7 +9,7 @@
 * 	installer to handle the installation of the stats-module                                            *
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                          *
+*	$Id$                                         *
 ********************************************************************************************************/
 
 require_once(_systempath_."/class_installer_base.php");
@@ -256,7 +256,6 @@ class class_installer_stats extends class_installer_base implements interface_in
         
         $strReturn .= "Creating new ip2country cache-table...\n";
        
-        
         $arrFields = array();
         $arrFields["ip2c_ip"]       = array("char20", false);
         $arrFields["ip2c_name"]     = array("char100", false);
