@@ -503,9 +503,9 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
         $arrRow = $this->objDB->getRow($strQuery);
         if($arrRow["COUNT(*)"] != 0) {
-        	$strSql = "ALTER TABLE `kajona_element_bild`   
-        	                   ADD `bild_x` INT NULL ,
-                               ADD `bild_y` INT NULL ";
+        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName("kajona_element_bild")."   
+        	                   ADD ".$this->objDB->encloseColumnName("bild_x")." INT NULL ,
+                               ADD ".$this->objDB->encloseColumnName("bild_y")." INT NULL ";
         	
         	if(!$this->objDB->_query($strSql))
         	   $strReturn .= "An error occured!\n";

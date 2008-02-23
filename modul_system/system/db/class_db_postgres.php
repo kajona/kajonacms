@@ -311,6 +311,17 @@ class class_db_postgres implements interface_db_driver {
     public function encloseColumnName($strColumn) {
     	return $strColumn;
     }
+    
+    /**
+     * Allows the db-driver to add database-specific surrounding to table-names.
+     *
+     * @param string $strTable
+     * @return string
+     */
+    public function encloseTableName($strTable) {
+        return $strTable;
+    }
+    
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 

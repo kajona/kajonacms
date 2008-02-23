@@ -167,13 +167,22 @@ interface interface_db_driver {
     public function dbImport($strFilename);
     
     /**
-     * Allows the db-driver to add database-specific surrounding to column-names.
+     * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
      *
      * @param string $strColum
      * @return string
      */
     public function encloseColumnName($strColumn);
+    
+    /**
+     * Allows the db-driver to add database-specific surroundings to table-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strTable
+     * @return string
+     */
+    public function encloseTableName($strTable);
 }
 
 

@@ -259,7 +259,8 @@ class class_installer_search extends class_installer_base implements interface_i
         
         $strReturn .= "Altering log-table...\n";
         
-        $strQuery = "ALTER TABLE `"._dbprefix_."search_log` ADD `search_log_language` VARCHAR( 10 ) NULL ";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_log")." 
+                             ADD ".$this->objDB->encloseColumnName("search_log_language")." VARCHAR( 10 ) NULL ";
         
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured...\n";

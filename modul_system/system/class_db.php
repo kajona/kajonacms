@@ -638,6 +638,17 @@ class class_db {
     public function encloseColumnName($strColumn) {
     	return $this->objDbDriver->encloseColumnName($strColumn);
     }
+    
+/**
+     * Allows the db-driver to add database-specific surrounding to table-names.
+     * E.g. needed by the mysql-drivers
+     *
+     * @param string $strColumn
+     * @return string
+     */
+    public function encloseTableName($strTable) {
+        return $this->objDbDriver->encloseTableName($strTable);
+    }
 
 } //class_db
 ?>
