@@ -143,13 +143,13 @@ class class_graph {
             $this->objGraph->legend->Pos(0.4,0.95,"center","bottom");
             //adjust margin, if not done before
             if(!$this->bitMarginSet)
-                $this->objGraph->img->SetMargin(30,30,10,60);
+                $this->objGraph->img->SetMargin(50,30,10,60);
 		}
 
 		$this->setGraphTitle();
 		//disable border
 		$this->objGraph->frame_weight = 0;
-		//set antialiasing, not used in every char, but won't make it worse ;)
+		//set antialiasing, not used in every chart, but won't make it worse ;)
 		$this->objGraph->img->SetAntiAliasing();
 		//reset the graph-mode
 		$this->intCurrentGraphMode = -1;
@@ -282,7 +282,7 @@ class class_graph {
      *  $objGraph->createLinePlotChart();
      *  $objGraph->addLinePlot(array(2,4,5,7,8), "blue");
 	 *  $objGraph->addLinePlot(array(4,4,3,9,1), "red");
-	 *  $objGraph->setXAxisTickLabels(array("eins", "zwo", "drii", "fier", "pf�nf"));
+	 *  $objGraph->setXAxisTickLabels(array("eins", "zwo", "drii", "fier", "pfuenf"));
      *  $objGraph->showGraph();
      *
      * @param int $intWidth

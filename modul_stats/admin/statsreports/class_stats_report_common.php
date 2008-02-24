@@ -248,12 +248,14 @@ class class_stats_report_common implements interface_admin_statsreports {
 		$arrHits = array();
 		$arrUser = array();
 		$arrLabels = array();
+		
+		$intDaysPerLoad = 30;
 
         //create tick labels
         $intCount = 0;
         $intStart = $this->intDateStart;
         $intDBStart = $this->intDateStart;
-        $intDBEnd = ($intDBStart+30*24*60*60);
+        $intDBEnd = ($intDBStart+$intDaysPerLoad*24*60*60);
 
         $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
         $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
@@ -267,7 +269,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 			if(($intStart+24*60*60*$this->intInterval) > $intDBEnd ) {
 			    //reload arrays
 			    $intDBStart = $intStart;
-			    $intDBEnd = ($intStart+30*24*60*60);
+			    $intDBEnd = ($intStart+$intDaysPerLoad*24*60*60);
 			    $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
                 $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
 
