@@ -71,9 +71,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	public function actionList() {
 		$strReturn = "";
 
-		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder") {
+		//systemid passed?
+		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree()) {
 		    $this->setSystemid($this->arrElementData["download_id"]);
-		}
+		} 
+		
 		$arrObjects = class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true);
 
 		if(count($arrObjects) > 0) {
@@ -151,7 +153,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		//Load the current records
 		$objArchive = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		$objFile = new class_modul_downloads_file($this->getSystemid());
-		//If the record is empty, try to load the gallery
+		//If the record is empty, try to load the archive
 		if($objFile->getFilename() == "") {
 		      $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		}
@@ -171,6 +173,39 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		}
 
 		return $strReturn;
+	}
+	
+	/**
+	 * Validates if the requested systemid is part of the dl-tree specified in the pageelement
+	 *
+	 * @return bool
+	 */
+	private function checkSystemidBelongsToCurrentTree() {
+		$bitReturn = true;
+		
+		//check if requested systemid is part of the elements tree
+        $objArchive = new class_modul_downloads_archive($this->arrElementData["download_id"]);
+        $objFile = new class_modul_downloads_file($this->getSystemid());
+            
+        //If the record is empty, try to load the archive
+        if($objFile->getFilename() == "") {
+            $objFile = new class_modul_downloads_archive($this->getSystemid());
+        }
+    
+        while($objFile->getPrevId() != "0" && $objFile->getPrevId() != $objArchive->getPrevId()) {
+            $strBackupId = $objFile->getPrevId();
+            $objFile = new class_modul_downloads_file($objFile->getPrevId());
+            if($objFile->getFilename() == "") {
+                $objFile = new class_modul_downloads_archive($strBackupId);
+            }
+        }
+            
+        //if the requested systemid belong to the tree set in the pageelement, the systemids should match.
+        //otherwise, set the pageelements' systemid as the current id
+        if($objFile->getSystemid() != $this->arrElementData["download_id"])
+            $bitReturn = false;
+               
+		return $bitReturn;
 	}
 
 }

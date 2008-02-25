@@ -53,8 +53,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		if($this->getParam("action") != "")
 		    $strAction = $this->getParam("action");
 
-		if($strAction == "detailImage")
-			$strReturn = $this->actionDetailImage();
+		if($strAction == "detailImage") {
+			if($this->checkIfRequestedIdIsInElementsTree())
+			    $strReturn = $this->actionDetailImage();
+			else
+			    $strReturn = $this->actionList();    
+		}
 		elseif($strAction == "imageFolder")
 		    $strReturn = $this->actionList();
 		elseif($this->arrElementData["gallery_mode"] == 1)
@@ -75,12 +79,11 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 */
 	public function actionList() {
 		$strReturn = "";
+		
 		//Determin the prev_id to load
-
-		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getParam("action") != "imageFolder") {
+		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getParam("action") != "imageFolder" || !$this->checkIfRequestedIdIsInElementsTree()) {
 		    $this->setSystemid($this->arrElementData["gallery_id"]);
 		}
-		
 		
 		$bitPageview = false;
 		//load using the pageview?
@@ -486,6 +489,40 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrReturn["backward_3"] = (isset($arrImagesLevel[$intKeyHit-3]) ? $arrImagesLevel[$intKeyHit-3]->getSystemid() : "");;
 
 		return $arrReturn;
+	}
+	
+	
+	/**
+	 * Validates if the systemid requested is a valid element of the gallery-tree selected via the pageeelement
+	 *
+	 * @return bool
+	 */
+	private function checkIfRequestedIdIsInElementsTree() {
+		$bitReturn = true;
+		
+        //check if requested systemid is part of the elements tree
+        $objData = new class_modul_gallery_pic($this->getSystemid());
+        $objGallery = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
+            
+        //If the record is empty, try to load the gallery
+        if($objData->getStrName() == "") {
+            $objData = new class_modul_gallery_gallery($this->getSystemid());
+        }
+    
+        while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $objData->getSystemid() != $objGallery->getSystemid()) {
+            $strBackupId = $objData->getPrevId();
+            $objData = new class_modul_gallery_pic($objData->getPrevId());
+            if($objData->getStrName() == "") {
+                $objData = new class_modul_gallery_gallery($strBackupId);
+            }
+    
+        }
+           
+        //if the requested systemid belong to the tree set in the pageelement, the systemids should match.
+        if($objData->getSystemid() != $this->arrElementData["gallery_id"])
+            $bitReturn = false;
+		
+		return $bitReturn;
 	}
 
 }
