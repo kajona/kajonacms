@@ -606,7 +606,7 @@ Width, Height
 ---------------------------------------------------------------------------------------------------------
 -- MODULE NAVIGATION ------------------------------------------------------------------------------------
 
-The sourrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
+The surrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
 <modulenavi_main>
     <table width="190" cellspacing="0" cellpadding="0">
 		<tr>

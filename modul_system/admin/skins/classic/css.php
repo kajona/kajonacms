@@ -605,7 +605,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
 	color: #FFFFFF;
     font-size: 11px;
-    width: 205px;
+    width: 175px;
     float: left;
 }
 
@@ -623,7 +623,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	padding: 0 0 10px 0; 
 	margin: none; 
 	list-style: none; 
-	width: 260px;
+	width: 230px;
 }
 
 .dashBoard ul li {

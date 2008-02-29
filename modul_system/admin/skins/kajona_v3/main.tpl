@@ -32,11 +32,11 @@
 			<td id="moduleNavi">
 				<div>
 					%%mainnavi%%
-					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img src="_skinwebpath_/modulenavi_more.png" /></a>
+					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img src="_skinwebpath_/modulenavi_more.gif" /></a>
 				</div> 
-				<div id="moduleNaviHidden" >
+				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl">
-						<li style="text-align: right"><a href="javascript:hideMenu();">[X]</a></li>
+						<li style="text-align: right" onclick="javascript:hideMenu();"><a href="javascript:hideMenu();">[X]</a></li>
 					</ul>
 				</div>
 			</td>
@@ -67,7 +67,7 @@
 			<td id="footerRightCorner"></td>
 		</tr>
 		<tr>
-			<td colspan="4" id="copyright">&copy; 2007-2008 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
+			<td colspan="4" id="copyright">&copy; 2008 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
 		</tr>
 	</tbody>
 </table>

@@ -36,7 +36,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="copyright">&copy; 2007-2008 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
+	<div class="copyright">&copy; 2008 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
 </div>
 
 </body>

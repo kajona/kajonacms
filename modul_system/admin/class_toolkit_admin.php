@@ -899,7 +899,7 @@ class class_toolkit_admin extends class_toolkit {
 			        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDLast);
 			    else {
 			    	//allow to hide modules if too much given 
-			    	if($intCount >= 7) {
+			    	if($intCount >= 8) {
 			    		$strTemp = $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowHiddenID);
 			    		if($strTemp == "")
 			    			$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);

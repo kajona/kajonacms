@@ -494,7 +494,7 @@ Width, Height
 ---------------------------------------------------------------------------------------------------------
 -- MODULE NAVIGATION ------------------------------------------------------------------------------------
 
-The sourrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
+The surrounding of the module-navigation (NOT THE MODULE-ACTIONS!)
 <modulenavi_main>
     <ul id="adminModuleNaviUl">
     	%%rows%%
@@ -763,18 +763,18 @@ The language switch sourrounds the buttons
 </adminwidget_widget>
 
 <dashboard_column_header>
+	<br />
 	<script type="text/javascript">
     	kajonaAjaxHelper.loadDragNDropBase();
     	kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
-    	if(arrayListIds == null)
+    	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
-        else
+        } else {
             arrayListIds[(arrayListIds.length +0)] = "%%column_id%%";
-    
-        
+		}
 	</script>
 	
-	<ul id="%%column_id%%" style="padding: 0 0 10px 0; margin: 0; list-style: none; width: 260px;">
+	<ul id="%%column_id%%" class="adminwidgetColumn">
 </dashboard_column_header>
 
 <dashboard_column_footer>
@@ -790,9 +790,5 @@ The language switch sourrounds the buttons
 </adminwidget_text>
 
 <adminwidget_separator>
-<table cellpadding="0" cellspacing="0" style="width: 100%;">
-	<tr>
-  		<td class="divider">&nbsp;</td>
-	</tr>
-</table>
+&nbsp;<br />
 </adminwidget_separator>

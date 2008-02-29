@@ -177,12 +177,12 @@ td {
 	background-image: url('"._skinwebpath_."/logo.gif');
 	background-position: bottom;
 	background-repeat: no-repeat;
-	width: 296px;
-	height: 74px;
+	width: 208px;
+	height: 66px;
 }
 
 #logoSpacer {
-	height: 50px;
+	height: 42px;
 }
 
 
@@ -318,6 +318,8 @@ html>body #moduleNavi ul span {
 
 #moduleNaviHidden ul span {
 	background: none;
+	margin: 0px;
+	padding: 0px;
 }
 
 #moduleNaviHidden ul li {
@@ -325,17 +327,17 @@ html>body #moduleNavi ul span {
 	display: list-item;
 	position: static;
 	float: none;
-	padding: 0 10px 0 10px;
 	margin: 0px;
+	padding: 0px;
 }
 
 #moduleNaviHidden ul li:hover {
 	background: #f0f0f0;
-	display: list-item;
-	position: static;
-	float: none;
-	padding: 0 10px 0 10px;
-	margin: 0px;
+}
+
+#moduleNaviHidden ul li a {
+	display: block;
+	padding: 0 7px 0 7px;
 }
 
 
@@ -345,13 +347,13 @@ html>body #moduleNavi ul span {
 	background-image: url('"._skinwebpath_."/navi_three_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
-	width: 146px;
+	width: 58px;
 }
 
 #moduleActionNaviThree div {
 	background-image: url('"._skinwebpath_."/navi_three.gif');
 	background-repeat: no-repeat;
-	width: 146px;
+	width: 58px;
 	height: 264px;
 }
 
@@ -546,7 +548,14 @@ h2 {
 
 .adminwidget {
     display: block;
-    width: 250px;
+    width: 225px;
+}
+
+.adminwidgetColumn {
+	padding: 0 0 10px 0;
+	margin: 0;
+	list-style: none;
+	width: 235px;
 }
 
 #quickHelp .hd .title, .adminwidget .hd .title {
