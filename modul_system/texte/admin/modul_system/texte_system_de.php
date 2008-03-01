@@ -207,7 +207,8 @@ $text["quickhelp_list"]				= "Die Liste der Module gibt eine schnelle Übersicht
 									   Zusätzlich werden die aktuell installierten Versionen der installierten Module genannt, ebenso das
 									   ursprüngliche Installationsdatum des Moduls.<br />
 									   Über die Rechte des Moduls kann der Modul-Rechte-Knoten bearbeitet werden, von welchem die Inhalte bei
-									   aktivierter Rechtevererbung ihre Einstellungen erben.";
+									   aktivierter Rechtevererbung ihre Einstellungen erben.<br />
+									   Durch Verschieben der Module in der Liste lässt sich die Reihenfolge in der Modulnavigation anpassen.";
 $text["quickhelp_moduleList"]       =  $text["quickhelp_list"];
 $text["quickhelp_systemInfo"]		= "Kajona versucht an dieser Stelle, ein paar Informationen über das System heraus zu finden, auf welchem sich die
 									   Installation befindet.";

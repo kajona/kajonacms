@@ -204,7 +204,8 @@ $text["quickhelp_title"]            = "Quickhelp";
 
 $text["quickhelp_list"]				= "The list of modules provides an overview of the modules currently installed.<br />
 									   Additionally, the modules versions and the installation dates are displayed.<br />
-									   You are able to modify the permissons of the module-rights-record, the base for all contents to inherit their permissions from (if activated)";
+									   You are able to modify the permissons of the module-rights-record, the base for all contents to inherit their permissions from (if activated).<br />
+									   It's also possible to reorder the modules in the module navigation by changing the position of a module in this list.";
 
 $text["quickhelp_moduleList"]       =  $text["quickhelp_list"];
 $text["quickhelp_systemInfo"]		= "Kajona tries to find out a few informations about the environment in which Kajona is running.";

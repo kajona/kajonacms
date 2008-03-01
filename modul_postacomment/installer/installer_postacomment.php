@@ -85,7 +85,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		                                     "class_modul_postacomment_portal_xml.php");
 
 		//modify default rights to allow guests to post
-		$strReturn .= "Modifying modules' rights knot...\n";
+		$strReturn .= "Modifying modules' rights node...\n";
 		$this->objRights->addGroupToRight(_gaeste_gruppe_id_, $strSystemID, "right1");
 		
 		$strReturn .= "Registering system-constants...\n";

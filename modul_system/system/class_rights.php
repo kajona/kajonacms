@@ -136,7 +136,7 @@ class class_rights {
 			}
 			else {
 				//Inheritance, but NO system_prev_id
-				//So we use the module-knot!
+				//So we use the module-node!
 				//!!!!!!!BUT: There are special cases!!!!!!
 
 				//Special case 1: Folders!
@@ -159,7 +159,7 @@ class class_rights {
 						$arrRow = $this->objDb->getRow($strQuery);
 					}
 				}
-				//Regular Case: Loading the module-knot
+				//Regular Case: Loading the module-node
 				else {
 					$strQuery = "SELECT *
 								FROM "._dbprefix_."system,
@@ -188,7 +188,7 @@ class class_rights {
 
 	/**
 	 * Returns a 2-dimensional Array containg the groups and the assinged rights.
-	 * If the record inherits, the tree is traversed upwards till the base-knot is being found.
+	 * If the record inherits, the tree is traversed upwards till the base-node is being found.
 	 * In the last case, this is the system-root
 	 *
 	 * @param string $strSystemid

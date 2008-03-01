@@ -296,7 +296,7 @@ abstract class class_installer_base extends class_root {
 		//The previous id is the the id of the Root-Record -> 0
 		$strPrevId = "0";
 
-		$strSystemid = $this->createSystemRecord($strPrevId, "Module ".$strName." System Knot", true, $intModuleNr);
+		$strSystemid = $this->createSystemRecord($strPrevId, "Module ".$strName." System node", true, $intModuleNr);
 
 		$strQuery = "INSERT INTO "._dbprefix_."system_module 
 						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin, 
