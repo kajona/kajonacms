@@ -35,9 +35,7 @@
 					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img src="_skinwebpath_/modulenavi_more.gif" /></a>
 				</div> 
 				<div id="moduleNaviHidden">
-					<ul id="naviCollectorUl">
-						<!-- <li style="text-align: right" onclick="javascript:hideMenu();"><a href="javascript:hideMenu();">[X]</a></li> -->
-					</ul>
+					<ul id="naviCollectorUl"></ul>
 				</div>
 			</td>
 			<td id="contentTopRightTop"></td>
