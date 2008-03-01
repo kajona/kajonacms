@@ -23,6 +23,7 @@ $text["sysinfo_server_system"]               = "System: ";
 $text["sysinfo_server_diskspace"]            = "Gesamter Plattenplatz: ";
 $text["sysinfo_server_diskspacef"]           = "Freier Plattenplatz: ";
 $text["sysinfo_kajona_version"]              = "Kajona Version: ";
+$text["sysinfo_kajona_versionAvail"]         = "Neuste Version: ";
 $text["sysinfo_kajona_nrOfModules"]          = "Anzahl Kajonamodule: ";
 
 

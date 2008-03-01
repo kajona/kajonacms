@@ -64,6 +64,7 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         }
         if($this->getFieldValue("kajona") == "checked") {
             $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_version").class_modul_system_module::getModuleByName("system")->getStrVersion());
+            $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_versionAvail").$this->getLatestKernelVersion());
             $strReturn .= $this->widgetText($this->getText("sysinfo_kajona_nrOfModules").count(class_modul_system_module::getAllModules()));
         }
         return $strReturn;
@@ -73,10 +74,55 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
     /**
      * Return a short (!) name of the widget.
      *
-     * @return 
+     * @return string
      */
     public function getWidgetName() {
         return $this->getText("sysinfo_name");
+    }
+    
+    /**
+     * Queries the kajona-updatecheck-server to fetch the latest version
+     *
+     * @return string
+     */
+    private function getLatestKernelVersion() {
+    	$strReturn = "";
+    	
+        //Fetch the xml-file of available updates
+        //To do this, use sockets, since php 5.2 url_fopen is disabled in most cases
+        $strChecksum = md5(urldecode(_webpath_)."getVersions");
+        $strQueryString = "/updates.php?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
+        $strXmlVersionList = false;
+
+        $strXmlVersionList = @file_get_contents("http://updatecheck.kajona.de".$strQueryString);
+        if(!$strXmlVersionList) {
+            return "n.a.";
+        }
+            
+        try {
+            include_once(_systempath_."/class_xml_parser.php");
+            $objXmlParser = new class_xml_parser();
+            if($objXmlParser->loadString($strXmlVersionList)) {
+                $arrRemoteModules = $objXmlParser->getNodesAttributesAsArray("module");
+                //Do a little clean up
+                $arrCleanModules = array();
+                foreach ($arrRemoteModules as $arrOneRemoteModule) {
+                    $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
+                }
+                
+                if(key_exists("system", $arrCleanModules)) {
+                	$strReturn = $arrCleanModules["system"];
+                }
+            }
+            else
+                $strReturn .= "n.a.";
+
+        }
+        catch (class_exception $objException) {
+            $strReturn .= "n.a.";
+        }    
+    	
+    	return $strReturn;
     }
     
 }
