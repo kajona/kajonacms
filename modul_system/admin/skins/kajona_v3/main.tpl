@@ -36,7 +36,7 @@
 				</div> 
 				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl">
-						<li style="text-align: right" onclick="javascript:hideMenu();"><a href="javascript:hideMenu();">[X]</a></li>
+						<!-- <li style="text-align: right" onclick="javascript:hideMenu();"><a href="javascript:hideMenu();">[X]</a></li> -->
 					</ul>
 				</div>
 			</td>
@@ -78,7 +78,6 @@ kajonaAjaxHelper.loadDragNDropBase();
 kajonaAjaxHelper.loadAnimationBase();
 
 function naviPreSetup() {
-
 		if(typeof YAHOO == "undefined") {
              window.setTimeout('naviPreSetup()', 1000);
              return;
@@ -86,46 +85,41 @@ function naviPreSetup() {
         naviSetup();
 }
 
-
+var moduleNaviHiddenTimeout = undefined;
 function naviSetup() {
-	
 	var list = YAHOO.util.Dom.get('adminModuleNaviUl');
-	//alert(list.id+" size "+YAHOO.util.Dom.getChildren(list).length);
-		
 	var arrayChildren = YAHOO.util.Dom.getChildren(list);
 	
 	for(intI = 0; intI < arrayChildren.length; intI++) {
-	
 		if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
-		
 			nodeToMove = arrayChildren[intI];
 		
 			YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
-			document.getElementById('naviCollectorUl').appendChild(nodeToMove.cloneNode(true));
+			var tmpNode = nodeToMove.cloneNode(true);
+			tmpNode.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
+			tmpNode.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
+			
+			document.getElementById('naviCollectorUl').appendChild(tmpNode);
 			document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
-		
 		}
-		
 	}
-
 }
 
 function showMenu() {
+	YAHOO.util.Dom.setStyle('moduleNaviHidden', "opacity", 0);
 	YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "block");
 	//get xy coords
 	arrCoords = YAHOO.util.Dom.getXY(YAHOO.util.Dom.get('showMenuLink'));
-	YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], -200 ], false);
+	YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], arrCoords[1] ], false);
 	
-	var attributes = { 
-        points: { to: [arrCoords[0], arrCoords[1]-10 ] } 
-	};
-	
-	animObject = new YAHOO.util.Motion('moduleNaviHidden', attributes, 0.5);
+	animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 1 } }, 0.5, YAHOO.util.Easing.easeOut);
 	animObject.animate();
 }
 
 function hideMenu() {
-	YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");
+	animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 0 } }, 1, YAHOO.util.Easing.easeOut);
+	animObject.animate();
+	animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");});
 }
 
 addLoadEvent(naviPreSetup);
