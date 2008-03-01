@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	css.php																					            *
-* 	CSS-Angaben fuer den Admin-Bereich																	*
+* 	CSS-styles for admin area																	*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                                    *
@@ -52,6 +52,9 @@ body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #737373;
+}
+
+body.login {
 	text-align: center;
 }
 
@@ -308,7 +311,7 @@ html>body #moduleNavi ul span {
 
 #moduleNaviHidden ul {
 	list-style: none;
-	background: none;
+	background: #ffffff;
 	display: list-item;
 	position: static;
 	float: none;
