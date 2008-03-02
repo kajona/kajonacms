@@ -51,6 +51,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         $strReturn = "";
         
         //request the xml...
+        /* TODO make use of the remoteloader */
         $strContent = @file_get_contents($this->getFieldValue("feedurl"));
         
         if($strContent != "") {

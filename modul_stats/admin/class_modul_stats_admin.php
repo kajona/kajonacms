@@ -418,7 +418,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
                 $strIP = $arrIpToLookup[$intI]["stats_ip"];
                 
                 $strQuery = $this->strIp2cServer."?ip=".urlencode($strIP)."&domain=".urlencode(_webpath_)."&checksum=".md5(urldecode(_webpath_).$strIP);
-                
+                /* TODO make use of the remoteloader */
                 $strCountry = @file_get_contents($strQuery);
                 
                 $objWorker->saveIp2CountryRecord($strIP, $strCountry);

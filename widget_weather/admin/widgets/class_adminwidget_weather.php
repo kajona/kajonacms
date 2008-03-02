@@ -53,6 +53,7 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
         $strReturn = "";
         
         //request the xml...
+        /* TODO make use of the remoteloader */
         $strSourceFeed = "http://weather.yahooapis.com/forecastrss?p=".$this->getFieldValue("location")."&u=".$this->getFieldValue("unit");
         $strContent = @file_get_contents($strSourceFeed);
         

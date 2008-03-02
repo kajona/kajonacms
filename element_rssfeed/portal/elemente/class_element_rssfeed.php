@@ -48,6 +48,7 @@ class class_element_rssfeed extends class_element_portal implements interface_po
 	public function loadData() {
 		$strReturn = "";
 		
+		/* TODO make use of the remoteloader */
 		$strFeed = @file_get_contents($this->arrElementData["char2"]);
 		
 		$strFeedTemplateID = $this->objTemplate->readTemplate("/element_rssfeed/".$this->arrElementData["char1"], "rssfeed_feed");

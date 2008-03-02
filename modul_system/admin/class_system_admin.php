@@ -500,6 +500,7 @@ class class_system_admin extends class_admin implements interface_admin {
             $strXmlVersionList = false;
 
             //first try: use url_fopen
+            /* TODO make use of the remoteloader */
             $strXmlVersionList = @file_get_contents("http://".$this->strUpdateServer.$strQueryString);
             if(!$strXmlVersionList) {
                 $strXmlVersionList = false;
