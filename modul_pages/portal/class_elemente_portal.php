@@ -98,8 +98,9 @@ class class_element_portal extends class_portal {
 	    //add an anchor to jump when coming from links
 	    /**
 	     * TODO check, if the tag won't get visible at any time
+	     * 		don't place anchor on navigation elements (not xhtml valid)
 	     */
-	    $strReturn = "<a name=\"".$this->getSystemid()."\" style=\"margin: 0px; padding: 0px; border: none; display: inline;\"></a>".$strReturn;
+	    $strReturn = "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>".$strReturn;
 
 		return $strReturn;
 	}

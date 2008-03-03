@@ -76,7 +76,7 @@ class class_element_languageswitch extends class_element_portal implements inter
                 	$strQueryString = "language=".$objOneLanguage->getStrName();
                 }
                 else {
-                	$strQueryString .= "&language=".$objOneLanguage->getStrName();
+                	$strQueryString .= "&amp;language=".$objOneLanguage->getStrName();
                 }
 
                //and the link

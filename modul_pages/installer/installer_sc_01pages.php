@@ -204,7 +204,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
              $strQuery = "UPDATE "._dbprefix_."element_absatz
                                 SET absatz_titel = 'An error occured',
                                     absatz_inhalt ='Maybe the requested page doesn\'t exist anymore.<br />
-                                                    Please try again later.'
+                                                    Please try it again later.'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -266,28 +266,28 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_absatz
                         SET absatz_titel = 'Impressum',
-                           absatz_inhalt ='Bitte tragen Sie hier ihre Kontaktdaten ein.<br />
+                           absatz_inhalt ='Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
                                            Nachname, Name<br />
                                            Straße und Hausnummer<br />
                                            PLZ, Ort<br />
                                            Telefon<br />
                                            E-Mail<br />
                                            <br />
-                                           Site powered by <a href=\"http://www.kajona.de\">Kajona³</a><br /><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /><br />
+                                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />
                                            '
                       WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
              $strQuery = "UPDATE "._dbprefix_."element_absatz
                         SET absatz_titel = 'Imprint',
-                           absatz_inhalt ='Please provide your contact data.<br />
+                           absatz_inhalt ='Please provide your contact details.<br />
                                            Name, Forename<br />
                                            Street<br />
-                                           Zip-Code, City<br />
+                                           Zip, City<br />
                                            Phone<br />
                                            Mail<br />
                                            <br />
-                                           Site powered by <a href=\"http://www.kajona.de\">Kajona³</a><br /><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /><br />
+                                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />
                                            '
                       WHERE content_id = '".dbsafeString($strElementId)."'";
         }  

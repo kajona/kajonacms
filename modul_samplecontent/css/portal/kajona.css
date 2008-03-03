@@ -43,6 +43,13 @@ body {
     color: #3b3b3b;
 }
 
+a.hiddenAnchor {
+    margin: 0px !important;
+	padding: 0px !important;
+	border: none !important;
+	display: inline !important; 
+}
+
 a {
     color: #246b39;
     text-decoration: none;  
@@ -76,9 +83,10 @@ h3 {
     position:absolute;
     left:50%;
     margin: 0 -450px;
-    width:  900px;
+	padding-bottom: 20px;
+    width: 900px;
     top: 20px;
-    border: none    ;
+    border: none;
 }
 
 #logoHeaderHeader {
@@ -117,7 +125,7 @@ h3 {
     width: 189px;
     height: 32px;
     margin-right: 5px;
-    margin-top: 38px; 
+    margin-top: 30px; 
 }
 
 #portalNaviContainer {
@@ -159,7 +167,7 @@ h3 {
     color: #3b3b3b;
     font-size: 13px;
     font-family: Verdana, arial, sans-serif;
-    font-weight: bold   ;
+    font-weight: bold;
     text-decoration: none;
 }
 
@@ -405,7 +413,7 @@ h3 {
 
 /* P O S T A C O M M E N T */
 #postaCommentForm {
-    display: hidden;
+	display: hidden;
     margin-bottom: 5px; 
 }
 
@@ -491,5 +499,3 @@ h3 {
 .portalListRow1 .actions img {
     margin-right: 2px;
 }
-
-

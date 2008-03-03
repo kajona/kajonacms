@@ -86,47 +86,47 @@ echo "
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
 .peContainerOut {
-	display: inline;
-	border: none;
+	display: inline !important;
+	border: none !important;
 }
 
 .peContainerHover {
-	display: block;
-	border: 1px solid #00e800;
+	display: block !important;
+	border: 1px solid #00e800 !important;
 }
 
 .peContainerOut .menuOut {
-	display: none;
+	display: none !important;
 }
 
 .peContainerHover .menuHover {
-	position: absolute;
-	border: none;
-	display: block;
+	position: absolute !important;
+	border: none !important;
+	display: block !important;
 }
 
 .peContainerHover .menuHover .actions {
-	display: inline;
-	background-color: #00e800;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	padding: 0 2px 2px 2px;
+	display: inline !important;
+	background-color: #00e800 !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+	padding: 0 2px 2px 2px !important;
 }
 
 .peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #ffffff;
-    text-decoration: none;
-	font-weight: normal;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
+	color: #ffffff !important;
+    text-decoration: none !important;
+	font-weight: normal !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
     font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #ffffff;
-	text-decoration: underline;
-	font-weight: normal;
+	font-size: 11px !important;
+	color: #ffffff !important;
+	text-decoration: underline !important;
+	font-weight: normal !important;
 }
 
 ";

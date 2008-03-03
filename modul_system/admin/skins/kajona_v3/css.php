@@ -660,7 +660,7 @@ h2 {
 
 /* L I S T S */
 .adminList {
-	width: 80%;
+	width: 100%;
 }
 
 body.folderView .adminList, body.portalEditor .adminList {

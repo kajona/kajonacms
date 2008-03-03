@@ -54,42 +54,42 @@ echo "
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
 .peContainerOut {
-	display: inline;
-	border: none;
+	display: inline !important;
+	border: none !important;
 }
 
 .peContainerHover {
-	display: block;
-	border: 1px solid #cccccc;
-	background-color: #EFEFEF;
+	display: block !important;
+	border: 1px solid #cccccc !important;
+	background-color: #EFEFEF !important;
 }
 
 .peContainerOut .menuOut {
-	display: none;
+	display: none !important;
 }
 
 .peContainerHover .menuHover {
-	position: absolute;
-	border: none;
-	display: block;
+	position: absolute !important;
+	border: none !important;
+	display: block !important;
 }
 
 .peContainerHover .menuHover .actions {
-	display: inline;
-	background-color: #FFFFFF;
-	border: 1px solid black;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+	display: inline !important;
+	background-color: #FFFFFF !important;
+	border: 1px solid black !important;
+	font-family: Verdana, Arial, Helvetica, sans-serif !important;
+	font-size: 11px !important;
 }
 
 a.pe_link {
-    font-size: 11px;
-    font-weight: normal;
-    color: #000000;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: #000000 !important;
 }
 
 #pe_classicskin img {
-	border: none;
+	border: none !important;
 }
 
 ";
