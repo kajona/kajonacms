@@ -413,7 +413,7 @@ h3 {
 
 /* P O S T A C O M M E N T */
 #postaCommentForm {
-	display: hidden;
+	display: none;
     margin-bottom: 5px; 
 }
 
