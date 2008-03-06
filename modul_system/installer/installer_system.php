@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.0.95";
+		$arrModul["version"] 			= "3.1.0";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -247,6 +247,16 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
 			$strReturn .= "An error occured! ...\n";
 			
+		//remoteloader-cache ----------------------------------------------------------------------------
+		$strReturn .= "Installing table remoteloader_cache...\n";
+			
+		$arrFields = array();
+		$arrFields["remoteloader_cache_checksum"]     = array("char40", false);
+		$arrFields["remoteloader_cache_releasetime"]  = array("int", false);
+		$arrFields["remoteloader_cache_response"]     = array("text", false);
+		
+		if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
+            $strReturn .= "An error occured! ...\n";
 			
 			
 
@@ -302,6 +312,9 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+        
+        //3.1: remoteloader max cachtime --> default 30 min
+        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -416,6 +429,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.0.95") {
+            $strReturn .= $this->update_3095_310();
         }
         
         return $strReturn."\n\n";
@@ -652,6 +670,35 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	    return $strReturn;
 	}
+	
+    private function update_3095_310() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
+        
+        $strReturn .= "Installing table remoteloader_cache...\n";
+            
+        $arrFields = array();
+        $arrFields["remoteloader_cache_checksum"]     = array("char40", false);
+        $arrFields["remoteloader_cache_releasetime"]  = array("int", false);
+        $arrFields["remoteloader_cache_response"]     = array("text", false);
+        
+        if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
+            $strReturn .= "An error occured! ...\n";
+            
+        //3.1: remoteloader max cachtime --> default 30 min
+        $strReturn .= "Registering remoteloader max cachteime constant...\n";
+        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);    
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("system", "3.1.0");
+        $this->updateModuleVersion("right", "3.1.0");
+        $this->updateModuleVersion("user", "3.1.0");
+        $this->updateModuleVersion("filemanager", "3.1.0");
+        $this->updateModuleVersion("dashboard", "3.1.0");
+        
+
+        return $strReturn;
+    }
 	
 	
 }

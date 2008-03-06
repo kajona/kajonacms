@@ -500,35 +500,15 @@ class class_system_admin extends class_admin implements interface_admin {
             $strXmlVersionList = false;
 
             //first try: use url_fopen
-            /* TODO make use of the remoteloader */
-            $strXmlVersionList = @file_get_contents("http://".$this->strUpdateServer.$strQueryString);
-            if(!$strXmlVersionList) {
-                $strXmlVersionList = false;
+            try {
+                include_once(_systempath_."/class_remoteloader.php");
+                $objRemoteloader = new class_remoteloader();
+                $objRemoteloader->setStrHost($this->strUpdateServer);
+                $objRemoteloader->setStrQueryParams($strQueryString);
+                $strXmlVersionList = $objRemoteloader->getRemoteContent();
             }
-
-            //second try: do it by sockets. yeah ;)
-            if(($strXmlVersionList == "" || $strXmlVersionList === false) && function_exists("socket_create")) {
-                include_once(_systempath_."/class_socket.php");
-                try {
-                    $objSocket = new class_socket($this->strUpdateServer, 80);
-                    $objSocket->connect();
-                    $objSocket->write("GET ".$strQueryString." HTTP/1.1");
-                    $objSocket->write("HOST: ".$this->strUpdateServer);
-                    $objSocket->writeLimiter();
-                    $strXml = $objSocket->read();
-                    $objSocket->close();
-                }
-                catch (class_exception $objException) {
-                    $objException->processException();
-                    $strXml = "";
-                }
-                $strXml = trim($strXml);
-                if(uniStrpos($strXml, "<?xml ") === false || uniStrpos($strXml, "<modulelist>") === false) {
-                    $strXmlVersionList = false;
-                }
-                else {
-                    $strXmlVersionList = uniSubstr($strXml, uniStrpos($strXml, "<?xml"), (uniStrrpos($strXml, ">")-uniStrpos($strXml, "<?xml")+1));
-                }
+            catch (class_exception $objExeption) {
+                $strXmlVersionList = false;
             }
 
             if($strXmlVersionList === false) {

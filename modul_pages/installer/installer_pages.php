@@ -173,7 +173,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$this->registerConstant("_pages_fehlerseite_", "error", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
 		$this->registerConstant("_pages_defaulttemplate_", "", class_modul_system_setting::$int_TYPE_STRING, _pages_modul_id_);
 		//2.1.1: overall cachetime
-		$this->registerConstant("_pages_maxcachetime_", "9999", class_modul_system_setting::$int_TYPE_INT, _pages_modul_id_);
+		$this->registerConstant("_pages_maxcachetime_", 4*60*60, class_modul_system_setting::$int_TYPE_INT, _pages_modul_id_);
 		$this->registerConstant("_pages_cacheenabled_", "true", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 		//2.1.1: possibility, to create new pages disabled
 		$this->registerConstant("_pages_newdisabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);

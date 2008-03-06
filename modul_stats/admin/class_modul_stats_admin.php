@@ -29,7 +29,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	private $intDateEnd;
 	private $intInterval;
 	
-	private $strIp2cServer = "http://ip2c.kajona.de/ip2c.php";
+	private $strIp2cServer = "ip2c.kajona.de";
 
 	/**
 	 * Constructor
@@ -417,9 +417,16 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
             if(isset($arrIpToLookup[$intI])) {
                 $strIP = $arrIpToLookup[$intI]["stats_ip"];
                 
-                $strQuery = $this->strIp2cServer."?ip=".urlencode($strIP)."&domain=".urlencode(_webpath_)."&checksum=".md5(urldecode(_webpath_).$strIP);
-                /* TODO make use of the remoteloader */
-                $strCountry = @file_get_contents($strQuery);
+                try {
+                    include_once(_systempath_."/class_remoteloader.php");
+		            $objRemoteloader = new class_remoteloader();
+		            $objRemoteloader->setStrHost($this->strIp2cServer);
+		            $objRemoteloader->setStrQueryParams("/ip2c.php?ip=".urlencode($strIP)."&domain=".urlencode(_webpath_)."&checksum=".md5(urldecode(_webpath_).$strIP));
+		            $strCountry = $objRemoteloader->getRemoteContent();
+		        }
+		        catch (class_exception $objExeption) {
+		            $strCountry = "n.a.";
+		        }
                 
                 $objWorker->saveIp2CountryRecord($strIP, $strCountry);
 

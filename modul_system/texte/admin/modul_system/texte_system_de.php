@@ -133,6 +133,9 @@ $text["_admin_nr_of_rows_hint"]             = "Anzahl an Datensätzen in den Adm
 $text["_admin_only_https_"]                 = "Admin nur per https:";
 $text["_admin_only_https_hint"]             = "Forciert die Verwendung von https im Adminbereich. Der Webserver muss hierfür https unterstützen.";
 $text["_system_use_dbcache_"]               = "Datenbankcache aktiv:";
+$text["_system_use_dbcache_hint"]           = "Aktiviert/Deaktiviert den systeminternen Cache für Datenbankabfragen.";
+$text["_remoteloader_max_cachetime_"]       = "Cachedauer externer Quellen:";
+$text["_remoteloader_max_cachetime_hint"]   = "Cachedauer in Sekunden für extern nachgeladene Inhalte (z.B. RSS-Feeds).";
 
 
 $text["errorintro"]                 = "Bitte alle benötigten Felder ausfüllen!";

@@ -94,8 +94,17 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         $strQueryString = "/updates.php?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
         $strXmlVersionList = false;
 
-        /* TODO make use of the remoteloader */
-        $strXmlVersionList = @file_get_contents("http://updatecheck.kajona.de".$strQueryString);
+        try {
+            include_once(_systempath_."/class_remoteloader.php");
+            $objRemoteloader = new class_remoteloader();
+            $objRemoteloader->setStrHost("updatecheck.kajona.de");
+            $objRemoteloader->setStrQueryParams($strQueryString);
+            $strXmlVersionList = $objRemoteloader->getRemoteContent();
+        }
+        catch (class_exception $objExeption) {
+            $strXmlVersionList = false;
+        }
+        
         if(!$strXmlVersionList) {
             return "n.a.";
         }
