@@ -589,6 +589,7 @@ abstract class class_admin {
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
+		$this->arrOutput["head"] = "<script language=\"Javascript\" type=\"text/javascript\">if(typeof KAJONA_DEBUG == 'undefined' || KAJONA_DEBUG == null) KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel").";</script>";
 		//Loading the wanted Template
 		//if requested the pe, load different template
 		if($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
