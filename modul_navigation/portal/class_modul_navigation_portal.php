@@ -135,6 +135,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$this->objTemplate->setTemplate($arrTree[$intCounter]);
 		$this->objTemplate->deletePlaceholder();
 		$strReturn = $this->objTemplate->getTemplate();
+		
 		return $strReturn;
 
 	}
@@ -358,7 +359,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	                              "pe_action_delete" => "deleteNavi",
 	                              "pe_action_delete_params" => "&systemid=".$strSystemid
 	                        );
-	    $strReturn = class_element_portal::addPortalEditorCode($strReturn, $strSystemid, $arrPeConfig, true);
+	    //$strReturn = class_element_portal::addPortalEditorCode($strReturn, $strSystemid, $arrPeConfig, true);
 
 		return $strReturn;
 	}
