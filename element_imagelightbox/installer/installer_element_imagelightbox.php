@@ -9,7 +9,7 @@
 * 	Installer of the imagelightbox element      														*																										*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: installer_element_imagelightbox.php 1885 2007-12-27 18:52:47Z sidler $                         *
+*	$Id$                         *
 ********************************************************************************************************/
 
 require_once(_systempath_."/class_installer_base.php");
