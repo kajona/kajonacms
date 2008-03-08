@@ -56,6 +56,11 @@ class class_element_navigation extends class_element_portal implements interface
 		return $strReturn;
 	}
 	
+	/**
+	 * so anchor here, plz
+	 *
+	 * @return string
+	 */
     protected function getAnchorTag() {
         return "";
     }

@@ -434,7 +434,17 @@ final class class_session {
 	public function getLoggedinKey() {
 	    //Logged-in key is user-specific.
 	    //To avoid session-stealing, use a ip-dependant key
-	    $strKey = md5(_systempath_."loggedin".getServer("REMOTE_ADDR"));
+	    //include the systems-module-id to generate a system-dependant key
+	    $strAddKey = "";
+        try {
+        	include_once(_systempath_."/class_modul_system_module.php");
+            $objModule = class_modul_system_module::getModuleByName("system", true);
+            $strAddKey = $objModule->getSystemid();
+        }
+        catch (class_exception $objException) {
+        }
+        
+	    $strKey = md5(_systempath_."loggedin".getServer("REMOTE_ADDR").$strAddKey);
 	    return $strKey;
 	}
 

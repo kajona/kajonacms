@@ -87,21 +87,29 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
                 $strReturn .= "Error creating headline element.\n";
 
         $strReturn .= "Creating Navigation-Entry...\n";
+        //navigations installed?
+        try {
+            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+        }
+        catch (class_exception $objException) {
+            $objModule = null;
+        }
+        if($objModule != null) {
         
-        include_once(_systempath_."/class_modul_navigation_tree.php");
-        include_once(_systempath_."/class_modul_navigation_point.php");
-        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-        $strTreeId = $objNavi->getSystemid();
-        
-        $objNaviPoint = new class_modul_navigation_point();
-        if($this->strContentLanguage == "de")
-            $objNaviPoint->setStrName("Gästebuch");
-        else
-            $objNaviPoint->setStrName("Guestbook");
-        $objNaviPoint->setStrPageI("guestbook");
-        $objNaviPoint->saveObjectToDb($strTreeId);
-        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-
+	        include_once(_systempath_."/class_modul_navigation_tree.php");
+	        include_once(_systempath_."/class_modul_navigation_point.php");
+	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+	        $strTreeId = $objNavi->getSystemid();
+	        
+	        $objNaviPoint = new class_modul_navigation_point();
+	        if($this->strContentLanguage == "de")
+	            $objNaviPoint->setStrName("Gästebuch");
+	        else
+	            $objNaviPoint->setStrName("Guestbook");
+	        $objNaviPoint->setStrPageI("guestbook");
+	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+        }
         return $strReturn;
     }
     

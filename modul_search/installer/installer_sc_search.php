@@ -96,25 +96,35 @@ class class_installer_sc_search implements interface_sc_installer  {
             else
                 $strReturn .= "Error creating headline element.\n";
 
-            $strReturn .= "Creating navigation point.\n";    
-            include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
-	        $arrNavis = class_modul_navigation_tree::getAllNavis();
-	        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
-	        $strTreeId = $objNavi->getSystemid();
-	        
-	        $objNaviPoint = new class_modul_navigation_point();
-	        if($this->strContentLanguage == "de") {
-	            $objNaviPoint->setStrName("Suche");
-	        }
-	        else {
-	        	$objNaviPoint->setStrName("Search");
-	        }
-	            
-	        $objNaviPoint->setStrPageI("search");
-	        $objNaviPoint->saveObjectToDb($strTreeId);
-	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";    
+            $strReturn .= "Creating navigation point.\n"; 
 
+            //navigations installed?
+	        try {
+	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+	        }
+	        catch (class_exception $objException) {
+	            $objModule = null;
+	        }
+	        if($objModule != null) {
+	        	
+	            include_once(_systempath_."/class_modul_navigation_tree.php");
+		        include_once(_systempath_."/class_modul_navigation_point.php");
+		        $arrNavis = class_modul_navigation_tree::getAllNavis();
+		        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
+		        $strTreeId = $objNavi->getSystemid();
+		        
+		        $objNaviPoint = new class_modul_navigation_point();
+		        if($this->strContentLanguage == "de") {
+		            $objNaviPoint->setStrName("Suche");
+		        }
+		        else {
+		        	$objNaviPoint->setStrName("Search");
+		        }
+		            
+		        $objNaviPoint->setStrPageI("search");
+		        $objNaviPoint->saveObjectToDb($strTreeId);
+		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";    
+            }
             
         return $strReturn;
     }

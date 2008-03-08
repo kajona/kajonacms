@@ -154,24 +154,35 @@ class class_installer_sc_news implements interface_sc_installer  {
             $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
             
             $strReturn .= "Creating navigation entries...\n";
-            include_once(_systempath_."/class_modul_navigation_tree.php");
-            include_once(_systempath_."/class_modul_navigation_point.php");
-            $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-            $strTreeId = $objNavi->getSystemid();
             
-            $objNaviPoint = new class_modul_navigation_point();
-            $objNaviPoint->setStrName("News");
-            $objNaviPoint->setStrPageI("index");
-            $objNaviPoint->saveObjectToDb($strTreeId);
-            $strNewsPointID = $objNaviPoint->getSystemid();
-            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-    
-            $objNaviPoint = new class_modul_navigation_point();
-            $objNaviPoint->setStrName("Details");
-            $objNaviPoint->setStrPageI("newsdetails");
-            $objNaviPoint->saveObjectToDb($strNewsPointID);
-            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-
+            //navigations installed?
+	        try {
+	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+	        }
+	        catch (class_exception $objException) {
+	            $objModule = null;
+	        }
+	        if($objModule != null) {
+	        	
+	            include_once(_systempath_."/class_modul_navigation_tree.php");
+	            include_once(_systempath_."/class_modul_navigation_point.php");
+	            $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+	            $strTreeId = $objNavi->getSystemid();
+	            
+	            $objNaviPoint = new class_modul_navigation_point();
+	            $objNaviPoint->setStrName("News");
+	            $objNaviPoint->setStrPageI("index");
+	            $objNaviPoint->saveObjectToDb($strTreeId);
+	            $strNewsPointID = $objNaviPoint->getSystemid();
+	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+	    
+	            $objNaviPoint = new class_modul_navigation_point();
+	            $objNaviPoint->setStrName("Details");
+	            $objNaviPoint->setStrPageI("newsdetails");
+	            $objNaviPoint->saveObjectToDb($strNewsPointID);
+	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+	
+	        }
         return $strReturn;
     }
     
