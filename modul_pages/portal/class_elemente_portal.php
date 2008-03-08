@@ -95,12 +95,8 @@ class class_element_portal extends class_portal {
 	    else
 	       $strReturn = $this->loadData();
 
-	    //add an anchor to jump when coming from links
-	    /**
-	     * TODO check, if the tag won't get visible at any time
-	     * 		don't place anchor on navigation elements (not xhtml valid)
-	     */
-	    $strReturn = "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>".$strReturn;
+	    //add an anchor to jump to, but exclude navigation-elements
+	    $strReturn = $this->getAnchorTag().$strReturn;
 
 		return $strReturn;
 	}
@@ -235,5 +231,15 @@ class class_element_portal extends class_portal {
 	 */
 	protected function loadData() {
 	    return "Element needs to overwrite loadData()!";
+	}
+	
+	/**
+	 * Generates an anchor tag enabling navigation-points to jump to specific page-elements.
+	 * can be overwritten by subclasses
+	 *
+	 * @return string
+	 */
+	protected function getAnchorTag() {
+		return "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>";
 	}
 }

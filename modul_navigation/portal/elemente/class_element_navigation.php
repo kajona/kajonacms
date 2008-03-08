@@ -55,6 +55,10 @@ class class_element_navigation extends class_element_portal implements interface
 
 		return $strReturn;
 	}
+	
+    protected function getAnchorTag() {
+        return "";
+    }
 
-}	 //class_element_absatz
+}	 
 ?>
