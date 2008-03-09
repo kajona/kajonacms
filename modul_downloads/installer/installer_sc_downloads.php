@@ -5,11 +5,11 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *                                                                                                       *
-*   class_installer_sc_downloads.php                                                                      *
-*   Interface of the downloads samplecontent                                                              *
+*   class_installer_sc_downloads.php                                                                    *
+*   Interface of the downloads samplecontent                                                            *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                              *
+*   $Id$                                  *
 ********************************************************************************************************/
 
 

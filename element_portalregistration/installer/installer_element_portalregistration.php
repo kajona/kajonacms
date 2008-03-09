@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_element_portalregistration.php															*
-* 	Installer of the portalregistration element      													*																										*
+* 	Installer of the portalregistration element      													*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                    *
@@ -27,7 +27,7 @@ class class_installer_element_portalregistration extends class_installer_base im
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "element_portalregistration";
 		$arrModule["name_lang"] 	= "Element portalregistration";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

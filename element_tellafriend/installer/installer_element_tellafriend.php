@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_element_tellafriend.php																    *
-* 	Installer of the tellafriend element      															*																										*
+* 	Installer of the tellafriend element      															*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                          *
@@ -28,7 +28,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "element_tellafriend";
 		$arrModule["name_lang"] 	= "Element tellafriend";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

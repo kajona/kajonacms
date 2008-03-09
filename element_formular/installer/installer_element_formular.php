@@ -28,7 +28,7 @@ class class_installer_element_formular extends class_installer_base implements i
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "element_formular";
 		$arrModule["name_lang"] 	= "Element Form";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

@@ -388,7 +388,7 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 
-	private function updateModuleVersion($strNewVersion) {
+	protected function updateModuleVersion($strNewVersion) {
 		parent::updateModuleVersion("system", $strNewVersion);
         parent::updateModuleVersion("right", $strNewVersion);
         parent::updateModuleVersion("user", $strNewVersion);

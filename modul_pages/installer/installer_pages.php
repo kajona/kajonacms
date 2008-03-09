@@ -280,7 +280,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
 
-	private function updateModuleVersion($strNewVersion) {
+	protected function updateModuleVersion($strNewVersion) {
 		parent::updateModuleVersion("pages", $strNewVersion);
         parent::updateModuleVersion("pages_content", $strNewVersion);
         parent::updateModuleVersion("folderview", $strNewVersion);
@@ -461,9 +461,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	private function update_302_309() {
 	    $strReturn = "";
-
 	    $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
-
 	    //add pages' xml-handler
 	    $strReturn .= "Registering system xml handler...\n";
 	    $objSystemModule = class_modul_system_module::getModuleByName("pages");
@@ -479,9 +477,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	
 	private function update_309_3095() {
 	    $strReturn = "";
-
 	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
-
 	    $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.0.95");
 
@@ -504,8 +500,6 @@ class class_installer_pages extends class_installer_base implements interface_in
         	if(!$this->objDB->_query($strSql))
         	   $strReturn .= "An error occured!\n";
         }
-            
-        
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.0");

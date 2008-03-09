@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_element_portallogin.php																    *
-* 	Installer of the portallogin element      															*																										*
+* 	Installer of the portallogin element      															*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                               *
@@ -27,7 +27,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.0.95";
+		$arrModule["version"] 		= "3.1.0";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -102,9 +102,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 	}
 
 
-	public function update()
-	{
-
+	public function update() {
 	}
 }
 ?>
