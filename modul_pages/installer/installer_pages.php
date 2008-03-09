@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_pages.php																					*
-* 	Installer of the pages-module																		*																										*
+* 	Installer of the pages-module																		*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                         *
@@ -280,6 +280,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
 
+	private function updateModuleVersion($strNewVersion) {
+		parent::updateModuleVersion("pages", $strNewVersion);
+        parent::updateModuleVersion("pages_content", $strNewVersion);
+        parent::updateModuleVersion("folderview", $strNewVersion);
+	}
+	
 
 	public function update() {
 	    $strReturn = "";
@@ -402,9 +408,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	    //Update the module-records to 2.2.0.2
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "2.2.0.2");
-        $this->updateModuleVersion("pages_content", "2.2.0.2");
-        $this->updateModuleVersion("folderview", "2.2.0.2");
+        $this->updateModuleVersion("2.2.0.2");
 
         return $strReturn;
 	}
@@ -415,9 +419,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Update the module-records to 3.0.0
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.0");
-        $this->updateModuleVersion("pages_content", "3.0.0");
-        $this->updateModuleVersion("folderview", "3.0.0");
+        $this->updateModuleVersion("3.0.0");
 
 	    return $strReturn;
 	}
@@ -427,9 +429,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	    $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.1");
-        $this->updateModuleVersion("pages_content", "3.0.1");
-        $this->updateModuleVersion("folderview", "3.0.1");
+        $this->updateModuleVersion("3.0.1");
 
 	    return $strReturn;
 	}
@@ -454,9 +454,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.2");
-        $this->updateModuleVersion("pages_content", "3.0.2");
-        $this->updateModuleVersion("folderview", "3.0.2");
+        $this->updateModuleVersion("3.0.2");
 
 	    return $strReturn;
 	}
@@ -474,9 +472,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	        $strReturn .= "An error occured!\n";
 
 	    $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.9");
-        $this->updateModuleVersion("pages_content", "3.0.9");
-        $this->updateModuleVersion("folderview", "3.0.9");
+        $this->updateModuleVersion("3.0.9");
 
 	    return $strReturn;
 	}
@@ -487,9 +483,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
 
 	    $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.0.95");
-        $this->updateModuleVersion("pages_content", "3.0.95");
-        $this->updateModuleVersion("folderview", "3.0.95");
+        $this->updateModuleVersion("3.0.95");
 
 	    return $strReturn;
 	}
@@ -514,9 +508,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("pages", "3.1.0");
-        $this->updateModuleVersion("pages_content", "3.1.0");
-        $this->updateModuleVersion("folderview", "3.1.0");
+        $this->updateModuleVersion("3.1.0");
 
         return $strReturn;
     }

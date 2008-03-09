@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_search.php																				*
-* 	Installer providing the installation of the search module											*																										*
+* 	Installer providing the installation of the search module											*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                         *

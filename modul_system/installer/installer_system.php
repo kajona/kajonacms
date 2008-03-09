@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	installer_system.php																				*
-* 	Installs the complete systemkernel																	*																										*
+* 	Installs the complete systemkernel																	*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                        *
@@ -388,6 +388,13 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 
+	private function updateModuleVersion($strNewVersion) {
+		parent::updateModuleVersion("system", $strNewVersion);
+        parent::updateModuleVersion("right", $strNewVersion);
+        parent::updateModuleVersion("user", $strNewVersion);
+        parent::updateModuleVersion("filemanager", $strNewVersion);
+        parent::updateModuleVersion("dashboard", $strNewVersion);
+	}
 
 	public function update() {
 	    $strReturn = "";
@@ -646,12 +653,7 @@ class class_installer_system extends class_installer_base implements interface_i
         }
 
         $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.9");
-        $this->updateModuleVersion("right", "3.0.9");
-        $this->updateModuleVersion("user", "3.0.9");
-        $this->updateModuleVersion("filemanager", "3.0.9");
-        $this->updateModuleVersion("dashboard", "3.0.9");
-        
+	    $this->updateModuleVersion("3.0.9");
 
 	    return $strReturn;
 	}
@@ -661,12 +663,7 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
 
         $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.95");
-        $this->updateModuleVersion("right", "3.0.95");
-        $this->updateModuleVersion("user", "3.0.95");
-        $this->updateModuleVersion("filemanager", "3.0.95");
-        $this->updateModuleVersion("dashboard", "3.0.95");
-        
+	    $this->updateModuleVersion("3.0.95");
 
 	    return $strReturn;
 	}
@@ -690,12 +687,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);    
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("system", "3.1.0");
-        $this->updateModuleVersion("right", "3.1.0");
-        $this->updateModuleVersion("user", "3.1.0");
-        $this->updateModuleVersion("filemanager", "3.1.0");
-        $this->updateModuleVersion("dashboard", "3.1.0");
-        
+        $this->updateModuleVersion("3.1.0");
 
         return $strReturn;
     }
