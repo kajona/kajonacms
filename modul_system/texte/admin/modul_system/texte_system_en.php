@@ -172,11 +172,11 @@ $text["update_nofilefound"]         = "The list of updates failed to load.<br />
 $text["update_invalidXML"]          = "The servers response was erroneous. Please try again.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.0 BETA (3.0.95), Codename \"kangaroo\"<br /><br />
+                                       Kajona V 3.1.0, Codename \"kangaroo\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        For further information, support or proposals, please visit our website.<br />
-									   Additional support is given using our <a href=\"http://board.kajona.de/index.php?c=7\" target=\"_blank\">board</a>.
+									   Additional support is given using our <a href=\"http://board.kajona.de/\" target=\"_blank\">board</a>.
                                        ";
 
 $text["about_part2"]                = "<h2>Head developers</h2>
@@ -194,7 +194,6 @@ $text["about_part3"]                = "<h2>Credits</h2>
                                        <li>JpGraph:<br />Aditus, <a href=\"http://www.aditus.nu/jpgraph/\" target=\"_blank\">http://www.aditus.nu/jpgraph/</a></li>
                                        <li>DHTML / JavaScript Calendar:<br />Dynarch, <a href=\"http://www.dynarch.com/projects/calendar/\" target=\"_blank\">http://www.dynarch.com/projects/calendar/</a></li>
                                        <li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li>
-                                       <li>IP-to-Country Database:<br />WebHosting.Info (http://www.webhosting.info), <a href=\"http://ip-to-country.webhosting.info\" target=\"_blank\">http://ip-to-country.webhosting.info</a></li>
                                        <li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li>
                                        </ul>
                                        ";
