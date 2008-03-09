@@ -147,8 +147,10 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         $strFilter = "";
         if($strPagefilter != "")
             $strFilter .= " AND postacomment_page = '".dbsafeString($strPagefilter)."' ";
-        if($strSystemidfilter != "")
-            $strFilter .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
+        
+        //if($strSystemidfilter != "")
+        $strFilter .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
+        
         if($strLanguagefilter != "")
             $strFilter .= " AND postacomment_language = '".dbsafeString($strLanguagefilter)."' ";    
         if($bitJustActive)
