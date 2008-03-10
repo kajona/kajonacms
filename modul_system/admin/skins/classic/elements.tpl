@@ -269,7 +269,7 @@ Upload-Field
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><input name="%%name%%" type="fil	e" id="%%name%%" class="%%class%%" /></td>
+		<td><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /></td>
 	</tr>
 </table>
 </input_upload>
