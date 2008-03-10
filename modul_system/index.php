@@ -89,7 +89,7 @@ class class_index  {
 	 */
 	public function loadAdmin() {
 		//Loading the details for the wanted module
-		if(issetGet("module"))
+		if(issetGet("module") && getGet("module") != "")
 			$strModule = getGet("module");
 		else
 			$strModule = "dashboard";

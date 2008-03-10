@@ -149,51 +149,60 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     			$objArraySectionIterator = new class_array_section_iterator($objPost->getNumberOfPostsAvailable($this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     			$objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-    			$objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, $this->getParam("filterId"), "", "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+    			$objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, $this->getParam("filterId"), false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
     		}
     		else {
     		    $objArraySectionIterator = new class_array_section_iterator($objPost->getNumberOfPostsAvailable());
     		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-    		    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, "", "", "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+    		    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, "", false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
     		}
 
     		$arrPosts = $objArraySectionIterator->getArrayExtended();
+    		
     		$arrPageViews = $this->objToolkit->getPageview($arrPosts, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "postacomment", "list", "&filterId=".$this->getParam("filterId"), _admin_nr_of_rows_);
-            $arrPosts = $arrPageViews["elements"];
-
+            
+    		$arrPosts = $arrPageViews["elements"];
+            
 
 			$strPostRows = "";
-			foreach($arrPosts as $objOnePost) {
-			    if($this->objRights->rightView($objOnePost->getSystemid())) {
-    				if($objOnePost->getStatus() == 1) {
-    			 		$strStatus = $this->getText("status_active");
-    			 		$strStatusImage = "icon_enabled.gif";
-    			 	}
-    			 	else {
-    			 		$strStatus = $this->getText("status_inactive");
-    			 		$strStatusImage = "icon_disabled.gif";
-    			 	}
-
-    			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
-    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
-                    $strAction = "";
-                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
-    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_delete"), "icon_ton.gif"));
-    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "postStatus", "&systemid=".$objOnePost->getSystemid(), "", $strStatus, $strStatusImage));
-    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), "icon_key.gif"));
-
-    		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
-
-    		   		//create the content of the details rows
-    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrUsername(), 40)." | ".uniStrTrim($objOnePost->getStrTitle(), 60), "", "", $intI);
-    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrComment(), 100), "", "", $intI++);
-			    }
-
+			
+			if(is_array($arrPosts) && count($arrPosts) > 0) {
+			 
+				foreach($arrPosts as $objOnePost) {
+					//var_dump($objOnePost->getSystemid());
+					//var_dump($objOnePost);
+				    if($this->objRights->rightView($objOnePost->getSystemid())) {
+	    				if($objOnePost->getStatus() == 1) {
+	    			 		$strStatus = $this->getText("status_active");
+	    			 		$strStatusImage = "icon_enabled.gif";
+	    			 	}
+	    			 	else {
+	    			 		$strStatus = $this->getText("status_inactive");
+	    			 		$strStatusImage = "icon_disabled.gif";
+	    			 	}
+	
+	    			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
+	    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
+	                    $strAction = "";
+	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
+	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_delete"), "icon_ton.gif"));
+	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "postStatus", "&systemid=".$objOnePost->getSystemid(), "", $strStatus, $strStatusImage));
+	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), "icon_key.gif"));
+	
+	    		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
+	
+	    		   		//create the content of the details rows
+	    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrUsername(), 40)." | ".uniStrTrim($objOnePost->getStrTitle(), 60), "", "", $intI);
+	    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrComment(), 100), "", "", $intI++);
+				    }
+	
+				}
+				
 			}
 
 			if(uniStrlen($strPostRows) != 0) {
