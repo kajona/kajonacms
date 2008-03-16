@@ -420,7 +420,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 							$intMaxHeigt = "300";
 							$intMaxWidth = (int)($intMaxHeigt * $intRelation);
 						}
-						$strImage = "<img src=\""._webpath_."/image.php?image=".$objImage->getStrFilename()."&maxWidth=300&maxHeight=300\" />";
+						$strImage = "<img src=\""._webpath_."/image.php?image=".$objImage->getStrFilename()."&amp;maxWidth=300&amp;maxHeight=300\" />";
 					}
 				}
 

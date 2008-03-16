@@ -134,7 +134,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			$arrNews["news_intro"] = $objNews->getStrIntro();
 			$arrNews["news_text"] = $objNews->getStrNewstext();
 			if($objNews->getStrImage() != "")
-                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&maxWidth=400&maxHeight=400\" >";
+                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
 			$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
 
 			//Add pe code

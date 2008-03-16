@@ -60,8 +60,8 @@ class class_element_imagelightbox extends class_element_portal implements interf
 		$strReturn .= "<div>";
         
 		//generate the preview
-		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&maxWidth=800&maxHeight=800\" rel=\"lightbox\" title=\"".$this->arrElementData["char2"]."\">\n";
-		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&maxWidth=200&maxHeight=200\" />\n";
+		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=800&amp;maxHeight=800\" rel=\"lightbox\" title=\"".$this->arrElementData["char2"]."\">\n";
+		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=200&amp;maxHeight=200\" />\n";
 		$strReturn .= "</a>";
 		
 		$strReturn .= "</div>";

@@ -860,7 +860,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//Round
 				$intWidth = number_format($intWidth, 0);
 				$intHeight = number_format($intHeight, 0);
-				$arrTemplate[$this->getText("bild_vorschau")] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&maxWidth=".$intWidth."&maxHeight=".$intHeight."\" />";
+				$arrTemplate[$this->getText("bild_vorschau")] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" />";
 			}
 			//Filesize
 			$arrTemplate[$this->getText("datei_groesse")] = bytesToString($arrDetails["filesize"]);

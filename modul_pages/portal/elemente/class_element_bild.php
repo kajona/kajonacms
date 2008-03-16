@@ -64,7 +64,7 @@ class class_element_bild extends class_element_portal implements interface_porta
                 $intMaxHeight = (int)$this->arrElementData["bild_y"];
                 
             if($intMaxHeight > 0 || $intMaxWidth > 0)    
-			    $strImage .= "<img src=\""._webpath_."/image.php?image=".urlencode($this->arrElementData["bild_bild"])."&maxWidth=".$intMaxWidth."&maxHeight=".$intMaxHeight."\" alt=\"".$strTitle."\" />";
+			    $strImage .= "<img src=\""._webpath_."/image.php?image=".urlencode($this->arrElementData["bild_bild"])."&amp;maxWidth=".$intMaxWidth."&amp;maxHeight=".$intMaxHeight."\" alt=\"".$strTitle."\" />";
 			else    
 			    $strImage .= "<img src=\""._webpath_.$this->arrElementData["bild_bild"]."\" alt=\"".$strTitle."\" />";
 		}
