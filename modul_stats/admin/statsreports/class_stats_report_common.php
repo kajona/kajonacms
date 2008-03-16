@@ -299,7 +299,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 		if($intCount > 1) {
     		include_once(_systempath_."/class_graph.php");
     		$objLineGraph = new class_graph();
-    		$objLineGraph->createLinePlotChart(735, 160);
+    		$objLineGraph->createLinePlotChart(715, 160);
     		$objLineGraph->addLinePlot($arrHits, "red", "Hits");
     		$objLineGraph->addLinePlot($arrUser, "blue", "Visitors/Day");
     		//only about 12 labels make sense

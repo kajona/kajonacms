@@ -43,18 +43,18 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objFaq2 = new class_modul_faqs_faq();
         
         if($this->strContentLanguage == "de") {
-        	$objFaq1->setStrQuestion("Was is Kajona?");
-        	$objFaq1->setStrAnswer("Kajona ist ein Open Source Content Management System basierend auf einer SQL-Datenbank und PHP. Dank der modularen Bauweise ist Kajona einfach zu erweitern und anzupassen.");
+        	$objFaq1->setStrQuestion("Was ist Kajona?");
+        	$objFaq1->setStrAnswer("Kajona ist ein Open Source Content Management System basierend auf PHP und einer Datenbank. Dank der modularen Bauweise ist Kajona einfach erweiter- und anpassbar.");
         	
         	$objFaq2->setStrQuestion("Wer entwickelt Kajona, wo gibt es weitere Infos?");
-        	$objFaq2->setStrAnswer("Kajona wird von einer Community entwickelt. Da Kajona ständig weiterentwickelt wird, sind wir immer auf der Suche nach Helfern. Weitere Infos hierzu auch auf <a href=\"http://www.kajona.de\">www.kajona.de</a>");
+        	$objFaq2->setStrAnswer("Kajona wird von einer Open Source Community entwickelt. Da Kajona ständig weiterentwickelt wird, sind wir jederzeit auf der Suche nach Helfern, seien es Programmierer, Grafiker, Betatester und auch Anwender. Weitere Informationen hierzu finden Sie auf <a href=\"http://www.kajona.de\">www.kajona.de</a>.");
         }
         else {
         	$objFaq1->setStrQuestion("What is Kajona?");
-            $objFaq1->setStrAnswer("Kajona is a open source content management system based on a sql-database and php. Due to its modular design, it can be extended and adopted very easily.");
+            $objFaq1->setStrAnswer("Kajona is an open source content management system based on PHP and a database. Due to it\'s modular design, it can be extended and adopted very easily.");
 
             $objFaq2->setStrQuestion("Who develops Kajona, where can I find more infos?");
-            $objFaq2->setStrAnswer("Kajona is being developed by a community. Since Kajona is still being developed, we are searching for contributors. Further infos can be found at <a href=\"http://www.kajona.de\">www.kajona.de</a>");
+            $objFaq2->setStrAnswer("Kajona is being developed by an open source community. Since Kajona is still being developed, we are searching for contributors. Further information can be found at <a href=\"http://www.kajona.de\">www.kajona.de</a>.");
         }
         
         $strReturn .= "Saving faqs...\n";

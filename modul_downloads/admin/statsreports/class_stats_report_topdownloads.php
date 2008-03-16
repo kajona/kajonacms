@@ -161,7 +161,7 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
     		if($intCount > 1) {
         		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
         		$objGraph = new class_graph();
-        		$objGraph->createLinePlotChart(735, 160);
+        		$objGraph->createLinePlotChart(715, 160);
         		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);

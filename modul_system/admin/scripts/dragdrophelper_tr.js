@@ -117,14 +117,13 @@ if(arrayTableIds == null)
 				parentNode = parentNode.parentNode;
 			//make a regular table out of it and make it look like the original
 			dragEl.innerHTML = "<table "+
-						         " class=\""+parentNode.getAttribute('class')+"\""+
+						         " class=\""+parentNode.className+"\""+
 								 " width=\""+(parentNode.getAttribute('width') != null ? parentNode.getAttribute('width') : "100%" )+"\""+
 								 " border=\""+(parentNode.getAttribute('border') != null ? parentNode.getAttribute('border') : "0" )+"\""+
 								 " cellpadding=\"0\" cellspacing=\"0\" "+
 								 " ><tr"+
-						         " class=\""+clickEl.getAttribute('class')+"\""+
+						         " class=\""+clickEl.className+"\""+
 								 ">" +clickEl.innerHTML+ "</tr></table>";
-
 	    },
 
 	    endDrag: function(e) {
@@ -199,4 +198,3 @@ if(arrayTableIds == null)
 	//and init the app
 	kajona.dragndroplist.DDApp.saveInit();
 })();
-

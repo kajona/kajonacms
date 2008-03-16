@@ -126,7 +126,7 @@ $text["submit"]						= "Speichern";
 $text["element_cachetime"]          = "Max. Cachedauer in Sek (-1 = kein Cacheing) :";
 
 $text["_pages_templatewechsel_"]        = "Templatewechsel erlaubt:";
-$text["_pages_templatewechsel_hint"]    = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese Elemente enthält. Wird dies erlaubt,
+$text["_pages_templatewechsel_hint"]    = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese bereits Elemente enthält. Wird dies erlaubt,
                                             kann es zu unerwarteten Nebeneffekten führen!";
 
 $text["_pages_maxcachetime_"]       = "Maximale Cachedauer:";

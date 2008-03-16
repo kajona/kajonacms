@@ -170,7 +170,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 	    if(count($arrGraphData) > 1) {
     	    include_once(_systempath_."/class_graph.php");
     	    $objGraph = new class_graph();
-    	    $objGraph->createBarChart($arrGraphData, 735, 200, false);
+    	    $objGraph->createBarChart($arrGraphData, 715, 200, false);
     	    $objGraph->setXAxisLabelAngle(0);
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_query_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_query_gewicht", "stats", "admin"));

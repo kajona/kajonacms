@@ -248,7 +248,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
         }
         if(count($arrKeyValues) > 0) {
             $objGraph = new class_graph();
-            $objGraph->create3DPieChart($arrKeyValues, 735, 200);
+            $objGraph->create3DPieChart($arrKeyValues, 715, 200);
             $strFilename = "/portal/pics/cache/stats_topbrowser.png";
             $objGraph->saveGraph($strFilename);
     		$arrReturn[] = _webpath_.$strFilename;
@@ -289,7 +289,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 		if(count($arrTickLabels) > 1 && count($arrPlots) > 0) {
     		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
     		$objGraph = new class_graph();
-    		$objGraph->createLinePlotChart(735, 160);
+    		$objGraph->createLinePlotChart(715, 160);
     		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
     		foreach($arrPlots as $arrPlotName => $arrPlotData) {
     		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);

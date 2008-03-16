@@ -193,7 +193,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
             $arrKeyValues["others"] = 100-$floatPercentageSum;
         }
         $objGraph = new class_graph();
-        $objGraph->create3DPieChart($arrKeyValues, 735, 200);
+        $objGraph->create3DPieChart($arrKeyValues, 715, 200);
         $strFilename = "/portal/pics/cache/stats_topcountries.png";
         $objGraph->saveGraph($strFilename);
 		$arrReturn[] = _webpath_.$strFilename;

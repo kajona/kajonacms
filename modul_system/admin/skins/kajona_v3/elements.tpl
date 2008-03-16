@@ -133,7 +133,7 @@ Divider to split up a page in logical sections
 
 data list header. Used to open a table to print data
 <datalist_header>
-<table cellpadding="0" cellspacing="0" style="width: 100%;">
+<table cellpadding="0" cellspacing="0" class="adminList">
 </datalist_header>
 
 data list footer. at the bottom of the datatable

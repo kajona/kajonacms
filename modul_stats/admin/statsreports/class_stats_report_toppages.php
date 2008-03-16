@@ -149,7 +149,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     	    //generate a bar-chart
     	    include_once(_systempath_."/class_graph.php");
     	    $objGraph = new class_graph();
-    	    $objGraph->createBarChart($arrGraphData, 735, 200, false);
+    	    $objGraph->createBarChart($arrGraphData, 715, 200, false);
     	    $objGraph->setXAxisLabelAngle(0);
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
@@ -190,7 +190,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     		if($intCount > 1) {
         		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
         		$objGraph = new class_graph();
-        		$objGraph->createLinePlotChart(735, 160);
+        		$objGraph->createLinePlotChart(715, 160);
         		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);

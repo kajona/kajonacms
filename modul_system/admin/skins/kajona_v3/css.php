@@ -334,13 +334,14 @@ html>body #moduleNavi ul span {
 	padding: 0px;
 }
 
-#moduleNaviHidden ul li:hover {
-	background: #f0f0f0;
-}
-
 #moduleNaviHidden ul li a {
 	display: block;
-	padding: 0 7px 0 7px;
+	width: 90px;
+	padding: 0 0 0 7px;
+}
+
+#moduleNaviHidden ul li a:hover {
+	background: #f0f0f0;
 }
 
 
@@ -512,7 +513,7 @@ h2 {
 /* Q U I C K H E L P, D A S H B O A R D */
 .quickHelpButton {
 	text-align: right;
-	margin: 50px 0 0 0;
+	margin: 50px 0 10px 0;
 }
 
 .quickHelpButton a {
@@ -660,7 +661,7 @@ h2 {
 
 /* L I S T S */
 .adminList {
-	width: 100%;
+	width: 715px;
 }
 
 body.folderView .adminList, body.portalEditor .adminList {
@@ -957,12 +958,14 @@ form .formText .text {
 div.percentBeamText {
 	width: 50px;
 	height: 15px;
+	padding-top: 5px;
 	float: left;
     white-space: nowrap;
 }
 
 div.percentBeam {
 	height: 10px;
+	margin-top: 3px;
 	padding-top: 5px;
 	border-left: 1px solid #737373;
 	border-right: 1px solid #737373;
