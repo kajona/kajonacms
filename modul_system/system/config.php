@@ -9,7 +9,7 @@
 *   Used to define global properties                                                                    *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                              *
+*   $Id$                                                  *
 ********************************************************************************************************/
 
 /*
@@ -23,13 +23,13 @@
 
     The following database-drivers could be used with Kajona:
 
-    mysql, mysqli
+    mysql, mysqli, postgres
 
 
 */
 
-switch($_SERVER['SERVER_NAME'])
-{
+switch($_SERVER['SERVER_NAME']) {
+
 //--Server1----------------------------------------------------------------------------------------------
 case "testpage.mulchprod.intern":
 case "aquarium":
@@ -62,6 +62,7 @@ default:
     $config['dbport']               = "%%defaultport%%";                       //Databaseport, default: ""
 
     break;
+
 }
 
 
@@ -84,7 +85,10 @@ default:
     $config['dirtexte']             = "/texte";	                               //Path containing the text-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
 
-    $config['adminlangs']           = "de,en";                                 //Available languages for the admin
+    $config['adminlangs']           = "de,en";                                 //Available languages for the administration
+
+    $config['portallanguage']       = "de";                                    //This is the default language for texts being loaded in the portal.
+                                                                               //Please note: This setting is only used, if no languages are installed.
 
 
 //--system settings--------------------------------------------------------------------------------------

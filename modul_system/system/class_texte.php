@@ -25,9 +25,9 @@ class class_texte {
 	 *
 	 * @var string
 	 */
-	private $strLanguage = "en";
+	private $strLanguage = "";
 
-	private $strFallbackLanguage = "en";
+	private $strFallbackLanguage = "";
 	private $arrTexts;
 
 	private static $objText = null;
@@ -40,6 +40,9 @@ class class_texte {
 		$this->arrModul["t_name"] 		= "class_texte";
 		$this->arrModul["t_author"]		= "sidler@mulchprod.de";
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
+		
+		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
+		$this->strFallbackLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage"); 
 	}
 
 	/**
