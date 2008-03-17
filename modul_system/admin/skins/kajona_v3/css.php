@@ -490,6 +490,7 @@ html>body #moduleNavi ul span {
 	margin-left: 30px;
 	margin-right: 20px;
 	text-align: left;
+	width: 720px;
 }
 
 
@@ -1010,8 +1011,7 @@ body.folderView .listActions a {
 
 .languageSwitch a, .languageSwitch a:link, .languageSwitch a:visited {
 	background-color: #c4f3c4;
-	padding: 0 4px 0 4px;
-	width: 50px;
+	padding: 0 6px 0 6px;
 	height: 19px;
 	line-height: 19px;
 	display: block;
