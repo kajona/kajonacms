@@ -17,7 +17,10 @@ include_once(_adminpath_."/interface_admin.php");
 include_once(_systempath_."/class_modul_system_adminwidget.php");
 include_once(_systempath_."/class_modul_dashboard_widget.php");
 
-
+/**
+ * @package modul_dashboard
+ *
+ */
 class class_modul_dashboard_admin extends class_admin implements interface_admin {
     
     private $arrColumnsOnDashboard = array("column1", "column2", "column3");
