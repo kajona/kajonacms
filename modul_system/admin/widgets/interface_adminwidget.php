@@ -15,7 +15,7 @@
 /**
  * Interface to be implemented by all adminwidgets
  * 
- * @package modul_system
+ * @package modul_dashboard
  */
 interface interface_adminwidget {
     

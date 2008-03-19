@@ -16,6 +16,11 @@ include_once(_adminpath_."/widgets/class_adminwidget.php");
 include_once(_adminpath_."/widgets/interface_adminwidget.php");
 include_once(_systempath_."/class_modul_downloads_logbook.php");
 
+
+/**
+ * @package modul_dashboard
+ *
+ */
 class class_adminwidget_downloads extends class_adminwidget implements interface_adminwidget {
     
     /**

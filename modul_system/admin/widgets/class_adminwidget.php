@@ -16,7 +16,7 @@
  * Base class to be extended by all adminwidgets.
  * Holds a few methods to create a framework-like behaviour 
  *
- * @package modul_system
+ * @package modul_dashboard
  */
 abstract class class_adminwidget {
 
