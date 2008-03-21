@@ -27,7 +27,7 @@ class class_texte {
 	 */
 	private $strLanguage = "";
 
-	private $strFallbackLanguage = "";
+	private $strFallbackLanguage = "de";
 	private $arrTexts;
 
 	private static $objText = null;
@@ -42,7 +42,6 @@ class class_texte {
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
 		
 		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
-		$this->strFallbackLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage"); 
 	}
 
 	/**
@@ -115,7 +114,7 @@ class class_texte {
 			 	$arrName = explode("_", $strTemp);
 
 
-			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage) {
+			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
 			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
 
@@ -137,7 +136,7 @@ class class_texte {
 
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strFallbackLanguage) {
 			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
-
+                    
 			 		if(isset($this->arrTexts[$strModule]))
 			 			$this->arrTexts[$strModule] = array_merge($this->arrTexts[$strModule], $text);
 			 		else
