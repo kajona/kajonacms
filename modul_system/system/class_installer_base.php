@@ -132,7 +132,7 @@ abstract class class_installer_base extends class_root {
 		//first check: current module installed?
 		$objModule = null;
 		try {
-		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
 		}
 		catch (class_exception $objE) {
 
@@ -169,7 +169,7 @@ abstract class class_installer_base extends class_root {
 	    $strReturn = "";
         //check, if module aint installed
         try {
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
         }
         catch (class_exception $objException) {
 		        $objModule = null;
@@ -208,7 +208,7 @@ abstract class class_installer_base extends class_root {
 	public final function doPostInstall() {
 	    $strReturn = "";
         //check, if module has postinstalles
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
         if($objModule == null && strpos($this->arrModule["name"], "element") === false) {
             $strReturn .= "<b>No post-install options available!</b>";
         }
@@ -227,7 +227,7 @@ abstract class class_installer_base extends class_root {
 	public final function doModuleUpdate() {
 	    $strReturn = "";
         //check, if module is installed
-        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
         if($objModule == null) {
             $strReturn .= "<b>Module not installed!</b>";
         }
