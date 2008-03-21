@@ -20,7 +20,7 @@ echo "<pre>\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "| Kajona Debug Subsystem                                                        |\n";
 echo "|                                                                               |\n";
-echo "| DB Importer                                                                   |\n";
+echo "| PHPINFO                                                                       |\n";
 echo "|                                                                               |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 echo "|loading system kernel...                                                       |\n";

@@ -439,7 +439,8 @@ final class class_session {
         try {
         	include_once(_systempath_."/class_modul_system_module.php");
             $objModule = class_modul_system_module::getModuleByName("system", true);
-            $strAddKey = $objModule->getSystemid();
+            if($objModule != null)
+                $strAddKey = $objModule->getSystemid();
         }
         catch (class_exception $objException) {
         }
