@@ -96,7 +96,7 @@ abstract class class_installer_base extends class_root {
 		//or, no link ;)
 		//first check: current module installed?
 		try {
-		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
 		}
 		catch (class_exception $objException) {
 		        $objModule = null;
