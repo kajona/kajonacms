@@ -270,6 +270,7 @@ $text["installer_config_write"]      = "Save to config.php";
 
 $text["installer_modules_found"]     = "<b>Install/update the modules</b><br /><br />Modules found:<br /><br />";
 $text["installer_modules_needed"]    = "Modules needed to install: ";
+$text["installer_module_notinstalled"] = "Module not installed";
 $text["installer_systemversion_needed"] = "Minimal version of system needed: ";
 
 $text["installer_elements_found"]    = "<b>Installation of the page elements</b><br /><br />Page elements found:<br /><br />";

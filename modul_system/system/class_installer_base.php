@@ -154,6 +154,9 @@ abstract class class_installer_base extends class_root {
 		    //install link
 		    $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=postInstall&postInstall=installer_".$this->arrModule["name"]."\">".$this->getText("installer_installpe", "system", "admin")."</a>";
 		}
+		else if($objModule == null) {
+			$strReturn .= $this->getText("installer_module_notinstalled", "system", "admin");
+		}
 
 		return $strReturn ."<br />";
 	}
