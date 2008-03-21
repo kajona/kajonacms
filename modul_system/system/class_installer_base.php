@@ -15,6 +15,7 @@
 //Extend the root-class
 require_once(_realpath_."/system/class_root.php");
 require_once(_realpath_."/system/class_modul_system_module.php");
+include_once(_realpath_."/system/class_modul_pages_element.php");
 
 /**
  * Base class for all installers. Provides some needed function to avoid multiple
