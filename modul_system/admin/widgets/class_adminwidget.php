@@ -130,6 +130,9 @@ abstract class class_adminwidget {
             if(isset($arrFields[$strOneKey])) {
                 $this->setFieldValue($strOneKey, $arrFields[$strOneKey]);   
             }
+            else {
+            	$this->setFieldValue($strOneKey, "");
+            }
         }
     }
     
