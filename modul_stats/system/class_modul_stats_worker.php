@@ -155,8 +155,8 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                             LEFT JOIN "._dbprefix_."stats_ip2country  
                                    ON (stats_ip = ip2c_ip)  
                       WHERE ip2c_name IS NULL
-                         OR ip2c_name = ''
-                        AND ip2c_name != 'na'
+                       /*   OR ip2c_name = '' 
+                        AND ip2c_name != 'na' */
                    GROUP BY stats_ip";
     	
     	return $this->objDB->getArray($strQuery);
