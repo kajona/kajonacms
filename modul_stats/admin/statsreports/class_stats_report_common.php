@@ -249,8 +249,8 @@ class class_stats_report_common implements interface_admin_statsreports {
 		$arrUser = array();
 		$arrLabels = array();
 		
-		$intDaysPerLoad = 30;
-
+		$intDaysPerLoad = 10;
+		
         //create tick labels
         $intCount = 0;
         $intStart = $this->intDateStart;
