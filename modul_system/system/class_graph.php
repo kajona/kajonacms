@@ -81,7 +81,9 @@ class class_graph {
 	 */
 	private function createPieGraphInstance($intWidth, $intHeight, $strFilename = "auto") {
 		$this->objGraph = new PieGraph($intWidth, $intHeight, $strFilename);
-		$this->objGraph->SetAntiAliasing(true);
+		
+		if(function_exists("imageantialias"))
+		    $this->objGraph->SetAntiAliasing(true);
 	}
 
 	/**
@@ -150,7 +152,8 @@ class class_graph {
 		//disable border
 		$this->objGraph->frame_weight = 0;
 		//set antialiasing, not used in every chart, but won't make it worse ;)
-		$this->objGraph->img->SetAntiAliasing();
+		if(function_exists("imageantialias"))
+		    $this->objGraph->img->SetAntiAliasing();
 		//reset the graph-mode
 		$this->intCurrentGraphMode = -1;
 	}
@@ -361,6 +364,6 @@ class class_graph {
 
 
 
-} //class_image
+} //class_graph
 
 ?>
