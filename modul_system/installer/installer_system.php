@@ -404,21 +404,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.0.0") {
-            $strReturn .= $this->update_2200_221();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.1") {
-            $strReturn .= $this->update_221_222();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.2") {
-            $strReturn .= $this->update_222_300();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.0") {
             $strReturn .= $this->update_300_301();
         }
@@ -446,106 +431,7 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn."\n\n";
 	}
 
-	private function update_2200_221() {
-	    $strReturn = "";
-        $strReturn .= "Updating 2.2.0.0 to 2.2.1...\n";
-
-	    //New Constant: Max time to lock records
-	    $strReturn .= "Registering max locktime...\n";
-	    $this->registerConstant("_system_lock_maxtime_", 7200, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
-
-		//adding column "system_lock_time"
-		$strReturn .= "Adding column system_lock_time to system-table...\n";
-        $strQuery = "ALTER TABLE "._dbprefix_."system
-                     ADD `system_lock_time` INT ";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-
-        //Creating the new rights-record
-        $strReturn .= "Creating new rights-root record...\n";
-        $strReturn .= "Fetching current settings...\n";
-        //Loading current default-rights
-        $strQuery = "SELECT "._dbprefix_."system_right.*
-                        FROM "._dbprefix_."system_right,
-                             "._dbprefix_."system
-                        WHERE right_id = system_id
-                          AND system_module_nr = "._system_modul_id_."
-                          AND system_prev_id = 0";
-        $arrCurrentRights = $this->objDB->getRow($strQuery);
-        //Create an root-record for the tree
-        $strReturn .= "Creating new root-record...\n";
-        $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
-		//Assign olg settings
-		$strReturn .= "Assigning old settings to new record...\n";
-
-		$strQuery = "UPDATE "._dbprefix_."system_right SET
-						right_inherit	= 0,
-					   	right_view	 	= '".$arrCurrentRights["right_view"]."',
-					   	right_edit 		= '".$arrCurrentRights["right_edit"]."',
-					   	right_delete	= '".$arrCurrentRights["right_delete"]."',
-					   	right_right		= '".$arrCurrentRights["right_right"]."',
-					   	right_right1 	= '".$arrCurrentRights["right_right1"]."',
-					   	right_right2 	= '".$arrCurrentRights["right_right2"]."',
-					   	right_right3  	= '".$arrCurrentRights["right_right3"]."',
-					   	right_right4    = '".$arrCurrentRights["right_right4"]."',
-					   	right_right5  	= '".$arrCurrentRights["right_right5"]."'
-					   	WHERE right_id='0'";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-
-        //Get all installed modules and correct the module-prev-id
-        $strReturn .= "Updating module-parents...\n";
-        include_once(_systempath_."/class_modul_system_module.php");
-        $arrModules = class_modul_system_module::getAllModules();
-        foreach($arrModules as $objOneModule) {
-            $strReturn .= "\tUpdating module ".$objOneModule->getStrName()."...\n";
-            $strQuery = "UPDATE "._dbprefix_."system SET system_prev_id = '0' WHERE system_id = '".dbsafeString($objOneModule->getSystemid())."'";
-            if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured!!!\n";
-        }
-
-	    $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "2.2.1");
-        $this->updateModuleVersion("right", "2.2.1");
-        $this->updateModuleVersion("user", "2.2.1");
-        $this->updateModuleVersion("filemanager", "2.2.1");
-	    return $strReturn;
-	}
-
-	private function update_221_222() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 2.2.1 to 2.2.2...\n";
-
-		//adding column "module_xmlfilenameadmin"
-		$strReturn .= "Adding columns module_xmlfilenameadmin, module_xmlfilenameportal to system_module-table...\n";
-        $strQuery = "ALTER TABLE "._dbprefix_."system_module
-                     ADD `module_xmlfilenameadmin` VARCHAR( 255 ),
-                     ADD `module_xmlfilenameportal` VARCHAR( 255 )";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-
-        $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "2.2.2");
-        $this->updateModuleVersion("right", "2.2.2");
-        $this->updateModuleVersion("user", "2.2.2");
-        $this->updateModuleVersion("filemanager", "2.2.2");
-
-	    return $strReturn;
-	}
-
-	private function update_222_300() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 2.2.2 to 3.0.0...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-	    $this->updateModuleVersion("system", "3.0.0");
-        $this->updateModuleVersion("right", "3.0.0");
-        $this->updateModuleVersion("user", "3.0.0");
-        $this->updateModuleVersion("filemanager", "3.0.0");
-
-	    return $strReturn;
-	}
-
+	
 	private function update_300_301() {
 	    $strReturn = "";
 	    $strReturn .= "Updating 3.0.0 to 3.0.1...\n";

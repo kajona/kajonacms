@@ -150,12 +150,6 @@ class class_installer_downloads extends class_installer_base implements interfac
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.0.0") {
-            $strReturn .= $this->update_2200_300();
-        }
-
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.0") {
             $strReturn .= $this->update_300_301();
@@ -182,18 +176,6 @@ class class_installer_downloads extends class_installer_base implements interfac
         }
 
         return $strReturn."\n\n";
-	}
-
-	private function update_2200_300() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 2.2.0.0 to 3.0.0...\n";
-
-        //Update the module-records to 2.2.0.0
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("downloads", "3.0.0");
-
-        return $strReturn;
 	}
 
 	private function update_300_301() {

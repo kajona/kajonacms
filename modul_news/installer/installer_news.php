@@ -167,15 +167,6 @@ class class_installer_news extends class_installer_base implements interface_ins
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.0.0") {
-            $strReturn .= $this->update_2200_221();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.1") {
-            $strReturn .= $this->update_221_300();
-        }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.0") {
@@ -205,43 +196,6 @@ class class_installer_news extends class_installer_base implements interface_ins
         return $strReturn."\n\n";
 	}
 
-	private function update_2200_221() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 2.2.0.0 to 2.2.1...\n";
-
-        $strReturn .= "Adding xml-classes to module...\n";
-		$strQuery = "UPDATE "._dbprefix_."system_module
-		            SET module_xmlfilenameportal = 'class_modul_news_portal_xml.php',
-		                module_xmlfilenameadmin = ''
-		            WHERE module_name = 'news'";
-
-		if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "2.2.1");
-
-        return $strReturn;
-	}
-
-	private function update_221_300() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 2.2.1 to 3.0.0...\n";
-
-        $strReturn .= "Adding internal-feed title field to db-table...\n";
-
-        $strQuery = "ALTER TABLE `"._dbprefix_."news_feed` ADD `news_feed_urltitle` VARCHAR( 255 ) ";
-
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.0.0");
-
-        return $strReturn;
-	}
 
 	private function update_300_301() {
 	    //Run the updates

@@ -294,15 +294,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.0.0") {
-            $strReturn .= $this->update_2200_2202();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "2.2.0.2") {
-            $strReturn .= $this->update_2202_300();
-        }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.0") {
@@ -332,97 +323,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         return $strReturn."\n\n";
 	}
 
-	private function update_2200_2202() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 2.2.0.0 to 2.2.0.2...\n";
-
-	    $strReturn .= "Updating page-element-table...\n";
-	    $strQuery = "ALTER TABLE `"._dbprefix_."page_element` ADD `page_element_placeholder_language` VARCHAR( 100 ) NULL ";
-	    if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Reorganizing pages tables...\n";
-
-		$strReturn .= "Renaming pages to pages_properties...\n";
-        $strQuery = "ALTER TABLE "._dbprefix_."page RENAME AS "._dbprefix_."page_properties";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Creating new page-table...\n";
-        $arrFields = array();
-		$arrFields["page_id"] 		= array("char20", false);
-		$arrFields["page_name"] 	= array("char254", true);
-
-		if(!$this->objDB->createTable("pages", $arrFields, array("page_id")))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Resorting existing pages...\n";
-        $strQuery = "INSERT INTO "._dbprefix_."page
-                        SELECT page_id, page_name
-                        FROM "._dbprefix_."page_properties";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Reasigning page_properties column names...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."page_properties`
-                        CHANGE `page_id` `pageproperties_id` VARCHAR( 20 ) ,
-                        CHANGE `page_name` `pageproperties_name` VARCHAR( 254 ) ,
-                        CHANGE `page_keywords` `pageproperties_keywords` VARCHAR( 254 ) ,
-                        CHANGE `page_description` `pageproperties_description` VARCHAR( 254 ) ,
-                        CHANGE `page_template` `pageproperties_template` VARCHAR( 120 ) ,
-                        CHANGE `page_browsername` `pageproperties_browsername` VARCHAR( 255 ) ,
-                        CHANGE `page_seostring` `pageproperties_seostring` VARCHAR( 255 )";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Adding language column...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."page_properties`
-                        ADD `pageproperties_language` VARCHAR( 100 ) NULL";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating default language of pages...\n";
-        $strQuery = "UPDATE `"._dbprefix_."page_properties`
-                        SET pageproperties_language=''";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating default language of page-elements...\n";
-        $strQuery = "UPDATE `"._dbprefix_."page_element`
-                        SET page_element_placeholder_language=''";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Dropping column name...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."page_properties` DROP `pageproperties_name` ";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-		$strReturn .= "Creating new index...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."page_properties`
-                    DROP PRIMARY KEY,
-                       ADD PRIMARY KEY(`pageproperties_id`, `pageproperties_language`)";
-        if(!$this->objDB->_query($strQuery))
-			$strReturn .= "An error occured! ...\n";
-
-
-	    //Update the module-records to 2.2.0.2
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("2.2.0.2");
-
-        return $strReturn;
-	}
-
-	private function update_2202_300() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 2.2.0.2 to 3.0.0...\n";
-
-		//Update the module-records to 3.0.0
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.0.0");
-
-	    return $strReturn;
-	}
+	
 
 	private function update_300_301() {
 	    $strReturn = "";
