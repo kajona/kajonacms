@@ -25,7 +25,7 @@ Nachricht:
 <errors>
 <table width="400" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td>Folgende Fehler sind aufgetreten:<br /><ul>%%liste_fehler%%<ul></td>
+    <td>Folgende Fehler sind aufgetreten:<br /><ul>%%liste_fehler%%</ul></td>
   </tr>
 </table>
 </errors>
