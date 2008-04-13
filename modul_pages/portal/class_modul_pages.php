@@ -140,12 +140,28 @@ class class_modul_pages extends class_portal {
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
 		}
+		
+		//Load the template from the filesystem to get the placeholders
+        $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+        //bit include the masters-elements!!
+        $arrRawPlaceholders = array_merge($this->objTemplate->getElements($strTemplateID, 0), $this->objTemplate->getElements($strTemplateID, 1));
+        
+        $arrPlaceholders = array();
+        //and retransform
+        foreach ($arrRawPlaceholders as $arrOneRawPlaceholder)
+            $arrPlaceholders[] = $arrOneRawPlaceholder["placeholder"];
+		
 		//Iterate over all elements and pass control to them
 		//Get back the filled element
 		//Build the array to fill the template
 		$arrTemplate = array();
 
 		foreach($arrElementsOnPage as $objOneElementOnPage) {
+			//element really available on the template?
+			if(!in_array($objOneElementOnPage->getStrPlaceholder(), $arrPlaceholders)) {
+				//next one, plz
+				continue;
+			}
 		    //Check if the max-cachetime is lower than the current one set
 		    //include the "please hide the element" time
 		    if($objOneElementOnPage->getIntCachetime() != 0) {
@@ -186,8 +202,7 @@ class class_modul_pages extends class_portal {
 		$arrGlobal = array();
 		include(_portalpath_."/global_includes.php");
 		$arrTemplate = array_merge($arrTemplate, $arrGlobal);
-		//Now we can load the template and fill it. use an exception in case of errors
-		$strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+		//fill the template. the template was read before
 		$strPageContent = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         //add the portaleditor toolbar
