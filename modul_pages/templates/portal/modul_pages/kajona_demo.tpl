@@ -53,7 +53,7 @@
                 %%sitemap_navigation%%
                 %%faqs_faqs%%
                 %%comments_postacomment%%
-                %%mixed_rssfeed|imagelightbox|portallogin|portalregistration|lastmodified%%
+                %%mixed_rssfeed|imagelightbox|portallogin|portalregistration|lastmodified|rendertext%%
             </div>
             <div class="cleaner"></div>
         </div>

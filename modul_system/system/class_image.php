@@ -252,11 +252,11 @@ class class_image {
 				imagejpeg($this->objImage, "", $intJpegQuality);
 				break;
 			case ".png":
-			    header('Content-type: image/png');
+			    header("Content-type: image/png");
 				imagepng($this->objImage);
 				break;
 			case ".gif":
-			    header('Content-type: image/gif');
+			    header("Content-type: image/gif");
 				imagegif($this->objImage);
 				break;
 			}
@@ -370,9 +370,14 @@ class class_image {
 		if($this->objImage == null && $this->bitPreload)
 			$this->finalLoadImage();
 
-		//Farbe bestimmen
-		$arrayColors = explode(",", $strColor);
-		$intColor = imagecolorallocate($this->objImage, $arrayColors[0], $arrayColors[1], $arrayColors[2]);
+		
+	    //Farbe bestimmen
+        if(is_int($strColor)) {
+            $intColor = $strColor;
+        }else{
+            $arrayColors = explode(",", $strColor);
+            $intColor = imagecolorallocate($this->objImage, $arrayColors[0], $arrayColors[1], $arrayColors[2]);
+        }
 
 		//Schrift laden
 		if(is_file(_systempath_."/fonts/".$strFont)) {
@@ -438,6 +443,23 @@ class class_image {
 
         return $intColorId;
     }
+    
+    
+    /**
+     * Tries to set a color transparent to the current image object
+     *
+     * @param int int the id of the color
+     * @return boolean true or false in case of errors
+     */
+    public function setColorTransparent($intColorId = 0) {
+        $bitReturn = false;
+        if($this->objImage != null && $intColorId > 0 && $this->strType != ".jpg"){
+            imagecolortransparent($this->objImage, $intColorId);
+            $bitReturn = true;
+        }
+
+        return $bitReturn;
+    }
 
 
     /**
@@ -489,6 +511,44 @@ class class_image {
     public function drawLine($intStartX, $intStartY, $intEndX, $intEndY, $intColor) {
         if($this->objImage != null) {
             imageline($this->objImage, $intStartX, $intStartY, $intEndX, $intEndY, $intColor);
+            return true;
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Calcs the size of the rendered text. 
+     *
+     * @param int $intFontSize
+     * @param int $floatAngle
+     * @param string $strFont
+     * @param string $strText
+     * @return array or false in case of errors
+     */
+    public function getBoundingTextbox($intFontSize, $floatAngle, $strFont, $strText){
+        if(is_file(_systempath_."/fonts/".$strFont)) {
+            return @ImageTTFBBox($intFontSize, $floatAngle, _systempath_."/fonts/".$strFont, $strText);
+        }
+        return false;
+    }
+    
+    
+    /**
+     * Draws a circle around the given point
+     *
+     * @param int $intCX
+     * @param int $intCY
+     * @param int $intWidth
+     * @param int $intHeight
+     * @param int $intStart
+     * @param int $intEnd
+     * @param int $intColor
+     * @return boolean
+     */
+    public function drawArc($intCX, $intCY, $intWidth, $intHeight, $intStart, $intEnd, $intColor){
+        if($this->objImage != null) {
+            imagearc($this->objImage, $intCX, $intCY, $intWidth, $intHeight, $intStart, $intEnd, $intColor);
             return true;
         }
         return false;
