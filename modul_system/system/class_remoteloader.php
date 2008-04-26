@@ -210,7 +210,7 @@ class class_remoteloader {
 	            $objSocket->close();
 	            
 	            $strReturn = trim($strReturn);
-	            //TODO: check for emtpy rows to get the content instad of search a tag
+	            //TODO: check for emtpy rows to get the content instad of searching for a tag introducing the message-body
 	            //in http-mode, try to skip the headers
 	            if(uniStrpos($strReturn, "<") !== false) {
 	            	$strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));

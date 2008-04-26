@@ -87,8 +87,8 @@ class class_system_admin extends class_admin implements interface_admin {
 		if($strAction == "systemSettings")
 			$strReturn = $this->actionSystemSettings();
 
-		if($strAction == "dbSettings")
-		    $strReturn = $this->actionDbSettings();
+		if($strAction == "systemTasks")
+		    $strReturn = $this->actionSystemtasks();
 
 		if($strAction == "systemlog")
 		    $strReturn = $this->actionSystemlog();
@@ -114,7 +114,7 @@ class class_system_admin extends class_admin implements interface_admin {
   	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "moduleList", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "systemInfo", "", $this->getText("system_info"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "dbSettings", "", $this->getText("db_settings"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
@@ -331,126 +331,98 @@ class class_system_admin extends class_admin implements interface_admin {
     }
 
 
-// --- DB-Setting ---------------------------------------------------------------------------------------
+// --- Systemtasks --------------------------------------------------------------------------------------
 
-    /**
-     * Task providing an user-interface to start various db-related workers
-     *
-     * @return string
-     */
-    private function actionDbSettings() {
+    private function actionSystemtasks() {
         $strReturn = "";
+        $strTaskOutput = "";
+        
         //check needed rights
         if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
-
-            $intI = 0;
+        	
+        	//include the list of possible tasks
+            include_once(_systempath_."/class_filesystem.php");
+            $objFilesystem = new class_filesystem();
+            $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
+            asort($arrFiles);
+            
+        	
+        	//react on special task-commands?
+            if($this->getParam("task") != "") {
+                //search for the matching task
+                foreach ($arrFiles as $strOneFile) {
+                    if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
+                        
+                        //instantiate the current task
+                        include_once(_adminpath_."/systemtasks/".$strOneFile);
+                        $strClassname = uniStrReplace(".php", "", $strOneFile);
+                        $objTask = new $strClassname();
+                        if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+                        	
+                        	
+                        	//fire the task or display a form?
+                        	if($this->getParam("work") == "true") {
+                        		 //let the work begin...
+                        		 $strTaskOutput .= $objTask->executeTask();
+                        	}
+                        	else {
+	                        	//any form to display?
+	                        	$strForm = $objTask->generateAdminForm();
+	                        	if($strForm != "") {
+	                        	   $strReturn .= $strForm;
+	                        	}
+	                        	else {
+	                        		//reload the task an fire the action
+	                        		$this->adminReload(_indexpath_."?admin=1&module=system&action=systemTasks&work=true&task=".$objTask->getStrInternalTaskname());
+	                        	}
+                        	}
+                            break;
+                        }
+                    }
+                }
+            }
+        	
+        	$intI = 0;
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("dbDump"), $this->objToolkit->listButton(getLinkAdmin("system", "dbSettings", "&task=dbDump", $this->getText("dbDump"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("dbImport"), $this->objToolkit->listButton(getLinkAdmin("system", "dbSettings", "&task=dbImport", $this->getText("dbImport"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("dbCheck"), $this->objToolkit->listButton(getLinkAdmin("system", "dbSettings", "&task=dbCheck", $this->getText("dbCheck"), "Run", "icon_accept.gif")), $intI++);
+            
+        	//loop over the found files
+        	foreach ($arrFiles as $strOneFile) {
+        		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
+        			
+        			//instantiate the current task
+        			include_once(_adminpath_."/systemtasks/".$strOneFile);
+        			$strClassname = uniStrReplace(".php", "", $strOneFile);
+        			$objTask = new $strClassname();
+        			
+        			if($objTask instanceof interface_admin_systemtask ) {
+	                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), 
+	                                                                   $objTask->getStrTaskname(), 
+	                                                                   $this->objToolkit->listButton(
+	                                                                        getLinkAdmin("system", 
+	                                                                                     "systemTasks", 
+	                                                                                     "&task=".$objTask->getStrInternalTaskName(), 
+	                                                                                      $objTask->getStrTaskname(), 
+	                                                                                      "Run", 
+	                                                                                      "icon_accept.gif")),
+	                                                                   $intI++);
+        			}
+        		}
+        	}
             $strReturn .= $this->objToolkit->listFooter();
-
-            //react on special commands?
-            if($this->getParam("task") == "dbDump") {
-
-                if($this->objDB->dumpDb())
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("dbDump_success"));
-                else
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("dbDump_error"));
-            }
-            else if($this->getParam("task") == "dbImport") {
-                $strReturn .= $this->objToolkit->divider();
-
-                if($this->getParam("dbImportFile") != "") {
-                    if($this->objDB->importDb($this->getParam("dbImportFile")))
-                        $strReturn .= $this->objToolkit->getTextRow($this->getText("dbImport_success"));
-                    else
-                        $strReturn .= $this->objToolkit->getTextRow($this->getText("dbImport_error"));
-                }
-                else {
-                    //show dropdown to select db-dump
-                    include_once(_systempath_."/class_filesystem.php");
-    	            $objFilesystem = new class_filesystem();
-    	            $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
-    	            $arrOptions = array();
-    	            foreach($arrFiles as $strOneFile)
-    	                $arrOptions[$strOneFile] = $strOneFile;
-
-    	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=system&amp;action=dbSettings&amp;task=dbImport");
-                    $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getText("dbImportFile"));
-    	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("import"));
-    	            $strReturn .= $this->objToolkit->formClose();
-                }
-            }
-            else if($this->getParam("task") == "dbCheck") {
-                $strReturn .= $this->objToolkit->divider();
-                include_once(_systempath_."/class_modul_system_worker.php");
-                $objWorker = new class_modul_system_worker();
-
-                //Check system_prev_id => system_id relations
-                $arrCorruptedRecords = $objWorker->checkSystemTableCurPrevRelations();
-
-                //create the output tables
-                if(count($arrCorruptedRecords) > 0) {
-                    //ohoh. errors found. create tow tables
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("dbcheck_curprev_error"), "", $intI++);
-                    foreach($arrCorruptedRecords as $strID => $strComment)  {
-                        $strReturn .= $this->objToolkit->listRow2Image("", $strID." (".$strComment.")" , "", 0);
-                    }
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-                else {
-                    //no errors found
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("dbcheck_curprev_ok"), "", $intI++);
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-
-                //check if every right-record has a system-record
-                $arrCorruptedRecords = $objWorker->chekRightSystemRelations();
-                //create the output tables
-                if(count($arrCorruptedRecords) > 0) {
-                    //ohoh. errors found. create tow tables
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("dbcheck_right_error"), "", $intI++);
-                    foreach($arrCorruptedRecords as $arrOneRecords)  {
-                        $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["right_id"]." (".$arrOneRecords["right_comment"].")" , "", $intI++);
-                    }
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-                else {
-                    //no errors found
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("dbcheck_right_ok"), "", $intI++);
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-
-                //check if every date-record has a system-record
-                $arrCorruptedRecords = $objWorker->chekDateSystemRelations();
-                //create the output tables
-                if(count($arrCorruptedRecords) > 0) {
-                    //ohoh. errors found. create tow tables
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("dbcheck_date_error"), "", $intI++);
-                    foreach($arrCorruptedRecords as $arrOneRecords)  {
-                        $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["system_date_id"], "", $intI++);
-                    }
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-                else {
-                    //no errors found
-                    $strReturn .= $this->objToolkit->listHeader();
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("dbcheck_date_ok"), "", $intI++);
-                    $strReturn .= $this->objToolkit->listFooter();
-                }
-            }
-
-        }
+        	
+            
+        	
+        	if($strTaskOutput != "") {
+        	   $strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
+        	}
+        	   
+        }          
         else
-			$strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("fehler_recht");
+            
         return $strReturn;
     }
+    
 
 // --- Systemlog ---------------------------------------------------------------------------------------.
 

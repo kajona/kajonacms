@@ -11,6 +11,14 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                              *
 ********************************************************************************************************/
+/**
+ * TODO try not to load all textfiles of a module at once. loading less files will reduce memory
+ * consumption and increase runtime
+ */
+
+
+
+
 
 /**
  * Class managing access to textfiles

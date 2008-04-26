@@ -25,7 +25,7 @@ $text["modul_status_enabled"]       = "Set module inactive (is active)";
 $text["modul_status_system"]        = "Woops, you want to set the system-kernel inactive? To process, please execute format c: instead! ;-)";
 $text["system_info"]				= "System information";
 $text["system_settings"]			= "System settings";
-$text["db_settings"]			    = "Database tools";
+$text["systemTasks"]			    = "System tasks";
 $text["systemlog"]                  = "System logfile";
 $text["updatecheck"]                = "Update-Check";
 $text["about"]                      = "About Kajona";
@@ -60,7 +60,7 @@ $text["permissions_header"]         = array(
             							2 => "Delete",
             							3 => "Permissions",
             							4 => "Settings",       //recht1
-            							5 => "Database",           //recht2
+            							5 => "Systemtasks",           //recht2
             							6 => "Systemlog",           //recht3
             							7 => "Updates",
             							8 => ""
@@ -142,22 +142,7 @@ $text["pageview_forward"]           = "Forward";
 $text["pageview_backward"]          = "Back";
 $text["pageview_total"]             = "Total: ";
 
-
-$text["dbDump"]                     = "Backup database";
-$text["dbImport"]                   = "Import database backup";
-$text["dbDump_success"]             = "Backup created succesfully";
-$text["dbDump_error"]               = "Error dumping the database";
-$text["dbImport_success"]           = "Backup restored successfully";
-$text["dbImport_error"]             = "Error restoring the backup";
-$text["import"]                     = "Import";
-$text["dbImportFile"]               = "Backup:";
-$text["dbCheck"]                    = "Check database consistency";
-$text["dbcheck_curprev_ok"]         = "All parent-child relations are correct";
-$text["dbcheck_curprev_error"]      = "The following parent-child relations are erroneous (missing parent-link):";
-$text["dbcheck_right_ok"]           = "All right-records have a corresponding system-record";
-$text["dbcheck_right_error"]        = "The following right-records are erroneous (missing system-record):";
-$text["dbcheck_date_ok"]            = "All date-records have a corresponding system-record";
-$text["dbcheck_date_error"]         = "The following date-records are erroneous (missing system-record):";
+$text["systemtask_run"]             = "Execute";
 
 $text["log_empty"]                  = "No entries in the logfile";
 
@@ -215,7 +200,7 @@ $text["quickhelp_systemSettings"]	= "You can define basic settings of the system
                                        The changes made should be made with care, wrong values can make the system become unusuable.<br /><br />
                                        Note: If there are changes made to a given module, you have to save the new values for every module! Changes
                                        on other modules will be ignored! When clicking a save-button, just the corresponding values are saved.";
-$text["quickhelp_dbSettings"]		= "To execute tasks on the database directly, you can use the given tasks.<br />
+$text["quickhelp_systemTasks"]      = "Systemtasks are small programms handling everyday work.<br />
 									   This includes tasks to backup the database or to restore backups created before.";
 $text["quickhelp_systemlog"]		= "The system-log shows the entries of the global logfile.<br />
 									   The granularity of the logging-engine could be set in the config-file (/system/config.php).";

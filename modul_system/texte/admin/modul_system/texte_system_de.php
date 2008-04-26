@@ -25,7 +25,7 @@ $text["modul_status_enabled"]       = "Modul inaktiv schalten (ist aktiv)";
 $text["modul_status_system"]        = "Hmmm. Den System-Kernel deaktivieren? Zuvor bitte format c: ausführen!";
 $text["system_info"]				= "Systeminformationen";
 $text["system_settings"]			= "Systemeinstellungen";
-$text["db_settings"]			    = "Datenbank-Tools";
+$text["systemTasks"]			    = "System-Tasks";
 $text["systemlog"]                  = "System-Log";
 $text["updatecheck"]                = "Update-Check";
 $text["about"]                      = "Über Kajona";
@@ -60,7 +60,7 @@ $text["permissions_header"]         = array(
             							2 => "Löschen",
             							3 => "Rechte",
             							4 => "Einstellungen",       //recht1
-            							5 => "Datenbank",           //recht2
+            							5 => "Systemtasks    ",           //recht2
             							6 => "Systemlog",           //recht3
             							7 => "Updates",
             							8 => ""
@@ -143,22 +143,7 @@ $text["pageview_forward"]           = "Weiter";
 $text["pageview_backward"]          = "Zurück";
 $text["pageview_total"]             = "Gesamt: ";
 
-
-$text["dbDump"]                     = "Datenbank sichern";
-$text["dbImport"]                   = "Datenbank importieren";
-$text["dbDump_success"]             = "Sicherung erfolgreich angelegt";
-$text["dbDump_error"]               = "Fehler beim Sichern der Datenbank";
-$text["dbImport_success"]           = "Sicherung erfolgreich eingespielt";
-$text["dbImport_error"]             = "Fehler beim Einspielen der Sicherung";
-$text["import"]                     = "Importieren";
-$text["dbImportFile"]               = "Sicherung:";
-$text["dbCheck"]                    = "Datenbankkonsistenz überprüfen";
-$text["dbcheck_curprev_ok"]         = "Alle Eltern-Kind Beziehungen sind korrekt";
-$text["dbcheck_curprev_error"]      = "Folgende Eltern-Kind Beziehungen sind fehlerhaft (fehlender Elternteil):";
-$text["dbcheck_right_ok"]           = "Alle Rechte-Records haben einen zugehörigen System-Record";
-$text["dbcheck_right_error"]        = "Folgende Rechte-Records sind fehlerhaft (fehlender System-Record):";
-$text["dbcheck_date_ok"]            = "Alle Datum-Records haben einen zugehörigen System-Record";
-$text["dbcheck_date_error"]         = "Folgende Datum-Records sind fehlerhaft (fehlender System-Record):";
+$text["systemtask_run"]             = "Ausführen";
 
 $text["log_empty"]                  = "Keine Einträge im Logfile vorhanden";
 
@@ -220,7 +205,7 @@ $text["quickhelp_systemSettings"]	= "Hier können grundlegende Einstellungen des
                                        Hinweis: Werden Werte an einem Modul geändert, so muss für JEDES Modul der Speichern-Button gedrückt werden. Ein Abändern
                                        der Einstellungen verschiedener Module wird beim Speichern nicht übernommen. Es werden nur die Werte der zum Speichern-Button
                                        zugehörigen Felder übernommen.";
-$text["quickhelp_dbSettings"]		= "Um Aktionen direkt auf der Datenbank auszuführen, können die unten stehenden Tasks genutzt werden.<br />
+$text["quickhelp_systemTasks"]		= "Systemtasks sind kleine Programme, die alltägliche Aufaben wie Wartungsarbeiten im System übernehmen.<br />
 									   Hierzu gehört das Sichern der Datenbank und ggf. das Rückspielen einer Sicherung in das System.";
 $text["quickhelp_systemlog"]		= "Das Systemlogbuch gibt die Einträge des Logfiles aus, in welche die Module Nachrichten schreiben können.<br />
 									   Die Feinheit des Loggings kann in der config-Datei (/system/config.php) eingestellt werden.";
