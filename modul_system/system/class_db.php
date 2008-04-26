@@ -629,7 +629,7 @@ class class_db {
 	
 	
 	/**
-     * Allows the db-driver to add database-specific surrounding to column-names.
+     * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
      *
      * @param string $strColumn
@@ -640,7 +640,7 @@ class class_db {
     }
     
 /**
-     * Allows the db-driver to add database-specific surrounding to table-names.
+     * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers
      *
      * @param string $strColumn

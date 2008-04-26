@@ -106,7 +106,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
      */
     public function saveObjectToDb($strFolderid = "0") {
         //Befor saving to database, filter special chars
-		$strDescription = htmlToString($this->getStrDesc());
+		$strDescription = htmlToString($this->getStrDesc(), false, false);
 		$strName = $this->generateNonexistingPagename($this->getStrName());
 
 		//Start the transaction
@@ -162,7 +162,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
         class_logger::getInstance()->addLogRow("updated page ".$this->getSystemid(), class_logger::$levelInfo);
 
         //Make texts db-save
-		$strDescription = htmlToString($this->getStrDesc());
+		$strDescription = htmlToString($this->getStrDesc(), false, false);
 		//Do we have a folderid?
 		$strName = str_replace(" ", "_", $this->getStrName());
 		//Pagename already existng?
