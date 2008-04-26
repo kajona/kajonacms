@@ -22,7 +22,6 @@ $text["modul_neu"]					= "Create page";
 $text["modul_neu_ordner"]			= "Create folder";
 $text["modul_elemente"]				= "Page elements";
 $text["modul_element_neu"]			= "Create page element";
-$text["flushCache"]                 = "Flush page-cache";
 $text["updatePlaceholder"]          = "Update placeholder";
 
 $text["permissions_header"]         = array(
@@ -150,8 +149,6 @@ $text["element_pos"]                = "Position at placeholder:";
 $text["element_first"]              = "At the beginning";
 $text["element_last"]               = "At the end";
 $text["page_element_placeholder_language"] = "Language:";
-
-$text["flushCacheSuccess"]          = "Page-cache was flushed successfully";
 
 $text["required_ordner_name"]       = "Name of the folder";
 $text["required_element_name"]      = "Name of the element";

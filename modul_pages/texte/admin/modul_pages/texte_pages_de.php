@@ -22,7 +22,6 @@ $text["modul_neu"]					= "Neue Seite";
 $text["modul_neu_ordner"]			= "Neuer Ordner";
 $text["modul_elemente"]				= "Elemente";
 $text["modul_element_neu"]			= "Neues Element";
-$text["flushCache"]                 = "Seitencache leeren";
 $text["updatePlaceholder"]          = "Platzhalter anpassen";
 
 $text["permissions_header"]         = array(
@@ -151,8 +150,6 @@ $text["element_pos"]                = "Position am Platzhalter:";
 $text["element_first"]              = "Am Anfang des Platzhalters";
 $text["element_last"]               = "Am Ende des Platzhalters";
 $text["page_element_placeholder_language"] = "Sprache:";
-
-$text["flushCacheSuccess"]          = "Seitencache erfolgreich geleert";
 
 $text["required_ordner_name"]       = "Name des Ordners";
 $text["required_element_name"]      = "Name des Elements";

@@ -179,8 +179,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     			if($strReturn == "")
     				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=listElements");
     		}
-    		if($strAction == "flushCache")
-    		    $strReturn = $this->actionFlushCache();
     		if($strAction == "updatePlaceholder")
                 $strReturn = $this->actionUpdatePlaceholder();
 		}
@@ -209,7 +207,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getText("modul_elemente"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "flushCache", "", $this->getText("flushCache"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "updatePlaceholder", "", $this->getText("updatePlaceholder"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
@@ -1232,12 +1229,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	
 	
 // -- Helferfunktionen ----------------------------------------------------------------------------------
-
-    public function actionFlushCache() {
-        $this->flushCompletePagesCache();
-        return $this->getText("flushCacheSuccess");
-    }
-
 
     /**
      * Checks, if a new element already exists
