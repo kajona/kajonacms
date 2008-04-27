@@ -126,5 +126,4 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

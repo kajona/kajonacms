@@ -36,27 +36,21 @@ class class_modul_pages_search extends class_portal implements interface_search_
         $this->arrSearchterm = $arrSearchterm;
 
         $arrSearch = array();
-
-        //Tables & rows of page-elements
+        
+        //include the list of tables and rows to search
         $arrSearch["pages_elements"] = array();
-		$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_titel";
-		$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_inhalt";
-		$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_link";
-		$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_bild";
-		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_titel";
-		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_bild";
-		$arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_link";
-		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char1";
-		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char2";
-		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "char3";
-		$arrSearch["pages_elements"][_dbprefix_."element_universal"][] = "text";
-
-		//Pagedata
         $arrSearch["page"] = array();
-		$arrSearch["page"][_dbprefix_."page"][] = "page_name";
-		$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_description";
-		$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_keywords";
-		$arrSearch["page"][_dbprefix_."page"][] = "pageproperties_browsername";
+        
+        include_once(_systempath_."/class_filesystem.php");
+        $objFilesystem = new class_filesystem();
+        $arrFiles = $objFilesystem->getFilelist(_portalpath_."/searchplugins/", array(".php"));
+        
+        foreach($arrFiles as $strOneFile) {
+        	if(uniStrpos($strOneFile, "searchdef_pages_" ) !== false) {
+        		include_once(_portalpath_."/searchplugins/".$strOneFile);
+        	}
+        }
+        
 
 		$this->arrTableConfig = $arrSearch;
     }

@@ -66,5 +66,4 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

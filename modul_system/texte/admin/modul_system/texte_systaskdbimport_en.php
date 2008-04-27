@@ -19,4 +19,4 @@ $text["systemtask_dbimport_error"]                  = "Error restoring the backu
 
 $text["systemtask_dbimport_file"]                   = "Backup:";
 
-?> 
+?>

@@ -98,5 +98,4 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
         return "languages";
     }
 }
-?> 
- 
+?>

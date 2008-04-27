@@ -199,5 +199,4 @@ class class_installer_sc_news implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

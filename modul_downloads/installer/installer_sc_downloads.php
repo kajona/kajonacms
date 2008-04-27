@@ -133,5 +133,4 @@ class class_installer_sc_downloads implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

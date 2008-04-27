@@ -362,7 +362,7 @@ class class_system_admin extends class_admin implements interface_admin {
                         	
                         	//fire the task or display a form?
                         	if($this->getParam("work") == "true") {
-                        		 class_logger::getInstance()->addLogRow("executing task "+$objTask->getInternalTaskname(), class_logger::$levelInfo); 
+                        		 class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo); 
                         		 //let the work begin...
                         		 $strTaskOutput .= $objTask->executeTask();
                         	}

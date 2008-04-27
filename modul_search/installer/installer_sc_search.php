@@ -141,5 +141,4 @@ class class_installer_sc_search implements interface_sc_installer  {
         return "search";
     }
 }
-?> 
- 
+?>

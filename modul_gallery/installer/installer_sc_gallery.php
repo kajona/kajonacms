@@ -170,5 +170,4 @@ class class_installer_sc_gallery implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

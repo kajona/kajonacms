@@ -150,5 +150,4 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

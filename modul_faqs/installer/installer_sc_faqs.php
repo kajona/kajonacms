@@ -144,5 +144,4 @@ class class_installer_sc_faqs implements interface_sc_installer  {
     }
     
 }
-?> 
- 
+?>

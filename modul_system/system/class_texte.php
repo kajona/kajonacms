@@ -11,13 +11,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                              *
 ********************************************************************************************************/
-/**
- * TODO try not to load all textfiles of a module at once. loading less files will reduce memory
- * consumption and increase runtime
- */
-
-
-
 
 
 /**
@@ -125,12 +118,12 @@ class class_texte {
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
 			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
-
+                    
 			 		if(isset($this->arrTexts[$strModule]))
 			 			$this->arrTexts[$strModule] = array_merge($this->arrTexts[$strModule], $text);
 			 		else
 			 			$this->arrTexts[$strModule] = $text;
-
+                    
 			 	}
 			}
 			if($bitFileMatched)
