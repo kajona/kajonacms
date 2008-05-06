@@ -189,7 +189,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
 			    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
-			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_rechte"), "icon_key.gif"));
+			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_rechte"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 			  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), $objOneNavigation->getStrName(), $strAction, $intI++);
 					}
 				}
@@ -241,7 +241,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), "icon_key.gif"));
+    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 
     		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
     				}

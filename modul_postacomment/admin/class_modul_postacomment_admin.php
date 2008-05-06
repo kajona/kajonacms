@@ -192,7 +192,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "postStatus", "&systemid=".$objOnePost->getSystemid(), "", $strStatus, $strStatusImage));
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), "icon_key.gif"));
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), getRightsImageAdminName($objOnePost->getSystemid())));
 	
 	    		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
 	

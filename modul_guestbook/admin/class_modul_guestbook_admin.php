@@ -153,7 +153,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightDelete($objOneGb->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteGuestbook", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_loeschen"), "icon_ton.gif"));
 			   		if($this->objRights->rightRight($objOneGb->getSystemid()))
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_rechte"), "icon_key.gif"));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_rechte"), getRightsImageAdminName($objOneGb->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_book.gif"), $objOneGb->getGuestbookTitle(), $strAction, $intI++);
 				}
 			}

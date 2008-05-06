@@ -104,7 +104,29 @@ class class_rights {
 		}
 	}
 
+    /**
+     * Looks up, whether a record intherits its' rights or not.
+     * If not, false is being returned, if the record inherits the rights from another 
+     * record, true is returned instead.
+     * 
+     * @return bool
+     */
+	public function isInherited($strSystemid) {
+		$bitReturn = false;
+		
+		$strQuery = "SELECT *
+                        FROM "._dbprefix_."system,
+                             "._dbprefix_."system_right
+                        WHERE system_id = '".dbsafeString($strSystemid)."'
+                            AND right_id = system_id ";
 
+        $arrRow = $this->objDb->getRow($strQuery);
+
+        if((isset($arrRow["right_inherit"]) && $arrRow["right_inherit"] == 1))
+            $bitReturn = true;
+		
+		return $bitReturn;
+	}
 
 	/**
 	 * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)

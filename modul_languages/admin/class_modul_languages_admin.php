@@ -143,7 +143,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "status", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_status").$strStatus.")", $strStatImage));
 		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_rechte"), "icon_key.gif"));
+		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_rechte"), getRightsImageAdminName($objOneLanguage->getSystemid())));
 
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (default)" : ""), $strAction, $intI++);
 				}

@@ -333,6 +333,20 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
 	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"htmlTooltip(this, '".$strAlt."');\" ".($strId == "" ? "" : "id=\"".$strId."\"" )." />";
 }
 
+/**
+ * Determins the rights-filename of a system-record. Looks up if the record
+ * uses its' own rights or inherits the rights from another record.
+ *
+ * @param string $strSystemid
+ * @return string
+ */
+function getRightsImageAdminName($strSystemid) {
+	if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
+	   return "icon_key_inherited.gif";
+	else
+	   return "icon_key.gif";   
+}
+
 
 /**
  * Makes out of a bytenumber a human readable string

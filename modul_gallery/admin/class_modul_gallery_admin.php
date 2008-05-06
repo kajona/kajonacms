@@ -183,7 +183,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		if($objOneGallery->rightDelete())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_loeschen"), "icon_ton.gif"));
 			   		if($objOneGallery->rightRight())
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), "icon_key.gif"));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), getRightsImageAdminName($objOneGallery->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
 				}
 			}
@@ -529,7 +529,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "status", "&systemid=".$objOneFile->getSystemid(), "", $strStatus, $strStatusImage));
 			   		}
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), "icon_key.gif"));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 
                     // if no folder, attach a thumbnail-tooltip
                     if ($objOneFile->getIntType() == 1) {

@@ -113,6 +113,10 @@ class class_socket {
     public function __construct($strHostname, $intPort) {
         $this->intPort = $intPort;
         $this->strHostname = $strHostname;
+        
+        //initial constants
+        $bitSupportEnabled = true;
+        if(!defined("AF_INET"))
 
         //Sockets implemented?
         if(!function_exists("socket_create"))

@@ -189,7 +189,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "faqStatus", "&systemid=".$objOneCategory->getSystemid(), "", $strStatus, $strStatusImage));
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), "icon_key.gif"));
+    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
 
     			}
@@ -229,7 +229,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "faqStatus", "&systemid=".$objOneFaq->getSystemid(), "", $strStatus, $strStatusImage));
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_rechte"), "icon_key.gif"));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_rechte"), getRightsImageAdminName($objOneFaq->getSystemid())));
 
     		   		$strFaqs .= $this->objToolkit->listRow2Image(getImageAdmin("icon_question.gif"), uniStrTrim($objOneFaq->getStrQuestion(), 80), $strAction, $intI++);
 			    }

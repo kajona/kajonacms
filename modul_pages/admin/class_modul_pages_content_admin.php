@@ -240,7 +240,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementStatus", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_status_inaktiv"), "icon_disabled.gif"));
 
 							//Rights - could be used, but not up to now not needed, so not yet implemented completly
-							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), "icon_key.gif"));
+							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
 
 							//Put all Output together
 							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrElement() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++);

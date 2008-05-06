@@ -273,7 +273,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deleteFolder", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_loeschen"), "icon_ton.gif"));
 			    		if($this->objRights->rightRight($objSingleFolder->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), "icon_key.gif"));
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objSingleFolder->getSystemid())));
 			  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strActions, $intI++);
 					}
 				}
@@ -323,7 +323,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    		if($this->objRights->rightEdit($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "status", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $status, $stat_bild));
 		    		if($this->objRights->rightRight($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_rechte"), "icon_key.gif"));
+		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneRow->getSystemid())));
 
 		  			$strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneRow->getStrName(), $strActions, $intI++);
 			 	}
@@ -393,7 +393,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "status", "&systemid=".$objPage->getSystemid(), "", $status, $stat_bild));
 	    		if($this->objRights->rightRight($objPage->getSystemid()	))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("rights", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), "icon_key.gif"));
+	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("rights", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
 
 	  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
 			}

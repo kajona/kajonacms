@@ -215,7 +215,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_loeschen"), "icon_ton.gif"));
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), "icon_key.gif"));
+    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
 
     			}
@@ -276,7 +276,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newsStatus", "&systemid=".$objOneNews->getSystemid(), "", $strStatus, $strStatusImage));
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), "icon_key.gif"));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), getRightsImageAdminName($objOneNews->getSystemid())));
     		   		$strNews .= $this->objToolkit->listRow3($objOneNews->getStrTitle()." (".$objOneNews->getIntHits()." Hits)", $strCenter, $strAction,getImageAdmin("icon_news.gif"), $intI++);
 			    }
 

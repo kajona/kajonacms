@@ -203,7 +203,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightDelete($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_loeschen"), "icon_ton.gif"));
 			   		if($this->objRights->rightRight($arrOneObjArchive->getSystemid()))
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_rechte"), "icon_key.gif"));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($arrOneObjArchive->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_downloads.gif"), $arrOneObjArchive->getTitle(), $strAction, $intI++);
 				}
 			}
@@ -281,7 +281,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "status", "&systemid=".$objOneFile->getSystemid(), "", $strStatus, $strStatusImage));
 			   		}
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), "icon_key.gif"));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 
 					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strImage, $strText), $intI++, $objOneFile->getSystemid());
 				}

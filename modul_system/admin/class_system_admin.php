@@ -161,7 +161,7 @@ class class_system_admin extends class_admin implements interface_admin {
 		   		    }
 		   		    //rights
 		   		    if($this->objRights->rightRight($intModuleSystemID))
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("modul_rechte"), "icon_key.gif"));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("modul_rechte"), getRightsImageAdminName($intModuleSystemID)));
 		   		}
 		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif"), $intI++, $objSingleModule->getSystemid());
 			}
