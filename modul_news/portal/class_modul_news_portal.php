@@ -56,7 +56,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 
 		if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1)
 			$strReturn = $this->actionNewsdetail();
-		elseif($this->arrElementData["news_view"] == 0)
+		elseif($this->arrElementData["news_view"] == 0 || $strAction == "newsList")
 		    $strReturn = $this->actionList();
 
 		return $strReturn;
@@ -73,8 +73,13 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	 */
 	public function actionList() {
 		$strReturn = "";
-		//Load news
-		$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $this->arrElementData["news_category"]);
+		//Load news using the correct filter
+		$strFilterId = "";
+		if($this->getParam("filterid") != "")
+		    $strFilterId = $this->getParam("filterid");
+		else
+		    $strFilterId = $this->arrElementData["news_category"];    
+		$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
 		//Check rights
 		if(count($arrNews) > 0) {

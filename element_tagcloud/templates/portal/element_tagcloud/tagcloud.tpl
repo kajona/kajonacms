@@ -5,6 +5,6 @@
 </tagcloud>
 
 <tagname>
-    <span style="font-size: %%fontsize%%px;">%%catname%%</span>
+    <span style="font-size: %%fontsize%%px;">%%catlink%%</span>
 </tagname>
 

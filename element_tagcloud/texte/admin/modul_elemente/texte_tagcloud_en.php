@@ -14,5 +14,6 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 $text["tagcloud_template"]                   = "Template:";
+$text["tagcloud_detailspage"]                = "Listenseite:";
 
 ?>

@@ -35,8 +35,8 @@ class class_element_tagcloud extends class_element_admin implements interface_ad
 		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModul["table"] 		    = _dbprefix_."element_universal";
 		$arrModul["modul"]			= "elemente";
-		//char1 => template
-		$arrModul["tableColumns"]   = "char1|char";
+		//char1 => template, char2 => detailspage
+		$arrModul["tableColumns"]   = "char1|char,char2|char";
 
 		parent::__construct($arrModul);
 	}
@@ -61,6 +61,7 @@ class class_element_tagcloud extends class_element_admin implements interface_ad
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tagcloud_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+		$strReturn .= $this->objToolkit->formInputPageSelector("char2", $this->getText("tagcloud_detailspage"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
 
 		return $strReturn;
 	}

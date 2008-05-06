@@ -91,6 +91,7 @@ class class_element_tagcloud extends class_element_portal implements interface_p
         	$arrTemplate = array();
         	$arrTemplate["catname"] = $arrCatDetails[1]->getStrTitle();
         	$arrTemplate["fontsize"] = $arrCatDetails[0];
+        	$arrTemplate["catlink"] = getLinkPortal($this->arrElementData["char2"], "", "", $arrCatDetails[1]->getStrTitle(), "newsList", "&filterid=".$arrCatDetails[1]->getSystemid());
         	$strTags .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateTagID);
         }
         
