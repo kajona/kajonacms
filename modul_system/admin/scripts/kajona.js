@@ -216,6 +216,11 @@ var kajonaAjaxHelper =  {
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-beta-min.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dom/dom-min.js');
 	},
+	
+	loadCalendarBase : function() {
+	   kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js');
+	   kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/calendar/calendar-min.js');
+	},
 
 
 	addFileToLoad : function(fileName) {

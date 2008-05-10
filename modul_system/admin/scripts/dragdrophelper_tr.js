@@ -152,15 +152,21 @@ if(arrayTableIds == null)
 			var posAfterMove = kajona.dragndroplist.DDApp.getCurrentPos(this.id);
 			if(posAfterMove != posBeforeMove)
 	        	kajonaAdminAjax.setAbsolutePosition(this.id, posAfterMove, kajona.dragndroplist.DDApp.getCurrentList(this.id));
+	        	
+	        	
 	    },
 
 	    onDragDrop: function(e, id) {
+	        //is target element an allowed one?
 	        if (DDM.interactionInfo.drop.length === 1) {
 	            var pt = DDM.interactionInfo.point;
 	            var region = DDM.interactionInfo.sourceRegion;
 	            if (!region.intersect(pt)) {
 	                var destEl = Dom.get(id);
 	                var destDD = DDM.getDDById(id);
+	                if(destEl != null && destEl.nodeName.toLowerCase() == "table")
+	                   return;
+	                   
 	                destEl.appendChild(this.getEl());
 	                destDD.isEmpty = false;
 	                DDM.refreshCache();

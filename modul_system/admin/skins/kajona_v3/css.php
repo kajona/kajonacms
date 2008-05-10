@@ -37,7 +37,7 @@ echo "
 
 
 /* C A L E N D A R  O V E R L A Y */
-#calendarOverlay {
+.calendarOverlay {
 	position: absolute;
 	width: 200px;
 	z-index: 1000;

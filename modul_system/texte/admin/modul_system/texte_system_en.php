@@ -185,6 +185,9 @@ $text["about_part3"]                = "<h2>Credits</h2>
 
 $text["setAbsolutePosOk"]           = "Saving position succeeded";
 
+$text["toolsetCalendarMonth"]       = "\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"Oktober\", \"November\", \"December\"";
+$text["toolsetCalendarWeekday"]     = "\"Su\", \"Mu\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"";
+
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_title"]            = "Quickhelp";

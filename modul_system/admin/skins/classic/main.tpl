@@ -14,9 +14,6 @@
 	kajonaAjaxHelper.loadAjaxBase();
     kajonaAjaxHelper.loadAutocompleteBase();
 </script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/lang/calendar-de.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar-setup.js"></script>
 </head>
 
 <body>

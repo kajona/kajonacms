@@ -145,12 +145,59 @@ class class_toolkit_admin extends class_toolkit {
 
 		//commands and values for the jscalendar
 		$arrTemplate["calendarCommands"] = "";
+		
+		//init the js-files
+		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
+		//and the css
+		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
+		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
+        
+        
+		//set up the container div
+        $strContainerId = $strName."jscalendarContainer";
+        $arrTemplate["calendarContainerId"] = $strContainerId;
+        
+        //init the calendar
+        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\"> function initCal_".$strContainerId."() { \n";
+        $arrTemplate["calendarCommands"] .="    if(typeof YAHOO == \"undefined\") {\n";
+        $arrTemplate["calendarCommands"] .="      window.setTimeout(initCal_".$strContainerId.", 1000)\n";
+        $arrTemplate["calendarCommands"] .="      return;";
+        $arrTemplate["calendarCommands"] .="    }\n";
+        $arrTemplate["calendarCommands"] .="    YAHOO.namespace(\"kajona.calendar\"); \n";
+        //set up the calendar
+        $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init = function() { \n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId." = new YAHOO.widget.Calendar(\n";
+        $arrTemplate["calendarCommands"] .="       \"cal_".$strContainerId."\",\n";
+        $arrTemplate["calendarCommands"] .="       \"".$strContainerId."\" );\n"; 
+        
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"WEEKDAYS_SHORT\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarWeekday", "system", "admin")."]);\n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"MONTHS_LONG\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarMonth", "system", "admin")."]);\n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".selectEvent.subscribe(handleSelect_".$strContainerId.", YAHOO.kajona.calendar.cal_".$strContainerId.", true);\n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".render();\n"; 
+        $arrTemplate["calendarCommands"] .="    } \n";
+    
+        $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init();\n";
+        $arrTemplate["calendarCommands"] .="}\n";
+        
+        $arrTemplate["calendarCommands"] .="function handleSelect_".$strContainerId."(type,args,obj) {\n"; 
+        $arrTemplate["calendarCommands"] .="   var dates = args[0]; \n";
+        $arrTemplate["calendarCommands"] .="   var date = dates[0]; \n";
+        $arrTemplate["calendarCommands"] .="   var year = date[0], month = date[1], day = date[2];\n"; 
+        //write to fields
+		$arrTemplate["calendarCommands"] .="   document.getElementById('".$arrTemplate["titleDay"]."').value=day+\"\";\n";
+		$arrTemplate["calendarCommands"] .="   document.getElementById('".$arrTemplate["titleMonth"]."').value=month+\"\";\n";
+        $arrTemplate["calendarCommands"] .="   document.getElementById('".$arrTemplate["titleYear"]."').value=year+\"\";\n";
+        $arrTemplate["calendarCommands"] .="   calClose_".$strContainerId."();\n";
+        $arrTemplate["calendarCommands"] .="} \n";
+        
+        
+        $arrTemplate["calendarCommands"] .="addLoadEvent(initCal_".$strContainerId.")</script>\n" ;
+		
+		/*
 		//load calendar-css
         $arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/jscalendar.css\");</script>";
 
-		//set up the container div
-		$strContainerId = $strName."jscalendarContainer";
-		$arrTemplate["calendarContainerId"] = $strContainerId;
+		
 		//create an instance of the calendar, do the setup
 		$arrTemplate["calendarCommands"] .= "
             		<script type=\"text/javascript\">
@@ -176,6 +223,7 @@ class class_toolkit_admin extends class_toolkit {
                       );
                     </script>
              ";
+        */
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
