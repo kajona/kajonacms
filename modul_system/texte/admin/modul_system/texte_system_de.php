@@ -178,7 +178,6 @@ $text["about_part3"]                = "<h2>Credits</h2>
                                        <li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li>
                                        <li>FCKeditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.fckeditor.net/\" target=\"_blank\">http://www.fckeditor.net/</a></li>
                                        <li>JpGraph:<br />Aditus, <a href=\"http://www.aditus.nu/jpgraph/\" target=\"_blank\">http://www.aditus.nu/jpgraph/</a></li>
-                                       <li>DHTML / JavaScript Calendar:<br />Dynarch, <a href=\"http://www.dynarch.com/projects/calendar/\" target=\"_blank\">http://www.dynarch.com/projects/calendar/</a></li>
                                        <li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li>
                                        <li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li>
                                        </ul>
