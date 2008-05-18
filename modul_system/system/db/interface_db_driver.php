@@ -183,6 +183,22 @@ interface interface_db_driver {
      * @return string
      */
     public function encloseTableName($strTable);
+    
+    /**
+     * Returns the db-specific datatype for the kajona internal datatype.
+     * Currently, this are
+     *      int
+     *      double
+     *      char10
+     *      char20
+     *      char100
+     *      char254
+     *      text 
+     * 
+     * @param string $strType
+     * @return string
+     */
+    public function getDatatype($strType);
 }
 
 

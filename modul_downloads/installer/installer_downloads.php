@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_downloads extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.0";
+		$arrModule["version"] 		= "3.1.1";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -70,6 +70,8 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_hits"]	 	= array("int", true);
 		$arrFields["downloads_type"]	 	= array("int", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
+		$arrFields["downloads_rating_rate"] = array("double", true);
+		$arrFields["downloads_rating_hits"] = array("int", true);
 		
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -174,6 +176,11 @@ class class_installer_downloads extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
         }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.0") {
+            $strReturn .= $this->update_310_311();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -234,5 +241,21 @@ class class_installer_downloads extends class_installer_base implements interfac
     }
 
 
+    private function update_310_311() {
+        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
+        
+        $strReturn .= "Adding voting-columns to table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")." 
+                        ADD ".$this->objDB->encloseColumnName("downloads_rating_rate")." ".$this->objDB->getDatatype("double")." NULL,
+                        ADD ".$this->objDB->encloseColumnName("downloads_rating_hits")." ".$this->objDB->getDatatype("int")." NULL;";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.1.1");
+
+        return $strReturn;
+    }
+    
 }
 ?>

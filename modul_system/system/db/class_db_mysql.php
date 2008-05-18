@@ -168,6 +168,43 @@ class class_db_mysql implements interface_db_driver {
         }
         return $arrReturn;
     }
+    
+    /**
+     * Returns the db-specific datatype for the kajona internal datatype.
+     * Currently, this are
+     *      int
+     *      double
+     *      char10
+     *      char20
+     *      char100
+     *      char254
+     *      text 
+     * 
+     * @param string $strType
+     * @return string
+     */
+    public function getDatatype($strType) {
+    	$strReturn = "";
+        
+        if($strType == "int")
+            $strReturn .= " INT ";
+        elseif($strType == "double")
+            $strReturn .= " DOUBLE ";    
+        elseif($strType == "char10")
+            $strReturn .= " VARCHAR( 10 ) "; 
+        elseif($strType == "char20")
+            $strReturn .= " VARCHAR( 20 ) ";
+        elseif($strType == "char100")
+            $strReturn .= " VARCHAR( 100 ) ";    
+        elseif($strType == "char254")
+            $strReturn .= " VARCHAR( 254 ) ";
+        elseif($strType == "text")
+            $strReturn .= " TEXT ";
+        else
+            $strReturn .= " VARCHAR( 254 ) ";
+            
+        return $strReturn;
+    }
 
     /**
      * Used to send a create table statement to the database
@@ -201,22 +238,7 @@ class class_db_mysql implements interface_db_driver {
     	foreach($arrFields as $strFieldName => $arrColumnSettings) {
     		$strQuery .= " `".$strFieldName."` ";
     		
-    		if($arrColumnSettings[0] == "int")
-    			$strQuery .= " INT ";
-    		elseif($arrColumnSettings[0] == "double")
-    			$strQuery .= " DOUBLE ";	
-    		elseif($arrColumnSettings[0] == "char10")
-    			$strQuery .= " VARCHAR( 10 ) ";	
-    		elseif($arrColumnSettings[0] == "char20")
-    			$strQuery .= " VARCHAR( 20 ) ";
-    		elseif($arrColumnSettings[0] == "char100")
-    			$strQuery .= " VARCHAR( 100 ) ";	
-    		elseif($arrColumnSettings[0] == "char254")
-    			$strQuery .= " VARCHAR( 254 ) ";
-    		elseif($arrColumnSettings[0] == "text")
-    			$strQuery .= " TEXT ";
-    		else
-    			$strQuery .= " VARCHAR( 254 ) ";
+    		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
     			
     		//any default?	
     		if(isset($arrColumnSettings[2]))

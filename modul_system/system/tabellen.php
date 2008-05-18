@@ -110,13 +110,13 @@ V 2.1.x:
 	page_name				= Pagetitle
 
 //--_page_properties-------------------------------------------------------------------------------------
-    pageproperties_id                 = table primary key
-	pageproperties_browsername        = name to display in browserwindow
+    pageproperties_id                = table primary key
+	pageproperties_browsername       = name to display in browserwindow
 	pageproperties_keywords			 = Keywords to describe this site
 	pageproperties_description		 = Description of the page
 	pageproperties_template			 = Template used fpr this site
-	pageproperties_seostring          = String to add for SEO
-	pageproperties_language           = language, the properties belong to
+	pageproperties_seostring         = String to add for SEO
+	pageproperties_language          = language, the properties belong to
 
 
 //--_element---------------------------------------------------------------------------------------------
@@ -240,6 +240,8 @@ V 2.1.x:
 	downloads_hits			= number of donwloads
 	downloads_type			= 0 => file, 1 => folder
 	downloads_max_kb		= Max Speed to download, 0 = unlimited
+    downloads_rating_rate   = Rating of the dl
+    downloads_rating_hits   = number of ratings
 
 //--_downloads_log---------------------------------------------------------------------------------------
 	downloads_log_id		= table primary key
