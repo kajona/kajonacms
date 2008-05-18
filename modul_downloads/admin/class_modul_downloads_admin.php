@@ -227,7 +227,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	public function actionShowArchive() {
+	private function actionShowArchive() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightView($this->getSystemid())) {
@@ -269,6 +269,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	$strName = $objOneFile->getName()." (".basename($objOneFile->getFilename()).")";
 				 	$strCenter = ($objOneFile->getType() == 0 ? bytesToString($objOneFile->getSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
+				 	$strCenter .= " - ".$objOneFile->getRating();
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getType() == 1 && $this->objRights->rightView($objOneFile->getSystemid()))
