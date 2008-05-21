@@ -25,10 +25,11 @@
     <td class="title">%%file_name%%</td>
     <td class="center">%%file_size%%</td>
     <td class="actions">%%file_link%%</td>
+    <td class="rating">%%file_rating%%</td>
   </tr>
   <tr class="portalListRow2">
     <td></td>
-    <td colspan="3" class="description">%%file_description%%</td>
+    <td colspan="4" class="description">%%file_description%%</td>
   </tr>
 </table>
 </file>
@@ -36,3 +37,12 @@
 <pathnavi_entry>
 %%path_level%% >
 </pathnavi_entry>
+
+<rating_bar>
+%%rating_icons%%
+</rating_bar>
+
+<rating_icon_filled><a href="%%rating_icon_href%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" /></a></rating_icon_filled>
+
+<rating_icon_empty><a href="%%rating_icon_href%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" /></a></rating_icon_empty>
+

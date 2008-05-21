@@ -51,6 +51,7 @@ class class_config {
 		define("_textpath_" , 		_realpath_ . $this->getConfig("dirtexte"));
 		define("_skinpath_" , 		_adminpath_ . $this->getConfig("dirskins"));
 		define("_indexpath_",		_webpath_."/index.php");
+		define("_xmlpath_",         _webpath_."/xml.php");
 		define("_dblog_", 			$this->getDebug("dblog"));
 		define("_timedebug_", 		$this->getDebug("time"));
 		define("_dbnumber_", 		$this->getDebug("dbnumber"));

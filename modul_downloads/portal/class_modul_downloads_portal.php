@@ -93,6 +93,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
+						$arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getRating(), $objOneFile->getSystemid());
 
 						//could we get a preview (e.g. if its an image)?
 						$strSuffix = uniSubstr($objOneFile->getFilename(), uniStrrpos($objOneFile->getFilename(), "."));
@@ -206,6 +207,39 @@ class class_modul_downloads_portal extends class_portal implements interface_por
             $bitReturn = false;
                
 		return $bitReturn;
+	}
+	
+	/**
+	 * Builds the rating bar available for every download.
+	 * Creates the needed js-links and image-tags as defined by the template.
+	 *
+	 * @param float $floatRating
+	 * @param string $strSystemid
+	 * @return string
+	 */
+	private function buildRatingBar($floatRating, $strSystemid) {
+		$strIcons = "";
+		
+		//read the templates
+		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_bar");
+		$strTemplateFilledId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon_filled");
+		$strTemplateEmptyId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon_empty");
+		
+		//currently, ratings are up to 5. increase here to get other ranges.
+		for($intI = 1; $intI < 6; $intI++) {
+			$arrTemplate = array();
+			$strIconId = "kajona_downloads_rating_icon_".$strSystemid."_".$intI;
+			$arrTemplate["rating_icon_id"] = $strIconId;
+			$arrTemplate["rating_icon_href"] = "javascript:downloadsRating('".$strSystemid."', '".$intI.".0');";
+			$arrTemplate["rating_icon_mouseover"] = "downloadsRatingMOver('".$strIconId."', 6);";
+			$arrTemplate["rating_icon_mouseout"] = "downloadsRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
+			
+			if(round($floatRating) > $intI) 
+				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateFilledId); 
+			else
+			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);
+		}
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons), $strTemplateBarId);
 	}
 
 }

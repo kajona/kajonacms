@@ -499,3 +499,7 @@ h3 {
 .portalListRow1 .actions img {
     margin-right: 2px;
 }
+
+.portalListRow1 .rating, .portalListRow2 .rating {
+    white-space: nowrap;
+}
