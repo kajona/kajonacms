@@ -39,8 +39,8 @@ echo "
 /* C A L E N D A R  O V E R L A Y */
 .calendarOverlay {
 	position: absolute;
-	width: 200px;
-	z-index: 1000;
+	margin-top: -10px;
+	left: 580px;
 }
 
 body {

@@ -5,11 +5,12 @@ http://developer.yahoo.net/yui/license.txt
 version: 2.5.1
 */
 .yui-calcontainer {
-	position:relative;
+	position:absolute;
+	z-index: 1000;
 	padding:5px;
 	background-color:#F7F9FB;
 	border:1px solid #7B9EBD;
-	float:left;
+	float:none;
 	_overflow:hidden; /* IE6 only, to clip iframe shim */
 }
 
@@ -95,6 +96,7 @@ version: 2.5.1
 	left:2px;
 	z-index:1;
 	background: url("callt.gif") no-repeat;
+	text-decoration: none;
 }
 
 .yui-calendar .calnavright {
@@ -107,6 +109,7 @@ version: 2.5.1
 	right:2px;
 	z-index:1;
 	background: url("calrt.gif") no-repeat;
+	text-decoration: none;
 }
 
 .yui-calendar td.calcell {

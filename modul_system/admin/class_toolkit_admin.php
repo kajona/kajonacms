@@ -149,8 +149,8 @@ class class_toolkit_admin extends class_toolkit {
 		//init the js-files
 		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
 		//and the css
-		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
 		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
+		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
         
         
 		//set up the container div
