@@ -632,7 +632,10 @@ class class_user_admin extends class_admin implements interface_admin {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                 }
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName(), $strAction, $intI++);
+                
+                //get the number of users per group
+                $intNrOfUsers = count(class_modul_user_group::getGroupMembers($objSingleGroup->getSystemid()));
+                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName()." (".$intNrOfUsers.")", $strAction, $intI++);
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
             $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_blank.gif"), $intI++);
