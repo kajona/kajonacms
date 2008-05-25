@@ -1,4 +1,7 @@
 <list>
+<script type="text/javascript">
+kajonaAjaxHelper.loadAjaxBase();
+</script>
 <p>%%pathnavigation%%</p>
 <p>%%folderlist%%</p>
 <p>%%filelist%%</p>

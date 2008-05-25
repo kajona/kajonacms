@@ -128,6 +128,31 @@ function downloadsRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
     }
 }
 
+
+function downloadsRating(strSystemid, floatRating, intNrOfIcons) {
+        ///create a new ajax request. collect data.
+        var post_target = 'xml.php?module=downloads&action=saveRating';
+        //concat to send all values
+        var post_body = 'systemid='+strSystemid+'&rating='+floatRating;
+        
+        //disable new ratings :)
+        for(var intI = 1; intI < intNrOfIcons; intI++) {
+            var strIconId = 'kajona_downloads_rating_icon_'+strSystemid+'_'+intI;
+            document.getElementById(strIconId).onmouseover = null;
+            document.getElementById(strIconId).onmouseout = null;
+        }
+        
+                        
+        YAHOO.util.Connect.asyncRequest('POST', post_target, {
+            success: function(o) {
+                alert("success: "+o.responseText);
+            },
+            failure: function(o) {
+                alert("failure: "+o.responseText);
+            }
+        }, post_body);
+}
+
 //--- LITTLE HELPERS ------------------------------------------------------------------------------------
 function addCss(file) {
 	var l=document.createElement("link");

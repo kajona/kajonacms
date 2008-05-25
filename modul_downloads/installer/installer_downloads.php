@@ -102,7 +102,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true, "class_modul_downloads_portal_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -250,6 +250,13 @@ class class_installer_downloads extends class_installer_base implements interfac
                         ADD ".$this->objDB->encloseColumnName("downloads_rating_hits")." ".$this->objDB->getDatatype("int")." NULL;";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
+            
+            
+        $strReturn .= "Registering portal xml-class...\n";
+        $objSystemModule = class_modul_system_module::getModuleByName("downloads");
+        $objSystemModule->setStrXmlNamePortal("class_modul_downloads_portal_xml.php");
+        if(!$objSystemModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";    
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.1.1");

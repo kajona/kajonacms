@@ -122,7 +122,9 @@ class class_modul_downloads_file extends class_model implements interface_model 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
-					    downloads_max_kb=".$this->objDB->dbsafeString($this->getMaxKb())."
+					    downloads_max_kb=".$this->objDB->dbsafeString($this->getMaxKb()).",
+					    downloads_rating_rate = ".dbsafeString($this->getRating()).",
+					    downloads_rating_hits= ".dbsafeString($this->getRatingHits())."
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -139,13 +141,13 @@ class class_modul_downloads_file extends class_model implements interface_model 
     	
     	//round the rating
     	$floatRating = round($floatRating, 3);
+    	class_logger::getInstance()->addLogRow("updated dl-rating of file".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
     	
-    	$strUpdateQuery = "UPDATE ".$this->objDB->encloseTableName($this->arrModule["table"])."
-    	                       SET downloads_rating_rate = ".dbsafeString($floatRating)."
-    	                           downloads_rating_hits=download_rating_hits+1
-    	                     WHERE downloads_id = '".dbsafeString($this->getSystemid())."'";
-
-    	return $this->objDB->_query($strUpdateQuery);
+    	//update the values to remain consistent
+    	$this->setRating($floatRating);
+    	$this->setRatingHits($this->getRatingHits()+1);
+    	
+    	return $this->updateObjectToDB();
     	
     }
 
