@@ -30,8 +30,6 @@ class class_modul_downloads_file extends class_model implements interface_model 
     private $intHits = 0;
     private $intType = 0;
     private $intMaxKb = 0;
-    private $floatRating = 0.0;
-    private $intRatingHits = 0;
 
     /**
      * Constructor to create a valid object
@@ -71,8 +69,6 @@ class class_modul_downloads_file extends class_model implements interface_model 
             $this->setName($arrRow["downloads_name"]);
             $this->setSize($arrRow["downloads_size"]);
             $this->setType($arrRow["downloads_type"]);
-            $this->setRating($arrRow["downloads_rating_rate"]);
-            $this->setRatingHits($arrRow["downloads_rating_hits"]);
         }
     }
 
@@ -93,9 +89,9 @@ class class_modul_downloads_file extends class_model implements interface_model 
 		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
 		//Modul-Table
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_rating_rate, downloads_rating_hits) VALUES
+		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb) VALUES
 		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-		               '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', 0.0, 0)";
+		               '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0')";
 
 		if($this->objDB->_query($strQuery))
 			$bitCommit = true;
@@ -122,34 +118,11 @@ class class_modul_downloads_file extends class_model implements interface_model 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
-					    downloads_max_kb=".$this->objDB->dbsafeString($this->getMaxKb()).",
-					    downloads_rating_rate = ".dbsafeString($this->getRating()).",
-					    downloads_rating_hits= ".dbsafeString($this->getRatingHits())."
+					    downloads_max_kb=".$this->objDB->dbsafeString($this->getMaxKb())."
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
     
-    /**
-     * Adds a rating-value to the record saved in the db
-     *
-     * @param float $floatRating
-     * @return bool
-     */
-    public function saveRating($floatRating) {
-    	//calc the new rating
-    	$floatRating = (($this->getRating() * $this->getRatingHits()) + $floatRating) / ($this->getRatingHits()+1);
-    	
-    	//round the rating
-    	$floatRating = round($floatRating, 3);
-    	class_logger::getInstance()->addLogRow("updated dl-rating of file".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
-    	
-    	//update the values to remain consistent
-    	$this->setRating($floatRating);
-    	$this->setRatingHits($this->getRatingHits()+1);
-    	
-    	return $this->updateObjectToDB();
-    	
-    }
 
     /**
      * Deletes the given dl-record from the database
@@ -163,7 +136,7 @@ class class_modul_downloads_file extends class_model implements interface_model 
         $bitReturn = false;
         $objDB = class_carrier::getInstance()->getObjDB();
         $objRoot = new class_modul_system_common();
-		//Modul-Tabelw
+		//Modul-Table
 		$strQuery = "DELETE FROM "._dbprefix_."downloads_file
 						WHERE downloads_id='".dbsafeString($strSystemid)."'";
 		if($objDB->_query($strQuery)) {
@@ -391,15 +364,6 @@ class class_modul_downloads_file extends class_model implements interface_model 
     public function getMd5Sum() {
         return @md5_file(_realpath_.$this->getFilename());
     }
-    public function getRating() {
-    	if($this->floatRating != "")
-    	   return $this->floatRating;
-    	else
-    	   return "0.0";   
-    }
-    public function getRatingHits() {
-    	return $this->intRatingHits;
-    }
 
     public function setName($strName) {
         $this->strName = $strName;
@@ -421,12 +385,6 @@ class class_modul_downloads_file extends class_model implements interface_model 
     }
     public function setFilename($strFilename) {
         $this->strFilename = $strFilename;
-    }
-    public function setRating($floatRating) {
-    	$this->floatRating = $floatRating;
-    }
-    public function setRatingHits($intRatingHits) {
-    	$this->intRatingHits = $intRatingHits;
     }
 
 }

@@ -174,8 +174,8 @@ class class_model extends class_root {
 // --- MISC ---------------------------------------------------------------------------------------------
 
     /**
-	 * Overwrite this method, if an object should be noticed in case of deleting a systemrecord.
-	 * This can be useful to delete other records dependant on the record to be deleted
+	 * Overwrite this method, if an object should be notified in case of deleting a systemrecord.
+	 * This can be useful to delete other records being dependent on the record to be deleted
 	 */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         return true;    

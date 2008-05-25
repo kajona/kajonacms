@@ -20,7 +20,7 @@ include_once(_adminpath_."/interface_admin.php");
 //needed classes
 include_once(_systempath_."/class_modul_downloads_archive.php");
 include_once(_systempath_."/class_modul_downloads_file.php");
-include_once(_systempath_."/class_modul_downloads_logbook.php");
+
 
 
 /**
@@ -269,7 +269,23 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	$strName = $objOneFile->getName()." (".basename($objOneFile->getFilename()).")";
 				 	$strCenter = ($objOneFile->getType() == 0 ? bytesToString($objOneFile->getSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
-				 	$strCenter .= " - ".$objOneFile->getRating();
+				 	//TODO $strCenter .= " - ".$objOneFile->getRating();
+				 	
+				 	//ratings available?
+				 	try {
+				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
+				        if($objMdlRating != null) {
+				 	        include_once(_systempath_."/class_modul_rating_rate.php");	
+				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
+				 	        if($objRating != null)
+				 	            $strCenter .= " - ".$objRating->getFloatRating();
+				 	        else
+				 	            $strCenter .= " - 0.0";    
+				        }
+
+				 	}
+				 	catch (class_exception $objException) { }
+				 	
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getType() == 1 && $this->objRights->rightView($objOneFile->getSystemid()))

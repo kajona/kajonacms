@@ -240,8 +240,6 @@ V 2.1.x:
 	downloads_hits			= number of donwloads
 	downloads_type			= 0 => file, 1 => folder
 	downloads_max_kb		= Max Speed to download, 0 = unlimited
-    downloads_rating_rate   = Rating of the dl
-    downloads_rating_hits   = number of ratings
 
 //--_downloads_log---------------------------------------------------------------------------------------
 	downloads_log_id		= table primary key
@@ -308,6 +306,12 @@ V 2.1.x:
     remoteloader_cache_releasetime  = timestamp the entry gets invalid
     remoteloader_cache_response     = saved response
    
+//--_rating----------------------------------------------------------------------------------------------
+    rating_id               = table primary key
+    rating_systemid         = systemid of the record the rating belongs to
+    rating_checksum         = optional checksum to seperate different ratings for a single systemid
+    rating_rate             = Rating of the dl
+    rating_hits             = number of ratings
 	
 
 !!!!!!!!!!!!!!!!!!!!!!!!!! ALL ELEMENT TABLES NEED THE COLUMN content_id AS primary key !!!!!!!!!!!!!!!!!

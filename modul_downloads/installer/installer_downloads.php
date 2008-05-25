@@ -70,8 +70,6 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_hits"]	 	= array("int", true);
 		$arrFields["downloads_type"]	 	= array("int", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
-		$arrFields["downloads_rating_rate"] = array("double", true);
-		$arrFields["downloads_rating_hits"] = array("int", true);
 		
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -102,7 +100,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true, "class_modul_downloads_portal_xml.php");
+		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -243,20 +241,6 @@ class class_installer_downloads extends class_installer_base implements interfac
 
     private function update_310_311() {
         $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-        
-        $strReturn .= "Adding voting-columns to table...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")." 
-                        ADD ".$this->objDB->encloseColumnName("downloads_rating_rate")." ".$this->objDB->getDatatype("double")." NULL,
-                        ADD ".$this->objDB->encloseColumnName("downloads_rating_hits")." ".$this->objDB->getDatatype("int")." NULL;";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-            
-            
-        $strReturn .= "Registering portal xml-class...\n";
-        $objSystemModule = class_modul_system_module::getModuleByName("downloads");
-        $objSystemModule->setStrXmlNamePortal("class_modul_downloads_portal_xml.php");
-        if(!$objSystemModule->updateObjectToDb())
-            $strReturn .= "An error occured!\n";    
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.1.1");

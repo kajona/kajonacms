@@ -5,25 +5,25 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *                                                                                                       *
-*   class_modul_downloads_portal_xml.php                                                                *
-*   portalclass of the downloads, xml stuff                                                             *
+*   class_modul_rating_portal_xml.php                                                                   *
+*   portalclass of the rating, xml stuff                                                                *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: class_modul_downloads_portal_xml.php 1895 2008-01-12 22:52:56Z sidler $                        *
+*   $Id: class_modul_rating_portal_xml.php 1895 2008-01-12 22:52:56Z sidler $                           *
 ********************************************************************************************************/
 
 //Include der Mutter-Klasse
 include_once(_portalpath_."/class_portal.php");
 include_once(_portalpath_."/interface_xml_portal.php");
 //model
-include_once(_systempath_."/class_modul_downloads_file.php");
+include_once(_systempath_."/class_modul_rating_rate.php");
 
 /**
- * Portal-class of the downloads-module
+ * Portal-class of the rating-module
  * Serves xml-requests, e.g. saves a sent comment
  *
- * @package modul_downloads
+ * @package modul_rating
  */
-class class_modul_downloads_portal_xml extends class_portal implements interface_xml_portal {
+class class_modul_rating_portal_xml extends class_portal implements interface_xml_portal {
     
     
     /**
@@ -32,10 +32,10 @@ class class_modul_downloads_portal_xml extends class_portal implements interface
      * @param mixed $arrElementData
      */
     public function __construct() {
-        $arrModule["name"]              = "modul_downloads";
+        $arrModule["name"]              = "modul_rating";
         $arrModule["author"]            = "sidler@mulchprod.de";
-        $arrModule["moduleId"]          = _downloads_modul_id_;
-        $arrModule["modul"]             = "downloads";
+        $arrModule["moduleId"]          = _rating_modul_id_;
+        $arrModule["modul"]             = "rating";
 
         parent::__construct($arrModule, array());
     }
@@ -57,14 +57,14 @@ class class_modul_downloads_portal_xml extends class_portal implements interface
 
 
     /**
-     * Saves a rating to a passed downloads-file
+     * Saves a rating to a passed rating-file
      *
      * @return string the new rating for the passed file
      */
     private function actionSaveRating() {
     	$strReturn = "<rating>";
     	
-    	$objDownloadFile = new class_modul_downloads_file($this->getSystemid());
+    	$objDownloadFile = new class_modul_rating_file($this->getSystemid());
     	if($objDownloadFile->getFilename() != "") {
     		$objDownloadFile->saveRating($this->getParam("rating"));
     		$strReturn .= $objDownloadFile->getRating();

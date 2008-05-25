@@ -93,7 +93,18 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
-						$arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getRating(), $objOneFile->getSystemid());
+						//ratings available?
+						$objRatingModule = class_modul_system_module::getModuleByName("rating");
+						if($objRatingModule != null) {
+							include_once(_systempath_."/class_modul_rating_rate.php");
+							$objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
+							if($objRating != null)
+						        $floatRating = $objRating->getFloatRating();
+						    else
+						        $floatRating = 0.0;
+						            
+						    $arrTemplate["file_rating"] = $this->buildRatingBar($floatRating, $objOneFile->getSystemid());
+						}
 
 						//could we get a preview (e.g. if its an image)?
 						$strSuffix = uniSubstr($objOneFile->getFilename(), uniStrrpos($objOneFile->getFilename(), "."));

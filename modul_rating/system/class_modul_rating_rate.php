@@ -1,0 +1,248 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+* 																										*
+* 	class_modul_rating_post.php 	    		                                                        *
+* 	Model for a single rating-record                                                                    *
+*																										*
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: class_modul_rating_post.php 1970 2008-03-10 20:04:45Z sidler $                                 *
+********************************************************************************************************/
+
+include_once(_systempath_."/class_model.php");
+include_once(_systempath_."/interface_model.php");
+
+/**
+ * Model for rating itself
+ *
+ * @package modul_rating
+ */
+class class_modul_rating_rate extends class_model implements interface_model  {
+
+    private $strRatingSystemid;
+    private $strRatingChecksum;
+    private $floatRating = 0.0;
+    private $intHits = 0;
+
+    /**
+     * Constructor to create a valid object
+     *
+     * @param string $strSystemid (use "" on new objets)
+     */
+    public function __construct($strSystemid = "") {
+        $arrModul["name"] 				= "modul_rating";
+		$arrModul["author"] 			= "sidler@mulchprod.de";
+		$arrModul["moduleId"] 			= _rating_modul_id_;
+		$arrModul["table"]       		= _dbprefix_."rating";
+		$arrModul["modul"]				= "rating";
+
+		//base class
+		parent::__construct($arrModul, $strSystemid);
+
+		
+		
+		//init current object
+		if($strSystemid != "")
+		    $this->initObject();
+    }
+
+    /**
+     * Initalises the current object, if a systemid was given
+     *
+     */
+    public function initObject() {
+        $strQuery = "SELECT * 
+		   			 FROM ".$this->arrModule["table"]."
+					 WHERE rating_id = '".$this->getSystemid()."'";
+        
+        $arrRow = $this->objDB->getRow($strQuery);
+        
+        $this->setStrRatingSystemid($arrRow["rating_systemid"]);
+        $this->setStrRatingChecksum($arrRow["rating_checksum"]);
+        $this->setFloatRating($arrRow["rating_rate"]);
+        $this->setIntHits($arrRow["rating_hits"]);
+    }
+
+    /**
+     * saves the current object with all its params back to the database
+     *
+     * @return bool
+     */
+    public function updateObjectToDb() {
+        class_logger::getInstance()->addLogRow("updated rating ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->setEditDate();
+        
+        $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
+                    	rating_sytemid		= '".dbsafeString($this->getStrRatingSystemid())."',
+                    	rating_checksum		= '".dbsafeString($this->getStrRatingChecksum())."',
+						rating_rate	        = '".dbsafeString($this->getFloatRating())."',
+                    	rating_hits         = ".dbsafeString($this->getIntHits())."
+					WHERE rating_id         = '".dbsafeString($this->getSystemid())."'";
+        return $this->objDB->_query($strQuery);
+    }
+
+    /**
+     * saves the current object as a new object to the database
+     *
+     * @return bool
+     */
+    public function saveObjectToDb() {
+        //Start wit the system-recods and a tx
+		$this->objDB->transactionBegin();
+		
+        $strRatingId = $this->createSystemRecord(0, "rating:".$this->getStrTitle());
+        $this->setSystemid($strRatingId);
+        class_logger::getInstance()->addLogRow("new rating ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->setIntDate(time());
+        //The news-Table
+        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+                    (rating_id, rating_systemid, rating_checksum, rating_rate, rating_hits) VALUES
+                    (
+					 '".dbsafeString($this->getSystemid())."', 
+					 '".dbsafeString($this->getStrRatingSystemid())."',
+					 '".dbsafeString($this->getStrRatingChecksum())."',
+                     '".dbsafeString($this->getFloatRating())."',
+					 '".dbsafeString($this->getIntHits())."'
+					)";
+
+
+        if($this->objDB->_query($strQuery)) {
+            $this->objDB->transactionCommit();
+			return true;
+        }
+        else {
+            $this->objDB->transactionRollback();
+			return false;
+        }
+
+    }
+    
+    /**
+     * Adds a rating-value to the record saved in the db
+     *
+     * @param float $floatRating
+     * @return bool
+     */
+    public function saveRating($floatRating) {
+        //calc the new rating
+        $floatRating = (($this->getFloatRating() * $this->getIntHits()) + $floatRating) / ($this->getIntHits()+1);
+        
+        //round the rating
+        $floatRating = round($floatRating, 3);
+        class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
+        
+        //update the values to remain consistent
+        $this->setFloatRating($floatRating);
+        $this->setIntHits($this->getIntHits()+1);
+        
+        return $this->updateObjectToDB();
+        
+    }
+    
+    /**
+     * Loads a single rating for a given sysid, if needed concreted by a checksum.
+     * If no rating is found, null is being returned.
+     *
+     * @param string $strSystemid
+     * @param string $strChecksum
+     * @static 
+     * @return class_modul_rating_rate 
+     */
+    public static function getRating($strSystemid, $strChecksum = "") {
+    	$strQuery = "SELECT rating_id 
+                     FROM "._dbprefix_."rating
+                     WHERE rating_systemid = '".dbsafeString($strSystemid)."'
+                     ".($strChecksum != "" ? " AND rating_checksum = '".dbsafeString($strChecksum)."'" : "" )."";
+    	$arrMatches = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+    	
+    	if(isset($arrMatches["rating_id"])) 
+    		return new class_modul_rating_rate($arrMatches["rating_id"]);
+    	else
+    	   return null;
+    	   
+    }
+    
+    
+    /**
+     * Searches for comments belonging to the systemid
+     * to be deleted.
+     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid) 
+     *
+     * @param string $strSystemid
+     * @return bool
+     * 
+     */
+    public function doAdditionalCleanupsOnDeletion($strSystemid) {
+        $bitReturn = true;
+        //check that systemid isn't the id of a rating to avoid recursions
+        $arrRecordModulId = $this->getSystemRecord($strSystemid);
+        if($arrRecordModulId["system_module_nr"] == _rating_modul_id_)
+            return true;
+            
+        //ok, so delete matching records
+        //fetch the matching ids..
+        $strQuery = "SELECT rating_id 
+                     FROM ".$this->arrModule["table"]."
+                     WHERE rating_systemid = '".$this->getSystemid()."'";
+        $arrRows = $this->objDB->getArray($strQuery);
+        
+        if(count($arrRows) > 0) {
+        	foreach ($arrRows as $arrOneRow) {
+        		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id=".dbsafeString($arrOneRow["rating_id"]);
+        		$bitReturn &= $this->objDB->_query($strQuery);
+        		$bitReturn &= $this->deleteSystemRecord($arrOneRow["rating_id"]);
+        	}
+        }
+        
+        
+            
+        return $bitReturn;
+    }
+	
+
+// --- GETTERS / SETTERS --------------------------------------------------------------------------------
+
+    public function getStrRatingSystemid() {
+    	return $this->strRatingSystemid;   
+    }
+    
+    public function getStrRatingChecksum() {
+    	return $this->strRatingChecksum;
+    }
+    
+    public function getFloatRating() {
+    	if($this->floatRating == "")
+    	   return 0.0;
+    	   
+    	return $this->floatRating;
+    }
+    
+    public function getIntHits() {
+    	if($this->intHits == "")
+    	   return 0;
+    	   
+    	return $this->intHits;
+    }
+
+    
+    public function setStrRatingSystemid($strRatingSystemid) {
+        $this->strRatingSystemid = $strRatingSystemid;   
+    }
+    
+    public function setStrRatingChecksum($strRatingChecksum) {
+        $this->strRatingChecksum = $strRatingChecksum;
+    }
+    
+    public function setFloatRating($floatRating) {
+        $this->floatRating = $floatRating;
+    }
+    
+    public function setIntHits($intHits) {
+        $this->intHits = $intHits;
+    }
+
+}
+?>
