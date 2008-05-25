@@ -269,7 +269,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	$strName = $objOneFile->getName()." (".basename($objOneFile->getFilename()).")";
 				 	$strCenter = ($objOneFile->getType() == 0 ? bytesToString($objOneFile->getSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
-				 	//TODO $strCenter .= " - ".$objOneFile->getRating();
 				 	
 				 	//ratings available?
 				 	try {

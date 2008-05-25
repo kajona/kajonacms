@@ -76,7 +76,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         $this->setEditDate();
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
-                    	rating_sytemid		= '".dbsafeString($this->getStrRatingSystemid())."',
+                    	rating_systemid		= '".dbsafeString($this->getStrRatingSystemid())."',
                     	rating_checksum		= '".dbsafeString($this->getStrRatingChecksum())."',
 						rating_rate	        = '".dbsafeString($this->getFloatRating())."',
                     	rating_hits         = ".dbsafeString($this->getIntHits())."
@@ -93,10 +93,10 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //Start wit the system-recods and a tx
 		$this->objDB->transactionBegin();
 		
-        $strRatingId = $this->createSystemRecord(0, "rating:".$this->getStrTitle());
+        $strRatingId = $this->createSystemRecord(0, "rating for:".$this->getStrRatingSystemid());
         $this->setSystemid($strRatingId);
         class_logger::getInstance()->addLogRow("new rating ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setIntDate(time());
+        $this->setEditDate();
         //The news-Table
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                     (rating_id, rating_systemid, rating_checksum, rating_rate, rating_hits) VALUES
@@ -127,11 +127,14 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @return bool
      */
     public function saveRating($floatRating) {
+    	if($floatRating < 0)
+    	   return false;
+    	   
         //calc the new rating
         $floatRating = (($this->getFloatRating() * $this->getIntHits()) + $floatRating) / ($this->getIntHits()+1);
         
         //round the rating
-        $floatRating = round($floatRating, 3);
+        $floatRating = round($floatRating, 2);
         class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
         
         //update the values to remain consistent
@@ -186,12 +189,12 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //fetch the matching ids..
         $strQuery = "SELECT rating_id 
                      FROM ".$this->arrModule["table"]."
-                     WHERE rating_systemid = '".$this->getSystemid()."'";
+                     WHERE rating_systemid = '".dbsafeString($strSystemid)."'";
         $arrRows = $this->objDB->getArray($strQuery);
         
         if(count($arrRows) > 0) {
         	foreach ($arrRows as $arrOneRow) {
-        		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id=".dbsafeString($arrOneRow["rating_id"]);
+        		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id='".dbsafeString($arrOneRow["rating_id"])."'";
         		$bitReturn &= $this->objDB->_query($strQuery);
         		$bitReturn &= $this->deleteSystemRecord($arrOneRow["rating_id"]);
         	}

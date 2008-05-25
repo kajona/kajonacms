@@ -42,10 +42,10 @@ kajonaAjaxHelper.loadAjaxBase();
 </pathnavi_entry>
 
 <rating_bar>
-%%rating_icons%%
+%%rating_icons%% %%rating_rating%%
 </rating_bar>
 
-<rating_icon_filled><a href="%%rating_icon_href%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" /></a></rating_icon_filled>
+<rating_icon_filled><a href="%%rating_icon_href%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" /></a></rating_icon_filled>
 
-<rating_icon_empty><a href="%%rating_icon_href%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" /></a></rating_icon_empty>
+<rating_icon_empty><a href="%%rating_icon_href%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" /></a></rating_icon_empty>
 

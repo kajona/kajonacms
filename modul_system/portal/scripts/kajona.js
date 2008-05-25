@@ -86,13 +86,13 @@ function reloadCaptcha(imageID) {
 
 //---DOWNLOADS-------------------------------------------------------------------------------------------
 
-function downloadsRatingMOver(strImageOverId, intNrOfIcons) {
+function kajonaRatingMOver(strImageOverId, intNrOfIcons) {
     //schema of icon-ids: kajona_downloads_rating_icon_SYSID_NR
     var arrId = strImageOverId.split("_");
-    var intMaxFilled = arrId[5];
+    var intMaxFilled = arrId[4];
     
     for(var intI = 1; intI < intNrOfIcons; intI++) {
-        var strIconId = 'kajona_downloads_rating_icon_'+arrId[4]+'_'+intI;
+        var strIconId = 'kajona_rating_icon_'+arrId[3]+'_'+intI;
         //alert(strIconId);
         var currentIcon = document.getElementById(strIconId).src;
         if(intI <= intMaxFilled) {
@@ -107,13 +107,13 @@ function downloadsRatingMOver(strImageOverId, intNrOfIcons) {
     }
 }
 
-function downloadsRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
-    //schema of icon-ids: kajona_downloads_rating_icon_SYSID_NR
+function kajonaRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
+    //schema of icon-ids: kajona_rating_icon_SYSID_NR
     var arrId = strImageOverId.split("_");
-    var intMaxFilled = arrId[5];
+    var intMaxFilled = arrId[4];
     
     for(var intI = 1; intI < intNrOfIcons; intI++) {
-        var strIconId = 'kajona_downloads_rating_icon_'+arrId[4]+'_'+intI;
+        var strIconId = 'kajona_rating_icon_'+arrId[3]+'_'+intI;
         //alert(strIconId);
         var currentIcon = document.getElementById(strIconId).src;
         if(intI < intRatingToSet) {
@@ -129,26 +129,25 @@ function downloadsRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
 }
 
 
-function downloadsRating(strSystemid, floatRating, intNrOfIcons) {
-        ///create a new ajax request. collect data.
-        var post_target = 'xml.php?module=downloads&action=saveRating';
+function kajonaRating(strSystemid, floatRating, intNrOfIcons) {
+        kajonaAjaxHelper.loadAjaxBase();
+        //create a new ajax request. collect data.
+        var post_target = 'xml.php?module=rating&action=saveRating';
         //concat to send all values
         var post_body = 'systemid='+strSystemid+'&rating='+floatRating;
         
         //disable new ratings :)
         for(var intI = 1; intI < intNrOfIcons; intI++) {
-            var strIconId = 'kajona_downloads_rating_icon_'+strSystemid+'_'+intI;
-            document.getElementById(strIconId).onmouseover = null;
-            document.getElementById(strIconId).onmouseout = null;
+            var strIconId = 'kajona_rating_icon_'+strSystemid+'_'+intI;
+            document.getElementById(strIconId).onmouseout = function(){};
+            document.getElementById(strIconId).onmouseover = function(){};
         }
         
                         
         YAHOO.util.Connect.asyncRequest('POST', post_target, {
             success: function(o) {
-                alert("success: "+o.responseText);
             },
             failure: function(o) {
-                alert("failure: "+o.responseText);
             }
         }, post_body);
 }

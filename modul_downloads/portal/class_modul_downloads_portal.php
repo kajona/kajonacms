@@ -239,18 +239,18 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		//currently, ratings are up to 5. increase here to get other ranges.
 		for($intI = 1; $intI < 6; $intI++) {
 			$arrTemplate = array();
-			$strIconId = "kajona_downloads_rating_icon_".$strSystemid."_".$intI;
+			$strIconId = "kajona_rating_icon_".$strSystemid."_".$intI;
 			$arrTemplate["rating_icon_id"] = $strIconId;
-			$arrTemplate["rating_icon_href"] = "javascript:downloadsRating('".$strSystemid."', '".$intI.".0', 6);";
-			$arrTemplate["rating_icon_mouseover"] = "downloadsRatingMOver('".$strIconId."', 6);";
-			$arrTemplate["rating_icon_mouseout"] = "downloadsRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
-			
+			$arrTemplate["rating_icon_href"] = "javascript:kajonaRating('".$strSystemid."', '".$intI.".0', 6);";
+			$arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6);";
+			$arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
+    			
 			if(round($floatRating) > $intI) 
 				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateFilledId); 
 			else
 			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);
 		}
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons), $strTemplateBarId);
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating), $strTemplateBarId);
 	}
 
 }

@@ -19,7 +19,7 @@ include_once(_systempath_."/class_modul_rating_rate.php");
 
 /**
  * Portal-class of the rating-module
- * Serves xml-requests, e.g. saves a sent comment
+ * Serves xml-requests, e.g. saves a sent rating
  *
  * @package modul_rating
  */
@@ -64,12 +64,16 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
     private function actionSaveRating() {
     	$strReturn = "<rating>";
     	
-    	$objDownloadFile = new class_modul_rating_file($this->getSystemid());
-    	if($objDownloadFile->getFilename() != "") {
-    		$objDownloadFile->saveRating($this->getParam("rating"));
-    		$strReturn .= $objDownloadFile->getRating();
+    	//rating already existing?
+    	$objRating = class_modul_rating_rate::getRating($this->getSystemid());
+    	if($objRating == null) {
+    		$objRating = new class_modul_rating_rate();
+    		$objRating->setStrRatingSystemid($this->getSystemid());
+    		$objRating->saveObjectToDb();
     	}
     	
+    	$objRating->saveRating($this->getParam("rating"));
+  		$strReturn .= $objRating->getFloatRating();
     	
     	$strReturn .= "</rating>";
     	return $strReturn;
