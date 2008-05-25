@@ -98,7 +98,7 @@ class class_element_rendertext extends class_element_admin implements interface_
 
 	  $arrData = $this->loadElementData();
 
-      return htmlToString(uniStrTrim($arrData["rendertext_text"], 25), true);
+      return htmlToString(uniStrTrim($arrData["rendertext_text"], 60), true);
 	}
 
 

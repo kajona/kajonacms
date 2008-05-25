@@ -511,7 +511,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	}
 
 				 	//And build the row itself
-				 	$strName = $objOneFile->getStrName()." (".basename($objOneFile->getStrFilename()).")";
+				 	$strName = uniStrTrim($objOneFile->getStrName(), 30)." (".uniStrTrim(basename($objOneFile->getStrFilename()), 25).")";
 				 	$strCenter = ($objOneFile->getIntType() == 0 ? bytesToString($objOneFile->getIntSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getIntType() == 0 ? $objOneFile->getIntHits()." Hits": "");
 			   		//If folder, a link to open

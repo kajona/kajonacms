@@ -266,7 +266,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 
 					//And build the row itself
-				 	$strName = $objOneFile->getName()." (".basename($objOneFile->getFilename()).")";
+				 	$strName = uniStrTrim($objOneFile->getName(), 30)." (".uniStrTrim(basename($objOneFile->getFilename()), 25).")";
 				 	$strCenter = ($objOneFile->getType() == 0 ? bytesToString($objOneFile->getSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
 				 	
