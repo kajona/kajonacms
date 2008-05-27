@@ -158,11 +158,16 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarContainerId"] = $strContainerId;
         
         //init the calendar
-        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\"> function initCal_".$strContainerId."() { \n";
-        $arrTemplate["calendarCommands"] .="    if(typeof YAHOO == \"undefined\") {\n";
-        $arrTemplate["calendarCommands"] .="      window.setTimeout(initCal_".$strContainerId.", 1000)\n";
+        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n"; 
+        $arrTemplate["calendarCommands"] .=" function saveInitCal_".$strContainerId."() { \n";
+        $arrTemplate["calendarCommands"] .="    if(typeof(YAHOO) == \"undefined\" || YAHOO == null) {\n";
+        $arrTemplate["calendarCommands"] .="      window.setTimeout(saveInitCal_".$strContainerId.", 1000)\n";
         $arrTemplate["calendarCommands"] .="      return;";
         $arrTemplate["calendarCommands"] .="    }\n";
+        $arrTemplate["calendarCommands"] .="    initCal_".$strContainerId."()\n";
+        $arrTemplate["calendarCommands"] .=" }\n";
+        
+        $arrTemplate["calendarCommands"] .=" function initCal_".$strContainerId."() { \n";
         $arrTemplate["calendarCommands"] .="    YAHOO.namespace(\"kajona.calendar\"); \n";
         //set up the calendar
         $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init = function() { \n";
@@ -191,7 +196,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="} \n";
         
         
-        $arrTemplate["calendarCommands"] .="addLoadEvent(initCal_".$strContainerId.")</script>\n" ;
+        $arrTemplate["calendarCommands"] .="addLoadEvent(saveInitCal_".$strContainerId.")</script>\n" ;
 		
 		/*
 		//load calendar-css
