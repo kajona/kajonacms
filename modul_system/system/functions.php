@@ -1057,7 +1057,8 @@ function checkConditionalGetHeaders($strChecksum) {
     if(issetServer("HTTP_IF_NONE_MATCH")) {
         if(getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
-            header("HTTP/1.0 304 Not Modified");
+            include_once(_systempath_."/class_http_statuscodes.php");
+            header(class_http_status_codes::$strSC_NOT_MODIFIED);
             header("Cache-Control: max-age=86400, must-revalidate");
             return true;
         }
