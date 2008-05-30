@@ -14,6 +14,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/interface_sortable_rating.php");
 include_once(_systempath_."/class_modul_system_common.php");
 
 /**
@@ -21,7 +22,7 @@ include_once(_systempath_."/class_modul_system_common.php");
  *
  * @package modul_downloads
  */
-class class_modul_downloads_file extends class_model implements interface_model  {
+class class_modul_downloads_file extends class_model implements interface_model, interface_sortable_rating {
 
     private $strName = "";
     private $strFilename = "";
@@ -330,6 +331,25 @@ class class_modul_downloads_file extends class_model implements interface_model 
 		}
 
 		return $arrReturn;
+	}
+	
+	
+	/**
+	 * Rating of the current file, of module rating is installed.
+	 * 
+	 * @see interface_sortable_rating
+	 * @return float
+	 */
+	public function getFloatRating() {
+		$floatRating = null;
+		$objModule = class_modul_system_module::getModuleByName("rating");
+		if($objModule != null) {
+			include_once(_systempath_."/class_modul_rating_rate.php");
+			$objRating = class_modul_rating_rate::getRating($this->getSystemid());
+			$floatRating = $objRating->getFloatRating();
+		}
+		
+		return $floatRating;
 	}
 
 
