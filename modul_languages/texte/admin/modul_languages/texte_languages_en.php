@@ -40,13 +40,14 @@ $text["language_bearbeiten"]        = "Edit language";
 $text["language_loeschen"]          = "Delete language";
 $text["language_status"]            = "Change status (is ";
 $text["language_rechte"]            = "Change permissions";
+$text["language_isDefault"]         = "Default language";
 
 $text["lang_save"]                  = "Save";
 $text["language_name"]              = "Language:";
 
 $text["default"]                    = "Yes";
 $text["nondefault"]                 = "No";
-$text["language_default"]           = "Default-language:";
+$text["language_default"]           = "Default language:";
 
 $text["lang_de"]                    = "German";
 $text["lang_en"]                    = "English";

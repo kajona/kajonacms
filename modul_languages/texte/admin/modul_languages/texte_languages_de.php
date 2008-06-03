@@ -41,6 +41,7 @@ $text["language_bearbeiten"]        = "Sprache bearbeiten";
 $text["language_loeschen"]          = "Sprache löschen";
 $text["language_status"]            = "Status ändern (ist ";
 $text["language_rechte"]            = "Rechte";
+$text["language_isDefault"]         = "Standardsprache";
 
 $text["lang_save"]                  = "Speichern";
 $text["language_name"]              = "Sprache:";
