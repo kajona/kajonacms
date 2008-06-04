@@ -1,1 +1,23 @@
- 
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*                                                                                                       *
+*   texte_downloadstoplist_de.php                                                                       *
+*   Admin language file for downloadstoplist page-element                                               *
+*                                                                                                       *
+*-------------------------------------------------------------------------------------------------------*
+*   $Id: texte_downloadstoplist_de.php 1884 2007-12-26 15:04:48Z sidler $                               *
+********************************************************************************************************/
+
+$text["dl_toplist_template"]                        = "Template:";
+$text["dl_toplist_archive"]                         = "Archiv:";
+$text["dl_toplist_amount"]                          = "Anzahl Einträge:";
+$text["dl_toplist_algo"]                            = "Sortierung:";
+
+$text["dl_toplist_algabs"]                          = "Absolut";
+
+
+?> 

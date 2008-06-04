@@ -5,21 +5,37 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *                                                                                                       *
-*   texte_downloadstoplist_en.php                                                                       *
-*   Admin language file for downloadstoplist page-element                                               *
+*   interface_modul_rating_sortalgo.php                                                                 *
+*   Interface for all rating sorting algorithms                                                         *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: texte_downloadstoplist_de.php 1884 2007-12-26 15:04:48Z sidler $                               *
+*   $Id: interface_modul_rating_sortalgo.php 2016 2008-04-27 21:40:43Z sidler $                         *
 ********************************************************************************************************/
 
-$text["dl_toplist_template"]                        = "Template:";
-$text["dl_toplist_archive"]                         = "Archive:";
-$text["dl_toplist_amount"]                          = "Number of entries:";
-$text["dl_toplist_algo"]                            = "Sorting:";
+/**
+ * Interface to be implemented by all sorting-algorithms designed to sort ratings 
+ *
+ * @package modul_rating
+ */
+interface interface_modul_rating_sortalgo {
 
-$text["dl_toplist_algabs"]                          = "Absolute";
+	/**
+	 * Sets an array of elements to be sorted.
+	 * Elements have to be an instance of interface_sortable_rating.
+	 *
+	 * @param array $arrElements
+	 */
+    public function setElementsArray($arrElements);
+    
+    /**
+     * Does the sorting and returns the sorted array of elements.
+     *
+     */
+    public function doSorting();
+    
+    
+    
+    
 
-
-
+}
 ?> 
- 

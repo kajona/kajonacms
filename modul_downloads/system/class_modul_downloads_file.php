@@ -173,6 +173,30 @@ class class_modul_downloads_file extends class_model implements interface_model,
 
 		return $arrReturn;
 	}
+	
+	/**
+	 * Loads all files, and only file under a given folderlevel recusively.
+	 *
+	 * @param string $strFolderlevel
+	 * @return array
+	 */
+    public static function getAllFilesUnderFolderLevelRecursive($strFolderlevel) {
+        $arrFiles = class_modul_downloads_file::getFilesDB($strFolderlevel);
+        
+        $arrChilds = array();
+        $arrReturn = array();
+        foreach ($arrFiles as $objOneFile) {
+           if($objOneFile->getType() == 1) {
+              $arrChilds = class_modul_downloads_file::getAllFilesUnderFolderLevelRecursive($objOneFile->getSystemid());
+           }
+           else if($objOneFile->getType() == 0) {
+           	  $arrReturn[$objOneFile->getSystemid()] = $objOneFile;
+           }
+        }
+        $arrReturn = array_merge($arrReturn, $arrChilds);
+        
+        return $arrReturn;               
+    }
 
    /**
 	 * Loads all files AND folders from db
@@ -346,7 +370,10 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		if($objModule != null) {
 			include_once(_systempath_."/class_modul_rating_rate.php");
 			$objRating = class_modul_rating_rate::getRating($this->getSystemid());
-			$floatRating = $objRating->getFloatRating();
+			if($objRating != null)
+			   $floatRating = $objRating->getFloatRating();
+			else
+			   return 0.0;   
 		}
 		
 		return $floatRating;
