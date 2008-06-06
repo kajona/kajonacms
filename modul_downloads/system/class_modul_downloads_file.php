@@ -379,6 +379,26 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		return $floatRating;
 	}
 	
+    /**  
+     * Checks if the current user is allowed to rate the file
+     * 
+     * @return bool
+     */
+    public function isRateableByUser() {
+        $bitReturn = false;
+        $objModule = class_modul_system_module::getModuleByName("rating");
+        if($objModule != null) {
+            include_once(_systempath_."/class_modul_rating_rate.php");
+            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
+            if($objRating != null)
+               $bitReturn = $objRating->isRatableByCurrentUser();
+            else
+               $bitReturn = true;   
+        }
+        
+        return $bitReturn;
+    }
+	
     /**
      * Number of rating for the current file
      * 

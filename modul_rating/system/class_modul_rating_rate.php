@@ -14,6 +14,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/class_cookie.php");
 
 /**
  * Model for rating itself
@@ -37,6 +38,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _rating_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."rating";
+		$arrModul["table2"]             = _dbprefix_."rating_history";
 		$arrModul["modul"]				= "rating";
 
 		//base class
@@ -98,7 +100,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         class_logger::getInstance()->addLogRow("new rating ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setEditDate();
         //The news-Table
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+        $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($this->arrModule["table"])."
                     (rating_id, rating_systemid, rating_checksum, rating_rate, rating_hits) VALUES
                     (
 					 '".dbsafeString($this->getSystemid())."', 
@@ -127,7 +129,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @return bool
      */
     public function saveRating($floatRating) {
-    	if($floatRating < 0)
+    	if($floatRating < 0 || !$this->isRatableByCurrentUser())
     	   return false;
     	   
         //calc the new rating
@@ -141,8 +143,49 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         $this->setFloatRating($floatRating);
         $this->setIntHits($this->getIntHits()+1);
         
+        //if the current user is not the guest user, save a hint in the history table
+        if($this->objSession->getUserID() != "") {
+        	$strInsert = "INSERT INTO ".$this->objDB->encloseTableName($this->arrModule["table2"])."
+        	              (rating_history_id, rating_history_rating, rating_history_user) VALUES 
+        	              ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."', '".dbsafeString($this->objSession->getUserID())."')";
+        	$this->objDB->_query($strInsert);
+        }
+        
+        //and save it in a cookie
+        $objCookie = new class_cookie();
+        $objCookie->setCookie("kj_ratingHistory", getCookie("kj_ratingHistory").$this->getSystemid().",");
+        
         return $this->updateObjectToDB();
         
+    }
+    
+    /**
+     * Checks, if the record is already rated by the current user to avoid double-ratings
+     *
+     * @return boolean
+     */
+    public function isRatableByCurrentUser() {
+    	$bitReturn = true;
+    	
+    	//sql-check
+    	$strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
+    	               WHERE rating_history_rating = '".dbsafeString($this->getSystemid())."'
+    	                 AND rating_history_user = '".dbsafeString($this->objSession->getUserID())."'";
+    	
+    	$arrRow = $this->objDB->getRow($strQuery);
+    	
+    	if($arrRow["COUNT(*)"] == 0) {
+    		//cookie available?
+    		if(getCookie("kj_ratingHistory") != "") {
+    			$strRatingCookie = getCookie("kj_ratingHistory");
+    			if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false)
+    			   $bitReturn = false;
+    		}
+    	}
+    	else
+    	   $bitReturn = false;
+    	
+    	return $bitReturn;
     }
     
     /**
@@ -176,6 +219,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      *
      * @param string $strSystemid
      * @return bool
+     * @overwrites
      * 
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
@@ -197,6 +241,10 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id='".dbsafeString($arrOneRow["rating_id"])."'";
         		$bitReturn &= $this->objDB->_query($strQuery);
         		$bitReturn &= $this->deleteSystemRecord($arrOneRow["rating_id"]);
+        		
+        		//delete the entries from the history-table
+        		$strQuery = "DELETE FROM ".$this->arrModule["table2"]." WHERE rating_history_rating='".dbsafeString($arrOneRow["rating_id"])."'";
+        		$bitReturn &= $this->objDB->_query($strQuery);
         	}
         }
         

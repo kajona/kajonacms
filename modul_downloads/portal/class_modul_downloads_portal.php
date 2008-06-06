@@ -96,7 +96,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
 							//TODO: rights-dependant: rating allowed?
-						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->rightRight4());
+						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), ($objOneFile->rightRight4()  && $objOneFile->isRateableByUser()));
 						}
 
 						//could we get a preview (e.g. if its an image)?

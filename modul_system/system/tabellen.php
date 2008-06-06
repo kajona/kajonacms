@@ -312,6 +312,11 @@ V 2.1.x:
     rating_checksum         = optional checksum to seperate different ratings for a single systemid
     rating_rate             = Rating of the dl
     rating_hits             = number of ratings
+
+//--_rating_history--------------------------------------------------------------------------------------
+    rating_history_id       = table primary key
+    rating_history_rating   = id of the corresponding rating
+    rating_history_user     = user id of the user 
 	
 
 !!!!!!!!!!!!!!!!!!!!!!!!!! ALL ELEMENT TABLES NEED THE COLUMN content_id AS primary key !!!!!!!!!!!!!!!!!
