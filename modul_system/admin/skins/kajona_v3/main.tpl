@@ -29,7 +29,7 @@
 			<td id="moduleNavi">
 				<div>
 					%%mainnavi%%
-					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img src="_skinwebpath_/modulenavi_more.gif" /></a>
+					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img id="modulNaviMoreIcon" src="_skinwebpath_/modulenavi_more.gif" /></a>
 				</div> 
 				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl"></ul>
@@ -85,6 +85,7 @@ function naviSetup() {
 	var list = YAHOO.util.Dom.get('adminModuleNaviUl');
 	var arrayChildren = YAHOO.util.Dom.getChildren(list);
 	
+	var intEntriesVisible = 0;
 	for(intI = 0; intI < arrayChildren.length; intI++) {
 		if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
 			nodeToMove = arrayChildren[intI];
@@ -96,8 +97,12 @@ function naviSetup() {
 			
 			document.getElementById('naviCollectorUl').appendChild(tmpNode);
 			document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
+			intEntriesVisible++;
 		}
 	}
+	
+	if(intEntriesVisible == 0)
+	   document.getElementById('modulNaviMoreIcon').style.display='none';
 }
 
 function showMenu() {
