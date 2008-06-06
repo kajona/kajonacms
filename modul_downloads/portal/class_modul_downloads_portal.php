@@ -96,7 +96,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
 							//TODO: rights-dependant: rating allowed?
-						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid());
+						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->rightRight4());
 						}
 
 						//could we get a preview (e.g. if its an image)?
@@ -219,9 +219,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 *
 	 * @param float $floatRating
 	 * @param string $strSystemid
+	 * @param bool $bitRatingAllowed
 	 * @return string
 	 */
-	private function buildRatingBar($floatRating, $strSystemid) {
+	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true) {
 		$strIcons = "";
 		
 		//read the templates
@@ -234,16 +235,18 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$arrTemplate = array();
 			$strIconId = "kajona_rating_icon_".$strSystemid."_".$intI;
 			$arrTemplate["rating_icon_id"] = $strIconId;
-			$arrTemplate["rating_icon_href"] = "javascript:kajonaRating('".$strSystemid."', '".$intI.".0', 6);";
-			$arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6);";
-			$arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
+			if($bitRatingAllowed) {
+			    $arrTemplate["rating_icon_href"] = "javascript:kajonaRating('".$strSystemid."', '".$intI.".0', 6);";
+       		    $arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6);";
+			    $arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
+			}
     			
 			if(round($floatRating) >= $intI) 
 				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateFilledId); 
 			else
 			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);
 		}
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating), $strTemplateBarId);
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating, 2), $strTemplateBarId);
 	}
 
 }

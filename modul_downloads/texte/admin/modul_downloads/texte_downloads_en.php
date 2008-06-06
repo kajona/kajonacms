@@ -30,7 +30,7 @@ $text["permissions_header"]         = array(
                     					4 => "Sync",		//Recht1
                     					5 => "Download",	//Recht2
                     					6 => "Logs",		//Recht3
-                    					7 => "",
+                    					7 => "Rating",      //Recht4
                     					8 => ""
                     					);
 
