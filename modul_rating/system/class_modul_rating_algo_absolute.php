@@ -39,12 +39,13 @@ class class_modul_rating_algo_absolute implements interface_modul_rating_sortalg
     		$floatRating = $objOneElement->getFloatRating();
     		//avoid replacement of files having the same rating
     		while(isset($arrToSort[$floatRating]))
-    		  $floatRating += 0.0000001;
+    		  $floatRating += 0.0001;
     		  
     		$arrToSort[$floatRating] = $objOneElement;
     	}
     	
     	ksort($arrToSort, SORT_NUMERIC);
+    	$arrToSort = array_reverse($arrToSort);
     	
     	return $arrToSort;
     }

@@ -94,8 +94,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
 						//ratings available?
-						$objRatingModule = class_modul_system_module::getModuleByName("rating");
-						if($objOneFile->getFloatRating() != null) {
+						if($objOneFile->getFloatRating() !== null) {
+							//TODO: rights-dependant: rating allowed?
 						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid());
 						}
 
@@ -238,7 +238,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6);";
 			$arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
     			
-			if(round($floatRating) > $intI) 
+			if(round($floatRating) >= $intI) 
 				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateFilledId); 
 			else
 			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);

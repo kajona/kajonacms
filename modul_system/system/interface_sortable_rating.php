@@ -28,6 +28,13 @@ interface interface_sortable_rating {
 	 */
 	public function getFloatRating();
 	
+	/**
+	 * Returns the number of ratings the current file received
+	 * 
+	 * @return int
+	 */
+	public function getIntHits();
+	
 
 }
 ?>

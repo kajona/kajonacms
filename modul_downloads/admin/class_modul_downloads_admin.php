@@ -155,6 +155,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
      	$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getText("archive_masssync"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("", "");
   	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "logbook", "", $this->getText("logbuch"), "", "", true, "adminnavi"));
+  	    //TODO: add rating right
 		return $arrReturn;
     }
 

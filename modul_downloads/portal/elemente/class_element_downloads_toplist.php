@@ -58,7 +58,27 @@ class class_element_downloads_toplist extends class_element_portal implements in
         $arrFiles = $objSorter->doSorting();
         
         //var_dump($arrFiles);
-
+        //create the elements output
+        $strOuterTemplateID = $this->objTemplate->readTemplate("/element_downloads_toplist/".$this->arrElementData["char2"], "dltoplist_list");
+        $strInnerTemplateID = $this->objTemplate->readTemplate("/element_downloads_toplist/".$this->arrElementData["char2"], "dltoplist_entry");
+        
+        $intCounter = 1;
+        $strInner = "";
+        foreach($arrFiles as $objOneFile) {
+        	$arrTemplate = array();
+        	$arrTemplate["dltoplist_pos"] = $intCounter;
+        	$arrTemplate["dltoplist_link"] = _webpath_."/downloads.php?systemid=".$objOneFile->getSystemid();
+        	$arrTemplate["dltoplist_name"] = $objOneFile->getName();
+        	$arrTemplate["dltoplist_rating"] = $objOneFile->getFloatRating();
+        	
+        	$strInner .= $this->objTemplate->fillTemplate($arrTemplate, $strInnerTemplateID);
+        	
+            if(++$intCounter > $this->arrElementData["int1"] && $this->arrElementData["int1"] > 0)
+                break;	
+        }
+        
+        $strReturn .= $this->objTemplate->fillTemplate(array("dltoplist_entries" => $strInner), $strOuterTemplateID);
+        
         return $strReturn;
     }
     

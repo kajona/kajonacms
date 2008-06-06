@@ -373,11 +373,32 @@ class class_modul_downloads_file extends class_model implements interface_model,
 			if($objRating != null)
 			   $floatRating = $objRating->getFloatRating();
 			else
-			   return 0.0;   
+			   $floatRating = 0.0;   
 		}
 		
 		return $floatRating;
 	}
+	
+    /**
+     * Number of rating for the current file
+     * 
+     * @see interface_sortable_rating
+     * @return int
+     */
+    public function getIntHits() {
+        $intHits = 0;
+        $objModule = class_modul_system_module::getModuleByName("rating");
+        if($objModule != null) {
+            include_once(_systempath_."/class_modul_rating_rate.php");
+            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
+            if($objRating != null)
+               $intHits = $objRating->getIntHits();
+            else
+               return 0;   
+        }
+        
+        return $floatRating;
+    }
 
 
 
