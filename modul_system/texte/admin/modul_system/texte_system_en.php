@@ -169,6 +169,10 @@ $text["about_part2"]                = "<h2>Head developers</h2>
                                        <li><a href=\"mailto:sidler@kajona.de\" target=\"_blank\">Stefan Idler</a> (project management, technical administration, development)</li>
                                        <li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (graphical administration, development)</li>
                                        </ul>
+                                       <h2>Contributors</h2>
+                                       <ul>
+                                       <li>Thomas Hertwig</li>
+                                       </ul>
                                        ";
 
 $text["about_part3"]                = "<h2>Credits</h2>
