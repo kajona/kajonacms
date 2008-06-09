@@ -95,7 +95,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
-							//TODO: rights-dependant: rating allowed?
 						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), ($objOneFile->rightRight4()  && $objOneFile->isRateableByUser()));
 						}
 

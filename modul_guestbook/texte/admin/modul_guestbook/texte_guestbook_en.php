@@ -24,7 +24,7 @@ $text["permissions_header"]         = array(
             							2 => "Delete",
             							3 => "Permissions",
             							4 => "Sign",         //recht1
-            							5 => "",
+            							5 => "",         //right2
             							6 => "",
             							7 => "",
             							8 => ""
@@ -45,6 +45,8 @@ $text["gaestebuch_modus_1"]			= "New posts are enabled";
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 $text["loeschen_frage"]				= " : Delete guestbook with all entries?<br />";
 $text["loeschen_link"]				= "Delete";
+$text["edit_post"]                  = "Edit";
+$text["post_text"]                  = "Message:";
 
 $text["loeschen_post"]				= "Delete";
 $text["post_liste_leer"]			= "No posts available";

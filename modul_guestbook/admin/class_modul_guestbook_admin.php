@@ -90,6 +90,16 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
     			if($strReturn == "")
     			   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getSystemid());
     		}
+            if($strAction == "editPost") {
+                $strReturn = $this->actionEditPost();
+                if($strReturn == "")
+                   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getSystemid());
+            }
+            if($strAction == "updatePostcontent") {
+                $strReturn = $this->updatePostcontent();
+                if($strReturn == "")
+                   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getPrevId());
+            }
 
         }
         catch (class_exception $objException) {
@@ -308,6 +318,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				 		$strStatusImage = "icon_disabled.gif";
 				 	}
 				 	$strActions = "";
+				 	if($this->objRights->rightEdit($this->getSystemid()))
+				 	    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objPost->getSystemid(), "", $this->getText("edit_post"), "icon_pencil.gif"));
 				 	if($this->objRights->rightDelete($this->getSystemid()))
 					    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid(), "", $this->getText("loeschen_post"), "icon_ton.gif"));
 					if($this->objRights->rightEdit($this->getSystemid()))
@@ -326,6 +338,50 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 		return $strReturn;
 	}
+	
+	/**
+	 * Shows a form to edit the content of a post
+	 *
+	 * @return string
+	 */
+    private function actionEditPost(){
+        $strReturn = "";
+
+        //check rights
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            //Load content
+            $objPost = new class_modul_guestbook_post($this->getSystemid());
+            //Build the form
+            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=guestbook&amp;action=updatePostcontent");
+            $strReturn .= $this->objToolkit->formWysiwygEditor("post_text", $this->getText("post_text"), $objPost->getGuestbookPostText());
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+        
+        return $strReturn;  
+    }
+    
+    /**
+     * Saves the passed post to the db
+     *
+     * @return string "" in case of success
+     */
+    private function updatePostcontent(){
+        $strReturn = "";
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            $objPost = new class_modul_guestbook_post($this->getSystemid());
+            $objPost->setGuestbookPostText(uniStrReplace(_webpath_, "", $this->getParam("post_text")));
+            if(!$objPost->updateObjectToDb())
+                throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+        }
+        else
+            $strReturn = $this->getText("fehler_recht");
+        return $strReturn;
+    }
 
 	/**
 	 * changes the status of a post

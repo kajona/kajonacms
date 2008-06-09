@@ -117,7 +117,31 @@ class class_modul_guestbook_post extends class_model implements interface_model 
      *
      */
     public function updateObjectToDb() {
-        /* updates not planned to be implemented */
+        class_logger::getInstance()->addLogRow("update gb-post ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->setEditDate();
+        //Update all needed tables
+        //dates
+        $this->objDB->transactionBegin();
+        $bitCommit = true;
+        
+        //post
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName($this->arrModule["table"])." 
+                        SET guestbook_post_text = '".dbsafeString($this->getGuestbookPostText(), false)."' 
+                      WHERE guestbook_post_id = '".dbsafeString($this->getSystemid())."'"; 
+        
+         if(!$this->objDB->_query($strQuery))
+            $bitCommit = false;
+
+        //Transaktion beenden
+        if($bitCommit) {
+            $this->objDB->transactionCommit();
+            return true;
+        }
+        else {
+            $this->objDB->transactionRollback();
+            return false;
+        }
+
         return false;
     }
 

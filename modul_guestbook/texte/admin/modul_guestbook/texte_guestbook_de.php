@@ -50,6 +50,8 @@ $text["loeschen_post"]				= "Löschen";
 $text["post_liste_leer"]			= "Keine Einträge vorhanden";
 $text["post_loeschen_frage"]		= " : Eintrag wirklich löschen?<br />";
 $text["post_loeschen_link"]			= "Löschen";
+$text["edit_post"]                  = "Bearbeiten";
+$text["post_text"]                  = "Nachricht:";
 
 $text["guestbook_title"]            = "Titel:";
 $text["guestbook_moderated"]        = "Freischaltungsmodus:";
