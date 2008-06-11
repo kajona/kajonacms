@@ -257,7 +257,7 @@ function is called after selecting a date, e.g. to hide the calendar
 		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
 		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
 		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
-		<a href="javascript:fold('%%calendarContainerId%%');"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
+		<a href="javascript:fold('%%calendarContainerId%%', initCal_%%calendarContainerId%%)"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
 		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
 	</div><br />
 	<script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script>

@@ -10,7 +10,7 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="_skinwebpath_/css.php" type="text/css" />
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript">
     	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
     	addLoadEvent(enableTooltipsWrapper);
@@ -68,62 +68,51 @@
 </table>
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
-
-kajonaAjaxHelper.loadDragNDropBase();
-kajonaAjaxHelper.loadAnimationBase();
-
-function naviPreSetup() {
-		if(typeof YAHOO == "undefined") {
-             window.setTimeout('naviPreSetup()', 1000);
-             return;
-        }
-        naviSetup();
-}
-
-var moduleNaviHiddenTimeout = undefined;
-function naviSetup() {
-	var list = YAHOO.util.Dom.get('adminModuleNaviUl');
-	var arrayChildren = YAHOO.util.Dom.getChildren(list);
+	kajonaAjaxHelper.loadAnimationBase();
 	
-	var intEntriesVisible = 0;
-	for(intI = 0; intI < arrayChildren.length; intI++) {
-		if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
-			nodeToMove = arrayChildren[intI];
+	var moduleNaviHiddenTimeout = undefined;
+	function naviSetup() {
+		var list = YAHOO.util.Dom.get('adminModuleNaviUl');
+		var arrayChildren = YAHOO.util.Dom.getChildren(list);
 		
-			YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
-			var tmpNode = nodeToMove.cloneNode(true);
-			tmpNode.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
-			tmpNode.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
+		var intEntriesVisible = 0;
+		for(intI = 0; intI < arrayChildren.length; intI++) {
+			if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
+				nodeToMove = arrayChildren[intI];
 			
-			document.getElementById('naviCollectorUl').appendChild(tmpNode);
-			document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
-			intEntriesVisible++;
+				YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
+				var tmpNode = nodeToMove.cloneNode(true);
+				tmpNode.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
+				tmpNode.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
+				
+				document.getElementById('naviCollectorUl').appendChild(tmpNode);
+				document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
+				intEntriesVisible++;
+			}
 		}
+		
+		if(intEntriesVisible == 0)
+		   document.getElementById('modulNaviMoreIcon').style.display='none';
 	}
 	
-	if(intEntriesVisible == 0)
-	   document.getElementById('modulNaviMoreIcon').style.display='none';
-}
-
-function showMenu() {
-	YAHOO.util.Dom.setStyle('moduleNaviHidden', "opacity", 0);
-	YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "block");
-	//get xy coords
-	arrCoords = YAHOO.util.Dom.getXY(YAHOO.util.Dom.get('showMenuLink'));
-	YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], arrCoords[1] ], false);
+	function showMenu() {
+		YAHOO.util.Dom.setStyle('moduleNaviHidden', "opacity", 0);
+		YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "block");
+		//get xy coords
+		arrCoords = YAHOO.util.Dom.getXY(YAHOO.util.Dom.get('showMenuLink'));
+		YAHOO.util.Dom.setXY('moduleNaviHidden', [ arrCoords[0], arrCoords[1] ], false);
+		
+		animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 1 } }, 0.5, YAHOO.util.Easing.easeOut);
+		animObject.animate();
+	}
 	
-	animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 1 } }, 0.5, YAHOO.util.Easing.easeOut);
-	animObject.animate();
-}
-
-function hideMenu() {
-	animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 0 } }, 1, YAHOO.util.Easing.easeOut);
-	animObject.animate();
-	animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");});
-}
-
-addLoadEvent(naviPreSetup);
-
+	function hideMenu() {
+		animObject = new YAHOO.util.Anim('moduleNaviHidden', { opacity: { to: 0 } }, 1, YAHOO.util.Easing.easeOut);
+		animObject.animate();
+		animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");});
+	}
+	
+	YAHOO.util.Event.onDOMReady(naviSetup);
 </script>
 </body>
 </html>

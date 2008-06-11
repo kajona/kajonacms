@@ -10,13 +10,11 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="_skinwebpath_/css.php" type="text/css" />
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript">
-		window.onload=function(){enableTooltips("showTooltip")};
+		function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
+    	addLoadEvent(enableTooltipsWrapper);
 	</script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/lang/calendar-de.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/jscalendar/calendar-setup.js"></script>	
 	%%head%%
 </head>
 <body class="portalEditor">

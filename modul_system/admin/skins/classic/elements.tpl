@@ -302,7 +302,7 @@ function is called after selecting a date, e.g. to hide the calendar
             		  <input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
             	  </td>
             	  <td>
-            		  <a href="javascript:fold('%%calendarContainerId%%');"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
+            		  <a href="javascript:fold('%%calendarContainerId%%', initCal_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
     		      </td>
     		  </tr>
     		</table>

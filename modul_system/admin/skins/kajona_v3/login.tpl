@@ -10,9 +10,9 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="_skinwebpath_/css.php" type="text/css" />
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript">
-		function loginStartup() { document.getElementById('name').focus(); 	enableTooltips("showTooltip"); }
+		function loginStartup() { document.getElementById('name').focus(); }
     	addLoadEvent(loginStartup);
 		kajonaAjaxHelper.loadAjaxBase();
   		kajonaAjaxHelper.loadAutocompleteBase();

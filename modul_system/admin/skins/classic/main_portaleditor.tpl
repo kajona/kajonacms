@@ -7,9 +7,10 @@
 %%head%%
 <link href="_skinwebpath_/css.php" rel="stylesheet" type="text/css">
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script language="Javascript" type="text/javascript">
-	window.onload=function(){enableTooltips("showTooltip")};
+	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
+	addLoadEvent(enableTooltipsWrapper);
 </script>
 </head>
 

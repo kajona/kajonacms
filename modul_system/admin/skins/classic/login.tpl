@@ -7,9 +7,9 @@
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
 <link href="_skinwebpath_/css.php" rel="stylesheet" type="text/css">
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/tooltips.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script language="Javascript" type="text/javascript">
-	function loginStartup() { document.getElementById('name').focus(); 	enableTooltips("showTooltip"); }
+	function loginStartup() { document.getElementById('name').focus(); }
 	addLoadEvent(loginStartup);
 	kajonaAjaxHelper.loadAjaxBase();
 	kajonaAjaxHelper.loadAutocompleteBase();
