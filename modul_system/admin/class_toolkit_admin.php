@@ -391,7 +391,8 @@ class class_toolkit_admin extends class_toolkit {
 		<script type=\"text/javascript\" language=\"Javascript\">
             kajonaAjaxHelper.loadAutocompleteBase();
             function initAC_".$strNameCleaned."() {
-            	delete this.onfocus;
+            	document.getElementById('".$strName."').onfocus = function() {};
+
                 var pageDataSource = new YAHOO.widget.DS_XHR(\"xml.php\", [\"page\", \"title\"]);
                 pageDataSource.queryMatchCase = false;
                 pageDataSource.scriptQueryParam = \"filter\";
