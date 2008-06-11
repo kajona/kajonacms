@@ -43,7 +43,7 @@
     <td height="1"></td>
   </tr>
   <tr bgcolor="#FFFFFF">
-    <td><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.openkaktena.de/index.php?c=7" target="_blank">Support</a></div></td>
+    <td><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/" target="_blank">Support</a></div></td>
   </tr>
 </table>
 </body>

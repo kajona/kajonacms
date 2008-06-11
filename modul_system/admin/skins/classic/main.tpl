@@ -65,7 +65,7 @@
     <td colspan="4" height="1"></td>
   </tr>
   <tr bgcolor="#FFFFFF">
-    <td colspan="4"><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/index.php?c=7" target="_blank">Support</a></div></td>
+    <td colspan="4"><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/" target="_blank">Support</a></div></td>
   </tr>
 </table>
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
