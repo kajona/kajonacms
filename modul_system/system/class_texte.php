@@ -78,12 +78,12 @@ class class_texte {
 		$strReturn = "";
 
 		//Did we already load this text?
-		if(!isset($this->arrTexts[$strModule]))
+		if(!isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
 			$this->loadText($strModule, $strArea);
 
 		//Searching for the text
-		if(isset($this->arrTexts[$strModule][$strText])) {
-			$strReturn = $this->arrTexts[$strModule][$strText];
+		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText])) {
+			$strReturn = $this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText];
 		}
 		else {
 			$strReturn = "!".$strText."!";
@@ -118,11 +118,14 @@ class class_texte {
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
 			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+			 		
+			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
+			 		    $this->arrTexts[$strArea.$this->strLanguage] = array();
                     
-			 		if(isset($this->arrTexts[$strModule]))
-			 			$this->arrTexts[$strModule] = array_merge($this->arrTexts[$strModule], $text);
+			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $text);
 			 		else
-			 			$this->arrTexts[$strModule] = $text;
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $text;
                     
 			 	}
 			}
@@ -138,10 +141,13 @@ class class_texte {
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strFallbackLanguage) {
 			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
                     
-			 		if(isset($this->arrTexts[$strModule]))
-			 			$this->arrTexts[$strModule] = array_merge($this->arrTexts[$strModule], $text);
+			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
+                        $this->arrTexts[$strArea.$this->strLanguage] = array();
+                        
+			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $text);
 			 		else
-			 			$this->arrTexts[$strModule] = $text;
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $text;
 
 			 	}
 			}
@@ -159,6 +165,15 @@ class class_texte {
 	        return;
 
 	    $this->strLanguage = $strLanguage;
+	}
+	
+	/**
+	 * Gets the current language set to the class_texte
+	 *
+	 * @return string
+	 */
+	public function getStrTextLanguage() {
+		return $this->strLanguage;
 	}
 
 } //class_texte()

@@ -211,6 +211,10 @@ class class_modul_pages extends class_portal {
 
     		if(!defined("skinwebpath_"))
     		    define("_skinwebpath_", _webpath_."/admin/skins/".$this->objSession->getAdminSkin());
+    		    
+    		//save back the current portal text language and set the admin-one
+    		$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
+    		class_carrier::getInstance()->getObjText()->setStrTextLanguage($this->objSession->getAdminLanguage());
 
             if($this->objSession->getSession("pe_disable") != "true" ) {
     		    $strPeToolbar = "";
@@ -234,7 +238,7 @@ class class_modul_pages extends class_portal {
 
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
     		    //Load tooltips
-		        $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/tooltips.js\"></script>";
+		        $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona.js\"></script>";
                 $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
@@ -249,7 +253,7 @@ class class_modul_pages extends class_portal {
                 //Button to enable the toolbar & pe
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"portalEditorEnable();\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
                 //Load tooltips
-                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/tooltips.js\"></script>";
+                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona.js\"></script>";
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
@@ -260,6 +264,9 @@ class class_modul_pages extends class_portal {
     		    //and insert the code
     		    $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body")+$intTemp) .$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body")+$intTemp) ;
             }
+            
+            //reset the portal texts language
+            class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
         }
         
 		//save the generated Page to the cache

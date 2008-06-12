@@ -120,6 +120,11 @@ class class_element_portal extends class_portal {
         if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
             if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true" ) {
+            	
+            	//switch the text-language temporary
+            	$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
+                class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
+            	
                 $strModule = "pages_content";
                 $strAction = "editElement";
                 //param-inits ---------------------------------------
@@ -215,6 +220,9 @@ class class_element_portal extends class_portal {
                     $strReturn .= "<br />";
                 }
                 $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strNewLink, $strDeleteLink, $strShiftUp, $strShiftDown), $strContent);
+                
+                //reset the portal texts language
+                class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
             }
             else
                 $strReturn = $strContent;
