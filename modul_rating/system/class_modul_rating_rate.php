@@ -224,6 +224,11 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         $bitReturn = true;
+        
+        //ratings installed as a module?
+        if(class_modul_system_module::getModuleByName("rating") == null)
+            return true;
+        
         //check that systemid isn't the id of a rating to avoid recursions
         $arrRecordModulId = $this->getSystemRecord($strSystemid);
         if($arrRecordModulId["system_module_nr"] == _rating_modul_id_)

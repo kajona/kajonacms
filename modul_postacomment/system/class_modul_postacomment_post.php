@@ -236,6 +236,9 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         $bitReturn = true;
+        //module installed?
+        if(class_modul_system_module::getModuleByName("postacomment") == null)
+            return true;
         //check that systemid isn't the id of a comment to avoid recursions
         $arrRecordModulId = $this->getSystemRecord($strSystemid);
         if($arrRecordModulId["system_module_nr"] == _postacomment_modul_id_)
