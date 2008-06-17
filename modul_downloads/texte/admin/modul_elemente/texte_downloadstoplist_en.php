@@ -21,5 +21,4 @@ $text["dl_toplist_algabs"]                          = "Absolute";
 
 
 
-?> 
- 
+?>

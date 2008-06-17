@@ -20,4 +20,4 @@ $text["dl_toplist_algo"]                            = "Sortierung:";
 $text["dl_toplist_algabs"]                          = "Absolut";
 
 
-?> 
+?>
