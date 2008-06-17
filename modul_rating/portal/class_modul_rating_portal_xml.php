@@ -8,7 +8,7 @@
 *   class_modul_rating_portal_xml.php                                                                   *
 *   portalclass of the rating, xml stuff                                                                *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: class_modul_rating_portal_xml.php 1895 2008-01-12 22:52:56Z sidler $                           *
+*   $Id$                           *
 ********************************************************************************************************/
 
 //Include der Mutter-Klasse

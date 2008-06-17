@@ -9,7 +9,7 @@
 *   Script to search for file containing white-space characters outside the php-tag.                    *                                                                                                       *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: filetrimcheck.php 1920 2008-01-23 10:19:53Z sidler $                                           *
+*   $Id$                                           *
 ********************************************************************************************************/
 
 require_once("../system/includes.php");

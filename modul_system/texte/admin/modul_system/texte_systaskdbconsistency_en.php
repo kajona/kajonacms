@@ -9,7 +9,7 @@
 *   Admin language file for the dbconsitency systemtask                                                 *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: texte_system_de.php 1987 2008-03-21 10:42:27Z sidler $                                         *
+*   $Id$                                         *
 ********************************************************************************************************/  
 
 $text["systemtask_dbconsistency_name"]               = "Check database consistency";

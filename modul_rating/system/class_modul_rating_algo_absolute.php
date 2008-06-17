@@ -9,7 +9,7 @@
 *   Does an absolute, linear sorting based on the current rating-value                                  *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: class_modul_rating_algo_absolute.php 1884 2007-12-26 15:04:48Z sidler $                        *
+*   $Id$                        *
 ********************************************************************************************************/
 
 include_once(_systempath_."/interface_modul_rating_sortalgo.php");

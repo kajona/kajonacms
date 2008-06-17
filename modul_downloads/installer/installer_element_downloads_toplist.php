@@ -9,7 +9,7 @@
 *   Installer of the downloads_toplist element                                                          *
 *                                                                                                       *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: installer_element_downloads_toplist.php 1965 2008-03-09 12:43:03Z sidler $                     *
+*   $Id$                     *
 ********************************************************************************************************/
 
 require_once(_systempath_."/class_installer_base.php");
