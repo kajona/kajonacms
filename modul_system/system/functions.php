@@ -428,90 +428,13 @@ function timeToString($intTime, $bitLong = true) {
  */
 function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "") {
 	$strReturn = "";
-	$bitInternal = true;
-	//Internal links are more important than external links!
-	if($strPageI == "" && $strPageE != "")
-		$bitInternal = false;
-	$strParams = str_replace("&", "&amp;", $strParams);
 
+	$strHref = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage);
+	
 	if($strTarget == "")
 		$strTarget = "_self";
-		
-	//any anchors set to the page?
-	$strAnchor = "";
-	if(uniStrpos($strPageI, "#") !== false) {
-		//get anchor, remove anchor from link
-		$strAnchor = urlencode(uniSubstr($strPageI, uniStrpos($strPageI, "#")+1));
-		$strPageI = uniSubstr($strPageI, 0, uniStrpos($strPageI, "#"));	
-	}
-		
-	//urlencoding
-	$strPageI = urlencode($strPageI);
-	$strAction = urlencode($strAction);
 
-	//languages installed?
-	include_once(_systempath_."/class_modul_system_module.php");
-	$objLanguages = class_modul_system_module::getModuleByName("languages");
-	if($strLanguage == "" && $objLanguages != null) {
-		include_once(_systempath_."/class_modul_system_common.php");
-		$objCommon = new class_modul_system_common();
-		$strLanguage = $objCommon->getStrPortalLanguage();
-	}
-
-
-	if($bitInternal) {
-	    //chek, if we could use mod_rewrite
-	    $bitRegularLink = true;
-	    if(_system_mod_rewrite_ == "true") {
-            if($strParams == "") {
-                //used later to add seo-relevant keywords
-                include_once(_systempath_."/class_modul_pages_page.php");
-                $objPage = class_modul_pages_page::getPageByName($strPageI);
-                $strAddKeys = saveUrlEncode($objPage->getStrSeostring());
-                if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
-                    $strAddKeys .= "__";
-                    
-                //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
-                $strHref = "href=\"";   
-                //but: special case: just pagename & language
-                if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
-                    $strHref .= $strPageI.".".$strLanguage.".html";
-                elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
-                elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
-                elseif($strSystemid != "" && $strLanguage == "")
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
-                else
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
-                    
-                    
-                // add anchor if given
-                if($strAnchor != "")
-                    $strHref .= "#".$strAnchor; 
-                    
-                $strHref .= "\"";    
-                       
-                $bitRegularLink = false;
-            }
-	    }
-
-	    //no, please create a common link
-	    if($bitRegularLink)
-		    $strHref = "href=\"_indexpath_?".
-		                  ($strPageI != "" ? "page=".$strPageI : "" )."".
-		                  ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). 
-		                  ($strAction != "" ? "&amp;action=".$strAction : "").
-		                  ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-		                  ($strParams != "" ? $strParams : "" ).
-		                  ($strAnchor != "" ? "#".$strAnchor : "")."\"";
-	}
-	else {
-		$strHref = "href=\"".$strPageE."\"";
-	}
-
-
-	$strReturn .="<a ".$strHref." target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
+	$strReturn .="<a href=\"".$strHref."\" target=\"".$strTarget."\" ".($strCssClass != "" ? " class=\"".$strCssClass."\" ": "").">".$strText."</a>";
 
 	return $strReturn;
 }
@@ -524,9 +447,10 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $st
  * @param string $strAction
  * @param string $strParams
  * @param string $strSystemid
+ * @param string $strLanguage
  * @return string
  */
-function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "") {
+function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "") {
 	$strReturn = "";
 	$bitInternal = true;
 	//Internal links are more important than external links!
@@ -548,10 +472,9 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
     //$strParams = urlencode($strParams);
 
 	//languages installed?
-	$strLanguage = "";
 	include_once(_systempath_."/class_modul_system_module.php");
 	$objLanguages = class_modul_system_module::getModuleByName("languages");
-	if($objLanguages != null) {
+	if($strLanguage == "" && $objLanguages != null) {
 		include_once(_systempath_."/class_modul_system_common.php");
 		$objCommon = new class_modul_system_common();
 		$strLanguage = $objCommon->getStrPortalLanguage();
