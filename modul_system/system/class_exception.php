@@ -81,6 +81,10 @@ class class_exception extends Exception {
             $strMailtext .= "\n\n";
             $strMailtext .= "Sourcehost: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Querystring: ".getServer("REQUEST_URI")."\n";
+			$strMailtext .= "Post data:\n";
+            foreach (getArrayPost() as $strName => $strValue) {
+            	$strMailtext .= "    ".$strName.": ".$strValue."\n";
+            }
             $strMailtext .= "\n\n";
             $strMailtext .= "If you dont't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
