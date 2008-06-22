@@ -35,6 +35,12 @@ echo "
     z-index: 2000;
 }
 
+/* L O A D I N G   C O N T A I N E R */
+.loadingContainer {
+	background: url('"._skinwebpath_."/loading.gif') center no-repeat;
+	min-height: 50px;
+	min-width: 50px;
+}
 
 /* C A L E N D A R  O V E R L A Y */
 .calendarOverlay {

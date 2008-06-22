@@ -535,7 +535,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                     if ($objOneFile->getIntType() == 1) {
                         $strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic), $intI++, $objOneFile->getSystemid());
                     } else {
-    			   		$strImage = "<img src=\\'"._webpath_."/image.php?image=".$objOneFile->getStrFilename()."&maxWidth=100&maxHeight=100\\' />";
+    			   		$strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".$objOneFile->getStrFilename()."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
 
     					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strPic, $strImage, true), $intI++, $objOneFile->getSystemid());
                     }
