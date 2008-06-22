@@ -438,7 +438,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				//additional infos about the image
 				if(is_file(_realpath_.$objImage->getStrFilename())) {
-				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_size").$arrImagesize[0]."x".$arrImagesize[1]);
+				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_size").$arrImagesize[0]."x".$arrImagesize[1].$this->getText("pic_size_pixel"));
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_filename").basename($objImage->getStrFilename()));
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_folder").dirname($objImage->getStrFilename()));
 				}

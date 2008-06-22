@@ -76,8 +76,8 @@ $text["upload_erfolg"]				= "Datei erfolgreich hochgeladen<br />";
 $text["upload_fehler"]				= "Dateiupload fehlerhaft<br />";
 $text["upload_fehler_filter"]		= "Der hochgeladene Dateityp ist nicht erlaubt<br />";
 
-$text["fehler_recht"]				= "Keine ausreichende Recht";
-$text["liste_leer"]					= "Keine Repositorys angelegt";
+$text["fehler_recht"]				= "Keine ausreichende Rechte";
+$text["liste_leer"]					= "Keine Repositories angelegt";
 
 $text["browser"]					= "Ordnerbrowser";
 

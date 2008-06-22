@@ -168,7 +168,7 @@ $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Manag
 $text["about_part2"]                = "<h2>Entwickler</h2>
                                        <ul>
                                        <li><a href=\"mailto:sidler@kajona.de\" target=\"_blank\">Stefan Idler</a> (Projektleitung, Technische Leitung, Entwicklung)</li>
-                                       <li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (Grafische Leitung, Entwicklung)</li>
+                                       <li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (Leitung Frontend, Entwicklung)</li>
                                        </ul>
                                        <h2>Contributors</h2>
                                        <ul>
@@ -178,7 +178,7 @@ $text["about_part2"]                = "<h2>Entwickler</h2>
 
 $text["about_part3"]                = "<h2>Credits</h2>
                                        <ul>
-                                       <li>Icons (u.A.):<br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a><br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a></li>
+                                       <li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li>
                                        <li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li>
                                        <li>FCKeditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.fckeditor.net/\" target=\"_blank\">http://www.fckeditor.net/</a></li>
                                        <li>JpGraph:<br />Aditus, <a href=\"http://www.aditus.nu/jpgraph/\" target=\"_blank\">http://www.aditus.nu/jpgraph/</a></li>
