@@ -532,6 +532,29 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 }
 
 /**
+ * Generates a link opening in a popup in portal-area
+ *
+ * @param string $strPage
+ * @param string $strParams
+ * @param string $strTitle
+ * @param int $intHeight
+ * @param int $intWidth
+ * @return string
+ */
+
+function getLinkPortalPopup($strPage, $strParams = "", $strTitle = "", $intHeight = "500", $intWidth = "500") {
+	if($strParams != "")
+		$strParams = str_replace("&", "&amp;", $strParams);
+		
+	//urlencoding
+    $strPage = urlencode($strPage);
+
+	$strLink = "<a href=\"#\" onclick=\"javascript:window.open('"._indexpath_."?page=".$strPage."&amp;".$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
+
+	return $strLink;
+}
+
+/**
  * Splits up a html-link into its parts, such as
  * link, name, href
  *
