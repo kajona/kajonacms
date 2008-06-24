@@ -57,6 +57,9 @@ class class_exception extends Exception {
         $intConfigDebuglevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglevel");
         // 0: fatal errors will be displayed
         // 1: fatal and regular errors will be displayed
+        
+        //set which POST parameters should read out
+        $arrPostParams = array("module", "action", "page", "systemid");
 
         //send an email to the admin?
         $bitMail = false;
@@ -81,9 +84,11 @@ class class_exception extends Exception {
             $strMailtext .= "\n\n";
             $strMailtext .= "Sourcehost: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Querystring: ".getServer("REQUEST_URI")."\n";
-			$strMailtext .= "Post data:\n";
-            foreach (getArrayPost() as $strName => $strValue) {
-            	$strMailtext .= "    ".$strName.": ".$strValue."\n";
+			$strMailtext .= "Post data (selective):\n";
+            foreach ($arrPostParams as $strParam) {
+            	if (getPost($strParam) != "") {
+            		$strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
+            	}
             }
             $strMailtext .= "\n\n";
             $strMailtext .= "If you dont't know what to do, feel free to open a ticket.\n\n";
