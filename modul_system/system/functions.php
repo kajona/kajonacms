@@ -534,22 +534,21 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 /**
  * Generates a link opening in a popup in portal-area
  *
- * @param string $strPage
+ * @param string $strPageI
+ * @param string $strPageE
+ * @param string $strAction
  * @param string $strParams
+ * @param string $strSystemid
  * @param string $strTitle
  * @param int $intHeight
  * @param int $intWidth
  * @return string
  */
+function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intHeight = "500", $intWidth = "500") {
+	
+    $strLink = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
 
-function getLinkPortalPopup($strPage, $strParams = "", $strTitle = "", $intHeight = "500", $intWidth = "500") {
-	if($strParams != "")
-		$strParams = str_replace("&", "&amp;", $strParams);
-		
-	//urlencoding
-    $strPage = urlencode($strPage);
-
-	$strLink = "<a href=\"#\" onclick=\"javascript:window.open('"._indexpath_."?page=".$strPage."&amp;".$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
+	$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
 
 	return $strLink;
 }
