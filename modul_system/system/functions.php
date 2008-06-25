@@ -548,7 +548,7 @@ function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = 
 	
     $strLink = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
 
-	$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
+	$strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
 
 	return $strLink;
 }
