@@ -101,4 +101,4 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
     public function update() {
     }
 }
-?> 
+?>

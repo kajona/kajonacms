@@ -33,9 +33,5 @@ interface interface_modul_rating_sortalgo {
      */
     public function doSorting();
     
-    
-    
-    
-
 }
-?> 
+?>

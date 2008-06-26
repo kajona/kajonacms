@@ -54,6 +54,4 @@ class class_modul_rating_algo_absolute implements interface_modul_rating_sortalg
 	
 }
 
-
-
 ?>
