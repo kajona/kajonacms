@@ -50,6 +50,7 @@ echo "
     border: none; 
     background-color: #EFEFEF; 
     z-index: 1000; 
+    width: 100%;
 }
 
 /* P O R T A L E D I T O R   C O N T A I N E R */
