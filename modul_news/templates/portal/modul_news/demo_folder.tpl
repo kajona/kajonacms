@@ -2,7 +2,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-           <h3>%%news_start_date%% - <a href="javascript:toggle('cont_%%news_id%%');">%%news_title%%</a></h3>
+           <h3>%%news_start_date%% - <a href="javascript:fold('cont_%%news_id%%');">%%news_title%%</a></h3>
         </div>
         <div class="newsListMore">%%news_more_link%%</div>
         <div class="cleaner"></div>

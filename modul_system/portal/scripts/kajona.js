@@ -184,16 +184,18 @@ function addLoadEvent(func) {
 	}
 }
 
-function toggle(id) {
+function fold(id, callbackShow) {
 	style = document.getElementById(id).style.display;
 	if (style=='none') 	{
 		document.getElementById(id).style.display='block';
+		if (callbackShow != undefined) {
+			callbackShow();
+		}
     }
     else {
         document.getElementById(id).style.display='none';
     }
 }
-
 
 var kajonaAjaxHelper =  {
 	

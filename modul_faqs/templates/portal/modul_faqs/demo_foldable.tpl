@@ -18,7 +18,7 @@
             <table cellpadding="0" cellspacing="0">
                 <tr>
                     <td><img src="_webpath_/portal/pics/kajona/icon_question.gif" /></td>
-                    <td style="padding-left: 2px;"><a href="javascript:toggle('%%faq_systemid%%');">%%faq_question%%</a></td>
+                    <td style="padding-left: 2px;"><a href="javascript:fold('%%faq_systemid%%');">%%faq_question%%</a></td>
                 </tr>
             </table>
         </div>

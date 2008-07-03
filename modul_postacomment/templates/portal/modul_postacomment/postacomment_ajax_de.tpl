@@ -1,7 +1,7 @@
 <postacomment_list>
 
 <div id="postacommentFormWrapper">
-   	<div><a href="javascript:toggle('postaCommentForm');">Kommentar schreiben</a></div>
+   	<div><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">Kommentar schreiben</a></div>
     <div id="postaCommentForm" style="display: none;">
 		%%postacomment_form%%
 	</div>
@@ -10,6 +10,15 @@
 %%postacomment_list%%
 
 <script type="text/javascript" language="javascript">
+function loadCaptcha() {
+	if (document.getElementById("kajonaCaptcha") == undefined) {
+		var i=document.createElement("img");
+		i.setAttribute("id", "kajonaCaptcha");
+		i.setAttribute("src", "_webpath_/image.php?image=kajonaCaptcha&amp;maxWidth=180");
+		document.getElementById("kajonaCaptchaContainer").appendChild(i);
+	}
+}
+
 //ok, further scripts needed. load now, to be set up, if user posts
 kajonaAjaxHelper.loadAjaxBase();	
 
@@ -24,7 +33,7 @@ function submitPostacommentForm()  {
 	
 	this.submit = function() {
 	
-		///create a new ajax request. collect data.
+		//create a new ajax request. collect data.
         var comment_name = document.getElementById('comment_name').value;
         var comment_subject = document.getElementById('comment_subject').value;
         var comment_message = document.getElementById('comment_message').value;
@@ -55,6 +64,10 @@ function submitPostacommentForm()  {
 		var intStart = o.responseText.indexOf("<postacomment>")+14;
 		var responseText = o.responseText.substr(intStart, o.responseText.indexOf("</postacomment>")-intStart);
 		document.getElementById('postacommentFormWrapper').innerHTML = responseText;
+		if (document.getElementById("kajonaCaptchaContainer") != undefined) {
+			loadCaptcha();
+			reloadCaptcha("kajonaCaptcha");
+		}
 	}
 	
 }
@@ -98,7 +111,7 @@ function postacommentSubmitWrapper() {
     			<div><label for="comment_name">Name*:</label><input type="text" name="comment_name" id="comment_name" value="%%comment_name%%" class="inputText" /></div><br />
     			<div><label for="comment_subject">Betreff:</label><input type="text" name="comment_subject" id="comment_subject" value="%%comment_subject%%" class="inputText" /></div><br />
     			<div><label for="comment_message">Nachricht*:</label><textarea name="comment_message" id="comment_message" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
-    			<div><label for="kajonaCaptcha"></label><img id="kajonaCaptcha" src="_webpath_/image.php?image=kajonaCaptcha&amp;maxWidth=180" /></div><br />
+    			<div id="kajonaCaptchaContainer"><label for="kajonaCaptcha"></label></div><br />
     			<div><label for="form_captcha">Code*:</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" /></div><br />
     			<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="Neuer Code" class="button" /></div><br /><br />
     			<div><label for="Submit"></label><input type="button" name="Submit" value="Senden" class="button" onclick="postacommentSubmitWrapper();" /></div><br />
