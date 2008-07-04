@@ -103,15 +103,17 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 
 		//and posts in the template!
 		foreach($arrObjPosts["arrData"] as $objOnePost) {
-			$strTemplatePostID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "post");
-			$arrtemplatePost = array();
-			$arrtemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
-			$arrtemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
-			$arrtemplatePost["post_text"] = $objOnePost->getGuestbookPostText();
-			//replace encoded newlines
-			$arrtemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $arrtemplatePost["post_text"]);
-			$arrtemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
-			$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrtemplatePost, $strTemplatePostID);
+			if($this->objRights->rightView($objOnePost->getSystemid())){
+				$strTemplatePostID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "post");
+				$arrtemplatePost = array();
+				$arrtemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
+				$arrtemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
+				$arrtemplatePost["post_text"] = $objOnePost->getGuestbookPostText();
+				//replace encoded newlines
+				$arrtemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $arrtemplatePost["post_text"]);
+				$arrtemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
+				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrtemplatePost, $strTemplatePostID);
+			}
 		}
         // A link to the post-form
 		$arrTemplate["link_newentry"] = getLinkPortal(($this->getParam("page") ? $this->getParam("page") : ""), "", "", $this->getText("eintragen"), "insertGuestbook");
