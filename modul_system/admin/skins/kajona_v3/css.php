@@ -22,6 +22,17 @@ header("Content-type: text/css");
 
 echo "
 
+/* I M G  P R E L O A D */
+.imgPreload {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+	display: none;
+}
+
 /* T O O L T I P */
 .tooltip {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -37,7 +48,7 @@ echo "
 
 /* L O A D I N G   C O N T A I N E R */
 .loadingContainer {
-	background: url('"._skinwebpath_."/loading.gif') center no-repeat;
+	background: #ffffff url('"._skinwebpath_."/loading.gif') center no-repeat;
 	min-height: 50px;
 	min-width: 50px;
 }
@@ -47,6 +58,9 @@ echo "
 	position: absolute;
 	margin-top: -10px;
 	left: 580px;
+	width: 143px;
+	height: 137px;
+	border:1px solid #7B9EBD;
 }
 
 body {

@@ -9,7 +9,6 @@ version: 2.5.1
 	z-index: 1000;
 	padding:5px;
 	background-color:#F7F9FB;
-	border:1px solid #7B9EBD;
 	float:none;
 	_overflow:hidden; /* IE6 only, to clip iframe shim */
 }

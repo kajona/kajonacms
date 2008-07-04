@@ -2,12 +2,12 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
+<link href="_skinwebpath_/css.php" rel="stylesheet" type="text/css">
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
-<link href="_skinwebpath_/css.php" rel="stylesheet" type="text/css">
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script language="Javascript" type="text/javascript">
 	function loginStartup() { document.getElementById('name').focus(); }
 	addLoadEvent(loginStartup);
@@ -46,5 +46,9 @@
     <td><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/" target="_blank">Support</a></div></td>
   </tr>
 </table>
+
+<div class="imgPreload">
+	<img src="_skinwebpath_/loading.gif" alt="" title="" />
+</div>
 </body>
 </html>

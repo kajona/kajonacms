@@ -77,7 +77,7 @@ submitPostacommentForm = new submitPostacommentForm();
 function postacommentSubmitWrapper() {
 
 	if(typeof YAHOO == "undefined" || typeof YAHOO.util.Connect == "undefined") {
-        window.setTimeout(postacommentSubmitWrapper(), 1000);
+        window.setTimeout("postacommentSubmitWrapper()", 1000);
         return;
     }
     

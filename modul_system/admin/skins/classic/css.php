@@ -22,6 +22,32 @@ header("Content-type: text/css");
 
 echo "
 
+/* I M G  P R E L O A D */
+.imgPreload {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 0;
+	width: 0;
+	overflow: hidden;
+	display: none;
+}
+
+/* L O A D I N G   C O N T A I N E R */
+.loadingContainer {
+	background: #ffffff url('"._skinwebpath_."/loading.gif') center no-repeat;
+	min-height: 50px;
+	min-width: 50px;
+}
+
+/* C A L E N D A R  O V E R L A Y */
+.calendarOverlay {
+	position: absolute;
+	width: 129px;
+	height: 143px;
+	border:1px solid #7B9EBD;
+}
+
 img {
 	border: none;
 }

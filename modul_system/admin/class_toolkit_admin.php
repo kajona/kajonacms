@@ -158,7 +158,20 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarContainerId"] = $strContainerId;
         
         //init the calendar
-        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n"; 
+        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
+        
+        $arrTemplate["calendarCommands"] .="
+	        function initCalWrapper_".$strContainerId."() {
+				if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
+					YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");
+			        window.setTimeout(\"initCalWrapper_".$strContainerId."()\", 1000);
+			        return;
+			    }
+			    YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");
+			    initCal_".$strContainerId."();
+			}
+        "; 
+        
         $arrTemplate["calendarCommands"] .=" function initCal_".$strContainerId."() { \n";
         $arrTemplate["calendarCommands"] .="    YAHOO.namespace(\"kajona.calendar\"); \n";
         //set up the calendar
