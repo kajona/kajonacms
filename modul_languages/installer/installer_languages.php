@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_languages extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.1.0";
+		$arrModule["version"] 		  = "3.1.1";
 		$arrModule["name"] 			  = "languages";
 		$arrModule["class_admin"]  	  = "class_modul_languages_admin";
 		$arrModule["file_admin"] 	  = "class_modul_languages_admin.php";
@@ -132,6 +132,11 @@ class class_installer_languages extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
         }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.0") {
+            $strReturn .= $this->update_310_311();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -184,6 +189,14 @@ class class_installer_languages extends class_installer_base implements interfac
         $strReturn = "Updating 3.0.95 to 3.1.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("languages", "3.1.0");
+
+        return $strReturn;
+    }
+    
+    private function update_310_311() {
+        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("languages", "3.1.1");
 
         return $strReturn;
     }

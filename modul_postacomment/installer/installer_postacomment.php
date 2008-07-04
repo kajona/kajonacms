@@ -24,7 +24,7 @@ require_once(_systempath_."/class_modul_pages_element.php");
 class class_installer_postacomment extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.1.0";
+		$arrModule["version"] 		  = "3.1.1";
 		$arrModule["name"] 			  = "postacomment";
 		$arrModule["class_admin"]  	  = "class_modul_postacomment_admin";
 		$arrModule["file_admin"] 	  = "class_modul_postacomment_admin.php";
@@ -136,9 +136,14 @@ class class_installer_postacomment extends class_installer_base implements inter
             $strReturn .= $this->update_309_3095();
         }
         
-	   $arrModul = $this->getModuleData($this->arrModule["name"], false);
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.0") {
+            $strReturn .= $this->update_310_311();
         }
 
         return $strReturn."\n\n";
@@ -158,6 +163,14 @@ class class_installer_postacomment extends class_installer_base implements inter
         $strReturn = "Updating 3.0.95 to 3.1.0..\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("postacomment", "3.1.0");
+
+        return $strReturn;
+    }
+    
+    private function update_310_311() {
+        $strReturn = "Updating 3.1.0 to 3.1.1..\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("postacomment", "3.1.1");
 
         return $strReturn;
     }

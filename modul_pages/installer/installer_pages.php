@@ -24,7 +24,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
 
-		$arrModule["version"] 		= "3.1.0";
+		$arrModule["version"] 		= "3.1.1";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -319,6 +319,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
         }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.0") {
+            $strReturn .= $this->update_310_311();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -404,6 +409,17 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.0");
+
+        return $strReturn;
+    }
+    
+    private function update_310_311() {
+        $strReturn = "";
+
+        $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.1.1");
 
         return $strReturn;
     }

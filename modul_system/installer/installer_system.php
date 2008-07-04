@@ -590,7 +590,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Deleting old js-calendar...\n";
         include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
-        $strReturn .= "Deleting old fck-editor folder...\n";
+        $strReturn .= "Deleting old calendar-editor folder...\n";
         if(!$objFilesystem->folderDeleteRecursive("/admin/scripts/jscalendar"))
            $strReturn .= "<b>Error deleting the folder \n /admin/scripts/jscalendar,\nplease delete manually</b>\n";
         

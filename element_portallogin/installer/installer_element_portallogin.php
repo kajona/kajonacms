@@ -27,7 +27,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.0";
+		$arrModule["version"] 		= "3.1.1";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

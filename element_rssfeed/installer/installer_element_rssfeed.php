@@ -28,7 +28,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.0";
+		$arrModule["version"] 		= "3.1.1";
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["name_lang"] 	= "Element rssfeed";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

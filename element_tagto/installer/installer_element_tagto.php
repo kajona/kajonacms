@@ -28,7 +28,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.0";
+		$arrModule["version"] 		= "3.1.1";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

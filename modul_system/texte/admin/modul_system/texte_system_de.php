@@ -158,7 +158,7 @@ $text["update_nofilefound"]         = "Die Liste der Updates konnte nicht gelade
 $text["update_invalidXML"]          = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.0, Codename \"kangaroo\"<br /><br />
+                                       Kajona V 3.1.1 BETA, Codename \"taskforce\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />
