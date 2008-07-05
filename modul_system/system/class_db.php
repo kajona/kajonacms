@@ -304,8 +304,9 @@ class class_db {
 			if (function_exists("debug_backtrace")) {
 				$arrStack = debug_backtrace();
 
-				foreach ($arrStack as $intPos => $arrValue)
-					$strErrorcode .= $arrValue["file"]."\n\t Row ".$arrValue["line"].", function ".$arrStack[$intPos]["function"]."\n";
+				foreach ($arrStack as $intPos => $arrValue) {
+					$strErrorcode .= (isset($arrValue["file"]) ? $arrValue["file"] : "n.a.")."\n\t Row ".(isset($arrValue["line"]) ? $arrValue["line"] : "n.a.").", function ".$arrStack[$intPos]["function"]."\n";
+				}
 			}
 			$strErrorcode .= "</pre>";
 			throw new class_exception($strErrorcode, class_exception::$level_ERROR);
