@@ -19,6 +19,12 @@
  */
 class class_rights {
 	private $arrModul = null;				//Array mit den Moduldaten
+	
+	/**
+	 * class_db
+	 *
+	 * @var class_db
+	 */
 	private $objDb = null;					//DatenbankObject
 	private $objSession = null;				//Session Object
 	private $arrRightsCache = array();		//Array, caching rights
@@ -97,8 +103,13 @@ class class_rights {
 							right_right4='".dbsafeString($strRight4)."',
 							right_right5='".dbsafeString($strRight5)."'
 							WHERE right_id='".dbsafeString($strSystemid)."'";
-			if($this->objDb->_query($strQuery))
+			
+			if($this->objDb->_query($strQuery)) {
+				//Flush the cache to later lookups will match the new rights
+				$this->objDb->flushQueryCache();
+				$this->arrRightsCache = array();
 				return true;
+			}
 			else
 				return false;
 		}
@@ -209,7 +220,7 @@ class class_rights {
 
 
 	/**
-	 * Returns a 2-dimensional Array containg the groups and the assinged rights.
+	 * Returns a 2-dimensional Array containg the groups and the assigned rights.
 	 * If the record inherits, the tree is traversed upwards till the base-node is being found.
 	 * In the last case, this is the system-root
 	 *
@@ -242,7 +253,7 @@ class class_rights {
 		$arrReturn["right4"] = explode(",",(isset($arrRow["right_right4"]) ? $arrRow["right_right4"] : ""));
 		$arrReturn["right5"] = explode(",",(isset($arrRow["right_right5"]) ? $arrRow["right_right5"] : ""));
 
-		$arrReturn["inherit"] = isset($arrTemp["right_inherit"]) ? $arrTemp["right_inherit"] : "";
+		$arrReturn["inherit"] = $arrTemp["right_inherit"];
 
 		return $arrReturn;
 	}
@@ -645,19 +656,18 @@ class class_rights {
 	public function addGroupToRight($strGroupId, $strSystemid, $strRight) {
 	    $bitReturn = true;
 
+	    $this->objDb->flushQueryCache();
+        $this->arrRightsCache = array();
+                
 	    //Load the current rights
-	    $arrRights = $this->getArrayRights($strSystemid);
+	    $arrRights = $this->getArrayRights($strSystemid, false);
 
-	    if(in_array($strGroupId, $arrRights[$strRight])) {
-	        //rights already given, return
-	        return true;
-	    }
-
-	    //rights not given, add now
+	    //rights not given, add now, disabling inheritance
 	    $arrRights["inherit"] = 0;
 
 	    //add the group to the row
-	    $arrRights[$strRight][] = $strGroupId;
+	    if(!in_array($strGroupId, $arrRights[$strRight]))
+	        $arrRights[$strRight][] = $strGroupId;
 
 	    //build a one-dim array
 	    $arrRights["view"] = implode(",", $arrRights["view"]);
@@ -672,11 +682,11 @@ class class_rights {
 
 	    //and save the row
 	    $bitReturn = $this->setRights($arrRights, $strSystemid);
-
+	    
 	    return $bitReturn;
 	}
 
-} //class_rechte()
+} 
 
 
 ?>
