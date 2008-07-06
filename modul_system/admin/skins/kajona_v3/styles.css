@@ -5,7 +5,7 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
-* 	styles.css																				            *
+* 	styles.css																							*
 * 	CSS-styles for admin area																			*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
@@ -15,7 +15,7 @@
 /*
 	NOTE:------------------------------------------------------------------------------------------------
 	  |   Use _webpath_ and _skinwebpath_ as constant containing the current webpath, see below
-      |
+	  |
 	  |   If you don't use _webpath_, _skinwebpath_ or the function IEOther("IE", "Other"), we
 	  |   recommend to use a static css-file like this one.
 	  |	  IF you need IEOther()), _webpath_ or _skinwebpath_ use a php-file using the following pattern
@@ -24,7 +24,7 @@
 	  |		require_once("../../../system/functions.php");
 	  |		$strTemp = dirname((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 	  |		define("_skinwebpath_", saveUrlEncode(str_replace("/css", "", $strTemp)));
-      |		header("Content-type: text/css");
+	  |		header("Content-type: text/css");
 	  |		echo " all your css stuff goes here ";
 	  |	  ?>
 	  \--------------------------------------------------------------------------------------------------
