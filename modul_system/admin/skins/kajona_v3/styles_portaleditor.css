@@ -1,26 +1,34 @@
-<?php
+
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
-* 	css_portaleditor.php																	            *
-* 	Portaleditor CSS-Styles																				*
+* 	styles_portaleditor.css																	            *
+* 	CSS-styles for portaleditor																			*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                                    *
 ********************************************************************************************************/
 
-//Konstanten einlesen
-require_once("../../../system/functions.php");
-$strTemp = dirname((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
-define("_skinwebpath_", saveUrlEncode(str_replace("/css", "", $strTemp)));
-
-//Header senden
-header("Content-type: text/css");
-
-echo "
+/*
+	NOTE:------------------------------------------------------------------------------------------------
+	  |   Use _webpath_ and _skinwebpath_ as constant containing the current webpath, see below
+      |
+	  |   If you don't use _webpath_, _skinwebpath_ or the function IEOther("IE", "Other"), we
+	  |   recommend to use a static css-file like this one.
+	  |	  IF you need IEOther()), _webpath_ or _skinwebpath_ use a php-file using the following pattern
+	  |   instead of a static css-file:
+	  |   <?php
+	  |		require_once("../../../system/functions.php");
+	  |		$strTemp = dirname((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+	  |		define("_skinwebpath_", saveUrlEncode(str_replace("/css", "", $strTemp)));
+      |		header("Content-type: text/css");
+	  |		echo " all your css stuff goes here ";
+	  |	  ?>
+	  \--------------------------------------------------------------------------------------------------
+*/
 
 /* T O O L T I P */
 .tooltip {
@@ -65,7 +73,7 @@ echo "
 }
 
 #peToolbar .logo {
-	background-image: url("._skinwebpath_."/pe_logo.png);
+	background-image: url(pe_logo.png);
 	background-repeat: no-repeat;
 	width: 200px;
 	height: 45px;
@@ -73,7 +81,7 @@ echo "
 }
 
 #peToolbar .info {
-	background-image: url("._skinwebpath_."/pe_back.png);
+	background-image: url(pe_back.png);
 	background-repeat: repeat-x;
 	height: 45px;
 	margin-left: 200px;
@@ -129,6 +137,3 @@ echo "
 	text-decoration: underline !important;
 	font-weight: normal !important;
 }
-
-";
-?>

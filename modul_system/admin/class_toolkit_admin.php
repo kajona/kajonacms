@@ -143,7 +143,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["valueMonth"] = $intMonth;
 		$arrTemplate["valueYear"] = $intYear;
 
-		//commands and values for the jscalendar
+		//commands and values for the calendar
 		$arrTemplate["calendarCommands"] = "";
 		
 		//init the js-files

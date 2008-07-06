@@ -5,22 +5,30 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
-* 	css.php																					            *
-* 	CSS-styles for admin area																	*
+* 	styles.css																				            *
+* 	CSS-styles for admin area																			*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                                    *
 ********************************************************************************************************/
 
-//Konstanten einlesen
-require_once("../../../system/functions.php");
-$strTemp = dirname((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
-define("_skinwebpath_", saveUrlEncode(str_replace("/css", "", $strTemp)));
-
-//Header senden
-header("Content-type: text/css");
-
-echo "
+/*
+	NOTE:------------------------------------------------------------------------------------------------
+	  |   Use _webpath_ and _skinwebpath_ as constant containing the current webpath, see below
+      |
+	  |   If you don't use _webpath_, _skinwebpath_ or the function IEOther("IE", "Other"), we
+	  |   recommend to use a static css-file like this one.
+	  |	  IF you need IEOther()), _webpath_ or _skinwebpath_ use a php-file using the following pattern
+	  |   instead of a static css-file:
+	  |   <?php
+	  |		require_once("../../../system/functions.php");
+	  |		$strTemp = dirname((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on" ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+	  |		define("_skinwebpath_", saveUrlEncode(str_replace("/css", "", $strTemp)));
+      |		header("Content-type: text/css");
+	  |		echo " all your css stuff goes here ";
+	  |	  ?>
+	  \--------------------------------------------------------------------------------------------------
+*/
 
 /* I M G  P R E L O A D */
 .imgPreload {
@@ -35,7 +43,7 @@ echo "
 
 /* L O A D I N G   C O N T A I N E R */
 .loadingContainer {
-	background: #ffffff url('"._skinwebpath_."/loading.gif') center no-repeat;
+	background: #ffffff url('loading.gif') center no-repeat;
 	min-height: 50px;
 	min-width: 50px;
 }
@@ -349,7 +357,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	text-align: left;
 	color: #FFFFFF;
 	background-position: left center;
-	background-image: url("._skinwebpath_."/tabellenkopf.gif);
+	background-image: url(tabellenkopf.gif);
 	background-repeat: no-repeat;
 }
 
@@ -364,7 +372,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	text-align: left;
 	color: #FFFFFF;
 	background-position: left center;
-	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	background-image: url(tabellenkopfkurz.gif);
 }
 
 .modullinie {
@@ -417,7 +425,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	height: 17px;
 	background-color:#ffffff;
 	background-repeat: repeat-x;
-	background-image: url("._skinwebpath_."/navi_back.gif);
+	background-image: url(navi_back.gif);
 }
 .listecontent {
 	font-family: Arial, Helvetica, sans-serif;
@@ -548,7 +556,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 
 .jsHeader {
 	background-position: left top;
-	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	background-image: url(tabellenkopfkurz.gif);
 	font-family: Arial, Verdana, Helvetica, sans-serif;
     color: #FFFFFF;
     font-size: 11px;
@@ -628,7 +636,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 .adminwidgetHeaderTitle {
 	padding: 2px 0 2px 2px;
 	background-position: left top;
-	background-image: url("._skinwebpath_."/tabellenkopfkurz.gif);
+	background-image: url(tabellenkopfkurz.gif);
 	color: #FFFFFF;
     font-size: 11px;
     width: 175px;
@@ -656,8 +664,3 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	padding: 0; 
 	margin: 0 0 10px 0; 
 }
-
-
-
-";
-?>

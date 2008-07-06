@@ -241,7 +241,7 @@ class class_modul_pages extends class_portal {
 		        $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona.js\"></script>";
                 $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
-                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
+                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
     		    //The toolbar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
     		    //find closing bracket
@@ -256,7 +256,7 @@ class class_modul_pages extends class_portal {
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona.js\"></script>";
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
-                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/css_portaleditor.php\");</script>";
+                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
     		    //find closing bracket
