@@ -119,6 +119,7 @@ function inArray(needle, haystack) {
     return false;
 }
 
+//deprecated, use YAHOO.util.Event.onDOMReady instead, if YUI loaded
 function addLoadEvent(func) {
 	var oldonload = window.onload;
     if (typeof window.onload != 'function') {
@@ -302,7 +303,7 @@ var kajonaAjaxHelper =  {
 	loadDragNDropBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop-min.js');
+		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop-min.js');
 	},
 
 	loadAnimationBase : function () {
@@ -335,7 +336,7 @@ var kajonaAjaxHelper =  {
 	}
 };
 
-addLoadEvent(kajonaAjaxHelper.onLoadHandlerFinal);
+YAHOO.util.Event.onDOMReady(kajonaAjaxHelper.onLoadHandlerFinal);
 
 var regularCallback = {
 	success: function(o) { kajonaStatusDisplay.displayXMLMessage(o.responseText) },

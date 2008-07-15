@@ -4,6 +4,7 @@
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/dragdrop/dragdrop-min.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -13,7 +14,7 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script language="Javascript" type="text/javascript">
 		function loginStartup() { document.getElementById('name').focus(); }
-    	addLoadEvent(loginStartup);
+    	YAHOO.util.Event.onDOMReady(loginStartup);
 		kajonaAjaxHelper.loadAjaxBase();
   		kajonaAjaxHelper.loadAutocompleteBase();
   		kajonaAjaxHelper.loadAnimationBase()

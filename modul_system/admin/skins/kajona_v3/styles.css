@@ -585,6 +585,11 @@ h2 {
     width: 225px;
 }
 
+.adminwidget .bd .c {
+	overflow: hidden;
+	width: 225px;
+}
+
 .adminwidgetColumn {
 	padding: 0 0 10px 0;
 	margin: 0;
