@@ -830,6 +830,8 @@ function uniStrpos($strHaystack, $strNeedle) {
         return strpos($strHaystack, $strNeedle);
 }
 
+
+
 /**
  * Wrapper to phps strrpos
  *
@@ -855,6 +857,19 @@ function uniStrlen($strString) {
         return mb_strlen($strString);
     else
         return strlen($strString);
+}
+
+/**
+ * Wrapper to phps strtolower
+ *
+ * @param string $strString
+ * @return string
+ */
+function uniStrtolower($strString) {
+    if(_mbstringloaded_)
+        return mb_strtolower($strString);
+    else
+        return strtolower($strString);
 }
 
 /**

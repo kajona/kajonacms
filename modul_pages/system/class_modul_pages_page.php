@@ -554,7 +554,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
     public function setStrName($strName) {
         //make a valid pagename
-        $strName = strtolower($strName);
+        $strName = uniStrtolower($strName);
         $arrSearch = array("ä", "ö", "ü", ".", " ", "ß");
         $arrReplace = array("ae", "oe", "ue", "-", "_", "ss");
         $strName = uniStrReplace($arrSearch, $arrReplace, $strName);
