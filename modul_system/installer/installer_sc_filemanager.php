@@ -30,13 +30,13 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
      *
      */
     public function install() {
-         $strReturn = "";
+		$strReturn = "";
 
-        $strReturn .= "Creating upload-folder\n";
+        $strReturn .= "Creating picture upload folder\n";
             if(!is_dir(_portalpath_."/pics/upload"))
                 mkdir(_realpath_."/portal/pics/upload");
 
-            $strReturn .= "Creating new file-repository\n";
+            $strReturn .= "Creating new picture repository\n";
             include_once(_systempath_."/class_modul_filemanager_repo.php");
             $objRepo = new class_modul_filemanager_repo();
 
@@ -50,7 +50,26 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $objRepo->setStrViewFilter(".jpg,.gif,.png");
             $objRepo->saveObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
-        return $strReturn;
+            
+        $strReturn .= "Creating file upload folder\n";
+            if(!is_dir(_portalpath_."/downloads"))
+                mkdir(_realpath_."/portal/downloads");
+
+            $strReturn .= "Creating new file repository\n";
+            include_once(_systempath_."/class_modul_filemanager_repo.php");
+            $objRepo = new class_modul_filemanager_repo();
+
+            if($this->strContentLanguage == "de")
+                $objRepo->setStrName("Hochgeladene Dateien");
+            else
+                $objRepo->setStrName("File uploads");
+
+            $objRepo->setStrPath("/portal/downloads");
+            $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
+            $objRepo->setStrViewFilter(".zip,.pdf,.txt");
+            $objRepo->saveObjectToDb();
+            $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
+		return $strReturn;
     }
     
     public function setObjDb($objDb) {
