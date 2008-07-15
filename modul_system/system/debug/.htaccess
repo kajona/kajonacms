@@ -11,8 +11,4 @@
 #	$Id: .htaccess 1972 2008-03-16 21:17:36Z jschroeter $                                                    *
 #*******************************************************************************************************/
 
-Order deny,allow
-
-<FilesMatch "\.php$" >
-  Deny from all
-</FilesMatch>
+Deny from all
