@@ -158,19 +158,19 @@ $text["update_nofilefound"]         = "Die Liste der Updates konnte nicht gelade
 $text["update_invalidXML"]          = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
 
 $text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.1 BETA, Codename \"taskforce\"<br /><br />
+                                       Kajona V 3.1.1, Codename \"taskforce\"<br /><br />
                                        <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
                                        <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
                                        Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />
 									   Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.
                                        ";
 
-$text["about_part2"]                = "<h2>Entwickler</h2>
+$text["about_part2"]                = "<h2>Entwicklungsleitung</h2>
                                        <ul>
                                        <li><a href=\"mailto:sidler@kajona.de\" target=\"_blank\">Stefan Idler</a> (Projektleitung, Technische Leitung, Entwicklung)</li>
                                        <li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (Leitung Frontend, Entwicklung)</li>
                                        </ul>
-                                       <h2>Contributors</h2>
+                                       <h2>Contributors / Entwickler</h2>
                                        <ul>
                                        <li>Thomas Hertwig</li>
                                        </ul>
