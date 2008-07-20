@@ -762,20 +762,33 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	private function actionUploadFile($bitActionFromFolderview = false, $strFormElement = "") {
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getSystemid())) {
-			//Upload of form?
 			//Upload-Form
+			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+			
 			if($bitActionFromFolderview)
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=folderview&amp;action=list&amp;fmcommand=uploadFile&amp;datei_upload_final=1&amp;form_element=".$strFormElement, "", "multipart/form-data");
+			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=folderview&amp;action=list&amp;fmcommand=uploadFile&amp;datei_upload_final=1&amp;form_element=".$strFormElement, "formUpload", "multipart/form-data");
 			else
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=filemanager&amp;action=uploadFile&amp;datei_upload_final=1", "", "multipart/form-data");
+			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=filemanager&amp;action=uploadFile&amp;datei_upload_final=1", "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
 			$strReturn .= $this->objToolkit->formTextRow($this->getText("max_size").(bytesToString($this->objConfig->getPhpIni("post_max_size"), true) > bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($this->objConfig->getphpIni("post_max_size"), true)));
-			$strReturn .= "<div id=\"upload_prototype\" style=\"display: inline;\">";
-			$strReturn .= $this->objToolkit->formInputUpload("filemanager_upload[0]", $this->getText("filemanager_upload"));
-			$strReturn .= "</div>";
-			$strReturn .= $this->objToolkit->formTextRow("<a href=\"javascript:addDownloadInput('upload_prototype', 'filemanager_upload');\" >".$this->getText("add_upload_field")."</a>");
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("upload"));
+			
+			//Fallback code if no or old Flash Player available
+			$strFallbackForm = "<div id=\"upload_prototype\" style=\"display: inline;\">";
+			$strFallbackForm .= $this->objToolkit->formInputUpload("filemanager_upload[0]", $this->getText("filemanager_upload"));
+			$strFallbackForm .= "</div>";
+			$strFallbackForm .= $this->objToolkit->formTextRow("<a href=\"javascript:addDownloadInput('upload_prototype', 'filemanager_upload');\" >".$this->getText("add_upload_field")."</a>");
+			$strFallbackForm .= $this->objToolkit->formInputSubmit($this->getText("upload_submit"));
+			
+			$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objRepo->getStrUploadFilter());
+
+			$arrTexts = array(
+				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter"),
+				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles"),
+				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel")
+			);
+			
+			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);
 			$strReturn .= $this->objToolkit->formClose();
 
 			if($this->getParam("datei_upload_final") != "") {
@@ -795,7 +808,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				include_once(_systempath_."/class_filesystem.php");
     				$objFilesystem = new class_filesystem();
     				//Check file for correct filters
-    				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
     				$arrAllowed = explode(",", $objRepo->getStrUploadFilter());
     				$strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
     				if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
@@ -822,6 +834,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		return $strReturn;
 	}
 
+	
 	/**
 	 * Returns details about the given file
 	 *

@@ -72,10 +72,6 @@ $text["datei_groesse"]				= "File size:";
 $text["bild_groesse"]				= "Image size:";
 $text["bild_vorschau"]				= "Preview:";
 
-$text["upload_erfolg"]				= "File was uploaded successfully<br />";
-$text["upload_fehler"]				= "An error occured while uploading file<br />";
-$text["upload_fehler_filter"]		= "The uploaded file type is not allowed<br />";
-
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 $text["liste_leer"]					= "No repositories available";
 
@@ -99,10 +95,17 @@ $text["datei_name"]                 = "File name:";
 $text["rename"]                     = "Rename";
 $text["ordner_name"]                = "Folder name:";
 $text["anlegen"]                    = "Create folder";
+
 $text["filemanager_upload"]         = "Upload file:";
 $text["max_size"]                   = "Maximal file size: ";
-$text["upload"]                     = "Upload";
+$text["upload_submit"]              = "Upload";
 $text["add_upload_field"]           = "Add additional upload field";
+$text["upload_erfolg"]				= "File was uploaded successfully<br />";
+$text["upload_fehler"]				= "An error occured while uploading file<br />";
+$text["upload_fehler_filter"]		= "The uploaded file type is not allowed<br />";
+$text["upload_multiple_uploadFiles"]	= "Upload file(s)";
+$text["upload_multiple_cancel"]		= "Cancel all uploads";
+$text["filemanager_upload"]         = "Upload file:";
 
 $text["_filemanager_ordner_groesse_"] = "Calculate size:";
 $text["_filemanager_ordner_groesse_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager.

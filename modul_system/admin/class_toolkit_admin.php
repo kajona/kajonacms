@@ -490,6 +490,87 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
+	
+    /**
+     * Returns a input-file element for a single file upload with progress bar
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strClass
+     * @return string
+     */
+    public function formInputUploadFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts) {
+		return formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, 1);
+	}
+	
+    /**
+     * Returns a input-file element for uploading multiple files with progress bar
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strClass
+     * @return string
+     */
+    public function formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, $intAllowedNumberOfFiles = 0) {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
+		$arrTemplate["fallbackContent"] = $strFallbackContent;
+		
+		$objConfig = class_config::getInstance();
+		
+		$strMaxSize = (bytesToString($objConfig->getPhpIni("post_max_size"), true) > bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($objConfig->getphpIni("post_max_size"), true));
+		
+		$arrTemplate["javascript"] = "
+			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.js\"></script>
+			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.swfobject.js\"></script>
+			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.queue.js\"></script>
+			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/fileprogress.js\"></script>
+			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/handlers.js\"></script>
+			<script type=\"text/javascript\">
+				var swfu;
+		
+				SWFUpload.onload = function() {
+					var settings = {
+						flash_url : \"admin/scripts/swfupload/swfupload_f9.swf\",
+						upload_url: document.getElementById(\"formUpload\").action+\"&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+						post_params: {\"systemid\" : document.getElementById(\"systemid\").value,
+							\"folder\" : document.getElementById(\"folder\").value},
+						file_post_name: \"".$strName."\",
+						file_size_limit : \"".$strMaxSize."\",
+						file_types : \"".$strAllowedFileTypes."\",
+						file_types_description : \"".$strAllowedFileTypes."\",
+						file_upload_limit : 0,
+						file_queue_limit : ".$intAllowedNumberOfFiles.",
+						custom_settings : {
+							progressTarget : \"fsUploadProgress\",
+							cancelButtonId : \"btnCancel\"
+						},
+						debug: KAJONA_DEBUG > 0 ? true : false,
+		
+						// The event handler functions are defined in handlers.js
+						swfupload_loaded_handler : swfUploadLoaded,
+						file_queued_handler : fileQueued,
+						file_queue_error_handler : fileQueueError,
+						file_dialog_complete_handler : fileDialogComplete,
+						upload_start_handler : uploadStart,
+						upload_progress_handler : uploadProgress,
+						upload_error_handler : uploadError,
+						upload_success_handler : uploadSuccess,
+						upload_complete_handler : uploadComplete,
+						queue_complete_handler : queueComplete,	// Queue plugin event
+						
+						minimum_flash_version: \"9.0.28\",
+						swfupload_pre_load_handler: swfUploadPreLoad,
+						swfupload_load_failed_handler: swfUploadLoadFailed
+					};
+					swfu = new SWFUpload(settings);
+			     };
+			</script>";
+
+		foreach ($arrTexts as $arrKey => $strValue) {
+			$arrTemplate[$arrKey] = $strValue;
+		}
+		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	}
 
 	/**
 	 * Returning a complete Dropdown

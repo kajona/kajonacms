@@ -72,10 +72,6 @@ $text["datei_groesse"]				= "Dateigröße:";
 $text["bild_groesse"]				= "Bildgröße:";
 $text["bild_vorschau"]				= "Vorschau:";
 
-$text["upload_erfolg"]				= "Datei erfolgreich hochgeladen<br />";
-$text["upload_fehler"]				= "Dateiupload fehlerhaft<br />";
-$text["upload_fehler_filter"]		= "Der hochgeladene Dateityp ist nicht erlaubt<br />";
-
 $text["fehler_recht"]				= "Keine ausreichende Rechte";
 $text["liste_leer"]					= "Keine Repositories angelegt";
 
@@ -99,10 +95,16 @@ $text["datei_name"]                 = "Dateiname:";
 $text["rename"]                     = "Umbenennen";
 $text["ordner_name"]                = "Ordnername:";
 $text["anlegen"]                    = "Ordner anlegen";
+
 $text["filemanager_upload"]         = "Datei hochladen:";
 $text["max_size"]                   = "Maximale Dateigröße: ";
-$text["upload"]                     = "Hochladen";
+$text["upload_submit"]              = "Hochladen";
 $text["add_upload_field"]           = "Zusätzliches Uploadfeld hinzufügen";
+$text["upload_erfolg"]				= "Datei erfolgreich hochgeladen<br />";
+$text["upload_fehler"]				= "Dateiupload fehlerhaft<br />";
+$text["upload_fehler_filter"]		= "Der hochgeladene Dateityp ist nicht erlaubt<br />";
+$text["upload_multiple_uploadFiles"]	= "Datei(en) hochladen";
+$text["upload_multiple_cancel"]		= "Abbrechen";
 
 $text["_filemanager_ordner_groesse_"] = "Größe anzeigen:";
 $text["_filemanager_ordner_groesse_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager.
