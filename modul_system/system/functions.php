@@ -507,7 +507,10 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                     
                 // add anchor if given
                 if($strAnchor != "")
-                    $strHref .= "#".$strAnchor; 
+                    $strHref .= "#".$strAnchor;
+
+                //plus the domain as a prefix
+                $strHref = _webpath_."/".$strHref;     
                     
                     
                 $bitRegularLink = false;
