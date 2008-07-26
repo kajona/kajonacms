@@ -265,6 +265,17 @@ class class_remoteloader {
 		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
 	}
 	
+    /**
+     * Deletes all entries currently saved to the cache
+     *
+     * @return bool
+     */
+    public function flushCache() {
+        $strQuery = "DELETE FROM ".$this->strCacheTable."";
+        
+        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+    }
+	
 	/**
 	 * Sets the protocol to use. Default is https://.
 	 *
