@@ -7,7 +7,7 @@
 <post>
 <table width="606" border="0">
   <tr>
-    <td width="442">von: %%post_name%%</td>
+    <td width="442">von: %%post_name_plain%%</td>
     <td width="154">%%post_date%%</td>
   </tr>
   <tr>

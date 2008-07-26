@@ -107,6 +107,8 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 				$strTemplatePostID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "post");
 				$arrtemplatePost = array();
 				$arrtemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
+				$arrtemplatePost["post_name_plain"] = $objOnePost->getGuestbookPostName();
+				$arrtemplatePost["post_name"] = $objOnePost->getGuestbookPostEmail();
 				$arrtemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
 				$arrtemplatePost["post_text"] = $objOnePost->getGuestbookPostText();
 				//replace encoded newlines
