@@ -90,7 +90,7 @@ class class_modul_news_news extends class_model implements interface_model  {
         $this->updateDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
         //news
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), false)."',
+                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle())."',
                             news_hits = '".$this->objDB->dbsafeString($this->getIntHits())."',
                             news_intro = '".$this->objDB->dbsafeString($this->getStrIntro(), false)."',
                             news_text = '".$this->objDB->dbsafeString($this->getStrNewstext(), false)."',
