@@ -170,7 +170,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$arrElementsOnPage = array();
 			//Language-dependant loading of elements, if installed
 		    $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
-
+            //save a copy of the array to be able to check against all values later on
+            $arrElementsOnPageCopy = $arrElementsOnPage;
+		    
 			//Loading all Elements installed on the system ("RAW"-Elements)
 			$arrElementsInSystem = class_modul_pages_element::getAllElements();
 
@@ -259,17 +261,17 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
         					if($objOneElementInSystem->getStrName() == $arrSingleElementOnTemplateplaceholder["element"]) {
         						$objElement = $objOneElementInSystem;
         						if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
-            						//So, the Row for a new element
+            						//So, the Row for a new element: element is repeatable or not yet created
             						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_blank.gif"));
             						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
             						$bitOutputAtPlaceholder = true;
             					}
             					else {
+            						//element not repeatable.
             					    //Is there already one element installed? if not, then it IS allowed to create a new one
             					    $bitOneInstalled = false;
-            					    foreach($arrElementsOnPage as $objOneElementToCheck) {
-            					        if($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() &&
-            					           $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement())
+            					    foreach($arrElementsOnPageCopy as $objOneElementToCheck) {
+            					        if($arrOneElementOnTemplate["placeholder"] == $objOneElementToCheck->getStrPlaceholder() && $arrSingleElementOnTemplateplaceholder["element"] == $objOneElementToCheck->getStrElement())
             					           $bitOneInstalled = true;
             					    }
             					    if(!$bitOneInstalled) {

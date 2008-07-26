@@ -156,7 +156,7 @@ class class_modul_pages_element extends class_model implements interface_model  
         return $this->strClassAdmin;
     }
     public function getIntRepeat() {
-        return $this->intRepeat;
+        return (int)$this->intRepeat;
     }
     public function getIntCachetime() {
         return $this->intCachetime;
