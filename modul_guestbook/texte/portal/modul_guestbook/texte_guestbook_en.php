@@ -19,6 +19,14 @@ $text["fehler_recht"]						= "Not enough permissions to perform this action";
 $text["weiter"]								= "next";
 $text["zurueck"]							= "previous";
 
+$text["post_name_from"]						= "from";
+$text["post_name_text"]						= "Name";
+$text["post_mail_text"]						= "Email";
+$text["post_page_text"]						= "www";
+$text["post_message_text"]					= "Message";
+$text["post_code_text"]						= "Request new code";
+$text["post_submit_text"]					= "Sign!";
+
 $text["eintragen"]							= "Sign";
 
 

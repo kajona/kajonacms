@@ -106,10 +106,14 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 			if($this->objRights->rightView($objOnePost->getSystemid())){
 				$strTemplatePostID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "post");
 				$arrtemplatePost = array();
+				$arrtemplatePost["post_name_from"] = $this->getText("post_name_from");
 				$arrtemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
 				$arrtemplatePost["post_name_plain"] = $objOnePost->getGuestbookPostName();
-				$arrtemplatePost["post_name"] = $objOnePost->getGuestbookPostEmail();
+				$arrtemplatePost["post_mail_text"] = $this->getText("post_mail_text");
+				$arrtemplatePost["post_email"] = $objOnePost->getGuestbookPostEmail();
+				$arrtemplatePost["post_page_text"] = $this->getText("post_page_text");
 				$arrtemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
+				$arrtemplatePost["post_message_text"] = $this->getText("post_message_text");
 				$arrtemplatePost["post_text"] = $objOnePost->getGuestbookPostText();
 				//replace encoded newlines
 				$arrtemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $arrtemplatePost["post_text"]);
@@ -142,10 +146,16 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		//update elements
 		$arrTemplate = array();
 		$arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler");
+		$arrTemplate["post_name_text"] = $this->getText("post_name_text");
         $arrTemplate["gb_post_name"]  = htmlToString($this->getParam("gb_post_name"), true);
-		$arrTemplate["gb_post_email"] = htmlToString($this->getParam("gb_post_email"), true);
-		$arrTemplate["gb_post_text"] = htmlToString($this->getParam("gb_post_text"), true);
-		$arrTemplate["gb_post_page"] = htmlToString($this->getParam("gb_post_page"), true);
+		$arrTemplate["post_mail_text"] = $this->getText("post_mail_text");
+        $arrTemplate["gb_post_email"] = htmlToString($this->getParam("gb_post_email"), true);
+		$arrTemplate["post_message_text"] = $this->getText("post_message_text");
+        $arrTemplate["gb_post_text"] = htmlToString($this->getParam("gb_post_text"), true);
+		$arrTemplate["post_page_text"] = $this->getText("post_page_text");
+        $arrTemplate["gb_post_page"] = htmlToString($this->getParam("gb_post_page"), true);
+        $arrTemplate["post_submit_text"] = $this->getText("post_submit_text");
+		$arrTemplate["post_code_text"] = $this->getText("post_code_text");
 
 		$arrTemplate["action"] = _indexpath_."?page=".$this->getPagename()."&amp;action=saveGuestbook";
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
