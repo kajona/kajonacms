@@ -231,7 +231,7 @@ class class_modul_gallery_pic extends class_model implements interface_model  {
 	 * @return bool
 	 */
 	public static function deletePictureRecord($strSystemid) {
-	    class_logger::getInstance()->addLogRow("delted pic ".$strSystemid, class_logger::$levelInfo);
+	    class_logger::getInstance()->addLogRow("deleted pic ".$strSystemid, class_logger::$levelInfo);
         $objRoot = new class_modul_system_common();
 		$bitReturn = false;
 		//Delete from module-table
