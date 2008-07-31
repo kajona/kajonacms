@@ -203,15 +203,19 @@ class class_modul_gallery_pic extends class_model implements interface_model  {
 	 * Loads the folders under the given systemid
 	 *
 	 * @param string $strPrevid
+     * @param bool $bitActiveOnly
 	 * @return mixed
 	 * @static
 	 */
-	public static function loadFoldersDB($strPrevid) {
+	public static function loadFoldersDB($strPrevid, $bitActiveOnly = false) {
 		$strQuery= "SELECT system_id FROM "._dbprefix_."system,
 		                           "._dbprefix_."gallery_pic
 		              WHERE system_id = pic_id
 		                AND system_prev_id = '".dbsafeString($strPrevid)."'
-		                AND pic_type = 1";
+                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
+		                AND pic_type = 1
+		                ORDER BY system_sort ASC,
+                            pic_name ASC";
 		$arrIds  = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
