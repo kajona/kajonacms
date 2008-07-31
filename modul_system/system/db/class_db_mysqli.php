@@ -352,7 +352,7 @@ class class_db_mysqli implements interface_db_driver {
         $strParamPass = "";
 
         if ($this->strPass != "") {
-        	$strParamPass = " -p".$this->strPass;
+        	$strParamPass = " -p\"".$this->strPass."\"";
         }
 
         $strCommand = $this->strDumpBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." ".$strTables." > \"".$strFilename."\"";
@@ -373,7 +373,7 @@ class class_db_mysqli implements interface_db_driver {
         $strParamPass = "";
 
         if ($this->strPass != "") {
-            $strParamPass = " -p".$this->strPass;
+            $strParamPass = " -p\"".$this->strPass."\"";
         }
 
         $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
