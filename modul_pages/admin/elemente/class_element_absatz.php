@@ -95,9 +95,9 @@ class class_element_absatz extends class_element_admin implements interface_admi
 
 	    $arrData = $this->loadElementData();
 	    if($arrData["absatz_titel"] != "")
-	       return htmlToString(uniStrTrim($arrData["absatz_titel"], 60), true);
+	       return uniStrTrim(htmlStripTags($arrData["absatz_titel"]), 60);
 	    else
-	       return htmlToString(uniStrTrim($arrData["absatz_inhalt"], 60), true);
+	       return uniStrTrim(htmlStripTags($arrData["absatz_inhalt"]), 60);
 	}
 
 

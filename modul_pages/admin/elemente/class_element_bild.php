@@ -64,7 +64,7 @@ class class_element_bild extends class_element_admin implements interface_admin_
 	 */
 	public function getContentTitle() {
 	    $arrData = $this->loadElementData();
-        return htmlToString(uniStrTrim($arrData["bild_bild"], 60), true);
+        return uniStrTrim(htmlStripTags($arrData["bild_bild"]), 60);
 	}
 
 	/**

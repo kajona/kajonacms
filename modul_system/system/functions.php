@@ -615,6 +615,19 @@ function htmlToString($strHtml, $bitEntities = false, $bitEscapeCrlf = true) {
 }
 
 /**
+ * Wrapper to phps strip_tags
+ * Removes all html and php tags in a string
+ *
+ * @param string $strHtml
+ * @param string $strAllowTags
+ * @return string
+ */
+function htmlStripTags ($strHtml, $strAllowTags = "") {
+	$strReturn = strip_tags($strHtml, $strAllowTags);
+	return $strReturn;
+}
+
+/**
  * Encodes an url to be more safe but being less strict than urlencode()
  *
  * @param string $strText

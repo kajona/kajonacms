@@ -62,7 +62,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	 */
 	public function getContentTitle() {
 	    $arrData = $this->loadElementData();
-        return htmlToString(uniStrTrim($arrData["absatz_titel"], 60), true);
+        return uniStrTrim(htmlStripTags($arrData["absatz_titel"]), 60);
 	}
 
 
