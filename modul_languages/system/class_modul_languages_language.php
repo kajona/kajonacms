@@ -139,6 +139,24 @@ class class_modul_languages_language extends class_model implements interface_mo
 
         return $arrReturn;
     }
+    
+    /**
+     * Returns the number of languages installed in the system 
+     *
+     * @param bool $bitJustActive
+     * @return int
+     */
+    public static function getNumberOfLanguagesAvailable($bitJustActive = false) {
+    	$strQuery = "SELECT COUNT(*)
+                     FROM "._dbprefix_."languages, "._dbprefix_."system
+                     WHERE system_id = language_id
+                     ".($bitJustActive ? "AND system_status != 0 ": "")."
+                     ORDER BY system_sort ASC, system_comment ASC";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+
+        return (int)$arrRow["COUNT(*)"];
+    	
+    }
 
     /**
      * Returns the language requested.

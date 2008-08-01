@@ -489,10 +489,19 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 	//languages installed?
 	include_once(_systempath_."/class_modul_system_module.php");
 	$objLanguages = class_modul_system_module::getModuleByName("languages");
-	if($strLanguage == "" && $objLanguages != null) {
-		include_once(_systempath_."/class_modul_system_common.php");
-		$objCommon = new class_modul_system_common();
-		$strLanguage = $objCommon->getStrPortalLanguage();
+	if($objLanguages != null) {
+		//more than one language installed?#
+		include_once(_systempath_."/class_modul_languages_language.php");
+		$intNumberOfLanguages = class_modul_languages_language::getNumberOfLanguagesAvailable(true);
+		
+		if($strLanguage == "" && $intNumberOfLanguages > 1) {
+			include_once(_systempath_."/class_modul_system_common.php");
+			$objCommon = new class_modul_system_common();
+			$strLanguage = $objCommon->getStrPortalLanguage();
+		}
+		else if($strLanguage != "" && $intNumberOfLanguages <=1)
+		  $strLanguage = "";
+		
 	}
 
 	if($bitInternal) {
