@@ -130,28 +130,32 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		if($this->objRights->rightView($this->getSystemid())) {
 			//Load record
 			$objNews = new class_modul_news_news($this->getSystemid());
-			$strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail");
-			//back link
-			$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
-			$arrNews["news_start_date"] = timeToString($objNews->getIntDateStart(), false);
-			$arrNews["news_id"] = $objNews->getSystemid();
-			$arrNews["news_title"] = $objNews->getStrTitle();
-			$arrNews["news_intro"] = $objNews->getStrIntro();
-			$arrNews["news_text"] = $objNews->getStrNewstext();
-			if($objNews->getStrImage() != "")
-                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
-			$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
-
-			//Add pe code
-			$arrPeConfig = array(
-		                              "pe_module" => "news",
-		                              "pe_action_edit" => "editNewscontent",
-		                              "pe_action_edit_params" => "&systemid=".$this->getSystemid()
-			                    );
-			include_once(_portalpath_."/class_elemente_portal.php");
-			$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
-			//and count the hit
-			$objNews->increaseHits();
+	        if($objNews->getStatus() == "1") {
+				$strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail");
+				//back link
+				$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
+				$arrNews["news_start_date"] = timeToString($objNews->getIntDateStart(), false);
+				$arrNews["news_id"] = $objNews->getSystemid();
+				$arrNews["news_title"] = $objNews->getStrTitle();
+				$arrNews["news_intro"] = $objNews->getStrIntro();
+				$arrNews["news_text"] = $objNews->getStrNewstext();
+				if($objNews->getStrImage() != "")
+	                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
+				$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
+	
+				//Add pe code
+				$arrPeConfig = array(
+			                              "pe_module" => "news",
+			                              "pe_action_edit" => "editNewscontent",
+			                              "pe_action_edit_params" => "&systemid=".$this->getSystemid()
+				                    );
+				include_once(_portalpath_."/class_elemente_portal.php");
+				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
+				//and count the hit
+				$objNews->increaseHits();
+			}
+			else
+                $strReturn = $this->getText("fehler_recht");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

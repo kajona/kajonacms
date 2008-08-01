@@ -68,7 +68,7 @@ class class_download_portal extends class_root {
 
 		    $objFile = new class_modul_downloads_file($this->getSystemid());
 			//Succeeded?
-			if($objFile->getFilename() != "") {
+			if($objFile->getFilename() != "" && $objFile->getStatus() == "1") {
 				//Check rights
 				if($this->objRights->rightRight2($objFile->getSystemid())) {
 				    //Log the download
