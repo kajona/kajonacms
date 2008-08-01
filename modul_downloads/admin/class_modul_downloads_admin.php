@@ -20,6 +20,7 @@ include_once(_adminpath_."/interface_admin.php");
 //needed classes
 include_once(_systempath_."/class_modul_downloads_archive.php");
 include_once(_systempath_."/class_modul_downloads_file.php");
+include_once(_systempath_."/class_modul_downloads_logbook.php");
 
 
 
