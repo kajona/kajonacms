@@ -15,6 +15,12 @@
 #uncomment the following line to use mod-rewrite
 #RewriteEngine on
 
+########################################ADMIN REWRITING##################################################
+
+#source: /admin/module.action.systemid
+#RewriteRule ^admin\/([a-z]+)\.([a-zA-Z]*)\.([0-9a-z]*)\.html([?]*)(.*)  index.php?admin=1&module=$1&action=$2&systemid=$3$5
+
+########################################PORTAL REWRITING#################################################
 
 # source: page.seo.action.systemid.language
 #uncomment the following line to use mod-rewrite
@@ -40,7 +46,7 @@
 #RewriteRule ^([0-9a-z-_]+)\.html  index.php?page=$1
 
 
-
+########################################RSS REWRITING####################################################
 #rewrite news-feeds
 #uncomment the following line to use mod-rewrite
 #RewriteRule ^([0-9a-z-_]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1

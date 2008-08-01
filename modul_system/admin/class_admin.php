@@ -669,7 +669,7 @@ abstract class class_admin {
 				    $arrModuleRows[$intI]["rawName"] = $arrModule["module_name"];
 					$arrModuleRows[$intI]["name"] = $this->getText("modul_titel", $arrModule["module_name"]);
 					$arrModuleRows[$intI]["link"] = getLinkAdmin($arrModule["module_name"], "", "", $arrModule["module_name"], $arrModule["module_name"], "", true, "adminModuleNavi");
-					$arrModuleRows[$intI]["href"] = _indexpath_."?admin=1&amp;module=".$arrModule["module_name"];
+					$arrModuleRows[$intI]["href"] = getLinkAdminHref($arrModule["module_name"], "");
 					$intI++;
 				}
 			}

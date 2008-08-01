@@ -183,27 +183,19 @@ function getCookie($strKey) {
  */
 function getLinkAdmin($strModule, $strAction, $strParams = "", $strText , $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
 
-	//optimizing params
-	if($strParams != "")
-		$strParams = str_replace("&", "&amp;", $strParams);
-		
-	//urlencoding
-    $strModule = urlencode($strModule);
-    $strAction = urlencode($strAction);	
-
 	if($strImage != "") {
 		if($strAlt == "")
 			$strAlt = $strAction;
 		if(!$bitTooltip)
-			$strLink = "<a href=\""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
+			$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" /></a>";
 		else
-			$strLink = "<a href=\""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."\" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" /></a>";
+			$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" /></a>";
 	}
 
 	if($strImage == "" && $strText != "") 	{
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+		$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
 	}
 
 	return $strLink;
@@ -222,12 +214,35 @@ function getLinkAdminHref($strModule, $strAction, $strParams = "") {
 	//optimizing params
 	if($strParams != "")
 		$strParams = str_replace("&", "&amp;", $strParams);
-		
+				
+    //systemid in params?
+    $strSystemid = "";
+    $arrParams = explode("&amp;", $strParams);
+    
+    foreach($arrParams as $strKey => $strValue) {
+    	$arrEntry = explode("=", $strValue); 
+    	if(count($arrEntry) == 2 && $arrEntry[0] == "systemid") {
+    	   $strSystemid = $arrEntry[1];
+    	   unset($arrParams[$strKey]);
+    	}
+    }
+    
 	//urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);	
-
-	$strLink = ""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."";
+    
+    //rewriting enabled?
+    if(_system_mod_rewrite_ == "true") {
+    	$strAddonParams = "";
+    	$strAddonParams = implode("&amp;", $arrParams);
+    	//scheme: /admin/module.action.systemid
+    	$strLink = _webpath_."/admin/".$strModule.".".$strAction.".".$strSystemid.".html";
+    	if($strAddonParams != "")
+    	   $strLink .= "?".$strAddonParams;
+    
+    }
+    else
+	   $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."";
 
 	return $strLink;
 }
@@ -297,9 +312,9 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText, $s
 			$strAlt = $strAction;
 
 		if(!$bitTooltip)
-			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('"._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
 		else
-			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('"._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
 	}
 
 	if($strImage == "" && $strText != "") {

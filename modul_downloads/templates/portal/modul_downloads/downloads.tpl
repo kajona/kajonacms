@@ -42,6 +42,11 @@ kajonaAjaxHelper.loadAjaxBase();
 </pathnavi_entry>
 
 <rating_bar>
+<script type="text/javascript">
+<!--
+kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+//-->
+</script>
 %%rating_icons%% %%rating_rating%%
 </rating_bar>
 
