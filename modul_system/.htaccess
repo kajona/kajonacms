@@ -11,9 +11,14 @@
 #	$Id$                                                   *
 #*******************************************************************************************************/
 
-#if you want mod-rewrite to rewrite urls, turn RewriteEngine on. Enable mod_rewrite in the system-settings, too!
+#if you want to use mod_rewrite for nice-urls, set RewriteEngine on and uncomment all following RewriteRules.
+#Please note to enable URL-Rewriting in Kajona's system-settings, too!
 #uncomment the following line to use mod-rewrite
 #RewriteEngine on
+
+#skip all requests not ending with .html or .rss - they don't have any rewrite rules (little performance tweak)
+#uncomment the following line to use mod-rewrite
+#RewriteRule !\.(html|rss)$ - [L]
 
 ########################################ADMIN REWRITING##################################################
 
@@ -36,6 +41,7 @@
 #RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$1&action=$3
 
 #source: page.language
+#uncomment the following line to use mod-rewrite
 #RewriteRule ^([0-9a-z-_]+)\.([a-z]{2,2})\.html  index.php?page=$1&language=$2
 
 # source: page.seo
