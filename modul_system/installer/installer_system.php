@@ -25,7 +25,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
 
-		$arrModul["version"] 			= "3.1.1";
+		$arrModul["version"] 			= "3.1.9";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_system_admin";
 		$arrModul["file_admin"] 		= "class_system_admin.php";
@@ -269,7 +269,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		//The Usermodule
 		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
-		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_modul_filemanager_admin.php", $this->arrModule["version"], true);
+		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_modul_filemanager_admin.php", $this->arrModule["version"], true, "", "class_modul_filemanager_admin_xml.php");
         //the dashboard
         $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
         
@@ -431,6 +431,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
         }
         
         return $strReturn."\n\n";
@@ -598,6 +603,23 @@ class class_installer_system extends class_installer_base implements interface_i
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.1");
+
+        return $strReturn;
+    }
+    
+    private function update_311_319() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+        
+        
+        $strReturn .= "Registering filemanager xml handler...\n";
+        $objFilemanagerModule = class_modul_system_module::getModuleByName("filemanager");
+        $objFilemanagerModule->setStrXmlNameAdmin("class_modul_filemanager_admin_xml.php");
+        if(!$objFilemanagerModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.1.9");
 
         return $strReturn;
     }

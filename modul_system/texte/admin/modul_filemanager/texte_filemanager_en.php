@@ -116,6 +116,12 @@ $text["required_filemanager_path"]  = "Path";
 
 $text["useFile"]                    = "Apply";
 
+$text["xmlupload_success"]          = "Upload successfull";
+$text["xmlupload_error_copyUpload"] = "Error while copying the file on the server";
+$text["xmlupload_error_filter"]     = "Filetyp not allowd in current filter";
+$text["xmlupload_error_notWritable"]= "Folder not writable";
+$text["xmlupload_error_permissions"]= "Not enough permissions";
+
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 

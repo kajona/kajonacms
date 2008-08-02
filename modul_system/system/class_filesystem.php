@@ -331,6 +331,16 @@ class class_filesystem {
 	    }
 	    return false;
 	}
+	
+	/**
+	 * Checks if a file or folder is writeable
+	 *
+	 * @param string $strFile
+	 * @return bool
+	 */
+	public function isWritable($strFile) {
+		return is_writable(_realpath_."/".$strFile);
+	}	
 }
 
 ?>

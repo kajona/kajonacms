@@ -531,7 +531,8 @@ class class_toolkit_admin extends class_toolkit {
 				SWFUpload.onload = function() {
 					var settings = {
 						flash_url : \"admin/scripts/swfupload/swfupload_f9.swf\",
-						upload_url: document.getElementById(\"formUpload\").action+\"&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+						upload_url: \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+						//upload_url: document.getElementById(\"formUpload\").action+\"&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						post_params: {\"systemid\" : document.getElementById(\"systemid\").value,
 							\"folder\" : document.getElementById(\"folder\").value},
 						file_post_name: \"".$strName."\",

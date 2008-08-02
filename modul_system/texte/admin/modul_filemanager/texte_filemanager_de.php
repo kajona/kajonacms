@@ -115,6 +115,12 @@ $text["required_filemanager_path"]  = "Pfad";
 
 $text["useFile"]                    = "Übernehmen";
 
+$text["xmlupload_success"]          = "Upload erfolgreich";
+$text["xmlupload_error_copyUpload"] = "Fehler beim Kopieren der Datei auf dem Server";
+$text["xmlupload_error_filter"]     = "Dateityp im Filter nicht erlaubt";
+$text["xmlupload_error_notWritable"]= "Zielordner nicht beschreibbar";
+$text["xmlupload_error_permissions"]= "Keine ausreichenden Rechte";
+
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
