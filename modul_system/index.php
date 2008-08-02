@@ -36,8 +36,6 @@ else
 	define("_admin_", false);
 
 
-
-
 // --- The Index Class ----------------------------------------------------------------------------------
 
 include_once(_realpath_."/system/class_root.php");

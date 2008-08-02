@@ -225,20 +225,20 @@ function getLinkAdminHref($strModule, $strAction, $strParams = "") {
     	   $strSystemid = $arrEntry[1];
     	   unset($arrParams[$strKey]);
     	}
+    	else if($strValue == "")
+           unset($arrParams[$strKey]);
     }
-    
+ 
 	//urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);	
     
     //rewriting enabled?
-    if(_system_mod_rewrite_ == "true") {
-    	$strAddonParams = "";
-    	$strAddonParams = implode("&amp;", $arrParams);
+    if(_system_mod_rewrite_ == "true" && count($arrParams) == 0) {
+    	
     	//scheme: /admin/module.action.systemid
-    	$strLink = _webpath_."/admin/".$strModule.".".$strAction.".".$strSystemid.".html";
-    	if($strAddonParams != "")
-    	   $strLink .= "?".$strAddonParams;
+    	$strLink = _webpath_."/admin_".$strModule.".".$strAction.".".$strSystemid.".html";
+    	
     
     }
     else
