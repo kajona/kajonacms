@@ -101,11 +101,11 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	                        $bitSuccess = true;
 	                    }
 	                    else
-	                        $strReturn .= $this->getText("xmlupload_error_copyUpload");
+	                        $strReturn .= "<error>".$this->getText("xmlupload_error_copyUpload")."</error>";
 	                }
 	                else {
 	                    @unlink($arrSource["tmp_name"]);
-	                    $strReturn .= $this->getText("xmlupload_error_filter");
+	                    $strReturn .= "<error>".$this->getText("xmlupload_error_filter")."</error>";
 	                }
 	            }
 	            else
