@@ -515,6 +515,10 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
 		$arrTemplate["fallbackContent"] = $strFallbackContent;
 		
+		
+		//create valid input-name element. no array needed!
+    	$strFieldName = preg_replace("/\[[0-9]\]/", "", $strName);
+		
 		$objConfig = class_config::getInstance();
 		
 		$strMaxSize = (bytesToString($objConfig->getPhpIni("post_max_size"), true) > bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($objConfig->getphpIni("post_max_size"), true));
@@ -534,7 +538,8 @@ class class_toolkit_admin extends class_toolkit {
 						upload_url: \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						//upload_url: document.getElementById(\"formUpload\").action+\"&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						post_params: {\"systemid\" : document.getElementById(\"systemid\").value,
-							\"folder\" : document.getElementById(\"folder\").value},
+							          \"folder\" : document.getElementById(\"folder\").value,
+                                      \"inputElement\" : \"".$strFieldName."\"},
 						file_post_name: \"".$strName."\",
 						file_size_limit : \"".$strMaxSize."\",
 						file_types : \"".$strAllowedFileTypes."\",

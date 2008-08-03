@@ -63,7 +63,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	 * action = fileUpload
 	 * folder = the folder to store the file within
 	 * systemid = the filemanagers' repo-id
-	 * filemanager_upload = array of file details
+	 * inputElement = name of the inputElement
 	 *
 	 * @return string
 	 */
@@ -77,7 +77,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	        $strFolder = $objRepo->getStrPath().$this->getParam("folder");
 	        
 	        //Handle the fileupload
-            $arrSourcesPre = $this->getParam("filemanager_upload");
+            $arrSourcesPre = $this->getParam($this->getParam("inputElement"));
             foreach ($arrSourcesPre["name"] as $intKey => $strName) {
                 if($strName != "") {
                     $arrSources[$intKey] = array();
