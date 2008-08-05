@@ -22,8 +22,13 @@ final class class_session {
 	private $arrModul;
 	private $objDB;
 	private $strKey;
+	
+	private $arrRequestArray;
+	
+	public static $intScopeSession = 1;
+	public static $intScopeRequest = 2;
 
-	private static  $objSession = null;
+	private static $objSession = null;
 
 
 	private function __construct() 	{
@@ -41,6 +46,12 @@ final class class_session {
 			if(!$this->sessionIsset("status"))
 				$this->setSession("status", "loggedout");
 		}
+		
+		$this->arrRequestArray = array();
+	}
+	
+	private function __desctruct() {
+		$this->arrRequestArray = null;
 	}
 
 	/**
@@ -80,13 +91,21 @@ final class class_session {
 	 *
 	 * @param string $strKey
 	 * @param string $strValue
+	 * @param int $intSessionScope one of class_session::$intScopeRequest or class_session::$intScopeSession
 	 * @return bool
 	 */
-	public function setSession($strKey, $strValue) 	{
-		if($_SESSION[$this->strKey][$strKey] = $strValue)
-			return true;
-		else
-			return false;
+	public function setSession($strKey, $strValue, $intSessionScope = 1) 	{
+		
+		if($intSessionScope == class_session::$intScopeRequest) {
+		    $this->arrRequestArray[$strKey] = $strValue;
+		    return true;	
+		}
+		else {
+			if($_SESSION[$this->strKey][$strKey] = $strValue)
+				return true;
+			else
+				return false;
+		}
 	}
 
 	/**
@@ -119,13 +138,22 @@ final class class_session {
 	 * Returns a value from the session
 	 *
 	 * @param string $strKey
+	 * @param int $intScope one of class_session::$intScopeRequest or class_session::$intScopeSession
 	 * @return string
 	 */
-	public function getSession($strKey) {
-		if(!isset($_SESSION[$this->strKey][$strKey]))
-			return false;
-		else
-			return $_SESSION[$this->strKey][$strKey];
+	public function getSession($strKey, $intScope = 1) {
+		if($intScope == class_session::$intScopeRequest) {
+			if(!isset($this->arrRequestArray[$strKey]))
+			    return false;
+			else
+    			return $this->arrRequestArray[$strKey];
+		}
+		else {
+			if(!isset($_SESSION[$this->strKey][$strKey]))
+				return false;
+			else
+				return $_SESSION[$this->strKey][$strKey];
+		}
 	}
 
 	/**
@@ -145,6 +173,7 @@ final class class_session {
 	 * Deletes a value from the session
 	 *
 	 * @param string $strKey
+	 * 
 	 */
 	public function sessionUnset($strKey) {
 		if($this->sessionIsset($strKey))
