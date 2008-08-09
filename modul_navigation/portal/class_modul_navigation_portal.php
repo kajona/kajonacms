@@ -76,23 +76,26 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$strReturn = "";
 		$strStack = "";
 
-		//Get Systemid of the current page int the navigations-table
+		//Get Systemid of the current page in the navigations-table
 		//short: find the point in the navigation linking on the current page
 		//First try: The current page found by the constructor
-		$objPagePointData = $this->loadPagePoint($this->strCurrentSite);
+		$objPagePointData = $this->loadPagePoint($this->strCurrentSite, $this->arrElementData["navigation_id"]);
 		//If we find an empty array, the current page isn't in the tree.
 		//as a workaround we could try to load the point of the page the user has visited before
 		if($objPagePointData == null) {
-		    $strFallbackPage = $this->objSession->getSession("navi_fallback_page_".$this->arrElementData["navigation_id"]);
-		    if($strFallbackPage !== false) {
-		        $objPagePointData = $this->loadPagePoint($strFallbackPage);
-		    }
-		    else {
-		        // Whoa. Now we got a problem. Suggestion: Load the Navigation with no activated point
-		        // EDIT: Maybe, the session-fallbacks could be saved navigation_id-dependant
-		        // EDIT: 06-04-10: Yeap, we need the page to be saved navigation-dependant
-		        $objPagePointData = null;
-		    }
+			//check if the page is linked in another tree
+            if(!$this->isPageVisibleInOtherNavigation()) { 
+			    $strFallbackPage = $this->objSession->getSession("navi_fallback_page_".$this->arrElementData["navigation_id"]);
+			    if($strFallbackPage !== false) {
+			        $objPagePointData = $this->loadPagePoint($strFallbackPage, $this->arrElementData["navigation_id"]);
+			    }
+			    else {
+			        // Whoa. Now we got a problem. Suggestion: Load the Navigation with no activated point
+			        $objPagePointData = null;
+			    }
+            }
+            else
+                $objPagePointData = null;
 		}
 		else {
 		    //save this page as a fallback page, dependant of the navigation_id / navigation_tree
@@ -284,9 +287,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * If the page is being linked several times, the deepest point in the tree is searched and returned
 	 *
 	 * @param string $strPagename
+	 * @param strin $strNavigationId
 	 * @return mixed
 	 */
-	public function loadPagePoint($strPagename) {
+	public function loadPagePoint($strPagename, $strNavigationId) {
 	    $objPoint = null;
 	    $arrAllPoints = class_modul_navigation_point::loadPagePoint($strPagename);
 
@@ -299,12 +303,73 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	            $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
 	            $intCurCounter++;
 	        }
-	        if($objTemp->getSystemid() == $this->arrElementData["navigation_id"]) {
+	        if($objTemp->getSystemid() == $strNavigationId) {
 	            if($intCurCounter >= $intCounter)
 	                $objPoint = $objOnePoint;
 	        }
 	    }
 	    return $objPoint;
+	}
+	
+	/**
+	 * Searches the current page in other navigation-trees found on the current page.
+	 * This can be usefull to avoid a session-based "opening" of the current tree.
+	 * The user may find it confusing, if the current tree remains opened but he clicked
+	 * a navigation-point of another tree.
+	 *
+	 * @return unknown
+	 */
+	public function isPageVisibleInOtherNavigation() {
+	   
+	   //load the placeholders placed on the current page-template. therefore, instantiate a page-object
+       $objPageData = class_modul_pages_page::getPageByName($this->getPagename());
+       $objMasterPageData = class_modul_pages_page::getPageByName("master");
+       if($objPageData != null) {
+           //analyze the placeholders on the page, faster than iterating the the elements available in the db
+           $strTemplateId = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate());
+           $arrElementsTemplate = $this->objTemplate->getElements($strTemplateId);
+           $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1));
+           
+           //loop elements to remove navigation-elements. to do so, get the current elements-name (maybe the user renamed the default "navigation")
+          // var_dump($this->arrElementData);
+          // var_dump($arrElementsTemplate);
+           foreach($arrElementsTemplate as $arrPlaceholder) {
+               if($arrPlaceholder["placeholder"] != $this->arrElementData["page_element_placeholder_placeholder"]) {
+                  //loop the elements-list
+                  foreach($arrPlaceholder["elementlist"] as $arrOneElement) {
+                      if($arrOneElement["element"] == $this->arrElementData["page_element_placeholder_element"]) {
+                      	
+                          //seems as we have a navigation-element different than the current one.
+                          //check, if the element is installed on the current page
+                          $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                          //maybe on the masters-page?
+                          if($objElement == null)
+                              $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
+                              
+                          if($objElement != null) {
+                              //wohooooo, an element was found. 
+                              //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
+                          	  //load the real-pageelement
+                          	  $objRealElement = new class_element_navigation($objElement);
+                          	  $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
+                          	  
+                          	  if($arrContent["navigation_mode"] == "tree" && $this->loadPagePoint($this->strCurrentSite, $arrContent["navigation_id"]) != null) {
+                          	      //jepp, page found in another tree, so return true
+                          	      return true;
+                          	  }
+                            
+                          }
+                              
+                      	
+                      }
+                  
+                  }
+               	
+               }
+           }
+	   
+       }
+	   return false;
 	}
 
 	/**

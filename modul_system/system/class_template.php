@@ -222,7 +222,7 @@ class class_template {
 	/**
 	 * Returns the elements in a given template
 	 *
-	 * @param string $strIndetifier
+	 * @param string $strIdentifier
 	 * @param int $intMode 0 = regular page, 1 = master page
 	 * @return mixed
 	 */

@@ -337,6 +337,50 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		return $arrReturn;
     }
+    
+    /**
+     * Tries to load an element identified by the pageId, the name of the placeholder and the language.
+     * If no matchin element was found, null is returned.
+     *
+     * @param string $strPageId
+     * @param string $strPlaceholder
+     * @param string $strLanguage
+     * @param bool $bitJustActive
+     * @return class_modul_pages_pageelement or NULL of no element was found.
+     */
+    public static function getElementByPlaceholderAndPage($strPageId, $strPlaceholder, $strLanguage, $bitJustActive = true) {
+    	$strAnd = "";
+        if($bitJustActive) {
+            $strAnd = "AND system_status = 1
+                       AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ".time()."))
+                       AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ".time().")) ";
+        }
+
+        $strQuery = "SELECT system_id
+                         FROM "._dbprefix_."page_element,
+                              "._dbprefix_."element,
+                              "._dbprefix_."system
+                              LEFT JOIN "._dbprefix_."system_date
+                                ON (system_id = system_date_id)
+                         WHERE system_prev_id='".dbsafeString($strPageId)."'
+                           AND page_element_placeholder_element = element_name
+                           AND system_id = page_element_id
+                           AND page_element_placeholder_language = '".dbsafeString($strLanguage)."'
+                           AND page_element_placeholder_placeholder = '".dbsafeString($strPlaceholder)."'
+                           " . $strAnd."
+                         ORDER BY page_element_placeholder_placeholder ASC,
+                                system_sort ASC";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+        if(count($arrIds) == 1) {
+            return (new class_modul_pages_pageelement($arrIds[0]["system_id"]));	
+        }
+        else {
+        	return null;
+        }
+    
+    }
 
     /**
 	 * Shifts an element up or down
