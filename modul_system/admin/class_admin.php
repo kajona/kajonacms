@@ -629,8 +629,32 @@ abstract class class_admin {
         $strReturn = "";
 
         //Text for the current action available?
-        $strTextname = "quickhelp_".$this->strAction;
-        $strText = $this->getText($strTextname);
+        //different loading when editing page-elements
+        if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "editElement" || $this->getParam("action") == "newElement")) {
+            
+            if($this->getParam("action") == "editElement") {
+                $objElement = new class_modul_pages_pageelement($this->getSystemid());
+            }
+            else if ($this->getParam("action") == "newElement") {
+                $strPlaceholderElement = $this->getParam("element");
+                $objElement = class_modul_pages_element::getElement($strPlaceholderElement);    
+            }
+            //Load the class to create an instance
+            include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
+            //Build the class-name
+            $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
+            //and finally create the object
+            $objElement = new $strElementClass();
+            $strTextname = "quickhelp_".$objElement->getArrModule("name");
+            var_dump($strTextname, $objElement->getArrModule("modul"), "admin");
+            $strText = class_carrier::getInstance()->getObjText()->getText($strTextname, $objElement->getArrModule("modul"), "admin");
+        }
+        else {
+            $strTextname = "quickhelp_".$this->strAction;
+            $strText = $this->getText($strTextname);
+        }
+        
+        
         if($strText != "!".$strTextname."!") {
             //Text found, embed the quickhelp into the current skin
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");

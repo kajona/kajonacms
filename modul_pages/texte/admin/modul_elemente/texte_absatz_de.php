@@ -9,7 +9,7 @@
 * 	Admin language file for module_pages paragraph page-element											*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$																						*
+*	$Id$											*
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
@@ -20,4 +20,6 @@ $text["absatz_inhalt"]						= "Text:";
 $text["absatz_bild"]						= "Bild:";
 $text["absatz_link"]						= "Link:";
 $text["submit"]								= "Speichern";
+
+$text["quickhelp_element_absatz"]           = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 ?>
