@@ -677,7 +677,7 @@ function createFilename($strName, $bitFolder = false) {
 	$strName = strtolower($strName);
 
 	if(!$bitFolder)
-		$strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")));
+		$strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")+1));
 	else
 		$strEnding = "";
 
@@ -691,6 +691,10 @@ function createFilename($strName, $bitFolder = false) {
 	$arrReplace = 		array( "_", "_", "_","ae","oe","ue", "_","ss", "_");
 
 	$strReturn = uniStrReplace($arrSearch, $arrReplace, $strReturn);
+	
+	//and the ending
+	if(!$bitFolder)
+	   $strEnding = ".".uniStrReplace($arrSearch, $arrReplace, $strEnding);
 
 	$strTemp = "";
 	//search for other, unknown chars and replace them
