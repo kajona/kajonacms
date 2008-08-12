@@ -694,7 +694,7 @@ function createFilename($strName, $bitFolder = false) {
 	
 	//and the ending
 	if(!$bitFolder)
-	   $strEnding = ".".uniStrReplace($arrSearch, $arrReplace, $strEnding);
+	   $strEnding = uniStrReplace($arrSearch, $arrReplace, $strEnding);
 
 	$strTemp = "";
 	//search for other, unknown chars and replace them
@@ -706,9 +706,25 @@ function createFilename($strName, $bitFolder = false) {
 	        $strTemp .= $strReturn[$intI];
 
 	}
+	
+	//do a replacing in the ending, too
+	if($strEnding != "") {
+    	$strTempEnding = "";
+        //search for other, unknown chars and replace them
+        for($intI = 0; $intI < uniStrlen($strEnding); $intI++) {
+            //no match right up till here -> doin the hard way
+            if(!preg_match("/[a-z0-9-_]/", $strEnding[$intI]))
+                $strTempEnding .= "-";
+            else
+                $strTempEnding .= $strEnding[$intI];
+        }
+                
+        $strEnding = ".".$strTempEnding;
 
-	$strReturn = $strTemp;
-	$strReturn .= $strEnding;
+	}
+
+	$strReturn = $strTemp.$strEnding;
+	
 	return $strReturn;
 }
 
