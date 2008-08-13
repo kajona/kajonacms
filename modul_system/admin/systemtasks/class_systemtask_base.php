@@ -21,6 +21,8 @@ include_once(_systempath_."/class_carrier.php");
  * @package modul_system
  */
 abstract class class_systemtask_base {
+    
+    private $strTextbase = "system";
 
 	/**
 	 * Instance of class_db
@@ -75,7 +77,7 @@ abstract class class_systemtask_base {
      * @return string
      */
     protected function getText($strTextKey) {
-        return $this->objTexte->getText($strTextKey, "system", "admin");	
+        return $this->objTexte->getText($strTextKey, $this->strTextbase, "admin");	
     }
     
     /**
@@ -97,6 +99,17 @@ abstract class class_systemtask_base {
     	}
     	
     	return $strReturn;
+    }
+    
+    /**
+     * Sets the current textbase, so a module.
+     * If your textfiles are coming along with a module different than module system, pass the name here
+     * to enable a proper text-loading.
+     * 
+     * @param string $strModulename
+     */
+    protected function setStrTextBase($strModulename) {
+        $this->strTextbase = $strModulename;        
     }
 
     /**
