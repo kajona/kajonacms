@@ -92,32 +92,17 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         
         $strReturn .= $objPoint->getStrName()." ";
         
-        if($objPoint->getStrPageI() != "") {
-            $strReturn .= $this->getText("systemtask_navigationcheck_internal"); 
-        
-            //instantiate the site to check if it's valid
-            $objPage = class_modul_pages_page::getPageByName($objPoint->getStrPageI());
-            if($objPage->getSystemid() != "") {
-                $strReturn .= " ".$objPoint->getStrPageI()." ".$this->getText("systemtask_navigationcheck_internalvalid"); 
-            }
-            else {
-                $strReturn .= " ".$this->getText("systemtask_navigationcheck_internalinvalid");
+        if($objPoint->getStrPageI() == "" && $objPoint->getStrPageE() == "") {
+            $strReturn .= $this->getText("systemtask_navigationcheck_invalidEmpty"); 
+        }
+        else if($objPoint->getStrPageI() != "" && $objPoint->getStrPageE() != "") {
+            $strReturn .= $this->getText("systemtask_navigationcheck_invalidBoth");
+        }
+        else {
+            $strReturn .= $this->getText("systemtask_navigationcheck_valid")." (".$objPoint->getStrPageI(). $objPoint->getStrPageE().")";
             
-            }
-        }
-        else {
-            $strReturn .= " ".$this->getText("systemtask_navigationcheck_internalunset");
         }
         
-        $strReturn .= " ";
-        
-        if($objPoint->getStrPageE() != "") {
-            $strReturn .= $this->getText("systemtask_navigationcheck_external"); 
-            $strReturn .= " ".$objPoint->getStrPageE(); 
-        }
-        else {
-            $strReturn .= " ".$this->getText("systemtask_navigationcheck_externalunset");
-        }
         
         return $strReturn."\n";
     

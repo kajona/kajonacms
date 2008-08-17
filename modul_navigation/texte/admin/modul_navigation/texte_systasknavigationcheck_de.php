@@ -16,11 +16,9 @@
 $text["systemtask_navigationcheck_name"]                   = "Navigationspunkte validieren";
 
 $text["systemtask_navigationcheck_treescan"]               = "Untersuche Navigation";
-$text["systemtask_navigationcheck_internal"]               = "Interne Seite: ";
-$text["systemtask_navigationcheck_internalvalid"]          = "Ok";
-$text["systemtask_navigationcheck_internalinvalid"]        = "Fehler";
-$text["systemtask_navigationcheck_internalunset"]          = "Interne Seite: n.a.";
-$text["systemtask_navigationcheck_external"]               = "Externe Seite: ";
-$text["systemtask_navigationcheck_externalunset"]          = "Externe Seite: n.a.";
+
+$text["systemtask_navigationcheck_invalidEmpty"]           = "Fehler, kein Ziel gesetzt!";
+$text["systemtask_navigationcheck_invalidBoth"]            = "Fehler, internes und externes Ziel gesetzt!";
+$text["systemtask_navigationcheck_valid"]                  = "O.K., Ziel:";
 
 ?> 

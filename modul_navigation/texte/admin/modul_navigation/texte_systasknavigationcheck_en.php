@@ -15,5 +15,9 @@
 
 $text["systemtask_navigationcheck_name"]                   = "Validate navigationpoints";
 
+$text["systemtask_navigationcheck_treescan"]               = "Investigate navigation";
 
+$text["systemtask_navigationcheck_invalidEmpty"]           = "Error, target not set!";
+$text["systemtask_navigationcheck_invalidBoth"]            = "Error, internal and external target set!";
+$text["systemtask_navigationcheck_valid"]                  = "O.K., Target:";
 ?>
