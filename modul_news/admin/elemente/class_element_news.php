@@ -37,7 +37,7 @@ class class_element_news extends class_element_admin implements interface_admin_
 		$arrModule["table"] 		= _dbprefix_."element_news";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]     = "news_category|char,news_view|number,news_mode|number,news_detailspage|char,news_template|char";
+		$arrModule["tableColumns"]     = "news_category|char,news_view|number,news_mode|number,news_order|number,news_detailspage|char,news_template|char";
 
 		parent::__construct($arrModule);
 	}
@@ -64,10 +64,15 @@ class class_element_news extends class_element_admin implements interface_admin_
 					      1 => $this->getText("news_view_detail"));
         $strReturn .= $this->objToolkit->formInputDropdown("news_view", $arrView, $this->getText("news_view"), (isset($arrElementData["news_view"]) ? $arrElementData["news_view"] : "" ));
 
-        $arrMode = array( 1 => $this->getText("news_mode_archive"),
-					      0 => $this->getText("news_mode_normal"));
+        $arrMode = array( 0 => $this->getText("news_mode_normal"),
+        				  1 => $this->getText("news_mode_archive"));
         $strReturn .= $this->objToolkit->formInputDropdown("news_mode", $arrMode, $this->getText("news_mode"), (isset($arrElementData["news_mode"]) ? $arrElementData["news_mode"] : "" ));
-		//Load the available templates
+		
+        $arrOrder = array( 0 => $this->getText("news_order_desc"),
+        				   1 => $this->getText("news_order_asc"));
+        $strReturn .= $this->objToolkit->formInputDropdown("news_order", $arrOrder, $this->getText("news_order"), (isset($arrElementData["news_order"]) ? $arrElementData["news_order"] : "" ));
+        
+        //Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_news", ".tpl");

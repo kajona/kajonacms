@@ -255,10 +255,11 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 *
 	 * @param int $intMode 0 = regular, 1 = archive
 	 * @param string $strCat
+	 * @param int $intOrder 0 = descending, 1 = ascending
 	 * @return mixed
 	 * @static
 	 */
-	public static function loadListNewsPortal($intMode, $strCat) {
+	public static function loadListNewsPortal($intMode, $strCat, $intOrder = 0) {
 		$arrReturn = array();
 
 		$intNow = time();
@@ -273,6 +274,13 @@ class class_modul_news_news extends class_model implements interface_model  {
 		}
 		else
 			$strTime = "";
+			
+		//check if news should be ordered de- or ascending
+		if ($intOrder == 0) {
+			$strOrder  = "DESC";
+		} else {
+			$strOrder  = "ASC";
+		}
 
 		$strQuery = "SELECT system_id
 						FROM "._dbprefix_."news,
@@ -287,7 +295,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 						  AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
 							".$strTime."
 						  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
-						ORDER BY system_date_start DESC";
+						ORDER BY system_date_start ".$strOrder;
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

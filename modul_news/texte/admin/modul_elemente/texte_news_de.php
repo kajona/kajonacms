@@ -29,6 +29,9 @@ $text["news_view_detail"]       = "Detail-Ansicht";
 $text["news_mode"]              = "Kategorie-Modus:";
 $text["news_mode_archive"]      = "Archiv-Modus";
 $text["news_mode_normal"]       = "Standard-Modus";
+$text["news_order"]             = "Reihenfolge:";
+$text["news_order_desc"]      	= "absteigend";
+$text["news_order_asc"]       	= "aufsteigend";
 $text["news_template"]          = "Template:";
 
 ?>

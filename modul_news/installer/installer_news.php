@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_news extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.1.1";
+		$arrModule["version"] 		  = "3.1.9";
 		$arrModule["name"] 			  = "news";
 		$arrModule["class_admin"]  	  = "class_modul_news_admin";
 		$arrModule["file_admin"] 	  = "class_modul_news_admin.php";
@@ -135,6 +135,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_category"] 	= array("char20", true);
 		$arrFields["news_view"] 		= array("int", true);
 		$arrFields["news_mode"] 		= array("int", true);
+		$arrFields["news_order"] 		= array("int", true);
 		$arrFields["news_detailspage"] 	= array("char254", true);
 		$arrFields["news_template"] 	= array("char254", true);
 		
@@ -196,6 +197,11 @@ class class_installer_news extends class_installer_base implements interface_ins
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
+        }
+        
+		$arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
         }
 
         return $strReturn."\n\n";
@@ -260,6 +266,33 @@ class class_installer_news extends class_installer_base implements interface_ins
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("news", "3.1.1");
+
+        return $strReturn;
+    }
+    
+    private function update_311_319() {
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
+
+        $strReturn .= "Scanning tables...\n";
+        $arrTables = $this->objDB->getTables();
+        
+        if(in_array(_dbprefix_."element_news", $arrTables)) {
+            $strReturn .= "Altering news-element-table...\n";
+            $strQuery = "ALTER TABLE `"._dbprefix_."element_news` 
+                            ADD `news_order` INT NULL;";
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!!!\n";
+            
+            $strReturn .= "Updating news-element-table...\n";
+            $strQuery = "UPDATE `"._dbprefix_."element_news` 
+            				SET `news_order` = 0;";
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!!!\n";
+                
+        }
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "3.1.9");
 
         return $strReturn;
     }
