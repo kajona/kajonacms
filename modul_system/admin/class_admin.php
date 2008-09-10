@@ -646,7 +646,6 @@ abstract class class_admin {
             //and finally create the object
             $objElement = new $strElementClass();
             $strTextname = "quickhelp_".$objElement->getArrModule("name");
-            var_dump($strTextname, $objElement->getArrModule("modul"), "admin");
             $strText = class_carrier::getInstance()->getObjText()->getText($strTextname, $objElement->getArrModule("modul"), "admin");
         }
         else {
