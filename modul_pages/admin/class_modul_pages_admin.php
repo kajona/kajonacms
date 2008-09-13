@@ -430,13 +430,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    //edit a page
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    //if languages are installed, present a language switch right here
-    		    $objLanguages = class_modul_system_module::getModuleByName("languages");
-    		    if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-    		        $bitUseLanguages = true;
-    		        include_once(_adminpath_."/class_modul_languages_admin.php");
-    		        $objLanguages = new class_modul_languages_admin();
-    		        $strReturn .= $objLanguages->getLanguageSwitch();
-    		    }
+		        //$bitUseLanguages = true; TODO: needed?
+		        include_once(_adminpath_."/class_modul_languages_admin.php");
+		        $objLanguages = new class_modul_languages_admin();
 				//Start Form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=changePage");
@@ -490,13 +486,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			//Mode: Create a new Page
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //if languages are installed, present a language switch right here
-    		    $objLanguages = class_modul_system_module::getModuleByName("languages");
-    		    if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-    		        $bitUseLanguages = true;
-    		        include_once(_adminpath_."/class_modul_languages_admin.php");
-    		        $objLanguages = new class_modul_languages_admin();
-    		        $strReturn .= $objLanguages->getLanguageSwitch();
-    		    }
+		        //$bitUseLanguages = true; TODO: needed?
+		        include_once(_adminpath_."/class_modul_languages_admin.php");
+		        $objLanguages = new class_modul_languages_admin();
+		        $strReturn .= $objLanguages->getLanguageSwitch();
 				//start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=savePage");

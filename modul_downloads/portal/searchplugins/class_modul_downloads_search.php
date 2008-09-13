@@ -98,19 +98,13 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 
 
 	/**
-	 * Checks, if the post is available on page using the current language
+	 * Checks, if the download is available on page using the current language
 	 *
 	 * @param array $arrOneDownload
 	 * @return bool true, if the post is visible
 	 */
 	private function checkLanguage($arrOneDownload) {
         $bitReturn = true;
-
-        //languages available?
-        $objLanguages = class_modul_system_module::getModuleByName("languages");
-        if($objLanguages == null)
-            return true;
-
 
         //Loop upwards to find the matching dl-repo
         $strPrevId = $arrOneDownload["system_prev_id"];

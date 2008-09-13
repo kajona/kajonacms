@@ -105,12 +105,6 @@ class class_modul_news_search extends class_portal implements interface_search_p
 	private function checkLanguage($arrOneNews) {
         $bitReturn = true;
 
-        //languages available?
-        $objLanguages = class_modul_system_module::getModuleByName("languages");
-        if($objLanguages == null)
-            return true;
-
-
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_news,
                             "._dbprefix_."news_member,

@@ -140,13 +140,10 @@ abstract class class_portal  {
 		    $this->setParam("page", $this->getPagename());
 
 		//set the correct language
-		$objLanguages = class_modul_system_module::getModuleByName("languages");
-	    if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-	        include_once(_systempath_."/class_modul_languages_language.php");
-            $objLanguage = new class_modul_languages_language();
-	        //set current language to the texts-object
-	        class_texte::getInstance()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
-	    }
+        include_once(_systempath_."/class_modul_languages_language.php");
+        $objLanguage = new class_modul_languages_language();
+        //set current language to the texts-object
+        class_texte::getInstance()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
 	}
 

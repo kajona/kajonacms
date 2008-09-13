@@ -136,13 +136,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		if($this->objRights->rightEdit($this->getSystemid())) {
 
 		    //if languages are installed, present a language switch right here
-		    $objLanguages = class_modul_system_module::getModuleByName("languages");
-		    if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-		        $bitUseLanguages = true;
-		        include_once(_adminpath_."/class_modul_languages_admin.php");
-		        $objLanguages = new class_modul_languages_admin();
-		        $strReturn .= $objLanguages->getLanguageSwitch();
-		    }
+	        //$bitUseLanguages = true; TODO: needed?
+	        include_once(_adminpath_."/class_modul_languages_admin.php");
+	        $objLanguages = new class_modul_languages_admin();
+	        $strReturn .= $objLanguages->getLanguageSwitch();
 
 
 			//Get Infos about the page

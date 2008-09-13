@@ -104,12 +104,6 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 	private function checkLanguage($arrOneFaq) {
         $bitReturn = true;
 
-        //languages available?
-        $objLanguages = class_modul_system_module::getModuleByName("languages");
-        if($objLanguages == null)
-            return true;
-
-
         //if theres an element showing all cats, everything is donw
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_faqs,

@@ -90,13 +90,9 @@ class class_xml {
 		else {
 		    //any reaction on language-commmands?
     	    if(issetGet("language")) {
-    	        //languages installed?
-    	        $objLanguages = class_modul_system_module::getModuleByName("languages");
-    	        if($objLanguages->getStrNameAdmin() != "") {
-    	            include_once(_systempath_."/class_modul_languages_language.php");
-    	            $objLanguage = new class_modul_languages_language();
-    	            $objLanguage->setStrPortalLanguage(getGet("language"));
-    	        }
+	            include_once(_systempath_."/class_modul_languages_language.php");
+	            $objLanguage = new class_modul_languages_language();
+	            $objLanguage->setStrPortalLanguage(getGet("language"));
     	    }
 
             //Requested module installed?

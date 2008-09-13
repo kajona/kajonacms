@@ -956,16 +956,9 @@ abstract class class_root {
     public final function getStrPortalLanguage() {
         if($this->strPortalLanguage == null) {
             //not yet initialized
-            $objModule = class_modul_system_module::getModuleByName("languages");
-            if($objModule != null && $objModule->getStrNameAdmin() != "") {
-                include_once(_systempath_."/class_modul_languages_language.php");
-                $objLanguage = new class_modul_languages_language();
-                $this->strPortalLanguage = $objLanguage->getPortalLanguage();
-            }
-            else {
-                //Languages not installed - ignore
-                $this->strPortalLanguage = "";
-            }
+            include_once(_systempath_."/class_modul_languages_language.php");
+            $objLanguage = new class_modul_languages_language();
+            $this->strPortalLanguage = $objLanguage->getPortalLanguage();
         }
         return $this->strPortalLanguage;
     }
@@ -983,16 +976,9 @@ abstract class class_root {
     public final function getStrAdminLanguageToWorkOn() {
         if($this->strAdminLanguage == null) {
             //not yet initalized
-            $objModule = class_modul_system_module::getModuleByName("languages");
-            if($objModule != null && $objModule->getStrNameAdmin() != "") {
-                include_once(_systempath_."/class_modul_languages_language.php");
-                $objLanguage = new class_modul_languages_language();
-                $this->strAdminLanguage = $objLanguage->getAdminLanguage();
-            }
-            else {
-                //Languages not installed - ignore
-                $this->strAdminLanguage = "";
-            }
+            include_once(_systempath_."/class_modul_languages_language.php");
+            $objLanguage = new class_modul_languages_language();
+            $this->strAdminLanguage = $objLanguage->getAdminLanguage();
         }
         return $this->strAdminLanguage;
     }

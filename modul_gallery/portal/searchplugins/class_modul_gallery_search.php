@@ -105,12 +105,6 @@ class class_modul_gallery_search extends class_portal implements interface_searc
 	private function checkLanguage($arrOnePic) {
         $bitReturn = true;
 
-        //languages available?
-        $objLanguages = class_modul_system_module::getModuleByName("languages");
-        if($objLanguages == null)
-            return true;
-
-
         //Loop upwards to find the matching dl-repo
         $strPrevId = $arrOnePic["system_prev_id"];
         $intCount = 0;

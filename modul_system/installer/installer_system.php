@@ -703,6 +703,8 @@ class class_installer_system extends class_installer_base implements interface_i
 		else {
 				$strReturn .= "Element already installed!...\n";
 		}
+		
+		//TODO: assign languages to default language!!!
 		 
 		return $strReturn;                                          
     }

@@ -126,11 +126,6 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 	private function checkLanguage($arrPost) {
         $bitReturn = true;
 
-        //languages available?
-        $objLanguages = class_modul_system_module::getModuleByName("languages");
-        if($objLanguages == null)
-            return true;
-
 
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_guestbook,
