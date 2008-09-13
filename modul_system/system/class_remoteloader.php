@@ -112,6 +112,14 @@ class class_remoteloader {
 		if($strReturn === false)
 		    $strReturn = $this->connectViaSocket();
 		    
+		//fourth: fsockopen
+		if($strReturn === false)
+		    $strReturn = $this->connectFSockOpen();    
+		    
+		//fifth: curl
+		if($strReturn === false)
+		    $strReturn = $this->connectViaCurl();    
+		    
 		    
 		//in case of an error, save the result to the cache, too:
 		//the possibility of receiving a regular time within the next interval is rather small.
@@ -183,8 +191,7 @@ class class_remoteloader {
 		                                 $this->strHost.
 		                                ($this->intPort > 0 ? ":".$this->intPort : "" ).
 		                                 $this->strQueryParams);
-		                                
-		
+		                              
 		return $strReturn;
 	}
 	
@@ -210,8 +217,10 @@ class class_remoteloader {
 	            $objSocket->close();
 	            
 	            $strReturn = trim($strReturn);
-	            //TODO: check for emtpy rows to get the content instad of searching for a tag introducing the message-body
-	            //in http-mode, try to skip the headers
+	            if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
+	            	$strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
+	            }
+
 	            if(uniStrpos($strReturn, "<") !== false) {
 	            	$strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
 	            }
@@ -233,6 +242,108 @@ class class_remoteloader {
 		}
         
 		return $strReturn;
+	}
+	
+	/**
+	 * Tries to load a remote located content via fsockopen
+	 * and returns the string
+	 *
+	 * @return string or false in case of an error
+	 */
+	private function connectFSockOpen() {
+		$strReturn = "";
+		
+		//request in list of supported protocols?
+		if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
+		
+	        try {
+	           $intErrorNumber; 
+	           $strErrorString;
+	           
+	           $strProtocolAdd = "";
+	           if($this->strProtocolHeader == "http://")
+	               $strProtocolAdd = "tcp://";
+	           if($this->strProtocolHeader == "https://")
+	               $strProtocolAdd = "tls://";
+	               
+    		   
+    		   $objRemoteResource = fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
+    		   
+    		   if(is_resource($objRemoteResource)){
+    		      fwrite($objRemoteResource,"GET ".$this->strProtocolHeader.$this->strHost.$this->strQueryParams." HTTP/1.0\r\n");
+    		      fwrite($objRemoteResource,"Host: ".$this->strHost."\r\n");
+    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");
+    		
+    		      
+    		      while(!feof($objRemoteResource)){
+    		         $strReturn .= fgets($objRemoteResource,1024);
+    		      }
+    		      fclose($objRemoteResource);
+    		   }
+    		  
+          	   if ($intErrorNumber!=0) 
+          	       return false;
+          	  
+          	   if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
+	               $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
+	           }   
+
+	           $strReturn = trim($strReturn);
+	           if(uniStrpos($strReturn, "<") !== false) {
+	           	   $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
+	           }
+	            
+	           //and, if given, remove the last 0
+	           if(uniSubstr($strReturn, -1) == "0")
+	               $strReturn = uniSubstr($strReturn, 0, -1);
+	               	            
+	        }
+	        catch (class_exception $objException) {
+	            $strReturn = false;
+	        }
+	        
+		}
+		else {
+			//protocol not supported via fsockopen
+		    $strReturn = false;
+		}
+      
+		
+		return $strReturn;
+	}
+	
+	/**
+	 * Tries to load a remote located content via curl extensions
+	 * and returns the string
+	 *
+	 * @return string or false in case of an error
+	 */
+	private function connectViaCurl() {
+	    $strReturn = "";
+
+	    if(!function_exists("curl_exec"))
+	        return false;
+	    
+	    // create a new curl-handle
+        $objHandle = curl_init();
+ 
+        // set the params
+        curl_setopt($objHandle, CURLOPT_URL, $this->strProtocolHeader.
+		                                     $this->strHost.
+		                                    ($this->intPort > 0 ? ":".$this->intPort : "" ).
+		                                     $this->strQueryParams);
+        //response-header not needed
+        curl_setopt($objHandle, CURLOPT_HEADER, false);
+        //return as string
+        curl_setopt($objHandle, CURLOPT_RETURNTRANSFER, true);
+ 
+        //and execute...
+        $strReturn = curl_exec($objHandle);
+ 
+        //close the handle
+        curl_close($objHandle);   
+	    
+	    return $strReturn;
 	}
 	
 	/**

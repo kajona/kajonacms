@@ -512,6 +512,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                 $strAddKeys = saveUrlEncode($objPage->getStrSeostring());
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
+                    
                 //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
                 $strHref = "";
                 //but: special case: just pagename & language
