@@ -53,18 +53,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                 $strReturn .= "Element created.\n";
          }    
 
-        $strReturn .= "Creating new default-language\n";
-        include_once(_systempath_."/class_modul_languages_language.php");
-        $objLanguage = new class_modul_languages_language();
-
-        if($this->strContentLanguage == "de")
-            $objLanguage->setStrName("de");
-        else
-           $objLanguage->setStrName("en");
-           
-        $objLanguage->setBitDefault(true);
-        $objLanguage->saveObjectToDb();
-        $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
+        
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {
         

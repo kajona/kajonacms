@@ -17,17 +17,6 @@ $text["modul_titel"]				= "Languages";
 $text["modul_rechte"]               = "Module permissions";
 $text["modul_liste"]                = "List";
 $text["modul_anlegen"]              = "Create language";
-$text["modul_assign"]               = "Assign contents";
-$text["assign_hint"]                = "Using this action, all page elements and page properties not yet assigned to a language (and so not visible in the admin-backend)
-                                       can be assigned to the current default-language. If there are records already exisiting for the target language, the respective,
-                                       not yet assigned record is skipped.";
-
-$text["assign_work"]                = "Assign now";
-$text["assign_pagesprop_true"]      = "Assigning page properties was successfull";
-$text["assign_pagesprop_false"]     = "An error occured while assigning page properties";
-$text["assign_pagesel_true"]        = "Assigning the page elements was successfull";
-$text["assign_pagesel_false"]       = "An error occured while assigning page elements";
-$text["assign_no_default"]          = "Please define a default-language first!";
 
 $text["liste_leer"]                 = "No languages available";
 

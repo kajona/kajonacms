@@ -17,18 +17,6 @@ $text["modul_titel"]				= "Sprachen";
 $text["modul_rechte"]               = "Modul-Rechte";
 $text["modul_liste"]                = "Liste";
 $text["modul_anlegen"]              = "Sprache anlegen";
-$text["modul_assign"]               = "Inhalte zuweisen";
-$text["assign_hint"]                = "Mit dieser Aktion können alle Seiteneigenschaften sowie alle Seitenelemente, die bisher keiner Sprache
-                                       zugeordnet wurde (und somit in der Administration nicht sichtbar sind) der aktuellen Default-Sprache zugeordnet
-                                       werden. Gibt es bereits Seiteneigenschaften in dieser Sprache, so wird der betreffende, nicht zugeordnete
-                                       Datensatz übersprungen.";
-
-$text["assign_work"]                = "Jetzt zuweisen";
-$text["assign_pagesprop_true"]      = "Zuweisen der Seiteneigenschaten war erfolgreich";
-$text["assign_pagesprop_false"]     = "Beim Zuweisen der Seiteneigenschaften ist ein Fehler aufgetreten!";
-$text["assign_pagesel_true"]        = "Zuweisen der Seitenelemente war erfolgreich";
-$text["assign_pagesel_false"]       = "Beim Zuweisen der Seitenelemente ist ein Fehler aufgetreten!";
-$text["assign_no_default"]          = "Bitte zuerst eine Default-Sprache anlegen!";
 
 $text["liste_leer"]                 = "Keine Sprachen angelegt";
 

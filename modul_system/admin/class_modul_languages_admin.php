@@ -78,8 +78,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
     		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		    }
     		}
-    		if($strAction == "assignNullElements")
-    		    $strReturn = $this->actionAssign();
 
 		}
 		catch (class_exception $objException) {
@@ -102,7 +100,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "assignNullElements", "", $this->getText("modul_assign"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -286,46 +283,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		return $strReturn;
 	}
 
-	/**
-	 * Assigns all not yet assigned elements as page-properties or page elements to the current default-language
-	 *
-	 * @return string
-	 */
-	private function actionAssign() {
-	    $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if($this->getParam("assign") == "") {
-                $strReturn .= $this->objToolkit->getTextRow($this->getText("assign_hint"));
-
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=languages&amp;action=assignNullElements");
-                $strReturn .= $this->objToolkit->formInputHidden("assign", "true");
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("assign_work"));
-                $strReturn .= $this->objToolkit->formClose();
-            }
-            else {
-                include_once(_systempath_."/class_modul_pages_page.php");
-                include_once(_systempath_."/class_modul_pages_pageelement.php");
-
-                $objDefaulLanguage = class_modul_languages_language::getDefaultLanguage();
-                if($objDefaulLanguage == null) {
-                    return $this->getText("assign_no_default");
-                }
-
-                if(class_modul_pages_page::assignNullProperties(class_modul_languages_language::getDefaultLanguage()->getStrName()))
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("assign_pagesprop_true"));
-                else
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("assign_pagesprop_false"));
-
-                if(class_modul_pages_pageelement::assignNullElements(class_modul_languages_language::getDefaultLanguage()->getStrName()))
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("assign_pagesel_true"));
-                else
-                    $strReturn .= $this->objToolkit->getTextRow($this->getText("assign_pagesel_false"));
-            }
-        }
-        else
-		    $strReturn = $this->getText("fehler_recht");
-		return $strReturn;
-	}
 
 	/**
 	 * Deletes the language
