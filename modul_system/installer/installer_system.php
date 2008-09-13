@@ -57,10 +57,32 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 	public function hasPostInstalls() {
-        $bitReturn = false;
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
+	    $arrRow = $this->objDB->getRow($strQuery);
+        if($arrRow["COUNT(*)"] == 0)
+            return true;
+
+        return false;
 	}
 
 	public function postInstall() {
+	    //Register the element
+		$strReturn .= "Registering languageswitch-element...\n";
+		//check, if not already existing
+		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
+		$arrRow = $this->objDB->getRow($strQuery);
+		if($arrRow["COUNT(*)"] == 0) {
+			$strQuery = "INSERT INTO "._dbprefix_."element
+							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
+							('".$this->generateSystemid()."', 'languageswitch', 'class_element_languageswitch.php', 'class_element_languageswitch.php', 0)";
+			$this->objDB->_query($strQuery);
+			$strReturn .= "Element registered...\n";
+		}
+		else {
+				$strReturn .= "Element already installed!...\n";
+		}
+		
+		return $strReturn;
 	}
 
 
@@ -257,6 +279,17 @@ class class_installer_system extends class_installer_base implements interface_i
 		
 		if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
             $strReturn .= "An error occured! ...\n";
+            
+        //languages -------------------------------------------------------------------------------------
+        $strReturn .= "Installing table languages...\n";
+		
+		$arrFields = array();
+		$arrFields["language_id"] 		= array("char20", false);
+		$arrFields["language_name"] 	= array("char254", true);
+		$arrFields["language_default"]  = array("int", true);
+
+		if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
+			$strReturn .= "An error occured! ...\n";            
 			
 			
 
@@ -272,6 +305,10 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strFilemanagerID = $this->registerModule("filemanager", _filemanager_modul_id_, "", "class_modul_filemanager_admin.php", $this->arrModule["version"], true, "", "class_modul_filemanager_admin_xml.php");
         //the dashboard
         $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
+        //languages
+        $strLanguagesID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_modul_languages_admin.php", $this->arrModule["version"] , true);
+        
+        
         
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
@@ -394,6 +431,7 @@ class class_installer_system extends class_installer_base implements interface_i
         parent::updateModuleVersion("user", $strNewVersion);
         parent::updateModuleVersion("filemanager", $strNewVersion);
         parent::updateModuleVersion("dashboard", $strNewVersion);
+        parent::updateModuleVersion("languages", $strNewVersion);
 	}
 
 	public function update() {
@@ -613,15 +651,60 @@ class class_installer_system extends class_installer_base implements interface_i
         
         
         $strReturn .= "Registering filemanager xml handler...\n";
-        $objFilemanagerModule = class_modul_system_module::getModuleByName("filemanager");
+        $objFilemanagerModule = class_modul_system_module::getModuleByName("filemanager", true);
         $objFilemanagerModule->setStrXmlNameAdmin("class_modul_filemanager_admin_xml.php");
         if(!$objFilemanagerModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
+            
+        //need to install languages?            
+        $strReturn .= "Validating if languages are installed...\n";
+        $objLanguagesModule = class_modul_system_module::getModuleByName("languages", true);
+        if($objLanguagesModule == null)
+            $strReturn .= $this->update_319_addLanguages();
+            
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
 
         return $strReturn;
+    }
+    
+    private function update_319_addLanguages() {
+        $strReturn = "";
+        $strReturn .= "Installing table languages...\n";
+		
+		$arrFields = array();
+		$arrFields["language_id"] 		= array("char20", false);
+		$arrFields["language_name"] 	= array("char254", true);
+		$arrFields["language_default"]  = array("int", true);
+
+		if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
+			$strReturn .= "An error occured! ...\n";
+
+
+		//register the module
+		$strSystemID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php",
+		                                      "class_modul_languages_admin.php", $this->arrModule["version"] , true);
+
+		$strReturn .= "Systemid of module languages: ".$strSystemID."";
+
+		//Register the element
+		$strReturn .= "Registering languageswitch-element...\n";
+		//check, if not already existing
+		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
+		$arrRow = $this->objDB->getRow($strQuery);
+		if($arrRow["COUNT(*)"] == 0) {
+			$strQuery = "INSERT INTO "._dbprefix_."element
+							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
+							('".$this->generateSystemid()."', 'languageswitch', 'class_element_languageswitch.php', 'class_element_languageswitch.php', 0)";
+			$this->objDB->_query($strQuery);
+			$strReturn .= "Element registered...\n";
+		}
+		else {
+				$strReturn .= "Element already installed!...\n";
+		}
+		 
+		return $strReturn;                                          
     }
 	
 	
