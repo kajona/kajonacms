@@ -214,6 +214,34 @@ $text["quickhelp_updateCheck"]		= "By using the update-check, the version of the
                                        compared. If there's a new version available, Kajona displays a hint at the concerning module.";
 
 
+
+//--- systemtasks ---------------------------------------------------------------------------------------
+
+$text["systemtask_dbconsistency_name"]               = "Check database consistency";
+$text["systemtask_dbconsistency_curprev_ok"]         = "All parent-child relations are correct";
+$text["systemtask_dbconsistency_curprev_error"]      = "The following parent-child relations are erroneous (missing parent-link):";
+$text["systemtask_dbconsistency_right_ok"]           = "All right-records have a corresponding system-record";
+$text["systemtask_dbconsistency_right_error"]        = "The following right-records are erroneous (missing system-record):";
+$text["systemtask_dbconsistency_date_ok"]            = "All date-records have a corresponding system-record";
+$text["systemtask_dbconsistency_date_error"]         = "The following date-records are erroneous (missing system-record):";
+
+$text["systemtask_dbexport_name"]   = "Backup database";
+$text["systemtask_dbexport_success"]= "Backup created succesfully";
+$text["systemtask_dbexport_error"]  = "Error dumping the database";
+
+$text["systemtask_dbimport_name"]   = "Import database backup";
+$text["systemtask_dbimport_success"]= "Backup restored successfully";
+$text["systemtask_dbimport_error"]  = "Error restoring the backup";
+$text["systemtask_dbimport_file"]   = "Backup:";
+
+$text["systemtask_flushpiccache_name"]               = "Flush images cache";
+$text["systemtask_flushpiccache_done"]               = "Flushing completed.";
+$text["systemtask_flushpiccache_deleted"]            = "<br />Number of files deleted: ";
+$text["systemtask_flushpiccache_skipped"]            = "<br />Number of files skipped: ";
+
+$text["systemtask_flushremoteloadercache_name"]      = "Flush remoteloadercache";
+$text["systemtask_flushremoteloadercache_done"]      = "Flushing completed.";
+
 //--- installer -----------------------------------------------------------------------------------------
 
 $text["installer_given"]            = "given";

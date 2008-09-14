@@ -220,6 +220,33 @@ $text["quickhelp_updateCheck"]		= "Mit der Aktion Updatecheck werden die Version
 									   so gibt Kajona in der Zeile dieses Moduls einen Hinweis hierzu aus.";
 
 
+//--- systemtasks ---------------------------------------------------------------------------------------
+
+$text["systemtask_dbconsistency_name"]               = "Datenbankkonsistenz überprüfen";
+$text["systemtask_dbconsistency_curprev_ok"]         = "Alle Eltern-Kind Beziehungen sind korrekt";
+$text["systemtask_dbconsistency_curprev_error"]      = "Folgende Eltern-Kind Beziehungen sind fehlerhaft (fehlender Elternteil):";
+$text["systemtask_dbconsistency_right_ok"]           = "Alle Rechte-Records haben einen zugehörigen System-Record";
+$text["systemtask_dbconsistency_right_error"]        = "Folgende Rechte-Records sind fehlerhaft (fehlender System-Record):";
+$text["systemtask_dbconsistency_date_ok"]            = "Alle Datum-Records haben einen zugehörigen System-Record";
+$text["systemtask_dbconsistency_date_error"]         = "Folgende Datum-Records sind fehlerhaft (fehlender System-Record):";
+
+$text["systemtask_dbexport_name"]   = "Datenbank sichern";
+$text["systemtask_dbexport_success"]= "Sicherung erfolgreich angelegt";
+$text["systemtask_dbexport_error"]  = "Fehler beim Sichern der Datenbank";
+
+$text["systemtask_dbimport_name"]   = "Datenbank importieren";
+$text["systemtask_dbimport_success"]= "Sicherung erfolgreich eingespielt";
+$text["systemtask_dbimport_error"]  = "Fehler beim Einspielen der Sicherung";
+$text["systemtask_dbimport_file"]   = "Sicherung:";
+
+$text["systemtask_flushpiccache_name"]               = "Bildercache leeren";
+$text["systemtask_flushpiccache_done"]               = "Leeren abgeschlossen.";
+$text["systemtask_flushpiccache_deleted"]            = "<br />Anzahl gelöschter Bilder: ";
+$text["systemtask_flushpiccache_skipped"]            = "<br />Anzahl übersprungener Bilder: ";
+
+$text["systemtask_flushremoteloadercache_name"]      = "Remoteloadercache leeren";
+$text["systemtask_flushremoteloadercache_done"]      = "Leeren abgeschlossen.";
+
 //--- installer -----------------------------------------------------------------------------------------
 
 $text["installer_given"]            = "vorhanden";
