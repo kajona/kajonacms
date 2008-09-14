@@ -240,6 +240,21 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id")))
 			$strReturn .= "An error occured! ...\n";
+			
+		// Sessionmgtm ----------------------------------------------------------------------------------
+		$strReturn .= "Installing table session...\n";
+		
+		$arrFields = array();
+		$arrFields["session_id"] 		      = array("char20", false);
+		$arrFields["session_phpid"]	          = array("char254", true);
+		$arrFields["session_userid"] 	      = array("char20", true);
+		$arrFields["session_groupids"] 	      = array("text", true);
+		$arrFields["session_releasetime"]     = array("int", true);
+		$arrFields["session_loginprovider"]   = array("char20", true);
+		$arrFields["session_lasturl"] 		  = array("char254", true);
+
+		if(!$this->objDB->createTable("session", $arrFields, array("session_id")))
+			$strReturn .= "An error occured! ...\n";	
 
 		//Filemanager -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table filemanager...\n";
@@ -675,7 +690,19 @@ class class_installer_system extends class_installer_base implements interface_i
         $objFilesystem = new class_filesystem();
         if(!$objFilesystem->fileDelete("/system/config/modul_languages_id.php"))
            $strReturn .= "<b>Error deleting the file \n /system/config/modul_languages_id.php,\nplease delete manually</b>\n";    
-            
+         
+        $strReturn .= "Installing table session...\n";
+		$arrFields = array();
+		$arrFields["session_id"] 		      = array("char20", false);
+		$arrFields["session_phpid"]	          = array("char254", true);
+		$arrFields["session_userid"] 	      = array("char20", true);
+		$arrFields["session_groupids"] 	      = array("text", true);
+		$arrFields["session_releasetime"]     = array("int", true);
+		$arrFields["session_loginprovider"]   = array("char20", true);
+		$arrFields["session_lasturl"] 		  = array("char254", true);
+
+		if(!$this->objDB->createTable("session", $arrFields, array("session_id")))
+			$strReturn .= "An error occured! ...\n";	      
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");

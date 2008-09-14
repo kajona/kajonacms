@@ -14,8 +14,6 @@
 *********************************************************************************************************
 
 
-V 2.1.x:
-
 //--_system----------------------------------------------------------------------------------------------
 	system_id				= Table primary key and heart of the system
 	system_prev_id			= Key to connect to the level above
@@ -61,6 +59,15 @@ V 2.1.x:
 	module_version			= Installed version
 	module_date				= Installation-date
 	module_navigation		= Module appears in the admin-list: 0 = false, 1 = true
+	
+//--_session---------------------------------------------------------------------------------------------
+    session_id              = table primary key
+    session_phpid           = matching php-sessionid
+    session_userid          = userid the session belongs to
+    session_groupids        = groupids the user/session belongs to
+    session_releasetime     = timestamp the session gets invalid
+    session_loginprovider   = provider acting as the sessions' source -> used in later releases
+    session_lasturl         = last url the owner visited
 
 //--_system_config---------------------------------------------------------------------------------------
     system_config_id        = table primary key
