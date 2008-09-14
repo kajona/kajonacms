@@ -486,8 +486,6 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
     $strAction = urlencode($strAction);
     //$strParams = urlencode($strParams);
 
-	//languages installed?
-	include_once(_systempath_."/class_modul_system_module.php");
 	//more than one language installed?
 	include_once(_systempath_."/class_modul_languages_language.php");
 	$intNumberOfLanguages = class_modul_languages_language::getNumberOfLanguagesAvailable(true);
