@@ -20,7 +20,6 @@ $text["modus_baum"]				= "Tree";
 $text["modus_sitemap"]			= "Sitemap";
 
 $text["navigation_name"]        = "Navigation:";
-$text["navigation_css"]         = "CSS-Class:";
 $text["navigation_template"]    = "Template:";
 $text["navigation_mode"]        = "Mode:";
 ?>

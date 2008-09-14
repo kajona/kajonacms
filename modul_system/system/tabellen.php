@@ -341,7 +341,6 @@ V 2.1.x:
 	content_id		       	= table primary key
 	navigation_id           = ID of the selected navigation
 	navigation_template		= template used to print the navigation
-	navigation_css			= CSS-class used for this navigation
 	navigation_mode         = mode of the navigation: tree || sitemap
 
 //--_element_guestbook-----------------------------------------------------------------------------------
@@ -368,6 +367,7 @@ V 2.1.x:
 	news_category		    = category to display
 	news_view		       	= list or detail-view
 	news_mode	     		= archive or regular view
+	news_order              = asc. oder desc. ordering of the list
 	news_detailspage		= page to load details
 	news_template			= template
 

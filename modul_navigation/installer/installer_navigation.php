@@ -23,7 +23,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_navigation extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.1";
+		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["class_admin"] 	= "class_modul_navigation_admin";
 		$arrModule["file_admin"] 	= "class_modul_navigation_admin.php";
@@ -100,7 +100,6 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$arrFields["content_id"] 			= array("char20", false);
 		$arrFields["navigation_id"] 		= array("char20", true);
 		$arrFields["navigation_template"] 	= array("char254", true);
-		$arrFields["navigation_css"] 		= array("char254", true);
 		$arrFields["navigation_mode"] 		= array("char254", true);
 		
 		if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
@@ -160,6 +159,11 @@ class class_installer_navigation extends class_installer_base implements interfa
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
         }
         
         return $strReturn."\n\n";
@@ -225,6 +229,22 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("navigation", "3.1.1");
+
+        return $strReturn;
+    }
+    
+    private function update_311_319() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+        
+        $strReturn .= "Removing css-column from element-table...\n";
+        $strQuery = "ALTER TABLE `"._dbprefix_."element_navigation`
+                        DROP `navigation_css`;";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.1.9");
 
         return $strReturn;
     }

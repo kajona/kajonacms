@@ -388,12 +388,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		//and start to create a link and all needed stuff
 		$arrTemp["page_intern"] = $objPointData->getStrPageI();
 		$arrTemp["page_extern"] = $objPointData->getStrPageE();
-		$strCss = $this->arrElementData["navigation_css"]."-".$intLevel;
-		if($bitActive)
-			$strCss .= "-active";
-		$arrTemp["css"] = $strCss;
 		$arrTemp["text"] = $objPointData->getStrName();
-		$arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"], "", "", "", $strCss);
+		$arrTemp["link"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), $arrTemp["text"]);
 		$arrTemp["href"] = getLinkPortalRaw($arrTemp["page_intern"], $arrTemp["page_extern"], "", "", "");
 		$arrTemp["target"] = $objPointData->getStrTarget();
 		if($objPointData->getStrImage() != "")

@@ -37,7 +37,7 @@ class class_element_navigation extends class_element_admin implements interface_
 		$arrModul["table"] 		    = _dbprefix_."element_navigation";
 		$arrModul["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]      = "navigation_id|char,navigation_template|char,navigation_css|char,navigation_mode|char";
+		$arrModul["tableColumns"]      = "navigation_id|char,navigation_template|char,navigation_mode|char";
 
 		parent::__construct($arrModul);
 	}
@@ -64,7 +64,6 @@ class class_element_navigation extends class_element_admin implements interface_
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $strNaviName, "inputText", getLinkAdminPopup("folderview", "navigationBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("navigation_css", $this->getText("navigation_css"), (isset($arrElementData["navigation_css"]) ? $arrElementData["navigation_css"] : ""));
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
