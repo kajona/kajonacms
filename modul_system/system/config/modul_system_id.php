@@ -14,25 +14,20 @@
 *	$Id$                                         *
 ********************************************************************************************************/
 
-//Modul-id des Systems
 	define(	"_system_modul_id_", 						0);
 
-//Modul-id des Login-Moduls
 	define(	"_login_modul_id_", 						0);
 
-//Modul-id der Dateisystem-Verwaltung
 	define( "_filesystem_modul_id_",					0);
 
-//ID der User-Verwaltung
 	define(	"_user_modul_id_",							15);
 
-//ID der Rechte-Verwaltung
 	define(	"_rechte_modul_id_",						20);
 
-//ID des Gaestebuch-Moduls
 	define( "_filemanager_modul_id_",					40);
 	
-//ID of dashboard
+    define( "_languages_modul_id_",                     65);	
+	
     define( "_dashboard_modul_id_",                     90);	
 
 ?>

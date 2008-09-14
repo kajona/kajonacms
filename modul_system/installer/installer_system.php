@@ -662,12 +662,19 @@ class class_installer_system extends class_installer_base implements interface_i
         $objFilemanagerModule->setStrXmlNameAdmin("class_modul_filemanager_admin_xml.php");
         if(!$objFilemanagerModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
+        
             
         //need to install languages?            
         $strReturn .= "Validating if languages are installed...\n";
         $objLanguagesModule = class_modul_system_module::getModuleByName("languages", true);
         if($objLanguagesModule == null)
             $strReturn .= $this->update_319_addLanguages();
+
+        $strReturn .= "Deleting languages module-id file...\n";
+        include_once(_systempath_."/class_filesystem.php");
+        $objFilesystem = new class_filesystem();
+        if(!$objFilesystem->fileDelete("/system/config/modul_languages_id.php"))
+           $strReturn .= "<b>Error deleting the file \n /system/config/modul_languages_id.php,\nplease delete manually</b>\n";    
             
         
         $strReturn .= "Updating module-versions...\n";
