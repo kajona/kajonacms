@@ -22,6 +22,7 @@ $text["aktuell"]				= "Aktuelle News";
 $text["archiv"]					= "News-Archiv";
 
 $text["news_category"]          = "Kategorie:";
+$text["news_category_all"]      = "Alle Kategorien";
 $text["news_detailspage"]       = "Detail-Seite:";
 $text["news_view"]              = "Ansichts-Modus:";
 $text["news_view_list"]         = "Listen-Ansicht";

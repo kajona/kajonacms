@@ -52,6 +52,7 @@
                 %%results_search%%
                 %%sitemap_navigation%%
                 %%faqs_faqs%%
+				%%events_eventplanner%%
                 %%comments_postacomment%%
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
             </div>

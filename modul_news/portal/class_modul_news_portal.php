@@ -78,7 +78,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		if($this->getParam("filterid") != "")
 		    $strFilterId = $this->getParam("filterid");
 		else
-		    $strFilterId = $this->arrElementData["news_category"];  
+		    $strFilterId = $this->arrElementData["news_category"];
 		$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"]);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
 		//Check rights

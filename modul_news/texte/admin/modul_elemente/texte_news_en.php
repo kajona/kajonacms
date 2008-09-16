@@ -22,6 +22,7 @@ $text["aktuell"]				= "Latest news";
 $text["archiv"]					= "News archive";
 
 $text["news_category"]          = "Category:";
+$text["news_category_all"]      = "All categories";
 $text["news_detailspage"]       = "Details page:";
 $text["news_view"]              = "View mode:";
 $text["news_view_list"]         = "List view";

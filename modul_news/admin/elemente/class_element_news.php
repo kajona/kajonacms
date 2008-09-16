@@ -51,8 +51,9 @@ class class_element_news extends class_element_admin implements interface_admin_
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all newscats available
-        $arrRawCats = class_modul_news_category::getCategories();
+		$arrRawCats = class_modul_news_category::getCategories();
         $arrCats = array();
+		$arrCats[0] = $this->getText("news_category_all");
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
 
