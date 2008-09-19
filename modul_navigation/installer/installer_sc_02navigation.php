@@ -79,7 +79,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id='".dbsafeString($strTreeId)."',
                                 navigation_template = 'mainnavi.tpl',
-                                navigation_css = '',
                                 navigation_mode = 'tree'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
             if($this->objDB->_query($strQuery))
@@ -99,7 +98,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id='".dbsafeString($strTreePortalId)."',
                                 navigation_template = 'portalnavi.tpl',
-                                navigation_css = '',
                                 navigation_mode = 'tree'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
             if($this->objDB->_query($strQuery))
@@ -128,7 +126,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strQuery = "UPDATE "._dbprefix_."element_navigation
                         SET navigation_id='".dbsafeString($strTreeId)."',
                             navigation_template = 'sitemap.tpl',
-                            navigation_css = '',
                             navigation_mode = 'sitemap'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
