@@ -13,7 +13,7 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["formular_email"]                             = "Ziel-Adresse:";
+$text["formular_email"]                             = "Ziel-E-Mail-Adresse:";
 $text["formular_success"]                           = "Erfolgsmeldung:";
 $text["formular_error"]                             = "Fehlermeldung:";
 $text["formular_class"]                             = "Portal-Klasse:";
