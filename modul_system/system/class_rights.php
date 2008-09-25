@@ -18,14 +18,20 @@
  * @package modul_system
  */
 class class_rights {
-	private $arrModul = null;				//Array mit den Moduldaten
+	private $arrModule = null;				
 	
 	/**
 	 * class_db
 	 *
 	 * @var class_db
 	 */
-	private $objDb = null;					//DatenbankObject
+	private $objDb = null;					
+	
+	/**
+	 * Session instance
+	 *
+	 * @var class_session
+	 */
 	private $objSession = null;				//Session Object
 	private $arrRightsCache = array();		//Array, caching rights
 
@@ -36,9 +42,9 @@ class class_rights {
 	 *
 	 */
 	private function __construct() 	{
-		$this->modul["name"] 		= "class_rights";
-		$this->modul["author"] 		= "sidler@mulchprod.de";
-		$this->modul["moduleId"] 		= _rechte_modul_id_;
+		$this->arrModule["name"] 		= "class_rights";
+		$this->arrModule["author"] 		= "sidler@mulchprod.de";
+		$this->arrModule["moduleId"]    = _rechte_modul_id_;
 
 		$objCarrier = class_carrier::getInstance();
 		$this->objDb = $objCarrier->getObjDb();
@@ -105,7 +111,7 @@ class class_rights {
 							WHERE right_id='".dbsafeString($strSystemid)."'";
 			
 			if($this->objDb->_query($strQuery)) {
-				//Flush the cache to later lookups will match the new rights
+				//Flush the cache so later lookups will match the new rights
 				$this->objDb->flushQueryCache();
 				$this->arrRightsCache = array();
 				return true;
@@ -269,20 +275,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["view"]))
+		if($strUserid != "") {
+        	$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["view"]))
 					$bitReturn = true;
 			}
 		}
@@ -307,20 +307,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["edit"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["edit"]))
 					$bitReturn = true;
 			}
 		}
@@ -346,20 +340,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["delete"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["delete"]))
 					$bitReturn = true;
 			}
 		}
@@ -386,20 +374,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right"]))
 					$bitReturn = true;
 			}
 		}
@@ -426,20 +408,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right1"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right1"]))
 					$bitReturn = true;
 			}
 		}
@@ -465,20 +441,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right2"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right2"]))
 					$bitReturn = true;
 			}
 		}
@@ -504,20 +474,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right3"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right3"]))
 					$bitReturn = true;
 			}
 		}
@@ -542,20 +506,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right4"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right4"]))
 					$bitReturn = true;
 			}
 		}
@@ -581,20 +539,14 @@ class class_rights {
 		$bitReturn = false;
 		//Given ID?
 		if($strUserid == "")
-			$strUserid = $this->objSession->getSession("userid");
+			$strUserid = $this->objSession->getUserID();
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
-		if($strUserid !== false) {
-			//Loading the groups the user belonges to
-			$strQuery = "SELECT group_member_group_id
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserid)."'";
-
-			$arrGroups = $this->objDb->getArray($strQuery);
-
-			foreach($arrGroups as $arrRow) 	{
-				if(in_array($arrRow["group_member_group_id"], $arrRights["right5"]))
+		if($strUserid != "") {
+			$arrGroups = $this->objSession->getGroupIdsAsArray();
+			foreach($arrGroups as $strGroup) {
+				if(in_array($strGroup, $arrRights["right5"]))
 					$bitReturn = true;
 			}
 		}

@@ -66,6 +66,7 @@
     session_userid          = userid the session belongs to
     session_groupids        = groupids the user/session belongs to
     session_releasetime     = timestamp the session gets invalid
+    session_loginstatus     = indicates the login-status
     session_loginprovider   = provider acting as the sessions' source -> used in later releases
     session_lasturl         = last url the owner visited
 

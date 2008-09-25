@@ -139,6 +139,28 @@ class class_modul_user_group extends class_model implements interface_model  {
 	    $arrRow = $this->objDB->getRow($strQuery);
 	    return ($arrRow["COUNT(*)"] != 0);
 	}
+	
+	/**
+	 * Returns an array of groupids the passed user is member
+	 *
+	 * @param string $strUserId
+	 * @return array
+	 */
+	public static function getAllGroupIdsForUser($strUserId) {
+	    if($strUserId == "")
+	       return array(_gaeste_gruppe_id_);
+	       
+	    $strQuery = "SELECT group_member_group_id 
+						FROM "._dbprefix_."user_group_members
+						WHERE group_member_user_id='".dbsafeString($strUserId)."'";
+						
+	    $arrGroups = class_carrier::getInstance()->getObjDB()->getRow($strQuery);   
+	    $arrReturn = array();
+	    foreach ($arrGroups as $arrOneGroup)
+	        $arrReturn[] = $arrOneGroup["group_member_group_id"];
+	       
+	    return $arrReturn;   
+	}
 
 	/**
 	 * Deletes all memberships of the given USER from ALL groups

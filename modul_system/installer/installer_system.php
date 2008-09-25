@@ -250,10 +250,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_userid"] 	      = array("char20", true);
 		$arrFields["session_groupids"] 	      = array("text", true);
 		$arrFields["session_releasetime"]     = array("int", true);
+		$arrFields["session_loginstatus"]     = array("char254", true);
 		$arrFields["session_loginprovider"]   = array("char20", true);
 		$arrFields["session_lasturl"] 		  = array("char254", true);
 
-		if(!$this->objDB->createTable("session", $arrFields, array("session_id")))
+		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
 			$strReturn .= "An error occured! ...\n";	
 
 		//Filemanager -----------------------------------------------------------------------------------
@@ -374,6 +375,9 @@ class class_installer_system extends class_installer_base implements interface_i
         
         //3.1: remoteloader max cachtime --> default 30 min
         $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        
+        //3.2: max session duration
+        $this->registerConstant("_system_release_time_", 1800, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -698,11 +702,15 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_userid"] 	      = array("char20", true);
 		$arrFields["session_groupids"] 	      = array("text", true);
 		$arrFields["session_releasetime"]     = array("int", true);
+		$arrFields["session_loginstatus"]     = array("char254", true);
 		$arrFields["session_loginprovider"]   = array("char20", true);
 		$arrFields["session_lasturl"] 		  = array("char254", true);
 
-		if(!$this->objDB->createTable("session", $arrFields, array("session_id")))
-			$strReturn .= "An error occured! ...\n";	      
+		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
+			$strReturn .= "An error occured! ...\n";	     
+			
+		$strReturn .= "Registering session relasetime setting...\n";
+		$this->registerConstant("_system_release_time_", 1800, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	 
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");

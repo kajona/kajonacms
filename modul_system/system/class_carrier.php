@@ -29,9 +29,12 @@ class class_carrier {
 	private $objToolkitAdmin = null;
 	private $objToolkitPortal = null;
 
+	/**
+	 * Current instance
+	 *
+	 * @var class_carrier
+	 */
 	private static $objCarrier = null;
-
-	//private $time;
 
 	/**
 	 * Constructor for class_carrier, doing nothing important,
@@ -47,7 +50,7 @@ class class_carrier {
 	 *
 	 * @return class_carrier
 	 */
-	public static  function getInstance() {
+	public static function getInstance() {
 
 		if(self::$objCarrier == null) {
 			self::$objCarrier = new class_carrier();
@@ -55,6 +58,8 @@ class class_carrier {
 			$objDB = self::$objCarrier->getObjDB();
 			//so, lets init the constants
             $objConfig->loadConfigsDatabase($objDB);
+            //and init the internal session
+            self::$objCarrier->getObjSession()->initInternalSession();
 		}
 
 		return self::$objCarrier;

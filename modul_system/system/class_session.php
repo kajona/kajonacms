@@ -29,6 +29,14 @@ final class class_session {
 	public static $intScopeRequest = 2;
 
 	private static $objSession = null;
+	
+	/**
+	 * Instance of internal kajona-session
+	 *
+	 * @var class_modul_system_session
+	 */
+	private $objInternalSession = null;
+	private $objUser = null;
 
 
 	private function __construct() 	{
@@ -39,13 +47,10 @@ final class class_session {
 		$objCarrier = class_carrier::getInstance();
 		$this->objDB = $objCarrier->getObjDB();
 
-		//Generating a session-key
-		$this->strKey = md5(_realpath_);
+		//Generating a session-key using a few characteristic values
+		$this->strKey = md5(_realpath_.getServer("REMOTE_ADDR"));
 
-		if($this->sessionStart()) {
-			if(!$this->sessionIsset("status"))
-				$this->setSession("status", "loggedout");
-		}
+		$this->sessionStart();
 		
 		$this->arrRequestArray = array();
 	}
@@ -82,7 +87,7 @@ final class class_session {
 		}
 		else
 			$bitReturn = true;
-
+			
 		return $bitReturn;
 	}
 
@@ -186,10 +191,11 @@ final class class_session {
 	 * @return bool
 	 */
 	public function isLoggedin() {
-		if($this->sessionIsset("status") && $this->getSession("status") == $this->getLoggedinKey())
-			return true;
-		else
-			return false;
+		if($this->objInternalSession != null)
+		    return $this->objInternalSession->isLoggedIn();
+		else 
+		    return false;    
+		  
 	}
 
 	/**
@@ -199,10 +205,7 @@ final class class_session {
 	 */
 	public function isAdmin() {
 		if($this->isLoggedin()) {
-		    include_once(_systempath_."/class_modul_user_user.php");
-		    $objUser = new class_modul_user_user($this->getSession("userid"));
-
-			if($objUser->getIntAdmin() == 1)
+			if($this->getUser() != null && $this->getUser()->getIntAdmin() == 1)
 				return true;
 			else
 				return false;
@@ -230,11 +233,8 @@ final class class_session {
 
 		if($this->isLoggedin()) {
 			if($this->isAdmin()) {
-			    include_once(_systempath_."/class_modul_user_user.php");
-		        $objUser = new class_modul_user_user($this->getSession("userid"));
-
-				if($objUser->getStrAdminskin() != "") {
-					return $objUser->getStrAdminskin();
+				if($this->getUser() != null && $this->getUser()->getStrAdminskin() != "") {
+					return $this->getUser()->getStrAdminskin();
 				}
 			}
 		}
@@ -262,11 +262,8 @@ final class class_session {
 
 		if($this->isLoggedin()) {
 			if($this->isAdmin()) {
-			    include_once(_systempath_."/class_modul_user_user.php");
-		        $objUser = new class_modul_user_user($this->getSession("userid"));
-
-				if($objUser->getStrAdminlanguage() != "") {
-					return $objUser->getStrAdminlanguage();
+				if($this->getUser() != null && $this->getUser()->getStrAdminlanguage() != "") {
+					return $this->getUser()->getStrAdminlanguage();
 				}
 			}
 		}
@@ -296,10 +293,7 @@ final class class_session {
 	 */
 	public function isPortal() 	{
 		if($this->isLoggedin()) {
-		    include_once(_systempath_."/class_modul_user_user.php");
-		    $objUser = new class_modul_user_user($this->getSession("userid"));
-
-			if($objUser->getIntPortal() == 1)
+			if($this->getUser() != null && $this->getUser()->getIntPortal() == 1)
 				return true;
 			else
 				return false;
@@ -316,10 +310,7 @@ final class class_session {
 	 */
 	public function isActive() {
 		if($this->isLoggedin()) {
-		    include_once(_systempath_."/class_modul_user_user.php");
-		    $objUser = new class_modul_user_user($this->getSession("userid"));
-
-			if($objUser->getIntActive() == 1)
+			if($this->getUser() && $this->getUser()->getIntActive() == 1)
 				return true;
 			else
 				return false;
@@ -353,7 +344,7 @@ final class class_session {
 					if($this->checkPassword($strPass, $objOneUser->getStrPass())) {
 						//Hit! User found, BUT: active?
 						if($objOneUser->getIntActive() == 1) {
-							$this->setSession("status", $this->getLoggedinKey());
+							//$this->setSession("status", $this->getLoggedinKey());
 							$this->setSession("userid", $objOneUser->getSystemid());
 							$this->setSession("username", $strName);
 							$objOneUser->setIntLogins($objOneUser->getIntLogins()+1);
@@ -366,7 +357,17 @@ final class class_session {
 							//Drop a line to the logger
 							class_logger::getInstance()->addLogRow("User: ".$strName." successfully logged in", class_logger::$levelInfo);
 							class_modul_user_log::generateLog();
+							
+							$this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
+							$this->objInternalSession->setStrUserid($objOneUser->getSystemid());
+							include_once(_systempath_."/class_modul_user_group.php");
+	                        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objOneUser->getSystemid()));
+	                        $this->objInternalSession->updateObjectToDb();
+	                        $this->objUser = $objOneUser;
 
+	                        //right now we have the time to do a few cleanups...
+	                        class_modul_system_session::deleteInvalidSessions();
+	                        
     						//Login successfull, quit
     						$bitReturn = true;
 						    break;
@@ -400,6 +401,12 @@ final class class_session {
 	 */
 	public function logout() {
 	    class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
+	    
+	    $this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
+	    $this->objInternalSession->updateObjectToDb();
+	    $this->objInternalSession->deleteObject();
+	    $this->objInternalSession = null;
+	    $this->objUser = null;
 		$this->setSession("status", "loggedout");
 		$this->sessionUnset("userid");
 		$this->sessionUnset("username");
@@ -412,7 +419,7 @@ final class class_session {
 		$this->sessionStart();
 		//and create a new sessid
 		session_regenerate_id();
-
+        $this->initInternalSession();
 		return;
 	}
 
@@ -437,13 +444,61 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUserID() {
-		if($this->isLoggedin()) {
-			$strUserid = $this->getSession("userid");
+		if($this->objInternalSession != null && $this->isLoggedin()) {
+			$strUserid = $this->objInternalSession->getStrUserid();
 		}
 		else {
 			$strUserid = "";
 		}
 		return $strUserid;
+	}
+	
+	/**
+	 * Returns an instance of the current user or null of not given
+	 *
+	 * @return class_modul_user_user
+	 */
+	private function getUser() {
+	    include_once(_systempath_."/class_modul_user_user.php");
+	    if($this->objUser != null)
+	       return $this->objUser;
+	       
+	    if($this->getUserID() != "") {  
+	       $this->objUser = new class_modul_user_user($this->getUserID());
+	       return $this->objUser;
+	    }
+	       
+	    return null;   
+	}
+	
+	/**
+	 * Returns the groups the user is member in as a string
+	 *
+	 * @return string
+	 */
+	public function getGroupIdsAsString() {
+	    if($this->objInternalSession != null ) {
+			$strGroupids = $this->objInternalSession->getStrGroupids();
+		}
+		else {
+			$strGroupids = _gaeste_gruppe_id_;
+		}
+		return $strGroupids;
+	}
+	
+	/**
+	 * Returns the groups the user is member in as an array
+	 *
+	 * @return array
+	 */
+	public function getGroupIdsAsArray() {
+	    if($this->objInternalSession != null ) {
+			$strGroupids = $this->objInternalSession->getStrGroupids();
+		}
+		else {
+			$strGroupids = _gaeste_gruppe_id_;
+		}
+		return explode(",", $strGroupids);
 	}
 
 	/**
@@ -453,29 +508,6 @@ final class class_session {
 	 */
 	public function getSessionId() {
 	    return session_id();
-	}
-
-	/**
-	 * Generates the key to identify a user as being logged in
-	 *
-	 * @return string
-	 */
-	public function getLoggedinKey() {
-	    //Logged-in key is user-specific.
-	    //To avoid session-stealing, use a ip-dependant key
-	    //include the systems-module-id to generate a system-dependant key
-	    $strAddKey = "";
-        try {
-        	include_once(_systempath_."/class_modul_system_module.php");
-            $objModule = class_modul_system_module::getModuleByName("system", true);
-            if($objModule != null)
-                $strAddKey = $objModule->getSystemid();
-        }
-        catch (class_exception $objException) {
-        }
-        
-	    $strKey = md5(_systempath_."loggedin".getServer("REMOTE_ADDR").$strAddKey);
-	    return $strKey;
 	}
 
 	/**
@@ -506,6 +538,43 @@ final class class_session {
             return $strEncryptedPassword == sha1($strPlainPassword);
 
 	    return false;
+	}
+	
+	/**
+	 * Initializes the internal kajona session
+	 *
+	 */
+	public function initInternalSession() {
+	    include_once(_systempath_."/class_modul_system_session.php");
+	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
+	        $this->objInternalSession = class_modul_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
+	        
+	        if($this->objInternalSession!= null && $this->objInternalSession->isSessionValid()) {
+    	        $this->objInternalSession->setIntReleasetime(time()+_system_release_time_);
+    	        $this->objInternalSession->updateObjectToDb();
+	        }
+	        else 
+	           $this->objInternalSession = null;
+	        
+	        if($this->objInternalSession != null) 
+	            return;
+	        
+	    }
+	    
+        include_once(_systempath_."/class_modul_user_group.php");
+        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($this->getUserID()));
+        $objSession = new class_modul_system_session();
+        $objSession->setStrPHPSessionId($this->getSessionId());
+        $objSession->setStrUserid($this->getUserID());
+        $objSession->setStrGroupids($strGroups);
+        $objSession->setIntReleasetime(time()+_system_release_time_);
+        $objSession->saveObjectToDb();
+        
+        $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());
+        $this->objInternalSession = $objSession;
+        
+        if($this->getUserID() != "")
+	       $this->objUser = new class_modul_user_user($this->getUserID());
 	}
 
 }
