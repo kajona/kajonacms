@@ -22,10 +22,14 @@ if(isset($_GET["aktion"]))
 		$obj_copy->aktion_copy_out();
 	elseif ($_GET["aktion"] == "copy_out_downwards")
 	    $obj_copy->aktion_copy_out_downwards();
+	elseif ($_GET["aktion"] == "copy_out_upwards_svn")
+	    $obj_copy->aktion_copy_out_upwards_svn();
 	elseif ($_GET["aktion"] == "copy_in")
 		$obj_copy->aktion_copy_in();
 	elseif ($_GET["aktion"] == "copy_in_downwards")
 		$obj_copy->aktion_copy_in_downwards();
+	elseif ($_GET["aktion"] == "copy_in_upwards_svn")
+		$obj_copy->aktion_copy_in_upwards_svn();
 
 }
 else
@@ -36,6 +40,9 @@ else
 	echo "<h2>New: downwards (Eclipse, ...)</h2>";
 	echo "<a href=\"copy.php?aktion=copy_out_downwards\">Copy-Out downwards (destination folder: ./kajona/)</a>\n\n";
 	echo "<a href=\"copy.php?aktion=copy_in_downwards\">Copy-In (from downwards (./kajona/))</a>\n\n";
+	echo "<h2>For SVN Projects: upwards (Eclipse, ...)</h2>";
+	echo "<a href=\"copy.php?aktion=copy_out_upwards_svn\">Copy-Out upwards (destination folder: ../trunk/)</a>\n\n";
+	echo "<a href=\"copy.php?aktion=copy_in_upwards_svn\">Copy-In (from upwards (../trunk/))</a>\n\n";
 }
 
 echo "</pre>";
@@ -97,6 +104,25 @@ class class_copy
 		}
 	}
 
+	public function aktion_copy_in_upwards_svn()
+	{
+		//Log-Datei auslesen
+		$str_temp = trim(file_get_contents(str_replace("/_module", "", $this->str_pfad)."/log/copy_up_svn.log"));
+		//Dateien extrahieren
+		$array_dateien = explode("<newfile>", $str_temp);
+		$inI = 0;
+		//Diese zurueckkopieren
+		foreach($array_dateien as $array_datei)
+		{
+			$array_eine_datei = explode("<to>", $array_datei);
+			if($array_eine_datei[0] != "" && basename($array_eine_datei[0]) != "config.php" && basename($array_eine_datei[0]) != "systemlog.log" && basename($array_eine_datei[0]) != "dblog.log" && basename($array_eine_datei[0]) != ".htaccess")
+			{
+				copy(trim($array_eine_datei[1]), trim($array_eine_datei[0]));
+				echo $inI++ . " ". trim($array_eine_datei[1])." --> ".trim($array_eine_datei[0])."\n";
+			}
+		}
+	}
+	
 
 
 	public function aktion_copy_out()
@@ -159,6 +185,57 @@ class class_copy
         }
 	}
 
+	public function aktion_copy_out_upwards_svn()
+	{
+		$array_files = $this->get_gesamte_liste("");
+		if(!isset($_POST["submit"])) {
+
+            echo "<form method=\"POST\" target=\"\">\n";
+            foreach ($array_files["ordner"] as $str_ordner)
+                if($str_ordner != "kajona")
+                    echo "<input type=\"checkbox\" name=\"module[".$str_ordner."]\" value=\"".$str_ordner."\" id=\"".$str_ordner."\" checked=\"checked\" /><label for=\"".$str_ordner."\">".$str_ordner."</label>\n";
+
+            echo "<input type=\"submit\" name=\"submit\" value=\"Copy out\" />\n";
+            echo "</form>\n";
+		}
+        else {
+        	
+        	// SVN Struktur Ordner anlegen
+        	$str_project_path = str_replace("_module", "", $this->str_pfad);
+        	
+        	
+	        if(!is_dir($str_project_path."branches/"))
+				{
+					mkdir($str_project_path."branches/");
+					chmod($str_project_path."branches/", 0777);
+				}
+        	
+	        if(!is_dir($str_project_path."tags/"))
+				{
+					mkdir($str_project_path."tags/");
+					chmod($str_project_path."tags/", 0777);
+				}
+        	
+	        if(!is_dir($str_project_path."log/"))
+				{
+					mkdir($str_project_path."log/");
+					chmod($str_project_path."log/", 0777);
+				}
+        	
+    		//copy selected modules
+    		foreach($array_files["ordner"] as $str_modulordner) {
+    			if($str_modulordner != "modul_vorlage" && $str_modulordner != "kajona" && in_array($str_modulordner, $_POST["module"])) {
+    				echo "<b>".$str_modulordner."</b>\n";
+    				
+    				$this->copy_out_up("/".$str_modulordner, $str_modulordner, 1);
+    			}
+    		}
+    		
+    		file_put_contents(str_replace("/_module", "", $this->str_pfad)."/log/copy_up_svn.log", $this->str_log);
+        }
+        
+	}	
+	
 	/**
 	 * Kopiert die Dateien aus den Modulen in ein System
 	 *
@@ -240,6 +317,64 @@ class class_copy
 				chmod($str_ordner_2, 0777);
 			}
 			$this->copy_out_down($str_ordner."/".$str_modul_ordner, $str_modul, $int_ebene++);
+		}
+	}
+
+	/**
+	 * Kopiert die Dateien aus den Modulen in ein System --> geschwisterordner trunk
+	 *
+	 */
+	public function copy_out_up($str_ordner, $str_modul, $int_ebene)
+	{
+		//alle Dateien und Ordner eine Ebene nach oben kopieren
+		for($int_i = 0; $int_i <= $int_ebene; $int_i++)
+			echo"  ";
+		
+		$array_files_modul = $this->get_gesamte_liste($str_ordner);
+		
+		foreach($array_files_modul["dateien"] as $array_modul_datei)
+		{
+			for($int_i = 0; $int_i <= $int_ebene; $int_i++)
+				echo"  ";
+			
+			$str_file_name = basename($array_modul_datei["dateipfad"]);
+			$str_directory_source = dirname($array_modul_datei["dateipfad"])."/";
+			$str_directory_dest = str_replace("_module/".$str_modul, "trunk", $str_directory_source);
+			
+			$str_source = $str_directory_source . $str_file_name;
+			$str_dest = $str_directory_dest . $str_file_name;
+			
+			//Alte datei löschen?
+			if(is_file($str_dest))
+				unlink($str_dest);
+			
+			copy($str_source, $str_dest);
+
+			//Chmod absetzen
+			chmod($str_dest, 0777);
+			echo $str_source . " --> ". $str_dest ."\n";
+			$this->str_log .= $str_source . "<to>\n". $str_dest ."\n<newfile>\n";
+			
+		}
+
+		foreach ($array_files_modul["ordner"] as $str_modul_ordner)
+		{
+			//Den Ordner anlegen
+			$str_ordner_2 = str_replace("/_module", "",$this->str_pfad)."/trunk/".substr($str_ordner, strpos($str_ordner, $str_modul)+strlen($str_modul));
+
+			if(!is_dir($str_ordner_2))
+			{
+				mkdir($str_ordner_2);
+				chmod($str_ordner_2, 0777);
+			}
+			
+			$str_ordner_2 = str_replace("/_module", "",$this->str_pfad)."/trunk".substr($str_ordner, strpos($str_ordner, $str_modul)+strlen($str_modul))."/".$str_modul_ordner;
+			if(!is_dir($str_ordner_2))
+			{
+				mkdir($str_ordner_2);
+				chmod($str_ordner_2, 0777);
+			}
+			$this->copy_out_up($str_ordner."/".$str_modul_ordner, $str_modul, $int_ebene++);
 		}
 	}
 
