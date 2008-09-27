@@ -277,7 +277,7 @@ class class_user_admin extends class_admin implements interface_admin {
             $bitRight = true;
         //Own profile?
         if(!$bitRight && $this->getParam("userid")!= "") {
-            if($this->getParam("userid") == $this->objSession->getSession("userid") && _user_selfedit_ == "true") {
+            if($this->getParam("userid") == $this->objSession->getUserID() && _user_selfedit_ == "true") {
                 $bitRight = true;
                 $bitSelf = true;
             }
@@ -448,7 +448,7 @@ class class_user_admin extends class_admin implements interface_admin {
             $bitRight = true;
         //Own Profile?
         if(!$bitRight && $this->getParam("userid") != ""  && $this->getParam("modus") == "selfedit") {
-            if($this->getParam("userid") == $this->objSession->getSession("userid") && _user_selfedit_ == "true") {
+            if($this->getParam("userid") == $this->objSession->getUserID() && _user_selfedit_ == "true") {
                 $bitRight = true;
                 $bitSelfedit = true;
             }

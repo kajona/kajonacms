@@ -225,7 +225,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 			$strQuery = "UPDATE "._dbprefix_."system
 						SET SYSTEM_prev_id='".$this->objDB->dbsafeString($strFolderid)."',
 							system_lm_time=".(int)time().",
-							system_lm_user='".$this->objDB->dbsafeString($this->objSession->getSession("userid"))."',
+							system_lm_user='".$this->objDB->dbsafeString($this->objSession->getUserID())."',
 							system_comment='PAGE: ".$this->objDB->dbsafeString($strName)."'
 							WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
 

@@ -161,7 +161,7 @@ abstract class class_root {
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
 					 ( system_id, system_prev_id, system_module_nr, system_lm_user, system_lm_time, system_status, system_comment) VALUES
-					 ('".$this->objDB->dbsafeString($strSystemId)."', '".$this->objDB->dbsafeString($strPrevId)."',".(int)$intModulNr." , '".$this->objDB->dbsafeString($this->objSession->getSession("userid"))."' , ".time()." , ".(int)$intStatus.", '".$this->objDB->dbsafeString($strComment)."')";
+					 ('".$this->objDB->dbsafeString($strSystemId)."', '".$this->objDB->dbsafeString($strPrevId)."',".(int)$intModulNr." , '".$this->objDB->dbsafeString($this->objSession->getUserID())."' , ".time()." , ".(int)$intStatus.", '".$this->objDB->dbsafeString($strComment)."')";
 		//Send the query to the db
 		$this->objDB->_query($strQuery);
 
@@ -393,7 +393,7 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='".$this->objDB->dbsafeString($this->objSession->getSession("userid"))."',
+						SET system_lock_id='".$this->objDB->dbsafeString($this->objSession->getUserID())."',
 						    system_lock_time = '".dbsafeString(time())."'
 						WHERE system_id ='".$this->objDB->dbsafeString($strSystemid)."'";
 		return $this->objDB->_query($strQuery);
@@ -476,7 +476,7 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
-					SET system_lm_user = '".$this->objDB->dbsafeString($this->objSession->getSession("userid"))."',
+					SET system_lm_user = '".$this->objDB->dbsafeString($this->objSession->getUserID())."',
 						system_lm_time= ".(int)time()."
 					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
 

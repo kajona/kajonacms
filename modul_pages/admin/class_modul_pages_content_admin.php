@@ -208,9 +208,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 							$strActions = "";
 							//First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
 							//won't be visible
-							if($objOneElementOnPage->getStrLockId() != "0" && $objOneElementOnPage->getStrLockId() != $this->objSession->getSession("userid")) {
+							if($objOneElementOnPage->getStrLockId() != "0" && $objOneElementOnPage->getStrLockId() != $this->objSession->getUserID()) {
 								//So, return a button, if we have an admin in front of us
-								if($this->objRights->userIsAdmin($this->objSession->getSession("userid"))) {
+								if($this->objRights->userIsAdmin($this->objSession->getUserID())) {
 									$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&unlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
 								}
 								//If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
@@ -220,7 +220,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 							else {
 								//The other case: The Record ain't being locked or is locked by the current user: All actions to take!
 								//if its the user who locked the record, unlock it now
-								if($objOneElementOnPage->getStrLockId() == $this->objSession->getSession("userid"))
+								if($objOneElementOnPage->getStrLockId() == $this->objSession->getUserID())
 								    $this->unlockRecord($objOneElementOnPage->getSystemid());
 
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
@@ -379,7 +379,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		//Load the element data
     		$objElement = new class_modul_pages_pageelement($this->getSystemid());
     		//check, if the element isn't locked
-    		if($objElement->getStrLockId() == "0" || $objElement->getStrLockId() == $this->objSession->getSession("userid")) {
+    		if($objElement->getStrLockId() == "0" || $objElement->getStrLockId() == $this->objSession->getUserID()) {
     			//Load the class to create an object
     			include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
     			//Build the class-name
@@ -449,7 +449,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 		$strLockID = $this->getLockId($this->getSystemid());
 
-		if($strLockID == "0" || $strLockID == $this->objSession->getSession("userid")) {
+		if($strLockID == "0" || $strLockID == $this->objSession->getUserID()) {
 			//Load the data of the current element
 			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
 			//Load the class to create an object

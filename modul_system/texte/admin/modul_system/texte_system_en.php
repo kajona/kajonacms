@@ -26,6 +26,7 @@ $text["modul_status_system"]        = "Woops, you want to set the system-kernel 
 $text["system_info"]				= "System information";
 $text["system_settings"]			= "System settings";
 $text["systemTasks"]			    = "System tasks";
+$text["system_sessions"]            = "Sessions";
 $text["systemlog"]                  = "System logfile";
 $text["updatecheck"]                = "Update-Check";
 $text["about"]                      = "About Kajona";

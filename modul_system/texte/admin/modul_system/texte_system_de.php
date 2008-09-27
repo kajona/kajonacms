@@ -26,6 +26,7 @@ $text["modul_status_system"]        = "Hmmm. Den System-Kernel deaktivieren? Zuv
 $text["system_info"]				= "Systeminformationen";
 $text["system_settings"]			= "Systemeinstellungen";
 $text["systemTasks"]			    = "System-Tasks";
+$text["system_sessions"]            = "Sessions";
 $text["systemlog"]                  = "System-Log";
 $text["updatecheck"]                = "Update-Check";
 $text["about"]                      = "Über Kajona";

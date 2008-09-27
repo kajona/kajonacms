@@ -345,7 +345,6 @@ final class class_session {
 						//Hit! User found, BUT: active?
 						if($objOneUser->getIntActive() == 1) {
 							//$this->setSession("status", $this->getLoggedinKey());
-							$this->setSession("userid", $objOneUser->getSystemid());
 							$this->setSession("username", $strName);
 							$objOneUser->setIntLogins($objOneUser->getIntLogins()+1);
 							$objOneUser->setIntLastLogin(time());
@@ -409,7 +408,6 @@ final class class_session {
 	    $this->objInternalSession = null;
 	    $this->objUser = null;
 		$this->setSession("status", "loggedout");
-		$this->sessionUnset("userid");
 		$this->sessionUnset("username");
 		if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time()-42000);

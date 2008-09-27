@@ -72,7 +72,7 @@ class class_modul_user_log extends class_model implements interface_model  {
 						('".dbsafeString(generateSystemid())."',";
 
         if($strOtherUsername == "") {
-			$strQuery .= "'".(class_carrier::getInstance()->getObjSession()->getSession("userid") == "" ? "0" : dbsafeString(class_carrier::getInstance()->getObjSession()->getSession("userid")))."'";
+			$strQuery .= "'".(class_carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : dbsafeString(class_carrier::getInstance()->getObjSession()->getUserID()))."'";
         }
 		else {
 		    $strQuery .= "'".dbsafeString($strOtherUsername)."'";
