@@ -362,6 +362,7 @@ final class class_session {
 							$this->objInternalSession->setStrUserid($objOneUser->getSystemid());
 							include_once(_systempath_."/class_modul_user_group.php");
 	                        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objOneUser->getSystemid()));
+	                        $this->objInternalSession->setStrGroupids($strGroups);
 	                        $this->objInternalSession->updateObjectToDb();
 	                        $this->objUser = $objOneUser;
 
@@ -557,6 +558,7 @@ final class class_session {
 	        
 	        if($this->objInternalSession!= null && $this->objInternalSession->isSessionValid()) {
     	        $this->objInternalSession->setIntReleasetime(time()+_system_release_time_);
+    	        $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
     	        $this->objInternalSession->updateObjectToDb();
 	        }
 	        else 
@@ -574,6 +576,7 @@ final class class_session {
         $objSession->setStrUserid($this->getUserID());
         $objSession->setStrGroupids($strGroups);
         $objSession->setIntReleasetime(time()+_system_release_time_);
+        $objSession->setStrLasturl(getServer("QUERY_STRING"));
         $objSession->saveObjectToDb();
         
         $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());

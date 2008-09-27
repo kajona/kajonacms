@@ -154,7 +154,7 @@ class class_modul_user_group extends class_model implements interface_model  {
 						FROM "._dbprefix_."user_group_members
 						WHERE group_member_user_id='".dbsafeString($strUserId)."'";
 						
-	    $arrGroups = class_carrier::getInstance()->getObjDB()->getRow($strQuery);   
+	    $arrGroups = class_carrier::getInstance()->getObjDB()->getArray($strQuery);   
 	    $arrReturn = array();
 	    foreach ($arrGroups as $arrOneGroup)
 	        $arrReturn[] = $arrOneGroup["group_member_group_id"];

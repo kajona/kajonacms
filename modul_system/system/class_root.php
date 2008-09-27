@@ -113,7 +113,7 @@ abstract class class_root {
 			$this->setSystemid($strSystemid);
 
 
-		//Generating all the needes Objects. Fo this we use our cool cool carrier-object
+		//Generating all the needed objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
 		include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();

@@ -120,7 +120,7 @@ abstract class class_admin {
 			$this->setSystemid($strSystemid);
 
 
-		//Generating all the needed Objects. Fo this we use our cool cool carrier-object
+		//Generating all the needed Objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
 		include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
