@@ -113,6 +113,16 @@ $text["settings_updated"]           = "Einstellungen wurden geändert.";
 $text["settings_true"]				= "Ja";
 $text["settings_false"]				= "Nein";
 
+$text["session_loggedin"]           = "Angemeldet";
+$text["session_loggedout"]          = "Gast";
+$text["session_admin"]              = "Administration, Modul: ";
+$text["session_portal"]             = "Portal, Seite: ";
+$text["session_username"]           = "Benutzer";
+$text["session_valid"]              = "Gültig bis";
+$text["session_status"]             = "Status";
+$text["session_activity"]           = "Aktivität";
+$text["session_logout"]             = "Session beenden";
+
 $text["_system_portal_disable_"]            = "Portal deaktiviert:";
 $text["_system_portal_disable_hint"]        = "Diese Einstellung aktiviert/deaktiviert das gesamte Portal.";
 $text["_system_portal_disablepage_"]        = "Zwischenseite:";
@@ -137,6 +147,8 @@ $text["_system_use_dbcache_"]               = "Datenbankcache aktiv:";
 $text["_system_use_dbcache_hint"]           = "Aktiviert/Deaktiviert den systeminternen Cache für Datenbankabfragen.";
 $text["_remoteloader_max_cachetime_"]       = "Cachedauer externer Quellen:";
 $text["_remoteloader_max_cachetime_hint"]   = "Cachedauer in Sekunden für extern nachgeladene Inhalte (z.B. RSS-Feeds).";
+$text["_system_release_time_"]              = "Dauer einer Session:";
+$text["_system_release_time_hint"]          = "Nach dieser Dauer in Sekunden wird eine Session automatisch ungültig.";
 
 
 $text["errorintro"]                 = "Bitte alle benötigten Felder ausfüllen!";

@@ -86,6 +86,9 @@ class class_system_admin extends class_admin implements interface_admin {
 
 		if($strAction == "systemSettings")
 			$strReturn = $this->actionSystemSettings();
+			
+		if($strAction == "systemSessions")
+			$strReturn = $this->actionSessions();
 
 		if($strAction == "systemTasks")
 		    $strReturn = $this->actionSystemtasks();
@@ -426,6 +429,93 @@ class class_system_admin extends class_admin implements interface_admin {
     }
     
 
+// --- Sessionmanagement --------------------------------------------------------------------------------
+
+    /**
+     * Creates a table filled with the sessions currently registered
+     *
+     * @return string
+     */
+    private function actionSessions() {
+        $strReturn = "";
+        //check needed rights
+        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            //react on commands?
+            if($this->getParam("logout") == "true") {
+                $objSession = new class_modul_system_session($this->getSystemid());
+                $objSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);               
+                $objSession->updateObjectToDb();
+            }
+            
+            include_once(_systempath_."/class_modul_system_session.php");
+            $arrSessions = class_modul_system_session::getAllActiveSessions();
+            $arrData = array();
+            $arrHeader = array();
+            $arrHeader[0] = $this->getText("session_username");
+            $arrHeader[1] = $this->getText("session_valid");
+            $arrHeader[2] = $this->getText("session_status");
+            $arrHeader[3] = $this->getText("session_activity");
+            $arrHeader[4] = "";
+            foreach ($arrSessions as $objOneSession) {
+                $arrRowData = array();
+                $strUsername = "";
+                if($objOneSession->getStrUserid() != "") {
+                    $objUser = new class_modul_user_user($objOneSession->getStrUserid());
+                    $strUsername = $objUser->getStrUsername();
+                    $this->objDB->flushQueryCache();
+                }
+                
+                $arrRowData[0] = $strUsername;
+                $arrRowData[1] = timeToString($objOneSession->getIntReleasetime());
+                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                    $arrRowData[2] = $this->getText("session_loggedin");
+                else 
+                    $arrRowData[2] = $this->getText("session_loggedout");    
+                    
+                //find out what the user is doing...
+                $strLastUrl = $objOneSession->getStrLasturl();
+                if(uniStrpos($strLastUrl, "?") !== false)
+                    $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
+                $strActivity = "";
+                if(uniStrpos($strLastUrl, "admin=1") !== false) {
+                    $strActivity .= $this->getText("session_admin");
+                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                        $arrUrlParam = explode("=", $strOneParam);
+                        if($arrUrlParam[0] == "module")
+                            $strActivity .= $arrUrlParam[1];
+                    }
+                }
+                else {
+                    $strActivity .= $this->getText("session_portal");
+                    if($strLastUrl == "")
+                        $strActivity .= _pages_startseite_;
+                    else {
+                        foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                            $arrUrlParam = explode("=", $strOneParam);
+                            if($arrUrlParam[0] == "page")
+                                $strActivity .= $arrUrlParam[1];
+                        }
+                    }
+                }
+                    
+                $arrRowData[3] = $strActivity;
+                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                    $arrRowData[4] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
+                else 
+                    $arrRowData[4] = getImageAdmin("icon_tonDisabled.gif");    
+                $arrData[] = $arrRowData;
+            }
+            $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+
+        }
+        else
+			$strReturn = $this->getText("fehler_recht");
+        return $strReturn;
+    }    
+    
+    
+    
 // --- Systemlog ---------------------------------------------------------------------------------------.
 
     /**

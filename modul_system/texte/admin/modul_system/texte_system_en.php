@@ -112,6 +112,16 @@ $text["settings_updated"]           = "Settings changed successfully";
 $text["settings_true"]				= "Yes";
 $text["settings_false"]				= "No";
 
+$text["session_loggedin"]           = "Loggedin";
+$text["session_loggedout"]          = "Guest";
+$text["session_admin"]              = "Administration, module: ";
+$text["session_portal"]             = "Portal, page: ";
+$text["session_username"]           = "Username";
+$text["session_valid"]              = "Valid until";
+$text["session_status"]             = "State";
+$text["session_activity"]           = "Activity";
+$text["session_logout"]             = "Invalidate session";
+
 $text["_system_portal_disable_"]            = "Deactivate portal:";
 $text["_system_portal_disable_hint"]        = "Activates / deactivates the whole portal.";
 $text["_system_portal_disablepage_"]        = "Temporary page:";
@@ -136,6 +146,8 @@ $text["_system_use_dbcache_"]               = "Database cache:";
 $text["_system_use_dbcache_hint"]           = "Enables/Disables the internal database query cache.";
 $text["_remoteloader_max_cachetime_"]       = "Cache time of external sources:";
 $text["_remoteloader_max_cachetime_hint"]   = "Time in seconds to cache externally loaded contents (e.g. RSS-Feeds).";
+$text["_system_release_time_"]              = "Duration of a session:";
+$text["_system_release_time_hint"]          = "After this amount of seconds a session gets invalid.";
 
 
 $text["errorintro"]                 = "Please provide all needed values!";

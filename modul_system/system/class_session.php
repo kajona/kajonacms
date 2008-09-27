@@ -344,8 +344,6 @@ final class class_session {
 					if($this->checkPassword($strPass, $objOneUser->getStrPass())) {
 						//Hit! User found, BUT: active?
 						if($objOneUser->getIntActive() == 1) {
-							//$this->setSession("status", $this->getLoggedinKey());
-							$this->setSession("username", $strName);
 							$objOneUser->setIntLogins($objOneUser->getIntLogins()+1);
 							$objOneUser->setIntLastLogin(time());
 							//Set pass = "" to avoid update conflicts
@@ -407,8 +405,6 @@ final class class_session {
 	    $this->objInternalSession->deleteObject();
 	    $this->objInternalSession = null;
 	    $this->objUser = null;
-		$this->setSession("status", "loggedout");
-		$this->sessionUnset("username");
 		if (isset($_COOKIE[session_name()])) {
             setcookie(session_name(), '', time()-42000);
         }
@@ -428,8 +424,8 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUsername() {
-		if($this->isLoggedin()) {
-			$strUsername = $this->getSession("username");
+		if($this->isLoggedin() && $this->objInternalSession != null) {
+			$strUsername = $this->getUser()->getStrUsername();
 		}
 		else {
 			$strUsername = "Guest";
