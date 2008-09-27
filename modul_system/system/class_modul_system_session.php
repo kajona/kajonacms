@@ -66,6 +66,7 @@ class class_modul_system_session extends class_model implements interface_model 
      *
      */
     public function initObject() {
+        
         class_logger::getInstance()->addLogRow("init session ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "SELECT * FROM "._dbprefix_."session
                      WHERE session_id = '".dbsafeString($this->getSystemid())."'";

@@ -53,10 +53,13 @@ class class_installer_element_formular extends class_installer_base implements i
 		    return false;
 		}
 
-	    //check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='form'";
-		$arrRow = $this->objDB->getRow($strQuery);
-        if(isset($arrRow["COUNT(*)"]) && $arrRow["COUNT(*)"] == 0)
+		$objElement = null;
+	    try {
+            $objElement = class_modul_pages_element::getElement("form");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null)
             return true;
 
         return false;

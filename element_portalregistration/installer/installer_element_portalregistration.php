@@ -53,6 +53,7 @@ class class_installer_element_portalregistration extends class_installer_base im
 		}
 
 	     //check, if not already existing
+	     $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("portalregistration");
 		}

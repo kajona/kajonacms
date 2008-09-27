@@ -56,6 +56,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
         }
 
         //check, if not already existing
+        $objElement = null;
         try {
             $objElement = class_modul_pages_element::getElement("downloadstoplist");
         }

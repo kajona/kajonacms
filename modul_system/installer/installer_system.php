@@ -64,9 +64,14 @@ class class_installer_system extends class_installer_base implements interface_i
 	}
 
 	public function hasPostInstalls() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
-	    $arrRow = $this->objDB->getRow($strQuery);
-        if($arrRow["COUNT(*)"] == 0)
+        //check, if not already existing
+	    $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("languageswitch");
+		}
+		catch (class_exception $objEx)  {
+		}
+        if($objElement == null)
             return true;
 
         return false;
@@ -74,7 +79,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function postInstall() {
 	    //Register the element
-		$strReturn .= "Registering languageswitch-element...\n";
+		$strReturn = "Registering languageswitch-element...\n";
 		//check, if not already existing
 		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
 		$arrRow = $this->objDB->getRow($strQuery);
@@ -446,6 +451,20 @@ class class_installer_system extends class_installer_base implements interface_i
 		include_once(_systempath_."/class_modul_dashboard_widget.php");
         $objDashboard = new class_modul_dashboard_widget();
         $objDashboard->createInitialWidgetsForUser($strUserID);
+        
+        //create a default language
+		$strReturn .= "Creating new default-language\n";
+        include_once(_systempath_."/class_modul_languages_language.php");
+        $objLanguage = new class_modul_languages_language();
+
+        if($this->strContentLanguage == "de")
+            $objLanguage->setStrName("de");
+        else
+           $objLanguage->setStrName("en");
+           
+        $objLanguage->setBitDefault(true);
+        $objLanguage->saveObjectToDb();
+        $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
 
 		return $strReturn;
 	}

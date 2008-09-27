@@ -267,7 +267,7 @@ class class_remoteloader {
 	               $strProtocolAdd = "tls://";
 	               
     		   
-    		   $objRemoteResource = fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
+    		   $objRemoteResource = @fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
     		   
     		   if(is_resource($objRemoteResource)){
     		      fwrite($objRemoteResource,"GET ".$this->strProtocolHeader.$this->strHost.$this->strQueryParams." HTTP/1.0\r\n");

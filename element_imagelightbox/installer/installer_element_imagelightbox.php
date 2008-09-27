@@ -53,6 +53,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 		}
 
 	    //check, if not already existing
+	    $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("imagelightbox");
 		}

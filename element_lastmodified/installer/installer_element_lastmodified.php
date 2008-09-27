@@ -53,6 +53,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 		}
 
 	    //check, if not already existing
+	    $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("lastmodified");
 		}

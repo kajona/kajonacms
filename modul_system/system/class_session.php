@@ -545,6 +545,12 @@ final class class_session {
 	 *
 	 */
 	public function initInternalSession() {
+	    
+	    
+	    $arrTables = $this->objDB->getTables();
+        if(!in_array(_dbprefix_."session", $arrTables))
+            return;
+	    
 	    include_once(_systempath_."/class_modul_system_session.php");
 	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
 	        $this->objInternalSession = class_modul_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
