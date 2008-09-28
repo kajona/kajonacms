@@ -125,7 +125,6 @@ $text["intro_worker_lookup"]         = "Current task: Resolve IP-addresses. <br 
 $text["intro_worker_lookupip2c"]     = "Current tals: Resolve IP-addresses by country.<br />
                                         Therefore the PHP-option 'allow_url_fopen' has to be enabled.<br />
                                         Number of addresses to process: "; 
-$text["ip2c_urlfopen"]               = "The PHP-option 'allow_url_fopen' is disbaled. The addresses cannot be resolved.";
 $text["progress_worker_lookup"]      = "Progress:";
 $text["worker_lookup_end"]           = "Execution finished. All addresses have been processed.";
 $text["worker_lookupReset_end"]      = "Execution finished. All erroneous hostnames have been resetted.";

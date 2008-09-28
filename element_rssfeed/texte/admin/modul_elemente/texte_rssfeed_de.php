@@ -15,6 +15,5 @@
 $text["rssfeed_template"]               = "Template:";
 $text["rssfeed_url"]                    = "RSS-Feed-URL:";
 $text["rssfeed_numberofposts"]          = "Anzahl anzuzeigender Meldungen:";
-$text["rssfeed_urlfopen"]               = "Achtung! Der PHP-Wert 'allow_url_fopen' wurde auf 'off' gesetzt. Ein Laden externer Feeds ist nicht möglich!";
 
 ?>

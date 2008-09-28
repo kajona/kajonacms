@@ -50,10 +50,6 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
 		
-		//url_fopen allowed?
-		if($this->objConfig->getPhpIni("allow_url_fopen") != 1)
-            $strReturn .= $this->objToolkit->warningBox($this->getText("rssfeed_urlfopen"));
-            
 		//Build the form
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");

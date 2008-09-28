@@ -131,6 +131,7 @@ class class_remoteloader {
         $this->doCacheCleanup();	
 			
 		//and save to the cache
+		if($strReturn !== false)
 		$this->saveResponseToCache($strReturn);
 
 		//throw a general error?

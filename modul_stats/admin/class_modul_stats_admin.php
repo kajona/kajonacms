@@ -402,10 +402,6 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
             return $this->objToolkit->getTextRow($this->getText("worker_lookup_end"));
         }
         
-        //url_fopen allowed?
-        if($this->objConfig->getPhpIni("allow_url_fopen") != 1)
-            return $this->objToolkit->warningBox($this->getText("ip2c_urlfopen"));
-
         //check, if we did anything before
         if($this->getParam("totalCount") == "")
             $this->setParam("totalCount", count($arrIpToLookup));

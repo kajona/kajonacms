@@ -128,7 +128,6 @@ $text["intro_worker_lookup"]         = "Aktueller Vorgang: IP-Adressen auflösen
 $text["intro_worker_lookupip2c"]     = "Aktueller Vorgang: IP-Adressen nach Ländern auflösen.<br />
                                         Hierfür muss die PHP-Option 'allow_url_fopen' aktiviert sein.<br />
                                         Anzahl zu verarbeitender Adressen: "; 
-$text["ip2c_urlfopen"]               = "Die PHP-Option 'allow_url_fopen' ist deaktiviert. Die Adressen können nicht aufgelöst werden.";
 $text["progress_worker_lookup"]      = "Fortschritt:";
 $text["worker_lookup_end"]           = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
 $text["worker_lookupReset_end"]      = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";
