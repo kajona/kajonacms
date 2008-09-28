@@ -451,6 +451,16 @@ abstract class class_admin {
 	    else
 	        return "";
 	}
+	
+	/**
+	 * Writes a key-value-pair to the arrModule
+	 *
+	 * @param string $strKey
+	 * @param mixed $strValue
+	 */
+	public function setArrModuleEntry($strKey, $strValue) {
+	    $this->arrModule[$strKey] = $strValue;
+	}
 
 
 // --- HistoryMethods -----------------------------------------------------------------------------------

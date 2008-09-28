@@ -31,6 +31,7 @@ class class_element_admin extends class_admin {
 		$arrModule["p_name"] 			= "element_admin";
 		$arrModule["p_author"] 			= "sidler@mulchprod.de";
 		$arrModule["p_nummer"] 			= _pages_elemente_modul_id_;
+		$arrModule["p_module"]          = "pages_content";
 
 		//Calling the base class
 		parent::__construct($arrModule);
@@ -55,7 +56,7 @@ class class_element_admin extends class_admin {
 		$strFormElement = $this->getEditForm($arrElementData);
 
 		//Start by creating the form & action
-		$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=pages_content&amp;action=saveElement", "elEditForm");
+		$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=".$this->arrModule["p_module"]."&amp;action=saveElement", "elEditForm");
 		//add a folder containing optional system-fields
         $strSystemFields = "";
         $arrStart = array("", "", "");
