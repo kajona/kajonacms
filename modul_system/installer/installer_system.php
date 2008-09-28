@@ -713,7 +713,27 @@ class class_installer_system extends class_installer_base implements interface_i
         $objFilesystem = new class_filesystem();
         if(!$objFilesystem->fileDelete("/system/config/modul_languages_id.php"))
            $strReturn .= "<b>Error deleting the file \n /system/config/modul_languages_id.php,\nplease delete manually</b>\n";    
-         
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskconsistency_de.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskconsistency_de.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskconsistency_en.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskconsistency_en.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskdbexport_de.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskdbexport_de.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskdbexport_en.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskdbexport_en.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskdbimport_de.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskdbimport_de.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskdbimport_en.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskdbimport_en.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskflushpiccache_de.php"))   
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskflushpiccache_de.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskflushpiccache_en.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskflushpiccache_en.php,\nplease delete manually</b>\n";   
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskflushremoteloadercache_de.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskflushremoteloadercache_de.php,\nplease delete manually</b>\n";         
+        if(!$objFilesystem->fileDelete("/texte/admin/modul_system/texte_systaskflushremoteloadercache_en.php"))
+           $strReturn .= "<b>Error deleting the file \n /texte/admin/modul_system/texte_systaskflushremoteloadercache_en.php,\nplease delete manually</b>\n";      
+            
         $strReturn .= "Installing table session...\n";
 		$arrFields = array();
 		$arrFields["session_id"] 		      = array("char20", false);
