@@ -446,32 +446,33 @@ class class_system_admin extends class_admin implements interface_admin {
                 $objSession = new class_modul_system_session($this->getSystemid());
                 $objSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);               
                 $objSession->updateObjectToDb();
+                $this->objDB->flushQueryCache();
             }
             
             include_once(_systempath_."/class_modul_system_session.php");
             $arrSessions = class_modul_system_session::getAllActiveSessions();
             $arrData = array();
             $arrHeader = array();
-            $arrHeader[0] = $this->getText("session_username");
-            $arrHeader[1] = $this->getText("session_valid");
-            $arrHeader[2] = $this->getText("session_status");
-            $arrHeader[3] = $this->getText("session_activity");
-            $arrHeader[4] = "";
+            $arrHeader[0] = "";
+            $arrHeader[1] = $this->getText("session_username");
+            $arrHeader[2] = $this->getText("session_valid");
+            $arrHeader[3] = $this->getText("session_status");
+            $arrHeader[4] = $this->getText("session_activity");
+            $arrHeader[5] = "";
             foreach ($arrSessions as $objOneSession) {
                 $arrRowData = array();
                 $strUsername = "";
                 if($objOneSession->getStrUserid() != "") {
                     $objUser = new class_modul_user_user($objOneSession->getStrUserid());
                     $strUsername = $objUser->getStrUsername();
-                    $this->objDB->flushQueryCache();
                 }
-                
-                $arrRowData[0] = $strUsername;
-                $arrRowData[1] = timeToString($objOneSession->getIntReleasetime());
+                $arrRowData[0] = getImageAdmin("icon_user.gif");    
+                $arrRowData[1] = $strUsername;
+                $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
                 if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
-                    $arrRowData[2] = $this->getText("session_loggedin");
+                    $arrRowData[3] = $this->getText("session_loggedin");
                 else 
-                    $arrRowData[2] = $this->getText("session_loggedout");    
+                    $arrRowData[3] = $this->getText("session_loggedout");    
                     
                 //find out what the user is doing...
                 $strLastUrl = $objOneSession->getStrLasturl();
@@ -499,11 +500,11 @@ class class_system_admin extends class_admin implements interface_admin {
                     }
                 }
                     
-                $arrRowData[3] = $strActivity;
+                $arrRowData[4] = $strActivity;
                 if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
-                    $arrRowData[4] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
+                    $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
                 else 
-                    $arrRowData[4] = getImageAdmin("icon_tonDisabled.gif");    
+                    $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");    
                 $arrData[] = $arrRowData;
             }
             $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
