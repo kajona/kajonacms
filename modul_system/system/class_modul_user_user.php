@@ -295,7 +295,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 
 
     public function setStrUsername($strUsername) {
-        $this->strUsername = $strUsername;
+        $this->strUsername = trim($strUsername);
     }
     public function setStrPass($strPass) {
         $this->strPass = $strPass;
