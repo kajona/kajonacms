@@ -118,6 +118,8 @@ class class_download_portal extends class_root {
 					@fclose($ptrFile);
 				}
 			}
+			else 
+			    header("Location: index.php");
 		}
 	}
 }
