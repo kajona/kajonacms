@@ -154,7 +154,7 @@ class class_index  {
 				}
 			}
 			else {
-                //try to load the installer, if available. in addition, a emtpy db should be found
+                //try to load the installer, if available. in addition, an emtpy db should be found
     		    if(count($this->objDB->getTables()) == 0 && file_exists(_realpath_."/installer/installer.php")) {
     		        header("Location: "._webpath_."/installer/installer.php");
     		        throw new class_exception("Requested Module '".$strModule."' not exisiting, redirect to installer", class_exception::$level_ERROR);

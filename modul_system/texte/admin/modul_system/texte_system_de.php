@@ -66,6 +66,9 @@ $text["permissions_header"]         = array(
             							7 => "Updates",
             							8 => ""
             							);
+            							
+$text["dateStyleShort"]             = "d.m.Y";            							
+$text["dateStyleLong"]              = "d M Y H:i:s";            							
 
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";

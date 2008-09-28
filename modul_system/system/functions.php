@@ -418,9 +418,9 @@ function timeToString($intTime, $bitLong = true) {
 	$strReturn = "";
 	if($intTime > 0) {
 		if($bitLong)
-			$strReturn = date("d M Y H:i:s", $intTime);
+			$strReturn = date(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"), $intTime);
 		else
-			$strReturn = date("d.m.Y", $intTime);
+			$strReturn = date(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"), $intTime);
 	}
 	return $strReturn;
 }
