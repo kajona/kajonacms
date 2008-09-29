@@ -29,7 +29,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrModule["file_admin"] 	  = "class_modul_faqs_admin.php";
 		$arrModule["class_portal"] 	  = "class_modul_faqs_portal";
 		$arrModule["file_portal"] 	  = "class_modul_faqs_portal.php";
-		$arrModule["name_lang"] 	  = "Module Faqs";
+		$arrModule["name_lang"] 	  = "Module FAQs";
 		$arrModule["moduleId"] 		  = _faqs_modul_id_;
 
 		$arrModule["tabellen"][]      = _dbprefix_."faqs";

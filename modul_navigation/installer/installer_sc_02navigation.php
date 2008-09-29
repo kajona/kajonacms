@@ -49,6 +49,18 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strTreeId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
         
+        $strReturn .= "Creating navigation points\n";
+        include_once(_systempath_."/class_modul_navigation_point.php");
+        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint->setStrName("Page 1");
+        $objNaviPoint->setStrPageI("page_1");
+        $objNaviPoint->saveObjectToDb($strTreeId);
+        $strNaviPointID = $objNaviPoint->getSystemid();
+        $objNaviPoint = new class_modul_navigation_point();
+        $objNaviPoint->setStrName("Subpage 1");
+        $objNaviPoint->setStrPageI("subpage_1");
+        $objNaviPoint->saveObjectToDb($strNaviPointID);
+        
         $strReturn .= "Creating new portalnavigation-tree\n";
         include_once(_systempath_."/class_modul_navigation_tree.php");
         $objNaviTree = new class_modul_navigation_tree();

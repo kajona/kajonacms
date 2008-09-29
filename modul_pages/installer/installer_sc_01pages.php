@@ -293,9 +293,147 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }  
         
         if($this->objDB->_query($strQuery))
+            $strReturn .= "Paragraph element created.\n";
+        else
+            $strReturn .= "Error creating paragraph element.\n";
+
+
+            
+            
+            
+            
+        $strReturn .= "Creating sample page...\n";
+        include_once(_systempath_."/class_modul_pages_page.php");
+        $objPage = new class_modul_pages_page();
+        $objPage->setStrName("page_1");
+        if($this->strContentLanguage == "de")
+            $objPage->setStrBrowsername("Beispielseite 1");
+        else
+            $objPage->setStrBrowsername("Sample page 1");
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
+        $objPage->saveObjectToDb();
+        $strSamplePageId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strSamplePageId."\n";
+        $strReturn .= "Adding headline-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("headline_row");
+        $objPagelement->setStrName("headline");
+        $objPagelement->setStrElement("row");
+        $objPagelement->saveObjectToDb($strSamplePageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Beispielseite 1'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Sample page 1'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+
+        if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
+
+        $strReturn .= "Adding paragraph-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrName("text");
+        $objPagelement->setStrElement("paragraph");
+        $objPagelement->saveObjectToDb($strSamplePageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+
+
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+							SET absatz_titel = 'Standard-Absatz',
+								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+						 	WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+             $strQuery = "UPDATE "._dbprefix_."element_absatz
+							SET absatz_titel = 'Standard paragraph',
+								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+							WHERE content_id = '".dbsafeString($strElementId)."'";
+        }  
+        
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Paragraph element created.\n";
+        else
+            $strReturn .= "Error creating paragraph element.\n";
+
+
+
+
+
+
+       $strReturn .= "Creating sample subpage...\n";
+        include_once(_systempath_."/class_modul_pages_page.php");
+        $objPage = new class_modul_pages_page();
+        $objPage->setStrName("subpage_1");
+        if($this->strContentLanguage == "de")
+            $objPage->setStrBrowsername("Beispiel-Unterseite 1");
+        else
+            $objPage->setStrBrowsername("Sample subpage 1");
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
+        $objPage->saveObjectToDb();
+        $strSampleSubPageId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
+        $strReturn .= "Adding headline-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("headline_row");
+        $objPagelement->setStrName("headline");
+        $objPagelement->setStrElement("row");
+        $objPagelement->saveObjectToDb($strSampleSubPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Beispiel-Unterseite 1'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+                            SET absatz_titel = 'Sample subpage 1'
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Headline element created.\n";
+        else
+            $strReturn .= "Error creating headline element.\n";
+
+        $strReturn .= "Adding paragraph-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrName("text");
+        $objPagelement->setStrElement("paragraph");
+        $objPagelement->saveObjectToDb($strSampleSubPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $strElementId = $objPagelement->getSystemid();
+
+
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_absatz
+							SET absatz_titel = 'Standard-Absatz auf Unterseite',
+								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+						 	WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+             $strQuery = "UPDATE "._dbprefix_."element_absatz
+							SET absatz_titel = 'Standard paragraph on subpage',
+								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+							WHERE content_id = '".dbsafeString($strElementId)."'";
+        }  
+        
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Paragraph element created.\n";
+        else
+            $strReturn .= "Error creating paragraph element.\n";
 
         return $strReturn;
     }

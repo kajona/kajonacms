@@ -276,7 +276,6 @@ $text["installer_phpcheck_lang"]    = "To load the installer using a different l
 $text["installer_phpcheck_intro2"]  = "<br />The installation of the system is spilt up into serveral steps: ";
 $text["installer_phpcheck_intro2"]  .= "<br />Check of permissions, DB-configuration, credentials to access the administration, module-installation, element-installation and installation of the samplecontents.<br />";
 $text["installer_phpcheck_intro2"]  .= "<br />Dependant on the modules choosen, the number of steps can vary.";
-$text["installer_phpcheck_intro2"]  .= "<br /><br /><b>Note:</b> Please install the module \"Sprachen/Languages\" only, if needed. It can be installed later at any time.";
 $text["installer_phpcheck_intro2"]  .= "<br /><br />The permissions on some files and the availability <br />of needed php-modules are being checked:<br />";
 $text["installer_phpcheck_folder"]  = "<br />Write-permissions on ";
 $text["installer_phpcheck_module"]  = "<br />PHP-module ";

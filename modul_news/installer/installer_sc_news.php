@@ -177,13 +177,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 	            $objNaviPoint->saveObjectToDb($strTreeId);
 	            $strNewsPointID = $objNaviPoint->getSystemid();
 	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-	    
-	            $objNaviPoint = new class_modul_navigation_point();
-	            $objNaviPoint->setStrName("Details");
-	            $objNaviPoint->setStrPageI("newsdetails");
-	            $objNaviPoint->saveObjectToDb($strNewsPointID);
-	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-	
+	            
 	        }
         return $strReturn;
     }
