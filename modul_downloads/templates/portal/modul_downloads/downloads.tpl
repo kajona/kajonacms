@@ -47,10 +47,9 @@ kajonaAjaxHelper.loadAjaxBase();
 kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
 //-->
 </script>
-%%rating_icons%% %%rating_rating%%
+%%rating_icons%% <span id="rating_rating_%%system_id%%">%%rating_rating%%</span>
 </rating_bar>
 
-<rating_icon_filled><a href="%%rating_icon_href%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" /></a></rating_icon_filled>
+<rating_icon_filled><a href="#" onclick="%%rating_icon_onclick%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" title="" /></a></rating_icon_filled>
 
-<rating_icon_empty><a href="%%rating_icon_href%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" /></a></rating_icon_empty>
-
+<rating_icon_empty><a href="#" onclick="%%rating_icon_onclick%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" title="" /></a></rating_icon_empty>

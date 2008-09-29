@@ -18,5 +18,9 @@ $text["liste_leer"]				= "Keine Downloads vorhanden";
 $text["download_datei_link"]	= "Download";
 $text["download_ordner_link"]	= "Anzeigen";
 
+$text["download_rating_rate1"]	= "Download mit ";
+$text["download_rating_rate2"]	= " Punkt(en) bewerten!";
+$text["download_rating_notallowed"]	= "Keine Berechtigung oder bereits bewertet";
+
 
 ?>

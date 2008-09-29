@@ -48,7 +48,6 @@ function kajonaRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
     }
 }
 
-
 function kajonaRating(strSystemid, floatRating, intNrOfIcons) {
         kajonaAjaxHelper.loadAjaxBase();
         //create a new ajax request. collect data.
@@ -63,9 +62,9 @@ function kajonaRating(strSystemid, floatRating, intNrOfIcons) {
             document.getElementById(strIconId).onmouseover = function(){};
         }
         
-                        
         YAHOO.util.Connect.asyncRequest('POST', post_target, {
             success: function(o) {
+				document.getElementById("rating_rating_"+strSystemid).innerHTML = o.responseXML.documentElement.firstChild.nodeValue;
             },
             failure: function(o) {
             }

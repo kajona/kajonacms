@@ -235,9 +235,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$strIconId = "kajona_rating_icon_".$strSystemid."_".$intI;
 			$arrTemplate["rating_icon_id"] = $strIconId;
 			if($bitRatingAllowed) {
-			    $arrTemplate["rating_icon_href"] = "javascript:kajonaRating('".$strSystemid."', '".$intI.".0', 6);";
-       		    $arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6);";
+			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', 6); return false;";
+       		    $arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6); htmlTooltip(this, '".$this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2")."');";
 			    $arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
+			} else {
+				$arrTemplate["rating_icon_mouseover"] = "htmlTooltip(this, '".$this->getText("download_rating_notallowed")."');";
 			}
     			
 			if(round($floatRating) >= $intI) 
@@ -245,7 +247,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			else
 			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);
 		}
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating, 2), $strTemplateBarId);
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating, "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
 }

@@ -342,6 +342,19 @@ h3 {
     color: #000000;
 }
 
+/* T O O L T I P */
+.tooltip {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #000000;
+    font-size: 10px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #00e800;
+    padding: 4px;
+    max-width: 200px;
+    z-index: 2000;
+}
+
 /* N E W S */
 .newsList {
     border: 1px solid #ffffff;
