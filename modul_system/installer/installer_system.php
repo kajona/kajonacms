@@ -382,7 +382,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         
         //3.2: max session duration
-        $this->registerConstant("_system_release_time_", 1800, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -749,7 +749,7 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";	     
 			
 		$strReturn .= "Registering session relasetime setting...\n";
-		$this->registerConstant("_system_release_time_", 1800, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	 
+		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	 
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
