@@ -231,7 +231,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         
         //check that systemid isn't the id of a rating to avoid recursions
         $arrRecordModulId = $this->getSystemRecord($strSystemid);
-        if($arrRecordModulId["system_module_nr"] == _rating_modul_id_)
+        if(isset($arrRecordModulId["system_modul_nr"]) && $arrRecordModulId["system_module_nr"] == _rating_modul_id_)
             return true;
             
         //ok, so delete matching records

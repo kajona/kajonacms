@@ -230,10 +230,12 @@ class class_modul_user_user extends class_model implements interface_model  {
      * @param string $strUserid
      * @return bool
      */
-    public static function deleteUser($strUserid) {
-        class_logger::getInstance()->addLogRow("deleted user with id ".$strUserid, class_logger::$levelInfo);
-        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strUserid)."'";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+    public function deleteUser() {
+        class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".dbsafeString($this->getSystemid())."'";
+        //call other models that may be interested
+        $this->additionalCallsOnDeletion($this->getSystemid());
+        return $this->objDB->_query($strQuery);
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------

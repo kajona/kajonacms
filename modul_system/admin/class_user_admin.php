@@ -598,9 +598,10 @@ class class_user_admin extends class_admin implements interface_admin {
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strUserid = $this->getParam("userid");
             //The user itself
-            class_modul_user_user::deleteUser($strUserid);
+            $objUser = new class_modul_user_user($strUserid);
+            $objUser->deleteUser();
             //Relationships
-            class_modul_user_group::deleteAllUserMemberships(new class_modul_user_user($strUserid));
+            class_modul_user_group::deleteAllUserMemberships($objUser);
             return true;
         }
         return false;

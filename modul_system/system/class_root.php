@@ -796,7 +796,7 @@ abstract class class_root {
 	 * @return bool
 	 * @see class_root::deleteSystemRecord, class_model::doAdditionalCleanupsOnDeletion
 	 */
-	private function additionalCallsOnDeletion($strSystemid) {
+	protected final function additionalCallsOnDeletion($strSystemid) {
 	    $bitReturn = true;
 
 	    //Look up classes extending class_model
@@ -814,9 +814,10 @@ abstract class class_root {
 	            //create instance
 	            $objModel = new $strClassname;
 	            if ($objModel instanceof class_model) {
-	                if(method_exists($objModel, "doAdditionalCleanupsOnDeletion"))
+	                if(method_exists($objModel, "doAdditionalCleanupsOnDeletion")) {
+	                    class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional deletions", class_logger::$levelInfo);
 	                    $bitReturn &= $objModel->doAdditionalCleanupsOnDeletion($strSystemid);
-
+	                }
 	            }
 	        }
 	    }
