@@ -2,14 +2,14 @@
 Copyright (c) 2008, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
-version: 2.5.1
+version: 2.5.2
 */
 .yui-calcontainer {
-	position:absolute;
-	z-index: 1000;
+	position:relative;
 	padding:5px;
 	background-color:#F7F9FB;
-	float:none;
+	border:1px solid #7B9EBD;
+	float:left;
 	_overflow:hidden; /* IE6 only, to clip iframe shim */
 }
 
@@ -95,7 +95,6 @@ version: 2.5.1
 	left:2px;
 	z-index:1;
 	background: url("callt.gif") no-repeat;
-	text-decoration: none;
 }
 
 .yui-calendar .calnavright {
@@ -108,7 +107,6 @@ version: 2.5.1
 	right:2px;
 	z-index:1;
 	background: url("calrt.gif") no-repeat;
-	text-decoration: none;
 }
 
 .yui-calendar td.calcell {

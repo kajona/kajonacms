@@ -68,7 +68,18 @@
 	left: 580px;
 	width: 143px;
 	height: 137px;
-	border:1px solid #7B9EBD;
+}
+
+.yui-calcontainer {
+	position: absolute !important;
+	z-index: 1000 !important;
+	background-color: #F7F9FB !important;
+	float: none !important;
+	border: 1px solid #7B9EBD;
+}
+
+.yui-calendar .calnavleft, .yui-calendar .calnavright {
+	text-decoration: none;
 }
 
 body {
