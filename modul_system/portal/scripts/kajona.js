@@ -127,8 +127,7 @@ el.onmousemove=Locate;
 function htmlTooltip (el, t) {
 var tooltip,t,s;
 if(t==null || t.length==0) return;
-title=el.getAttribute("title");
-if(title!=null || title.length!=0) el.removeAttribute("title");
+if(el.getAttribute("title")) el.removeAttribute("title");
 tooltip=CreateEl("span","tooltip");
 s=CreateEl("span","top");
 s.innerHTML = t;

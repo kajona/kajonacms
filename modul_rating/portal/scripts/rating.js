@@ -6,65 +6,26 @@
 
 
 
-function kajonaRatingMOver(strImageOverId, intNrOfIcons) {
-    //schema of icon-ids: kajona_downloads_rating_icon_SYSID_NR
-    var arrId = strImageOverId.split("_");
-    var intMaxFilled = arrId[4];
-    
-    for(var intI = 1; intI < intNrOfIcons; intI++) {
-        var strIconId = 'kajona_rating_icon_'+arrId[3]+'_'+intI;
-        //alert(strIconId);
-        var currentIcon = document.getElementById(strIconId).src;
-        if(intI <= intMaxFilled) {
-            if(currentIcon.indexOf('filled') == -1)
-                currentIcon = currentIcon.replace('empty', 'filled');
-        } 
-        else {
-            if(currentIcon.indexOf('empty') == -1)
-                currentIcon = currentIcon.replace('filled', 'empty');
-        }
-        document.getElementById(strIconId).src = currentIcon;    
-    }
-}
-
-function kajonaRatingMOut(strImageOverId, intNrOfIcons, intRatingToSet) {
-    //schema of icon-ids: kajona_rating_icon_SYSID_NR
-    var arrId = strImageOverId.split("_");
-    var intMaxFilled = arrId[4];
-    
-    for(var intI = 1; intI < intNrOfIcons; intI++) {
-        var strIconId = 'kajona_rating_icon_'+arrId[3]+'_'+intI;
-        //alert(strIconId);
-        var currentIcon = document.getElementById(strIconId).src;
-        if(intI < intRatingToSet) {
-            if(currentIcon.indexOf('filled') == -1)
-                currentIcon = currentIcon.replace('empty', 'filled');
-        } 
-        else {
-            if(currentIcon.indexOf('empty') == -1)
-                currentIcon = currentIcon.replace('filled', 'empty');
-        }
-        document.getElementById(strIconId).src = currentIcon;    
-    }
-}
-
-function kajonaRating(strSystemid, floatRating, intNrOfIcons) {
+function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
         kajonaAjaxHelper.loadAjaxBase();
         //create a new ajax request. collect data.
         var post_target = 'xml.php?module=rating&action=saveRating';
         //concat to send all values
         var post_body = 'systemid='+strSystemid+'&rating='+floatRating;
         
-        //disable new ratings :)
-        for(var intI = 1; intI < intNrOfIcons; intI++) {
-            var strIconId = 'kajona_rating_icon_'+strSystemid+'_'+intI;
-            document.getElementById(strIconId).onmouseout = function(){};
-            document.getElementById(strIconId).onmouseover = function(){};
+        //disable rating buttons
+		var ratingBar = document.getElementById("kajona_rating_"+strSystemid);
+		var ratingIcons = ratingBar.getElementsByTagName("li");
+        for(var intI = intNumberOfIcons; intI >= 1; intI--) {
+			ratingBar.removeChild(ratingIcons[intI]);
         }
         
         YAHOO.util.Connect.asyncRequest('POST', post_target, {
             success: function(o) {
-				document.getElementById("rating_rating_"+strSystemid).innerHTML = o.responseXML.documentElement.firstChild.nodeValue;
+				//display new rating
+				var floatNewRating = o.responseXML.documentElement.firstChild.nodeValue;
+				document.getElementById("kajona_rating_rating_"+strSystemid).innerHTML = floatNewRating;
+				ratingIcons[0].style.width = floatNewRating/intNumberOfIcons*100+"%";
             },
             failure: function(o) {
             }

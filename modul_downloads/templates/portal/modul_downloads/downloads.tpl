@@ -47,9 +47,11 @@ kajonaAjaxHelper.loadAjaxBase();
 kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
 //-->
 </script>
-%%rating_icons%% <span id="rating_rating_%%system_id%%">%%rating_rating%%</span>
+<span class="inline-rating-bar">
+<ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">
+	<li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
+	%%rating_icons%%
+</ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span>
 </rating_bar>
 
-<rating_icon_filled><a href="#" onclick="%%rating_icon_onclick%%"><img src="_webpath_/portal/pics/kajona/rating_filled.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" title="" /></a></rating_icon_filled>
-
-<rating_icon_empty><a href="#" onclick="%%rating_icon_onclick%%"><img src="_webpath_/portal/pics/kajona/rating_empty.png" id="%%rating_icon_id%%" onmouseover="%%rating_icon_mouseover%%" onmouseout="%%rating_icon_mouseout%%" title="" /></a></rating_icon_empty>
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

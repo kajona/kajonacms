@@ -223,31 +223,31 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 */
 	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true) {
 		$strIcons = "";
+		$strRatingBarTitle = "";
+		
+		//currently, ratings are up to 5. increase here to get other ranges.
+		$intNumberOfIcons = 5;
 		
 		//read the templates
 		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_bar");
-		$strTemplateFilledId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon_filled");
-		$strTemplateEmptyId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon_empty");
 		
-		//currently, ratings are up to 5. increase here to get other ranges.
-		for($intI = 1; $intI < 6; $intI++) {
-			$arrTemplate = array();
-			$strIconId = "kajona_rating_icon_".$strSystemid."_".$intI;
-			$arrTemplate["rating_icon_id"] = $strIconId;
-			if($bitRatingAllowed) {
-			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', 6); return false;";
-       		    $arrTemplate["rating_icon_mouseover"] = "kajonaRatingMOver('".$strIconId."', 6); htmlTooltip(this, '".$this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2")."');";
-			    $arrTemplate["rating_icon_mouseout"] = "kajonaRatingMOut('".$strIconId."', 6, ".round($floatRating).");";
-			} else {
-				$arrTemplate["rating_icon_mouseover"] = "htmlTooltip(this, '".$this->getText("download_rating_notallowed")."');";
+		if($bitRatingAllowed) {
+			$strTemplateIconId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon");
+			
+			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
+				$arrTemplate = array();
+				$arrTemplate["rating_icon_number"] = $intI;
+				
+			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
+       		    $arrTemplate["rating_icon_title"] = $this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2");
+	
+				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
 			}
-    			
-			if(round($floatRating) >= $intI) 
-				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateFilledId); 
-			else
-			    $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateEmptyId);
+		} else {
+			$strRatingBarTitle = $this->getText("download_rating_notallowed");
 		}
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_rating" => $floatRating, "system_id" => $strSystemid, 2), $strTemplateBarId);
+		
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
 }
