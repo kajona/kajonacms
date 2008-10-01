@@ -639,6 +639,20 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
 	}
+	
+	/**
+	 * Returns a headline in a form
+	 *
+	 * @param string $strText
+	 * @param string $strClass
+	 * @return string
+	 */
+	public function formHeadline($strText, $strClass = "heading") {
+	    $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "headline_form");
+	    $arrTemplate["text"] = $strText;
+	    $arrTemplate["class"] = $strClass;
+	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+	}
 
 	/**
 	 * Returns the tags to close an open form

@@ -371,6 +371,11 @@ Used to print plaintext in a form
 <div class="formText"><div class="spacer"></div><div class="%%class%%">%%text%%</div></div><br />
 </text_row_form>
 
+Used to print headline in a form
+<headline_form>
+<h2 class="%%class%%">%%text%%</h2>
+</headline_form>
+
 This Section is used to display a few special details about the current page being edited
 <page_infobox>
  <table cellpadding="0" cellspacing="0" style="width: 100%;" class="statusPages">

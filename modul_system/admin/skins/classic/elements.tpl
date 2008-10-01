@@ -452,6 +452,17 @@ Used tp print plaintext in a form
 </table>
 </text_row_form>
 
+Used to print headline in a form
+
+<headline_form>
+<table width="90%" cellpadding="2" cellspacing="0">
+	<tr>
+		<td width="30%" align="right" class="%%class%%">%%text%%</td>
+		<td class="%%class%%"></td>
+	</tr>
+</table>
+</headline_form>
+
 This Section is used to display a few special details about the current page being edited
 <page_infobox>
  <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="statusPages">
