@@ -406,16 +406,22 @@ class class_toolkit_admin extends class_toolkit {
             function initAC_".$strNameCleaned."() {
             	document.getElementById('".$strName."').onfocus = function() {};
 
-                var pageDataSource = new YAHOO.widget.DS_XHR(\"xml.php\", [\"page\", \"title\"]);
-                pageDataSource.queryMatchCase = false;
-                pageDataSource.scriptQueryParam = \"filter\";
-                pageDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
-                pageDataSource.scriptQueryAppend = \"admin=1&module=pages&action=getPagesByFilter\";
+				var pageDataSource = new YAHOO.util.XHRDataSource(\"xml.php\");
+				pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
+				pageDataSource.responseSchema = { 
+					resultNode : \"page\", 
+					fields : [\"title\"] 
+				};
 
-                var page%%name%%autocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource);
-                page%%name%%autocomplete.allowBrowserAutocomplete = false;
-                page%%name%%autocomplete.useShadow = false;
-            }
+                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
+					queryMatchCase: false,
+                	allowBrowserAutocomplete: false,
+                	useShadow: false
+				});
+				pageautocomplete.generateRequest = function(sQuery) { 
+					return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ; 
+				};
+			}
             
             YAHOO.util.Event.onDOMReady(function () {document.getElementById('".$strName."').onfocus = function () {initAC_".$strNameCleaned."();};});
 		</script>

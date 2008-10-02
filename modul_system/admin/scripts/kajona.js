@@ -312,8 +312,8 @@ var kajonaAjaxHelper =  {
 
 	loadAutocompleteBase : function () {
 		kajonaAjaxHelper.loadAjaxBase();
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-min.js');
 		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/autocomplete/autocomplete-min.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-beta-min.js');
 	},
 	
 	loadCalendarBase : function() {
