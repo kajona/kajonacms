@@ -416,11 +416,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveNews");
+				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
                 //The date selector
                 $strReturn .= $this->objToolkit->formDate(0, 0, 0, $this->getText("start"), $this->getText("end"), $this->getText("archive"));
-                $strReturn .= $this->objToolkit->divider();
                 //and the cats
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
                 foreach ($arrCats as $objOneCat) {
             	   $strReturn .= $this->objToolkit->formInputCheckbox("cat[".$objOneCat->getSystemid()."]", $objOneCat->getStrTitle());
@@ -441,11 +442,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $objNews = new class_modul_news_news($this->getSystemid());
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveNews");
+			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
                 //The date selector
                 $strReturn .= $this->objToolkit->formDate($objNews->getIntDateStart(), $objNews->getIntDateEnd(), $objNews->getIntDateSpecial(), $this->getText("start"), $this->getText("end"), $this->getText("archive"));
-                $strReturn .= $this->objToolkit->divider();
                 //and the cats
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
                 $arrNewsMember = class_modul_news_category::getNewsMember($this->getSystemid());
 

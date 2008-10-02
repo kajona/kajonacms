@@ -55,10 +55,12 @@ $text["news_rechte"]				= "Rechte bearbeiten";
 $text["news_loeschen"]				= "News löschen";
 $text["news_loeschen_frage"]		= " : News wirklich löschen?";
 $text["news_loeschen_link"]			= "Löschen";
+$text["news_basicdata"]             = "News-Grunddaten";
 $text["news_title"]                 = "Titel:";
 $text["start"]                      = "Start-Datum:";
 $text["end"]                        = "Ende-Datum:";
 $text["archive"]                    = "Archiv-Datum:";
+$text["news_categories"]            = "Kategorien";
 $text["browser"]                    = "Browser öffnen";
 
 $text["news_intro"]                 = "Aufmacher:";

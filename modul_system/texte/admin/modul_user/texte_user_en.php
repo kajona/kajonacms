@@ -64,6 +64,7 @@ $text["gruppe_loeschen_fehler"]		= "An error occured while deleting group";
 $text["gruppe_loeschen_x"]			= "This group can\'t be deleted";
 $text["gruppe_mitglieder"]			= "Show members of the group";
 
+$text["group_memberlist"]  			= "Members of group ";
 $text["mitglied_loeschen"]			= "Delete user from group";
 $text["mitglied_loeschen_frage_1"]	= " : really delete user from group";
 $text["mitglied_loeschen_frage_2"]	= " ?";
@@ -84,6 +85,7 @@ $text["login_status_1"]				= "Login OK";
 $text["login_ip"]					= "IP-Address";
 
 //Form-Texts
+$text["user_personaldata"]			= "Persönliche Daten";
 $text["username"]					= "Username:";
 $text["passwort"]					= "Password:";
 $text["passwort2"]					= "Password:";
@@ -96,6 +98,7 @@ $text["ort"]						= "City:";
 $text["tel"]						= "Phone:";
 $text["handy"]						= "Mobile:";
 $text["gebdatum"]					= "Date of birth:";
+$text["user_system"]				= "Systemeinstellungen";
 $text["aktiv"]						= "Active:";
 $text["admin"]						= "Admin login:";
 $text["portal"]						= "Portal login:";
@@ -103,6 +106,9 @@ $text["submit"]						= "Save";
 $text["skin"]						= "Admin skin:";
 $text["gruppe"]						= "Group title:";
 $text["language"]                   = "Admin language:";
+
+//Form-Texts Memberships
+$text["user_memberships"]			= "Group assignments of user ";
 
 
 $text["fehler_recht"]				= "Not enough permissions to perform this action";

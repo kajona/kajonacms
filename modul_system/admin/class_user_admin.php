@@ -308,6 +308,7 @@ class class_user_admin extends class_admin implements interface_admin {
 
                 //Form filled with the data
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 if(!$bitSelf)
                     $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), $objUser->getStrUsername());
                 $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
@@ -321,12 +322,13 @@ class class_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $objUser->getStrTel());
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $objUser->getStrMobile());
                 $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $objUser->getStrDate());
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $objUser->getStrAdminlanguage());
                 if(!$bitSelf) {
-                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), $objUser->getIntActive());
                     $strReturn .= $this->objToolkit->formInputCheckbox("admin", $this->getText("admin"), $objUser->getIntAdmin());
                     $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), $objUser->getIntPortal());
+                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), $objUser->getIntActive());
                 }
                 $strReturn .= $this->objToolkit->formInputHidden("userid", $objUser->getSystemid());
                 if($bitSelf)
@@ -335,6 +337,7 @@ class class_user_admin extends class_admin implements interface_admin {
             else {
                 //Blank form
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), $this->getParam("username"));
                 $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
                 $strReturn .= $this->objToolkit->formInputPassword("passwort2", $this->getText("passwort2"));
@@ -347,11 +350,12 @@ class class_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $this->getParam("tel"));
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $this->getParam("handy"));
                 $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $this->getParam("gebdatum"));
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), $this->getParam("skin"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"));
                 $strReturn .= $this->objToolkit->formInputCheckbox("admin", $this->getText("admin"));
                 $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"));
+                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"));
                 $strReturn .= $this->objToolkit->formInputHidden("userid");
 
             }
@@ -741,12 +745,15 @@ class class_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($this->getParam("groupid") != "") {
+            	$objGroup = new class_modul_user_group($this->getParam("groupid"));
+            	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
+            	
                 $arrMembers = class_modul_user_group::getGroupMembers($this->getParam("groupid"));
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach ($arrMembers as $objSingleMember) {
                     $strAction = $this->objToolkit->listButton(getLinkAdmin("user", "groupmemberdelete", "&memberid=".$objSingleMember->getSystemid()."&groupid=".$this->getParam("groupid"), $this->getText("mitglied_loeschen"), $this->getText("mitglied_loeschen"), "icon_ton.gif"));
-                    $strReturn .= $this->objToolkit->listRow2($objSingleMember->getStrUsername(), $strAction, $intI++);
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
             }
@@ -862,7 +869,7 @@ class class_user_admin extends class_admin implements interface_admin {
             $objUser = new class_modul_user_user($this->getParam("userid"));
 
             $strReturn .= $this->objToolkit->formInputHidden("userid", $this->getParam("userid"));
-            $strReturn .= $this->objToolkit->getTextRow($objUser->getStrUsername());
+            $strReturn .= $this->objToolkit->formHeadline($this->getText("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
             //Collect groups
             $arrGroups = class_modul_user_group::getAllGroups();

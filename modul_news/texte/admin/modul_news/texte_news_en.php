@@ -56,10 +56,12 @@ $text["news_rechte"]				= "Change permissions";
 $text["news_loeschen"]				= "Delete news";
 $text["news_loeschen_frage"]		= " : really delete news?";
 $text["news_loeschen_link"]			= "Delete";
+$text["news_basicdata"]             = "News basic data";
 $text["news_title"]                 = "Title:";
 $text["start"]                      = "Start date:";
 $text["end"]                        = "End date:";
 $text["archive"]                    = "Archive date:";
+$text["news_categories"]            = "Categories";
 $text["browser"]                    = "Open browser";
 
 $text["news_intro"]                 = "Teaser:";

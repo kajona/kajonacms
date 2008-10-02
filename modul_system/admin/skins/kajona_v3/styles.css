@@ -809,7 +809,7 @@ form br {
 	margin: 0 3px 0 0;
 	display: block;
 	float: left;
-	width: 180px;
+	width: 280px;
 	height: 16px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -840,7 +840,7 @@ form br {
 	margin: 0 3px 4px 0;
 	display: block;
 	float: left;
-	width: 180px;
+	width: 280px;
 	height: 50px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -859,7 +859,7 @@ form br {
 	margin: 0 3px 0 0;
 	display: block;
 	float: left;
-	width: 186px;
+	width: 286px;
 	height: 18px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -869,7 +869,7 @@ form br {
 
 * html .inputDropdown {
 	height: 20px;
-	width: 180px;
+	width: 280px;
 }
 
 .inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
@@ -885,7 +885,7 @@ form br {
 	margin: 8px 0 0 0;
 	display: block;
 	float: left;
-	width: 186px;
+	width: 156px;
 	height: 20px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -896,7 +896,7 @@ form br {
 }
 
 * html .inputSubmit {
-	width: 180px;
+	width: 150px;
 }
 
 .inputSubmitShort {

@@ -63,6 +63,7 @@ $text["gruppe_loeschen_fehler"]		= "Löschen";
 $text["gruppe_loeschen_x"]			= "Diese Gruppe kann nicht gelöscht werden";
 $text["gruppe_mitglieder"]			= "Mitglieder der Gruppe anzeigen";
 
+$text["group_memberlist"]  			= "Mitglieder der Gruppe ";
 $text["mitglied_loeschen"]			= "Benutzer aus der Gruppe entfernen";
 $text["mitglied_loeschen_frage_1"]	= " : Benutzer wirklich aus der Gruppe";
 $text["mitglied_loeschen_frage_2"]	= " entfernen?";
@@ -83,6 +84,7 @@ $text["login_status_1"]				= "Login OK";
 $text["login_ip"]					= "IP-Adresse";
 
 //Form-Texts
+$text["user_personaldata"]			= "Persönliche Daten";
 $text["username"]					= "Benutzername:";
 $text["passwort"]					= "Passwort:";
 $text["passwort2"]					= "Passwort:";
@@ -95,6 +97,7 @@ $text["ort"]						= "Ort:";
 $text["tel"]						= "Telefon:";
 $text["handy"]						= "Handy:";
 $text["gebdatum"]					= "Geburtsdatum:";
+$text["user_system"]				= "Systemeinstellungen";
 $text["aktiv"]						= "Aktiv:";
 $text["admin"]						= "Admin-Login:";
 $text["portal"]						= "Portal-Login:";
@@ -102,6 +105,9 @@ $text["submit"]						= "Speichern";
 $text["skin"]						= "Admin-Skin:";
 $text["gruppe"]						= "Gruppen-Name:";
 $text["language"]                   = "Admin-Sprache:";
+
+//Form-Texts Memberships
+$text["user_memberships"]			= "Gruppenzugehörigkeit des Benutzers ";
 
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
