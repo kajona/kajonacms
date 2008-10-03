@@ -391,7 +391,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
             include_once(_systempath_."/class_modul_rating_rate.php");
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)
-               $bitReturn = $objRating->isRatableByCurrentUser();
+               $bitReturn = $objRating->isRateableByCurrentUser();
             else
                $bitReturn = true;   
         }

@@ -27,7 +27,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     private $strRatingChecksum;
     private $floatRating = 0.0;
     private $intHits = 0;
-
+    
     /**
      * The max value an object can be rated
      *
@@ -136,7 +136,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @return bool
      */
     public function saveRating($floatRating) {
-    	if($floatRating < 0 || !$this->isRatableByCurrentUser() || $floatRating > class_modul_rating_rate::$intMaxRatingValue)
+    	if($floatRating < 0 || !$this->isRateableByCurrentUser() || $floatRating > class_modul_rating_rate::$intMaxRatingValue)
     	   return false;
     	   
         //calc the new rating
@@ -169,9 +169,10 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     /**
      * Checks, if the record is already rated by the current user to avoid double-ratings
      *
+     * @param $intReason 
      * @return boolean
      */
-    public function isRatableByCurrentUser() {
+    public function isRateableByCurrentUser() {
     	$bitReturn = true;
     	
     	//sql-check
@@ -185,11 +186,12 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     		//cookie available?
     		if(getCookie("kj_ratingHistory") != "") {
     			$strRatingCookie = getCookie("kj_ratingHistory");
-    			if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false)
+    			if(uniStrpos($strRatingCookie, $this->getSystemid()) !== false) {
     			   $bitReturn = false;
+    			}
     		}
     	}
-    	else
+    	else 
     	   $bitReturn = false;
     	
     	return $bitReturn;

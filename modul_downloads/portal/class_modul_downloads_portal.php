@@ -95,7 +95,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
-						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), ($objOneFile->rightRight4()  && $objOneFile->isRateableByUser()));
+						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
 						}
 
 						//could we get a preview (e.g. if its an image)?
@@ -221,7 +221,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 * @param bool $bitRatingAllowed
 	 * @return string
 	 */
-	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true) {
+	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
 		$strIcons = "";
 		$strRatingBarTitle = "";
 		
@@ -232,7 +232,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		//read the templates
 		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_bar");
 		
-		if($bitRatingAllowed) {
+		if($bitRatingAllowed && $bitPermissions) {
 			$strTemplateIconId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon");
 			
 			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
@@ -245,7 +245,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
 			}
 		} else {
-			$strRatingBarTitle = $this->getText("download_rating_notallowed");
+		    if(!$bitRatingAllowed)
+			    $strRatingBarTitle = $this->getText("download_rating_voted");
+			else    
+			    $strRatingBarTitle = $this->getText("download_rating_permissions");
 		}
 		
 		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
