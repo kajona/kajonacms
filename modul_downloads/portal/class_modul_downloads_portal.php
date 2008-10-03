@@ -226,7 +226,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strRatingBarTitle = "";
 		
 		//currently, ratings are up to 5. increase here to get other ranges.
-		$intNumberOfIcons = 5;
+		include_once(_systempath_."/class_modul_rating_rate.php");
+		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 		
 		//read the templates
 		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_bar");

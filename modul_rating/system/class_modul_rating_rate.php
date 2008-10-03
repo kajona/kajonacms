@@ -29,6 +29,13 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     private $intHits = 0;
 
     /**
+     * The max value an object can be rated
+     *
+     * @var int
+     */
+    public static $intMaxRatingValue = 5;
+    
+    /**
      * Constructor to create a valid object
      *
      * @param string $strSystemid (use "" on new objets)
@@ -129,7 +136,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @return bool
      */
     public function saveRating($floatRating) {
-    	if($floatRating < 0 || !$this->isRatableByCurrentUser())
+    	if($floatRating < 0 || !$this->isRatableByCurrentUser() || $floatRating > class_modul_rating_rate::$intMaxRatingValue)
     	   return false;
     	   
         //calc the new rating
@@ -293,6 +300,11 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     }
     
     public function setFloatRating($floatRating) {
+        if($floatRating > class_modul_rating_rate::$intMaxRatingValue) {
+            $floatRating = class_modul_rating_rate::$intMaxRatingValue;
+        }
+        if($floatRating < 0)
+            $floatRating = 0;
         $this->floatRating = $floatRating;
     }
     
