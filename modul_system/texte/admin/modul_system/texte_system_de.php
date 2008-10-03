@@ -189,6 +189,7 @@ $text["about_part2"]                = "<h2>Entwicklungsleitung</h2>
                                        <h2>Contributors / Entwickler</h2>
                                        <ul>
                                        <li>Thomas Hertwig</li>
+                                       <li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li>
                                        </ul>
                                        ";
 
