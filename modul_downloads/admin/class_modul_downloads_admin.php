@@ -274,7 +274,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	//ratings available?
 				 	try {
 				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
-				        if($objMdlRating != null) {
+				        if($objMdlRating != null && $objOneFile->getType() != 1) {
 				 	        include_once(_systempath_."/class_modul_rating_rate.php");	
 				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
 				 	        if($objRating != null)

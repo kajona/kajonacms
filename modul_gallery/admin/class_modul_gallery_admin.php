@@ -514,6 +514,22 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	$strName = uniStrTrim($objOneFile->getStrName(), 30)." (".uniStrTrim(basename($objOneFile->getStrFilename()), 25).")";
 				 	$strCenter = ($objOneFile->getIntType() == 0 ? bytesToString($objOneFile->getIntSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getIntType() == 0 ? $objOneFile->getIntHits()." Hits": "");
+				 	
+				 	//ratings available?
+				 	try {
+				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
+				        if($objMdlRating != null && $objOneFile->getIntType() != 1) {
+				 	        include_once(_systempath_."/class_modul_rating_rate.php");	
+				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
+				 	        if($objRating != null)
+				 	            $strCenter .= " - ".$objRating->getFloatRating();
+				 	        else
+				 	            $strCenter .= " - 0.0";    
+				        }
+
+				 	}
+				 	catch (class_exception $objException) { }
+				 	
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getIntType() == 1 && $objOneFile->rightView())

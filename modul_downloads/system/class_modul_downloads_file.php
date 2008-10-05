@@ -359,7 +359,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	
 	
 	/**
-	 * Rating of the current file, of module rating is installed.
+	 * Rating of the current file, if module rating is installed.
 	 * 
 	 * @see interface_sortable_rating
 	 * @return float

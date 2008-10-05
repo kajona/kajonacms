@@ -63,11 +63,14 @@
 </piclist_unlimited>
 
 <picdetail>
+<script type="text/javascript">
+kajonaAjaxHelper.loadAjaxBase();
+</script>
 %%pathnavigation%%
 <table width="85%"  border="0">
   <tr>
     <td width="20%">&nbsp;</td>
-    <td width="60%"><div align="center">%%pic_name%%</div></td>
+    <td width="60%"><div align="center" style="float: left;">%%pic_name%%</div><div style="float: right;">%%pic_rating%%</div></td>
     <td width="20%">&nbsp;</td>
   </tr>
   <tr>
@@ -97,3 +100,18 @@
 <pathnavigation_level>
 %%pathnavigation_point%% >
 </pathnavigation_level>
+
+<rating_bar>
+<script type="text/javascript">
+<!--
+kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+//-->
+</script>
+<span class="inline-rating-bar">
+<ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">
+	<li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
+	%%rating_icons%%
+</ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span>
+</rating_bar>
+
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

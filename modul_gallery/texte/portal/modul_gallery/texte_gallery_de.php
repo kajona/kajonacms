@@ -21,5 +21,10 @@ $text["forwardlink"]			= "Weiter";
 $text["backlink"]				= "Zurück";
 $text["uebersicht"]				= "Übersicht";
 
+$text["gallery_rating_rate1"]	= "Bild mit ";
+$text["gallery_rating_rate2"]	= " Punkt(en) bewerten!";
+$text["gallery_rating_permissions"] = "Keine ausreichenden Rechte.";
+$text["gallery_rating_voted"]	= "Dieses Bild wurde bereits bewertet.";
+
 
 ?>

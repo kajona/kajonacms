@@ -240,6 +240,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrImage["pic_size"] = $objImage->getIntSize();
 		$arrImage["pic_hits"] = $objImage->getIntHits();
 		$arrImage["pic_subtitle"] = $objImage->getStrSubtitle();
+		
+		//ratings available?
+		if($objImage->getFloatRating() !== null) {
+		    $arrImage["pic_rating"] = $this->buildRatingBar($objImage->getFloatRating(), $objImage->getSystemid(), $objImage->isRateableByUser(), $objImage->rightRight2());
+		}
+		
 		$strReturn = $this->objTemplate->fillTemplate($arrImage, $strTemplateID);
 
 		//Update view counter
@@ -523,6 +529,47 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $bitReturn = false;
 		
 		return $bitReturn;
+	}
+	
+	/**
+	 * Builds the rating bar available for every image-detailview.
+	 * Creates the needed js-links and image-tags as defined by the template.
+	 *
+	 * @param float $floatRating
+	 * @param string $strSystemid
+	 * @param bool $bitRatingAllowed
+	 * @return string
+	 */
+	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+		$strIcons = "";
+		$strRatingBarTitle = "";
+		
+		include_once(_systempath_."/class_modul_rating_rate.php");
+		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
+		
+		//read the templates
+		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "rating_bar");
+		
+		if($bitRatingAllowed && $bitPermissions) {
+			$strTemplateIconId = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "rating_icon");
+			
+			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
+				$arrTemplate = array();
+				$arrTemplate["rating_icon_number"] = $intI;
+				
+			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
+       		    $arrTemplate["rating_icon_title"] = $this->getText("gallery_rating_rate1").$intI.$this->getText("gallery_rating_rate2");
+	
+				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+			}
+		} else {
+		    if(!$bitRatingAllowed)
+			    $strRatingBarTitle = $this->getText("gallery_rating_voted");
+			else    
+			    $strRatingBarTitle = $this->getText("gallery_rating_permissions");
+		}
+		
+		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
 }

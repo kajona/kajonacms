@@ -39,9 +39,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$arrModul["modul"] 			    = "downloads";
 
 		parent::__construct($arrModul, $arrElementData);
-
-
-
 	}
 
 	/**
@@ -225,7 +222,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strIcons = "";
 		$strRatingBarTitle = "";
 		
-		//currently, ratings are up to 5. increase here to get other ranges.
 		include_once(_systempath_."/class_modul_rating_rate.php");
 		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 		

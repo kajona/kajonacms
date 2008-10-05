@@ -21,5 +21,9 @@ $text["forwardlink"]			= "Next";
 $text["backlink"]				= "Previous";
 $text["uebersicht"]				= "Overview";
 
+$text["gallery_rating_rate1"]	= "Rate image with ";
+$text["gallery_rating_rate2"]	= " point(s)!";
+$text["gallery_rating_permissions"] = "Not enough permissions.";
+$text["gallery_rating_voted"]	= "You already voted for this image.";
 
 ?>
