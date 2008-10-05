@@ -55,6 +55,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
     public function initObject() {
          $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
 		             WHERE system_id = navigation_id
+		             AND system_module_nr = "._navigation_modul_id_."
 		             AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
         if(count($arrRow)> 0) {
@@ -141,6 +142,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
     			             AND system_prev_id = '".dbsafeString($strSystemid)."'
+    			             AND system_module_nr = "._navigation_modul_id_."
     			             ".($bitJustActive ? " AND system_status = 1 ": "")."
     			             ORDER BY system_sort ASC, system_comment ASC";
 	    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
@@ -205,6 +207,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    $arrReturn = array();
 	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
+    			             AND system_module_nr = "._navigation_modul_id_."
     			             AND navigation_page_i = '".dbsafeString($strPagename)."'
     			             AND system_status = 1";
 	    $arrIds = $objDB->getArray($strQuery);

@@ -116,7 +116,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_status"] 	= array("int", true);
 		$arrFields["system_comment"]	= array("char254", true);
 		
-		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id")))
+		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Rights table ----------------------------------------------------------------------------------

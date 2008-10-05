@@ -51,6 +51,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
 		             WHERE system_id = navigation_id
+		             AND system_module_nr = "._navigation_modul_id_."
 		             AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
         $this->setStrName($arrRow["navigation_name"]);
@@ -113,6 +114,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
                      FROM "._dbprefix_."navigation, "._dbprefix_."system
 		             WHERE system_id = navigation_id
 		             AND system_prev_id = '0'
+		             AND system_module_nr = "._navigation_modul_id_."
 		             ORDER BY system_sort ASC, system_comment ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrReturn = array();
@@ -136,6 +138,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
                      WHERE system_id = navigation_id
                      AND system_prev_id = '0'
                      AND navigation_name = '".dbsafeString($strName)."'
+                     AND system_module_nr = "._navigation_modul_id_."
                      ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
         if(isset($arrRow["system_id"]))
