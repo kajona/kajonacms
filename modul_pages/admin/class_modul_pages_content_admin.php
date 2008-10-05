@@ -343,7 +343,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionNewElement() {
+	private function actionNewElement($bitShowErrors = false) {
 		$strReturn = "";
         //check rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
@@ -358,6 +358,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     		//and finally create the object
     		$objElement = new $strElementClass();
+    		if($bitShowErrors)
+    		  $objElement->setDoValidation(true);
+    		  
     		$strReturn = $objElement->actionEdit("new");
 		}
 		else
@@ -372,7 +375,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionEditElement() {
+	private function actionEditElement($bitShowErrors = false) {
 		$strReturn = "";
 		//check rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
@@ -386,6 +389,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     			//and finally create the object
     			$objElement = new $strElementClass();
+    			if($bitShowErrors)
+    		        $objElement->setDoValidation(true);
     			$strReturn .= $objElement->actionEdit("edit");
     			$this->lockRecord();
     		}
@@ -407,9 +412,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	private function actionSaveElement() {
 		$strReturn = "";
 		//There are two modes - edit an new
-		//The element itself just knows the edit mode, so in case of new, we have to create a dummy element, before
+		//The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
 		//passing control to the element
-
 		if($this->getParam("mode") == "new") {
 			//Using the passed placeholder-param to load the element and get the table
 			$strPlaceholder = $this->getParam("placeholder");
@@ -425,6 +429,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
+			
+			//really continue? try to validate the passed data.
+			if(!$objElement->validateForm()) {
+			    $strReturn .= $this->actionNewElement(true);
+			    return $strReturn;
+			}
+			
 			//Get the table used by the element to create the record
 			$strTable = $objElement->getTable();
 
@@ -458,6 +469,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
+			
+			//really continue? try to validate the passed data.
+			if(!$objElement->validateForm()) {
+			    $strReturn .= $this->actionEditElement(true);
+			    return $strReturn;
+			}
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great

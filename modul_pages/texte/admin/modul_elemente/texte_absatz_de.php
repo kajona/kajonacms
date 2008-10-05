@@ -21,5 +21,7 @@ $text["absatz_bild"]						= "Bild:";
 $text["absatz_link"]						= "Link:";
 $text["submit"]								= "Speichern";
 
+$text["required_absatz_titel"]              = "Titel";
+
 $text["quickhelp_element_absatz"]           = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 ?>

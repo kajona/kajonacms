@@ -64,6 +64,15 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	    $arrData = $this->loadElementData();
         return uniStrTrim(htmlStripTags($arrData["absatz_titel"]), 60);
 	}
+	
+	/**
+     * Overwrite this function, if you want to validate passed form-input
+     *
+     * @return mixed
+     */
+    protected function getRequiredFields() {
+        return array("absatz_titel" => "string");
+    }
 
 
 } //class_element_absatz.php

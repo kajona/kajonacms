@@ -21,6 +21,8 @@ $text["absatz_bild"]						= "Image:";
 $text["absatz_link"]						= "Link:";
 $text["submit"]								= "Save";
 
+$text["required_absatz_titel"]              = "Title";
+
 $text["quickhelp_element_absatz"]           = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
 
 ?>
