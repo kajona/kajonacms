@@ -55,6 +55,7 @@
 				%%events_eventplanner%%
                 %%comments_postacomment%%
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
+                %%mixed2_portalupload%%
             </div>
             <div class="cleaner"></div>
         </div>

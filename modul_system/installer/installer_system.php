@@ -695,7 +695,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
         
         
-        $strReturn .= "Registering filemanager xml handler...\n";
+        $strReturn .= "Registering filemanager xml handlers...\n";
         $objFilemanagerModule = class_modul_system_module::getModuleByName("filemanager", true);
         $objFilemanagerModule->setStrXmlNameAdmin("class_modul_filemanager_admin_xml.php");
         if(!$objFilemanagerModule->updateObjectToDb())
