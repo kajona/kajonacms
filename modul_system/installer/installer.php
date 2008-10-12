@@ -131,7 +131,7 @@ class class_installer {
 	public function checkPHPSetting() {
 	    $strReturn = "";
 
-	    $arrFilesAndFolders = array("/system/config.php",
+	    $arrFilesAndFolders = array("/system/config/config.php",
 	                                "/system/dbdumps",
 	                                "/system/debug",
 	                                "/portal/pics/cache",
@@ -227,11 +227,11 @@ class class_installer {
                    $_POST["port"]
                );
             //load config file
-            $strConfig = file_get_contents(_systempath_."/config.php");
+            $strConfig = file_get_contents(_systempath_."/config/config.php");
             //insert values
             $strConfig = str_replace($arrSearch, $arrReplace, $strConfig);
             //and save to file
-            file_put_contents(_systempath_."/config.php", $strConfig);
+            file_put_contents(_systempath_."/config/config.php", $strConfig);
             // and reload
             header("Location: "._webpath_."/installer/installer.php?step=loginData");
         }
@@ -496,7 +496,7 @@ class class_installer {
 	    //use return true to diable config-check
 	    //return true;
         //Load the conig to parse it
-        $strConfig = file_get_contents(_systempath_."/config.php");
+        $strConfig = file_get_contents(_systempath_."/config/config.php");
         //check all needed values
         if(   uniStrpos($strConfig, "%%defaulthost%%") !== false
            || uniStrpos($strConfig, "%%defaultusername%%") !== false

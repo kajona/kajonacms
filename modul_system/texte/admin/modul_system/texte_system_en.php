@@ -226,7 +226,7 @@ $text["quickhelp_systemSettings"]	= "You can define basic settings of the system
 $text["quickhelp_systemTasks"]      = "Systemtasks are small programms handling everyday work.<br />
 									   This includes tasks to backup the database or to restore backups created before.";
 $text["quickhelp_systemlog"]		= "The system-log shows the entries of the global logfile.<br />
-									   The granularity of the logging-engine could be set in the config-file (/system/config.php).";
+									   The granularity of the logging-engine could be set in the config-file (/system/config/config.php).";
 $text["quickhelp_updateCheck"]		= "By using the update-check, the version of the modules installed locally and the versions of the modules available online are
                                        compared. If there's a new version available, Kajona displays a hint at the concerning module.";
 
@@ -289,9 +289,9 @@ $text["installer_login_password"]   = "Password:";
 $text["installer_login_save"]       = "Create account";
 
 $text["installer_config_intro"]      = "<b>Set up database-access</b><br /><br />";
-$text["installer_config_intro"]     .= "Note: The webserver needs write-permissions on /system/config.php.<br />";
+$text["installer_config_intro"]     .= "Note: The webserver needs write-permissions on /system/config/config.php.<br />";
 $text["installer_config_intro"]     .= "Empty values for the database server, -user, -password and -name are not allowed.<br />";
-$text["installer_config_intro"]     .= "<br />In the case you want to use emtpy values, edit the config-file /system/config.php manually using a text-editor. For further informations, refer to the manual.<br />";
+$text["installer_config_intro"]     .= "<br />In the case you want to use emtpy values, edit the config-file /system/config/config.php manually using a text-editor. For further informations, refer to the manual.<br />";
 $text["installer_config_intro"]     .= "<br /><b>ATTENTION:</b> The PostgreSQL driver is still in an alpha stadium and should be used in test environments only.<br /><br />";
 $text["installer_config_dbhostname"] = "Database server:";
 $text["installer_config_dbusername"] = "Database user:";
@@ -314,7 +314,7 @@ $text["installer_samplecontent"]     = "<b>Installation of the samplecontent</b>
 $text["installer_samplecontent"]    .= "The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";
 
 $text["installer_finish_intro"]      = "<b>Installation finshed</b><br /><br />";
-$text["installer_finish_hints"]      = "You should set back the write permission on /system/config.php to read-only permission.<br />";
+$text["installer_finish_hints"]      = "You should set back the write permission on /system/config/config.php to read-only permission.<br />";
 $text["installer_finish_hints"]     .= "Additionally, you should remove the folder /installer/ completely out of security reasons.<br /><br />";
 $text["installer_finish_hints"]     .= "<br />The administation in now available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />";
 $text["installer_finish_hints"]     .= "The portal is available under:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";

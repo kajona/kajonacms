@@ -36,7 +36,7 @@ class class_config {
 		$debug = array();
 
 		//Include the config-File
-		if(!@include_once(_realpath_."/system/config.php"))
+		if(!@include_once(_realpath_."/system/config/config.php"))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;
@@ -131,7 +131,7 @@ class class_config {
 		$arrFiles = $objFilesystem->getFilelist("/system/config/", ".php");
 
 		foreach($arrFiles as $strFile)
-			if($strFile != "modul_rechte_config.php" && $strFile != "modul_suche_config.php" && uniStrpos($strFile, "~") === false)
+			if($strFile != "config.php" && uniStrpos($strFile, "~") === false)
 				include_once(_systempath_."/config/".$strFile);
 
 		return;

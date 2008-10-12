@@ -231,7 +231,7 @@ $text["quickhelp_systemSettings"]	= "Hier können grundlegende Einstellungen des
 $text["quickhelp_systemTasks"]		= "Systemtasks sind kleine Programme, die alltägliche Aufaben wie Wartungsarbeiten im System übernehmen.<br />
 									   Hierzu gehört das Sichern der Datenbank und ggf. das Rückspielen einer Sicherung in das System.";
 $text["quickhelp_systemlog"]		= "Das Systemlogbuch gibt die Einträge des Logfiles aus, in welche die Module Nachrichten schreiben können.<br />
-									   Die Feinheit des Loggings kann in der config-Datei (/system/config.php) eingestellt werden.";
+									   Die Feinheit des Loggings kann in der config-Datei (/system/config/config.php) eingestellt werden.";
 $text["quickhelp_updateCheck"]		= "Mit der Aktion Updatecheck werden die Versionsnummern der im System installierten Module mit den Versionsnummern
 									   der aktuell verfügbaren Module verglichen. Sollte ein Modul nicht mehr in der neusten Verion installiert sein,
 									   so gibt Kajona in der Zeile dieses Moduls einen Hinweis hierzu aus.";
@@ -294,9 +294,9 @@ $text["installer_login_password"]   = "Passwort:";
 $text["installer_login_save"]       = "Benutzer anlegen";
 
 $text["installer_config_intro"]     = "<b>Datenbankeinstellungen erfassen</b><br /><br />";
-$text["installer_config_intro"]     .= "Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config.php.<br />";
+$text["installer_config_intro"]     .= "Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />";
 $text["installer_config_intro"]     .= "Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br />";
-$text["installer_config_intro"]     .= "<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br />";
+$text["installer_config_intro"]     .= "<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br />";
 $text["installer_config_intro"]     .= "<br /><b>ACHTUNG:</b> Der PostgreSQL Treiber befindet sich noch im Alpha-Stadium und sollte nur in Test-Umgebungen verwendet werden.<br /><br />";
 $text["installer_config_dbhostname"] = "Datenbankserver:";
 $text["installer_config_dbusername"] = "Datenbankbenutzer:";
@@ -319,7 +319,7 @@ $text["installer_samplecontent"]     = "<b>Installation der Beispielinhalte</b><
 $text["installer_samplecontent"]     .= "Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";
 
 $text["installer_finish_intro"]      = "<b>Installation abgeschlossen</b><br /><br />";
-$text["installer_finish_hints"]      = "Sie sollten nun die Schreibrechte auf die Datei /system/config.php auf Leserechte zurücksetzen.<br />";
+$text["installer_finish_hints"]      = "Sie sollten nun die Schreibrechte auf die Datei /system/config/config.php auf Leserechte zurücksetzen.<br />";
 $text["installer_finish_hints"]      .= "Zusätzlich sollte aus Sicherheitsgründen der Ordner /installer/ unbedingt komplett gelöscht werden.<br /><br />";
 $text["installer_finish_hints"]      .= "<br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />";
 $text["installer_finish_hints"]      .= "Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
