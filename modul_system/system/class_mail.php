@@ -49,7 +49,7 @@ class class_mail {
 	private $bitMultipart = false;
 	private $bitFileAttached = false;
 
-	private $strEndOfLine = "\r\n";
+	private $strEndOfLine = "\n";
 
 	/**
 	 * Constructor
