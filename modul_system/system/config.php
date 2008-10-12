@@ -34,6 +34,7 @@ switch($_SERVER['SERVER_NAME']) {
 case "testpage.mulchprod.intern":
 case "aquarium":
 case "mango":
+case "vserver":
     $config = array();
 
     //Database-Access
