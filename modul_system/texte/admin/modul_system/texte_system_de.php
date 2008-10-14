@@ -264,8 +264,6 @@ $text["systemtask_flushpiccache_skipped"]            = "<br />Anzahl übersprung
 $text["systemtask_flushremoteloadercache_name"]      = "Remoteloadercache leeren";
 $text["systemtask_flushremoteloadercache_done"]      = "Leeren abgeschlossen.";
 
-$text["systemtask_senddelayeddispatch_name"]         = "Verzögerten Versand von Newsletter ausführen.";
-$text["systemtask_senddelayeddispatch_done"]         = "Verschicken abgeschlossen.";
 
 //--- installer -----------------------------------------------------------------------------------------
 
