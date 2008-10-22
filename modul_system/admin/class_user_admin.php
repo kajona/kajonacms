@@ -544,10 +544,11 @@ class class_user_admin extends class_admin implements interface_admin {
 				    	    $objCookie = new class_cookie();
 				    	    //flush the db-cache
 				    	    $this->objDB->flushQueryCache();
+				    	    $this->objSession->resetUser();
 				    	    //and update the cookie
-				    		$objCookie->setCookie("adminskin", $this->getParam("skin"));
+				    		$objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
 				    		//update language set before
-                            $objCookie->setCookie("adminlanguage", $this->getParam("language"));
+                            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
 
                             return "";
                         }

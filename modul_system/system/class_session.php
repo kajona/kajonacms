@@ -467,6 +467,15 @@ final class class_session {
 	}
 	
 	/**
+	 * Resets the internal reference to the current user, e.g. to load new values from the database
+	 */
+	public function resetUser() {
+	    if($this->getUserID() != "") {  
+           $this->objUser = new class_modul_user_user($this->getUserID());
+        }
+	}
+	
+	/**
 	 * Returns the groups the user is member in as a string
 	 *
 	 * @return string
