@@ -51,6 +51,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
         $strReturn = "";
         if($strAction == "setAbsolutePosition")
             $strReturn .= $this->actionSetAbsolutePosition();
+        if($strAction == "setStatus")
+            $strReturn .= $this->actionSetStatus();    
 
         return $strReturn;
 	}
@@ -79,6 +81,25 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
 
         return $strReturn;
+	}
+	
+	/**
+	 * Changes the status of the current systemid
+	 * 
+	 * @return string
+	 */
+	private function actionSetStatus() {
+	    $strReturn = "";
+	    if($this->objRights->rightEdit($this->getSystemid())) {
+	    if(parent::setStatus())
+	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
+	    else
+            $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusError")."</message>";
+	    }
+	    else
+	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+	        
+	    return $strReturn;    
 	}
 
 
