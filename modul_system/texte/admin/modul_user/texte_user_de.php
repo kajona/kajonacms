@@ -35,6 +35,10 @@ $text["user_fehler_name"]			= "Bitte Benutzername angeben <a href=\"javascript:h
 $text["user_fehler_namedoppelt"]	= "Benutzername schon vorhanden, bitte wählen Sie einen anderen Benutzernamen <a href=\"javascript:history.back(-1)\">zurück</a>";
 $text["fehler_speichern"]			= "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
 
+$text["user_logins"]                = "Logins: ";
+$text["user_lastlogin"]             = " Letzer Login: ";
+
+
 $text["permissions_header"]         = array(
             							0 => "Anzeigen",
             							1 => "Bearbeiten",

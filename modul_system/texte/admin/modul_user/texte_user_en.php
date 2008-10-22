@@ -35,6 +35,9 @@ $text["user_fehler_name"]			= "Please enter an username <a href=\"javascript:his
 $text["user_fehler_namedoppelt"]	= "The username already exits, please choose another one <a href=\"javascript:history.back(-1)\">back</a>";
 $text["fehler_speichern"]			= "An error occured while saving profile!";
 
+$text["user_logins"]                = "Logins:";
+$text["user_lastlogin"]             = "Last Login:";
+
 $text["permissions_header"]         = array(
             							0 => "View",
             							1 => "Edit",

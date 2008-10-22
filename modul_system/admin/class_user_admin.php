@@ -225,11 +225,12 @@ class class_user_admin extends class_admin implements interface_admin {
                     else
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
                 }
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strActions, $intI++);
+                $strCenter = $this->getText("user_logins").$objOneUser->getIntLogins().$this->getText("user_lastlogin").timeToString($objOneUser->getIntLastLogin());
+                $strReturn .= $this->objToolkit->listRow3($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strCenter, $strActions, getImageAdmin("icon_user.gif"), $intI++);
             }
             //And one row to create a new one
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                $strReturn .= $this->objToolkit->listRow2Image("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_blank.gif")), $intI++);
+                $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_blank.gif")), "", $intI++);
             $strReturn .= $this->objToolkit->listFooter();
         }
         else
