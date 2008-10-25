@@ -24,6 +24,9 @@ if(issetGet("admin") && getGet("admin") == 1)
 	define("_admin_", true);
 else
 	define("_admin_", false);
+	
+	
+define("_xmlLoader_", true);	
 
 /**
  * Class handling all requests to be served with xml

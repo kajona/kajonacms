@@ -112,17 +112,24 @@ class class_exception extends Exception {
 
 
             //fatal errors are displayed in every case
-            $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
-		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
-		    $strErrormessage .= $this->getMessage()."<br />";
-
-	        if($bitMail)
-	           $strErrormessage .= "An email containing this error was sent to the administration.";
-	        else
-	           $strErrormessage .= "Please inform the administration about the error above.";
-
-	        $strErrormessage .= "</div></body></html>";
-	        print $strErrormessage;
+            if(defined("_xmlLoader_") && _xmlLoader_ === true) {
+                $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+                $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
+            }
+            else {
+                $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
+    		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
+    		    $strErrormessage .= $this->getMessage()."<br />";
+    
+    	        if($bitMail)
+    	           $strErrormessage .= "An email containing this error was sent to the administration.";
+    	        else
+    	           $strErrormessage .= "Please inform the administration about the error above.";
+    
+    	        $strErrormessage .= "</div></body></html>";
+    	        
+            }
+            print $strErrormessage;
 	        //close remaining txs
 	        class_carrier::getInstance()->getObjDB()->__destruct();
 	        //Execution has to be stopped here!
@@ -136,15 +143,21 @@ class class_exception extends Exception {
 
             //check, if regular errors should be displayed:
             if($intConfigDebuglevel >= 1) {
-                $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
-    		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
-    		    $strErrormessage .= $this->getMessage()."<br />";
-    		    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
-    		    if($bitMail)
-	               $strErrormessage .= "An email containing this error was sent to the administration.";
-	           else
-	               $strErrormessage .= "Please inform the administration about the error above.";
-    	        $strErrormessage .= "</div></body></html>";
+                if(defined("_xmlLoader_") && _xmlLoader_ === true) {
+                    $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+                    $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
+                }
+                else {
+                    $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px; \">\n";
+        		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
+        		    $strErrormessage .= $this->getMessage()."<br />";
+        		    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
+        		    if($bitMail)
+    	               $strErrormessage .= "An email containing this error was sent to the administration.";
+    	            else
+    	               $strErrormessage .= "Please inform the administration about the error above.";
+        	        $strErrormessage .= "</div></body></html>";
+                }
     	        print $strErrormessage;
     	        //close remaining txs
                 class_carrier::getInstance()->getObjDB()->__destruct();
