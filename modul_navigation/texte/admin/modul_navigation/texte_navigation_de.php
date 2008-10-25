@@ -41,9 +41,6 @@ $text["navigationp_runter"]			= "Punkt nach unten verschieben";
 $text["navigationp_loeschen"]		= "Navigationspunkt löschen";
 $text["navigationp_recht"]			= "Rechte bearbeiten";
 
-$text["status_aktiv"]               = "Status ändern (ist aktiv)";
-$text["status_inaktiv"]             = "Status ändern (ist inaktiv)";
-
 $text["navigation_name"]            = "Name:";
 $text["speichern"]                  = "Speichern";
 $text["navigation_page_i"]          = "Interne Seite:";

@@ -105,11 +105,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     			if($strReturn == "")
     				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
     		}
-    		if($strAction == "status") {
-    			$strReturn = $this->actionStatus();
-    			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
-    		}
     		if($strAction == "copyPage") {
     		    $strReturn = $this->actionCopyPage();
     			if($strReturn == "")
@@ -300,18 +295,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			 	$strSystemid = $objOneRow->getSystemid();
 			 	//As usual: Just display, if the needed rights are given
 			 	if($this->objRights->rightView($strSystemid)) {
-				 	//Fetch the status of the page
-				 	$intStatus = $objOneRow->getStatus();
-				 	if($intStatus == 1) {
-				 		$status = $this->getText("status_active");
-				 		$stat_bild = "icon_enabled.gif";
-				 	}
-				 	else {
-				 		$status = $this->getText("status_inactive");
-				 		$stat_bild = "icon_disabled.gif";
-				 	}
-
-		    		//Split up rights
+				 	//Split up rights
 		    		if($this->objRights->rightEdit($strSystemid))
     				    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
 		    		if($this->objRights->rightEdit($strSystemid))
@@ -321,7 +305,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    		if($this->objRights->rightDelete($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
 		    		if($this->objRights->rightEdit($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "status", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $status, $stat_bild));
+		    			$strActions .= $this->objToolkit->listStatusButton($objOneRow->getSystemid());
 		    		if($this->objRights->rightRight($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneRow->getSystemid())));
 
@@ -370,16 +354,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $arrPages = $arrPageViews["elements"];
 
 			foreach($arrPages as $objPage) {
-			 	//Get the status
-			 	$status = $objPage->getStatus();
-			 	if($status == 1) {
-			 		$status = $this->getText("status_active");
-			 		$stat_bild = "icon_enabled.gif";
-			 	}
-			 	else {
-			 		$status = $this->getText("status_inactive");
-			 		$stat_bild = "icon_disabled.gif";
-			 	}
 				$strActions = "";
 
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
@@ -391,7 +365,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		if($this->objRights->rightDelete($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "status", "&systemid=".$objPage->getSystemid(), "", $status, $stat_bild));
+	    			$strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
 	    		if($this->objRights->rightRight($objPage->getSystemid()	))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("rights", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
 
@@ -697,30 +671,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	}
 	
-
-	/**
-	 * Changes the status of a page
-	 *
-	 * @return string, "" in case of success
-	 */
-	public function actionStatus() {
-		$strReturn = "";
-
-		if($this->objRights->rightEdit($this->getSystemid())) {
-			if($this->setStatus($this->getSystemid())) {
-				$this->setEditDate($this->getSystemid());
-				//Flush cache
-				$objPage = new class_modul_pages_page($this->getSystemid());
-				$this->flushPageFromPagesCache($objPage->getStrname());
-			}
-			else
-				throw new class_exception("Error changing status", class_exception::$level_ERROR);
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-
-		return $strReturn;
-	}
 
 //*"*****************************************************************************************************
 //--Folder-Mgmt------------------------------------------------------------------------------------------

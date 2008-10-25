@@ -80,11 +80,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
     			if($strReturn == "")
     			   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
-
-    		if($strAction == "statusPost") {
-    			$strReturn = $this->actionStatusPost();
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getPrevId());
-    		}
     		if($strAction == "deletePost") {
     			$strReturn = $this->actionDeletePost();
     			if($strReturn == "")
@@ -308,22 +303,13 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			if(count($arrPosts) > 0) {
 			    $strReturn .= $this->objToolkit->listHeader();
 				foreach($arrPosts as $objPost) {
-
-					if($this->getStatus($objPost->getSystemid()) == 1) {
-				 		$strStatus = $this->getText("status_active");
-				 		$strStatusImage = "icon_enabled.gif";
-				 	}
-				 	else {
-				 		$strStatus = $this->getText("status_inactive");
-				 		$strStatusImage = "icon_disabled.gif";
-				 	}
-				 	$strActions = "";
+                    $strActions = "";
 				 	if($this->objRights->rightEdit($this->getSystemid()))
 				 	    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objPost->getSystemid(), "", $this->getText("edit_post"), "icon_pencil.gif"));
 				 	if($this->objRights->rightDelete($this->getSystemid()))
 					    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid(), "", $this->getText("loeschen_post"), "icon_ton.gif"));
 					if($this->objRights->rightEdit($this->getSystemid()))
-					    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "statusPost", "&systemid=".$objPost->getSystemid(), "", $strStatus, $strStatusImage));
+					    $strActions .= $this->objToolkit->listStatusButton($objPost->getSystemid());
 					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), $objPost->getGuestbookPostName()." - ".$objPost->getGuestbookPostEmail()." - ".$objPost->getGuestbookPostPage(), $strActions, " ", $intI++);
 					$strReturn .= $this->objToolkit->listRow3("", uniStrReplace("&lt;br /&gt;", "<br />" , $objPost->getGuestbookPostText()), "", "", $intI);
 					$strReturn .= $this->objToolkit->listRow3("","", "", "", $intI++);
@@ -382,20 +368,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $strReturn = $this->getText("fehler_recht");
         return $strReturn;
     }
-
-	/**
-	 * changes the status of a post
-	 *
-	 * @return void
-	 */
-	public function actionStatusPost() {
-	    if($this->objRights->rightEdit($this->getSystemid())) {
-		    $this->setStatus();
-		    $this->setEditDate();
-	    }
-		return;
-	}
-
 
 	/**
 	 * Deletes a post or shows a warning box

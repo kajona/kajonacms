@@ -115,13 +115,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=logbook");
     		}
 
-
-    		if($strAction == "status") {
-    		    if($this->objRights->rightEdit($this->getSystemid()))
-                    $this->setStatus();
-                $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showArchive&systemid=".$this->getPrevId());
-    		}
-
     		if($strAction == "sortUp") {
     			$strReturn = $this->actionSort("up");
     			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showArchive&systemid=".$this->getPrevId());
@@ -246,14 +239,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 			if(count($arrFiles) > 0) {
 				foreach($arrFiles as $objOneFile) {
-					if($objOneFile->getStatus() == 1) {
-				 		$strStatus = $this->getText("status_active");
-				 		$strStatusImage = "icon_enabled.gif";
-				 	}
-				 	else {
-				 		$strStatus = $this->getText("status_inactive");
-				 		$strStatusImage = "icon_disabled.gif";
-				 	}
 				 	//get mimes
 				 	if($objOneFile->getType() == 0) {
 				 		$arrTemp =  $this->objToolkit->mimeType(basename($objOneFile->getFilename()));
@@ -295,7 +280,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFile", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("datei_bearbeiten"), "icon_pencil.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "status", "&systemid=".$objOneFile->getSystemid(), "", $strStatus, $strStatusImage));
+				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));

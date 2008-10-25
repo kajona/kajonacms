@@ -114,12 +114,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
 
-    		if($strAction == "newsStatus") {
-    		    if($this->objRights->rightEdit($this->getSystemid()))
-    			    $this->setStatus();
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
-    		}
-
     		if($strAction == "newsFeed")
     		    $strReturn = $this->actionListNewsFeed();
 
@@ -254,15 +248,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			$strNews = "";
 			foreach($arrNews as $objOneNews) {
 			    if($this->objRights->rightView($objOneNews->getSystemid())) {
-    				$intStatus = $objOneNews->getStatus();
-    				if($intStatus == 1) {
-    			 		$strStatus = $this->getText("status_active");
-    			 		$strStatusImage = "icon_enabled.gif";
-    			 	}
-    			 	else {
-    			 		$strStatus = $this->getText("status_inactive");
-    			 		$strStatusImage = "icon_disabled.gif";
-    			 	}
                     $strAction = "";
                     $strCenter = "S: ".timeToString($objOneNews->getIntDateStart(), false)
                                .($objOneNews->getIntDateEnd() != 0 ?" E: ".timeToString($objOneNews->getIntDateEnd(), false) : "" )
@@ -274,7 +259,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightDelete($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_loeschen"), "icon_ton.gif"));
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newsStatus", "&systemid=".$objOneNews->getSystemid(), "", $strStatus, $strStatusImage));
+    				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), getRightsImageAdminName($objOneNews->getSystemid())));
     		   		$strNews .= $this->objToolkit->listRow3($objOneNews->getStrTitle()." (".$objOneNews->getIntHits()." Hits)", $strCenter, $strAction,getImageAdmin("icon_news.gif"), $intI++);

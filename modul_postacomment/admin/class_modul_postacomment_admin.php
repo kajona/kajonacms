@@ -74,12 +74,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
 
-    		if($strAction == "postStatus") {
-    		    if($this->objRights->rightEdit($this->getSystemid()))
-    			    $this->setStatus();
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
-    		}
-
 	    }
 	    catch (class_exception $objException) {
 		    $objException->processException();
@@ -173,15 +167,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 					//var_dump($objOnePost->getSystemid());
 					//var_dump($objOnePost);
 				    if($this->objRights->rightView($objOnePost->getSystemid())) {
-	    				if($objOnePost->getStatus() == 1) {
-	    			 		$strStatus = $this->getText("status_active");
-	    			 		$strStatusImage = "icon_enabled.gif";
-	    			 	}
-	    			 	else {
-	    			 		$strStatus = $this->getText("status_inactive");
-	    			 		$strStatusImage = "icon_disabled.gif";
-	    			 	}
-	
+	    				
 	    			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
 	    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
 	                    $strAction = "";
@@ -190,7 +176,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_delete"), "icon_ton.gif"));
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "postStatus", "&systemid=".$objOnePost->getSystemid(), "", $strStatus, $strStatusImage));
+	    		   		    $strAction .= $this->objToolkit->listStatusButton($objOnePost->getSystemid());
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), getRightsImageAdminName($objOnePost->getSystemid())));
 	

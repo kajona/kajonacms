@@ -885,7 +885,7 @@ class class_toolkit_admin extends class_toolkit {
 	            success: function(o) { 
 	               kajonaStatusDisplay.displayXMLMessage(o.responseText);
 	               var strImage = document.getElementById('statusImage_".$strSystemid."').src;
-	               if(o.responseText.indexOf('<error>') == -1) {
+	               if(o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
     	               if(strImage.indexOf('icon_enabled.gif') != -1)
     	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_disabled.gif';
     	               else

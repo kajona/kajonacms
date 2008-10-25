@@ -73,10 +73,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		            $strReturn = $this->actionNewNavi("edit");
     		    }
     		}
-    		if($strAction == "status") {
-    			$strReturn = $this->actionStatus();
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"].($this->getPrevId() != "0" ? "&systemid=".$this->getPrevId() : ""));
-    		}
     		if($strAction == "newNaviPoint")
     			$strReturn = $this->actionNewNaviPoint("new");
     		if($strAction == "editNaviPoint")
@@ -170,15 +166,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				foreach($arrNavigations as $objOneNavigation) {
 					//Correct Rights?
 					if($this->objRights->rightView($objOneNavigation->getSystemid())) {
-						//Get Status
-						if($objOneNavigation->getStatus()) {
-							$strStatus = $this->getText("status_aktiv");
-							$strStatImage = "icon_enabled.gif";
-						}
-						else {
-							$strStatus = $this->getText("status_inaktiv");
-							$strStatImage = "icon_disabled.gif";
-						}
 						$strAction = "";
 						if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_bearbeiten"), "icon_pencil.gif"));
@@ -187,7 +174,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    		if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "deleteNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_loeschen"), "icon_ton.gif"));
 			    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
-			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
+			    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
 			    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_rechte"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 			  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), $objOneNavigation->getStrName(), $strAction, $intI++);
@@ -217,15 +204,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			foreach($arrNavigations as $objOneNavigation) {
     				//check rights
     				if($this->objRights->rightView($objOneNavigation->getSystemid())) {
-    					//Status
-    					if($objOneNavigation->getStatus()) {
-    						$strStatus = $this->getText("status_aktiv");
-    						$strStatImage = "icon_enabled.gif";
-    					}
-    					else {
-    						$strStatus = $this->getText("status_inaktiv");
-    						$strStatImage = "icon_disabled.gif";
-    					}
     					$strName = $objOneNavigation->getStrName() . " (".$objOneNavigation->getStrPageI().($objOneNavigation->getStrPageE() != "" ? " ".$objOneNavigation->getStrPageE() : "").") ";
     					$strAction = "";
     					if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
@@ -239,7 +217,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     					if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "deleteNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_loeschen"), "icon_ton.gif"));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "status", "&systemid=".$objOneNavigation->getSystemid(), "", $strStatus, $strStatImage));
+    		    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 
@@ -417,19 +395,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		//Flush pages cache
 		$this->flushCompletePagesCache();
 		return $strReturn;
-	}
-
-
-	/**
-	 * Sets the status of a navigation / a navi point
-	 *
-	 * @return void
-	 */
-	private function actionStatus() {
-		if($this->objRights->rightEdit($this->getSystemid())) {
-			$this->setEditDate();
-			$this->setStatus();
-		}
 	}
 
 	/**

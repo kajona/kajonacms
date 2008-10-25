@@ -41,9 +41,6 @@ $text["navigationp_runter"]			= "Move item down";
 $text["navigationp_loeschen"]		= "Delete item";
 $text["navigationp_recht"]			= "Change permissions";
 
-$text["status_aktiv"]               = "Change status (is active)";
-$text["status_inaktiv"]             = "Change status (is inactive)";
-
 $text["navigation_name"]            = "Name:";
 $text["speichern"]                  = "Save";
 $text["navigation_page_i"]          = "Page:";

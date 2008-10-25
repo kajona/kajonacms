@@ -21,9 +21,6 @@ $text["galerie_neu"]				= "Neue Galerie";
 $text["browser"]					= "Ordnerbrowser";
 $text["gallery_masssync"]           = "Alle synchronisieren";
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["galerie_liste_leer"]			= "Keine Galerien angelegt";
 $text["fehler_gal"]					= "Fehler beim Anlegen der Galerie";
 $text["fehler_gal_bearbeiten"]		= "Fehler beim Bearbeiten der Gallerie";

@@ -39,9 +39,6 @@ $text["permissions_header"]         = array(
 $text["browser"]					= "Browser öffnen";
 $text["klapper"]					= "Ordner ein-/ausblenden";
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["seite_bearbeiten"]			= "Seite bearbeiten";
 $text["liste_seiten_leer"]			= "Keine Seiten angelegt";
 $text["seite_inhalte"]				= "Seiteninhalte bearbeiten";

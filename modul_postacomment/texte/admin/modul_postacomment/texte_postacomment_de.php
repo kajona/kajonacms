@@ -31,9 +31,6 @@ $text["permissions_header"]         = array(
             							8 => ""
             							);
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["postacomment_edit"]          = "Kommentar bearbeiten";
 $text["postacomment_delete"]        = "Kommentar löschen";
 $text["postacomment_rights"]        = "Rechte bearbeiten";

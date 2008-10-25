@@ -37,9 +37,6 @@ $text["permissions_header"]         = array(
 
 $text["logbuch_loeschen_link"]		= "Flush logfile";
 
-$text["status_active"]              = "Change status (is active)";
-$text["status_inactive"]            = "Change status (is inactive)";
-
 $text["archiv_anzeigen"]			= "Open archive";
 $text["archiv_bearbeiten"]			= "Edit archive";
 $text["archiv_loeschen"]			= "Delete archive";

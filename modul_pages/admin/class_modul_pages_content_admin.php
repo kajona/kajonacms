@@ -74,10 +74,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     			if($strReturn == "")
     				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId());
     		}
-    		if($strAction == "elementStatus") {
-    			$strReturn = $this->actionSetElementStatus();
-    			$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId());
-    		}
     		if($strAction == "deleteElement")
     			$strReturn = $this->actionDeleteElement();
     		if($strAction == "deleteElementFinal") {
@@ -233,10 +229,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 
 							//The status-icons
-							if($objOneElementOnPage->getStatus() == 1)
-								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementStatus", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_status_aktiv"), "icon_enabled.gif"));
-							else
-								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementStatus", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_status_inaktiv"), "icon_disabled.gif"));
+    						$strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
 
 							//Rights - could be used, but not up to now not needed, so not yet implemented completly
 							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
@@ -323,20 +316,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strReturn = $this->getText("fehler_recht");
 		return $strReturn;
 	}
-
-
-	/**
-	 * Sets a new state for the record
-	 *
-	 * @return bool
-	 */
-	public function actionSetElementStatus() {
-	    //Loading the data of the corresp site
-		$objPage = new class_modul_pages_page($this->getPrevId());
-		$this->flushPageFromPagesCache($objPage->getStrName());
-		return $this->setStatus($this->getSystemid());
-	}
-
 
 	/**
 	 * Loads the form to create a new element

@@ -22,9 +22,6 @@ $text["liste_leer"]                 = "No languages available";
 
 $text["fehler_recht"]               = "Not enough permissions to perform this action";
 
-$text["lang_aktiv"]                 = "active";
-$text["lang_inaktiv"]               = "incative";
-
 $text["language_bearbeiten"]        = "Edit language";
 $text["language_loeschen"]          = "Delete language";
 $text["language_status"]            = "Change status (is ";

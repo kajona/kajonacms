@@ -36,9 +36,6 @@ $text["permissions_header"]         = array(
             							8 => ""
             							);
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["klapper"]					= "Kategorien ein-/ausblenden";
 
 $text["kat_anzeigen"]				= "Kategorie anzeigen";

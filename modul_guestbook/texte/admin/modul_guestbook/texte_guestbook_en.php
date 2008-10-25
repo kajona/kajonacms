@@ -36,9 +36,6 @@ $text["gaestebuch_loeschen"]		= "Delete guestbook";
 $text["gaestebuch_rechte"]			= "Change permissions";
 $text["gaestebuch_listeleer"]		= "No guestbooks available";
 
-$text["status_active"]              = "Change status (is active)";
-$text["status_inactive"]            = "Change status (is inactive)";
-
 $text["gaestebuch_modus_0"]			= "New posts are disabled";
 $text["gaestebuch_modus_1"]			= "New posts are enabled";
 

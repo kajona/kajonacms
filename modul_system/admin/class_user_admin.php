@@ -256,7 +256,7 @@ class class_user_admin extends class_admin implements interface_admin {
             if($objUser->updateObjectToDb())
                 return "";
             else
-                throw new class_exception("Error updateing user ".$this->getParam("userid"), class_exception::$level_ERROR);
+                throw new class_exception("Error updating user ".$this->getParam("userid"), class_exception::$level_ERROR);
         }
         else
             $strReturn .= $this->getText("fehler_recht");

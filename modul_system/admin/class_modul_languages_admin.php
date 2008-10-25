@@ -71,13 +71,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
     		    if($strReturn == "")
     		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
-    		if($strAction == "status") {
-    		    if($this->objRights->rightEdit($this->getSystemid())) {
-    		        $this->setStatus();
-    		        $this->flushCompletePagesCache();
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
-    		    }
-    		}
 
 		}
 		catch (class_exception $objException) {
@@ -123,22 +116,13 @@ class class_modul_languages_admin extends class_admin implements interface_admin
             foreach ($arrObjLanguages as $objOneLanguage) {
                 //Correct Rights?
 				if($this->objRights->rightView($objOneLanguage->getSystemid())) {
-					//Get Status
-					if($objOneLanguage->getStatus()) {
-						$strStatus = $this->getText("lang_aktiv");
-						$strStatImage = "icon_enabled.gif";
-					}
-					else {
-						$strStatus = $this->getText("lang_inaktiv");
-						$strStatImage = "icon_disabled.gif";
-					}
 					$strAction = "";
 					if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
 		    		if($this->objRights->rightDelete($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "deleteLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_loeschen"), "icon_ton.gif"));
 		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "status", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_status").$strStatus.")", $strStatImage));
+		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
 		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_rechte"), getRightsImageAdminName($objOneLanguage->getSystemid())));
 

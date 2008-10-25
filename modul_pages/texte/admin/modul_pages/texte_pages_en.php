@@ -39,9 +39,6 @@ $text["permissions_header"]         = array(
 $text["browser"]					= "Open browser";
 $text["klapper"]					= "Show/hide folders";
 
-$text["status_active"]              = "Change status (is active)";
-$text["status_inactive"]            = "Change status (is inactive)";
-
 $text["seite_bearbeiten"]			= "Edit page";
 $text["liste_seiten_leer"]			= "No pages available";
 $text["seite_inhalte"]				= "Edit page content";

@@ -334,6 +334,8 @@ abstract class class_root {
 			$intNewStatus = 1;
 		else
 			$intNewStatus = 0;
+			
+		$this->setEditDate($strSystemid);	
 
 		//Upate the record
 		$strQuery = "UPDATE "._dbprefix_."system

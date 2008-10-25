@@ -21,9 +21,6 @@ $text["galerie_neu"]				= "Create gallery";
 $text["browser"]					= "Browse folders";
 $text["gallery_masssync"]           = "Synchronize all";
 
-$text["status_active"]              = "Change status (is active)";
-$text["status_inactive"]            = "Change status (is inactive)";
-
 $text["galerie_liste_leer"]			= "No galleries available";
 $text["fehler_gal"]					= "An error occured while creating gallery";
 $text["fehler_gal_bearbeiten"]		= "An error occured while saving gallery";

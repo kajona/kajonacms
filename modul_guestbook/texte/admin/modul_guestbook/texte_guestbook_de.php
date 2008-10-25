@@ -36,9 +36,6 @@ $text["gaestebuch_loeschen"]		= "Gästebuch löschen";
 $text["gaestebuch_rechte"]			= "Rechte bearbeiten";
 $text["gaestebuch_listeleer"]		= "Kein Gästebuch angelegt";
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["gaestebuch_modus_0"]			= "Freischaltung erforderlich";
 $text["gaestebuch_modus_1"]			= "Keine Freischaltung erforderlich";
 

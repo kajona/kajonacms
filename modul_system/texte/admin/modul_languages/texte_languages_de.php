@@ -22,9 +22,6 @@ $text["liste_leer"]                 = "Keine Sprachen angelegt";
 
 $text["fehler_recht"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 
-$text["lang_aktiv"]                 = "Aktiv";
-$text["lang_inaktiv"]               = "Inaktiv";
-
 $text["language_bearbeiten"]        = "Sprache bearbeiten";
 $text["language_loeschen"]          = "Sprache löschen";
 $text["language_status"]            = "Status ändern (ist ";
