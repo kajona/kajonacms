@@ -68,7 +68,10 @@ $text["permissions_header"]         = array(
             							);
             							
 $text["dateStyleShort"]             = "m/d/Y";            							
-$text["dateStyleLong"]              = "M/d/Y H:i:s";             							
+$text["dateStyleLong"]              = "M/d/Y H:i:s";      
+
+$text["status_active"]              = "Change status (is active)";
+$text["status_inactive"]            = "Change status (is inactive)";
 
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 
@@ -204,8 +207,8 @@ $text["about_part3"]                = "<h2>Credits</h2>
                                        ";
 
 $text["setAbsolutePosOk"]           = "Saving position succeeded";
-$text["setStatusOk"]                = "Error changing the status";
-$text["setStatusError"]             = "Changing the status succeeded";
+$text["setStatusOk"]                = "Changing the status succeeded";
+$text["setStatusError"]             = "Error changing the status";
 
 $text["toolsetCalendarMonth"]       = "\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"Oktober\", \"November\", \"December\"";
 $text["toolsetCalendarWeekday"]     = "\"Su\", \"Mu\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"";

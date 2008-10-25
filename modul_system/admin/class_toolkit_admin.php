@@ -853,6 +853,53 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["content"] = $strContent;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
+	
+	/**
+	 * Generates a button allowing to change the status of the record passed.
+	 * Therefore an ajax-method is called.
+	 * 
+	 * @param string $strSystemid
+	 * @return string
+	 */
+	public function listStatusButton($strSystemid) {
+	    //read the current status
+	    $strButton = "";
+	    include_once(_systempath_."/class_modul_system_common.php");
+	    $objRecord = new class_modul_system_common($strSystemid);
+	    $strImage = "";
+	    $strNewImage = "";
+	    $strText = "";
+	    if($objRecord->getStatus() == 1) {
+	        $strImage = "icon_enabled.gif";
+	        $strNewImage = "icon_disabled.gif";
+	        $strText = class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin");
+	    }
+	    else {
+	        $strImage = "icon_disabled.gif";
+	        $strNewImage = "icon_enabled.gif";
+	        $strText = class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin");
+	    }
+	    
+	    $strJavascript = "<script type=\"text/javascript\">
+	         var statusCallback_".$strSystemid." =  {
+	            success: function(o) { 
+	               kajonaStatusDisplay.displayXMLMessage(o.responseText);
+	               var strImage = document.getElementById('statusImage_".$strSystemid."').src;
+	               if(o.responseText.indexOf('<error>') == -1) {
+    	               if(strImage.indexOf('icon_enabled.gif') != -1)
+    	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_disabled.gif';
+    	               else
+    	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_enabled.gif';
+	               }     
+	            },
+                failure: function(o) { kajonaStatusDisplay.messageError(o.responseText) }
+	         };
+	       </script>";
+	    
+	    $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid);
+	    
+	    return $this->listButton($strButton).$strJavascript;
+	}
 
 /*"*****************************************************************************************************/
 // --- Misc-Elements ------------------------------------------------------------------------------------

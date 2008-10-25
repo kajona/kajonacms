@@ -104,13 +104,6 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
 
-
-    		if($strAction == "faqStatus") {
-    		    if($this->objRights->rightEdit($this->getSystemid()))
-    			    $this->setStatus();
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
-    		}
-
 	    }
 	    catch (class_exception $objException) {
 		    $objException->processException();
@@ -172,14 +165,6 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		if(count($arrCategories) > 0) {
     			foreach($arrCategories as $objOneCategory) {
     			    $strAction = "";
-    			    if($objOneCategory->getStatus() == 1) {
-    			 		$strStatus = $this->getText("status_active");
-    			 		$strStatusImage = "icon_enabled.gif";
-    			 	}
-    			 	else {
-    			 		$strStatus = $this->getText("status_inactive");
-    			 		$strStatusImage = "icon_disabled.gif";
-    			 	}
     			    if($this->objRights->rightView($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "&filterId=".$objOneCategory->getSystemid(), "", $this->getText("kat_anzeigen"), "icon_lens.gif"));
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
@@ -187,7 +172,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_loeschen"), "icon_ton.gif"));
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "faqStatus", "&systemid=".$objOneCategory->getSystemid(), "", $strStatus, $strStatusImage));
+    		   		    $strAction .= $this->objToolkit->listStatusButton($objOneCategory->getSystemid());
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
@@ -213,21 +198,14 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			$strFaqs = "";
 			foreach($arrFaqs as $objOneFaq) {
 			    if($this->objRights->rightView($objOneFaq->getSystemid())) {
-    				if($objOneFaq->getStatus() == 1) {
-    			 		$strStatus = $this->getText("status_active");
-    			 		$strStatusImage = "icon_enabled.gif";
-    			 	}
-    			 	else {
-    			 		$strStatus = $this->getText("status_inactive");
-    			 		$strStatusImage = "icon_disabled.gif";
-    			 	}
+    				
                     $strAction = "";
                     if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_edit"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_loeschen"), "icon_ton.gif"));
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "faqStatus", "&systemid=".$objOneFaq->getSystemid(), "", $strStatus, $strStatusImage));
+    				    $strAction .= $this->objToolkit->listStatusButton($objOneFaq->getSystemid());
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_rechte"), getRightsImageAdminName($objOneFaq->getSystemid())));
 

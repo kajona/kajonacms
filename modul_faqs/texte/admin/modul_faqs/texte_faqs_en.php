@@ -23,9 +23,6 @@ $text["modul_titel2"]				= "FAQs management - category ";
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 $text["liste_leer"]					= "No FAQs available";
 
-$text["status_active"]              = "Change status (is active)";
-$text["status_inactive"]            = "Change status (is inactive)";
-
 $text["kat_anzeigen"]				= "Show category";
 $text["kat_bearbeiten"]				= "Edit category";
 $text["kat_loeschen"]				= "Delete category";

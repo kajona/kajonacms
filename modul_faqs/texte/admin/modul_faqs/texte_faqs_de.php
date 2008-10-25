@@ -22,9 +22,6 @@ $text["modul_titel2"]				= "FAQ-Verwaltung - Kategorie ";
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $text["liste_leer"]					= "Keine FAQs angelegt";
 
-$text["status_active"]              = "Status ändern (ist aktiv)";
-$text["status_inactive"]            = "Status ändern (ist inaktiv)";
-
 $text["kat_anzeigen"]				= "Kategorie anzeigen";
 $text["kat_bearbeiten"]				= "Kategorie bearbeiten";
 $text["kat_loeschen"]				= "Kategorie löschen";

@@ -68,8 +68,10 @@ $text["permissions_header"]         = array(
             							);
             							
 $text["dateStyleShort"]             = "d.m.Y";            							
-$text["dateStyleLong"]              = "d M Y H:i:s";            							
+$text["dateStyleLong"]              = "d M Y H:i:s"; 
 
+$text["status_active"]              = "Status ändern (ist aktiv)";
+$text["status_inactive"]            = "Status ändern (ist inaktiv)";
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 

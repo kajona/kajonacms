@@ -169,6 +169,40 @@ function getCookie($strKey) {
 }
 
 /**
+ * Generates a link using the content passed.
+ * The param $strLinkContent should contain all contents of the a-tag.
+ * The system renders <a $strLinkContent title... class...>($strText|$strImage)</a>
+ *
+ * @param string $strLinkContent
+ * @param string $strText
+ * @param string $strAlt
+ * @param string $strImage
+ * @param string $strImageId
+ * @param bool $bitTooltip
+ * @param string $strCss
+ * @return string
+ */
+function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $bitTooltip = true, $strCss = "") {
+
+    if($strImage != "") {
+        if($strAlt == "")
+            $strAlt = $strAction;
+        if(!$bitTooltip)
+            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+        else
+            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+    }
+
+    if($strImage == "" && $strText != "")   {
+        if($strAlt == "")
+            $strAlt = $strText;
+        $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+    }
+
+    return $strLink;
+}
+
+/**
  * Generates a link for the admin-area
  *
  * @param string $strModule

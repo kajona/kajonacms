@@ -342,10 +342,13 @@ var regularCallback = {
 	failure: function(o) { kajonaStatusDisplay.messageError("<b>request failed!!!</b>") }
 };
 
+
+
 var kajonaAdminAjax = {
 	posConn : null,
 	pagesConn : null,
 	dashboardConn : null,
+	statusConn : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
 		//load ajax libs
@@ -371,6 +374,19 @@ var kajonaAdminAjax = {
 		if(kajonaAdminAjax.dashboardConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.dashboardConn)) {
 			kajonaAdminAjax.dashboardConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, regularCallback, postBody);
 		}
+	},
+	
+	setSystemStatus : function (systemIdToSet, objCallback) {
+	    //load ajax libs
+        kajonaAjaxHelper.loadAjaxBase();
+        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
+
+        var postTarget = 'xml.php?admin=1&module=system&action=setStatus';
+        var postBody = 'systemid='+systemIdToSet;
+
+        if(kajonaAdminAjax.statusConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.statusConn)) {
+            kajonaAdminAjax.statusConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, objCallback, postBody);
+        }
 	}
 
 };

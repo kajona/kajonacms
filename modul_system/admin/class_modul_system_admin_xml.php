@@ -91,10 +91,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	private function actionSetStatus() {
 	    $strReturn = "";
 	    if($this->objRights->rightEdit($this->getSystemid())) {
-	    if(parent::setStatus())
-	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
-	    else
-            $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusError")."</message>";
+    	    if(parent::setStatus())
+    	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
+    	    else
+                $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";
 	    }
 	    else
 	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
