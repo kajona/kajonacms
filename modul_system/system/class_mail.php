@@ -264,8 +264,10 @@ class class_mail {
                 if($this->bitFileAttached)
                     $strBody .= "--".$strBoundaryAlt."--".$this->strEndOfLine.$this->strEndOfLine;
             }
-            else
+            else {
+                $this->arrHeader[] = "Content-Type: text/plain; charset=\"utf-8\"".$this->strEndOfLine;
                 $strBody .= $this->strText;
+            }
 
 
             //any files to place in the mail body?
