@@ -148,7 +148,7 @@ class class_copy
     		}
 
     		file_put_contents($this->str_pfad."/copy.log", $this->str_log);
-    		$this->updateConfig($this->str_system_pfad."/system/config.php");
+    		$this->updateConfig($this->str_system_pfad."/system/config/config.php");
         }
 	}
 
@@ -181,7 +181,7 @@ class class_copy
     		chmod($this->str_pfad."/kajona", 0777);
 
     		file_put_contents($this->str_pfad."/copy_down.log", $this->str_log);
-    		$this->updateConfig($this->str_pfad."/kajona/system/config.php");
+    		$this->updateConfig($this->str_pfad."/kajona/system/config/config.php");
         }
 	}
 
