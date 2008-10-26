@@ -137,8 +137,8 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                         $strWidgetId, 
                                         $strWidgetName, 
                                         $strGeneratedContent,
-                                        getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif"),
-                                        getLinkAdmin("dashboard", "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("deleteWidget"), "icon_ton.gif")
+                                        ($this->objRights->rightEdit($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
+                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("deleteWidget"), "icon_ton.gif") : "")
                                 )
                              );
                              
