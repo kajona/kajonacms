@@ -138,4 +138,28 @@ $text["quickhelp_newFolder"]        = $text["quickhelp_openFolder"];
 $text["quickhelp_imageDetail"]      = $text["quickhelp_openFolder"];
 $text["quickhelp_deleteFile"]       = $text["quickhelp_openFolder"];
 $text["quickhelp_deleteFolder"]     = $text["quickhelp_openFolder"];
+
+//--- MODULE FOLDERVIEW --------------------------------------------------------------------------------
+$text["moduleFolderviewTitle"]      = "Folderview";
+
+$text["ordner_hoch"]                = "One level up";
+$text["ordner_oeffnen"]             = "Open folder";
+$text["ordner_uebernehmen"]         = "Apply folder";
+
+$text["seite_uebernehmen"]          = "Apply page";
+$text["seite_oeffnen"]              = "Show pageelements";
+
+$text["datei_detail"]               = "Detailed view";
+$text["datei_name"]                 = "File name:";
+$text["datei_pfad"]                 = "Path:";
+$text["datei_typ"]                  = "File type:";
+$text["datei_groesse"]              = "File size:";
+$text["datei_erstell"]              = "Date of creation:";
+$text["datei_bearbeit"]             = "Date of last modification:";
+$text["datei_zugriff"]              = "Date of last access:";
+$text["bild_groesse"]               = "Image size:";
+$text["bild_vorschau"]              = "Preview:";
+$text["pfad"]                       = "Path: ";
+$text["ordner_anz"]                 = "Number of folders: ";
+$text["dateien_anz"]                = "Number of files: ";
 ?>

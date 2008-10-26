@@ -269,6 +269,28 @@ $text["systemtask_flushremoteloadercache_name"]      = "Remoteloadercache leeren
 $text["systemtask_flushremoteloadercache_done"]      = "Leeren abgeschlossen.";
 
 
+//--- MODULE RIGHTS -------------------------------------------------------------------------------------
+
+// --- Module texts -------------------------------------------------------------------------------------
+$text["moduleRightsTitle"]          = "Rechte";
+
+$text["titel_root"]                 = "Rechte-Root-Satz";
+$text["titel_leer"]                 = "<em>Kein Titel hinterlegt</em>";
+$text["titel_erben"]                = "Rechte erben:";
+
+$text["fehler_setzen"]              = "Fehler beim Speichern der Rechte";
+$text["setzen_erfolg"]              = "Rechte erfolgreich gespeichert";
+
+$text["backlink"]                   = "Zurück";
+$text["desc"]                       = "Rechte ändern an:";
+$text["submit"]                     = "Speichern";
+
+
+// --- Quickhelp texts ----------------------------------------------------------------------------------
+$text["quickhelp_change"]           = "Mit Hilfe dieses Formulares können die Rechte eines Datensatzes angepasst werden.<br />
+                                       Je nach dem, welchem Modul der Datensatz zugeordnet wurde, kann die Anzahl der möglichen
+                                       zu konfigurierenden Rechte variieren.";
+
 //--- installer -----------------------------------------------------------------------------------------
 
 $text["installer_given"]            = "vorhanden";

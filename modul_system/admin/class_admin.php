@@ -77,6 +77,7 @@ abstract class class_admin {
 	private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
 	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
+	private   $strTextBase;                 //String containing the current module to be used to load texts
 	private   $arrHistory;			        //Stack cotaining the 5 urls last visited
 	protected $arrModule;			        //Array containing Infos about the current modul
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
@@ -150,6 +151,8 @@ abstract class class_admin {
 
 		//set the correct language to the text-object
 		$this->objText->setStrTextLanguage($this->objSession->getAdminLanguage(true));
+		
+		$this->strTextBase = $this->arrModule["modul"];
 	}
 
 // --- Common Methods -----------------------------------------------------------------------------------
@@ -523,13 +526,21 @@ abstract class class_admin {
 	 */
 	public function getText($strName, $strModule = "", $strArea = "") {
 		if($strModule == "")
-			$strModule = $this->arrModule["modul"];
+			$strModule = $this->strTextBase;
 
 		if($strArea == "")
 			$strArea = $this->strArea;
 
 		//Now we have to ask the Text-Object to return the text
 		return $this->objText->getText($strName, $strModule, $strArea);
+	}
+	
+	/**
+	 * Sets the textbase, so the module used to load texts
+	 * @param string $strTextbase
+	 */
+	protected final function setStrTextBase($strTextbase) {
+	    $this->strTextBase = $strTextbase;
 	}
 
 	/**

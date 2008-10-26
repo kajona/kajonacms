@@ -266,6 +266,27 @@ $text["systemtask_flushpiccache_skipped"]            = "<br />Number of files sk
 $text["systemtask_flushremoteloadercache_name"]      = "Flush remoteloadercache";
 $text["systemtask_flushremoteloadercache_done"]      = "Flushing completed.";
 
+//--- MODULE RIGHTS -------------------------------------------------------------------------------------
+
+// --- Module texts -------------------------------------------------------------------------------------
+$text["moduleRightsTitle"]          = "Permissions";
+
+$text["titel_root"]                 = "Rights root-record";
+$text["titel_leer"]                 = "<em>No title defined</em>";
+$text["titel_erben"]                = "Inherit rights:";
+
+$text["fehler_setzen"]              = "Error saving permissions";
+$text["setzen_erfolg"]              = "Permissions saved successfully";
+
+$text["backlink"]                   = "Back";
+$text["desc"]                       = "Edit permissions of:";
+$text["submit"]                     = "Save";
+
+
+// --- Quickhelp texts ----------------------------------------------------------------------------------
+$text["quickhelp_change"]           = "Using this form, you are able to adjust the permissions of a record.<br />
+                                       Depending on the module the record belongs to, the different types of permissions may vary.";
+
 //--- installer -----------------------------------------------------------------------------------------
 
 $text["installer_given"]            = "given";

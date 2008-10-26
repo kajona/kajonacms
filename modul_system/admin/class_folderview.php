@@ -39,6 +39,7 @@ class class_folderview extends class_admin  implements interface_admin {
 		$arrModule["template"] 				= "/folderview.tpl";
 
 		parent::__construct($arrModule);
+		$this->setStrTextBase("filemanager");
 	}
 
 	/**
@@ -113,6 +114,10 @@ class class_folderview extends class_admin  implements interface_admin {
 	public function getOutputContent() {
 		return $this->strOutput;
 	}
+	
+    protected function getOutputModuleTitle() {
+        return $this->getText("moduleFolderviewTitle");
+    }
 
 
 

@@ -36,6 +36,7 @@ class class_right_admin extends class_admin implements interface_admin {
 		$arrModul["modul"]			= "right";
 
 		parent::__construct($arrModul);
+		$this->setStrTextBase("system");
 
 	}
 
@@ -75,6 +76,10 @@ class class_right_admin extends class_admin implements interface_admin {
 	public function getOutputContent() {
 		return $this->strTemp;
 	}
+	
+    protected function getOutputModuleTitle() {
+        return $this->getText("moduleRightsTitle");
+    }
 	
 
 
