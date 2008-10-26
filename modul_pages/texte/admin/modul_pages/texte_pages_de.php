@@ -187,6 +187,10 @@ $text["pe_disable"]                         = "Den Portaleditor temporär deakti
 $text["pe_enable"]                          = "Den Portaleditor aktivieren";
 
 
+$text["systemtask_flushpagescache_name"]    = "Seitencache leeren";
+$text["systemtask_flushpagescache_done"]    = "Leeren abgeschlossen.";
+
+
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "In dieser Ansicht können Sie durch die Seitenstruktur Ihres Systems navigieren. <br />

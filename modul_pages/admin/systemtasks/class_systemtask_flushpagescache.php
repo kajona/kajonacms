@@ -29,6 +29,7 @@ class class_systemtask_flushpagescache extends class_systemtask_base implements 
      */
     public function __construct() {
         parent::__construct();
+        $this->setStrTextBase("pages");
     }
     
     

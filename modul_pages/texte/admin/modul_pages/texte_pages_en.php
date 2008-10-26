@@ -186,6 +186,10 @@ $text["pe_disable"]                         = "Set portaleditor temporary inacti
 $text["pe_enable"]                          = "Set portaleditor active";
 
 
+$text["systemtask_flushpagescache_name"]    = "Flush cached pages";
+$text["systemtask_flushpagescache_done"]    = "Flushing completed.";
+
+
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "In this view, you can browse all available pages.<br />

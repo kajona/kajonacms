@@ -54,6 +54,13 @@ $text["navigation_tagetself"]       = "_self (in the same browser window)";
 $text["required_navigation_name"]   = "Name";
 
 
+$text["systemtask_navigationcheck_name"]                   = "Validate navigationpoints";
+$text["systemtask_navigationcheck_treescan"]               = "Investigate navigation";
+$text["systemtask_navigationcheck_invalidEmpty"]           = "Error, target not set!";
+$text["systemtask_navigationcheck_invalidBoth"]            = "Error, internal and external target set!";
+$text["systemtask_navigationcheck_valid"]                  = "O.K., Target:";
+
+
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "The list shows all existing navigation trees und their items.

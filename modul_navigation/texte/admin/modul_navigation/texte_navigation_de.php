@@ -54,6 +54,13 @@ $text["navigation_tagetself"]       = "_self (Selbes Browserfenster)";
 $text["required_navigation_name"]   = "Name";
 
 
+$text["systemtask_navigationcheck_name"]                   = "Navigationspunkte validieren";
+$text["systemtask_navigationcheck_treescan"]               = "Untersuche Navigation";
+$text["systemtask_navigationcheck_invalidEmpty"]           = "Fehler, kein Ziel gesetzt!";
+$text["systemtask_navigationcheck_invalidBoth"]            = "Fehler, internes und externes Ziel gesetzt!";
+$text["systemtask_navigationcheck_valid"]                  = "O.K., Ziel:";
+
+
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "Alle im System angelegten Navigationsbäume und dessen Unterpunkte werden in dieser Liste angezeigt.
