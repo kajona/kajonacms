@@ -87,7 +87,7 @@ class class_flyimage {
         //Load the image-dimensions
         $intWidthNew = 0;
 		$intHeightNew = 0;
-		if(is_file(_realpath_.$this->strFilename) && uniStrpos($this->strFilename, "/portal/pics") !== false) {
+		if(is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "/portal/pics") !== false || uniStrpos($this->strFilename, "/portal/downloads") !== false)) {
 			$arrImageData = getimagesize(_realpath_.$this->strFilename);
 			//check, if resizing is needed
 			$bitResize = false;

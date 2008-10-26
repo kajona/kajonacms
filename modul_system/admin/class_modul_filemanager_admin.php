@@ -841,7 +841,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 * @param string $strFile
 	 * @return string
 	 */
-	public function actionFileDetailview() {
+	private function actionFileDetailview() {
 		$strReturn = "";
 		$strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
 		if(is_file($strFile)) {
