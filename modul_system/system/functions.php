@@ -178,25 +178,26 @@ function getCookie($strKey) {
  * @param string $strAlt
  * @param string $strImage
  * @param string $strImageId
+ * @param string $strLinkId
  * @param bool $bitTooltip
  * @param string $strCss
  * @return string
  */
-function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $bitTooltip = true, $strCss = "") {
+function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
 
     if($strImage != "") {
         if($strAlt == "")
             $strAlt = $strAction;
         if(!$bitTooltip)
-            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
         else
-            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" class=\"showTooltip\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" class=\"showTooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
     }
 
     if($strImage == "" && $strText != "")   {
         if($strAlt == "")
             $strAlt = $strText;
-        $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+        $strLink = "<a ".$strLinkContent." title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." >".$strText."</a>";
     }
 
     return $strLink;

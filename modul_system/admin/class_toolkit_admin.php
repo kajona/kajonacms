@@ -885,18 +885,29 @@ class class_toolkit_admin extends class_toolkit {
 	            success: function(o) { 
 	               kajonaStatusDisplay.displayXMLMessage(o.responseText);
 	               var strImage = document.getElementById('statusImage_".$strSystemid."').src;
+	               var strActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin")."';
+	               var strInActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin")."';
+	               
 	               if(o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
-    	               if(strImage.indexOf('icon_enabled.gif') != -1)
+    	               if(strImage.indexOf('icon_enabled.gif') != -1) {
     	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_disabled.gif';
-    	               else
+    	                   document.getElementById('statusImage_".$strSystemid."').setAttribute('alt', strInActiveText);
+    	                   document.getElementById('statusLink_".$strSystemid."').setAttribute('title', strInActiveText);
+    	                   Prepare(document.getElementById('statusLink_".$strSystemid."'));
+    	               }
+    	               else {
     	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_enabled.gif';
+    	                   document.getElementById('statusImage_".$strSystemid."').setAttribute('alt', strActiveText);
+    	                   document.getElementById('statusLink_".$strSystemid."').setAttribute('title', strActiveText);
+    	                   Prepare(document.getElementById('statusLink_".$strSystemid."'));
+    	               }
 	               }     
 	            },
                 failure: function(o) { kajonaStatusDisplay.messageError(o.responseText) }
 	         };
 	       </script>";
 	    
-	    $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid);
+	    $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
 	    
 	    return $this->listButton($strButton).$strJavascript;
 	}
