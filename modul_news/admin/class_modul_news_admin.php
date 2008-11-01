@@ -207,7 +207,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_loeschen"), "icon_ton.gif"));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneCategory->getStrTitle().$this->getText("kat_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), $this->getText("kat_loeschen_link")));
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
@@ -257,7 +257,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightRight1($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_loeschen"), "icon_ton.gif"));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle().$this->getText("news_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1", $this->getText("news_loeschen_link")));
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
@@ -368,16 +368,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//waring or delete?
-			if($this->getParam("news_kat_loeschen_final") == "") {
-			    $objKat = new class_modul_news_category($this->getSystemid());
-				$strReturn .= $this->objToolkit->warningBox($objKat->getStrTitle().$this->getText("kat_loeschen_frage")."<br /><a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteCat&systemid=".$this->getSystemid()."&news_kat_loeschen_final=1\">"
-				                                            .$this->getText("kat_loeschen_link"));
-			}
-			elseif($this->getParam("news_kat_loeschen_final") == "1") {
-               if(!class_modul_news_category::deleteCategory($this->getSystemid()))
-                   throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+           if(!class_modul_news_category::deleteCategory($this->getSystemid()))
+               throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -529,8 +521,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 			if($this->getParam("news_loeschen_final") == "") {
 			    $objNews = new class_modul_news_news($this->getSystemid());
-				$strName = $objNews->getStrTitle();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("news_loeschen_frage")
+				$strReturn .= $this->objToolkit->warningBox($objNews->getStrTitle().$this->getText("news_loeschen_frage")
 				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deleteNews&amp;systemid="
 				               .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))."&amp;news_loeschen_final=1\">"
 				               .$this->getText("news_loeschen_link"));
@@ -619,7 +610,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 foreach ($arrFeeds as $objOneFeed) {
                     $strAction = "";
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewsFeed", "&systemid=".$objOneFeed->getSystemid(), "", $this->getText("editNewsFeed"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteNewsFeed", "&systemid=".$objOneFeed->getSystemid(), "", $this->getText("deleteNewsFeed"), "icon_ton.gif"));
+                    $strAction .= $this->objToolkit->listDeleteButton($objOneFeed->getStrTitle().$this->getText("feed_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteNewsFeed", "&systemid=".$objOneFeed->getSystemid(), $this->getText("news_loeschen_link")));
 
                     //mod-rewrite enabled?
                     if(_system_mod_rewrite_ == "true")
@@ -760,17 +751,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     private function actionDeleteNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if($this->getParam("deleteFinal") != "1") {
-                //Warning
-                $objFeed = new class_modul_news_feed($this->getSystemid());
-                $strReturn .= $this->objToolkit->warningBox($objFeed->getStrTitle().$this->getText("feed_loeschen_frage")
-                        ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deleteNewsFeed&amp;systemid=".$this->getSystemid()."&amp;deleteFinal=1\">".$this->getText("news_loeschen_link")."</a>");
-            }
-            else {
-                //Delete
-                if(!class_modul_news_feed::deleteNewsFeed($this->getSystemid()))
-                    throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-            }
+            if(!class_modul_news_feed::deleteNewsFeed($this->getSystemid()))
+                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
         }
 		else
@@ -779,6 +761,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     }
 
 
-} //class_modul_navigation_admin
+}
 
 ?>

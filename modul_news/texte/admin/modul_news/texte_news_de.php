@@ -40,7 +40,6 @@ $text["klapper"]					= "Kategorien ein-/ausblenden";
 
 $text["kat_anzeigen"]				= "Kategorie anzeigen";
 $text["kat_bearbeiten"]				= "Kategorie bearbeiten";
-$text["kat_loeschen"]				= "Kategorie löschen";
 $text["kat_loeschen_frage"]			= " : Kategorie wirklich löschen?";
 $text["kat_loeschen_link"]			= "Löschen";
 $text["kat_rechte"]					= "Rechte bearbeiten";
@@ -49,7 +48,6 @@ $text["kat_ausblenden"]				= "Kategorien ein-/ausblenden";
 $text["news_inhalt"]				= "Newsinhalte bearbeiten";
 $text["news_grunddaten"]			= "Newsgrunddaten bearbeiten";
 $text["news_rechte"]				= "Rechte bearbeiten";
-$text["news_loeschen"]				= "News löschen";
 $text["news_loeschen_frage"]		= " : News wirklich löschen?";
 $text["news_loeschen_link"]			= "Löschen";
 $text["news_basicdata"]             = "News-Grunddaten";
@@ -76,7 +74,6 @@ $text["feed_cat"]                   = "Kategorie des Feeds:";
 $text["feed_cat_all"]               = "Alle Kategorien";
 $text["feed_liste_leer"]            = "Keine Feeds angelegt";
 $text["editNewsFeed"]               = "Feed bearbeiten";
-$text["deleteNewsFeed"]             = "Feed löschen";
 $text["feed_loeschen_frage"]        = " : Feed wirklich löschen?";
 
 $text["_news_suche_seite_"]         = "Treffer-Seite:";
