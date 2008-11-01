@@ -174,7 +174,8 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
 	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_delete"), "icon_ton.gif"));
+	    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOnePost->getStrTitle().$this->getText("postacomment_delete_question")
+	    		   		                  .getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid()."&postacommentDeleteFinal=1".($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe")), $this->getText("postacomment_delete_link")));
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listStatusButton($objOnePost->getSystemid());
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
@@ -218,11 +219,10 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-
 			if($this->getParam("postacommentDeleteFinal") == "") {
 			    $objPost = new class_modul_postacomment_post($this->getSystemid());
 				$strName = $objPost->getStrTitle();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("postacomment_delete_question")
+				$strReturn .= $this->objToolkit->warningBox($objPost->getStrTitle().$this->getText("postacomment_delete_question")
 				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deletePost&amp;systemid="
 				               .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))."&amp;postacommentDeleteFinal=1\">"
 				               .$this->getText("postacomment_delete_link"));

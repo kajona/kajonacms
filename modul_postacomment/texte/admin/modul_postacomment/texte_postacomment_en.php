@@ -32,7 +32,6 @@ $text["permissions_header"]         = array(
             							);
 
 $text["postacomment_edit"]          = "Edit comment";
-$text["postacomment_delete"]        = "Delete comment";
 $text["postacomment_rights"]        = "Change permissions";
 
 $text["postacomment_delete_question"] = " | Really delete comment?";

@@ -32,7 +32,6 @@ $text["permissions_header"]         = array(
             							);
 
 $text["postacomment_edit"]          = "Kommentar bearbeiten";
-$text["postacomment_delete"]        = "Kommentar löschen";
 $text["postacomment_rights"]        = "Rechte bearbeiten";
 
 $text["postacomment_delete_question"] = " | Kommentar wirklich löschen?";
