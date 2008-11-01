@@ -636,31 +636,42 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	vertical-align: top;
 }
 
-.adminwidget {
+.adminwidget, .dialog {
 	border: 1px solid #000099;
 }
 
-.adminwidgetHeader {
-
+ .dialog {
+    display: block;
+	visibility: hidden;
+	position: absolute;
+	width: auto;
+	background-color: #FFFFFF;
 }
 
-.adminwidgetHeaderTitle {
+.adminwidgetHeader, .dialogHeader {
+    background-color: #FFFFFF;
+}
+
+.adminwidgetHeaderTitle, .dialogHeaderTitle {
 	padding: 2px 0 2px 2px;
 	background-position: left top;
 	background-image: url(tabellenkopfkurz.gif);
+	background-color: #ffffff;
 	color: #FFFFFF;
     font-size: 11px;
     width: 175px;
     float: left;
+    text-align: left;
 }
 
-.adminwidgetHeaderActions {
+.adminwidgetHeaderActions, .dialogHeaderActions {
 	text-align: right;
 	float: right;
 	margin: 1px 1px 0 0;
+	background-color: #ffffff;
 }
 
-.adminwidgetContent {
+.adminwidgetContent, .dialogContent {
 	padding: 2px;
 }
 
@@ -674,4 +685,79 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 .dashBoard ul li {
 	padding: 0; 
 	margin: 0 0 10px 0; 
+}
+
+
+
+
+
+/* Dialog classes */
+.yui-overlay,
+.yui-panel-container {
+    visibility:hidden;
+    position:absolute;
+    z-index: 2;
+}
+
+.mask {
+    z-index: 1; 
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.5;
+    opacity:.50;
+    filter: alpha(opacity=50);
+    background-color:#000000;
+}
+
+.yui-panel-container.show-scrollbars {
+    overflow: visible;
+}
+
+.yui-panel-container.show-scrollbars .underlay {
+    overflow: auto;
+}
+
+/* Panel underlay styles */
+
+.yui-panel-container .underlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+}
+
+.yui-panel-container.matte {
+    padding: 3px;
+    background-color: #fff;
+}
+
+
+/* 
+   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
+   the Panel's content changes, to force Safari 2.x to redraw the underlay.
+   We attempt to choose a CSS property which has no visual impact when added,
+   removed, but still causes Safari to redraw
+*/
+.yui-panel-container.shadow .underlay.yui-force-redraw {
+    padding-bottom: 1px;
+}
+
+.yui-effect-fade .underlay {
+    display:none;
+}
+
+.yui-panel {
+    visibility:hidden;
+    border-collapse:separate;
+    position:relative;
+    left:0;
+    top:0;
+    font:1em Arial;
+    
+    z-index:1;
+    overflow:hidden;
 }
