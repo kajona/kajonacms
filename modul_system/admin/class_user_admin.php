@@ -6,7 +6,7 @@
 *-------------------------------------------------------------------------------------------------------*
 * 																										*
 * 	class_user_admin.php																				*
-* 	Admin Part of the user / group management															*																										*
+* 	Admin Part of the user / group management															*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                         *
@@ -89,8 +89,6 @@ class class_user_admin extends class_admin implements interface_admin {
                 if($strReturn == "")
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
             }
-            if($strAction == "delete")
-                $strReturn = $this->actionDelete();
             if($strAction == "deletefinal") {
                 if($this->actionDeleteFinal())
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
@@ -123,15 +121,11 @@ class class_user_admin extends class_admin implements interface_admin {
             }
             if($strAction == "groupmember")
                 $strReturn = $this->actionGroupMember();
-            if($strAction == "groupmemberdelete")
-                $strReturn = $this->actionGroupMemberDelete();
             if($strAction == "groupmemberdeletefinal") {
                 $strReturn = $this->actionGroupMemberDeleteFinal();
                 if($strReturn == "")
                     $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=groupmember&groupid=".$this->getParam("groupid"));
             }
-            if($strAction == "groupdelete")
-                $strReturn = $this->actionGroupDelete();
             if($strAction == "groupdeletefinal") {
                 $strReturn = $this->actionGroupDeleteFinal();
                 if($strReturn == "")
@@ -215,7 +209,8 @@ class class_user_admin extends class_admin implements interface_admin {
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "edit", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "delete", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_loeschen"), "icon_ton.gif"));
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")". $this->getText("user_loeschen_frage")
+                                   .getLinkAdmin($this->arrModule["modul"], "deletefinal", "&userid=".$objOneUser->getSystemid(), $this->getText("user_loeschen_link")));
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
                 //new 2.1: the status icon
@@ -572,28 +567,6 @@ class class_user_admin extends class_admin implements interface_admin {
             return $this->getText( "fehler_recht");
     }
 
-    /**
-	 * Asks, if the user should really be deleted
-	 *
-	 * @return string
-	 */
-    private function actionDelete() {
-        $strReturn = "";
-        if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) 	{
-            $objUser = new class_modul_user_user($this->getParam("userid"));
-            $strContent =	  $objUser->getStrUsername()
-            . " (".$objUser->getStrForename() ." "
-            . $objUser->getStrName() .")"
-            . $this->getText("user_loeschen_frage")
-            ."<br /><a href=\""._indexpath_."?admin=1&amp;module=user&amp;action=deletefinal&amp;userid=".$this->getParam("userid")
-            ."\">".$this->getText("user_loeschen_link");
-
-            $strReturn .= $this->objToolkit->warningBox($strContent);
-        }
-        else
-            $strReturn .= $this->getText("fehler_recht");
-        return $strReturn;
-    }
 
     /**
 	 * Deltes a user from the database
@@ -631,7 +604,8 @@ class class_user_admin extends class_admin implements interface_admin {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _gaeste_gruppe_id_  && $objSingleGroup->getSystemid() != _admin_gruppe_id_) {
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupdelete", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_loeschen"), "icon_ton.gif"));
+                    $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName().$this->getText("gruppe_loeschen_frage")
+                                  .getLinkAdmin($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid(), $this->getText("gruppe_loeschen_link")));
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                 }
                 else {
@@ -754,7 +728,9 @@ class class_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach ($arrMembers as $objSingleMember) {
-                    $strAction = $this->objToolkit->listButton(getLinkAdmin("user", "groupmemberdelete", "&memberid=".$objSingleMember->getSystemid()."&groupid=".$this->getParam("groupid"), $this->getText("mitglied_loeschen"), $this->getText("mitglied_loeschen"), "icon_ton.gif"));
+                    $strAction = $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
+                                 .$this->getText("mitglied_loeschen_frage_1")." ".$objGroup->getStrName().$this->getText("mitglied_loeschen_frage_2")
+                                 .getLinkAdmin($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid(), $this->getText("mitglied_loeschen_link")));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
@@ -765,29 +741,6 @@ class class_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-    /**
-	 * Shows a warning before deleting a membership
-	 *
-	 * @return string
-	 */
-    private function actionGroupMemberDelete() {
-        $strReturn = "";
-        if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objUser = new class_modul_user_user($this->getParam("memberid"));
-            $objGroup = new class_modul_user_group($this->getParam("groupid"));
-            $strContent = $objUser->getStrUsername()
-                            . " (".$objUser->getStrForename() ." "
-                            . $objUser->getStrName() .")"
-                            .$this->getText("mitglied_loeschen_frage_1")." "
-                            .$objGroup->getStrName().$this->getText("mitglied_loeschen_frage_2")."<br /><a href=\""
-                            ._indexpath_."?admin=1&module=user&action=groupmemberdeletefinal&groupid=".$objGroup->getSystemid()."&userid=".$objUser->getSystemid()."\">"
-                            .$this->getText("mitglied_loeschen_link")."</a>";
-            $strReturn .= $this->objToolkit->warningBox($strContent);
-        }
-        else
-            $strReturn .= $this->getText("fehler_recht");
-        return $strReturn;
-    }
 
     /**
 	 * Deletes a membership
@@ -809,27 +762,6 @@ class class_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-
-    /**
-	 * Shows warning before deleting a group
-	 *
-	 * @return string
-	 */
-    private function actionGroupDelete() {
-        $strReturn = "";
-        if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objGroup = new class_modul_user_group($this->getParam("groupid"));
-            $strContent = $objGroup->getStrName()
-                            .$this->getText("gruppe_loeschen_frage")
-                            ."<br /><a href=\""._indexpath_."?admin=1&module=user&action=groupdeletefinal&groupid=".$objGroup->getSystemid()."\">"
-                            .$this->getText("gruppe_loeschen_link")."</a>";
-
-            $strReturn = $this->objToolkit->warningBox($strContent);
-        }
-        else
-            $strReturn .= $this->getText("fehler_recht");
-        return $strReturn;
-    }
 
     /**
 	 * Deletes a group and all memberships

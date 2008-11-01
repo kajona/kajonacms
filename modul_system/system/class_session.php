@@ -350,10 +350,6 @@ final class class_session {
 							$objOneUser->setStrPass("");
 							//No htmlentitiesencoding here !!!
 							$objOneUser->updateObjectToDb(false);
-
-							//Drop a line to the logger
-							class_logger::getInstance()->addLogRow("User: ".$strName." successfully logged in", class_logger::$levelInfo);
-							class_modul_user_log::generateLog();
 							
 							$this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
 							$this->objInternalSession->setStrUserid($objOneUser->getSystemid());
@@ -362,6 +358,10 @@ final class class_session {
 	                        $this->objInternalSession->setStrGroupids($strGroups);
 	                        $this->objInternalSession->updateObjectToDb();
 	                        $this->objUser = $objOneUser;
+	                        
+	                        //Drop a line to the logger
+							class_logger::getInstance()->addLogRow("User: ".$strName." successfully logged in", class_logger::$levelInfo);
+							class_modul_user_log::generateLog();
 
 	                        //right now we have the time to do a few cleanups...
 	                        class_modul_system_session::deleteInvalidSessions();
