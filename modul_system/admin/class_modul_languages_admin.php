@@ -64,8 +64,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
     		    if($strReturn == "")
     		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
-    		if($strAction == "deleteLanguage")
-    		    $strReturn .= $this->actionDeleteLanguage();
     		if($strAction == "deleteLanguageFinal") {
     		    $strReturn = $this->actionDeleteLanguageFinal();
     		    if($strReturn == "")
@@ -120,7 +118,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 					if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
 		    		if($this->objRights->rightDelete($objOneLanguage->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "deleteLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_loeschen"), "icon_ton.gif"));
+		    		    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()).$this->getText("delete_question").getLinkAdmin($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid(), $this->getText("delete_link")));
 		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
 		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
@@ -249,24 +247,6 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 			    $strReturn = $this->getText("fehler_recht");
 	    }
 	}
-
-	/**
-	 * Shows the warning before deleting a language
-	 *
-	 * @return string
-	 */
-	private function actionDeleteLanguage() {
-	    $strReturn = "";
-        if($this->objRights->rightDelete($this->getSystemid())) {
-            $objLang = new class_modul_languages_language($this->getSystemid());
-            $strReturn .= $this->objToolkit->warningBox($this->getText("lang_".$objLang->getStrName()).$this->getText("delete_question")
-                                                        .getLinkAdmin($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$this->getSystemid(), $this->getText("delete_link")));
-        }
-        else
-		    $strReturn = $this->getText("fehler_recht");
-		return $strReturn;
-	}
-
 
 	/**
 	 * Deletes the language
