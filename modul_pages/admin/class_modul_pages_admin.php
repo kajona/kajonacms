@@ -98,8 +98,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    else
     		        $strReturn = $this->actionNew();
     		}
-    		if($strAction == "deletePage")
-    			$strReturn = $this->actionDeletePage();
     		if($strAction == "deletePageFinal") {
     			$strReturn = $this->actionDeletePageFinal();
     			if($strReturn == "")
@@ -136,8 +134,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		        $strReturn = $this->actionFolderNew();
     		}
 
-    		if($strAction == "deleteFolder")
-    			$strReturn = $this->actionFolderDelete();
     		if($strAction == "deleteFolderFinal") {
     			$strReturn = $this->actionDeleteFolderFinal();
     			if($strReturn == "")
@@ -265,8 +261,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
 			    		if($this->objRights->rightEdit($objSingleFolder->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deleteFolder", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_loeschen"), "icon_ton.gif"));
+			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid())) {
+			    		    if(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) != 0 || count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) != 0)
+                			    $strActions .= $this->objToolkit->listDeleteButton($this->getText("ordner_loschen_leer"));
+                            else
+                                $strActions .= $this->objToolkit->listDeleteButton($objSingleFolder->getStrName().$this->getText("pages_ordner_loeschen_frage").getLinkAdmin("pages", "deleteFolderFinal", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_loeschen_link")));
+			    		}
 			    		if($this->objRights->rightRight($objSingleFolder->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objSingleFolder->getSystemid())));
 			  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strActions, $intI++);
@@ -303,7 +303,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    			if($this->objRights->rightEdit($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));	
 		    		if($this->objRights->rightDelete($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
+		    		    $strActions .= $this->objToolkit->listDeleteButton($objOneRow->getStrName().$this->getText("seite_loeschen_frage").getLinkAdmin("pages", "deletePageFinal", "&systemid=".$objOneRow->getSystemid(), $this->getText("seite_loeschen_link")));
 		    		if($this->objRights->rightEdit($strSystemid))
 		    			$strActions .= $this->objToolkit->listStatusButton($objOneRow->getSystemid());
 		    		if($this->objRights->rightRight($strSystemid))
@@ -600,27 +600,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	} //actionChangePage()
 
-	/**
-	 * Returns the warning-field to confirm deletion
-	 *
-	 * @return string
-	 */
-	public function actionDeletePage() {
-		$strReturn = "";
-		//Check the rights
-		if($this->objRights->rightDelete($this->getSystemid())) {
-			$objPage = new class_modul_pages_page($this->getSystemid());
-			$strName = $objPage->getStrName();
-
-			$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("seite_loeschen_frage")."<br /><a href=\""._indexpath_."?admin=1&module=pages&action=deletePageFinal&systemid=".$this->getSystemid()."\">".$this->getText("seite_loeschen_link"));
-            //Flush the cache
-			$this->flushPageFromPagesCache($strName);
-		}
-		else
-			$strReturn .= $this->getText("fehler_recht");
-
-		return $strReturn;
-	}
 
 	/**
 	 * Delete a page and all associated elements
@@ -781,29 +760,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
 	/**
-	 * Returns the Warning-Box before deleting a folder
-	 *
-	 * @return string
-	 */
-	public function actionFolderDelete() {
-		$strReturn = "";
-
-		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Get Folder details
-			$objFolder = new class_modul_pages_folder($this->getSystemid());
-			//Just delete the folder, if the folder aint got childs...
-			if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) != 0 || count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) != 0)
-			    $strReturn .= $this->objToolkit->warningBox($this->getText("ordner_loschen_leer"));
-            else
-			    $strReturn .= $this->objToolkit->warningBox($objFolder->getStrName().$this->getText("pages_ordner_loeschen_frage")."<br /><a href=\""._indexpath_."?admin=1&module=pages&action=deleteFolderFinal&systemid=".$this->getSystemid()."\">".$this->getText("pages_ordner_loeschen_link"));
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-		return $strReturn;
-	}
-
-
-	/**
 	 * Deletes a folder from Database. All subpages & subfolders turn up to top-level
 	 *
 	 * @return string, "" in case of success
@@ -858,7 +814,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$intI = 0;
 			foreach($arrElements as $objOneElement) {
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-	    		$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "deleteElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_loeschen"), $this->getText("element_loeschen"), "icon_ton.gif"));
+	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName().$this->getText("element_loeschen_frage").getLinkAdmin("pages", "deleteElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_loeschen_link")));
 				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
 			}
 			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
@@ -1108,18 +1064,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	private function actionDeleteElement() {
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
-			if($this->getParam("elementDeleteFinal") == "") {
-				$objData = new class_modul_pages_element($this->getParam("elementid"));
-				$strName = $objData->getStrName();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("element_loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteElement&elementid=".$objData->getStrElementId()."&elementDeleteFinal=1\">".$this->getText("element_loeschen_link"));
-			}
-			elseif($this->getParam("elementDeleteFinal") == "1") {
-				//Delete
-				if(!class_modul_pages_element::deleteElement($this->getParam("elementid")))
-				    throw new class_exception($this->getText("element_loeschen_fehler"), class_exception::$level_ERROR);
+			//Delete
+			if(!class_modul_pages_element::deleteElement($this->getParam("elementid")))
+			    throw new class_exception($this->getText("element_loeschen_fehler"), class_exception::$level_ERROR);
 
-				$this->flushCompletePagesCache();
-			}
+			$this->flushCompletePagesCache();
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

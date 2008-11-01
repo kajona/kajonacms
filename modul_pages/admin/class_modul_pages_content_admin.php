@@ -220,7 +220,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 								    $this->unlockRecord($objOneElementOnPage->getSystemid());
 
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "deleteElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_loeschen"), "icon_ton.gif"));
+								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ).$this->getText("element_loeschen_frage")
+			                                   .getLinkAdmin("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")), $this->getText("element_loeschen_link")));                 
 							}
 
 							//The Icons to sort the list
@@ -551,9 +552,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		//Rights?
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			$objElement = new class_modul_pages_pageelement($this->getSystemid());
-			$strName = $objElement->getStrName();
-			$strTitle = $objElement->getStrTitle();
-			$strReturn .= $this->objToolkit->warningBox($strName. ($strTitle != "" ? " - ".$strTitle : "" )
+			$strReturn .= $this->objToolkit->warningBox($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" )
 			             .$this->getText("element_loeschen_frage")
 			             ." <br /><a href=\""._indexpath_."?admin=1&module=pages_content&action=deleteElementFinal&systemid="
 			             .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))."\">"
