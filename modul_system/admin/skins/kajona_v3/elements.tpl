@@ -822,3 +822,25 @@ The language switch sourrounds the buttons
 <adminwidget_separator>
 &nbsp;<br />
 </adminwidget_separator>
+
+---------------------------------------------------------------------------------------------------------
+-- DIALOG -----------------------------------------------------------------------------------------------
+<dialog><div class="dialog" id="%%dialog_id%%">
+        <div class="hd">
+            <div class="title">%%dialog_name%%</div>
+            <div class="c"><a class="container-close" href="javascript:%%dialog_var%%.hide();">[X]</a></div>
+            <div class="clear"></div>
+        </div>
+        <div class="bd">
+            <div class="c" style="padding:0 10px;">
+                <div class="spacer"></div>
+                <p>
+                    %%dialog_content%%
+                </p>
+                <div class="spacer"></div>
+            </div>
+        </div>
+        <div class="ft">
+            <div class="c"></div>
+        </div>
+</div></dialog>

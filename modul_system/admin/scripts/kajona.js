@@ -134,6 +134,37 @@ function addLoadEvent(func) {
 	}
 }
 
+function ModalDialog(strDialogId) {
+    
+    kajonaAjaxHelper.loadAnimationBase();
+    
+    this.dialog = null;
+    this.width = "240px";
+    this.containerId = strDialogId;
+    
+    this.init = function() {
+        this.dialog = 
+    		new YAHOO.widget.Panel(this.containerId,  
+    			{ /*width:this.width,  */
+    			  fixedcenter:true, 
+    			  close:false, 
+    			  draggable:false, 
+    			  zindex:4000,
+    			  modal:true,
+    			  visible:true,
+    			  effect: { effect: YAHOO.widget.ContainerEffect.FADE, duration: 0.5 }
+    			} 
+		);
+		
+        this.dialog.render(document.body);
+        this.dialog.show();
+    }
+    
+    this.hide = function() {
+        this.dialog.hide();
+    }
+}
+
 //--- RIGHTS-STUFF --------------------------------------------------------------------------------------
 function checkRightMatrix() {
 	//mode 1: inheritance
@@ -317,9 +348,12 @@ var kajonaAjaxHelper =  {
 	},
 	
 	loadCalendarBase : function() {
-	   kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/calendar/calendar-min.js');
+	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/calendar/calendar-min.js');
 	},
-
+	
+	loadDialogBase : function() {
+	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/container/container-min.js');
+	},
 
 	addFileToLoad : function(fileName) {
 		if(kajonaAjaxHelper.bitPastOnload) {

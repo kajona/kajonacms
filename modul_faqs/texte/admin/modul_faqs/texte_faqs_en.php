@@ -25,7 +25,6 @@ $text["liste_leer"]					= "No FAQs available";
 
 $text["kat_anzeigen"]				= "Show category";
 $text["kat_bearbeiten"]				= "Edit category";
-$text["kat_loeschen"]				= "Delete category";
 $text["kat_loeschen_frage"]			= " : really delete category?";
 $text["kat_loeschen_link"]			= "Delete";
 $text["kat_rechte"]					= "Change permissions";
@@ -37,7 +36,6 @@ $text["speichern"]                  = "Save";
 $text["faqs_question"]              = "Question:";
 $text["faqs_answer"]                = "Answer:";
 $text["faq_edit"]                   = "Edit FAQ";
-$text["faq_loeschen"]               = "Delete FAQ";
 $text["faq_rechte"]                 = "Change permissions";
 $text["faqs_loeschen_frage"]        = " : really delete FAQ?";
 $text["faqs_loeschen_link"]         = "Delete";

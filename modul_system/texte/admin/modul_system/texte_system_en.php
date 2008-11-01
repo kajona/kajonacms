@@ -73,6 +73,9 @@ $text["dateStyleLong"]              = "M/d/Y H:i:s";
 $text["status_active"]              = "Change status (is active)";
 $text["status_inactive"]            = "Change status (is inactive)";
 
+$text["deleteHeader"]               = "Confirm deletion";
+$text["deleteButton"]               = "Delete";
+
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 
 $text["gd"]							= "GD-Lib";

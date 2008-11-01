@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/dragdrop/dragdrop-min.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/container/container-min.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -114,6 +115,7 @@
 	}
 	
 	YAHOO.util.Event.onDOMReady(naviSetup);
+	
 </script>
 </body>
 </html>

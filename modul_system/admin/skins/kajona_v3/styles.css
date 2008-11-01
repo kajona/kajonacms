@@ -9,7 +9,7 @@
 * 	CSS-styles for admin area																			*
 *																										*
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                                    *
+*	$Id$	                                            *
 ********************************************************************************************************/
 
 /*
@@ -551,7 +551,7 @@ h2 {
 	margin-top: 13px;
 }
 
-/* Q U I C K H E L P, D A S H B O A R D */
+/* Q U I C K H E L P,  D A S H B O A R D,  D I A L O G */
 .quickHelpButton {
 	text-align: right;
 	margin: 50px 0 10px 0;
@@ -581,7 +581,7 @@ h2 {
      text-decoration: none;
 }
 
-#quickHelp, .adminwidget {
+#quickHelp, .adminwidget, .dialog {
 	display: none;
 	text-align: left;
 	width: 400px;
@@ -589,6 +589,13 @@ h2 {
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
+}
+
+ .dialog {
+    display: block;
+	visibility: hidden;
+	position: absolute;
+	width: auto;
 }
 
 .adminwidget {
@@ -608,24 +615,24 @@ h2 {
 	width: 235px;
 }
 
-#quickHelp .hd .title, .adminwidget .hd .title {
+#quickHelp .hd .title, .adminwidget .hd .title, .dialog .hd .title {
 	float: left;
 	text-indent: 25px;
 	text-transform: uppercase;
 	padding-top: 5px;
 }
 
-.adminwidget .hd .title {
+.adminwidget .hd .title, .dialog .hd .title {
     text-indent: 5px;
 }
 
-#quickHelp .hd .c, .adminwidget .hd .c {
+#quickHelp .hd .c, .adminwidget .hd .c, .dialog .hd .c {
 	text-align: right;
 	line-height: 22px;
 	height: 22px;
 }
 
-.adminwidget .hd .c {
+.adminwidget .hd .c, .dialog .hd .c {
     text-align: right;
     line-height: 22px;
     height: 22px;
@@ -640,60 +647,60 @@ h2 {
     margin-right: 1px;
 }
 
-#quickHelp .hd .clear, .adminwidget .hd .clear {
+#quickHelp .hd .clear, .adminwidget .hd .clear, .dialog .hd .clear {
 	clear: both;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
 	font-size: 1px; /* ensure minimum height */
 	height: 22px;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
 	height: 14px;
 }
 
-#quickHelp .hd, .adminwidget .hd {
+#quickHelp .hd, .adminwidget .hd, .dialog .hd {
 	background: transparent url(quickhelp_topleft.png) no-repeat 0px 0px;
 	margin-right: 7px; /* space for right corner */
 	cursor: move;
 }
 
-.adminwidget .hd {
+.adminwidget .hd, .dialog .hd {
     background: transparent url(adminwidget_topleft.png) no-repeat 0px 0px;
 }
 
 
-#quickHelp .hd .c, .adminwidget .hd .c {
+#quickHelp .hd .c, .adminwidget .hd .c, .dialog .hd .c {
 	background: transparent url('quickhelp_topright.png') no-repeat right 0px;
 	margin-right: -7px; /* pull right corner back over empty space (from above margin) */
 }
 
-#quickHelp .bd, .adminwidget .bd {
+#quickHelp .bd, .adminwidget .bd, .dialog .bd {
 	background: transparent url(quickhelp_middleleft.png) repeat-y 0px 0px;
 	margin-right: 6px;
 }
 
-#quickHelp .bd .c, .adminwidget .bd .c {
+#quickHelp .bd .c, .adminwidget .bd .c, .dialog .bd .c {
 	background: transparent url(quickhelp_middleright.png) repeat-y right 0px;
 	margin-right: -6px;
 }
 
-#quickHelp .bd .c .spacer, .adminwidget .bd .c .spacer {
+#quickHelp .bd .c .spacer, .adminwidget .bd .c .spacer, .dialog .bd .c .spacer {
 	height: 5px;
 }
 
-#quickHelp .ft, .adminwidget .ft {
+#quickHelp .ft, .adminwidget .ft, .dialog .ft {
 	background: transparent url(quickhelp_bottomleft.png) no-repeat 0px 0px;
 	margin-right: 7px;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
 	background: transparent url(quickhelp_bottomright.png) no-repeat right 0px;
 	margin-right: -7px;
 }
 
-#quickHelp p, .adminwidget p, .adminwidget .bd .c div {
+#quickHelp p, .adminwidget p, .adminwidget .bd .c div, .dialog .bd .c div {
 	margin: 0;
 	padding: 0 10px 0px 10px;
 }
@@ -1240,3 +1247,77 @@ body.folderView .listActions a {
 .swfUpload a.progressCancel:hover {
 	background-position: 0px 0px;
 }
+
+
+
+/* Dialog classes */
+.yui-overlay,
+.yui-panel-container {
+    visibility:hidden;
+    position:absolute;
+    z-index: 2;
+}
+
+.mask {
+    z-index: 1; 
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.5;
+    opacity:.50;
+    filter: alpha(opacity=50);
+    background-color:#000000;
+}
+
+.yui-panel-container.show-scrollbars {
+    overflow: visible;
+}
+
+.yui-panel-container.show-scrollbars .underlay {
+    overflow: auto;
+}
+
+/* Panel underlay styles */
+
+.yui-panel-container .underlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+}
+
+.yui-panel-container.matte {
+    padding: 3px;
+    background-color: #fff;
+}
+
+
+/* 
+   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
+   the Panel's content changes, to force Safari 2.x to redraw the underlay.
+   We attempt to choose a CSS property which has no visual impact when added,
+   removed, but still causes Safari to redraw
+*/
+.yui-panel-container.shadow .underlay.yui-force-redraw {
+    padding-bottom: 1px;
+}
+
+.yui-effect-fade .underlay {
+    display:none;
+}
+
+.yui-panel {
+    visibility:hidden;
+    border-collapse:separate;
+    position:relative;
+    left:0;
+    top:0;
+    font:1em Arial;
+    border:none;
+    z-index:1;
+    overflow:hidden;
+}
+

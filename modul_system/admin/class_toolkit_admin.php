@@ -855,6 +855,30 @@ class class_toolkit_admin extends class_toolkit {
 	}
 	
 	/**
+	 * Generates a delete-button. The passed content is shown as a modal dialog when the icon was clicked.
+	 * So place the link for the final deletion inside the contents, otherwise the user has no more chance to 
+	 * delete the record!
+	 *
+	 * @param $strContent
+	 * @return string
+	 */
+	public function listDeleteButton($strContent) {
+	    //wrap the contents by a warning-box
+	    $strDialogContent = $this->warningBox($strContent);
+	    //place it into a standard-js-dialog
+	    $strDialogId = "delVar".generateSystemid();
+	    $strDialog = $this->modalDialog(class_carrier::getInstance()->getObjText()->getText("deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
+	    
+	    //create the list-button and the js code to show the dialog
+	    $strButton = getLinkAdminManual("href=\"javascript:".$strDialogId.".init();\"", 
+	                                     "", 
+	                                     class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"), 
+	                                     "icon_ton.gif" );
+	    
+	    return $this->listButton($strButton).$strDialog;
+	}
+	
+	/**
 	 * Generates a button allowing to change the status of the record passed.
 	 * Therefore an ajax-method is called.
 	 * 
@@ -1414,6 +1438,39 @@ class class_toolkit_admin extends class_toolkit {
     public function adminwidgetSeparator() {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_separator");
         return $this->objTemplate->fillTemplate(array(""), $strTemplateID);
+    }
+    
+//--- modal dialog --------------------------------------------------------------------------------------
+
+    /**
+     * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
+     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
+     * dialog become visible.
+     *
+     * @param string $strTitle
+     * @param string $strContent
+     * @param string $strDialogId
+     * @return string
+     */
+    public function modalDialog($strTitle, $strDialogContent, $strDialogId) {
+        $strContent = "";
+        //create the html-part
+        $arrTemplate = array();
+        $strContainerId = generateSystemid();
+        $arrTemplate["dialog_id"] = $strContainerId;
+        $arrTemplate["dialog_name"] = $strTitle;
+        $arrTemplate["dialog_content"] = $strDialogContent;
+        $arrTemplate["dialog_var"] = $strDialogId;
+        $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialog");
+        
+        $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
+        
+        //and create the java-script
+        $strContent .="<script type=\"text/javascript\">
+            var ".$strDialogId." = new ModalDialog('".$strContainerId."');
+        </script>";
+        
+        return $strContent;
     }
     
 }

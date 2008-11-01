@@ -170,7 +170,10 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_loeschen"), "icon_ton.gif"));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton(
+    		   		           $objOneCategory->getStrTitle().$this->getText("kat_loeschen_frage")
+				               ."<br />".getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()."&peClose=".$this->getParam("pe"), $this->getText("kat_loeschen_link"))
+    		   		    ); 
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listStatusButton($objOneCategory->getSystemid());
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
@@ -203,7 +206,10 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                     if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_edit"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneFaq->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_loeschen"), "icon_ton.gif"));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton(
+    		   		           $objOneFaq->getStrQuestion().$this->getText("faqs_loeschen_frage")
+				               ."<br />".getLinkAdmin($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid()."&peClose=".$this->getParam("pe"), $this->getText("faqs_loeschen_link"))
+    		   		    );    
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneFaq->getSystemid());
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
@@ -312,16 +318,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//warning or delete?
-			if($this->getParam("faqs_kat_loeschen_final") == "") {
-			    $objKat = new class_modul_faqs_category($this->getSystemid());
-				$strReturn .= $this->objToolkit->warningBox($objKat->getStrTitle().$this->getText("kat_loeschen_frage")."<br /><a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteCat&systemid=".$this->getSystemid()."&faqs_kat_loeschen_final=1\">"
-				                                            .$this->getText("kat_loeschen_link"));
-			}
-			elseif($this->getParam("faqs_kat_loeschen_final") == "1") {
-               if(!class_modul_faqs_category::deleteCategory($this->getSystemid()))
-                   throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+           if(!class_modul_faqs_category::deleteCategory($this->getSystemid()))
+               throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -462,19 +460,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-
-			if($this->getParam("faqs_loeschen_final") == "") {
-			    $objFaq = new class_modul_faqs_faq($this->getSystemid());
-				$strName = $objFaq->getStrQuestion();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("faqs_loeschen_frage")
-				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deleteFaq&amp;systemid="
-				               .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))."&amp;faqs_loeschen_final=1\">"
-				               .$this->getText("faqs_loeschen_link"));
-			}
-			elseif($this->getParam("faqs_loeschen_final") == "1") {
-			    if(!class_modul_faqs_faq::deleteFaqs($this->getSystemid()))
-			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+		    if(!class_modul_faqs_faq::deleteFaqs($this->getSystemid()))
+		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
