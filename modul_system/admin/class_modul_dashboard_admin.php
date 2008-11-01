@@ -132,13 +132,19 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
         
+        if($this->objRights->rightDelete($objDashboardWidget->getSystemid())) {
+            $strWidgetContent .= $this->objToolkit->modalDialog($this->getText("deleteButton", "system", "admin"), 
+                                                                $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName().$this->getText("widgetDeleteQuestion").getLinkAdmin($this->arrModule["modul"], 
+                                                                "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), $this->getText("widgetDeleteLink")), "del".$objDashboardWidget->getSystemid() );
+        }
+        
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
                                 $objDashboardWidget->getSystemid(), $this->objToolkit->getAdminwidget(
                                         $strWidgetId, 
                                         $strWidgetName, 
                                         $strGeneratedContent,
                                         ($this->objRights->rightEdit($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
-                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("deleteWidget"), "icon_ton.gif") : "")
+                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? getLinkAdminManual("href=\"javascript:del".$objDashboardWidget->getSystemid().".init();\"", "", $this->getText("deleteButton", "system", "admin"), "icon_ton.gif") : "")
                                 )
                              );
                              
@@ -244,20 +250,9 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
-
-			if($this->getParam("widgetDeleteFinal") == "") {
-			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
-				$strName = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("widgetDeleteQuestion")
-				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deleteWidget&amp;systemid="
-				               .$this->getSystemid()."&amp;widgetDeleteFinal=1\">"
-				               .$this->getText("widgetDeleteLink"));
-			}
-			elseif($this->getParam("widgetDeleteFinal") == "1") {
-			    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
-			    if(!$objDashboardwidget->deleteObjectFromDb())
-			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+		    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
+		    if(!$objDashboardwidget->deleteObjectFromDb())
+		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

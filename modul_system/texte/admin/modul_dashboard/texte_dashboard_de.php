@@ -22,7 +22,6 @@ $text["fehler_recht"]               = "Keine ausreichende Rechte";
 $text["setDashboardPosition"]       = "Speichern der Position erfolgreich";
 
 $text["editWidget"]                 = "Widget bearbeiten";
-$text["deleteWidget"]               = "Widget löschen";                
 $text["widgetDeleteQuestion"]       = " - Widget wirklich löschen?";
 $text["widgetDeleteLink"]           = "Löschen";
 
