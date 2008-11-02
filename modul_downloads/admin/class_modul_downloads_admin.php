@@ -195,7 +195,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightEdit($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_bearbeiten"), "icon_pencil.gif"));
 			   		if($this->objRights->rightDelete($arrOneObjArchive->getSystemid()))
-			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_loeschen"), "icon_ton.gif"));
+			   		    $strAction .= $this->objToolkit->listDeleteButton($arrOneObjArchive->getTitle().$this->getText("archiv_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid(), $this->getText("archiv_loeschen_link")));
 			   		if($this->objRights->rightRight($arrOneObjArchive->getSystemid()))
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($arrOneObjArchive->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_downloads.gif"), $arrOneObjArchive->getTitle(), $strAction, $intI++);
@@ -309,20 +309,11 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Warning box
-			if($this->getParam("loeschen_final") == "") {
-				$objArchive = new class_modul_downloads_archive($this->getSystemid());
-				$strName = $objArchive->getTitle();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("archiv_loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteArchive&systemid=".$this->getSystemid()."&loeschen_final=1\">".$this->getText("archiv_loeschen_link"));
-			}
-			else {
-				//Invoke deletion
-				if(class_modul_downloads_archive::deleteArchiveRecursive($this->getSystemid())) {
-					if(!class_modul_downloads_archive::deleteArchive($this->getSystemid())) {
-					    throw new class_exception($this->getText("archiv_loeschen_fehler"), class_exception::$level_ERROR);
-					}
-			   }
-		   }
+			if(class_modul_downloads_archive::deleteArchiveRecursive($this->getSystemid())) {
+				if(!class_modul_downloads_archive::deleteArchive($this->getSystemid())) {
+				    throw new class_exception($this->getText("archiv_loeschen_fehler"), class_exception::$level_ERROR);
+				}
+		    }
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

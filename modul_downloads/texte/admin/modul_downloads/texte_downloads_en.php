@@ -39,7 +39,6 @@ $text["logbuch_loeschen_link"]		= "Flush logfile";
 
 $text["archiv_anzeigen"]			= "Open archive";
 $text["archiv_bearbeiten"]			= "Edit archive";
-$text["archiv_loeschen"]			= "Delete archive";
 $text["archiv_loeschen_frage"]		= " : really delete archive? <br /> All stored details will be deleted!<br />";
 $text["archiv_loeschen_link"]		= "Delete";
 $text["archiv_loeschen_erfolg"]		= "The archive was delete successfully";
