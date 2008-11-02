@@ -27,7 +27,6 @@ $text["fehler_gal_bearbeiten"]		= "Fehler beim Bearbeiten der Gallerie";
 $text["galerie_anzeigen"]			= "Galerie anzeigen";
 $text["galerie_syncro"]				= "Galerie synchronisieren";
 $text["galerie_bearbeiten"]			= "Galerie bearbeiten";
-$text["galerie_loeschen"]			= "Galerie löschen";
 $text["galerie_loeschen_frage"]		= " : Galerie wirklich löschen? <br />Dabei werden alle hinterlegten Daten gelöscht!<br />";
 $text["galerie_loeschen_link"]		= "Löschen";
 $text["galerie_loeschen_erfolg"]	= "Löschen der Galerie erfolgreich";

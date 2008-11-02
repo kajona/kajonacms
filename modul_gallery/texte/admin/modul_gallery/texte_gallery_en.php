@@ -27,7 +27,6 @@ $text["fehler_gal_bearbeiten"]		= "An error occured while saving gallery";
 $text["galerie_anzeigen"]			= "Show gallery";
 $text["galerie_syncro"]				= "Synchronize gallery";
 $text["galerie_bearbeiten"]			= "Edit gallery";
-$text["galerie_loeschen"]			= "Delete gallery";
 $text["galerie_loeschen_frage"]		= " : really delete gallery? <br />All stored details will be deleted, too!<br />";
 $text["galerie_loeschen_link"]		= "Delete";
 $text["galerie_loeschen_erfolg"]	= "The gallery was deleted successfully";

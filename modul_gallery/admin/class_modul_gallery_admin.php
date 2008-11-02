@@ -176,7 +176,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		if($objOneGallery->rightEdit())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "editGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_bearbeiten"), "icon_pencil.gif"));
 			   		if($objOneGallery->rightDelete())
-			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_loeschen"), "icon_ton.gif"));
+			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGallery->getStrTitle().$this->getText("galerie_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid(), $this->getText("galerie_loeschen_link")));
 			   		if($objOneGallery->rightRight())
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), getRightsImageAdminName($objOneGallery->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
@@ -291,22 +291,12 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		$strReturn = "";
 		//Rechte-Check
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Warning?
-			if($this->getParam("loeschen_final") == "") {
-			    $objGallery = new class_modul_gallery_gallery($this->getSystemid());
-				$strName = $objGallery->getStrTitle();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("galerie_loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteGallery&systemid=".$this->getSystemid()."&loeschen_final=1\">".$this->getText("galerie_loeschen_link"));
+			if(class_modul_gallery_gallery::deleteGalleryRecursive($this->getSystemid())) {
+			    if(!class_modul_gallery_gallery::deleteGallery($this->getSystemid()))
+			        throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
 			}
-			else {
-				//Invoke the deletion
-				if(class_modul_gallery_gallery::deleteGalleryRecursive($this->getSystemid())) {
-				    if(!class_modul_gallery_gallery::deleteGallery($this->getSystemid()))
-				        throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
-				}
-				else
-					throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
-
-			}
+			else
+				throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
