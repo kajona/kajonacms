@@ -274,6 +274,30 @@ Upload-Field
 </table>
 </input_upload>
 
+Upload-Field for multiple files with progress bar
+<input_uploadFlash>
+	%%javascript%%
+	<div id="divSWFUploadUI" class="swfUpload" style="visibility: hidden;">
+		<fieldset class="flash" id="fsUploadProgress" style="display: none;">
+			<legend>Upload Queue</legend>
+		</fieldset>
+		<div id="divStatus"></div>
+		<div>
+			<input id="btnBrowse" type="button" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /><br /><input id="btnCancel" type="button" value="%%upload_multiple_cancel%%" disabled="disabled" class="inputSubmit" style="display: none;" />
+		</div>
+	</div>
+	
+	<div id="divLoadingContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+		SWFUpload is loading. Please wait a moment...
+	</div>
+	<div id="divLongLoading" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
+		SWFUpload is taking a long time to load or the load has failed.  Please make sure JavaScript is enabled and that a working version of the Adobe Flash Player is installed.
+	</div>
+	<div id="divAlternateContent" style="display: none;">
+		%%fallbackContent%%
+	</div>
+</input_uploadFlash>
+
 Regular Submit-Button
 <input_submit>
 <table width="90%" cellpadding="2" cellspacing="0">
