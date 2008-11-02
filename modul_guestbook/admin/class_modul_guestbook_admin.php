@@ -156,7 +156,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
            		    if($this->objRights->rightEdit($objOneGb->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editGuestbook", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_bearbeiten"), "icon_pencil.gif"));
 			   		if($this->objRights->rightDelete($objOneGb->getSystemid()))
-			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteGuestbook", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_loeschen"), "icon_ton.gif"));
+			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGb->getGuestbookTitle().$this->getText("loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteGuestbook", "&systemid=".$objOneGb->getSystemid(), $this->getText("loeschen_link")));
 			   		if($this->objRights->rightRight($objOneGb->getSystemid()))
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_rechte"), getRightsImageAdminName($objOneGb->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_book.gif"), $objOneGb->getGuestbookTitle(), $strAction, $intI++);
@@ -271,16 +271,9 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	public function actionDeleteGuestbook() {
 		$strReturn = "";
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//delete or warn?
-			if($this->getParam("gb_loeschen_final") == "") {
-				$objBook = new class_modul_guestbook_guestbook($this->getSystemid());
-				$strName = $objBook->getGuestbookTitle();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteGuestbook&systemid=".$this->getSystemid()."&gb_loeschen_final=1\">".$this->getText("loeschen_link"));
-			}
-			elseif($this->getParam("gb_loeschen_final") == 1) {
-                if(!class_modul_guestbook_guestbook::deleteGuestbook($this->getSystemid()))
-                    throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+            if(!class_modul_guestbook_guestbook::deleteGuestbook($this->getSystemid()))
+                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+			
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -307,7 +300,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				 	if($this->objRights->rightEdit($this->getSystemid()))
 				 	    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objPost->getSystemid(), "", $this->getText("edit_post"), "icon_pencil.gif"));
 				 	if($this->objRights->rightDelete($this->getSystemid()))
-					    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid(), "", $this->getText("loeschen_post"), "icon_ton.gif"));
+				 	    $strActions .= $this->objToolkit->listDeleteButton($objPost->getGuestbookPostName() . " - ".timeToString($objPost->getGuestbookPostDate()).$this->getText("post_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid(), $this->getText("post_loeschen_link")));
 					if($this->objRights->rightEdit($this->getSystemid()))
 					    $strActions .= $this->objToolkit->listStatusButton($objPost->getSystemid());
 					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), $objPost->getGuestbookPostName()." - ".$objPost->getGuestbookPostEmail()." - ".$objPost->getGuestbookPostPage(), $strActions, " ", $intI++);
@@ -377,21 +370,14 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	public function actionDeletePost() {
 		$strReturn = "";
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Delete od warn?
-			if($this->getParam("gb_post_loeschen_final") == "") {
-				$objPost = new class_modul_guestbook_post($this->getSystemid());
-				$strName = $objPost->getGuestbookPostName() . " - ".timeToString($objPost->getGuestbookPostDate());
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("post_loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deletePost&systemid=".$this->getSystemid()."&gb_post_loeschen_final=1\">". $this->getText("post_loeschen_link"));
-			}
-			elseif($this->getParam("gb_post_loeschen_final") == 1) {
-                //Delete from module-table
-                $strPrevID = $this->getPrevId();
+            //Delete from module-table
+            $strPrevID = $this->getPrevId();
 
-                $bitDelete = class_modul_guestbook_post::deletePost($this->getSystemid());
-                $this->setSystemid($strPrevID);
-                if(!$bitDelete)
-                    throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			}
+            $bitDelete = class_modul_guestbook_post::deletePost($this->getSystemid());
+            $this->setSystemid($strPrevID);
+            if(!$bitDelete)
+                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+			
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -414,6 +400,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	}
 
 
-} //class_modul_gaestebuch_admin
+} 
 
 ?>

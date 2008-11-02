@@ -32,7 +32,6 @@ $text["permissions_header"]         = array(
 
 $text["gaestebuch_anzeigen"]		= "Gästebuch anzeigen";
 $text["gaestebuch_bearbeiten"]		= "Gästebuch bearbeiten";
-$text["gaestebuch_loeschen"]		= "Gästebuch löschen";
 $text["gaestebuch_rechte"]			= "Rechte bearbeiten";
 $text["gaestebuch_listeleer"]		= "Kein Gästebuch angelegt";
 
@@ -43,7 +42,6 @@ $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuf�
 $text["loeschen_frage"]				= " : Gästebuch mit allen Einträgen wirklich löschen?<br />";
 $text["loeschen_link"]				= "Löschen";
 
-$text["loeschen_post"]				= "Löschen";
 $text["post_liste_leer"]			= "Keine Einträge vorhanden";
 $text["post_loeschen_frage"]		= " : Eintrag wirklich löschen?<br />";
 $text["post_loeschen_link"]			= "Löschen";

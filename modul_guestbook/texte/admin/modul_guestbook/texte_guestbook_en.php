@@ -32,7 +32,6 @@ $text["permissions_header"]         = array(
 
 $text["gaestebuch_anzeigen"]		= "View guestbook";
 $text["gaestebuch_bearbeiten"]		= "Edit guestbook";
-$text["gaestebuch_loeschen"]		= "Delete guestbook";
 $text["gaestebuch_rechte"]			= "Change permissions";
 $text["gaestebuch_listeleer"]		= "No guestbooks available";
 
@@ -45,7 +44,6 @@ $text["loeschen_link"]				= "Delete";
 $text["edit_post"]                  = "Edit";
 $text["post_text"]                  = "Message:";
 
-$text["loeschen_post"]				= "Delete";
 $text["post_liste_leer"]			= "No posts available";
 $text["post_loeschen_frage"]		= " : Really delete post?<br />";
 $text["post_loeschen_link"]			= "Delete";
