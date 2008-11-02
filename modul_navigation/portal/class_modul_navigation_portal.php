@@ -409,19 +409,6 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 			$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId);
 		}
 
-		//Add pe code
-	    include_once(_portalpath_."/class_elemente_portal.php");
-	    $arrPeConfig = array(
-	                              "pe_module" => "navigation",
-	                              "pe_action_edit" => "editNaviPoint",
-	                              "pe_action_edit_params" => "&systemid=".$strSystemid,
-	                              "pe_action_new" => "newNaviPoint",
-	                              "pe_action_new_params" => "&systemid=".$this->getPrevId($strSystemid),
-	                              "pe_action_delete" => "deleteNavi",
-	                              "pe_action_delete_params" => "&systemid=".$strSystemid
-	                        );
-	    //$strReturn = class_element_portal::addPortalEditorCode($strReturn, $strSystemid, $arrPeConfig, true);
-
 		return $strReturn;
 	}
 

@@ -25,7 +25,6 @@ $text["liste_leer"]					= "Keine Navigation angelegt";
 
 $text["navigation_bearbeiten"]		= "Navigation bearbeiten";
 $text["navigation_anzeigen"]		= "Unterpunkte anzeigen";
-$text["navigation_loeschen"]		= "Navigation löschen";
 $text["navigation_loeschen_frage"]	= " : Navigation mit allen Unterpunkten löschen?";
 $text["navigation_loeschen_link"]	= "Löschen";
 $text["navigation_rechte"]			= "Rechte bearbeiten";
@@ -38,7 +37,6 @@ $text["navigationp_bearbeiten"]		= "Navigationspunkt bearbeiten";
 $text["navigationp_anzeigen"]		= "Unterpunkte anzeigen";
 $text["navigationp_hoch"]			= "Punkt nach oben verschieben";
 $text["navigationp_runter"]			= "Punkt nach unten verschieben";
-$text["navigationp_loeschen"]		= "Navigationspunkt löschen";
 $text["navigationp_recht"]			= "Rechte bearbeiten";
 
 $text["navigation_name"]            = "Name:";

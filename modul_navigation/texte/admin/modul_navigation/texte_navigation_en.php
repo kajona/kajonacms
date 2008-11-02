@@ -25,7 +25,6 @@ $text["liste_leer"]					= "No navigations available";
 
 $text["navigation_bearbeiten"]		= "Edit navigation";
 $text["navigation_anzeigen"]		= "Show navigation items";
-$text["navigation_loeschen"]		= "Delete navigation";
 $text["navigation_loeschen_frage"]	= " : Delete navigation with all items?";
 $text["navigation_loeschen_link"]	= "Delete";
 $text["navigation_rechte"]			= "Change permissions";
@@ -38,7 +37,6 @@ $text["navigationp_bearbeiten"]		= "Edit navigation item";
 $text["navigationp_anzeigen"]		= "Show navigation items";
 $text["navigationp_hoch"]			= "Move item up";
 $text["navigationp_runter"]			= "Move item down";
-$text["navigationp_loeschen"]		= "Delete item";
 $text["navigationp_recht"]			= "Change permissions";
 
 $text["navigation_name"]            = "Name:";

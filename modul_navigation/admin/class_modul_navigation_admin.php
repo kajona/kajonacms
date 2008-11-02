@@ -90,8 +90,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                         $strReturn = $this->actionNewNaviPoint("edit");
     		    }
     		}
-    		if($strAction == "deleteNavi")
-    			$strReturn = $this->actionDeleteNavi();
     		if($strAction == "deleteNaviFinal") {
     			$strReturn = $this->actionDeleteNaviFinal();
     			if($strReturn == "")
@@ -172,7 +170,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    		if($this->objRights->rightView($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
 			    		if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
-			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "deleteNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_loeschen"), "icon_ton.gif"));
+			    		    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName().$this->getText("navigation_loeschen_frage").getLinkAdmin("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid(), $this->getText("navigation_loeschen_link")));
 			    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
 			    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
@@ -215,7 +213,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     					    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveDown", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_runter"), "icon_arrowDown.gif"));
     					if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "deleteNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_loeschen"), "icon_ton.gif"));
+    					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName().$this->getText("navigation_loeschen_frage").getLinkAdmin("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid(), $this->getText("navigation_loeschen_link")));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
@@ -397,27 +395,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
-	/**
-	 * Returns a warning box before deleting
-	 *
-	 * @return string
-	 */
-	private function actionDeleteNavi() {
-		$strReturn = "";
-		if($this->objRights->rightDelete($this->getSystemid())) {
-		    $objPoint = new class_modul_navigation_point($this->getSystemid());
-			$strName = $objPoint->getStrName();
-			$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("navigation_loeschen_frage")
-			             ."<br /><a href=\""._indexpath_."?admin=1&module=navigation&action=deleteNaviFinal&systemid=".$this->getSystemid()
-			             .($this->getParam("pe") == "" ? "" : "&pe=".$this->getParam("pe"))."\">"
-			             .$this->getText("navigation_loeschen_link"));
-		}
-		else {
-			$strReturn .= $this->getText("fehler_recht");
-		}
-		return $strReturn;
-	}
-
+	
 	/**
 	 * Invokes the deletion of navi-points
 	 *
@@ -439,7 +417,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			$strReturn = $this->getText("fehler_recht");
 		return $strReturn;
 	}
-
 
 
 	/**
