@@ -35,7 +35,6 @@ $text["repo_oeffnen"]				= "Show folder";
 $text["repo_bearbeiten"]			= "Define properties";
 $text["repo_bearbeiten_fehler"]		= "An error occured while saving the repository";
 $text["repo_rechte"]				= "Edit permissions";
-$text["repo_loeschen"]				= "Delete repository";
 $text["repo_loeschen_frage"]		= " : really delete repository?<br />";
 $text["repo_loeschen_link"]			= "Delete";
 
@@ -43,7 +42,6 @@ $text["ordner_anlegen"]				= "Create folder";
 $text["ordner_anlegen_erfolg"]		= "Folder was created successfully";
 $text["ordner_anlegen_fehler"]		= "An error occured while saving the folder";
 $text["ordner_anlegen_fehler_l"]	= "The folder already exists";
-$text["ordner_loeschen"]			= "Delete folder";
 $text["ordner_loeschen_frage"]		= ": really delete folder?";
 $text["ordner_loeschen_link"]		= "Delete";
 $text["ordner_loeschen_fehler_l"]	= "The folder is not empty!";
@@ -51,7 +49,6 @@ $text["ordner_loeschen_fehler"]		= "An error occured while deleting folder!";
 $text["ordner_loeschen_erfolg"]		= "The folder was deleted successfully";
 $text["ordner_hoch"]				= "One level up";
 
-$text["datei_loeschen"]				= "Delete file";
 $text["datei_loeschen_frage"]		= " : really delete file?<br />Please keep in mind about interdependencies with other modules!";
 $text["datei_loeschen_link"]		= "Delete";
 $text["datei_loeschen_erfolg"]		= "File was deleted successfully";

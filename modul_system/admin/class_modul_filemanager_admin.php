@@ -144,7 +144,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			   		if($this->objRights->rightRight2($objOneRepo->getSystemid()))
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editRepo", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
 			   		if($this->objRights->rightRight2($objOneRepo->getSystemid()))
-			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_loeschen"), "icon_ton.gif"));
+			   		    $strActions .= $this->objToolkit->listDeleteButton($objOneRepo->getStrName().$this->getText("repo_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid(), $this->getText("repo_loeschen_link")));
 		   			if($this->objRights->rightRight2($objOneRepo->getSystemid()))
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_rechte"), getRightsImageAdminName($objOneRepo->getSystemid())));
 
@@ -179,15 +179,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Delte or warningbox?
-			if($this->getParam("deleteRepoFinal") == "") {
-				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
-				$strName = $objRepo->getStrName();
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("repo_loeschen_frage")."<a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteRepo&systemid=".$this->getSystemid()."&deleteRepoFinal=1\">". $this->getText("repo_loeschen_link"));
-			}
-			elseif($this->getParam("deleteRepoFinal") == 1) {
-				class_modul_filemanager_repo::deleteRepo($this->getSystemid());
-			}
+			class_modul_filemanager_repo::deleteRepo($this->getSystemid());
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -375,7 +367,16 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				foreach($arrFiles["folders"] as $strFolder) {
                     $strAction = "";
 		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."&delFolder=".$strFolder, "",  $this->getText("ordner_loeschen"),   "icon_ton.gif"));
+                    
+    				include_once(_systempath_."/class_filesystem.php");
+    				$objFilesystem = new class_filesystem();
+    				$arrFiles = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
+    				if(count($arrFiles["files"]) == 0 && count($arrFiles["folders"]) == 0) {
+    					$strAction .= $this->objToolkit->listDeleteButton($strFolder.$this->getText("ordner_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder, $this->getText("ordner_loeschen_link")));
+    				}
+    				else
+    					$strAction .= $this->objToolkit->listDeleteButton($this->getText("ordner_loeschen_fehler_l"));
+                        
 		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_ordner_groesse_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
 				}
 			}
@@ -410,6 +411,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   			else
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetail", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
+		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"], $this->getText("datei_loeschen_link")));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid().($this->strFolderOld  != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_loeschen"), "icon_ton.gif"));
 					$arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
 					$arrFilesTemplate[$intJ][1] = $strFilename;
@@ -643,20 +645,12 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Warning or deleting?
-			if($this->getParam("datei_loeschen_final") == "") {
-				//Warning
-				$strName = $this->getParam("file");
-				$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("datei_loeschen_frage")."<br /><a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteFile&systemid=".$this->getSystemid()."&datei_loeschen_final=1".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$strName."\">".$this->getText("datei_loeschen_link"));
-			}
-			else {
-				include_once(_systempath_."/class_filesystem.php");
-				$objFilesystem = new class_filesystem();
-				if($objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
-					$strReturn .= $this->getText("datei_loeschen_erfolg");
-				else
-					$strReturn .= $this->getText("datei_loeschen_fehler");
-			}
+			include_once(_systempath_."/class_filesystem.php");
+			$objFilesystem = new class_filesystem();
+			if($objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
+				$strReturn .= $this->getText("datei_loeschen_erfolg");
+			else
+				$strReturn .= $this->getText("datei_loeschen_fehler");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -673,31 +667,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			//Delete or warn?
-			if($this->getParam("ordner_loeschen_final") == "") {
-				//Warning
-				include_once(_systempath_."/class_filesystem.php");
-				$objFilesystem = new class_filesystem();
-				//check if folder is empty
-				$arrFiles = $objFilesystem->getCompleteList($this->strFolder."/".$this->getParam("delFolder"), array(), array(), array(".", ".."));
+			include_once(_systempath_."/class_filesystem.php");
+			$objFilesystem = new class_filesystem();
 
-				if(count($arrFiles["files"]) == 0 && count($arrFiles["folders"]) == 0) {
-					$strName = $this->getParam("delFolder");
-					$strReturn .= $this->objToolkit->warningBox($strName.$this->getText("ordner_loeschen_frage")
-					                   ."<br /><a href=\""._indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=deleteFolder&systemid=".$this->getSystemid()."&ordner_loeschen_final=1".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strName."\">".$this->getText("ordner_loeschen_link"));
-				}
-				else
-					$strReturn .= $this->getText("ordner_loeschen_fehler_l");
-			}
-			else {
-				include_once(_systempath_."/class_filesystem.php");
-				$objFilesystem = new class_filesystem();
-
-				if($objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
-					$strReturn .= $this->getText("ordner_loeschen_erfolg");
-				else
-					$strReturn .= $this->getText("ordner_loeschen_fehler");
-			}
+			if($objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
+				$strReturn .= $this->getText("ordner_loeschen_erfolg");
+			else
+				$strReturn .= $this->getText("ordner_loeschen_fehler");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
