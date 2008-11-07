@@ -4,16 +4,15 @@
 *   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*                                                                                                       *
-*   class_modul_rating_algo_absolute.php                                                                *
-*   Does an absolute, linear sorting based on the current rating-value                                  *
-*                                                                                                       *
-*-------------------------------------------------------------------------------------------------------*
 *   $Id$                        *
 ********************************************************************************************************/
 
 include_once(_systempath_."/interface_modul_rating_sortalgo.php");
 
+/**
+ * Does an absolute, linear sorting based on the current rating-value
+ * @package modul_rating
+ */
 class class_modul_rating_algo_absolute implements interface_modul_rating_sortalgo {
 	
 	private $arrElements = array();

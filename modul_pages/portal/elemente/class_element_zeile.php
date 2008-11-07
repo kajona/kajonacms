@@ -4,10 +4,6 @@
 *   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-* 																										*
-* 	class_element_zeile.php																				*
-* 	Portal-Klasse des Zeilen-Elements																	*
-*-------------------------------------------------------------------------------------------------------*
 *	$Id$                                      *
 ********************************************************************************************************/
 
@@ -17,7 +13,7 @@ require_once(_portalpath_."/class_elemente_portal.php");
 require_once(_portalpath_."/interface_portal_element.php");
 
 /**
- * Portal-Part of the paragraph
+ * Portal-Part of the row-element
  *
  * @package modul_pages
  */
