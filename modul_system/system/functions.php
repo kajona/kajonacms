@@ -181,8 +181,6 @@ function getCookie($strKey) {
 function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
 
     if($strImage != "") {
-        if($strAlt == "")
-            $strAlt = $strAction;
         if(!$bitTooltip)
             $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
         else

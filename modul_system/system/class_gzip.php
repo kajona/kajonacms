@@ -112,7 +112,7 @@ class class_gzip {
                 return true;
             }
             else {
-                gzclose($objTargetPointer);
+                gzclose($objSourcePointer);
                 throw new class_exception("can't open sourcefile", class_exception::$level_ERROR);
             }
 

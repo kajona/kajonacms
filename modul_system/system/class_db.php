@@ -473,7 +473,7 @@ class class_db {
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if(!$bitReturn)
-        	$this->getError($strQuery);
+        	$this->getError("");
         	
         return $bitReturn;	
     }

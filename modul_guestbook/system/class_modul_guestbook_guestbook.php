@@ -101,7 +101,6 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 			return false;
 		}
 
-		return false;
 
     }
 

@@ -412,7 +412,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
                return 0;   
         }
         
-        return $floatRating;
+        return $intHits;
     }
 
 

@@ -101,7 +101,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 			return false;
 		}
 
-		return false;
     }
 
     /**
@@ -137,7 +136,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
             return false;
         }
 
-        return false;
     }
 
 

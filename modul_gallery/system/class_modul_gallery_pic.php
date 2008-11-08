@@ -111,7 +111,6 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 			return false;
 		}
 
-		return false;
     }
 
     /**

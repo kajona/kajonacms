@@ -251,8 +251,8 @@ class class_remoteloader {
 		if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
 		
 	        try {
-	           $intErrorNumber; 
-	           $strErrorString;
+	           $intErrorNumber = ""; 
+	           $strErrorString = "";
 	           
 	           $strProtocolAdd = "";
 	           if($this->strProtocolHeader == "http://")
