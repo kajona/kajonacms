@@ -4,11 +4,6 @@
 *   (c) 2007-2008 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*                                                                                                       *
-*   class_systemtask_base.php                                                                           *
-*   Base class for all systemtasks. Provides a few methods to be used by the concrete tasks.            *
-*                                                                                                       *
-*-------------------------------------------------------------------------------------------------------*
 *   $Id$                                       *
 ********************************************************************************************************/
 

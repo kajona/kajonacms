@@ -100,10 +100,10 @@ default:
 
     $debug['dblog']                 = false;                                   //Logs all queries sent to the db into a logfile
 
-    $debug['debuglevel']            = 0;                                       //Current level of debugging. There are several states:
+    $debug['debuglevel'] = 1;                                       //Current level of debugging. There are several states:
                                                                                    // 0: fatal errors will be displayed
                                                                                    // 1: fatal and regular errors will be displayed
-    $debug['debuglogging']          = 1;                                       //Configures the logging-engine:
+    $debug['debuglogging'] = 2;                                       //Configures the logging-engine:
                                                                                    // 0: Nothing is logged to file
                                                                                    // 1: Errors are logged
                                                                                    // 2: Errors and warning
