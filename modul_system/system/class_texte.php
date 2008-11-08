@@ -38,7 +38,17 @@ class class_texte {
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
 		
 		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
+        
+        //load texts from session
+        $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
+        if($this->arrTexts === false)
+            $this->arrTexts = array();
 	}
+    
+    public function __destruct() {
+    	//save texts to session
+        class_session::getInstance()->setSession("textSessionCache", $this->arrTexts);
+    }
 
 	/**
 	 * Singleton

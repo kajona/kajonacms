@@ -73,7 +73,21 @@ class class_db {
 		    //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame
 		    //throw new class_exception("No db-driver defined!", class_exception::$level_FATALERROR);
 		}
+        
+        
 	}
+    
+    /**
+     * Loads the cache saved to session before into the current instance.
+     * This method is being called during the system-startup, so there's no 
+     * need to call this method manually!
+     */
+    public function loadCacheFromSession() {
+    	//load query cache from session
+        //$this->arrQueryCache = class_session::getInstance()->getSession("databaseQuerySessionCache");
+        //if($this->arrQueryCache === false)
+        //    $this->arrQueryCache = array();
+    }
 
 
 	/**
@@ -88,6 +102,22 @@ class class_db {
 	    }
 	    if($this->objDbDriver !== null)
 	        $this->objDbDriver->dbclose();
+            
+        //save cache to session
+        //reset cache after ~10 times to avoid mem-errors
+        /*
+        $intCacheTimes = class_session::getInstance()->getSession("databaseQueryCacheTimes");
+        if($intCacheTimes === false)
+            $intCacheTimes = 0;
+        if( $intCacheTimes < 10 ) {
+            class_session::getInstance()->setSession("databaseQuerySessionCache", $this->arrQueryCache);
+            class_session::getInstance()->setSession("databaseQueryCacheTimes", ++$intCacheTimes);
+        }
+        else {
+        	class_session::getInstance()->setSession("databaseQuerySessionCache", array());
+            class_session::getInstance()->setSession("databaseQueryCacheTimes", 0);
+        }   
+        */ 
 	}
 
 	/**
@@ -611,6 +641,15 @@ class class_db {
 	public function getNumberCache() {
 		return $this->intNumberCache;
 	}
+    
+    /**
+     * Returns the number of items currently in the query-cache
+     * 
+     * @return  int 
+     */
+    public function getCacheSize() {
+    	return count($this->arrQueryCache);
+    }
 
 	/**
 	 * Makes a string db-save

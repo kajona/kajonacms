@@ -55,6 +55,7 @@ class class_carrier {
             $objConfig->loadConfigsDatabase($objDB);
             //and init the internal session
             self::$objCarrier->getObjSession()->initInternalSession();
+            $objDB->loadCacheFromSession();
 		}
 
 		return self::$objCarrier;

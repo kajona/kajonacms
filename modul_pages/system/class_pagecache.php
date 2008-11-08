@@ -49,7 +49,7 @@ class class_pagecache {
 	                   AND page_cache_releasetime > ".(int)time()."
 	                   AND page_cache_userid = '".$this->objDB->dbsafeString($strUserid)."'";
 
-	    $arrPage = $this->objDB->getRow($strQuery);
+	    $arrPage = $this->objDB->getRow($strQuery, 0, false);
 	    if(isset($arrPage["page"]))
 	       return $arrPage["page"];
 	    else

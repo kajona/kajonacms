@@ -298,6 +298,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 							".$strTime."
 						  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
 						ORDER BY system_date_start ".$strOrder;
+                        
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

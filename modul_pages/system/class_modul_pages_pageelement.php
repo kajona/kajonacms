@@ -264,7 +264,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     
     
     /**
-     * Loads all Elements on the given page known by the systems, so db-sided, not template-sided
+     * Loads all Elements on the given page known by the system, so db-sided, not template-sided
      *
      * @param string $strPageId
      * @param bool $bitJustActive
@@ -295,7 +295,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						 ORDER BY page_element_placeholder_placeholder ASC,
 						 		system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        //since theres the time as an parameter, theres no need for querying the cache...
+		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery, false);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

@@ -31,7 +31,25 @@ class class_template {
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
 		$this->strArea = "";
+        
+        //any caches to load from session?
+        $objSession = class_session::getInstance();
+        $this->arrCacheTemplates = $objSession->getSession("templateSessionCacheTemplate");
+        if($this->arrCacheTemplates === false)
+            $this->arrCacheTemplates = array();
+            
+        $this->arrCacheTemplateSections = $objSession->getSession("templateSessionCacheTemplateSections");
+        if($this->arrCacheTemplateSections === false)
+            $this->arrCacheTemplateSections = array();    
+            
+        //echo "loaded from session : ".count($this->arrCacheTemplates);    
 	}
+    
+    public function __destruct() {
+    	//save cache to session
+        class_session::getInstance()->setSession("templateSessionCacheTemplate", $this->arrCacheTemplates);
+        class_session::getInstance()->setSession("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
+    }
 
 
 	/**

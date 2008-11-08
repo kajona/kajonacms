@@ -246,7 +246,7 @@ class class_index  {
     
     		//Hows about the queries?
     		if(_dbnumber_) {
-    			$strDebug .= "<b>Queries db/cache/fired:</b> ".$this->objDB->getNumber() . "/".$this->objDB->getNumberCache()."/".($this->objDB->getNumber()-$this->objDB->getNumberCache())." ";
+    			$strDebug .= "<b>Queries db/cachesize/cached/fired:</b> ".$this->objDB->getNumber()."/".$this->objDB->getCacheSize()."/".$this->objDB->getNumberCache()."/".($this->objDB->getNumber()-$this->objDB->getNumberCache())." ";
     		}
     
     		//anything to say about the templates?
