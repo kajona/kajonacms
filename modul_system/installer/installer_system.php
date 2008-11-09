@@ -119,7 +119,6 @@ class class_installer_system extends class_installer_base implements interface_i
 		
 		$arrFields = array();
 		$arrFields["right_id"] 		= array("char20", false);
-		$arrFields["right_comment"] = array("char254", true);
 		$arrFields["right_inherit"] = array("int", true);
 		$arrFields["right_view"] 	= array("char254", true);
 		$arrFields["right_edit"] 	= array("char254", true);
@@ -744,7 +743,13 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";	     
 			
 		$strReturn .= "Registering session relasetime setting...\n";
-		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	 
+		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	
+        
+        $strReturn .= "Deleting row right_comment from rights-table...\n"; 
+        $strQuery = "ALTER TABLE `"._dbprefix_."system_right`
+                        DROP `right_comment`";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
@@ -816,6 +821,9 @@ class class_installer_system extends class_installer_base implements interface_i
                 class_modul_pages_pageelement::assignNullElements("en");
                 
         }
+        
+        
+        
 		 
 		return $strReturn;                                          
     }

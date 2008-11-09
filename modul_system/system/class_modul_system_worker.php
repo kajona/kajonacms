@@ -101,7 +101,7 @@ class class_modul_system_worker extends class_model implements interface_model  
      */
     public function chekRightSystemRelations() {
         $arrReturn = array();
-        $strQuery = "SELECT right_id, right_comment
+        $strQuery = "SELECT right_id, system_comment
                        FROM "._dbprefix_."system_right
                        LEFT JOIN "._dbprefix_."system
                         ON (right_id = system_id)

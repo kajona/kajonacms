@@ -163,8 +163,8 @@ abstract class class_root {
 		//Do we need a Rights-Record?
 		if($bitRight) {
 			$strQuery = "INSERT INTO "._dbprefix_."system_right
-						 (right_id, right_comment, right_inherit) VALUES
-						 ('".$this->objDB->dbsafeString($strSystemId)."', '".$this->objDB->dbsafeString($strComment)."', 1)";
+						 (right_id, right_inherit) VALUES
+						 ('".$this->objDB->dbsafeString($strSystemId)."', 1)";
 			$this->objDB->_query($strQuery);
 		}
 

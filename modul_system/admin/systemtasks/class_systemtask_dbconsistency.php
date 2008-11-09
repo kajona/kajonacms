@@ -81,7 +81,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
             $strReturn .= $this->objToolkit->listHeader();
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_right_error"), "", $intI++);
             foreach($arrCorruptedRecords as $arrOneRecords)  {
-                $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["right_id"]." (".$arrOneRecords["right_comment"].")" , "", $intI++);
+                $strReturn .= $this->objToolkit->listRow2Image("", $arrOneRecords["right_id"]." (".$arrOneRecords["system_comment"].")" , "", $intI++);
             }
             $strReturn .= $this->objToolkit->listFooter();
         }

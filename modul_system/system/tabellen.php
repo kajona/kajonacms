@@ -28,7 +28,6 @@
 
 //--_system_right----------------------------------------------------------------------------------------
 	right_id				= Table primary key & reference to systemId
-	right_comment			= Short comment for humans to identify the record
 	right_inherit			= Flag to set the inheritance of rights to on / off -> 0 || 1
    	right_view	 			= Groups allowing to view the record
    	right_edit 				= Groups allowing to edit the record

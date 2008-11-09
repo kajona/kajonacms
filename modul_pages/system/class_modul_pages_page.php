@@ -178,12 +178,14 @@ class class_modul_pages_page extends class_model implements interface_model  {
 				$intCount++;
 			}
 			$strName = $strTemp;
+            $this->setStrName($strName);
 		}
 
 		//Update the baserecord
 		$strQuery = "UPDATE  "._dbprefix_."page
 					SET page_name='".$this->objDB->dbsafeString($strName)."'
 						WHERE page_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+                        
 
 		//and the properties record
 		//properties fpr this language alerady existing?
@@ -461,6 +463,13 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	        $this->objDB->transactionRollback();
 	        return false;
 	    }
+        
+        //update the comment in system-table
+        $strQuery = "UPDATE "._dbprefix_."system
+                        SET system_comment='PAGE: ".$this->objDB->dbsafeString(dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"])))."'
+                      WHERE system_id = '".$this->objDB->dbsafeString($strIdOfNewPage)."'";
+
+        $this->objDB->_query($strQuery);
 	    
 	    //insert all pageprops in all languages
 	    foreach ($arrBasicSourceProperties as $arrOneProperty) {

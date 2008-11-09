@@ -178,9 +178,8 @@ class class_modul_system_common extends class_model implements interface_model  
         if($this->objDB->_query($strQuerySystem)) {
             if(count($arrRightsRow) > 0) {
                 $strQueryRights = "INSERT INTO "._dbprefix_."system_right 
-                (right_id, right_comment, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES 
+                (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES 
                 ('".dbsafeString($strNewSystemid)."' ,
-                '".dbsafeString($arrRightsRow["right_comment"])."', 
                 '".dbsafeString($arrRightsRow["right_inherit"])."', 
                 '".dbsafeString($arrRightsRow["right_view"])."',
                 '".dbsafeString($arrRightsRow["right_edit"])."', 

@@ -108,10 +108,10 @@ class class_right_admin extends class_admin implements interface_admin {
 
 			//Determin name of the record
 			$arrSystemRecord = $this->getSystemRecord($strSystemID);
-			if($arrSystemRecord["right_comment"] == "")
+			if($arrSystemRecord["system_comment"] == "")
 				$strTitle = $this->getText("titel_leer");
 			else
-				$strTitle = $arrSystemRecord["right_comment"] . " ";
+				$strTitle = $arrSystemRecord["system_comment"] . " ";
 			$strUrlHistory = $this->getHistory(0);
 			$strTemp = "";
 
