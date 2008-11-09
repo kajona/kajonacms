@@ -46,7 +46,7 @@ abstract class class_installer_base extends class_root {
 	 * @return string
 	 */
 	public function getModuleName() {
-        $this->arrModule["name_lang"];
+        return $this->arrModule["name_lang"];
 	}
 
 
