@@ -21,6 +21,8 @@ class class_template {
 	private $strTempTemplate = "";
 
 	private static $objTemplate = null;
+    
+    private $bitSessionCacheEnabled = false;
 
 	/**
 	 * Constructor
@@ -34,15 +36,16 @@ class class_template {
         
         //any caches to load from session?
         $objSession = class_session::getInstance();
-        $this->arrCacheTemplates = $objSession->getSession("templateSessionCacheTemplate");
-        if($this->arrCacheTemplates === false)
-            $this->arrCacheTemplates = array();
+        if($this->bitSessionCacheEnabled) {
+            $this->arrCacheTemplates = $objSession->getSession("templateSessionCacheTemplate");
+            if($this->arrCacheTemplates === false)
+                $this->arrCacheTemplates = array();
+                
+            $this->arrCacheTemplateSections = $objSession->getSession("templateSessionCacheTemplateSections");
+            if($this->arrCacheTemplateSections === false)
+                $this->arrCacheTemplateSections = array();    
+        }
             
-        $this->arrCacheTemplateSections = $objSession->getSession("templateSessionCacheTemplateSections");
-        if($this->arrCacheTemplateSections === false)
-            $this->arrCacheTemplateSections = array();    
-            
-        //echo "loaded from session : ".count($this->arrCacheTemplates);    
 	}
     
     public function __destruct() {
