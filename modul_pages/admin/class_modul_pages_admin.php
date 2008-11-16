@@ -402,6 +402,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		        //$bitUseLanguages = true; TODO: needed?
 		        include_once(_adminpath_."/class_modul_languages_admin.php");
 		        $objLanguages = new class_modul_languages_admin();
+                $strReturn .= $objLanguages->getLanguageSwitch();
 				//Start Form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=changePage");
