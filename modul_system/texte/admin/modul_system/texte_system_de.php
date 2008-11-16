@@ -301,6 +301,7 @@ $text["installer_install"]          = "Installieren";
 $text["installer_installpe"]        = "Seitenelemente installieren";
 $text["installer_update"]           = "Update auf ";
 $text["installer_systemlog"]        = "System Log";
+$text["installer_versioninstalled"] = "Installierte Version: ";
 
 $text["installer_phpcheck_intro"]   = "<b>Herzlich Willkommen</b><br /><br />";
 $text["installer_phpcheck_lang"]    = "Um den Installer in einer anderen Sprache zu laden, bitte einen der folgenden Links verwenden:<br /><br />";

@@ -297,6 +297,7 @@ $text["installer_install"]          = "Install";
 $text["installer_installpe"]        = "Install page elements";
 $text["installer_update"]           = "Update to ";
 $text["installer_systemlog"]        = "System log";
+$text["installer_versioninstalled"] = "Version installed: ";
 
 $text["installer_phpcheck_intro"]   = "<b>Welcome</b><br /><br />";
 $text["installer_phpcheck_lang"]    = "To load the installer using a different language, use one of the following links:<br /><br />";

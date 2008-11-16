@@ -311,26 +311,33 @@ class class_installer {
 		$strInstallLog = "";
 		$strReturn .= "";
 
-		//Is there a module to be installed or updated?
-		if(isset($_GET["install"]) || isset($_GET["update"])) {
-		    if(isset($_GET["install"]))
-			    $strClass = $_GET["install"].".php";
-			else
-			    $strClass = $_GET["update"].".php";
-
+		//Is there a module to be updated?
+		if(isset($_GET["update"])) {
+			$strClass = $_GET["update"].".php";
 			include_once(_realpath_."/installer/".$strClass);
 		    $strClass = "class_".str_replace(".php", "", $strClass);
 		    $objInstaller = new $strClass();
-
-		    if(isset($_GET["install"]))
-		        $strInstallLog = $objInstaller->doModuleInstall();
-		    elseif (isset($_GET["update"]))
-		        $strInstallLog = $objInstaller->doModuleUpdate();
-
+	        $strInstallLog .= $objInstaller->doModuleUpdate();
 		}
+        
+        //module-installs to loop?
+        if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
+            $arrModulesToInstall = $_POST["moduleInstallBox"];
+            foreach($arrModulesToInstall as $strOneModule => $strValue) {
+                $strClass = $strOneModule.".php";
+                include_once(_realpath_."/installer/".$strClass);
+                $strClass = "class_".str_replace(".php", "", $strClass);
+                $objInstaller = new $strClass();
+                $strInstallLog .= $objInstaller->doModuleInstall()."";
+            }
+        }
+        
+        
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_modules_found");
 
+        $strRows = "";
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row", true);
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -338,9 +345,21 @@ class class_installer {
 			$strClass = "class_".str_replace(".php", "", $strInstaller);
 			$objInstaller = new $strClass();
 
-			if($objInstaller instanceof interface_installer && $strInstaller != "installer_samplecontent.php" && strpos($strInstaller, "element") === false )
-			   $strReturn .= $objInstaller->getModuleInstallLink()."<br />";
+			if($objInstaller instanceof interface_installer && $strInstaller != "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
+               $arrTemplate = array();
+               $arrTemplate["module_name"] = $objInstaller->getModuleName();
+               $arrTemplate["module_version"] = $objInstaller->getVersion();
+               $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
+               $arrTemplate["module_installcheck"] = $objInstaller->getModuleInstallCheckbox();
+               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               
+            }
 		}
+        
+        //wrap in form
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_form", true);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
+        
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=loginData");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=postInstall");
@@ -355,19 +374,24 @@ class class_installer {
 		$strInstallLog = "";
 		$strReturn .= "";
 
-		//Is there a module to be installed or updated?
-		if(isset($_GET["postInstall"])) {
-		    $strClass = $_GET["postInstall"].".php";
-
-			include_once(_realpath_."/installer/".$strClass);
-		    $strClass = "class_".str_replace(".php", "", $strClass);
-		    $objInstaller = new $strClass();
-
-		    $strInstallLog = $objInstaller->doPostInstall();
-		}
+        //module-installs to loop?
+        if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
+            $arrModulesToInstall = $_POST["moduleInstallBox"];
+            foreach($arrModulesToInstall as $strOneModule => $strValue) {
+                $strClass = $strOneModule.".php";
+                include_once(_realpath_."/installer/".$strClass);
+                $strClass = "class_".str_replace(".php", "", $strClass);
+                $objInstaller = new $strClass();
+                $strInstallLog .= $objInstaller->doPostInstall()."";
+            }
+        }
+        
+        
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_elements_found");
 
+        $strRows = "";
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_elements_row", true);
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -375,9 +399,21 @@ class class_installer {
 			$strClass = "class_".str_replace(".php", "", $strInstaller);
 			$objInstaller = new $strClass();
 
-			if($objInstaller instanceof interface_installer )
-			   $strReturn .= $objInstaller->getModulePostInstallLink()."<br />";
+			if($objInstaller instanceof interface_installer ) {
+               $arrTemplate = array();
+               $arrTemplate["module_name"] = $objInstaller->getModuleName();
+               $arrTemplate["module_version"] = $objInstaller->getVersion();
+               $arrTemplate["module_hint"] = $objInstaller->getModulePostInstallInfo();
+               $arrTemplate["module_installcheck"] = $objInstaller->getModulePostInstallCheckbox();
+               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               
+            }
 		}
+        
+        //wrap in form
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_elements_form", true);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
+        
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=install");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=samplecontent");
@@ -394,25 +430,33 @@ class class_installer {
 		$strReturn .= "\n\n";
 
 		//Is there a module to be installed or updated?
-		if(isset($_GET["install"]) || isset($_GET["update"])) {
-		    if(isset($_GET["install"]))
-			    $strClass = $_GET["install"].".php";
-			else
-			    $strClass = $_GET["update"].".php";
-
+		if(isset($_GET["update"])) {
+		    $strClass = $_GET["update"].".php";
 			include_once(_realpath_."/installer/".$strClass);
 		    $strClass = "class_".str_replace(".php", "", $strClass);
 		    $objInstaller = new $strClass();
-
-		    if(isset($_GET["install"]))
-		        $strInstallLog = $objInstaller->doModuleInstall();
-		    elseif (isset($_GET["update"]))
-		        $strInstallLog = $objInstaller->doModuleUpdate();
+	        $strInstallLog .= $objInstaller->doModuleUpdate();
 		}
+        
+        //module-installs to loop?
+        if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
+            $arrModulesToInstall = $_POST["moduleInstallBox"];
+            foreach($arrModulesToInstall as $strOneModule => $strValue) {
+                $strClass = $strOneModule.".php";
+                include_once(_realpath_."/installer/".$strClass);
+                $strClass = "class_".str_replace(".php", "", $strClass);
+                $objInstaller = new $strClass();
+                $strInstallLog .= $objInstaller->doModuleInstall()."";
+            }
+        }
+        
+        
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_samplecontent");
 
 		//Loading each installer
+        $strRows = "";
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row", true);
 		$bitInstallerFound = false;
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -421,13 +465,22 @@ class class_installer {
 			$objInstaller = new $strClass();
 
 			if($objInstaller instanceof interface_installer && $strInstaller == "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
-			   $strReturn .= $objInstaller->getModuleInstallLink()."\n";
 			   $bitInstallerFound = true;
+               $arrTemplate = array();
+               $arrTemplate["module_name"] = $objInstaller->getModuleName();
+               $arrTemplate["module_version"] = $objInstaller->getVersion();
+               $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
+               $arrTemplate["module_installcheck"] = $objInstaller->getModuleInstallCheckbox();
+               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
 			}
 		}
 
 		if(!$bitInstallerFound)
 		    header("Location: "._webpath_."/installer/installer.php?step=finish");
+            
+        //wrap in form
+        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_samplecontent_form", true);
+        $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
 
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=postInstall");

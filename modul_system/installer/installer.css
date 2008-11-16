@@ -343,3 +343,21 @@ div.percentBeam {
 .red {
     color: red;
 }
+
+table.moduleRowTable {
+    width: 100%;
+    border: none;
+    border-bottom: 1px dashed #CCCCCC;
+}
+
+table.moduleRowTable:hover {
+    background-color: #EFEFEF;	
+}
+
+table.moduleRowTable label {
+    display: inline;
+    width: auto;
+    height: auto;
+    padding: 0px;
+}
+

@@ -48,11 +48,93 @@ abstract class class_installer_base extends class_root {
 	public function getModuleName() {
         return $this->arrModule["name_lang"];
 	}
+    
+    /**
+     * Creates a text-based info. Update-Links are placed within those infos.
+     * 
+     * @since 3.2
+     * @return string info or an empty string in case of now errors
+     */
+    public function getModuleInstallInfo() {
+
+        //check needed modules
+        $arrModulesNeeded = $this->getNeededModules();
+        $strNeeded = "";
+        foreach($arrModulesNeeded as $strOneModule) {
+            try {
+                $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+            }
+            catch (class_exception $objException) {
+                $objModule = null;
+            }
+            if($objModule == null) {
+                $strNeeded .= $strOneModule.", ";
+            }
+        }
+
+        if($strNeeded != "") {
+            return $this->getText("installer_modules_needed", "system", "admin").substr($strNeeded, 0, -2);
+        }
+        
+        //check, if a min version of the system is needed
+        if($this->getMinSystemVersion() != "") {
+            //the systems version to compare to
+            $objSystem = class_modul_system_module::getModuleByName("system");
+            if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+                return $this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
+            }
+        }
+
+        //ok, all needed modules are installed. check if update or install-link should be generated
+        //first check: current module installed?
+        try {
+            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+        }
+        catch (class_exception $objException) {
+                $objModule = null;
+        }
+        if($objModule == null) {
+            return "";
+        }
+        else {
+            //updates available?
+            if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<"))
+                return "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+            elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
+                return $this->getText("installer_versioninstalled", "system", "admin").$objModule->getStrVersion();
+            
+        }
+        return "";
+    }
+    
+    /**
+     * Creates a checkbox to install the current module - if possible
+     * 
+     * @since 3.2
+     * @return string The Checkbox or an empty string
+     */
+    public function getModuleInstallCheckbox() {
+    	if($this->getModuleInstallInfo() == "") {
+    		//check if module not yet installed
+            try {
+            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            }
+            catch (class_exception $objException) {
+                    $objModule = null;
+            }
+            if($objModule == null) {
+                //not yet installed, create checkbox
+                return "<label for=\"installer_moduleInstallBox[".$this->arrModule["name"]."]\">".$this->getText("installer_install", "system", "admin")."</label>".
+                       "<input class=\"checkbox\" type=\"checkbox\" name=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" id=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" />";
+            }
+    	}
+    }
 
 
 	/**
 	 * Creates the links to install a module or to run updates on a module
 	 *
+     * @deprecated use self::getModulInstallInfo() or self::getModuleInstallCheckbox() instead
 	 * @return string
 	 */
 	public final function getModuleInstallLink() {
@@ -114,48 +196,72 @@ abstract class class_installer_base extends class_root {
 		}
 	}
 
-	/**
-	 * Creates the links to install a module or to run updates on a module
-	 *
-	 * @return string
-	 */
-	public final function getModulePostInstallLink() {
-        $strReturn = "";
-		$strReturn .= $this->arrModule["name_lang"]."<br />&nbsp;&nbsp;&nbsp;&nbsp;(V ".$this->arrModule["version"].")&nbsp;&nbsp;&nbsp;&nbsp;";
+    /**
+     * Creates a checkbox for post-installs if available
+     * 
+     * @return string or ""
+     */
+    public final function getModulePostInstallCheckbox() {
 
-		//ok, all needed modules are installed. check if update or install-link should be generated
-		//or, no link ;)
-		//first check: current module installed?
-		$objModule = null;
-		try {
-		    $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
-		}
-		catch (class_exception $objE) {
+        if($this->getModulePostInstallInfo() == "") {
+            $objModule = null;
+            try {
+                $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            }
+            catch (class_exception $objE) { }
+    
+            if(strpos($this->arrModule["name"], "element") !== false)
+                $objModule = true;
+                
+            if($objModule != null && $this->hasPostInstalls()) {
+                return "<label for=\"installer_moduleInstallBox[".$this->arrModule["name"]."]\">".$this->getText("installer_install", "system", "admin")."</label>".
+                       "<input class=\"checkbox\" type=\"checkbox\" name=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" id=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" />";
+            }
+        
+        }
 
-		}
+        return "";
+    }
+    
+    /**
+     * Creates text-based infos regarding the current installation.
+     * If a post-install is possible, an empty string is returned.
+     * 
+     * @return string or ""
+     */
+    public final function getModulePostInstallInfo() {
 
-		if(strpos($this->arrModule["name"], "element") !== false)
-		    $objModule = true;
-		    
-	    //check, if a min version of the system is needed
-		if($this->getMinSystemVersion() != "") {
-		    //the systems version to compare to
-		    $objSystem = class_modul_system_module::getModuleByName("system");
-		    if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
-		        return $strReturn.$this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
-		    }
-		}    
+        //ok, all needed modules are installed. check if update or install-link should be generated
+        //or, no link ;)
+        //first check: current module installed?
+        $objModule = null;
+        try {
+            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+        }
+        catch (class_exception $objE) { }
 
-		if($objModule != null && $this->hasPostInstalls()) {
-		    //install link
-		    $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=postInstall&postInstall=installer_".$this->arrModule["name"]."\">".$this->getText("installer_installpe", "system", "admin")."</a>";
-		}
-		else if($objModule == null) {
-			$strReturn .= $this->getText("installer_module_notinstalled", "system", "admin");
-		}
+        if(strpos($this->arrModule["name"], "element") !== false)
+            $objModule = true;
+            
+        //check, if a min version of the system is needed
+        if($this->getMinSystemVersion() != "") {
+            //the systems version to compare to
+            $objSystem = class_modul_system_module::getModuleByName("system");
+            if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+                return $this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
+            }
+        }    
 
-		return $strReturn ."<br />";
-	}
+        if($objModule != null && $this->hasPostInstalls()) {
+            //install link
+            return "";
+        }
+        else if($objModule == null) {
+            return $this->getText("installer_module_notinstalled", "system", "admin");
+        }
+
+        return "";
+    }
 
 	/**
 	 * Invokes the installation of the module

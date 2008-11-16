@@ -22,6 +22,7 @@ class class_template {
 
 	private static $objTemplate = null;
     
+    //TODO: reenable
     private $bitSessionCacheEnabled = false;
 
 	/**

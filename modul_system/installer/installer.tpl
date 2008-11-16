@@ -87,3 +87,64 @@
 <installer_backward_link>
 <a href="%%href%%">%%text%%</a>
 </installer_backward_link>
+
+<installer_modules_form>
+	<form action="_webpath_/installer/installer.php?step=install" method="POST">
+	  
+	   %%module_rows%%
+	   
+	   <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+	</form>
+</installer_modules_form>
+
+<installer_samplecontent_form>
+    <form action="_webpath_/installer/installer.php?step=samplecontent" method="POST">
+      
+       %%module_rows%%
+       
+       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+    </form>
+</installer_samplecontent_form>
+
+<installer_modules_row>
+    <table class="moduleRowTable" cellpadding="0" cellspacing="0">
+        <tr valign="bottom">
+            
+            <td colspan="2" valign="bottom">
+                %%module_name%%
+            </td>
+            <td rowspan="2" width="100px;">%%module_installcheck%%</td>
+        </tr>
+        <tr>
+            <td width="80px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
+            <td align="left">%%module_hint%%</td>
+        </tr>
+            
+    </table>
+</installer_modules_row>
+
+<installer_elements_form>
+    <form action="_webpath_/installer/installer.php?step=postInstall" method="POST">
+       
+       %%module_rows%%
+       
+       <div><label for="submit"></label><input type="submit" value="%%button_install%%" class="inputSubmit" /></div><br /> 
+    </form>
+</installer_elements_form>
+
+<installer_elements_row>
+    <table class="moduleRowTable" cellpadding="0" cellspacing="0">
+        <tr valign="bottom">
+            
+            <td colspan="2" valign="bottom">
+                %%module_name%%
+            </td>
+            <td rowspan="2" width="100px;">%%module_installcheck%%</td>
+        </tr>
+        <tr>
+            <td width="80px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
+            <td align="left">%%module_hint%%</td>
+        </tr>
+            
+    </table>
+</installer_elements_row>
