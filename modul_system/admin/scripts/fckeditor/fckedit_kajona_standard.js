@@ -33,7 +33,7 @@ FCKConfig.ToolbarSets["kajona"] = [
     defaultconfig
 */
 FCKConfig.ToolbarSets["standard"] = [
-	['Source','Save','-','Cut','Copy','Paste','PasteText','PasteWord','-','SpellCheck'],
+	['Source','Save','-','Cut','Copy','Paste','PasteText','PasteWord','-'],
 	['Undo','Redo','-','RemoveFormat'],['FitWindow'],
 	['Link','Unlink','Anchor'],
 	['Image','Table','Rule','SpecialChar'],
