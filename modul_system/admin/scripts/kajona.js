@@ -353,6 +353,15 @@ var kajonaAjaxHelper =  {
 	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/calendar/calendar-min.js');
 	},
 	
+
+	loadImagecropperBase : function() {
+		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/element/element-beta-min.js');
+		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
+	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/resize/resize-min.js');
+	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/imagecropper/imagecropper-beta-min.js');
+	},
+	
 	loadDialogBase : function() {
 	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/container/container-min.js');
 	},
@@ -385,6 +394,8 @@ var kajonaAdminAjax = {
 	pagesConn : null,
 	dashboardConn : null,
 	statusConn : null,
+	cropConn : null,
+	rotateConn : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
 		//load ajax libs
@@ -423,6 +434,110 @@ var kajonaAdminAjax = {
         if(kajonaAdminAjax.statusConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.statusConn)) {
             kajonaAdminAjax.statusConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, objCallback, postBody);
         }
+	},
+	
+	saveImageCropping : function (intX, intY, intWidth, intHeight, strRepoId, strFolder, strFile, objCallback) {
+		//load ajax libs
+        kajonaAjaxHelper.loadAjaxBase();
+        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
+
+        var postTarget = 'xml.php?admin=1&module=filemanager&action=saveCropping';
+        var postBody = 'systemid='+strRepoId+'&folder='+strFolder+'&file='+strFile+'&intX='+intX+'&intY='+intY+'&intWidth='+intWidth+'&intHeight='+intHeight+'';
+
+        if(kajonaAdminAjax.cropConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.cropConn)) {
+            kajonaAdminAjax.cropConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, objCallback, postBody);
+        }
+	},
+	
+	saveImageRotating : function (intAngle, strRepoId, strFolder, strFile, objCallback) {
+		//load ajax libs
+        kajonaAjaxHelper.loadAjaxBase();
+        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
+
+        var postTarget = 'xml.php?admin=1&module=filemanager&action=rotate';
+        var postBody = 'systemid='+strRepoId+'&folder='+strFolder+'&file='+strFile+'&angle='+intAngle+'';
+
+        if(kajonaAdminAjax.rotateConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.rotateConn)) {
+            kajonaAdminAjax.rotateConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, objCallback, postBody);
+        }
 	}
 
 };
+
+//--- FILEMANAGER ---------------------------------------------------------------------------------------
+function filemanagerShowRealsize() {
+	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl;
+	fm_image_isScaled = false;
+	
+}
+
+function filemanagerShowPreview() {
+	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl;
+	fm_image_isScaled = true;
+	fm_cropObj.destroy();
+	fm_cropObj = null;
+}
+
+var fm_cropObj = null;
+function filemanagerShowCropping() {
+	if(fm_image_isScaled) {
+		fm_preview_warning.init();
+		return;
+	}
+	//init the cropping
+	if(fm_cropObj == null)
+		fm_cropObj =  new YAHOO.widget.ImageCropper('fm_filemanagerPic', {status: true});
+	else {
+		fm_cropObj.destroy();
+		fm_cropObj = null;
+	}
+}
+
+function filemanagerSaveCropping() {
+	if(fm_cropObj != null)
+		fm_crop_save_warning.init();
+}
+
+var cropArea = null;
+function filemanagerSaveCroppingToBackend() {
+	fm_crop_save_warning.hide();
+	fm_crop_screenlock.init();
+	cropArea = fm_cropObj.getCropCoords();
+	kajonaAdminAjax.saveImageCropping(cropArea.left, cropArea.top, cropArea.width, cropArea.height, fm_repo_id, fm_folder, fm_file, fm_cropping_callback);
+}
+
+var fm_cropping_callback = {
+	success: function(o) { 
+		kajonaStatusDisplay.displayXMLMessage(o.responseText);
+		fm_cropObj.destroy();
+		fm_cropObj = null;
+		document.getElementById('fm_image_dimensions').innerHTML = cropArea.width+' x '+cropArea.height;
+		document.getElementById('fm_image_size').innerHTML = 'n.a.';
+		filemanagerShowRealsize();
+		cropArea = null;
+		
+		fm_crop_screenlock.hide();
+	},
+	failure: function(o) { 
+		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText); 
+		fm_crop_screenlock.hide(); 
+	}
+};
+
+function filemanagerRotate(intAngle) {
+	fm_crop_screenlock.init();
+	kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file, fm_rotate_callback);
+}
+
+var fm_rotate_callback = {
+		success: function(o) { 
+			kajonaStatusDisplay.displayXMLMessage(o.responseText);
+			document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
+			document.getElementById('fm_filemanagerPic').src = document.getElementById('fm_filemanagerPic').src; 
+			fm_crop_screenlock.hide();
+		},
+		failure: function(o) { 
+			kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText); 
+			fm_crop_screenlock.hide(); 
+		}
+	};

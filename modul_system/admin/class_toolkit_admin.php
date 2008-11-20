@@ -1027,21 +1027,20 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "filemanager_infobox");
 		return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 	}
+    
+    /**
+     * Creates the page to view & manipulate image.
+     * 
+     * @since 3.2
+     * @replaces class_toolkit_admin::getFileDetails()
+     * @param array $arrContent
+     * @return string
+     */
+    public function getFilemanagerImageDetails($arrContent) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "folderview_image_details");
+        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);	
+    }
 
-	/**
-	 * Returns the filled details on the folderview
-	 *
-	 * @param mixed $arrContent
-	 * @return string
-	 */
-	public function getFileDetails($arrContent) {
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "folderview_detail_frame");
-		$strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "folderview_detail_row");
-		$strRows = "";
-		foreach ($arrContent as $strName => $strKey)
-			$strRows .= $this->objTemplate->fillTemplate(array("title" => $strName, "name" => $strKey), $strTemplateRowID);
-		return $this->objTemplate->fillTemplate(array("rows" => $strRows), $strTemplateID);
-	}
 
 	/**
 	 * Creates a fieldset to structure elements
@@ -1468,5 +1467,31 @@ class class_toolkit_admin extends class_toolkit {
         return $strContent;
     }
     
+    /**
+     * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
+     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
+     * dialog become visible. The Raw-Dialog has no markup!
+     *
+     * @param string $strContent
+     * @param string $strDialogId
+     * @return string
+     */
+    public function modalDialogRaw($strDialogContent, $strDialogId) {
+        $strContent = "";
+        //create the html-part
+        $arrTemplate = array();
+        $strContainerId = generateSystemid();
+        $arrTemplate["dialog_id"] = $strContainerId;
+        $arrTemplate["dialog_content"] = $strDialogContent;
+        $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRaw");
+        $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
+        
+        //and create the java-script
+        $strContent .="<script type=\"text/javascript\">
+            var ".$strDialogId." = new ModalDialog('".$strContainerId."');
+        </script>";
+        
+        return $strContent;
+    }    
 }
 ?>

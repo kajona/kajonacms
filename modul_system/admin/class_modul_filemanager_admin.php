@@ -76,6 +76,10 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     			if($strReturn == "")
     			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
     		}
+            
+            if($strAction == "imageDetails") {
+            	$strReturn = $this->actionImageDetails();
+            }
         }
         catch (class_exception $objException) {
 		    $objException->processException();
@@ -325,7 +329,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	$arrViewFilter = array();
 		   	if($objRepo->getStrViewFilter() != "")
 		   		$arrViewFilter = explode(",", $objRepo->getStrViewFilter());
-
+                
 		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
             $strActions = "";
 		   	$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld, "", $this->getText("ordner_anlegen"), "icon_folderOpen.gif"));
@@ -365,8 +369,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     
     				include_once(_systempath_."/class_filesystem.php");
     				$objFilesystem = new class_filesystem();
-    				$arrFiles = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
-    				if(count($arrFiles["files"]) == 0 && count($arrFiles["folders"]) == 0) {
+    				$arrFilesSub = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
+    				if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
     					$strAction .= $this->objToolkit->listDeleteButton($strFolder.$this->getText("ordner_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder, $this->getText("ordner_loeschen_link")));
     				}
     				else
@@ -404,10 +408,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					if(!$bitImage)
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 		   			else
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetail", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
 		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"], $this->getText("datei_loeschen_link")));
-		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid().($this->strFolderOld  != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_loeschen"), "icon_ton.gif"));
 					$arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
 					$arrFilesTemplate[$intJ][1] = $strFilename;
 					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
@@ -479,9 +482,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		   	    $bitSpecial = true;
     		   		$strExtra .= $this->actionNewFolder(true, $strTargetfield);
     		   	}
-    		   	elseif ($strAddonAction == "imageDetail") {
-    		   	    $strExtra .= $this->actionFileDetailview();
-    		   	}
     		   	elseif ($strAddonAction == "uploadFile")  {
     		   	    $bitSpecial = true;
     		   		$strExtra .= $this->actionUploadFile(true, $strTargetfield);
@@ -549,17 +549,11 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         					//Geticon
         					$arrMime  = $this->objToolkit->mimeType($arrOneFile["filename"]);
         					$strFilename = $arrOneFile["filename"];
-        					$bitImage = false;
-        					if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
-        					   $bitImage = true;
         					//Filename too long?
         					$strFilename = uniStrTrim($strFilename, 50);
 
         					$strActions = "";
-        					if(!$bitImage)
-        		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
-        		   			else
-        		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&fmcommand=imageDetail&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
+        		   			$strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 
                             $strFolder = $this->strFolder;
         		   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
@@ -785,6 +779,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     					if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
     						$strReturn .= $this->getText("upload_erfolg");
     						$bitSuccess = true;
+                            
+                            class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
 
     					}
     					else
@@ -807,55 +803,84 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
 	
 	/**
-	 * Returns details about the given file
+	 * Returns details and additional functions handling the current image.
 	 *
 	 * @param string $strFile
 	 * @return string
 	 */
-	private function actionFileDetailview() {
+	private function actionImageDetails() {
 		$strReturn = "";
+        
+        $arrTemplate = array();
+        $arrTemplate["file_pathnavi"] = $this->generatePathNavi($this->strFolder);         
 		$strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
 		if(is_file($strFile)) {
+            
 			//Details der Datei sammeln
 			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
 			$arrDetails = $objFilesystem->getFileDetails($strFile);
-			$arrTemplate = array();
-			$arrTemplate[$this->getText("datei_name")] = $arrDetails["filename"];
-			$arrTemplate[$this->getText("datei_pfad")] = $arrDetails["filepath"];
-			$arrTemplate[$this->getText("datei_typ")] = $arrDetails["filetype"];
+            
+			$arrTemplate["file_name"] = $arrDetails["filename"];
+			$arrTemplate["file_path"] = $arrDetails["filepath"];
+			$arrTemplate["file_path_title"] = $this->getText("datei_pfad");
 
-			//If we have an image, return more detailed infos
-			if($arrDetails["filetype"] == ".jpg" || $arrDetails["filetype"] == ".gif" || $arrDetails["filetype"] == ".png") {
-				$arrSize = getimagesize($strFile);
-				$arrTemplate[$this->getText("bild_groesse")] = $arrSize[0]." x ".$arrSize[1];
+			
+			$arrSize = getimagesize($strFile);
+			$arrTemplate["file_dimensions"] = $arrSize[0]." x ".$arrSize[1];
+            $arrTemplate["file_dimensions_title"] = $this->getText("bild_groesse");
+            
+            $arrTemplate["file_size"] = bytesToString($arrDetails["filesize"]);
+            $arrTemplate["file_size_title"] = $this->getText("datei_groesse");
+            
+            $arrTemplate["file_lastedit"] = timeToString($arrDetails["filechange"]);
+            $arrTemplate["file_lastedit_title"] = $this->getText("datei_bearbeit");
+            
 
-				//Generate Dimensions
-				$intHeight = $arrSize[1];
-				$intWidth = $arrSize[0];
-				$strPath = $strFile;
-				if(uniStrpos($strPath, _realpath_) !== false)
-					$strPath = str_replace(_realpath_, _webpath_, $strPath);
+			//Generate Dimensions
+			$intHeight = $arrSize[1];
+			$intWidth = $arrSize[0];
+			$strPath = $strFile;
+			if(uniStrpos($strPath, _realpath_) !== false)
+				$strPath = str_replace(_realpath_, _webpath_, $strPath);
 
-				while($intWidth > 300 || $intHeight > 300) {
-					$intWidth *= 0.8;
-					$intHeight *= 0.8;
-				}
-				//Round
-				$intWidth = number_format($intWidth, 0);
-				$intHeight = number_format($intHeight, 0);
-				$arrTemplate[$this->getText("bild_vorschau")] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" />";
+			while($intWidth > 300 || $intHeight > 300) {
+				$intWidth *= 0.8;
+				$intHeight *= 0.8;
 			}
-			//Filesize
-			$arrTemplate[$this->getText("datei_groesse")] = bytesToString($arrDetails["filesize"]);
-			//Creation
-			$arrTemplate[$this->getText("datei_erstell")] = timeToString($arrDetails["filecreation"]);
-			//Edit
-			$arrTemplate[$this->getText("datei_bearbeit")] = timeToString($arrDetails["filechange"]);
-			//Access
-			$arrTemplate[$this->getText("datei_zugriff")] = timeToString($arrDetails["fileaccess"]);
+			//Round
+			$intWidth = number_format($intWidth, 0);
+			$intHeight = number_format($intHeight, 0);
+			$arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_filemanagerPic\" />";
+            
+            $arrTemplate["file_actions"] = "";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"], $this->getText("datei_loeschen_link")));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowRealsize();\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowPreview();\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowCropping();\"", "",  $this->getText("cropImage"), "icon_crop.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerSaveCropping();\"", "",  $this->getText("cropImageAccept"), "icon_crop_accept.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(90);\"", "",  $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(270);\"", "",  $this->getText("rotateImageRight"), "icon_rotate_right.gif"));
+             
+            $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
+                   var fm_image_rawurl = '"._webpath_.str_replace(_realpath_, "", $strFile)."';
+                   var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&maxWidth=".$intWidth."&maxHeight=".$intHeight."';
+                   var fm_image_isScaled = true;
+                   var fm_repo_id = '".$this->getSystemid()."'; 
+                   var fm_file = '".$this->getParam("file")."' ;
+                   var fm_folder = '".$this->getParam("folder")."'; 
+                    kajonaAjaxHelper.loadImagecropperBase();
+                    addCss('admin/scripts/yui/resize/assets/resize-core.css');
+                    addCss('admin/scripts/yui/imagecropper/assets/imagecropper-core.css'); 
+                                   
+                   </script>";
+			
+            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningPreview"), "fm_preview_warning");
+            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningSaving")."<a href=\"javascript:filemanagerSaveCroppingToBackend();\">".$this->getText("cropWarningCrop")."</a>", "fm_crop_save_warning");
+            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialogRaw("<img src=\""._skinwebpath_."/loading.gif\" />", "fm_crop_screenlock");
+            
 		}
-		$strReturn .= $this->objToolkit->getFileDetails($arrTemplate);
+		$strReturn .= $this->objToolkit->getFilemanagerImageDetails($arrTemplate);
 		return $strReturn;
 	}
 

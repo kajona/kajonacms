@@ -12,6 +12,7 @@ include_once(_adminpath_."/class_admin.php");
 include_once(_adminpath_."/interface_xml_admin.php");
 
 include_once(_systempath_."/class_modul_filemanager_repo.php");
+include_once(_systempath_."/class_image.php");
 
 
 /**
@@ -48,9 +49,92 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         $strReturn = "";
         if($strAction == "fileUpload")
             $strReturn .= $this->actionFileupload();
+        elseif($strAction == "saveCropping")
+            $strReturn .= $this->actionSaveCropping();
+        elseif($strAction == "rotate")
+            $strReturn .= $this->actionRotateImage();           
 
         return $strReturn;
 	}
+    
+    /**
+     * Tries to rotate the passed imaged.
+     * The following params are needed:
+     * action = rotateImage
+     * folder = the files' location
+     * file = the file to crop
+     * systemid = the repo-id
+     * angle
+     */
+    private function actionRotateImage(){
+    	$strReturn = "";
+        
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            //create repo instance
+            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            
+            //pass to the image-class
+            $objImage = new class_image();
+            $objImage->preLoadImage($strFile);
+            if($objImage->rotateImage($this->getParam("angle"))) {
+                if($objImage->saveImage($strFile, false)) { 
+                    class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo); 
+                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";   
+                }
+                else
+                    class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
+            }
+            
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
+        
+        
+        return $strReturn;
+    }
+    
+    /**
+     * Tries to save the passed cropping.
+     * The following params are needed:
+     * action = saveCropping
+     * folder = the files' location
+     * file = the file to crop
+     * systemid = the repo-id
+     * intX
+     * intY
+     * intWidth
+     * intHeight
+     */
+    private function actionSaveCropping() {
+    	$strReturn = "";
+        
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            //create repo instance
+            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            
+            //pass to the image-class
+            $objImage = new class_image();
+            $objImage->preLoadImage($strFile);
+            //var_dump($strFile, $this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"));
+            //die();            
+            if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
+            	if($objImage->saveImage($strFile, false)) { 
+                    class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);	
+                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";	
+            	}
+                else
+                    class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
+            }
+            
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
+        
+        
+        return $strReturn;
+    }
 
 
 	/**
@@ -95,6 +179,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	                    if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 	                        $strReturn .= "<message>".$this->getText("xmlupload_success")."</message>";
 	                        $bitSuccess = true;
+                            class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
 	                    }
 	                    else
 	                        $strReturn .= "<error>".$this->getText("xmlupload_error_copyUpload")."</error>";
@@ -110,7 +195,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	    
 		}
 		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("xmlupload_error_permissions"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
 
         return $strReturn;
 	}

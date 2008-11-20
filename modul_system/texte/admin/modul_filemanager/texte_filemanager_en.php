@@ -108,11 +108,23 @@ $text["required_filemanager_path"]  = "Path";
 
 $text["useFile"]                    = "Apply";
 
+$text["showPreview"]                = "Show preview size";
+$text["showRealsize"]               = "Show original size";
+$text["cropImage"]                  = "Crop image";
+$text["cropImageAccept"]            = "Save cropping";
+$text["cropWarningPreview"]         = "You are working with a scaled view. Switch to the original size in order to use the tool.";
+$text["cropWarningSaving"]          = "Please note: The cropping affects all usages of the image. Proceed?<br />";
+$text["cropWarningCrop"]            = "Crop";
+
 $text["xmlupload_success"]          = "Upload successfull";
 $text["xmlupload_error_copyUpload"] = "Error while copying the file on the server";
 $text["xmlupload_error_filter"]     = "Filetyp not allowd in current filter";
 $text["xmlupload_error_notWritable"]= "Folder not writable";
-$text["xmlupload_error_permissions"]= "Not enough permissions";
+$text["xml_error_permissions"]      = "Not enough permissions";
+$text["xml_cropping_success"]       = "Cropping successful";
+$text["xml_rotate_success"]         = "Rotating successfull";
+$text["rotateImageLeft"]            = "Rotate 90° to the right";
+$text["rotateImageRight"]           = "Rotate 90° to the left";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------

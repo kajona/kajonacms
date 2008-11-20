@@ -114,8 +114,6 @@ class class_folderview extends class_admin  implements interface_admin {
         return $this->getText("moduleFolderviewTitle");
     }
 
-
-
 	/**
 	 * Opens the filemanager to browse files
 	 *
@@ -175,72 +173,6 @@ class class_folderview extends class_admin  implements interface_admin {
 		if($bitHit)
 		  $strReturn .= $this->objToolkit->listFooter();
         return $strReturn;
-	}
-
-
-	/**
-	 * Returns details about the given file
-	 *
-	 * @param string $strFile
-	 * @return string
-	 */
-	public function fileDetailview($strFile) {
-		$strReturn = "";
-		if(is_file($strFile)) {
-			//Details der Datei sammeln
-			include_once(_systempath_."/class_filesystem.php");
-			$objFilesystem = new class_filesystem();
-			$arrDetails = $objFilesystem->getFileDetails($strFile);
-			$arrTemplate = array();
-			$arrTemplate[$this->getText("datei_name")] = $arrDetails["filename"];
-			$arrTemplate[$this->getText("datei_pfad")] = $arrDetails["filepath"];
-			$arrTemplate[$this->getText("datei_typ")] = $arrDetails["filetype"];
-
-			//If we have an image, return more detailed infos
-			if($arrDetails["filetype"] == ".jpg" || $arrDetails["filetype"] == ".gif" || $arrDetails["filetype"] == ".png") {
-				$arrSize = getimagesize($strFile);
-				$arrTemplate[$this->getText("bild_groesse")] = $arrSize[0]." x ".$arrSize[1];
-				$arrTemplate[$this->getText("bild_vorschau")] = "";
-
-				//Generate Dimensions
-				$intHeight = $arrSize[1];
-				$intWidth = $arrSize[0];
-				$strPath = $strFile;
-				if(uniStrpos($strPath, _realpath_) !== false)
-					$strPath = str_replace(_realpath_, _webpath_, $strPath);
-
-				while($intWidth > 300 || $intHeight > 300) {
-					$intWidth *= 0.8;
-					$intHeight *= 0.8;
-				}
-				//Round
-				$intWidth = number_format($intWidth, 0);
-				$intHeight = number_format($intHeight, 0);
-				$arrTemplate["  "] = "<img src=\"".$strPath."\" width=\"".$intWidth."\" height=\"".$intHeight."\" />";
-			}
-			//Filesize
-			$arrTemplate[$this->getText("datei_groesse")] = bytesToString($arrDetails["filesize"]);
-			//Creation
-			$arrTemplate[$this->getText("datei_erstell")] = timeToString($arrDetails["filecreation"]);
-			//Edit
-			$arrTemplate[$this->getText("datei_bearbeit")] = timeToString($arrDetails["filechange"]);
-			//Access
-			$arrTemplate[$this->getText("datei_zugriff")] = timeToString($arrDetails["fileaccess"]);
-		}
-		$strReturn .= $this->objToolkit->getFileDetails($arrTemplate);
-		return $strReturn;
-	}
-
-
-	/**
-	 * Looks up the icon for the passed file
-	 *
-	 * @param string $strType
-	 * @return string
-	 */
-	private function getFileicon($strType) {
-		$arrType = $this->objToolkit->mimeType($strType);
-		return getImageAdmin($arrType[2]);
 	}
 
 

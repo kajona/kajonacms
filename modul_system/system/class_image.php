@@ -60,7 +60,7 @@ class class_image {
 		$this->bitNeedToSave = true;
 		$this->bitPreload = false;
 
-		// Try to overwrite PHP memory-limit so also large images can be processed
+		// Try to overwrite PHP memory-limit so large images can be processed, too
 		if (class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
 			@ini_set("memory_limit", "30M");
 	}
@@ -198,7 +198,7 @@ class class_image {
 			if($strTarget == "")
 			   $strTarget = "/".$this->strCachepath.$this->generateCachename();
 
-			switch ($strType) {
+			switch (strtolower($strType)) {
 				case ".jpg":
 					imagejpeg($this->objImage, _realpath_.$strTarget, 90);
 					$bitReturn = true;
@@ -216,6 +216,8 @@ class class_image {
 		else
 			$bitReturn = true;
 
+        if(!$bitReturn)
+            class_logger::getInstance()->addLogRow("error saving file to ".$strTarget, class_logger::$levelWarning);
 
 		return $bitReturn;
 	}
@@ -333,6 +335,125 @@ class class_image {
 
 		return $bitReturn;
 	}
+    
+    
+    /**
+     * Crops the current image. Therefore you are able to set the start x/y-coordinates and the 
+     * desired height and width of the section to keep.
+     * 
+     * @param int $intXStart
+     * @param int $intYStart
+     * @param int $intWidth
+     * @param int $intHeight
+     * @return bool
+     */
+    public function cropImage($intXStart, $intYStart, $intWidth, $intHeight) {
+    	$bitReturn = false;
+        
+        //load the original image
+        //Hier bei Bedarf das Bild nachladen
+        if($this->objImage == null && $this->bitPreload)
+            $this->finalLoadImage();
+        
+        //create a new image using the desired size
+        $objImageCropped = imagecreatetruecolor($intWidth, $intHeight);
+        
+        //copy the selected region
+        imagecopy($objImageCropped, $this->objImage, 0, 0, $intXStart, $intYStart, $intWidth, $intHeight);
+        $this->intWidth = $intWidth;
+        $this->intHeight = $intHeight;
+        imagedestroy($this->objImage);
+        $this->objImage = $objImageCropped;
+        $bitReturn = true;
+        
+        return $bitReturn;
+    }
+    
+    /**
+     * Rotates an image. Note: Only a degree of 90, 180 or 270 is allowed!
+     * 
+     * @param int $intAngle
+     * @return bool
+     */
+    public function rotateImage($intAngle) {
+    	$bitReturn = false;
+        
+        //load the original image
+        //Hier bei Bedarf das Bild nachladen
+        if($this->objImage == null && $this->bitPreload)
+            $this->finalLoadImage();
+            
+        //different cases. 180 is easy ;)
+        if($intAngle == 180) {
+        	$this->objImage = imagerotate($this->objImage, 180, 0);
+            $bitReturn = true;
+        }
+        elseif($intAngle == 90) {
+            
+            //Set up the temp image
+            $intSquareSize = $this->intWidth > $this->intHeight ? $this->intWidth : $this->intHeight;
+            $objSquareImage = imagecreatetruecolor($intSquareSize, $intSquareSize);
+            //copy the existing image into the new image
+            if($this->intWidth > $this->intHeight)
+                imagecopy($objSquareImage, $this->objImage, 0, ($this->intWidth-$this->intHeight)/2, 0, 0, $this->intWidth, $this->intHeight);
+            else
+                imagecopy($objSquareImage, $this->objImage, ($this->intHeight-$this->intWidth)/2, 0, 0, 0, $this->intWidth, $this->intHeight);  
+                
+            //rotate the image
+            $objSquareImage = imagerotate($objSquareImage, 90, 0, -1);
+            //crop to the final sizes
+            imagedestroy($this->objImage);
+            
+            if($this->intWidth > $this->intHeight) {
+                $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage ,0,0, ($this->intWidth-$this->intHeight)/2,0, $this->intHeight, $this->intWidth);      
+            }
+            else  {
+                $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage, 0,0, 0,($this->intHeight-$this->intWidth)/2, $this->intHeight, $this->intWidth);      
+            }
+            
+            
+            $intWidthTemp = $this->intWidth;
+            $this->intWidth = $this->intHeight;
+            $this->intHeight = $intWidthTemp;
+            $bitReturn = true;        	
+        }   
+        elseif($intAngle == 270) {
+            
+            //Set up the temp image
+            $intSquareSize = $this->intWidth > $this->intHeight ? $this->intWidth : $this->intHeight;
+            $objSquareImage = imagecreatetruecolor($intSquareSize, $intSquareSize);
+            //copy the existing image into the new image
+            if($this->intWidth > $this->intHeight)
+                imagecopy($objSquareImage, $this->objImage, 0, ($this->intWidth-$this->intHeight)/2, 0, 0, $this->intWidth, $this->intHeight);
+            else
+                imagecopy($objSquareImage, $this->objImage, ($this->intHeight-$this->intWidth)/2, 0, 0, 0, $this->intWidth, $this->intHeight);  
+                
+            //rotate the image
+            $objSquareImage = imagerotate($objSquareImage, 270, 0, -1);
+            //crop to the final sizes
+            imagedestroy($this->objImage);
+            
+            if($this->intWidth > $this->intHeight) {
+                $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage ,0,0, ($this->intWidth-$this->intHeight)/2,0, $this->intHeight, $this->intWidth);      
+            }
+            else  {
+                $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage, 0,0, 0,($this->intHeight-$this->intWidth)/2, $this->intHeight, $this->intWidth);      
+            }
+            
+        	$intWidthTemp = $this->intWidth;
+            $this->intWidth = $this->intHeight;
+            $this->intHeight = $intWidthTemp;
+            $bitReturn = true;
+        } 
+        
+        
+        
+        return $bitReturn;
+    }
 
 
 	/**

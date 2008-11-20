@@ -107,11 +107,23 @@ $text["required_filemanager_path"]  = "Pfad";
 
 $text["useFile"]                    = "Übernehmen";
 
+$text["showPreview"]                = "Vorschaugröße anzeigen";
+$text["showRealsize"]               = "Originalgröße anzeigen";
+$text["cropImage"]                  = "Bild zuschneiden";
+$text["cropImageAccept"]            = "Zuschneiden speichern";
+$text["cropWarningPreview"]         = "Sie befinden sich in der skalierten Ansicht. Schalten Sie auf die Originalgröße, um das Werkzeug zu verwenden.";
+$text["cropWarningSaving"]          = "Bitte beachten: Das Zuschneiden betrifft alle Verwendungen des Bildes! Forfahren?<br />";
+$text["cropWarningCrop"]            = "Zuschneiden";
+
 $text["xmlupload_success"]          = "Upload erfolgreich";
 $text["xmlupload_error_copyUpload"] = "Fehler beim Kopieren der Datei auf dem Server";
 $text["xmlupload_error_filter"]     = "Dateityp im Filter nicht erlaubt";
 $text["xmlupload_error_notWritable"]= "Zielordner nicht beschreibbar";
-$text["xmlupload_error_permissions"]= "Keine ausreichenden Rechte";
+$text["xml_error_permissions"]      = "Keine ausreichenden Rechte";
+$text["xml_cropping_success"]       = "Zuschneiden erfolgreich";
+$text["xml_rotate_success"]         = "Drehen erfolgreich";
+$text["rotateImageLeft"]            = "Um 90° nach links drehen";
+$text["rotateImageRight"]           = "Um 90° nach rechts drehen";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
