@@ -466,13 +466,13 @@ var kajonaAdminAjax = {
 
 //--- FILEMANAGER ---------------------------------------------------------------------------------------
 function filemanagerShowRealsize() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl;
+	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl+"?x="+(new Date()).getMilliseconds();
 	fm_image_isScaled = false;
 	
 }
 
 function filemanagerShowPreview() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl;
+	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl+"?x="+(new Date()).getMilliseconds();
 	fm_image_isScaled = true;
 	fm_cropObj.destroy();
 	fm_cropObj = null;
@@ -533,7 +533,7 @@ var fm_rotate_callback = {
 		success: function(o) { 
 			kajonaStatusDisplay.displayXMLMessage(o.responseText);
 			document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
-			document.getElementById('fm_filemanagerPic').src = document.getElementById('fm_filemanagerPic').src; 
+			filemanagerShowRealsize();
 			fm_crop_screenlock.hide();
 		},
 		failure: function(o) { 
