@@ -330,12 +330,12 @@ $text["installer_config_dbname"]     = "Database name:";
 $text["installer_config_dbprefix"]   = "Table prefix:";
 $text["installer_config_write"]      = "Save to config.php";
 
-$text["installer_modules_found"]     = "<b>Install/update the modules</b><br /><br />Modules found:<br /><br />";
+$text["installer_modules_found"]     = "<b>Install/update the modules</b><br /><br />Select which of the found modules you want to install:<br /><br />";
 $text["installer_modules_needed"]    = "Modules needed to install: ";
 $text["installer_module_notinstalled"] = "Module not installed";
 $text["installer_systemversion_needed"] = "Minimal version of system needed: ";
 
-$text["installer_elements_found"]    = "<b>Installation of the page elements</b><br /><br />Page elements found:<br /><br />";
+$text["installer_elements_found"]    = "<b>Installation of the page elements</b><br /><br />Select which of the found page elements you want to install:<br /><br />";
 
 $text["installer_samplecontent"]     = "<b>Installation of the samplecontent</b><br /><br />";
 $text["installer_samplecontent"]    .= "The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";

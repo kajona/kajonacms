@@ -334,12 +334,12 @@ $text["installer_config_dbname"]     = "Datenbankname:";
 $text["installer_config_dbprefix"]   = "Tabellenpräfix:";
 $text["installer_config_write"]      = "In config.php speichern";
 
-$text["installer_modules_found"]     = "<b>Installation/Update der Module</b><br /><br />Gefundene Module:<br /><br />";
+$text["installer_modules_found"]     = "<b>Installation/Update der Module</b><br /><br />Bitte wählen Sie die Module aus, die Sie installieren möchten:<br /><br />";
 $text["installer_modules_needed"]    = "Zur Installation benötigte Module: ";
 $text["installer_module_notinstalled"] = "Modul ist nicht installiert";
 $text["installer_systemversion_needed"] = "Minimal benötigte Systemversion: ";
 
-$text["installer_elements_found"]    = "<b>Installation der Seitenelemente</b><br /><br />Gefundene Seitenelemente:<br /><br />";
+$text["installer_elements_found"]    = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 
 $text["installer_samplecontent"]     = "<b>Installation der Beispielinhalte</b><br /><br />";
 $text["installer_samplecontent"]     .= "Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";

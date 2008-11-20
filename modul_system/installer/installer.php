@@ -338,6 +338,8 @@ class class_installer {
 
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row_installable", true);
+        
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -348,10 +350,15 @@ class class_installer {
 			if($objInstaller instanceof interface_installer && $strInstaller != "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
                $arrTemplate = array();
                $arrTemplate["module_name"] = $objInstaller->getModuleName();
+               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
                $arrTemplate["module_version"] = $objInstaller->getVersion();
                $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
-               $arrTemplate["module_installcheck"] = $objInstaller->getModuleInstallCheckbox();
-               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               
+               if ($objInstaller->isModuleInstallable()) {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
+               } else {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               }
                
             }
 		}
@@ -392,6 +399,7 @@ class class_installer {
 
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_elements_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_elements_row_installable", true);
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -402,10 +410,15 @@ class class_installer {
 			if($objInstaller instanceof interface_installer ) {
                $arrTemplate = array();
                $arrTemplate["module_name"] = $objInstaller->getModuleName();
+               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
                $arrTemplate["module_version"] = $objInstaller->getVersion();
                $arrTemplate["module_hint"] = $objInstaller->getModulePostInstallInfo();
-               $arrTemplate["module_installcheck"] = $objInstaller->getModulePostInstallCheckbox();
-               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               
+			   if ($objInstaller->isModulePostInstallable()) {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
+               } else {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               }
                
             }
 		}
@@ -457,6 +470,7 @@ class class_installer {
 		//Loading each installer
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row", true);
+        $strTemplateIDInstallable = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row_installable", true);
 		$bitInstallerFound = false;
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -467,11 +481,16 @@ class class_installer {
 			if($objInstaller instanceof interface_installer && $strInstaller == "installer_samplecontent.php" && strpos($strInstaller, "element") === false ) {
 			   $bitInstallerFound = true;
                $arrTemplate = array();
+               $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
                $arrTemplate["module_name"] = $objInstaller->getModuleName();
                $arrTemplate["module_version"] = $objInstaller->getVersion();
                $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
-               $arrTemplate["module_installcheck"] = $objInstaller->getModuleInstallCheckbox();
-               $strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+
+               if ($objInstaller->isModuleInstallable()) {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
+               } else {
+					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
+               }
 			}
 		}
 

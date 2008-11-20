@@ -41,12 +41,21 @@ abstract class class_installer_base extends class_root {
 	}
 
 	/**
-	 * Returns the value of $arrModule["name_lang"], the name of the module
+	 * Returns the value of $arrModule["name_lang"], the long name of the module
 	 *
 	 * @return string
 	 */
 	public function getModuleName() {
         return $this->arrModule["name_lang"];
+	}
+	
+	/**
+	 * Returns the value of $arrModule["name"], the name of the module
+	 *
+	 * @return string
+	 */
+	public function getModuleNameShort() {
+        return $this->arrModule["name"];
 	}
     
     /**
@@ -108,26 +117,29 @@ abstract class class_installer_base extends class_root {
     }
     
     /**
-     * Creates a checkbox to install the current module - if possible
+     * checks if the module can be installed
      * 
      * @since 3.2
-     * @return string The Checkbox or an empty string
+     * @return boolean
      */
-    public function getModuleInstallCheckbox() {
+    public function isModuleInstallable() {
+    	$bitReturn = false;
+    	
     	if($this->getModuleInstallInfo() == "") {
     		//check if module not yet installed
             try {
-            $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
+            	$objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
             }
             catch (class_exception $objException) {
-                    $objModule = null;
+				$objModule = null;
             }
             if($objModule == null) {
-                //not yet installed, create checkbox
-                return "<label for=\"installer_moduleInstallBox[".$this->arrModule["name"]."]\">".$this->getText("installer_install", "system", "admin")."</label>".
-                       "<input class=\"checkbox\" type=\"checkbox\" name=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" id=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" />";
+                //not yet installed
+                $bitReturn = true;
             }
     	}
+    	
+    	return $bitReturn;
     }
 
 
@@ -197,11 +209,13 @@ abstract class class_installer_base extends class_root {
 	}
 
     /**
-     * Creates a checkbox for post-installs if available
+     * checks if module post-installs are available and can be installed
      * 
-     * @return string or ""
+     * @since 3.2
+     * @return boolean
      */
-    public final function getModulePostInstallCheckbox() {
+    public final function isModulePostInstallable() {
+    	$bitReturn = false;
 
         if($this->getModulePostInstallInfo() == "") {
             $objModule = null;
@@ -214,13 +228,12 @@ abstract class class_installer_base extends class_root {
                 $objModule = true;
                 
             if($objModule != null && $this->hasPostInstalls()) {
-                return "<label for=\"installer_moduleInstallBox[".$this->arrModule["name"]."]\">".$this->getText("installer_install", "system", "admin")."</label>".
-                       "<input class=\"checkbox\" type=\"checkbox\" name=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" id=\"moduleInstallBox[installer_".$this->arrModule["name"]."]\" />";
+            	$bitReturn = true;
             }
         
         }
 
-        return "";
+        return $bitReturn;
     }
     
     /**

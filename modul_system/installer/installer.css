@@ -1,5 +1,3 @@
-/* Seitenglobales*/
-
 body {
 	margin: 0 5px 20px 0;
 	padding: 0px;
@@ -39,7 +37,7 @@ td {
 }
 
 
-/* L O G I N P A G E */
+/* L A Y O U T */
 #installerBox {
 	margin: 0 auto 0 auto;
 	padding-top: 10px;
@@ -344,20 +342,17 @@ div.percentBeam {
     color: red;
 }
 
+.installable {
+	cursor: pointer;
+}
+
 table.moduleRowTable {
     width: 100%;
     border: none;
-    border-bottom: 1px dashed #CCCCCC;
+    border-bottom: 1px solid #c2c2c2;
+	padding: 4px 0 4px 0;
 }
 
 table.moduleRowTable:hover {
-    background-color: #EFEFEF;	
+	background-color: #f0f0f0;
 }
-
-table.moduleRowTable label {
-    display: inline;
-    width: auto;
-    height: auto;
-    padding: 0px;
-}
-
