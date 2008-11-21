@@ -75,7 +75,7 @@ class class_exception extends Exception {
             $strMailtext .= "File and linenumber the error was thrown:\n";
             $strMailtext .= "\t".basename($this->getFile()) ." in Line ".$this->getLine()."\n\n";
             $strMailtext .= "Callstack / Backtrace:\n\n";
-            $strMailtext .= $arrStack = $this->getTraceAsString();
+            $strMailtext .= $this->getTraceAsString();
             $strMailtext .= "\n\n";
             $strMailtext .= "Sourcehost: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
             $strMailtext .= "Querystring: ".getServer("REQUEST_URI")."\n";

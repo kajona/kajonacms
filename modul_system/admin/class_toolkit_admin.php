@@ -1277,7 +1277,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param int $intElementPerPage
      * @return mixed a one-dimensional array: ["elements"] and ["pageview"]
      */
-    public function getPageview($arrData, $intCurrentpage = 1, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
+    public function getPageview($arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
         $arrReturn = array();
 
         include_once(_systempath_."/class_array_iterator.php");
