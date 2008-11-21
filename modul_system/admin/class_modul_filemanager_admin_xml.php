@@ -78,7 +78,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $objImage = new class_image();
             $objImage->preLoadImage($strFile);
             if($objImage->rotateImage($this->getParam("angle"))) {
-                if($objImage->saveImage($strFile, false)) { 
+                if($objImage->saveImage($strFile, false, 100)) { 
                     class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo); 
                     $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";   
                 }
@@ -120,7 +120,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             //var_dump($strFile, $this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"));
             //die();            
             if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
-            	if($objImage->saveImage($strFile, false)) { 
+            	if($objImage->saveImage($strFile, false, 100)) { 
                     class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);	
                     $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";	
             	}

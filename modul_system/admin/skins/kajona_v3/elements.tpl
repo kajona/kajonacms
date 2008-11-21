@@ -483,21 +483,47 @@ The following sections specify the layout of the rights-mgmt
 ---------------------------------------------------------------------------------------------------------
 -- FOLDERVIEW -------------------------------------------------------------------------------------------
 
-<folderview_detail_frame>
-
-<table cellpadding="0" cellspacing="0" class="folderviewDetail" style="text-align: center;">
-	%%rows%%
+UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame are removed since no longer needed.
+               Replaced by the section folderview_image_details
+               
+<folderview_image_details>
+<table border="0" width="100%" cellpadding="0" cellspacing="0" style="">
+    <tr>
+        <td>%%file_pathnavi%%</td>
+    </tr>
+    <tr class="fmBackBar">
+        <td align="center" style="padding: 2px;">%%file_actions%%</td>
+    </tr>
+    <tr>
+        <td align="center" style="padding: 3px;">
+            %%file_image%%
+        </td>
+    </tr>
+    <tr class="fmBackBar">
+        <td>
+            <table style="border: none;">
+                <tr>
+                    <td>%%file_path_title%%</td>
+                    <td colspan="3">%%file_path%% (%%file_name%%)</td>
+                </tr>
+                <tr >
+                    <td>%%file_size_title%%</td>
+                    <td id="fm_image_size">%%file_size%%</td>
+                    <td>%%file_dimensions_title%%</td>
+                    <td id="fm_image_dimensions">%%file_dimensions%%</td>
+                </tr>
+                <tr>
+                    <td>%%file_lastedit_title%%</td>
+                    <td>%%file_lastedit%%</td>
+                    <td></td>
+                    <td></td>
+            </table>
+        </td>
+    </tr>           
 </table>
 
-</folderview_detail_frame>
-<folderview_detail_row>
-	<tr class="text">
-		<td align="left"></td>
-		<td align="left">%%title%%</td>
-		<td align="left">%%name%%</td>
-		<td align="right"></td>
-	</tr>
-</folderview_detail_row>
+%%filemanager_image_js%%
+</folderview_image_details>
 
 ---------------------------------------------------------------------------------------------------------
 -- WYSIWYG EDITOR ---------------------------------------------------------------------------------------
@@ -839,3 +865,5 @@ The language switch sourrounds the buttons
             <div class="c"></div>
         </div>
 </div></dialog>
+
+<dialogRaw><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRaw>

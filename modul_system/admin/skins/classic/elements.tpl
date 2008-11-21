@@ -596,7 +596,7 @@ The following sections specify the layout of the rights-mgmt
 -- FOLDERVIEW -------------------------------------------------------------------------------------------
 
 UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame are removed since no longer needed.
-               Replaces by the section folderview_image_details
+               Replaced by the section folderview_image_details
                
 <folderview_image_details>
 <table border="0" width="100%" cellpadding="0" cellspacing="0" style="">

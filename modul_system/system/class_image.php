@@ -181,9 +181,10 @@ class class_image {
 	 *
 	 * @param string $strTarget
 	 * @param bool $bitCache
+     * @param int $intJpegQuality
 	 * @return bool
 	 */
-	public function saveImage($strTarget = "", $bitCache = false) {
+	public function saveImage($strTarget = "", $bitCache = false, $intJpegQuality = 90) {
 		$bitReturn = false;
 		if($this->bitNeedToSave) {
 			//Wenn Cache Aktiviert, dann unter Cachename speichern
@@ -200,7 +201,7 @@ class class_image {
 
 			switch (strtolower($strType)) {
 				case ".jpg":
-					imagejpeg($this->objImage, _realpath_.$strTarget, 90);
+					imagejpeg($this->objImage, _realpath_.$strTarget, $intJpegQuality);
 					$bitReturn = true;
 					break;
 				case ".png":

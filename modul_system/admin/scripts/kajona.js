@@ -474,7 +474,10 @@ function filemanagerShowRealsize() {
 function filemanagerShowPreview() {
 	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl+"?x="+(new Date()).getMilliseconds();
 	fm_image_isScaled = true;
-	fm_cropObj.destroy();
+	if(fm_cropObj != null)
+		fm_cropObj.destroy();
+	
+	document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 	fm_cropObj = null;
 }
 
@@ -485,12 +488,16 @@ function filemanagerShowCropping() {
 		return;
 	}
 	//init the cropping
-	if(fm_cropObj == null)
+	if(fm_cropObj == null) {
 		fm_cropObj =  new YAHOO.widget.ImageCropper('fm_filemanagerPic', {status: true});
+		document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
+	}
 	else {
 		fm_cropObj.destroy();
 		fm_cropObj = null;
+		document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 	}
+	
 }
 
 function filemanagerSaveCropping() {
@@ -511,6 +518,7 @@ var fm_cropping_callback = {
 		kajonaStatusDisplay.displayXMLMessage(o.responseText);
 		fm_cropObj.destroy();
 		fm_cropObj = null;
+		document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 		document.getElementById('fm_image_dimensions').innerHTML = cropArea.width+' x '+cropArea.height;
 		document.getElementById('fm_image_size').innerHTML = 'n.a.';
 		filemanagerShowRealsize();

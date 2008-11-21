@@ -858,7 +858,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowRealsize();\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowPreview();\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowCropping();\"", "",  $this->getText("cropImage"), "icon_crop.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerSaveCropping();\"", "",  $this->getText("cropImageAccept"), "icon_crop_accept.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerSaveCropping();\"", "",  $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(90);\"", "",  $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(270);\"", "",  $this->getText("rotateImageRight"), "icon_rotate_right.gif"));
              

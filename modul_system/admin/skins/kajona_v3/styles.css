@@ -1315,3 +1315,22 @@ body.folderView .listActions a {
     overflow:hidden;
 }
 
+/* Image Cropper */
+.yui-resize-handle {
+    background-color: #FFFFFF;  
+}
+
+.yui-crop-resize-mask {
+    border: 1px dashed #FFFFFF; 
+}
+
+.yui-crop .yui-crop-mask {
+    background-color: #000;
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.yui-resize-status {
+    background-color: #CCCCCC;  
+}
+
