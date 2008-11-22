@@ -217,7 +217,9 @@ if(className==null || className.length==0) {
 Prepare(links[i]);
 }
 else {
-if(links[i].className == className) {Prepare(links[i])};
+    if(links[i].className == className) {
+        Prepare(links[i])
+    }
 }
 }
 }
@@ -239,7 +241,7 @@ el.onmousemove=Locate;
 }
 
 function htmlTooltip (el, t) {
-var tooltip,t,s;
+var tooltip, s;
 if(t==null || t.length==0) return;
 if(el.getAttribute("title")) el.removeAttribute("title");
 tooltip=CreateEl("span","tooltip");
