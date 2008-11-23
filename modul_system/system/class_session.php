@@ -101,7 +101,7 @@ final class class_session {
 		    return true;	
 		}
 		else {
-			if($_SESSION[$this->strKey][$strKey] = $strValue)
+			if($_SESSION[$this->strKey][$strKey] == $strValue)
 				return true;
 			else
 				return false;
@@ -270,7 +270,7 @@ final class class_session {
                 //check, if one of the requested languages is available on our system
                 foreach ($arrLanguages as $strOneLanguage) {
                     if(!preg_match("#q\=[0-9]\.[0-9]#i", $strOneLanguage)) {
-                        if(in_array($strOneLanguage, $this->arrLanguages = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
+                        if(in_array($strOneLanguage, explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")))) {
                             return $strOneLanguage;
                         }
                     }

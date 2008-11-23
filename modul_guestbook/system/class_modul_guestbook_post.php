@@ -226,7 +226,7 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	 * @return string
 	 * @static
 	 */
-	public static function getPostsSection($strSystemid = "", $bitJustActive = false, $intStart, $intEnd) {
+	public static function getPostsSection($strSystemid, $bitJustActive, $intStart, $intEnd) {
 	    $strQuery = "SELECT system_id
 						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
 						WHERE system_id = guestbook_post_id

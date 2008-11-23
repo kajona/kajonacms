@@ -152,7 +152,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
      * @return mixed
      * @static
      */
-    public static  function loadFilesDBSection($strPrevID, $bitFilesOnly = false, $bitActiveOnly = false, $intStart, $intEnd) {
+    public static  function loadFilesDBSection($strPrevID, $bitFilesOnly, $bitActiveOnly, $intStart, $intEnd) {
         $strQuery = "SELECT system_id FROM "._dbprefix_."system,
                               "._dbprefix_."gallery_pic
                     WHERE system_id = pic_id

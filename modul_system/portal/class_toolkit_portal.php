@@ -43,7 +43,7 @@ class class_toolkit_portal extends class_toolkit {
 	 * 								  [strBack]	= link to the previous page
 	 * 								  [strPages] = Pager ( [0][1] ...)
 	 */
-	public function pager($intNumber, $intPage = 1, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $arrData, $strAdd = "") {
+	public function pager($intNumber, $intPage = 1, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "") {
 		$arrReturn = 	array("arrData" 	=> array(),
 							  "strForward" 	=> "",
 							  "strBack" 	=> "",

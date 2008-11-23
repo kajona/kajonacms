@@ -67,7 +67,7 @@ class class_rights {
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public function setRights($arrRights = array(), $strSystemid) 	{
+	public function setRights($arrRights, $strSystemid) 	{
 	    //check against root-record: here no inheritance
 	    if($strSystemid == "")
 	        $arrRights["inherit"] = 0;

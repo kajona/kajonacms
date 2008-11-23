@@ -209,7 +209,7 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
  * @param string $strCss
  * @return string
  */
-function getLinkAdmin($strModule, $strAction, $strParams = "", $strText , $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
+function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
 
 	if($strImage != "") {
 		if($strAlt == "")
@@ -324,7 +324,7 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
  * @param bool $bitPortalEditor
  * @return string
  */
-function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText, $strAlt="", $strImage="", $intHeight = "500", $intWidth = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intHeight = "500", $intWidth = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
 	//if($strParams != "")
 	//	$strParams = str_replace("&", "&amp;", $strParams);
 		
@@ -469,7 +469,7 @@ function timeToString($intTime, $bitLong = true) {
  * @param string $strLanguage
  * @return string
  */
-function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText, $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "") {
+function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "") {
 	$strReturn = "";
 
 	$strHref = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage);
