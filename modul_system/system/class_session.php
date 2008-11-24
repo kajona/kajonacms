@@ -101,7 +101,8 @@ final class class_session {
 		    return true;	
 		}
 		else {
-			if($_SESSION[$this->strKey][$strKey] == $strValue)
+            //yes, it is wanted to have only one =. The condition checks the assignment.
+			if($_SESSION[$this->strKey][$strKey] = $strValue)
 				return true;
 			else
 				return false;
