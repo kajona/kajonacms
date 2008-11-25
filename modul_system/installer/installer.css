@@ -95,6 +95,7 @@ td {
 	text-align: right;
 	color: #c2c2c2;
 	margin-right: 10px;
+	
 }
 
 #installerBox .copyright a, #installerBox .copyright a:link, #installerBox .copyright a:visited {
@@ -311,10 +312,12 @@ form .formText .text {
 	background-color: #EDEDED;
 	padding: 8px;
 	overflow: auto;
+	max-height: 100px;
 }
 
 .preText pre {
 	margin: 0;
+	padding-bottom: 8px;
 }
 
 

@@ -24,9 +24,9 @@
 						<div>
 						%%installer_output%%
 						</div>
-						<pre>
+						<br />
 						%%installer_logfile%%
-						</pre>
+						<br />
 						<div>
 						  <div style="float: left;">%%installer_backward%%</div>
 						  <div style="float: right;">%%installer_forward%%</div>
@@ -45,7 +45,9 @@
 </installer_main>
 
 <installer_log>
-<b>%%systemlog%%</b><br />%%log_content%%
+<div class="preText">
+	<pre><b>%%systemlog%%</b><br />%%log_content%%</pre>
+</div>
 </installer_log>
 
 <configwizard_form>
