@@ -173,7 +173,7 @@ class class_element_portal extends class_portal {
                 $strDeleteLink = "";
                 //standard: pages_content.
                 if($strModule == "pages_content") {
-                    $strDeleteLink = getLinkAdminPopup("pages_content", "deleteElement", "&systemid=".$strSystemid, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin").$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "500", "650", "", false, true);
+                    $strDeleteLink = getLinkAdminPopup("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "500", "650", "", false, true);
                 }
                 else {
                     //Use Module-config to generate link
