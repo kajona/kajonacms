@@ -274,11 +274,14 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      */
     public static function getElementsOnPage($strPageId, $bitJustActive = false, $strLanguage = "") {
 
+        //Calculate the current day as a time-stamp. This improves database-caches e.g. the kajona or mysql-query-cache.
+        $intToday = mktime(0, 0, 0, date("m"), date("d"), date("Y"))+1;
+
         $strAnd = "";
         if($bitJustActive) {
             $strAnd = "AND system_status = 1
-                       AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ".time()."))
-                       AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ".time().")) ";
+                       AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ".(int)$intToday."))
+                       AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ".(int)$intToday.")) ";
         }
 
         $strQuery = "SELECT system_id
