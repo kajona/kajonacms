@@ -259,7 +259,7 @@ class class_index  {
     		    $strDebug .= "<b>Memory:</b> ".bytesToString(memory_get_usage())." ";
     		}
 
-			$strDebug .= "</pre>";
+			$strDebug .= "</pre>\n";
 		}
 
 		//compress output

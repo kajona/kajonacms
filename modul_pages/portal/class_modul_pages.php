@@ -261,6 +261,13 @@ class class_modul_pages extends class_portal {
             //reset the portal texts language
             class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
         }
+
+        //insert the copyright headers. NOT: Due to our licence, you are NOT allwed to remove those lines.
+        $strHeader  = "<!--\n";
+        $strHeader .= "Website powered by Kajona³ Open Source Content Management Framework\n";
+        $strHeader .= "For more informations about Kajona see http://www.kajona.de\n";
+        $strHeader .= "-->\n";
+        $strPageContent = $strHeader.$strPageContent;
         
 		//save the generated Page to the cache
 		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage)
