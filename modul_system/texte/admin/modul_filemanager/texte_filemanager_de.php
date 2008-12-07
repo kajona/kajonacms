@@ -101,6 +101,7 @@ $text["upload_multiple_cancel"]		= "Abbrechen";
 $text["_filemanager_ordner_groesse_"] = "Größe anzeigen:";
 $text["_filemanager_ordner_groesse_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager.
                                             Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
+$text["_filemanager_show_foreign_"] = "Versteckte Repositories anzeigen:";
 
 $text["required_filemanager_name"]  = "Name";
 $text["required_filemanager_path"]  = "Pfad";

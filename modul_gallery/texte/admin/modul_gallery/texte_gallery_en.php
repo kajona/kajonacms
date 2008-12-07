@@ -63,7 +63,8 @@ $text["ordner_bearbeiten"]			= "Edit folder";
 $text["ordner_hoch"]				= "One level up";
 $text["bild_bearbeiten"]			= "Edit picture";
 $text["bild_rechte"]				= "Edit permissions";
-$text["bils_speichern_fehler"]		= "An error occured while saving picture";
+$text["bild_speichern_fehler"]		= "An error occured while saving picture";
+$text["image_properties"]           = "Edit basic properties";
 
 
 $text["fehler_recht"]				= "Not enough permissions to perform this action";

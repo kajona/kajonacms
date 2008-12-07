@@ -102,6 +102,7 @@ $text["filemanager_upload"]         = "Upload file:";
 $text["_filemanager_ordner_groesse_"] = "Calculate size:";
 $text["_filemanager_ordner_groesse_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager.
                                             Deep folder structures can lead to performance problems.";
+$text["_filemanager_show_foreign_"] = "Show hidden repositories:";
 
 $text["required_filemanager_name"]  = "Name";
 $text["required_filemanager_path"]  = "Path";

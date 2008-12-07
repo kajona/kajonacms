@@ -13,6 +13,7 @@ include_once(_adminpath_."/interface_admin.php");
 //needed models
 include_once(_systempath_."/class_modul_gallery_gallery.php");
 include_once(_systempath_."/class_modul_gallery_pic.php");
+include_once(_systempath_."/class_modul_filemanager_repo.php");
 
 
 /**
@@ -456,6 +457,36 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		if($this->objRights->rightView($this->getSystemid())) {
 		    //path navi
 		    $strReturn .= $this->generatePathnavi();
+
+            //Since we can crossreference the filemanager, provide an upload-form
+            $arrPath = $this->getPathArray();
+            $objTempPic = new class_modul_gallery_pic($this->getSystemid());
+            $objFmRepo = class_modul_filemanager_repo::getRepoForForeignId($arrPath[0]);
+
+            $strFmFolder = dirname(substr($objTempPic->getStrFilename(), strpos($objTempPic->getStrFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath())));
+
+            //Build the upload form
+            //TODO: check permissions, build form as soon as the new upload is set up
+            /*
+            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=gallery&amp;action=uploadFile&amp;datei_upload_final=1", "formUpload", "multipart/form-data");
+			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+			$strReturn .= $this->objToolkit->formInputHidden("folder");
+
+			$strFallbackForm = "<div id=\"upload_prototype\" style=\"display: inline;\">";
+			$strFallbackForm .= $this->objToolkit->formInputUpload("gallery_upload[0]", $this->getText("gallery_upload"));
+			$strFallbackForm .= "</div>";
+			$strFallbackForm .= $this->objToolkit->formInputSubmit($this->getText("upload_submit"));
+			$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objFmRepo->getStrUploadFilter());
+			$arrTexts = array(
+				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter", "filemanager"),
+				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles", "filemanager"),
+				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel", "filemanager")
+			);
+
+			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("gallery_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);
+			$strReturn .= $this->objToolkit->formClose();
+             */
+
 			//Load all files
 			$arrFiles = class_modul_gallery_pic::loadFilesDB($this->getSystemid());
 
@@ -507,10 +538,16 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
 
 			   		if($this->objRights->rightEdit($objOneFile->getSystemid())) {
-			   		    if($objOneFile->getIntType() == 1)
+			   		    if($objOneFile->getIntType() == 1) {
 			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("ordner_bearbeiten"), "icon_pencil.gif"));
-			   			else
-			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_bearbeiten"), "icon_pencil.gif"));
+                        }
+			   			else {
+                            //the filemanager edit action
+                            if($objFmRepo != null) {
+                                $strAction .= $this->objToolkit->listButton(getLinkAdmin("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."", "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
+                            }
+			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("image_properties"), "icon_pencil.gif"));
+                        }
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());

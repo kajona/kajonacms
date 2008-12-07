@@ -159,6 +159,7 @@
 	filemanager_name               = Title of repo
 	filemanager_upload_filter      = Files allowedfor upload
 	filemanager_view_filter        = Files allowed to view
+    filemanager_foreign_id         = ID of a foreign entry. Set when another module uses this repo.
 
 //--_guestbook_book--------------------------------------------------------------------------------------
 	guestbook_id			= table primary key

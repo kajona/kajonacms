@@ -265,6 +265,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["filemanager_name"] 			= array("char254", true);
 		$arrFields["filemanager_upload_filter"] = array("char254", true);
 		$arrFields["filemanager_view_filter"] 	= array("char254", true);
+        $arrFields["filemanager_foreign_id"] 	= array("char20", true);
 
 		if(!$this->objDB->createTable("filemanager", $arrFields, array("filemanager_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -377,6 +378,8 @@ class class_installer_system extends class_installer_base implements interface_i
         
         //3.2: max session duration
         $this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        //3.2: filemanager hidden repos
+        $this->registerConstant("_filemanager_show_foreign_", "false", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -743,11 +746,19 @@ class class_installer_system extends class_installer_base implements interface_i
 			$strReturn .= "An error occured! ...\n";	     
 			
 		$strReturn .= "Registering session relasetime setting...\n";
-		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);	
+		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        $strReturn .= "Registering filemanager hidden repo setting...\n";
+        $this->registerConstant("_filemanager_show_foreign_", "false", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         
         $strReturn .= "Deleting row right_comment from rights-table...\n"; 
-        $strQuery = "ALTER TABLE `"._dbprefix_."system_right`
-                        DROP `right_comment`";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
+                            DROP ".$this->objDB->encloseColumnName("right_comment")."";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
+
+        $strReturn .= "Altering filemanager table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."filemanager")."
+                             ADD ".$this->objDB->encloseColumnName("filemanager_foreign_id")." VARCHAR( 20 ) NULL ";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
         

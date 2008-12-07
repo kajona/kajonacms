@@ -131,7 +131,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		//Check rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Load the repos
-			$arrObjRepos = class_modul_filemanager_repo::getAllRepos();
+			$arrObjRepos = class_modul_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
 			$intI = 0;
 			//Print every repo
 			foreach($arrObjRepos as $objOneRepo) {
@@ -178,7 +178,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			class_modul_filemanager_repo::deleteRepo($this->getSystemid());
+            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $objRepo->deleteRepo();
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -445,7 +446,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		if($this->getSystemid() == "") {
             if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
     			//Load the repos
-    			$arrObjRepos = class_modul_filemanager_repo::getAllRepos();
+    			$arrObjRepos = class_modul_filemanager_repo::getAllRepos(_filemanager_show_foreign_);
     			$intI = 0;
     			//Print every repo
     			foreach($arrObjRepos as $objOneRepo) {

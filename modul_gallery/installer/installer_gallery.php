@@ -9,6 +9,8 @@
 
 require_once(_systempath_."/class_installer_base.php");
 require_once(_systempath_."/interface_installer.php");
+require_once(_systempath_."/class_modul_gallery_gallery.php");
+require_once(_systempath_."/class_modul_filemanager_repo.php");
 
 /**
  * Installer to install the gallery-module
@@ -18,7 +20,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_gallery extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.1";
+		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["class_admin"] 	= "class_modul_gallery_admin";
 		$arrModule["file_admin"] 	= "class_modul_gallery_admin.php";
@@ -197,6 +199,11 @@ class class_installer_gallery extends class_installer_base implements interface_
             $strReturn .= $this->update_310_311();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -285,6 +292,30 @@ class class_installer_gallery extends class_installer_base implements interface_
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("gallery", "3.1.1");
+
+        return $strReturn;
+    }
+
+    private function update_311_319() {
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
+
+        $strReturn .= "Creating filemanager-repos for existing galleries...\n";
+        $arrGalleries = class_modul_gallery_gallery::getGalleries();
+        foreach($arrGalleries as $objOneGallery) {
+            $strReturn .= "Investigating gallery ".$objOneGallery->getStrTitle()."\n";
+            $objRepo = new class_modul_filemanager_repo();
+            $objRepo->setStrPath($objOneGallery->getStrPath());
+            $objRepo->setStrForeignId($objOneGallery->getSystemid());
+            $objRepo->setStrName("Internal Repo for Gallery ".$objOneGallery->getSystemid());
+            $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
+            $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
+            $objRepo->saveObjectToDb();
+
+            $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.1.9");
 
         return $strReturn;
     }

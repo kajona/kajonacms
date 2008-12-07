@@ -63,7 +63,9 @@ $text["ordner_bearbeiten"]			= "Ordner bearbeiten";
 $text["ordner_hoch"]				= "Eine Ebene nach oben springen";
 $text["bild_bearbeiten"]			= "Bild bearbeiten";
 $text["bild_rechte"]				= "Rechte bearbeiten";
-$text["bils_speichern_fehler"]		= "Fehler beim Speichern des Bildes";
+$text["bild_speichern_fehler"]		= "Fehler beim Speichern des Bildes";
+$text["image_properties"]           = "Eigenschaften des Bildes bearbeiten";
+
 
 
 $text["fehler_recht"]				= "Keine ausreichende Rechte";

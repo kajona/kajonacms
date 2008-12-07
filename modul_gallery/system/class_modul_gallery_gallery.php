@@ -10,6 +10,7 @@
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
 include_once(_systempath_."/class_modul_system_common.php");
+include_once(_systempath_."/class_modul_filemanager_repo.php");
 
 /**
  * Model for glleries itself
@@ -20,6 +21,9 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 
     private $strPath = "";
     private $strTitle = "";
+
+    public static $strFilemanagerViewFilter = ".jpg,.png,.gif,.jpeg";
+    public static $strFilemanagerUploadFilter = ".jpg,.png,.gif,.jpeg";
 
     /**
      * Constructor to create a valid object
@@ -42,7 +46,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
     }
 
     /**
-     * Initalises the current object, if a systemid was given
+     * Initialises the current object, if a systemid was given
      *
      */
     public function initObject() {
@@ -67,7 +71,15 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 					    gallery_title='".$this->objDB->dbsafeString($this->getStrTitle())."'
 					WHERE gallery_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
 
-		 return $this->objDB->_query($strQuery);
+		if($this->objDB->_query($strQuery)) {
+            //update the filemanager-repo
+            $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
+            $objRepo->setStrPath($this->getStrPath());
+            if($objRepo->updateObjectToDb())
+                return true;
+        }
+        else
+            return false;
     }
 
     /**
@@ -92,6 +104,16 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 
 		if($bitCommit) {
 		    $this->objDB->transactionCommit();
+
+            //gallery was created, create an internal filemanager repo
+            $objRepo = new class_modul_filemanager_repo();
+            $objRepo->setStrPath($this->getStrPath());
+            $objRepo->setStrForeignId($this->getSystemid());
+            $objRepo->setStrName("Internal Repo for Gallery ".$this->getSystemid());
+            $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
+            $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
+            $objRepo->saveObjectToDb();
+
 		    return true;
 		}
 		else {
@@ -138,7 +160,10 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 					WHERE gallery_id='".dbsafeString($strSystemid)."'";
 	    if($objDB->_query($strQuery)) {
 	        if($objRoot->deleteSystemRecord($strSystemid)) {
-	           return true;
+                //and delete the filemanager repo
+                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($strSystemid);
+                if($objRepo->deleteRepo())
+                    return true;
 	        }
 	    }
 
