@@ -21,7 +21,7 @@ include_once(_systempath_."/class_modul_user_group.php");
  *
  * @package modul_system
  */
-class class_user_admin extends class_admin implements interface_admin {
+class class_modul_user_admin extends class_admin implements interface_admin {
 
     //languages, the admin area could display (texts)
     private $arrLanguages = array();
@@ -945,5 +945,5 @@ class class_user_admin extends class_admin implements interface_admin {
         return $bitPass;
     }
 
-} //class_user_admin()
+} //class_modul_user_admin()
 ?>

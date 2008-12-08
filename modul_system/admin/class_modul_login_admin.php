@@ -19,7 +19,7 @@ include_once(_systempath_."/class_modul_user_log.php");
  *
  * @package modul_system
  */
-class class_login_admin extends class_admin implements interface_admin  {
+class class_modul_login_admin extends class_admin implements interface_admin  {
 
 	private $strTemp;
 
@@ -157,5 +157,5 @@ class class_login_admin extends class_admin implements interface_admin  {
 	}
 
 
-} //class_login_admin()
+} //class_modul_login_admin()
 ?>

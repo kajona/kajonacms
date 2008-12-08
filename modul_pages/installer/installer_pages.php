@@ -23,8 +23,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
-		$arrModule["class_admin3"] 	= "class_folderview";
-		$arrModule["file_admin3"] 	= "class_folderview.php";
+		$arrModule["class_admin3"] 	= "class_modul_folderview_admin";
+		$arrModule["file_admin3"] 	= "class_modul_folderview_admin.php";
 		$arrModule["class_portal2"] = "";
 		$arrModule["class_portal3"] = "";
 		$arrModule["file_portal2"] 	= "";
@@ -156,11 +156,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Now we have to register module by module
 
 		//the pages
-		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
+		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages_portal.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
 		//The pages_content
 		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
-		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "class_folderview.php", $this->arrModule["version"] , false);
+		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatewechsel_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
@@ -320,6 +320,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_310_311();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -415,6 +420,27 @@ class class_installer_pages extends class_installer_base implements interface_in
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.1");
+
+        return $strReturn;
+    }
+
+    private function update_311_319() {
+        $strReturn = "";
+
+        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+        $strReturn .= "Registering module settings...\n";
+        $objModule = class_modul_system_module::getModuleByName("pages", true);
+        $objModule->setStrNamePortal("class_modul_pages_portal.php");
+        if(!$objModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
+
+        $objModule = class_modul_system_module::getModuleByName("folderview", true);
+        $objModule->setStrNameAdmin("class_modul_folderview_admin.php");
+        if(!$objModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.1.9");
 
         return $strReturn;
     }

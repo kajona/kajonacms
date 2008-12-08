@@ -505,8 +505,8 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
-	    include_once(_systempath_."/class_pagecache.php");
-	    $objPagecache = new class_pagecache();
+	    include_once(_systempath_."/class_modul_pages_pagecache.php");
+	    $objPagecache = new class_modul_pages_pagecache();
         return $objPagecache->flushCompletePagesCache();
 	}
 
@@ -517,8 +517,8 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    include_once(_systempath_."/class_pagecache.php");
-	    $objPagecache = new class_pagecache();
+	    include_once(_systempath_."/class_modul_pages_pagecache.php");
+	    $objPagecache = new class_modul_pages_pagecache();
 	    return $objPagecache->flushPageFromPagesCache($strPagename);
 	}
 

@@ -21,7 +21,7 @@ include_once(_systempath_."/class_http_statuscodes.php");
  *
  * @package modul_pages
  */
-class class_modul_pages extends class_portal {
+class class_modul_pages_portal extends class_portal {
 
     private $objPagecache;
 
@@ -34,8 +34,8 @@ class class_modul_pages extends class_portal {
 		parent::__construct($arrModul);
 
 		//in nearly every case, we'll need a pagecache-object
-		include_once(_systempath_."/class_pagecache.php");
-		$this->objPagecache = new class_pagecache();
+		include_once(_systempath_."/class_modul_pages_pagecache.php");
+		$this->objPagecache = new class_modul_pages_pagecache();
 	}
 
 	/**

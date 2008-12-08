@@ -13,7 +13,7 @@
  *
  * @package modul_pages
  */
-class class_pagecache {
+class class_modul_pages_pagecache {
 
     private $arrModule;
     private $objDB;

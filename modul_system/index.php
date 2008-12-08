@@ -141,8 +141,8 @@ class class_index  {
 					}
 					else {
 						//Loading the login-Object
-						include_once(_adminpath_."/class_login_admin.php");
-						$objModule = new class_login_admin();
+						include_once(_adminpath_."/class_modul_login_admin.php");
+						$objModule = new class_modul_login_admin();
 						$objModule->action("login");
 						$this->strOutput = $objModule->getModuleOutput();
 					}
@@ -158,8 +158,8 @@ class class_index  {
 			}
 		}
 		elseif ($strModule == "login") {
-			include_once(_adminpath_."/class_login_admin.php");
-			$objModule = new class_login_admin();
+			include_once(_adminpath_."/class_modul_login_admin.php");
+			$objModule = new class_modul_login_admin();
 			$objModule->action($strAction);
 		}
 	}

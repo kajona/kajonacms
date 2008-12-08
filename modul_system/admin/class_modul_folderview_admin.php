@@ -18,16 +18,17 @@ include_once(_adminpath_."/interface_admin.php");
  *
  * @package modul_system
  */
-class class_folderview extends class_admin  implements interface_admin {
+class class_modul_folderview_admin extends class_admin  implements interface_admin {
 	//Which paths are allowed to browse?
 	private $strStart = "portal/pics,portal/pics/,/portal/pics,/portal/pics/,/portal/downloads,portal/downloads/,portal/downloads,/portal/downloads";
+    //TODO: why inidacted by netbeans as unused? bug?
 
 	/**
 	 * Constructor, doin nothing but a few inits
 	 *
 	 */
 	public function __construct() {
-		$arrModule["name"] 					= "class_folderview";
+		$arrModule["name"] 					= "class_modul_folderview_admin";
 		$arrModule["author"] 				= "sidler@mulchprod.de";
 		$arrModule["moduleId"]				= _filesystem_modul_id_;
 		$arrModule["modul"]					= "folderview";

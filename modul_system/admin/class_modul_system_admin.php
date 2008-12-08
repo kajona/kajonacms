@@ -23,7 +23,7 @@ include_once(_systempath_."/class_modul_user_group.php");
  *
  * @package modul_system
  */
-class class_system_admin extends class_admin implements interface_admin {
+class class_modul_system_admin extends class_admin implements interface_admin {
 
     private $strUpdateServer = "updatecheck.kajona.de";
     private $strUpdateUrl = "/updates.php";
@@ -789,6 +789,6 @@ class class_system_admin extends class_admin implements interface_admin {
         return null;
 	}
 
-}//class_system_admin
+}//class_modul_system_admin
 
 ?>
