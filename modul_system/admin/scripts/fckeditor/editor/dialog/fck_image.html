@@ -178,7 +178,8 @@ document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 						<input id="txtLnkUrl" style="width: 100%" type="text" onblur="UpdatePreview();" />
 					</div>
 					<div id="divLnkBrowseServer" align="right">
-						<input type="button" value="Browse Server" fcklang="DlgBtnBrowseServer" onclick="LnkBrowseServer();" />
+						<input type="button" value="Browse Server" fcklang="DlgBtnBrowseServer" onclick="javascript:window.open('../../../../../index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=txtLnkUrl&bit_link=1','Seiten','scrollbars=yes,resizable=yes,width=500,height=500');"
+                        />
 					</div>
 					<div>
 						<span fcklang="DlgLnkTarget">Target</span><br />
