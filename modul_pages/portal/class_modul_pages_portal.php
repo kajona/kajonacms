@@ -262,7 +262,7 @@ class class_modul_pages_portal extends class_portal {
             class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
         }
 
-        //insert the copyright headers. NOT: Due to our licence, you are NOT allwed to remove those lines.
+        //insert the copyright headers. Due to our licence, you are NOT allowed to remove those lines.
         $strHeader  = "<!--\n";
         $strHeader .= "Website powered by Kajona³ Open Source Content Management Framework\n";
         $strHeader .= "For more informations about Kajona see http://www.kajona.de\n";
