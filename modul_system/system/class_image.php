@@ -497,7 +497,7 @@ class class_image {
         }
 
 		//Schrift laden
-		if(is_file(_systempath_."/fonts/".$strFont)) {
+        if(is_file(_systempath_."/fonts/".$strFont) && function_exists("imagefttext")) {
 			@imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _systempath_."/fonts/".$strFont, $strText);
 		}
 
