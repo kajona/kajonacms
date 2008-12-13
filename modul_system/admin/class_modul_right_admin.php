@@ -17,7 +17,7 @@ include_once(_adminpath_."/interface_admin.php");
  *
  * @package modul_system
  */
-class class_right_admin extends class_admin implements interface_admin {
+class class_modul_right_admin extends class_admin implements interface_admin {
 
 	private $strTemp = "";
 	/**
@@ -25,7 +25,7 @@ class class_right_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "class_right_admin";
+		$arrModul["name"] 			= "class_modul_right_admin";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _system_modul_id_;
 		$arrModul["modul"]			= "right";

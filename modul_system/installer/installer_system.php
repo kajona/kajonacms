@@ -321,7 +321,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		//The Systemkernel
 		$strSystemID = $this->registerModule("system", _system_modul_id_, "", "class_modul_system_admin.php", $this->arrModule["version"], true, "", "class_modul_system_admin_xml.php" );
 		//The Rightsmodule
-		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_right_admin.php", $this->arrModule["version"], false );
+		$strRightID = $this->registerModule("right", _system_modul_id_, "", "class_modul_right_admin.php", $this->arrModule["version"], false );
 		//The Usermodule
 		$strUserID = $this->registerModule("user", _user_modul_id_, "", "class_modul_user_admin.php", $this->arrModule["version"], true );
         //The filemanagermodule
@@ -706,6 +706,11 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $objModule = class_modul_system_module::getModuleByName("user", true);
         $objModule->setStrNameAdmin("class_modul_user_admin.php");
+        if(!$objModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
+
+        $objModule = class_modul_system_module::getModuleByName("right", true);
+        $objModule->setStrNameAdmin("class_modul_right_admin.php");
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
 
