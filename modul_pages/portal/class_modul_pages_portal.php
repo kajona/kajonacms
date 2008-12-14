@@ -26,6 +26,7 @@ class class_modul_pages_portal extends class_portal {
     private $objPagecache;
 
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 			= "modul_pages";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_modul_id_;
@@ -146,6 +147,9 @@ class class_modul_pages_portal extends class_portal {
         //and retransform
         foreach ($arrRawPlaceholders as $arrOneRawPlaceholder)
             $arrPlaceholders[] = $arrOneRawPlaceholder["placeholder"];
+
+        //copy for the portaleditor
+        $arrPlaceholdersFilled = array();
 		
 		//Iterate over all elements and pass control to them
 		//Get back the filled element
@@ -158,6 +162,11 @@ class class_modul_pages_portal extends class_portal {
 				//next one, plz
 				continue;
 			}
+            else {
+                //create a protocol of placeholders filled
+                //remove from pe-additional-array, pe code is injected by element directly
+                $arrPlaceholdersFilled[] = array("placeholder" => $objOneElementOnPage->getStrPlaceholder(), "name" => $objOneElementOnPage->getStrName(), "element" => $objOneElementOnPage->getStrElement());
+            }
 		    //Check if the max-cachetime is lower than the current one set
 		    //include the "please hide the element" time
 		    if($objOneElementOnPage->getIntCachetime() != 0) {
@@ -190,6 +199,54 @@ class class_modul_pages_portal extends class_portal {
 
 			$arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
 		}
+
+        //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
+        if(_pages_portaleditor_ == "true" && $objPageData->rightEdit() && $this->objSession->isAdmin() && $this->objSession->getSession("pe_disable") != "true" ) {
+            //loop placeholders on template in order to remove already filled ones
+            $arrRawPlaceholdersForPe = $arrRawPlaceholders;
+            foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
+                foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
+                    if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
+                        foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
+                            if($arrOneRawElement["name"] == $arrOnePlaceholder["name"] && $arrOneRawElement["element"] == $arrOnePlaceholder["element"]) {
+                                $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            //array is now set up. loop again to create new-buttons
+            //var_dump($arrRawPlaceholdersForPe);
+            $arrPePlaceholdersDone = array();
+            foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
+                $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
+                foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
+                    if($arrOnePeNewElement != null) {
+                        
+                        //check if the linked element exists
+                        $objPeNewElement = class_modul_pages_element::getElement($arrOnePeNewElement["element"]);
+                        if($objPeNewElement != null) {
+                            //placeholder processed before?
+                            $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
+                            if(in_array($strArrayKey, $arrPePlaceholdersDone))
+                                continue;
+                            else
+                                $arrPePlaceholdersDone[] = $strArrayKey;
+
+                            //create and register the button to add a new element. Therefore generate an image-tag.
+                            if(!isset($arrTemplate[$strPeNewPlaceholder]))
+                                $arrTemplate[$strPeNewPlaceholder] = "";
+
+                            $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
+                            
+                            $arrTemplate[$strPeNewPlaceholder] .= $strLink;
+
+                        }
+                    }
+                }
+            }
+        }
 
 		$arrTemplate["description"] = $objPageData->getStrDesc();
 		$arrTemplate["keywords"] = $objPageData->getStrKeywords();

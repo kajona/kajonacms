@@ -163,5 +163,30 @@ class class_toolkit_portal extends class_toolkit {
         return $strReturn;
     }
 
+    /**
+     * Generates the icon / link to create a new element at an empty placeholder using the portaleditor
+     *
+     * @param string $strElementName
+     * @param string $strNewLink
+     * @return string
+     */
+    public function getPeNewButtonWrapper($strElementName, $strNewLink) {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateWrapperID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNewWrapper", true);
+        $strReturn = $this->objTemplate->fillTemplate(array("elementName" => $strElementName, "newlink" => $strNewLink), $strTemplateWrapperID);
+        return $strReturn;
+    }
+
+    /**
+     * Loads the link-content to be used when generating a new-icon-link
+     * @return string
+     */
+    public function getPeNewButtonContent() {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNew", true);
+        $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        return $strReturn;
+    }
+
 }
 ?>

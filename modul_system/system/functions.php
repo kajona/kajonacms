@@ -325,6 +325,7 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
  * @return string
  */
 function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intHeight = "500", $intWidth = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+    $strLink = "";
 	//if($strParams != "")
 	//	$strParams = str_replace("&", "&amp;", $strParams);
 		

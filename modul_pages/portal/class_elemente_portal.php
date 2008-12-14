@@ -233,6 +233,38 @@ class class_element_portal extends class_portal {
         return $strReturn;
 	}
 
+    /**
+     * Generates the link to create an element at a placeholder not yet existing
+     * @param string $strSystemid
+     * @param string $strPlaceholder
+     * @param string $strElement
+     * @return string
+     * @static
+     */
+    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, $strElement) {
+        $strReturn = "";
+        //switch the text-language temporary
+        $strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
+        class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
+
+        //fetch the language to set the correct admin-lang
+        $objLanguages = new class_modul_languages_language();
+        $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
+
+        $strReturn = getLinkAdminPopup("pages_content", 
+                                       "newElement",
+                                       "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement,
+                                        class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonContent(),
+                                        class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"),
+                                        "", "500", "650", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
+        $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strElement, $strReturn);
+
+        //reset the portal texts language
+        class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
+
+        return $strReturn;
+    }
+
 	/**
 	 * Dummy method, element needs to overwrite it
 	 *

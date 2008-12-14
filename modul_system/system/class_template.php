@@ -243,11 +243,11 @@ class class_template {
 	 * @param int $intMode 0 = regular page, 1 = master page
 	 * @return mixed
 	 */
-	public function getElements($strIndetifier, $intMode = 0) {
+	public function getElements($strIdentifier, $intMode = 0) {
 		$arrReturn = array();
 
-		if(isset($this->arrCacheTemplateSections[$strIndetifier]))
-			$strTemplate = $this->arrCacheTemplateSections[$strIndetifier];
+		if(isset($this->arrCacheTemplateSections[$strIdentifier]))
+			$strTemplate = $this->arrCacheTemplateSections[$strIdentifier];
 		else
 			return array();
 

@@ -693,6 +693,15 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 %%link_complete%%
 </pe_actionToolbar_link>
 
+No placeholders here, this only sets up the link-content of a new-icon
+<pe_actionNew>
+    <img src="_skinwebpath_/pics/icon_blank.gif" alt="" />
+</pe_actionNew>
+
+<pe_actionNewWrapper>
+    <div>%%newlink%% %%elementName%%</div>
+</pe_actionNewWrapper>
+
 ---------------------------------------------------------------------------------------------------------
 --- LANGUAGES -------------------------------------------------------------------------------------------
 
