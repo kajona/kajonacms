@@ -251,7 +251,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_releasetime"]     = array("int", true);
 		$arrFields["session_loginstatus"]     = array("char254", true);
 		$arrFields["session_loginprovider"]   = array("char20", true);
-		$arrFields["session_lasturl"] 		  = array("char254", true);
+		$arrFields["session_lasturl"] 		  = array("char500", true);
 
 		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
 			$strReturn .= "An error occured! ...\n";	
@@ -731,7 +731,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_releasetime"]     = array("int", true);
 		$arrFields["session_loginstatus"]     = array("char254", true);
 		$arrFields["session_loginprovider"]   = array("char20", true);
-		$arrFields["session_lasturl"] 		  = array("char254", true);
+		$arrFields["session_lasturl"] 		  = array("char500", true);
 
 		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
 			$strReturn .= "An error occured! ...\n";	     

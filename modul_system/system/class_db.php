@@ -491,6 +491,7 @@ class class_db {
      * 		char20
      * 		char100
      * 		char254
+     *      char500
      * 		text
      *
      * @param string $strName

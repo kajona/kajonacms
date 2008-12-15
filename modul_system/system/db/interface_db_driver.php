@@ -101,6 +101,7 @@ interface interface_db_driver {
      * 		char20
      * 		char100
      * 		char254
+     *      char500
      * 		text 
      *
      * @param string $strName

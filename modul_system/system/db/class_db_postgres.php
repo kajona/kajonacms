@@ -200,6 +200,8 @@ class class_db_postgres implements interface_db_driver {
             $strReturn .= " VARCHAR( 100 ) ";    
         elseif($strType == "char254")
             $strReturn .= " VARCHAR( 254 ) ";
+        elseif($strType == "char500")
+            $strReturn .= " VARCHAR( 500 ) ";
         elseif($strType == "text")
             $strReturn .= " TEXT ";
         else
@@ -221,6 +223,7 @@ class class_db_postgres implements interface_db_driver {
      * 		char20
      * 		char100
      * 		char254
+     *      char500
      * 		text
      *
      * @param string $strName
