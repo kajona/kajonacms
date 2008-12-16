@@ -14,8 +14,7 @@ $text["weather_fahrenheit"]                  = "Fahrenheit";
 $text["weather_celsius"]                     = "Celsius";
 
 $text["weather_location"]                    = "Location-Id:";
-$text["weather_location_finder"]             = "A locations id can be found at <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>
-                                                   (e.g. in the url of the shown forecast)";
+$text["weather_location_finder"]             = "A locations id can be found at <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>(e.g. in the url of the shown forecast)";
 
 $text["weather_errorloading"]                = "Error loading the weatherdata.";
 

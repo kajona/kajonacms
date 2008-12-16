@@ -33,17 +33,7 @@ $text["user_logins"]                = "Logins: ";
 $text["user_lastlogin"]             = " Letzer Login: ";
 
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Logs",		//Recht1
-            							5 => "",
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 $text["gruppen"]					= "Gruppen: ";
 $text["gruppen_liste"]				= "Alle Gruppen";
@@ -106,7 +96,6 @@ $text["language"]                   = "Admin-Sprache:";
 //Form-Texts Memberships
 $text["user_memberships"]			= "Gruppenzugehörigkeit des Benutzers ";
 
-
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 
 $text["_gaeste_gruppe_id_"]         = "ID der Gäste-Gruppe:";
@@ -140,31 +129,20 @@ $text["login_loginTitle"]           = "Anmelden";
 $text["login_loginUser"]            = "Benutzer";
 $text["login_loginPass"]            = "Passwort";
 $text["login_loginButton"]          = "Anmelden";
-$text["login_loginError"]           = "Leider waren Ihre Anmeldedaten nicht korrekt. Bitte prüfen Sie Ihren Benutzernamen und Ihr Passwort auf Korrektheit.<br /><br />
-									   Sollte dies keine Abhilfe schaffen, wenden Sie sich bitte an Ihren Systemadministrator.";
+$text["login_loginError"]           = "Leider waren Ihre Anmeldedaten nicht korrekt. Bitte prüfen Sie Ihren Benutzernamen und Ihr Passwort auf Korrektheit.<br /><br />Sollte dies keine Abhilfe schaffen, wenden Sie sich bitte an Ihren Systemadministrator.";
 $text["login_loginJsInfo"]          = "Bitte aktivieren Sie JavaScript in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";
 $text["login_loginCookiesInfo"]     = "Bitte aktivieren Sie Cookies in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]				= "Alle im System angelegten Benutzer werden in dieser Ansicht aufgelistet.<br />
-									   Benutzer können hier bearbeitet werden, ebenfalls können die Gruppenzugehörigkeiten verändert werden.";
-$text["quickhelp_edit"]				= "Dieses Formular dient zum Bearbeiten oder Anlegen eines neuen Benutzers. <br />
-									   Wenn der Benutzer aktiv geschaltet wurde, dann darf er sich grunsätzlich am System anmelden.<br />
-									   Zusätzlich muss aber der Bereich definiert sein, in dem sich ein Benutzer anmelden darf.";
-$text["quickhelp_new"]				= $text["quickhelp_edit"];
-$text["quickhelp_membership"]		= "Mit Hilfe dieser Liste können die Gruppenzugehörigkeiten eines Benutzers angepasst werden.<br />
-									   So kann ein Benutzer einer Gruppe hinzugefügt werden, oder wieder aus einer Gruppe entfernt werden.<br />
-									   ACHTUNG: Ein Benutzer ohne Gruppenzugehörigkeit kann sich nicht am System anmelden!";
-$text["quickhelp_grouplist"]		= "Gruppen, die momentan im System angelegt sind, werden hier aufgelistet. <br />
-									   Die Grupper der Gäste sowie die Gruppe der Administratoren kann nicht bearbeitet werden,
-									   da diese vom System vorrausgesetzt werden";
+$text["quickhelp_list"]				= "Alle im System angelegten Benutzer werden in dieser Ansicht aufgelistet.<br />Benutzer können hier bearbeitet werden, ebenfalls können die Gruppenzugehörigkeiten verändert werden.";
+$text["quickhelp_edit"]				= "Dieses Formular dient zum Bearbeiten oder Anlegen eines neuen Benutzers. <br />Wenn der Benutzer aktiv geschaltet wurde, dann darf er sich grunsätzlich am System anmelden.<br />Zusätzlich muss aber der Bereich definiert sein, in dem sich ein Benutzer anmelden darf.";
+$text["quickhelp_new"]				= "Dieses Formular dient zum Bearbeiten oder Anlegen eines neuen Benutzers. <br />Wenn der Benutzer aktiv geschaltet wurde, dann darf er sich grunsätzlich am System anmelden.<br />Zusätzlich muss aber der Bereich definiert sein, in dem sich ein Benutzer anmelden darf.";
+$text["quickhelp_membership"]		= "Mit Hilfe dieser Liste können die Gruppenzugehörigkeiten eines Benutzers angepasst werden.<br />So kann ein Benutzer einer Gruppe hinzugefügt werden, oder wieder aus einer Gruppe entfernt werden.<br />ACHTUNG: Ein Benutzer ohne Gruppenzugehörigkeit kann sich nicht am System anmelden!";
+$text["quickhelp_grouplist"]		= "Gruppen, die momentan im System angelegt sind, werden hier aufgelistet. <br />Die Grupper der Gäste sowie die Gruppe der Administratoren kann nicht bearbeitet werden, da diese vom System vorrausgesetzt werden";
 $text["quickhelp_groupnew"]			= "Zum Anlegen einer Gruppe wird lediglich der Gruppenname benötigt.";
-$text["quickhelp_groupsave"]		= $text["quickhelp_groupnew"];
-$text["quickhelp_groupmember"]		= "Listet alle Mitglieder einer Gruppe auf. Um die Mitgliedschaft eines Benutzers in dieser Gruppe zu beenden, kann die
-									   Zugehörigkeit einfach gelöscht werden. Soll ein Benutzer der Gruppe hinzugefügt werden, so muss dies über den Gruppendialog
-									   des Benutzers direkt erfolgen.";
-$text["quickhelp_loginlog"]			= "Das Login-Protokoll gibt eine Liste der Loginversuche und erfolgreichen Logins am System aus. So kann nachvollzogen werden,
-									   wer wann von wo aus mit dem System gearbeitet hat.";
+$text["quickhelp_groupsave"]		= "Zum Anlegen einer Gruppe wird lediglich der Gruppenname benötigt.";
+$text["quickhelp_groupmember"]		= "Listet alle Mitglieder einer Gruppe auf. Um die Mitgliedschaft eines Benutzers in dieser Gruppe zu beenden, kann die Zugehörigkeit einfach gelöscht werden. Soll ein Benutzer der Gruppe hinzugefügt werden, so muss dies über den Gruppendialog des Benutzers direkt erfolgen.";
+$text["quickhelp_loginlog"]			= "Das Login-Protokoll gibt eine Liste der Loginversuche und erfolgreichen Logins am System aus. So kann nachvollzogen werden, wer wann von wo aus mit dem System gearbeitet hat.";
 ?>

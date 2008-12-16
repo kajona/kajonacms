@@ -12,8 +12,5 @@ $text["portalregistration_template"]                   = "Template:";
 $text["portalregistration_success"]                    = "Seite im Erfolgsfall (optional):";
 $text["portalregistration_group"]                      = "Zugehörige Gruppe:";
 
-$text["portalregistration_hint"]                       = "Über das Element angelegte Benutzer sind deaktivert,<br /> die 
-                                                          Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein 
-                                                          entsprechender Hinweis hierzu sollte auf der Seite
-                                                          gegeben werden.";
+$text["portalregistration_hint"]                       = "Über das Element angelegte Benutzer sind deaktivert,<br />die Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein entsprechender Hinweis hierzu sollte auf der Seite gegeben werden.";
 ?>

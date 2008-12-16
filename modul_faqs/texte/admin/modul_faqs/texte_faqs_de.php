@@ -44,12 +44,9 @@ $text["required_faqs_question"]     = "Frage";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Alle FAQs und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien
-                                       aufgelistet, im zweiten die einzelnen FAQs.<br />Um alle FAQs einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie
-                                       anzeigen' bei der entsprechenden Kategorie die Liste der FAQs gefiltert werden.";
-$text["quickhelp_newFaq"]           = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf
-                                       diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
-$text["quickhelp_editFaq"]          = $text["quickhelp_newFaq"];
+$text["quickhelp_list"]             = "Alle FAQs und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien aufgelistet, im zweiten die einzelnen FAQs.<br />Um alle FAQs einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie anzeigen' bei der entsprechenden Kategorie die Liste der FAQs gefiltert werden.";
+$text["quickhelp_newFaq"]           = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
+$text["quickhelp_editFaq"]          = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
 $text["quickhelp_newCat"]           = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
-$text["quickhelp_editCat"]          = $text["quickhelp_newCat"];
+$text["quickhelp_editCat"]          = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 ?>

@@ -19,17 +19,7 @@ $text["modul_elemente"]				= "Page elements";
 $text["modul_element_neu"]			= "Create page element";
 $text["updatePlaceholder"]          = "Update placeholder";
 
-$text["permissions_header"]         = array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Elements",		//Recht1
-            							5 => "Folder",			//Recht2
-            							6 => "Placeholders",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
 
 $text["browser"]					= "Open browser";
 $text["klapper"]					= "Show/hide folders";
@@ -89,9 +79,7 @@ $text["ds_gesperrt"]				= "The record is currently locked";
 $text["ds_seite_gesperrt"]			= "The page can\'t be deleted, it contains locked records";
 $text["ds_entsperren"]				= "Unlock record";
 
-$text["warning_elementsremaining"]  = "ATTENTION<br>There are pageelements in the system which can't be assigned to any placeholder provided
-                                       by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder
-                                       in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+$text["warning_elementsremaining"]  = "ATTENTION<br>There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
 
 $text["placeholder"]                = "Placeholder: ";
 
@@ -113,8 +101,7 @@ $text["submit"]						= "Save";
 $text["element_cachetime"]          = "Max. cache duration in sec (-1 = no caching) :";
 
 $text["_pages_templatewechsel_"]        = "Allow change of templates:";
-$text["_pages_templatewechsel_hint"]    = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may
-                                           come with unexpected sideeffects!";
+$text["_pages_templatewechsel_hint"]    = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may come with unexpected sideeffects!";
 
 $text["_pages_maxcachetime_"]       = "Maximum cache duration:";
 $text["_pages_maxcachetime_hint"]   = "Defines, how many seconds a page remains valid in the cache";
@@ -145,18 +132,12 @@ $text["required_element_cachetime"] = "Cache duration of the element";
 $text["required_name"]              = "Name of the page";
 $text["required_elementid"]         = "There already exists an element with this name.";
 
-$text["plUpdateHelp"]               = "Here you are able to update placeholders saved in the database.<br />
-                                       This can be necessary if a placeholder was extended by another possible page element.
-                                       In this case the new element will appear in the admin, but remains invisible in the portal. To change this,
-                                       placeholders saved in the database have to be updated to the new placeholders.<br />
-                                       To do so, you need the name of the changed template, the title of the old placeholder (name_element) and the
-                                       name of the new placeholder (e.g. name_element|element2). The placeholder should be provided without percent signs.";
+$text["plUpdateHelp"]               = "Here you are able to update placeholders saved in the database.<br />This can be necessary if a placeholder was extended by another possible page element. In this case the new element will appear in the admin, but remains invisible in the portal. To change this, placeholders saved in the database have to be updated to the new placeholders.<br />To do so, you need the name of the changed template, the title of the old placeholder (name_element) and the name of the new placeholder (e.g. name_element|element2). The placeholder should be provided without percent signs.";
 $text["plRename"]                   = "Update";
 $text["plToUpdate"]                 = "Old placeholder:";
 $text["plNew"]                      = "New placeholder:";
 $text["plUpdateTrue"]               = "Update was successfull.";
 $text["plUpdateFalse"]              = "An error occured while updating placeholders.";
-
 
 
 // portaleditor
@@ -184,45 +165,15 @@ $text["systemtask_flushpagescache_done"]    = "Flushing completed.";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "In this view, you can browse all available pages.<br />
-                                       Therefore, pages can be sorted by the use of virtual folders.<br />
-                                       While editing the contents of a page, elements can be created, edited or deleted according to the placeholders provided
-                                       by the template.";
-$text["quickhelp_listAll"]			= "In the flat list, all pages created are shown and the folderstructure is ignored and hidden.<br />
-									   This view can be used to find a page quickly.";
-$text["quickhelp_newPage"]			= "This form is used to create or edit a page.<br />
-									   Therefore, you can provide the following values:<br />
-									   <ul>
-									   <li>Name: The name of the page. This name is used to open the page in the portal.</li>
-									   <li>Browser title: The browser window shows this title.</li>
-									   <li>SEO-URL-Keywords: Search-Engine-Optimization, provide a few keywords about the current site. Those will be added to the url.</li>
-									   <li>Description: A short description of the page. This text is shown in the search results and other summaries.</li>
-									   <li>Keywords: The given, comma-separated list of keywords is placed in the meta-tags of the page. Those keywords
-									     are relevant for search-engines.</li>
-									   <li>Folder: The internal virtual folder, to save the page into.</li>
-									   <li>Template: The template used as a base for the page. In most cases, this field is disabled, as soon as there are contents created
-									     on the page.</li>
-									   	</ul>";
+$text["quickhelp_list"]             = "In this view, you can browse all available pages.<br />Therefore, pages can be sorted by the use of virtual folders.<br />While editing the contents of a page, elements can be created, edited or deleted according to the placeholders provided by the template.";
+$text["quickhelp_listAll"]			= "In the flat list, all pages created are shown and the folderstructure is ignored and hidden.<br />This view can be used to find a page quickly.";
+$text["quickhelp_newPage"]			= "This form is used to create or edit a page.<br />Therefore, you can provide the following values:<br /><ul><li>Name: The name of the page. This name is used to open the page in the portal.</li><li>Browser title: The browser window shows this title.</li><li>SEO-URL-Keywords: Search-Engine-Optimization, provide a few keywords about the current site. Those will be added to the url.</li><li>Description: A short description of the page. This text is shown in the search results and other summaries.</li><li>Keywords: The given, comma-separated list of keywords is placed in the meta-tags of the page. Those keywords are relevant for search-engines.</li><li>Folder: The internal virtual folder, to save the page into.</li><li>Template: The template used as a base for the page. In most cases, this field is disabled, as soon as there are contents created on the page.</li></ul>";
 $text["quickhelp_newFolder"]		= "To create or rename a folder, a folder name can be set here.";
-$text["quickhelp_editFolder"]		= $text["quickhelp_newFolder"];
-$text["quickhelp_listElements"]		= "This list contains all page elements currently available.<br />
-									   The name of the element matches the last part of a placeholder in a template.<br />
-									   If the system finds installers of elements not yet installed, those elements are provided at the end
-									   of the list to be installed.";
-$text["quickhelp_newElement"]		= "This form is used to create or modify the basic data of page elements. Therefore, you are able to set the following fields:<br />
-									   <ul>
-									    <li>Name: Title of the element</li>
-									    <li>Max. cache duration: Duration in seconds the element is valid in the cache.<br />
-									         After this duration, the page will be regenerated with the next request.</li>
-									    <li>Admin-class: class containing the admin-forms.</li>
-									    <li>Portal-class: class responsible to generate the portal-output.</li>
-									    <li>Repeatable: Defines, whether an element is allowed more than once at a placeholder or not.</li>
-									   </ul>";
-$text["quickhelp_editElement"]		= $text["quickhelp_newElement"];
+$text["quickhelp_editFolder"]		= "To create or rename a folder, a folder name can be set here.";
+$text["quickhelp_listElements"]		= "This list contains all page elements currently available.<br />The name of the element matches the last part of a placeholder in a template.<br />If the system finds installers of elements not yet installed, those elements are provided at the end of the list to be installed.";
+$text["quickhelp_newElement"]		= "This form is used to create or modify the basic data of page elements. Therefore, you are able to set the following fields:<br /><ul><li>Name: Title of the element</li><li>Max. cache duration: Duration in seconds the element is valid in the cache.<br />After this duration, the page will be regenerated with the next request.</li><li>Admin-class: class containing the admin-forms.</li><li>Portal-class: class responsible to generate the portal-output.</li><li>Repeatable: Defines, whether an element is allowed more than once at a placeholder or not.</li></ul>";
+$text["quickhelp_editElement"]		= "This form is used to create or modify the basic data of page elements. Therefore, you are able to set the following fields:<br /><ul><li>Name: Title of the element</li><li>Max. cache duration: Duration in seconds the element is valid in the cache.<br />After this duration, the page will be regenerated with the next request.</li><li>Admin-class: class containing the admin-forms.</li><li>Portal-class: class responsible to generate the portal-output.</li><li>Repeatable: Defines, whether an element is allowed more than once at a placeholder or not.</li></ul>";
 $text["quickhelp_flushCache"]		= "Congratulations - the page cache was flushed a few seconds ago ;-)";
-$text["quickhelp_updatePlaceholder"] = "ATTENTION! This action is just needed, if a templates placeholder was extended.<br />
-                                        If a templates placeholder is extended, the contents assigned to it won't be diplayed in the portal because
-                                        the database still contains the old placeholder. To replace this old placeholder with the new ones, use this
-                                        form.";
+$text["quickhelp_updatePlaceholder"] = "ATTENTION! This action is just needed, if a templates placeholder was extended.<br />If a templates placeholder is extended, the contents assigned to it won't be diplayed in the portal because the database still contains the old placeholder. To replace this old placeholder with the new ones, use this form.";
 
 ?>

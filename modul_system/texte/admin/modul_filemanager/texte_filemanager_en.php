@@ -14,17 +14,7 @@ $text["modul_rechte"]				= "Module permissions";
 $text["modul_liste"]				= "List";
 $text["modul_neu"]					= "Create repository";
 
-$text["permissions_header"]         = array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Upload",		//Recht1
-            							5 => "Manage",	//Recht2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
 
 $text["repo_oeffnen"]				= "Show folder";
 $text["repo_bearbeiten"]			= "Define properties";
@@ -100,8 +90,7 @@ $text["upload_multiple_cancel"]		= "Cancel all uploads";
 $text["filemanager_upload"]         = "Upload file:";
 
 $text["_filemanager_ordner_groesse_"] = "Calculate size:";
-$text["_filemanager_ordner_groesse_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager.
-                                            Deep folder structures can lead to performance problems.";
+$text["_filemanager_ordner_groesse_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager. Deep folder structures can lead to performance problems.";
 $text["_filemanager_show_foreign_"] = "Show hidden repositories:";
 
 $text["required_filemanager_name"]  = "Name";
@@ -130,19 +119,14 @@ $text["rotateImageRight"]           = "Rotate 90° to the left";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "The filemanager is, as the name says, the integrated filemanager of Kajona. You can use it to upload files to the system
-                                       or to rename or delete exisiting files.<br />
-                                       In this view, you find a list of created repositoryies. Every repository can be configured to meet different requirements.";
-$text["quickhelp_newRepo"]          = "When creating or editing a repository, you can set up the different properties.<br />
-                                       This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads
-                                       and a view-filter to define a white-list of file types to be shown in the lists.";
-$text["quickhelp_editRepo"]         = $text["quickhelp_newRepo"];
-$text["quickhelp_openFolder"]       = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up
-                                       for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
-$text["quickhelp_newFolder"]        = $text["quickhelp_openFolder"];
-$text["quickhelp_imageDetail"]      = $text["quickhelp_openFolder"];
-$text["quickhelp_deleteFile"]       = $text["quickhelp_openFolder"];
-$text["quickhelp_deleteFolder"]     = $text["quickhelp_openFolder"];
+$text["quickhelp_list"]             = "The filemanager is, as the name says, the integrated filemanager of Kajona. You can use it to upload files to the system or to rename or delete exisiting files.<br />In this view, you find a list of created repositories. Every repository can be configured to meet different requirements.";
+$text["quickhelp_newRepo"]          = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
+$text["quickhelp_editRepo"]         = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
+$text["quickhelp_openFolder"]       = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
+$text["quickhelp_newFolder"]        = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
+$text["quickhelp_imageDetail"]      = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
+$text["quickhelp_deleteFile"]       = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
+$text["quickhelp_deleteFolder"]     = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
 
 //--- MODULE FOLDERVIEW --------------------------------------------------------------------------------
 $text["moduleFolderviewTitle"]      = "Folderview";

@@ -56,16 +56,10 @@ $text["systemtask_navigationcheck_valid"]                  = "O.K., Ziel:";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Alle im System angelegten Navigationsbäume und dessen Unterpunkte werden in dieser Liste angezeigt.
-                                       Die Sortierung der Navigationspunkte einer Ebene zueinander kann über Anklicken der Pfeil-Grafiken verändert werden.";
-$text["quickhelp_newNavi"]          = "Für eine neue Navigation muss lediglich der Titel des Navigationsbaumes vergeben werden.
-                                       Über die Aktion 'bearbeiten' kann dieser später wieder verändert werden.";
-$text["quickhelp_editNavi"]         = $text["quickhelp_newNavi"];
-$text["quickhelp_deleteNavi"]       = "Mit dieser Aktion wird eine Navigation oder ein Navigationspunkt mit allen Unterpunkten aus dem System gelöscht.
-                                       Dieser Schritt kann nicht rückgängig gemacht werden.";
-$text["quickhelp_newNaviPoint"]     = "Beim Anlegen oder Bearbeiten eines Navigationspunktes können dessen Eigenschaften verändert werden.
-                                       Hierzu gehören der Name der Punktes, sowie die Seite, auf welche der Punkt zeigen soll. Für externe Seiten kann
-                                       das Feld 'externer Verweis' verwendet werden. Soll statt des Namens ein Bild geladen werden, so kann dies unter
-                                       'Bild' angegeben werden. Das Ziel gibt das spätere Link-Target an.";
-$text["quickhelp_editNaviPoint"]    = $text["quickhelp_newNaviPoint"];
+$text["quickhelp_list"]             = "Alle im System angelegten Navigationsbäume und dessen Unterpunkte werden in dieser Liste angezeigt.Die Sortierung der Navigationspunkte einer Ebene zueinander kann über Anklicken der Pfeil-Grafiken verändert werden.";
+$text["quickhelp_newNavi"]          = "Für eine neue Navigation muss lediglich der Titel des Navigationsbaumes vergeben werden. Über die Aktion 'bearbeiten' kann dieser später wieder verändert werden.";
+$text["quickhelp_editNavi"]         = "Für eine neue Navigation muss lediglich der Titel des Navigationsbaumes vergeben werden. Über die Aktion 'bearbeiten' kann dieser später wieder verändert werden.";
+$text["quickhelp_deleteNavi"]       = "Mit dieser Aktion wird eine Navigation oder ein Navigationspunkt mit allen Unterpunkten aus dem System gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.";
+$text["quickhelp_newNaviPoint"]     = "Beim Anlegen oder Bearbeiten eines Navigationspunktes können dessen Eigenschaften verändert werden. Hierzu gehören der Name der Punktes, sowie die Seite, auf welche der Punkt zeigen soll. Für externe Seiten kann das Feld 'externer Verweis' verwendet werden. Soll statt des Namens ein Bild geladen werden, so kann dies unter 'Bild' angegeben werden. Das Ziel gibt das spätere Link-Target an.";
+$text["quickhelp_editNaviPoint"]    = "Beim Anlegen oder Bearbeiten eines Navigationspunktes können dessen Eigenschaften verändert werden. Hierzu gehören der Name der Punktes, sowie die Seite, auf welche der Punkt zeigen soll. Für externe Seiten kann das Feld 'externer Verweis' verwendet werden. Soll statt des Namens ein Bild geladen werden, so kann dies unter 'Bild' angegeben werden. Das Ziel gibt das spätere Link-Target an.";
 ?>

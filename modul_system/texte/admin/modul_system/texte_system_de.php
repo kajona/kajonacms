@@ -26,41 +26,9 @@ $text["systemlog"]                  = "System-Log";
 $text["updatecheck"]                = "Update-Check";
 $text["about"]                      = "Über Kajona";
 
-$text["permissions_default_header"] = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "",
-            							5 => "",
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
-
-$text["permissions_root_header"]    = array(
-                                    	0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Universal 1",      //Recht1
-            							5 => "Universal 2",
-            							6 => "Universal 3",
-            							7 => "Universal 4",
-            							8 => "Universal 5"
-            							);
-
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Einstellungen",       //recht1
-            							5 => "Systemtasks    ",           //recht2
-            							6 => "Systemlog",           //recht3
-            							7 => "Updates",
-            							8 => ""
-            							);
+$text["permissions_default_header"] = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
+$text["permissions_root_header"]    = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Universal 1", 5 => "Universal 2", 6 => "Universal 3", 7 => "Universal 4", 8 => "Universal 5" );
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Einstellungen",  5 => "Systemtasks", 6 => "Systemlog", 7 => "Updates", 8 => "");
             							
 $text["dateStyleShort"]             = "d.m.Y";            							
 $text["dateStyleLong"]              = "d M Y H:i:s"; 
@@ -169,40 +137,14 @@ $text["update_module_name"]         = "Modul";
 $text["update_module_localversion"] = "Diese Installation";
 $text["update_module_remoteversion"]= "Verfügbar";
 $text["update_available"]           = "Bitte updaten!";
-$text["update_nofilefound"]         = "Die Liste der Updates konnte nicht geladen werden.<br />Gründe hierfür können sein, dass auf diesem System der PHP-Config-Wert
-                                       'allow_url_fopen' auf 'off' gesetzt wurde, oder das System keine Unterstützung für Sockets bietet.";
+$text["update_nofilefound"]         = "Die Liste der Updates konnte nicht geladen werden.<br />Gründe hierfür können sein, dass auf diesem System der PHP-Config-Wert 'allow_url_fopen' auf 'off' gesetzt wurde, oder das System keine Unterstützung für Sockets bietet.";
 $text["update_invalidXML"]          = "Die Antwort vom Server war leider nicht korrekt. Bitte versuchen Sie die letzte Aktion erneut.";
 
-$text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>
-                                       Kajona V 3.1.1, Codename \"taskforce\"<br /><br />
-                                       <a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br />
-                                       <a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />
-                                       Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />
-									   Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.
-                                       ";
+$text["about_part1"]                = "<h2>Kajona V3 - Open Source Content Management System</h2>Kajona V 3.1.1, Codename \"taskforce\"<br /><br /><a href=\"http://www.kajona.de\" target=\"_blank\">www.kajona.de</a><br /><a href=\"mailto:info@kajona.de\" target=\"_blank\">info@kajona.de</a><br /><br />Für weitere Infomationen, Support oder bei Anregungen besuchen Sie einfach unsere Webseite.<br />Support erhalten Sie auch in unserem <a href=\"http://board.kajona.de/\" target=\"_blank\">Forum</a>.";
 
-$text["about_part2"]                = "<h2>Entwicklungsleitung</h2>
-                                       <ul>
-                                       <li><a href=\"mailto:sidler@kajona.de\" target=\"_blank\">Stefan Idler</a> (Projektleitung, Technische Leitung, Entwicklung)</li>
-                                       <li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (Leitung Frontend, Entwicklung)</li>
-                                       </ul>
-                                       <h2>Contributors / Entwickler</h2>
-                                       <ul>
-                                       <li>Thomas Hertwig</li>
-                                       <li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li>
-                                       </ul>
-                                       ";
+$text["about_part2"]                = "<h2>Entwicklungsleitung</h2><ul><li><a href=\"mailto:sidler@kajona.de\" target=\"_blank\">Stefan Idler</a> (Projektleitung, Technische Leitung, Entwicklung)</li><li><a href=\"mailto:jschroeter@kajona.de\" target=\"_blank\">Jakob Schröter</a> (Leitung Frontend, Entwicklung)</li></ul><h2>Contributors / Entwickler</h2><ul><li>Thomas Hertwig</li><li><a href=\"mailto:tim.kiefer@kojikui.de\" target=\"_blank\">Tim Kiefer</a></li></ul>";
 
-$text["about_part3"]                = "<h2>Credits</h2>
-                                       <ul>
-                                       <li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li>
-                                       <li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li>
-                                       <li>FCKeditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.fckeditor.net/\" target=\"_blank\">http://www.fckeditor.net/</a></li>
-                                       <li>JpGraph:<br />Aditus, <a href=\"http://www.aditus.nu/jpgraph/\" target=\"_blank\">http://www.aditus.nu/jpgraph/</a></li>
-                                       <li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li>
-                                       <li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li>
-                                       </ul>
-                                       ";
+$text["about_part3"]                = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>FCKeditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.fckeditor.net/\" target=\"_blank\">http://www.fckeditor.net/</a></li><li>JpGraph:<br />Aditus, <a href=\"http://www.aditus.nu/jpgraph/\" target=\"_blank\">http://www.aditus.nu/jpgraph/</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
 
 $text["setAbsolutePosOk"]           = "Speichern der Position erfolgreich";
 $text["setStatusOk"]                = "Ändern des Status erfolgreich";
@@ -215,28 +157,13 @@ $text["toolsetCalendarWeekday"]     = "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \
 
 $text["quickhelp_title"]            = "Schnellhilfe";
 
-$text["quickhelp_list"]				= "Die Liste der Module gibt eine schnelle Übersicht über die aktuell im System installierten Module.<br />
-									   Zusätzlich werden die aktuell installierten Versionen der installierten Module genannt, ebenso das
-									   ursprüngliche Installationsdatum des Moduls.<br />
-									   Über die Rechte des Moduls kann der Modul-Rechte-Knoten bearbeitet werden, von welchem die Inhalte bei
-									   aktivierter Rechtevererbung ihre Einstellungen erben.<br />
-									   Durch Verschieben der Module in der Liste lässt sich die Reihenfolge in der Modulnavigation anpassen.";
-$text["quickhelp_moduleList"]       =  $text["quickhelp_list"];
-$text["quickhelp_systemInfo"]		= "Kajona versucht an dieser Stelle, ein paar Informationen über das System heraus zu finden, auf welchem sich die
-									   Installation befindet.";
-$text["quickhelp_systemSettings"]	= "Hier können grundlegende Einstellungen des Systems vorgenommen werden. Hierfür kann jedes Modul beliebige
-                                       Einstellungsmöglichkeiten anbieten. Die hier vorgenommenen Einstellungen sollten mit Vorsicht verändert werden,
-                                       falsche Einstellungen können das System im schlimmsten Fall unbrauchbar machen.<br /><br />
-                                       Hinweis: Werden Werte an einem Modul geändert, so muss für JEDES Modul der Speichern-Button gedrückt werden. Ein Abändern
-                                       der Einstellungen verschiedener Module wird beim Speichern nicht übernommen. Es werden nur die Werte der zum Speichern-Button
-                                       zugehörigen Felder übernommen.";
-$text["quickhelp_systemTasks"]		= "Systemtasks sind kleine Programme, die alltägliche Aufaben wie Wartungsarbeiten im System übernehmen.<br />
-									   Hierzu gehört das Sichern der Datenbank und ggf. das Rückspielen einer Sicherung in das System.";
-$text["quickhelp_systemlog"]		= "Das Systemlogbuch gibt die Einträge des Logfiles aus, in welche die Module Nachrichten schreiben können.<br />
-									   Die Feinheit des Loggings kann in der config-Datei (/system/config/config.php) eingestellt werden.";
-$text["quickhelp_updateCheck"]		= "Mit der Aktion Updatecheck werden die Versionsnummern der im System installierten Module mit den Versionsnummern
-									   der aktuell verfügbaren Module verglichen. Sollte ein Modul nicht mehr in der neusten Verion installiert sein,
-									   so gibt Kajona in der Zeile dieses Moduls einen Hinweis hierzu aus.";
+$text["quickhelp_list"]				= "Die Liste der Module gibt eine schnelle Übersicht über die aktuell im System installierten Module.<br />Zusätzlich werden die aktuell installierten Versionen der installierten Module genannt, ebenso das ursprüngliche Installationsdatum des Moduls.<br />Über die Rechte des Moduls kann der Modul-Rechte-Knoten bearbeitet werden, von welchem die Inhalte bei aktivierter Rechtevererbung ihre Einstellungen erben.<br />Durch Verschieben der Module in der Liste lässt sich die Reihenfolge in der Modulnavigation anpassen.";
+$text["quickhelp_moduleList"]       = "Die Liste der Module gibt eine schnelle Übersicht über die aktuell im System installierten Module.<br />Zusätzlich werden die aktuell installierten Versionen der installierten Module genannt, ebenso das ursprüngliche Installationsdatum des Moduls.<br />Über die Rechte des Moduls kann der Modul-Rechte-Knoten bearbeitet werden, von welchem die Inhalte bei aktivierter Rechtevererbung ihre Einstellungen erben.<br />Durch Verschieben der Module in der Liste lässt sich die Reihenfolge in der Modulnavigation anpassen.";
+$text["quickhelp_systemInfo"]		= "Kajona versucht an dieser Stelle, ein paar Informationen über das System heraus zu finden, auf welchem sich die Installation befindet.";
+$text["quickhelp_systemSettings"]	= "Hier können grundlegende Einstellungen des Systems vorgenommen werden. Hierfür kann jedes Modul beliebige Einstellungsmöglichkeiten anbieten. Die hier vorgenommenen Einstellungen sollten mit Vorsicht verändert werden, falsche Einstellungen können das System im schlimmsten Fall unbrauchbar machen.<br /><br />Hinweis: Werden Werte an einem Modul geändert, so muss für JEDES Modul der Speichern-Button gedrückt werden. Ein Abändern der Einstellungen verschiedener Module wird beim Speichern nicht übernommen. Es werden nur die Werte der zum Speichern-Button zugehörigen Felder übernommen.";
+$text["quickhelp_systemTasks"]		= "Systemtasks sind kleine Programme, die alltägliche Aufaben wie Wartungsarbeiten im System übernehmen.<br />Hierzu gehört das Sichern der Datenbank und ggf. das Rückspielen einer Sicherung in das System.";
+$text["quickhelp_systemlog"]		= "Das Systemlogbuch gibt die Einträge des Logfiles aus, in welche die Module Nachrichten schreiben können.<br />Die Feinheit des Loggings kann in der config-Datei (/system/config/config.php) eingestellt werden.";
+$text["quickhelp_updateCheck"]		= "Mit der Aktion Updatecheck werden die Versionsnummern der im System installierten Module mit den Versionsnummern der aktuell verfügbaren Module verglichen. Sollte ein Modul nicht mehr in der neusten Verion installiert sein, so gibt Kajona in der Zeile dieses Moduls einen Hinweis hierzu aus.";
 
 
 //--- systemtasks ---------------------------------------------------------------------------------------
@@ -285,9 +212,7 @@ $text["submit"]                     = "Speichern";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
-$text["quickhelp_change"]           = "Mit Hilfe dieses Formulares können die Rechte eines Datensatzes angepasst werden.<br />
-                                       Je nach dem, welchem Modul der Datensatz zugeordnet wurde, kann die Anzahl der möglichen
-                                       zu konfigurierenden Rechte variieren.";
+$text["quickhelp_change"]           = "Mit Hilfe dieses Formulares können die Rechte eines Datensatzes angepasst werden.<br />Je nach dem, welchem Modul der Datensatz zugeordnet wurde, kann die Anzahl der möglichen zu konfigurierenden Rechte variieren.";
 
 //--- installer -----------------------------------------------------------------------------------------
 
@@ -305,25 +230,17 @@ $text["installer_versioninstalled"] = "Installierte Version: ";
 
 $text["installer_phpcheck_intro"]   = "<b>Herzlich Willkommen</b><br /><br />";
 $text["installer_phpcheck_lang"]    = "Um den Installer in einer anderen Sprache zu laden, bitte einen der folgenden Links verwenden:<br /><br />";
-$text["installer_phpcheck_intro2"]  = "<br />Die Installation des Systems erfolgt in mehreren Schritten: ";
-$text["installer_phpcheck_intro2"]  .= "<br />Rechtepüfung, DB-Konfiguration, Zugangsdaten zur Administration, Modulinstallation, Elementinstallation und Installation der Beispielinhalte.<br />";
-$text["installer_phpcheck_intro2"]  .= "<br />Je nach Modulauswahl kann die Anzahl dieser Schritte abweichen.";
-$text["installer_phpcheck_intro2"]  .= "<br /><br />Es werden die Schreibrechte einzelner Dateien und Verzeichnisse sowie<br />die Verfügbarkeit benötigter PHP-Module überprüft:<br />";
+$text["installer_phpcheck_intro2"]  = "<br />Die Installation des Systems erfolgt in mehreren Schritten: <br />Rechtepüfung, DB-Konfiguration, Zugangsdaten zur Administration, Modulinstallation, Elementinstallation und Installation der Beispielinhalte.<br /><br />Je nach Modulauswahl kann die Anzahl dieser Schritte abweichen.<br /><br />Es werden die Schreibrechte einzelner Dateien und Verzeichnisse sowie<br />die Verfügbarkeit benötigter PHP-Module überprüft:<br />";
 $text["installer_phpcheck_folder"]  = "<br />Schreibrechte auf ";
 $text["installer_phpcheck_module"]  = "<br />PHP-Modul ";
 
-$text["installer_login_intro"]     = "<b>Admin-Benutzer einrichten</b><br /><br />";
-$text["installer_login_intro"]      .= "Bitte geben Sie hier einen Benutzernamen und ein Passwort an.<br />Diese Daten werden später als Zugang zur Administration verwendet.<br />Aus Sicherheitsgründen sollten Sie Benutzernamen wie \"admin\" oder \"administrator\" vermeiden.<br /><br />";
+$text["installer_login_intro"]     = "<b>Admin-Benutzer einrichten</b><br /><br />Bitte geben Sie hier einen Benutzernamen und ein Passwort an.<br />Diese Daten werden später als Zugang zur Administration verwendet.<br />Aus Sicherheitsgründen sollten Sie Benutzernamen wie \"admin\" oder \"administrator\" vermeiden.<br /><br />";
 $text["installer_login_installed"]  = "<br />Das System wurde bereits mit einem Admin-Benutzer installiert.<br />";
 $text["installer_login_username"]   = "Benutzername:";
 $text["installer_login_password"]   = "Passwort:";
 $text["installer_login_save"]       = "Benutzer anlegen";
 
-$text["installer_config_intro"]     = "<b>Datenbankeinstellungen erfassen</b><br /><br />";
-$text["installer_config_intro"]     .= "Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />";
-$text["installer_config_intro"]     .= "Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br />";
-$text["installer_config_intro"]     .= "<br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br />";
-$text["installer_config_intro"]     .= "<br /><b>ACHTUNG:</b> Der PostgreSQL Treiber befindet sich noch im Alpha-Stadium und sollte nur in Test-Umgebungen verwendet werden.<br /><br />";
+$text["installer_config_intro"]     = "<b>Datenbankeinstellungen erfassen</b><br /><br />Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br /><br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br /><br /><b>ACHTUNG:</b> Der PostgreSQL Treiber befindet sich noch im Alpha-Stadium und sollte nur in Test-Umgebungen verwendet werden.<br /><br />";
 $text["installer_config_dbhostname"] = "Datenbankserver:";
 $text["installer_config_dbusername"] = "Datenbankbenutzer:";
 $text["installer_config_dbpassword"] = "Datenbankpasswort:";
@@ -341,13 +258,9 @@ $text["installer_systemversion_needed"] = "Minimal benötigte Systemversion: ";
 
 $text["installer_elements_found"]    = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 
-$text["installer_samplecontent"]     = "<b>Installation der Beispielinhalte</b><br /><br />";
-$text["installer_samplecontent"]     .= "Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";
+$text["installer_samplecontent"]     = "<b>Installation der Beispielinhalte</b><br /><br />Das Modul Samplecontent erstellt einige Standard-Seiten und Navigationen.<br />Je nach installierten Modulen werden verschiedene Beispielinhalte installiert.<br /><br /><br />";
 
 $text["installer_finish_intro"]      = "<b>Installation abgeschlossen</b><br /><br />";
-$text["installer_finish_hints"]      = "Sie sollten nun die Schreibrechte auf die Datei /system/config/config.php auf Leserechte zurücksetzen.<br />";
-$text["installer_finish_hints"]      .= "Zusätzlich sollte aus Sicherheitsgründen der Ordner /installer/ unbedingt komplett gelöscht werden.<br /><br />";
-$text["installer_finish_hints"]      .= "<br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />";
-$text["installer_finish_hints"]      .= "Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
+$text["installer_finish_hints"]      = "Sie sollten nun die Schreibrechte auf die Datei /system/config/config.php auf Leserechte zurücksetzen.<br />Zusätzlich sollte aus Sicherheitsgründen der Ordner /installer/ unbedingt komplett gelöscht werden.<br /><br /><br />Die Administrationsoberfläche erreichen Sie nun unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/admin\">"._webpath_."/admin</a><br /><br />Das Portal erreichen Sie unter:<br />&nbsp;&nbsp;&nbsp;&nbsp;<a href=\""._webpath_."/\">"._webpath_."</a><br /><br />";
 $text["installer_finish_closer"]     = "<br />Wir wünschen viel Spaß mit Kajona!";
 ?>

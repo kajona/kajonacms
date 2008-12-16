@@ -46,11 +46,9 @@ $text["required_faqs_question"]     = "Question";
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 
-$text["quickhelp_list"]             = "All FAQs and categories are listed here.<br />The first part contains the categories, the second one the FAQs.
-                                       <br />To show all FAQs for a specific category you can choose it by clicking on '".$text["kat_anzeigen"]."'.";
-$text["quickhelp_newFaq"]          = "You can edit the basic data of a FAQ by creating or editing it. The basic data contains the question and the answer.
-                                      Furthermore the belongings to the categories can be changed here.";
-$text["quickhelp_editFaq"]         = $text["quickhelp_newFaq"];
+$text["quickhelp_list"]             = "All FAQs and categories are listed here.<br />The first part contains the categories, the second one the FAQs.<br />To show all FAQs for a specific category you can choose it by clicking on '".$text["kat_anzeigen"]."'.";
+$text["quickhelp_newFaq"]           = "You can edit the basic data of a FAQ by creating or editing it. The basic data contains the question and the answer. Furthermore the belongings to the categories can be changed here.";
+$text["quickhelp_editFaq"]          = "You can edit the basic data of a FAQ by creating or editing it. The basic data contains the question and the answer. Furthermore the belongings to the categories can be changed here.";
 $text["quickhelp_newCat"]           = "At the moment you just can define the title of a category.";
-$text["quickhelp_editCat"]          = $text["quickhelp_newCat"];
+$text["quickhelp_editCat"]          = "At the moment you just can define the title of a category.";
 ?>

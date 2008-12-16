@@ -14,8 +14,7 @@ $text["weather_fahrenheit"]                  = "Fahrenheit";
 $text["weather_celsius"]                     = "Celsius";
 
 $text["weather_location"]                    = "Orts-Id:";
-$text["weather_location_finder"]             = "Die ID zu einem Ort finden Sie unter <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>
-                                                   (z.B. in der URL eines angezeigten Wetterberichts)";
+$text["weather_location_finder"]             = "Die ID zu einem Ort finden Sie unter <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>(z.B. in der URL eines angezeigten Wetterberichts)";
 
 $text["weather_errorloading"]                = "Fehler beim Laden der Wetterdaten.";
 

@@ -17,17 +17,7 @@ $text["logbuch"]					= "Logbuch";
 $text["browser"]					= "Ordnerbrowser";
 $text["archive_masssync"]           = "Alle synchronisieren";
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Syncro",		//Recht1
-            							5 => "Download",	//Recht2
-            							6 => "Logbuch",		//Recht3
-            							7 => "Rating",      //Recht4
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro", 5 => "Download", 6 => "Logbuch", 7 => "Rating", 8 => "");
 
 $text["logbuch_loeschen_link"]		= "Logbuch leeren";
 
@@ -94,17 +84,9 @@ $text["required_downloads_max_kb"]  = "Geschwindigkeit";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_newArchive"]       = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br />
-                                       Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs
-                                       im Dateisystem.";
-$text["quickhelp_editArchive"]      = $text["quickhelp_newArchive"];
-$text["quickhelp_list"]             = "Alle bereits angelegten Archive werden in dieser Liste angezeigt.<br />
-                                       Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der
-                                       Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen,
-                                       gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der
-                                       Datenbank aktualisiert.";
+$text["quickhelp_newArchive"]       = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
+$text["quickhelp_editArchive"]      = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
+$text["quickhelp_list"]             = "Alle bereits angelegten Archive werden in dieser Liste angezeigt.<br />Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen, gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der Datenbank aktualisiert.";
 $text["quickhelp_showArchive"]      = "Dateien und Ordner, die sich im zuvor gewählten Archiv befinden werden hier aufgelistet.";
-$text["quickhelp_editFile"]         = "Eine vorhandene Datei oder ein vorhandener Ordner können hier um weitere Informationen ergänzt werden.<br />
-                                       Bei Dateien kann zusätzlich eine maximale Downloadrate in KB festgelegt werden. Wird die Datei über das Portal
-                                       angefordert, so kann die Geschwindigkeit des Downloads hiermit limitiert werden.";
+$text["quickhelp_editFile"]         = "Eine vorhandene Datei oder ein vorhandener Ordner können hier um weitere Informationen ergänzt werden.<br />Bei Dateien kann zusätzlich eine maximale Downloadrate in KB festgelegt werden. Wird die Datei über das Portal angefordert, so kann die Geschwindigkeit des Downloads hiermit limitiert werden.";
 ?>

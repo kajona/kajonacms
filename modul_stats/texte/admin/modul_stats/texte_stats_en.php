@@ -24,17 +24,7 @@ $text["topcountries"]	       		= "Top countries";
 
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 
-$text["permissions_header"]         = array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Worker",      //Recht1
-            							5 => "",
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Worker", 5 => "", 6 => "", 7 => "", 8 => "");
 
 $text["anzahl_hits"]				= "Total page hits:";
 $text["anzahl_visitor"]				= "Total visitors:";
@@ -92,17 +82,14 @@ $text["task_lookupReset"]            = "Reset erroneous hostnames";
 $text["task_ip2c"]                   = "Resolve origin countries of ip-addresses";
 $text["task_exportToCsv"]            = "Export data to CSV-file";
 
-$text["task_csvExportIntro"]         = "With this task, existing records from the database can be exported to a CSV-file. Those records are being deleted
-                                        from the database at the same time! This task can be usefull, if the databse contains many old records. The exported
-                                        and deleted records can be reimported anytime.";
+$text["task_csvExportIntro"]         = "With this task, existing records from the database can be exported to a CSV-file. Those records are being deleted from the database at the same time! This task can be usefull, if the databse contains many old records. The exported and deleted records can be reimported anytime.";
 $text["export_start"]                = "Start date:";
 $text["export_end"]                  = "End date:";
 $text["export_filename"]             = "File name:";
 $text["export_success"]              = "The export was successfull.";
 $text["export_failure"]              = "An error occured during the export.";
 $text["task_importFromCsv"]          = "Import data from a CSV-file";
-$text["task_importFromCsvIntro"]     = "By using the task 'Import data from a CSV-file', records existing in a CSV-file can be imported into the system. After
-                                        the import, those records can be used in all reports.";
+$text["task_importFromCsvIntro"]     = "By using the task 'Import data from a CSV-file', records existing in a CSV-file can be imported into the system. After the import, those records can be used in all reports.";
 $text["import_filename"]             = "File:";
 $text["import_success"]              = "The import was successfull.";
 $text["import_failure"]              = "An error occured during the import.";
@@ -117,9 +104,7 @@ $text["interval_60days"]             = "60 days";
 
 
 $text["intro_worker_lookup"]         = "Current task: Resolve IP-addresses. <br />Number of addresses to process: ";
-$text["intro_worker_lookupip2c"]     = "Current tals: Resolve IP-addresses by country.<br />
-                                        Therefore the PHP-option 'allow_url_fopen' has to be enabled.<br />
-                                        Number of addresses to process: "; 
+$text["intro_worker_lookupip2c"]     = "Current tals: Resolve IP-addresses by country.<br />Therefore the PHP-option 'allow_url_fopen' has to be enabled.<br />Number of addresses to process: "; 
 $text["progress_worker_lookup"]      = "Progress:";
 $text["worker_lookup_end"]           = "Execution finished. All addresses have been processed.";
 $text["worker_lookupReset_end"]      = "Execution finished. All erroneous hostnames have been resetted.";
@@ -127,10 +112,8 @@ $text["worker_lookupReset_end"]      = "Execution finished. All erroneous hostna
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_worker"]            = "Worker are used for periodical tasks. This can be tasks like 'Resolve IP-addresses' or other ones. Using this tasks,
-                                        the stats often become more significant.";
+$text["quickhelp_worker"]            = "Worker are used for periodical tasks. This can be tasks like 'Resolve IP-addresses' or other ones. Using this tasks, the stats often become more significant.";
 
-$text["quickhelp_statsCommon"]       = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed
-                                        to grant different views to the data.";
-$text["quickhelp_list"]              = $text["quickhelp_statsCommon"];
+$text["quickhelp_statsCommon"]       = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
+$text["quickhelp_list"]              = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
 ?>

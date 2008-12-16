@@ -19,17 +19,7 @@ $text["liste_leer"]					= "Keine News angelegt";
 $text["modul_list_feed"]            = "RSS-Feeds";
 $text["modul_new_feed"]             = "Neuer RSS-Feed";
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "News bearbeiten",	 //Recht1
-            							5 => "Feeds",            //Recht2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "News bearbeiten", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
 
 $text["klapper"]					= "Kategorien ein-/ausblenden";
 
@@ -83,26 +73,13 @@ $text["required_feed_page"]         = "Detailseite";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Alle News und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien
-                                       aufgelistet, im zweiten die einzelnen Newsmeldungen. <br />Um alle News einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie
-                                       anzeigen' bei der entsprechenden Kategorie die Liste der News gefiltert werden.<br />
-                                       In der Liste der News werden der Titel der News, die Anzahl Zugriffe sowie das Start- End und Archivdatum der News angezeigt.";
-$text["quickhelp_newNews"]          = "Beim Bearbeiten oder Anlegen einer News werden deren Grunddaten erfasst. Hierzu gehört unter Anderem der Titel der News.
-                                       Des Weiteren können verschiedene Datumswerte definiert werden: <ul>
-                                       <li>Start-Datum: Ab diesem Datum erscheint die Newsmeldung im Portal</li>
-                                       <li>Ende-Datum: Ab diesem Datum verschwindet die Newsmeldung komplett aus dem Portal, auch aus dem Archiv</li>
-                                       <li>Archiv-Datum: Ab diesem Datum wandert die Newsmeldung in die Archivansicht</li>
-                                       </ul>Zusätzlich können die Zugehörigkeitein zu verschiedenen News-Kategorien angegeben werden.";
-$text["quickhelp_editNews"]         = $text["quickhelp_newNews"];
+$text["quickhelp_list"]             = "Alle News und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien aufgelistet, im zweiten die einzelnen Newsmeldungen. <br />Um alle News einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie anzeigen' bei der entsprechenden Kategorie die Liste der News gefiltert werden.<br />In der Liste der News werden der Titel der News, die Anzahl Zugriffe sowie das Start- End und Archivdatum der News angezeigt.";
+$text["quickhelp_newNews"]          = "Beim Bearbeiten oder Anlegen einer News werden deren Grunddaten erfasst. Hierzu gehört unter Anderem der Titel der News. Des Weiteren können verschiedene Datumswerte definiert werden: <ul><li>Start-Datum: Ab diesem Datum erscheint die Newsmeldung im Portal</li><li>Ende-Datum: Ab diesem Datum verschwindet die Newsmeldung komplett aus dem Portal, auch aus dem Archiv</li><li>Archiv-Datum: Ab diesem Datum wandert die Newsmeldung in die Archivansicht</li></ul>Zusätzlich können die Zugehörigkeitein zu verschiedenen News-Kategorien angegeben werden.";
+$text["quickhelp_editNews"]         = "Beim Bearbeiten oder Anlegen einer News werden deren Grunddaten erfasst. Hierzu gehört unter Anderem der Titel der News. Des Weiteren können verschiedene Datumswerte definiert werden: <ul><li>Start-Datum: Ab diesem Datum erscheint die Newsmeldung im Portal</li><li>Ende-Datum: Ab diesem Datum verschwindet die Newsmeldung komplett aus dem Portal, auch aus dem Archiv</li><li>Archiv-Datum: Ab diesem Datum wandert die Newsmeldung in die Archivansicht</li></ul>Zusätzlich können die Zugehörigkeitein zu verschiedenen News-Kategorien angegeben werden.";
 $text["quickhelp_newCat"]           = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
-$text["quickhelp_editCat"]          = $text["quickhelp_newCat"];
+$text["quickhelp_editCat"]          = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 $text["quickhelp_editNewscontent"]  = "Die eigentlichen Inhalte einer News werden in dieser Ansicht erfasst und bearbeitet.";
-$text["quickhelp_newsFeed"]         = "Die Verwaltung der RSS-Feeds erfolgt in diesem Teil der Newsverwaltung. In dieser Liste finden Sie alle RSS-Feeds,
-                                       die im System konfiguriert wurden.";
-$text["quickhelp_newNewsFeed"]      = "Mit Hilfe des aktuellen Formulars können die Eigenschaften eines vorhandenen, oder eines anzulegenden Newsfeeds
-                                       verändert werden.<br />Die Seite 'Detailansicht' wird dann aufgerufen, wenn ein Abonnent des Newsfeeds die Detaildarstellung
-                                       der Newsmeldung anfordert. Mit der Einstellung 'Kategorie des Feeds' können die im Feed anzuzeigenden Newsmeldungen
-                                       eingeschränkt werden. <br />Über das Feld URL-Titel wird ein Titel des Feeds festgelegt, anhand dessen der Feed im Internet
-                                       erreicht werden kann, z.B. /newsnfacts.rss. Dieser Titel sollte nur aus Buchstaben und Ziffern bestehen (a-z, A-Z, 0-9).";
-$text["quickhelp_editNewsFeed"]     = $text["quickhelp_newNewsFeed"];
+$text["quickhelp_newsFeed"]         = "Die Verwaltung der RSS-Feeds erfolgt in diesem Teil der Newsverwaltung. In dieser Liste finden Sie alle RSS-Feeds, die im System konfiguriert wurden.";
+$text["quickhelp_newNewsFeed"]      = "Mit Hilfe des aktuellen Formulars können die Eigenschaften eines vorhandenen, oder eines anzulegenden Newsfeeds verändert werden.<br />Die Seite 'Detailansicht' wird dann aufgerufen, wenn ein Abonnent des Newsfeeds die Detaildarstellung der Newsmeldung anfordert. Mit der Einstellung 'Kategorie des Feeds' können die im Feed anzuzeigenden Newsmeldungen eingeschränkt werden. <br />Über das Feld URL-Titel wird ein Titel des Feeds festgelegt, anhand dessen der Feed im Internet erreicht werden kann, z.B. /newsnfacts.rss. Dieser Titel sollte nur aus Buchstaben und Ziffern bestehen (a-z, A-Z, 0-9).";
+$text["quickhelp_editNewsFeed"]     = "Mit Hilfe des aktuellen Formulars können die Eigenschaften eines vorhandenen, oder eines anzulegenden Newsfeeds verändert werden.<br />Die Seite 'Detailansicht' wird dann aufgerufen, wenn ein Abonnent des Newsfeeds die Detaildarstellung der Newsmeldung anfordert. Mit der Einstellung 'Kategorie des Feeds' können die im Feed anzuzeigenden Newsmeldungen eingeschränkt werden. <br />Über das Feld URL-Titel wird ein Titel des Feeds festgelegt, anhand dessen der Feed im Internet erreicht werden kann, z.B. /newsnfacts.rss. Dieser Titel sollte nur aus Buchstaben und Ziffern bestehen (a-z, A-Z, 0-9).";
 ?>

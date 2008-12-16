@@ -56,16 +56,10 @@ $text["systemtask_navigationcheck_valid"]                  = "O.K., Target:";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "The list shows all existing navigation trees und their items.
-                                       The sort sequence of navigation items in the same level can be changed by clicking on the arrows.";
-$text["quickhelp_newNavi"]          = "To create a new navigation tree you just have to assign a titel to it.
-                                       The name can be changed by using the 'edit' function later.";
+$text["quickhelp_list"]             = "The list shows all existing navigation trees und their items. The sort sequence of navigation items in the same level can be changed by clicking on the arrows.";
+$text["quickhelp_newNavi"]          = "To create a new navigation tree you just have to assign a titel to it. The name can be changed by using the 'edit' function later.";
 $text["quickhelp_editNavi"]         = "You can edit the properties of the navigation tree here.";
-$text["quickhelp_deleteNavi"]       = "By executing the 'delete' function the selected navigation tree or navigation tree item and all sub items will be deleted.
-                                       This step is irreversible.";
-$text["quickhelp_newNaviPoint"]     = "By creating and editing a navigation item you can change its properties.
-                                       The properties include the item name and the corresponding link. For external websites you can use the field
-                                       'External link'. If you want to have an image to be shown instead of the item name, you can use the field
-                                       'Image'. You can choose the target of the link with the corresponding drop down.";
-$text["quickhelp_editNaviPoint"]    = $text["quickhelp_newNaviPoint"];
+$text["quickhelp_deleteNavi"]       = "By executing the 'delete' function the selected navigation tree or navigation tree item and all sub items will be deleted. This step is irreversible.";
+$text["quickhelp_newNaviPoint"]     = "By creating and editing a navigation item you can change its properties. The properties include the item name and the corresponding link. For external websites you can use the field 'External link'. If you want to have an image to be shown instead of the item name, you can use the field 'Image'. You can choose the target of the link with the corresponding drop down.";
+$text["quickhelp_editNaviPoint"]    = "By creating and editing a navigation item you can change its properties. The properties include the item name and the corresponding link. For external websites you can use the field 'External link'. If you want to have an image to be shown instead of the item name, you can use the field 'Image'. You can choose the target of the link with the corresponding drop down.";
 ?>

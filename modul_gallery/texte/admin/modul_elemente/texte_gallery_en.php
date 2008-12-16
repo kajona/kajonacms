@@ -27,8 +27,7 @@ $text["hint_movie"]                               = "Moviestrip view<br />If the
 $text["hint_text"]                                = "Places a text at the position (X,Y) into the image when in detail-mode";
 $text["hint_nrow"]                                = "Number of images per row. 0 = unlimited, templatesection piclist_unlimited is used, > 0 = limited, templatesection piclist is used.";
 $text["gallery_mode"]                             = "Element-mode";
-$text["gallery_mode_hint"]                        = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery.
-                                                     The values defined in the detail-view section are applied.";
+$text["gallery_mode_hint"]                        = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery. The values defined in the detail-view section are applied.";
 $text["gallery_imagesperpage"]                    = "Images per page:";
 $text["gallery_imagesperpage_hint"]               = "Number of images per page in the listview. 0 = unlimited.";
 $text["mode_standard"]                            = "Standard-mode";

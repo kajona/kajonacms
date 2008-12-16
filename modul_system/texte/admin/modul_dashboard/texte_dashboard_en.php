@@ -29,10 +29,7 @@ $text["column1"]                    = "Column 1";
 $text["column2"]                    = "Column 2";
 $text["column3"]                    = "Column 3";
 
-$text["quickhelp_list"]             = "The dashboard is the place to pin every kind of widget. A widget is a small programm presenting a piece of information.
-									   The widgets can be sorted, edited and deleted right on the dashboard. To add new widgets, use the acion
-									    \"add widget\". ";
-$text["quickhelp_addWidgetToDashboard"] = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the
-									   widget to add and the column to pin it. In the second step, the widget itself can be configured.";
+$text["quickhelp_list"]             = "The dashboard is the place to pin every kind of widget. A widget is a small programm presenting a piece of information. The widgets can be sorted, edited and deleted right on the dashboard. To add new widgets, use the acion \"add widget\". ";
+$text["quickhelp_addWidgetToDashboard"] = "To add a widget to the dashboard, you have to run a process consisting of two steps. In the first step, choose the widget to add and the column to pin it. In the second step, the widget itself can be configured.";
 
 ?>

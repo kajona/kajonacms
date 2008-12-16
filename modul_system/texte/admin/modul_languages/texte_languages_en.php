@@ -42,11 +42,8 @@ $text["delete_link"]                = "Delete";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "All languages created can be found in this list.
-                                       To change the systems default-language, the basic data of the future default-language have to be
-                                       changed.";
-$text["quickhelp_newLanguage"]      = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />
-                                       To create a language not yet existing in the list, an admin has to modify the corresponding files.";
-$text["quickhelp_editLanguage"]     = $text["quickhelp_newLanguage"];
+$text["quickhelp_list"]             = "All languages created can be found in this list. To change the systems default-language, the basic data of the future default-language have to be changed.";
+$text["quickhelp_newLanguage"]      = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$text["quickhelp_editLanguage"]     = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
 
 ?>

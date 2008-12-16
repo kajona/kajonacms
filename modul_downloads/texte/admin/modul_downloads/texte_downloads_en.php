@@ -17,18 +17,7 @@ $text["logbuch"]					= "Logfile";
 $text["browser"]					= "Browse folders";
 $text["archive_masssync"]           = "Synchronize all";
 
-$text["permissions_header"]         = array(
-                    					0 => "View",
-                    					1 => "Edit",
-                    					2 => "Delete",
-                    					3 => "Permissions",
-                    					4 => "Sync",		//Recht1
-                    					5 => "Download",	//Recht2
-                    					6 => "Logs",		//Recht3
-                    					7 => "Rating",      //Recht4
-                    					8 => ""
-                    					);
-
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync", 5 => "Download", 6 => "Logs", 7 => "Rating", 8 => "");
 
 $text["logbuch_loeschen_link"]		= "Flush logfile";
 
@@ -95,15 +84,9 @@ $text["required_downloads_max_kb"]  = "Downloadspeed";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_newArchive"]       = "The basic data of a archive is captured by this form.<br />
-                                       This includes the title and the corresponding start-path on the filesystem.";
-$text["quickhelp_editArchive"]      = $text["quickhelp_newArchive"];
-$text["quickhelp_list"]             = "All set up archives are included in this list.<br />
-                                       Using the action 'synchronize' the files on the filesystem will be synchronized with the database records.
-                                       New files on the filesystem will be added to the database, deleted files will be removed from the database. Modified files
-                                       will be updated to the database.";
+$text["quickhelp_newArchive"]       = "The basic data of a archive is captured by this form.<br />This includes the title and the corresponding start-path on the filesystem.";
+$text["quickhelp_editArchive"]      = "The basic data of a archive is captured by this form.<br />This includes the title and the corresponding start-path on the filesystem.";
+$text["quickhelp_list"]             = "All set up archives are included in this list.<br />Using the action 'synchronize' the files on the filesystem will be synchronized with the database records. New files on the filesystem will be added to the database, deleted files will be removed from the database. Modified files will be updated to the database.";
 $text["quickhelp_showArchive"]      = "Files and folders contained by the before selected archive are listed in this view.";
-$text["quickhelp_editFile"]         = "A file or folder could be extended by a set of additional informations.<br />
-                                       When editing a file, a maximal download speed can be defined. This limits the download speed when users are
-                                       downloading this file in the portal.";
+$text["quickhelp_editFile"]         = "A file or folder could be extended by a set of additional informations.<br />When editing a file, a maximal download speed can be defined. This limits the download speed when users are downloading this file in the portal.";
 ?>

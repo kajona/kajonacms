@@ -14,23 +14,13 @@ $text["modul_rechte"]				= "Modul-Rechte";
 $text["modul_liste"]				= "Liste";
 $text["modul_neu"]					= "Neues Repository";
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Upload",		//Recht1
-            							5 => "Verwalten",	//Recht2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
 
 $text["repo_oeffnen"]				= "Ordner öffnen";
 $text["repo_bearbeiten"]			= "Eigenschaften festlegen";
 $text["repo_bearbeiten_fehler"]		= "Beim Bearbeiten ist ein Fehler aufgetreten";
 $text["repo_rechte"]				= "Rechte bearbeiten";
-$text["repo_loeschen_frage"]			= " : Repository wirklich löschen?<br />";
+$text["repo_loeschen_frage"]		= " : Repository wirklich löschen?<br />";
 $text["repo_loeschen_link"]			= "Löschen";
 
 $text["ordner_anlegen"]				= "Neuer Ordner";
@@ -99,8 +89,7 @@ $text["upload_multiple_uploadFiles"]	= "Datei(en) hochladen";
 $text["upload_multiple_cancel"]		= "Abbrechen";
 
 $text["_filemanager_ordner_groesse_"] = "Größe anzeigen:";
-$text["_filemanager_ordner_groesse_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager.
-                                            Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
+$text["_filemanager_ordner_groesse_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager. Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
 $text["_filemanager_show_foreign_"] = "Versteckte Repositories anzeigen:";
 
 $text["required_filemanager_name"]  = "Name";
@@ -129,20 +118,14 @@ $text["rotateImageRight"]           = "Um 90° nach rechts drehen";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Der Filemanager dient als Dateimananger. Mit Hilfe dessen können Dateien in das System hochgeladen werden, umbenannt oder gelöscht werden.
-                                       In dieser Ansicht finden Sie eine Liste der angelegten Repositories. Jedes Respository kann nach speziellen
-                                       Anforderungen konfiguriert werden.";
-$text["quickhelp_newRepo"]          = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden.
-                                       Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von
-                                       für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
-$text["quickhelp_editRepo"]         = $text["quickhelp_newRepo"];
-$text["quickhelp_openFolder"]       = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund
-                                       von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen
-                                       von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
-$text["quickhelp_newFolder"]        = $text["quickhelp_openFolder"];
-$text["quickhelp_imageDetail"]      = $text["quickhelp_openFolder"];
-$text["quickhelp_deleteFile"]       = $text["quickhelp_openFolder"];
-$text["quickhelp_deleteFolder"]     = $text["quickhelp_openFolder"];
+$text["quickhelp_list"]             = "Der Filemanager dient als Dateimananger. Mit Hilfe dessen können Dateien in das System hochgeladen werden, umbenannt oder gelöscht werden. In dieser Ansicht finden Sie eine Liste der angelegten Repositories. Jedes Respository kann nach speziellen Anforderungen konfiguriert werden.";
+$text["quickhelp_newRepo"]          = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden. Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
+$text["quickhelp_editRepo"]         = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden. Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
+$text["quickhelp_openFolder"]       = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
+$text["quickhelp_newFolder"]        = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
+$text["quickhelp_imageDetail"]      = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
+$text["quickhelp_deleteFile"]       = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
+$text["quickhelp_deleteFolder"]     = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
 
 // --- MODULE FOLDERVIEW --------------------------------------------------------------------------------
 $text["moduleFolderviewTitle"]      = "Ordneransicht";

@@ -27,8 +27,7 @@ $text["hint_movie"]                               = "Filmstreifenansicht<br />We
 $text["hint_text"]                                = "Legt in das Bild der Detailansicht an Stelle (X,Y) einen Text";
 $text["hint_nrow"]                                = "Anzahl Bilder pro Zeile. 0 = unbeschränkt, Templateabschnitet piclist_unlimited wird verwendet, > 0 = beschränkt, Templateabschnitt piclist wird verwendet.";
 $text["gallery_mode"]                             = "Element-Modus";
-$text["gallery_mode_hint"]                        = "Definiert den Modus des Elements: Normaler Listen-/Detailmodus, oder ein Zufallsbild aus der gewählten Galerie.
-                                                     Es gelten die in der Detail-Ansicht definierten Werte.";
+$text["gallery_mode_hint"]                        = "Definiert den Modus des Elements: Normaler Listen-/Detailmodus, oder ein Zufallsbild aus der gewählten Galerie. Es gelten die in der Detail-Ansicht definierten Werte.";
 $text["gallery_imagesperpage"]                    = "Bilder pro Seite:";
 $text["gallery_imagesperpage_hint"]               = "Anzahl an Bildern pro Seite in der Listenansicht. 0 = Unbeschränkt.";
 $text["mode_standard"]                            = "Standard-Modus";

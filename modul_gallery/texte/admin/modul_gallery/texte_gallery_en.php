@@ -28,17 +28,7 @@ $text["galerie_loeschen_erfolg"]	= "The gallery was deleted successfully";
 $text["galerie_loeschen_fehler"]	= "An error occured while deleting gallery";
 $text["galerie_rechte"]				= "Edit permissions";
 
-$text["permissions_header"]         =  array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Sync",		//Recht1
-            							5 => "Rating",     //right2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         =  array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "", 7 => "", 8 => "");
 
 $text["gallery_title"]              = "Title:";
 $text["gallery_path"]               = "Path:";
@@ -85,13 +75,9 @@ $text["sync_upd"]                   = " Updated: ";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_newGallery"]       = "The basic data of a gallery is set up using this form.<br />
-                                       This includes the title of the gallery an the corresponding start-folder on the filesystem.";
-$text["quickhelp_editGallery"]      = $text["quickhelp_newGallery"];
-$text["quickhelp_list"]             = "All existing galleries are included in this list.<br />
-                                       By using the action 'Synchronize gallery', the filesystem will be synchronized with the database.
-                                       New files will be added to the database, deleted files will be removed and modified files will be updated
-                                       to the database.";
+$text["quickhelp_newGallery"]       = "The basic data of a gallery is set up using this form.<br />This includes the title of the gallery an the corresponding start-folder on the filesystem.";
+$text["quickhelp_editGallery"]      = "The basic data of a gallery is set up using this form.<br />This includes the title of the gallery an the corresponding start-folder on the filesystem.";
+$text["quickhelp_list"]             = "All existing galleries are included in this list.<br />By using the action 'Synchronize gallery', the filesystem will be synchronized with the database. New files will be added to the database, deleted files will be removed and modified files will be updated to the database.";
 $text["quickhelp_showGallery"]      = "Files and folders contained by the gallery selected before are listed in this view.";
 $text["quickhelp_editImage"]        = "An existing image or folder can be extended by a set of additional informations.";
 

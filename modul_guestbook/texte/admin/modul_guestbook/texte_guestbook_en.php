@@ -13,17 +13,7 @@ $text["modul_liste"]				= "List";
 $text["modul_anlegen"]				= "New guestbook";
 $text["modul_titel"]				= "Guestbooks";
 
-$text["permissions_header"]         = array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Sign",         //recht1
-            							5 => "",         //right2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");
 
 $text["gaestebuch_anzeigen"]		= "View guestbook";
 $text["gaestebuch_bearbeiten"]		= "Edit guestbook";
@@ -56,11 +46,8 @@ $text["_guestbook_suche_seite_hint"]= "On this page, the posts found by the sear
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "All guestbooks created can be found in this list.";
-$text["quickhelp_newGuestbook"]     = "While creating or edtiting a guestbook, a title can be assigned.
-                                       In addition, you can decide, whether new posts are published instantly. In the other case, new posts will
-                                       remain inactive until an admin decides to activate them.<br /><br />
-                                       Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
-$text["quickhelp_editGuestbook"]    = $text["quickhelp_newGuestbook"];
+$text["quickhelp_newGuestbook"]     = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
+$text["quickhelp_editGuestbook"]    = "While creating or edtiting a guestbook, a title can be assigned. In addition, you can decide, whether new posts are published instantly. In the other case, new posts will remain inactive until an admin decides to activate them.<br /><br />Hint: If guests should be allowed to sign the guestbook, they need the right 'Sign'!";
 $text["quickhelp_viewGuestbook"]    = "In this list, all posts belonging to the current guestbook are listed. Posts can be deleted, activated or inactivated.";
 $text["quickhelp_deletePost"]       = "If you want to delete the current post, confirm this action now.";
 ?>

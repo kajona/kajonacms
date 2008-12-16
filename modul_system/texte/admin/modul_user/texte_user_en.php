@@ -32,18 +32,7 @@ $text["fehler_speichern"]			= "An error occured while saving profile!";
 $text["user_logins"]                = "Logins:";
 $text["user_lastlogin"]             = "Last Login:";
 
-$text["permissions_header"]         = array(
-            							0 => "View",
-            							1 => "Edit",
-            							2 => "Delete",
-            							3 => "Permissions",
-            							4 => "Logs",		//Recht1
-            							5 => "",
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
-
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 $text["gruppen"]					= "Groups: ";
 $text["gruppen_liste"]				= "All groups";
@@ -106,7 +95,6 @@ $text["language"]                   = "Admin language:";
 //Form-Texts Memberships
 $text["user_memberships"]			= "Group assignments of user ";
 
-
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
 
 $text["_gaeste_gruppe_id_"]         = "ID of the guest group:";
@@ -140,29 +128,20 @@ $text["login_loginTitle"]           = "Login";
 $text["login_loginUser"]            = "Username";
 $text["login_loginPass"]            = "Password";
 $text["login_loginButton"]          = "Login";
-$text["login_loginError"]           = "Unfortunately, the provided login data was invalid. Please check your username and password.<br /><br />
-									   If you still can't log in, contact your system-administrator.";
+$text["login_loginError"]           = "Unfortunately, the provided login data was invalid. Please check your username and password.<br /><br />If you still can't log in, contact your system-administrator.";
 $text["login_loginJsInfo"]          = "Please allow JavaScript for this site an reload the current page to be able to use all functionalities.";
 $text["login_loginCookiesInfo"]     = "Please allow Cookies for this site an reload the current page to be able to use all functionalities.";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]				= "All useres created are listed in this view.<br />
-									   You can edit the users profile and the group assignments.";
-$text["quickhelp_edit"]				= "This form is used to edit or create a new user.<br />
-									   If the user is set active, the account is allowed to login in general.<br />
-									   In addtion, the area allowed to access must be set.";
-$text["quickhelp_new"]				= $text["quickhelp_edit"];
-$text["quickhelp_membership"]		= "Using this list, the group assignments can be edited.<br />
-									   A user can be added to a group or can be removed from a group.<br />
-									   NOTE: A user not being member of any of the groups is not allwed to log in!";
-$text["quickhelp_grouplist"]		= "Groups available are listet in this view.<br />
-									   The groups of the guests and the admins can\'t be deleted, since they are required for the system to work properly.";
+$text["quickhelp_list"]				= "All useres created are listed in this view.<br />You can edit the users profile and the group assignments.";
+$text["quickhelp_edit"]				= "This form is used to edit or create a new user.<br />If the user is set active, the account is allowed to login in general.<br />In addtion, the area allowed to access must be set.";
+$text["quickhelp_new"]				= "This form is used to edit or create a new user.<br />If the user is set active, the account is allowed to login in general.<br />In addtion, the area allowed to access must be set.";
+$text["quickhelp_membership"]		= "Using this list, the group assignments can be edited.<br />A user can be added to a group or can be removed from a group.<br />NOTE: A user not being member of any of the groups is not allwed to log in!";
+$text["quickhelp_grouplist"]		= "Groups available are listet in this view.<br />The groups of the guests and the admins can\'t be deleted, since they are required for the system to work properly.";
 $text["quickhelp_groupnew"]			= "To create a group, you just have to specify a title for the group.";
-$text["quickhelp_groupsave"]		= $text["quickhelp_groupnew"];
-$text["quickhelp_groupmember"]		= "All members of a group are listet right here. To end the membership of a user, the membership can be deleted.
-                                       If you want a user to become a member of the group, you have to use the groupdialog.";
-$text["quickhelp_loginlog"]			= "The login log shows a list of all successfull an unsuccessfull login attempts. Using this logfile, you are able to see
-                                       wo logged into the system.";
+$text["quickhelp_groupsave"]		= "To create a group, you just have to specify a title for the group.";
+$text["quickhelp_groupmember"]		= "All members of a group are listet right here. To end the membership of a user, the membership can be deleted. If you want a user to become a member of the group, you have to use the groupdialog.";
+$text["quickhelp_loginlog"]			= "The login log shows a list of all successfull an unsuccessfull login attempts. Using this logfile, you are able to see who logged into the system.";
 ?>

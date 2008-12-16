@@ -28,17 +28,7 @@ $text["galerie_loeschen_erfolg"]	= "Löschen der Galerie erfolgreich";
 $text["galerie_loeschen_fehler"]	= "Fehler beim Loeschen der Galerie";
 $text["galerie_rechte"]				= "Rechte bearbeiten";
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Syncro",		//Recht1
-            							5 => "Rating",       //Recht2
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "", 7 => "", 8 => "");
 
 $text["gallery_title"]              = "Titel:";
 $text["gallery_path"]               = "Pfad:";
@@ -87,15 +77,9 @@ $text["sync_upd"]                   = " Aktualisiert: ";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_newGallery"]       = "Die Grunddaten einer Galerie werden mit Hilfe dieses Formulars festgelegt.<br />
-                                       Hierzu gehören der Titel der Galerie, sowie der entsprechende Start-Pfad der Galerie
-                                       im Dateisystem.";
-$text["quickhelp_editGallery"]      = $text["quickhelp_newGallery"];
-$text["quickhelp_list"]             = "Alle bereits angelegten Galerien werden in dieser Liste angezeigt.<br />
-                                       Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der
-                                       Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen,
-                                       gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der
-                                       Datenbank aktualisiert.";
+$text["quickhelp_newGallery"]       = "Die Grunddaten einer Galerie werden mit Hilfe dieses Formulars festgelegt.<br />Hierzu gehören der Titel der Galerie, sowie der entsprechende Start-Pfad der Galerie im Dateisystem.";
+$text["quickhelp_editGallery"]      = "Die Grunddaten einer Galerie werden mit Hilfe dieses Formulars festgelegt.<br />Hierzu gehören der Titel der Galerie, sowie der entsprechende Start-Pfad der Galerie im Dateisystem.";
+$text["quickhelp_list"]             = "Alle bereits angelegten Galerien werden in dieser Liste angezeigt.<br />Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen, gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der Datenbank aktualisiert.";
 $text["quickhelp_showGallery"]      = "Dateien und Ordner, die sich in der zuvor gewählten Galerie befinden werden hier aufgelistet.";
 $text["quickhelp_editImage"]        = "Ein vorhandenes Bild oder ein vorhandener Ordner können hier um weitere Informationen ergänzt werden.";
 

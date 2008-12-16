@@ -13,17 +13,7 @@ $text["modul_liste"]				= "Liste";
 $text["modul_anlegen"]				= "Gästebuch anlegen";
 $text["modul_titel"]				= "Gästebücher";
 
-$text["permissions_header"]         = array(
-            							0 => "Anzeigen",
-            							1 => "Bearbeiten",
-            							2 => "Löschen",
-            							3 => "Rechte",
-            							4 => "Eintragen",         //recht1
-            							5 => "",
-            							6 => "",
-            							7 => "",
-            							8 => ""
-            							);
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");
 
 $text["gaestebuch_anzeigen"]		= "Gästebuch anzeigen";
 $text["gaestebuch_bearbeiten"]		= "Gästebuch bearbeiten";
@@ -56,13 +46,8 @@ $text["_guestbook_suche_seite_hint"]= "Auf diese Seite verlinken die Treffer der
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
 $text["quickhelp_list"]             = "Alle angelegten Gästebücher finde Sie in dieser Liste.";
-$text["quickhelp_newGuestbook"]     = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden.
-                                       Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue
-                                       Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann
-                                       durch einen Admin oder Redakteur freigegeben werden.<br /><br />
-                                       Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";
-$text["quickhelp_editGuestbook"]    = $text["quickhelp_newGuestbook"];
-$text["quickhelp_viewGuestbook"]    = "In dieser Liste werden alle Einträge eines Gästebuchs angezeigt. Diese können dann gelöscht,
-                                       aktiviert oder deaktiviert werden.";
+$text["quickhelp_newGuestbook"]     = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden. Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann durch einen Admin oder Redakteur freigegeben werden.<br /><br />Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";
+$text["quickhelp_editGuestbook"]    = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden. Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann durch einen Admin oder Redakteur freigegeben werden.<br /><br />Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";
+$text["quickhelp_viewGuestbook"]    = "In dieser Liste werden alle Einträge eines Gästebuchs angezeigt. Diese können dann gelöscht, aktiviert oder deaktiviert werden.";
 $text["quickhelp_deletePost"]       = "Soll ein Post gelöscht werden, so muss dies hier bestätigt werden.";
 ?>

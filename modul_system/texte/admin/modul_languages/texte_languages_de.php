@@ -42,12 +42,8 @@ $text["delete_link"]                = "Löschen";
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder.
-                                       Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen
-                                       Standardsprache bearbeitet werden.";
-$text["quickhelp_newLanguage"]      = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular
-                                       die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss
-                                       durch einen Administrator erfolgen.";
-$text["quickhelp_editLanguage"]     = $text["quickhelp_newLanguage"];
+$text["quickhelp_list"]             = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder. Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen Standardsprache bearbeitet werden.";
+$text["quickhelp_newLanguage"]      = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
+$text["quickhelp_editLanguage"]     = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
 
 ?>
