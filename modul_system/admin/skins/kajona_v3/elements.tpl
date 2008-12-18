@@ -521,7 +521,7 @@ UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame 
         </td>
     </tr>           
 </table>
-
+%%filemanager_internal_code%%
 %%filemanager_image_js%%
 </folderview_image_details>
 

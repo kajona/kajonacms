@@ -879,7 +879,10 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningPreview"), "fm_preview_warning");
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningSaving")."<a href=\"javascript:filemanagerSaveCroppingToBackend();\">".$this->getText("cropWarningCrop")."</a>", "fm_crop_save_warning");
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialogRaw("<img src=\""._skinwebpath_."/loading.gif\" />", "fm_crop_screenlock");
-            
+
+            $arrTemplate["filemanager_internal_code"] = "<input type=\"text\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" \">";
+            $arrTemplate["filemanager_internal_code"] .= "<input type=\"text\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" \">";
+
 		}
 		$strReturn .= $this->objToolkit->getFilemanagerImageDetails($arrTemplate);
 		return $strReturn;

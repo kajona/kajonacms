@@ -474,7 +474,7 @@ function filemanagerShowRealsize() {
 }
 
 function filemanagerShowPreview() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl+"?x="+(new Date()).getMilliseconds();
+	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl+"&x="+(new Date()).getMilliseconds();
 	fm_image_isScaled = true;
 	if(fm_cropObj != null)
 		fm_cropObj.destroy();
@@ -485,10 +485,10 @@ function filemanagerShowPreview() {
 
 var fm_cropObj = null;
 function filemanagerShowCropping() {
-	if(fm_image_isScaled) {
+	/*if(fm_image_isScaled) {
 		fm_preview_warning.init();
 		return;
-	}
+	}*/
 	//init the cropping
 	if(fm_cropObj == null) {
 		fm_cropObj =  new YAHOO.widget.ImageCropper('fm_filemanagerPic', {status: true});
@@ -512,6 +512,19 @@ function filemanagerSaveCroppingToBackend() {
 	fm_crop_save_warning.hide();
 	fm_crop_screenlock.init();
 	cropArea = fm_cropObj.getCropCoords();
+    if(fm_image_isScaled) {
+        //recalculate the "real" crop-coordinates
+        var intScaledWidth = document.getElementById('fm_filemanagerPic').width;
+        var intScaledHeight = document.getElementById('fm_filemanagerPic').height;
+        var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
+        var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
+
+        cropArea.left = cropArea.left * (intOriginalWidth/intScaledWidth);
+        cropArea.top = cropArea.top * (intOriginalHeigth/intScaledHeight);
+        cropArea.width = cropArea.width * (intOriginalWidth/intScaledWidth);
+        cropArea.height = cropArea.height * (intOriginalHeigth/intScaledHeight);
+
+    }
 	kajonaAdminAjax.saveImageCropping(cropArea.left, cropArea.top, cropArea.width, cropArea.height, fm_repo_id, fm_folder, fm_file, fm_cropping_callback);
 }
 
@@ -523,6 +536,8 @@ var fm_cropping_callback = {
 		document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 		document.getElementById('fm_image_dimensions').innerHTML = cropArea.width+' x '+cropArea.height;
 		document.getElementById('fm_image_size').innerHTML = 'n.a.';
+        document.getElementById('fm_int_realwidth').value = cropArea.width;
+        document.getElementById('fm_int_realheight').value = cropArea.height;
 		filemanagerShowRealsize();
 		cropArea = null;
 		
@@ -542,9 +557,17 @@ function filemanagerRotate(intAngle) {
 var fm_rotate_callback = {
 		success: function(o) { 
 			kajonaStatusDisplay.displayXMLMessage(o.responseText);
-			document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
+			//document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
 			filemanagerShowRealsize();
-			fm_crop_screenlock.hide();
+			//fm_crop_screenlock.hide();
+            //update size-info & hidden elements
+            var intWidthOld = document.getElementById('fm_int_realwidth').value;
+            var intHeightOld = document.getElementById('fm_int_realheight').value;
+            document.getElementById('fm_int_realwidth').value = intHeightOld;
+            document.getElementById('fm_int_realheight').value = intWidthOld;
+            document.getElementById('fm_image_dimensions').innerHTML = intHeightOld+' x '+intWidthOld;
+
+            fm_crop_screenlock.hide();
 		},
 		failure: function(o) { 
 			kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText); 
