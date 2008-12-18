@@ -100,18 +100,18 @@ class class_remoteloader {
 		//second try: file_get_content
 		if($strReturn === false) 
 		    $strReturn = $this->connectByFileGetContents();
-
-		//third try: sockets
-		if($strReturn === false)
-		    $strReturn = $this->connectViaSocket();
 		    
-		//fourth: fsockopen
+		//third: fsockopen
 		if($strReturn === false)
 		    $strReturn = $this->connectFSockOpen();    
 		    
-		//fifth: curl
+		//fourth: curl
 		if($strReturn === false)
-		    $strReturn = $this->connectViaCurl();    
+		    $strReturn = $this->connectViaCurl();
+
+        //fifth try: sockets
+		if($strReturn === false)
+		    $strReturn = $this->connectViaSocket();
 		    
 		    
 		//in case of an error, save the result to the cache, too:

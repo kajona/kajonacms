@@ -255,7 +255,6 @@ class class_modul_system_session extends class_model implements interface_model 
     public function setStrLasturl($strLasturl) {
         //limit to 255 chars
         $this->strLasturl = uniStrTrim($strLasturl, 450, "");
-        var_dump($this->strLasturl);
     }
     public function setStrLoginstatus($strLoginstatus) {
         $this->strLoginstatus = $strLoginstatus;

@@ -111,7 +111,7 @@ class class_socket {
         
         //initial constants
         $bitSupportEnabled = true;
-        if(!defined("AF_INET"))
+        //if(!defined("AF_INET"))
 
         //Sockets implemented?
         if(!function_exists("socket_create"))
