@@ -29,5 +29,6 @@ $text["news_order"]             = "Reihenfolge:";
 $text["news_order_desc"]      	= "absteigend";
 $text["news_order_asc"]       	= "aufsteigend";
 $text["news_template"]          = "Template:";
-
+$text["news_amount"]            = "Anzahl News pro Seite:";
+$text["required_news_amount"]   = "Anzahl News pro Seite";
 ?>

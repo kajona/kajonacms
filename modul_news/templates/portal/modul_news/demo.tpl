@@ -13,6 +13,19 @@
 </div>
 </news_list>
 
+<news_list_wrapper>
+    %%news%%
+    <div>
+        <table border="0">
+            <tr>
+                <td align="left">%%link_back%%</td>
+                <td align="center">%%link_pages%%</td>
+                <td align="right">%%link_forward%%</td>
+            </tr>
+        </table>
+    </div>
+</news_list_wrapper>
+
 
 <news_detail>
 <div class="newsDetail">

@@ -131,6 +131,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_view"] 		= array("int", true);
 		$arrFields["news_mode"] 		= array("int", true);
 		$arrFields["news_order"] 		= array("int", true);
+        $arrFields["news_amount"] 		= array("int", true);
 		$arrFields["news_detailspage"] 	= array("char254", true);
 		$arrFields["news_template"] 	= array("char254", true);
 		
@@ -273,14 +274,15 @@ class class_installer_news extends class_installer_base implements interface_ins
         
         if(in_array(_dbprefix_."element_news", $arrTables)) {
             $strReturn .= "Altering news-element-table...\n";
-            $strQuery = "ALTER TABLE `"._dbprefix_."element_news` 
-                            ADD `news_order` INT NULL;";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
+                            ADD ".$this->objDB->encloseColumnName("news_order")." INT NULL,
+                            ADD ".$this->objDB->encloseColumnName("news_amount")." INT NULL;";
             if(!$this->objDB->_query($strQuery))
                 $strReturn .= "An error occured!!!\n";
             
             $strReturn .= "Updating news-element-table...\n";
-            $strQuery = "UPDATE `"._dbprefix_."element_news` 
-            				SET `news_order` = 0;";
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
+            				SET news_order = 0;";
             if(!$this->objDB->_query($strQuery))
                 $strReturn .= "An error occured!!!\n";
                 

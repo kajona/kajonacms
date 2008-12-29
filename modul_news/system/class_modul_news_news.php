@@ -36,6 +36,7 @@ class class_modul_news_news extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_news";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
@@ -167,6 +168,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getNewsList($strFilter = "", $intStart = false, $intEnd = false) {
+        $strQuery = "";
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."news,
@@ -210,6 +212,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 * @return int
 	 */
 	public function getNewsCount($strFilter = "") {
+        $strQuery = "";
         if($strFilter != "") {
 			$strQuery = "SELECT COUNT(*)
 							FROM "._dbprefix_."news_member
@@ -245,18 +248,33 @@ class class_modul_news_news extends class_model implements interface_model  {
 	}
 
 
+    /**
+     * Counts the number of news displayed for the passed portal-setup
+     *
+     * @param int $intMode 0 = regular, 1 = archive
+	 * @param string $strCat
+	 * @return int
+	 * @static
+     */
+    public static function getNewsCountPortal($intMode, $strCat = 0) {
+        return count(self::loadListNewsPortal($intMode, $strCat));
+    }
+
 	/**
 	 * Loads all news from the db assigned to the passed cat
 	 *
 	 * @param int $intMode 0 = regular, 1 = archive
 	 * @param string $strCat
 	 * @param int $intOrder 0 = descending, 1 = ascending
+     * @param int $intStart
+     * @param int $intEnd
 	 * @return mixed
 	 * @static
 	 */
-	public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0) {
+	public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = false, $intEnd = false) {
 		$arrReturn = array();
-
+        $strOrder = "";
+        $strOneCat = "";
 		$intNow = time();
 		//Get Timeintervall
 		if($intMode == "0") {
@@ -298,8 +316,12 @@ class class_modul_news_news extends class_model implements interface_model  {
 							".$strTime."
 						  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
 						ORDER BY system_date_start ".$strOrder;
-                        
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_news_news($arrOneId["system_id"]);

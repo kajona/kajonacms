@@ -27,6 +27,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_news";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."news";
@@ -75,13 +76,29 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		    $strFilterId = $this->getParam("filterid");
 		else
 		    $strFilterId = $this->arrElementData["news_category"];
-		$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"]);
+
+
+
+        //Load all posts
+        include_once(_systempath_."/class_array_section_iterator.php");
+        $objArraySectionIterator = new class_array_section_iterator(class_modul_news_news::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
+	    $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["news_amount"]);
+	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+        $objArraySectionIterator->setArraySection(class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+	    $arrNews = $objArraySectionIterator->getArrayExtended();
+
+		$arrNews = $this->objToolkit->pager($this->arrElementData["news_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("forward"), $this->getText("backward"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrNews);
+
+		//$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"]);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
+        $strWrapperTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list_wrapper");
 		//Check rights
-		if(count($arrNews) > 0) {
-			foreach($arrNews as $objOneNews) {
+		if(count($arrNews["arrData"]) > 0) {
+			foreach($arrNews["arrData"] as $objOneNews) {
 				if($this->objRights->rightView($objOneNews->getSystemid())) {
 				    $strOneNews = "";
+                    $arrOneNews = array();
 					//generate a link to the details
 					$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"),"newsDetail", "", $objOneNews->getSystemid());
 					$arrOneNews["news_start_date"] = timeToString($objOneNews->getIntDateStart(), false);
@@ -109,6 +126,12 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig, true);
 				}
 			}
+            $arrWrapperTemplate = array();
+            $arrWrapperTemplate["news"] = $strReturn;
+            $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
+            $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
+            $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
+            $strReturn = $this->objTemplate->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
 		}
 		else {
 			$strReturn .= $this->getText("news_list_empty");
@@ -129,6 +152,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	        if($objNews->getStatus() == "1") {
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail");
 				//back link
+                $arrNews = array();
 				$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
 				$arrNews["news_start_date"] = timeToString($objNews->getIntDateStart(), false);
 				$arrNews["news_id"] = $objNews->getSystemid();

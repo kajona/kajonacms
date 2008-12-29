@@ -29,5 +29,7 @@ $text["news_order"]             = "Order:";
 $text["news_order_desc"]      	= "descending";
 $text["news_order_asc"]       	= "ascending";
 $text["news_template"]          = "Template:";
+$text["news_amount"]            = "Number of news per page:";
+$text["required_news_amount"]   = "Number of news per page";
 
 ?>

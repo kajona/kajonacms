@@ -10,7 +10,6 @@
 include_once(_adminpath_."/class_element_admin.php");
 //Interface
 include_once(_adminpath_."/interface_admin_element.php");
-
 include_once(_systempath_."/class_modul_news_category.php");
 
 /**
@@ -26,16 +25,26 @@ class class_element_news extends class_element_admin implements interface_admin_
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_news";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"] 		= _dbprefix_."element_news";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]     = "news_category|char,news_view|number,news_mode|number,news_order|number,news_detailspage|char,news_template|char";
+		$arrModule["tableColumns"]     = "news_category|char,news_view|number,news_mode|number,news_order|number,news_detailspage|char,news_template|char,news_amount|number";
+
+        $this->setDoValidation(true);
 
 		parent::__construct($arrModule);
 	}
+
+    public function getRequiredFields() {
+        return array(
+            "news_amount" => "number",
+            "news_category" => "systemid"
+        );
+    }
 
     /**
 	 * Returns a form to edit the element-data
@@ -79,10 +88,11 @@ class class_element_news extends class_element_admin implements interface_admin_
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getText("news_template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "" ));
-        //and finally offer the different modes
+
+        $strReturn .= $this->objToolkit->formInputText("news_amount", $this->getText("news_amount"), (isset($arrElementData["news_amount"]) ? $arrElementData["news_amount"] : ""));
 		return $strReturn;
 	}
 
 
-} //class_element_absatz.php
+} 
 ?>

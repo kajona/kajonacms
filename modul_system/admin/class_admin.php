@@ -644,11 +644,14 @@ abstract class class_admin {
 	 */
 	private function getQuickHelp() {
         $strReturn = "";
+        $strText = "";
+        $strTextname = "";
 
         //Text for the current action available?
         //different loading when editing page-elements
         if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "editElement" || $this->getParam("action") == "newElement")) {
-            
+            include_once(_systempath_."/class_modul_pages_pageelement.php");
+            $objElement = null;
             if($this->getParam("action") == "editElement") {
                 $objElement = new class_modul_pages_pageelement($this->getSystemid());
             }
