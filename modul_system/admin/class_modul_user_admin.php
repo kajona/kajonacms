@@ -342,7 +342,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $this->getParam("handy"));
                 $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $this->getParam("gebdatum"));
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), $this->getParam("skin"));
+                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
                 $strReturn .= $this->objToolkit->formInputCheckbox("admin", $this->getText("admin"));
                 $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"));
