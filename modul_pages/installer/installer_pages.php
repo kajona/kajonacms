@@ -19,7 +19,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
 
-		$arrModule["version"] 		= "3.1.1";
+		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
