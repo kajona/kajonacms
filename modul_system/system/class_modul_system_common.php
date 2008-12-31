@@ -25,6 +25,7 @@ class class_modul_system_common extends class_model implements interface_model  
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -83,6 +84,7 @@ class class_modul_system_common extends class_model implements interface_model  
      */
     public function setStartDate($intStartDate) {
         //check, if an insert or an update is needed
+        $strQuery = "";
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -105,6 +107,7 @@ class class_modul_system_common extends class_model implements interface_model  
      */
     public function setEndDate($intEndDate) {
         //check, if an insert or an update is needed
+        $strQuery = "";
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -127,6 +130,7 @@ class class_modul_system_common extends class_model implements interface_model  
      */
     public function setSpecialDate($intSpecialDate) {
         //check, if an insert or an update is needed
+        $strQuery = "";
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date

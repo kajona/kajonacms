@@ -45,6 +45,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      * @param bool $bitLoadPassword
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_user";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _user_modul_id_;

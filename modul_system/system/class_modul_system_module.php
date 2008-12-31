@@ -35,6 +35,7 @@ class class_modul_system_module extends class_model implements interface_model  
      * @param string $strModuleid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;

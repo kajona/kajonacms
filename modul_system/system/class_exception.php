@@ -100,7 +100,7 @@ class class_exception extends Exception {
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {
             //Handle fatal errors.
-
+            $strErrormessage = "";
             $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelError);
 
@@ -132,7 +132,7 @@ class class_exception extends Exception {
         }
         elseif ($this->intErrorlevel == class_exception::$level_ERROR) {
             //handle regular errors
-
+            $strErrormessage = "";
             $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelWarning);
 

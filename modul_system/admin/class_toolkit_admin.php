@@ -22,6 +22,7 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param string $strSystemid
 	 */
 	public function __construct($strSystemid = "") {
+        $arrModul = array();
 		$arrModul["name"] 			= "modul_elemente_admin";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 
@@ -129,6 +130,7 @@ class class_toolkit_admin extends class_toolkit {
 			$strName .= "_";
 
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
+        $arrTemplate = array();
 		$arrTemplate["class"] = $strClass;
 		$arrTemplate["titleDay"] = $strName."datum_tag";
 		$arrTemplate["titleMonth"] = $strName."datum_monat";
@@ -228,6 +230,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strReturn .= "	<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/fckeditor/fckeditor.js\"></script>\n";
         //Create the html-input element
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_fckedit");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["title"] = $strTitle;
 		$arrTemplate["content"] = $strContent;
@@ -275,6 +278,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function divider($strClass = "divider") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "divider");
+        $arrTemplate = array();
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
@@ -296,6 +300,7 @@ class class_toolkit_admin extends class_toolkit {
 			$intBeamLength = 1;
 
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "percent_beam");
+        $arrTemplate = array();
 		$arrTemplate["length"] = $intLength;
 		$arrTemplate["percent"] = number_format($floatPercent, 2);
 		$arrTemplate["width"] = $intWidth;
@@ -325,6 +330,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputCheckbox($strName, $strTitle, $bitChecked = false, $strClass = "") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_checkbox");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["title"] = $strTitle;
 		$arrTemplate["checked"] = ($bitChecked ? "checked=\"checked\"" : "");
@@ -340,6 +346,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputHidden($strName, $strValue = "") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_hidden");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -358,6 +365,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputText($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $strOpener = "", $bitReadonly = false) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_text");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		$arrTemplate["title"] = $strTitle;
@@ -379,6 +387,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		$arrTemplate["title"] = $strTitle;
@@ -435,6 +444,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "inputTextarea") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		$arrTemplate["title"] = $strTitle;
@@ -452,6 +462,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputPassword($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_password");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		$arrTemplate["title"] = $strTitle;
@@ -469,6 +480,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formInputSubmit($strValue = "Submit", $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_submit");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["value"] = $strValue;
 		$arrTemplate["eventhandler"] = $strEventhandler;
@@ -486,6 +498,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
+        $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["title"] = $strTitle;
 		$arrTemplate["class"] = $strClass;
@@ -514,6 +527,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, $intAllowedNumberOfFiles = 0) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
+        $arrTemplate = array();
 		$arrTemplate["fallbackContent"] = $strFallbackContent;
 		
 		
@@ -596,6 +610,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
 		//Iterating over the array to create the options
 		foreach ($arrKeyValues as $strKey => $strValue) {
+            $arrTemplate = array();
 			$arrTemplate["key"] = $strKey;
 			$arrTemplate["value"] = $strValue;
 			if($strKey == $strKeySelected)
@@ -622,6 +637,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formHeader($strAction, $strName = "", $strEncoding = "") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
+        $arrTemplate = array();
 		$arrTemplate["name"] = ($strName != "" ? $strName : "form".time());
 		$arrTemplate["action"] = $strAction;
 		$arrTemplate["enctype"] = $strEncoding;
@@ -636,6 +652,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formTextRow($strText, $strClass = "text") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row_form");
+        $arrTemplate = array();
 		$arrTemplate["text"] = $strText;
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
@@ -650,6 +667,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function formHeadline($strText, $strClass = "heading") {
 	    $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "headline_form");
+        $arrTemplate = array();
 	    $arrTemplate["text"] = $strText;
 	    $arrTemplate["class"] = $strClass;
 	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
@@ -725,6 +743,8 @@ class class_toolkit_admin extends class_toolkit {
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_1".$strType);
 		else
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2_2".$strType);
+
+        $arrTemplate = array();
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
 		$arrTemplate["listitemid"] = $strListitemID;
@@ -747,6 +767,8 @@ class class_toolkit_admin extends class_toolkit {
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2image_1".$strType);
 		else
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_2image_2".$strType);
+
+        $arrTemplate = array();
 		$arrTemplate["image"] = $strImage;
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["actions"] = $strActions;
@@ -770,6 +792,8 @@ class class_toolkit_admin extends class_toolkit {
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_3_1");
 		else
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_row_3_2");
+
+        $arrTemplate = array();
 		$arrTemplate["image"] = $strImage;
 		$arrTemplate["title"] = $strName;
 		$arrTemplate["center"] = $strCenter;
@@ -845,6 +869,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function listButton($strContent) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "list_button");
+        $arrTemplate = array();
 		$arrTemplate["content"] = $strContent;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
@@ -943,6 +968,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function warningBox($strContent, $strClass = "warnbox") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "warning_box");
+        $arrTemplate = array();
 		$arrTemplate["content"] = $strContent;
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -956,6 +982,7 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function getTextRow($strText, $strClass = "text") {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row");
+        $arrTemplate = array();
 		$arrTemplate["text"] = $strText;
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -976,6 +1003,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrReturn = array();
 		$strID = str_replace(array(" ", "."), array("", ""), microtime());
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder");
+        $arrTemplate = array();
 		$arrTemplate["id"] = $strID;
 		$arrTemplate["content"] = $strContent;
 		$arrTemplate["display"] = ($bitVisible ? "block" : "none");
@@ -999,6 +1027,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrReturn = array();
 		$strID = str_replace(array(" ", "."), array("", ""), microtime());
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
+        $arrTemplate = array();
 		$arrTemplate["id"] = $strID;
 		$arrTemplate["content"] = $strContent;
 		$arrTemplate["display"] = ($bitVisible ? "block" : "none");

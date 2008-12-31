@@ -25,6 +25,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_dashboard";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _dashboard_modul_id_;

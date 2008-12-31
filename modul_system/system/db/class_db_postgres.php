@@ -314,6 +314,7 @@ class class_db_postgres implements interface_db_driver {
 
     public function getDbInfo() {
     	$arrInfo = @pg_version($this->linkDB);
+        $arrReturn = array();
         $arrReturn["dbdriver"] = "postgres-extension";
         $arrReturn["dbserver"] = "postgres ".$arrInfo["server"];
         $arrReturn["dbclient"] = $arrInfo["client"];

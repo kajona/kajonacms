@@ -305,6 +305,7 @@ class class_db_mysql implements interface_db_driver {
     }
 
     public function getDbInfo() {
+        $arrReturn = array();
         $arrReturn["dbdriver"] = "mysql-extension";
         $arrReturn["dbserver"] = "MySQL ".mysql_get_server_info();
         $arrReturn["dbclient"] = mysql_get_client_info();

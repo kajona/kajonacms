@@ -28,6 +28,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_downloads";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _downloads_modul_id_;

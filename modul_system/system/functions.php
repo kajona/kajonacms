@@ -179,7 +179,7 @@ function getCookie($strKey) {
  * @return string
  */
 function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage="", $strImageId = "", $strLinkId = "", $bitTooltip = true, $strCss = "") {
-
+    $strLink = "";
     if($strImage != "") {
         if(!$bitTooltip)
             $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
@@ -210,7 +210,7 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
  * @return string
  */
 function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $strAlt="", $strImage="", $bitTooltip = true, $strCss = "") {
-
+    $strLink = "";
 	if($strImage != "") {
 		if($strAlt == "")
 			$strAlt = $strAction;
@@ -527,7 +527,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 	else if($strLanguage != "" && $intNumberOfLanguages <=1)
 	    $strLanguage = "";
 		
-
+    $strHref = "";
 	if($bitInternal) {
 	    //chek, if we could use mod_rewrite
 	    $bitRegularLink = true;
@@ -541,7 +541,6 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                     $strAddKeys .= "__";
                     
                 //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
-                $strHref = "";
                 //but: special case: just pagename & language
                 if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
                     $strHref .= $strPageI.".".$strLanguage.".html";
@@ -615,6 +614,7 @@ function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = 
 function splitUpLink($strLink) {
     //use regex to get href and name
     preg_match("/<a href=\"([^\"]+)\"\s+(.*)>(.*)<\/a>/i", $strLink, $arrHits);
+    $arrReturn = array();
     $arrReturn["link"] = $strLink;
     $arrReturn["name"] = isset($arrHits[3]) ? $arrHits[3] : "" ;
     $arrReturn["href"] = isset($arrHits[1]) ? $arrHits[1] : "";

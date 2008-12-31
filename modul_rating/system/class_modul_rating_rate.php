@@ -36,6 +36,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_rating";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _rating_modul_id_;

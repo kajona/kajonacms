@@ -29,6 +29,7 @@ class class_modul_faqs_faq extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_faqs";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _faqs_modul_id_;
@@ -145,6 +146,7 @@ class class_modul_faqs_faq extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getFaqsList($strFilter = "") {
+        $strQuery = "";
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."faqs,
@@ -201,7 +203,7 @@ class class_modul_faqs_faq extends class_model implements interface_model  {
 	 */
 	public static function loadListFaqsPortal($strCat) {
 		$arrReturn = array();
-
+        $strQuery = "";
 		if($strCat == 1) {
 		    $strQuery = "SELECT system_id
     						FROM "._dbprefix_."faqs,

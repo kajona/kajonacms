@@ -32,6 +32,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_news";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
@@ -191,6 +192,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getNewsList($strFilter = "") {
+        $strQuery = "";
 	    $intNow = time();
 		if($strFilter != "") {
 			$strQuery = "SELECT *

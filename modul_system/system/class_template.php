@@ -178,6 +178,7 @@ class class_template {
 	 * @return string The filled Template
 	 */
 	public function fillCurrentTemplate($arrContent) {
+        //TODO: BUG? $strTemplate is overwritten every iteration!
 		if(count($arrContent) >= 1) {
 			foreach($arrContent as $strPlaceholder => $strContent) {
 				$strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $this->strTempTemplate);

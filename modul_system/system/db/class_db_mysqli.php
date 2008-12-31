@@ -307,6 +307,7 @@ class class_db_mysqli implements interface_db_driver {
     }
 
     public function getDbInfo() {
+        $arrReturn = array();
         $arrReturn["dbdriver"] = "mysqli-extension";
         $arrReturn["dbserver"] = "MySQL ".mysqli_get_server_info($this->linkDB);
         $arrReturn["dbclient"] = mysqli_get_client_info($this->linkDB);

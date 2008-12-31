@@ -31,6 +31,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_gallery";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _bildergalerie_modul_id_;

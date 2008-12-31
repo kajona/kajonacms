@@ -32,6 +32,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_postacomment";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _postacomment_modul_id_;

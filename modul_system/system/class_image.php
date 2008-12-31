@@ -487,7 +487,7 @@ class class_image {
 		if($this->objImage == null && $this->bitPreload)
 			$this->finalLoadImage();
 
-		
+		$intColor = 0;
 	    //Farbe bestimmen
         if(is_int($strColor)) {
             $intColor = $strColor;

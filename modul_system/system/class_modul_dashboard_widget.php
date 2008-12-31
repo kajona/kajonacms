@@ -29,6 +29,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_dashboard";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;

@@ -42,6 +42,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_pages_content";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _pages_inhalte_modul_id_;
@@ -113,6 +114,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		$strElementSystemId = $this->createSystemRecord($strPrevId, "ELEMENT: ".$strPlaceholder);
 		$this->setSystemid($strElementSystemId);
 		//And create the row in the Element-Table, if given
+        $strQuery = "";
 		if($strForeignTable != "") {
 		    $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES ('".$this->objDB->dbsafeString($strElementSystemId)."')";
 		}

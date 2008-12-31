@@ -25,6 +25,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_navigation";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;

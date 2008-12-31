@@ -30,6 +30,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_filemanger";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _dashboard_modul_id_;
@@ -158,6 +159,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	        
 	        //Handle the fileupload
             $arrSourcesPre = $this->getParam($this->getParam("inputElement"));
+            $arrSources = array();
             foreach ($arrSourcesPre["name"] as $intKey => $strName) {
                 if($strName != "") {
                     $arrSources[$intKey] = array();
