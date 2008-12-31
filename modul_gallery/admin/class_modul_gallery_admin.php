@@ -173,7 +173,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		if($objOneGallery->rightEdit())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "editGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_bearbeiten"), "icon_pencil.gif"));
 			   		if($objOneGallery->rightDelete())
-			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGallery->getStrTitle().$this->getText("galerie_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid(), $this->getText("galerie_loeschen_link")));
+			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGallery->getStrTitle(), $this->getText("galerie_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid()));
 			   		if($objOneGallery->rightRight())
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), getRightsImageAdminName($objOneGallery->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);

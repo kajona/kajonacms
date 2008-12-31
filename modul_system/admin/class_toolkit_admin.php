@@ -882,9 +882,9 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param $strContent
 	 * @return string
 	 */
-	public function listDeleteButton($strContent) {
+	public function listDeleteButton($strTitle, $strQuestion, $strLinkHref) {
 	    //wrap the contents by a warning-box
-	    $strDialogContent = $this->warningBox($strContent);
+	    $strDialogContent = $this->deleteBox($strTitle, $strQuestion, $strLinkHref);
 	    //place it into a standard-js-dialog
 	    $strDialogId = "delVar".generateSystemid();
 	    $strDialog = $this->modalDialog(class_carrier::getInstance()->getObjText()->getText("deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
@@ -971,6 +971,23 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
 		$arrTemplate["content"] = $strContent;
 		$arrTemplate["class"] = $strClass;
+		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	}
+	
+	/**
+	 * Returns a delete box, e.g. shown before deleting a record
+	 *
+	 * @param string $strContent
+	 * @param string $strClass
+	 * @return string
+	 */
+	public function deleteBox($strTitle, $strQuestion, $strLinkHref) {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "delete_box");
+        $arrTemplate = array();
+		$arrTemplate["title"] = $strTitle;
+		$arrTemplate["question"] = $strQuestion;
+		$arrTemplate["buttonText"] = class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin");
+		$arrTemplate["linkHref"] = $strLinkHref;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 

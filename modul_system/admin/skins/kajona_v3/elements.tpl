@@ -356,6 +356,13 @@ Shown, wherever the attention of the user is needed
 </div>
 </warning_box>
 
+<delete_box>
+<div>
+<b>%%title%%</b><br />%%question%%<br />
+<input type="submit" name="delete" value="%%buttonText%%" class="inputSubmit" onclick="window.location='%%linkHref%%';" />
+</div>
+</delete_box>
+
 Used to print plain text
 <text_row>
 <span class="%%class%%">%%text%%</span><br />
@@ -856,23 +863,15 @@ The language switch sourrounds the buttons
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
 <dialog><div class="dialog" id="%%dialog_id%%">
-        <div class="hd">
-            <div class="title">%%dialog_name%%</div>
-            <div class="c"><a class="container-close" href="javascript:%%dialog_var%%.hide();">[X]</a></div>
-            <div class="clear"></div>
-        </div>
-        <div class="bd">
-            <div class="c" style="padding:0 10px;">
-                <div class="spacer"></div>
-                <p>
-                    %%dialog_content%%
-                </p>
-                <div class="spacer"></div>
-            </div>
-        </div>
-        <div class="ft">
-            <div class="c"></div>
-        </div>
+	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
+	<div class="bd">
+		<div class="c">
+			<p>%%dialog_content%%
+			<input type="submit" name="cancel%%dialog_id%%" value="abbrechen" class="inputSubmitShort" onclick="%%dialog_var%%.hide(); return false;" />
+			</p>
+		</div>
+	</div>
+	<div class="ft"><div class="c"></div></div>
 </div></dialog>
 
 <dialogRaw><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRaw>

@@ -545,6 +545,13 @@ h2 {
 	margin-top: 13px;
 }
 
+h3 {
+	color: #737373;
+	font-size: 11px;
+	font-weight: normal;
+	margin: 0px;
+}
+
 /* Q U I C K H E L P,  D A S H B O A R D,  D I A L O G */
 .quickHelpButton {
 	text-align: right;
@@ -575,7 +582,7 @@ h2 {
      text-decoration: none;
 }
 
-#quickHelp, .adminwidget, .dialog {
+#quickHelp, .adminwidget {
 	display: none;
 	text-align: left;
 	width: 400px;
@@ -583,13 +590,6 @@ h2 {
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	user-select: none;
-}
-
- .dialog {
-    display: block;
-	visibility: hidden;
-	position: absolute;
-	width: auto;
 }
 
 .adminwidget {
@@ -609,24 +609,24 @@ h2 {
 	width: 235px;
 }
 
-#quickHelp .hd .title, .adminwidget .hd .title, .dialog .hd .title {
+#quickHelp .hd .title, .adminwidget .hd .title {
 	float: left;
 	text-indent: 25px;
 	text-transform: uppercase;
 	padding-top: 5px;
 }
 
-.adminwidget .hd .title, .dialog .hd .title {
+.adminwidget .hd .title {
     text-indent: 5px;
 }
 
-#quickHelp .hd .c, .adminwidget .hd .c, .dialog .hd .c {
+#quickHelp .hd .c, .adminwidget .hd .c {
 	text-align: right;
 	line-height: 22px;
 	height: 22px;
 }
 
-.adminwidget .hd .c, .dialog .hd .c {
+.adminwidget .hd .c {
     text-align: right;
     line-height: 22px;
     height: 22px;
@@ -641,60 +641,60 @@ h2 {
     margin-right: 1px;
 }
 
-#quickHelp .hd .clear, .adminwidget .hd .clear, .dialog .hd .clear {
+#quickHelp .hd .clear, .adminwidget .hd .clear {
 	clear: both;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	font-size: 1px; /* ensure minimum height */
 	height: 22px;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	height: 14px;
 }
 
-#quickHelp .hd, .adminwidget .hd, .dialog .hd {
+#quickHelp .hd, .adminwidget .hd {
 	background: transparent url(quickhelp_topleft.png) no-repeat 0px 0px;
 	margin-right: 7px; /* space for right corner */
 	cursor: move;
 }
 
-.adminwidget .hd, .dialog .hd {
+.adminwidget .hd {
     background: transparent url(adminwidget_topleft.png) no-repeat 0px 0px;
 }
 
 
-#quickHelp .hd .c, .adminwidget .hd .c, .dialog .hd .c {
+#quickHelp .hd .c, .adminwidget .hd .c {
 	background: transparent url('quickhelp_topright.png') no-repeat right 0px;
 	margin-right: -7px; /* pull right corner back over empty space (from above margin) */
 }
 
-#quickHelp .bd, .adminwidget .bd, .dialog .bd {
+#quickHelp .bd, .adminwidget .bd {
 	background: transparent url(quickhelp_middleleft.png) repeat-y 0px 0px;
 	margin-right: 6px;
 }
 
-#quickHelp .bd .c, .adminwidget .bd .c, .dialog .bd .c {
+#quickHelp .bd .c, .adminwidget .bd .c {
 	background: transparent url(quickhelp_middleright.png) repeat-y right 0px;
 	margin-right: -6px;
 }
 
-#quickHelp .bd .c .spacer, .adminwidget .bd .c .spacer, .dialog .bd .c .spacer {
+#quickHelp .bd .c .spacer, .adminwidget .bd .c .spacer {
 	height: 5px;
 }
 
-#quickHelp .ft, .adminwidget .ft, .dialog .ft {
+#quickHelp .ft, .adminwidget .ft {
 	background: transparent url(quickhelp_bottomleft.png) no-repeat 0px 0px;
 	margin-right: 7px;
 }
 
-#quickHelp .ft .c, .adminwidget .ft .c, .dialog .ft .c {
+#quickHelp .ft .c, .adminwidget .ft .c {
 	background: transparent url(quickhelp_bottomright.png) no-repeat right 0px;
 	margin-right: -7px;
 }
 
-#quickHelp p, .adminwidget p, .adminwidget .bd .c div, .dialog .bd .c div {
+#quickHelp p, .adminwidget p, .adminwidget .bd .c div {
 	margin: 0;
 	padding: 0 10px 0px 10px;
 }
@@ -1245,6 +1245,81 @@ body.folderView .listActions a {
 
 
 /* Dialog classes */
+/* based on http://www.schillmania.com/content/projects/even-more-rounded-corners/ */
+.dialog {
+    display: block;
+	visibility: hidden;
+	position: absolute;
+	width: 450px;
+	margin:0px auto;
+	min-width:300px;
+	max-width:650px; /* max-size because of bg-image width */
+}
+
+.dialog .hd .c,
+.dialog .ft .c {
+ font-size:1px; /* ensure minimum height */
+ height:73px;
+}
+
+.dialog .hd .c h3 {
+  padding-top: 43px;
+  padding-left: 48px;
+  text-transform: uppercase;
+}
+
+.dialog .ft .c {
+ height:73px;
+}
+
+.dialog .hd {
+ background:transparent url(dialog_corners.png) no-repeat left top;
+ margin-right:73px; /* space for right corner */
+}
+
+.dialog .hd .c {
+ background:transparent url(dialog_corners.png) no-repeat right top;
+ margin-right:-73px; /* pull right corner back over "empty" space (from above margin) */
+}
+
+.dialog .bd {
+ background:transparent url(dialog_cornersmiddle.png) repeat-y 0px 0px;
+ margin-right:43px;
+}
+
+.dialog .bd .c {
+ background:transparent url(dialog_cornersmiddle.png) repeat-y right 0px;
+ margin:0px -43px 0px 48px;
+ padding-right: 48px;
+}
+
+.dialog .ft {
+ background:transparent url(dialog_corners.png) no-repeat left bottom;
+ margin-right:73px;
+}
+
+.dialog .ft .c {
+ background:transparent url(dialog_corners.png) no-repeat right bottom;
+ margin-right:-73px;
+}
+
+.dialog .warnbox {
+	width: auto;
+	border: none;
+}
+
+.dialog .warnbox h3 {
+	margin: 0;
+	padding: 0;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+.dialog p {
+ margin:0px;
+ padding:0px;
+}
+
 .yui-overlay,
 .yui-panel-container {
     visibility:hidden;
@@ -1258,9 +1333,9 @@ body.folderView .listActions a {
     position:absolute;
     top:0;
     left:0;
-    -moz-opacity: 0.5;
-    opacity:.50;
-    filter: alpha(opacity=50);
+    -moz-opacity: 0.2;
+    opacity:.20;
+    filter: alpha(opacity=20);
     background-color:#000000;
 }
 
