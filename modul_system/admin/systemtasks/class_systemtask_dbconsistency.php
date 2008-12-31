@@ -116,7 +116,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     }
 
     /**
-     * @see interface_admin_systemtast::getAdminForm()
+     * @see interface_admin_systemtask::getAdminForm()
      * @return string 
      */
     public function getAdminForm() {

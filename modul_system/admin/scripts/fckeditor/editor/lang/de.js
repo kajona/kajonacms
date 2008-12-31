@@ -173,6 +173,9 @@ DlgOpOther			: "<andere>",
 DlgInfoTab			: "Info",
 DlgAlertUrl			: "Bitte tragen Sie die URL ein",
 
+DlgBtnBrowseServerP : "Server durchsuchen (Seiten)",
+DlgBtnBrowseServerF : "Server durchsuchen (Dateien)",
+
 // General Dialogs Labels
 DlgGenNotSet		: "<nichts>",
 DlgGenId			: "ID",

@@ -173,6 +173,9 @@ DlgOpOther			: "<Other>",
 DlgInfoTab			: "Info",
 DlgAlertUrl			: "Please insert the URL",
 
+DlgBtnBrowseServerP : "Browse Server (Pages)",
+DlgBtnBrowseServerF : "Browse Server (Files)",
+
 // General Dialogs Labels
 DlgGenNotSet		: "<not set>",
 DlgGenId			: "Id",

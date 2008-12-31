@@ -47,7 +47,7 @@ document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 							<td id="tdBrowse" style="display: none" nowrap="nowrap" rowspan="2">
 								&nbsp;
 								<input id="btnBrowse" onclick="javascript:window.open('../../../../../index.php?admin=1&module=folderview&action=list&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=txtUrl&bit_link=1','Images','scrollbars=yes,resizable=yes,width=500,height=500');" type="button" value="Browse Server"
-									fcklang="DlgBtnBrowseServer" />
+									fcklang="DlgBtnBrowseServerP" />
 							</td>
 						</tr>
 						<tr>
@@ -178,8 +178,8 @@ document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 						<input id="txtLnkUrl" style="width: 100%" type="text" onblur="UpdatePreview();" />
 					</div>
 					<div id="divLnkBrowseServer" align="right">
-						<input type="button" value="Browse Server" fcklang="DlgBtnBrowseServer" onclick="javascript:window.open('../../../../../index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=txtLnkUrl&bit_link=1','Seiten','scrollbars=yes,resizable=yes,width=500,height=500');"
-                        />
+						<input type="button" value="Browse Server (Pages)" fcklang="DlgBtnBrowseServerP" onclick="javascript:window.open('../../../../../index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=txtLnkUrl&bit_link=1','Seiten','scrollbars=yes,resizable=yes,width=500,height=500');" />
+						<input type="button" value="Browse Server (Files)" fcklang="DlgBtnBrowseServerF" onclick="javascript:window.open('../../../../../index.php?admin=1&module=folderview&action=list&form_element=txtLnkUrl&bit_link=1','Seiten','scrollbars=yes,resizable=yes,width=500,height=500');" />
 					</div>
 					<div>
 						<span fcklang="DlgLnkTarget">Target</span><br />
