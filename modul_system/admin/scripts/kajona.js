@@ -394,7 +394,32 @@ var regularCallback = {
 	failure: function(o) { kajonaStatusDisplay.messageError("<b>request failed!!!</b>") }
 };
 
+var systemStatusCallback = function (o, bitSuccess) {
+	if (bitSuccess) {
+		kajonaStatusDisplay.displayXMLMessage(o.responseText);
+		
+		var strSystemid = o.argument[0];
 
+		if(o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
+			var image = document.getElementById('statusImage_'+strSystemid);
+			var link = document.getElementById('statusLink_'+strSystemid);
+		
+			if(image.src.indexOf('icon_enabled.gif') != -1) {
+				image.src=strInActiveImageSrc;
+				image.setAttribute('alt', strInActiveText);
+				link.setAttribute('title', strInActiveText);
+			}
+			else {
+				image.src=strActiveImageSrc;
+				image.setAttribute('alt', strActiveText);
+				link.setAttribute('title', strActiveText);
+			}
+			Prepare(link);
+		}     
+	} else {
+		kajonaStatusDisplay.messageError(o.responseText);
+	}
+};
 
 var kajonaAdminAjax = {
 	posConn : null,
@@ -441,6 +466,33 @@ var kajonaAdminAjax = {
         if(kajonaAdminAjax.statusConn == null || !YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.statusConn)) {
             kajonaAdminAjax.statusConn = YAHOO.util.Connect.asyncRequest('POST', postTarget, objCallback, postBody);
         }
+	},
+	
+	systemStatusCalslback : function (o, bitSuccess) {
+		if (bitSuccess) {
+			kajonaStatusDisplay.displayXMLMessage(o.responseText);
+			
+			var strSystemid = o.argument[0];
+
+			if(o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
+				var image = document.getElementById('statusImage_'+strSystemid);
+				var link = document.getElementById('statusLink_'+strSystemid);
+			
+				if(image.src.indexOf('icon_enabled.gif') != -1) {
+					image.src=strInActiveImageSrc;
+					image.setAttribute('alt', strInActiveText);
+					link.setAttribute('title', strInActiveText);
+				}
+				else {
+					image.src=strActiveImageSrc;
+					image.setAttribute('alt', strActiveText);
+					link.setAttribute('title', strActiveText);
+				}
+				Prepare(link);
+			}     
+		} else {
+			kajonaStatusDisplay.messageError(o.responseText);
+		}
 	},
 	
 	saveImageCropping : function (intX, intY, intWidth, intHeight, strRepoId, strFolder, strFile, objCallback) {

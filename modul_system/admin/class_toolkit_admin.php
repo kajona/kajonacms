@@ -933,34 +933,26 @@ class class_toolkit_admin extends class_toolkit {
 	        $strNewImage = "icon_enabled.gif";
 	        $strText = class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin");
 	    }
-	    
+
 	    $strJavascript = "<script type=\"text/javascript\">
-	         var statusCallback_".$strSystemid." =  {
-	            success: function(o) { 
-	               kajonaStatusDisplay.displayXMLMessage(o.responseText);
-	               var strImage = document.getElementById('statusImage_".$strSystemid."').src;
-	               var strActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin")."';
-	               var strInActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin")."';
-	               
-	               if(o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
-    	               if(strImage.indexOf('icon_enabled.gif') != -1) {
-    	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_disabled.gif';
-    	                   document.getElementById('statusImage_".$strSystemid."').setAttribute('alt', strInActiveText);
-    	                   document.getElementById('statusLink_".$strSystemid."').setAttribute('title', strInActiveText);
-    	                   Prepare(document.getElementById('statusLink_".$strSystemid."'));
-    	               }
-    	               else {
-    	                   document.getElementById('statusImage_".$strSystemid."').src='"._skinwebpath_."/pics/icon_enabled.gif';
-    	                   document.getElementById('statusImage_".$strSystemid."').setAttribute('alt', strActiveText);
-    	                   document.getElementById('statusLink_".$strSystemid."').setAttribute('title', strActiveText);
-    	                   Prepare(document.getElementById('statusLink_".$strSystemid."'));
-    	               }
-	               }     
-	            },
-                failure: function(o) { kajonaStatusDisplay.messageError(o.responseText) }
-	         };
-	       </script>";
-	    
+			var statusCallback_".$strSystemid." = {
+				success: function(o) { systemStatusCallback(o, true); },
+				failure: function(o) { systemStatusCallback(o, false); },
+				argument: ['".$strSystemid."']
+			};
+		</script>";
+
+	    //output texts and image paths only once
+		if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
+            $strJavascript .= "<script type=\"text/javascript\">
+				var strActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_active", "system", "admin")."';
+				var strInActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin")."';
+				var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
+				var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
+			</script>";
+            class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
+        }
+
 	    $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
 	    
 	    return $this->listButton($strButton).$strJavascript;
