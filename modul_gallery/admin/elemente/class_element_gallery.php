@@ -68,7 +68,7 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_gallery", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_gallery", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

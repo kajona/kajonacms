@@ -62,7 +62,7 @@ class class_element_navigation extends class_element_admin implements interface_
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_navigation", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_navigation", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

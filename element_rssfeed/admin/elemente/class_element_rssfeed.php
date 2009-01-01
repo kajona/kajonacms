@@ -49,7 +49,7 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/element_rssfeed", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_rssfeed", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

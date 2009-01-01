@@ -51,7 +51,7 @@ class class_element_portalregistration extends class_element_admin implements in
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/element_portalregistration", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_portalregistration", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

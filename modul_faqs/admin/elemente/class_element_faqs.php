@@ -62,7 +62,7 @@ class class_element_faqs extends class_element_admin implements interface_admin_
 
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_faqs", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_faqs", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

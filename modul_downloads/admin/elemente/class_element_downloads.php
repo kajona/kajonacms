@@ -61,7 +61,7 @@ class class_element_downloads extends class_element_admin implements interface_a
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_downloads", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_downloads", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

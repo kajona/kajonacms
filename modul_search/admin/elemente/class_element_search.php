@@ -52,7 +52,7 @@ class class_element_search extends class_element_admin implements interface_admi
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_search", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_search", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

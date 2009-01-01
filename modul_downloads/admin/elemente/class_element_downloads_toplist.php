@@ -58,7 +58,7 @@ class class_element_downloads_toplist extends class_element_admin implements int
         //Load the available templates
         include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
-        $arrTemplates = $objFilesystem->getFilelist("/templates/portal/element_downloads_toplist", ".tpl");
+        $arrTemplates = $objFilesystem->getFilelist("/templates/element_downloads_toplist", ".tpl");
         $arrTemplatesDD = array();
         if(count($arrTemplates) > 0) {
             foreach($arrTemplates as $strTemplate) {

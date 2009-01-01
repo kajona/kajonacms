@@ -80,7 +80,7 @@ class class_element_news extends class_element_admin implements interface_admin_
         //Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_news", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_news", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

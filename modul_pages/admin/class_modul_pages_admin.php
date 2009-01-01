@@ -428,7 +428,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				//Load the available templates
 				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
-				$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_pages", ".tpl");
+				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				//If set on, the dropdown could be disabled
 				$bitEnabled = true;
 				if(_pages_templatewechsel_ == "false") {
@@ -482,7 +482,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
 
-				$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_pages", ".tpl");
+				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 
 				$arrTemplatesDD = array();
 				if(count($arrTemplates) > 0)
@@ -1089,7 +1089,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 //Load the available templates
 				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
-				$arrTemplates = $objFilesystem->getFilelist("/templates/portal/modul_pages", ".tpl");
+				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				$arrTemplatesDD = array();
 				if(count($arrTemplates) > 0) {
 					foreach($arrTemplates as $strTemplate) {

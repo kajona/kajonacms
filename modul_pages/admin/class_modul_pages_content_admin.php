@@ -29,6 +29,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_pages_elemente";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_inhalte_modul_id_;
@@ -147,7 +148,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$arrTemplate["pagepreview"] = getLinkPortal($objPage->getStrName(), "", "_blank", $this->getText("seite_vorschau"), "", "&preview=1", "", "", $this->getLanguageToWorkOn());
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
-			$strTemplateID = $this->objTemplate->readTemplate("templates/portal/modul_pages/".$objPage->getStrTemplate(), "", true);
+			$strTemplateID = $this->objTemplate->readTemplate("templates/modul_pages/".$objPage->getStrTemplate(), "", true);
 
 			//Load elements on template, master-page special case!
 			if($objPage->getStrName() == "master")

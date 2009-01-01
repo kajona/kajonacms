@@ -48,7 +48,7 @@ class class_element_tagto extends class_element_admin implements interface_admin
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/portal/element_tagto/", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_tagto/", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

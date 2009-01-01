@@ -81,8 +81,9 @@ class class_template {
 	 */
 	public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
 		//Adding the current areaprefix
-		if(!$bitForce)
+		if(!$bitForce && $this->strArea != "portal")
 			$strName = $this->strArea . $strName;
+            
 		$strTemplate = "Template not found";
 		$bitKnownTemplate = false;
 		//Is this template already in the cache?
