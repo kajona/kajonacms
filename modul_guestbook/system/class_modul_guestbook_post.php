@@ -33,6 +33,7 @@ class class_modul_guestbook_post extends class_model implements interface_model 
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_guestbook";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _gaestebuch_modul_id_;

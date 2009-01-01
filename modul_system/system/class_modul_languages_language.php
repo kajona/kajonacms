@@ -28,6 +28,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_languages";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
