@@ -862,7 +862,7 @@ The language switch sourrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
-<dialog><div class="dialog" id="%%dialog_id%%">
+<dialogContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
 		<div class="c">
@@ -872,9 +872,9 @@ The language switch sourrounds the buttons
 		</div>
 	</div>
 	<div class="ft"><div class="c"></div></div>
-</div></dialog>
+</div></dialogContainer>
 
-<dialogConfirmation><div class="dialog" id="%%dialog_id%%">
+<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
 		<div class="c">
@@ -884,6 +884,6 @@ The language switch sourrounds the buttons
 		</div>
 	</div>
 	<div class="ft"><div class="c"></div></div>
-</div></dialogConfirmation>
+</div></dialogConfirmationContainer>
 
-<dialogRaw><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRaw>
+<dialogRawContainer><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRawContainer>

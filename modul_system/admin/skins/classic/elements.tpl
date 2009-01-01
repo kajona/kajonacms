@@ -946,22 +946,22 @@ The language switch sourrounds the buttons
 
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
-<dialog><div class="dialog" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;" id="%%dialog_id%%">
+<dialogContainer><div class="dialog" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;" id="%%dialog_id%%">
 	<div class="dialogHeader">
 		<div class="dialogHeaderTitle">%%dialog_name%%</div>
 		<div class="dialogHeaderActions"><a class="container-close" href="javascript:%%dialog_var%%.hide();">[X]</a></div>
 		<div style="clear: both;"></div>
 	</div>
 	<div class="dialogContent">%%dialog_content%%</div>
-</div></dialog>
+</div></dialogContainer>
 
-<dialogConfirmation><div class="dialog" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;" id="%%dialog_id%%">
+<dialogConfirmationContainer><div class="dialog" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;" id="%%dialog_id%%">
 	<div class="dialogHeader">
 		<div class="dialogHeaderTitle">%%dialog_name%%</div>
 		<div class="dialogHeaderActions"><a class="container-close" href="javascript:%%dialog_var%%.hide();">[X]</a></div>
 		<div style="clear: both;"></div>
 	</div>
 	<div class="dialogContent">%%dialog_content%%</div>
-</div></dialogConfirmation>
+</div></dialogConfirmationContainer>
 
-<dialogRaw><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRaw>
+<dialogRawContainer><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRawContainer>

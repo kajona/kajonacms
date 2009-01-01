@@ -1512,15 +1512,22 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["dialog_content"] = $strDialogContent;
         $arrTemplate["dialog_var"] = $strDialogId;
 
-        if($intDialogType == 0)
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialog");
-        else if($intDialogType == 1)
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmation");
-        else if($intDialogType == 3)
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRaw");
+        $strTemplateId = null;
+        if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogContainer");
+            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
+        }
+        else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
+            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
+        }
+        else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRawContainer");
+            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
+        }
 
-        
-        $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
+        if($strTemplateId != null)
+            $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
         
         //and create the java-script
         $strContent .="<script type=\"text/javascript\">
