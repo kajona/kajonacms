@@ -873,7 +873,10 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["content"] = $strContent;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
-	
+
+
+    
+
 	/**
 	 * Generates a delete-button. The passed content is shown as a modal dialog when the icon was clicked.
 	 * So place the link for the final deletion inside the contents, otherwise the user has no more chance to 
@@ -882,7 +885,13 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param $strContent
 	 * @return string
 	 */
-	public function listDeleteButton($strTitle, $strQuestion, $strLinkHref) {
+	public function listDeleteButton($strTitle, $strQuestion = "", $strLinkHref = "") {
+
+        //TODO: remove after fixing
+        if($strQuestion == "" || $strLinkHref == "")
+            return;
+        // END REMOVE
+
 	    //wrap the contents by a warning-box
 	    $strDialogContent = $this->deleteBox($strTitle, $strQuestion, $strLinkHref);
 	    //place it into a standard-js-dialog
