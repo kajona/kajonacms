@@ -49,7 +49,7 @@ class class_element_imagelightbox extends class_element_portal implements interf
 		//Include the javascript-file
 		$strReturn .= "<script language=\"Javascript\" type=\"text/javascript\">\n";
 		$strReturn .= "  kajonaAjaxHelper.addFileToLoad('"._webpath_."/portal/scripts/lightbox.js');\n";
-		$strReturn .= " addCss('"._webpath_."/css/portal/lightbox.css');\n";
+		$strReturn .= " addCss('"._webpath_."/portal/css/lightbox.css');\n";
 		$strReturn .= "</script>\n";
 		
 		

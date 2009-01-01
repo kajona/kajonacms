@@ -8,7 +8,7 @@
     <meta http-equiv="imagetoolbar" content="no" />
     <meta name="description" content="%%description%%" />
     <meta name="keywords" content="%%keywords%%" />
-    <link href="_webpath_/css/portal/kajona.css" rel="stylesheet" type="text/css" />
+    <link href="_webpath_/portal/css/kajona.css" rel="stylesheet" type="text/css" />
     <link rel="alternate" type="application/rss+xml" title="Kajona³ news" href="_webpath_/xml.php?module=news&amp;action=newsFeed&amp;feedTitle=kajona_news" />
     %%kajona_head%%
     <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
