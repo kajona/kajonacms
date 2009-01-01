@@ -37,7 +37,7 @@ $text["status_active"]              = "Status ändern (ist aktiv)";
 $text["status_inactive"]            = "Status ändern (ist inaktiv)";
 
 $text["deleteHeader"]               = "Löschen bestätigen";
-$text["deleteButton"]               = "Ja, löschen";
+$text["deleteButton"]               = "Löschen";
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 

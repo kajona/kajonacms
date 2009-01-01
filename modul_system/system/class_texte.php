@@ -40,7 +40,8 @@ class class_texte {
 		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
         
         //load texts from session
-        $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
+        //TODO: reneable before release
+        //$this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
         if($this->arrTexts === false)
             $this->arrTexts = array();
 	}
