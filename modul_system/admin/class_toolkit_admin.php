@@ -878,28 +878,29 @@ class class_toolkit_admin extends class_toolkit {
     
 
 	/**
-	 * Generates a delete-button. The passed content is shown as a modal dialog when the icon was clicked.
-	 * So place the link for the final deletion inside the contents, otherwise the user has no more chance to 
-	 * delete the record!
+	 * Generates a delete-button. The passed element name and question is shown as a modal dialog
+	 * when the icon was clicked. So set the link-href-param for the final deletion, otherwise the
+	 * user has no more chance to delete the record!
 	 *
-	 * @param $strContent
+	 * @param $strElementName
+	 * @param $strQuestion
+	 * @param $strLinkHref
 	 * @return string
 	 */
-	public function listDeleteButton($strTitle, $strQuestion = "", $strLinkHref = "") {
-
+	public function listDeleteButton($strElementName, $strQuestion = "", $strLinkHref = "") {
         //TODO: remove after fixing
         if($strQuestion == "" || $strLinkHref == "")
             return "TODO";
         // END REMOVE
 
-	    //wrap the contents by a warning-box
-	    $strDialogContent = $this->deleteBox($strTitle, $strQuestion, $strLinkHref);
 	    //place it into a standard-js-dialog
 	    $strDialogId = "delVar".generateSystemid();
-        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
+        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
 	    
+        $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
+        
 	    //create the list-button and the js code to show the dialog
-	    $strButton = getLinkAdminManual("href=\"javascript:".$strDialogId.".init();\"", 
+	    $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"", 
 	                                     "", 
 	                                     class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"), 
 	                                     "icon_ton.gif" );
@@ -980,23 +981,6 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
 		$arrTemplate["content"] = $strContent;
 		$arrTemplate["class"] = $strClass;
-		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-	}
-	
-	/**
-	 * Returns a delete box, e.g. shown before deleting a record
-	 *
-	 * @param string $strContent
-	 * @param string $strClass
-	 * @return string
-	 */
-	public function deleteBox($strTitle, $strQuestion, $strLinkHref) {
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "delete_box");
-        $arrTemplate = array();
-		$arrTemplate["title"] = $strTitle;
-		$arrTemplate["question"] = $strQuestion;
-		$arrTemplate["buttonText"] = class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin");
-		$arrTemplate["linkHref"] = $strLinkHref;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -1510,7 +1494,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["dialog_id"] = $strContainerId;
         $arrTemplate["dialog_name"] = $strTitle;
         $arrTemplate["dialog_content"] = $strDialogContent;
-        $arrTemplate["dialog_var"] = $strDialogId;
+        //TODO: check if needed
+        //$arrTemplate["dialog_var"] = $strDialogId;
 
         $strTemplateId = null;
         if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
@@ -1518,7 +1503,9 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
         else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
-            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
+            $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjText()->getText("dialog_cancelButton", "system", "admin");
+        	
+        	$strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
         else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
@@ -1526,13 +1513,14 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
 
-        if($strTemplateId != null)
+        if($strTemplateId != null) {
             $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
         
-        //and create the java-script
-        $strContent .="<script type=\"text/javascript\">
-            var ".$strDialogId." = new ModalDialog('".$strContainerId."');
-        </script>";
+	        //and create the java-script
+	        $strContent .="<script type=\"text/javascript\">
+	            var jsDialog_".$intDialogType." = new ModalDialog('".$strContainerId."', ".$intDialogType.");
+	        </script>";
+        }
         
         return $strContent;
     }

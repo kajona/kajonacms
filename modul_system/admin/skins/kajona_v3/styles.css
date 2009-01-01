@@ -896,6 +896,14 @@ form br {
 	cursor: pointer;
 }
 
+a.inputSubmit, a.inputSubmitShort {
+	padding: 3px 0 3px 18px;
+	float: none;
+	width: 143px;
+	height: 12px;
+	text-decoration: none;
+}
+
 * html .inputSubmit {
 	width: 150px;
 }
@@ -1258,66 +1266,53 @@ body.folderView .listActions a {
 
 .dialog .hd .c,
 .dialog .ft .c {
- font-size:1px; /* ensure minimum height */
- height:73px;
-}
-
-.dialog .hd .c h3 {
-  padding-top: 43px;
-  padding-left: 48px;
-  text-transform: uppercase;
+	font-size:1px; /* ensure minimum height */
+	height:73px;
 }
 
 .dialog .ft .c {
- height:73px;
+	height:73px;
 }
 
 .dialog .hd {
- background:transparent url(dialog_corners.png) no-repeat left top;
- margin-right:73px; /* space for right corner */
+	background:transparent url(dialog_corners.png) no-repeat left top;
+	margin-right:73px; /* space for right corner */
 }
 
 .dialog .hd .c {
- background:transparent url(dialog_corners.png) no-repeat right top;
- margin-right:-73px; /* pull right corner back over "empty" space (from above margin) */
+	background:transparent url(dialog_corners.png) no-repeat right top;
+	margin-right:-73px; /* pull right corner back over "empty" space (from above margin) */
+	text-align: center;
+}
+
+.dialog .hd .c h3 {
+	padding-top: 43px;
+	text-transform: uppercase;
 }
 
 .dialog .bd {
- background:transparent url(dialog_cornersmiddle.png) repeat-y 0px 0px;
- margin-right:43px;
+	background:transparent url(dialog_cornersmiddle.png) repeat-y left top;
+ 	margin-right:43px;
 }
 
 .dialog .bd .c {
- background:transparent url(dialog_cornersmiddle.png) repeat-y right 0px;
- margin:0px -43px 0px 48px;
- padding-right: 48px;
+	background:transparent url(dialog_cornersmiddle.png) repeat-y right top;
+	margin:0px -43px 0px 60px;
+	padding-right: 48px;
 }
 
 .dialog .ft {
- background:transparent url(dialog_corners.png) no-repeat left bottom;
- margin-right:73px;
+	background:transparent url(dialog_corners.png) no-repeat left bottom;
+	margin-right:73px;
 }
 
 .dialog .ft .c {
- background:transparent url(dialog_corners.png) no-repeat right bottom;
- margin-right:-73px;
+	background:transparent url(dialog_corners.png) no-repeat right bottom;
+	margin-right:-73px;
 }
 
-.dialog .warnbox {
-	width: auto;
-	border: none;
-}
-
-.dialog .warnbox h3 {
-	margin: 0;
-	padding: 0;
-	font-size: 11px;
-	font-weight: bold;
-}
-
-.dialog p {
- margin:0px;
- padding:0px;
+.dialog .inputSubmit {
+	margin-right: 20px;
 }
 
 .yui-overlay,

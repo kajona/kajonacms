@@ -36,8 +36,11 @@ $text["dateStyleLong"]              = "d M Y H:i:s";
 $text["status_active"]              = "Status ändern (ist aktiv)";
 $text["status_inactive"]            = "Status ändern (ist inaktiv)";
 
-$text["deleteHeader"]               = "Löschen bestätigen";
 $text["deleteButton"]               = "Löschen";
+
+$text["dialog_deleteHeader"]        = "Löschen bestätigen";
+$text["dialog_deleteButton"]        = "Ja, löschen";
+$text["dialog_cancelButton"]        = "abbrechen";
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 

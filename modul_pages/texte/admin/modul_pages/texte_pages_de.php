@@ -27,8 +27,7 @@ $text["klapper"]					= "Ordner ein-/ausblenden";
 $text["seite_bearbeiten"]			= "Seite bearbeiten";
 $text["liste_seiten_leer"]			= "Keine Seiten angelegt";
 $text["seite_inhalte"]				= "Seiteninhalte bearbeiten";
-$text["seite_loeschen_frage"]		= " : Seite wirklich löschen?";
-$text["seite_loeschen_link"]		= "Löschen";
+$text["seite_loeschen_frage"]		= "Möchten Sie die Seite &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["seite_loeschen_erfolg"]		= "Seite erfolgreich gelöscht";
 $text["seite_rechte"]				= "Rechte bearbeiten";
 $text["seite_vorschau"]				= "Vorschau anzeigen";
@@ -44,8 +43,8 @@ $text["ordner_loeschen_erfolg"]		= "Ordner erfolgreich gelöscht";
 $text["ordner_loeschen_fehler"]		= "Fehler beim Löschen des Ordners";
 $text["ordner_loschen_leer"]        = "Ordner kann nicht gelöscht werden, er ist nicht leer";
 $text["pages_ordner_rechte"]		= "Rechte bearbeiten";
-$text["pages_ordner_loeschen_frage"]= " : Ordner wirklich löschen?";
-$text["pages_ordner_loeschen_link"]	= "Löschen";
+$text["pages_ordner_loeschen_frage"]= "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+
 $text["pages_ordner_edit"]			= "Ordner bearbeiten";
 
 $text["inhalte_titel"]				= "Seitenverwaltung - ";
@@ -62,8 +61,8 @@ $text["element_installer_hint"]     = "Gefundene Installer noch nicht installier
 $text["element_anlegen"]			= "Element anlegen";
 $text["element_anlegen_fehler"]		= "Fehler beim Anlegen des Elements";
 $text["element_bearbeiten_fehler"]	= "Fehler beim Bearbeiten des Elements";
-$text["element_loeschen_frage"]		= " : Element wirklich löschen?<br />";
-$text["element_loeschen_link"]		= "Löschen";
+
+$text["element_loeschen_frage"]		= "Möchten Sie das Element &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["element_loeschen_fehler"]	= "Fehler beim Löschen des Elements";
 $text["element_hoch"]				= "Element nach oben verschieben";
 $text["element_runter"]				= "Element nach unten verschieben";

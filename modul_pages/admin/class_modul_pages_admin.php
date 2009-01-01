@@ -258,9 +258,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
 			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid())) {
 			    		    if(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) != 0 || count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) != 0)
-                			    $strActions .= $this->objToolkit->listDeleteButton($this->getText("ordner_loschen_leer"));
+ 			    		    	$strActions .= $this->objToolkit->listDeleteButton($this->getText("ordner_loschen_leer"));
                             else
-                                $strActions .= $this->objToolkit->listDeleteButton($objSingleFolder->getStrName().$this->getText("pages_ordner_loeschen_frage").getLinkAdmin("pages", "deleteFolderFinal", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_loeschen_link")));
+                            	$strActions .= $this->objToolkit->listDeleteButton($objSingleFolder->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objSingleFolder->getSystemid()));
 			    		}
 			    		if($this->objRights->rightRight($objSingleFolder->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objSingleFolder->getSystemid())));
@@ -298,7 +298,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    			if($this->objRights->rightEdit($strSystemid))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));	
 		    		if($this->objRights->rightDelete($strSystemid))
-		    		    $strActions .= $this->objToolkit->listDeleteButton($objOneRow->getStrName().$this->getText("seite_loeschen_frage").getLinkAdmin("pages", "deletePageFinal", "&systemid=".$objOneRow->getSystemid(), $this->getText("seite_loeschen_link")));
+		    			$strActions .= $this->objToolkit->listDeleteButton($objOneRow->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneRow->getSystemid()));
 		    		if($this->objRights->rightEdit($strSystemid))
 		    			$strActions .= $this->objToolkit->listStatusButton($objOneRow->getSystemid());
 		    		if($this->objRights->rightRight($strSystemid))
@@ -810,7 +810,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$intI = 0;
 			foreach($arrElements as $objOneElement) {
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName().$this->getText("element_loeschen_frage").getLinkAdmin("pages", "deleteElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_loeschen_link")));
+	    		
+	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getStrElementId()));
 				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
 			}
 			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))

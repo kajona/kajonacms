@@ -356,13 +356,6 @@ Shown, wherever the attention of the user is needed
 </div>
 </warning_box>
 
-<delete_box>
-<div>
-<b>%%title%%</b><br />%%question%%<br />
-<input type="submit" name="delete" value="%%buttonText%%" class="inputSubmit" onclick="window.location='%%linkHref%%';" />
-</div>
-</delete_box>
-
 Used to print plain text
 <text_row>
 <span class="%%class%%">%%text%%</span><br />
@@ -866,21 +859,19 @@ The language switch sourrounds the buttons
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
 		<div class="c">
-			<p>%%dialog_content%%
-			<input type="submit" name="cancel%%dialog_id%%" value="abbrechen" class="inputSubmitShort" onclick="%%dialog_var%%.hide(); return false;" />
-			</p>
+			%dialog_content%%
 		</div>
 	</div>
 	<div class="ft"><div class="c"></div></div>
 </div></dialogContainer>
 
-<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
+<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%" onmousedown="return false;">
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
 		<div class="c">
-			<p>%%dialog_content%%
-			<input type="submit" name="cancel%%dialog_id%%" value="abbrechen" class="inputSubmitShort" onclick="%%dialog_var%%.hide(); return false;" />
-			</p>
+			<span id="%%dialog_id%%_content"><!-- filled by js --></span><br /><br />
+			<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" /> <input type="submit" name="%%dialog_id%%_cancelButton" id="%%dialog_id%%_cancelButton" value="%%dialog_cancelButton%%" class="inputSubmitShort" onclick="jsDialog_1.hide(); return false;" />
+			<br />
 		</div>
 	</div>
 	<div class="ft"><div class="c"></div></div>

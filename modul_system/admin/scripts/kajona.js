@@ -136,30 +136,35 @@ function addLoadEvent(func) {
 	}
 }
 
-function ModalDialog(strDialogId) {
-    
-    kajonaAjaxHelper.loadAnimationBase();
-    
+function ModalDialog(strDialogId, intDialogType) {
     this.dialog = null;
-    this.width = "240px";
     this.containerId = strDialogId;
     
-    this.init = function() {
+	this.setContent = function(strQuestion, strConfirmButton, strLinkHref) {
+		if (intDialogType == 1) {
+			document.getElementById(this.containerId+"_content").innerHTML = strQuestion;
+			var confirmButton = document.getElementById(this.containerId+"_confirmButton");
+			confirmButton.value = strConfirmButton;
+			confirmButton.onclick = function() { window.location = strLinkHref; return false; };
+		}
+	}
+	
+    this.init = function() {	
         this.dialog = 
-    		new YAHOO.widget.Panel(this.containerId,  
-    			{ /*width:this.width,  */
-    			  fixedcenter:true, 
-    			  close:false, 
-    			  draggable:false, 
+    		new YAHOO.widget.Panel(this.containerId,
+    			{
+    			  fixedcenter:true,
+    			  close:false,
+    			  draggable:false,
     			  zindex:4000,
     			  modal:true,
-    			  visible:true,
-    			  effect: { effect: YAHOO.widget.ContainerEffect.FADE, duration: 0.5 }
-    			} 
+    			  visible:true
+    			}
 		);
-		
+ 		
         this.dialog.render(document.body);
         this.dialog.show();
+		this.dialog.focusLast();
     }
     
     this.hide = function() {

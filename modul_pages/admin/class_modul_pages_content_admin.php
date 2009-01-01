@@ -216,8 +216,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 								    $this->unlockRecord($objOneElementOnPage->getSystemid());
 
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ).$this->getText("element_loeschen_frage")
-			                                   .getLinkAdmin("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")), $this->getText("element_loeschen_link")));                 
+								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));   
 							}
 
 							//The Icons to sort the list
