@@ -557,6 +557,13 @@ function filemanagerRotate(intAngle) {
 var fm_rotate_callback = {
 		success: function(o) { 
 			kajonaStatusDisplay.displayXMLMessage(o.responseText);
+
+            if(fm_cropObj != null) {
+                fm_cropObj.destroy();
+                fm_cropObj = null;
+                document.getElementById("accept_icon").src = document.getElementById("accept_icon").src.replace("icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+            }
+
 			//document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
 			filemanagerShowRealsize();
 			//fm_crop_screenlock.hide();

@@ -889,14 +889,14 @@ class class_toolkit_admin extends class_toolkit {
 
         //TODO: remove after fixing
         if($strQuestion == "" || $strLinkHref == "")
-            return;
+            return "TODO";
         // END REMOVE
 
 	    //wrap the contents by a warning-box
 	    $strDialogContent = $this->deleteBox($strTitle, $strQuestion, $strLinkHref);
 	    //place it into a standard-js-dialog
 	    $strDialogId = "delVar".generateSystemid();
-	    $strDialog = $this->modalDialog(class_carrier::getInstance()->getObjText()->getText("deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
+        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
 	    
 	    //create the list-button and the js code to show the dialog
 	    $strButton = getLinkAdminManual("href=\"javascript:".$strDialogId.".init();\"", 
@@ -1499,9 +1499,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param string $strContent
      * @param string $strDialogId
+     * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog)
      * @return string
      */
-    public function modalDialog($strTitle, $strDialogContent, $strDialogId) {
+    public function jsDialog($strTitle, $strDialogContent, $strDialogId, $intDialogType) {
         $strContent = "";
         //create the html-part
         $arrTemplate = array();
@@ -1510,7 +1511,14 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["dialog_name"] = $strTitle;
         $arrTemplate["dialog_content"] = $strDialogContent;
         $arrTemplate["dialog_var"] = $strDialogId;
-        $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialog");
+
+        if($intDialogType == 0)
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialog");
+        else if($intDialogType == 1)
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmation");
+        else if($intDialogType == 3)
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRaw");
+
         
         $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
         
@@ -1521,32 +1529,35 @@ class class_toolkit_admin extends class_toolkit {
         
         return $strContent;
     }
-    
+
     /**
      * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
      * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
-     * dialog become visible. The Raw-Dialog has no markup!
+     * dialog become visible.
      *
+     * @param string $strTitle
      * @param string $strContent
      * @param string $strDialogId
      * @return string
      */
-    public function modalDialogRaw($strDialogContent, $strDialogId) {
-        $strContent = "";
-        //create the html-part
-        $arrTemplate = array();
-        $strContainerId = generateSystemid();
-        $arrTemplate["dialog_id"] = $strContainerId;
-        $arrTemplate["dialog_content"] = $strDialogContent;
-        $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRaw");
-        $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-        
-        //and create the java-script
-        $strContent .="<script type=\"text/javascript\">
-            var ".$strDialogId." = new ModalDialog('".$strContainerId."');
-        </script>";
-        
-        return $strContent;
-    }    
+    public function modalDialog($strTitle, $strDialogContent, $strDialogId) {
+        return $this->jsDialog($strTitle, $strDialogContent, $strDialogId, 0);
+    }
+
+    /**
+     * Creates a confirmation dialog (Action / Cancel button) on the page. By default, the dialog is hidden, so has to be set visible.
+     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
+     * dialog become visible.
+     *
+     * @param string $strTitle
+     * @param string $strContent
+     * @param string $strDialogId
+     * @return string
+     */
+    public function confirmationDialog($strTitle, $strDialogContent, $strDialogId) {
+        return $this->jsDialog($strTitle, $strDialogContent, $strDialogId, 1);
+    }
+    
+    
 }
 ?>
