@@ -14,5 +14,9 @@ $text["validation_name"]                    = "Bitte Namen angeben";
 $text["validation_message"]                 = "Bitte Nachricht angeben";
 $text["validation_code"]                    = "Bitte korrekten Code angeben";
 
+$text["postacomment_rating_rate1"]   = "Kommentar mit ";
+$text["postacomment_rating_rate2"]   = " Punkt(en) bewerten!";
+$text["postacomment_rating_permissions"] = "Keine ausreichenden Rechte.";
+$text["postacomment_rating_voted"]   = "Dieser Kommentar wurde bereits bewertet.";
 
 ?>

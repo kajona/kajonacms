@@ -175,6 +175,70 @@ class class_model extends class_root {
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         return true;    
 	}
+	
+// --- RATING -------------------------------------------------------------------------------------------
+
+    /**
+     * Rating of the current file, if module rating is installed.
+     * 
+     * @see interface_sortable_rating
+     * @return float
+     */
+    public function getFloatRating() {
+        $floatRating = null;
+        $objModule = class_modul_system_module::getModuleByName("rating");
+        if($objModule != null) {
+            include_once(_systempath_."/class_modul_rating_rate.php");
+            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
+            if($objRating != null)
+               $floatRating = $objRating->getFloatRating();
+            else
+               $floatRating = 0.0;   
+        }
+        
+        return $floatRating;
+    }
+    
+    /**  
+     * Checks if the current user is allowed to rate the file
+     * 
+     * @return bool
+     */
+    public function isRateableByUser() {
+        $bitReturn = false;
+        $objModule = class_modul_system_module::getModuleByName("rating");
+        if($objModule != null) {
+            include_once(_systempath_."/class_modul_rating_rate.php");
+            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
+            if($objRating != null)
+               $bitReturn = $objRating->isRateableByCurrentUser();
+            else
+               $bitReturn = true;   
+        }
+        
+        return $bitReturn;
+    }
+    
+    /**
+     * Number of rating for the current file
+     * 
+     * @see interface_sortable_rating
+     * @return int
+     */
+    public function getIntHits() {
+        $intHits = 0;
+        $objModule = class_modul_system_module::getModuleByName("rating");
+        if($objModule != null) {
+            include_once(_systempath_."/class_modul_rating_rate.php");
+            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
+            if($objRating != null)
+               $intHits = $objRating->getIntHits();
+            else
+               return 0;   
+        }
+        
+        return $intHits;
+    }
 
 }
 ?>

@@ -1,4 +1,7 @@
 <postacomment_list>
+<script type="text/javascript">
+kajonaAjaxHelper.loadAjaxBase();
+</script>
 %%postacomment_form%%
 %%postacomment_list%%
 </postacomment_list>
@@ -8,10 +11,13 @@
 <postacomment_post>
 	<div class="pacComment">
 		<div class="pacHeader">
-			<div class="pacName">%%postacomment_post_name%%</div>
-			<div class="pacDate">%%postacomment_post_date%%</div>
-			<div class="pacSubject">%%postacomment_post_subject%%</div>
-		</div>	
+            <div class="pacName">%%postacomment_post_name%%</div>
+            <div class="pacDate">%%postacomment_post_date%%</div>
+            <div style="clear: both;"></div>
+            <div class="pacSubject">%%postacomment_post_subject%%</div>
+            <div class="pacRating">%%postacomment_post_rating%%</div>
+            <div style="clear: both;"></div>
+        </div>  
 		<div class="pacText">%%postacomment_post_message%%</div>
 	</div>
 </postacomment_post>
@@ -47,3 +53,18 @@
 <validation_error_row>
 	&middot; %%error%% <br />
 </validation_error_row>
+
+<rating_bar>
+<script type="text/javascript">
+<!--
+kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+//-->
+</script>
+<span class="inline-rating-bar">
+<ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">
+    <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
+    %%rating_icons%%
+</ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span>
+</rating_bar>
+
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

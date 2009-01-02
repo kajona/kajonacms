@@ -159,13 +159,29 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 			if(is_array($arrPosts) && count($arrPosts) > 0) {
 			 
 				foreach($arrPosts as $objOnePost) {
-					//var_dump($objOnePost->getSystemid());
-					//var_dump($objOnePost);
 				    if($this->objRights->rightView($objOnePost->getSystemid())) {
 	    				
 	    			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
 	    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
 	                    $strAction = "";
+	                    
+	                    
+				        //ratings available?
+                        try {
+                            $objMdlRating = class_modul_system_module::getModuleByName("rating");
+                            if($objMdlRating != null) {
+                                include_once(_systempath_."/class_modul_rating_rate.php");  
+                                $objRating = class_modul_rating_rate::getRating($objOnePost->getSystemid());
+                                if($objRating != null)
+                                    $strCenter .= " - ".$objOnePost->getFloatRating();
+                                else
+                                    $strCenter .= " - 0.0";    
+                            }
+    
+                        }
+                        catch (class_exception $objException) { }
+	                    
+	                    
 	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
 	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))

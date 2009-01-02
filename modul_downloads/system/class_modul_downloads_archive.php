@@ -49,8 +49,10 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 						WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
 						  AND system_id = archive_id";
         $arrResult = $this->objDB->getRow($strQuery);
-        $this->setPath($arrResult["archive_path"]);
-        $this->setTitle($arrResult["archive_title"]);
+        if(count($arrResult) > 0) {
+            $this->setPath($arrResult["archive_path"]);
+            $this->setTitle($arrResult["archive_title"]);
+        }
     }
 
     /**

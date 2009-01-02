@@ -14,7 +14,7 @@ $text["module_list"]				= "Liste";
 
 $text["liste_leer"]                 = "Keine Posts vorhanden";
 
-$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Kommentieren", 5 => "", 6 => "", 7 => "", 8 => "");
+$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Kommentieren", 5 => "Rating", 6 => "", 7 => "", 8 => "");
 
 $text["postacomment_edit"]          = "Kommentar bearbeiten";
 $text["postacomment_rights"]        = "Rechte bearbeiten";

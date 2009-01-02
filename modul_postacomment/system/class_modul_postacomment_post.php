@@ -9,6 +9,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/interface_sortable_rating.php");
 include_once(_systempath_."/class_modul_system_common.php");
 
 /**
@@ -16,7 +17,7 @@ include_once(_systempath_."/class_modul_system_common.php");
  *
  * @package modul_postacomment
  */
-class class_modul_postacomment_post extends class_model implements interface_model  {
+class class_modul_postacomment_post extends class_model implements interface_model, interface_sortable_rating  {
 
     private $strTitle;
     private $strComment;
@@ -255,7 +256,8 @@ class class_modul_postacomment_post extends class_model implements interface_mod
             
         return $bitReturn;
     }
-	
+    
+    
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

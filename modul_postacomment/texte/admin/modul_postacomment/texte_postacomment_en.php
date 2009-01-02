@@ -14,7 +14,7 @@ $text["module_list"]				= "List";
 
 $text["liste_leer"]                 = "No posts available";
 
-$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Post", 5 => "", 6 => "", 7 => "", 8 => "");
+$text["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Post", 5 => "Rating", 6 => "", 7 => "", 8 => "");
 
 $text["postacomment_edit"]          = "Edit comment";
 $text["postacomment_rights"]        = "Change permissions";

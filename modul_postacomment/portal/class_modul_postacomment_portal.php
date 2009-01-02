@@ -102,6 +102,10 @@ class class_modul_postacomment_portal extends class_portal implements interface_
     				$arrOnePost["postacomment_post_message"] = $objOnePost->getStrComment();
     				$arrOnePost["postacomment_post_systemid"] = $objOnePost->getSystemid();
     				$arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
+    			    //ratings available?
+                    if($objOnePost->getFloatRating() !== null) {
+                        $arrOnePost["postacomment_post_rating"] = $this->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
+                    }
 
     				
     				$strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
@@ -125,21 +129,23 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    $strPosts .= $this->getText("postacomment_empty");
 		    
 		//Create form
-        $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_form");
-        $arrForm = array();
-        $arrForm["formaction"] = getLinkPortalRaw($this->getPagename(), "", "postComment", "", $this->getSystemid());
-		$arrForm["comment_name"] = $this->getParam("comment_name");
-		$arrForm["comment_subject"] = $this->getParam("comment_subject");
-		$arrForm["comment_message"] = $this->getParam("comment_message");
-		$arrForm["comment_template"] = $this->arrElementData["char1"];
-		$arrForm["comment_systemid"] = $this->getParam("systemid");
-		$arrForm["comment_page"] = $this->getPagename();
-		$arrForm["validation_errors"] = $this->strErrors;
-		$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
-		
+		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+	        $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_form");
+	        $arrForm = array();
+	        $arrForm["formaction"] = getLinkPortalRaw($this->getPagename(), "", "postComment", "", $this->getSystemid());
+			$arrForm["comment_name"] = $this->getParam("comment_name");
+			$arrForm["comment_subject"] = $this->getParam("comment_subject");
+			$arrForm["comment_message"] = $this->getParam("comment_message");
+			$arrForm["comment_template"] = $this->arrElementData["char1"];
+			$arrForm["comment_systemid"] = $this->getParam("systemid");
+			$arrForm["comment_page"] = $this->getPagename();
+			$arrForm["validation_errors"] = $this->strErrors;
+		  $strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
+		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
 		$strReturn .= $this->objTemplate->fillTemplate(array("postacomment_form" => $strForm, "postacomment_list" => $strPosts), $strTemplateID); 
+		
 		return $strReturn;
 	}
 	
@@ -151,23 +157,25 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	public function actionPostComment() {
 	    
 	    //pageid or systemid to filter?
-		$strSystemidfilter = "";
-		$strPagefilter = "";
-		if($this->getSystemid() != "")
-		    $strSystemidfilter = $this->getSystemid();
+	    if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+			$strSystemidfilter = "";
+			$strPagefilter = "";
+			if($this->getSystemid() != "")
+			    $strSystemidfilter = $this->getSystemid();
+			    
+			$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
 		    
-		$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
-	    
-	    $objPost = new class_modul_postacomment_post();
-	    $objPost->setStrUsername($this->getParam("comment_name"));
-	    $objPost->setStrTitle($this->getParam("comment_subject"));
-	    $objPost->setStrComment($this->getParam("comment_message"));
-	    
-	    $objPost->setStrAssignedPage($strPagefilter);
-	    $objPost->setStrAssignedSystemid($strSystemidfilter);
-	    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
-	    
-	    $objPost->saveObjectToDb();
+		    $objPost = new class_modul_postacomment_post();
+		    $objPost->setStrUsername($this->getParam("comment_name"));
+		    $objPost->setStrTitle($this->getParam("comment_subject"));
+		    $objPost->setStrComment($this->getParam("comment_message"));
+		    
+		    $objPost->setStrAssignedPage($strPagefilter);
+		    $objPost->setStrAssignedSystemid($strSystemidfilter);
+		    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
+		    
+		    $objPost->saveObjectToDb();
+	    }
 	}
 	
 	/**
@@ -194,7 +202,46 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	    return $bitReturn;
 	}
 
-	
+    /**
+     * Builds the rating bar available for every comment.
+     * Creates the needed js-links and image-tags as defined by the template.
+     *
+     * @param float $floatRating
+     * @param string $strSystemid
+     * @param bool $bitRatingAllowed
+     * @return string
+     */
+    private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+        $strIcons = "";
+        $strRatingBarTitle = "";
+        
+        include_once(_systempath_."/class_modul_rating_rate.php");
+        $intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
+        
+        //read the templates
+        $strTemplateBarId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_bar");
+        
+        if($bitRatingAllowed && $bitPermissions) {
+            $strTemplateIconId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_icon");
+            
+            for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
+                $arrTemplate = array();
+                $arrTemplate["rating_icon_number"] = $intI;
+                
+                $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
+                $arrTemplate["rating_icon_title"] = $this->getText("postacomment_rating_rate1").$intI.$this->getText("postacomment_rating_rate2");
+    
+                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+            }
+        } else {
+            if(!$bitRatingAllowed)
+                $strRatingBarTitle = $this->getText("postacomment_rating_voted");
+            else    
+                $strRatingBarTitle = $this->getText("postacomment_rating_permissions");
+        }
+        
+        return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+    }	
 
 }
 ?>

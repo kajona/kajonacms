@@ -379,48 +379,6 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		return $arrReturn;
 	}
 	
-	
-	
-	/**
-	 * Rating of the current picture, if module rating is installed.
-	 * 
-	 * @see interface_sortable_rating
-	 * @return float
-	 */
-	public function getFloatRating() {
-		$floatRating = null;
-		$objModule = class_modul_system_module::getModuleByName("rating");
-		if($objModule != null) {
-			include_once(_systempath_."/class_modul_rating_rate.php");
-			$objRating = class_modul_rating_rate::getRating($this->getSystemid());
-			if($objRating != null)
-			   $floatRating = $objRating->getFloatRating();
-			else
-			   $floatRating = 0.0;   
-		}
-		
-		return $floatRating;
-	}
-	
-    /**  
-     * Checks if the current user is allowed to rate the picture
-     * 
-     * @return bool
-     */
-    public function isRateableByUser() {
-        $bitReturn = false;
-        $objModule = class_modul_system_module::getModuleByName("rating");
-        if($objModule != null) {
-            include_once(_systempath_."/class_modul_rating_rate.php");
-            $objRating = class_modul_rating_rate::getRating($this->getSystemid());
-            if($objRating != null)
-               $bitReturn = $objRating->isRateableByCurrentUser();
-            else
-               $bitReturn = true;   
-        }
-        
-        return $bitReturn;
-    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
