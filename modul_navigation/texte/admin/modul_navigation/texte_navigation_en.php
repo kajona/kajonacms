@@ -20,8 +20,7 @@ $text["liste_leer"]					= "No navigations available";
 
 $text["navigation_bearbeiten"]		= "Edit navigation";
 $text["navigation_anzeigen"]		= "Show navigation items";
-$text["navigation_loeschen_frage"]	= " : Delete navigation with all items?";
-$text["navigation_loeschen_link"]	= "Delete";
+$text["navigation_loeschen_frage"]	= "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
 $text["navigation_rechte"]			= "Change permissions";
 $text["navigation_erfolg"]			= "Navigation was created succesfully";
 $text["navigation_erf_loeschen"]	= "Navigation was deleted succesfully";

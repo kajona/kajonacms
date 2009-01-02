@@ -202,7 +202,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneCategory->getStrTitle().$this->getText("kat_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid(), $this->getText("kat_loeschen_link")));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()));
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
     				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
@@ -252,7 +252,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightRight1($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle().$this->getText("news_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1", $this->getText("news_loeschen_link")));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
@@ -605,7 +605,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 foreach ($arrFeeds as $objOneFeed) {
                     $strAction = "";
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewsFeed", "&systemid=".$objOneFeed->getSystemid(), "", $this->getText("editNewsFeed"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listDeleteButton($objOneFeed->getStrTitle().$this->getText("feed_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteNewsFeed", "&systemid=".$objOneFeed->getSystemid(), $this->getText("news_loeschen_link")));
+                    $strAction .= $this->objToolkit->listDeleteButton($objOneFeed->getStrTitle(), $this->getText("feed_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNewsFeed", "&systemid=".$objOneFeed->getSystemid()));
 
                     //mod-rewrite enabled?
                     if(_system_mod_rewrite_ == "true")

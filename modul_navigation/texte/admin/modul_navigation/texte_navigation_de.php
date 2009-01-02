@@ -20,7 +20,7 @@ $text["liste_leer"]					= "Keine Navigation angelegt";
 
 $text["navigation_bearbeiten"]		= "Navigation bearbeiten";
 $text["navigation_anzeigen"]		= "Unterpunkte anzeigen";
-$text["navigation_loeschen_frage"]	= " : Navigation mit allen Unterpunkten löschen?";
+$text["navigation_loeschen_frage"]	= "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
 $text["navigation_loeschen_link"]	= "Löschen";
 $text["navigation_rechte"]			= "Rechte bearbeiten";
 $text["navigation_erfolg"]			= "Navigation erfolgreich angelegt";

@@ -25,16 +25,14 @@ $text["klapper"]					= "Show/hide category";
 
 $text["kat_anzeigen"]				= "Show category";
 $text["kat_bearbeiten"]				= "Edit category";
-$text["kat_loeschen_frage"]			= " : really delete category?";
-$text["kat_loeschen_link"]			= "Delete";
+$text["kat_loeschen_frage"]			= "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $text["kat_rechte"]					= "Change permissions";
 $text["kat_ausblenden"]				= "Show/hide categories";
 
 $text["news_inhalt"]				= "Edit news";
 $text["news_grunddaten"]			= "Edit news basic data";
 $text["news_rechte"]				= "Change permissions";
-$text["news_loeschen_frage"]		= " : really delete news?";
-$text["news_loeschen_link"]			= "Delete";
+$text["news_loeschen_frage"]		= "Do you really want to delete the news &quot;<b>%%element_name%%</b>&quot;?";
 $text["news_basicdata"]             = "News basic data";
 $text["news_title"]                 = "Title:";
 $text["start"]                      = "Start date:";
@@ -59,7 +57,7 @@ $text["feed_cat"]                   = "Feed category:";
 $text["feed_cat_all"]               = "All categories";
 $text["feed_liste_leer"]            = "No feeds available";
 $text["editNewsFeed"]               = "Edit feed";
-$text["feed_loeschen_frage"]        = " : really delete feed?";
+$text["feed_loeschen_frage"]        = "Do you really want to delete the feed &quot;<b>%%element_name%%</b>&quot;?";
 
 $text["_news_suche_seite_"]         = "Result page:";
 $text["_news_suche_seite_hint"]     = "This page shows the details of the news which where found by the search.";

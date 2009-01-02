@@ -169,8 +169,8 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
 	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOnePost->getStrTitle().$this->getText("postacomment_delete_question")
-	    		   		                  .getLinkAdmin($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid()."&postacommentDeleteFinal=1".($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe")), $this->getText("postacomment_delete_link")));
+	    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOnePost->getStrTitle(), $this->getText("postacomment_delete_question"), 
+	    		   		                  getLinkAdminHref($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid()."&postacommentDeleteFinal=1".($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))));
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listStatusButton($objOnePost->getSystemid());
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))

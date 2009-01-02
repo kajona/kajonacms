@@ -25,16 +25,14 @@ $text["klapper"]					= "Kategorien ein-/ausblenden";
 
 $text["kat_anzeigen"]				= "Kategorie anzeigen";
 $text["kat_bearbeiten"]				= "Kategorie bearbeiten";
-$text["kat_loeschen_frage"]			= " : Kategorie wirklich löschen?";
-$text["kat_loeschen_link"]			= "Löschen";
+$text["kat_loeschen_frage"]			= "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["kat_rechte"]					= "Rechte bearbeiten";
 $text["kat_ausblenden"]				= "Kategorien ein-/ausblenden";
 
 $text["news_inhalt"]				= "Newsinhalte bearbeiten";
 $text["news_grunddaten"]			= "Newsgrunddaten bearbeiten";
 $text["news_rechte"]				= "Rechte bearbeiten";
-$text["news_loeschen_frage"]		= " : News wirklich löschen?";
-$text["news_loeschen_link"]			= "Löschen";
+$text["news_loeschen_frage"]		= "Möchten Sie die News &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["news_basicdata"]             = "News-Grunddaten";
 $text["news_title"]                 = "Titel:";
 $text["start"]                      = "Start-Datum:";
@@ -59,7 +57,7 @@ $text["feed_cat"]                   = "Kategorie des Feeds:";
 $text["feed_cat_all"]               = "Alle Kategorien";
 $text["feed_liste_leer"]            = "Keine Feeds angelegt";
 $text["editNewsFeed"]               = "Feed bearbeiten";
-$text["feed_loeschen_frage"]        = " : Feed wirklich löschen?";
+$text["feed_loeschen_frage"]        = "Möchten Sie den Feed &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 $text["_news_suche_seite_"]         = "Treffer-Seite:";
 $text["_news_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Detailansicht der News, die in der Suche gefunden wurden.";

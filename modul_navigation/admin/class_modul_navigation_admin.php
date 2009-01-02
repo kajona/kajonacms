@@ -165,7 +165,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    		if($this->objRights->rightView($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
 			    		if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
-			    		    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName().$this->getText("navigation_loeschen_frage").getLinkAdmin("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid(), $this->getText("navigation_loeschen_link")));
+			    		    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid()));
 			    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
 			    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
@@ -208,7 +208,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     					    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveDown", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_runter"), "icon_arrowDown.gif"));
     					if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
-    					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName().$this->getText("navigation_loeschen_frage").getLinkAdmin("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid(), $this->getText("navigation_loeschen_link")));
+    					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid()));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
