@@ -704,11 +704,13 @@ function saveUrlEncode($strText) {
  */
 function urlSafeString($strText) {
     $strReturn = "";
+    if($strText == "")
+        return "";
     
-	$arraySearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
-	$arrayReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
+	$arrSearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
+	$arrReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
 	
-	$strReturn = str_replace($arraySearch, $arrayReplace, $strText);
+	$strReturn = str_replace($arrSearch, $arrReplace, $strText);
 	
 	//remove all other special characters
 	$strReturn = ereg_replace("[^A-Za-z0-9_-]", "", $strReturn);
