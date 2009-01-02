@@ -340,9 +340,13 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=faqs&amp;action=saveFaq");
                 $strReturn .= $this->objToolkit->formInputTextArea("faqs_question", $this->getText("faqs_question"), $this->getParam("faqs_question"));
                 $strReturn .= $this->objToolkit->formWysiwygEditor("faqs_answer", $this->getText("faqs_answer"), $this->getParam("faqs_answer"), "minimal");
-                $strReturn .= $this->objToolkit->divider();
+
                 //and the cats
                 $arrCats = class_modul_faqs_category::getCategories();
+                
+                if (count($arrCats) > 0)
+                    $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
+                
                 foreach ($arrCats as $objOneCat) {
             	   $strReturn .= $this->objToolkit->formInputCheckbox("cat[".$objOneCat->getSystemid()."]", $objOneCat->getStrTitle());
                 }
@@ -364,10 +368,13 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=faqs&amp;action=saveFaq");
                 $strReturn .= $this->objToolkit->formInputTextArea("faqs_question", $this->getText("faqs_question"), $objFaq->getStrQuestion());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("faqs_answer", $this->getText("faqs_answer"), $objFaq->getStrAnswer(), "minimal");
-                $strReturn .= $this->objToolkit->divider();
+
                 //and the cats
                 $arrCats = class_modul_faqs_category::getCategories();
                 $arrFaqsMember = class_modul_faqs_category::getFaqsMember($this->getSystemid());
+                
+                if (count($arrCats) > 0)
+                    $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
 
                 foreach ($arrCats as $objOneCat) {
                     $bitChecked = false;

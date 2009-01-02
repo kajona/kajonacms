@@ -29,6 +29,7 @@ $text["speichern"]                  = "Speichern";
 
 $text["faqs_question"]              = "Frage:";
 $text["faqs_answer"]                = "Antwort:";
+$text["faqs_categories"]            = "Kategorien";
 $text["faq_edit"]                   = "FAQ bearbeiten";
 $text["faq_rechte"]                 = "Rechte bearbeiten";
 $text["faqs_loeschen_frage"]        = " : FAQ wirklich löschen?";
