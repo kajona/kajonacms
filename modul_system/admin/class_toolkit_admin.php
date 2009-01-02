@@ -887,12 +887,7 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param $strLinkHref
 	 * @return string
 	 */
-	public function listDeleteButton($strElementName, $strQuestion = "", $strLinkHref = "") {
-        //TODO: remove after fixing
-        if($strQuestion == "" || $strLinkHref == "")
-            return "TODO";
-        //END REMOVE
-
+	public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
 	    //place it into a standard-js-dialog
 	    //$strDialogId = "delVar".generateSystemid();
         $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"));

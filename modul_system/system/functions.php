@@ -468,12 +468,13 @@ function timeToString($intTime, $bitLong = true) {
  * @param string $strSystemid
  * @param string $strCssClass
  * @param string $strLanguage
+ * @param string $strSeoAddon
  * @return string
  */
-function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "") {
+function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 
-	$strHref = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage);
+	$strHref = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 	
 	if($strTarget == "")
 		$strTarget = "_self";
@@ -492,9 +493,10 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @param string $strParams
  * @param string $strSystemid
  * @param string $strLanguage
+ * @param string $strSeoAddon Only used if using mod_rewrite
  * @return string
  */
-function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "") {
+function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 	$bitInternal = true;
 	//Internal links are more important than external links!
@@ -536,7 +538,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                 //used later to add seo-relevant keywords
                 include_once(_systempath_."/class_modul_pages_page.php");
                 $objPage = class_modul_pages_page::getPageByName($strPageI);
-                $strAddKeys = saveUrlEncode($objPage->getStrSeostring());
+                $strAddKeys = saveUrlEncode($objPage->getStrSeostring().($strSeoAddon != "" ? "-".$strSeoAddon : ""));
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
                     
