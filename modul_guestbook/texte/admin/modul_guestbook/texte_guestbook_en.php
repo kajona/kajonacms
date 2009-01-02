@@ -24,14 +24,12 @@ $text["gaestebuch_modus_0"]			= "New posts are disabled";
 $text["gaestebuch_modus_1"]			= "New posts are enabled";
 
 $text["fehler_recht"]				= "Not enough permissions to perform this action";
-$text["loeschen_frage"]				= " : Delete guestbook with all entries?<br />";
-$text["loeschen_link"]				= "Delete";
+$text["loeschen_frage"]				= "Do you really want to delete the guestbook &quot;<b>%%element_name%%</b>&quot; with all entries?";
 $text["edit_post"]                  = "Edit";
 $text["post_text"]                  = "Message:";
 
 $text["post_liste_leer"]			= "No posts available";
-$text["post_loeschen_frage"]		= " : Really delete post?<br />";
-$text["post_loeschen_link"]			= "Delete";
+$text["post_loeschen_frage"]		= "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";
 
 $text["guestbook_title"]            = "Title:";
 $text["guestbook_moderated"]        = "Control-mode:";

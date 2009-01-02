@@ -204,8 +204,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "edit", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")". $this->getText("user_loeschen_frage")
-                                   .getLinkAdmin($this->arrModule["modul"], "deletefinal", "&userid=".$objOneUser->getSystemid(), $this->getText("user_loeschen_link")));
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
+                                   getLinkAdminHref($this->arrModule["modul"], "deletefinal", "&userid=".$objOneUser->getSystemid()));
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
                 //new 2.1: the status icon
@@ -599,8 +599,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _gaeste_gruppe_id_  && $objSingleGroup->getSystemid() != _admin_gruppe_id_) {
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName().$this->getText("gruppe_loeschen_frage")
-                                  .getLinkAdmin($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid(), $this->getText("gruppe_loeschen_link")));
+                    $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
+                                  getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                 }
                 else {
@@ -724,8 +724,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $intI = 0;
                 foreach ($arrMembers as $objSingleMember) {
                     $strAction = $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
-                                 .$this->getText("mitglied_loeschen_frage_1")." ".$objGroup->getStrName().$this->getText("mitglied_loeschen_frage_2")
-                                 .getLinkAdmin($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid(), $this->getText("mitglied_loeschen_link")));
+                                 ,$this->getText("mitglied_loeschen_frage_1")." ".$objGroup->getStrName().$this->getText("mitglied_loeschen_frage_2")
+                                 ,getLinkAdminHref($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();

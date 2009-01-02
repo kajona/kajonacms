@@ -24,11 +24,10 @@ $text["gaestebuch_modus_0"]			= "Freischaltung erforderlich";
 $text["gaestebuch_modus_1"]			= "Keine Freischaltung erforderlich";
 
 $text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
-$text["loeschen_frage"]				= " : Gästebuch mit allen Einträgen wirklich löschen?<br />";
-$text["loeschen_link"]				= "Löschen";
+$text["loeschen_frage"]				= "Möchten Sie das Gästebuch &quot;<b>%%element_name%%</b>&quot; mit allen Einträgen wirklich löschen?";
 
 $text["post_liste_leer"]			= "Keine Einträge vorhanden";
-$text["post_loeschen_frage"]		= " : Eintrag wirklich löschen?<br />";
+$text["post_loeschen_frage"]		= "Möchten Sie den Eintrag &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["post_loeschen_link"]			= "Löschen";
 $text["edit_post"]                  = "Bearbeiten";
 $text["post_text"]                  = "Nachricht:";

@@ -36,8 +36,7 @@ $text["lang_ru"]                    = "Russian";
 
 $text["language_existing"]          = "The language already exists";
 
-$text["delete_question"]            = ": Really delete this language?<br />";
-$text["delete_link"]                = "Delete";
+$text["delete_question"]            = "Do you really want to delete the language &quot;<b>%%element_name%%</b>&quot;?";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------

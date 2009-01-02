@@ -20,7 +20,7 @@ $text["repo_oeffnen"]				= "Ordner öffnen";
 $text["repo_bearbeiten"]			= "Eigenschaften festlegen";
 $text["repo_bearbeiten_fehler"]		= "Beim Bearbeiten ist ein Fehler aufgetreten";
 $text["repo_rechte"]				= "Rechte bearbeiten";
-$text["repo_loeschen_frage"]		= "Möchten Sie das Repository &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />";
+$text["repo_loeschen_frage"]		= "Möchten Sie das Repository &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 $text["ordner_anlegen"]				= "Neuer Ordner";
 $text["ordner_anlegen_erfolg"]		= "Ordner erfolgreich angelegt";

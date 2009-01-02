@@ -23,7 +23,7 @@ $text["logbuch_loeschen_link"]		= "Flush logfile";
 
 $text["archiv_anzeigen"]			= "Open archive";
 $text["archiv_bearbeiten"]			= "Edit archive";
-$text["archiv_loeschen_frage"]		= "Do you really want to delete the archive &quot;<b>%%element_name%%</b>&quot;? <br /> All stored details will be deleted!<br />";
+$text["archiv_loeschen_frage"]		= "Do you really want to delete the archive &quot;<b>%%element_name%%</b>&quot;? <br /> All stored details will be deleted!";
 $text["archiv_loeschen_erfolg"]		= "The archive was delete successfully";
 $text["archiv_loeschen_fehler"]		= "Because of missing permissions the archive couldn't be deleted";
 $text["archiv_rechte"]				= "Edit permissions";

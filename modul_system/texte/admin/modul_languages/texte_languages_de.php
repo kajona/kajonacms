@@ -36,8 +36,7 @@ $text["lang_ru"]                    = "Russisch";
 
 $text["language_existing"]          = "Die Sprache wurde bereits angelegt";
 
-$text["delete_question"]            = ": Diese Sprache wirklich löschen?<br />";
-$text["delete_link"]                = "Löschen";
+$text["delete_question"]            = "Möchten Sie die Sprache &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------

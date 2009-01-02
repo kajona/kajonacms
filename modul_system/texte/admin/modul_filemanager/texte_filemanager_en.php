@@ -20,7 +20,7 @@ $text["repo_oeffnen"]				= "Show folder";
 $text["repo_bearbeiten"]			= "Define properties";
 $text["repo_bearbeiten_fehler"]		= "An error occured while saving the repository";
 $text["repo_rechte"]				= "Edit permissions";
-$text["repo_loeschen_frage"]		= "Do you really want to delete the repository &quot;<b>%%element_name%%</b>&quot;?<br />";
+$text["repo_loeschen_frage"]		= "Do you really want to delete the repository &quot;<b>%%element_name%%</b>&quot;?";
 
 $text["ordner_anlegen"]				= "Create folder";
 $text["ordner_anlegen_erfolg"]		= "Folder was created successfully";

@@ -113,7 +113,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 					if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("languages", "editLanguage", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_bearbeiten"), "icon_pencil.gif"));
 		    		if($this->objRights->rightDelete($objOneLanguage->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()).$this->getText("delete_question").getLinkAdmin($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid(), $this->getText("delete_link")));
+		    		    $strAction .= $this->objToolkit->listDeleteButton($this->getText("lang_".$objOneLanguage->getStrName()), $this->getText("delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteLanguageFinal", "&systemid=".$objOneLanguage->getSystemid()));
 		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
 		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
