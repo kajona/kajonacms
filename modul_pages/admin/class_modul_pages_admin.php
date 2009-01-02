@@ -258,7 +258,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
 			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid())) {
 			    		    if(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) != 0 || count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) != 0)
- 			    		    	$strActions .= $this->objToolkit->listDeleteButton($this->getText("ordner_loschen_leer"));
+ 			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
                             else
                             	$strActions .= $this->objToolkit->listDeleteButton($objSingleFolder->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objSingleFolder->getSystemid()));
 			    		}
@@ -399,7 +399,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    //edit a page
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    //if languages are installed, present a language switch right here
-		        //$bitUseLanguages = true; TODO: needed?
 		        include_once(_adminpath_."/class_modul_languages_admin.php");
 		        $objLanguages = new class_modul_languages_admin();
                 $strReturn .= $objLanguages->getLanguageSwitch();
@@ -456,7 +455,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			//Mode: Create a new Page
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //if languages are installed, present a language switch right here
-		        //$bitUseLanguages = true; TODO: needed?
 		        include_once(_adminpath_."/class_modul_languages_admin.php");
 		        $objLanguages = new class_modul_languages_admin();
 		        $strReturn .= $objLanguages->getLanguageSwitch();
