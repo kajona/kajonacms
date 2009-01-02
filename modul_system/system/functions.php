@@ -538,7 +538,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                 //used later to add seo-relevant keywords
                 include_once(_systempath_."/class_modul_pages_page.php");
                 $objPage = class_modul_pages_page::getPageByName($strPageI);
-                $strAddKeys = saveUrlEncode($objPage->getStrSeostring().($strSeoAddon != "" ? "-".$strSeoAddon : ""));
+                $strAddKeys = urlencode($objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").$strSeoAddon);
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
                     
