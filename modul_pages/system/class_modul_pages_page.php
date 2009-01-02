@@ -559,10 +559,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
     public function setStrName($strName) {
         //make a valid pagename
-        $strName = uniStrtolower($strName);
-        $arrSearch = array("ä", "ö", "ü", ".", " ", "ß");
-        $arrReplace = array("ae", "oe", "ue", "-", "_", "ss");
-        $strName = uniStrReplace($arrSearch, $arrReplace, $strName);
+        $strName = uniStrtolower(urlSafeString($strName));
         
     	$this->strName = $strName;
     }
@@ -580,10 +577,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
     }
     public function setStrSeostring($strSeostring) {
         //Remove permitted characters
-        $arrSearch =  array( ".", " ", "," );
-        $arrReplace = array( "_", "_", "-" );
-        $strSeostring = str_replace($arrSearch, $arrReplace, $strSeostring);
-    	$this->strSeostring = $strSeostring;
+    	$this->strSeostring = urlSafeString($strSeostring);
     }
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;

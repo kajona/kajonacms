@@ -538,9 +538,12 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                 //used later to add seo-relevant keywords
                 include_once(_systempath_."/class_modul_pages_page.php");
                 $objPage = class_modul_pages_page::getPageByName($strPageI);
-                $strAddKeys = urlencode($objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").$strSeoAddon);
+                $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
                 if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                     $strAddKeys .= "__";
+                
+                //trim string
+                $strAddKeys = uniStrTrim($strAddKeys, 100, "");
                     
                 //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
                 //but: special case: just pagename & language
@@ -679,6 +682,8 @@ function htmlStripTags ($strHtml, $strAllowTags = "") {
 }
 
 /**
+ * @deprecated Doesn't make that much sense?!
+ * @todo please check if needed, maybe remove method
  * Encodes an url to be more safe but being less strict than urlencode()
  *
  * @param string $strText
@@ -690,6 +695,26 @@ function saveUrlEncode($strText) {
 	return str_replace($arraySearch, $arrayReplace, $strText);
 }
 
+/**
+ * Replaces some special characters with url-safe characters and removes any other special characters.
+ * Should be used whenever a string is placed into an URL 
+ *
+ * @param string $strText
+ * @return string
+ */
+function urlSafeString($strText) {
+    $strReturn = "";
+    
+	$arraySearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
+	$arrayReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
+	
+	$strReturn = str_replace($arraySearch, $arrayReplace, $strText);
+	
+	//remove all other special characters
+	$strReturn = ereg_replace("[^A-Za-z0-9_-]", "", $strReturn);
+	
+	return $strReturn;
+}
 
 /**
  * Creates a filename valid for filesystems
