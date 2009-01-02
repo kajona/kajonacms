@@ -875,7 +875,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     addCss('admin/scripts/yui/imagecropper/assets/imagecropper-core.css'); 
                                    
                    </script>";
-			
+			//TODO: fix to new dialog-calls
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningPreview"), "fm_preview_warning");
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningSaving")."<a href=\"javascript:filemanagerSaveCroppingToBackend();\">".$this->getText("cropWarningCrop")."</a>", "fm_crop_save_warning");
             $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", "<img src=\""._skinwebpath_."/loading.gif\" />", "fm_crop_screenlock", 3);

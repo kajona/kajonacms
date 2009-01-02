@@ -891,11 +891,11 @@ class class_toolkit_admin extends class_toolkit {
         //TODO: remove after fixing
         if($strQuestion == "" || $strLinkHref == "")
             return "TODO";
-        // END REMOVE
+        //END REMOVE
 
 	    //place it into a standard-js-dialog
-	    $strDialogId = "delVar".generateSystemid();
-        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"), $strDialogContent, $strDialogId);
+	    //$strDialogId = "delVar".generateSystemid();
+        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"));
 	    
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
         
@@ -1473,21 +1473,20 @@ class class_toolkit_admin extends class_toolkit {
      * dialog become visible.
      *
      * @param string $strTitle
-     * @param string $strContent
-     * @param string $strDialogId
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog)
      * @return string
      */
-    public function jsDialog($strTitle, $strDialogContent, $strDialogId, $intDialogType) {
+    public function jsDialog($strTitle, $intDialogType) {
         $strContent = "";
         //create the html-part
         $arrTemplate = array();
         $strContainerId = generateSystemid();
         $arrTemplate["dialog_id"] = $strContainerId;
         $arrTemplate["dialog_name"] = $strTitle;
-        $arrTemplate["dialog_content"] = $strDialogContent;
+        
         //TODO: check if needed
         //$arrTemplate["dialog_var"] = $strDialogId;
+        $arrTemplate["dialog_content"] = "REMOVED!!! Use js-calls!";
 
         $strTemplateId = null;
         if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
@@ -1523,12 +1522,10 @@ class class_toolkit_admin extends class_toolkit {
      * dialog become visible.
      *
      * @param string $strTitle
-     * @param string $strContent
-     * @param string $strDialogId
      * @return string
      */
-    public function modalDialog($strTitle, $strDialogContent, $strDialogId) {
-        return $this->jsDialog($strTitle, $strDialogContent, $strDialogId, 0);
+    public function modalDialog($strTitle) {
+        return $this->jsDialog($strTitle, 0);
     }
 
     /**
@@ -1537,12 +1534,10 @@ class class_toolkit_admin extends class_toolkit {
      * dialog become visible.
      *
      * @param string $strTitle
-     * @param string $strContent
-     * @param string $strDialogId
      * @return string
      */
-    public function confirmationDialog($strTitle, $strDialogContent, $strDialogId) {
-        return $this->jsDialog($strTitle, $strDialogContent, $strDialogId, 1);
+    public function confirmationDialog($strTitle) {
+        return $this->jsDialog($strTitle, 1);
     }
     
     
