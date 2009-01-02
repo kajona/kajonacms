@@ -19,8 +19,7 @@ $text["liste_leer"]					= "Keine FAQs angelegt";
 
 $text["kat_anzeigen"]				= "Kategorie anzeigen";
 $text["kat_bearbeiten"]				= "Kategorie bearbeiten";
-$text["kat_loeschen_frage"]			= " : Kategorie wirklich löschen?";
-$text["kat_loeschen_link"]			= "Löschen";
+$text["kat_loeschen_frage"]			= "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["kat_rechte"]					= "Rechte bearbeiten";
 $text["kat_ausblenden"]				= "Kategorien ein-/ausblenden";
 
@@ -32,8 +31,7 @@ $text["faqs_answer"]                = "Antwort:";
 $text["faqs_categories"]            = "Kategorien";
 $text["faq_edit"]                   = "FAQ bearbeiten";
 $text["faq_rechte"]                 = "Rechte bearbeiten";
-$text["faqs_loeschen_frage"]        = " : FAQ wirklich löschen?";
-$text["faqs_loeschen_link"]         = "Löschen";
+$text["faqs_loeschen_frage"]        = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 $text["_faqs_suche_seite_"]         = "Treffer-Seite:";
 $text["_faqs_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";

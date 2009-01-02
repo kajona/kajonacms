@@ -190,7 +190,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightEdit($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_bearbeiten"), "icon_pencil.gif"));
 			   		if($this->objRights->rightDelete($arrOneObjArchive->getSystemid()))
-			   		    $strAction .= $this->objToolkit->listDeleteButton($arrOneObjArchive->getTitle().$this->getText("archiv_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid(), $this->getText("archiv_loeschen_link")));
+			   		    $strAction .= $this->objToolkit->listDeleteButton($arrOneObjArchive->getTitle(), $this->getText("archiv_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid()));
 			   		if($this->objRights->rightRight($arrOneObjArchive->getSystemid()))
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($arrOneObjArchive->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_downloads.gif"), $arrOneObjArchive->getTitle(), $strAction, $intI++);

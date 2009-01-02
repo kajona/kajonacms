@@ -166,8 +166,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
-    		   		           $objOneCategory->getStrTitle().$this->getText("kat_loeschen_frage")
-				               ."<br />".getLinkAdmin($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()."&&peClose=".$this->getParam("pe"), $this->getText("kat_loeschen_link"))
+    		   		           $objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"), 
+				               getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()."&peClose=".$this->getParam("pe"))
     		   		    ); 
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listStatusButton($objOneCategory->getSystemid());
@@ -202,8 +202,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_edit"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
-    		   		           $objOneFaq->getStrQuestion().$this->getText("faqs_loeschen_frage")
-				               ."<br />".getLinkAdmin($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid()."&faqs_loeschen_final=1&peClose=".$this->getParam("pe"), $this->getText("faqs_loeschen_link"))
+    		   		           $objOneFaq->getStrQuestion(), $this->getText("faqs_loeschen_frage"),
+				               getLinkAdminHref($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid()."&faqs_loeschen_final=1&peClose=".$this->getParam("pe"))
     		   		    );    
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneFaq->getSystemid());

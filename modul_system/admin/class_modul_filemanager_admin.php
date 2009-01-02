@@ -143,7 +143,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			   		if($this->objRights->rightRight2($objOneRepo->getSystemid()))
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editRepo", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
 			   		if($this->objRights->rightRight2($objOneRepo->getSystemid()))
-			   		    $strActions .= $this->objToolkit->listDeleteButton($objOneRepo->getStrName().$this->getText("repo_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid(), $this->getText("repo_loeschen_link")));
+			   		    $strActions .= $this->objToolkit->listDeleteButton($objOneRepo->getStrName(), $this->getText("repo_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid()));
 		   			if($this->objRights->rightRight2($objOneRepo->getSystemid()))
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_rechte"), getRightsImageAdminName($objOneRepo->getSystemid())));
 
@@ -372,10 +372,10 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				$objFilesystem = new class_filesystem();
     				$arrFilesSub = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
     				if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
-    					$strAction .= $this->objToolkit->listDeleteButton($strFolder.$this->getText("ordner_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder, $this->getText("ordner_loeschen_link")));
+    					$strAction .= $this->objToolkit->listDeleteButton($strFolder, $this->getText("ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolder", "&systemid=".$this->getSystemid()."".($this->strFolderOld!= "" ? "&folder=".$this->strFolderOld: "")."&delFolder=".$strFolder));
     				}
     				else
-    					$strAction .= $this->objToolkit->listDeleteButton($this->getText("ordner_loeschen_fehler_l"));
+    					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loeschen_fehler_l")));
                         
 		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_ordner_groesse_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
 				}
@@ -411,7 +411,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   			else
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
-		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"], $this->getText("datei_loeschen_link")));
+		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
 					
 		   			// if an image, attach a thumbnail-tooltip
 		   			if ($bitImage) {
@@ -873,7 +873,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_filemanagerPic\" />";
             
             $arrTemplate["file_actions"] = "";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"], $this->getText("datei_loeschen_link")));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"]));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowRealsize();\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowPreview();\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowCropping();\"", "",  $this->getText("cropImage"), "icon_crop.gif"));

@@ -20,8 +20,7 @@ $text["liste_leer"]					= "No FAQs available";
 
 $text["kat_anzeigen"]				= "Show category";
 $text["kat_bearbeiten"]				= "Edit category";
-$text["kat_loeschen_frage"]			= " : really delete category?";
-$text["kat_loeschen_link"]			= "Delete";
+$text["kat_loeschen_frage"]			= "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $text["kat_rechte"]					= "Change permissions";
 $text["kat_ausblenden"]				= "Show/hide categories";
 
@@ -33,8 +32,7 @@ $text["faqs_answer"]                = "Answer:";
 $text["faqs_categories"]            = "Categories";
 $text["faq_edit"]                   = "Edit FAQ";
 $text["faq_rechte"]                 = "Change permissions";
-$text["faqs_loeschen_frage"]        = " : really delete FAQ?";
-$text["faqs_loeschen_link"]         = "Delete";
+$text["faqs_loeschen_frage"]        = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
 
 $text["_faqs_suche_seite_"]         = "Result page:";
 $text["_faqs_suche_seite_hint"]     = "This page shows the FAQs which where found by the search.";

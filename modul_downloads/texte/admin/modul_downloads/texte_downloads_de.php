@@ -23,8 +23,7 @@ $text["logbuch_loeschen_link"]		= "Logbuch leeren";
 
 $text["archiv_anzeigen"]			= "Archiv öffnen";
 $text["archiv_bearbeiten"]			= "Archiv bearbeiten";
-$text["archiv_loeschen_frage"]		= " : Archiv wirklich löschen? <br /> Dabei werden alle hinterlegten Details gelöscht!<br />";
-$text["archiv_loeschen_link"]		= "Löschen";
+$text["archiv_loeschen_frage"]		= "Möchten Sie das Archiv &quot;<b>%%element_name%%</b>&quot; wirklich löschen? <br /> Dabei werden alle hinterlegten Details gelöscht!<br />";
 $text["archiv_loeschen_erfolg"]		= "Löschen erfolgreich";
 $text["archiv_loeschen_fehler"]		= "Auf Grund nicht ausreichender Rechte konnte das Löschen nicht erfolgreich abgeschlossen werden";
 $text["archiv_rechte"]				= "Rechte bearbeiten";

@@ -20,22 +20,19 @@ $text["repo_oeffnen"]				= "Ordner öffnen";
 $text["repo_bearbeiten"]			= "Eigenschaften festlegen";
 $text["repo_bearbeiten_fehler"]		= "Beim Bearbeiten ist ein Fehler aufgetreten";
 $text["repo_rechte"]				= "Rechte bearbeiten";
-$text["repo_loeschen_frage"]		= " : Repository wirklich löschen?<br />";
-$text["repo_loeschen_link"]			= "Löschen";
+$text["repo_loeschen_frage"]		= "Möchten Sie das Repository &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />";
 
 $text["ordner_anlegen"]				= "Neuer Ordner";
 $text["ordner_anlegen_erfolg"]		= "Ordner erfolgreich angelegt";
 $text["ordner_anlegen_fehler"]		= "Fehler beim Anlegen des Ordners";
 $text["ordner_anlegen_fehler_l"]	= "Ordner bereits vorhanden";
-$text["ordner_loeschen_frage"]		= ": Den Ordner wirklich löschen?";
-$text["ordner_loeschen_link"]		= "Löschen";
+$text["ordner_loeschen_frage"]		= "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $text["ordner_loeschen_fehler_l"]	= "Der Ordner ist nicht leer!";
 $text["ordner_loeschen_fehler"]		= "Fehler beim Löschen des Ordners!";
 $text["ordner_loeschen_erfolg"]		= "Ordner erfolgreich gelöscht";
 $text["ordner_hoch"]				= "Eine Ebene nach oben";
 
-$text["datei_loeschen_frage"]		= " : Datei wirklich löschen?<br />Bitte Wechselwirkungen mit anderen Modulen bedenken!";
-$text["datei_loeschen_link"]		= "Löschen";
+$text["datei_loeschen_frage"]		= "Möchten Sie die Datei &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Bitte Wechselwirkungen mit anderen Modulen bedenken!";
 $text["datei_loeschen_erfolg"]		= "Datei erfolgreich gelöscht";
 $text["datei_loeschen_fehler"]		= "Fehler beim Löschen der Datei";
 $text["datei_umbenennen"]			= "Datei umbenennen";
