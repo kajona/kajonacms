@@ -358,7 +358,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
 	    		if($this->objRights->rightDelete($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "deletePage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_loeschen"), "icon_ton.gif"));
+	    			$strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
 	    		if($this->objRights->rightRight($objPage->getSystemid()	))
