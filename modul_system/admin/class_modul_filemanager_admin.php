@@ -412,7 +412,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
 		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"].$this->getText("datei_loeschen_frage").getLinkAdmin($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"], $this->getText("datei_loeschen_link")));
-					$arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+					
+		   			// if an image, attach a thumbnail-tooltip
+		   			if ($bitImage) {
+		   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $arrOneFile["filepath"]))."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
+		   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $strImage, true);
+		   			} else
+		   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+
 					$arrFilesTemplate[$intJ][1] = $strFilename;
 					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
 					$arrFilesTemplate[$intJ][3] = timeToString($arrOneFile["filecreation"]);
@@ -547,8 +554,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         	  		if(count($arrFiles["files"]) > 0) {
         	  		    $intJ = 0;
         				foreach($arrFiles["files"] as $arrOneFile) {
-        					//Geticon
+        					//Get icon
         					$arrMime  = $this->objToolkit->mimeType($arrOneFile["filename"]);
+        					
+        					$bitImage = false;
+					        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
+					           $bitImage = true;
+					   
         					$strFilename = $arrOneFile["filename"];
         					//Filename too long?
         					$strFilename = uniStrTrim($strFilename, 50);
@@ -560,7 +572,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         		   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
         		   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" class=\"showTooltip\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
 
-        					$arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+				   			// if an image, attach a thumbnail-tooltip
+				   			if ($bitImage) {
+				   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $arrOneFile["filepath"]))."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
+				   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $strImage, true);
+				   			} else
+				   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+
         					$arrFilesTemplate[$intJ][1] = $strFilename;
         					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
         					$arrFilesTemplate[$intJ++][3] = "<div class=\"listActions\">".$strActions."</div>";

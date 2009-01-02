@@ -301,8 +301,10 @@ posy=e.clientY+document.body.scrollTop;
 }
 }
 t = document.getElementById("btc");
+var left =(posx-t.offsetWidth);
+if (left-t.offsetWidth < 0) {left += t.offsetWidth;}
 t.style.top=(posy+10)+"px";
-t.style.left=(posx-t.offsetWidth)+"px";
+t.style.left=left+"px";
 }
 
 //--- AJAX-STUFF --------------------------------------------------------------------------------------
