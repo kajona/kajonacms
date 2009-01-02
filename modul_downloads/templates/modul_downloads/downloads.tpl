@@ -3,12 +3,19 @@
 kajonaAjaxHelper.loadAjaxBase();
 </script>
 <p>%%pathnavigation%%</p>
-<p>%%folderlist%%</p>
-<p>%%filelist%%</p>
+<p>
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="portalList">
+		%%folderlist%%
+	</table>
+</p>
+<p>
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="portalList">
+		%%filelist%%
+	</table>
+</p>
 </list>
 
 <folder>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="portalList">
   <tr class="portalListRow1">
     <td class="image"><img src="_webpath_/portal/pics/kajona/icon_folderClosed.gif" /></td>
     <td class="title"><a href="%%folder_href%%">%%folder_name%%</a></td>
@@ -18,11 +25,9 @@ kajonaAjaxHelper.loadAjaxBase();
     <td></td>
     <td colspan="3" class="description">%%folder_description%%</td>
   </tr>
-</table>
 </folder>
 
 <file>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0" class="portalList">
   <tr class="portalListRow1">
     <td class="image"><img src="_webpath_/portal/pics/kajona/icon_downloads.gif" /></td>
     <td class="title">%%file_name%%</td>
@@ -34,7 +39,6 @@ kajonaAjaxHelper.loadAjaxBase();
     <td></td>
     <td colspan="4" class="description">%%file_description%%</td>
   </tr>
-</table>
 </file>
 
 <pathnavi_entry>

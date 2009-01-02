@@ -225,7 +225,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         }
 
         //current image
-        $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid());
+        $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid(), "currentPic");
 
 		$arrImage["overview"] = ($objImage->getPrevId() != "0" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("uebersicht"), "imageFolder", "", $objImage->getPrevId()) : "" );
 		$arrImage["pathnavigation"] = $this->generatePathnavi(true);

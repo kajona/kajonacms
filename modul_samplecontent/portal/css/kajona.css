@@ -50,17 +50,17 @@ a.hiddenAnchor {
 	display: inline !important; 
 }
 
-a {
+a, a:link, a:visited {
     color: #246b39;
-    text-decoration: none;  
+    text-decoration: none; 
+}
+
+a:hover, a:active, a:focus {
+     text-decoration: underline;
 }
 
 img {
     border: none;   
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 h2 {
@@ -98,7 +98,7 @@ h3 {
 #imageHeader {
     width: 900px;
     height: 180px;
-    background-image: url(../../portal/pics/kajona/header1.jpg);
+    background-image: url(../pics/kajona/header1.jpg);
     background-repeat: no-repeat;
 }
 
@@ -110,7 +110,7 @@ h3 {
 
 #headerLogo {
     float: left;
-    background-image: url(../../portal/pics/kajona/headerlogo.png);
+    background-image: url(../pics/kajona/headerlogo.png);
     background-repeat: no-repeat;
     width: 217px;
     height: 59px;
@@ -120,7 +120,7 @@ h3 {
 
 #headerLogoR {
     float: right;
-    background-image: url(../../portal/pics/kajona/headerlogor.png);
+    background-image: url(../pics/kajona/headerlogor.png);
     background-repeat: no-repeat;
     width: 189px;
     height: 32px;
@@ -171,7 +171,7 @@ h3 {
     text-decoration: none;
 }
 
-#mainNaviContainer a:hover {
+#mainNaviContainer a:hover, #mainNaviContainer a:active, #mainNaviContainer a:focus {
     text-decoration: underline;
 }
 
@@ -190,16 +190,16 @@ h3 {
     text-decoration: underline;
 }
 
-#mainNaviContainer ul li ul li {
+#mainNaviContainer ul ul li {
     padding: 0;
     margin: 0 0 0 10px;
 }
 
-#mainNaviContainer ul li ul li a.active {
+#mainNaviContainer ul ul li a.active {
     text-decoration: underline;
 }
 
-#mainNaviContainer ul li ul li a {
+#mainNaviContainer ul ul li a {
     font-size: 10px;
 	font-weight: normal;
 }
@@ -244,7 +244,7 @@ h3 {
     color: #3b3b3b;
 }
 
-#pNaviContainer ul li a:hover {
+#pNaviContainer ul li a:hover, #pNaviContainer a:active, #pNaviContainer a:focus {
     text-decoration: underline;
 }
 
@@ -254,7 +254,7 @@ h3 {
     height: 15px;   
 }
 
-.cleaner {
+.clearer {
     clear: both;    
 }
 
@@ -273,7 +273,7 @@ h3 {
 }
 
 .inputText, .inputTextShort, .inputDate {
-    background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+    background-image: url('../pics/kajona/forms_input_back.gif');
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -288,7 +288,7 @@ h3 {
 }
 
 .inputTextarea {
-    background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+    background-image: url('../pics/kajona/forms_input_back.gif');
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -303,7 +303,7 @@ h3 {
 }
 
 .inputTextareaLarge {
-    background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+    background-image: url('../pics/kajona/forms_input_back.gif');
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -322,7 +322,7 @@ h3 {
 }
 
 .button, .buttonShort {
-    background-image: url('../../portal/pics/kajona/forms_button_back_31.gif');
+    background-image: url('../pics/kajona/forms_button_back_31.gif');
     background-repeat: repeat-x;
     padding: 0 0 3px 15px;
     margin: 8px 0 0 0;
@@ -364,7 +364,7 @@ h3 {
 }
 .newsListTitle {
     float: left;
-    background-image: url('../../portal/pics/kajona/news_button_31.gif');
+    background-image: url('../pics/kajona/news_button_31.gif');
     background-repeat: no-repeat;
     text-indent: 15px;
 }
@@ -525,6 +525,15 @@ h3 {
     white-space: nowrap;
 }
 
+/* G A L L E R Y */
+.picstrip .currentPic {
+	margin: 0 4px 0 4px;
+}
+
+.picstrip .currentPic img {
+	border: 3px solid #a5a5a5;
+}
+
 
 /* R A T I N G   B A R (http://www.komodomedia.com/blog/2007/01/css-star-rating-redux/) */
 .inline-rating-bar {
@@ -539,7 +548,7 @@ h3 {
 .rating-icon a:active,
 .rating-icon a:focus,
 .rating-icon .current-rating{
-	background: url(../../portal/pics/kajona/rating_icons.png) left -1000px repeat-x;
+	background: url(../pics/kajona/rating_icons.png) left -1000px repeat-x;
 }
 .rating-icon{
 	position: relative;

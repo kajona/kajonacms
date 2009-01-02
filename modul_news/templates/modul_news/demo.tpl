@@ -5,7 +5,7 @@
            <h3>%%news_start_date%% - %%news_title%%</h3>
         </div>
         <div class="newsListMore">%%news_more_link%%</div>
-        <div class="cleaner"></div>
+        <div class="clearer"></div>
     </div>
     <div class="newsListTeaser">
         <div>%%news_intro%%</div>

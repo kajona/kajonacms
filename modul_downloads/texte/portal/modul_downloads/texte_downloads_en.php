@@ -13,10 +13,10 @@ $text["liste_leer"]				= "No downloads available";
 $text["download_datei_link"]	= "Download";
 $text["download_ordner_link"]	= "Open";
 
-$text["download_rating_rate1"]	= "Rate download with ";
+$text["download_rating_rate1"]	= "Rate file with ";
 $text["download_rating_rate2"]	= " point(s)!";
 $text["download_rating_permissions"]	= "Not enough permissions.";
-$text["download_rating_voted"]	        = "You already voted for this download.";
+$text["download_rating_voted"]	        = "You already voted for this file.";
 
 
 ?>

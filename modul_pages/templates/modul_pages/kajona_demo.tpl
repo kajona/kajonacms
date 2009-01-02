@@ -20,7 +20,7 @@
     <div id="logoHeaderHeader">
         <div id="headerLogo"></div>
         <div id="headerLogoR"></div>
-        <div class="cleaner"></div>
+        <div class="clearer"></div>
     </div>
     <div id="imageHeader"></div>
     
@@ -32,7 +32,7 @@
             <div id="pNaviContainer">   
                 <ul>%%masterportalnavi_navigation%%</ul>
             </div>
-            <div class="cleaner"></div> 
+            <div class="clearer"></div> 
         </div>
         <div class="contentSpacer"></div>
         <div id="mainContentContainer">
@@ -57,7 +57,7 @@
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
                 %%mixed2_portalupload%%
             </div>
-            <div class="cleaner"></div>
+            <div class="clearer"></div>
         </div>
         <div class="contentSpacer"></div>
         <div id="footerContainer">%%copyright%%</div>

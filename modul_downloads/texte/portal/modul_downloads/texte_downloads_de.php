@@ -13,10 +13,10 @@ $text["liste_leer"]				= "Keine Downloads vorhanden";
 $text["download_datei_link"]	= "Download";
 $text["download_ordner_link"]	= "Anzeigen";
 
-$text["download_rating_rate1"]	= "Download mit ";
+$text["download_rating_rate1"]	= "Datei mit ";
 $text["download_rating_rate2"]	= " Punkt(en) bewerten!";
 $text["download_rating_permissions"]	= "Keine ausreichenden Rechte.";
-$text["download_rating_voted"]	        = "Dieser Downloads wurde bereits bewertet.";
+$text["download_rating_voted"]	        = "Diese Datei wurde bereits bewertet.";
 
 
 ?>

@@ -39,7 +39,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 	background: #FFFFFF;
-	background-image: url('../../portal/pics/kajona/back.gif');
+	background-image: url('../pics/kajona/back.gif');
 	background-repeat: repeat-x;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -79,32 +79,32 @@ td {
 }
 
 #loginBox .logo {
-	background: url('../../portal/pics/kajona/login_logo.gif') top left no-repeat;
+	background: url('../pics/kajona/login_logo.gif') top left no-repeat;
 	width: 178px;
 	height: 51px;
 }
 
 #loginBox .topRight {
-	background: url('../../portal/pics/kajona/login_box_topright.gif') top right no-repeat;
+	background: url('../pics/kajona/login_box_topright.gif') top right no-repeat;
 	margin: 0 0 0 48px;
 	padding: 0;
 	width: 325px;
 }
 
 #loginBox .topLeft {
-	background: url('../../portal/pics/kajona/login_box_topleft.gif') top left no-repeat;
+	background: url('../pics/kajona/login_box_topleft.gif') top left no-repeat;
 	margin: 0;
 	padding: 0;
 }
 
 #loginBox .bottomRight {
-	background: url('../../portal/pics/kajona/login_box_bottomright.gif') bottom right no-repeat;
+	background: url('../pics/kajona/login_box_bottomright.gif') bottom right no-repeat;
 	margin: 0;
 	padding: 0;
 }
 
 #loginBox .bottomLeft {
-	background: url('../../portal/pics/kajona/login_box_bottomleft.gif') bottom left no-repeat;
+	background: url('../pics/kajona/login_box_bottomleft.gif') bottom left no-repeat;
 	margin: 0;
 	padding: 0;
 }
@@ -162,7 +162,7 @@ td {
 /* L O G O */
 
 #logo {
-	background-image: url('../../portal/pics/kajona/logo.gif');
+	background-image: url('../pics/kajona/logo.gif');
 	background-position: bottom;
 	background-repeat: no-repeat;
 	width: 326px;
@@ -175,7 +175,7 @@ td {
 
 #poweredBy {
 	background-color: #ffffff;
-	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-image: url('../pics/kajona/moduleactionnavi_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
 	text-align: center;
@@ -183,7 +183,7 @@ td {
 
 #naviContainer {
     background-color: #ffffff;
-	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-image: url('../pics/kajona/moduleactionnavi_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
     background-color: #ffffff;
@@ -193,13 +193,13 @@ td {
 /* S T A T U S B O X */
 
 #statusBoxHeader {
-	background-image: url('../../portal/pics/kajona/statusbox_header.gif');
+	background-image: url('../pics/kajona/statusbox_header.gif');
 	width: 150px;
 	height: 5px;
 }
 
 #statusBox {
-	background-image: url('../../portal/pics/kajona/statusbox_back.gif');
+	background-image: url('../pics/kajona/statusbox_back.gif');
 	width: 150px;
 	height: 75px;
 }
@@ -211,14 +211,14 @@ td {
 
 /* F O O T E R */
 #footerLeftCorner {
-	background-image: url('../../portal/pics/kajona/footer_left.gif');
+	background-image: url('../pics/kajona/footer_left.gif');
 	background-repeat: no-repeat;
 	background-position: right;
 	height: 18px;
 }
 
 #footerLeft {
-	background-image: url('../../portal/pics/kajona/footer_left_back.gif');
+	background-image: url('../pics/kajona/footer_left_back.gif');
 	background-repeat: no-repeat;
 	width: 150px;
 	height: 18px;
@@ -227,7 +227,7 @@ td {
 
 #footerRight {
 	background-color: #ffffff;
-	background-image: url('../../portal/pics/kajona/footer_middle_back.gif');
+	background-image: url('../pics/kajona/footer_middle_back.gif');
 	background-repeat: repeat-x;
 	background-position: bottom;
 	height: 18px;
@@ -239,7 +239,7 @@ td {
 }
 
 #footerRightCorner {
-	background-image: url('../../portal/pics/kajona/footer_right.gif');
+	background-image: url('../pics/kajona/footer_right.gif');
 	background-repeat: no-repeat;
 	background-position: left;
 	width: 8px;
@@ -268,7 +268,7 @@ td {
 
 /* C O N T E N T */
 #contentTopRightTop {
-	background-image: url('../../portal/pics/kajona/content_top_right_top.gif');
+	background-image: url('../pics/kajona/content_top_right_top.gif');
 	background-repeat: no-repeat;
 	background-position: bottom;
 	width: 8px;
@@ -277,14 +277,14 @@ td {
 
 #contentTopRight {
 	background-color: #ffffff;
-	background-image: url('../../portal/pics/kajona/content_right.gif');
+	background-image: url('../pics/kajona/content_right.gif');
 	background-repeat: repeat-y;
 	background-position: right;
 	width: 8px;
 }
 
 #contentTopRight div {
-	background-image: url('../../portal/pics/kajona/content_top_right.gif');
+	background-image: url('../pics/kajona/content_top_right.gif');
 	background-repeat: no-repeat;
 	width: 8px;
 	height: 5px;
@@ -334,7 +334,7 @@ h3 {
 }
 
 .inputText, .inputTextShort, .inputDate {
-	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.gif');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -357,7 +357,7 @@ h3 {
 }
 
 .inputTextarea {
-	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.gif');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -372,7 +372,7 @@ h3 {
 }
 
 .inputTextareaLarge {
-	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.gif');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -387,7 +387,7 @@ h3 {
 }
 
 .inputDropdown {
-	background-image: url('../../portal/pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.gif');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -406,7 +406,7 @@ h3 {
 }
 
 .button, .buttonShort {
-	background-image: url('../../portal/pics/kajona/forms_button_back.gif');
+	background-image: url('../pics/kajona/forms_button_back.gif');
 	background-repeat: repeat-x;
 	padding: 0 0 3px 15px;
 	margin: 8px 0 0 0;
@@ -434,7 +434,7 @@ h3 {
 /* N A V I G A T I O N */
 
 #portalNavi {
-	background-image: url('../../portal/pics/kajona/modulenavi_back.gif');
+	background-image: url('../pics/kajona/modulenavi_back.gif');
 	background-repeat: repeat-x;
 	background-position: bottom;
 	height: 24px;
@@ -461,14 +461,14 @@ h3 {
 }
 
 #moduleActionNaviThree {
-	background-image: url('../../portal/pics/kajona/navi_three_back.gif');
+	background-image: url('../pics/kajona/navi_three_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
 	width: 176px;
 }
 
 #moduleActionNaviThree div {
-	background-image: url('../../portal/pics/kajona/navi_three.gif');
+	background-image: url('../pics/kajona/navi_three.gif');
 	background-repeat: no-repeat;
 	width: 176px;
 	height: 264px;
@@ -476,7 +476,7 @@ h3 {
 
 #mainNavi {
 	background-color: #ffffff;
-	background-image: url('../../portal/pics/kajona/moduleactionnavi_back.gif');
+	background-image: url('../pics/kajona/moduleactionnavi_back.gif');
 	background-repeat: repeat-y;
 	background-position: right;
 }
@@ -491,7 +491,7 @@ h3 {
 }
 
 #mainNavi ul li a {
-	background-image: url('../../portal/pics/kajona/moduleactionnavi_disabled_back.gif');
+	background-image: url('../pics/kajona/moduleactionnavi_disabled_back.gif');
 	text-decoration: none;
 	display: block;
 	width: 150px;
@@ -522,7 +522,7 @@ h3 {
 }
 
 #mainNavi ul.level2 li a {
-	background-image: url('../../portal/pics/kajona/moduleactionnavi_disabled_back_level2.gif');
+	background-image: url('../pics/kajona/moduleactionnavi_disabled_back_level2.gif');
 	text-decoration: none;
 	display: block;
 	width: 150px;
@@ -615,7 +615,7 @@ h3 {
 }
 .newsListTitle {
     float: left;
-    background-image: url('../../portal/pics/kajona/news_button.gif');
+    background-image: url('../pics/kajona/news_button.gif');
     background-repeat: no-repeat;
     text-indent: 15px;
 }
