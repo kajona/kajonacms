@@ -73,7 +73,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	private function actionList() {
 		$strReturn = "";
 		
 		//Determin the prev_id to load
@@ -123,7 +123,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                        //defined nr of images oer row?
 					    if($this->arrElementData["gallery_nrow"] > 0) {
     						//Image
-    						$arrTemplateImage["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid());
+    						$arrTemplateImage["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
     						$arrTemplateImage["name_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrName();
     						$arrTemplateImage["subtitle_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrSubtitle();
     						$intImageCounter++;
@@ -137,7 +137,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 					    //unlimited nr of images per row, no linebreaks
 					    else {
                             //Image
-    						$arrTemplateImage["pic"] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid());
+    						$arrTemplateImage["pic"] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
     						$arrTemplateImage["name"] = $objOneImage->getStrName();
     						$arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
 
@@ -153,7 +153,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$arrFolder["folder_name"] = $objOneImage->getStrName();
 						$arrFolder["folder_description"] = $objOneImage->getStrDescription();
 						$arrFolder["folder_subtitle"] = $objOneImage->getStrSubtitle();
-						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid());
+						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
 						$arrFolder["folder_href"] = getLinkPortalRaw($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid());
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "folderlist");
 						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID);
@@ -207,7 +207,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["backward_".$intI] != "") {
                 $objImageBack = new class_modul_gallery_pic($arrImage["backward_".$intI]);
-                $arrImage["backlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageBack->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageBack->getSystemid());
+                $arrImage["backlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageBack->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageBack->getSystemid(), "", "", $objImageBack->getStrName());
                 $arrImage["backlink_image_filename_".$intI] = urlencode($objImageBack->getStrFilename());
                 $arrImage["backlink_image_systemid_".$intI] = $objImageBack->getSystemid();
             }
@@ -218,7 +218,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["forward_".$intI] != "") {
                 $objImageFwd = new class_modul_gallery_pic($arrImage["forward_".$intI]);
-                $arrImage["forwardlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageFwd->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageFwd->getSystemid());
+                $arrImage["forwardlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageFwd->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageFwd->getSystemid(), "", "", $objImageFwd->getStrName());
                 $arrImage["forwardlink_image_filename_".$intI] = urlencode($objImageFwd->getStrFilename());
                 $arrImage["forwardlink_image_systemid_".$intI] = $objImageFwd->getSystemid();
             }
