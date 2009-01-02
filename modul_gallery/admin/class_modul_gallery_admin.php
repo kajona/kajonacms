@@ -462,8 +462,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             $arrPath = $this->getPathArray();
             $objTempPic = new class_modul_gallery_pic($this->getSystemid());
             $objFmRepo = class_modul_filemanager_repo::getRepoForForeignId($arrPath[0]);
-
-            $strFmFolder = dirname(substr($objTempPic->getStrFilename(), strpos($objTempPic->getStrFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath())));
+            $strFmFolder = substr($objTempPic->getStrFilename(), strpos($objTempPic->getStrFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath()));
 
             //Build the upload form
             //TODO: check permissions, build form as soon as the new upload is set up
