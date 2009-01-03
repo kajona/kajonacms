@@ -121,7 +121,7 @@ class class_texte {
 			 	$arrName = explode("_", $strTemp);
 
 
-			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
+			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
 			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
 			 		
@@ -144,7 +144,7 @@ class class_texte {
 				$strTemp = str_replace(".php", "", $strFile);
 			 	$arrName = explode("_", $strTemp);
 
-			 	if($arrName[0] == "texte" && $arrName[2] == $this->strFallbackLanguage) {
+			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
 			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
                     
 			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
