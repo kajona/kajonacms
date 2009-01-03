@@ -78,7 +78,7 @@ default:
     $config['dirportal']            = "/portal";                               //Path containing the portal-classes
     $config['dirtemplates']         = "/templates";                            //Path containing the templates
     $config['dirsystem']            = "/system";                               //Path containing the system classes
-    $config['dirtexte']             = "/texte";	                               //Path containing the text-files
+    $config['dirlang']              = "/lang";	                               //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
 
     $config['adminlangs']           = "de,en";                                 //Available languages for the administration
@@ -100,10 +100,10 @@ default:
 
     $debug['dblog']                 = false;                                   //Logs all queries sent to the db into a logfile
 
-    $debug['debuglevel'] = 1;                                       //Current level of debugging. There are several states:
+    $debug['debuglevel']            = 0;                                       //Current level of debugging. There are several states:
                                                                                    // 0: fatal errors will be displayed
                                                                                    // 1: fatal and regular errors will be displayed
-    $debug['debuglogging'] = 2;                                       //Configures the logging-engine:
+    $debug['debuglogging']          = 2;                                       //Configures the logging-engine:
                                                                                    // 0: Nothing is logged to file
                                                                                    // 1: Errors are logged
                                                                                    // 2: Errors and warning

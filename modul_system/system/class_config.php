@@ -43,7 +43,7 @@ class class_config {
 		define("_portalpath_" , 	_realpath_ . $this->getConfig("dirportal"));
 		define("_adminpath_" , 		_realpath_ . $this->getConfig("diradmin"));
 		define("_templatepath_" , 	_realpath_ . $this->getConfig("dirtemplates"));
-		define("_textpath_" , 		_realpath_ . $this->getConfig("dirtexte"));
+		define("_langpath_" , 		_realpath_ . $this->getConfig("dirlang"));
 		define("_skinpath_" , 		_adminpath_ . $this->getConfig("dirskins"));
 		define("_indexpath_",		_webpath_."/index.php");
 		define("_xmlpath_",         _webpath_."/xml.php");

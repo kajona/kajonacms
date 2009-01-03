@@ -113,7 +113,7 @@ class class_texte {
 		$objFilesystem = new class_filesystem();
 
 		//load files
-		$arrFiles = $objFilesystem->getFilelist(_textpath_."/".$strArea."/modul_".$strModule);
+		$arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
 		if(is_array($arrFiles)) {
 			foreach($arrFiles as $strFile) {
 				$text = array();
@@ -123,7 +123,7 @@ class class_texte {
 
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
-			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
 			 		
 			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
 			 		    $this->arrTexts[$strArea.$this->strLanguage] = array();
@@ -145,7 +145,7 @@ class class_texte {
 			 	$arrName = explode("_", $strTemp);
 
 			 	if($arrName[0] == "texte" && $arrName[2] == $this->strFallbackLanguage) {
-			 		include_once(_textpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
                     
 			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
                         $this->arrTexts[$strArea.$this->strLanguage] = array();
