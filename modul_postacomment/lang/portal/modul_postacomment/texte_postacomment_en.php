@@ -8,14 +8,14 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["postacomment_empty"]					= "No comments available";
+$lang["postacomment_empty"]					= "No comments available";
 
-$text["validation_name"]                    = "Please provide your name";
-$text["validation_message"]                 = "Please provide a message";
-$text["validation_code"]                    = "Please enter the valid code";
+$lang["validation_name"]                    = "Please provide your name";
+$lang["validation_message"]                 = "Please provide a message";
+$lang["validation_code"]                    = "Please enter the valid code";
 
-$text["postacomment_rating_rate1"]   = "Rate comment with ";
-$text["postacomment_rating_rate2"]   = " point(s)!";
-$text["postacomment_rating_permissions"] = "Not enough permissions.";
-$text["postacomment_rating_voted"]   = "You already voted for this comment.";
+$lang["postacomment_rating_rate1"]   = "Rate comment with ";
+$lang["postacomment_rating_rate2"]   = " point(s)!";
+$lang["postacomment_rating_permissions"] = "Not enough permissions.";
+$lang["postacomment_rating_voted"]   = "You already voted for this comment.";
 ?>

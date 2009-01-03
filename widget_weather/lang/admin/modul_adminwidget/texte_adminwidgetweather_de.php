@@ -7,21 +7,21 @@
 *	$Id$								*
 ********************************************************************************************************/
 
-$text["weather_name"]                        = "Wetter";
+$lang["weather_name"]                        = "Wetter";
 
-$text["weather_unit"]                        = "Einheit:";
-$text["weather_fahrenheit"]                  = "Fahrenheit";
-$text["weather_celsius"]                     = "Celsius";
+$lang["weather_unit"]                        = "Einheit:";
+$lang["weather_fahrenheit"]                  = "Fahrenheit";
+$lang["weather_celsius"]                     = "Celsius";
 
-$text["weather_location"]                    = "Orts-Id:";
-$text["weather_location_finder"]             = "Die ID zu einem Ort finden Sie unter <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>(z.B. in der URL eines angezeigten Wetterberichts)";
+$lang["weather_location"]                    = "Orts-Id:";
+$lang["weather_location_finder"]             = "Die ID zu einem Ort finden Sie unter <a href=\"http://weather.yahoo.com\" target=\"_blank\">http://weather.yahoo.com</a>(z.B. in der URL eines angezeigten Wetterberichts)";
 
-$text["weather_errorloading"]                = "Fehler beim Laden der Wetterdaten.";
+$lang["weather_errorloading"]                = "Fehler beim Laden der Wetterdaten.";
 
-$text["weather_location_string"]             = "Ort: ";
-$text["weather_temp_string"]                 = "Temperatur: ";
+$lang["weather_location_string"]             = "Ort: ";
+$lang["weather_temp_string"]                 = "Temperatur: ";
 
-$text["weather_forecast"]                    = "Vorhersage:";
+$lang["weather_forecast"]                    = "Vorhersage:";
 
 
 ?>

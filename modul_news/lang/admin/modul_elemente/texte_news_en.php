@@ -9,27 +9,27 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["browser"]				= "Open browser";
-$text["liste"]					= "List";
-$text["detail"]					= "Details";
+$lang["browser"]				= "Open browser";
+$lang["liste"]					= "List";
+$lang["detail"]					= "Details";
 
-$text["aktuell"]				= "Latest news";
-$text["archiv"]					= "News archive";
+$lang["aktuell"]				= "Latest news";
+$lang["archiv"]					= "News archive";
 
-$text["news_category"]          = "Category:";
-$text["news_category_all"]      = "All categories";
-$text["news_detailspage"]       = "Details page:";
-$text["news_view"]              = "View mode:";
-$text["news_view_list"]         = "List view";
-$text["news_view_detail"]       = "Detailed view";
-$text["news_mode"]              = "Category mode:";
-$text["news_mode_archive"]      = "Archive mode";
-$text["news_mode_normal"]       = "Standard mode";
-$text["news_order"]             = "Order:";
-$text["news_order_desc"]      	= "descending";
-$text["news_order_asc"]       	= "ascending";
-$text["news_template"]          = "Template:";
-$text["news_amount"]            = "Number of news per page:";
-$text["required_news_amount"]   = "Number of news per page";
+$lang["news_category"]          = "Category:";
+$lang["news_category_all"]      = "All categories";
+$lang["news_detailspage"]       = "Details page:";
+$lang["news_view"]              = "View mode:";
+$lang["news_view_list"]         = "List view";
+$lang["news_view_detail"]       = "Detailed view";
+$lang["news_mode"]              = "Category mode:";
+$lang["news_mode_archive"]      = "Archive mode";
+$lang["news_mode_normal"]       = "Standard mode";
+$lang["news_order"]             = "Order:";
+$lang["news_order_desc"]      	= "descending";
+$lang["news_order_asc"]       	= "ascending";
+$lang["news_template"]          = "Template:";
+$lang["news_amount"]            = "Number of news per page:";
+$lang["required_news_amount"]   = "Number of news per page";
 
 ?>

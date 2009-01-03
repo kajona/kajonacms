@@ -8,15 +8,15 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["browser"]							= "Browser öffnen";
-$text["page_element_placeholder_title"]		= "Interner Titel:";
-$text["absatz_titel"]						= "Titel:";
-$text["absatz_inhalt"]						= "Text:";
-$text["absatz_bild"]						= "Bild:";
-$text["absatz_link"]						= "Link:";
-$text["submit"]								= "Speichern";
+$lang["browser"]							= "Browser öffnen";
+$lang["page_element_placeholder_title"]		= "Interner Titel:";
+$lang["absatz_titel"]						= "Titel:";
+$lang["absatz_inhalt"]						= "Text:";
+$lang["absatz_bild"]						= "Bild:";
+$lang["absatz_link"]						= "Link:";
+$lang["submit"]								= "Speichern";
 
-$text["required_absatz_titel"]              = "Titel";
+$lang["required_absatz_titel"]              = "Titel";
 
-$text["quickhelp_element_absatz"]           = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
+$lang["quickhelp_element_absatz"]           = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 ?>

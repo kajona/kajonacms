@@ -8,21 +8,21 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["username"]                             = "Benutzername:";
-$text["password"]                             = "Passwort:";
-$text["login"]                                = "Login";
-$text["logoutlink"]                           = "Logout";
-$text["editprofilelink"]                      = "Profil bearbeiten";
+$lang["username"]                             = "Benutzername:";
+$lang["password"]                             = "Passwort:";
+$lang["login"]                                = "Login";
+$lang["logoutlink"]                           = "Logout";
+$lang["editprofilelink"]                      = "Profil bearbeiten";
 
-$text["usernameTitle"]                        = "Benutzername:";
-$text["passwordTitle"]                        = "Passwort:";
-$text["passwordTitle2"]                       = "Passwort:";
-$text["emailTitle"]                           = "E-Mail*:";
-$text["forenameTitle"]                        = "Vorname:";
-$text["nameTitle"]                            = "Nachname:";
-$text["userDataSubmit"]                       = "Speichern";
+$lang["usernameTitle"]                        = "Benutzername:";
+$lang["passwordTitle"]                        = "Passwort:";
+$lang["passwordTitle2"]                       = "Passwort:";
+$lang["emailTitle"]                           = "E-Mail*:";
+$lang["forenameTitle"]                        = "Vorname:";
+$lang["nameTitle"]                            = "Nachname:";
+$lang["userDataSubmit"]                       = "Speichern";
 
-$text["invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
-$text["passwordsUnequal"]                     = "Passwörter unterschiedlich.";
+$lang["invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
+$lang["passwordsUnequal"]                     = "Passwörter unterschiedlich.";
 
 ?>

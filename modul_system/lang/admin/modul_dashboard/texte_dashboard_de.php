@@ -9,27 +9,27 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["modul_titel"]				= "Übersicht";
-$text["moduleRights"]               = "Rechte";
-$text["addWidget"]                  = "Widget hinzufügen";
-$text["errorSavingWidget"]          = "Fehler beim Speichern des Widgets";
-$text["fehler_recht"]               = "Keine ausreichende Rechte";
-$text["setDashboardPosition"]       = "Speichern der Position erfolgreich";
+$lang["modul_titel"]				= "Übersicht";
+$lang["moduleRights"]               = "Rechte";
+$lang["addWidget"]                  = "Widget hinzufügen";
+$lang["errorSavingWidget"]          = "Fehler beim Speichern des Widgets";
+$lang["fehler_recht"]               = "Keine ausreichende Rechte";
+$lang["setDashboardPosition"]       = "Speichern der Position erfolgreich";
 
-$text["editWidget"]                 = "Widget bearbeiten";
-$text["widgetDeleteQuestion"]       = " - Widget wirklich löschen?";
-$text["widgetDeleteLink"]           = "Löschen";
+$lang["editWidget"]                 = "Widget bearbeiten";
+$lang["widgetDeleteQuestion"]       = " - Widget wirklich löschen?";
+$lang["widgetDeleteLink"]           = "Löschen";
 
 
-$text["widget"]                     = "Widget:";
-$text["addWidgetNextStep"]          = "Weiter";
-$text["addWidgetSave"]              = "Speichern";
-$text["column"]                     = "Spalte:";
-$text["column1"]                    = "Spalte 1";
-$text["column2"]                    = "Spalte 2";
-$text["column3"]                    = "Spalte 3";
+$lang["widget"]                     = "Widget:";
+$lang["addWidgetNextStep"]          = "Weiter";
+$lang["addWidgetSave"]              = "Speichern";
+$lang["column"]                     = "Spalte:";
+$lang["column1"]                    = "Spalte 1";
+$lang["column2"]                    = "Spalte 2";
+$lang["column3"]                    = "Spalte 3";
 
-$text["quickhelp_list"]             = "Das Dashboard dient als Ablage für Widgets jeglicher Art. Widgets stellen Miniprogramme dar, welche Informationen ausgeben. Diese Widgets können auf dem Dashboard sortiert, editiert und gelöscht werden. Das Hinzufügen neuer Widgets erfolgt über die Aktion \"Widget hinzufügen\". ";
-$text["quickhelp_addWidgetToDashboard"] = "Das Hinzufügen neuer Widgets zum Dashboard ist ein zweistufiger Prozess. Im ersten Schritt kann das hinzuzufügende Widget samt der Zielspalte bestimmt werden, im zweiten Schritt kann das anzulegende Widget konfiguriert werden.";
+$lang["quickhelp_list"]             = "Das Dashboard dient als Ablage für Widgets jeglicher Art. Widgets stellen Miniprogramme dar, welche Informationen ausgeben. Diese Widgets können auf dem Dashboard sortiert, editiert und gelöscht werden. Das Hinzufügen neuer Widgets erfolgt über die Aktion \"Widget hinzufügen\". ";
+$lang["quickhelp_addWidgetToDashboard"] = "Das Hinzufügen neuer Widgets zum Dashboard ist ein zweistufiger Prozess. Im ersten Schritt kann das hinzuzufügende Widget samt der Zielspalte bestimmt werden, im zweiten Schritt kann das anzulegende Widget konfiguriert werden.";
 
 ?>

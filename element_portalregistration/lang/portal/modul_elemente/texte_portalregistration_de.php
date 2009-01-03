@@ -8,31 +8,31 @@
 ********************************************************************************************************/
 
 
-$text["pr_usernameTitle"]                        = "Benutzername*:";
-$text["pr_passwordTitle"]                        = "Passwort*:";
-$text["pr_passwordTitle2"]                       = "Passwort*:";
-$text["pr_emailTitle"]                           = "E-Mail*:";
-$text["pr_forenameTitle"]                        = "Vorname:";
-$text["pr_nameTitle"]                            = "Nachname:";
-$text["pr_userDataSubmit"]                       = "Speichern";
+$lang["pr_usernameTitle"]                        = "Benutzername*:";
+$lang["pr_passwordTitle"]                        = "Passwort*:";
+$lang["pr_passwordTitle2"]                       = "Passwort*:";
+$lang["pr_emailTitle"]                           = "E-Mail*:";
+$lang["pr_forenameTitle"]                        = "Vorname:";
+$lang["pr_nameTitle"]                            = "Nachname:";
+$lang["pr_userDataSubmit"]                       = "Speichern";
 
-$text["pr_invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
-$text["pr_passwordsUnequal"]                     = "Passwörter unterschiedlich.";
-$text["pr_noUsername"]                           = "Kein Benutzername angegeben.";
-$text["pr_usernameGiven"]                        = "Benutzername exisitert bereits. Bitte einen anderen wählen.";
-$text["pr_captcha"]                              = "Kein gültiger Code.";
+$lang["pr_invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
+$lang["pr_passwordsUnequal"]                     = "Passwörter unterschiedlich.";
+$lang["pr_noUsername"]                           = "Kein Benutzername angegeben.";
+$lang["pr_usernameGiven"]                        = "Benutzername exisitert bereits. Bitte einen anderen wählen.";
+$lang["pr_captcha"]                              = "Kein gültiger Code.";
 
-$text["pr_register_suc"]                         = "Sie erhalten in wenigen Minuten eine E-Mail mit einem Aktivierungslink. Verwenden Sie diesen, um Ihre Anmeldung zu vervollständigen.";
+$lang["pr_register_suc"]                         = "Sie erhalten in wenigen Minuten eine E-Mail mit einem Aktivierungslink. Verwenden Sie diesen, um Ihre Anmeldung zu vervollständigen.";
 
-$text["pr_errorLoggedin"]                        = "Sie sind angemeldet. Diese Funktion steht nur abgemeldeten Benutzern zur Verfügung.";
+$lang["pr_errorLoggedin"]                        = "Sie sind angemeldet. Diese Funktion steht nur abgemeldeten Benutzern zur Verfügung.";
 
-$text["pr_email_subject"]                        = "Aktivierung des Benutzerkontos";
+$lang["pr_email_subject"]                        = "Aktivierung des Benutzerkontos";
 
-$text["pr_email_body"]                           = "Bitte verwenden Sie den nachstehenden Link, um ihre Anmeldung zu vervollständigen. <br />Danach können Sie sich am Portal anmelden. Sollte der Link nicht anzuklicken sein, kopieren Sie diesen bitte in die Adresszeile Ihres Browsers.<br /><br />";
+$lang["pr_email_body"]                           = "Bitte verwenden Sie den nachstehenden Link, um ihre Anmeldung zu vervollständigen. <br />Danach können Sie sich am Portal anmelden. Sollte der Link nicht anzuklicken sein, kopieren Sie diesen bitte in die Adresszeile Ihres Browsers.<br /><br />";
 
-$text["pr_email_footer"]                         = "<br /><br />Vielen Dank.";
+$lang["pr_email_footer"]                         = "<br /><br />Vielen Dank.";
 
-$text["pr_completionSuccess"]                    = "Aktivierung erfolgreich. Sie können sich nun am Portal anmelden.";
-$text["pr_completionErrorStatus"]                = "Dieser Account kann nicht aktiviert werden.";
+$lang["pr_completionSuccess"]                    = "Aktivierung erfolgreich. Sie können sich nun am Portal anmelden.";
+$lang["pr_completionErrorStatus"]                = "Dieser Account kann nicht aktiviert werden.";
 
 ?>

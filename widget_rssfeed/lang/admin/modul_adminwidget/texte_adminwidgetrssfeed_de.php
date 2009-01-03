@@ -7,13 +7,13 @@
 *	$Id$								*
 ********************************************************************************************************/
 
-$text["rssfeed_name"]                        = "Newsfeed";
+$lang["rssfeed_name"]                        = "Newsfeed";
 
-$text["rssfeed_feedurl"]                     = "Feed-URL:";
-$text["rssfeed_posts"]                       = "Anzahl an Posts:";
+$lang["rssfeed_feedurl"]                     = "Feed-URL:";
+$lang["rssfeed_posts"]                       = "Anzahl an Posts:";
 
-$text["rssfeed_errorparsing"]                = "Fehler beim Parsen des Feeds";
-$text["rssfeed_errorloading"]                = "Fehler beim Laden des Feeds";
+$lang["rssfeed_errorparsing"]                = "Fehler beim Parsen des Feeds";
+$lang["rssfeed_errorloading"]                = "Fehler beim Laden des Feeds";
 
 
 ?>

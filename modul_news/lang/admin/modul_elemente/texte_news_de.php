@@ -9,26 +9,26 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["browser"]				= "Browser öffnen";
-$text["liste"]					= "Liste";
-$text["detail"]					= "Detail";
+$lang["browser"]				= "Browser öffnen";
+$lang["liste"]					= "Liste";
+$lang["detail"]					= "Detail";
 
-$text["aktuell"]				= "Aktuelle News";
-$text["archiv"]					= "News-Archiv";
+$lang["aktuell"]				= "Aktuelle News";
+$lang["archiv"]					= "News-Archiv";
 
-$text["news_category"]          = "Kategorie:";
-$text["news_category_all"]      = "Alle Kategorien";
-$text["news_detailspage"]       = "Detail-Seite:";
-$text["news_view"]              = "Ansichts-Modus:";
-$text["news_view_list"]         = "Listen-Ansicht";
-$text["news_view_detail"]       = "Detail-Ansicht";
-$text["news_mode"]              = "Kategorie-Modus:";
-$text["news_mode_archive"]      = "Archiv-Modus";
-$text["news_mode_normal"]       = "Standard-Modus";
-$text["news_order"]             = "Reihenfolge:";
-$text["news_order_desc"]      	= "absteigend";
-$text["news_order_asc"]       	= "aufsteigend";
-$text["news_template"]          = "Template:";
-$text["news_amount"]            = "Anzahl News pro Seite:";
-$text["required_news_amount"]   = "Anzahl News pro Seite";
+$lang["news_category"]          = "Kategorie:";
+$lang["news_category_all"]      = "Alle Kategorien";
+$lang["news_detailspage"]       = "Detail-Seite:";
+$lang["news_view"]              = "Ansichts-Modus:";
+$lang["news_view_list"]         = "Listen-Ansicht";
+$lang["news_view_detail"]       = "Detail-Ansicht";
+$lang["news_mode"]              = "Kategorie-Modus:";
+$lang["news_mode_archive"]      = "Archiv-Modus";
+$lang["news_mode_normal"]       = "Standard-Modus";
+$lang["news_order"]             = "Reihenfolge:";
+$lang["news_order_desc"]      	= "absteigend";
+$lang["news_order_asc"]       	= "aufsteigend";
+$lang["news_template"]          = "Template:";
+$lang["news_amount"]            = "Anzahl News pro Seite:";
+$lang["required_news_amount"]   = "Anzahl News pro Seite";
 ?>

@@ -141,16 +141,16 @@ class LinePlot extends Plot{
 	// values in plots.
 	$numpoints=count($this->coords[0]);
 	if( $this->barcenter ) 
-	    $textadj = 0.5-$xscale->text_scale_off;
+	    $langadj = 0.5-$xscale->text_scale_off;
 	else
-	    $textadj = 0;
+	    $langadj = 0;
 
 	$img->SetColor($this->color);
 	$img->SetLineWeight($this->weight);
 	$pnts=$aStartPoint;
 	while( $pnts < $numpoints ) {	    
 	    if( $exist_x ) $x=$this->coords[1][$pnts];
-	    else $x=$pnts+$textadj;
+	    else $x=$pnts+$langadj;
 	    $xt = $xscale->Translate($x);
 	    $y=$this->coords[0][$pnts];
 	    $yt = $yscale->Translate($y);    
@@ -184,9 +184,9 @@ class LinePlot extends Plot{
 	    $exist_x = false;
 
 	if( $this->barcenter ) 
-	    $textadj = 0.5-$xscale->text_scale_off;
+	    $langadj = 0.5-$xscale->text_scale_off;
 	else
-	    $textadj = 0;
+	    $langadj = 0;
 
 	// Find the first numeric data point
 	$startpoint=0;
@@ -205,7 +205,7 @@ class LinePlot extends Plot{
 	if( $exist_x )
 	    $xs=$this->coords[1][$startpoint];
 	else
-	    $xs= $textadj+$startpoint;
+	    $xs= $langadj+$startpoint;
 
 	$img->SetStartPoint($xscale->Translate($xs),
 			    $yscale->Translate($this->coords[0][$startpoint]));
@@ -239,7 +239,7 @@ class LinePlot extends Plot{
 	while( $pnts < $numpoints ) {
 	    
 	    if( $exist_x ) $x=$this->coords[1][$pnts];
-	    else $x=$pnts+$textadj;
+	    else $x=$pnts+$langadj;
 	    $xt = $xscale->Translate($x);
 	    $yt = $yscale->Translate($this->coords[0][$pnts]);
 	    
@@ -387,7 +387,7 @@ class LinePlot extends Plot{
 	for( $pnts=0; $pnts<$numpoints; ++$pnts) {
 
 	    if( $exist_x ) $x=$this->coords[1][$pnts];
-	    else $x=$pnts+$textadj;
+	    else $x=$pnts+$langadj;
 	    $xt = $xscale->Translate($x);
 	    $yt = $yscale->Translate($this->coords[0][$pnts]);
 

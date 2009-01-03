@@ -8,15 +8,15 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["postacomment_empty"]					= "Keine Kommentare vorhanden";
+$lang["postacomment_empty"]					= "Keine Kommentare vorhanden";
 
-$text["validation_name"]                    = "Bitte Namen angeben";
-$text["validation_message"]                 = "Bitte Nachricht angeben";
-$text["validation_code"]                    = "Bitte korrekten Code angeben";
+$lang["validation_name"]                    = "Bitte Namen angeben";
+$lang["validation_message"]                 = "Bitte Nachricht angeben";
+$lang["validation_code"]                    = "Bitte korrekten Code angeben";
 
-$text["postacomment_rating_rate1"]   = "Kommentar mit ";
-$text["postacomment_rating_rate2"]   = " Punkt(en) bewerten!";
-$text["postacomment_rating_permissions"] = "Keine ausreichenden Rechte.";
-$text["postacomment_rating_voted"]   = "Dieser Kommentar wurde bereits bewertet.";
+$lang["postacomment_rating_rate1"]   = "Kommentar mit ";
+$lang["postacomment_rating_rate2"]   = " Punkt(en) bewerten!";
+$lang["postacomment_rating_permissions"] = "Keine ausreichenden Rechte.";
+$lang["postacomment_rating_voted"]   = "Dieser Kommentar wurde bereits bewertet.";
 
 ?>

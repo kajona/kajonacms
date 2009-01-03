@@ -9,9 +9,9 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["stats_title"]            = "Searchqueries";
-$text["header_date"]            = "Date";
-$text["header_query"]           = "Seachterm";
-$text["header_language"]        = "Language";
+$lang["stats_title"]            = "Searchqueries";
+$lang["header_date"]            = "Date";
+$lang["header_query"]           = "Seachterm";
+$lang["header_language"]        = "Language";
 
 ?>

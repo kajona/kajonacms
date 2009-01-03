@@ -9,12 +9,12 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["browser"]				= "Open browser";
+$lang["browser"]				= "Open browser";
 
-$text["modus_baum"]				= "Tree";
-$text["modus_sitemap"]			= "Sitemap";
+$lang["modus_baum"]				= "Tree";
+$lang["modus_sitemap"]			= "Sitemap";
 
-$text["navigation_name"]        = "Navigation:";
-$text["navigation_template"]    = "Template:";
-$text["navigation_mode"]        = "Mode:";
+$lang["navigation_name"]        = "Navigation:";
+$lang["navigation_template"]    = "Template:";
+$lang["navigation_mode"]        = "Mode:";
 ?>

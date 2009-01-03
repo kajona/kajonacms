@@ -6,18 +6,18 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
 ********************************************************************************************************/
-$text["sender"]                     = "Ihre E-Mail-Adresse:";
-$text["sender_name"]                = "Ihr Name:";
-$text["receiver"]                   = "Empfänger E-Mail-Adresse:";
-$text["receiver_name"]              = "Empfängername:";
-$text["message"]                    = "Nachricht:";
-$text["submit"]                     = "Absenden";
-$text["captcha"]                    = "Code:";
-$text["reload_captcha"]             = "Neuer Code";
+$lang["sender"]                     = "Ihre E-Mail-Adresse:";
+$lang["sender_name"]                = "Ihr Name:";
+$lang["receiver"]                   = "Empfänger E-Mail-Adresse:";
+$lang["receiver_name"]              = "Empfängername:";
+$lang["message"]                    = "Nachricht:";
+$lang["submit"]                     = "Absenden";
+$lang["captcha"]                    = "Code:";
+$lang["reload_captcha"]             = "Neuer Code";
 
-$text["tellafriend_sender"]         = "Bitte geben Sie Ihre E-Mail-Adresse an";
-$text["tellafriend_sender_name"]    = "Bitte geben Sie Ihren Namen an";
-$text["tellafriend_receiver"]       = "Bitte geben Sie die E-Mail-Adresse des Empfängers an";
-$text["tellafriend_receiver_name"]  = "Bitte geben Sie den Namen des Empfängers an";
-$text["fehler_captcha"]             = "Bitte geben Sie den korrekten Bestätigungscode ein";
+$lang["tellafriend_sender"]         = "Bitte geben Sie Ihre E-Mail-Adresse an";
+$lang["tellafriend_sender_name"]    = "Bitte geben Sie Ihren Namen an";
+$lang["tellafriend_receiver"]       = "Bitte geben Sie die E-Mail-Adresse des Empfängers an";
+$lang["tellafriend_receiver_name"]  = "Bitte geben Sie den Namen des Empfängers an";
+$lang["fehler_captcha"]             = "Bitte geben Sie den korrekten Bestätigungscode ein";
 ?>

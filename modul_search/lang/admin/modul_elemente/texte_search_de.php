@@ -9,10 +9,10 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["browser"]				= "Browser öffnen";
-$text["search_amount"]          = "Anzahl Treffer pro Seite:";
-$text["search_page"]            = "Ergebnisseite:";
-$text["search_template"]        = "Template:";
+$lang["browser"]				= "Browser öffnen";
+$lang["search_amount"]          = "Anzahl Treffer pro Seite:";
+$lang["search_page"]            = "Ergebnisseite:";
+$lang["search_template"]        = "Template:";
 
 
 ?>

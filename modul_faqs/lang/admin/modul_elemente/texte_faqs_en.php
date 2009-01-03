@@ -9,10 +9,10 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["faqs_category"]          = "Category:";
-$text["faqs_template"]          = "Template:";
+$lang["faqs_category"]          = "Category:";
+$lang["faqs_template"]          = "Template:";
 
-$text["all_cats"]               = "All categories";
+$lang["all_cats"]               = "All categories";
 
 
 ?>

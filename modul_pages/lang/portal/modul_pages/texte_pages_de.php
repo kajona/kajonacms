@@ -8,14 +8,14 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["fehler_seite"]						= "Startseite nicht vorhanden";
-$text["fehler_recht"]						= "Keine Rechte für diese Aktion";
+$lang["fehler_seite"]						= "Startseite nicht vorhanden";
+$lang["fehler_recht"]						= "Keine Rechte für diese Aktion";
 
 // --- Form texts ---------------------------------------------------------------------------------------
 
-$text["fehler_email"]						= "Bitte geben Sie eine gültige E-Mail Adresse an";
-$text["fehler_name"]						= "Bitte geben Sie einen Namen an";
-$text["fehler_nachricht"]					= "Bitte geben Sie eine Nachricht an";
-$text["fehler_captcha"]                     = "Bitte geben Sie den korrekten Code an";
+$lang["fehler_email"]						= "Bitte geben Sie eine gültige E-Mail Adresse an";
+$lang["fehler_name"]						= "Bitte geben Sie einen Namen an";
+$lang["fehler_nachricht"]					= "Bitte geben Sie eine Nachricht an";
+$lang["fehler_captcha"]                     = "Bitte geben Sie den korrekten Code an";
 
 ?>

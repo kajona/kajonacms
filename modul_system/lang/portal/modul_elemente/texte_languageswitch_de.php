@@ -8,9 +8,9 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["lang_de"]					       = "Deutsch";
-$text["lang_en"]					       = "Englisch";
-$text["lang_fr"]					       = "Französisch";
+$lang["lang_de"]					       = "Deutsch";
+$lang["lang_en"]					       = "Englisch";
+$lang["lang_fr"]					       = "Französisch";
 
 
 ?>

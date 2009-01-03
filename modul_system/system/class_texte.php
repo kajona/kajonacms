@@ -116,7 +116,7 @@ class class_texte {
 		$arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
 		if(is_array($arrFiles)) {
 			foreach($arrFiles as $strFile) {
-				$text = array();
+				$lang = array();
 				$strTemp = str_replace(".php", "", $strFile);
 			 	$arrName = explode("_", $strTemp);
 
@@ -129,9 +129,9 @@ class class_texte {
 			 		    $this->arrTexts[$strArea.$this->strLanguage] = array();
                     
 			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $text);
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $lang);
 			 		else
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $text;
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $lang;
                     
 			 	}
 			}
@@ -140,7 +140,7 @@ class class_texte {
 
 			//if we reach up here, no matching file was found. search for fallback file
 			foreach($arrFiles as $strFile) {
-				$text = array();
+				$lang = array();
 				$strTemp = str_replace(".php", "", $strFile);
 			 	$arrName = explode("_", $strTemp);
 
@@ -151,9 +151,9 @@ class class_texte {
                         $this->arrTexts[$strArea.$this->strLanguage] = array();
                         
 			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $text);
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $lang);
 			 		else
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $text;
+			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $lang;
 
 			 	}
 			}

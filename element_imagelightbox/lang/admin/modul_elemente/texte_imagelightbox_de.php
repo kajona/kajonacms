@@ -7,7 +7,7 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-$text["imagelightbox_image"]                  = "Bild:";
-$text["imagelightbox_title"]                  = "Titel:";
+$lang["imagelightbox_image"]                  = "Bild:";
+$lang["imagelightbox_title"]                  = "Titel:";
 
 ?>

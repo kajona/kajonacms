@@ -599,10 +599,10 @@ class Graph {
     public $title,$subtitle,$subsubtitle; 	// Title and subtitle(s) text object
     public $axtype="linlin";	// Type of axis
     public $xtick_factor;	// Factot to determine the maximum number of ticks depending on the plot with
-    public $texts=null, $y2texts=null;		// Text object to ge shown in the graph
+    public $langs=null, $y2texts=null;		// Text object to ge shown in the graph
     public $lines=null, $y2lines=null;
     public $bands=null, $y2bands=null;
-    public $text_scale_off=0, $text_scale_abscenteroff=-1;	// Text scale in fractions and for centering bars
+    public $lang_scale_off=0, $lang_scale_abscenteroff=-1;	// Text scale in fractions and for centering bars
     public $background_image="",$background_image_type=-1,$background_image_format="png";
     public $background_image_bright=0,$background_image_contr=0,$background_image_sat=0;
     public $image_bright=0, $image_contr=0, $image_sat=0;
@@ -4283,7 +4283,7 @@ class LinearTicks extends Ticks {
 	$ticks_pos = array(), $maj_ticks_label = array();
     private $label_offset=0; // What offset should the displayed label have
     // i.e should we display 0,1,2 or 1,2,3,4 or 2,3,4 etc
-    private $text_label_start=0;
+    private $lang_label_start=0;
     private $iManualTickPos = NULL, $iManualMinTickPos = NULL, $iManualTickLabels = NULL;
     private $iAdjustForDST = false; // If a date falls within the DST period add one hour to the diaplyed time
 
@@ -4633,7 +4633,7 @@ class LinearTicks extends Ticks {
 // Description: Handle linear scaling between screen and world
 //===================================================
 class LinearScale {
-    public $textscale=false; // Just a flag to let the Plot class find out if
+    public $langscale=false; // Just a flag to let the Plot class find out if
     // we are a textscale or not. This is a cludge since
     // this ionformatyion is availabale in Graph::axtype but
     // we don't have access to the graph object in the Plots
@@ -4641,7 +4641,7 @@ class LinearScale {
     // when the linear scale is created. A real cludge...
     public $type; // is this x or y scale ?
     public $ticks=null; // Store ticks
-    public $text_scale_off = 0;
+    public $lang_scale_off = 0;
     public $scale_abs=array(0,0);
     public $scale_factor; // Scale factor between world and screen
     public $off; // Offset between image edge and plot area
@@ -5760,7 +5760,7 @@ class Image {
     protected $obs_list=array();
     protected $font_size=12,$font_family=FF_FONT1, $font_style=FS_NORMAL;
     protected $font_file='';
-    protected $text_halign="left",$text_valign="bottom";
+    protected $lang_halign="left",$lang_valign="bottom";
     protected $ttf=null;
     protected $use_anti_aliasing=false;
     protected $quality=null;

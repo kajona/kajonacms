@@ -8,16 +8,16 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["browser"]							= "Open browser";
-$text["page_element_placeholder_title"]		= "Internal title:";
-$text["absatz_titel"]						= "Title:";
-$text["absatz_inhalt"]						= "Text:";
-$text["absatz_bild"]						= "Image:";
-$text["absatz_link"]						= "Link:";
-$text["submit"]								= "Save";
+$lang["browser"]							= "Open browser";
+$lang["page_element_placeholder_title"]		= "Internal title:";
+$lang["absatz_titel"]						= "Title:";
+$lang["absatz_inhalt"]						= "Text:";
+$lang["absatz_bild"]						= "Image:";
+$lang["absatz_link"]						= "Link:";
+$lang["submit"]								= "Save";
 
-$text["required_absatz_titel"]              = "Title";
+$lang["required_absatz_titel"]              = "Title";
 
-$text["quickhelp_element_absatz"]           = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
+$lang["quickhelp_element_absatz"]           = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
 
 ?>

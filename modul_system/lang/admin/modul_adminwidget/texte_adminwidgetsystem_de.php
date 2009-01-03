@@ -7,42 +7,42 @@
 *	$Id$								*
 ********************************************************************************************************/
 
-$text["syslog_name"]                         = "Systemlog";
-$text["syslog_nrofrows"]                     = "Anzahl Einträge:";
+$lang["syslog_name"]                         = "Systemlog";
+$lang["syslog_nrofrows"]                     = "Anzahl Einträge:";
 
-$text["note_name"]                           = "Notizen";
-$text["note_content"]                        = "Inhalt:";
+$lang["note_name"]                           = "Notizen";
+$lang["note_content"]                        = "Inhalt:";
 
-$text["sysinfo_name"]                        = "Systeminformationen";
-$text["sysinfo_checkboxphp"]                 = "PHP Informationen anzeigen";
-$text["sysinfo_checkboxserver"]              = "Server Informationen anzeigen";
-$text["sysinfo_checkboxkajona"]              = "Kajona Informationen anzeigen";
+$lang["sysinfo_name"]                        = "Systeminformationen";
+$lang["sysinfo_checkboxphp"]                 = "PHP Informationen anzeigen";
+$lang["sysinfo_checkboxserver"]              = "Server Informationen anzeigen";
+$lang["sysinfo_checkboxkajona"]              = "Kajona Informationen anzeigen";
 
-$text["sysinfo_php_version"]                 = "PHP Version: ";
-$text["sysinfo_php_memlimit"]                = "PHP Memory Limit: ";
-$text["sysinfo_server_system"]               = "System: ";
-$text["sysinfo_server_diskspace"]            = "Gesamter Plattenplatz: ";
-$text["sysinfo_server_diskspacef"]           = "Freier Plattenplatz: ";
-$text["sysinfo_kajona_version"]              = "Kajona Version: ";
-$text["sysinfo_kajona_versionAvail"]         = "Neuste Version: ";
-$text["sysinfo_kajona_nrOfModules"]          = "Anzahl Kajonamodule: ";
+$lang["sysinfo_php_version"]                 = "PHP Version: ";
+$lang["sysinfo_php_memlimit"]                = "PHP Memory Limit: ";
+$lang["sysinfo_server_system"]               = "System: ";
+$lang["sysinfo_server_diskspace"]            = "Gesamter Plattenplatz: ";
+$lang["sysinfo_server_diskspacef"]           = "Freier Plattenplatz: ";
+$lang["sysinfo_kajona_version"]              = "Kajona Version: ";
+$lang["sysinfo_kajona_versionAvail"]         = "Neuste Version: ";
+$lang["sysinfo_kajona_nrOfModules"]          = "Anzahl Kajonamodule: ";
 
-$text["systemcheck_name"]                        = "Systemcheck";
-$text["systemcheck_checkboxphp"]                 = "PHP Check";
-$text["systemcheck_checkboxkajona"]              = "Kajona Check";
+$lang["systemcheck_name"]                        = "Systemcheck";
+$lang["systemcheck_checkboxphp"]                 = "PHP Check";
+$lang["systemcheck_checkboxkajona"]              = "Kajona Check";
 
-$text["systemcheck_yes"]                         = "Ja";
-$text["systemcheck_no"]                          = "Nein";
+$lang["systemcheck_yes"]                         = "Ja";
+$lang["systemcheck_no"]                          = "Nein";
 
-$text["systemcheck_php_safemode"]                = "Safemode: ";
-$text["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
-$text["systemcheck_php_regglobal"]               = "Register global: ";
-$text["systemcheck_kajona_installer"]            = "/installer vorhanden: ";
-$text["systemcheck_kajona_debug"]                = "/debug vorhanden: ";
-$text["systemcheck_kajona_configper"]            = "Schreibrechte auf config.php: ";
-$text["systemcheck_kajona_debugper"]             = "Schreibrechte auf /system/debug: ";
-$text["systemcheck_kajona_dbdumpsper"]           = "Schreibrechte auf /system/dbdumps: ";
-$text["systemcheck_kajona_piccacheper"]          = "Schreibrechte auf "._bildergalerie_cachepfad_.": ";
+$lang["systemcheck_php_safemode"]                = "Safemode: ";
+$lang["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
+$lang["systemcheck_php_regglobal"]               = "Register global: ";
+$lang["systemcheck_kajona_installer"]            = "/installer vorhanden: ";
+$lang["systemcheck_kajona_debug"]                = "/debug vorhanden: ";
+$lang["systemcheck_kajona_configper"]            = "Schreibrechte auf config.php: ";
+$lang["systemcheck_kajona_debugper"]             = "Schreibrechte auf /system/debug: ";
+$lang["systemcheck_kajona_dbdumpsper"]           = "Schreibrechte auf /system/dbdumps: ";
+$lang["systemcheck_kajona_piccacheper"]          = "Schreibrechte auf "._bildergalerie_cachepfad_.": ";
 
 
 ?>

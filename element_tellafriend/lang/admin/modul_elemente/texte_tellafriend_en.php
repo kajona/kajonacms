@@ -7,8 +7,8 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
-$text["tellafriend_template"]               = "Template:";
-$text["tellafriend_error"]                  = "Page in case of an error:";
-$text["tellafriend_success"]                = "Page in case of success:";
+$lang["tellafriend_template"]               = "Template:";
+$lang["tellafriend_error"]                  = "Page in case of an error:";
+$lang["tellafriend_success"]                = "Page in case of success:";
 
 ?>

@@ -6,18 +6,18 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
 ********************************************************************************************************/
-$text["sender"]                     = "Your email address:";
-$text["sender_name"]                = "Your name:";
-$text["receiver"]                   = "Recipients email address:";
-$text["receiver_name"]              = "Recipients name:";
-$text["message"]                    = "Message:";
-$text["submit"]                     = "Send";
-$text["captcha"]                    = "Code:";
-$text["reload_captcha"]             = "New code";
+$lang["sender"]                     = "Your email address:";
+$lang["sender_name"]                = "Your name:";
+$lang["receiver"]                   = "Recipients email address:";
+$lang["receiver_name"]              = "Recipients name:";
+$lang["message"]                    = "Message:";
+$lang["submit"]                     = "Send";
+$lang["captcha"]                    = "Code:";
+$lang["reload_captcha"]             = "New code";
 
-$text["tellafriend_sender"]         = "Please enter your email address";
-$text["tellafriend_sender_name"]    = "Please enter your name";
-$text["tellafriend_receiver"]       = "Please enter the recipients email address";
-$text["tellafriend_receiver_name"]  = "Please enter the recipients name";
-$text["fehler_captcha"]             = "Please enter the correct verification code";
+$lang["tellafriend_sender"]         = "Please enter your email address";
+$lang["tellafriend_sender_name"]    = "Please enter your name";
+$lang["tellafriend_receiver"]       = "Please enter the recipients email address";
+$lang["tellafriend_receiver_name"]  = "Please enter the recipients name";
+$lang["fehler_captcha"]             = "Please enter the correct verification code";
 ?>

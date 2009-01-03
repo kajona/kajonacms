@@ -9,83 +9,83 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["modul_titel"]				= "Downloads";
-$text["modul_rechte"]				= "Modul-Rechte";
-$text["modul_liste"]				= "Liste";
-$text["archiv_neu"]					= "Neues Archiv";
-$text["logbuch"]					= "Logbuch";
-$text["browser"]					= "Ordnerbrowser";
-$text["archive_masssync"]           = "Alle synchronisieren";
+$lang["modul_titel"]				= "Downloads";
+$lang["modul_rechte"]				= "Modul-Rechte";
+$lang["modul_liste"]				= "Liste";
+$lang["archiv_neu"]					= "Neues Archiv";
+$lang["logbuch"]					= "Logbuch";
+$lang["browser"]					= "Ordnerbrowser";
+$lang["archive_masssync"]           = "Alle synchronisieren";
 
-$text["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro", 5 => "Download", 6 => "Logbuch", 7 => "Rating", 8 => "");
+$lang["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro", 5 => "Download", 6 => "Logbuch", 7 => "Rating", 8 => "");
 
-$text["logbuch_loeschen_link"]		= "Logbuch leeren";
+$lang["logbuch_loeschen_link"]		= "Logbuch leeren";
 
-$text["archiv_anzeigen"]			= "Archiv öffnen";
-$text["archiv_bearbeiten"]			= "Archiv bearbeiten";
-$text["archiv_loeschen_frage"]		= "Möchten Sie das Archiv &quot;<b>%%element_name%%</b>&quot; wirklich löschen? <br /> Dabei werden alle hinterlegten Details gelöscht!";
-$text["archiv_loeschen_erfolg"]		= "Löschen erfolgreich";
-$text["archiv_loeschen_fehler"]		= "Auf Grund nicht ausreichender Rechte konnte das Löschen nicht erfolgreich abgeschlossen werden";
-$text["archiv_rechte"]				= "Rechte bearbeiten";
-$text["archiv_syncro"]				= "Archiv synchronisieren";
-$text["syncro_ende"]				= "Synchronisierung erfolgreich abgeschlossen<br />";
+$lang["archiv_anzeigen"]			= "Archiv öffnen";
+$lang["archiv_bearbeiten"]			= "Archiv bearbeiten";
+$lang["archiv_loeschen_frage"]		= "Möchten Sie das Archiv &quot;<b>%%element_name%%</b>&quot; wirklich löschen? <br /> Dabei werden alle hinterlegten Details gelöscht!";
+$lang["archiv_loeschen_erfolg"]		= "Löschen erfolgreich";
+$lang["archiv_loeschen_fehler"]		= "Auf Grund nicht ausreichender Rechte konnte das Löschen nicht erfolgreich abgeschlossen werden";
+$lang["archiv_rechte"]				= "Rechte bearbeiten";
+$lang["archiv_syncro"]				= "Archiv synchronisieren";
+$lang["syncro_ende"]				= "Synchronisierung erfolgreich abgeschlossen<br />";
 
-$text["archive_title"]              = "Titel:";
-$text["archive_path"]               = "Pfad:";
+$lang["archive_title"]              = "Titel:";
+$lang["archive_path"]               = "Pfad:";
 
-$text["speichern"]                  = "Speichern";
+$lang["speichern"]                  = "Speichern";
 
-$text["downloads_name"]             = "Name:";
-$text["downloads_description"]      = "Beschreibung:";
-$text["downloads_max_kb"]           = "Maximale Downloadrate in kb/s (0=unbegrenzt):";
+$lang["downloads_name"]             = "Name:";
+$lang["downloads_description"]      = "Beschreibung:";
+$lang["downloads_max_kb"]           = "Maximale Downloadrate in kb/s (0=unbegrenzt):";
 
-$text["sortierung_hoch"]			= "Eine Position nach oben";
-$text["sortierung_runter"]			= "Eine Position nach unten";
+$lang["sortierung_hoch"]			= "Eine Position nach oben";
+$lang["sortierung_runter"]			= "Eine Position nach unten";
 
-$text["ordner_oeffnen"]				= "Ordner anzeigen";
-$text["ordner_hoch"]				= "Eine Ebene nach oben springen";
+$lang["ordner_oeffnen"]				= "Ordner anzeigen";
+$lang["ordner_hoch"]				= "Eine Ebene nach oben springen";
 
-$text["datei_bearbeiten"]			= "Details bearbeiten";
-$text["datei_speichern_fehler"]		= "Fehler beim Speichern der Details";
+$lang["datei_bearbeiten"]			= "Details bearbeiten";
+$lang["datei_speichern_fehler"]		= "Fehler beim Speichern der Details";
 
-$text["fehler_recht"]				= "Keine ausreichende Rechte";
+$lang["fehler_recht"]				= "Keine ausreichende Rechte";
 
-$text["liste_leer_archive"]			= "Keine Archive angelegt";
-$text["liste_leer_dl"]				= "Keine Downloads vorhanden";
+$lang["liste_leer_archive"]			= "Keine Archive angelegt";
+$lang["liste_leer_dl"]				= "Keine Downloads vorhanden";
 
-$text["header_id"]                  = "Download-ID";
-$text["header_date"]                = "Datum";
-$text["header_file"]                = "Datei";
-$text["header_user"]                = "Benutzer";
-$text["header_ip"]                  = "IP/Hostname";
-$text["header_amount"]              = "Anzahl";
+$lang["header_id"]                  = "Download-ID";
+$lang["header_date"]                = "Datum";
+$lang["header_file"]                = "Datei";
+$lang["header_user"]                = "Benutzer";
+$lang["header_ip"]                  = "IP/Hostname";
+$lang["header_amount"]              = "Anzahl";
 
-$text["stats_title"]                = "Downloads";
-$text["stats_toptitle"]             = "Top Downloads";
+$lang["stats_title"]                = "Downloads";
+$lang["stats_toptitle"]             = "Top Downloads";
 
-$text["sync_add"]                   = "Hinzugefügt: ";
-$text["sync_del"]                   = " Gelöscht: ";
-$text["sync_upd"]                   = " Aktualisiert: ";
+$lang["sync_add"]                   = "Hinzugefügt: ";
+$lang["sync_del"]                   = " Gelöscht: ";
+$lang["sync_upd"]                   = " Aktualisiert: ";
 
 
 
-$text["datum"]                      = "Datum:";
-$text["hint_datum"]                 = "Löscht alle Eintraege des Logbuchs, die älter als das angegeben Datum sind.";
+$lang["datum"]                      = "Datum:";
+$lang["hint_datum"]                 = "Löscht alle Eintraege des Logbuchs, die älter als das angegeben Datum sind.";
 
-$text["_downloads_suche_seite_"]         = "Treffer-Seite:";
-$text["_downloads_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Listenansicht der Downloads, die in der Suche gefunden wurden.";
+$lang["_downloads_suche_seite_"]         = "Treffer-Seite:";
+$lang["_downloads_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Listenansicht der Downloads, die in der Suche gefunden wurden.";
 
-$text["required_archive_title"]     = "Titel des Archivs";
-$text["required_archive_path"]      = "Pfad des Archivs";
-$text["required_downloads_name"]    = "Name";
-$text["required_downloads_max_kb"]  = "Geschwindigkeit";
+$lang["required_archive_title"]     = "Titel des Archivs";
+$lang["required_archive_path"]      = "Pfad des Archivs";
+$lang["required_downloads_name"]    = "Name";
+$lang["required_downloads_max_kb"]  = "Geschwindigkeit";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_newArchive"]       = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
-$text["quickhelp_editArchive"]      = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
-$text["quickhelp_list"]             = "Alle bereits angelegten Archive werden in dieser Liste angezeigt.<br />Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen, gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der Datenbank aktualisiert.";
-$text["quickhelp_showArchive"]      = "Dateien und Ordner, die sich im zuvor gewählten Archiv befinden werden hier aufgelistet.";
-$text["quickhelp_editFile"]         = "Eine vorhandene Datei oder ein vorhandener Ordner können hier um weitere Informationen ergänzt werden.<br />Bei Dateien kann zusätzlich eine maximale Downloadrate in KB festgelegt werden. Wird die Datei über das Portal angefordert, so kann die Geschwindigkeit des Downloads hiermit limitiert werden.";
+$lang["quickhelp_newArchive"]       = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
+$lang["quickhelp_editArchive"]      = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";
+$lang["quickhelp_list"]             = "Alle bereits angelegten Archive werden in dieser Liste angezeigt.<br />Mit Hilfe der Aktion 'Synchronisieren' kann der Datenbestand des Dateisystems mit dem der Datenbank synchronisiert werden. Neue Dateien werden in die Datenbank aufgenommen, gelöschte aus dieser entfernt, ebenso werden im Dateisystem veränderte Dateien in der Datenbank aktualisiert.";
+$lang["quickhelp_showArchive"]      = "Dateien und Ordner, die sich im zuvor gewählten Archiv befinden werden hier aufgelistet.";
+$lang["quickhelp_editFile"]         = "Eine vorhandene Datei oder ein vorhandener Ordner können hier um weitere Informationen ergänzt werden.<br />Bei Dateien kann zusätzlich eine maximale Downloadrate in KB festgelegt werden. Wird die Datei über das Portal angefordert, so kann die Geschwindigkeit des Downloads hiermit limitiert werden.";
 ?>

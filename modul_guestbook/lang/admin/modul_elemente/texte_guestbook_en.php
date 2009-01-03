@@ -9,8 +9,8 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["guestbook_id"]                             = "Guestbook:";
-$text["guestbook_amount"]                         = "Number of posts per page:";
-$text["guestbook_template"]                       = "Template:";
+$lang["guestbook_id"]                             = "Guestbook:";
+$lang["guestbook_amount"]                         = "Number of posts per page:";
+$lang["guestbook_template"]                       = "Template:";
 
 ?>

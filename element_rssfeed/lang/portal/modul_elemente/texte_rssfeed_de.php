@@ -7,7 +7,7 @@
 *	$Id$                                        *
 ********************************************************************************************************/
 
-$text["rssfeed_errorloading"]                       = "Fehler beim Laden des Feeds.";
-$text["rssfeed_errorparsing"]                       = "Fehler beim Parsen des Feeds.";
+$lang["rssfeed_errorloading"]                       = "Fehler beim Laden des Feeds.";
+$lang["rssfeed_errorparsing"]                       = "Fehler beim Parsen des Feeds.";
 
 ?>

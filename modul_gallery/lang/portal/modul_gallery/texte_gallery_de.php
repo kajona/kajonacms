@@ -8,18 +8,18 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["liste_leer"]				= "Keine Bilder vorhanden";
+$lang["liste_leer"]				= "Keine Bilder vorhanden";
 
-$text["galerie_ordner_link"]	= "Anzeigen";
+$lang["galerie_ordner_link"]	= "Anzeigen";
 
-$text["forwardlink"]			= "Weiter";
-$text["backlink"]				= "Zurück";
-$text["uebersicht"]				= "Übersicht";
+$lang["forwardlink"]			= "Weiter";
+$lang["backlink"]				= "Zurück";
+$lang["uebersicht"]				= "Übersicht";
 
-$text["gallery_rating_rate1"]	= "Bild mit ";
-$text["gallery_rating_rate2"]	= " Punkt(en) bewerten!";
-$text["gallery_rating_permissions"] = "Keine ausreichenden Rechte.";
-$text["gallery_rating_voted"]	= "Dieses Bild wurde bereits bewertet.";
+$lang["gallery_rating_rate1"]	= "Bild mit ";
+$lang["gallery_rating_rate2"]	= " Punkt(en) bewerten!";
+$lang["gallery_rating_permissions"] = "Keine ausreichenden Rechte.";
+$lang["gallery_rating_voted"]	= "Dieses Bild wurde bereits bewertet.";
 
 
 ?>

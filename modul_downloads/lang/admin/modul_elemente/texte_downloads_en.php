@@ -9,7 +9,7 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["download_id"]                              = "Archive:";
-$text["download_template"]                        = "Template:";
+$lang["download_id"]                              = "Archive:";
+$lang["download_template"]                        = "Template:";
 
 ?>

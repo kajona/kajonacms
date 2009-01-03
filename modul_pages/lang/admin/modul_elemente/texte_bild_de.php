@@ -8,12 +8,12 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["browser"]				= "Browser öffnen";
-$text["bild_titel"]				= "Titel:";
-$text["bild_link"]				= "Link:";
-$text["bild_bild"]				= "Bild:";
-$text["bild_x"]                 = "Maximale Breite:";
-$text["bild_y"]                 = "Maximale Höhe:";
-$text["bild_xy_hint"]           = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
+$lang["browser"]				= "Browser öffnen";
+$lang["bild_titel"]				= "Titel:";
+$lang["bild_link"]				= "Link:";
+$lang["bild_bild"]				= "Bild:";
+$lang["bild_x"]                 = "Maximale Breite:";
+$lang["bild_y"]                 = "Maximale Höhe:";
+$lang["bild_xy_hint"]           = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
 
 ?>

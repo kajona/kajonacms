@@ -8,15 +8,15 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["liste_leer"]				= "No downloads available";
+$lang["liste_leer"]				= "No downloads available";
 
-$text["download_datei_link"]	= "Download";
-$text["download_ordner_link"]	= "Open";
+$lang["download_datei_link"]	= "Download";
+$lang["download_ordner_link"]	= "Open";
 
-$text["download_rating_rate1"]	= "Rate file with ";
-$text["download_rating_rate2"]	= " point(s)!";
-$text["download_rating_permissions"]	= "Not enough permissions.";
-$text["download_rating_voted"]	        = "You already voted for this file.";
+$lang["download_rating_rate1"]	= "Rate file with ";
+$lang["download_rating_rate2"]	= " point(s)!";
+$lang["download_rating_permissions"]	= "Not enough permissions.";
+$lang["download_rating_voted"]	        = "You already voted for this file.";
 
 
 ?>

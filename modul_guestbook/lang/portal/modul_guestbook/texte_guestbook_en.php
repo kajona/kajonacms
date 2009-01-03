@@ -8,21 +8,21 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["eintragen_fehler"]					= "Please provide all values";
-$text["fehler_recht"]						= "Not enough permissions to perform this action";
+$lang["eintragen_fehler"]					= "Please provide all values";
+$lang["fehler_recht"]						= "Not enough permissions to perform this action";
 
-$text["weiter"]								= "next";
-$text["zurueck"]							= "previous";
+$lang["weiter"]								= "next";
+$lang["zurueck"]							= "previous";
 
-$text["post_name_from"]						= "from";
-$text["post_name_text"]						= "Name";
-$text["post_mail_text"]						= "Email";
-$text["post_page_text"]						= "www";
-$text["post_message_text"]					= "Message";
-$text["post_code_text"]						= "Request new code";
-$text["post_submit_text"]					= "Sign!";
+$lang["post_name_from"]						= "from";
+$lang["post_name_text"]						= "Name";
+$lang["post_mail_text"]						= "Email";
+$lang["post_page_text"]						= "www";
+$lang["post_message_text"]					= "Message";
+$lang["post_code_text"]						= "Request new code";
+$lang["post_submit_text"]					= "Sign!";
 
-$text["eintragen"]							= "Sign";
+$lang["eintragen"]							= "Sign";
 
 
 ?>

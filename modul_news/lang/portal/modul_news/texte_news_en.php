@@ -8,13 +8,13 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["news_zurueck"]						= "Go back";
-$text["news_mehr"]							= "read more...";
+$lang["news_zurueck"]						= "Go back";
+$lang["news_mehr"]							= "read more...";
 
-$text["fehler_recht"]						= "Not enough permissions to perform this action";
+$lang["fehler_recht"]						= "Not enough permissions to perform this action";
 
-$text["news_list_empty"]					= "No news available.";
-$text["forward"]                            = "Forward";
-$text["backward"]                           = "Backward";
+$lang["news_list_empty"]					= "No news available.";
+$lang["forward"]                            = "Forward";
+$lang["backward"]                           = "Backward";
 
 ?>

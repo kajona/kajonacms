@@ -8,42 +8,42 @@
 ********************************************************************************************************/
 
 
-$text["syslog_name"]                         = "Systemlog";
-$text["syslog_nrofrows"]                     = "Number of entries:";
+$lang["syslog_name"]                         = "Systemlog";
+$lang["syslog_nrofrows"]                     = "Number of entries:";
 
-$text["note_name"]                        = "Notes";
-$text["note_content"]                     = "Content:";
+$lang["note_name"]                        = "Notes";
+$lang["note_content"]                     = "Content:";
 
-$text["sysinfo_name"]                        = "Systeminformation";
-$text["sysinfo_checkboxphp"]                 = "Show PHP information";
-$text["sysinfo_checkboxserver"]              = "Show server information";
-$text["sysinfo_checkboxkajona"]              = "Show kajona information";
+$lang["sysinfo_name"]                        = "Systeminformation";
+$lang["sysinfo_checkboxphp"]                 = "Show PHP information";
+$lang["sysinfo_checkboxserver"]              = "Show server information";
+$lang["sysinfo_checkboxkajona"]              = "Show kajona information";
 
-$text["sysinfo_php_version"]                 = "PHP Version: ";
-$text["sysinfo_php_memlimit"]                = "PHP Memory Limit: ";
-$text["sysinfo_server_system"]               = "System: ";
-$text["sysinfo_server_diskspace"]            = "Total Diskpace: ";
-$text["sysinfo_server_diskspacef"]           = "Free Diskspace: ";
-$text["sysinfo_kajona_version"]              = "Kajona Version: ";
-$text["sysinfo_kajona_versionAvail"]         = "Latest Version: ";
-$text["sysinfo_kajona_nrOfModules"]          = "Number of modules: ";
+$lang["sysinfo_php_version"]                 = "PHP Version: ";
+$lang["sysinfo_php_memlimit"]                = "PHP Memory Limit: ";
+$lang["sysinfo_server_system"]               = "System: ";
+$lang["sysinfo_server_diskspace"]            = "Total Diskpace: ";
+$lang["sysinfo_server_diskspacef"]           = "Free Diskspace: ";
+$lang["sysinfo_kajona_version"]              = "Kajona Version: ";
+$lang["sysinfo_kajona_versionAvail"]         = "Latest Version: ";
+$lang["sysinfo_kajona_nrOfModules"]          = "Number of modules: ";
 
-$text["systemcheck_name"]                        = "Systemcheck";
-$text["systemcheck_checkboxphp"]                 = "PHP Check";
-$text["systemcheck_checkboxkajona"]              = "Kajona Check";
+$lang["systemcheck_name"]                        = "Systemcheck";
+$lang["systemcheck_checkboxphp"]                 = "PHP Check";
+$lang["systemcheck_checkboxkajona"]              = "Kajona Check";
 
-$text["systemcheck_yes"]                         = "Yes";
-$text["systemcheck_no"]                          = "No";
+$lang["systemcheck_yes"]                         = "Yes";
+$lang["systemcheck_no"]                          = "No";
 
-$text["systemcheck_php_safemode"]                = "Safemode: ";
-$text["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
-$text["systemcheck_php_regglobal"]               = "Register global: ";
-$text["systemcheck_kajona_installer"]            = "/installer present: ";
-$text["systemcheck_kajona_debug"]                = "/debug present: ";
-$text["systemcheck_kajona_configper"]            = "Writeperm. on config.php: ";
-$text["systemcheck_kajona_debugper"]             = "Writeperm. on /system/debug: ";
-$text["systemcheck_kajona_dbdumpsper"]           = "Writeperm. on /system/dbdumps: ";
-$text["systemcheck_kajona_piccacheper"]          = "Writeperm. on "._bildergalerie_cachepfad_.": ";
+$lang["systemcheck_php_safemode"]                = "Safemode: ";
+$lang["systemcheck_php_urlfopen"]                = "Allow url fopen: ";
+$lang["systemcheck_php_regglobal"]               = "Register global: ";
+$lang["systemcheck_kajona_installer"]            = "/installer present: ";
+$lang["systemcheck_kajona_debug"]                = "/debug present: ";
+$lang["systemcheck_kajona_configper"]            = "Writeperm. on config.php: ";
+$lang["systemcheck_kajona_debugper"]             = "Writeperm. on /system/debug: ";
+$lang["systemcheck_kajona_dbdumpsper"]           = "Writeperm. on /system/dbdumps: ";
+$lang["systemcheck_kajona_piccacheper"]          = "Writeperm. on "._bildergalerie_cachepfad_.": ";
 
 
 ?>

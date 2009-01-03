@@ -8,41 +8,41 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["modul_titel"]				= "Languages";
-$text["modul_rechte"]               = "Module permissions";
-$text["modul_liste"]                = "List";
-$text["modul_anlegen"]              = "Create language";
+$lang["modul_titel"]				= "Languages";
+$lang["modul_rechte"]               = "Module permissions";
+$lang["modul_liste"]                = "List";
+$lang["modul_anlegen"]              = "Create language";
 
-$text["liste_leer"]                 = "No languages available";
+$lang["liste_leer"]                 = "No languages available";
 
-$text["fehler_recht"]               = "Not enough permissions to perform this action";
+$lang["fehler_recht"]               = "Not enough permissions to perform this action";
 
-$text["language_bearbeiten"]        = "Edit language";
-$text["language_status"]            = "Change status (is ";
-$text["language_rechte"]            = "Change permissions";
-$text["language_isDefault"]         = "Default language";
+$lang["language_bearbeiten"]        = "Edit language";
+$lang["language_status"]            = "Change status (is ";
+$lang["language_rechte"]            = "Change permissions";
+$lang["language_isDefault"]         = "Default language";
 
-$text["lang_save"]                  = "Save";
-$text["language_name"]              = "Language:";
+$lang["lang_save"]                  = "Save";
+$lang["language_name"]              = "Language:";
 
-$text["default"]                    = "Yes";
-$text["nondefault"]                 = "No";
-$text["language_default"]           = "Default language:";
+$lang["default"]                    = "Yes";
+$lang["nondefault"]                 = "No";
+$lang["language_default"]           = "Default language:";
 
-$text["lang_de"]                    = "German";
-$text["lang_en"]                    = "English";
-$text["lang_fr"]                    = "French";
-$text["lang_ru"]                    = "Russian";
+$lang["lang_de"]                    = "German";
+$lang["lang_en"]                    = "English";
+$lang["lang_fr"]                    = "French";
+$lang["lang_ru"]                    = "Russian";
 
-$text["language_existing"]          = "The language already exists";
+$lang["language_existing"]          = "The language already exists";
 
-$text["delete_question"]            = "Do you really want to delete the language &quot;<b>%%element_name%%</b>&quot;?";
+$lang["delete_question"]            = "Do you really want to delete the language &quot;<b>%%element_name%%</b>&quot;?";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "All languages created can be found in this list. To change the systems default-language, the basic data of the future default-language have to be changed.";
-$text["quickhelp_newLanguage"]      = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
-$text["quickhelp_editLanguage"]     = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$lang["quickhelp_list"]             = "All languages created can be found in this list. To change the systems default-language, the basic data of the future default-language have to be changed.";
+$lang["quickhelp_newLanguage"]      = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
+$lang["quickhelp_editLanguage"]     = "To create a new language or to edit an existing language the basic data can be captured using this form.<br />To create a language not yet existing in the list, an admin has to modify the corresponding files.";
 
 ?>

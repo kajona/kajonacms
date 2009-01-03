@@ -7,12 +7,12 @@
 *   $Id$                               *
 ********************************************************************************************************/
 
-$text["dl_toplist_template"]                        = "Template:";
-$text["dl_toplist_archive"]                         = "Archiv:";
-$text["dl_toplist_amount"]                          = "Anzahl Einträge:";
-$text["dl_toplist_algo"]                            = "Sortierung:";
+$lang["dl_toplist_template"]                        = "Template:";
+$lang["dl_toplist_archive"]                         = "Archiv:";
+$lang["dl_toplist_amount"]                          = "Anzahl Einträge:";
+$lang["dl_toplist_algo"]                            = "Sortierung:";
 
-$text["dl_toplist_algabs"]                          = "Absolut";
+$lang["dl_toplist_algabs"]                          = "Absolut";
 
 
 ?>

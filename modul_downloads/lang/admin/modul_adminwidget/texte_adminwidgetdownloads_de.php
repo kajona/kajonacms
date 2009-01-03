@@ -7,12 +7,12 @@
 *	$Id$							*
 ********************************************************************************************************/
 
-$text["downloads_name"]                        = "Downloads";
-$text["downloads_nrOfEntries"]                 = "Anzahl letzter Downloads:";
+$lang["downloads_name"]                        = "Downloads";
+$lang["downloads_nrOfEntries"]                 = "Anzahl letzter Downloads:";
 
-$text["downloads_head_date"]                   = "Datum";
-$text["downloads_head_file"]                   = "Datei";
+$lang["downloads_head_date"]                   = "Datum";
+$lang["downloads_head_file"]                   = "Datei";
 
-$text["downloads_total"]                       = "Gesamte Downloads: ";
+$lang["downloads_total"]                       = "Gesamte Downloads: ";
 
 ?>

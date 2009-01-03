@@ -8,8 +8,8 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["portallogin_template"]                   = "Template:";
-$text["portallogin_error"]                      = "Page in case of an error (optional):";
-$text["portallogin_success"]                    = "Page in case of success (optional):";
-$text["portallogin_logout_success"]             = "Page after logging out (optional):";
+$lang["portallogin_template"]                   = "Template:";
+$lang["portallogin_error"]                      = "Page in case of an error (optional):";
+$lang["portallogin_success"]                    = "Page in case of success (optional):";
+$lang["portallogin_logout_success"]             = "Page after logging out (optional):";
 ?>

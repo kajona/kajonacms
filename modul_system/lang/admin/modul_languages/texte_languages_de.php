@@ -8,41 +8,41 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["modul_titel"]				= "Sprachen";
-$text["modul_rechte"]               = "Modul-Rechte";
-$text["modul_liste"]                = "Liste";
-$text["modul_anlegen"]              = "Sprache anlegen";
+$lang["modul_titel"]				= "Sprachen";
+$lang["modul_rechte"]               = "Modul-Rechte";
+$lang["modul_liste"]                = "Liste";
+$lang["modul_anlegen"]              = "Sprache anlegen";
 
-$text["liste_leer"]                 = "Keine Sprachen angelegt";
+$lang["liste_leer"]                 = "Keine Sprachen angelegt";
 
-$text["fehler_recht"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
+$lang["fehler_recht"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 
-$text["language_bearbeiten"]        = "Sprache bearbeiten";
-$text["language_status"]            = "Status ändern (ist ";
-$text["language_rechte"]            = "Rechte";
-$text["language_isDefault"]         = "Standardsprache";
+$lang["language_bearbeiten"]        = "Sprache bearbeiten";
+$lang["language_status"]            = "Status ändern (ist ";
+$lang["language_rechte"]            = "Rechte";
+$lang["language_isDefault"]         = "Standardsprache";
 
-$text["lang_save"]                  = "Speichern";
-$text["language_name"]              = "Sprache:";
+$lang["lang_save"]                  = "Speichern";
+$lang["language_name"]              = "Sprache:";
 
-$text["default"]                    = "Ja";
-$text["nondefault"]                 = "Nein";
-$text["language_default"]           = "Standardsprache:";
+$lang["default"]                    = "Ja";
+$lang["nondefault"]                 = "Nein";
+$lang["language_default"]           = "Standardsprache:";
 
-$text["lang_de"]                    = "Deutsch";
-$text["lang_en"]                    = "Englisch";
-$text["lang_fr"]                    = "Französisch";
-$text["lang_ru"]                    = "Russisch";
+$lang["lang_de"]                    = "Deutsch";
+$lang["lang_en"]                    = "Englisch";
+$lang["lang_fr"]                    = "Französisch";
+$lang["lang_ru"]                    = "Russisch";
 
-$text["language_existing"]          = "Die Sprache wurde bereits angelegt";
+$lang["language_existing"]          = "Die Sprache wurde bereits angelegt";
 
-$text["delete_question"]            = "Möchten Sie die Sprache &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["delete_question"]            = "Möchten Sie die Sprache &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder. Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen Standardsprache bearbeitet werden.";
-$text["quickhelp_newLanguage"]      = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
-$text["quickhelp_editLanguage"]     = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
+$lang["quickhelp_list"]             = "Sämtliche Sprachen die im System angelegt wurden finden sich in dieser Liste wieder. Um die default-Sprache des Systems zu verändern, müssen die Grunddaten der zukünftigen Standardsprache bearbeitet werden.";
+$lang["quickhelp_newLanguage"]      = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
+$lang["quickhelp_editLanguage"]     = "Um eine neue Sprache anzulegen oder eine bereits vorhanden Sprache zu bearbeiten, können in diesem Formular die Daten der Sprache erfasst werden. <br />Die Liste der Sprachen lässt sich hier nicht erweitern, dies muss durch einen Administrator erfolgen.";
 
 ?>

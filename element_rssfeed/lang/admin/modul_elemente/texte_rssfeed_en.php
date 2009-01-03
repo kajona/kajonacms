@@ -7,8 +7,8 @@
 *   $Id$                                    *
 ********************************************************************************************************/
 
-$text["rssfeed_template"]               = "Template:";
-$text["rssfeed_url"]                    = "RSS-Feed-URL:";
-$text["rssfeed_numberofposts"]          = "Number of messages to show:";
+$lang["rssfeed_template"]               = "Template:";
+$lang["rssfeed_url"]                    = "RSS-Feed-URL:";
+$lang["rssfeed_numberofposts"]          = "Number of messages to show:";
 
 ?>

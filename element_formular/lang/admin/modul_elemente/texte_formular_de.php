@@ -8,8 +8,8 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["formular_email"]                             = "Ziel-E-Mail-Adresse:";
-$text["formular_success"]                           = "Erfolgsmeldung:";
-$text["formular_error"]                             = "Fehlermeldung:";
-$text["formular_class"]                             = "Portal-Klasse:";
+$lang["formular_email"]                             = "Ziel-E-Mail-Adresse:";
+$lang["formular_success"]                           = "Erfolgsmeldung:";
+$lang["formular_error"]                             = "Fehlermeldung:";
+$lang["formular_class"]                             = "Portal-Klasse:";
 ?>

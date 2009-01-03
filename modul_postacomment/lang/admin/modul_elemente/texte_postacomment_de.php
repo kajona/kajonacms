@@ -9,6 +9,6 @@
 
 // --- Module texts -------------------------------------------------------------------------------------
 
-$text["postacomment_template"]          = "Template:";
+$lang["postacomment_template"]          = "Template:";
 
 ?>

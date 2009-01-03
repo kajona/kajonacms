@@ -7,16 +7,16 @@
 *	$Id$								*
 ********************************************************************************************************/
 
-$text["stats_name"]                        = "Statistiken";
+$lang["stats_name"]                        = "Statistiken";
 
-$text["stats_current"]                     = "Aktuelles:";
-$text["stats_day"]                         = "Tagesanalyse:";
-$text["stats_last"]                        = "Letzte Zugriffe:";
-$text["stats_nrLast"]                      = "Anzahl letzer Zugriffe:";
+$lang["stats_current"]                     = "Aktuelles:";
+$lang["stats_day"]                         = "Tagesanalyse:";
+$lang["stats_last"]                        = "Letzte Zugriffe:";
+$lang["stats_nrLast"]                      = "Anzahl letzer Zugriffe:";
 
-$text["stats_online"]                      = "User online: ";
-$text["stats_hits"]                        = "Zugriffe: ";
-$text["stats_visitors"]                    = "Besucher: ";
-$text["stats_ip"]                          = "IP";
-$text["stats_page"]                        = "Seite";
+$lang["stats_online"]                      = "User online: ";
+$lang["stats_hits"]                        = "Zugriffe: ";
+$lang["stats_visitors"]                    = "Besucher: ";
+$lang["stats_ip"]                          = "IP";
+$lang["stats_page"]                        = "Seite";
 ?>

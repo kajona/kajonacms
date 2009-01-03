@@ -7,8 +7,8 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
-$text["tellafriend_template"]               = "Template:";
-$text["tellafriend_error"]                  = "Fehlerseite:";
-$text["tellafriend_success"]                = "Erfolgsseite:";
+$lang["tellafriend_template"]               = "Template:";
+$lang["tellafriend_error"]                  = "Fehlerseite:";
+$lang["tellafriend_success"]                = "Erfolgsseite:";
 
 ?>

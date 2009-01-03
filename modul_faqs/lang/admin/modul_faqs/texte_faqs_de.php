@@ -8,44 +8,44 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["modul_rechte"]				= "Modul-Rechte";
-$text["modul_liste"]				= "Liste";
-$text["modul_anlegen"]				= "FAQ anlegen";
-$text["modul_kat_anlegen"]			= "Kategorie anlegen";
-$text["modul_titel"]				= "FAQs";
-$text["modul_titel2"]				= "FAQ-Verwaltung - Kategorie ";
-$text["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
-$text["liste_leer"]					= "Keine FAQs angelegt";
+$lang["modul_rechte"]				= "Modul-Rechte";
+$lang["modul_liste"]				= "Liste";
+$lang["modul_anlegen"]				= "FAQ anlegen";
+$lang["modul_kat_anlegen"]			= "Kategorie anlegen";
+$lang["modul_titel"]				= "FAQs";
+$lang["modul_titel2"]				= "FAQ-Verwaltung - Kategorie ";
+$lang["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
+$lang["liste_leer"]					= "Keine FAQs angelegt";
 
-$text["kat_anzeigen"]				= "Kategorie anzeigen";
-$text["kat_bearbeiten"]				= "Kategorie bearbeiten";
-$text["kat_loeschen_frage"]			= "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$text["kat_rechte"]					= "Rechte bearbeiten";
-$text["kat_ausblenden"]				= "Kategorien ein-/ausblenden";
+$lang["kat_anzeigen"]				= "Kategorie anzeigen";
+$lang["kat_bearbeiten"]				= "Kategorie bearbeiten";
+$lang["kat_loeschen_frage"]			= "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["kat_rechte"]					= "Rechte bearbeiten";
+$lang["kat_ausblenden"]				= "Kategorien ein-/ausblenden";
 
-$text["faqs_cat_title"]             = "Kategorie-Titel:";
-$text["speichern"]                  = "Speichern";
+$lang["faqs_cat_title"]             = "Kategorie-Titel:";
+$lang["speichern"]                  = "Speichern";
 
-$text["faqs_question"]              = "Frage:";
-$text["faqs_answer"]                = "Antwort:";
-$text["faqs_categories"]            = "Kategorien";
-$text["faq_edit"]                   = "FAQ bearbeiten";
-$text["faq_rechte"]                 = "Rechte bearbeiten";
-$text["faqs_loeschen_frage"]        = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["faqs_question"]              = "Frage:";
+$lang["faqs_answer"]                = "Antwort:";
+$lang["faqs_categories"]            = "Kategorien";
+$lang["faq_edit"]                   = "FAQ bearbeiten";
+$lang["faq_rechte"]                 = "Rechte bearbeiten";
+$lang["faqs_loeschen_frage"]        = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
-$text["_faqs_suche_seite_"]         = "Treffer-Seite:";
-$text["_faqs_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";
+$lang["_faqs_suche_seite_"]         = "Treffer-Seite:";
+$lang["_faqs_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";
 
-$text["required_faqs_cat_title"]    = "Kategorie-Titel";
-$text["required_faqs_answer"]       = "Antwort";
-$text["required_faqs_question"]     = "Frage";
+$lang["required_faqs_cat_title"]    = "Kategorie-Titel";
+$lang["required_faqs_answer"]       = "Antwort";
+$lang["required_faqs_question"]     = "Frage";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------
 
-$text["quickhelp_list"]             = "Alle FAQs und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien aufgelistet, im zweiten die einzelnen FAQs.<br />Um alle FAQs einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie anzeigen' bei der entsprechenden Kategorie die Liste der FAQs gefiltert werden.";
-$text["quickhelp_newFaq"]           = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
-$text["quickhelp_editFaq"]          = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
-$text["quickhelp_newCat"]           = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
-$text["quickhelp_editCat"]          = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
+$lang["quickhelp_list"]             = "Alle FAQs und Kategorien werden in dieser Ansicht aufgelistet.<br />Im ersten Teil werden die Kategorien aufgelistet, im zweiten die einzelnen FAQs.<br />Um alle FAQs einer Kategorie anzuzeigen, kann per Klick auf 'Kategorie anzeigen' bei der entsprechenden Kategorie die Liste der FAQs gefiltert werden.";
+$lang["quickhelp_newFaq"]           = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
+$lang["quickhelp_editFaq"]          = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
+$lang["quickhelp_newCat"]           = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
+$lang["quickhelp_editCat"]          = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 ?>

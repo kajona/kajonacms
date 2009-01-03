@@ -8,21 +8,21 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
-$text["eintragen_fehler"]					= "Bitte alle Felder ausfüllen";
-$text["fehler_recht"]						= "Keine Rechte für diese Aktion";
+$lang["eintragen_fehler"]					= "Bitte alle Felder ausfüllen";
+$lang["fehler_recht"]						= "Keine Rechte für diese Aktion";
 
-$text["weiter"]								= "weiter";
-$text["zurueck"]							= "zurück";
+$lang["weiter"]								= "weiter";
+$lang["zurueck"]							= "zurück";
 
-$text["post_name_from"]						= "von";
-$text["post_name_text"]						= "Name";
-$text["post_mail_text"]						= "Email";
-$text["post_page_text"]						= "WWW";
-$text["post_message_text"]					= "Nachricht";
-$text["post_code_text"]						= "Neuen Code anfordern";
-$text["post_submit_text"]					= "Eintragen!";
+$lang["post_name_from"]						= "von";
+$lang["post_name_text"]						= "Name";
+$lang["post_mail_text"]						= "Email";
+$lang["post_page_text"]						= "WWW";
+$lang["post_message_text"]					= "Nachricht";
+$lang["post_code_text"]						= "Neuen Code anfordern";
+$lang["post_submit_text"]					= "Eintragen!";
 
-$text["eintragen"]							= "Eintragen";
+$lang["eintragen"]							= "Eintragen";
 
 
 ?>
