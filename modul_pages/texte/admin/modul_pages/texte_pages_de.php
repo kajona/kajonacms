@@ -97,7 +97,8 @@ $text["element_admin"]				= "Admin-Klasse:";
 $text["element_portal"]				= "Portal-Klasse:";
 $text["element_repeat"]				= "Wiederholbar:";
 $text["submit"]						= "Speichern";
-$text["element_cachetime"]          = "Max. Cachedauer in Sek (-1 = kein Caching) :";
+$text["element_cachetime"]          = "Max. Cachedauer:";
+$text["element_cachetime_hint"]     = "in Sekunden (-1 = kein Caching)";
 
 $text["_pages_templatewechsel_"]        = "Templatewechsel erlaubt:";
 $text["_pages_templatewechsel_hint"]    = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese bereits Elemente enthält. Wird dies erlaubt, kann es zu unerwarteten Nebeneffekten führen!";

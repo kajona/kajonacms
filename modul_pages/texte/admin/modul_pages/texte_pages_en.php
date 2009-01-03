@@ -95,7 +95,8 @@ $text["element_admin"]				= "Admin-class:";
 $text["element_portal"]				= "Portal-class:";
 $text["element_repeat"]				= "Repeatable:";
 $text["submit"]						= "Save";
-$text["element_cachetime"]          = "Max. cache duration in sec (-1 = no caching) :";
+$text["element_cachetime"]          = "Max. cache duration:";
+$text["element_cachetime_hint"]     = "in seconds (-1 = no caching)";
 
 $text["_pages_templatewechsel_"]        = "Allow change of templates:";
 $text["_pages_templatewechsel_hint"]    = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may come with unexpected sideeffects!";

@@ -98,7 +98,7 @@ $text["_gaeste_gruppe_id_"]         = "ID of the guest group:";
 $text["_admin_gruppe_id_"]          = "ID of the admin group:";
 $text["_user_log_anzahl_"]          = "Number of rows:";
 $text["_user_log_anzahl_hint"]      = "Defines the number of rows to be shown in the login logfile.";
-$text["_admin_skin_default_"]       = "Default-skin when loading the admin-area:";
+$text["_admin_skin_default_"]       = "Default admin skin:";
 $text["_user_selfedit_"]            = "Own profile:";
 $text["_user_selfedit_hint_"]       = "Defines, if the user is allowed to change its own profile.";
 

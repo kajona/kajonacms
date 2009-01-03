@@ -99,7 +99,7 @@ $text["_gaeste_gruppe_id_"]         = "ID der Gäste-Gruppe:";
 $text["_admin_gruppe_id_"]          = "ID der Admin-Gruppe:";
 $text["_user_log_anzahl_"]          = "Anzahl Zeilen:";
 $text["_user_log_anzahl_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
-$text["_admin_skin_default_"]       = "Default-Skin im Admin-Bereich:";
+$text["_admin_skin_default_"]       = "Standard-Admin-Skin:";
 $text["_user_selfedit_"]            = "Eigene Daten:";
 $text["_user_selfedit_hint_"]       = "Legt fest, ob ein Benutzer seine eigenen Daten berbeiten darf";
 

@@ -907,6 +907,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=saveElement");
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $this->getParam("element_name"));
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $this->getParam("element_cachetime"));
+				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
+                $strReturn .= $this->objToolkit->divider();
+                
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", 0);
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "new");
 				//Fetch Admin-Classes
@@ -923,7 +926,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 					$arrClassesPortal[$strClass] = $strClass;
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $this->getParam("element_portal"));
 
-				//Repeteable?
+				$strReturn .= $this->objToolkit->divider();
+				
+				//Repeatable?
 				$arrRepeat = array();
 				$arrRepeat[1] = $this->getText("option_ja");
 				$arrRepeat[0] = $this->getText("option_nein");
@@ -940,6 +945,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=saveElement");
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $objData->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $objData->getIntCachetime());
+				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
+                $strReturn .= $this->objToolkit->divider();
+				
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", $this->getParam("elementid"));
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "edit");
 				//Fetch Admin-Classes
@@ -956,7 +964,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 					$arrClassesPortal[$strClass] = $strClass;
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $objData->getStrClassPortal());
 
-				//Repeteable?
+				$strReturn .= $this->objToolkit->divider();
+				
+				//Repeatable?
 				$arrRepeat = array();
 				$arrRepeat[1] = $this->getText("option_ja");
 				$arrRepeat[0] = $this->getText("option_nein");
