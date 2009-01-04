@@ -275,7 +275,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * Fetches the rating-history of the current rating from the database.
      * This is an array containing the fields:
      *    rating_history_id --> used internally  
-     *    rating_history_rating --> the current rating-sytemid
+     *    rating_history_rating --> the current rating-systemid
      *    rating_history_user --> the systemid if the user who rated or '' in case of a guest
      *    rating_history_timestamp --> timestamp of the rating   
      *    rating_history_value --> the value the user rated the record
