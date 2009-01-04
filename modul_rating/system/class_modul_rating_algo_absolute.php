@@ -35,12 +35,6 @@ class class_modul_rating_algo_absolute implements interface_modul_rating_sortalg
     	//move elements into a single array
     	$arrToSort = array();
     	foreach($this->arrElements as $objOneElement) {
-    		
-    		
-    		include_once (_systempath_."/class_modul_rating_rate.php");
-            $objRating = class_modul_rating_rate::getRating($objOneElement->getSystemid());
-    		var_dump($objRating->getRatingHistoryAsArray());
-    		
     		$floatRating = $objOneElement->getFloatRating();
     		//avoid replacement of files having the same rating
     		while(isset($arrToSort[$floatRating]))
