@@ -7,48 +7,31 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_modul_rating_sortalgo.php");
+include_once(_systempath_."/interface_modul_rating_algo.php");
 
 /**
- * Does an absolute, linear sorting based on the current rating-value
+ * Does an absolute, linear rating based on the current rating-value
  * @package modul_rating
  */
-class class_modul_rating_algo_absolute implements interface_modul_rating_sortalgo {
+class class_modul_rating_algo_absolute implements interface_modul_rating_algo {
 	
-	private $arrElements = array();
 	
 	/**
-     * Sets an array of elements to be sorted.
-     * Elements have to be an instance of interface_sortable_rating.
-     *
-     * @param array $arrElements
+     * Calculates the new rating
+     * 
+     * @param class_modul_rating_rate $objSourceRate The rating-record to update
+     * @param float $floatNewRating The rating fired by the user
+     * @return float the new rating
      */
-    public function setElementsArray($arrElements) {
-    	$this->arrElements = $arrElements;
+    public function doRating($objSourceRate, $floatNewRating) {
+    	//calc the new rating
+        $floatNewRating = (($objSourceRate->getFloatRating() * $objSourceRate->getIntHits()) + $floatNewRating) / ($objSourceRate->getIntHits()+1);
+        
+        //round the rating
+        $floatNewRating = round($floatNewRating, 2);
+        
+        return $floatNewRating;
     }
-    
-    /**
-     * Does the sorting and returns the sorted array of elements.
-     *
-     */
-    public function doSorting() {
-    	//move elements into a single array
-    	$arrToSort = array();
-    	foreach($this->arrElements as $objOneElement) {
-    		$floatRating = $objOneElement->getFloatRating();
-    		//avoid replacement of files having the same rating
-    		while(isset($arrToSort[$floatRating]))
-    		  $floatRating += 0.0001;
-    		  
-    		$arrToSort[$floatRating] = $objOneElement;
-    	}
-    	
-    	ksort($arrToSort, SORT_NUMERIC);
-    	$arrToSort = array_reverse($arrToSort);
-    	
-    	return $arrToSort;
-    }
-	
 	
 	
 }

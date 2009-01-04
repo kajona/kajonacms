@@ -8,25 +8,21 @@
 ********************************************************************************************************/
 
 /**
- * Interface to be implemented by all sorting-algorithms designed to sort ratings 
+ * Interface to be implemented by all rating-algorithms designed to calculate ratings 
  *
  * @package modul_rating
  */
-interface interface_modul_rating_sortalgo {
+interface interface_modul_rating_algo {
 
 	/**
-	 * Sets an array of elements to be sorted.
-	 * Elements have to be an instance of interface_sortable_rating.
-	 *
-	 * @param array $arrElements
+	 * Calculates the new rating
+	 * 
+	 * @param class_modul_rating_rate $objSourceRate The rating-record to update
+	 * @param float $floatNewRating The rating fired by the user
+	 * @return float the new rating
 	 */
-    public function setElementsArray($arrElements);
-    
-    /**
-     * Does the sorting and returns the sorted array of elements.
-     *
-     */
-    public function doSorting();
+	public function doRating($objSourceRate, $floatNewRating);
+		
     
 }
 ?>
