@@ -64,6 +64,8 @@ class class_installer_rating extends class_installer_base implements interface_i
         $arrFields["rating_history_id"]     = array("char20", false);
         $arrFields["rating_history_rating"] = array("char20", true);
         $arrFields["rating_history_user"]   = array("char20", true);
+        $arrFields["rating_history_timestamp"]= array("int", true);
+        $arrFields["rating_history_value"]  = array("double", true);
         
         if(!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id")))
             $strReturn .= "An error occured! ...\n";	

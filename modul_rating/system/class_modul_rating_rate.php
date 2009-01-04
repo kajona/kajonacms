@@ -134,6 +134,8 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     public function saveRating($floatRating) {
     	if($floatRating < 0 || !$this->isRateableByCurrentUser() || $floatRating > class_modul_rating_rate::$intMaxRatingValue)
     	   return false;
+
+    	$floatRatingOriginal = $floatRating;
     	   
         //calc the new rating
         $floatRating = (($this->getFloatRating() * $this->getIntHits()) + $floatRating) / ($this->getIntHits()+1);
@@ -146,13 +148,14 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         $this->setFloatRating($floatRating);
         $this->setIntHits($this->getIntHits()+1);
         
-        //if the current user is not the guest user, save a hint in the history table
-        if($this->objSession->getUserID() != "") {
+        //save a hint in the history table
+        //if($this->objSession->getUserID() != "") {
         	$strInsert = "INSERT INTO ".$this->objDB->encloseTableName($this->arrModule["table2"])."
-        	              (rating_history_id, rating_history_rating, rating_history_user) VALUES 
-        	              ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."', '".dbsafeString($this->objSession->getUserID())."')";
+        	              (rating_history_id, rating_history_rating, rating_history_user, rating_history_timestamp, rating_history_value) VALUES 
+        	              ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."', '".dbsafeString($this->objSession->getUserID())."',
+        	               '".(int)time()."', '".dbsafeString($floatRatingOriginal)."')";
         	$this->objDB->_query($strInsert);
-        }
+        //}
         
         //and save it in a cookie
         $objCookie = new class_cookie();
@@ -171,12 +174,17 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     public function isRateableByCurrentUser() {
     	$bitReturn = true;
     	
-    	//sql-check
-    	$strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
-    	               WHERE rating_history_rating = '".dbsafeString($this->getSystemid())."'
-    	                 AND rating_history_user = '".dbsafeString($this->objSession->getUserID())."'";
+    	//sql-check - only if user is not a guest
+    	$arrRow = array();
+    	$arrRow["COUNT(*)"] = 0;
     	
-    	$arrRow = $this->objDB->getRow($strQuery);
+    	if($this->objSession->getUserID() != "") {
+	    	$strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
+	    	               WHERE rating_history_rating = '".dbsafeString($this->getSystemid())."'
+	    	                 AND rating_history_user = '".dbsafeString($this->objSession->getUserID())."'";
+	    	
+	    	$arrRow = $this->objDB->getRow($strQuery);
+    	}
     	
     	if($arrRow["COUNT(*)"] == 0) {
     		//cookie available?
@@ -218,7 +226,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     
     
     /**
-     * Searches for comments belonging to the systemid
+     * Searches for ratings belonging to the systemid
      * to be deleted.
      * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid) 
      *
@@ -261,6 +269,25 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         
             
         return $bitReturn;
+    }
+    
+    
+    /**
+     * Fetches the rating-history of the current rating from the database.
+     * This is an array containing the fields:
+     *    rating_history_id --> used internally  
+     *    rating_history_rating --> the current rating-sytemid
+     *    rating_history_user --> the systemid if the user who rated or '' in case of a guest
+     *    rating_history_timestamp --> timestamp of the rating   
+     *    rating_history_value --> the value the user rated the record
+     * @return array
+     */
+    public function getRatingHistoryAsArray() {
+    	$strQuery = "SELECT * FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
+    	             WHERE ".$this->objDB->encloseColumnName("rating_history_rating")." = '".dbsafeString($this->getSystemid())."'
+    	             ORDER BY ".$this->objDB->encloseColumnName("rating_history_timestamp")." ASC";
+    	
+    	return $this->objDB->getArray($strQuery);
     }
 	
 

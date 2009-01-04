@@ -28,7 +28,7 @@ interface interface_sortable_rating {
 	 * 
 	 * @return int
 	 */
-	public function getIntHits();
+	public function getIntRatingHits();
 	
 
 }

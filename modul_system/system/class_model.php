@@ -225,7 +225,7 @@ class class_model extends class_root {
      * @see interface_sortable_rating
      * @return int
      */
-    public function getIntHits() {
+    public function getIntRatingHits() {
         $intHits = 0;
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
