@@ -7,12 +7,13 @@
 *   $Id: class_modul_rating_algo_absolute.php 2400 2009-01-04 14:29:58Z sidler $                        *
 ********************************************************************************************************/
 
+include_once(_systempath_."/interface_modul_rating_sortalgo.php");
 
 /**
  * Does an absolute, linear sorting based on the current rating-value
  * @package modul_rating
  */
-class class_modul_rating_sort_absolute  {
+class class_modul_rating_sort_absolute implements interface_modul_rating_sortalgo {
 	
 	private $arrElements = array();
 	
