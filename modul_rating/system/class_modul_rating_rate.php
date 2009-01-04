@@ -136,20 +136,11 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     	   return false;
 
     	$floatRatingOriginal = $floatRating;
-    	   
     	
     	include_once(_systempath_."/class_modul_rating_algo_absolute.php");
     	$objRatingAlgo = new class_modul_rating_algo_absolute();
     	$floatRating = $objRatingAlgo->doRating($this, $floatRating);
     	
-    	
-    	
-        //calc the new rating
-        //$floatRating = (($this->getFloatRating() * $this->getIntHits()) + $floatRating) / ($this->getIntHits()+1);
-        
-        //round the rating
-        //$floatRating = round($floatRating, 2);
-        
         class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
         
         //update the values to remain consistent
