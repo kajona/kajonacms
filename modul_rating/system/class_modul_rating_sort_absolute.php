@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: class_modul_rating_algo_absolute.php 2400 2009-01-04 14:29:58Z sidler $                        *
+*   $Id$                        *
 ********************************************************************************************************/
 
 include_once(_systempath_."/interface_modul_rating_sortalgo.php");
