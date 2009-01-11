@@ -126,11 +126,28 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		//Create tree from bottom
 		$arrTemp = array();
 		while($intCounter > 1) {
-			$arrTemp["level".$intCounter] = $arrTree[$intCounter];
+			$strLevel = $arrTree[$intCounter];
+			
+			//include into a wrapper?
+			$strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
+			$strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID, true);
+			if(uniStrlen($strWrappedLevel) > 0)
+			    $strLevel = $strWrappedLevel;
+			
+			$arrTemp["level".$intCounter] = $strLevel;
+			
 			$this->objTemplate->setTemplate($arrTree[$intCounter-1]);
 			$arrTree[$intCounter-1] = $this->objTemplate->fillCurrentTemplate($arrTemp);
 			$intCounter--;
 		}
+		
+		//and add level 1 wrapper
+        $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
+        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID, true);
+        if(uniStrlen($strWrappedLevel) > 0)
+            $arrTree[$intCounter] = $strWrappedLevel;
+            
+        
 		$this->objTemplate->setTemplate($arrTree[$intCounter]);
 		$this->objTemplate->deletePlaceholder();
 		$strReturn = $this->objTemplate->getTemplate();
@@ -247,12 +264,22 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 				$this->objTemplate->setTemplate($strCurrentPoint);
 				$arrTemp = array("level".($intLevel+1) => $strChilds);
 				$strTemplate = $this->objTemplate->fillCurrentTemplate($arrTemp);
+				
 				//set the template again to delete placeholders
 				$this->objTemplate->setTemplate($strTemplate);
 				$this->objTemplate->deletePlaceholder();
 				$strReturn .= $this->objTemplate->getTemplate();
+				
+				
 			}
 		}
+		
+		//wrap into the wrapper-section
+        $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
+        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID, true);
+        if(uniStrlen($strWrappedLevel) > 0)
+            $strReturn = $strWrappedLevel;
+		
 		return $strReturn;
 	}
 

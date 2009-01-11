@@ -23,7 +23,7 @@
 		</tr>
 		<tr>
 			<td id="portalNavi">
-				<ul>%%masterportalnavi_navigation%%</ul>
+				%%masterportalnavi_navigation%%
 			</td>
 			<td id="contentTopRightTop"></td>
 		</tr>
@@ -32,7 +32,7 @@
 			<td id="naviContainer">
 			    <div id="statusBoxHeader"></div>
 			    <div id="statusBox">%%search_search%%</div>
-			    <div id="mainNavi"><ul>%%mastermainnavi_navigation%%</ul></div>
+			    <div id="mainNavi">%%mastermainnavi_navigation%%</div>
 			    <div id="poweredBy"><img src="_webpath_/portal/pics/kajona/kajona_poweredby.png" alt="powered by Kajona V3" /></div>
 			</td>
 			<td  id="content">

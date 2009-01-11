@@ -30,14 +30,14 @@
                 %%masterswitch_languageswitch%%
             </div>
             <div id="pNaviContainer">   
-                <ul>%%masterportalnavi_navigation%%</ul>
+                %%masterportalnavi_navigation%%
             </div>
             <div class="clearer"></div> 
         </div>
         <div class="contentSpacer"></div>
         <div id="mainContentContainer">
             <div id="mainNaviContainer">
-                <ul>%%mastermainnavi_navigation%%</ul>
+                %%mastermainnavi_navigation%%
             </div>
             <div id="contentContainer">
                 %%headline_row%%

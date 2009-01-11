@@ -1,3 +1,6 @@
+
+<level_1_wrapper><ul>%%level1%%</ul></level_1_wrapper>
+
 <level_1_active>
 <li>%%link%% &middot;</li>
 </level_1_active>
