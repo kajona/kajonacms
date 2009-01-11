@@ -173,6 +173,10 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
 				//and count the hit
 				$objNews->increaseHits();
+				
+				//set the name of the current news to the page-title via class_pages
+				include_once(_portalpath_."/class_modul_pages_portal.php");
+				class_modul_pages_portal::registerAdditionalTitle($objNews->getStrTitle());
 			}
 			else
                 $strReturn = $this->getText("fehler_recht");

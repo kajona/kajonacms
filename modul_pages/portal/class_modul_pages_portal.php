@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                        *
+*	$Id$                            *
 ********************************************************************************************************/
 
 //base class
@@ -24,6 +24,8 @@ include_once(_systempath_."/class_http_statuscodes.php");
 class class_modul_pages_portal extends class_portal {
 
     private $objPagecache;
+    
+    private static $strAdditionalHeader = "";
 
 	public function __construct() {
         $arrModul = array();
@@ -251,6 +253,7 @@ class class_modul_pages_portal extends class_portal {
 		$arrTemplate["description"] = $objPageData->getStrDesc();
 		$arrTemplate["keywords"] = $objPageData->getStrKeywords();
 		$arrTemplate["title"] = $objPageData->getStrBrowsername();
+		$arrTemplate["additionalTitle"] = self::$strAdditionalHeader;
 		//Include the $arrGlobal Elements
 		$arrGlobal = array();
 		include(_portalpath_."/global_includes.php");
@@ -338,6 +341,15 @@ class class_modul_pages_portal extends class_portal {
 	    $this->objPagecache->cacheCleanup();
 	}
 
+	/**
+	 * Sets the passed text as an additional title-information.
+	 * If set, the separator-placeholder from global-includes will be included, too.
+	 * @param string $strTitle
+	 * @return void
+	 */
+	public static function registerAdditionalTitle($strTitle) {
+		self::$strAdditionalHeader = "%%kajonaTitleSeparator%%".$strTitle;
+	}
 
-} //class_modul_apges
+} 
 ?>
