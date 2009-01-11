@@ -98,8 +98,8 @@ $lang["submit"]						= "Save";
 $lang["element_cachetime"]          = "Max. cache duration:";
 $lang["element_cachetime_hint"]     = "in seconds (-1 = no caching)";
 
-$lang["_pages_templatewechsel_"]        = "Allow change of templates:";
-$lang["_pages_templatewechsel_hint"]    = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may come with unexpected sideeffects!";
+$lang["_pages_templatechange_"]        = "Allow change of templates:";
+$lang["_pages_templatechange_hint"]    = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may come with unexpected sideeffects!";
 
 $lang["_pages_maxcachetime_"]       = "Maximum cache duration:";
 $lang["_pages_maxcachetime_hint"]   = "Defines, how many seconds a page remains valid in the cache";
@@ -111,8 +111,8 @@ $lang["_pages_newdisabled_hint"]    = "If set to yes, new pages remain inactive"
 
 $lang["_pages_cacheenabled_"]       = "Page-cache enabled:";
 
-$lang["_pages_startseite_"]         = "Start page:";
-$lang["_pages_fehlerseite_"]        = "Error page:";
+$lang["_pages_indexpage_"]         = "Start page:";
+$lang["_pages_errorpage_"]        = "Error page:";
 $lang["_pages_defaulttemplate_"]    = "Default template:";
 
 $lang["page_element_placeholder_title"] = "Internal title:";

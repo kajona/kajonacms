@@ -430,7 +430,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				//If set on, the dropdown could be disabled
 				$bitEnabled = true;
-				if(_pages_templatewechsel_ == "false") {
+				if(_pages_templatechange_ == "false") {
 					if($objPage->getNumberOfElementsOnPage() != 0)
 						$bitEnabled = false;
 				}

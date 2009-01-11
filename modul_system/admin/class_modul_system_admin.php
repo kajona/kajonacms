@@ -485,7 +485,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 else {
                     $strActivity .= $this->getText("session_portal");
                     if($strLastUrl == "")
-                        $strActivity .= _pages_startseite_;
+                        $strActivity .= _pages_indexpage_;
                     else {
                         foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
                             $arrUrlParam = explode("=", $strOneParam);

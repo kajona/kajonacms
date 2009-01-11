@@ -100,8 +100,8 @@ $lang["submit"]						= "Speichern";
 $lang["element_cachetime"]          = "Max. Cachedauer:";
 $lang["element_cachetime_hint"]     = "in Sekunden (-1 = kein Caching)";
 
-$lang["_pages_templatewechsel_"]        = "Templatewechsel erlaubt:";
-$lang["_pages_templatewechsel_hint"]    = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese bereits Elemente enthält. Wird dies erlaubt, kann es zu unerwarteten Nebeneffekten führen!";
+$lang["_pages_templatechange_"]        = "Templatewechsel erlaubt:";
+$lang["_pages_templatechange_hint"]    = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese bereits Elemente enthält. Wird dies erlaubt, kann es zu unerwarteten Nebeneffekten führen!";
 
 $lang["_pages_maxcachetime_"]       = "Maximale Cachedauer:";
 $lang["_pages_maxcachetime_hint"]   = "Gibt an, wie viele Sekunden eine Seite im Cache maximal gültig ist.";
@@ -113,8 +113,8 @@ $lang["_pages_newdisabled_hint"]    = "Wenn diese Option aktiviert wird, sind ne
 
 $lang["_pages_cacheenabled_"]       = "Seitencache aktiv:";
 
-$lang["_pages_startseite_"]         = "Startseite:";
-$lang["_pages_fehlerseite_"]        = "Fehlerseite:";
+$lang["_pages_indexpage_"]         = "Startseite:";
+$lang["_pages_errorpage_"]          = "Fehlerseite:";
 $lang["_pages_defaulttemplate_"]    = "Standardtemplate:";
 
 $lang["page_element_placeholder_title"] = "Interner Titel:";

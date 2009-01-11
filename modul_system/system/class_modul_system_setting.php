@@ -106,14 +106,33 @@ class class_modul_system_setting extends class_model implements interface_model 
 
 
     /**
-     * Updates the current object to the database
+     * Updates the current object to the database.
+     * Only the value is updated!!!
      *
+     * @return bool
      */
     public function updateObjectToDb() {
         class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
 
         $strQuery = "UPDATE "._dbprefix_."system_config
                     SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."' WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
+        return $this->objDB->_query($strQuery);
+    }
+    
+    
+    /**
+     * Renames a constant in the database.
+     * @param string $strNewName
+     * @return bool
+     */
+    public function renameConstant($strNewName) {
+    	class_logger::getInstance()->addLogRow("renamed constant ".$this->getStrName() ." to ".$strNewName, class_logger::$levelInfo);
+        
+    	
+        $strQuery = "UPDATE "._dbprefix_."system_config
+                    SET system_config_name = '".$this->objDB->dbsafeString($strNewName)."' WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
+        
+        $this->strName = $strNewName;
         return $this->objDB->_query($strQuery);
     }
 

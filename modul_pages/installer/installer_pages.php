@@ -163,9 +163,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_pages_templatewechsel_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
-		$this->registerConstant("_pages_startseite_", "index", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
-		$this->registerConstant("_pages_fehlerseite_", "error", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
+		$this->registerConstant("_pages_templatechange_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
+		$this->registerConstant("_pages_indexpage_", "index", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
+		$this->registerConstant("_pages_errorpage_", "error", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
 		$this->registerConstant("_pages_defaulttemplate_", "", class_modul_system_setting::$int_TYPE_STRING, _pages_modul_id_);
 		//2.1.1: overall cachetime
 		$this->registerConstant("_pages_maxcachetime_", 4*60*60, class_modul_system_setting::$int_TYPE_INT, _pages_modul_id_);
@@ -438,6 +438,17 @@ class class_installer_pages extends class_installer_base implements interface_in
         $objModule->setStrNameAdmin("class_modul_folderview_admin.php");
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
+            
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_pages_fehlerseite_");
+        $objConstant->renameConstant("_pages_errorpage_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_pages_startseite_");
+        $objConstant->renameConstant("_pages_indexpage_");
+
+        $objConstant = class_modul_system_setting::getConfigByName("_pages_templatewechsel_");
+        $objConstant->renameConstant("_pages_templatechange_");
+        
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");

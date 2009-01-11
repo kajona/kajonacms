@@ -545,7 +545,7 @@ abstract class class_portal  {
     		}
     		//Use the page set in the configs
     		else {
-    			$strReturn = _pages_startseite_;
+    			$strReturn = _pages_indexpage_;
     		}
 		}
 		$strReturn = htmlspecialchars($strReturn);

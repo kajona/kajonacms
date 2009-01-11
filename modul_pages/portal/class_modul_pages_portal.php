@@ -108,7 +108,7 @@ class class_modul_pages_portal extends class_portal {
 
 			//and load the errorpage itself
 			$strFirstPagename = $strPagename;
-			$strPagename = _pages_fehlerseite_;
+			$strPagename = _pages_errorpage_;
 			$objPageData = class_modul_pages_page::getPageByName($strPagename);
 
 			//check, if the page is enabled and if the rights are given, too
