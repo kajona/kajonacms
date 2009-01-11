@@ -12,6 +12,7 @@ if(!require_once("./system/includes.php"))
 
 //The base class
 include_once(_realpath_."/system/class_root.php");
+include_once(_realpath_."/system/class_http_statuscodes.php");
 
 
 /**
@@ -59,6 +60,9 @@ class class_download_portal extends class_root {
 	 */
 	private function actionDownload() {
 		//Load filedetails
+		
+		$bitRedirectToErrorPage = false;
+		
 		if($this->getSystemid() != "" && $this->getSystemid() != "0") {
 
 		    $objFile = new class_modul_downloads_file($this->getSystemid());
@@ -112,9 +116,25 @@ class class_download_portal extends class_root {
 					}
 					@fclose($ptrFile);
 				}
+				else {
+                    header(class_http_status_codes::$strSC_FORBIDDEN);
+                    $bitRedirectToErrorPage = true;
+				}
+				
 			}
-			else 
-			    header("Location: index.php");
+			else {
+				header(class_http_status_codes::$strSC_NOT_FOUND);
+				$bitRedirectToErrorPage = true;
+			}
+			
+		}
+		else { 
+            header(class_http_status_codes::$strSC_NOT_FOUND);
+            $bitRedirectToErrorPage = true;
+		}
+		
+		if($bitRedirectToErrorPage) {
+			header("Location: index.php?page="._pages_fehlerseite_);
 		}
 	}
 }
