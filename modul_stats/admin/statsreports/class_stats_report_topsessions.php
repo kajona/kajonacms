@@ -78,7 +78,7 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
 		$intI =0;
 		foreach($arrSessions as $arrOneSession) {
 			//Escape?
-			if($intI >= _stats_anzahl_liste_)
+			if($intI >= _stats_nrofrecords_)
 				break;
             $arrValues[$intI] = array();
 			$arrValues[$intI][] = $intI+1;
@@ -137,11 +137,11 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
                      ".$strOrder."
                      ";
 
-        $arrSessions = $this->objDB->getArraySection($strQuery, 0, _stats_anzahl_liste_ -1);
+        $arrSessions = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
 
         $intI = 0;
         foreach($arrSessions as $intKey => $arrOneSession) {
-            if($intI++ >= _stats_anzahl_liste_)
+            if($intI++ >= _stats_nrofrecords_)
 				break;
 
             //Load the details for all sessions

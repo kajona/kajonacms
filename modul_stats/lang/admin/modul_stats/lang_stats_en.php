@@ -68,12 +68,12 @@ $lang["ende"]                       = "End:";
 $lang["submit_export"]               = "Export";
 $lang["submit_import"]               = "Import";
 
-$lang["_stats_ausschluss_"]          = "Domains to exclude:";
-$lang["_stats_ausschluss_hint"]      = "Comma-separated list of domains to exclude from stats";
-$lang["_stats_zeitraum_online_"]     = "Number of seconds:";
-$lang["_stats_zeitraum_online_hint"] = "Defines, how long a user applies to be online";
-$lang["_stats_anzahl_liste_"]        = "Number of rows:";
-$lang["_stats_anzahl_liste_hint"]    = "The number of rows to be shown in lists";
+$lang["_stats_exclusionlist_"]          = "Domains to exclude:";
+$lang["_stats_exclusionlist_hint"]      = "Comma-separated list of domains to exclude from stats";
+$lang["_stats_duration_online_"]     = "Number of seconds:";
+$lang["_stats_duration_online_hint"] = "Defines, how long a user applies to be online";
+$lang["_stats_nrofrecords_"]        = "Number of rows:";
+$lang["_stats_nrofrecords_hint"]    = "The number of rows to be shown in lists";
 
 $lang["worker_intro"]                = "Here you can start different maintenance tasks. Those can take up a long time during execution.<br />";
 

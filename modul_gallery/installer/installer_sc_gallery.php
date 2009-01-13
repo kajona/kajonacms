@@ -41,7 +41,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
         
         $strReturn .= "Modify rights to allow guests to rate images...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_gaeste_gruppe_id_, $objGallery->getSystemid(), "right2");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $objGallery->getSystemid(), "right2");
         
 
         $strReturn .= "Creating new gallery page...\n";

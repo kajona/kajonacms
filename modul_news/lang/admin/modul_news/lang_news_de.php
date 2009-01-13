@@ -59,8 +59,8 @@ $lang["feed_liste_leer"]            = "Keine Feeds angelegt";
 $lang["editNewsFeed"]               = "Feed bearbeiten";
 $lang["feed_loeschen_frage"]        = "Möchten Sie den Feed &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
-$lang["_news_suche_seite_"]         = "Treffer-Seite:";
-$lang["_news_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Detailansicht der News, die in der Suche gefunden wurden.";
+$lang["_news_search_resultpage_"]         = "Treffer-Seite:";
+$lang["_news_search_resultpage_hint"]     = "Auf dieser Seite erfolgt die Detailansicht der News, die in der Suche gefunden wurden.";
 
 $lang["required_news_cat_title"]    = "Kategorie-Titel";
 $lang["required_news_title"]        = "Newstitel";

@@ -52,11 +52,11 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     	//fetch the number of images to be deleted
     	include_once(_systempath_."/class_filesystem.php");
     	$objFilesystem = new class_filesystem();
-    	$arrFiles = $objFilesystem->getFilelist(_bildergalerie_cachepfad_, array());
+    	$arrFiles = $objFilesystem->getFilelist(_images_cachepath_, array());
     	$intFilesDeleted = 0;
     	$intTotalFiles = count($arrFiles);
     	foreach($arrFiles as $strOneFile) {
-    		if($objFilesystem->fileDelete(_bildergalerie_cachepfad_."/".$strOneFile))
+    		if($objFilesystem->fileDelete(_images_cachepath_."/".$strOneFile))
     		  $intFilesDeleted++;
     	}
     	

@@ -283,7 +283,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["view"]))
 				$bitReturn = true;
@@ -315,7 +315,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["edit"]))
 				$bitReturn = true;
@@ -348,7 +348,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["delete"]))
 				$bitReturn = true;
@@ -382,7 +382,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right"]))
 				$bitReturn = true;
@@ -416,7 +416,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right1"]))
 				$bitReturn = true;
@@ -449,7 +449,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right2"]))
 				$bitReturn = true;
@@ -482,7 +482,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right3"]))
 				$bitReturn = true;
@@ -514,7 +514,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right4"]))
 				$bitReturn = true;
@@ -547,7 +547,7 @@ class class_rights {
 		}
 		else {
 			//Guest
-			$strGuestId = _gaeste_gruppe_id_;
+			$strGuestId = _guests_group_id_;
 
 			if(in_array($strGuestId, $arrRights["right5"]))
 				$bitReturn = true;

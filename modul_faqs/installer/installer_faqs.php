@@ -18,7 +18,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_faqs extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		  = "3.1.1";
+		$arrModule["version"] 		  = "3.1.9";
 		$arrModule["name"] 			  = "faqs";
 		$arrModule["class_admin"]  	  = "class_modul_faqs_admin";
 		$arrModule["file_admin"] 	  = "class_modul_faqs_admin.php";
@@ -94,7 +94,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 		$strReturn .= "Registering system-constants...\n";
 
-		$this->registerConstant("_faqs_suche_seite_", "faqs", class_modul_system_setting::$int_TYPE_PAGE, _faqs_modul_id_);
+		$this->registerConstant("_faqs_search_resultpage_", "faqs", class_modul_system_setting::$int_TYPE_PAGE, _faqs_modul_id_);
 
 		return $strReturn;
 
@@ -163,7 +163,12 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
-        }        
+        }
+
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
+        }
 
 
         return $strReturn."\n\n";
@@ -215,6 +220,21 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "3.1.1");
 
         return $strReturn;
-    }    
+    }   
+    
+    private function update_311_319() {
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
+        
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_faqs_suche_seite_");
+        $objConstant->renameConstant("_faqs_search_resultpage_");
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "3.1.9");
+
+        return $strReturn;
+    }   
+
+    
 }
 ?>

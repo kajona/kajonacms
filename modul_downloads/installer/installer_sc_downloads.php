@@ -38,8 +38,8 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $strDownloadsID = $objDownloads->getSystemid();
         
         $strReturn .= "Modify rights to allow guests to download files and rate files...\n";
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_gaeste_gruppe_id_, $strDownloadsID, "right2");
-        class_carrier::getInstance()->getObjRights()->addGroupToRight(_gaeste_gruppe_id_, $strDownloadsID, "right4");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $strDownloadsID, "right2");
+        class_carrier::getInstance()->getObjRights()->addGroupToRight(_guests_group_id_, $strDownloadsID, "right4");
         
         $strReturn .= "Sync downloads..\n";
         class_modul_downloads_file::syncRecursive($objDownloads->getSystemid(), $objDownloads->getPath());

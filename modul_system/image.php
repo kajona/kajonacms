@@ -54,7 +54,7 @@ class class_flyimage {
         $objCarrier = class_carrier::getInstance();
         //ok, all needed constants are set up...
         include_once(_realpath_."/system/class_image.php");
-        $this->objImage = new class_image(_bildergalerie_cachepfad_);
+        $this->objImage = new class_image(_images_cachepath_);
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing

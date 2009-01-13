@@ -113,7 +113,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		$strReturn .= "Registering system-constants...\n";
 
-		$this->registerConstant("_news_suche_seite_", "newsdetails", class_modul_system_setting::$int_TYPE_PAGE, _news_modul_id_);
+		$this->registerConstant("_news_search_resultpage_", "newsdetails", class_modul_system_setting::$int_TYPE_PAGE, _news_modul_id_);
 
 		return $strReturn;
 
@@ -287,6 +287,10 @@ class class_installer_news extends class_installer_base implements interface_ins
                 $strReturn .= "An error occured!!!\n";
                 
         }
+        
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_news_suche_seite_");
+        $objConstant->renameConstant("_news_search_resultpage_");
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("news", "3.1.9");

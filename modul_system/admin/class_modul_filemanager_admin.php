@@ -377,7 +377,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				else
     					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loeschen_fehler_l")));
                         
-		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_ordner_groesse_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
+		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
 				}
 			}
 			$strReturn .= $this->objToolkit->listFooter();
@@ -539,7 +539,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         				foreach($arrFiles["folders"] as $strFolder) {
                             $strAction = "";
         		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
-        		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_ordner_groesse_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
+        		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
         				}
         			}
         			$strReturn .= $this->objToolkit->listFooter();

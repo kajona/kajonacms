@@ -371,7 +371,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
     			}
 
 				include_once(_systempath_."/class_image.php");
-				$objImage = new class_image(_bildergalerie_cachepfad_, $strText);
+				$objImage = new class_image(_images_cachepath_, $strText);
 				//Edit Picture
 				if($objImage->preLoadImage($strImage)) {
 					//resize the image
@@ -382,7 +382,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$objImage->imageText($strText, $intTextX, $intTextY, $intTextSize, $strFontColor, $strFont, true);
 					$objImage->saveImage("", true);
 					$strImageName = $objImage->getCachename();
-					$strReturn = "<img src=\"_webpath_"._bildergalerie_cachepfad_.$strImageName."\" border=\"0\" />";
+					$strReturn = "<img src=\"_webpath_"._images_cachepath_.$strImageName."\" border=\"0\" />";
 					//and release memory
 					$objImage->releaseResources();
 				}

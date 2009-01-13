@@ -94,10 +94,10 @@ $lang["user_memberships"]			= "Group assignments of user ";
 
 $lang["fehler_recht"]				= "Not enough permissions to perform this action";
 
-$lang["_gaeste_gruppe_id_"]         = "ID of the guest group:";
+$lang["_guests_group_id_"]         = "ID of the guest group:";
 $lang["_admin_gruppe_id_"]          = "ID of the admin group:";
-$lang["_user_log_anzahl_"]          = "Number of rows:";
-$lang["_user_log_anzahl_hint"]      = "Defines the number of rows to be shown in the login logfile.";
+$lang["_user_log_nrofrecords_"]          = "Number of rows:";
+$lang["_user_log_nrofrecords_hint"]      = "Defines the number of rows to be shown in the login logfile.";
 $lang["_admin_skin_default_"]       = "Default admin skin:";
 $lang["_user_selfedit_"]            = "Own profile:";
 $lang["_user_selfedit_hint_"]       = "Defines, if the user is allowed to change its own profile.";

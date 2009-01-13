@@ -23,7 +23,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.1";
+		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -34,8 +34,6 @@ class class_installer_stats extends class_installer_base implements interface_in
 		$arrModule["tabellen"][]    = _dbprefix_."stats_daten";
 		parent::__construct($arrModule);
 
-		//increase script-runtime
-		set_time_limit(3600);
 	}
 
 	public function getNeededModules() {
@@ -93,9 +91,9 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
-		$this->registerConstant("_stats_anzahl_liste_", "25", class_modul_system_setting::$int_TYPE_INT, _stats_modul_id_);
-		$this->registerConstant("_stats_zeitraum_online_", "300", class_modul_system_setting::$int_TYPE_INT, _stats_modul_id_);
-		$this->registerConstant("_stats_ausschluss_", _webpath_, class_modul_system_setting::$int_TYPE_STRING, _stats_modul_id_);
+		$this->registerConstant("_stats_nrofrecords_", "25", class_modul_system_setting::$int_TYPE_INT, _stats_modul_id_);
+		$this->registerConstant("_stats_duration_online_", "300", class_modul_system_setting::$int_TYPE_INT, _stats_modul_id_);
+		$this->registerConstant("_stats_exclusionlist_", _webpath_, class_modul_system_setting::$int_TYPE_STRING, _stats_modul_id_);
 		return $strReturn;
 	}
 
@@ -139,6 +137,11 @@ class class_installer_stats extends class_installer_base implements interface_in
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
+        }
+        
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
         }
 
         return $strReturn."\n\n";
@@ -232,8 +235,30 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         return $strReturn;
     }
+    
+    private function update_311_319() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_stats_anzahl_liste_");
+        $objConstant->renameConstant("_stats_nrofrecords_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_stats_zeitraum_online_");
+        $objConstant->renameConstant("_stats_duration_online_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_stats_ausschluss_");
+        $objConstant->renameConstant("_stats_exclusionlist_");
+        
+       
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.1.9");
+
+        return $strReturn;
+    }
 
 
-
+    
+    
 }
 ?>

@@ -93,9 +93,9 @@ class class_installer_gallery extends class_installer_base implements interface_
 		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_bildergalerie_bildtypen_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _bildergalerie_modul_id_);
+		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _bildergalerie_modul_id_);
 
-		$this->registerConstant("_bildergalerie_suche_seite_", "gallery", class_modul_system_setting::$int_TYPE_PAGE, _bildergalerie_modul_id_);
+		$this->registerConstant("_gallery_search_resultpage_", "gallery", class_modul_system_setting::$int_TYPE_PAGE, _bildergalerie_modul_id_);
 
 		return $strReturn;
 
@@ -313,6 +313,13 @@ class class_installer_gallery extends class_installer_base implements interface_
 
             $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
         }
+        
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_bildtypen_");
+        $objConstant->renameConstant("_gallery_imagetypes_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_gallery_search_resultpage_");
+        $objConstant->renameConstant("_gallery_search_resultpage_");
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("gallery", "3.1.9");

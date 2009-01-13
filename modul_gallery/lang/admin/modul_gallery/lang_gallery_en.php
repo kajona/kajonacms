@@ -58,11 +58,11 @@ $lang["image_properties"]           = "Edit basic properties";
 
 $lang["fehler_recht"]				= "Not enough permissions to perform this action";
 
-$lang["_bildergalerie_suche_seite_"]         = "Result page:";
-$lang["_bildergalerie_suche_seite_hint"]     = "This page shows the list of pictures found by the search";
+$lang["_gallery_search_resultpage_"]         = "Result page:";
+$lang["_gallery_search_resultpage_hint"]     = "This page shows the list of pictures found by the search";
 
-$lang["_bildergalerie_bildtypen_"]      = "Picture-types:";
-$lang["_bildergalerie_bildtypen_hint"]  = "Comma-separated list of picture-types to be processed by galleries";
+$lang["_gallery_imagetypes_"]      = "Picture-types:";
+$lang["_gallery_imagetypes_hint"]  = "Comma-separated list of picture-types to be processed by galleries";
 
 $lang["required_gallery_title"]     = "Title";
 $lang["required_gallery_path"]      = "Path";

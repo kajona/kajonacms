@@ -103,7 +103,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 		$intI =0;
 		foreach($arrStats as $strName => $arrOneStat) {
 			//Escape?
-			if($intI >= _stats_anzahl_liste_)
+			if($intI >= _stats_nrofrecords_)
 				break;
 
             $arrValues[$intI] = array();

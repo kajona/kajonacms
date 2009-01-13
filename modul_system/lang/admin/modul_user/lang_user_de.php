@@ -95,10 +95,10 @@ $lang["user_memberships"]			= "Gruppenzugehörigkeit des Benutzers ";
 
 $lang["fehler_recht"]				= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 
-$lang["_gaeste_gruppe_id_"]         = "ID der Gäste-Gruppe:";
+$lang["_guests_group_id_"]         = "ID der Gäste-Gruppe:";
 $lang["_admin_gruppe_id_"]          = "ID der Admin-Gruppe:";
-$lang["_user_log_anzahl_"]          = "Anzahl Zeilen:";
-$lang["_user_log_anzahl_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
+$lang["_user_log_nrofrecords_"]          = "Anzahl Zeilen:";
+$lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
 $lang["_admin_skin_default_"]       = "Standard-Admin-Skin:";
 $lang["_user_selfedit_"]            = "Eigene Daten:";
 $lang["_user_selfedit_hint_"]       = "Legt fest, ob ein Benutzer seine eigenen Daten berbeiten darf";

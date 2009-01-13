@@ -143,7 +143,7 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 */
 	public static function getAllGroupIdsForUser($strUserId) {
 	    if($strUserId == "")
-	       return array(_gaeste_gruppe_id_);
+	       return array(_guests_group_id_);
 	       
 	    $strQuery = "SELECT group_member_group_id 
 						FROM "._dbprefix_."user_group_members

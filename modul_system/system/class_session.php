@@ -481,7 +481,7 @@ final class class_session {
 			$strGroupids = $this->objInternalSession->getStrGroupids();
 		}
 		else {
-			$strGroupids = _gaeste_gruppe_id_;
+			$strGroupids = _guests_group_id_;
 		}
 		return $strGroupids;
 	}
@@ -496,7 +496,7 @@ final class class_session {
 			$strGroupids = $this->objInternalSession->getStrGroupids();
 		}
 		else {
-			$strGroupids = _gaeste_gruppe_id_;
+			$strGroupids = _guests_group_id_;
 		}
 		return explode(",", $strGroupids);
 	}

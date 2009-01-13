@@ -33,8 +33,8 @@ $lang["faq_edit"]                   = "FAQ bearbeiten";
 $lang["faq_rechte"]                 = "Rechte bearbeiten";
 $lang["faqs_loeschen_frage"]        = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
-$lang["_faqs_suche_seite_"]         = "Treffer-Seite:";
-$lang["_faqs_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";
+$lang["_faqs_search_resultpage_"]         = "Treffer-Seite:";
+$lang["_faqs_search_resultpage_hint"]     = "Auf dieser Seite erfolgt die Ansicht der Faqs, die in der Suche gefunden wurden.";
 
 $lang["required_faqs_cat_title"]    = "Kategorie-Titel";
 $lang["required_faqs_answer"]       = "Antwort";

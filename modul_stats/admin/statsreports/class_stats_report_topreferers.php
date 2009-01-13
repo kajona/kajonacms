@@ -84,7 +84,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 		$intI =0;
 		foreach($arrStats as $arrOneStat) {
 			//Escape?
-			if($intI >= _stats_anzahl_liste_)
+			if($intI >= _stats_nrofrecords_)
 				break;
 
 			if($arrOneStat["referer"] == "")
@@ -118,7 +118,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 	 */
 	public function getTopReferer() {
 	    //Build excluded domains
-	    $arrBlocked = explode(",", _stats_ausschluss_);
+	    $arrBlocked = explode(",", _stats_exclusionlist_);
 
 	    $strExclude = "";
 			foreach($arrBlocked as $strBlocked)
@@ -134,7 +134,7 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 						GROUP BY referer
 						ORDER BY anzahl desc";
 
-		return $this->objDB->getArraySection($strQuery, 0, _stats_anzahl_liste_ -1);
+		return $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
 	}
 
 	public function getReportGraph() {

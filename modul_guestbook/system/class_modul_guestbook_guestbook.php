@@ -89,7 +89,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 
         //new guestbooks should be allowed to be signed by guests
         if($bitCommit) {
-            $this->objRights->addGroupToRight(_gaeste_gruppe_id_, $strGbSystemid, "right1");
+            $this->objRights->addGroupToRight(_guests_group_id_, $strGbSystemid, "right1");
         }
 
 		//Transaktion beenden

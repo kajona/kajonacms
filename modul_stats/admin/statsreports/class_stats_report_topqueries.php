@@ -83,7 +83,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 		$intI =0;
 		foreach($arrStats as $strKey =>  $intHits) {
 			//Escape?
-			if($intI >= _stats_anzahl_liste_)
+			if($intI >= _stats_nrofrecords_)
 				break;
             $arrValues[$intI] = array();
 			$arrValues[$intI][] = $intI+1;
@@ -110,7 +110,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 	 */
 	public function getTopQueries() {
 	    //Load all records in the passed interval
-	    $arrBlocked = explode(",", _stats_ausschluss_);
+	    $arrBlocked = explode(",", _stats_exclusionlist_);
 
 	    $strExclude = "";
 			foreach($arrBlocked as $strBlocked)

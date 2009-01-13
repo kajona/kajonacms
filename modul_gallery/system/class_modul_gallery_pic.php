@@ -261,7 +261,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		//Load files and folder from filesystem
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
-		$arrFilesystem = $objFilesystem->getCompleteList($strPath, explode(",", _bildergalerie_bildtypen_), array(), array(".", "..", ".svn"));
+		$arrFilesystem = $objFilesystem->getCompleteList($strPath, explode(",", _gallery_imagetypes_), array(), array(".", "..", ".svn"));
 		//So, lets sync those two arrays
 		//At first the files
 		foreach($arrFilesystem["files"] as $intKeyFS => $arrOneFileFilesystem) {

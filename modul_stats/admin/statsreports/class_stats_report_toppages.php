@@ -84,7 +84,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 		$intI =0;
 		foreach($arrPages as $arrOnePage) {
 			//Escape?
-			if($intI >= _stats_anzahl_liste_)
+			if($intI >= _stats_nrofrecords_)
 				break;
             $arrValues[$intI] = array();
 			$arrValues[$intI][] = $intI+1;
@@ -120,7 +120,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 						GROUP BY stats_page, stats_language
 							ORDER BY anzahl desc";
 
-		return $this->objDB->getArraySection($strQuery, 0, _stats_anzahl_liste_ -1);
+		return $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
 	}
 
 	public function getReportGraph() {

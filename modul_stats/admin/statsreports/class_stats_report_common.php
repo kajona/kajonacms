@@ -200,7 +200,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	public function getNumberOfCurrentUsers() {
 		$strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM ".$this->arrModule["table"]."
-					  WHERE stats_date >= ".(int)(time() - _stats_zeitraum_online_)."
+					  WHERE stats_date >= ".(int)(time() - _stats_duration_online_)."
 					  GROUP BY stats_ip, stats_browser";
 
 		$arrRow = $this->objDB->getArray($strQuery);

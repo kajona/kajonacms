@@ -101,8 +101,8 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 					    //calculate pv
 					    $intPvPos = ceil($intCounter/$intAmount);
 				    	$this->arrHits[$arrOnePost["system_id"]]["hits"] = 1;
-					    $this->arrHits[$arrOnePost["system_id"]]["pagelink"] = getLinkPortal(_guestbook_suche_seite_, "", "_self", _guestbook_suche_seite_, "", "&highlight=".$this->strSearchtermRaw."&pv=".$intPvPos);
-					    $this->arrHits[$arrOnePost["system_id"]]["pagename"] = _guestbook_suche_seite_;
+					    $this->arrHits[$arrOnePost["system_id"]]["pagelink"] = getLinkPortal(_guestbook_search_resultpage_, "", "_self", _guestbook_search_resultpage_, "", "&highlight=".$this->strSearchtermRaw."&pv=".$intPvPos);
+					    $this->arrHits[$arrOnePost["system_id"]]["pagename"] = _guestbook_search_resultpage_;
 					    $this->arrHits[$arrOnePost["system_id"]]["description"] = (uniStrlen($arrOnePost["guestbook_post_text"]) < 100 ? $arrOnePost["guestbook_post_text"] : uniSubstr($arrOnePost["guestbook_post_text"], 0, 100)."...") ;
 					}
 				}

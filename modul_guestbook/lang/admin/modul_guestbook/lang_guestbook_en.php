@@ -37,8 +37,8 @@ $lang["speichern"]                  = "Save";
 
 $lang["required_guestbook_title"]   = "Title";
 
-$lang["_guestbook_suche_seite_"]    = "Result page:";
-$lang["_guestbook_suche_seite_hint"]= "On this page, the posts found by the search, are linked to.";
+$lang["_guestbook_search_resultpage_"]    = "Result page:";
+$lang["_guestbook_search_resultpage_hint"]= "On this page, the posts found by the search, are linked to.";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------

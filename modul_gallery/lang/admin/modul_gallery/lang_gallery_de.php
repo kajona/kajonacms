@@ -59,11 +59,11 @@ $lang["image_properties"]           = "Eigenschaften des Bildes bearbeiten";
 
 $lang["fehler_recht"]				= "Keine ausreichende Rechte";
 
-$lang["_bildergalerie_suche_seite_"]         = "Treffer-Seite:";
-$lang["_bildergalerie_suche_seite_hint"]     = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
+$lang["_gallery_search_resultpage_"]         = "Treffer-Seite:";
+$lang["_gallery_search_resultpage_hint"]     = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
 
-$lang["_bildergalerie_bildtypen_"]      = "Bildtypen:";
-$lang["_bildergalerie_bildtypen_hint"]  = "Kommaseparierte Liste an Bildtypen, die die Bildergalerie verarbeiten soll.";
+$lang["_gallery_imagetypes_"]      = "Bildtypen:";
+$lang["_gallery_imagetypes_hint"]  = "Kommaseparierte Liste an Bildtypen, die die Bildergalerie verarbeiten soll.";
 
 $lang["required_gallery_title"]     = "Titel";
 $lang["required_gallery_path"]      = "Pfad";

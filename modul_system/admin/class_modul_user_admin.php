@@ -597,7 +597,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $intI = 0;
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
-                if($objSingleGroup->getSystemid() != _gaeste_gruppe_id_  && $objSingleGroup->getSystemid() != _admin_gruppe_id_) {
+                if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admin_gruppe_id_) {
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
                     $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
                                   getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));
@@ -864,14 +864,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             include_once(_systempath_."/class_array_section_iterator.php");
 		    $objLogbook = new class_modul_user_log();
 		    $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
-		    $objArraySectionIterator->setIntElementsPerPage(_user_log_anzahl_);
+		    $objArraySectionIterator->setIntElementsPerPage(_user_log_nrofrecords_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection($objLogbook->getLoginLogsSection($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
 		    $arrLogs = $objArraySectionIterator->getArrayExtended();
 
             $strRows = "";
-            $arrPageViews = $this->objToolkit->getPageview($arrLogs, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "loginlog", "", _user_log_anzahl_);
+            $arrPageViews = $this->objToolkit->getPageview($arrLogs, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "loginlog", "", _user_log_nrofrecords_);
             $arrLogs = $arrPageViews["elements"];
 
 

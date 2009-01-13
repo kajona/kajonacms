@@ -75,7 +75,7 @@ class class_stats_report_downloads implements interface_admin_statsreports {
         $arrLogs = array();
         $intI = 0;
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
-            if($intI++ >= _stats_anzahl_liste_)
+            if($intI++ >= _stats_nrofrecords_)
 				break;
 
 			$arrLogs[$intKey][0] = $intI;
@@ -110,7 +110,7 @@ class class_stats_report_downloads implements interface_admin_statsreports {
 							AND downloads_log_date <= ".(int)$this->intDateEnd."
 					  ORDER BY downloads_log_date DESC";
 
-		$arrReturn = $this->objDB->getArraySection($strQuery, 0, (_stats_anzahl_liste_-1));
+		$arrReturn = $this->objDB->getArraySection($strQuery, 0, (_stats_nrofrecords_-1));
 
 		foreach ($arrReturn as &$arrOneRow) {
     		//Load hostname, if available. faster, then mergin per LEFT JOIN

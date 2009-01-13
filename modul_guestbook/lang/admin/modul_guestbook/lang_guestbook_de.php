@@ -38,8 +38,8 @@ $lang["speichern"]                  = "Speichern";
 
 $lang["required_guestbook_title"]   = "Titel";
 
-$lang["_guestbook_suche_seite_"]    = "Treffer-Seite:";
-$lang["_guestbook_suche_seite_hint"]= "Auf diese Seite verlinken die Treffer der Suche, die in Gästebuch-Posts gefunden wurden.";
+$lang["_guestbook_search_resultpage_"]    = "Treffer-Seite:";
+$lang["_guestbook_search_resultpage_hint"]= "Auf diese Seite verlinken die Treffer der Suche, die in Gästebuch-Posts gefunden wurden.";
 
 
 // --- Quickhelp texts ----------------------------------------------------------------------------------

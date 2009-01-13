@@ -74,7 +74,7 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_dbdumpsper").( is_writable(_systempath_."/dbdumps/") ? 
                         "<span style=\"color: green\">".$this->getText("systemcheck_yes")."</span>" : 
                         "<span style=\"color: red\">".$this->getText("systemcheck_no")."</span>"));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._bildergalerie_cachepfad_) ? 
+            $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ? 
                         "<span style=\"color: green\">".$this->getText("systemcheck_yes")."</span>" : 
                         "<span style=\"color: red\">".$this->getText("systemcheck_no")."</span>"));
             

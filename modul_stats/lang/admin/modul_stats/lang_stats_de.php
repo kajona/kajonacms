@@ -68,12 +68,12 @@ $lang["ende"]                       = "Ende:";
 $lang["submit_export"]               = "Exportieren";
 $lang["submit_import"]               = "Importieren";
 
-$lang["_stats_ausschluss_"]          = "Auszuschließende Domains:";
-$lang["_stats_ausschluss_hint"]      = "Kommaseparierte Liste an Domains, die aus den Statistiken ausgenommen werden sollen";
-$lang["_stats_zeitraum_online_"]     = "Anzahl Sekunden:";
-$lang["_stats_zeitraum_online_hint"] = "Definiert, wie lange Besucher als online gelten";
-$lang["_stats_anzahl_liste_"]        = "Anzahl Einträge:";
-$lang["_stats_anzahl_liste_hint"]    = "Legt die Anzahl an Zeilen in den Statistiken fest";
+$lang["_stats_exclusionlist_"]          = "Auszuschließende Domains:";
+$lang["_stats_exclusionlist_hint"]      = "Kommaseparierte Liste an Domains, die aus den Statistiken ausgenommen werden sollen";
+$lang["_stats_duration_online_"]     = "Anzahl Sekunden:";
+$lang["_stats_duration_online_hint"] = "Definiert, wie lange Besucher als online gelten";
+$lang["_stats_nrofrecords_"]        = "Anzahl Einträge:";
+$lang["_stats_nrofrecords_hint"]    = "Legt die Anzahl an Zeilen in den Statistiken fest";
 
 $lang["worker_intro"]                = "Hier können verschiedene Wartungs-Tasks gestartet werden. Diese können bei der Ausführung längere Zeit in Anspruch nehmen.<br />";
 

@@ -235,7 +235,7 @@ class class_graph {
 	 *  $objGraph->setStrYAxisTitle("y-axis");
 	 *  $objGraph->setStrGraphTitle("Test Graph");
 	 *  $objGraph->createBarChart(array("value 1" => 4, "value 2" => 5, "value 3" => 2, "value 4" => 7));
-	 *  $objGraph->saveGraph(_bildergalerie_cachepfad_."/graph.png");
+	 *  $objGraph->saveGraph(_images_cachepath_."/graph.png");
 	 *
 	 * @param array $arrValues see the example above for the internal array-structure
 	 * @param int $intWidth

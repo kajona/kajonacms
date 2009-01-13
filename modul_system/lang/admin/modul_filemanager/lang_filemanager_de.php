@@ -85,8 +85,8 @@ $lang["upload_fehler_filter"]		= "Der hochgeladene Dateityp ist nicht erlaubt<br
 $lang["upload_multiple_uploadFiles"]	= "Datei(en) hochladen";
 $lang["upload_multiple_cancel"]		= "Abbrechen";
 
-$lang["_filemanager_ordner_groesse_"] = "Größe anzeigen:";
-$lang["_filemanager_ordner_groesse_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager. Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
+$lang["_filemanager_foldersize_"] = "Größe anzeigen:";
+$lang["_filemanager_foldersize_hint"] = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager. Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
 $lang["_filemanager_show_foreign_"] = "Versteckte Repositories anzeigen:";
 
 $lang["required_filemanager_name"]  = "Name";

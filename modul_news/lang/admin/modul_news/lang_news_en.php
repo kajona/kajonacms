@@ -59,8 +59,8 @@ $lang["feed_liste_leer"]            = "No feeds available";
 $lang["editNewsFeed"]               = "Edit feed";
 $lang["feed_loeschen_frage"]        = "Do you really want to delete the feed &quot;<b>%%element_name%%</b>&quot;?";
 
-$lang["_news_suche_seite_"]         = "Result page:";
-$lang["_news_suche_seite_hint"]     = "This page shows the details of the news which where found by the search.";
+$lang["_news_search_resultpage_"]         = "Result page:";
+$lang["_news_search_resultpage_hint"]     = "This page shows the details of the news which where found by the search.";
 
 $lang["required_news_cat_title"]    = "Category title";
 $lang["required_news_title"]        = "News title";

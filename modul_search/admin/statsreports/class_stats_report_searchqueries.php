@@ -80,7 +80,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $arrLogs = array();
         $intI = 0;
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
-            if($intI++ >= _stats_anzahl_liste_)
+            if($intI++ >= _stats_nrofrecords_)
 				break;
 
 			$arrLogs[$intKey][0] = $intI;
@@ -112,7 +112,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 				   GROUP BY search_log_date
 				   ORDER BY search_log_date DESC";
 
-		$arrReturn = $this->objDB->getArraySection($strQuery, 0, _stats_anzahl_liste_-1);
+		$arrReturn = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_-1);
 
 		return $arrReturn;
 	}

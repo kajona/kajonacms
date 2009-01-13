@@ -42,7 +42,7 @@ $lang["systemcheck_kajona_debug"]                = "/debug vorhanden: ";
 $lang["systemcheck_kajona_configper"]            = "Schreibrechte auf config.php: ";
 $lang["systemcheck_kajona_debugper"]             = "Schreibrechte auf /system/debug: ";
 $lang["systemcheck_kajona_dbdumpsper"]           = "Schreibrechte auf /system/dbdumps: ";
-$lang["systemcheck_kajona_piccacheper"]          = "Schreibrechte auf "._bildergalerie_cachepfad_.": ";
+$lang["systemcheck_kajona_piccacheper"]          = "Schreibrechte auf "._images_cachepath_.": ";
 
 
 ?>

@@ -86,8 +86,8 @@ $lang["upload_multiple_uploadFiles"]	= "Upload file(s)";
 $lang["upload_multiple_cancel"]		= "Cancel all uploads";
 $lang["filemanager_upload"]         = "Upload file:";
 
-$lang["_filemanager_ordner_groesse_"] = "Calculate size:";
-$lang["_filemanager_ordner_groesse_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager. Deep folder structures can lead to performance problems.";
+$lang["_filemanager_foldersize_"] = "Calculate size:";
+$lang["_filemanager_foldersize_hint"] = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager. Deep folder structures can lead to performance problems.";
 $lang["_filemanager_show_foreign_"] = "Show hidden repositories:";
 
 $lang["required_filemanager_name"]  = "Name";

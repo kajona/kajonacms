@@ -34,8 +34,8 @@ $lang["faq_edit"]                   = "Edit FAQ";
 $lang["faq_rechte"]                 = "Change permissions";
 $lang["faqs_loeschen_frage"]        = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
 
-$lang["_faqs_suche_seite_"]         = "Result page:";
-$lang["_faqs_suche_seite_hint"]     = "This page shows the FAQs which where found by the search.";
+$lang["_faqs_search_resultpage_"]         = "Result page:";
+$lang["_faqs_search_resultpage_hint"]     = "This page shows the FAQs which where found by the search.";
 
 $lang["required_faqs_cat_title"]    = "Category title";
 $lang["required_faqs_answer"]       = "Answer";

@@ -336,11 +336,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
-		$this->registerConstant("_user_log_anzahl_", "50", 1, _user_modul_id_);
+		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
         //Systemid of guest-user & admin group
         $strGuestID = $this->generateSystemid();
         $strAdminID = $this->generateSystemid();
-        $this->registerConstant("_gaeste_gruppe_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admin_gruppe_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v3", class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
@@ -350,7 +350,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_system_portal_disablepage_", "", class_modul_system_setting::$int_TYPE_PAGE, _system_modul_id_);
 
         //new in 2.1.1.0: cachepath now in the system-settings
-        $this->registerConstant("_bildergalerie_cachepfad_", "/portal/pics/cache/", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        $this->registerConstant("_images_cachepath_", "/portal/pics/cache/", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
         //New in 3.0: Number of db-dumps to hold
 	    $this->registerConstant("_system_dbdump_amount_", 5, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
@@ -359,7 +359,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //New Constant: Max time to lock records
 	    $this->registerConstant("_system_lock_maxtime_", 7200, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         //Filemanger settings
-        $this->registerConstant("_filemanager_ordner_groesse_", "true", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_foldersize_", "true", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         //Email to send error-reports
 	    $this->registerConstant("_system_admin_email_", "", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
 	    //3.0.1: gzip-compression
@@ -752,6 +752,24 @@ class class_installer_system extends class_installer_base implements interface_i
                              ADD ".$this->objDB->encloseColumnName("filemanager_foreign_id")." VARCHAR( 20 ) NULL ";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
+            
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_user_log_anzahl_");
+        $objConstant->renameConstant("_user_log_nrofrecords_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_gaeste_gruppe_id_");
+        $objConstant->renameConstant("_guests_group_id_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_admin_gruppe_id_");
+        $objConstant->renameConstant("_admins_group_id_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_filemanager_ordner_groesse_");
+        $objConstant->renameConstant("_filemanager_foldersize_");
+        
+        $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_cachepfad_");
+        $objConstant->renameConstant("_images_cachepath_");
+        
+            
         
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");

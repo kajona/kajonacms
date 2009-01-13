@@ -43,7 +43,7 @@ $lang["systemcheck_kajona_debug"]                = "/debug present: ";
 $lang["systemcheck_kajona_configper"]            = "Writeperm. on config.php: ";
 $lang["systemcheck_kajona_debugper"]             = "Writeperm. on /system/debug: ";
 $lang["systemcheck_kajona_dbdumpsper"]           = "Writeperm. on /system/dbdumps: ";
-$lang["systemcheck_kajona_piccacheper"]          = "Writeperm. on "._bildergalerie_cachepfad_.": ";
+$lang["systemcheck_kajona_piccacheper"]          = "Writeperm. on "._images_cachepath_.": ";
 
 
 ?>

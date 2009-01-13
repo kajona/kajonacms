@@ -18,7 +18,7 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_guestbook extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.1";
+		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "guestbook";
 		$arrModule["class_admin"] 	= "class_modul_guestbook_admin";
 		$arrModule["file_admin"] 	= "class_modul_guestbook_admin.php";
@@ -88,7 +88,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$strSystemID = $this->registerModule("guestbook", _gaestebuch_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_guestbook_suche_seite_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _gaestebuch_modul_id_);
+		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _gaestebuch_modul_id_);
 
 		return $strReturn;
 
@@ -164,6 +164,11 @@ class class_installer_guestbook extends class_installer_base implements interfac
             $strReturn .= $this->update_310_311();
         }
         
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.1") {
+            $strReturn .= $this->update_311_319();
+        }
+        
         return $strReturn."\n\n";
 	}
 
@@ -228,5 +233,21 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         return $strReturn;
     }
+    
+    private function update_311_319() {
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
+        
+        $strReturn .= "Updating system-constants...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_guestbook_suche_seite_");
+        $objConstant->renameConstant("_guestbook_search_resultpage_");
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("guestbook", "3.1.9");
+
+        return $strReturn;
+    }
+    
+    
+    
 }
 ?>
