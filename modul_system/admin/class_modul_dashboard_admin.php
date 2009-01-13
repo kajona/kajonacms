@@ -129,9 +129,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         $strWidgetName = $objConcreteWidget->getWidgetName();
         
         if($this->objRights->rightDelete($objDashboardWidget->getSystemid())) {
-            $strWidgetContent .= $this->objToolkit->modalDialog($this->getText("deleteButton", "system", "admin"), 
-                                                                $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName().$this->getText("widgetDeleteQuestion").getLinkAdmin($this->arrModule["modul"], 
-                                                                "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(), $this->getText("widgetDeleteLink")), "del".$objDashboardWidget->getSystemid() );
+            $strWidgetContent .= $this->objToolkit->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"));
         }
         
         $strWidgetContent .= $this->objToolkit->getDashboardWidgetEncloser(
@@ -140,7 +138,12 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                         $strWidgetName, 
                                         $strGeneratedContent,
                                         ($this->objRights->rightEdit($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
-                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? getLinkAdminManual("href=\"javascript:del".$objDashboardWidget->getSystemid().".init();\"", "", $this->getText("deleteButton", "system", "admin"), "icon_ton.gif") : "")
+                                        ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? 
+                                                getLinkAdminManual("href=\"#\" onclick =\"javascript:jsDialog_1.setContent('".$objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName().
+                                                                            $this->getText("widgetDeleteQuestion")."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".
+                                                                            getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(),
+                                                                    $this->getText("widgetDeleteLink"))."'); jsDialog_1.init(); return false;\"", "", $this->getText("deleteButton", "system", "admin"), "icon_ton.gif") 
+                                                 : "")
                                 )
                              );
                              

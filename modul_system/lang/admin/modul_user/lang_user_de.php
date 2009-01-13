@@ -101,7 +101,7 @@ $lang["_user_log_nrofrecords_"]          = "Anzahl Zeilen:";
 $lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
 $lang["_admin_skin_default_"]       = "Standard-Admin-Skin:";
 $lang["_user_selfedit_"]            = "Eigene Daten:";
-$lang["_user_selfedit_hint_"]       = "Legt fest, ob ein Benutzer seine eigenen Daten berbeiten darf";
+$lang["_user_selfedit_hint"]        = "Legt fest, ob ein Benutzer seine eigenen Daten berbeiten darf";
 
 $lang["user_active"]                = "Status ändern (ist aktiv)";
 $lang["user_inactive"]              = "Status ändern (ist inaktiv)";
