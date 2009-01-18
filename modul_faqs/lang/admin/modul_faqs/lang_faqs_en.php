@@ -7,8 +7,9 @@
 *	$Id$                                            *
 ********************************************************************************************************/
 
-
 // --- Module texts -------------------------------------------------------------------------------------
+$lang["permissions_header"]         = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Rating", 5 => "", 6 => "", 7 => "", 8 => "");
+
 $lang["modul_rechte"]				= "Module permissions";
 $lang["modul_liste"]				= "List";
 $lang["modul_anlegen"]				= "Create FAQ";

@@ -4,32 +4,13 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                               *
+*	$Id: lang_gallery_en.php 2397 2009-01-03 12:27:28Z jschroeter $									*
 ********************************************************************************************************/
 
-/**
- * Objects to be sortable by the rating have to implement this interface.
- * E.g. needed to create top-lists. 
- *
- * @package modul_system
- */
-interface interface_sortable_rating {
 
+$lang["faqs_rating_rate1"]	= "Rate faq with ";
+$lang["faqs_rating_rate2"]	= " point(s)!";
+$lang["faqs_rating_permissions"] = "Not enough permissions.";
+$lang["faqs_rating_voted"]	= "You already voted for this faq.";
 
-	/**
-	 * Returns the rating for the current object
-	 * 
-	 * @return float
-	 */
-	public function getFloatRating();
-	
-	/**
-	 * Returns the number of ratings the current file received
-	 * 
-	 * @return int
-	 */
-	public function getIntRatingHits();
-	
-
-}
 ?>

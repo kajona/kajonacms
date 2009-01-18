@@ -196,6 +196,24 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			$strFaqs = "";
 			foreach($arrFaqs as $objOneFaq) {
 			    if($this->objRights->rightView($objOneFaq->getSystemid())) {
+			    	
+			    	
+			        //ratings available?
+			        $strRating = "";
+                    try {
+                        $objMdlRating = class_modul_system_module::getModuleByName("rating");
+                        if($objMdlRating != null ) {
+                            include_once(_systempath_."/class_modul_rating_rate.php");  
+                            $objRating = class_modul_rating_rate::getRating($objOneFaq->getSystemid());
+                            if($objRating != null)
+                                $strRating .= " - ".$objRating->getFloatRating();
+                            else
+                                $strRating .= " - 0.0";    
+                        }
+
+                    }
+                    catch (class_exception $objException) { }
+                    
     				
                     $strAction = "";
                     if($this->objRights->rightEdit($objOneFaq->getSystemid()))
@@ -210,7 +228,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_rechte"), getRightsImageAdminName($objOneFaq->getSystemid())));
 
-    		   		$strFaqs .= $this->objToolkit->listRow2Image(getImageAdmin("icon_question.gif"), uniStrTrim($objOneFaq->getStrQuestion(), 80), $strAction, $intI++);
+    		   		$strFaqs .= $this->objToolkit->listRow2Image(getImageAdmin("icon_question.gif"), uniStrTrim($objOneFaq->getStrQuestion(), 80).$strRating, $strAction, $intI++);
 			    }
 
 			}

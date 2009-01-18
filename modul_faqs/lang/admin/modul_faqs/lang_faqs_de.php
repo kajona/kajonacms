@@ -8,6 +8,8 @@
 ********************************************************************************************************/
 
 // --- Module texts -------------------------------------------------------------------------------------
+$lang["permissions_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Rating", 5 => "", 6 => "", 7 => "", 8 => "");
+
 $lang["modul_rechte"]				= "Modul-Rechte";
 $lang["modul_liste"]				= "Liste";
 $lang["modul_anlegen"]				= "FAQ anlegen";

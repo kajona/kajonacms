@@ -97,6 +97,12 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
     				$arrOneFaq["faq_question"] = $objOneFaq->getStrQuestion();
     				$arrOneFaq["faq_answer"] = $objOneFaq->getStrAnswer();
     				$arrOneFaq["faq_systemid"] = $objOneFaq->getSystemid();
+    				
+    				
+    			    //ratings available?
+			        if($objOneFaq->getFloatRating() !== null) {
+			            $arrOneFaq["faq_rating"] = $this->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
+			        }
 
     				$strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID);
 
@@ -134,6 +140,49 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 
 		return $strReturn;
 	}
+	
+	
+
+    /**
+     * Builds the rating bar available for every faq
+     * Creates the needed js-links and image-tags as defined by the template.
+     *
+     * @param float $floatRating
+     * @param string $strSystemid
+     * @param bool $bitRatingAllowed
+     * @return string
+     */
+    private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+        $strIcons = "";
+        $strRatingBarTitle = "";
+        
+        include_once(_systempath_."/class_modul_rating_rate.php");
+        $intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
+        
+        //read the templates
+        $strTemplateBarId = $this->objTemplate->readTemplate("/modul_faqs/".$this->arrElementData["faqs_template"], "rating_bar");
+        
+        if($bitRatingAllowed && $bitPermissions) {
+            $strTemplateIconId = $this->objTemplate->readTemplate("/modul_faqs/".$this->arrElementData["faqs_template"], "rating_icon");
+            
+            for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
+                $arrTemplate = array();
+                $arrTemplate["rating_icon_number"] = $intI;
+                
+                $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
+                $arrTemplate["rating_icon_title"] = $this->getText("faqs_rating_rate1").$intI.$this->getText("faqs_rating_rate2");
+    
+                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+            }
+        } else {
+            if(!$bitRatingAllowed)
+                $strRatingBarTitle = $this->getText("faqs_rating_voted");
+            else    
+                $strRatingBarTitle = $this->getText("faqs_rating_permissions");
+        }
+        
+        return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+    }
 
 }
 ?>
