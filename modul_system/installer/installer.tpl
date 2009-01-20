@@ -124,14 +124,14 @@
 </installer_modules_row>
 
 <installer_modules_row_installable>
-	    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
+	    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0">
 	        <tr valign="bottom">
 	            <td rowspan="2" width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" /></td>
-	            <td colspan="2" valign="bottom">
+	            <td colspan="2" valign="bottom" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
 	                %%module_name%%
 	            </td>
 	        </tr>
-	        <tr>
+	        <tr onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
 	            <td width="180px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
 	            <td align="left">%%module_hint%%</td>
 	        </tr>
@@ -163,14 +163,14 @@
 </installer_elements_row>
 
 <installer_elements_row_installable>
-    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
+    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0">
         <tr valign="bottom">
 	        <td rowspan="2" width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" checked="checked" /></td>
-			<td colspan="2" valign="bottom">
+			<td colspan="2" valign="bottom" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
                 %%module_name%%
             </td>
         </tr>
-        <tr>
+        <tr onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
             <td width="180px" style="text-indent: 20px;" valign="middle">V %%module_version%%</td>
             <td align="left">%%module_hint%%</td>
         </tr>
