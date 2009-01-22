@@ -289,7 +289,7 @@ class class_modul_pages_portal extends class_portal {
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
     		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages", "newPage", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_page"), $this->getText("pe_icon_page", "pages", "admin"), "icon_page.gif");
 
-    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"portalEditorDisable();\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
+    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"portalEditorStatus(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
     		    //Load tooltips
@@ -305,7 +305,7 @@ class class_modul_pages_portal extends class_portal {
             }
             else {
                 //Button to enable the toolbar & pe
-                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"portalEditorEnable();\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
+                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"portalEditorStatus(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
                 //Load tooltips
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles

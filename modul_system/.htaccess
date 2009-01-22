@@ -18,40 +18,40 @@
 ########################################ADMIN REWRITING##################################################
 
 #source: /admin_module.action.systemid
-#RewriteRule ^admin_([a-z_]+)\.([a-zA-Z]*)\.([0-9a-z]*)\.html index.php?admin=1&module=$1&action=$2&systemid=$3
+#RewriteRule ^admin_([a-z_]+)\.([a-zA-Z]*)\.([0-9a-z]*)\.html index.php?admin=1&module=$1&action=$2&systemid=$3 [QSA,L]
 
 
 ########################################PORTAL REWRITING#################################################
 
 # source: page.seo.action.systemid.language
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4&language=$5
+#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4&language=$5 [QSA,L]
 
 # source: page.seo.action.systemid
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4
+#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4 [QSA,L]
 
 # source: page.seo.action
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$1&action=$3
+#RewriteRule ^([0-9a-z-_]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$1&action=$3 [QSA,L]
 
 #source: page.language
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.([a-z]{2,2})\.html  index.php?page=$1&language=$2
+#RewriteRule ^([0-9a-z-_]+)\.([a-z]{2,2})\.html  index.php?page=$1&language=$2 [QSA,L]
 
 # source: page.seo
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.(.*)\.html  index.php?page=$1
+#RewriteRule ^([0-9a-z-_]+)\.(.*)\.html  index.php?page=$1 [QSA,L]
 
 # source: page
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.html  index.php?page=$1
+#RewriteRule ^([0-9a-z-_]+)\.html  index.php?page=$1 [QSA,L]
 
 
 ########################################RSS REWRITING####################################################
 #rewrite news-feeds
 #uncomment the following line to use mod-rewrite
-#RewriteRule ^([0-9a-z-_]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1
+#RewriteRule ^([0-9a-z-_]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1 [L]
 
 
 

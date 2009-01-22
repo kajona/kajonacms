@@ -18,64 +18,23 @@ function portalEditorOut(elementSysId) {
     menuElement.className="menuOut";
 }
 
-function portalEditorDisable() {
-    url = window.location.href;
-    url = url.replace('#', '');
+function portalEditorStatus(status) {
+    var status = status == true ? "true": "false";
+	var url = window.location.href;
+	var anchorPos = url.indexOf('#');
+	if (anchorPos != -1) {
+    	url = url.substring(0, anchorPos);
+	}
+
     url = url.replace('&pe=false', '');
     url = url.replace('&pe=true', '');
     url = url.replace('?pe=false', '');
     url = url.replace('?pe=true', '');
-    //check if mod_rewrite is enabled
-    if(url.indexOf(".html") != -1) {
-        url = getIndexAsNonRewrite(url);
-    }
+
     if(url.indexOf('?') == -1)
-        window.location.replace(url+'?pe=false');
+        window.location.replace(url+'?pe='+status);
     else
-        window.location.replace(url+'&pe=false');
-}
-
-function portalEditorEnable() {
-    url = window.location.href;
-    url = url.replace('#', '');
-    url = url.replace('&pe=false', '');
-    url = url.replace('&pe=true', '');
-    url = url.replace('?pe=false', '');
-    url = url.replace('?pe=true', '');
-    //check if mod_rewrite is enabled
-    if(url.indexOf(".html") != -1) {
-        url = getIndexAsNonRewrite(url);
-    }
-    if(url.indexOf('?') == -1)
-        window.location.replace(url+'?pe=true');
-    else
-        window.location.replace(url+'&pe=true');
-}
-
-function getIndexAsNonRewrite(currentUrl) {
-    tempUrl = currentUrl.substr(currentUrl.lastIndexOf('/')+1);
-
-    //Match regular expressions
-    if(tempUrl.search(/([0-9a-z-_]+)\.([0-9a-z-_]*)\.([a-zA-Z]*)\.([0-9a-z]*).([a-z]*)\.html/) != -1) {
-        tempUrl = "index.php?page="+RegExp.$1+"&action="+RegExp.$3+"&systemid="+RegExp.$4+"&language="+RegExp.$5;
-    }
-    else if(tempUrl.search(/([0-9a-z-_]+)\.([0-9a-z-_]*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html/) != -1) {
-        tempUrl = "index.php?page="+RegExp.$1+"&action="+RegExp.$3+"&systemid="+RegExp.$4;
-    }
-    else if(tempUrl.search(/([0-9a-z-_]+)\.([0-9a-z-_]*)\.([a-zA-Z]*)\.html/) != -1) {
-        tempUrl = "index.php?page="+RegExp.$1+"&action="+RegExp.$3;
-    }
-    else if(tempUrl.search(/([0-9a-z-_]+)\.([a-z]{2,2})\.html/) != -1) {
-        tempUrl = "index.php?page="+ RegExp.$1+"&language="+RegExp.$2;
-    }
-    else if(tempUrl.search(/([0-9a-z-_]+)\.([0-9a-z-_]*)\.html/) != -1) {
-        tempUrl = "index.php?page="+ RegExp.$1;
-    }
-    else if(tempUrl.search(/([0-9a-z-_]+)\.html/) != -1) {
-        tempUrl = "index.php?page="+ RegExp.$1;
-    }
-    currentUrl = currentUrl.substr(0, currentUrl.lastIndexOf('/')+1)+tempUrl;
-    return currentUrl;
+        window.location.replace(url+'&pe='+status);
 }
 
 function reloadCaptcha(imageID) {
