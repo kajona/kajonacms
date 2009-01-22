@@ -3,38 +3,39 @@
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id$
 
-
-function portalEditorHover(elementSysId) {
-    divElement = document.getElementById('container_'+elementSysId);
-    divElement.className="peContainerHover";
-    menuElement = document.getElementById('menu_'+elementSysId);
-    menuElement.className="menuHover";
-}
-
-function portalEditorOut(elementSysId) {
-    divElement = document.getElementById('container_'+elementSysId);
-	divElement.className="peContainerOut";
-    menuElement = document.getElementById('menu_'+elementSysId);
-    menuElement.className="menuOut";
-}
-
-function portalEditorStatus(status) {
-    var status = status == true ? "true": "false";
-	var url = window.location.href;
-	var anchorPos = url.indexOf('#');
-	if (anchorPos != -1) {
-    	url = url.substring(0, anchorPos);
+var kajonaPortalEditorHelper = {
+	portalEditorHover: function (elementSysId) {
+	    divElement = document.getElementById('container_'+elementSysId);
+	    divElement.className="peContainerHover";
+	    menuElement = document.getElementById('menu_'+elementSysId);
+	    menuElement.className="menuHover";
+	},
+	
+	portalEditorOut: function (elementSysId) {
+	    divElement = document.getElementById('container_'+elementSysId);
+		divElement.className="peContainerOut";
+	    menuElement = document.getElementById('menu_'+elementSysId);
+	    menuElement.className="menuOut";
+	},
+	
+	portalEditorStatus: function (status) {
+	    var status = status == true ? 'true' : 'false';
+		var url = window.location.href;
+		var anchorPos = url.indexOf('#');
+		if (anchorPos != -1) {
+	    	url = url.substring(0, anchorPos);
+		}
+	
+	    url = url.replace('&pe=false', '');
+	    url = url.replace('&pe=true', '');
+	    url = url.replace('?pe=false', '');
+	    url = url.replace('?pe=true', '');
+	
+	    if(url.indexOf('?') == -1)
+	        window.location.replace(url+'?pe='+status);
+	    else
+	        window.location.replace(url+'&pe='+status);
 	}
-
-    url = url.replace('&pe=false', '');
-    url = url.replace('&pe=true', '');
-    url = url.replace('?pe=false', '');
-    url = url.replace('?pe=true', '');
-
-    if(url.indexOf('?') == -1)
-        window.location.replace(url+'?pe='+status);
-    else
-        window.location.replace(url+'&pe='+status);
 }
 
 function reloadCaptcha(imageID) {
