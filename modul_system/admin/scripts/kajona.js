@@ -82,12 +82,11 @@ function switchLanguage(strLanguageToLoad) {
     //TODO: this works with mod-rewrite enabled? 
 }
 
+//deprecated, use kajonaAjaxHelper.Loader object instead
 function addCss(file){
-	var l=document.createElement("link");
-	l.setAttribute("type", "text/css");
-	l.setAttribute("rel", "stylesheet");
-	l.setAttribute("href", file);
-	document.getElementsByTagName("head").item(0).appendChild(l);
+	var l = new kajonaAjaxHelper.Loader();
+	l.addCssFile(file);
+	l.load();
 }
 
 function addDownloadInput(idOfPrototype, nameOfCounterId) {
@@ -310,86 +309,111 @@ t.style.left=left+"px";
 //--- AJAX-STUFF --------------------------------------------------------------------------------------
 var kajonaAjaxHelper =  {
 
-	arrayFilesToLoad : new Array(),
-	arrayFilesLoaded : new Array(),
-	bitPastOnload : false,
+	// Loader object for dynamically loading additional js and css files
+	Loader : function () {
+		var additionalFileCounter = 0;
+		this.jsBase = "admin/scripts/";
+		this.yuiBase = this.jsBase+"yui/";
+		
+	    var loader = new YAHOO.util.YUILoader({
+	        base: this.yuiBase,
+	
+			//filter: "DEBUG", 	//use debug versions
 
-	onLoadHandlerFinal : function() {
-		for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
-			if(kajonaAjaxHelper.arrayFilesToLoad[i] != null) {
-				kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
-				kajonaAjaxHelper.arrayFilesToLoad[i] = null;
-			}
+	        onFailure: function(o) {
+	            alert("error: " + YAHOO.lang.dump(o));
+	        }
+	     });	
+	
+		this.addYUIComponents = function (componentList) {
+			loader.require(componentList);
 		}
-		kajonaAjaxHelper.bitPastOnload = true;
+	
+		this.addFile = function (file, type) {
+			loader.addModule({
+				name: "additionalFile"+additionalFileCounter,
+				type: type,
+				skinnable: false,
+			    fullpath: file
+			});
+	
+		    loader.require("additionalFile"+additionalFileCounter);
+			additionalFileCounter++;
+		},
+		
+		this.addJavascriptFile = function (fileWithPath) {
+		    this.addFile(fileWithPath, "js");
+		},
+		
+		this.addCssFile = function (fileWithPath) {
+		    this.addFile(fileWithPath, "css");
+		},
+		
+		this.load = function (callback) {
+			if (callback == null) {
+				callback = function () {};
+			}
+		
+			loader.onSuccess = callback;
+		    loader.insert();
+		}
 	},
 
-	addJavascriptFile : function (file) {
-	    if(inArray(file, kajonaAjaxHelper.arrayFilesLoaded)) {
-	       return;
-	    }
-		var l=document.createElement("script");
-		l.setAttribute("type", "text/javascript");
-		l.setAttribute("language", "javascript");
-		l.setAttribute("src", file);
-		document.getElementsByTagName("head").item(0).appendChild(l);
-		intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
-		kajonaAjaxHelper.arrayFilesLoaded[intCount] = file;
+	loadAjaxBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["connection"]);
+		l.addJavascriptFile(l.jsBase+"messagebox.js");
+		l.load(callback);
 	},
 
-	loadAjaxBase : function () {
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/connection/connection-min.js');
+	loadDragNDropBase : function (callback, additionalJsFile) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["connection", "animation", "dragdrop"]);
+		
+		if (additionalJsFile != null) {
+			l.addJavascriptFile(additionalJsFile);
+		}
+		
+		l.load(callback);
 	},
 
-	loadDragNDropBase : function () {
-		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
-		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/dragdrop/dragdrop-min.js');
+	loadAnimationBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["animation"]);
+		l.load(callback);
 	},
 
-	loadAnimationBase : function () {
-		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
-	},
-
-	loadAutocompleteBase : function () {
-		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/datasource/datasource-min.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/autocomplete/autocomplete-min.js');
+	loadAutocompleteBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["connection", "datasource", "autocomplete"]);
+		l.load(callback);
 	},
 	
-	loadCalendarBase : function() {
-	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/calendar/calendar-min.js');
+	loadCalendarBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["calendar"]);
+		l.load(callback);
 	},
 	
 
-	loadImagecropperBase : function() {
-		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/yahoo/yahoo-min.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/element/element-beta-min.js');
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
-	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/resize/resize-min.js');
-	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/imagecropper/imagecropper-beta-min.js');
+	loadImagecropperBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["imagecropper"]);
+		l.load(callback);
+		
+		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/element/element-beta-min.js');
+		//kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
+	    //kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/resize/resize-min.js');
+	    //kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/imagecropper/imagecropper-beta-min.js');
+		
 	},
 	
-	loadDialogBase : function() {
-	    kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/container/container-min.js');
-	},
-
-	addFileToLoad : function(fileName) {
-		if(kajonaAjaxHelper.bitPastOnload) {
-			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesLoaded)) {
-				kajonaAjaxHelper.addJavascriptFile(fileName);
-			}
-		}
-		else {
-			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesToLoad)) {
-				kajonaAjaxHelper.arrayFilesToLoad[kajonaAjaxHelper.arrayFilesToLoad.length] = fileName;
-			}
-		}
+	loadDialogBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addJavascriptFile(l.yuiBase+"container/container-min.js");
+		l.load(callback);
 	}
 };
-
-YAHOO.util.Event.onDOMReady(kajonaAjaxHelper.onLoadHandlerFinal);
 
 var regularCallback = {
 	success: function(o) { kajonaStatusDisplay.displayXMLMessage(o.responseText) },
@@ -432,10 +456,6 @@ var kajonaAdminAjax = {
 	rotateConn : null,
 
 	setAbsolutePosition : function (systemIdToMove, intNewPos, strIdOfList) {
-		//load ajax libs
-		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
-
 		var postTarget = 'xml.php?admin=1&module=system&action=setAbsolutePosition';
 		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos;
 
@@ -445,10 +465,6 @@ var kajonaAdminAjax = {
 	},
 	
 	setDashboardPos : function (systemIdToMove, intNewPos, strIdOfList) {
-		//load ajax libs
-		kajonaAjaxHelper.loadAjaxBase();
-		kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
-
 		var postTarget = 'xml.php?admin=1&module=dashboard&action=setDashboardPosition';
 		var postBody = 'systemid='+systemIdToMove+'&listPos='+intNewPos+'&listId='+strIdOfList;
 
@@ -458,10 +474,6 @@ var kajonaAdminAjax = {
 	},
 	
 	setSystemStatus : function (systemIdToSet, objCallback) {
-	    //load ajax libs
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
-
         var postTarget = 'xml.php?admin=1&module=system&action=setStatus';
         var postBody = 'systemid='+systemIdToSet;
 
@@ -471,10 +483,6 @@ var kajonaAdminAjax = {
 	},
 	
 	saveImageCropping : function (intX, intY, intWidth, intHeight, strRepoId, strFolder, strFile, objCallback) {
-		//load ajax libs
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
-
         var postTarget = 'xml.php?admin=1&module=filemanager&action=saveCropping';
         var postBody = 'systemid='+strRepoId+'&folder='+strFolder+'&file='+strFile+'&intX='+intX+'&intY='+intY+'&intWidth='+intWidth+'&intHeight='+intHeight+'';
 
@@ -484,10 +492,6 @@ var kajonaAdminAjax = {
 	},
 	
 	saveImageRotating : function (intAngle, strRepoId, strFolder, strFile, objCallback) {
-		//load ajax libs
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addFileToLoad('admin/scripts/messagebox.js');
-
         var postTarget = 'xml.php?admin=1&module=filemanager&action=rotate';
         var postBody = 'systemid='+strRepoId+'&folder='+strFolder+'&file='+strFile+'&angle='+intAngle+'';
 

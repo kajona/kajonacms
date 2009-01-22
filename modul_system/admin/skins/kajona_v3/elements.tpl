@@ -25,13 +25,12 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadDragNDropBase();
-	if(arrayTableIds == null)
+	kajonaAjaxHelper.loadDragNDropBase(null, "admin/scripts/dragdrophelper_tr.js");
+	if(arrayTableIds == null) {
         var arrayTableIds = new Array("%%listid%%");
-    else
+    } else {
         arrayTableIds[(arrayTableIds.length +0)] = "%%listid%%";
-
-    kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_tr.js");
+	}
 </script>
 <table cellspacing="0" cellpadding="0" id="%%listid%%" class="adminList">
 </dragable_list_header>
@@ -825,8 +824,7 @@ The language switch sourrounds the buttons
 <dashboard_column_header>
 	<br />
 	<script type="text/javascript">
-    	kajonaAjaxHelper.loadDragNDropBase();
-    	kajonaAjaxHelper.addFileToLoad("admin/scripts/dragdrophelper_li.js");
+    	kajonaAjaxHelper.loadDragNDropBase(null, "admin/scripts/dragdrophelper_li.js");
     	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
         } else {

@@ -3,9 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/dragdrop/dragdrop-min.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/container/container-min.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -16,7 +14,7 @@
 	<script language="Javascript" type="text/javascript">
     	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
     	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
-    </script>
+	</script>
 	%%head%%
 </head>
 <body>
@@ -70,7 +68,8 @@
 </table>
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadAnimationBase();
+	kajonaAjaxHelper.loadAjaxBase();
+	kajonaAjaxHelper.loadAnimationBase(function() {YAHOO.util.Event.onContentReady("adminModuleNaviUl", naviSetup);});
 	
 	var moduleNaviHiddenTimeout = undefined;
 	function naviSetup() {
@@ -113,9 +112,6 @@
 		animObject.animate();
 		animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle('moduleNaviHidden', "display", "");});
 	}
-	
-	YAHOO.util.Event.onDOMReady(naviSetup);
-	
 </script>
 </body>
 </html>

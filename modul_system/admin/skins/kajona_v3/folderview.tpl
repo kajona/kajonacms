@@ -3,8 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/dragdrop/dragdrop-min.js"></script>
+	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
 	<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%moduletitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />

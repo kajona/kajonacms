@@ -12,7 +12,7 @@
  * 		 class: jsStatusBoxError		    class in case of an error message
  * - div,   id: jsStatusBoxContent			the box to place the message-content into
  * 
- * Pass a xml-response from a kajona-server to displayXMLMessage() to star the logic
+ * Pass a xml-response from a kajona-server to displayXMLMessage() to start the logic
  * or use messageOK() / messageError() passing a regular string
  */
 var kajonaStatusDisplay = {
@@ -125,4 +125,3 @@ var kajonaStatusDisplay = {
 			window.setTimeout("kajonaStatusDisplay.fadeOut()", 30);
 	}
 };
- 

@@ -3,9 +3,7 @@
 <html>
 <head>
 <link href="_skinwebpath_/styles.css" rel="stylesheet" type="text/css">
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/dragdrop/dragdrop-min.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/container/container-min.js"></script>
+<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
 <script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
