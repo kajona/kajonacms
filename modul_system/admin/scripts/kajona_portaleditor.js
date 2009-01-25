@@ -1,12 +1,41 @@
 //   (c) 2004-2006 by MulchProductions, www.mulchprod.de
 //   (c) 2007-2009 by Kajona, www.kajona.de
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
-//       $Id$
+//       $Id: kajona.js 2353 2008-12-31 15:22:01Z sidler $
 
-function reloadCaptcha(imageID) {
-	timeCode = new Date().getTime();
-	codeImg = document.getElementById(imageID);
- 	codeImg.src = codeImg.src+"&reload="+timeCode;
+var kajonaPortalEditorHelper = {
+	portalEditorHover: function (elementSysId) {
+	    divElement = document.getElementById('container_'+elementSysId);
+	    divElement.className="peContainerHover";
+	    menuElement = document.getElementById('menu_'+elementSysId);
+	    menuElement.className="menuHover";
+	},
+	
+	portalEditorOut: function (elementSysId) {
+	    divElement = document.getElementById('container_'+elementSysId);
+		divElement.className="peContainerOut";
+	    menuElement = document.getElementById('menu_'+elementSysId);
+	    menuElement.className="menuOut";
+	},
+	
+	portalEditorStatus: function (status) {
+	    var status = status == true ? 'true' : 'false';
+		var url = window.location.href;
+		var anchorPos = url.indexOf('#');
+		if (anchorPos != -1) {
+	    	url = url.substring(0, anchorPos);
+		}
+	
+	    url = url.replace('&pe=false', '');
+	    url = url.replace('&pe=true', '');
+	    url = url.replace('?pe=false', '');
+	    url = url.replace('?pe=true', '');
+	
+	    if(url.indexOf('?') == -1)
+	        window.location.replace(url+'?pe='+status);
+	    else
+	        window.location.replace(url+'&pe='+status);
+	}
 }
 
 //--- TOOLTIPS --------------------------------------------------------------------------------------
@@ -118,15 +147,6 @@ function addCss(file) {
 	document.getElementsByTagName("head")[0].appendChild(l);
 }
 
-function inArray(needle, haystack) {
-    for (var i = 0; i < haystack.length; i++) {
-        if (haystack[i] == needle) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function addLoadEvent(func) {
 	var oldonload = window.onload;
     if (typeof window.onload != 'function') {
@@ -140,68 +160,3 @@ function addLoadEvent(func) {
 		};
 	}
 }
-
-function fold(id, callbackShow) {
-	style = document.getElementById(id).style.display;
-	if (style=='none') 	{
-		document.getElementById(id).style.display='block';
-		if (callbackShow != undefined) {
-			callbackShow();
-		}
-    }
-    else {
-        document.getElementById(id).style.display='none';
-    }
-}
-
-var kajonaAjaxHelper =  {
-	
-	arrayFilesToLoad : new Array(),
-	arrayFilesLoaded : new Array(),
-	bitPastOnload : false,
-	
-	onLoadHandlerFinal : function() {
-        for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
-            if(kajonaAjaxHelper.arrayFilesToLoad[i] != null) {
-                kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
-                kajonaAjaxHelper.arrayFilesToLoad[i] = null;
-            }
-        }
-        kajonaAjaxHelper.bitPastOnload = true;
-    },
-
-    addJavascriptFile : function (file) {
-        if(inArray(file, kajonaAjaxHelper.arrayFilesLoaded)) {
-           return;
-        }
-        var l=document.createElement("script");
-        l.setAttribute("type", "text/javascript");
-        l.setAttribute("language", "javascript");
-        l.setAttribute("src", file);
-        document.getElementsByTagName("head").item(0).appendChild(l);
-        intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
-        kajonaAjaxHelper.arrayFilesLoaded[intCount] = file;
-    },
-	
-	loadAjaxBase : function () {
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/yahoo/yahoo-min.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/event/event-min.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/connection/connection-min.js');
-	},
-	
-	
-	addFileToLoad : function(fileName) {
-		if(kajonaAjaxHelper.bitPastOnload) {
-			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesLoaded)) {
-				kajonaAjaxHelper.addJavascriptFile(fileName);
-			}
-		}
-		else {
-			intCount = kajonaAjaxHelper.arrayFilesToLoad.length;
-			kajonaAjaxHelper.arrayFilesToLoad[(intCount+1)] = fileName;
-		}
-	}
-};
-
-addLoadEvent(kajonaAjaxHelper.onLoadHandlerFinal);
-function enableTooltipsWrapper() { enableTooltips("showTooltip"); } addLoadEvent(enableTooltipsWrapper);
