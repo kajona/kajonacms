@@ -265,7 +265,7 @@ function getLinkAdminHref($strModule, $strAction, $strParams = "") {
     if(_system_mod_rewrite_ == "true" && count($arrParams) == 0) {
     	
     	//scheme: /admin/module.action.systemid
-    	$strLink = _webpath_."/admin_".$strModule.".".$strAction.".".$strSystemid.".html";
+    	$strLink = _webpath_."/admin/".$strModule.".".$strAction.".".$strSystemid.".html";
     	
     
     }

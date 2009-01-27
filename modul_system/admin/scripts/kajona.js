@@ -316,7 +316,10 @@ var kajonaAjaxHelper =  {
 	// Loader object for dynamically loading additional js and css files
 	Loader : function () {
 		var additionalFileCounter = 0;
-		this.jsBase = "admin/scripts/";
+		if(document.location.href.indexOf('admin/') != -1)
+			this.jsBase = "scripts/";
+		else
+			this.jsBase = "admin/scripts/";
 		this.yuiBase = this.jsBase+"yui/";
 		
 	    var loader = new YAHOO.util.YUILoader({
