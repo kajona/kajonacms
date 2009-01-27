@@ -433,7 +433,7 @@ abstract class class_root {
 	 * @return string
 	 */
 	public function getLastEditUser($strSystemid = "") {
-		if($strSystemid == 0)
+		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		$strQuery = "SELECT user_username
 					FROM "._dbprefix_."system ,
@@ -446,6 +446,25 @@ abstract class class_root {
 		else
 		    return "System";
 	}
+	
+    /**
+     * Sets the name of the user last editing the current record
+     *
+     * @param string $strSystemid
+     * @return string $strUserid
+     */
+    public function setLastEditUser($strSystemid = "", $strUserid = "") {
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
+        if($strUserid == "")
+            $strUserid = $this->objSession->getUserID();
+                
+        $strQuery = "UPDATE "._dbprefix_."system 
+                        SET system_lm_user = '".dbsafeString($strUserid)."'
+                      WHERE system_id = '".dbsafeString($strSystemid)."'";
+        return $this->objDB->_query($strQuery);
+        
+    }
 
 	/**
 	 * Returns the time the record was last edited
@@ -454,7 +473,7 @@ abstract class class_root {
 	 * @return int
 	 */
 	public function getEditDate($strSystemid = "") 	{
-		if($strSystemid == 0)
+		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 
 		$arrRow = $this->getSystemRecord($strSystemid);
@@ -463,7 +482,8 @@ abstract class class_root {
 
 
 	/**
-	 * Sets the current date as the edit-date of a system record
+	 * Sets the current date as the edit-date of a system record.
+	 * Updates the last-edit-user, too
 	 *
 	 * @param string $strSystemid
 	 * @return bool
