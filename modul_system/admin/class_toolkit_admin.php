@@ -514,7 +514,7 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formInputUploadFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts) {
-		return formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, 1);
+		return formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, false);
 	}
 	
     /**
@@ -525,11 +525,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, $intAllowedNumberOfFiles = 0) {
+    public function formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, $bitMultiple = true) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
 		$arrTemplate["fallbackContent"] = $strFallbackContent;
 		
+		$arrTemplate["modalDialog"] = $this->modalDialog("Upload");
 		
 		//create valid input-name element. no array needed!
     	$strFieldName = preg_replace("/\[[0-9]\]/", "", $strName);
@@ -539,52 +540,151 @@ class class_toolkit_admin extends class_toolkit {
 		$strMaxSize = (bytesToString($objConfig->getPhpIni("post_max_size"), true) > bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($objConfig->getphpIni("post_max_size"), true));
 		
 		$arrTemplate["javascript"] = "
-			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.js\"></script>
-			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.swfobject.js\"></script>
-			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/swfupload.queue.js\"></script>
-			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/fileprogress.js\"></script>
-			<script type=\"text/javascript\" src=\"admin/scripts/swfupload/handlers.js\"></script>
-			<script type=\"text/javascript\">
-				var swfu;
-		
-				SWFUpload.onload = function() {
-					var settings = {
-						flash_url : \"admin/scripts/swfupload/swfupload_f9.swf\",
-						upload_url: \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
-						//upload_url: document.getElementById(\"formUpload\").action+\"&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
-						post_params: {\"systemid\" : document.getElementById(\"systemid\").value,
-							          \"folder\" : document.getElementById(\"folder\").value,
-                                      \"inputElement\" : \"".$strFieldName."\"},
-						file_post_name: \"".$strName."\",
-						file_size_limit : \"".$strMaxSize."\",
-						file_types : \"".$strAllowedFileTypes."\",
-						file_types_description : \"".$strAllowedFileTypes."\",
-						file_upload_limit : 0,
-						file_queue_limit : ".$intAllowedNumberOfFiles.",
-						custom_settings : {
-							progressTarget : \"fsUploadProgress\",
-							cancelButtonId : \"btnCancel\"
-						},
-						debug: KAJONA_DEBUG > 0 ? true : false,
-		
-						// The event handler functions are defined in handlers.js
-						swfupload_loaded_handler : swfUploadLoaded,
-						file_queued_handler : fileQueued,
-						file_queue_error_handler : fileQueueError,
-						file_dialog_complete_handler : fileDialogComplete,
-						upload_start_handler : uploadStart,
-						upload_progress_handler : uploadProgress,
-						upload_error_handler : uploadError,
-						upload_success_handler : uploadSuccess,
-						upload_complete_handler : uploadComplete,
-						queue_complete_handler : queueComplete,	// Queue plugin event
-						
-						minimum_flash_version: \"9.0.28\",
-						swfupload_pre_load_handler: swfUploadPreLoad,
-						swfupload_load_failed_handler: swfUploadLoadFailed
-					};
-					swfu = new SWFUpload(settings);
-			     };
+			<script type=\"text/javascript\">				
+				var uploader;
+				var fileList;
+				var fileCount = 0;
+				var fileCountUploaded = 0;
+				var tableRowSample;
+				
+				function initUploader() {
+					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\"; 
+					uploader = new YAHOO.widget.Uploader(\"uploaderOverlay\"); 
+					
+					uploader.addListener('contentReady', handleContentReady);
+					uploader.addListener('fileSelect', onFileSelect)
+					uploader.addListener('uploadStart', onUploadStart);
+					uploader.addListener('uploadProgress', onUploadProgress);
+					uploader.addListener('uploadCancel', onUploadCancel);
+					uploader.addListener('uploadComplete', onUploadComplete);
+					uploader.addListener('uploadCompleteData', onUploadResponse);
+					uploader.addListener('uploadError', onUploadError);
+				    uploader.addListener('rollOver', handleRollOver);
+				    uploader.addListener('rollOut', handleRollOut);
+			    }
+			    kajonaAjaxHelper.loadUploaderBase(initUploader);
+
+			    
+				YAHOO.util.Event.onDOMReady(function () { 
+					var uiLayer = YAHOO.util.Dom.getRegion('selectLink');
+					var overlay = YAHOO.util.Dom.get('uploaderOverlay');
+					YAHOO.util.Dom.setStyle(overlay, 'width', uiLayer.right-uiLayer.left + \"px\");
+					YAHOO.util.Dom.setStyle(overlay, 'height', uiLayer.bottom-uiLayer.top + \"px\");
+				});
+
+				
+				function handleRollOver () {
+					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'color', \"#FFFFFF\");
+					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'background-color', \"#000000\");
+				}
+			
+				function handleRollOut () {
+					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'color', \"#0000CC\");
+					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'background-color', \"#FFFFFF\");
+				}
+				
+				function handleContentReady () {
+				    // Allows the uploader to send log messages to trace, as well as to YAHOO.log
+					uploader.setAllowLogging(false);
+					
+					// Allows multiple file selection in Browse dialog.
+					uploader.setAllowMultipleFiles(".($bitMultiple ? "true" : "false").");
+					
+					uploader.setSimUploadLimit(2);
+					
+					// New set of file filters.
+					var ff = new Array({description:\"".$strAllowedFileTypes."\", extensions:\"".$strAllowedFileTypes."\"});
+					                   
+					// Apply new set of file filters to the uploader.
+					uploader.setFileFilters(ff);
+					
+					// load sample file row for file list
+					tableRowSample = document.getElementById('kajonaUploadFileSample').cloneNode(true);
+				}
+				
+				
+			
+				function onFileSelect(event) {
+					fileList = event.fileList;
+					
+					jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
+					document.getElementById('kajonaUploadDialog').innerHTML = '';
+					jsDialog_0.init();
+					
+					createFileTable(fileList);
+				}
+				
+				function createFileTable(entries) {
+					  table = document.getElementById('kajonaUploadFiles');
+
+					  //create table row for each file
+					  for(var i in entries) {
+					     var entry = entries[i];
+
+					     //check if file is already in list
+					     if (document.getElementById('kajonaUploadFile_'+entry['id']) == null) {
+						     var tableRow = tableRowSample.cloneNode(true);
+						     tableRow.setAttribute('id', 'kajonaUploadFile_'+entry['id']);
+						     
+						     var filename = YAHOO.util.Dom.getElementsByClassName('filename', 'td', tableRow)[0];
+						     var size = YAHOO.util.Dom.getElementsByClassName('size', 'td', tableRow)[0];
+						     var progress = YAHOO.util.Dom.getElementsByClassName('progress', 'td', tableRow)[0];
+	
+						     filename.innerHTML = entry['name'];
+						     size.innerHTML = entry['size'];
+						     progress.innerHTML = '<div class=\"progressBar\"></div>';
+						     
+						     table.appendChild(tableRow);
+						     
+						     fileCount++;
+						 }
+					  }
+				}
+				
+				function upload() {
+					if (fileList != null) {
+						uploader.uploadAll(\""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+							\"POST\", {\"systemid\" : document.getElementById(\"systemid\").value,
+								          \"folder\" : document.getElementById(\"folder\").value,
+	                                      \"inputElement\" : \"".$strFieldName."\"},
+	                        \"".$strName."\"
+						);
+					}	
+				}
+				
+				function onUploadProgress(event) {
+						row = document.getElementById('kajonaUploadFile_'+event['id']);
+						prog = Math.round(100*(event[\"bytesLoaded\"]/event[\"bytesTotal\"]));
+						progbar = \"<div class='progressBar'><div style='width:\" + prog + \"px;'></div></div>\";
+						YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+					}
+				
+				function onUploadComplete(event) {
+					row = document.getElementById('kajonaUploadFile_'+event['id']);
+					prog = Math.round(100*(event[\"bytesLoaded\"]/event[\"bytesTotal\"]));
+					progbar = \"<div class='progressBar'><div></div></div>\";
+					YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+					
+					fileCountUploaded++;
+					
+					//reload page if all files are uploaded
+					if (fileCount == fileCountUploaded) {
+						location.reload(true);
+    				}
+					
+				}
+					
+				function onUploadStart(event) {	
+				}
+			
+				function onUploadError(event) {
+				}
+				
+				function onUploadCancel(event) {
+				}
+				
+				function onUploadResponse(event) {
+				}
 			</script>";
 
 		foreach ($arrTexts as $arrKey => $strValue) {

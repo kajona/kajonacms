@@ -239,22 +239,33 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
 	%%javascript%%
-	<div id="divSWFUploadUI" class="swfUpload" style="visibility: hidden;">
-		<fieldset class="flash" id="fsUploadProgress" style="display: none;">
-			<legend>Upload Queue</legend>
-		</fieldset>
-		<div id="divStatus"></div>
-		<div>
-			<input id="btnBrowse" type="button" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /><br /><input id="btnCancel" type="button" value="%%upload_multiple_cancel%%" disabled="disabled" class="inputSubmit" style="display: none;" />
-		</div>
+	
+	<div id="uiElements" style="display:inline;">
+			<div id="uploaderContainer">
+				<div id="uploaderOverlay" style="position:absolute; z-index:2"></div>
+				<div id="selectFilesLink" style="z-index:1"><a id="selectLink" href="#">Select Files</a></div>
+			</div>
 	</div>
 	
-	<div id="divLoadingContent" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
-		SWFUpload is loading. Please wait a moment...
+	%%modalDialog%%
+
+	<div id="kajonaUploadDialog">
+		<div id="uploadFilesLink"><a id="uploadLink" onClick="upload(); return false;" href="#">%%upload_multiple_uploadFiles%%</a></div>
+		
+		<table id="kajonaUploadFiles">
+			<tr>
+				<td>Datei</td>
+				<td>Größe</td>
+				<td></td>
+			</tr>
+			<tr id="kajonaUploadFileSample">
+				<td class="filename"></td>
+				<td class="size"></td>
+				<td class="progress"></td>
+			</tr>
+		</table>
 	</div>
-	<div id="divLongLoading" class="content" style="background-color: #FFFF66; border-top: solid 4px #FF9966; border-bottom: solid 4px #FF9966; margin: 10px 25px; padding: 10px 15px; display: none;">
-		SWFUpload is taking a long time to load or the load has failed.  Please make sure JavaScript is enabled and that a working version of the Adobe Flash Player is installed.
-	</div>
+	
 	<div id="divAlternateContent" style="display: none;">
 		%%fallbackContent%%
 	</div>
@@ -856,8 +867,8 @@ The language switch sourrounds the buttons
 <dialogContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
-		<div class="c">
-			%dialog_content%%
+		<div class="c" id="%%dialog_id%%_content">
+			<!-- filled by js -->
 		</div>
 	</div>
 	<div class="ft"><div class="c"></div></div>

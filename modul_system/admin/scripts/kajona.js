@@ -148,6 +148,10 @@ function ModalDialog(strDialogId, intDialogType) {
 		}
 	}
 	
+	this.setContentRaw = function(strContent) {
+		document.getElementById(this.containerId+"_content").innerHTML = strContent;
+	}
+	
     this.init = function() {	
         this.dialog = 
     		new YAHOO.widget.Panel(this.containerId,
@@ -395,6 +399,11 @@ var kajonaAjaxHelper =  {
 		l.load(callback);
 	},
 	
+	loadUploaderBase : function (callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents(["uploader"]);
+		l.load(callback);
+	},
 
 	loadImagecropperBase : function (callback) {
 		var l = new kajonaAjaxHelper.Loader();
