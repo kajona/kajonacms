@@ -317,7 +317,7 @@ var kajonaAjaxHelper =  {
 	Loader : function () {
 		var additionalFileCounter = 0;
 		if(document.location.href.indexOf('admin/') != -1)
-			this.jsBase = "scripts/";
+			this.jsBase = document.location.href.substr(0, document.location.href.indexOf('admin/'))+"admin/scripts/";
 		else
 			this.jsBase = "admin/scripts/";
 		this.yuiBase = this.jsBase+"yui/";

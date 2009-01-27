@@ -265,7 +265,12 @@ function getLinkAdminHref($strModule, $strAction, $strParams = "") {
     if(_system_mod_rewrite_ == "true" && count($arrParams) == 0) {
     	
     	//scheme: /admin/module.action.systemid
-    	$strLink = _webpath_."/admin/".$strModule.".".$strAction.".".$strSystemid.".html";
+    	if($strModule != "" && $strAction == "" && $strSystemid == "")
+    	   $strLink = _webpath_."/admin/".$strModule.".html";
+    	else if($strModule != "" && $strAction != "" && $strSystemid == "")
+    	   $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";   
+    	else 
+           $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";   
     	
     
     }
