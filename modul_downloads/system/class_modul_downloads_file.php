@@ -253,10 +253,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
 					if($objOneFileDatabase->getFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
 						//if size diffes, update record
 						if($arrOneFileFilesystem["filesize"] != $objOneFileDatabase->getSize()) {
-							$strQuery = "UPDATE "._dbprefix_."downloads_file
-										SET downloads_size = ".(int)$arrOneFileFilesystem["filesize"]."
-										WHERE downloads_id = '".dbsafeString($objOneFileDatabase->getSystemid())."'";
-							$objDB->_query($strQuery);
+							$objOneFileDatabase->setSize($arrOneFileFilesystem["filesize"]);
+							$objOneFileDatabase->updateObjectToDB();
 							$arrReturn["update"]++;
 						}
 						//Remove from both arrays
