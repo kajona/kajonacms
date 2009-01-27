@@ -261,6 +261,15 @@ class class_index  {
 
 			$strDebug .= "</pre>\n";
 		}
+		
+		
+	    //check headers, maybe execution could be terminated right here
+	    //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
+        if(checkConditionalGetHeaders(md5($this->strOutput))) {
+            return;
+        }
+        
+        sendConditionalGetHeaders(md5($this->strOutput));
 
 		//compress output
 		include_once(_systempath_."/class_gzip.php");

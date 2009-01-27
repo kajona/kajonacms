@@ -120,7 +120,7 @@ class class_modul_pages_portal extends class_portal {
 		}
 
 		//react on portaleditor commands
-        //pe to display, or pe to diable?
+        //pe to display, or pe to disable?
         if($this->getParam("pe") == "false") {
             $this->objSession->setSession("pe_disable", "true");
         }

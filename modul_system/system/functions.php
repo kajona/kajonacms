@@ -1117,6 +1117,7 @@ function uniStrTrim($strString, $intLength, $strAdd = "...") {
 function sendConditionalGetHeaders($strChecksum) {
     header("ETag: ".$strChecksum);
     header("Cache-Control: max-age=86400, must-revalidate");
+    
 }
 
 
@@ -1133,7 +1134,9 @@ function checkConditionalGetHeaders($strChecksum) {
             //strike. no further actions needed.
             include_once(_systempath_."/class_http_statuscodes.php");
             header(class_http_status_codes::$strSC_NOT_MODIFIED);
+            header("ETag: ".$strChecksum);
             header("Cache-Control: max-age=86400, must-revalidate");
+            
             return true;
         }
     }
