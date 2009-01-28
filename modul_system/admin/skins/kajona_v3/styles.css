@@ -1155,33 +1155,44 @@ body.folderView .listActions a {
 }
 
 /* F L A S H U P L O A D */
-#selectFilesLink a, #uploadFilesLink a, #clearFilesLink a {
-	color: #0000CC;
-	background-color: #FFFFFF;
+.kajonaUploadFilesContainer {
+	max-height: 250px;
+	overflow-y: auto;
 }
 
-#selectFilesLink a:visited, #uploadFilesLink a:visited, #clearFilesLink a:visited {
-	color: #0000CC;
-	background-color: #FFFFFF;
-}
-
-#uploadFilesLink a:hover, #clearFilesLink a:hover {	
-	color: #FFFFFF;
-	background-color: #000000;
-}
-
-#kajonaUploadFiles .progressBar {
+.kajonaUploadFilesTable .progressBar {
 	height: 5px;
 	width: 100px;
-	background-color: #CCC;
+	background-color: #e3e3e3;
 }
 
-#kajonaUploadFiles .progressBar div {
+.kajonaUploadFilesTable .progressBar div {
 	height: 5px;
-	width: 100px;
-	background-color: #F00;
+	background-color: #00e800;
 }
 
+.kajonaUploadFilesTable tr.header {
+	font-weight: bold;
+}
+
+.kajonaUploadFilesTable td {
+	height: 15px;
+	vertical-align: middle;
+}
+
+.kajonaUploadFilesTable td.filename {
+	width: 250px;
+}
+
+.kajonaUploadFilesTable td.size {
+	width: 90px;
+	padding-right: 10px;
+	text-align: right;
+}
+
+.kajonaUploadFilesTable td.progress {
+	width: 100px;
+}
 
 
 /* Dialog classes */

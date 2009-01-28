@@ -515,6 +515,151 @@ var kajonaAdminAjax = {
 };
 
 //--- FILEMANAGER ---------------------------------------------------------------------------------------
+// Uploader
+function KajonaUploader(config) {
+	var self = this;
+
+	this.config = config;
+	this.uploader;
+    this.fileList;
+	this.fileCount = 0;
+	this.fileCountUploaded = 0;
+	this.tableRowSample;
+    
+	this.init = function() {
+		this.uploader = new YAHOO.widget.Uploader(self.config['overlayContainerId']); 
+
+		this.uploader.addListener('contentReady', self.handleContentReady);
+		this.uploader.addListener('fileSelect', self.onFileSelect)
+		this.uploader.addListener('uploadStart', self.onUploadStart);
+		this.uploader.addListener('uploadProgress', self.onUploadProgress);
+		this.uploader.addListener('uploadCancel', self.onUploadCancel);
+		this.uploader.addListener('uploadComplete', self.onUploadComplete);
+		this.uploader.addListener('uploadCompleteData', self.onUploadResponse);
+		this.uploader.addListener('uploadError', self.onUploadError);
+	    this.uploader.addListener('rollOver', self.handleRollOver);
+	    this.uploader.addListener('rollOut', self.handleRollOut);
+	    
+	    YAHOO.util.Event.onDOMReady(function () { 
+			var uiLayer = YAHOO.util.Dom.getRegion(self.config['selectLinkId']);
+			var overlay = YAHOO.util.Dom.get(self.config['overlayContainerId']);
+			YAHOO.util.Dom.setStyle(overlay, 'width', uiLayer.right-uiLayer.left + "px");
+			YAHOO.util.Dom.setStyle(overlay, 'height', uiLayer.bottom-uiLayer.top + "px");
+		});
+	}
+	
+	this.handleRollOver = function() {
+		//YAHOO.util.Dom.get(self.config['selectLinkId']).onmouseover();
+	}
+
+	this.handleRollOut = function() {
+		//YAHOO.util.Dom.get(self.config['selectLinkId']).onmouseover();
+	}
+	
+	this.handleContentReady = function() {
+	    // Allows the uploader to send log messages to trace, as well as to YAHOO.log
+		self.uploader.setAllowLogging(false);
+		
+		// Allows multiple file selection in Browse dialog.
+		self.uploader.setAllowMultipleFiles(self.config['multipleFiles']);
+		
+		self.uploader.setSimUploadLimit(2);
+							                   
+		// Apply new set of file filters to the uploader.
+		self.uploader.setFileFilters(new Array({description:self.config['allowedFileTypes'], extensions:self.config['allowedFileTypes']}));
+		
+		// load sample file row for file list
+		tableRowSample = document.getElementById('kajonaUploadFileSample').cloneNode(true);
+	}
+	
+	this.onFileSelect = function(event) {
+		self.fileList = event.fileList;
+		
+		jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
+		document.getElementById('kajonaUploadDialog').innerHTML = '';
+		jsDialog_0.init();
+		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'), 'display', "block");
+		
+		self.createFileTable();
+	}
+	
+	this.createFileTable = function() {
+		table = document.getElementById('kajonaUploadFiles');
+		
+		//create table row for each file
+		for(var i in self.fileList) {
+			var entry = self.fileList[i];
+			
+			//check if file is already in list
+			if (document.getElementById('kajonaUploadFile_'+entry['id']) == null) {
+				var tableRow = tableRowSample.cloneNode(true);
+				tableRow.setAttribute('id', 'kajonaUploadFile_'+entry['id']);
+				 
+				var filename = YAHOO.util.Dom.getElementsByClassName('filename', 'td', tableRow)[0];
+				var size = YAHOO.util.Dom.getElementsByClassName('size', 'td', tableRow)[0];
+				var progress = YAHOO.util.Dom.getElementsByClassName('progress', 'td', tableRow)[0];
+				
+				filename.innerHTML = entry['name'].substring(0, 30);
+				size.innerHTML = self.bytesToString(entry['size']);
+				progress.innerHTML = '<div class=\"progressBar\"></div>';
+				 
+				table.appendChild(tableRow);
+				 
+				self.fileCount++;
+			}
+		}
+		  
+		document.getElementById(self.config['uploadLinkId']).onclick = function() {self.upload(); return false;};
+		document.getElementById(self.config['cancelLinkId']).onclick = function() {location.reload(true); return false;};
+	}
+	
+	this.upload = function() {
+		if (self.fileList != null) {
+			self.uploader.uploadAll(self.config['uploadUrl'], "POST", self.config['uploadUrlParams'], self.config['uploadInputName']);
+		}	
+	}
+	
+	this.onUploadProgress = function(event) {
+		row = document.getElementById('kajonaUploadFile_'+event['id']);
+		prog = Math.round(100*(event["bytesLoaded"]/event["bytesTotal"]));
+		progbar = "<div class='progressBar'><div style='width:\" + prog + \"%;'></div></div>";
+		YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+	}
+	
+	this.onUploadComplete = function(event) {
+		row = document.getElementById('kajonaUploadFile_'+event['id']);
+		prog = Math.round(100*(event["bytesLoaded"]/event["bytesTotal"]));
+		progbar = "<div class='progressBar'><div width=\"100%\"></div></div>";
+		YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+		
+		self.fileCountUploaded++;
+		
+		//reload page if all files are uploaded
+		if (self.fileCount == self.fileCountUploaded) {
+			location.reload(true);
+		}
+	}
+		
+	this.onUploadStart = function(event) {	
+	}
+
+	this.onUploadError = function(event) {
+	}
+	
+	this.onUploadCancel = function(event) {
+	}
+	
+	this.onUploadResponse = function(event) {
+	}
+	
+	this.bytesToString = function (intBytes) {
+		var entities = ["B", "KB", "MB", "GB"];
+		var entity = Math.floor(Math.log(intBytes)/Math.log(1024));
+		return (intBytes/Math.pow(1024, Math.floor(entity))).toFixed(2)+" "+entities[entity];
+	}
+}
+
+				
 function filemanagerShowRealsize() {
 	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl+"?x="+(new Date()).getMilliseconds();
 	fm_image_isScaled = false;

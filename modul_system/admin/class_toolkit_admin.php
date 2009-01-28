@@ -542,149 +542,25 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["javascript"] = "
 			<script type=\"text/javascript\">				
 				var uploader;
-				var fileList;
-				var fileCount = 0;
-				var fileCountUploaded = 0;
-				var tableRowSample;
 				
 				function initUploader() {
 					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\"; 
-					uploader = new YAHOO.widget.Uploader(\"uploaderOverlay\"); 
-					
-					uploader.addListener('contentReady', handleContentReady);
-					uploader.addListener('fileSelect', onFileSelect)
-					uploader.addListener('uploadStart', onUploadStart);
-					uploader.addListener('uploadProgress', onUploadProgress);
-					uploader.addListener('uploadCancel', onUploadCancel);
-					uploader.addListener('uploadComplete', onUploadComplete);
-					uploader.addListener('uploadCompleteData', onUploadResponse);
-					uploader.addListener('uploadError', onUploadError);
-				    uploader.addListener('rollOver', handleRollOver);
-				    uploader.addListener('rollOut', handleRollOut);
+					uploader = new KajonaUploader({
+						\"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
+						\"selectLinkId\": \"kajonaUploadSelectLink\",
+						\"uploadLinkId\": \"kajonaUploadUploadLink\",
+						\"cancelLinkId\": \"kajonaUploadCancelLink\",
+						\"multipleFiles\": ".($bitMultiple ? "true" : "false").",
+						\"allowedFileTypes\": \"".$strAllowedFileTypes."\",
+						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
+						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"systemid\").value,
+									          \"folder\" : document.getElementById(\"folder\").value,
+		                                      \"inputElement\" : \"".$strFieldName."\"},
+		                \"uploadInputName\": \"".$strName."\"
+					});
+					uploader.init();				
 			    }
 			    kajonaAjaxHelper.loadUploaderBase(initUploader);
-
-			    
-				YAHOO.util.Event.onDOMReady(function () { 
-					var uiLayer = YAHOO.util.Dom.getRegion('selectLink');
-					var overlay = YAHOO.util.Dom.get('uploaderOverlay');
-					YAHOO.util.Dom.setStyle(overlay, 'width', uiLayer.right-uiLayer.left + \"px\");
-					YAHOO.util.Dom.setStyle(overlay, 'height', uiLayer.bottom-uiLayer.top + \"px\");
-				});
-
-				
-				function handleRollOver () {
-					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'color', \"#FFFFFF\");
-					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'background-color', \"#000000\");
-				}
-			
-				function handleRollOut () {
-					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'color', \"#0000CC\");
-					YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('selectLink'), 'background-color', \"#FFFFFF\");
-				}
-				
-				function handleContentReady () {
-				    // Allows the uploader to send log messages to trace, as well as to YAHOO.log
-					uploader.setAllowLogging(false);
-					
-					// Allows multiple file selection in Browse dialog.
-					uploader.setAllowMultipleFiles(".($bitMultiple ? "true" : "false").");
-					
-					uploader.setSimUploadLimit(2);
-					
-					// New set of file filters.
-					var ff = new Array({description:\"".$strAllowedFileTypes."\", extensions:\"".$strAllowedFileTypes."\"});
-					                   
-					// Apply new set of file filters to the uploader.
-					uploader.setFileFilters(ff);
-					
-					// load sample file row for file list
-					tableRowSample = document.getElementById('kajonaUploadFileSample').cloneNode(true);
-				}
-				
-				
-			
-				function onFileSelect(event) {
-					fileList = event.fileList;
-					
-					jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
-					document.getElementById('kajonaUploadDialog').innerHTML = '';
-					jsDialog_0.init();
-					
-					createFileTable(fileList);
-				}
-				
-				function createFileTable(entries) {
-					  table = document.getElementById('kajonaUploadFiles');
-
-					  //create table row for each file
-					  for(var i in entries) {
-					     var entry = entries[i];
-
-					     //check if file is already in list
-					     if (document.getElementById('kajonaUploadFile_'+entry['id']) == null) {
-						     var tableRow = tableRowSample.cloneNode(true);
-						     tableRow.setAttribute('id', 'kajonaUploadFile_'+entry['id']);
-						     
-						     var filename = YAHOO.util.Dom.getElementsByClassName('filename', 'td', tableRow)[0];
-						     var size = YAHOO.util.Dom.getElementsByClassName('size', 'td', tableRow)[0];
-						     var progress = YAHOO.util.Dom.getElementsByClassName('progress', 'td', tableRow)[0];
-	
-						     filename.innerHTML = entry['name'];
-						     size.innerHTML = entry['size'];
-						     progress.innerHTML = '<div class=\"progressBar\"></div>';
-						     
-						     table.appendChild(tableRow);
-						     
-						     fileCount++;
-						 }
-					  }
-				}
-				
-				function upload() {
-					if (fileList != null) {
-						uploader.uploadAll(\""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
-							\"POST\", {\"systemid\" : document.getElementById(\"systemid\").value,
-								          \"folder\" : document.getElementById(\"folder\").value,
-	                                      \"inputElement\" : \"".$strFieldName."\"},
-	                        \"".$strName."\"
-						);
-					}	
-				}
-				
-				function onUploadProgress(event) {
-						row = document.getElementById('kajonaUploadFile_'+event['id']);
-						prog = Math.round(100*(event[\"bytesLoaded\"]/event[\"bytesTotal\"]));
-						progbar = \"<div class='progressBar'><div style='width:\" + prog + \"px;'></div></div>\";
-						YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
-					}
-				
-				function onUploadComplete(event) {
-					row = document.getElementById('kajonaUploadFile_'+event['id']);
-					prog = Math.round(100*(event[\"bytesLoaded\"]/event[\"bytesTotal\"]));
-					progbar = \"<div class='progressBar'><div></div></div>\";
-					YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
-					
-					fileCountUploaded++;
-					
-					//reload page if all files are uploaded
-					if (fileCount == fileCountUploaded) {
-						location.reload(true);
-    				}
-					
-				}
-					
-				function onUploadStart(event) {	
-				}
-			
-				function onUploadError(event) {
-				}
-				
-				function onUploadCancel(event) {
-				}
-				
-				function onUploadResponse(event) {
-				}
 			</script>";
 
 		foreach ($arrTexts as $arrKey => $strValue) {

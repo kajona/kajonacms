@@ -241,32 +241,34 @@ Upload-Field for multiple files with progress bar
 	%%javascript%%
 	
 	<div id="uiElements" style="display:inline;">
-			<div id="uploaderContainer">
-				<div id="uploaderOverlay" style="position:absolute; z-index:2"></div>
-				<div id="selectFilesLink" style="z-index:1"><a id="selectLink" href="#">Select Files</a></div>
+			<div id="kajonaUploadButtonsContainer">
+				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
+				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
 	</div>
 	
 	%%modalDialog%%
 
-	<div id="kajonaUploadDialog">
-		<div id="uploadFilesLink"><a id="uploadLink" onClick="upload(); return false;" href="#">%%upload_multiple_uploadFiles%%</a></div>
-		
-		<table id="kajonaUploadFiles">
-			<tr>
-				<td>Datei</td>
-				<td>Größe</td>
-				<td></td>
-			</tr>
-			<tr id="kajonaUploadFileSample">
-				<td class="filename"></td>
-				<td class="size"></td>
-				<td class="progress"></td>
-			</tr>
-		</table>
+	<div id="kajonaUploadDialog" style="display: none;">
+		<div class="kajonaUploadFilesContainer">
+			<table id="kajonaUploadFiles" class="kajonaUploadFilesTable">
+				<tr class="header">
+					<td>Datei</td>
+					<td>Größe</td>
+					<td></td>
+				</tr>
+				<tr id="kajonaUploadFileSample">
+					<td class="filename"></td>
+					<td class="size"></td>
+					<td class="progress"></td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<div><a id="kajonaUploadUploadLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a> <a id="kajonaUploadCancelLink" href="#" class="inputSubmit">%%upload_multiple_cancel%%</a></div>
 	</div>
 	
-	<div id="divAlternateContent" style="display: none;">
+	<div id="kajonaUploadFallbackContainer" style="display: none;">
 		%%fallbackContent%%
 	</div>
 </input_uploadFlash>
