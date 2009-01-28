@@ -25,7 +25,7 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadDragNDropBase(null, "admin/scripts/dragdrophelper_tr.js");
+	kajonaAjaxHelper.loadDragNDropBase(null, KAJONA_WEBPATH+"/admin/scripts/dragdrophelper_tr.js");
 	if(arrayTableIds == null) {
         var arrayTableIds = new Array("%%listid%%");
     } else {
@@ -837,7 +837,7 @@ The language switch sourrounds the buttons
 <dashboard_column_header>
 	<br />
 	<script type="text/javascript">
-    	kajonaAjaxHelper.loadDragNDropBase(null, "admin/scripts/dragdrophelper_li.js");
+    	kajonaAjaxHelper.loadDragNDropBase(null, KAJONA_WEBPATH+"/admin/scripts/dragdrophelper_li.js");
     	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
         } else {
