@@ -18,6 +18,7 @@
 ########################################ADMIN REWRITING##################################################
 
 #source: /admin/module.action.systemid
+#RewriteRule ^admin/index.html index.php?admin=1
 #RewriteRule ^admin/([a-z_]+)/([a-zA-Z]*)/([0-9a-z]*)\.html index.php?admin=1&module=$1&action=$2&systemid=$3 [QSA,L]
 #RewriteRule ^admin/([a-z_]+)/([a-zA-Z]*)\.html index.php?admin=1&module=$1&action=$2 [QSA,L]
 #RewriteRule ^admin/([a-z_]+)\.html index.php?admin=1&module=$1 [QSA,L]
