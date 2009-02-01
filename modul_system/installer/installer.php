@@ -538,7 +538,49 @@ class class_installer {
                                                                         "systemlog" => $this->getText("installer_systemlog")
                                                                   ), $strTemplateID);
 	    }
+	    
+	    
+	    //build the progress-entries
+	    $strCurrentCommand = (isset($_GET["step"]) ? $_GET["step"] : "" );
+	    if($strCurrentCommand == "")
+	       $strCurrentCommand = "phpsettings";
+	       
+	    $arrProgessEntries = array(
+	       "phpsettings" => $this->getText("installer_step_phpsettings"),
+	       "config" => $this->getText("installer_step_dbsettings"),
+	       "loginData" => $this->getText("installer_step_adminsettings"),
+	       "install" => $this->getText("installer_step_modules"),
+	       "postInstall" => $this->getText("installer_step_elements"),
+	       "samplecontent" => $this->getText("installer_step_samplecontent"),
+	       "finish" => $this->getText("installer_step_finish"),
+	    );
+	    
+	    $strProgess = "";
+	    $strTemplateEnrtyID = $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry", true);
+	    
+	    $strImageTodo = "<img src=\""._webpath_."/installer/pics/todo.png\" />";
+	    $strImageCurrent = "<img src=\""._webpath_."/installer/pics/current.png\" />";
+	    $strImageDone = "<img src=\""._webpath_."/installer/pics/done.png\" />";
+	    
+	    $strCurrentImage = $strImageDone;
+	    foreach($arrProgessEntries as $strKey => $strValue) {
+	    	
+	    	//choose the correct image
+	    	if($strCurrentCommand == $strKey)
+	    	    $strCurrentImage = $strImageCurrent;  
+	    	
+	    	$arrTemplateEntry = array();
+	    	$arrTemplateEntry["image"] = $strCurrentImage;
+	    	$arrTemplateEntry["entry_name"] = $strValue;
+	    	
+	    	$strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEnrtyID, true);
+	    	
+	    	if($strCurrentCommand == $strKey)
+                $strCurrentImage = $strImageTodo;  
+            
+	    }
 
+	    $arrTemplate["installer_progress"] = $strProgess;
 	    $arrTemplate["installer_version"] = $this->strVersion;
 	    $arrTemplate["installer_output"] = $this->strOutput;
 	    $arrTemplate["installer_forward"] = $this->strForwardLink;

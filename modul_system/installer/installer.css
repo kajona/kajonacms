@@ -42,6 +42,7 @@ td {
 	margin: 0 auto 0 auto;
 	padding-top: 10px;
 	width: 673px;
+	width: 873px;
 	text-align: left;
 }
 
@@ -56,6 +57,7 @@ td {
 	margin: 0 0 0 48px;
 	padding: 0;
 	width: 625px;
+	float: left;
 }
 
 #installerBox .topLeft {
@@ -91,10 +93,19 @@ td {
 	margin-top: 10px;
 }
 
+#installerBox .progressContainer {
+	float: right; 
+	width: 180px; 
+	margin-top: 50px;
+	border: 1px solid #cccccc;
+	background-color: #FFFFFF;
+}
+
 #installerBox .copyright {
 	text-align: right;
 	color: #c2c2c2;
 	margin-right: 10px;
+	width: 675px;
 	
 }
 

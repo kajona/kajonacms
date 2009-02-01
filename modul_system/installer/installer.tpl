@@ -15,34 +15,48 @@
 
 <div id="installerBox">
 	<div class="logo"></div>
-	<div class="topRight">
-		<div class="topLeft">
-			<div class="bottomRight">
-				<div class="bottomLeft">
-					<div class="content">
-						<h1>Kajona Installer %%installer_version%%</h1>
-						<div>
-						%%installer_output%%
+	<div>
+		<div class="topRight">
+			<div class="topLeft">
+				<div class="bottomRight">
+					<div class="bottomLeft">
+						<div class="content">
+							<h1>Kajona Installer %%installer_version%%</h1>
+							<div>
+							%%installer_output%%
+							</div>
+							<br />
+							%%installer_logfile%%
+							<br />
+							<div>
+							  <div style="float: left;">%%installer_backward%%</div>
+							  <div style="float: right;">%%installer_forward%%</div>
+							  <div style="clear: both;"></div>
+							</div>
 						</div>
-						<br />
-						%%installer_logfile%%
-						<br />
-						<div>
-						  <div style="float: left;">%%installer_backward%%</div>
-						  <div style="float: right;">%%installer_forward%%</div>
-						  <div style="clear: both;"></div>
-						</div>
+						
 					</div>
+					
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="copyright">&copy; 2008 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
+		
+		
+	    <div class="progressContainer">
+           %%installer_progress%%
+        </div>
+        <div style="clear: both;"></div>
+    </div>    
+	<div class="copyright">&copy; 2009 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
 </div>
 
 </body>
 </html>
 </installer_main>
+
+<installer_progress_entry>
+    <div style="border-bottom: 1px dashed #cccccc; padding: 2px;">%%image%%&nbsp;&nbsp;%%entry_name%%</div>
+</installer_progress_entry>
 
 <installer_log>
 <div class="preText">
