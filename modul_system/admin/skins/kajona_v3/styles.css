@@ -1036,16 +1036,6 @@ div.percentBeam {
 }
 
 
-/* F O L D E R V I E W */
-body.folderView .listActions {
-	text-align: right;
-	vertical-align: middle;
-}
-
-body.folderView .listActions a {
-	margin-right: 2px;
-}
-
 /* L A N G U A G E S W I T C H */
 
 .languageSwitch {

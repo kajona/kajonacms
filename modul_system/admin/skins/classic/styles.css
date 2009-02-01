@@ -166,7 +166,9 @@ img {
 	height: 15px;
 }
 
-.listActions {
+.adminListRow1 .actions, .adminListRow1Over .actions, .adminListRow2 .actions, .adminListRow2Over .actions {
+	white-space: nowrap;
+	vertical-align: middle;
     text-align: right;
 }
 

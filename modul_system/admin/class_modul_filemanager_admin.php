@@ -389,8 +389,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $arrHeader[2] = $this->getText("datei_groesse");
             $arrHeader[3] = $this->getText("datei_erstell");
             $arrHeader[4] = $this->getText("datei_bearbeit");
-            $arrHeader[5] = $this->getText("datei_zugriff");
-            $arrHeader[6] = "";
+            $arrHeader[5] = "";
             $arrFilesTemplate = array();
 	  		if(count($arrFiles["files"]) > 0) {
 	  		    $intJ = 0;
@@ -424,8 +423,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
 					$arrFilesTemplate[$intJ][3] = timeToString($arrOneFile["filecreation"]);
 					$arrFilesTemplate[$intJ][4] = timeToString($arrOneFile["filechange"]);
-					$arrFilesTemplate[$intJ][5] = timeToString($arrOneFile["fileaccess"]);
-					$arrFilesTemplate[$intJ++][6] = "<div class=\"listActions\">".$strActions."</div>";
+					$arrFilesTemplate[$intJ++][5] = "<div class=\"actions\">".$strActions."</div>";
 				}
 	  		}
 	  		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
@@ -581,7 +579,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
         					$arrFilesTemplate[$intJ][1] = $strFilename;
         					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
-        					$arrFilesTemplate[$intJ++][3] = "<div class=\"listActions\">".$strActions."</div>";
+        					$arrFilesTemplate[$intJ++][3] = "<div class=\"actions\">".$strActions."</div>";
         				}
         	  		}
         	  		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
