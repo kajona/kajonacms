@@ -23,7 +23,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
      *
      */
     public function __construct() {
-        $arrModule["version"]       = "3.1.1";
+        $arrModule["version"]       = "3.1.9";
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["name_lang"]     = "Element downloads_toplist";
         $arrModule["nummer2"]       = _pages_inhalte_modul_id_;
