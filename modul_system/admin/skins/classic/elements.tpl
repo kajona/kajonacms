@@ -943,8 +943,8 @@ The language switch sourrounds the buttons
 	</div>
 	<div class="dialogContent">
 		<span id="%%dialog_id%%_content"><!-- filled by js --></span><br /><br />
-		<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" />
+		<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" /> <input type="submit" name="%%dialog_id%%_cancelButton" id="%%dialog_id%%_cancelButton" value="%%dialog_cancelButton%%" class="inputSubmit" onclick="jsDialog_1.hide(); return false;" />
 	</div>
 </div></dialogConfirmationContainer>
 
-<dialogRawContainer><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRawContainer>
+<dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>

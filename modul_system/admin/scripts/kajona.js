@@ -172,7 +172,10 @@ function ModalDialog(strDialogId, intDialogType) {
 	}
 
 	this.hide = function() {
-		this.dialog.hide();
+		try {
+			this.dialog.hide();
+		}
+		catch (e) {};
 	}
 }
 
@@ -554,7 +557,7 @@ var kajonaAdminAjax = {
 };
 
 // --- FILEMANAGER
-// ---------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------
 // Uploader
 function KajonaUploader(config) {
 	var self = this;
@@ -724,6 +727,9 @@ function KajonaUploader(config) {
 	}
 }
 
+
+//--- image-editor --------------------------------------------------------------------------------------
+
 function filemanagerShowRealsize() {
 	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "?x="
 			+ (new Date()).getMilliseconds();
@@ -769,13 +775,16 @@ function filemanagerShowCropping() {
 
 function filemanagerSaveCropping() {
 	if (fm_cropObj != null)
-		fm_crop_save_warning.init();
+		init_fm_crop_save_warning_dialog();
+		//fm_crop_save_warning.init();
 }
 
 var cropArea = null;
 function filemanagerSaveCroppingToBackend() {
-	fm_crop_save_warning.hide();
-	fm_crop_screenlock.init();
+	jsDialog_1.hide();
+	init_fm_crop_screenlock_dialog();
+	//fm_crop_save_warning.hide();
+	//fm_crop_screenlock.init();
 	cropArea = fm_cropObj.getCropCoords();
 	if (fm_image_isScaled) {
 		// recalculate the "real" crop-coordinates
@@ -812,17 +821,20 @@ var fm_cropping_callback = {
 		filemanagerShowRealsize();
 		cropArea = null;
 
-		fm_crop_screenlock.hide();
+		//fm_crop_screenlock.hide();
+		hide_fm_screenlock_dialog();
 	},
 	failure : function(o) {
 		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
 				+ o.responseText);
-		fm_crop_screenlock.hide();
+		//fm_crop_screenlock.hide();
+		hide_fm_screenlock_dialog();
 	}
 };
 
 function filemanagerRotate(intAngle) {
-	fm_crop_screenlock.init();
+	//fm_crop_screenlock.init();
+	init_fm_crop_screenlock_dialog();
 	kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
 			fm_rotate_callback);
 }
@@ -850,11 +862,14 @@ var fm_rotate_callback = {
 		document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
 				+ ' x ' + intWidthOld;
 
-		fm_crop_screenlock.hide();
+		//fm_crop_screenlock.hide();
+		jsDialog_0.hide();
+		hide_fm_screenlock_dialog();
 	},
 	failure : function(o) {
 		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
 				+ o.responseText);
-		fm_crop_screenlock.hide();
+		//fm_crop_screenlock.hide();
+		hide_fm_screenlock_dialog();
 	}
 };

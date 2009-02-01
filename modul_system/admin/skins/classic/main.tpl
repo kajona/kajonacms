@@ -11,6 +11,8 @@
 <script language="Javascript" type="text/javascript">
 	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
 	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
+	kajonaAjaxHelper.loadAjaxBase();
+	kajonaAjaxHelper.loadAnimationBase();
 </script>
 </head>
 

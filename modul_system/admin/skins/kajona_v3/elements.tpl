@@ -888,4 +888,4 @@ The language switch sourrounds the buttons
 	<div class="ft"><div class="c"></div></div>
 </div></dialogConfirmationContainer>
 
-<dialogRawContainer><div class="dialog" id="%%dialog_id%%">%%dialog_content%%</div></dialogRawContainer>
+<dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>

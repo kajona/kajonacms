@@ -889,13 +889,19 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     kajonaAjaxHelper.loadImagecropperBase();
                     addCss('admin/scripts/yui/resize/assets/resize-core.css');
                     addCss('admin/scripts/yui/imagecropper/assets/imagecropper-core.css'); 
+                    
+                    
+                   function init_fm_preview_warning_dialog() { jsDialog_0.setContentRaw('".$this->getText("cropWarningPreview")."'); jsDialog_0.init(); }
+                   function init_fm_crop_save_warning_dialog() { jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
+                   function init_fm_crop_screenlock_dialog() { jsDialog_2.setContentRaw('<img src=\""._skinwebpath_."/loading.gif\" />'); jsDialog_2.init(); }
+                   function hide_fm_screenlock_dialog() { jsDialog_2.hide(); } 
                                    
                    </script>";
-			//TODO: fix to new dialog-calls
-            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningPreview"), "fm_preview_warning");
-            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->modalDialog("", $this->getText("cropWarningSaving")."<a href=\"javascript:filemanagerSaveCroppingToBackend();\">".$this->getText("cropWarningCrop")."</a>", "fm_crop_save_warning");
-            $arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", "<img src=\""._skinwebpath_."/loading.gif\" />", "fm_crop_screenlock", 3);
-
+			
+			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", 0);
+			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", 1);
+			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", 2);
+            
             $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" \">";
             $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" \">";
 

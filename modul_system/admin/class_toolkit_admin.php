@@ -530,7 +530,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
 		$arrTemplate["fallbackContent"] = $strFallbackContent;
 		
-		$arrTemplate["modalDialog"] = $this->modalDialog("Upload");
+		$arrTemplate["modalDialog"] = $this->jsDialog("Upload", 0);
 		
 		//create valid input-name element. no array needed!
     	$strFieldName = preg_replace("/\[[0-9]\]/", "", $strName);
@@ -1442,8 +1442,8 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
-     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
-     * dialog become visible.
+     * The type-param decides what template is used for the dialog-layout. The name of the dialog is built via jsDialog_$intTypeNr. 
+     * Set the contents via js-calls.
      *
      * @param string $strTitle
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog)
@@ -1457,10 +1457,6 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["dialog_id"] = $strContainerId;
         $arrTemplate["dialog_name"] = $strTitle;
         
-        //TODO: check if needed
-        //$arrTemplate["dialog_var"] = $strDialogId;
-        $arrTemplate["dialog_content"] = "REMOVED!!! Use js-calls!";
-
         $strTemplateId = null;
         if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogContainer");
@@ -1472,7 +1468,7 @@ class class_toolkit_admin extends class_toolkit {
         	$strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
-        else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+        else if($intDialogType == 2 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRawContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
@@ -1490,25 +1486,13 @@ class class_toolkit_admin extends class_toolkit {
         return $strContent;
     }
 
-    /**
-     * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
-     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
-     * dialog become visible.
-     *
-     * @param string $strTitle
-     * @return string
-     */
-    public function modalDialog($strTitle) {
-        return $this->jsDialog($strTitle, 0);
-    }
 
     /**
      * Creates a confirmation dialog (Action / Cancel button) on the page. By default, the dialog is hidden, so has to be set visible.
-     * The name of the javascript-object is the parameter $strDialogId, so use xxx.init() to make the
-     * dialog become visible.
      *
      * @param string $strTitle
      * @return string
+     * @see class_toolkit_admin::jsDialog($strTitle, $intDialogType)
      */
     public function confirmationDialog($strTitle) {
         return $this->jsDialog($strTitle, 1);
