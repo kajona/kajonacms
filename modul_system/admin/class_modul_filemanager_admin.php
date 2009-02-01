@@ -753,6 +753,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=filemanager&amp;action=uploadFile&amp;datei_upload_final=1", "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
+			
+			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
 			$strReturn .= $this->objToolkit->formTextRow($this->getText("max_size").(bytesToString($this->objConfig->getPhpIni("post_max_size"), true) > bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($this->objConfig->getphpIni("post_max_size"), true)));
 			
 			//Fallback code if no or old Flash Player available

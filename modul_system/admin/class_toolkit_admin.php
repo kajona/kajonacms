@@ -553,8 +553,8 @@ class class_toolkit_admin extends class_toolkit {
 						\"multipleFiles\": ".($bitMultiple ? "true" : "false").",
 						\"allowedFileTypes\": \"".$strAllowedFileTypes."\",
 						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
-						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"systemid\").value,
-									          \"folder\" : document.getElementById(\"folder\").value,
+						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
+									          \"folder\" : document.getElementById(\"flashuploadFolder\").value,
 		                                      \"inputElement\" : \"".$strFieldName."\"},
 		                \"uploadInputName\": \"".$strName."\"
 					});

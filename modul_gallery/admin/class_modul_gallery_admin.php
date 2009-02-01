@@ -465,26 +465,20 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             $strFmFolder = substr($objTempPic->getStrFilename(), strpos($objTempPic->getStrFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath()));
 
             //Build the upload form
-            //TODO: check permissions, build form as soon as the new upload is set up
-            /*
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=gallery&amp;action=uploadFile&amp;datei_upload_final=1", "formUpload", "multipart/form-data");
-			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-			$strReturn .= $this->objToolkit->formInputHidden("folder");
-
-			$strFallbackForm = "<div id=\"upload_prototype\" style=\"display: inline;\">";
-			$strFallbackForm .= $this->objToolkit->formInputUpload("gallery_upload[0]", $this->getText("gallery_upload"));
-			$strFallbackForm .= "</div>";
-			$strFallbackForm .= $this->objToolkit->formInputSubmit($this->getText("upload_submit"));
-			$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objFmRepo->getStrUploadFilter());
-			$arrTexts = array(
-				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter", "filemanager"),
-				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles", "filemanager"),
-				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel", "filemanager")
-			);
-
-			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("gallery_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);
-			$strReturn .= $this->objToolkit->formClose();
-             */
+            if($objFmRepo->rightRight()) {
+				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
+				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder");
+	
+				$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objFmRepo->getStrUploadFilter());
+				$arrTexts = array(
+					"upload_fehler_filter" =>  $this->getText("upload_fehler_filter", "filemanager"),
+					"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles", "filemanager"),
+					"upload_multiple_cancel" => $this->getText("upload_multiple_cancel", "filemanager")
+				);
+	
+				$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, "", $arrTexts);
+            }
+             
 
 			//Load all files
 			$arrFiles = class_modul_gallery_pic::loadFilesDB($this->getSystemid());
