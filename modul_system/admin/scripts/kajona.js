@@ -179,6 +179,7 @@ function ModalDialog(strDialogId, intDialogType) {
 	}
 }
 
+
 // --- RIGHTS-STUFF
 // --------------------------------------------------------------------------------------
 function checkRightMatrix() {
@@ -487,6 +488,19 @@ var kajonaAdminAjax = {
 	statusConn :null,
 	cropConn :null,
 	rotateConn :null,
+	genericCall :null,
+	
+	genericAjaxCall : function(module, action, systemid, objCallback) {
+		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
+		var postBody = 'systemid=' + systemid;
+	
+		if (kajonaAdminAjax.genericCall == null
+				|| !YAHOO.util.Connect
+						.isCallInProgress(kajonaAdminAjax.genericCall)) {
+			kajonaAdminAjax.genericCall = YAHOO.util.Connect.asyncRequest(
+					'POST', postTarget, objCallback, postBody);
+		}
+	},
 
 	setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition';

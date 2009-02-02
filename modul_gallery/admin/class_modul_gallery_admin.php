@@ -75,9 +75,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
     		    }
     		}
 
-    		if($strAction == "syncGallery")
-    			$strReturn .= $this->actionSyncGallery();
-
     		if($strAction == "massSync")
     			$strReturn .= $this->actionMassSync();
 
@@ -161,6 +158,36 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			//Load galleries
 			$arrObjGalleries = class_modul_gallery_gallery::getGalleries();
 			$intI = 0;
+			
+			$strJsSyncCode = "";
+			//initial js-code needed for common tasks
+			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
+			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
+			$strJsSyncCode .= "<script type=\"text/javascript\">
+                function gallery_init_screenlock_dialog() { jsDialog_2.setContentRaw('<img src=\""._skinwebpath_."/loading.gif\" />'); jsDialog_2.init(); }
+                function gallery_hide_screenlock_dialog() { jsDialog_2.hide(); }
+                
+                function syncGallery(strSystemid) {
+                    gallery_init_screenlock_dialog();
+                    
+                    kajonaAdminAjax.genericAjaxCall('gallery', 'syncGallery', strSystemid, {
+						    success : function(o) {
+						        gallery_hide_screenlock_dialog();
+						        jsDialog_0.setContentRaw(o.responseText+'<br /><a href=\"javascript:jsDialog_0.hide();\">".$this->getText("hideSyncDialog")."</a>');
+						        jsDialog_0.init();
+						        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+						    },
+						    failure : function(o) {
+						        gallery_hide_screenlock_dialog();
+						        kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
+						                + o.responseText);
+						    }
+						}
+					);
+                }
+            ";
+                   
+			
 			//Iterate over all galleries
 			foreach($arrObjGalleries as $objOneGallery) {
 				//Check specific rights
@@ -168,8 +195,12 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				    $strAction = "";
 				    if($objOneGallery->rightView())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_anzeigen"), "icon_folderActionOpen.gif"));
-			   		if($objOneGallery->rightRight1())
-			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "syncGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_syncro"), "icon_sync.gif"));
+			   		if($objOneGallery->rightRight1()) {
+			   			//snyc is allowed. create js-code for ajax-syncing
+			   			
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:syncGallery('".$objOneGallery->getSystemid()."');\"",  "", $this->getText("galerie_syncro"), "icon_sync.gif"));
+			   		    //$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "syncGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_syncro"), "icon_sync.gif"));
+			   		}
 			   		if($objOneGallery->rightEdit())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "editGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_bearbeiten"), "icon_pencil.gif"));
 			   		if($objOneGallery->rightDelete())
@@ -179,6 +210,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
 				}
 			}
+			
+			$strJsSyncCode .= " </script>";
+			
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newGallery", "", $this->getText("galerie_neu"), $this->getText("galerie_neu"), "icon_blank.gif"), $intI++);
 
@@ -191,7 +225,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		else
 			$strReturn = $this->getText("fehler_recht");
 
-		return $strReturn;
+		return $strReturn.$strJsSyncCode;
 	}
 
 
@@ -303,29 +337,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 // --- Synchronisierungsfunktionen ----------------------------------------------------------------------
 
-	/**
-	 * Starts the syncro of a gallery
-	 *
-	 * @return string
-	 */
-	private function actionSyncGallery() {
-		$strReturn = "";
-		if($this->objRights->rightRight1($this->getSystemid())) {
-			//Load the gall data
-			$objGallery = new class_modul_gallery_gallery($this->getSystemid());
-			//Call the recursive fuction
-			$arrSyncs = class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
-			$strReturn = $this->getText("syncro_ende");
-			$strReturn .= $this->objToolkit->getTextRow($this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"]);
-
-			//flush cache
-			$this->flushCompletePagesCache();
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-
-		return $strReturn;
-	}
 
 	/**
 	 * Synchronizes all galleries available, if rights given

@@ -36,6 +36,7 @@ $lang["galerie_syncro"]                  = "Galerie synchronisieren";
 $lang["gallery_masssync"]                = "Alle synchronisieren";
 $lang["gallery_path"]                    = "Pfad:";
 $lang["gallery_title"]                   = "Titel:";
+$lang["hideSyncDialog"]                  = "Schließen";
 $lang["image_properties"]                = "Eigenschaften des Bildes bearbeiten";
 $lang["liste_bilder_leer"]               = "Keine Bilder vorhanden";
 $lang["modul_liste"]                     = "Liste";

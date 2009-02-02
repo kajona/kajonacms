@@ -90,7 +90,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 
 		//register the module
-		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true, "", "class_modul_gallery_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _bildergalerie_modul_id_);
@@ -313,6 +313,12 @@ class class_installer_gallery extends class_installer_base implements interface_
 
             $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
         }
+        
+        $strReturn .= "Registering xml-classes...\n";
+        $objModule = class_modul_system_module::getModuleByName("gallery", true);
+        $objModule->setStrXmlNameAdmin("class_modul_gallery_admin_xml.php");
+        if(!$objModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
         
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_bildtypen_");
