@@ -4,19 +4,17 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$									    *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["liste_leer"]				= "No downloads available";
-
-$lang["download_datei_link"]	= "Download";
-$lang["download_ordner_link"]	= "Open";
-
-$lang["download_rating_rate1"]	= "Rate file with ";
-$lang["download_rating_rate2"]	= " point(s)!";
-$lang["download_rating_permissions"]	= "Not enough permissions.";
-$lang["download_rating_voted"]	        = "You already voted for this file.";
-
-
+//editable entries
+$lang["download_datei_link"]             = "Download";
+$lang["download_ordner_link"]            = "Open";
+$lang["download_rating_permissions"]     = "Not enough permissions.";
+$lang["download_rating_rate1"]           = "Rate file with ";
+$lang["download_rating_rate2"]           = " point(s)!";
+$lang["download_rating_voted"]           = "You already voted for this file.";
+$lang["liste_leer"]                      = "No downloads available";
 ?>

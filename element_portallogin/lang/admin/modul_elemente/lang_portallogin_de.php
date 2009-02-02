@@ -4,12 +4,14 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                      *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["portallogin_template"]                   = "Template:";
-$lang["portallogin_error"]                      = "Seite im Fehlerfall (optional):";
-$lang["portallogin_success"]                    = "Seite im Erfolgsfall (optional):";
-$lang["portallogin_logout_success"]             = "Seite nach dem Logout (optional):";
+//editable entries
+$lang["portallogin_error"]               = "Seite im Fehlerfall (optional):";
+$lang["portallogin_logout_success"]      = "Seite nach dem Logout (optional):";
+$lang["portallogin_success"]             = "Seite im Erfolgsfall (optional):";
+$lang["portallogin_template"]            = "Template:";
 ?>

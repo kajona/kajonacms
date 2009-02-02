@@ -4,25 +4,24 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                    *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["username"]                             = "Benutzername:";
-$lang["password"]                             = "Passwort:";
-$lang["login"]                                = "Login";
-$lang["logoutlink"]                           = "Logout";
-$lang["editprofilelink"]                      = "Profil bearbeiten";
-
-$lang["usernameTitle"]                        = "Benutzername:";
-$lang["passwordTitle"]                        = "Passwort:";
-$lang["passwordTitle2"]                       = "Passwort:";
-$lang["emailTitle"]                           = "E-Mail*:";
-$lang["forenameTitle"]                        = "Vorname:";
-$lang["nameTitle"]                            = "Nachname:";
-$lang["userDataSubmit"]                       = "Speichern";
-
-$lang["invalidEmailadress"]                   = "Keine gültige E-Mailadresse.";
-$lang["passwordsUnequal"]                     = "Passwörter unterschiedlich.";
-
+//editable entries
+$lang["editprofilelink"]                 = "Profil bearbeiten";
+$lang["emailTitle"]                      = "E-Mail*:";
+$lang["forenameTitle"]                   = "Vorname:";
+$lang["invalidEmailadress"]              = "Keine gültige E-Mailadresse.";
+$lang["login"]                           = "Login";
+$lang["logoutlink"]                      = "Logout";
+$lang["nameTitle"]                       = "Nachname:";
+$lang["password"]                        = "Passwort:";
+$lang["passwordTitle"]                   = "Passwort:";
+$lang["passwordTitle2"]                  = "Passwort:";
+$lang["passwordsUnequal"]                = "Passwörter unterschiedlich.";
+$lang["userDataSubmit"]                  = "Speichern";
+$lang["username"]                        = "Benutzername:";
+$lang["usernameTitle"]                   = "Benutzername:";
 ?>

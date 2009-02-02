@@ -4,15 +4,15 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$							*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-$lang["downloads_name"]                        = "Downloads";
-$lang["downloads_nrOfEntries"]                 = "Anzahl letzter Downloads:";
-
-$lang["downloads_head_date"]                   = "Datum";
-$lang["downloads_head_file"]                   = "Datei";
-
-$lang["downloads_total"]                       = "Gesamte Downloads: ";
-
+//editable entries
+$lang["downloads_head_date"]             = "Datum";
+$lang["downloads_head_file"]             = "Datei";
+$lang["downloads_name"]                  = "Downloads";
+$lang["downloads_nrOfEntries"]           = "Anzahl letzter Downloads:";
+$lang["downloads_total"]                 = "Gesamte Downloads: ";
 ?>

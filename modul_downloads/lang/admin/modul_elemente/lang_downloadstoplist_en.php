@@ -4,16 +4,15 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                               *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-$lang["dl_toplist_template"]                        = "Template:";
-$lang["dl_toplist_archive"]                         = "Archive:";
-$lang["dl_toplist_amount"]                          = "Number of entries:";
-$lang["dl_toplist_algo"]                            = "Sorting:";
-
-$lang["dl_toplist_algabs"]                          = "Absolute";
-
-
-
+//editable entries
+$lang["dl_toplist_algabs"]               = "Absolute";
+$lang["dl_toplist_algo"]                 = "Sorting:";
+$lang["dl_toplist_amount"]               = "Number of entries:";
+$lang["dl_toplist_archive"]              = "Archive:";
+$lang["dl_toplist_template"]             = "Template:";
 ?>

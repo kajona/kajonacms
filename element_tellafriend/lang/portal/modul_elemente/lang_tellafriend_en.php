@@ -4,20 +4,23 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                   *
+*	$Id$					    *
 ********************************************************************************************************/
-$lang["sender"]                     = "Your email address:";
-$lang["sender_name"]                = "Your name:";
-$lang["receiver"]                   = "Recipients email address:";
-$lang["receiver_name"]              = "Recipients name:";
-$lang["message"]                    = "Message:";
-$lang["submit"]                     = "Send";
-$lang["captcha"]                    = "Code:";
-$lang["reload_captcha"]             = "New code";
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-$lang["tellafriend_sender"]         = "Please enter your email address";
-$lang["tellafriend_sender_name"]    = "Please enter your name";
-$lang["tellafriend_receiver"]       = "Please enter the recipients email address";
-$lang["tellafriend_receiver_name"]  = "Please enter the recipients name";
-$lang["fehler_captcha"]             = "Please enter the correct verification code";
+//editable entries
+$lang["captcha"]                         = "Code:";
+$lang["fehler_captcha"]                  = "Please enter the correct verification code";
+$lang["message"]                         = "Message:";
+$lang["receiver"]                        = "Recipients email address:";
+$lang["receiver_name"]                   = "Recipients name:";
+$lang["reload_captcha"]                  = "New code";
+$lang["sender"]                          = "Your email address:";
+$lang["sender_name"]                     = "Your name:";
+$lang["submit"]                          = "Send";
+$lang["tellafriend_receiver"]            = "Please enter the recipients email address";
+$lang["tellafriend_receiver_name"]       = "Please enter the recipients name";
+$lang["tellafriend_sender"]              = "Please enter your email address";
+$lang["tellafriend_sender_name"]         = "Please enter your name";
 ?>

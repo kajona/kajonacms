@@ -4,12 +4,14 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                      *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["formular_email"]                             = "Target email-address:";
-$lang["formular_success"]                           = "Success message:";
-$lang["formular_error"]                             = "Error message:";
-$lang["formular_class"]                             = "Portal-class:";
+//editable entries
+$lang["formular_class"]                  = "Portal-class:";
+$lang["formular_email"]                  = "Target email-address:";
+$lang["formular_error"]                  = "Error message:";
+$lang["formular_success"]                = "Success message:";
 ?>

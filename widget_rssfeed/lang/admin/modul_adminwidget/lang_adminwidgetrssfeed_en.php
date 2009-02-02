@@ -4,16 +4,15 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$								*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-$lang["rssfeed_name"]                        = "Newsfeed";
-
-$lang["rssfeed_feedurl"]                     = "Feed-URL:";
-$lang["rssfeed_posts"]                       = "Number of posts:";
-
-$lang["rssfeed_errorparsing"]                = "Error while parsing the feed";
-$lang["rssfeed_errorloading"]                = "Error while loading the feed";
-
-
+//editable entries
+$lang["rssfeed_errorloading"]            = "Error while loading the feed";
+$lang["rssfeed_errorparsing"]            = "Error while parsing the feed";
+$lang["rssfeed_feedurl"]                 = "Feed-URL:";
+$lang["rssfeed_name"]                    = "Newsfeed";
+$lang["rssfeed_posts"]                   = "Number of posts:";
 ?>

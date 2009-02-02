@@ -4,16 +4,17 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	    									*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["browser"]				= "Open browser";
-$lang["bild_titel"]				= "Title:";
-$lang["bild_link"]				= "Link:";
-$lang["bild_bild"]				= "Image:";
-$lang["bild_x"]                 = "Maximum width:";
-$lang["bild_y"]                 = "Maximum height:";
-$lang["bild_xy_hint"]           = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";
-
+//editable entries
+$lang["bild_bild"]                       = "Image:";
+$lang["bild_link"]                       = "Link:";
+$lang["bild_titel"]                      = "Title:";
+$lang["bild_x"]                          = "Maximum width:";
+$lang["bild_xy_hint"]                    = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";
+$lang["bild_y"]                          = "Maximum height:";
+$lang["browser"]                         = "Open browser";
 ?>

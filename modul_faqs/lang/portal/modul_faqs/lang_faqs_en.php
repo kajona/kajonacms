@@ -4,13 +4,14 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_gallery_en.php 2397 2009-01-03 12:27:28Z jschroeter $									*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-
-$lang["faqs_rating_rate1"]	= "Rate faq with ";
-$lang["faqs_rating_rate2"]	= " point(s)!";
-$lang["faqs_rating_permissions"] = "Not enough permissions.";
-$lang["faqs_rating_voted"]	= "You already voted for this faq.";
-
+//editable entries
+$lang["faqs_rating_permissions"]         = "Not enough permissions.";
+$lang["faqs_rating_rate1"]               = "Rate faq with ";
+$lang["faqs_rating_rate2"]               = " point(s)!";
+$lang["faqs_rating_voted"]               = "You already voted for this faq.";
 ?>

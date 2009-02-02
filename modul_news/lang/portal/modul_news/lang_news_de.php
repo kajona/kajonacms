@@ -4,17 +4,16 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$										*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["news_zurueck"]						= "Zurück";
-$lang["news_mehr"]							= "Weiter...";
-
-$lang["fehler_recht"]						= "Keine ausreichenden Rechte um diese Aktion durchzuführen";
-
-$lang["news_list_empty"]					= "Momentan keine News vorhanden.";
-$lang["forward"]                            = "Weiter";
-$lang["backward"]                           = "Zurück";
-
+//editable entries
+$lang["backward"]                        = "Zurück";
+$lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
+$lang["forward"]                         = "Weiter";
+$lang["news_list_empty"]                 = "Momentan keine News vorhanden.";
+$lang["news_mehr"]                       = "Weiter...";
+$lang["news_zurueck"]                    = "Zurück";
 ?>

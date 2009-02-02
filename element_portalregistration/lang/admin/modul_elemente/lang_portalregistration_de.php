@@ -4,13 +4,14 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                             *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["portalregistration_template"]                   = "Template:";
-$lang["portalregistration_success"]                    = "Seite im Erfolgsfall (optional):";
-$lang["portalregistration_group"]                      = "Zugehörige Gruppe:";
-
-$lang["portalregistration_hint"]                       = "Über das Element angelegte Benutzer sind deaktivert,<br />die Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein entsprechender Hinweis hierzu sollte auf der Seite gegeben werden.";
+//editable entries
+$lang["portalregistration_group"]        = "Zugehörige Gruppe:";
+$lang["portalregistration_hint"]         = "Über das Element angelegte Benutzer sind deaktivert,<br />die Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein entsprechender Hinweis hierzu sollte auf der Seite gegeben werden.";
+$lang["portalregistration_success"]      = "Seite im Erfolgsfall (optional):";
+$lang["portalregistration_template"]     = "Template:";
 ?>

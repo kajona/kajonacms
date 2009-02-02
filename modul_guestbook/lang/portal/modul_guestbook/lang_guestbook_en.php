@@ -4,25 +4,22 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$									*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 101
 
-// --- Module texts -------------------------------------------------------------------------------------
-$lang["eintragen_fehler"]					= "Please provide all values";
-$lang["fehler_recht"]						= "Not enough permissions to perform this action";
-
-$lang["weiter"]								= "next";
-$lang["zurueck"]							= "previous";
-
-$lang["post_name_from"]						= "from";
-$lang["post_name_text"]						= "Name";
-$lang["post_mail_text"]						= "Email";
-$lang["post_page_text"]						= "www";
-$lang["post_message_text"]					= "Message";
-$lang["post_code_text"]						= "Request new code";
-$lang["post_submit_text"]					= "Sign!";
-
-$lang["eintragen"]							= "Sign";
-
-
+//editable entries
+$lang["eintragen"]                       = "Sign";
+$lang["eintragen_fehler"]                = "Please provide all values";
+$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
+$lang["post_code_text"]                  = "Request new code";
+$lang["post_mail_text"]                  = "Email";
+$lang["post_message_text"]               = "Message";
+$lang["post_name_from"]                  = "from";
+$lang["post_name_text"]                  = "Name";
+$lang["post_page_text"]                  = "www";
+$lang["post_submit_text"]                = "Sign!";
+$lang["weiter"]                          = "next";
+$lang["zurueck"]                         = "previous";
 ?>
