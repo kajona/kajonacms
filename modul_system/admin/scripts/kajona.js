@@ -717,8 +717,13 @@ function KajonaUploader(config) {
 
 		// reload page if all files are uploaded
 		if (self.fileCount == self.fileCountUploaded) {
-			location.reload(true);
+			self.onAllUploadsComplete();
 		}
+	}
+	
+	this.onAllUploadsComplete = function() {
+		alert('done in main');
+		location.reload(true);
 	}
 
 	this.onUploadStart = function(event) {

@@ -47,6 +47,9 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
         $strReturn = "";
         if($strAction == "syncGallery")
             $strReturn .= $this->actionSyncGallery();
+        else if($strAction == "massSyncGallery")
+            $strReturn .= $this->actionMassSyncGallery();
+            
 
         return $strReturn;
 	}
@@ -67,15 +70,47 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
         if($objGallery->rightRight1()) {
             $arrSyncs = class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
             $strResult .= $this->getText("syncro_ende");
-            $strResult .= $this->objToolkit->getTextRow($this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"]);
+            $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
             
             $strReturn .= "<gallery>".xmlSafeString(strip_tags($strResult))."</gallery>";
         }
         else
             $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
-        
+
+        class_logger::getInstance()->addLogRow("synced gallery ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);    
+            
 		return $strReturn;
 	}
+	
+/**
+     * Syncs the gallery and creates a small report
+     *
+     * @return string
+     */
+    private function actionMassSyncGallery() {
+        $strReturn = "";
+        $strResult = "";
+        
+        //load all galleries
+        $arrGalleries = class_modul_gallery_gallery::getGalleries();
+        $arrSyncs = array( "insert" => 0, "delete" => 0, "update" => 0);
+        foreach($arrGalleries as $objOneGallery) {
+            if($objOneGallery->rightRight1()) {
+                $arrTemp = class_modul_gallery_pic::syncRecursive($objOneGallery->getSystemid(), $objOneGallery->getStrPath());
+                $arrSyncs["insert"] += $arrTemp["insert"];
+                $arrSyncs["delete"] += $arrTemp["delete"];
+                $arrSyncs["update"] += $arrTemp["update"];
+            }
+        }
+        $strResult = $this->getText("syncro_ende");
+        $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
+            
+        $strReturn .= "<gallery>".xmlSafeString(strip_tags($strResult))."</gallery>";
+        
+            
+        class_logger::getInstance()->addLogRow("mass synced galleries : ".$strResult, class_logger::$levelInfo);
+        return $strReturn;
+    }
 
 
 } 

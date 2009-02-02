@@ -478,7 +478,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             //Build the upload form
             if($objFmRepo->rightRight()) {
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
-				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder");
+				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 	
 				$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objFmRepo->getStrUploadFilter());
 				$arrTexts = array(
@@ -488,6 +488,26 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				);
 	
 				$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, "", $arrTexts);
+				
+				$strReturn .= "<script type=\"text/javascript\">
+				 function registerSucessMethod() {
+                   uploader.onAllUploadsComplete = function() {
+                     
+                     kajonaAdminAjax.genericAjaxCall('gallery', 'massSyncGallery', '', {
+                            success : function(o) {
+                                location.reload(true);
+                            },
+                            failure : function(o) {
+                                kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
+                                        + o.responseText);
+                            }
+                        }
+                    );
+                   }
+                 }
+                 kajonaAjaxHelper.loadUploaderBase(registerSucessMethod);
+                 
+                </script>";
             }
              
 
