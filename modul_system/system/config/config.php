@@ -81,7 +81,7 @@ default:
     $config['dirlang']              = "/lang";	                               //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
 
-    $config['adminlangs']           = "de,en";                                 //Available languages for the administration
+    $config['adminlangs']           = "de,en,pt";                              //Available languages for the administration
 
     $config['portallanguage']       = "de";                                    //This is the default language for texts being loaded in the portal.
                                                                                //Please note: This setting is only used, if no languages are installed.
