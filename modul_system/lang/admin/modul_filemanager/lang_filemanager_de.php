@@ -104,6 +104,7 @@ $lang["upload_erfolg"]                   = "Datei erfolgreich hochgeladen<br />"
 $lang["upload_fehler"]                   = "Dateiupload fehlerhaft<br />";
 $lang["upload_fehler_filter"]            = "Der hochgeladene Dateityp ist nicht erlaubt<br />";
 $lang["upload_multiple_cancel"]          = "Abbrechen";
+$lang["upload_multiple_errorFilesize"]   = "Die markierten Dateien können auf Grund ihrer Dateigröße nicht hochgeladen werden.<br />Die maximale Dateigröße beträgt:";
 $lang["upload_multiple_totalFilesAndSize"] = "Datei(en) mit insgesamt";
 $lang["upload_multiple_uploadFiles"]     = "Datei(en) hochladen";
 $lang["upload_submit"]                   = "Hochladen";

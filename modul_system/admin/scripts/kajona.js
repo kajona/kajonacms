@@ -583,7 +583,7 @@ function KajonaUploader(config) {
 	this.fileCountUploaded = 0;
 	this.fileTotalSize = 0;
 	this.listElementSample;
-
+	
 	this.init = function() {
 		this.uploader = new YAHOO.widget.Uploader(
 				self.config['overlayContainerId']);
@@ -615,7 +615,7 @@ function KajonaUploader(config) {
 		self.uploader.setSimUploadLimit(2);
 
 		self.uploader.setFileFilters(new Array( {
-			description : self.config['allowedFileTypesDescription'],
+			description : self.config['allowedFileTypesDescription']+" (max. "+self.bytesToString(self.config['maxFileSize'])+")",
 			extensions : self.config['allowedFileTypes']
 		}));
 
@@ -639,6 +639,7 @@ function KajonaUploader(config) {
 
 	this.createFileList = function() {
 		htmlList = document.getElementById('kajonaUploadFiles');
+		bitFileError = false;
 
 		//count files (self.fileList.length doesn't work here)
 		for (var i in self.fileList) {
@@ -668,21 +669,36 @@ function KajonaUploader(config) {
 						'filename', 'div', listElement)[0];
 
 				filename.innerHTML = entry['name'].substring(0, 40) + (entry['name'].length > 40 ? "...":"") + " ("+self.bytesToString(entry['size'])+")";
-				htmlList.appendChild(listElement);
-
+				
+				//check if file size exceeds upload limit
+				if (entry['size'] > self.config['maxFileSize']) {
+					listElement.className = "error";
+					bitFileError = true;
+				}
+				
 				self.fileTotalSize += entry['size'];
+				
+				htmlList.appendChild(listElement);
 			}
 		}
 		
 		document.getElementById("kajonaUploadFilesTotal").innerHTML = self.fileCount;
 		document.getElementById("kajonaUploadFilesTotalSize").innerHTML = self.bytesToString(self.fileTotalSize);
 
-		document.getElementById(self.config['uploadLinkId']).onclick = function() {
-			this.style.visibility = "hidden";
-			self.upload();
-			return false;
-		};
+		//disable upload and show error if some files can't be uploaded
+		if (bitFileError) {
+			document.getElementById(self.config['uploadLinkId']).style.visibility = "hidden";
+			document.getElementById("kajonaUploadError").style.display = "block";
+		} else {
+			document.getElementById(self.config['uploadLinkId']).onclick = function() {
+				this.style.visibility = "hidden";
+				self.upload();
+				return false;
+			};			
+		}
+		
 		document.getElementById(self.config['cancelLinkId']).onclick = function() {
+			self.uploader.cancel();
 			location.reload();
 			return false;
 		};
@@ -704,7 +720,7 @@ function KajonaUploader(config) {
 		row.className = "active";
 		progress = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
 		YAHOO.util.Dom.getElementsByClassName('progress', 'div', row)[0].innerHTML = progress+"%";
-		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:\" + progress + \"%;'></div>";
+		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:" + progress + "%;'></div>";
 	}
 
 	this.onUploadComplete = function(event) {
@@ -734,11 +750,15 @@ function KajonaUploader(config) {
 		if (event['data'].indexOf('<error>') != -1) {
 			var intStart = event['data'].indexOf("<error>")+7;
 			var responseText = event['data'].substr(intStart, event['data'].indexOf("</error>")-intStart);
-			alert(self.fileList[event['id']]['name']+':\n'+responseText);
+			
+			document.getElementById('kajonaUploadFile_' + event['id']).className = "error";
+			alert('Error on file '+self.fileList[event['id']]['name']+':\n'+responseText);
 		}
 	}
 
 	this.bytesToString = function(intBytes) {
+		if (intBytes == 0) return "0 B";
+		
 		var entities = [ "B", "KB", "MB", "GB" ];
 		var entity = Math.floor(Math.log(intBytes) / Math.log(1024));
 		return (intBytes / Math.pow(1024, Math.floor(entity))).toFixed(2) + " "

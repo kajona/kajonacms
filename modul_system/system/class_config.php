@@ -108,11 +108,22 @@ class class_config {
 	 * Returns a php.ini value
 	 *
 	 * @param string $strKey
-	 * @return sring
+	 * @return string
 	 */
 	public function getPhpIni($strKey) {
 		return ini_get($strKey);
 	}
+	
+	/**
+	 * Returns the max upload size in bytes
+	 *
+	 * @return int
+	 */
+	public function getPhpMaxUploadSize() {    
+	    $strBytes = $this->getPhpIni("post_max_size") > $this->getPhpIni("upload_max_filesize") ? $this->getPhpIni("upload_max_filesize") : $this->getphpIni("post_max_size");
+
+    	return phpSizeToBytes($strBytes);
+    }
 
 	/**
 	 * Loads all config-files from the filesystem

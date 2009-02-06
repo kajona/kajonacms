@@ -265,6 +265,7 @@ Upload-Field for multiple files with progress bar
 		<br />
 		<span id="kajonaUploadFilesTotal"></span> %%upload_multiple_totalFilesAndSize%% <span id="kajonaUploadFilesTotalSize"></span>
 		<br /><br />
+		<div id="kajonaUploadError" class="kajonaUploadError" style="display: none;">%%upload_multiple_errorFilesize%%<br /><br /></div>
 		<input type="submit" name="kajonaUploadUploadLink" id="kajonaUploadUploadLink" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /> <input type="submit" name="kajonaUploadCancelLink" id="kajonaUploadCancelLink" value="%%upload_multiple_cancel%%" class="inputSubmitShort" />
 		<br />
 	</div>

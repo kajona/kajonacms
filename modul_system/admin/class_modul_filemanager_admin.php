@@ -756,7 +756,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			
 			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
-			$strReturn .= $this->objToolkit->formTextRow($this->getText("max_size").(bytesToString($this->objConfig->getPhpIni("post_max_size"), true) > bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($this->objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($this->objConfig->getphpIni("post_max_size"), true)));
+			$strReturn .= $this->objToolkit->formTextRow($this->getText("max_size").bytesToString($this->objConfig->getPhpMaxUploadSize()));
 			
 			//Fallback code if no or old Flash Player available
 			$strFallbackForm = "<div id=\"upload_prototype\" style=\"display: inline;\">";
@@ -771,7 +771,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter"),
 				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles"),
 				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel"),
-				"upload_multiple_totalFilesAndSize" => $this->getText("upload_multiple_totalFilesAndSize")
+				"upload_multiple_totalFilesAndSize" => $this->getText("upload_multiple_totalFilesAndSize"),
+				"upload_multiple_errorFilesize" => $this->getText("upload_multiple_errorFilesize")." ".bytesToString($this->objConfig->getPhpMaxUploadSize())
 			);
 			
 			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);

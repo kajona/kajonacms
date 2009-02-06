@@ -398,7 +398,32 @@ function getRightsImageAdminName($strSystemid) {
 
 
 /**
- * Makes out of a bytenumber a human readable string
+ * Converts a php size string (e.g. "4M") into bytes
+ *
+ * @param int $strBytes
+ * @return int
+ */
+function phpSizeToBytes($strBytes) {
+	$intReturn = 0;
+	
+	$strBytes = strtolower($strBytes);
+
+	if(strpos($strBytes, "m") !== false) {
+		$intReturn = str_replace("m", "", $strBytes);
+		$intReturn = $intReturn * 1024 * 1024;
+	} else if(strpos($strBytes, "k") !== false) {
+		$intReturn = str_replace("m", "", $strBytes);
+		$intReturn = $intReturn * 1024;
+	} else if(strpos($strBytes, "g") !== false) {
+		$intReturn = str_replace("m", "", $strBytes);
+		$intReturn = $intReturn * 1024 * 1024 * 1024;
+	}
+
+	return $intReturn;
+}
+
+/**
+ * Makes out of a byte number a human readable string
  *
  * @param int $intBytes
  * @param bool $bitPhpIni (Value ends with M/K/B)
@@ -410,21 +435,7 @@ function bytesToString($intBytes, $bitPhpIni = false) {
 		$arrFormats = array("B", "KB", "MB", "GB", "TB");
 
 		if($bitPhpIni) {
-			$intBytes = strtolower($intBytes);
-
-			if(strpos($intBytes, "m") !== false) {
-				$intBytes = str_replace("m", "", $intBytes);
-				$intBytes = $intBytes * 1024 * 1024;
-			}
-			if(strpos($intBytes, "k") !== false) {
-				$intBytes = str_replace("m", "", $intBytes);
-				$intBytes = $intBytes * 1024;
-			}
-			if(strpos($intBytes, "g") !== false) {
-				$intBytes = str_replace("m", "", $intBytes);
-				$intBytes = $intBytes * 1024 * 1024 * 1024;
-			}
-
+			$intBytes = phpSizeToBytes($intBytes);
 		}
 
 		$intTemp = $intBytes;

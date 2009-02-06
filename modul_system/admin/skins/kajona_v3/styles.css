@@ -1165,11 +1165,6 @@ div.percentBeam {
 	list-style-type: none;
 }
 
-.kajonaUploadFilesList li.active {
-	background-color: #c4f3c4;
-	color: #000000;
-}
-
 #kajonaUploadFileSample {
 	display: none;
 }
@@ -1194,6 +1189,25 @@ div.percentBeam {
 .kajonaUploadFilesList .progressBar div {
 	height: 4px;
 	background-color: #00e800;
+}
+
+.kajonaUploadFilesList li.active {
+	background-color: #c4f3c4;
+	color: #000000;
+}
+
+.kajonaUploadFilesList li.error {
+	background-color: #ffcccc;
+	color: #000000;
+}
+
+.kajonaUploadFilesList li.error .progress, .kajonaUploadFilesList li.error .progressBar div {
+	visibility: hidden;
+}
+
+.kajonaUploadError {
+	font-weight: bold;
+	color: #ff0000;
 }
 
 
