@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["addWidget"]                       = "Widget hinzufügen";
@@ -26,6 +26,5 @@ $lang["quickhelp_addWidgetToDashboard"]  = "Das Hinzufügen neuer Widgets zum Da
 $lang["quickhelp_list"]                  = "Das Dashboard dient als Ablage für Widgets jeglicher Art. Widgets stellen Miniprogramme dar, welche Informationen ausgeben. Diese Widgets können auf dem Dashboard sortiert, editiert und gelöscht werden. Das Hinzufügen neuer Widgets erfolgt über die Aktion \"Widget hinzufügen\". ";
 $lang["setDashboardPosition"]            = "Speichern der Position erfolgreich";
 $lang["widget"]                          = "Widget:";
-$lang["widgetDeleteLink"]                = "Löschen";
-$lang["widgetDeleteQuestion"]            = " - Widget wirklich löschen?";
+$lang["widgetDeleteQuestion"]            = "Möchten Sie das Widget &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
 ?>

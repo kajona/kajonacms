@@ -581,7 +581,8 @@ function KajonaUploader(config) {
 	this.fileList;
 	this.fileCount = 0;
 	this.fileCountUploaded = 0;
-	this.tableRowSample;
+	this.fileTotalSize = 0;
+	this.listElementSample;
 
 	this.init = function() {
 		this.uploader = new YAHOO.widget.Uploader(
@@ -591,12 +592,9 @@ function KajonaUploader(config) {
 		this.uploader.addListener('fileSelect', self.onFileSelect)
 		this.uploader.addListener('uploadStart', self.onUploadStart);
 		this.uploader.addListener('uploadProgress', self.onUploadProgress);
-		this.uploader.addListener('uploadCancel', self.onUploadCancel);
 		this.uploader.addListener('uploadComplete', self.onUploadComplete);
 		this.uploader.addListener('uploadCompleteData', self.onUploadResponse);
 		this.uploader.addListener('uploadError', self.onUploadError);
-		this.uploader.addListener('rollOver', self.handleRollOver);
-		this.uploader.addListener('rollOut', self.handleRollOut);
 
 		YAHOO.util.Event
 				.onDOMReady( function() {
@@ -611,32 +609,18 @@ function KajonaUploader(config) {
 				});
 	}
 
-	this.handleRollOver = function() {
-		// YAHOO.util.Dom.get(self.config['selectLinkId']).onmouseover();
-	}
-
-	this.handleRollOut = function() {
-		// YAHOO.util.Dom.get(self.config['selectLinkId']).onmouseover();
-	}
-
 	this.handleContentReady = function() {
-		// Allows the uploader to send log messages to trace, as well as to
-		// YAHOO.log
 		self.uploader.setAllowLogging(false);
-
-		// Allows multiple file selection in Browse dialog.
 		self.uploader.setAllowMultipleFiles(self.config['multipleFiles']);
-
 		self.uploader.setSimUploadLimit(2);
 
-		// Apply new set of file filters to the uploader.
 		self.uploader.setFileFilters(new Array( {
-			description :self.config['allowedFileTypes'],
-			extensions :self.config['allowedFileTypes']
+			description : self.config['allowedFileTypesDescription'],
+			extensions : self.config['allowedFileTypes']
 		}));
 
-		// load sample file row for file list
-		tableRowSample = document.getElementById('kajonaUploadFileSample')
+		//load sample file row for file list
+		listElementSample = document.getElementById('kajonaUploadFileSample')
 				.cloneNode(true);
 	}
 
@@ -650,44 +634,56 @@ function KajonaUploader(config) {
 		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'),
 				'display', "block");
 
-		self.createFileTable();
+		self.createFileList();
 	}
 
-	this.createFileTable = function() {
-		table = document.getElementById('kajonaUploadFiles');
+	this.createFileList = function() {
+		htmlList = document.getElementById('kajonaUploadFiles');
 
-		// create table row for each file
-		for ( var i in self.fileList) {
+		//count files (self.fileList.length doesn't work here)
+		for (var i in self.fileList) {
+			self.fileCount++;
+		}
+		
+		//sort file list, otherwise the upload will start with the last file in the list
+		sortedFileList = new Array();
+		tempFileCount = 0;
+		for (var i in self.fileList) {
 			var entry = self.fileList[i];
+			var entryId = self.fileCount - tempFileCount;
+			sortedFileList[entryId] = entry;
+			tempFileCount++;
+		}
+		
+		//create table row for each file
+		for (var i in sortedFileList) {
+			var entry = sortedFileList[i];
 
-			// check if file is already in list
+			//check if file is already in list
 			if (document.getElementById('kajonaUploadFile_' + entry['id']) == null) {
-				var tableRow = tableRowSample.cloneNode(true);
-				tableRow.setAttribute('id', 'kajonaUploadFile_' + entry['id']);
+				var listElement = listElementSample.cloneNode(true);
+				listElement.setAttribute('id', 'kajonaUploadFile_' + entry['id']);
 
 				var filename = YAHOO.util.Dom.getElementsByClassName(
-						'filename', 'td', tableRow)[0];
-				var size = YAHOO.util.Dom.getElementsByClassName('size', 'td',
-						tableRow)[0];
-				var progress = YAHOO.util.Dom.getElementsByClassName(
-						'progress', 'td', tableRow)[0];
+						'filename', 'div', listElement)[0];
 
-				filename.innerHTML = entry['name'].substring(0, 30);
-				size.innerHTML = self.bytesToString(entry['size']);
-				progress.innerHTML = '<div class=\"progressBar\"></div>';
+				filename.innerHTML = entry['name'].substring(0, 40) + (entry['name'].length > 40 ? "...":"") + " ("+self.bytesToString(entry['size'])+")";
+				htmlList.appendChild(listElement);
 
-				table.appendChild(tableRow);
-
-				self.fileCount++;
+				self.fileTotalSize += entry['size'];
 			}
 		}
+		
+		document.getElementById("kajonaUploadFilesTotal").innerHTML = self.fileCount;
+		document.getElementById("kajonaUploadFilesTotalSize").innerHTML = self.bytesToString(self.fileTotalSize);
 
 		document.getElementById(self.config['uploadLinkId']).onclick = function() {
+			this.style.visibility = "hidden";
 			self.upload();
 			return false;
 		};
 		document.getElementById(self.config['cancelLinkId']).onclick = function() {
-			location.reload(true);
+			location.reload();
 			return false;
 		};
 	}
@@ -697,45 +693,49 @@ function KajonaUploader(config) {
 			self.uploader.uploadAll(self.config['uploadUrl'], "POST",
 					self.config['uploadUrlParams'],
 					self.config['uploadInputName']);
+			
+			//show nice progress cursor
+			document.getElementsByTagName("body")[0].style.cursor = "progress";
 		}
 	}
 
 	this.onUploadProgress = function(event) {
 		row = document.getElementById('kajonaUploadFile_' + event['id']);
-		prog = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
-		progbar = "<div class='progressBar'><div style='width:\" + prog + \"%;'></div></div>";
-		YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+		row.className = "active";
+		progress = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
+		YAHOO.util.Dom.getElementsByClassName('progress', 'div', row)[0].innerHTML = progress+"%";
+		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:\" + progress + \"%;'></div>";
 	}
 
 	this.onUploadComplete = function(event) {
 		row = document.getElementById('kajonaUploadFile_' + event['id']);
-		prog = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
-		progbar = "<div class='progressBar'><div width=\"100%\"></div></div>";
-		YAHOO.util.Dom.getElementsByClassName('progress', 'td', row)[0].innerHTML = progbar;
+		YAHOO.util.Dom.getElementsByClassName('progress', 'div', row)[0].innerHTML = "100%";
+		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:100%;'></div>";
 
 		self.fileCountUploaded++;
 
-		// reload page if all files are uploaded
+		//reload page if all files are uploaded
 		if (self.fileCount == self.fileCountUploaded) {
-			self.onAllUploadsComplete();
+			location.reload();
 		}
-	}
-	
-	this.onAllUploadsComplete = function() {
-		alert('done in main');
-		location.reload(true);
 	}
 
 	this.onUploadStart = function(event) {
+		row = document.getElementById('kajonaUploadFile_' + event['id']);
+		row.className = "active";
 	}
 
 	this.onUploadError = function(event) {
-	}
-
-	this.onUploadCancel = function(event) {
+		alert('An error occurred while uploading file "'+self.fileList[event['id']]['name']+'". Please try again.');
+		location.reload();
 	}
 
 	this.onUploadResponse = function(event) {
+		if (event['data'].indexOf('<error>') != -1) {
+			var intStart = event['data'].indexOf("<error>")+7;
+			var responseText = event['data'].substr(intStart, event['data'].indexOf("</error>")-intStart);
+			alert(self.fileList[event['id']]['name']+':\n'+responseText);
+		}
 	}
 
 	this.bytesToString = function(intBytes) {

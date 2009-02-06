@@ -400,9 +400,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					$bitImage = false;
 					if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
 					   $bitImage = true;
+					
 					//Filename too long?
-					if(uniStrlen($strFilename) > 50)
-						$strFilename = uniSubstr($strFilename, 0, 50)."...";
+					$strFilename = uniStrTrim($strFilename, 40);
 
 					$strActions = "";
 					if(!$bitImage)
@@ -561,7 +561,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					   
         					$strFilename = $arrOneFile["filename"];
         					//Filename too long?
-        					$strFilename = uniStrTrim($strFilename, 50);
+        					$strFilename = uniStrTrim($strFilename, 40);
 
         					$strActions = "";
         		   			$strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
@@ -770,7 +770,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$arrTexts = array(
 				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter"),
 				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles"),
-				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel")
+				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel"),
+				"upload_multiple_totalFilesAndSize" => $this->getText("upload_multiple_totalFilesAndSize")
 			);
 			
 			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);

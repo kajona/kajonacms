@@ -139,10 +139,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                         $strGeneratedContent,
                                         ($this->objRights->rightEdit($objDashboardWidget->getSystemid()) ? getLinkAdmin("dashboard", "editWidget", "&systemid=".$objDashboardWidget->getSystemid(), "", $this->getText("editWidget"), "icon_pencil.gif") : ""),
                                         ($this->objRights->rightDelete($objDashboardWidget->getSystemid()) ? 
-                                                getLinkAdminManual("href=\"#\" onclick =\"javascript:jsDialog_1.setContent('".$objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName().
-                                                                            $this->getText("widgetDeleteQuestion")."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".
-                                                                            getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid(),
-                                                                    $this->getText("widgetDeleteLink"))."'); jsDialog_1.init(); return false;\"", "", $this->getText("deleteButton", "system", "admin"), "icon_ton.gif") 
+                                        		$this->objToolkit->listDeleteButton($objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget()->getWidgetName(), $this->getText("widgetDeleteQuestion"), getLinkAdminHref($this->arrModule["modul"], "deleteWidget", "&systemid=".$objDashboardWidget->getSystemid()))
                                                  : "")
                                 )
                              );

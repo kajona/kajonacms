@@ -537,7 +537,7 @@ class class_toolkit_admin extends class_toolkit {
 		
 		$objConfig = class_config::getInstance();
 		
-		$strMaxSize = (bytesToString($objConfig->getPhpIni("post_max_size"), true) > bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($objConfig->getphpIni("post_max_size"), true));
+		$strMaxFileSize = (bytesToString($objConfig->getPhpIni("post_max_size"), true) > bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) ? bytesToString($objConfig->getPhpIni("upload_max_filesize"), true) : bytesToString($objConfig->getphpIni("post_max_size"), true));
 		
 		$arrTemplate["javascript"] = "
 			<script type=\"text/javascript\">				
@@ -552,6 +552,8 @@ class class_toolkit_admin extends class_toolkit {
 						\"cancelLinkId\": \"kajonaUploadCancelLink\",
 						\"multipleFiles\": ".($bitMultiple ? "true" : "false").",
 						\"allowedFileTypes\": \"".$strAllowedFileTypes."\",
+						\"allowedFileTypesDescription\": \"".$strAllowedFileTypes." (".$strMaxFileSize.")\",
+						\"maxFileSize\": \"".$strMaxFileSize."\",
 						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
 									          \"folder\" : document.getElementById(\"flashuploadFolder\").value,

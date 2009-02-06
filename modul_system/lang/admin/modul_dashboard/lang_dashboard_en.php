@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["addWidget"]                       = "Add widget";
@@ -26,6 +26,5 @@ $lang["quickhelp_addWidgetToDashboard"]  = "To add a widget to the dashboard, yo
 $lang["quickhelp_list"]                  = "The dashboard is the place to pin every kind of widget. A widget is a small programm presenting a piece of information. The widgets can be sorted, edited and deleted right on the dashboard. To add new widgets, use the acion \"add widget\". ";
 $lang["setDashboardPosition"]            = "New position saved successful";
 $lang["widget"]                          = "Widget:";
-$lang["widgetDeleteLink"]                = "Delete";
-$lang["widgetDeleteQuestion"]            = " - Really delete widget?";
+$lang["widgetDeleteQuestion"]            = "Do you really want to remove the widget &quot;<b>%%element_name%%</b>&quot;?";
 ?>

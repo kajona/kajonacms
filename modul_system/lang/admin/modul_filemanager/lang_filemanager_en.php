@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
@@ -103,7 +103,8 @@ $lang["submit"]                          = "Save";
 $lang["upload_erfolg"]                   = "File was uploaded successfully<br />";
 $lang["upload_fehler"]                   = "An error occured while uploading file<br />";
 $lang["upload_fehler_filter"]            = "The uploaded file type is not allowed<br />";
-$lang["upload_multiple_cancel"]          = "Cancel all uploads";
+$lang["upload_multiple_cancel"]          = "Cancel";
+$lang["upload_multiple_totalFilesAndSize"] = "file(s) with a total of";
 $lang["upload_multiple_uploadFiles"]     = "Upload file(s)";
 $lang["upload_submit"]                   = "Upload";
 $lang["useFile"]                         = "Apply";
@@ -111,7 +112,7 @@ $lang["xml_cropping_success"]            = "Cropping successful";
 $lang["xml_error_permissions"]           = "Not enough permissions";
 $lang["xml_rotate_success"]              = "Rotating successfull";
 $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the server";
-$lang["xmlupload_error_filter"]          = "Filetyp not allowd in current filter";
+$lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
 ?>

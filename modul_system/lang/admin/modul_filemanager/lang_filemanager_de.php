@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -104,6 +104,7 @@ $lang["upload_erfolg"]                   = "Datei erfolgreich hochgeladen<br />"
 $lang["upload_fehler"]                   = "Dateiupload fehlerhaft<br />";
 $lang["upload_fehler_filter"]            = "Der hochgeladene Dateityp ist nicht erlaubt<br />";
 $lang["upload_multiple_cancel"]          = "Abbrechen";
+$lang["upload_multiple_totalFilesAndSize"] = "Datei(en) mit insgesamt";
 $lang["upload_multiple_uploadFiles"]     = "Datei(en) hochladen";
 $lang["upload_submit"]                   = "Hochladen";
 $lang["useFile"]                         = "Übernehmen";

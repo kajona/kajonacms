@@ -763,6 +763,8 @@ body.folderView .adminList, body.portalEditor .adminList {
 
 .adminListRow1 .actions img, .adminListRow2 .actions img {
 	margin-right: 2px;
+	width: 20px;
+	height: 20px;
 }
 
 
@@ -1146,42 +1148,52 @@ div.percentBeam {
 
 /* F L A S H U P L O A D */
 .kajonaUploadFilesContainer {
-	max-height: 250px;
+	max-height: 245px;
 	overflow-y: auto;
 }
 
-.kajonaUploadFilesTable .progressBar {
-	height: 5px;
-	width: 100px;
-	background-color: #e3e3e3;
+.kajonaUploadFilesList {
+	margin: 0;
+	padding: 0;
 }
 
-.kajonaUploadFilesTable .progressBar div {
-	height: 5px;
-	background-color: #00e800;
+.kajonaUploadFilesList li {
+	width: 315px;
+	background-color: #f0f0f0;
+	padding: 5px;
+	margin: 0 0 5px 0;
+	list-style-type: none;
 }
 
-.kajonaUploadFilesTable tr.header {
-	font-weight: bold;
+.kajonaUploadFilesList li.active {
+	background-color: #c4f3c4;
+	color: #000000;
 }
 
-.kajonaUploadFilesTable td {
-	height: 15px;
-	vertical-align: middle;
+#kajonaUploadFileSample {
+	display: none;
 }
 
-.kajonaUploadFilesTable td.filename {
-	width: 250px;
+.kajonaUploadFilesList .filename {
+	width: 260px;
+	float: left;
 }
 
-.kajonaUploadFilesTable td.size {
-	width: 90px;
-	padding-right: 10px;
+.kajonaUploadFilesList .progress {
+	margin-left: 260px;
 	text-align: right;
 }
 
-.kajonaUploadFilesTable td.progress {
-	width: 100px;
+.kajonaUploadFilesList .progressBar {
+	height: 4px;
+	width: 315px;
+	margin-top: 2px;
+	background-color: #c2c2c2;
+}
+
+.kajonaUploadFilesList .progressBar div {
+	height: 4px;
+	background-color: #00e800;
 }
 
 
