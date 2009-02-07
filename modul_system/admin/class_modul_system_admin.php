@@ -402,7 +402,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                                                                                     "systemTasks", 
 	                                                                                     "&task=".$objTask->getStrInternalTaskName(), 
 	                                                                                      $objTask->getStrTaskname(), 
-	                                                                                      "Run", 
+	                                                                                      $this->getText("systemtask_run"), 
 	                                                                                      "icon_accept.gif")),
 	                                                                   $intI++);
         			}

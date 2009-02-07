@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -152,7 +152,7 @@ $lang["quickhelp_updateCheck"]           = "Mit der Aktion Updatecheck werden di
 $lang["server"]                          = "Webserver";
 $lang["session_activity"]                = "Aktivität";
 $lang["session_admin"]                   = "Administration, Modul: ";
-$lang["session_loggedin"]                = "Angemeldet";
+$lang["session_loggedin"]                = "angemeldet";
 $lang["session_loggedout"]               = "Gast";
 $lang["session_logout"]                  = "Session beenden";
 $lang["session_portal"]                  = "Portal, Seite: ";
