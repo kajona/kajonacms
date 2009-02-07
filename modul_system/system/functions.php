@@ -522,7 +522,13 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 	//Internal links are more important than external links!
 	if($strPageI == "" && $strPageE != "")
 		$bitInternal = false;
+
+    //if given, remove first & from params
+    if(substr($strParams, 0, 1) == "&")
+        $strParams = substr($strParams, 1);
+        
 	$strParams = str_replace("&", "&amp;", $strParams);
+    //create an array out of the params
 	
     // any anchors set to the page?
     $strAnchor = "";
@@ -554,7 +560,8 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 	    //chek, if we could use mod_rewrite
 	    $bitRegularLink = true;
 	    if(_system_mod_rewrite_ == "true") {
-            if($strParams == "") {
+
+            
                 //used later to add seo-relevant keywords
                 include_once(_systempath_."/class_modul_pages_page.php");
                 $objPage = class_modul_pages_page::getPageByName($strPageI);
@@ -577,7 +584,11 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                     $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
                 else
                     $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
-                    
+                
+                //params?
+                if($strParams != "")
+                    $strHref .= "?".$strParams;
+
                 // add anchor if given
                 if($strAnchor != "")
                     $strHref .= "#".$strAnchor;
@@ -587,7 +598,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
                     
                     
                 $bitRegularLink = false;
-            }
+            
 	    }
 
         if($bitRegularLink)
@@ -595,7 +606,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
 		                              ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). 
 		                              ($strAction != "" ? "&amp;action=".$strAction : "").
 		                              ($strLanguage != "" ? "&amp;language=".$strLanguage : "").
-		                              ($strParams != "" ? $strParams : "" ).
+		                              ($strParams != "" ? "&amp;".$strParams : "" ).
 		                              ($strAnchor != "" ? "#".$strAnchor : "")."";
 	}
 	else {
