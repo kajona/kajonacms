@@ -57,9 +57,9 @@ class class_element_absatz extends class_element_portal implements  interface_po
 		    //internal page?
 		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["absatz_link"]);
 		    if($objPage->getStrName() != "")
-			    $strReturn .= "<a href=\"".getLinkPortalRaw($this->arrElementData["absatz_link"], "")."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref($this->arrElementData["absatz_link"], "")."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
 			else
-			    $strReturn .= "<a href=\"".getLinkPortalRaw("",$this->arrElementData["absatz_link"])."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref("",$this->arrElementData["absatz_link"])."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
 		}
 
 		$strReturn .="</p>\n";

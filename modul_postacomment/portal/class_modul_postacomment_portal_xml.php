@@ -72,7 +72,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	            //Create form to reenter valuess
                 $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "postacomment_form");
                 $arrForm = array();
-                $arrForm["formaction"] = getLinkPortalRaw($this->getPagename(), "", "postComment", "", $this->getSystemid());
+                $arrForm["formaction"] = getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
         		$arrForm["comment_name"] = $this->getParam("comment_name");
         		$arrForm["comment_subject"] = $this->getParam("comment_subject");
         		$arrForm["comment_message"] = $this->getParam("comment_message");

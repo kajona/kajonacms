@@ -49,7 +49,7 @@ class class_element_tagto extends class_element_portal implements interface_port
 
         //load the template
         $strTemplateID = $this->objTemplate->readTemplate("/element_tagto/".$this->arrElementData["char1"], "tagtos");
-        $strLink = getLinkPortalRaw($strPagenme, "", $strActions, "", $strSystemid);
+        $strLink = getLinkPortalHref($strPagenme, "", $strActions, "", $strSystemid);
         $strReturn = $this->objTemplate->fillTemplate(array("pageurl" => $strLink), $strTemplateID);
 
 		return $strReturn;

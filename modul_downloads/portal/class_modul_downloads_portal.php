@@ -113,7 +113,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["folder_name"] = $objOneFile->getName();
 						$arrTemplate["folder_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid());
-						$arrTemplate["folder_href"] = getLinkPortalRaw($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid());
+						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid());
 						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTememplateID);
 					}
 				}

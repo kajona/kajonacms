@@ -70,9 +70,9 @@ class class_element_bild extends class_element_portal implements interface_porta
 		    //internal page?
 		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["bild_link"]);
 		    if($objPage->getStrName() != "")
-			    $strReturn .= "<a href=\"".getLinkPortalRaw($this->arrElementData["bild_link"], "")."\" target=\"_self\" >".$strImage.$strTitle."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref($this->arrElementData["bild_link"], "")."\" target=\"_self\" >".$strImage.$strTitle."</a>\n";
 			else
-			    $strReturn .= "<a href=\"".getLinkPortalRaw("",$this->arrElementData["bild_link"])."\" target=\"_self\" >".$strImage.$strTitle."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref("",$this->arrElementData["bild_link"])."\" target=\"_self\" >".$strImage.$strTitle."</a>\n";
 		}
 		else
 			$strReturn .= $strImage.$strTitle;

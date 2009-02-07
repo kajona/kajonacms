@@ -494,7 +494,7 @@ function timeToString($intTime, $bitLong = true) {
 function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = "", $strAction = "", $strParams = "", $strSystemid = "", $strCssClass = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 
-	$strHref = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
+	$strHref = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid, $strLanguage, $strSeoAddon);
 	
 	if($strTarget == "")
 		$strTarget = "_self";
@@ -516,7 +516,7 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @param string $strSeoAddon Only used if using mod_rewrite
  * @return string
  */
-function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
+function getLinkPortalHref($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 	$bitInternal = true;
 	//Internal links are more important than external links!
@@ -633,7 +633,7 @@ function getLinkPortalRaw($strPageI, $strPageE, $strAction = "", $strParams = ""
  */
 function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intHeight = "500", $intWidth = "500") {
 	
-    $strLink = getLinkPortalRaw($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
+    $strLink = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
 
 	$strLink = "<a href=\"$strLink\" onclick=\"return !window.open('".$strLink."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."')\" title=\"".$strTitle."\">".$strTitle."</a>";
 

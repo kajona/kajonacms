@@ -134,7 +134,7 @@ class class_download_portal extends class_root {
 		}
 		
 		if($bitRedirectToErrorPage) {
-			header("Location: ".str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalRaw(_pages_errorpage_)));
+			header("Location: ".str_replace(array("_indexpath_", "&amp;"), array(_indexpath_, "&"), getLinkPortalHref(_pages_errorpage_)));
 		}
 	}
 }

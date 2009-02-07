@@ -162,7 +162,7 @@ class class_element_tellafriend extends class_element_portal implements interfac
 
 	    }
 
-	    $strHref = getLinkPortalRaw($strPage, "", $strAction, $strParams, $strSystemid, $this->getPortalLanguage());
+	    $strHref = getLinkPortalHref($strPage, "", $strAction, $strParams, $strSystemid, $this->getPortalLanguage());
 	    $arrMessage = array();
 	    $arrMessage["tellafriend_url"] = "<a href=\"".$strHref."\">".$strHref."</a>";
 	    $arrMessage["tellafriend_receiver_name"] = $this->getParam("tellafriend_receiver_name");
