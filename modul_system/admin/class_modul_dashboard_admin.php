@@ -46,21 +46,21 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	    else if($strAction == "addWidgetToDashboard") {
 	        $strResponse = $this->actionAddWidgetToDashboard();
 	        if($strResponse == "")
-	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        else
 	            $this->strOutput = $strResponse;    
 	    }
 	    else if($strAction == "deleteWidget") {
 	        $strResponse = $this->actionDeleteWidget();
 	        if($strResponse == "")
-	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        else
 	            $this->strOutput = $strResponse;
 	    }
 	    else if($strAction == "editWidget") {
 	        $strResponse = $this->actionEditWidget();
 	        if($strResponse == "")
-	            $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        else
 	            $this->strOutput = $strResponse;
 	    }
@@ -174,7 +174,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	                $arrColumnsAvailable[$strOneColumn] = $this->getText($strOneColumn);
 	            
 	            
-	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=dashboard&amp;action=addWidgetToDashboard");
+	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
 	            $strReturn .= $this->objToolkit->formInputDropdown("widget", $arrDD, $this->getText("widget") );
 	            $strReturn .= $this->objToolkit->formInputDropdown("column", $arrColumnsAvailable, $this->getText("column") );
 	            
@@ -189,7 +189,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $objWidget = new $strWidgetClass();
 	            
 	            //ask the widget to generate its form-parts and wrap our elements around
-	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=dashboard&amp;action=addWidgetToDashboard");
+	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "addWidgetToDashboard"));
 	            $strReturn .= $objWidget->getEditForm();
 	            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
 	            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
@@ -271,7 +271,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 				$objWidget = $objDashboardwidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 	            
 	            //ask the widget to generate its form-parts and wrap our elements around
-	            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=dashboard&amp;action=editWidget");
+	            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("dashboard", "editWidget"));
 	            $strReturn .= $objWidget->getEditForm();
 	            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 	            $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");

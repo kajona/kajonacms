@@ -65,7 +65,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
     		    if($this->validateForm()) {
         			$strReturn .= $this->actionSaveGallery();
         			if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         		    }
     		    else {
     		        if($this->getParam("mode") == "new")
@@ -81,7 +81,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
     		if($strAction == "deleteGallery") {
     			$strReturn .= $this->actionDeleteGallery();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		//Bildfunktionen-----------------------------------
@@ -91,17 +91,17 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
     		if($strAction == "editImage") {
     			$strReturn .= $this->actionEditImage();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showGallery&systemid=".$this->getPrevId());
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "systemid=".$this->getPrevId()));
     		}
 
     		if($strAction == "sortUp") {
     			$strReturn = $this->actionSort("up");
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showGallery&systemid=".$this->getPrevId());
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "systemid=".$this->getPrevId()));
     		}
 
     		if($strAction == "sortDown") {
     			$strReturn = $this->actionSort("down");
-    		    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showGallery&systemid=".$this->getPrevId());
+    		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "systemid=".$this->getPrevId()));
     		}
 
         }
@@ -244,7 +244,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=gallery&action=saveGallery");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $this->getParam("gallery_title"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
@@ -261,7 +261,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $objGallery = new class_modul_gallery_gallery($this->getSystemid());
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=gallery&action=saveGallery");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $objGallery->getStrTitle());
                 $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $objGallery->getStrPath(), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
@@ -422,7 +422,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				//Build the form
 				if(!$bitValidated)
 				    $strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=editImage");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editImage"));
                 $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("pic_name"), $objImage->getStrName());
                 $strReturn .= $this->objToolkit->formInputText("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("pic_description", $this->getText("pic_description"), $objImage->getStrDescription(), "minimal");

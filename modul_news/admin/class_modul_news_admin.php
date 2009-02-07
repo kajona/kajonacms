@@ -63,7 +63,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveCat();
     			    if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		    }
     		    else {
     		        if($this->getParam("mode") == "new")
@@ -75,7 +75,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		if($strAction == "deleteCat") {
     			$strReturn = $this->actionDeleteCategory();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "newNews")
@@ -86,7 +86,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveNews();
     			    if($strReturn == "")
-                       $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                       $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		    }
     		    else  {
     		        if($this->getParam("mode") == "new")
@@ -98,7 +98,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		if($strAction == "deleteNews") {
     			$strReturn = $this->actionDeleteNews();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "editNewscontent")
@@ -106,7 +106,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		if($strAction == "saveNewscontent") {
     			$strReturn = $this->actionSaveNewscontent();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "newsFeed")
@@ -115,19 +115,19 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		if($strAction == "newNewsFeed") {
     		    $strReturn .= $this->actionCreateNewsFeed();
     		    if($strReturn == "")
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=newsFeed");
+    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
     		}
 
     		if($strAction == "editNewsFeed") {
     		    $strReturn .= $this->actionEditNewsFeed();
     		    if($strReturn == "")
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=newsFeed");
+    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
     		}
 
     		if($strAction == "deleteNewsFeed") {
     		    $strReturn .= $this->actionDeleteNewsFeed();
     		    if($strReturn == "")
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=newsFeed");
+    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
     		}
 
 	    }
@@ -296,7 +296,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			//New Category
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveCat");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $this->getParam("news_cat_title"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -311,7 +311,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				//Load cat data
 				$objCat = new class_modul_news_category($this->getSystemid());
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveCat");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $objCat->getStrTitle());
@@ -387,7 +387,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			//Form to create new news
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveNews");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
                 //The date selector
@@ -413,7 +413,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    $objNews = new class_modul_news_news($this->getSystemid());
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveNews");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
                 //The date selector
@@ -551,7 +551,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			//Load content
 			$objNews = new class_modul_news_news($this->getSystemid());
             //Build the form
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=saveNewscontent");
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNewscontent"));
             $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
 		    $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
 		    $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=news_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
@@ -645,7 +645,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 //Form
                 if(!$bitValidate)
                     $strReturn .= $this->objToolkit->getValidationErrors($this);
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=newNewsFeed");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $this->getParam("feed_title"));
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $this->getParam("feed_urltitle"));
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $this->getParam("feed_link"));
@@ -701,8 +701,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 //Form
                 if(!$bitValidate)
                     $strReturn .= $this->objToolkit->getValidationErrors($this);
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=news&amp;action=editNewsFeed");
-
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $objFeed->getStrTitle());
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $objFeed->getStrUrlTitle());
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $objFeed->getStrLink());

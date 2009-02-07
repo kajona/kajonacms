@@ -260,7 +260,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$arrTemplate["desc"] = $this->getText("desc");
 			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 			//Followed by the form
-			$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=right&amp;action=saverights", "rightsForm");
+			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saverights"), "rightsForm");
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_form");
 			$strReturn .= $this->objTemplate->fillTemplate($arrTemplateTotal, $strTemplateID);
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);

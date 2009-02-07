@@ -53,7 +53,7 @@ class class_element_admin extends class_admin {
 		$strFormElement = $this->getEditForm(array_merge($arrElementData, $this->getAllParams()));
 
 		//Start by creating the form & action
-		$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=".$this->arrModule["p_module"]."&amp;action=saveElement", "elEditForm");
+		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["p_module"], "saveElement"), "elEditForm");
 		
 		//validation errors?
 		if($this->bitDoValidation && !$this->validateForm())

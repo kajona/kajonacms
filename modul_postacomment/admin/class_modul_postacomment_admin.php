@@ -56,7 +56,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSavePost();
     			    if($strReturn == "") {
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list".($this->getParam("pe") == "1" ? "&peClose=".$this->getParam("pe") : ""));
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getParam("pe") == "1" ? "peClose=".$this->getParam("pe") : "")));
     			    }
     		    }
     		    else {
@@ -66,7 +66,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		if($strAction == "deletePost") {
     			$strReturn = $this->actionDeletePost();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
 	    }
@@ -117,7 +117,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $intI = 0;
 
             //a small filter would be nice...
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=list");
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "list"));
 
             $arrPages = array();
             $arrPages[""] = "---";
@@ -261,7 +261,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 		if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_postacomment_post($this->getSystemid());
 
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=postacomment&amp;action=savePost".($this->getParam("pe") == "1" ? "&amp;pe=".$this->getParam("pe") : ""));
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePost", ($this->getParam("pe") == "1" ? "pe=".$this->getParam("pe") : "")));
 
             if(count($this->getValidationErrors()) == 0) {
                 $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $objPost->getStrUsername() );

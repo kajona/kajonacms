@@ -57,12 +57,12 @@ class class_modul_languages_admin extends class_admin implements interface_admin
     		if($strAction == "saveLanguage") {
     		    $strReturn = $this->actionSaveLanguage();
     		    if($strReturn == "")
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
     		if($strAction == "deleteLanguageFinal") {
     		    $strReturn = $this->actionDeleteLanguageFinal();
     		    if($strReturn == "")
-    		        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
 		}
@@ -157,7 +157,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 
         if($strMode == "new") {
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=languages&amp;action=saveLanguage");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("language_name"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
@@ -170,7 +170,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
         elseif ($strMode == "edit") {
             $objLanguage = new class_modul_languages_language($this->getSystemid());
             if($objLanguage->rightEdit()) {
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=languages&amp;action=saveLanguage");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("language_name"), $objLanguage->getStrName());
                 $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"), $objLanguage->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");

@@ -188,7 +188,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 		$intYearEnd = $this->getParam("ende_datum_jahr");
 
 		//And create the selector
-        $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=".$this->getParam("action"));
+        $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getParam("action")));
         $strReturn .= $this->objToolkit->formInputHidden("sort", $this->getParam("sort"));
         $strReturn .= $this->objToolkit->formInputHidden("action", $this->getParam("action"));
         $strReturn .= $this->objToolkit->formInputHidden("filter", "true");
@@ -307,7 +307,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
        if($this->getParam("startImport") == "") {
            //create the form and a row as explanation
            $strReturn .= $this->objToolkit->getTextRow($this->getText("task_importFromCsvIntro"));
-           $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=worker&amp;task=importFromCsv&amp;startImport=1");
+           $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "worker", "task=importFromCsv&amp;startImport=1"));
            //show dropdown to select csv-file
            include_once(_systempath_."/class_filesystem.php");
            $objFilesystem = new class_filesystem();
@@ -350,7 +350,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
        if($this->getParam("startExport") == "") {
            //create the form and a row as explanation
            $strReturn .= $this->objToolkit->getTextRow($this->getText("task_csvExportIntro"));
-           $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=worker&amp;task=exportToCsv&amp;startExport=1");
+           $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "worker", "task=exportToCsv&amp;startExport=1"));
            $strReturn .= $this->objToolkit->formDateSimple("export_start", "", "", "", $this->getText("export_start"));
            $strReturn .= $this->objToolkit->formDateSimple("export_end", "", "", "", $this->getText("export_end"));
            $strReturn .= $this->objToolkit->formInputText("export_filename", $this->getText("export_filename"));
@@ -435,7 +435,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
         $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
         $strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
-        header("Refresh: 0; "._indexpath_."?admin=1&module=stats&action=worker&task=ip2c&totalCount=".$this->getParam("totalCount")."");
+        header("Refresh: 0; ".getLinkAdminHref($this->arrModule["modul"], "worker", "task=ip2c&totalCount=".$this->getParam("totalCount"));
 
 
         return $strReturn;
@@ -490,7 +490,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
         $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
         $strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
-        header("Refresh: 0; "._indexpath_."?admin=1&module=stats&action=worker&task=lookup&totalCount=".$this->getParam("totalCount")."");
+        header("Refresh: 0; ".getLinkAdminHref($this->arrModule["modul"], "worker", "task=lookup&totalCount=".$this->getParam("totalCount")));
 
 
         return $strReturn;

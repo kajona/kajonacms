@@ -237,7 +237,7 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @param string $strParams
  * @return string
  */
-function getLinkAdminHref($strModule, $strAction, $strParams = "") {
+function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
 
 	//optimizing params
 	if($strParams != "")

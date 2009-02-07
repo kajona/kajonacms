@@ -69,7 +69,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveArchive();
     			    if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		    }
     		    else {
     		        if($this->getParam("mode") == "new")
@@ -92,13 +92,13 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     		if($strAction == "deleteArchive") {
     			$strReturn = $this->actionDeleteArchive();
     			if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "editFile") {
     			$strReturn = $this->actionEditDetails();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showArchive&systemid=".$this->getPrevId());
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
     		}
 
     		if($strAction == "logbook")
@@ -107,17 +107,17 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     		if($strAction == "deleteLogbook") {
     			$strReturn = $this->actionDeleteLogbook();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=logbook");
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "logbook"));
     		}
 
     		if($strAction == "sortUp") {
     			$strReturn = $this->actionSort("up");
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showArchive&systemid=".$this->getPrevId());
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
     		}
 
     		if($strAction == "sortDown") {
     			$strReturn = $this->actionSort("down");
-    		    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=showArchive&systemid=".$this->getPrevId());
+    		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
     		}
 
         }
@@ -329,7 +329,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=downloads&action=saveArchive");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
                 $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $this->getParam("archive_title"));
                 $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $this->getParam("archive_path"), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
@@ -346,7 +346,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $objArchive = new class_modul_downloads_archive($this->getSystemid());
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=downloads&action=saveArchive");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
                 $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $objArchive->getTitle());
                 $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $objArchive->getPath(), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
@@ -478,7 +478,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				$objFile = new class_modul_downloads_file($this->getSystemid());
 				if($bitErrors)
                     $strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=downloads&action=editFile");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "editFile"));
                 $strReturn .= $this->objToolkit->formInputText("downloads_name", $this->getText("downloads_name"), $objFile->getName());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("downloads_description", $this->getText("downloads_description"), $objFile->getDescription(), "minimal");
                 if($objFile->getType() == 0)
@@ -565,7 +565,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	private function actionDeleteLogbook() {
 		$strReturn = "";
 		if($this->getParam("loeschen") == "") {
-		    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=downloads&action=deleteLogbook&loeschen=1");
+		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "deleteLogbook", "loeschen=1"));
 		    $strReturn .= $this->objToolkit->formTextRow($this->getText("hint_datum"));
 		    $strReturn .= $this->objToolkit->formDateSimple("datum", "", "", "", $this->getText("datum"));
 		    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));

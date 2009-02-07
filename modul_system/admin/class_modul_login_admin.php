@@ -69,9 +69,8 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		//Loading a small login-form
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "login_form");
 		$arrTemplate = array();
-		$arrTemplate["action"] = _indexpath_."?admin=1&amp;module=login&amp;action=adminLogin";
 		$strForm = "";
-		$strForm .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=login&amp;action=adminLogin");
+		$strForm .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "adminLogin"));
 		$strForm .= $this->objToolkit->formInputText("name", $this->getText("login_loginUser", "user"), "", "inputTextShort");
 		$strForm .= $this->objToolkit->formInputPassword("passwort", $this->getText("login_loginPass", "user"), "", "inputTextShort");
 		$strForm .= $this->objToolkit->formInputSubmit($this->getText("login_loginButton", "user"), "", "", "inputSubmitShort");
@@ -101,9 +100,9 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
 		$arrTemplate = array();
 		$arrTemplate["name"] = $this->objSession->getUsername();
-		$arrTemplate["profile"] = _indexpath_."?admin=1&amp;module=user&amp;action=edit&amp;userid=".$this->objSession->getUserID();
-		$arrTemplate["logout"] = _indexpath_."?admin=1&amp;module=login&amp;action=adminLogout";
-		$arrTemplate["dashboard"] = _indexpath_."?admin=1&amp;module=dashboard";
+		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+		$arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
+		$arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
 		$arrTemplate["statusTitle"] = $this->getText("login_statusTitle", "user");
 		$arrTemplate["profileTitle"] = $this->getText("login_profileTitle", "user");
 		$arrTemplate["logoutTitle"] = $this->getText("login_logoutTitle", "user");

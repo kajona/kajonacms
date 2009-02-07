@@ -68,24 +68,24 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		if($strAction == "saveElement") {
     			$strReturn = $this->actionSaveElement();
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId());
+    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
     		}
     		if($strAction == "deleteElement")
     			$strReturn = $this->actionDeleteElement();
     		if($strAction == "deleteElementFinal") {
     			$strReturn = $this->actionDeleteElementFinal();
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getParam("deleteid"));
+    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getParam("deleteid")));
     		}
     		if($strAction == "elementSortUp") {
     			$strReturn = $this->actionShiftElement("up");
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")));
+    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
     		if($strAction == "elementSortDown") {
     			$strReturn = $this->actionShiftElement("down");
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=pages_content&action=list&systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")));
+    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
 
     		//add a pathnavigation when not in pe mode
@@ -549,8 +549,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$objElement = new class_modul_pages_pageelement($this->getSystemid());
 			$strReturn .= $this->objToolkit->warningBox($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" )
 			             .$this->getText("element_loeschen_frage")
-			             ." <br /><a href=\""._indexpath_."?admin=1&module=pages_content&action=deleteElementFinal&systemid="
-			             .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))."\">"
+			             ." <br /><a href=\"".getLinkAdminHref($this->arrModule["modul"], "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
 			             .$this->getText("element_loeschen_link"));
 		}
 		else

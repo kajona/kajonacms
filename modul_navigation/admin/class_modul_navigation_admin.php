@@ -59,7 +59,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveNavi();
     			    if($strReturn == "")
-    	               $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    	               $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		    }
     		    else {
     		        if($this->getParam("mode") == "new")
@@ -76,7 +76,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveNaviPoint();
     			    if($strReturn == "")
-    			       $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"].($this->getPrevId() != "0" ? "&systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")));
+    			       $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		    }
     		    else {
                     if($this->getParam("mode") == "new")
@@ -88,15 +88,15 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		if($strAction == "deleteNaviFinal") {
     			$strReturn = $this->actionDeleteNaviFinal();
     			if($strReturn == "")
-    			   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"].($this->getPrevId() != "0" ? "&systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")));
+    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
     		if($strAction == "naviPointMoveUp") {
     			$strReturn = $this->actionMovePoint("upwards");
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"].($this->getPrevId() != "0" ? "&systemid=".$this->getPrevId() : ""));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
     		}
     		if($strAction == "naviPointMoveDown") {
     			$strReturn = $this->actionMovePoint("downwards");
-    			$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"].($this->getPrevId() != "0" ? "&systemid=".$this->getPrevId() : ""));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
     		}
 
 		}
@@ -246,7 +246,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		    //Build the form
 		    $strReturn .= $this->objToolkit->getValidationErrors($this);
-		    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=navigation&action=saveNavi");
+		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
             $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
             $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -302,7 +302,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build the form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=navigation&action=saveNaviPoint");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
@@ -325,7 +325,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    $objPoint = new class_modul_navigation_point($this->getSystemid());
 			    //Build the form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=navigation&action=saveNaviPoint");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $objPoint->getStrName());

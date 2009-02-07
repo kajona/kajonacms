@@ -79,7 +79,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSavePage();
     			    if($strReturn == "")
-    				    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
+    				    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		    }
     		    else
     		        $strReturn = $this->actionNew();
@@ -88,7 +88,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionChangePage();
     			    if($strReturn == "")
-    				    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
+    				    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		    }
     		    else
     		        $strReturn = $this->actionNew();
@@ -96,12 +96,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		if($strAction == "deletePageFinal") {
     			$strReturn = $this->actionDeletePageFinal();
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
     		}
     		if($strAction == "copyPage") {
     		    $strReturn = $this->actionCopyPage();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		}
 
     		// -- Folders ------------------------------
@@ -111,7 +111,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionFolderNewSave();
     			    if($strReturn == "")
-    				    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->strFolderlevel);
+    				    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		    }
     		    else
     		        $strReturn = $this->actionFolderNew();
@@ -123,7 +123,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionFolderEditSave();
     			    if($strReturn == "")
-    				    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list&folderid=".$this->getPrevId());
+    				    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->getPrevId()));
     		    }
     		    else
     		        $strReturn = $this->actionFolderNew();
@@ -132,7 +132,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		if($strAction == "deleteFolderFinal") {
     			$strReturn = $this->actionDeleteFolderFinal();
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
     		}
 
     		// -- Misc ----------------------------------
@@ -145,13 +145,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		if($strAction == "installElement") {
     		    $strReturn = $this->actionInstallElement();
     		    if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=listElements");
+    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
     		}
     		if($strAction == "saveElement") {
     		    if($this->validateForm() & !$this->checkElementExisting()) {
         			$strReturn = $this->actionSaveElement();
         			if($strReturn == "")
-        				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=listElements");
+        				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
     		    }
     		    else {
     		        if($this->getParam("modus") == "edit")
@@ -163,7 +163,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		if($strAction == "deleteElement") {
     			$strReturn = $this->actionDeleteElement();
     			if($strReturn == "")
-    				$this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=listElements");
+    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
     		}
     		if($strAction == "updatePlaceholder")
                 $strReturn = $this->actionUpdatePlaceholder();
@@ -404,7 +404,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strReturn .= $objLanguages->getLanguageSwitch();
 				//Start Form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=changePage");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
 				//Load data of the page
 				$objPage = new class_modul_pages_page($this->getSystemid());
 
@@ -460,7 +460,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		        $strReturn .= $objLanguages->getLanguageSwitch();
 				//start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=savePage");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $this->getParam("name"));
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
@@ -661,7 +661,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			//Build the form
 			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this);
-			$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=folderNewSave");
+			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $this->getParam("ordner_name"));
 			$strReturn .= $this->objToolkit->formInputHidden("prev_id", $strPrevid);
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
@@ -687,7 +687,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			//Build the form
 			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this);
-			$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=folderEditSave");
+			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName());
 
 			if($objFolder->getPrevId() != "0") {
@@ -904,7 +904,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if($strMode == "new") {
 				//Build the form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=saveElement");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $this->getParam("element_name"));
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $this->getParam("element_cachetime"));
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
@@ -942,7 +942,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				//Build the form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=saveElement");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $objData->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $objData->getIntCachetime());
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
@@ -1093,7 +1093,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             if($this->getParam("plToUpdate") == "") {
                 $strReturn .= $this->objToolkit->getTextRow($this->getText("plUpdateHelp"));
                 $strReturn .= $this->objToolkit->divider();
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=pages&action=updatePlaceholder");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "updatePlaceholder"));
                 //fetch available templates
                 //Load the available templates
 				include_once(_systempath_."/class_filesystem.php");

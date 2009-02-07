@@ -58,12 +58,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 		if($strAction == "moduleSortUp") {
 		    $this->actionSortModule("upwards");
-		    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 
 		if($strAction == "moduleSortDown") {
 		    $this->actionSortModule("downwards");
-		    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 
 		if($strAction == "moduleStatus") {
@@ -72,7 +72,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $objAdminGroup = new class_modul_user_group(_admin_gruppe_id_);
    		    if($this->objRights->rightEdit($this->getSystemid()) && $objAdminGroup->isUserMemberInGroup($objUser)) {
     		    $this->setStatus();
-    		    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
    		    }
 		}
 
@@ -270,7 +270,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                             //In the first loop, ignore the output
                             if($objCurrentModule !== null) {
                                 //Build a form to return
-                                $strFieldset = $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=system&amp;action=systemSettings");
+                                $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
                                 $strFieldset .= $strRows;
                                 $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
                                 $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -302,7 +302,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     }
                 }
                 //Build a form to return -> include the last module
-                $strFieldset = $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=system&amp;action=systemSettings");
+                $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
                 $strFieldset .= $strRows;
                 $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
                 $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -373,7 +373,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                        	}
 	                        	else {
 	                        		//reload the task an fire the action
-	                        		$this->adminReload(_indexpath_."?admin=1&module=system&action=systemTasks&work=true&task=".$objTask->getStrInternalTaskname());
+	                        		$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
 	                        	}
                         	}
                             break;

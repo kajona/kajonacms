@@ -62,19 +62,19 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		if($strAction == "newRepo") {
     			$strReturn = $this->actionNewRepo();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "deleteRepo") {
     			$strReturn = $this->actionDeleteRepo();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
     		if($strAction == "editRepo") {
     			$strReturn = $this->actionEditRepo();
     			if($strReturn == "")
-    			    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
             
             if($strAction == "imageDetails") {
@@ -209,7 +209,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//create the form
 				if(!$bitValidated)
 				    $strReturn .= $this->objToolkit->getValidationErrors($this);
-    			$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=filemanager&action=newRepo&repoSaveNew=1");
+    			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
@@ -260,7 +260,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		        if(!$bitValidated)
 		            $strReturn .= $this->objToolkit->getValidationErrors($this);
 				//create the form
-    			$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=filemanager&action=editRepo&repoSaveEdit=1");
+    			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());
     			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $objRepo->getStrPath(), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
@@ -606,7 +606,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//Check existance of file
 				if(is_file(_realpath_."/".$this->strFolder."/".$this->getParam("file"))) {
 					//Form
-					$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=filemanager&action=renameFile&datei_umbenennen_final=1");
+					$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "renameFile", "datei_umbenennen_final=1"));
 					$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 					$strReturn .= $this->objToolkit->formInputHidden("datei_name_alt", $this->getParam("file"));
 					$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
@@ -701,9 +701,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			if($this->getParam("createFolderFinal") == "") {
 				//Form
 				if($bitActionFromFolderview)
-				    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=folderview&action=list&fmcommand=newFolder&createFolderFinal=1&form_element=".$strFormElement);
+				    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("folderview", "list", "fmcommand=newFolder&createFolderFinal=1&form_element=".$strFormElement));
 				else
-				    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=filemanager&action=newFolder&createFolderFinal=1");
+				    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newFolder", "createFolderFinal=1"));
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
 				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"));
@@ -748,9 +748,9 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 			
 			if($bitActionFromFolderview)
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=folderview&amp;action=list&amp;fmcommand=uploadFile&amp;datei_upload_final=1&amp;form_element=".$strFormElement, "formUpload", "multipart/form-data");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("folderview", "list", "fmcommand=uploadFile&amp;datei_upload_final=1&amp;form_element=".$strFormElement), "formUpload", "multipart/form-data");
 			else
-			    $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=filemanager&amp;action=uploadFile&amp;datei_upload_final=1", "formUpload", "multipart/form-data");
+			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "uploadFile", "datei_upload_final=1"), "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
 			

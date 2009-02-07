@@ -63,7 +63,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->validateForm() & $this->checkAdditionalNewData()) {
                     $strReturn = $this->actionSave();
                     if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
                 }
                 else {
                     $strReturn = $this->actionNew("new");
@@ -73,7 +73,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->validateForm() & $this->checkAdditionalEditData()) {
                     $strReturn = $this->actionEdit();
                     if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
                 }
                 else {
                     $strReturn = $this->actionNew("edit");
@@ -82,11 +82,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             if($strAction == "status") {
                 $strReturn = $this->actionStatus();
                 if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
             }
             if($strAction == "deletefinal") {
                 if($this->actionDeleteFinal())
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
                 else
                     $strReturn = $this->getText("user_loeschen_fehler");
             }
@@ -98,7 +98,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->validateForm()) {
                     $strReturn = $this->actionGroupSave();
                     if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=grouplist");
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
                 }
                 else {
                     $strReturn = $this->actionGroupNew();
@@ -108,7 +108,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->validateForm()) {
                     $strReturn = $this->actionGroupSaveEdit();
                     if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=grouplist");
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
                 }
                 else {
                     $strReturn = $this->actionGroupNew();
@@ -119,19 +119,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             if($strAction == "groupmemberdeletefinal") {
                 $strReturn = $this->actionGroupMemberDeleteFinal();
                 if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=groupmember&groupid=".$this->getParam("groupid"));
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupmember", "groupid=".$this->getParam("groupid")));
             }
             if($strAction == "groupdeletefinal") {
                 $strReturn = $this->actionGroupDeleteFinal();
                 if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=grouplist");
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
             }
             if($strAction == "membership")
                 $strReturn = $this->actionMembership();
             if($strAction == "membershipsave") {
                 $strReturn = $this->actionSaveMembership();
                 if($strReturn == "")
-                    $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=list");
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
             }
             if($strAction == "loginlog")
                 $strReturn = $this->actionLoginLog();
@@ -290,9 +290,9 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $arrLang[$strLanguage] = $this->getText("lang_".$strLanguage);
             //Start the form
             if($strAction == "new")
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=user&action=save");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "save"));
             else
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=user&action=saveedit");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveedit"));
 
             if($this->getParam("userid") != "") {
                 $objUser = new class_modul_user_user($this->getParam("userid"));
@@ -637,14 +637,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->getParam("groupid") == "" && $this->getParam("gruppeid") != "")
                 $this->setParam("groupid", $this->getParam("gruppeid"));
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=user&action=groupsaveedit");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsaveedit"));
                 $objGroup = new class_modul_user_group($this->getParam("groupid"));
                 $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), $objGroup->getStrName());
                 $strReturn .= $this->objToolkit->formInputHidden("gruppeid", $objGroup->getSystemid());
             }
             else {
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
-                $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&module=user&action=groupsave");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsave"));
                 $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), "");
                 $strReturn .= $this->objToolkit->formInputHidden("gruppeid");
             }
@@ -793,7 +793,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             //open the form
-            $strReturn .= $this->objToolkit->formHeader( _indexpath_."?admin=1&module=user&action=membershipsave");
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "membershipsave"));
             //Create a list of checkboxes
             $objUser = new class_modul_user_user($this->getParam("userid"));
 

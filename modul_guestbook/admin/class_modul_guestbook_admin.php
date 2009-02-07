@@ -59,7 +59,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveGuestbook();
     			    if($strReturn == "")
-                        $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		    }
     		    else {
     		        if($this->getParam("mode") == "new")
@@ -73,22 +73,22 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
     		if($strAction == "deleteGuestbook") {
     			$strReturn = $this->actionDeleteGuestbook();
     			if($strReturn == "")
-    			   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]);
+    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
     		if($strAction == "deletePost") {
     			$strReturn = $this->actionDeletePost();
     			if($strReturn == "")
-    			   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getSystemid());
+    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getSystemid()));
     		}
             if($strAction == "editPost") {
                 $strReturn = $this->actionEditPost();
                 if($strReturn == "")
-                   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getSystemid());
+                   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getSystemid()));
             }
             if($strAction == "updatePostcontent") {
                 $strReturn = $this->updatePostcontent();
                 if($strReturn == "")
-                   $this->adminReload(_indexpath_."?admin=1&module=".$this->arrModule["modul"]."&action=viewGuestbook&systemid=".$this->getPrevId());
+                   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getPrevId()));
             }
 
         }
@@ -193,7 +193,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 				//Create form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=guestbook&amp;action=saveGuestbook");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
                 $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $this->getParam("guestbook_title"));
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $this->getParam("guestbook_moderated"));
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "new");
@@ -210,7 +210,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$objGuestbook = new class_modul_guestbook_guestbook($this->getSystemid());
 				//Create form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
-				$strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=guestbook&amp;action=saveGuestbook");
+				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
                 $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $objGuestbook->getGuestbookTitle());
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $objGuestbook->getGuestbookModerated());
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
@@ -326,7 +326,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             //Load content
             $objPost = new class_modul_guestbook_post($this->getSystemid());
             //Build the form
-            $strReturn .= $this->objToolkit->formHeader(_indexpath_."?admin=1&amp;module=guestbook&amp;action=updatePostcontent");
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "updatePostcontent"));
             $strReturn .= $this->objToolkit->formWysiwygEditor("post_text", $this->getText("post_text"), $objPost->getGuestbookPostText());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
