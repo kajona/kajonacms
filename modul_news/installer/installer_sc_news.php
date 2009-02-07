@@ -78,6 +78,7 @@ class class_installer_sc_news implements interface_sc_installer  {
                                     news_view = '0',
                                     news_mode = '0',
                                     news_order = '0',
+                                    news_amount = '10',
                                     news_detailspage = 'newsdetails',
                                     news_template = 'demo.tpl'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
@@ -108,6 +109,7 @@ class class_installer_sc_news implements interface_sc_installer  {
                                 news_view = '1',
                                 news_mode = '0',
                                 news_order = '0',
+                                news_amount = '20',
                                 news_detailspage = 'index',
                                 news_template = 'demo.tpl'
                             WHERE content_id = '".dbsafeString($strElementId)."'";

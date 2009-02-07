@@ -41,8 +41,7 @@ class class_element_news extends class_element_admin implements interface_admin_
 
     public function getRequiredFields() {
         return array(
-            "news_amount" => "number",
-            "news_category" => "systemid"
+            "news_amount" => "number"
         );
     }
 
