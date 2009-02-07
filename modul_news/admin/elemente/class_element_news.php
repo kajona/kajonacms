@@ -34,8 +34,6 @@ class class_element_news extends class_element_admin implements interface_admin_
 
 		$arrModule["tableColumns"]     = "news_category|char,news_view|number,news_mode|number,news_order|number,news_detailspage|char,news_template|char,news_amount|number";
 
-        $this->setDoValidation(true);
-
 		parent::__construct($arrModule);
 	}
 
