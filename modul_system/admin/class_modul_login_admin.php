@@ -100,7 +100,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
 		$arrTemplate = array();
 		$arrTemplate["name"] = $this->objSession->getUsername();
-		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
+		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "&userid=".$this->objSession->getUserID());
 		$arrTemplate["logout"] = getLinkAdminHref($this->arrModule["modul"], "adminLogout");
 		$arrTemplate["dashboard"] = getLinkAdminHref("dashboard");
 		$arrTemplate["statusTitle"] = $this->getText("login_statusTitle", "user");
