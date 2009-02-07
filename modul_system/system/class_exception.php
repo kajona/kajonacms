@@ -86,7 +86,7 @@ class class_exception extends Exception {
             	}
             }
             $strMailtext .= "\n\n";
-            $strMailtext .= "If you dont't know what to do, feel free to open a ticket.\n\n";
+            $strMailtext .= "If you don't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
 
             include_once(_systempath_."/class_mail.php");
