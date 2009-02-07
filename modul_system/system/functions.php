@@ -238,14 +238,10 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @return string
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
-
-	//optimizing params
-	if($strParams != "")
-		$strParams = str_replace("&", "&amp;", $strParams);
-				
+    $strLink = "";
     //systemid in params?
     $strSystemid = "";
-    $arrParams = explode("&amp;", $strParams);
+    $arrParams = explode("&", $strParams);
     
     foreach($arrParams as $strKey => $strValue) {
     	$arrEntry = explode("=", $strValue); 
@@ -262,7 +258,7 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
     $strAction = urlencode($strAction);	
     
     //rewriting enabled?
-    if(_system_mod_rewrite_ == "true" && count($arrParams) == 0) {
+    if(_system_mod_rewrite_ == "true") {
     	
     	//scheme: /admin/module.action.systemid
     	if($strModule != "" && $strAction == "" && $strSystemid == "")
@@ -271,11 +267,19 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
     	   $strLink = _webpath_."/admin/".$strModule."/".$strAction.".html";   
     	else 
            $strLink = _webpath_."/admin/".$strModule."/".$strAction."/".$strSystemid.".html";   
-    	
+
+        if(count($arrParams) > 0)
+        $strLink .= "?".implode("&amp;", $arrParams);
     
     }
-    else
-	   $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."";
+    else {
+	   $strLink = ""._indexpath_."?admin=1&amp;module=".$strModule.
+                                        ($strAction != "" ? "&amp;action=".$strAction : "" ).
+                                        ($strSystemid != "" ?  "&amp;systemid=".$strSystemid : "");
+
+       if(count($arrParams) > 0)
+           $strLink .= "&amp;".(implode("&amp;", $arrParams));
+    }
 
 	return $strLink;
 }
