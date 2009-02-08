@@ -177,7 +177,7 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	 * Loads all posts belonging to the given systemid (in most cases a guestbook)
 	 *
 	 * @param string $strSystemid
-	 * @return string
+	 * @return array
 	 * @static
 	 */
 	public static function getPosts($strSystemid = "", $bitJustActive = false) {
@@ -203,7 +203,7 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	 * Looks up the posts available
 	 *
 	 * @param string $strSystemid
-	 * @return string
+	 * @return int
 	 * @static
 	 */
 	public static function getPostsCount($strSystemid = "", $bitJustActive = false) {

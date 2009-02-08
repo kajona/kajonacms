@@ -642,7 +642,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
-        $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("fehler_recht");
 
         return $strReturn;
     }

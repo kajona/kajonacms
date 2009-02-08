@@ -25,6 +25,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_guestbook";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _gaestebuch_modul_id_;
@@ -285,7 +286,18 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	public function actionViewGuestbook() {
 		$strReturn = "";
 		if($this->objRights->rightView($this->getSystemid())) {
-            $arrPosts = class_modul_guestbook_post::getPosts($this->getSystemid());
+
+
+            include_once(_systempath_."/class_array_section_iterator.php");
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_guestbook_post::getPostsCount($this->getSystemid()));
+            $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setArraySection(class_modul_guestbook_post::getPostsSection($this->getSystemid(), false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+    		$arrPosts = $objArraySectionIterator->getArrayExtended();
+            $arrPageViews = $this->objToolkit->getPageview($arrPosts, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "guestbook", "viewGuestbook", "&systemid=".$this->getSystemid(), _admin_nr_of_rows_);
+            $arrPosts = $arrPageViews["elements"];
+
             $intI = 0;
 			//Print all posts using a modified 2 row list
 			if(count($arrPosts) > 0) {
@@ -302,7 +314,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 					$strReturn .= $this->objToolkit->listRow3("", uniStrReplace("&lt;br /&gt;", "<br />" , $objPost->getGuestbookPostText()), "", "", $intI);
 					$strReturn .= $this->objToolkit->listRow3("","", "", "", $intI++);
 				}
-				$strReturn .= $this->objToolkit->listFooter();
+				$strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
 			}
 			else
 				$strReturn = $this->getText("post_liste_leer");
