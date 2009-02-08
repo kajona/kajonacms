@@ -340,8 +340,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
                     if($objOneFile->getType() == 0 && $this->objRights->rightDelete($objOneFile->getSystemid())) {
-                        //$strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("archiv_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteArchive", "&systemid=".$objOneFile->getSystemid()));
-                        $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\')");
+                        $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
                     }
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))

@@ -564,6 +564,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
+                    if($objOneFile->getIntType() == 0 && $this->objRights->rightDelete($objOneFile->getSystemid())) {
+                        $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
+                    }
+                    
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 

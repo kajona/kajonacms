@@ -30,6 +30,7 @@ $lang["galerie_liste_leer"]              = "Keine Galerien angelegt";
 $lang["galerie_loeschen_erfolg"]         = "Löschen der Galerie erfolgreich";
 $lang["galerie_loeschen_fehler"]         = "Fehler beim Loeschen der Galerie";
 $lang["galerie_loeschen_frage"]          = "Möchten Sie die Galerie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Dabei werden alle hinterlegten Daten gelöscht!";
+$lang["datei_loeschen_frage"]            = "Möchten Sie das Bild &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["galerie_neu"]                     = "Neue Galerie";
 $lang["galerie_rechte"]                  = "Rechte bearbeiten";
 $lang["galerie_syncro"]                  = "Galerie synchronisieren";

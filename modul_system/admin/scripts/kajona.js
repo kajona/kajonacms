@@ -568,10 +568,10 @@ var kajonaAdminAjax = {
 		}
 	},
 
-    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule) {
+    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction) {
         kajonaAdminAjax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
                 success : function(o) {
-                    kajonaAdminAjax.genericAjaxCall(strSourceModule, 'massSyncArchive', '', {
+                    kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
 							success : function(o) {
 								location.reload();
 							},

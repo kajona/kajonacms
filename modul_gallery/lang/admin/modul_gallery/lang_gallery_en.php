@@ -30,6 +30,7 @@ $lang["galerie_liste_leer"]              = "No galleries available";
 $lang["galerie_loeschen_erfolg"]         = "The gallery was deleted successfully";
 $lang["galerie_loeschen_fehler"]         = "An error occured while deleting gallery";
 $lang["galerie_loeschen_frage"]          = "Do you really want to delete the gallery &quot;<b>%%element_name%%</b>&quot;?<br />All stored details will be deleted, too!";
+$lang["datei_loeschen_frage"]            = "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?";
 $lang["galerie_neu"]                     = "Create gallery";
 $lang["galerie_rechte"]                  = "Edit permissions";
 $lang["galerie_syncro"]                  = "Synchronize gallery";
