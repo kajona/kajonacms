@@ -475,7 +475,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             $strFmFolder = substr($objTempPic->getStrFilename(), strpos($objTempPic->getStrFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath()));
 
             //Build the upload form
-            if($objFmRepo->rightRight()) {
+            if($objFmRepo->rightRight1()) {
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 	

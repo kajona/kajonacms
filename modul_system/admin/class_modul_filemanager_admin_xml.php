@@ -13,6 +13,7 @@ include_once(_adminpath_."/interface_xml_admin.php");
 
 include_once(_systempath_."/class_modul_filemanager_repo.php");
 include_once(_systempath_."/class_image.php");
+include_once(_systempath_."/class_filesystem.php");
 
 
 /**
@@ -33,7 +34,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         $arrModule = array();
 		$arrModule["name"] 				= "modul_filemanger";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 			= _dashboard_modul_id_;
+		$arrModule["moduleId"] 			= _filemanager_modul_id_;
 		$arrModule["modul"]				= "filemanager";
 
 		parent::__construct($arrModule);
@@ -53,11 +54,42 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         elseif($strAction == "saveCropping")
             $strReturn .= $this->actionSaveCropping();
         elseif($strAction == "rotate")
-            $strReturn .= $this->actionRotateImage();           
+            $strReturn .= $this->actionRotateImage();
+        elseif($strAction == "deleteFile")
+            $strReturn .= $this->actionDeleteFile();
 
         return $strReturn;
 	}
-    
+
+
+
+    private function actionDeleteFile() {
+        $strReturn = "";
+        if($this->objRights->rightDelete($this->getSystemid())) {
+            //create repo-instance
+            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFolder = $this->getParam("folder");
+            $strFile = $this->getParam("file");
+
+            //Delete from filesystem
+            $objFilesystem = new class_filesystem();
+            
+            if($objFilesystem->fileDelete($objFmRepo->getStrPath()."/".$strFolder."/".$strFile))
+                $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
+			else
+                $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
+
+
+
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+        
+
+        return $strReturn;
+    }
+
+
     /**
      * Tries to rotate the passed imaged.
      * The following params are needed:

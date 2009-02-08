@@ -29,6 +29,7 @@ $lang["archiv_loeschen_fehler"]		= "Auf Grund nicht ausreichender Rechte konnte 
 $lang["archiv_rechte"]				= "Rechte bearbeiten";
 $lang["archiv_syncro"]				= "Archiv synchronisieren";
 $lang["syncro_ende"]				= "Synchronisierung erfolgreich abgeschlossen<br />";
+$lang["datei_loeschen_frage"]		= "Möchten Sie die Datei &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 
 $lang["archive_title"]              = "Titel:";
 $lang["archive_path"]               = "Pfad:";

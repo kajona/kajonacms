@@ -29,6 +29,7 @@ $lang["archiv_loeschen_fehler"]		= "Because of missing permissions the archive c
 $lang["archiv_rechte"]				= "Edit permissions";
 $lang["archiv_syncro"]				= "Synchronize archive";
 $lang["syncro_ende"]				= "Synchronization finished successfully<br />";
+$lang["archiv_loeschen_frage"]		= "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?";
 
 $lang["archive_title"]              = "Title:";
 $lang["archive_path"]               = "Path:";

@@ -261,7 +261,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
             $strFmFolder = substr($objTempFile->getFilename(), strpos($objTempFile->getFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath()));
 
             //Build the upload form
-            if($objFmRepo->rightRight()) {
+            if($objFmRepo->rightRight1()) {
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 
@@ -339,6 +339,11 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
+                    if($objOneFile->getType() == 0 && $this->objRights->rightDelete($objOneFile->getSystemid())) {
+                        //$strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("archiv_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteArchive", "&systemid=".$objOneFile->getSystemid()));
+                        $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\')");
+                    }
+
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 

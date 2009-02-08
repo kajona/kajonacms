@@ -566,7 +566,26 @@ var kajonaAdminAjax = {
 			kajonaAdminAjax.rotateConn = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
-	}
+	},
+
+    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule) {
+        kajonaAdminAjax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
+                success : function(o) {
+                    kajonaAdminAjax.genericAjaxCall(strSourceModule, 'massSyncArchive', '', {
+							success : function(o) {
+								location.reload();
+							},
+							failure : function(o) {
+								kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+							}
+						}
+						);
+                },
+                failure : function(o) {
+                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                }
+            });
+    }
 
 };
 
