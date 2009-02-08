@@ -560,6 +560,16 @@ abstract class class_portal  {
 	public function getModuleOutput() {
 		return $this->strOutput;
 	}
+	
+    /**
+     * Use this method to do a header-redirect to a specific url.
+     * <b>Use ONLY this method and DO NOT use header("Location: ...");</b>
+     *
+     * @param string $strUrlToLoad
+     */
+    public function portalReload($strUrlToLoad) {
+        header("Location: ".str_replace("&amp;", "&", $strUrlToLoad));
+    }
 
 }
 ?>

@@ -47,25 +47,25 @@ class class_element_portallogin extends class_element_portal implements interfac
 		if($this->getParam("action") == "portalLogin") {
 		    if($this->doLogin()) {
 		         if($this->arrElementData["portallogin_success"] != "") {
-		             header("Location: "._indexpath_."?page=".$this->arrElementData["portallogin_success"]);
+		             $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_success"]));
 		         }
 		         else {
-		             header("Location: "._indexpath_."?page=".$this->getPagename());
+		             $this->portalReload(getLinkPortalHref($this->getPagename()));
 		         }
 		    }
 		    else {
                 if($this->arrElementData["portallogin_error"] != "") {
-		             header("Location: "._indexpath_."?page=".$this->arrElementData["portallogin_error"]);
+		             $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_error"]));
                 }
 		    }
 		}
 		elseif ($this->getParam("action") == "portalLogout") {
 		    $this->doLogout();
 		    if($this->arrElementData["portallogin_logout_success"] != "") {
-		        header("Location: "._indexpath_."?page=".$this->arrElementData["portallogin_logout_success"]);
+		        $this->portalReload(getLinkPortalHref($this->arrElementData["portallogin_logout_success"]));
             }
             else {
-		        header("Location: "._indexpath_."?page=".$this->getPagename());
+		        $this->portalReload(getLinkPortalHref($this->getPagename()));
 		    }
 		}
 		
@@ -102,7 +102,7 @@ class class_element_portallogin extends class_element_portal implements interfac
         $arrTemplate["login"] = $this->getText("login");
         $arrTemplate["portallogin_action"] = "portalLogin";
 
-		$arrTemplate["action"] = _indexpath_."?page=".$this->getPagename()."";
+		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -164,7 +164,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             
             
             $arrTemplate["submitTitle"] = $this->getText("userDataSubmit");
-            $arrTemplate["formaction"] = _indexpath_."?page=".$this->getPagename()."&amp;action=portalEditProfile";
+            $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
             
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
@@ -186,7 +186,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             $objUser->setStrPass($this->getParam("password"));
             
             $objUser->updateObjectToDb();
-            header("Location: "._indexpath_."?page=".$this->getPagename());
+            $this->portalReload(getLinkPortalHref($this->getPagename()));
             
 	    }
 	}

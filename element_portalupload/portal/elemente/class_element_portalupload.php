@@ -134,7 +134,7 @@ class class_element_portalupload extends class_element_portal implements interfa
                             $arrSyncs = class_modul_downloads_file::syncRecursive($objDownloadsRepo->getSystemid(), $objDownloadsRepo->getPath());
                             
                             //reload the site to display the new file
-							header("Location: ".str_replace("&amp;", "&", getLinkPortalHref($this->getPagename(), "", $this->getAction(), "uploadSuccess=1", $this->getSystemid())));
+							$this->portalReload(getLinkPortalHref($this->getPagename(), "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                         }
                         
                         $bitSuccess = true;

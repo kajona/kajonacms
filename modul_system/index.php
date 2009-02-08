@@ -100,7 +100,7 @@ class class_index  {
 		    if(!issetServer("HTTPS")) {
                 //reload to https
                 header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                die("Reloading using https...");       
+                die("Reloading using https...");
 		    }
 		}
 

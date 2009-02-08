@@ -56,7 +56,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 			    try {
 				    $strReturn = $this->actionSave();
 				    if($strReturn == "")
-				        header("Location: "._indexpath_."?page=".$this->getPagename());
+				        $this->portalReload(getLinkPortalHref($this->getPagename()));
 			    }
 			    catch (class_exception $objException) {
 			        $objException->processException();
@@ -153,7 +153,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
         $arrTemplate["post_submit_text"] = $this->getText("post_submit_text");
 		$arrTemplate["post_code_text"] = $this->getText("post_code_text");
 
-		$arrTemplate["action"] = _indexpath_."?page=".$this->getPagename()."&amp;action=saveGuestbook";
+		$arrTemplate["action"] = getLinkPortalHref($this->getPagename(), "", "saveGuestbook");
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 		return $strReturn;
 	}

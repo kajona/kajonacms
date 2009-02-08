@@ -277,11 +277,11 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
             $intIpsOpen = $objWorker->getNumberOfIpsToLookup();
 
             $strReturn .= $this->objToolkit->listHeader();
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookup") ." (".$intIpsOpen.")", $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookup", $this->getText("task_lookup"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookupReset"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookupReset", $this->getText("task_lookupReset"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_ip2c"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=ip2c", $this->getText("task_ip2c"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_exportToCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=exportToCsv", $this->getText("task_exportToCsv"), "Run", "icon_accept.gif")), $intI++);
-            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_importFromCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=importFromCsv", $this->getText("task_importFromCsv"), "Run", "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookup") ." (".$intIpsOpen.")", $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookup", $this->getText("task_lookup"), $this->getText("worker_run"), "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_lookupReset"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=lookupReset", $this->getText("task_lookupReset"), $this->getText("worker_run"), "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_ip2c"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=ip2c", $this->getText("task_ip2c"), $this->getText("worker_run"), "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_exportToCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=exportToCsv", $this->getText("task_exportToCsv"), $this->getText("worker_run"), "icon_accept.gif")), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $this->getText("task_importFromCsv"), $this->objToolkit->listButton(getLinkAdmin("stats", "worker", "&task=importFromCsv", $this->getText("task_importFromCsv"), $this->getText("worker_run"), "icon_accept.gif")), $intI++);
 
 
             $strReturn .= $this->objToolkit->listFooter();

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Worker", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -100,4 +100,5 @@ $lang["topvisitor"]                      = "Top Besucher";
 $lang["worker_intro"]                    = "Hier können verschiedene Wartungs-Tasks gestartet werden. Diese können bei der Ausführung längere Zeit in Anspruch nehmen.<br />";
 $lang["worker_lookupReset_end"]          = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";
 $lang["worker_lookup_end"]               = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
+$lang["worker_run"]                      = "Ausführen";
 ?>

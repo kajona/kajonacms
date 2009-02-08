@@ -77,7 +77,7 @@ class class_element_portalregistration extends class_element_portal implements i
 	               if($objUser->updateObjectToDb()) {
 	                   $strReturn .= $this->getText("pr_completionSuccess");
 	                   if($this->arrElementData["portalregistration_success"] != "")
-	                       header("Location: "._indexpath_."?page=".$this->arrElementData["portalregistration_success"]);
+	                       $this->portalReload(getLinkPortalHref($this->arrElementData["portalregistration_success"]));
 	               }
 	           }
 	           else
@@ -144,7 +144,7 @@ class class_element_portalregistration extends class_element_portal implements i
             
             
             $arrTemplate["submitTitle"] = $this->getText("pr_userDataSubmit");
-            $arrTemplate["formaction"] = _indexpath_."?page=".$this->getPagename()."&amp;action=portalCreateAccount";
+            $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
             
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {

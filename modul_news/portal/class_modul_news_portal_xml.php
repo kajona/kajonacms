@@ -124,7 +124,7 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
                 $strReturn .=
                  "        <item>\n"
 			    ."            <title>".xmlSafeString($objOneNews->getStrTitle())."</title>\n"
-			    ."            <link>"._indexpath_."?page=".$strPage."&amp;action=newsDetail&amp;systemid=".$objOneNews->getSystemid()."</link>\n"
+			    ."            <link>".getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle())."</link>\n"
 			    ."            <guid isPermaLink=\"false\">".$objOneNews->getSystemid()."</guid>\n"
 			    ."            <description>".xmlSafeString($objOneNews->getStrIntro())."</description>\n"
 			    ."            <pubDate>".strftime("%a, %d %b %Y 00:00:00 GMT", $objOneNews->getIntDateStart())."</pubDate>\n"

@@ -57,7 +57,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    if($this->validateForm()) {
 			    $strReturn .= $this->actionPostComment();
 			    //load the page before
-			    header("Location: "._indexpath_."?".$this->getHistory(1));
+			    $this->portalReload(getLinkPortalHref($this->getHistory(1)));
 		    }
 		}
 

@@ -112,8 +112,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$strTememplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "folder");
 						$arrTemplate["folder_name"] = $objOneFile->getName();
 						$arrTemplate["folder_description"] = $objOneFile->getDescription()."";
-						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid());
-						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid());
+						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid(), "", "", $objOneFile->getName());
+						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
 						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTememplateID);
 					}
 				}
@@ -155,7 +155,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		      $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		}
 
-		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid());
+		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
 		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
@@ -164,7 +164,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		    if($objFile->getFilename() == "") {
 		        $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		    }
-   		    $arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid());
+   		    $arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
    	       	$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
        		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID) . $strReturn;
 		}

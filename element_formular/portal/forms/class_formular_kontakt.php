@@ -84,7 +84,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		//and the form itself
 		$strTemplateformId = $this->objTemplate->readTemplate($this->arrModule["template"], "contactform");
 		//get actions
-		$this->setParam("formaction",  _indexpath_."?page=".$this->getParam("page")."&amp;action=sendForm");
+		$this->setParam("formaction", getLinkPortalHref($this->getParam("page"), "", "sendForm"));
 		$strReturn .= $this->objTemplate->fillTemplate($this->getAllParams(), $strTemplateformId);
 		return $strReturn;
 	}

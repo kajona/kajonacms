@@ -80,7 +80,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 		if($strPage == "")
 		  $strPage = $this->getPagename();
 
-		$arrTemplate["action"] = _indexpath_."?page=".$strPage."&amp;action=search";
+		$arrTemplate["action"] = getLinkPortalHref($strPage, "", "search");
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 

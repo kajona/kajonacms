@@ -154,7 +154,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$arrFolder["folder_description"] = $objOneImage->getStrDescription();
 						$arrFolder["folder_subtitle"] = $objOneImage->getStrSubtitle();
 						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
-						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid());
+						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "folderlist");
 						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID);
 
@@ -415,9 +415,9 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		}
 		//Name and link
 		if($bitCurrentViewIsDetail)
-			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "detailImage", "", $objData->getSystemid());
+			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "detailImage", "", $objData->getSystemid(), "", "", $objData->getStrName());
 		else
-			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid());
+			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrName());
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
 		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

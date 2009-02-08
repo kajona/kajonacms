@@ -55,32 +55,30 @@ class class_element_languageswitch extends class_element_portal implements inter
             $objPage = class_modul_pages_page::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
-                $strReturn .= " ";
-                $strQueryString = "?".getServer("QUERY_STRING");
+                
+                //TODO: please check if this is really needed
+                /*
+                $strQueryString = getServer("QUERY_STRING");
+
                 //Remove old language-param, if given
                 $strQueryString = preg_replace('/(\?|&)language=([a-z]+)/', "", $strQueryString);
 
-                //remove systemids and actions
+                //remove page, action and systemid
+                $strQueryString = preg_replace('/(\?|&)page=([a-z0-9_]+)/i', "", $strQueryString);
                 $strQueryString = preg_replace('/(\?|&)action=([a-z]+)/i', "", $strQueryString);
                 $strQueryString = preg_replace('/(\?|&)systemid=([a-z0-9]+)/i', "", $strQueryString);
 
                 //first char a '?' ?
                 if(uniStrlen($strQueryString) > 0 && $strQueryString[0] == '?')
                 	$strQueryString = uniSubstr($strQueryString, 1);
-                //and attach the new language param
-                if(uniStrlen($strQueryString) == 0) {
-                	$strQueryString = "language=".$objOneLanguage->getStrName();
-                }
-                else {
-                	$strQueryString .= "&amp;language=".$objOneLanguage->getStrName();
-                }
-
-               //and the link
-               //add html code to modify the lool and feel of the buttons (e.g. <img src=\"language_".$objOneLanguage->getStrName().".gif\" />
-                $strReturn .= "<a href=\""._indexpath_."?".$strQueryString."\">"
+				*/
+                
+                //and the link
+                //add html code to modify the look and feel of the buttons (e.g. <img src=\"language_".$objOneLanguage->getStrName().".gif\" />
+                $strReturn .= "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName())."\">"
                               //.$this->getText("lang_".$objOneLanguage->getStrName())
                               .$objOneLanguage->getStrName()
-                              ."</a>";
+                              ."</a> ";
             }
         }
 

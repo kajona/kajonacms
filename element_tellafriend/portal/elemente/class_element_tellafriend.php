@@ -94,7 +94,7 @@ class class_element_tellafriend extends class_element_portal implements interfac
         $arrTemplate["submit"] = $this->getText("submit");
         $arrTemplate["tellafriend_action"] = "sendTellafriend";
 
-		$arrTemplate["action"] = _indexpath_."?page=".$this->getPagename()."";
+		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -185,9 +185,9 @@ class class_element_tellafriend extends class_element_portal implements interfac
 	    $objEmail->setHtml($strEmailBody);
 
 	    if($objEmail->sendMail())
-	       header("Location: "._indexpath_."?page=".$this->arrElementData["tellafriend_success"]);
+	       $this->portalReload(getLinkPortalHref($this->arrElementData["tellafriend_success"]));
 	    else
-	       header("Location: "._indexpath_."?page=".$this->arrElementData["tellafriend_error"]);
+	       $this->portalReload(getLinkPortalHref($this->arrElementData["tellafriend_error"]));
 	}
 }
 ?>

@@ -358,7 +358,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 	if($strImage == "" && $strText != "") {
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." onclick=\"javascript:window.open('"._indexpath_."?admin=1&amp;module=".$strModule."&amp;action=".$strAction.$strParams."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
+		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
 	}
 	return $strLink;
 }
@@ -516,7 +516,7 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
  * @param string $strSeoAddon Only used if using mod_rewrite
  * @return string
  */
-function getLinkPortalHref($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
+function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 	$bitInternal = true;
 	//Internal links are more important than external links!
