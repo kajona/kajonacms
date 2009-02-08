@@ -757,7 +757,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
 		
-			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true);
+			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true, true);
 			$strReturn .= $this->objToolkit->formClose();
 
 			if($this->getParam("datei_upload_final") != "") {

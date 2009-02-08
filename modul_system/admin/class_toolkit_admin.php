@@ -493,6 +493,7 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strName
      * @param string $strTitle
+     * @param bool $bitMultiple
      * @param string $strClass
      * @return string
      */
@@ -523,10 +524,12 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strName
      * @param string $strTitle
-     * @param string $strClass
+     * @param string $strAllowedFileTypes
+     * @param bool $bitMultiple
+     * @param bool $bitFallback
      * @return string
      */
-    public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false) {
+    public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
@@ -582,9 +585,13 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["modalDialog"] = $this->jsDialog($objText->getText("upload_multiple_dialogHeader", "filemanager", "admin"), 0);
 		
 		//Fallback code if no or old Flash Player available
-		$strFallbackForm = $this->formInputUpload($strName, $strTitle, $bitMultiple);
-		$strFallbackForm .= $this->formInputSubmit($objText->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
-		$arrTemplate["fallbackContent"] = $strFallbackForm;
+		if ($bitFallback) {
+			$strFallbackForm = $this->formInputUpload($strName, $strTitle, $bitMultiple);
+			$strFallbackForm .= $this->formInputSubmit($objText->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
+			$arrTemplate["fallbackContent"] = $strFallbackForm;
+		} else {
+		    $arrTemplate["fallbackContent"] = $objText->getText("upload_multiple_errorFlash", "filemanager", "admin");
+		}
 		
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}

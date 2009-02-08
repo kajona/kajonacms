@@ -41,8 +41,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
                 $objRepo->setStrName("Picture uploads");
 
             $objRepo->setStrPath("/portal/pics/upload");
-            $objRepo->setStrUploadFilter(".jpg,.gif,.png");
-            $objRepo->setStrViewFilter(".jpg,.gif,.png");
+            $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
+            $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
             $objRepo->saveObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
             

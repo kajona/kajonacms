@@ -104,8 +104,9 @@ $lang["upload_erfolg"]                   = "File was uploaded successfully<br />
 $lang["upload_fehler"]                   = "An error occured while uploading file<br />";
 $lang["upload_fehler_filter"]            = "The uploaded file type is not allowed<br />";
 $lang["upload_multiple_cancel"]          = "Cancel";
-$lang["upload_multiple_dialogHeader"]    = "";
+$lang["upload_multiple_dialogHeader"]    = "Upload files";
 $lang["upload_multiple_errorFilesize"]   = "The marked files can't be uploaded due to their file size.<br />The maximum file size is:";
+$lang["upload_multiple_errorFlash"]      = "Please install <a href=\"http://get.adobe.com/en/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> >= Version 9 to use the comfortable file upload.<br />Alternatively you can use \"Filemanager\" in the top navigation.";
 $lang["upload_multiple_totalFilesAndSize"] = "file(s) with a total of";
 $lang["upload_multiple_uploadFiles"]     = "Upload file(s)";
 $lang["upload_submit"]                   = "Upload";

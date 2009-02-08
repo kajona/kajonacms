@@ -1185,6 +1185,7 @@ div.percentBeam {
 	width: 315px;
 	margin-top: 2px;
 	background-color: #c2c2c2;
+	padding: 0;
 }
 
 .kajonaUploadFilesList .progressBar div {
@@ -1230,10 +1231,6 @@ div.percentBeam {
 	height:73px;
 }
 
-.dialog .ft .c {
-	height:73px;
-}
-
 .dialog .hd {
 	background:transparent url(dialog_corners.png) no-repeat left top;
 	margin-right:73px; /* space for right corner */
@@ -1274,6 +1271,56 @@ div.percentBeam {
 .dialog .inputSubmit {
 	margin-right: 20px;
 }
+
+/* IE6 fixes for dialog*/
+* html .dialog {
+	background-color: #ffffff;
+	border: 2px solid #00e800;
+}
+
+* html .dialog .hd .c,
+* html .dialog .ft .c {
+	height:auto;
+}
+
+* html .dialog .hd {
+	background-image: none;
+	margin-right:0px; /* space for right corner */
+}
+
+* html .dialog .hd .c {
+	background-image: none;
+	margin-right:0px; /* pull right corner back over "empty" space (from above margin) */
+}
+
+* html .dialog .hd .c h3 {
+	padding-top: 5px;
+	padding-bottom: 10px;
+}
+
+* html .dialog .bd {
+	background-image: none;
+ 	margin-right:0px;
+}
+
+* html .dialog .bd .c {
+	background-image: none;
+	margin:0px 10px 10px 10px;
+	padding-right: 0px;
+	padding-bottom: 20px;
+}
+
+* html .dialog .ft {
+	background-image: none;
+	margin-right:0px;
+}
+
+* html .dialog .ft .c {
+	background-image: none;
+	background-color: #ffffff;
+	margin-right:0px;
+}
+
 
 .yui-overlay,
 .yui-panel-container {
