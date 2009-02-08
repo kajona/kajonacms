@@ -358,6 +358,7 @@ class class_db_mysqli implements interface_db_driver {
 		//Now do a systemfork
 		$intTemp = "";
 		$strResult = system($strCommand, $intTemp);
+        class_logger::getInstance()->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
         return $intTemp == 0;
     }
 
@@ -378,6 +379,7 @@ class class_db_mysqli implements interface_db_driver {
         $strCommand = $this->strRestoreBin." -h".$this->strHost." -u".$this->strUsername.$strParamPass." -P".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
+        class_logger::getInstance()->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
     }
 
