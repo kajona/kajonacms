@@ -339,8 +339,11 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
-                    if($objOneFile->getType() == 0 && $this->objRights->rightDelete($objOneFile->getSystemid())) {
-                        $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
+                    if($this->objRights->rightDelete($objOneFile->getSystemid())) {
+                        if($objOneFile->getType() == 0)
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
+                        else
+                            $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", ""));
                     }
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
