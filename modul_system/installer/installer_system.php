@@ -43,10 +43,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		parent::__construct($arrModul);
 		
 		//set the correct language
-		if($this->objSession->getAdminLanguage() == "en")
-		    $this->strContentLanguage = "en";
-		else
-		    $this->strContentLanguage = "de";
+		$this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
 
 

@@ -26,6 +26,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
     private $strIndexID = "";
 
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["version"] 		  = "3.1.9";
 		$arrModule["name"] 			  = "samplecontent";
 		$arrModule["class_admin"]  	  = "";
@@ -39,11 +40,8 @@ class class_installer_samplecontent extends class_installer_base implements inte
 		parent::__construct($arrModule);
 
 		//set the correct language
-		if($this->objSession->getAdminLanguage() == "en")
-		    $this->strContentLanguage = "en";
-		else
-		    $this->strContentLanguage = "de";
-		    
+        $this->strContentLanguage = $this->objSession->getAdminLanguage();
+        
 	}
 
 	public function getNeededModules() {
