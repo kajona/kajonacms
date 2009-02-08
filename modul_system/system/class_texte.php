@@ -17,14 +17,22 @@ class class_texte {
 	private $arrModul;
 
 	/**
-	 * This is the default language. Set to other languages as you like
+	 * This is the default language. 
 	 *
 	 * @var string
 	 */
 	private $strLanguage = "";
 
-	private $strFallbackLanguage = "de";
+	private $strFallbackLanguage = "en";
 	private $arrTexts;
+
+    /**
+     * Used to keep placeholders loaded from the fallback lang-file.
+     * Only used, if the file itself exists in the target-language but misses a placeholder!
+     * @var array
+     */
+    private $arrFallbackTextEntrys = array();
+
 
 	private static $objText = null;
 
@@ -92,12 +100,48 @@ class class_texte {
 			$strReturn = $this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText];
 		}
 		else {
-			$strReturn = "!".$strText."!";
+            //Try to find the text using the fallback language
+            $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
 		}
 
 		return $strReturn;
 	}
 
+
+    private function loadFallbackPlaceholder($strModule, $strArea, $strText) {
+        $strReturn = "";
+
+        if(isset($this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText])) {
+            $strReturn = $this->arrTexts[$strArea.$this->strFallbackLanguage][$strModule][$strText];
+        }
+        else {
+            //try to load the fallback-files
+            include_once(_systempath_."/class_filesystem.php");
+            $objFilesystem = new class_filesystem();
+            //load files
+            $arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
+            if(is_array($arrFiles)) {
+                foreach($arrFiles as $strFile) {
+                    $lang = array();
+                    $strTemp = str_replace(".php", "", $strFile);
+                    $arrName = explode("_", $strTemp);
+
+                    if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
+                        $bitFileMatched = true;
+                        $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrFallbackTextEntrys);
+
+                    }
+                }
+            }
+            if(isset($this->arrFallbackTextEntrys[$strArea.$this->strFallbackLanguage][$strModule][$strText])) {
+                $strReturn = $this->arrFallbackTextEntrys[$strArea.$this->strFallbackLanguage][$strModule][$strText];
+            }
+            else
+                $strReturn = "!".$strText."!";
+        }
+
+        return $strReturn;
+    }
 
 
 	/**
@@ -123,42 +167,48 @@ class class_texte {
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
-			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
-			 		
-			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
-			 		    $this->arrTexts[$strArea.$this->strLanguage] = array();
-                    
-			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $lang);
-			 		else
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $lang;
+                    $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strLanguage, $this->arrTexts);
                     
 			 	}
 			}
 			if($bitFileMatched)
 		        return true;
 
-			//if we reach up here, no matching file was found. search for fallback file
+			//if we reach up here, no matching file was found. search for fallback file (fallback language)
 			foreach($arrFiles as $strFile) {
 				$lang = array();
 				$strTemp = str_replace(".php", "", $strFile);
 			 	$arrName = explode("_", $strTemp);
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
-			 		include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+                    $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrTexts);
                     
-			 		if(!isset($this->arrTexts[$strArea.$this->strLanguage]))
-                        $this->arrTexts[$strArea.$this->strLanguage] = array();
-                        
-			 		if(isset($this->arrTexts[$strArea.$this->strLanguage][$strModule]))
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = array_merge($this->arrTexts[$strArea.$this->strLanguage][$strModule], $lang);
-			 		else
-			 			$this->arrTexts[$strArea.$this->strLanguage][$strModule] = $lang;
-
 			 	}
 			}
 		}
 	}
+
+    /**
+     * Includes the file from the filesystem and merges the contents to the passed array.
+     * NOTE: this array is used as a reference!!!
+     * @param string $strArea
+     * @param string $strModule
+     * @param string $strFile
+     * @param string $strLanguage
+     * @param array $arrTargetArray
+     */
+    private function loadAndMergeTextfile($strArea, $strModule, $strFile, $strLanguage, &$arrTargetArray) {
+        $lang = array();
+        include_once(_langpath_."/".$strArea."/modul_".$strModule."/".$strFile);
+
+        if(!isset($arrTargetArray[$strArea.$strLanguage]))
+            $arrTargetArray[$strArea.$strLanguage] = array();
+
+        if(isset($arrTargetArray[$strArea.$strLanguage][$strModule]))
+            $arrTargetArray[$strArea.$strLanguage][$strModule] = array_merge($arrTargetArray[$strArea.$strLanguage][$strModule], $lang);
+        else
+            $arrTargetArray[$strArea.$strLanguage][$strModule] = $lang;
+    }
 
 
 	/**
