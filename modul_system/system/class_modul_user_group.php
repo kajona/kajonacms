@@ -1,4 +1,4 @@
-<?php
+#<?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
@@ -26,6 +26,7 @@ class class_modul_user_group extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_user";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _user_modul_id_;
@@ -85,18 +86,34 @@ class class_modul_user_group extends class_model implements interface_model  {
     /**
 	 * Returns all groups from database
 	 *
+     * @param int $intStart
+     * @param int $intEnd
 	 * @return array of class_modul_user_group
 	 * @static
 	 */
-	public static function getAllGroups() {
+	public static function getAllGroups($intStart = false, $intEnd = false) {
 		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group";
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_group($arrOneId["group_id"]);
 
 		return $arrReturn;
 	}
+
+    /**
+     * Fetches the number of groups available
+     * @return int
+     */
+    public static function getNumberOfGroups() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user_group";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        return $arrRow["COUNT(*)"];
+    }
 
 	/**
 	 * Gets all Members off the specified group

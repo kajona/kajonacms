@@ -31,6 +31,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 */
     public function __construct() {
+        $arrModul = array();
         $arrModul["name"] 			= "modul_user";
         $arrModul["author"] 		= "sidler@mulchprod.de";
         $arrModul["moduleId"] 		= _user_modul_id_;
@@ -196,8 +197,20 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     private function actionList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            include_once(_systempath_."/class_array_section_iterator.php");
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers());
+            $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setArraySection(class_modul_user_user::getAllUsers($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+    		$arrUsers = $objArraySectionIterator->getArrayExtended();
+    		$arrPageViews = $this->objToolkit->getPageview($arrUsers, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "list", "", _admin_nr_of_rows_);
+            $arrUsers = $arrPageViews["elements"];
+            
             $strReturn = $this->objToolkit->listHeader();
-            $arrUsers = class_modul_user_user::getAllUsers();
+
+            
             $intI = 0;
             foreach ($arrUsers as $objOneUser) 	{
                 $strActions = "";
@@ -221,7 +234,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             //And one row to create a new one
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                 $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_blank.gif")), "", $intI++);
-            $strReturn .= $this->objToolkit->listFooter();
+            $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
         $strReturn .= $this->getText("fehler_recht");
@@ -592,8 +605,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     private function actionGroupList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            include_once(_systempath_."/class_array_section_iterator.php");
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getNumberOfGroups());
+            $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+            $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+            $objArraySectionIterator->setArraySection(class_modul_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+    		$arrGroups = $objArraySectionIterator->getArrayExtended();
+    		$arrPageViews = $this->objToolkit->getPageview($arrGroups, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "grouplist", "", _admin_nr_of_rows_);
+            $arrGroups = $arrPageViews["elements"];
+            
             $strReturn = $this->objToolkit->listHeader();
-            $arrGroups = class_modul_user_group::getAllGroups();
+
             $intI = 0;
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
@@ -615,7 +639,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
             $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_blank.gif"), $intI++);
-            $strReturn .= $this->objToolkit->listFooter();
+            $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
         $strReturn .= $this->getText("fehler_recht");

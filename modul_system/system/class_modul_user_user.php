@@ -189,11 +189,18 @@ class class_modul_user_user extends class_model implements interface_model  {
     /**
      * Fetches all available users an returns them in an array
      *
+     * @param int $intStart
+     * @param int $intEnd
      * @return mixed
      */
-    public static function getAllUsers() {
+    public static function getAllUsers($intStart = false, $intEnd = false) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user ORDER BY user_username ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
@@ -218,6 +225,16 @@ class class_modul_user_user extends class_model implements interface_model  {
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"], true);
 
 		return $arrReturn;
+    }
+
+    /**
+     * Counts the number of users created
+     * @return int
+     */
+    public static function getNumberOfUsers() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user ";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+		return $arrRow["COUNT(*)"];
     }
 
     /**
