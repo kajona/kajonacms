@@ -1172,6 +1172,7 @@ div.percentBeam {
 .kajonaUploadFilesList .filename {
 	width: 260px;
 	float: left;
+	white-space: nowrap;
 }
 
 .kajonaUploadFilesList .progress {

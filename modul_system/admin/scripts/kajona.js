@@ -87,7 +87,7 @@ function addCss(file) {
 	l.load();
 }
 
-function addDownloadInput(idOfPrototype, nameOfCounterId) {
+function addUploadInput(idOfPrototype, nameOfCounterId) {
 	// load inner html of prototype
 	var uploadForm = document.getElementById(idOfPrototype).innerHTML;
 
@@ -598,6 +598,8 @@ function KajonaUploader(config) {
 
 		YAHOO.util.Event
 				.onDOMReady( function() {
+					document.getElementById('kajonaUploadButtonsContainer').style.display = 'block';
+
 					var uiLayer = YAHOO.util.Dom
 							.getRegion(self.config['selectLinkId']);
 					var overlay = YAHOO.util.Dom
@@ -627,14 +629,16 @@ function KajonaUploader(config) {
 	this.onFileSelect = function(event) {
 		self.fileList = event.fileList;
 
-		jsDialog_0
-				.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
+		
+
+		jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
 		document.getElementById('kajonaUploadDialog').innerHTML = '';
+		
+		self.createFileList();
+		
 		jsDialog_0.init();
 		YAHOO.util.Dom.setStyle(YAHOO.util.Dom.get('kajonaUploadDialog'),
 				'display', "block");
-
-		self.createFileList();
 	}
 
 	this.createFileList = function() {
@@ -668,7 +672,7 @@ function KajonaUploader(config) {
 				var filename = YAHOO.util.Dom.getElementsByClassName(
 						'filename', 'div', listElement)[0];
 
-				filename.innerHTML = entry['name'].substring(0, 40) + (entry['name'].length > 40 ? "...":"") + " ("+self.bytesToString(entry['size'])+")";
+				filename.innerHTML = entry['name'].substring(0, 30) + (entry['name'].length > 30 ? "...":"") + " ("+self.bytesToString(entry['size'])+")";
 				
 				//check if file size exceeds upload limit
 				if (entry['size'] > self.config['maxFileSize']) {
@@ -732,7 +736,16 @@ function KajonaUploader(config) {
 
 		//reload page if all files are uploaded
 		if (self.fileCount == self.fileCountUploaded) {
+			self.onUploadCompleteAll();
+		}
+	}
+
+	this.onUploadCompleteAll = function() {
+		//check if callback method is available
+		if (!YAHOO.lang.isFunction("kajonaUploaderCallback")) {
 			location.reload();
+		} else {
+			kajonaUploaderCallback();
 		}
 	}
 

@@ -480,34 +480,23 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 	
-				$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objFmRepo->getStrUploadFilter());
-				$arrTexts = array(
-					"upload_fehler_filter" =>  $this->getText("upload_fehler_filter", "filemanager"),
-					"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles", "filemanager"),
-					"upload_multiple_cancel" => $this->getText("upload_multiple_cancel", "filemanager")
-				);
-	
-				$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, "", $arrTexts);
+	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
 				
 				$strReturn .= "<script type=\"text/javascript\">
-				 function registerSucessMethod() {
-                   uploader.onAllUploadsComplete = function() {
-                     
-                     kajonaAdminAjax.genericAjaxCall('gallery', 'massSyncGallery', '', {
-                            success : function(o) {
-                                location.reload(true);
-                            },
-                            failure : function(o) {
-                                kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
-                                        + o.responseText);
-                            }
-                        }
-                    );
-                   }
-                 }
-                 kajonaAjaxHelper.loadUploaderBase(registerSucessMethod);
-                 
+					function kajonaUploaderCallback() {
+						kajonaAdminAjax.genericAjaxCall('gallery', 'massSyncGallery', '', {
+							success : function(o) {
+								location.reload();
+							},
+							failure : function(o) {
+								kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\" + o.responseText);
+							}
+						}
+						);
+					}
                 </script>";
+				
+				$strReturn .= "<br />";
             }
              
 

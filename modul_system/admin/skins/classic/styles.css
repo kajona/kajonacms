@@ -636,6 +636,73 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	background-color: #CFD0FF;
 }
 
+
+/* F L A S H U P L O A D */
+.kajonaUploadFilesContainer {
+	max-height: 245px;
+	overflow-y: auto;
+}
+
+.kajonaUploadFilesList {
+	margin: 0;
+	padding: 0;
+}
+
+.kajonaUploadFilesList li {
+	width: 315px;
+	background-color: #f0f0f0;
+	padding: 5px;
+	margin: 0 0 5px 0;
+	list-style-type: none;
+}
+
+#kajonaUploadFileSample {
+	display: none;
+}
+
+.kajonaUploadFilesList .filename {
+	width: 260px;
+	float: left;
+	white-space: nowrap;
+}
+
+.kajonaUploadFilesList .progress {
+	margin-left: 260px;
+	text-align: right;
+}
+
+.kajonaUploadFilesList .progressBar {
+	height: 4px;
+	width: 315px;
+	margin-top: 2px;
+	background-color: #c2c2c2;
+}
+
+.kajonaUploadFilesList .progressBar div {
+	height: 4px;
+	background-color: #00e800;
+}
+
+.kajonaUploadFilesList li.active {
+	background-color: #c4f3c4;
+	color: #000000;
+}
+
+.kajonaUploadFilesList li.error {
+	background-color: #ffcccc;
+	color: #000000;
+}
+
+.kajonaUploadFilesList li.error .progress, .kajonaUploadFilesList li.error .progressBar div {
+	visibility: hidden;
+}
+
+.kajonaUploadError {
+	font-weight: bold;
+	color: #ff0000;
+}
+
+
 .dashBoard {
 	border: none;
 	width: 100%;

@@ -496,25 +496,26 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
+    public function formInputUpload($strName, $strTitle = "", $bitMultiple = false, $strClass = "inputText") {
+        $strReturn = "";
+        
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["title"] = $strTitle;
 		$arrTemplate["class"] = $strClass;
-		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-	}
-	
-    /**
-     * Returns a input-file element for a single file upload with progress bar
-     *
-     * @param string $strName
-     * @param string $strTitle
-     * @param string $strClass
-     * @return string
-     */
-    public function formInputUploadFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts) {
-		return formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, false);
+		
+		$objText = class_carrier::getInstance()->getObjText();
+		$arrTemplate["maxSize"] = $objText->getText("max_size", "filemanager", "admin")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
+
+		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		
+		if ($bitMultiple) {
+		    $strReturn = "<div id=\"upload_prototype\" style=\"display: inline;\">".$strReturn."</div>";
+		    $strReturn .= "<a href=\"#\" onclick=\"javascript:addUploadInput('upload_prototype', '".$strName."'); return false;\" >".$objText->getText("add_upload_field", "filemanager", "admin")."</a>";
+		}
+		
+		return $strReturn;
 	}
 	
     /**
@@ -525,16 +526,13 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUploadMultipleFlash($strName, $strAllowedFileTypes, $strFallbackContent, $arrTexts, $bitMultiple = true) {
+    public function formInputUploadFlash($strName, $strTitle = "", $strAllowedFileTypes, $bitMultiple = false) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
-		$arrTemplate["fallbackContent"] = $strFallbackContent;
-		
-		$arrTemplate["modalDialog"] = $this->jsDialog("Upload", 0);
-		
-		//create valid input-name element. no array needed!
-    	$strFieldName = preg_replace("/\[[0-9]\]/", "", $strName);
-		
+        $arrTemplate["title"] = $strTitle;
+        
+        $strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $strAllowedFileTypes);
+
 		$objConfig = class_config::getInstance();
 		
 		$arrTemplate["javascript"] = "
@@ -542,6 +540,8 @@ class class_toolkit_admin extends class_toolkit {
 				var uploader;
 				
 				function initUploader() {
+					window.setTimeout('checkUploader()', 50);
+					
 					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\"; 
 					uploader = new KajonaUploader({
 						\"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
@@ -555,17 +555,35 @@ class class_toolkit_admin extends class_toolkit {
 						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
 									          \"folder\" : document.getElementById(\"flashuploadFolder\").value,
-		                                      \"inputElement\" : \"".$strFieldName."\"},
+		                                      \"inputElement\" : \"".preg_replace("/\[[0-9]\]/", "", $strName)."\"}, //create valid input-name element. no array needed!
 		                \"uploadInputName\": \"".$strName."\"
 					});
 					uploader.init();				
 			    }
 			    kajonaAjaxHelper.loadUploaderBase(initUploader);
+			    
+			    function checkUploader() {
+			    	if (uploader.uploader == undefined) {
+    					document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
+						document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
+    				}
+    			}
 			</script>";
-
-		foreach ($arrTexts as $arrKey => $strValue) {
-			$arrTemplate[$arrKey] = $strValue;
-		}
+        
+		$objText = class_carrier::getInstance()->getObjText();
+		$arrTemplate["upload_fehler_filter"] = $objText->getText("upload_fehler_filter", "filemanager", "admin");
+		$arrTemplate["upload_multiple_uploadFiles"] = $objText->getText("upload_multiple_uploadFiles", "filemanager", "admin");
+		$arrTemplate["upload_multiple_cancel"] = $objText->getText("upload_multiple_cancel", "filemanager", "admin");
+		$arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getText("upload_multiple_totalFilesAndSize", "filemanager", "admin");
+		$arrTemplate["upload_multiple_errorFilesize"] = $objText->getText("upload_multiple_errorFilesize", "filemanager", "admin")." ".bytesToString($objConfig->getPhpMaxUploadSize());
+		
+		$arrTemplate["modalDialog"] = $this->jsDialog($objText->getText("upload_multiple_dialogHeader", "filemanager", "admin"), 0);
+		
+		//Fallback code if no or old Flash Player available
+		$strFallbackForm = $this->formInputUpload($strName, $strTitle, $bitMultiple);
+		$strFallbackForm .= $this->formInputSubmit($objText->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
+		$arrTemplate["fallbackContent"] = $strFallbackForm;
+		
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 

@@ -402,7 +402,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					   $bitImage = true;
 					
 					//Filename too long?
-					$strFilename = uniStrTrim($strFilename, 40);
+					$strFilename = uniStrTrim($strFilename, 35);
 
 					$strActions = "";
 					if(!$bitImage)
@@ -756,26 +756,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			
 			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
-			$strReturn .= $this->objToolkit->formTextRow($this->getText("max_size").bytesToString($this->objConfig->getPhpMaxUploadSize()));
-			
-			//Fallback code if no or old Flash Player available
-			$strFallbackForm = "<div id=\"upload_prototype\" style=\"display: inline;\">";
-			$strFallbackForm .= $this->objToolkit->formInputUpload("filemanager_upload[0]", $this->getText("filemanager_upload"));
-			$strFallbackForm .= "</div>";
-			$strFallbackForm .= $this->objToolkit->formTextRow("<a href=\"javascript:addDownloadInput('upload_prototype', 'filemanager_upload');\" >".$this->getText("add_upload_field")."</a>");
-			$strFallbackForm .= $this->objToolkit->formInputSubmit($this->getText("upload_submit"));
-			
-			$strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $objRepo->getStrUploadFilter());
-
-			$arrTexts = array(
-				"upload_fehler_filter" =>  $this->getText("upload_fehler_filter"),
-				"upload_multiple_uploadFiles" => $this->getText("upload_multiple_uploadFiles"),
-				"upload_multiple_cancel" => $this->getText("upload_multiple_cancel"),
-				"upload_multiple_totalFilesAndSize" => $this->getText("upload_multiple_totalFilesAndSize"),
-				"upload_multiple_errorFilesize" => $this->getText("upload_multiple_errorFilesize")." ".bytesToString($this->objConfig->getPhpMaxUploadSize())
-			);
-			
-			$strReturn .= $this->objToolkit->formInputUploadMultipleFlash("filemanager_upload[0]", $strAllowedFileTypes, $strFallbackForm, $arrTexts);
+		
+			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true);
 			$strReturn .= $this->objToolkit->formClose();
 
 			if($this->getParam("datei_upload_final") != "") {

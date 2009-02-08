@@ -225,7 +225,7 @@ Checkbox
 
 Regular Hidden-Field
 <input_hidden>
-	<input name="%%name%%" type="hidden" id="hidden_%%name%%" value="%%value%%" />
+	<input name="%%name%%" type="hidden" id="%%name%%" value="%%value%%" />
 </input_hidden>
 
 Regular Text-Field
@@ -263,7 +263,7 @@ Upload-Field
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /></td>
+		<td><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /> (%%maxSize%%)</td>
 	</tr>
 </table>
 </input_upload>
@@ -271,7 +271,40 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
 	%%javascript%%
-	TODO!
+	
+	<div style="display:inline;">
+			<div id="kajonaUploadButtonsContainer" style="display: none;">
+				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
+				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
+			</div>
+	</div>
+	
+	%%modalDialog%%
+
+	<div id="kajonaUploadDialog" style="display: none;">
+		<div class="kajonaUploadFilesContainer">
+			<ul id="kajonaUploadFiles" class="kajonaUploadFilesList">
+				<li id="kajonaUploadFileSample">
+					<div>
+						<div class="filename"></div>
+						<div class="progress">&nbsp;</div>
+						<div class="clearer"></div>
+					</div>
+					<div class="progressBar"></div>
+				</li>
+			</ul>
+		</div>
+		<br />
+		<span id="kajonaUploadFilesTotal"></span> %%upload_multiple_totalFilesAndSize%% <span id="kajonaUploadFilesTotalSize"></span>
+		<br /><br />
+		<div id="kajonaUploadError" class="kajonaUploadError" style="display: none;">%%upload_multiple_errorFilesize%%<br /><br /></div>
+		<input type="submit" name="kajonaUploadUploadLink" id="kajonaUploadUploadLink" value="%%upload_multiple_uploadFiles%%" class="inputSubmit" /> <input type="submit" name="kajonaUploadCancelLink" id="kajonaUploadCancelLink" value="%%upload_multiple_cancel%%" class="inputSubmit" />
+		<br />
+	</div>
+	
+	<div id="kajonaUploadFallbackContainer" style="display: none;">
+		%%fallbackContent%%
+	</div>
 </input_uploadFlash>
 
 Regular Submit-Button
@@ -929,10 +962,10 @@ The language switch sourrounds the buttons
 <dialogContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="dialogHeader">
 		<div class="dialogHeaderTitle">%%dialog_name%%</div>
-		<div class="dialogHeaderActions"><a class="container-close" href="javascript:%%dialog_var%%.hide();">[X]</a></div>
+		<div class="dialogHeaderActions"></div>
 		<div style="clear: both;"></div>
 	</div>
-	<div class="dialogContent">%%dialog_content%%</div>
+	<div class="dialogContent" id="%%dialog_id%%_content"><!-- filled by js --></div>
 </div></dialogContainer>
 
 <dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%" onmousedown="return false;">

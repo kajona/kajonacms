@@ -233,7 +233,7 @@ Regular Password-Field
 
 Upload-Field
 <input_upload>
-	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /></div><br />
+	<div><label for="%%name%%">%%title%% </label><input name="%%name%%" type="file" id="%%name%%" class="%%class%%" /> (%%maxSize%%)</div><br />
 </input_upload>
 
 Upload-Field for multiple files with progress bar
@@ -241,7 +241,7 @@ Upload-Field for multiple files with progress bar
 	%%javascript%%
 	
 	<div style="display:inline;">
-			<div id="kajonaUploadButtonsContainer">
+			<div id="kajonaUploadButtonsContainer" style="display: none;">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>

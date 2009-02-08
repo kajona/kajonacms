@@ -81,7 +81,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
                         $strTitle = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                         $strLink = (isset($arrOneItem["link"][0]["value"]) ? $arrOneItem["link"][0]["value"] : "");
                         
-                        $strReturn .= $this->widgetText("<a href=\"".$strLink."\">".$strTitle."</a>");
+                        $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
                                                 
                         if(++$intCounter >= $this->getFieldValue("posts"))
@@ -98,7 +98,7 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
                         $strTitle = (isset($arrOneItem["title"][0]["value"]) ? $arrOneItem["title"][0]["value"] : "");
                         $strLink = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");
             
-                        $strReturn .= $this->widgetText("<a href=\"".$strLink."\">".$strTitle."</a>");
+                        $strReturn .= $this->widgetText("<a href=\"".$strLink."\" target=\"_blank\">".$strTitle."</a>");
                         $strReturn .= $this->widgetSeparator();
                         
                         if(++$intCounter >= $this->getFieldValue("posts"))
