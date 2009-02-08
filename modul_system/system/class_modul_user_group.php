@@ -119,20 +119,43 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 * Gets all Members off the specified group
 	 *
 	 * @param string $strGroupId
+     * @param int $intStart
+     * @param int $intEnd
 	 * @return mixed array of user-objects
 	 * @static
 	 */
-	public static function getGroupMembers($strGroupId) {
+	public static function getGroupMembers($strGroupId, $intStart = false, $intEnd = false) {
 		$strQuery = "SELECT user_id FROM "._dbprefix_."user,
 									"._dbprefix_."user_group_members
 								WHERE group_member_group_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strGroupId)."'
 									AND user_id = group_member_user_id";
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+        if($intStart !== false && $intEnd !== false)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
 
 		return $arrReturn;
+	}
+
+    /**
+	 * Gets the number of members of a group
+	 *
+	 * @param string $strGroupId
+	 * @return mixed array of user-objects
+	 * @static
+	 */
+	public static function getGroupMembersCount($strGroupId) {
+		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user,
+									"._dbprefix_."user_group_members
+								WHERE group_member_group_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strGroupId)."'
+									AND user_id = group_member_user_id";
+		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        return $arrRow["COUNT(*)"];
 	}
 
 	/**

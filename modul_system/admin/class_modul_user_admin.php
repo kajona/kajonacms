@@ -742,8 +742,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             if($this->getParam("groupid") != "") {
             	$objGroup = new class_modul_user_group($this->getParam("groupid"));
             	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
-            	
-                $arrMembers = class_modul_user_group::getGroupMembers($this->getParam("groupid"));
+
+
+
+                include_once(_systempath_."/class_array_section_iterator.php");
+                $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getGroupMembersCount($this->getParam("groupid")));
+                $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+                $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+                $objArraySectionIterator->setArraySection(class_modul_user_group::getGroupMembers($this->getParam("groupid"), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+                $arrMembers = $objArraySectionIterator->getArrayExtended();
+                $arrPageViews = $this->objToolkit->getPageview($arrMembers, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "groupmember", "groupid=".$this->getParam("groupid"), _admin_nr_of_rows_);
+                $arrMembers = $arrPageViews["elements"];
+
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach ($arrMembers as $objSingleMember) {
@@ -752,7 +763,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                                  ,getLinkAdminHref($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
-                $strReturn .= $this->objToolkit->listFooter();
+                $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
             }
         }
         else
