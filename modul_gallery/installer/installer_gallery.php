@@ -20,6 +20,7 @@ require_once(_systempath_."/class_modul_filemanager_repo.php");
 class class_installer_gallery extends class_installer_base implements interface_installer {
 
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["class_admin"] 	= "class_modul_gallery_admin";

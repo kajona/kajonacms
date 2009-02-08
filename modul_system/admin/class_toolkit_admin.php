@@ -526,12 +526,14 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUploadFlash($strName, $strTitle = "", $strAllowedFileTypes, $bitMultiple = false) {
+    public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false) {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
         
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $strAllowedFileTypes);
+        if($strAllowedFileTypes == "")
+            $strAllowedFileTypes = "*.*";
 
 		$objConfig = class_config::getInstance();
 		

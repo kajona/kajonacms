@@ -66,7 +66,7 @@ $lang["stats_toptitle"]             = "Top downloads";
 $lang["sync_add"]                   = "Added: ";
 $lang["sync_del"]                   = " Deleted: ";
 $lang["sync_upd"]                   = " Updated: ";
-
+$lang["hideSyncDialog"]             = "Close";
 
 
 $lang["datum"]                      = "Date:";

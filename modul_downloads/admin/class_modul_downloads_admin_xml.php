@@ -12,16 +12,16 @@
 include_once(_adminpath_."/class_admin.php");
 include_once(_adminpath_."/interface_xml_admin.php");
 //model
-include_once(_systempath_."/class_modul_gallery_pic.php");
-include_once(_systempath_."/class_modul_gallery_gallery.php");
+include_once(_systempath_."/class_modul_downloads_file.php");
+include_once(_systempath_."/class_modul_downloads_archive.php");
 
 /**
- * admin-class of the gallery-module
- * Serves xml-requests, e.g. syncing a gallery
+ * admin-class of the downloads-module
+ * Serves xml-requests, e.g. syncing an archive
  *
- * @package modul_gallery
+ * @package modul_downloads
  */
-class class_modul_gallery_admin_xml extends class_admin implements interface_xml_admin {
+class class_modul_downloads_admin_xml extends class_admin implements interface_xml_admin {
 
 	/**
 	 * Constructor
@@ -29,10 +29,10 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 	 */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 			= "modul_gallery";
+		$arrModul["name"] 			= "modul_downloads";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _bildergalerie_modul_id_;
-		$arrModul["modul"]			= "gallery";
+		$arrModul["moduleId"] 		= _downloads_modul_id_;
+		$arrModul["modul"]			= "downloads";
 
 		//base class
 		parent::__construct($arrModul);
@@ -46,10 +46,10 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 	 */
 	public function action($strAction) {
         $strReturn = "";
-        if($strAction == "syncGallery")
-            $strReturn .= $this->actionSyncGallery();
-        else if($strAction == "massSyncGallery")
-            $strReturn .= $this->actionMassSyncGallery();
+        if($strAction == "syncArchive")
+            $strReturn .= $this->actionSyncArchive();
+        else if($strAction == "massSyncArchive")
+            $strReturn .= $this->actionMassSyncArchive();
             
 
         return $strReturn;
@@ -59,26 +59,26 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 
 
 	/**
-	 * Syncs the gallery and creates a small report
+	 * Syncs the archive and creates a small report
 	 *
 	 * @return string
 	 */
-	private function actionSyncGallery() {
+	private function actionSyncArchive() {
 		$strReturn = "";
 		$strResult = "";
 		
-		$objGallery = new class_modul_gallery_gallery($this->getSystemid());
-        if($objGallery->rightRight1()) {
-            $arrSyncs = class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
+		$objArchive = new class_modul_downloads_archive($this->getSystemid());
+        if($objArchive->rightRight1()) {
+            $arrSyncs = class_modul_downloads_file::syncRecursive($objArchive->getSystemid(), $objArchive->getPath());
             $strResult .= $this->getText("syncro_ende");
             $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
             
-            $strReturn .= "<gallery>".xmlSafeString(strip_tags($strResult))."</gallery>";
+            $strReturn .= "<archive>".xmlSafeString(strip_tags($strResult))."</archive>";
         }
         else
             $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
 
-        class_logger::getInstance()->addLogRow("synced gallery ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);    
+        class_logger::getInstance()->addLogRow("synced archive ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
             
 		return $strReturn;
 	}
@@ -88,16 +88,16 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
      *
      * @return string
      */
-    private function actionMassSyncGallery() {
+    private function actionMassSyncArchive() {
         $strReturn = "";
         $strResult = "";
         
         //load all galleries
-        $arrGalleries = class_modul_gallery_gallery::getGalleries();
+        $arrArchives = class_modul_downloads_archive::getAllArchives();
         $arrSyncs = array( "insert" => 0, "delete" => 0, "update" => 0);
-        foreach($arrGalleries as $objOneGallery) {
-            if($objOneGallery->rightRight1()) {
-                $arrTemp = class_modul_gallery_pic::syncRecursive($objOneGallery->getSystemid(), $objOneGallery->getStrPath());
+        foreach($arrArchives as $objOneArchive) {
+            if($objOneArchive->rightRight1()) {
+                $arrTemp = class_modul_downloads_file::syncRecursive($objOneArchive->getSystemid(), $objOneArchive->getPath());
                 $arrSyncs["insert"] += $arrTemp["insert"];
                 $arrSyncs["delete"] += $arrTemp["delete"];
                 $arrSyncs["update"] += $arrTemp["update"];
@@ -106,10 +106,10 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
         $strResult = $this->getText("syncro_ende");
         $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
             
-        $strReturn .= "<gallery>".xmlSafeString(strip_tags($strResult))."</gallery>";
+        $strReturn .= "<archive>".xmlSafeString(strip_tags($strResult))."</archive>";
         
             
-        class_logger::getInstance()->addLogRow("mass synced galleries : ".$strResult, class_logger::$levelInfo);
+        class_logger::getInstance()->addLogRow("mass synced archives : ".$strResult, class_logger::$levelInfo);
         return $strReturn;
     }
 

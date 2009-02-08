@@ -80,9 +80,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     		    }
     		}
 
-    		if($strAction == "syncArchive")
-    			$strReturn = $this->actionSyncArchive();
-
     		if($strAction == "massSync")
     			$strReturn .= $this->actionMassSync();
 
@@ -175,18 +172,51 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 */
 	private function actionList() {
 		$strReturn = "";
+        $strJsSyncCode = "";
 		//Check rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Load archves
 			$arrObjArchives = class_modul_downloads_archive::getAllArchives();
 			$intI = 0;
+
+
+            
+			//initial js-code needed for common tasks
+			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
+			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
+			$strJsSyncCode .= "<script type=\"text/javascript\">
+                function archive_init_screenlock_dialog() { jsDialog_2.setContentRaw('<img src=\""._skinwebpath_."/loading.gif\" />'); jsDialog_2.init(); }
+                function archive_hide_screenlock_dialog() { jsDialog_2.hide(); }
+
+                function syncArchive(strSystemid) {
+                    archive_init_screenlock_dialog();
+
+                    kajonaAdminAjax.genericAjaxCall('downloads', 'syncArchive', strSystemid, {
+						    success : function(o) {
+						        archive_hide_screenlock_dialog();
+						        jsDialog_0.setContentRaw(o.responseText+'<br /><a href=\"javascript:jsDialog_0.hide();\">".$this->getText("hideSyncDialog")."</a>');
+						        jsDialog_0.init();
+						        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+						    },
+						    failure : function(o) {
+						        archive_hide_screenlock_dialog();
+						        kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
+						                + o.responseText);
+						    }
+						}
+					);
+                }
+            </script>";
+
+
 			foreach($arrObjArchives as $arrOneObjArchive) {
 				if($this->objRights->rightView($arrOneObjArchive->getSystemid())) {
 					$strAction = "";
 					if($this->objRights->rightView($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_anzeigen"), "icon_folderActionOpen.gif"));
-			   		if($this->objRights->rightRight1($arrOneObjArchive->getSystemid()))
-			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "syncArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_syncro"), "icon_sync.gif"));
+			   		if($this->objRights->rightRight1($arrOneObjArchive->getSystemid())) {
+                        $strAction .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:syncArchive('".$arrOneObjArchive->getSystemid()."');\"",  "", $this->getText("archiv_syncro"), "icon_sync.gif"));
+                    }
 			   		if($this->objRights->rightEdit($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editArchive", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_bearbeiten"), "icon_pencil.gif"));
 			   		if($this->objRights->rightDelete($arrOneObjArchive->getSystemid()))
@@ -208,7 +238,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		else
 			$strReturn = $this->getText("fehler_recht");
 
-		return $strReturn;
+		return $strReturn.$strJsSyncCode;
 	}
 
 	/**
@@ -223,6 +253,38 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		    $strListId = generateSystemid();
 		    //path navi
 		    $strReturn .= $this->generatePathnavi();
+
+            //Since we can crossreference the filemanager, provide an upload-form
+            $arrPath = $this->getPathArray();
+            $objTempFile = new class_modul_downloads_file($this->getSystemid());
+            $objFmRepo = class_modul_filemanager_repo::getRepoForForeignId($arrPath[0]);
+            $strFmFolder = substr($objTempFile->getFilename(), strpos($objTempFile->getFilename(), $objFmRepo->getStrPath()) + strlen($objFmRepo->getStrPath()));
+
+            //Build the upload form
+            if($objFmRepo->rightRight()) {
+				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
+				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
+
+	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
+
+				$strReturn .= "<script type=\"text/javascript\">
+					function kajonaUploaderCallback() {
+						kajonaAdminAjax.genericAjaxCall('downloads', 'massSyncArchive', '', {
+							success : function(o) {
+								location.reload();
+							},
+							failure : function(o) {
+								kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\" + o.responseText);
+							}
+						}
+						);
+					}
+                </script>";
+
+				$strReturn .= "<br />";
+            }
+
+
 			//Load files
 			$arrFiles = class_modul_downloads_file::getFilesDB($this->getSystemid());
 			$strReturn .= $this->objToolkit->dragableListHeader($strListId);
@@ -400,25 +462,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 // --- Synchronisierungsfunktionen ----------------------------------------------------------------------
 
-	/**
-	 * Starts the syncing of a archive
-	 *
-	 * @return string
-	 */
-	private function actionSyncArchive() {
-		$strReturn = "";
-		if($this->objRights->rightRight1($this->getSystemid())) {
-			//Load data
-			$objArchive = new class_modul_downloads_archive($this->getSystemid());
-			$arrSyncs = class_modul_downloads_file::syncRecursive($objArchive->getSystemid(), $objArchive->getPath());
-            $strReturn = $this->getText("syncro_ende");
-			$strReturn .= $this->objToolkit->getTextRow($this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"]);
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-		return $strReturn;
-	}
-
+	
 	/**
 	 * Synchronizes all archives available, if rights given
 	 *

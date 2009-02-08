@@ -153,13 +153,14 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 */
 	private function actionList() {
 		$strReturn = "";
+        $strJsSyncCode = "";
 		//Pruefen der Modul-Rechte
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Load galleries
 			$arrObjGalleries = class_modul_gallery_gallery::getGalleries();
 			$intI = 0;
 			
-			$strJsSyncCode = "";
+			
 			//initial js-code needed for common tasks
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
@@ -185,7 +186,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 						}
 					);
                 }
-            ";
+            </script>";
                    
 			
 			//Iterate over all galleries
@@ -197,9 +198,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_anzeigen"), "icon_folderActionOpen.gif"));
 			   		if($objOneGallery->rightRight1()) {
 			   			//snyc is allowed. create js-code for ajax-syncing
-			   			
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:syncGallery('".$objOneGallery->getSystemid()."');\"",  "", $this->getText("galerie_syncro"), "icon_sync.gif"));
-			   		    //$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "syncGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_syncro"), "icon_sync.gif"));
 			   		}
 			   		if($objOneGallery->rightEdit())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "editGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_bearbeiten"), "icon_pencil.gif"));
@@ -211,7 +210,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				}
 			}
 			
-			$strJsSyncCode .= " </script>";
+			
 			
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newGallery", "", $this->getText("galerie_neu"), $this->getText("galerie_neu"), "icon_blank.gif"), $intI++);

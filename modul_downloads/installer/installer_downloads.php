@@ -9,6 +9,8 @@
 
 require_once(_systempath_."/class_installer_base.php");
 require_once(_systempath_."/interface_installer.php");
+require_once(_systempath_."/class_modul_downloads_archive.php");
+require_once(_systempath_."/class_modul_filemanager_repo.php");
 
 /**
  * Installer to install the downloads-module
@@ -18,7 +20,8 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_downloads extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -95,7 +98,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true, "", "class_modul_downloads_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -180,6 +183,11 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_311_319();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -251,6 +259,38 @@ class class_installer_downloads extends class_installer_base implements interfac
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.1.9");
+
+        return $strReturn;
+    }
+
+    private function update_319_3195() {
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
+
+        $strReturn .= "Creating filemanager-repos for existing archives...\n";
+        $arrArchives = class_modul_downloads_archive::getAllArchives();
+        foreach($arrArchives as $objOneArchive) {
+            $strReturn .= "Investigating archive ".$objOneArchive->getTitle()."\n";
+            $objRepo = new class_modul_filemanager_repo();
+            $objRepo->setStrPath($objOneArchive->getPath());
+            $objRepo->setStrForeignId($objOneArchive->getSystemid());
+            $objRepo->setStrName("Internal Repo for DL-Archive ".$objOneArchive->getSystemid());
+            $objRepo->setStrViewFilter("");
+            $objRepo->setStrUploadFilter("");
+            $objRepo->saveObjectToDb();
+
+            $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
+        }
+
+        $strReturn .= "Registering xml-classes...\n";
+        $objModule = class_modul_system_module::getModuleByName("downloads", true);
+        $objModule->setStrXmlNameAdmin("class_modul_downloads_admin_xml.php");
+        if(!$objModule->updateObjectToDb())
+            $strReturn .= "An error occured!\n";
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.1.95");
 
         return $strReturn;
     }

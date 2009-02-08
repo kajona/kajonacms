@@ -10,6 +10,7 @@
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
 include_once(_systempath_."/class_modul_system_common.php");
+include_once(_systempath_."/class_modul_filemanager_repo.php");
 
 /**
  * Class to represent an archive, used to store download-files and folders
@@ -77,6 +78,16 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 
 		if($bitCommit) {
 		    $this->objDB->transactionCommit();
+
+            //archive was created, create an internal filemanager repo
+            $objRepo = new class_modul_filemanager_repo();
+            $objRepo->setStrPath($this->getPath());
+            $objRepo->setStrForeignId($this->getSystemid());
+            $objRepo->setStrName("Internal Repo for DL-Archive ".$this->getSystemid());
+            $objRepo->setStrViewFilter("");
+            $objRepo->setStrUploadFilter("");
+            $objRepo->saveObjectToDb();
+
 		    return true;
 		}
 		else {
@@ -172,7 +183,12 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	    $objRoot = new class_modul_system_common();
 	    if($objDB->_query($strQuery)) {
 	       if($objRoot->deleteSystemRecord($strSystemid)) {
-	           return true;
+               //and delete the filemanager repo
+                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($strSystemid);
+                if($objRepo->deleteRepo())
+                    return true;
+
+	           
 	       }
 	    }
 

@@ -742,11 +742,12 @@ function KajonaUploader(config) {
 
 	this.onUploadCompleteAll = function() {
 		//check if callback method is available
-		if (!YAHOO.lang.isFunction("kajonaUploaderCallback")) {
-			location.reload();
-		} else {
-			kajonaUploaderCallback();
-		}
+        try {
+            kajonaUploaderCallback();
+        }
+        catch (e) {
+            location.reload();
+        }
 	}
 
 	this.onUploadStart = function(event) {
