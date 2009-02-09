@@ -865,11 +865,10 @@ function filemanagerSaveCroppingToBackend() {
 		var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
 		var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
 
-		cropArea.left = cropArea.left * (intOriginalWidth / intScaledWidth);
-		cropArea.top = cropArea.top * (intOriginalHeigth / intScaledHeight);
-		cropArea.width = cropArea.width * (intOriginalWidth / intScaledWidth);
-		cropArea.height = cropArea.height
-				* (intOriginalHeigth / intScaledHeight);
+		cropArea.left = Math.floor(cropArea.left * (intOriginalWidth / intScaledWidth));
+		cropArea.top = Math.floor(cropArea.top * (intOriginalHeigth / intScaledHeight));
+		cropArea.width = Math.floor(cropArea.width * (intOriginalWidth / intScaledWidth));
+		cropArea.height = Math.floor(cropArea.height * (intOriginalHeigth / intScaledHeight));
 
 	}
 	kajonaAdminAjax.saveImageCropping(cropArea.left, cropArea.top,
