@@ -568,7 +568,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                         if($objOneFile->getIntType() == 0)
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                         else
-                            $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", ""));
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                     }
                     
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))

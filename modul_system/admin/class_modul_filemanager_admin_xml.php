@@ -57,12 +57,17 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $strReturn .= $this->actionRotateImage();
         elseif($strAction == "deleteFile")
             $strReturn .= $this->actionDeleteFile();
+        elseif($strAction == "deleteFolder")
+            $strReturn .= $this->actionDeleteFolder();
 
         return $strReturn;
 	}
 
 
-
+    /**
+     * Deletes the given file from the filesystem
+     * @return string
+     */
     private function actionDeleteFile() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
@@ -78,13 +83,45 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
 			else
                 $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
-
-
-
         }
         else
             $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
         
+
+        return $strReturn;
+    }
+
+    /**
+     * Deletes the given file from the filesystem
+     * @return string
+     */
+    private function actionDeleteFolder() {
+        $strReturn = "";
+        if($this->objRights->rightDelete($this->getSystemid())) {
+            //create repo-instance
+            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFolder = $this->getParam("folder");
+
+            //Delete from filesystem
+            $objFilesystem = new class_filesystem();
+
+            //check if folder is empty
+            $arrFilesSub = $objFilesystem->getCompleteList($objFmRepo->getStrPath()."/".$strFolder, array(), array(), array(".", ".."));
+            var_dump($objFmRepo->getStrPath()."/".$strFolder,$arrFilesSub);
+            if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
+                if($objFilesystem->folderDelete($objFmRepo->getStrPath()."/".$strFolder))
+                    $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
+                else
+                    $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
+            }
+            else {
+                $strReturn .= "<error>".xmlSafeString($this->getText("ordner_loeschen_fehler_l"))."</error>";
+            }
+
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
 
         return $strReturn;
     }

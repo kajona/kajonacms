@@ -585,6 +585,31 @@ var kajonaAdminAjax = {
                     kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
                 }
             });
+    },
+
+    deleteFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
+        kajonaAdminAjax.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
+                success : function(o) {
+                    //check if answer contains an error
+                    if(o.responseText.indexOf("<error>") != -1) {
+                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    }
+                    else {
+                        kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                                success : function(o) {
+                                    location.reload();
+                                },
+                                failure : function(o) {
+                                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                                }
+                            }
+                        );
+                    }
+                },
+                failure : function(o) {
+                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                }
+            });
     }
 
 };
