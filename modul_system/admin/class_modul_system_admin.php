@@ -33,6 +33,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"]		 		= "modul_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -636,6 +637,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part1"));
         $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part2"));
         $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part3"));
+        $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part4"));
         return $strReturn;
     }
 
