@@ -435,7 +435,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
         $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
         $strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
-        header("Refresh: 0; ".getLinkAdminHref($this->arrModule["modul"], "worker", "task=ip2c&totalCount=".$this->getParam("totalCount")));
+        header("Refresh: 0; ".uniStrReplace("&amp;", "&", getLinkAdminHref($this->arrModule["modul"], "worker", "task=ip2c&totalCount=".$this->getParam("totalCount"))));
 
 
         return $strReturn;
@@ -490,7 +490,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
         $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
         $strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
-        header("Refresh: 0; ".getLinkAdminHref($this->arrModule["modul"], "worker", "task=lookup&totalCount=".$this->getParam("totalCount")));
+        header("Refresh: 0; ".uniStrReplace("&amp;", "&", getLinkAdminHref($this->arrModule["modul"], "worker", "task=lookup&totalCount=".$this->getParam("totalCount"))));
 
 
         return $strReturn;
