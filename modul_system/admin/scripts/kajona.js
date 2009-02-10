@@ -87,29 +87,6 @@ function addCss(file) {
 	l.load();
 }
 
-function addUploadInput(idOfPrototype, nameOfCounterId) {
-	// load inner html of prototype
-	var uploadForm = document.getElementById(idOfPrototype).innerHTML;
-
-	// calc new counter
-	var counter = 0;
-	while (document.getElementById(nameOfCounterId + '[' + counter + ']') != null)
-		counter++;
-
-	// set new id
-	uploadForm = uploadForm.replace(
-			new RegExp(nameOfCounterId + '\\[0\\]', "g"), nameOfCounterId + '['
-					+ counter + ']');
-
-	// and place in document
-	var newNode = document.createElement("div");
-	newNode.setAttribute("style", "display: inline;");
-	newNode.innerHTML = uploadForm;
-
-	var protoNode = document.getElementById(idOfPrototype)
-	protoNode.parentNode.insertBefore(newNode, protoNode);
-
-}
 
 function inArray(needle, haystack) {
 	for ( var i = 0; i < haystack.length; i++) {

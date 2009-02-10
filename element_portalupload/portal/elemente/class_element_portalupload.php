@@ -27,6 +27,7 @@ class class_element_portalupload extends class_element_portal implements interfa
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_portalupload";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

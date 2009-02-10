@@ -497,7 +497,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function formInputUpload($strName, $strTitle = "", $bitMultiple = false, $strClass = "inputText") {
+    public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
         $strReturn = "";
         
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
@@ -511,10 +511,7 @@ class class_toolkit_admin extends class_toolkit {
 
 		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 		
-		if ($bitMultiple) {
-		    $strReturn = "<div id=\"upload_prototype\" style=\"display: inline;\">".$strReturn."</div>";
-		    $strReturn .= "<a href=\"#\" onclick=\"javascript:addUploadInput('upload_prototype', '".$strName."'); return false;\" >".$objText->getText("add_upload_field", "filemanager", "admin")."</a>";
-		}
+		
 		
 		return $strReturn;
 	}
@@ -560,7 +557,7 @@ class class_toolkit_admin extends class_toolkit {
 						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
 									          \"folder\" : document.getElementById(\"flashuploadFolder\").value,
-		                                      \"inputElement\" : \"".preg_replace("/\[[0-9]\]/", "", $strName)."\"}, //create valid input-name element. no array needed!
+		                                      \"inputElement\" : \"".$strName."\"}, //create valid input-name element. no array needed!
 		                \"uploadInputName\": \"".$strName."\"
 					});
 					uploader.init();				
@@ -586,7 +583,7 @@ class class_toolkit_admin extends class_toolkit {
 		
 		//Fallback code if no or old Flash Player available
 		if ($bitFallback) {
-			$strFallbackForm = $this->formInputUpload($strName, $strTitle, $bitMultiple);
+			$strFallbackForm = $this->formInputUpload($strName, $strTitle);
 			$strFallbackForm .= $this->formInputSubmit($objText->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
 			$arrTemplate["fallbackContent"] = $strFallbackForm;
 		} else {

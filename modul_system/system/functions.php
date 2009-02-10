@@ -602,7 +602,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 	    }
 
         if($bitRegularLink)
-		    $strHref = "_indexpath_?".($strPageI != "" ? "page=".$strPageI : "" )."".
+		    $strHref = _indexpath_."?".($strPageI != "" ? "page=".$strPageI : "" )."".
 		                              ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ). 
 		                              ($strAction != "" ? "&amp;action=".$strAction : "").
 		                              ($strLanguage != "" ? "&amp;language=".$strLanguage : "").

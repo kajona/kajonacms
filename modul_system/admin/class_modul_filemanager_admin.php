@@ -28,6 +28,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_filemanager";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _filemanager_modul_id_;
@@ -757,44 +758,37 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $this->strFolderOld);
 		
-			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true, true);
+			$strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload", $this->getText("filemanager_upload"), $objRepo->getStrUploadFilter(), true, true);
 			$strReturn .= $this->objToolkit->formClose();
 
 			if($this->getParam("datei_upload_final") != "") {
 				//Handle the fileupload
-				$arrSourcesPre = $this->getParam("filemanager_upload");
-                foreach ($arrSourcesPre["name"] as $intKey => $strName) {
-                    if($strName != "") {
-                        $arrSources[$intKey] = array();
-                        $arrSources[$intKey]["name"] = $arrSourcesPre["name"][$intKey];
-                        $arrSources[$intKey]["tmp_name"] = $arrSourcesPre["tmp_name"][$intKey];
-                    }
-                }
+				$arrSource = $this->getParam("filemanager_upload");
 
 				$bitSuccess = false;
-				foreach ($arrSources as $arrSource) {
-    				$strTarget = $this->strFolder."/".createFilename(strtolower($arrSource["name"]));
-    				include_once(_systempath_."/class_filesystem.php");
-    				$objFilesystem = new class_filesystem();
-    				//Check file for correct filters
-    				$arrAllowed = explode(",", $objRepo->getStrUploadFilter());
-    				$strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-    				if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
-    					if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-    						$strReturn .= $this->getText("upload_erfolg");
-    						$bitSuccess = true;
-                            
-                            class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+				
+                $strTarget = $this->strFolder."/".createFilename(strtolower($arrSource["name"]));
+                include_once(_systempath_."/class_filesystem.php");
+                $objFilesystem = new class_filesystem();
+                //Check file for correct filters
+                $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
+                $strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
+                    if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
+                        $strReturn .= $this->getText("upload_erfolg");
+                        $bitSuccess = true;
 
-    					}
-    					else
-    						$strReturn .= $this->getText("upload_fehler");
-    				}
-    				else {
-    					@unlink($arrSource["tmp_name"]);
-    					$strReturn .= $this->getText("upload_fehler_filter");
-    				}
-				}
+                        class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+
+                    }
+                    else
+                        $strReturn .= $this->getText("upload_fehler");
+                }
+                else {
+                    @unlink($arrSource["tmp_name"]);
+                    $strReturn .= $this->getText("upload_fehler_filter");
+                }
+				
 				if($bitActionFromFolderview && $bitSuccess)
                     $strReturn .= "<script type=text/javascript>opener.location.reload();window.close();</script>";
 			}

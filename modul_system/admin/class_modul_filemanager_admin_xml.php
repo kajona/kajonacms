@@ -227,42 +227,33 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	        $strFolder = $objRepo->getStrPath().$this->getParam("folder");
 	        
 	        //Handle the fileupload
-            $arrSourcesPre = $this->getParam($this->getParam("inputElement"));
-            $arrSources = array();
-            foreach ($arrSourcesPre["name"] as $intKey => $strName) {
-                if($strName != "") {
-                    $arrSources[$intKey] = array();
-                    $arrSources[$intKey]["name"] = $arrSourcesPre["name"][$intKey];
-                    $arrSources[$intKey]["tmp_name"] = $arrSourcesPre["tmp_name"][$intKey];
+            $arrSource = $this->getParam($this->getParam("inputElement"));
+            
+            $strTarget = $strFolder."/".createFilename(strtolower($arrSource["name"]));
+            include_once(_systempath_."/class_filesystem.php");
+            $objFilesystem = new class_filesystem();
+            if($objFilesystem->isWritable($strFolder)) {
+
+                //Check file for correct filters
+                $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
+                $strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
+                    if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
+                        $strReturn .= "<message>".$this->getText("xmlupload_success")."</message>";
+                        $bitSuccess = true;
+                        class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
+                    }
+                    else
+                        $strReturn .= "<error>".$this->getText("xmlupload_error_copyUpload")."</error>";
+                }
+                else {
+                    @unlink($arrSource["tmp_name"]);
+                    $strReturn .= "<error>".$this->getText("xmlupload_error_filter")."</error>";
                 }
             }
-
-            foreach ($arrSources as $arrSource) {
-	            $strTarget = $strFolder."/".createFilename(strtolower($arrSource["name"]));
-	            include_once(_systempath_."/class_filesystem.php");
-	            $objFilesystem = new class_filesystem();
-	            if($objFilesystem->isWritable($strFolder)) {
-	            	
-	                //Check file for correct filters
-	                $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
-	                $strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
-	                if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
-	                    if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
-	                        $strReturn .= "<message>".$this->getText("xmlupload_success")."</message>";
-	                        $bitSuccess = true;
-                            class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
-	                    }
-	                    else
-	                        $strReturn .= "<error>".$this->getText("xmlupload_error_copyUpload")."</error>";
-	                }
-	                else {
-	                    @unlink($arrSource["tmp_name"]);
-	                    $strReturn .= "<error>".$this->getText("xmlupload_error_filter")."</error>";
-	                }
-	            }
-	            else
-		            $strReturn .= "<error>".xmlSafeString($this->getText("xmlupload_error_notWritable"))."</error>";
-            }
+            else
+                $strReturn .= "<error>".xmlSafeString($this->getText("xmlupload_error_notWritable"))."</error>";
+            
 	    
 		}
 		else
