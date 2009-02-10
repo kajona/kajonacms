@@ -114,7 +114,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
-					    downloads_max_kb=".$this->objDB->dbsafeString($this->getMaxKb())."
+					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
+					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb())."
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
