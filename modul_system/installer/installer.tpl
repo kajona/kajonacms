@@ -34,19 +34,14 @@
 							  <div style="clear: both;"></div>
 							</div>
 						</div>
-						
-					</div>
-					
+					</div>				
 				</div>
 			</div>
-		</div>
-		
-		
-	    <div class="progressContainer">
+				<div class="progressContainer">
            %%installer_progress%%
         </div>
-        <div style="clear: both;"></div>
-    </div>    
+		</div>
+    </div>
 	<div class="copyright">&copy; 2009 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
 </div>
 
@@ -55,8 +50,16 @@
 </installer_main>
 
 <installer_progress_entry>
-    <div style="border-bottom: 1px dashed #cccccc; padding: 2px;">%%image%%&nbsp;&nbsp;%%entry_name%%</div>
+    <div>%%entry_name%%</div>
 </installer_progress_entry>
+
+<installer_progress_entry_current>
+    <div class="current">%%entry_name%%</div>
+</installer_progress_entry_current>
+
+<installer_progress_entry_done>
+    <div class="done">%%entry_name%%</div>
+</installer_progress_entry_done>
 
 <installer_log>
 <div class="preText">

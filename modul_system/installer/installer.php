@@ -556,28 +556,22 @@ class class_installer {
 	    );
 	    
 	    $strProgess = "";
-	    $strTemplateEnrtyID = $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry", true);
-	    
-	    $strImageTodo = "<img src=\""._webpath_."/installer/pics/todo.png\" />";
-	    $strImageCurrent = "<img src=\""._webpath_."/installer/pics/current.png\" />";
-	    $strImageDone = "<img src=\""._webpath_."/installer/pics/done.png\" />";
-	    
-	    $strCurrentImage = $strImageDone;
+	    $strTemplateEntryTodoID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry", true);
+	    $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry_current", true);
+	    $strTemplateEntryDoneID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry_done", true);
+
+	    $strTemplateEntryID = $strTemplateEntryDoneID;
 	    foreach($arrProgessEntries as $strKey => $strValue) {
-	    	
-	    	//choose the correct image
-	    	if($strCurrentCommand == $strKey)
-	    	    $strCurrentImage = $strImageCurrent;  
-	    	
 	    	$arrTemplateEntry = array();
-	    	$arrTemplateEntry["image"] = $strCurrentImage;
 	    	$arrTemplateEntry["entry_name"] = $strValue;
-	    	
-	    	$strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEnrtyID, true);
-	    	
-	    	if($strCurrentCommand == $strKey)
-                $strCurrentImage = $strImageTodo;  
-            
+
+	    	//choose the correct template section
+	    	if($strCurrentCommand == $strKey) {
+	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryCurrentID, true);
+	    	    $strTemplateEntryID = $strTemplateEntryTodoID;
+	    	} else
+	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryID, true);
+     
 	    }
 
 	    $arrTemplate["installer_progress"] = $strProgess;

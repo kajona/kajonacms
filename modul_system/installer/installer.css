@@ -41,7 +41,6 @@ td {
 #installerBox {
 	margin: 0 auto 0 auto;
 	padding-top: 10px;
-	width: 673px;
 	width: 873px;
 	text-align: left;
 }
@@ -57,7 +56,6 @@ td {
 	margin: 0 0 0 48px;
 	padding: 0;
 	width: 625px;
-	float: left;
 }
 
 #installerBox .topLeft {
@@ -81,6 +79,7 @@ td {
 #installerBox .content {
 	margin: 0;
 	padding: 13px 20px 20px 20px;
+	min-height: 250px;
 }
 
 #installerBox .content p {
@@ -94,11 +93,28 @@ td {
 }
 
 #installerBox .progressContainer {
-	float: right; 
-	width: 180px; 
-	margin-top: 50px;
-	border: 1px solid #cccccc;
-	background-color: #FFFFFF;
+	width: 200px;
+	margin-left: 622px;
+	position: absolute;
+	top: 120px;
+}
+
+#installerBox .progressContainer div {
+	height: 22px;
+	margin-bottom: 2px;
+	padding-left: 30px;
+	line-height: 22px;
+	background-image: url('pics/progress_bg.png');
+	background-position: left top;
+}
+
+#installerBox .progressContainer div.current {
+	color: #000000;
+	background-position: left center;
+}
+
+#installerBox .progressContainer div.done {
+	background-position: left bottom;
 }
 
 #installerBox .copyright {

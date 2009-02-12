@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 151
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -110,13 +110,13 @@ $lang["installer_phpcheck_lang"]         = "To load the installer using a differ
 $lang["installer_phpcheck_module"]       = "<br />PHP-module ";
 $lang["installer_prev"]                  = "< Previous step";
 $lang["installer_samplecontent"]         = "<b>Installation of the samplecontent</b><br /><br />The module 'samplecontent' creates a few standard pages and navigation entries.<br />According to the modules installed, additional contents will be created.<br /><br /><br />";
-$lang["installer_step_adminsettings"]    = "Adminaccess";
-$lang["installer_step_dbsettings"]       = "Databasesettings";
-$lang["installer_step_elements"]         = "Pageelements";
+$lang["installer_step_adminsettings"]    = "Admin access";
+$lang["installer_step_dbsettings"]       = "Database settings";
+$lang["installer_step_elements"]         = "Page elements";
 $lang["installer_step_finish"]           = "Finalize";
 $lang["installer_step_modules"]          = "Modules";
-$lang["installer_step_phpsettings"]      = "PHP-Configuration";
-$lang["installer_step_samplecontent"]    = "Demo-Contents";
+$lang["installer_step_phpsettings"]      = "PHP configuration";
+$lang["installer_step_samplecontent"]    = "Demo content";
 $lang["installer_systemlog"]             = "System log";
 $lang["installer_systemversion_needed"]  = "Minimal version of system needed: ";
 $lang["installer_update"]                = "Update to ";
