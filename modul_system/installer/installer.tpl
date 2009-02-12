@@ -37,9 +37,9 @@
 					</div>				
 				</div>
 			</div>
-				<div class="progressContainer">
-           %%installer_progress%%
-        </div>
+			<div class="progressContainer">
+           		%%installer_progress%%
+        	</div>
 		</div>
     </div>
 	<div class="copyright">&copy; 2009 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></div>
@@ -93,8 +93,8 @@
 <loginwizard_form>
 <form action="_webpath_/installer/installer.php?step=loginData" method="POST">
 <input type="hidden" name="write" value="true" />
-<div><label for="username">%%login_username%%</label><input type="text" name="username" id="username" class="inputText" /><div /><br />
-<div><label for="password">%%login_password%%</label><input type="password" name="password" id="password" class="inputText" /><div /><br />
+<div><label for="username">%%login_username%%</label><input type="text" name="username" id="username" class="inputText" /></div><br />
+<div><label for="password">%%login_password%%</label><input type="password" name="password" id="password" class="inputText" /></div><br />
 <div><label for="submit"></label><input type="submit" value="%%login_save%%" class="inputSubmit" /></div><br />
 </form>
 </loginwizard_form>
