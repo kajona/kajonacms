@@ -343,7 +343,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
     $strAction = urlencode($strAction);
 
 	if($bitPortalEditor)
-        $strParams .= "&amp;pe=1";
+        $strParams .= "&pe=1";
         
 	if($strImage != "") {
 		if($strAlt == "")
