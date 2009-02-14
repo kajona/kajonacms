@@ -21,15 +21,16 @@ class class_element_languageswitch extends class_element_admin implements interf
 
 
 	public function __construct() {
-		$arrModul["name"] 			= "element_languageswitch";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]	 		= "";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_languageswitch";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"]	 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "";
+		$arrModule["tableColumns"]   = "char1|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
 
@@ -41,6 +42,20 @@ class class_element_languageswitch extends class_element_admin implements interf
 	 */
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
+
+        //Load the available templates
+		include_once(_systempath_."/class_filesystem.php");
+		$objFilesystem = new class_filesystem();
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_languageswitch", ".tpl");
+		$arrTemplatesDD = array();
+		if(count($arrTemplates) > 0) {
+			foreach($arrTemplates as $strTemplate) {
+				$arrTemplatesDD[$strTemplate] = $strTemplate;
+			}
+		}
+		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("languageswitch_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+
+
 		return $strReturn;
 	}
 
@@ -53,13 +68,6 @@ class class_element_languageswitch extends class_element_admin implements interf
 	    return "";
 	}
 
-	/**
-	 * Dummy for saving, returns true, no foreign table used by this element
-	 *
-	 * @return bool true
-	 */
-    public function actionSave() {
-        return true;
-    }
+	
 }
 ?>

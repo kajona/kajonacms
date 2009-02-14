@@ -32,16 +32,17 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "modul_pages";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_modul_id_;
-		$arrModul["modul"]			= "pages";
-		$arrModul["table"]			= _dbprefix_."page";
-		$arrModul["table2"]			= _dbprefix_."page_elemente";
-		$arrModul["table3"]			= _dbprefix_."elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "modul_pages";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_modul_id_;
+		$arrModule["modul"]			= "pages";
+		$arrModule["table"]			= _dbprefix_."page";
+		$arrModule["table2"]			= _dbprefix_."page_elemente";
+		$arrModule["table3"]			= _dbprefix_."elemente";
 
 		//base class
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 
 		//To generate a correct list-view, set a view params
 		$this->strFolderlevel= ($this->getParam("folderid") != "" ? $this->getParam("folderid") : "");

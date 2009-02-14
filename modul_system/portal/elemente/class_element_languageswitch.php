@@ -26,14 +26,14 @@ class class_element_languageswitch extends class_element_portal implements inter
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
+		$arrModule["name"] 			= "element_languageswitch";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"]			= _dbprefix_."element_universal";
+		$arrModule["modul"]          = "elemente";
 
-		$arrModul["name"] 			= "element_languageswitch";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]			= "";
-		$arrModul["modul"]          = "elemente";
-
-		parent::__construct($arrModul, $objElementData);
+		parent::__construct($arrModule, $objElementData);
 
 	}
 
@@ -44,11 +44,17 @@ class class_element_languageswitch extends class_element_portal implements inter
 	 * @return string
 	 */
 	public function loadData() {
+
+        //fallback for old elements not yet using the template
+        if(!isset($this->arrElementData["char1"]) || $this->arrElementData["char1"] == "")
+            $this->arrElementData["char1"] = "languageswitch.tpl";
+
 		$strReturn = "";
 
         include_once(_systempath_."/class_modul_languages_language.php");
         $arrObjLanguages = class_modul_languages_language::getAllLanguages(true);
         //Iterate over all languages
+        $strRows = "";
         foreach($arrObjLanguages as $objOneLanguage) {
             //Check, if the current page has elements
             include_once(_systempath_."/class_modul_pages_page.php");
@@ -56,32 +62,21 @@ class class_element_languageswitch extends class_element_portal implements inter
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
                 
-                //TODO: please check if this is really needed
-                /*
-                $strQueryString = getServer("QUERY_STRING");
-
-                //Remove old language-param, if given
-                $strQueryString = preg_replace('/(\?|&)language=([a-z]+)/', "", $strQueryString);
-
-                //remove page, action and systemid
-                $strQueryString = preg_replace('/(\?|&)page=([a-z0-9_]+)/i', "", $strQueryString);
-                $strQueryString = preg_replace('/(\?|&)action=([a-z]+)/i', "", $strQueryString);
-                $strQueryString = preg_replace('/(\?|&)systemid=([a-z0-9]+)/i', "", $strQueryString);
-
-                //first char a '?' ?
-                if(uniStrlen($strQueryString) > 0 && $strQueryString[0] == '?')
-                	$strQueryString = uniSubstr($strQueryString, 1);
-				*/
                 
                 //and the link
-                //add html code to modify the look and feel of the buttons (e.g. <img src=\"language_".$objOneLanguage->getStrName().".gif\" />
-                $strReturn .= "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName())."\">"
-                              //.$this->getText("lang_".$objOneLanguage->getStrName())
-                              .$objOneLanguage->getStrName()
-                              ."</a> ";
+                $arrTemplate = array();
+                $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName());
+                $arrTemplate["lang_short"] = $objOneLanguage->getStrName();
+                $arrTemplate["lang_long"] = $this->getText("lang_".$objOneLanguage->getStrName());
+
+               $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
+               $strRows .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRowID, true);
+
             }
         }
 
+        $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_wrapper");
+        $strReturn = $this->objTemplate->fillTemplate(array("languageswitch_entries" => $strRows), $strTemplateWrapperID, true);
 
 		return $strReturn;
 	}

@@ -169,6 +169,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		$intNumber = $arrResult["COUNT(*)"];
 		if($intNumber != 0) {
 			$intCount = 1;
+            $strTemp = "";
 			while($intNumber != 0) {
 				$strTemp = $strName."_".$intCount;
 				$strQuery = "SELECT COUNT(*)
@@ -519,6 +520,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		$intNumbers = $arrTemp["COUNT(*)"];
 		if($intNumbers != 0) {
 			$intCount = 1;
+            $strTemp = "";
 			while($intNumbers != 0) {
 				$strTemp = $strName."_".$intCount;
 				$strQuery = "SELECT COUNT(*)
