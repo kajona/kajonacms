@@ -241,6 +241,7 @@
 	downloads_size		    = filesize of file
 	downloads_hits			= number of donwloads
 	downloads_type			= 0 => file, 1 => folder
+    downloads_checksum      = md5-hash of the file
 	downloads_max_kb		= Max Speed to download, 0 = unlimited
 
 //--_downloads_log---------------------------------------------------------------------------------------

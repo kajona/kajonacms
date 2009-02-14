@@ -67,6 +67,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_size"] 		= array("int", true);
 		$arrFields["downloads_hits"]	 	= array("int", true);
 		$arrFields["downloads_type"]	 	= array("int", true);
+		$arrFields["downloads_cheksum"]	 	= array("char254", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
 		
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
@@ -270,15 +271,17 @@ class class_installer_downloads extends class_installer_base implements interfac
         $arrArchives = class_modul_downloads_archive::getAllArchives();
         foreach($arrArchives as $objOneArchive) {
             $strReturn .= "Investigating archive ".$objOneArchive->getTitle()."\n";
-            $objRepo = new class_modul_filemanager_repo();
-            $objRepo->setStrPath($objOneArchive->getPath());
-            $objRepo->setStrForeignId($objOneArchive->getSystemid());
-            $objRepo->setStrName("Internal Repo for DL-Archive ".$objOneArchive->getSystemid());
-            $objRepo->setStrViewFilter("");
-            $objRepo->setStrUploadFilter("");
-            $objRepo->saveObjectToDb();
+            if(class_modul_filemanager_repo::getRepoForForeignId($objOneArchive->getSystemid()) == null) {
+                $objRepo = new class_modul_filemanager_repo();
+                $objRepo->setStrPath($objOneArchive->getPath());
+                $objRepo->setStrForeignId($objOneArchive->getSystemid());
+                $objRepo->setStrName("Internal Repo for DL-Archive ".$objOneArchive->getSystemid());
+                $objRepo->setStrViewFilter("");
+                $objRepo->setStrUploadFilter("");
+                $objRepo->saveObjectToDb();
 
-            $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
+                $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
+            }
         }
 
         $strReturn .= "Registering xml-classes...\n";
@@ -287,6 +290,13 @@ class class_installer_downloads extends class_installer_base implements interfac
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
 
+
+        $strReturn .= "Adding downloads_checksum column to db-schema...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")."
+        	               ADD ".$this->objDB->encloseColumnName("downloads_checksum")." VARCHAR(254) NULL ";
+
+        if(!$this->objDB->_query($strSql))
+           $strReturn .= "An error occured!\n";
 
 
         $strReturn .= "Updating module-versions...\n";

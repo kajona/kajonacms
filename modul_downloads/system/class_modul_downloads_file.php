@@ -22,6 +22,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     private $strName = "";
     private $strFilename = "";
     private $strDescription = "";
+    private $strChecksum = "";
     private $intSize = 0;
     private $intHits = 0;
     private $intType = 0;
@@ -33,14 +34,15 @@ class class_modul_downloads_file extends class_model implements interface_model,
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
-        $arrModul["name"] 				= "modul_downloads";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _downloads_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."downloads_file";
-		$arrModul["modul"]				= "downloads";
+        $arrModule = array();
+        $arrModule["name"] 				= "modul_downloads";
+		$arrModule["author"] 			= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 			= _downloads_modul_id_;
+		$arrModule["table"]       		= _dbprefix_."downloads_file";
+		$arrModule["modul"]				= "downloads";
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($arrModule, $strSystemid);
 
 		//init current object
 		if($strSystemid != "")
@@ -65,6 +67,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
             $this->setName($arrRow["downloads_name"]);
             $this->setSize($arrRow["downloads_size"]);
             $this->setType($arrRow["downloads_type"]);
+            $this->setChecksum($arrRow["downloads_checksum"]);
         }
     }
 
@@ -85,9 +88,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
 		//Modul-Table
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb) VALUES
+		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_checksum) VALUES
 		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-		               '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0')";
+                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(md5_file(_realpath_.$this->getFilename()))."')";
 
 		if($this->objDB->_query($strQuery))
 			$bitCommit = true;
@@ -115,7 +118,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
 					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
-					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb())."
+					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb()).",
+                        downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."'
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -233,6 +237,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	 */
 	public static function syncRecursive($strPrevId, $strPath) {
 	    $objDB = class_carrier::getInstance()->getObjDB();
+        $arrReturn = array();
         $arrReturn["insert"] = 0;
 	    $arrReturn["delete"] = 0;
 	    $arrReturn["update"] = 0;
@@ -252,9 +257,10 @@ class class_modul_downloads_file extends class_model implements interface_model,
 				if($objOneFileDatabase->getType() == 0) {
 					//Compare
 					if($objOneFileDatabase->getFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
-						//if size diffes, update record
-						if($arrOneFileFilesystem["filesize"] != $objOneFileDatabase->getSize()) {
+						//if checksum diffes, update record
+                        if(@md5_file($arrOneFileFilesystem["filepath"]) != $objOneFileDatabase->getChecksum()) {
 							$objOneFileDatabase->setSize($arrOneFileFilesystem["filesize"]);
+                            $objOneFileDatabase->setChecksum(@md5_file($arrOneFileFilesystem["filepath"]));
 							$objOneFileDatabase->updateObjectToDB();
 							$arrReturn["update"]++;
 						}
@@ -379,8 +385,15 @@ class class_modul_downloads_file extends class_model implements interface_model,
     public function getFilename() {
         return $this->strFilename;
     }
+    /**
+     * @deprecated Use getStrChecksum instead!
+     * @return string
+     */
     public function getMd5Sum() {
         return @md5_file(_realpath_.$this->getFilename());
+    }
+    public function getChecksum() {
+        return $this->strChecksum;
     }
 
     public function setName($strName) {
@@ -403,6 +416,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
     }
     public function setFilename($strFilename) {
         $this->strFilename = $strFilename;
+    }
+    public function setChecksum($strChecksum) {
+        $this->strChecksum = $strChecksum;
     }
 
 }
