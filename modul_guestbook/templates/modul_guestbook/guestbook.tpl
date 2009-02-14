@@ -26,7 +26,7 @@
 
 
 <entry_form>
-%%eintragen_fehler%%
+<ul>%%eintragen_fehler%%</ul>
 <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8">
     <div><label for="gb_post_name">%%post_name_text%%*:</label><input type="text" name="gb_post_name" id="gb_post_name" value="%%gb_post_name%%" class="inputText" /></div><br />
     <div><label for="gb_post_email">%%post_mail_text%%*:</label><input type="text" name="gb_post_email" id="gb_post_email" value="%%gb_post_email%%" class="inputText" /></div><br />
@@ -40,3 +40,6 @@
 </form>
 </entry_form>
 
+<error_row>
+    <li>%%error%%</li>
+</error_row>

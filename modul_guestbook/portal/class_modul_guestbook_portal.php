@@ -21,20 +21,24 @@ include_once(_systempath_."/class_modul_guestbook_guestbook.php");
  * @package modul_guestbook
  */
 class class_modul_guestbook_portal extends class_portal implements interface_portal {
+
+    private $arrErrors = array();
+
 	/**
 	 * Constructor
 	 *
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
-		$arrModul["name"] 				= "modul_guestbook";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["table"] 	    		= _dbprefix_."guestbook_book";
-		$arrModul["table2"] 			= _dbprefix_."guestbook_post";
-		$arrModul["moduleId"] 			= _gaestebuch_modul_id_;
-		$arrModul["modul"] 			    = "guestbook";
+        $arrModule = array();
+		$arrModule["name"] 				= "modul_guestbook";
+		$arrModule["author"] 			= "sidler@mulchprod.de";
+		$arrModule["table"] 	    	= _dbprefix_."guestbook_book";
+		$arrModule["table2"] 			= _dbprefix_."guestbook_post";
+		$arrModule["moduleId"] 			= _gaestebuch_modul_id_;
+		$arrModule["modul"] 			= "guestbook";
 
-        parent::__construct($arrModul, $arrElementData);
+        parent::__construct($arrModule, $arrElementData);
 	}
 
 	/**
@@ -139,9 +143,16 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$strReturn = "";
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
+        $strErrors = "";
+        if(count($this->arrErrors) > 0) {
+            $strErrorTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
+            foreach ($this->arrErrors as $strOneError)
+            $strErrors .= $this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
+        }
+
 		//update elements
 		$arrTemplate = array();
-		$arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler");
+		$arrTemplate["eintragen_fehler"] = $this->getParam("eintragen_fehler").$strErrors;
 		$arrTemplate["post_name_text"] = $this->getText("post_name_text");
         $arrTemplate["gb_post_name"]  = htmlToString($this->getParam("gb_post_name"), true);
 		$arrTemplate["post_mail_text"] = $this->getText("post_mail_text");
@@ -215,14 +226,20 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 			$bitReturn = false;
 
 		//Check mailaddress
-		if(!checkEmailaddress($this->getParam("gb_post_email")))
+		if(!checkEmailaddress($this->getParam("gb_post_email"))) {
+            $this->arrErrors[] = $this->getText("insert_error_email");
 			$bitReturn = false;
+        }
 
-		if(uniStrlen($this->getParam("gb_post_name")) == 0)
+		if(uniStrlen($this->getParam("gb_post_name")) == 0) {
+            $this->arrErrors[] = $this->getText("insert_error_name");
 			$bitReturn = false;
+        }
 
-		if(uniStrlen($this->getParam("gb_post_text")) == 0)
+		if(uniStrlen($this->getParam("gb_post_text")) == 0) {
+            $this->arrErrors[] = $this->getText("insert_error_post");
 			$bitReturn = false;
+        }
 
 		//if there aint any errors, update texts
 		if($bitReturn) {
