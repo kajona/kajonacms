@@ -90,7 +90,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
 		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_checksum) VALUES
 		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(md5_file(_realpath_.$this->getFilename()))."')";
+                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."')";
 
 		if($this->objDB->_query($strQuery))
 			$bitCommit = true;
@@ -257,7 +257,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 				if($objOneFileDatabase->getType() == 0) {
 					//Compare
 					if($objOneFileDatabase->getFilename() == str_replace(_realpath_, "", $arrOneFileFilesystem["filepath"])) {
-						//if checksum diffes, update record
+						//if checksum differs, update record
                         if(@md5_file($arrOneFileFilesystem["filepath"]) != $objOneFileDatabase->getChecksum()) {
 							$objOneFileDatabase->setSize($arrOneFileFilesystem["filesize"]);
                             $objOneFileDatabase->setChecksum(@md5_file($arrOneFileFilesystem["filepath"]));
