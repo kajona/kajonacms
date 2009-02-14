@@ -52,6 +52,7 @@ kajonaAjaxHelper.loadAjaxBase();
 
 <validation_error_row>
 	&middot; %%error%% <br />
+    <script type="text/javascript">document.getElementById('postaCommentForm').style.display = "block";</script>
 </validation_error_row>
 
 <rating_bar>
