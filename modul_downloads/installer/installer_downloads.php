@@ -67,7 +67,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_size"] 		= array("int", true);
 		$arrFields["downloads_hits"]	 	= array("int", true);
 		$arrFields["downloads_type"]	 	= array("int", true);
-		$arrFields["downloads_cheksum"]	 	= array("char254", true);
+		$arrFields["downloads_checksum"]	 	= array("char254", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
 		
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
