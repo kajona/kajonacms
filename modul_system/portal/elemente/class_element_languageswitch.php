@@ -69,8 +69,13 @@ class class_element_languageswitch extends class_element_portal implements inter
                 $arrTemplate["lang_short"] = $objOneLanguage->getStrName();
                 $arrTemplate["lang_long"] = $this->getText("lang_".$objOneLanguage->getStrName());
 
-               $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
-               $strRows .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRowID, true);
+                $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
+                $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");
+
+                if($objOneLanguage->getStrName() == $this->getPortalLanguage())
+                    $strRows .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateActiveRowID, true);
+                else
+                    $strRows .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateRowID, true);
 
             }
         }
