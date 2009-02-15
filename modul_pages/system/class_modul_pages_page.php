@@ -277,8 +277,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    $strQuery = "SELECT COUNT(*)
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
-					WHERE system_id = page_id
-					ORDER BY page_name ASC";
+					WHERE system_id = page_id";
 		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
 		return $arrRow["COUNT(*)"];
 	}
