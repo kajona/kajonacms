@@ -1,7 +1,7 @@
 <?php
 
 // includes
-include_once(_adminpath_."/class_user_admin.php");
+include_once(_adminpath_."/class_modul_user_admin.php");
 include_once(_systempath_."/class_modul_user_user.php");
 include_once(_systempath_."/class_modul_user_group.php");
 
