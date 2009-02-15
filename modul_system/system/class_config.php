@@ -120,9 +120,10 @@ class class_config {
 	 * @return int
 	 */
 	public function getPhpMaxUploadSize() {    
-	    $strBytes = $this->getPhpIni("post_max_size") > $this->getPhpIni("upload_max_filesize") ? $this->getPhpIni("upload_max_filesize") : $this->getphpIni("post_max_size");
-
-    	return phpSizeToBytes($strBytes);
+	    if(phpSizeToBytes($this->getPhpIni("post_max_size")) > phpSizeToBytes($this->getPhpIni("upload_max_filesize")))
+            return phpSizeToBytes($this->getPhpIni("upload_max_filesize"));
+        else
+            return phpSizeToBytes($this->getPhpIni("post_max_size"));
     }
 
 	/**
