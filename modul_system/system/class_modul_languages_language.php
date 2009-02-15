@@ -146,8 +146,7 @@ class class_modul_languages_language extends class_model implements interface_mo
     	$strQuery = "SELECT COUNT(*)
                      FROM "._dbprefix_."languages, "._dbprefix_."system
                      WHERE system_id = language_id
-                     ".($bitJustActive ? "AND system_status != 0 ": "")."
-                     ORDER BY system_sort ASC, system_comment ASC";
+                     ".($bitJustActive ? "AND system_status != 0 ": "")."";
         $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
 
         return (int)$arrRow["COUNT(*)"];
