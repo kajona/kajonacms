@@ -186,10 +186,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
                     WHERE system_id = pic_id
                       AND system_prev_id = '".dbsafeString($strPrevID)."'
                         ".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
-                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
-                        ORDER BY system_sort ASC,
-                            pic_type DESC,
-                            pic_name ASC";
+                        ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."";
         $arrIds  = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
         return $arrIds["COUNT(*)"];
     }

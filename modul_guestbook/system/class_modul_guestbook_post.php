@@ -211,8 +211,7 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
 						WHERE system_id = guestbook_post_id
 						  AND system_prev_id='".dbsafeString($strSystemid)."'
-						  ".($bitJustActive ? " AND system_status = 1" : "" )."
-						ORDER BY guestbook_post_date DESC";
+						  ".($bitJustActive ? " AND system_status = 1" : "" )."";
 
 	    $objDB = class_carrier::getInstance()->getObjDB();
 	    $arrRow = $objDB->getRow($strQuery);
