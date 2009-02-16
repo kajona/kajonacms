@@ -101,27 +101,27 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 
 		$arrObjPosts = $this->objToolkit->pager($this->arrElementData["guestbook_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrObjPosts);
 
-		//and posts in the template!
+		//and put posts into a template
 		foreach($arrObjPosts["arrData"] as $objOnePost) {
 			if($this->objRights->rightView($objOnePost->getSystemid())){
 				$strTemplatePostID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "post");
-				$arrtemplatePost = array();
-				$arrtemplatePost["post_name_from"] = $this->getText("post_name_from");
-				$arrtemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
-				$arrtemplatePost["post_name_plain"] = $objOnePost->getGuestbookPostName();
-				$arrtemplatePost["post_mail_text"] = $this->getText("post_mail_text");
-				$arrtemplatePost["post_email"] = $objOnePost->getGuestbookPostEmail();
-				$arrtemplatePost["post_page_text"] = $this->getText("post_page_text");
-				$arrtemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
-				$arrtemplatePost["post_message_text"] = $this->getText("post_message_text");
-				$arrtemplatePost["post_text"] = $objOnePost->getGuestbookPostText();
+				$arrTemplatePost = array();
+				$arrTemplatePost["post_name_from"] = $this->getText("post_name_from");
+				$arrTemplatePost["post_name"] = "<a href=\"mailto:".$objOnePost->getGuestbookPostEmail()."\">".$objOnePost->getGuestbookPostName()."</a>";
+				$arrTemplatePost["post_name_plain"] = $objOnePost->getGuestbookPostName();
+				$arrTemplatePost["post_mail_text"] = $this->getText("post_mail_text");
+				$arrTemplatePost["post_email"] = $objOnePost->getGuestbookPostEmail();
+				$arrTemplatePost["post_page_text"] = $this->getText("post_page_text");
+				$arrTemplatePost["post_page"] = "<a href=\"http://".$objOnePost->getGuestbookPostPage()."\">".$objOnePost->getGuestbookPostPage()."</a>";
+				$arrTemplatePost["post_message_text"] = $this->getText("post_message_text");
 				//replace encoded newlines
-				$arrtemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $arrtemplatePost["post_text"]);
-				$arrtemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
-				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrtemplatePost, $strTemplatePostID);
+				$arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $objOnePost->getGuestbookPostText());
+				$arrTemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
+				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrTemplatePost, $strTemplatePostID);
 			}
 		}
-        // A link to the post-form
+
+        //link to the post-form & pageview links
 		$arrTemplate["link_newentry"] = getLinkPortal(($this->getParam("page") ? $this->getParam("page") : ""), "", "", $this->getText("eintragen"), "insertGuestbook");
 		$arrTemplate["link_forward"] = $arrObjPosts["strForward"];
 		$arrTemplate["link_pages"] = $arrObjPosts["strPages"];

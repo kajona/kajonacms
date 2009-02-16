@@ -204,4 +204,3 @@ var kajonaAjaxHelper =  {
 };
 
 addLoadEvent(kajonaAjaxHelper.onLoadHandlerFinal);
-function enableTooltipsWrapper() { enableTooltips("showTooltip"); } addLoadEvent(enableTooltipsWrapper);

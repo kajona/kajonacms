@@ -15,11 +15,7 @@
 </tellafriend_form>
 
 <errors>
-<table width="400" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td><ul>%%liste_fehler%%<ul></td>
-  </tr>
-</table>
+<ul>%%liste_fehler%%<ul>
 </errors>
 
 <errorrow>

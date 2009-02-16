@@ -7,13 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["backward"]                        = "Zurück";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["forward"]                         = "Weiter";
-$lang["news_list_empty"]                 = "Momentan keine News vorhanden.";
-$lang["news_mehr"]                       = "Weiter...";
+$lang["news_list_empty"]                 = "Momentan sind keine News vorhanden.";
+$lang["news_mehr"]                       = "[weiterlesen]";
 $lang["news_zurueck"]                    = "Zurück";
 ?>

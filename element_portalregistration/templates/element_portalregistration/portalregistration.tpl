@@ -1,5 +1,3 @@
-
-
 <portalregistration_userdataform>
 <form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8" autocomplete="off">
     %%formErrors%%

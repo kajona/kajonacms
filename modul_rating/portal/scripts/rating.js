@@ -3,9 +3,6 @@
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id$ 
 
-
-
-
 function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
         kajonaAjaxHelper.loadAjaxBase();
         //create a new ajax request. collect data.
@@ -31,3 +28,6 @@ function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
             }
         }, post_body);
 }
+
+//enable tooltips
+function enableTooltipsWrapper() { enableTooltips("showTooltip"); } addLoadEvent(enableTooltipsWrapper);

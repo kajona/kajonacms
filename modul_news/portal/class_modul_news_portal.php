@@ -100,7 +100,8 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				    $strOneNews = "";
                     $arrOneNews = array();
 					//generate a link to the details
-					$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"),"newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
+					$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
+					$arrOneNews["news_more_link_href"] = getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
 					$arrOneNews["news_start_date"] = timeToString($objOneNews->getIntDateStart(), false);
 					$arrOneNews["news_id"] = $objOneNews->getSystemid();
 					$arrOneNews["news_title"] = $objOneNews->getStrTitle();
@@ -111,7 +112,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
                     if(uniStrlen($arrOneNews["news_text"]) == 0)
                         $arrOneNews["news_more_link"] = "";
 					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
-	
+
 					//Add pe code
 				    include_once(_portalpath_."/class_elemente_portal.php");
 				    $arrPeConfig = array(
@@ -162,7 +163,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				if($objNews->getStrImage() != "")
 	                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
 				$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
-	
+
 				//Add pe code
 				$arrPeConfig = array(
 			                              "pe_module" => "news",
@@ -173,7 +174,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
 				//and count the hit
 				$objNews->increaseHits();
-				
+
 				//set the name of the current news to the page-title via class_pages
 				include_once(_portalpath_."/class_modul_pages_portal.php");
 				class_modul_pages_portal::registerAdditionalTitle($objNews->getStrTitle());

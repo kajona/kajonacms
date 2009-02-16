@@ -1,5 +1,3 @@
-
-
 <dltoplist_list>
 	<table>
 	    %%dltoplist_entries%%    

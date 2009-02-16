@@ -67,8 +67,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		//systemid passed?
 		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree()) {
 		    $this->setSystemid($this->arrElementData["download_id"]);
-		} 
-		
+		}
+
 		$arrObjects = class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true);
 
 		if(count($arrObjects) > 0) {
@@ -81,7 +81,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 					//Folder or file?
 					if($objOneFile->getType() == 0) {
                         //File
-						$strTememplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "file");
+						$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "file");
 						$arrTemplate["file_name"] = $objOneFile->getName();
 						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
@@ -105,34 +105,34 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 							$arrTemplate["file_href"] = "";
 						}
 
-						$strFileList .= $this->objTemplate->fillTemplate($arrTemplate, $strTememplateID);
+						$strFileList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 					}
 					elseif ($objOneFile->getType() == 1) {
 					    //Folder
-						$strTememplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "folder");
+						$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "folder");
 						$arrTemplate["folder_name"] = $objOneFile->getName();
 						$arrTemplate["folder_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid(), "", "", $objOneFile->getName());
 						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
-						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTememplateID);
+						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 					}
 				}
 			}
 
 			//the sourrounding template
-			$strTememplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
+			$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
 			$arrTempalte = array();
-			$arrTempalte["folderlist"] = $strFolderList;
-			$arrTempalte["filelist"] = $strFileList;
-			$arrTempalte["pathnavigation"] = $this->generatePathnavi();
-			$strReturn .= $this->objTemplate->fillTemplate($arrTempalte, $strTememplateID);
+			$arrTemplate["folderlist"] = $strFolderList;
+			$arrTemplate["filelist"] = $strFileList;
+			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
+			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 		}
 		else {
-			$strTememplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
-			$arrTempalte = array();
-			$arrTempalte["filelist"] = $this->getText("liste_leer");
-			$arrTempalte["pathnavigation"] = $this->generatePathnavi();
-			$strReturn .= $this->objTemplate->fillTemplate($arrTempalte, $strTememplateID);
+			$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
+			$arrTemplate = array();
+			$arrTemplate["filelist"] = $this->getText("liste_leer");
+			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
+			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 		}
 
 		return $strReturn;
@@ -171,7 +171,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Validates if the requested systemid is part of the dl-tree specified in the pageelement
 	 *
@@ -179,16 +179,16 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 */
 	private function checkSystemidBelongsToCurrentTree() {
 		$bitReturn = true;
-		
+
 		//check if requested systemid is part of the elements tree
         $objArchive = new class_modul_downloads_archive($this->arrElementData["download_id"]);
         $objFile = new class_modul_downloads_file($this->getSystemid());
-            
+
         //If the record is empty, try to load the archive
         if($objFile->getFilename() == "") {
             $objFile = new class_modul_downloads_archive($this->getSystemid());
         }
-    
+
         while($objFile->getPrevId() != "0" && $objFile->getPrevId() != $objArchive->getPrevId()) {
             $strBackupId = $objFile->getPrevId();
             $objFile = new class_modul_downloads_file($objFile->getPrevId());
@@ -196,15 +196,15 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                 $objFile = new class_modul_downloads_archive($strBackupId);
             }
         }
-            
+
         //if the requested systemid belong to the tree set in the pageelement, the systemids should match.
         //otherwise, set the pageelements' systemid as the current id
         if($objFile->getSystemid() != $this->arrElementData["download_id"])
             $bitReturn = false;
-               
+
 		return $bitReturn;
 	}
-	
+
 	/**
 	 * Builds the rating bar available for every download.
 	 * Creates the needed js-links and image-tags as defined by the template.
@@ -217,32 +217,32 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
 		$strIcons = "";
 		$strRatingBarTitle = "";
-		
+
 		include_once(_systempath_."/class_modul_rating_rate.php");
 		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
-		
+
 		//read the templates
 		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_bar");
-		
+
 		if($bitRatingAllowed && $bitPermissions) {
 			$strTemplateIconId = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "rating_icon");
-			
+
 			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
 				$arrTemplate = array();
 				$arrTemplate["rating_icon_number"] = $intI;
-				
+
 			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2");
-	
-				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+
+				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
 			}
 		} else {
 		    if(!$bitRatingAllowed)
 			    $strRatingBarTitle = $this->getText("download_rating_voted");
-			else    
+			else
 			    $strRatingBarTitle = $this->getText("download_rating_permissions");
 		}
-		
+
 		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 

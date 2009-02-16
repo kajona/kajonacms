@@ -1,10 +1,13 @@
+<!-- see section "Template-API" of module manual for a list of available placeholders -->
+
+<!-- available placeholders: faq_categories -->
 <faqs_list>
-<div class="faqsList">
-    <br />%%faq_categories%%
-</div>
+    <div class="faqsList">
+        <br />%%faq_categories%%
+    </div>
 </faqs_list>
 
-
+<!-- available placeholders: faq_cat_title, faq_faqs -->
 <faq_category>
     <div class="faqCategory">
         <div class="faqCategoryTitle"><h3>%%faq_cat_title%%</h3></div>
@@ -12,6 +15,7 @@
     </div>
 </faq_category>
 
+<!-- available placeholders: faq_question, faq_answer, faq_systemid, faq_rating (if module rating installed) -->
 <faq_faq>
     <div class="faqFaq">
         <div class="faqFaqQuestion">

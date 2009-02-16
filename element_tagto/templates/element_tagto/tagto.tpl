@@ -1,5 +1,4 @@
 <tagtos>
-
 <div>
     <a href="http://slashdot.org/bookmark.pl?url=%%pageurl%%" target="_blank" style="text-decoration: none; border: 1px solid #cccccc; padding: 1px; padding-top: 5px;">
         <img src="_webpath_/portal/pics/kajona/slashdot.gif"  /> slashdot
@@ -14,5 +13,4 @@
         <img src="_webpath_/portal/pics/kajona/furl.gif" /> furl
     </a>
 </div>
-
 </tagtos>

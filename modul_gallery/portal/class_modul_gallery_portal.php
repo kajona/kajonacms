@@ -53,7 +53,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			if($this->checkIfRequestedIdIsInElementsTree())
 			    $strReturn = $this->actionDetailImage();
 			else
-			    $strReturn = $this->actionList();    
+			    $strReturn = $this->actionList();
 		}
 		elseif($strAction == "imageFolder")
 		    $strReturn = $this->actionList();
@@ -75,12 +75,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 */
 	private function actionList() {
 		$strReturn = "";
-		
+
 		//Determin the prev_id to load
 		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getParam("action") != "imageFolder" || !$this->checkIfRequestedIdIsInElementsTree()) {
 		    $this->setSystemid($this->arrElementData["gallery_id"]);
 		}
-		
+
 		$bitPageview = false;
 		//load using the pageview?
 		if($this->arrElementData["gallery_imagesperpage"] > 1) {
@@ -90,14 +90,14 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["gallery_imagesperpage"]);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_gallery_pic::loadFilesDBSection($this->getSystemid(), false, true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
-        
+
 		    $arrImages = $objArraySectionIterator->getArrayExtended();
-		    $arrTempImages = $this->objToolkit->pager($this->arrElementData["gallery_imagesperpage"], 
-		                                              ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), 
-		                                              $this->getText("forwardlink"), 
-		                                              $this->getText("backlink"), 
-		                                              $this->getParam("action"), 
-		                                              ($this->getParam("page") != "" ? $this->getParam("page") : ""), 
+		    $arrTempImages = $this->objToolkit->pager($this->arrElementData["gallery_imagesperpage"],
+		                                              ($this->getParam("pv") != "" ? $this->getParam("pv") : 1),
+		                                              $this->getText("forwardlink"),
+		                                              $this->getText("backlink"),
+		                                              $this->getParam("action"),
+		                                              ($this->getParam("page") != "" ? $this->getParam("page") : ""),
 		                                              $arrImages,
 		                                              "&systemid=".$this->getSystemid());
 		    $arrImages = $arrTempImages["arrData"];
@@ -111,7 +111,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrTemplate  = array();
 		$arrTemplate["folderlist"] = "";
 		$arrTemplate["piclist"] = "";
-		
+
         $arrTemplateImage = array();
 		if(count($arrImages) > 0) {
 		    $intImageCounter = 0;
@@ -232,16 +232,16 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrImage["systemid"] = $this->getSystemid();
 		$arrImage["pic_name"] = $objImage->getStrName();
 		$arrImage["pic_description"] = $objImage->getStrDescription();
+        $arrImage["pic_subtitle"] = $objImage->getStrSubtitle();
 		$arrImage["pic_filename"] = $objImage->getStrFilename();
 		$arrImage["pic_size"] = $objImage->getIntSize();
 		$arrImage["pic_hits"] = $objImage->getIntHits();
-		$arrImage["pic_subtitle"] = $objImage->getStrSubtitle();
-		
+
 		//ratings available?
 		if($objImage->getFloatRating() !== null) {
 		    $arrImage["pic_rating"] = $this->buildRatingBar($objImage->getFloatRating(), $objImage->getSystemid(), $objImage->isRateableByUser(), $objImage->rightRight2());
 		}
-		
+
 		$strReturn = $this->objTemplate->fillTemplate($arrImage, $strTemplateID);
 
 		//Update view counter
@@ -492,8 +492,8 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		return $arrReturn;
 	}
-	
-	
+
+
 	/**
 	 * Validates if the systemid requested is a valid element of the gallery-tree selected via the pageeelement
 	 *
@@ -501,32 +501,32 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 */
 	private function checkIfRequestedIdIsInElementsTree() {
 		$bitReturn = true;
-		
+
         //check if requested systemid is part of the elements tree
         $objData = new class_modul_gallery_pic($this->getSystemid());
         $objGallery = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
-            
+
         //If the record is empty, try to load the gallery
         if($objData->getStrName() == "") {
             $objData = new class_modul_gallery_gallery($this->getSystemid());
         }
-    
+
         while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $objData->getSystemid() != $objGallery->getSystemid()) {
             $strBackupId = $objData->getPrevId();
             $objData = new class_modul_gallery_pic($objData->getPrevId());
             if($objData->getStrName() == "") {
                 $objData = new class_modul_gallery_gallery($strBackupId);
             }
-    
+
         }
-           
+
         //if the requested systemid belong to the tree set in the pageelement, the systemids should match.
         if($objData->getSystemid() != $this->arrElementData["gallery_id"])
             $bitReturn = false;
-		
+
 		return $bitReturn;
 	}
-	
+
 	/**
 	 * Builds the rating bar available for every image-detailview.
 	 * Creates the needed js-links and image-tags as defined by the template.
@@ -539,32 +539,32 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
 		$strIcons = "";
 		$strRatingBarTitle = "";
-		
+
 		include_once(_systempath_."/class_modul_rating_rate.php");
 		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
-		
+
 		//read the templates
 		$strTemplateBarId = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "rating_bar");
-		
+
 		if($bitRatingAllowed && $bitPermissions) {
 			$strTemplateIconId = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "rating_icon");
-			
+
 			for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
 				$arrTemplate = array();
 				$arrTemplate["rating_icon_number"] = $intI;
-				
+
 			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("gallery_rating_rate1").$intI.$this->getText("gallery_rating_rate2");
-	
-				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+
+				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
 			}
 		} else {
 		    if(!$bitRatingAllowed)
 			    $strRatingBarTitle = $this->getText("gallery_rating_voted");
-			else    
+			else
 			    $strRatingBarTitle = $this->getText("gallery_rating_permissions");
 		}
-		
+
 		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 

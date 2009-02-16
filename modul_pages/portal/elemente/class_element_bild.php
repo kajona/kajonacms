@@ -52,16 +52,16 @@ class class_element_bild extends class_element_portal implements interface_porta
 			//scale the image?
 			$intMaxWidth = 0;
 			$intMaxHeight = 0;
-			
+
 			if($this->arrElementData["bild_x"] != "" && $this->arrElementData["bild_x"] != 0)
 		        $intMaxWidth = (int)$this->arrElementData["bild_x"];
-		        
+
 		    if($this->arrElementData["bild_y"] != "" && $this->arrElementData["bild_y"] != 0)
                 $intMaxHeight = (int)$this->arrElementData["bild_y"];
-                
-            if($intMaxHeight > 0 || $intMaxWidth > 0)    
+
+            if($intMaxHeight > 0 || $intMaxWidth > 0)
 			    $strImage .= "<img src=\""._webpath_."/image.php?image=".urlencode($this->arrElementData["bild_bild"])."&amp;maxWidth=".$intMaxWidth."&amp;maxHeight=".$intMaxHeight."\" alt=\"".$strTitle."\" />";
-			else    
+			else
 			    $strImage .= "<img src=\""._webpath_.$this->arrElementData["bild_bild"]."\" alt=\"".$strTitle."\" />";
 		}
 
