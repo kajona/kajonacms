@@ -21,9 +21,9 @@ include_once(_systempath_."/class_modul_pages_page.php");
  * @package modul_postacomment
  */
 class class_modul_postacomment_portal_xml extends class_portal implements interface_xml_portal {
-    
+
     private $strErrors;
-    
+
 	/**
 	 * Constructor
 	 *
@@ -69,7 +69,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 	        //validate needed fields
 	        if(!$this->validateForm()) {
-	            //Create form to reenter valuess
+	            //Create form to reenter values
                 $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "postacomment_form");
                 $arrForm = array();
                 $arrForm["formaction"] = getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
@@ -80,6 +80,16 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
         		$arrForm["comment_systemid"] = $this->getParam("comment_systemid");
 		        $arrForm["comment_page"] = $this->getParam("comment_page");
         		$arrForm["validation_errors"] = $this->strErrors;
+
+        		//texts
+        		$arrForm["postacomment_write_new"] = $this->getText("postacomment_write_new");
+	            $arrForm["form_name_label"] = $this->getText("form_name_label");
+	            $arrForm["form_subject_label"] = $this->getText("form_subject_label");
+	            $arrForm["form_message_label"] = $this->getText("form_message_label");
+	            $arrForm["form_captcha_label"] = $this->getText("form_captcha_label");
+	            $arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
+	            $arrForm["form_submit_label"] = $this->getText("form_submit_label");
+
         		$strXMLContent .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
 	        }
 	        else {
@@ -87,23 +97,23 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	            //pageid or systemid to filter?
         		$strSystemidfilter = $this->getParam("comment_systemid");
         		$strPagefilter = "";
-        		    
+
         		$strPagefilter = class_modul_pages_page::getPageByName($this->getParam("comment_page"))->getSystemid();
-        	    
+
         	    $objPost = new class_modul_postacomment_post();
         	    $objPost->setStrUsername($this->getParam("comment_name"));
         	    $objPost->setStrTitle($this->getParam("comment_subject"));
         	    $objPost->setStrComment($this->getParam("comment_message"));
-        	    
+
         	    $objPost->setStrAssignedPage($strPagefilter);
         	    $objPost->setStrAssignedSystemid($strSystemidfilter);
         	    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
-        	    
+
         	    $objPost->saveObjectToDb();
         	    //reinit post -> encoded entities
         	    $objPost->loadDataFromDb();
-        	    
-        	    
+
+
         	    //load the post as a new post to add it at top of the list
 				$arrOnePost = array();
 				$arrOnePost["postacomment_post_name"] = $objPost->getStrUsername();
@@ -115,7 +125,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "postacomment_post");
 				$strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
 	        }
-		    
+
 		}
 		else
 		    $strXMLContent = $this->getText("fehler_recht");
@@ -138,8 +148,8 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	    $strReturn .= "</postacomment>";
         return $strReturn;
 	}
-	
-	
+
+
     /**
 	 * Validates the form data provided by the user
 	 *
@@ -147,7 +157,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	 */
 	public function validateForm() {
 	    $bitReturn = true;
-	    
+
 	    $strTemplateId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "validation_error_row");
 	    if(uniStrlen($this->getParam("comment_name")) < 2) {
 	        $bitReturn = false;

@@ -35,7 +35,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPage->setStrBrowsername("Postacomment Sample");
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");        
+        $objPage->setStrLanguage("");
         $objPage->saveObjectToDb();
 
         $strPostacommentPageID = $objPage->getSystemid();
@@ -47,17 +47,11 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrElement("postacomment");
         $objPagelement->saveObjectToDb($strPostacommentPageID, "comments_postacomment", _dbprefix_."element_universal", "first");
         $strElementId = $objPagelement->getSystemid();
-        
-        if($this->strContentLanguage == "de") {
-	        $strQuery = "UPDATE "._dbprefix_."element_universal
-	                        SET char1 ='postacomment_classic_de.tpl'
+
+        $strQuery = "UPDATE "._dbprefix_."element_universal
+	                        SET char1 ='postacomment_classic.tpl'
 	                        WHERE content_id = '".dbsafeString($strElementId)."'";
-        }
-        else {
-	        $strQuery = "UPDATE "._dbprefix_."element_universal
-	                        SET char1 ='postacomment_classic_en.tpl'
-	                        WHERE content_id = '".dbsafeString($strElementId)."'";
-        }
+
         if($this->objDB->_query($strQuery))
             $strReturn .= "Postacomment element created.\n";
         else
@@ -77,7 +71,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
-                
+
         $strReturn .= "Adding paragraph-element to new page\n";
         $objPagelement = new class_modul_pages_pageelement();
         $objPagelement->setStrPlaceholder("text_paragraph");
@@ -99,15 +93,15 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
                                     absatz_inhalt ='By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
                                                     switch the template to be used by the postacomment-pageelement by using the admin-backend.'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
-        }        
-        
+        }
+
         if($this->objDB->_query($strQuery))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
 
         $strReturn .= "Creating Navigation-Entry...\n";
-        
+
         //navigations installed?
         try {
             $objModule = class_modul_system_module::getModuleByName("navigation", true);
@@ -116,13 +110,13 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
             $objModule = null;
         }
         if($objModule != null) {
-        	
+
 	        include_once(_systempath_."/class_modul_navigation_tree.php");
 	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $arrNavis = class_modul_navigation_tree::getAllNavis();
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
-	        
+
 	        $objNaviPoint = new class_modul_navigation_point();
 	        $objNaviPoint->setStrName("Postacomment");
 	        $objNaviPoint->setStrPageI("postacomment");
@@ -131,11 +125,11 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         }
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
@@ -143,6 +137,6 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
     public function getCorrespondingModule() {
         return "postacomment";
     }
-    
+
 }
 ?>

@@ -21,9 +21,9 @@ include_once(_systempath_."/class_modul_postacomment_post.php");
  * @package modul_postacomment
  */
 class class_modul_postacomment_portal extends class_portal implements interface_portal {
-    
+
     private $strErrors = "";
-    
+
 	/**
 	 * Constructor
 	 *
@@ -51,17 +51,17 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		if($this->getParam("action") != "postComment")
 		    $strAction = "list";
 		else
-		    $strAction = "postComment";    
+		    $strAction = "postComment";
 
 		if ($strAction == "postComment") {
 		    if($this->validateForm()) {
 			    $strReturn .= $this->actionPostComment();
 			    //load the page before
-			    $this->portalReload(getLinkPortalHref($this->getHistory(1)));
+			    $this->portalReload(_indexpath_."?".$this->getHistory(1));
 		    }
 		}
 
-		//the list should be loaded in every case	    
+		//the list should be loaded in every case
 	    $strReturn = $this->actionList();
 
 		return $strReturn;
@@ -77,19 +77,20 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		$strReturn = "";
 		$strPosts = "";
 		$strForm = "";
-		
+		$strNewButton = "";
+
 		//pageid or systemid to filter?
 		$strSystemidfilter = "";
 		$strPagefilter = "";
 		if($this->getSystemid() != "")
 		    $strSystemidfilter = $this->getSystemid();
-		    
+
 		$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
-		    
-		
+
+
 		//Load postacomment
 		$arrComments = class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage());
-      
+
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_post");
 		//Check rights
 		if(count($arrComments) > 0) {
@@ -107,9 +108,9 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                         $arrOnePost["postacomment_post_rating"] = $this->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
                     }
 
-    				
+
     				$strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
-    
+
     				//Add pe code
     			    $arrPeConfig = array(
     			                              "pe_module" => "postacomment",
@@ -123,11 +124,11 @@ class class_modul_postacomment_portal extends class_portal implements interface_
     			    $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig, true);
     			}
     		}
-    		
+
 		}
 		else
 		    $strPosts .= $this->getText("postacomment_empty");
-		    
+
 		//Create form
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 	        $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_form");
@@ -140,44 +141,60 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 			$arrForm["comment_systemid"] = $this->getParam("systemid");
 			$arrForm["comment_page"] = $this->getPagename();
 			$arrForm["validation_errors"] = $this->strErrors;
-		  $strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
+
+			//texts
+			$arrForm["form_name_label"] = $this->getText("form_name_label");
+			$arrForm["form_subject_label"] = $this->getText("form_subject_label");
+			$arrForm["form_message_label"] = $this->getText("form_message_label");
+			$arrForm["form_captcha_label"] = $this->getText("form_captcha_label");
+			$arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
+			$arrForm["form_submit_label"] = $this->getText("form_submit_label");
+
+			$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
+
+			//button to show the form
+			$strTemplateNewButtonID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
+            $arrNewButton = array();
+            $arrNewButton["postacomment_write_new"] = $this->getText("postacomment_write_new");
+            $strNewButton = $this->objTemplate->fillTemplate($arrNewButton, $strTemplateNewButtonID);
 		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
-		$strReturn .= $this->objTemplate->fillTemplate(array("postacomment_form" => $strForm, "postacomment_list" => $strPosts), $strTemplateID); 
-		
+
+    	$strReturn .= $this->objTemplate->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_list" => $strPosts), $strTemplateID);
+
 		return $strReturn;
 	}
-	
-	
+
+
 	/**
 	 * Saves a post to the databases
 	 *
 	 */
 	public function actionPostComment() {
-	    
+
 	    //pageid or systemid to filter?
 	    if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 			$strSystemidfilter = "";
 			$strPagefilter = "";
 			if($this->getSystemid() != "")
 			    $strSystemidfilter = $this->getSystemid();
-			    
+
 			$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
-		    
+
 		    $objPost = new class_modul_postacomment_post();
 		    $objPost->setStrUsername($this->getParam("comment_name"));
 		    $objPost->setStrTitle($this->getParam("comment_subject"));
 		    $objPost->setStrComment($this->getParam("comment_message"));
-		    
+
 		    $objPost->setStrAssignedPage($strPagefilter);
 		    $objPost->setStrAssignedSystemid($strSystemidfilter);
 		    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
-		    
+
 		    $objPost->saveObjectToDb();
 	    }
 	}
-	
+
 	/**
 	 * Validates the form data provided by the user
 	 *
@@ -185,7 +202,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 */
 	public function validateForm() {
 	    $bitReturn = true;
-	    
+
 	    $strTemplateId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "validation_error_row");
 	    if(uniStrlen($this->getParam("comment_name")) < 2) {
 	        $bitReturn = false;
@@ -214,34 +231,34 @@ class class_modul_postacomment_portal extends class_portal implements interface_
     private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
         $strIcons = "";
         $strRatingBarTitle = "";
-        
+
         include_once(_systempath_."/class_modul_rating_rate.php");
         $intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
-        
+
         //read the templates
         $strTemplateBarId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_bar");
-        
+
         if($bitRatingAllowed && $bitPermissions) {
             $strTemplateIconId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "rating_icon");
-            
+
             for($intI = 1; $intI <= $intNumberOfIcons; $intI++) {
                 $arrTemplate = array();
                 $arrTemplate["rating_icon_number"] = $intI;
-                
+
                 $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
                 $arrTemplate["rating_icon_title"] = $this->getText("postacomment_rating_rate1").$intI.$this->getText("postacomment_rating_rate2");
-    
-                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+
+                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
             }
         } else {
             if(!$bitRatingAllowed)
                 $strRatingBarTitle = $this->getText("postacomment_rating_voted");
-            else    
+            else
                 $strRatingBarTitle = $this->getText("postacomment_rating_permissions");
         }
-        
+
         return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
-    }	
+    }
 
 }
 ?>
