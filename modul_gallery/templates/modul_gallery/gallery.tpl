@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: folderlist, piclist, pathnavigation -->
+<!-- available placeholders: folderlist, piclist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <p>%%pathnavigation%%</p>
     <p>%%folderlist%%</p>

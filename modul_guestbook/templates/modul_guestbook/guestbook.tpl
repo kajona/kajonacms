@@ -9,10 +9,10 @@
 
 <!-- available placeholders: post_name_from, post_name, post_name_plain, post_mail_text, post_email, post_page_text, post_page, post_message_text, post_text, post_date -->
 <post>
-    <table width="606" border="0">
+    <table width="100%" border="0">
         <tr>
-            <td width="442">%%post_name_from%%: %%post_name_plain%%</td>
-            <td width="154">%%post_date%%</td>
+            <td>%%post_name_from%%: %%post_name_plain%%</td>
+            <td style="text-align: right;">%%post_date%%</td>
         </tr>
         <tr>
             <td colspan="2">%%post_page_text%%: %%post_page%%</td>

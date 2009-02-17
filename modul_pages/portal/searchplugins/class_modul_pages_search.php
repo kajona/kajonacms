@@ -31,21 +31,21 @@ class class_modul_pages_search extends class_portal implements interface_search_
         $this->arrSearchterm = $arrSearchterm;
 
         $arrSearch = array();
-        
+
         //include the list of tables and rows to search
         $arrSearch["pages_elements"] = array();
         $arrSearch["page"] = array();
-        
+
         include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_portalpath_."/searchplugins/", array(".php"));
-        
+
         foreach($arrFiles as $strOneFile) {
         	if(uniStrpos($strOneFile, "searchdef_pages_" ) !== false) {
         		include_once(_portalpath_."/searchplugins/".$strOneFile);
         	}
         }
-        
+
 
 		$this->arrTableConfig = $arrSearch;
     }
@@ -77,8 +77,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
 			//Build the query
-
-    		 $strQuery = "SELECT page_name, pageproperties_description
+            $strQuery = "SELECT page_name, pageproperties_browsername, pageproperties_description
 						 FROM ".$strTable.",
 						      "._dbprefix_."page_element,
 						      "._dbprefix_."page,
@@ -96,7 +95,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 						   AND   ".$strWhere."
 						 ORDER BY page_element_placeholder_placeholder ASC,
 						 		system_sort ASC";
-            
+
 			$arrPages = $this->objDB->getArray($strQuery);
 
 			//register the found pages
@@ -107,6 +106,8 @@ class class_modul_pages_search extends class_portal implements interface_search_
 					}
 					else {
 						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
+						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
+						$this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".$this->strSearchtermRaw);
 						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
 						$this->arrHits[$arrOnePage["page_name"]]["description"] = $arrOnePage["pageproperties_description"];
 					}
@@ -133,8 +134,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 			$strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
 			//build query
-
-			$strQuery = "SELECT page_name, pageproperties_description
+			$strQuery = "SELECT page_name, pageproperties_browsername, pageproperties_description
 						 FROM ".$strTable.",
 						      "._dbprefix_."page_properties,
 						      "._dbprefix_."system
@@ -157,6 +157,8 @@ class class_modul_pages_search extends class_portal implements interface_search_
     					}
     					else {
     						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
+    						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
+                            $this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".$this->strSearchtermRaw);
     						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
     						$this->arrHits[$arrOnePage["page_name"]]["description"] = $arrOnePage["pageproperties_description"];
     					}
