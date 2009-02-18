@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -53,9 +53,9 @@ $lang["login_dashboard"]                 = "Welcome page";
 $lang["login_datum"]                     = "Date";
 $lang["login_ip"]                        = "IP-Address";
 $lang["login_loginButton"]               = "Login";
-$lang["login_loginCookiesInfo"]          = "Please allow Cookies for this site an reload the current page to be able to use all functionalities.";
+$lang["login_loginCookiesInfo"]          = "Please allow Cookies for this site and reload the current page to be able to use all functionalities.";
 $lang["login_loginError"]                = "Unfortunately, the provided login data was invalid. Please check your username and password.<br /><br />If you still can't log in, contact your system-administrator.";
-$lang["login_loginJsInfo"]               = "Please allow JavaScript for this site an reload the current page to be able to use all functionalities.";
+$lang["login_loginJsInfo"]               = "Please allow JavaScript for this site and reload the current page to be able to use all functionalities.";
 $lang["login_loginPass"]                 = "Password";
 $lang["login_loginTitle"]                = "Login";
 $lang["login_loginUser"]                 = "Username";
