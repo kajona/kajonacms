@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["note_content"]                    = "Content:";
@@ -36,8 +36,8 @@ $lang["systemcheck_kajona_installer"]    = "/installer present: ";
 $lang["systemcheck_kajona_piccacheper"]  = "Writeperm. on "._images_cachepath_.": ";
 $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_no"]                  = "No";
-$lang["systemcheck_php_regglobal"]       = "Register global: ";
-$lang["systemcheck_php_safemode"]        = "Safemode: ";
-$lang["systemcheck_php_urlfopen"]        = "Allow url fopen: ";
+$lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
+$lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
+$lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
 $lang["systemcheck_yes"]                 = "Yes";
 ?>

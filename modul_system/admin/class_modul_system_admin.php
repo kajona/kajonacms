@@ -82,7 +82,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 		if($strAction == "systemSettings")
 			$strReturn = $this->actionSystemSettings();
-			
+
 		if($strAction == "systemSessions")
 			$strReturn = $this->actionSessions();
 
@@ -336,33 +336,33 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     private function actionSystemtasks() {
         $strReturn = "";
         $strTaskOutput = "";
-        
+
         //check needed rights
         if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
-        	
+
         	//include the list of possible tasks
             include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
             asort($arrFiles);
-            
-        	
+
+
         	//react on special task-commands?
             if($this->getParam("task") != "") {
                 //search for the matching task
                 foreach ($arrFiles as $strOneFile) {
                     if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
-                        
+
                         //instantiate the current task
                         include_once(_adminpath_."/systemtasks/".$strOneFile);
                         $strClassname = uniStrReplace(".php", "", $strOneFile);
                         $objTask = new $strClassname();
                         if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
-                        	
-                        	
+
+
                         	//fire the task or display a form?
                         	if($this->getParam("work") == "true") {
-                        		 class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo); 
+                        		 class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
                         		 //let the work begin...
                         		 $strTaskOutput .= $objTask->executeTask();
                         	}
@@ -382,48 +382,48 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     }
                 }
             }
-        	
+
         	$intI = 0;
             $strReturn .= $this->objToolkit->listHeader();
-            
+
         	//loop over the found files
         	foreach ($arrFiles as $strOneFile) {
         		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
-        			
+
         			//instantiate the current task
         			include_once(_adminpath_."/systemtasks/".$strOneFile);
         			$strClassname = uniStrReplace(".php", "", $strOneFile);
         			$objTask = new $strClassname();
-        			
+
         			if($objTask instanceof interface_admin_systemtask ) {
-	                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), 
-	                                                                   $objTask->getStrTaskname(), 
+	                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
+	                                                                   $objTask->getStrTaskname(),
 	                                                                   $this->objToolkit->listButton(
-	                                                                        getLinkAdmin("system", 
-	                                                                                     "systemTasks", 
-	                                                                                     "&task=".$objTask->getStrInternalTaskName(), 
-	                                                                                      $objTask->getStrTaskname(), 
-	                                                                                      $this->getText("systemtask_run"), 
+	                                                                        getLinkAdmin("system",
+	                                                                                     "systemTasks",
+	                                                                                     "&task=".$objTask->getStrInternalTaskName(),
+	                                                                                      $objTask->getStrTaskname(),
+	                                                                                      $this->getText("systemtask_run"),
 	                                                                                      "icon_accept.gif")),
 	                                                                   $intI++);
         			}
         		}
         	}
             $strReturn .= $this->objToolkit->listFooter();
-        	
-            
-        	
+
+
+
         	if($strTaskOutput != "") {
         	   $strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
         	}
-        	   
-        }          
+
+        }
         else
             $strReturn = $this->getText("fehler_recht");
-            
+
         return $strReturn;
     }
-    
+
 
 // --- Sessionmanagement --------------------------------------------------------------------------------
 
@@ -436,15 +436,15 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
-            
+
             //react on commands?
             if($this->getParam("logout") == "true") {
                 $objSession = new class_modul_system_session($this->getSystemid());
-                $objSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);               
+                $objSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
                 $objSession->updateObjectToDb();
                 $this->objDB->flushQueryCache();
             }
-            
+
             include_once(_systempath_."/class_modul_system_session.php");
             $arrSessions = class_modul_system_session::getAllActiveSessions();
             $arrData = array();
@@ -462,14 +462,14 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     $objUser = new class_modul_user_user($objOneSession->getStrUserid());
                     $strUsername = $objUser->getStrUsername();
                 }
-                $arrRowData[0] = getImageAdmin("icon_user.gif");    
+                $arrRowData[0] = getImageAdmin("icon_user.gif");
                 $arrRowData[1] = $strUsername;
                 $arrRowData[2] = timeToString($objOneSession->getIntReleasetime());
                 if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
                     $arrRowData[3] = $this->getText("session_loggedin");
-                else 
-                    $arrRowData[3] = $this->getText("session_loggedout");    
-                    
+                else
+                    $arrRowData[3] = $this->getText("session_loggedout");
+
                 //find out what the user is doing...
                 $strLastUrl = $objOneSession->getStrLasturl();
                 if(uniStrpos($strLastUrl, "?") !== false)
@@ -495,12 +495,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         }
                     }
                 }
-                    
+
                 $arrRowData[4] = $strActivity;
                 if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
                     $arrRowData[5] = getLinkAdmin("system", "systemSessions", "&logout=true&systemid=".$objOneSession->getSystemid(), "", $this->getText("session_logout"), "icon_ton.gif");
-                else 
-                    $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");    
+                else
+                    $arrRowData[5] = getImageAdmin("icon_tonDisabled.gif");
                 $arrData[] = $arrRowData;
             }
             $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
@@ -509,10 +509,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         else
 			$strReturn = $this->getText("fehler_recht");
         return $strReturn;
-    }    
-    
-    
-    
+    }
+
+
+
 // --- Systemlog ---------------------------------------------------------------------------------------.
 
     /**
@@ -655,9 +655,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		$arrReturn[$this->getText("inputtimeout")] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_input_time") ."s";
 		$arrReturn[$this->getText("memorylimit")] = bytesToString(ini_get("memory_limit"), true);
 		$arrReturn[$this->getText("errorlevel")] = class_carrier::getInstance()->getObjConfig()->getPhpIni("error_reporting");
+        $arrReturn[$this->getText("systeminfo_php_safemode")] = (ini_get("safe_mode") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+        $arrReturn[$this->getText("systeminfo_php_urlfopen")] = (ini_get("allow_url_fopen") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+        $arrReturn[$this->getText("systeminfo_php_regglobal")] = (ini_get("register_globals") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 		$arrReturn[$this->getText("postmaxsize")] = bytesToString(ini_get("post_max_size"), true);
 		$arrReturn[$this->getText("uploadmaxsize")] = bytesToString(ini_get("upload_max_filesize"), true);
-		$arrReturn[$this->getText("uploads")] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? "On" : "Off");
+		$arrReturn[$this->getText("uploads")] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 
 		return $arrReturn;
 	}
@@ -686,10 +689,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		if(function_exists("gd_info")) 	{
 			$arrGd = gd_info();
 			$arrReturn[$this->getText("version")] = $arrGd["GD Version"];
-			$arrReturn[$this->getText("gifread")] = ($arrGd["GIF Read Support"] ? "True" : "False");
-			$arrReturn[$this->getText("gifwrite")] = ($arrGd["GIF Create Support"] ? "True" : "False");
-			$arrReturn[$this->getText("jpg")] = ($arrGd["JPG Support"] ? "True" : "False");
-			$arrReturn[$this->getText("png")] = ($arrGd["PNG Support"] ? "True" : "False");
+			$arrReturn[$this->getText("gifread")] = ($arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("gifwrite")] = ($arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("jpg")] = ($arrGd["JPG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("png")] = ($arrGd["PNG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 		}
 		else
 			$arrReturn[""] = $this->getText("keinegd");
@@ -743,7 +746,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
 			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
-			
+
 		case "postgres":
 			foreach($arrTables as $arrTable) {
 				$intNumber++;
@@ -759,9 +762,9 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$arrReturn[$this->getText("groessegesamt")] = bytesToString($intSizeData + $intSizeIndex);
 			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
 			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
-			break;	
+			break;
 		}
-		
+
 
 		return $arrReturn;
 	}

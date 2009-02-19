@@ -7,14 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["note_content"]                    = "Inhalt:";
 $lang["note_name"]                       = "Notizen";
 $lang["sysinfo_checkboxkajona"]          = "Kajona Informationen anzeigen";
-$lang["sysinfo_checkboxphp"]             = "PHP Informationen anzeigen";
-$lang["sysinfo_checkboxserver"]          = "Server Informationen anzeigen";
+$lang["sysinfo_checkboxphp"]             = "PHP-Informationen anzeigen";
+$lang["sysinfo_checkboxserver"]          = "Server-Informationen anzeigen";
 $lang["sysinfo_kajona_nrOfModules"]      = "Anzahl Kajonamodule: ";
 $lang["sysinfo_kajona_version"]          = "Kajona Version: ";
 $lang["sysinfo_kajona_versionAvail"]     = "Neuste Version: ";
@@ -36,8 +36,8 @@ $lang["systemcheck_kajona_installer"]    = "/installer vorhanden: ";
 $lang["systemcheck_kajona_piccacheper"]  = "Schreibrechte auf "._images_cachepath_.": ";
 $lang["systemcheck_name"]                = "Systemcheck";
 $lang["systemcheck_no"]                  = "Nein";
-$lang["systemcheck_php_regglobal"]       = "Register global: ";
-$lang["systemcheck_php_safemode"]        = "Safemode: ";
-$lang["systemcheck_php_urlfopen"]        = "Allow url fopen: ";
+$lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
+$lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
+$lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
 $lang["systemcheck_yes"]                 = "Ja";
 ?>
