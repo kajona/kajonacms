@@ -52,18 +52,15 @@ class class_exception extends Exception {
         $intConfigDebuglevel = class_carrier::getInstance()->getObjConfig()->getDebug("debuglevel");
         // 0: fatal errors will be displayed
         // 1: fatal and regular errors will be displayed
-        
+
         //set which POST parameters should read out
         $arrPostParams = array("module", "action", "page", "systemid");
 
         //send an email to the admin?
-        $bitMail = false;
         if(defined("_system_admin_email_") && _system_admin_email_ != "") {
-            $bitMail = true;
-
             $strMailtext = "";
-            $strMailtext .= "On the system installed at "._webpath_." an error occured!\n\n";
-            $strMailtext .= "The errormessage was:\n";
+            $strMailtext .= "The system installed at "._webpath_." registered an error!\n\n";
+            $strMailtext .= "The error message was:\n";
             $strMailtext .= "\t".$this->getMessage()."\n\n";
             $strMailtext .= "The level of this error was:\n";
             $strMailtext .= "\t";
@@ -72,17 +69,17 @@ class class_exception extends Exception {
             if($this->getErrorlevel() == self::$level_ERROR)
                 $strMailtext .= "REGULAR ERROR";
             $strMailtext .= "\n\n";
-            $strMailtext .= "File and linenumber the error was thrown:\n";
-            $strMailtext .= "\t".basename($this->getFile()) ." in Line ".$this->getLine()."\n\n";
+            $strMailtext .= "File and line number the error was thrown:\n";
+            $strMailtext .= "\t".basename($this->getFile()) ." in line ".$this->getLine()."\n\n";
             $strMailtext .= "Callstack / Backtrace:\n\n";
             $strMailtext .= $this->getTraceAsString();
             $strMailtext .= "\n\n";
-            $strMailtext .= "Sourcehost: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
-            $strMailtext .= "Querystring: ".getServer("REQUEST_URI")."\n";
-			$strMailtext .= "Post data (selective):\n";
+            $strMailtext .= "Source host: ".getServer("REMOTE_ADDR")." (".gethostbyaddr(getServer("REMOTE_ADDR")).")\n";
+            $strMailtext .= "Query string: ".getServer("REQUEST_URI")."\n";
+			$strMailtext .= "POST data (selective):\n";
             foreach ($arrPostParams as $strParam) {
             	if (getPost($strParam) != "") {
-            		$strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
+            		$strMailtext .= "\t".$strParam.": ".htmlToString(getPost($strParam), true)."\n";
             	}
             }
             $strMailtext .= "\n\n";
@@ -91,7 +88,7 @@ class class_exception extends Exception {
 
             include_once(_systempath_."/class_mail.php");
             $objMail = new class_mail();
-            $objMail->setSubject("Error on website at "._webpath_." occured!");
+            $objMail->setSubject("Error on website "._webpath_." occured!");
             $objMail->setSender(_system_admin_email_);
             $objMail->setText($strMailtext);
             $objMail->addTo(_system_admin_email_);
@@ -104,8 +101,6 @@ class class_exception extends Exception {
             $strLogMessage = basename($this->getFile()).":".$this->getLine(). " -- ".$this->getMessage();
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelError);
 
-
-
             //fatal errors are displayed in every case
             if(defined("_xmlLoader_") && _xmlLoader_ === true) {
                 $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -115,14 +110,10 @@ class class_exception extends Exception {
                 $strErrormessage = "<html><head></head><body><div style=\"border: 1px solid red; padding: 5px; margin: 20px; font-family: arial,verdana; font-size: 12px;  \">\n";
     		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">A fatal error occured:</div>\n";
     		    $strErrormessage .= $this->getMessage()."<br />";
-    
-    	        if($bitMail)
-    	           $strErrormessage .= "An email containing this error was sent to the administration.";
-    	        else
-    	           $strErrormessage .= "Please inform the administration about the error above.";
-    
+
+                $strErrormessage .= "Please inform the administration about the error above.";
     	        $strErrormessage .= "</div></body></html>";
-    	        
+
             }
             print $strErrormessage;
 	        //close remaining txs
@@ -147,10 +138,8 @@ class class_exception extends Exception {
         		    $strErrormessage .= "<div style=\"background-color: #cccccc; color: #000000; font-weight: bold; \">An error occured:</div>\n";
         		    $strErrormessage .= $this->getMessage()."<br />";
         		    //$strErrormessage .= basename($this->getFile()) ." in Line ".$this->getLine();
-        		    if($bitMail)
-    	               $strErrormessage .= "An email containing this error was sent to the administration.";
-    	            else
-    	               $strErrormessage .= "Please inform the administration about the error above.";
+
+    	            $strErrormessage .= "Please inform the administration about the error above.";
         	        $strErrormessage .= "</div></body></html>";
                 }
     	        print $strErrormessage;
@@ -177,7 +166,7 @@ class class_exception extends Exception {
     public function getErrorlevel() {
         return $this->intErrorlevel;
     }
-    
+
     public function setErrorlevel($intErrorlevel) {
         $this->intErrorlevel = $intErrorlevel;
     }
