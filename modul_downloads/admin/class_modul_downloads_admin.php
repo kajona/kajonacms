@@ -180,7 +180,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			$intI = 0;
 
 
-            
+
 			//initial js-code needed for common tasks
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
@@ -265,7 +265,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 
-	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
+	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
 
 				$strReturn .= "<script type=\"text/javascript\">
 					function kajonaUploaderCallback() {
@@ -312,22 +312,22 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	$strName = uniStrTrim($objOneFile->getName(), 30)." (".uniStrTrim(basename($objOneFile->getFilename()), 25).")";
 				 	$strCenter = ($objOneFile->getType() == 0 ? bytesToString($objOneFile->getSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
-				 	
+
 				 	//ratings available?
 				 	try {
 				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
 				        if($objMdlRating != null && $objOneFile->getType() != 1) {
-				 	        include_once(_systempath_."/class_modul_rating_rate.php");	
+				 	        include_once(_systempath_."/class_modul_rating_rate.php");
 				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
 				 	        if($objRating != null)
 				 	            $strCenter .= " - ".$objRating->getFloatRating();
 				 	        else
-				 	            $strCenter .= " - 0.0";    
+				 	            $strCenter .= " - 0.0";
 				        }
 
 				 	}
 				 	catch (class_exception $objException) { }
-				 	
+
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getType() == 1 && $this->objRights->rightView($objOneFile->getSystemid()))
@@ -469,7 +469,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 // --- Synchronisierungsfunktionen ----------------------------------------------------------------------
 
-	
+
 	/**
 	 * Synchronizes all archives available, if rights given
 	 *

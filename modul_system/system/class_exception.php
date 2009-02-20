@@ -79,7 +79,7 @@ class class_exception extends Exception {
 			$strMailtext .= "POST data (selective):\n";
             foreach ($arrPostParams as $strParam) {
             	if (getPost($strParam) != "") {
-            		$strMailtext .= "\t".$strParam.": ".htmlToString(getPost($strParam), true)."\n";
+            		$strMailtext .= "\t".$strParam.": ".getPost($strParam)."\n";
             	}
             }
             $strMailtext .= "\n\n";

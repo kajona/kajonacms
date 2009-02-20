@@ -159,18 +159,18 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			//Load galleries
 			$arrObjGalleries = class_modul_gallery_gallery::getGalleries();
 			$intI = 0;
-			
-			
+
+
 			//initial js-code needed for common tasks
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
 			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
 			$strJsSyncCode .= "<script type=\"text/javascript\">
                 function gallery_init_screenlock_dialog() { jsDialog_2.setContentRaw('<img src=\""._skinwebpath_."/loading.gif\" />'); jsDialog_2.init(); }
                 function gallery_hide_screenlock_dialog() { jsDialog_2.hide(); }
-                
+
                 function syncGallery(strSystemid) {
                     gallery_init_screenlock_dialog();
-                    
+
                     kajonaAdminAjax.genericAjaxCall('gallery', 'syncGallery', strSystemid, {
 						    success : function(o) {
 						        gallery_hide_screenlock_dialog();
@@ -187,8 +187,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 					);
                 }
             </script>";
-                   
-			
+
+
 			//Iterate over all galleries
 			foreach($arrObjGalleries as $objOneGallery) {
 				//Check specific rights
@@ -209,9 +209,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
 				}
 			}
-			
-			
-			
+
+
+
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newGallery", "", $this->getText("galerie_neu"), $this->getText("galerie_neu"), "icon_blank.gif"), $intI++);
 
@@ -478,9 +478,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             if($objFmRepo->rightRight1()) {
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
-	
-	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload[0]", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
-				
+
+	            $strReturn .= $this->objToolkit->formInputUploadFlash("filemanager_upload", $this->getText("filemanager_upload", "filemanager", "admin"), $objFmRepo->getStrUploadFilter(), true);
+
 				$strReturn .= "<script type=\"text/javascript\">
 					function kajonaUploaderCallback() {
 						kajonaAdminAjax.genericAjaxCall('gallery', 'massSyncGallery', '', {
@@ -494,10 +494,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 						);
 					}
                 </script>";
-				
+
 				$strReturn .= "<br />";
             }
-             
+
 
 			//Load all files
 			$arrFiles = class_modul_gallery_pic::loadFilesDB($this->getSystemid());
@@ -528,22 +528,22 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	$strName = uniStrTrim($objOneFile->getStrName(), 30)." (".uniStrTrim(basename($objOneFile->getStrFilename()), 25).")";
 				 	$strCenter = ($objOneFile->getIntType() == 0 ? bytesToString($objOneFile->getIntSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getIntType() == 0 ? $objOneFile->getIntHits()." Hits": "");
-				 	
+
 				 	//ratings available?
 				 	try {
 				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
 				        if($objMdlRating != null && $objOneFile->getIntType() != 1) {
-				 	        include_once(_systempath_."/class_modul_rating_rate.php");	
+				 	        include_once(_systempath_."/class_modul_rating_rate.php");
 				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
 				 	        if($objRating != null)
 				 	            $strCenter .= " - ".$objRating->getFloatRating();
 				 	        else
-				 	            $strCenter .= " - 0.0";    
+				 	            $strCenter .= " - 0.0";
 				        }
 
 				 	}
 				 	catch (class_exception $objException) { }
-				 	
+
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getIntType() == 1 && $objOneFile->rightView())
@@ -570,7 +570,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                         else
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                     }
-                    
+
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 
