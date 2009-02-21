@@ -73,13 +73,13 @@ class class_db {
 		    //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame
 		    //throw new class_exception("No db-driver defined!", class_exception::$level_FATALERROR);
 		}
-        
-        
+
+
 	}
-    
+
     /**
      * Loads the cache saved to session before into the current instance.
-     * This method is being called during the system-startup, so there's no 
+     * This method is being called during the system-startup, so there's no
      * need to call this method manually!
      */
     public function loadCacheFromSession() {
@@ -104,7 +104,7 @@ class class_db {
         class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
 	    if($this->objDbDriver !== null)
 	        $this->objDbDriver->dbclose();
-            
+
         //save cache to session
         //reset cache after ~10 times to avoid mem-errors
         /*
@@ -118,8 +118,8 @@ class class_db {
         else {
         	class_session::getInstance()->setSession("databaseQuerySessionCache", array());
             class_session::getInstance()->setSession("databaseQueryCacheTimes", 0);
-        }   
-        */ 
+        }
+        */
 	}
 
 	/**
@@ -462,7 +462,7 @@ class class_db {
     public function getColumnsOfTable($strTableName) {
         return $this->objDbDriver->getColumnsOfTable($strTableName);
     }
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -472,8 +472,8 @@ class class_db {
      *      char20
      *      char100
      *      char254
-     *      text 
-     * 
+     *      text
+     *
      * @param string $strType
      * @return string
      */
@@ -508,8 +508,8 @@ class class_db {
         $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if(!$bitReturn)
         	$this->getError("");
-        	
-        return $bitReturn;	
+
+        return $bitReturn;
     }
 
 	/**
@@ -645,18 +645,18 @@ class class_db {
 	public function getNumberCache() {
 		return $this->intNumberCache;
 	}
-    
+
     /**
      * Returns the number of items currently in the query-cache
-     * 
-     * @return  int 
+     *
+     * @return  int
      */
     public function getCacheSize() {
     	return count($this->arrQueryCache);
     }
 
 	/**
-	 * Makes a string db-save
+	 * Makes a string db-safe
 	 *
 	 * @param string $strString
 	 * @param bool $bitHtmlEntitites
@@ -683,8 +683,8 @@ class class_db {
 	public function flushQueryCache() {
 	    $this->arrQueryCache = array();
 	}
-	
-	
+
+
 	/**
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
@@ -695,7 +695,7 @@ class class_db {
     public function encloseColumnName($strColumn) {
     	return $this->objDbDriver->encloseColumnName($strColumn);
     }
-    
+
 /**
      * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers

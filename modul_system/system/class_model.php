@@ -92,7 +92,7 @@ class class_model extends class_root {
     }
 
     /**
-     * Returns the bool-value for the right to right1 this record,
+     * Returns the bool-value for the right1 of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
@@ -107,7 +107,7 @@ class class_model extends class_root {
     }
 
     /**
-     * Returns the bool-value for the right to right2 this record,
+     * Returns the bool-value for the right2 of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
@@ -122,7 +122,7 @@ class class_model extends class_root {
     }
 
     /**
-     * Returns the bool-value for the right to right3 this record,
+     * Returns the bool-value for the right3 of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
@@ -137,7 +137,7 @@ class class_model extends class_root {
     }
 
     /**
-     * Returns the bool-value for the right to right4 this record,
+     * Returns the bool-value for the right4 of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
@@ -152,7 +152,7 @@ class class_model extends class_root {
     }
 
     /**
-     * Returns the bool-value for the right to right5 this record,
+     * Returns the bool-value for the right5 of this record,
      * Systemid MUST be given, otherwise false
      *
      * @return bool
@@ -165,7 +165,7 @@ class class_model extends class_root {
         }
         return false;
     }
-    
+
 // --- MISC ---------------------------------------------------------------------------------------------
 
     /**
@@ -173,14 +173,14 @@ class class_model extends class_root {
 	 * This can be useful to delete other records being dependent on the record to be deleted
 	 */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
-        return true;    
+        return true;
 	}
-	
+
 // --- RATING -------------------------------------------------------------------------------------------
 
     /**
      * Rating of the current file, if module rating is installed.
-     * 
+     *
      * @see interface_sortable_rating
      * @return float
      */
@@ -193,15 +193,15 @@ class class_model extends class_root {
             if($objRating != null)
                $floatRating = $objRating->getFloatRating();
             else
-               $floatRating = 0.0;   
+               $floatRating = 0.0;
         }
-        
+
         return $floatRating;
     }
-    
-    /**  
+
+    /**
      * Checks if the current user is allowed to rate the file
-     * 
+     *
      * @return bool
      */
     public function isRateableByUser() {
@@ -213,15 +213,15 @@ class class_model extends class_root {
             if($objRating != null)
                $bitReturn = $objRating->isRateableByCurrentUser();
             else
-               $bitReturn = true;   
+               $bitReturn = true;
         }
-        
+
         return $bitReturn;
     }
-    
+
     /**
      * Number of rating for the current file
-     * 
+     *
      * @see interface_sortable_rating
      * @return int
      */
@@ -234,9 +234,9 @@ class class_model extends class_root {
             if($objRating != null)
                $intHits = $objRating->getIntHits();
             else
-               return 0;   
+               return 0;
         }
-        
+
         return $intHits;
     }
 

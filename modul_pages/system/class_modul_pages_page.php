@@ -157,7 +157,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
     public function updateObjectToDb($strFolderid = "0") {
         class_logger::getInstance()->addLogRow("updated page ".$this->getSystemid(), class_logger::$levelInfo);
 
-        //Make texts db-save
+        //Make texts db-safe
 		$strDescription = htmlToString($this->getStrDesc(), false, false);
 		//Do we have a folderid?
 		$strName = str_replace(" ", "_", $this->getStrName());
@@ -187,7 +187,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		$strQuery = "UPDATE  "._dbprefix_."page
 					SET page_name='".$this->objDB->dbsafeString($strName)."'
 						WHERE page_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-                        
+
 
 		//and the properties record
 		//properties fpr this language alerady existing?
@@ -236,8 +236,8 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		else
 		  return false;
     }
-    
-    
+
+
 
     /**
 	 * Loads all pages known by the system
@@ -260,14 +260,14 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		else
 		    $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
-		        
+
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_pages_page($arrOneId["system_id"]);
 
 		return $arrReturn;
 	}
-	
+
 	/**
 	 * Fetches the total number of pages available
 	 *
@@ -401,8 +401,8 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	public static function assignNullProperties($strTargetLanguage) {
         //Load all non-assigned props
         $strQuery = "SELECT pageproperties_id FROM "._dbprefix_."page_properties WHERE pageproperties_language = '' OR pageproperties_language IS NULL";
-        $arrPropIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery); 
-        
+        $arrPropIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
         foreach ($arrPropIds as $arrOneId) {
             $strId = $arrOneId["pageproperties_id"];
             $strCountQuery = "SELECT COUNT(*)
@@ -410,7 +410,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
                                WHERE pageproperties_language = '".dbsafeString($strTargetLanguage)."'
                                  AND pageproperties_id = '".dbsafeString($strId)."'";
             $arrCount = class_carrier::getInstance()->getObjDB()->getRow($strCountQuery);
-            
+
             if((int)$arrCount["COUNT(*)"] == 0) {
                 $strUpdate = "UPDATE "._dbprefix_."page_properties
                               SET pageproperties_language = '".dbsafeString($strTargetLanguage)."'
@@ -423,8 +423,8 @@ class class_modul_pages_page extends class_model implements interface_model  {
         }
 	    return true;
 	}
-	
-	
+
+
 	/**
 	 * Does a deep copy of the current page.
 	 * Inlcudes all page-elements created on the page
@@ -436,60 +436,60 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    class_logger::getInstance()->addLogRow("copy page ".$this->getSystemid(), class_logger::$levelInfo);
 	    //working directly on the db is much more easier than handling this stuff by objects
 	    $strSourcePage = $this->getSystemid();
-	    
+
 	    //load basic page properties
 	    $arrBasicSourcePage = $this->objDB->getRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_id = '".dbsafeString($strSourcePage)."'");
-	    
+
 	    //and load an array of corresponding pageproperties
 	    $arrBasicSourceProperties = $this->objDB->getArray("SELECT * FROM ".$this->arrModule["table2"]." WHERE pageproperties_id = '".dbsafeString($strSourcePage)."'");
-	    
+
 	    //create the new systemid
 	    $strIdOfNewPage = generateSystemid();
-	    
+
 	    //start the copy-process
 	    $this->objDB->transactionBegin();
-	    
+
 	    //copy the rights and systemrecord
 	    $objCommon = new class_modul_system_common($this->getSystemid());
 	    if(!$objCommon->copyCurrentSystemrecord($strIdOfNewPage)) {
 	        $this->objDB->transactionRollback();
 	        return false;
 	    }
-	    
+
 	    //create the foregin record in our table
 	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-	    			(page_id, page_name) VALUES 
+	    			(page_id, page_name) VALUES
 	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"]))."')";
 	    if(!$this->objDB->_query($strQuery)) {
 	        $this->objDB->transactionRollback();
 	        return false;
 	    }
-        
+
         //update the comment in system-table
         $strQuery = "UPDATE "._dbprefix_."system
                         SET system_comment='PAGE: ".$this->objDB->dbsafeString(dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"])))."'
                       WHERE system_id = '".$this->objDB->dbsafeString($strIdOfNewPage)."'";
 
         $this->objDB->_query($strQuery);
-	    
+
 	    //insert all pageprops in all languages
 	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
-	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]." 
-	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES 
-	        ('".dbsafeString($strIdOfNewPage)."', 
-	        '".dbsafeString($arrOneProperty["pageproperties_browsername"])."', 
+	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
+	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES
+	        ('".dbsafeString($strIdOfNewPage)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_browsername"])."',
 	        '".dbsafeString($arrOneProperty["pageproperties_keywords"])."',
 	        '".dbsafeString($arrOneProperty["pageproperties_description"])."',
 	        '".dbsafeString($arrOneProperty["pageproperties_template"])."',
 	        '".dbsafeString($arrOneProperty["pageproperties_seostring"])."',
 	        '".dbsafeString($arrOneProperty["pageproperties_language"])."')";
-	        
+
 	        if(!$this->objDB->_query($strQuery)) {
 	            $this->objDB->transactionRollback();
 	            return false;
 	        }
 	    }
-	    
+
 	    //ok. so now load all elements on the source page and copy them, too
 	    $arrElementsOnSource = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 	    if(count($arrElementsOnSource) > 0) {
@@ -500,12 +500,12 @@ class class_modul_pages_page extends class_model implements interface_model  {
     	        }
     	    }
 	    }
-	    
+
 	    //if we reach up here, we've done it. commit and quit ;)
 	    $this->objDB->transactionCommit();
 	    return true;
 	}
-	
+
 	public function generateNonexistingPagename($strName) {
 	    //Filter blanks out of pagename
 		$strName = str_replace(" ", "_", $this->getStrName());
@@ -561,7 +561,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
     public function setStrName($strName) {
         //make a valid pagename
         $strName = uniStrtolower(urlSafeString($strName));
-        
+
     	$this->strName = $strName;
     }
     public function setStrKeywords($strKeywords) {
