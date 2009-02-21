@@ -11,6 +11,7 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
+    %%head%%
 	<script language="Javascript" type="text/javascript">
 		function loginStartup() { document.getElementById('name').focus(); }
     	YAHOO.util.Event.onDOMReady(loginStartup);
@@ -19,7 +20,6 @@
   		kajonaAjaxHelper.loadAnimationBase();
 		kajonaAjaxHelper.loadAutocompleteBase();
 	</script>
-	%%head%%
 </head>
 <body class="login">
 

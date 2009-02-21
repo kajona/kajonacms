@@ -8,6 +8,7 @@
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
+%%head%%
 <script language="Javascript" type="text/javascript">
 	function loginStartup() { document.getElementById('name').focus(); }
 	YAHOO.util.Event.onDOMReady(loginStartup);
