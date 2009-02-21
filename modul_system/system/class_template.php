@@ -80,7 +80,10 @@ class class_template {
 	 * @throws class_exception
 	 */
 	public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
-		//Adding the current areaprefix
+		//avoid directory traversals
+        $strName = uniStrReplace("..", "", $strName);
+
+        //Adding the current areaprefix
 		if(!$bitForce && $this->strArea != "portal")
 			$strName = $this->strArea . $strName;
             
@@ -106,7 +109,7 @@ class class_template {
 				$strTemplatePath = _templatepath_;
 
 			//We have to read the whole Template from the filesystem
-			if(file_exists($strTemplatePath."/".$strName) && is_file($strTemplatePath."/".$strName)) {
+            if(file_exists($strTemplatePath."/".$strName) && is_file($strTemplatePath."/".$strName) && uniSubstr($strName, -4) == ".tpl" ) {
 				$strTemplate = file_get_contents($strTemplatePath."/".$strName);
 				//Saving to the cache
 				$this->arrCacheTemplates[$strCacheTemplate] = $strTemplate;
