@@ -57,7 +57,7 @@ class class_db {
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 
-		$this->bitMagicQuotesGPC = (get_magic_quotes_gpc() == 0);
+		//TODO: can be removed? $this->bitMagicQuotesGPC = (get_magic_quotes_gpc() == 0);
 
 		//Load the defined db-driver
 		$strDriver = $this->objConfig->getConfig("dbdriver");
@@ -100,6 +100,8 @@ class class_db {
 	        $this->objDbDriver->transactionRollback();
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
+        
+        class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
 	    if($this->objDbDriver !== null)
 	        $this->objDbDriver->dbclose();
             
@@ -140,6 +142,7 @@ class class_db {
 	public function dbconnect() {
 	    if($this->objDbDriver !== null) {
 	        try {
+                class_logger::getInstance()->addLogRow("creating database-connection using driver ".get_class($this->objDbDriver), class_logger::$levelInfo);
 		        $this->objDbDriver->dbconnect($this->objConfig->getConfig("dbhost"), $this->objConfig->getConfig("dbusername"), $this->objConfig->getConfig("dbpassword"), $this->objConfig->getConfig("dbname"), $this->objConfig->getConfig("dbport"));
 	        }
 	        catch (class_exception $objException) {
