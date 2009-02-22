@@ -26,6 +26,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_downloads";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["table2"] 			= _dbprefix_."downloads_file";
@@ -121,7 +122,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
 			//the sourrounding template
 			$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
-			$arrTempalte = array();
+			$arrTemplate = array();
 			$arrTemplate["folderlist"] = $strFolderList;
 			$arrTemplate["filelist"] = $strFileList;
 			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
@@ -154,7 +155,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		if($objFile->getFilename() == "") {
 		      $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		}
-
+        $arrTemplate = array();
 		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
 		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -189,7 +190,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
             $objFile = new class_modul_downloads_archive($this->getSystemid());
         }
 
-        while($objFile->getPrevId() != "0" && $objFile->getPrevId() != $objArchive->getPrevId()) {
+        while($objFile->getPrevId() != "0" && $this->validateSystemid($objFile->getPrevId()) && $objFile->getPrevId() != $objArchive->getPrevId()) {
             $strBackupId = $objFile->getPrevId();
             $objFile = new class_modul_downloads_file($objFile->getPrevId());
             if($objFile->getFilename() == "") {

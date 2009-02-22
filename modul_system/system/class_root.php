@@ -63,7 +63,7 @@ abstract class class_root {
 	private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
 	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
-	private   $arrHistory;			        //Stack cotaining the 5 urls last visited
+	private   $arrHistory;			        //Stack containing the 5 urls last visited TODO: still needed?
 	protected $arrModule;			        //Array containing Infos about the current modul
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
 	private   $strPortalLanguage = null;    //Language to load on the portal

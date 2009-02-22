@@ -26,6 +26,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_gallery";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["table"]  			= _dbprefix_."gallery_gallery";
@@ -83,6 +84,8 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		$bitPageview = false;
 		//load using the pageview?
+        $arrTempImages = array();
+        $arrImages = array();
 		if($this->arrElementData["gallery_imagesperpage"] > 1) {
 		    $bitPageview = true;
 		    include_once(_systempath_."/class_array_section_iterator.php");
@@ -413,6 +416,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		if($objData->getStrName() == "") {
 		      $objData = new class_modul_gallery_gallery($this->getSystemid());
 		}
+        $arrTemplate = array();
 		//Name and link
 		if($bitCurrentViewIsDetail)
 			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "detailImage", "", $objData->getSystemid(), "", "", $objData->getStrName());
@@ -511,7 +515,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $objData = new class_modul_gallery_gallery($this->getSystemid());
         }
 
-        while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $objData->getSystemid() != $objGallery->getSystemid()) {
+        while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $this->validateSystemid($objData->getPrevId())  && $objData->getSystemid() != $objGallery->getSystemid()) {
             $strBackupId = $objData->getPrevId();
             $objData = new class_modul_gallery_pic($objData->getPrevId());
             if($objData->getStrName() == "") {
