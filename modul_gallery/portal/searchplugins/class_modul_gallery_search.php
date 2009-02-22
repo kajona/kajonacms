@@ -75,7 +75,7 @@ class class_modul_gallery_search extends class_portal implements interface_searc
 			if(count($arrPics) > 0) {
 				foreach($arrPics as $arrOnePic) {
 
-				    if(!$this->checkLanguage($arrOnePic))
+				    if(!$this->checkLanguage($arrOnePic)  || !$this->objRights->rightView($arrOnePic["system_id"]))
 				        continue;
 
 					if(isset($this->arrHits[$arrOnePic["system_id"]]["hits"]))

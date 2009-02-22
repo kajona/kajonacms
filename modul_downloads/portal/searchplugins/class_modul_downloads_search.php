@@ -75,7 +75,7 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 			if(count($arrDownloads) > 0) {
 				foreach($arrDownloads as $arrOneDownload) {
 
-				    if(!$this->checkLanguage($arrOneDownload))
+				    if(!$this->checkLanguage($arrOneDownload) || !$this->objRights->rightView($arrOneDownload["system_id"]))
 				        continue;
 
 					if(isset($this->arrHits[$arrOneDownload["system_id"]]["hits"]))

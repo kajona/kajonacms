@@ -18,7 +18,6 @@ include_once(_systempath_."/class_modul_search_commons.php");
  * @package modul_search
  */
 class class_modul_search_portal extends class_portal implements interface_portal {
-	private $arrHits = array();
 	private $strSearchterm = "";
 
 	/**
@@ -27,7 +26,8 @@ class class_modul_search_portal extends class_portal implements interface_portal
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
-		$arrModule["name"] 				= "modul_suche";
+        $arrModule = array();
+		$arrModule["name"] 				= "modul_search";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _suche_modul_id_;
 		$arrModule["modul"] 			= "search";
@@ -96,7 +96,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 	private function actionSearch() {
 		$strReturn = "";
 		//Read the config
-
+        $arrTemplate = array();
 		$arrTemplate["hitlist"] = "";
 		$strReturn .= $this->actionForm();
         $objSearchCommons = new class_modul_search_commons();
@@ -107,6 +107,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 
         $strRowTempalteID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
 		foreach($arrHitsFilter["arrData"] as $strPage => $arrHit) {
+            $arrRow = array();
 			if(!isset($arrHit["pagelink"]))
 				$arrRow["page_link"] = getLinkPortal($arrHit["pagename"], "", "_self", $arrHit["pagename"], "", "&highlight=".urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8"))."#".strtolower(urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8"))));
 			else

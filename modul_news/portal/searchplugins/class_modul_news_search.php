@@ -74,7 +74,7 @@ class class_modul_news_search extends class_portal implements interface_search_p
 			if(count($arrNews) > 0) {
 				foreach($arrNews as $arrOneNews) {
 
-                    if(!$this->checkLanguage($arrOneNews))
+                    if(!$this->checkLanguage($arrOneNews) || !$this->objRights->rightView($arrOneNews["system_id"]))
                         continue;
 
 					//generate links

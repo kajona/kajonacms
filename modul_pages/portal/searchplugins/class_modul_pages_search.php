@@ -23,12 +23,14 @@ class class_modul_pages_search extends class_portal implements interface_search_
 
     private $arrTableConfig = array();
     private $arrSearchterm;
+    private $strSearchtermRaw = "";
     private $arrHits = array();
 
     public function  __construct($arrSearchterm, $strSearchtermRaw) {
         parent::__construct();
 
         $this->arrSearchterm = $arrSearchterm;
+        $this->strSearchtermRaw = $strSearchtermRaw;
 
         $arrSearch = array();
 

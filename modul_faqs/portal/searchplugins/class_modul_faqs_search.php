@@ -72,7 +72,7 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 			if(count($arrFaqs) > 0) {
 				foreach($arrFaqs as $arrOneFaq) {
 
-				    if(!$this->checkLanguage($arrOneFaq))
+				    if(!$this->checkLanguage($arrOneFaq) || !$this->objRights->rightView($arrOneFaq["system_id"]))
 				        continue;
 
 					//generate links

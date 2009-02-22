@@ -75,7 +75,7 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 				foreach($arrPosts as $arrOnePost) {
 
 				    //check, if the post is available on a page using the current language
-                    if(!$this->checkLanguage($arrOnePost))
+                    if(!$this->checkLanguage($arrOnePost) || !$this->objRights->rightView($arrOnePost["system_id"]))
                         continue;
 
 					if(isset($this->arrHits[$arrOnePost["system_id"]]["hits"]))
