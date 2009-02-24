@@ -992,6 +992,20 @@ function uniStrrpos($strHaystack, $strNeedle) {
 }
 
 /**
+ * Wrapper to phps stripos
+ *
+ * @param string $strHaystack
+ * @param string $strNeedle
+ * @return int
+ */
+function uniStripos($strHaystack, $strNeedle) {
+    if(_mbstringloaded_)
+        return mb_stripos($strHaystack, $strNeedle);
+    else
+        return stripos($strHaystack, $strNeedle);
+}
+
+/**
  * Wrapper to phps strlen
  *
  * @param string $strString

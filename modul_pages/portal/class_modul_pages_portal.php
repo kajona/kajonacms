@@ -315,9 +315,9 @@ class class_modul_pages_portal extends class_portal {
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
-    		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
+    		    $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
     		    //find closing bracket
-    		    $intTemp = uniStrpos($strTemp, ">")+1;
+    		    $intTemp = uniStripos($strTemp, ">")+1;
     		    //and insert the code
     		    $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body")+$intTemp) .$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body")+$intTemp) ;
             }
@@ -331,7 +331,14 @@ class class_modul_pages_portal extends class_portal {
         $strHeader .= "Website powered by Kajona³ Open Source Content Management Framework\n";
         $strHeader .= "For more information about Kajona see http://www.kajona.de\n";
         $strHeader .= "-->\n";
-        $strPageContent = $strHeader.$strPageContent;
+
+        $intBodyPos = uniStripos($strPageContent, "</head>");
+        if($intBodyPos !== false) {
+            $strPageContent = uniSubstr($strPageContent, 0, uniStripos($strPageContent, "</head")).$strHeader.uniSubstr($strPageContent, uniStripos($strPageContent, "</head"));
+        }
+        else {
+            $strPageContent = $strHeader.$strPageContent;
+        }
         
 		//save the generated Page to the cache
 		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage)
