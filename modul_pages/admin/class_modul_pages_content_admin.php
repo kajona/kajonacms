@@ -161,7 +161,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		    $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($this->getSystemid(), false, $this->getLanguageToWorkOn());
             //save a copy of the array to be able to check against all values later on
             $arrElementsOnPageCopy = $arrElementsOnPage;
-		    
+
 			//Loading all Elements installed on the system ("RAW"-Elements)
 			$arrElementsInSystem = class_modul_pages_element::getAllElements();
 
@@ -216,7 +216,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 								    $this->unlockRecord($objOneElementOnPage->getSystemid());
 
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));   
+								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 							}
 
 							//The Icons to sort the list
@@ -297,7 +297,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                     foreach($arrElementsOnPage as $objOneElement) {
                         //Create a row to handle the element, check all necessary stuff such as locking etc
 						$strActions = "";
-						$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "deleteElement", "&systemid=".$objOneElement->getSystemid(), "", $this->getText("element_loeschen"), "icon_ton.gif"));
+						$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
 						//Put all Output together
 						$strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
@@ -335,7 +335,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		$objElement = new $strElementClass();
     		if($bitShowErrors)
     		  $objElement->setDoValidation(true);
-    		  
+
     		$strReturn = $objElement->actionEdit("new");
 		}
 		else
@@ -404,13 +404,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
-			
+
 			//really continue? try to validate the passed data.
 			if(!$objElement->validateForm()) {
 			    $strReturn .= $this->actionNewElement(true);
 			    return $strReturn;
 			}
-			
+
 			//Get the table used by the element to create the record
 			$strTable = $objElement->getTable();
 
@@ -444,7 +444,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
 			//and finally create the object
 			$objElement = new $strElementClass();
-			
+
 			//really continue? try to validate the passed data.
 			if(!$objElement->validateForm()) {
 			    $strReturn .= $this->actionEditElement(true);
@@ -455,10 +455,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//woah, we are soooo great
 			$strElementTableColumns = $objElement->getArrModule("tableColumns");
 			if($strElementTableColumns != "") {
-			    
+
 			    //open new tx
 			    $this->objDB->transactionBegin();
-			    
+
                 $arrTableRows = explode(",", $strElementTableColumns);
                 if(count($arrTableRows) > 0) {
                     $arrInserts = array();
