@@ -2,14 +2,16 @@
 
 <!-- available placeholders: link_newentry, link_back, link_pages, link_forward, liste_posts -->
 <list>
-    %%link_newentry%%<br />
-    <p>%%link_back%% - %%link_pages%% - %%link_forward%%</p>
-    <p>%%liste_posts%%</p>
+    <div class="guestbook">
+        %%link_newentry%%<br />
+        <p>%%link_back%% %%link_pages%% %%link_forward%%</p>
+        <div class="posts">%%liste_posts%%</div>
+    </div>
 </list>
 
 <!-- available placeholders: post_name_from, post_name, post_name_plain, post_mail_text, post_email, post_page_text, post_page, post_message_text, post_text, post_date -->
 <post>
-    <table width="100%" border="0">
+    <table>
         <tr>
             <td>%%post_name_from%%: %%post_name_plain%%</td>
             <td style="text-align: right;">%%post_date%%</td>
@@ -25,7 +27,6 @@
             <td colspan="2">%%post_text%%</td>
         </tr>
     </table>
-    <br /><br />
 </post>
 
 <!-- available placeholders: eintragen_fehler, post_name_text, gb_post_name, post_mail_text, gb_post_email, post_message_text, gb_post_text, post_page_text, gb_post_page, post_submit_text, post_code_text, action -->

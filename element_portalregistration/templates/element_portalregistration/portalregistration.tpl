@@ -17,5 +17,5 @@
 
 
 <errorRow>
-<p>&middot; %%error%%</p>
+&middot; %%error%%<br />
 </errorRow>

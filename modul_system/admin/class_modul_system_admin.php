@@ -554,13 +554,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"]))) {
-            //Fetch the xml-file of available updates
-            //To do this, use sockets, since php 5.2 url_fopen is disabled in most cases
             $strChecksum = md5(urldecode(_webpath_)."getVersions");
             $strQueryString = $this->strUpdateUrl."?action=getVersions&domain=".urlencode(_webpath_)."&checksum=".urlencode($strChecksum);
             $strXmlVersionList = false;
 
-            //first try: use url_fopen
+            //try to load the xml-file with a list of available updates
             try {
                 include_once(_systempath_."/class_remoteloader.php");
                 $objRemoteloader = new class_remoteloader();

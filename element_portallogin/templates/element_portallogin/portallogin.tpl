@@ -8,9 +8,8 @@
 </portallogin_loginform>
 
 <portallogin_status>
-<p>Logged in as: %%username%%</p>
-<p>%%logoutlink%%</p>
-<p>%%editprofilelink%%</p>
+<p>%%loggedin_label%%: %%username%%</p>
+<p>%%logoutlink%% &nbsp; %%editprofilelink%%</p>
 </portallogin_status>
 
 
@@ -30,5 +29,5 @@
 
 
 <errorRow>
-<p>&middot; %%error%%</p>
+&middot; %%error%%<br />
 </errorRow>

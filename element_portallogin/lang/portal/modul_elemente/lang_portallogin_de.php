@@ -7,13 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //editable entries
 $lang["editprofilelink"]                 = "Profil bearbeiten";
 $lang["emailTitle"]                      = "E-Mail*:";
 $lang["forenameTitle"]                   = "Vorname:";
 $lang["invalidEmailadress"]              = "Keine gültige E-Mailadresse.";
+$lang["loggedin_label"]                  = "Angemeldet als";
 $lang["login"]                           = "Login";
 $lang["logoutlink"]                      = "Logout";
 $lang["nameTitle"]                       = "Nachname:";

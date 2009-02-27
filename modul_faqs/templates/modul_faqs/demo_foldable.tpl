@@ -23,10 +23,10 @@
     <div class="faqFaq">
         <div class="faqFaqQuestion">
             <table cellspacing="0" class="portalList">
-                <tr>
-                    <td style="width: 25px;"><img src="_webpath_/portal/pics/kajona/icon_question.gif" /></td>
-                    <td style="padding-left: 2px;"><a href="javascript:fold('%%faq_systemid%%');">%%faq_question%%</a></td>
-                    <td style="width: 90px;">%%faq_rating%%</td>
+                <tr class="portalListRow1">
+                    <td class="image"><img src="_webpath_/portal/pics/kajona/icon_question.gif" /></td>
+                    <td class="title"><a href="javascript:fold('%%faq_systemid%%');">%%faq_question%%</a></td>
+                    <td class="rating">%%faq_rating%%</td>
                 </tr>
             </table>
         </div>

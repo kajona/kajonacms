@@ -6,8 +6,6 @@
 *	$Id$									                *
 ********************************************************************************************************/
 
-
-
 /*
 	NOTE:------------------------------------------------------------------------------------------------
 	  |   Use _webpath_ as constant containing the current webpath, see below
@@ -26,7 +24,6 @@
 */
 
 
-
 body {
     text-align: center;
     background-color: #a5a5a5;
@@ -37,10 +34,15 @@ body {
     color: #3b3b3b;
 }
 
-table {
+table, td {
     font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 10px;
     color: #3b3b3b;
+    border: none;
+}
+
+table td {
+    vertical-align: top;
 }
 
 a.hiddenAnchor {
@@ -63,8 +65,14 @@ img {
     border: none;   
 }
 
+.clearer {
+    clear: both !important;    
+}
+
+
+/* H E A D L I N E S */
 h2 {
-    font-family: Verdana, arial, sans-serif;    
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 18px;
     font-weight: bold;
     margin: 0 0 10px 0;
@@ -72,13 +80,14 @@ h2 {
 }
 
 h3 {
-    font-family: Verdana, arial, sans-serif;    
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
     margin: 0 0 5px 0;
     padding: 0px;   
 }
 
+/* L A Y O U T */
 #bodyContainer {
     position:absolute;
     left:50%;
@@ -156,6 +165,10 @@ h3 {
     padding-top: 33px;
 }
 
+#pNaviContainer {
+    float: right;   
+}
+
 #contentContainer {
     border-left: 1px solid #a5a5a5;
     float: right;
@@ -163,7 +176,14 @@ h3 {
     padding: 30px 20px 0 25px;  
 }
 
-#mainNaviContainer a {
+.contentSpacer {
+    border: none;
+    height: 15px;   
+}
+
+
+/* N A V I G A T I O N S */
+#mainNaviContainer a, #mainNaviContainer a:link, #mainNaviContainer a:visited {
     color: #3b3b3b;
     font-size: 13px;
     font-family: Verdana, arial, sans-serif;
@@ -181,22 +201,20 @@ h3 {
     padding: 0px;
 }
 
+/* level 1 */
 #mainNaviContainer ul li {
     padding: 0 0 10px 0;
     margin: 0px;
 }
 
-#mainNaviContainer ul li a.active {
+#mainNaviContainer ul li a.active, #mainNaviContainer ul li a.active:link, #mainNaviContainer ul li a.active:visited {
     text-decoration: underline;
 }
 
+/* level 2 */
 #mainNaviContainer ul ul li {
     padding: 0;
     margin: 0 0 0 10px;
-}
-
-#mainNaviContainer ul ul li a.active {
-    text-decoration: underline;
 }
 
 #mainNaviContainer ul ul li a {
@@ -204,26 +222,10 @@ h3 {
 	font-weight: normal;
 }
 
-
-
-#languageSwitchContainer {
-    float: left;    
-}
-
-#languageSwitchContainer a {
-    color: #3b3b3b;
-    text-decoration: none;
-    text-transform: uppercase;
-}
-
-#languageSwitchContainer a:hover {
+#mainNaviContainer ul ul li a.active, #mainNaviContainer ul ul li a.active:link, #mainNaviContainer ul ul li a.active:visited {
     text-decoration: underline;
 }
 
-
-#pNaviContainer {
-    float: right;   
-}
 
 #pNaviContainer ul {
     list-style: none;
@@ -235,27 +237,17 @@ h3 {
     display: inline;    
 }
 
-#pNaviContainer ul li a {
+#pNaviContainer a, #pNaviContainer a:link, #pNaviContainer a:visited {
     text-decoration: none;
     color: #3b3b3b;
 }
 
-#pNaviContainer ul li a:hover, #pNaviContainer a:active, #pNaviContainer a:focus {
+#pNaviContainer a:hover, #pNaviContainer a:active, #pNaviContainer a:focus {
     text-decoration: underline;
 }
 
 
-.contentSpacer {
-    border: none;
-    height: 15px;   
-}
-
-.clearer {
-    clear: both;    
-}
-
-/** FORMS **/
-
+/** F O R M S **/
 #contentContainer form label {
     display: block;
     float: left;
@@ -338,6 +330,66 @@ h3 {
     color: #000000;
 }
 
+/* L I S T S */
+.portalList {
+    width: 100%;
+    padding: 0;
+    border: none;
+}
+
+.portalListRow1 {
+    height: 22px;
+    background-color: #f0f0f0;
+}
+
+.portalListRow1:hover, .portalListRow1:hover td {
+    background-color: #DFDFDF;
+    color: #000000;
+}
+
+.portalListRow1 td{
+    vertical-align: middle;
+}
+
+.portalListRow1 .image {
+    padding-left: 2px;
+    padding-right: 3px;
+}
+
+.portalListRow1 .title {
+    width: 100%;
+    padding-left: 2px;
+    padding-right: 5px;
+}
+
+.portalListRow1 .center {
+    white-space: nowrap;
+    padding-right: 5px;
+}
+
+.portalListRow1 .actions {
+    white-space: nowrap;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.portalListRow2 {
+    height: 22px;
+}
+.portalListRow2 .description {
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 2px;
+}
+
+.portalListRow1 .actions img {
+    margin-right: 2px;
+}
+
+.portalListRow1 .rating, .portalListRow2 .rating {
+    white-space: nowrap;
+}
+
 /* T O O L T I P */
 .tooltip {
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -349,6 +401,34 @@ h3 {
     padding: 4px;
     max-width: 200px;
     z-index: 2000;
+}
+
+/* E L E M E N T  I M A G E */
+.bild {
+    margin-bottom: 10px;
+}
+
+/* E L E M E N T  T A G T O */
+.tagto a {
+    text-decoration: none;
+    border: 1px solid #cccccc;
+    padding: 1px;
+    padding-top: 5px;
+}
+
+/* E L E M E N T  L A N G U A G E S W I T C H */
+#languageSwitchContainer {
+    float: left;    
+}
+
+#languageSwitchContainer a {
+    color: #3b3b3b;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+#languageSwitchContainer a:hover {
+    text-decoration: underline;
 }
 
 /* N E W S */
@@ -391,11 +471,6 @@ h3 {
 }
 .newsDetail img {
     margin: 5px;
-}
-
-/* E L E M E N T  I M A G E */
-.bild {
-    margin-bottom: 10px;
 }
 
 /* S E A R C H */
@@ -470,65 +545,10 @@ h3 {
     padding: 1px 1px 0 1px;	
 }
 
-
-/* L I S T S */
-.portalList {
+/* G U E S T B O O K */
+.guestbook .posts table {
     width: 100%;
-    padding: 0;
-    border: none;
-}
-
-.portalListRow1 {
-    height: 22px;
-    background-color: #f0f0f0;
-}
-
-.portalListRow1:hover, .portalListRow1:hover td {
-    background-color: #DFDFDF;
-    color: #000000;
-}
-
-.portalListRow1 td{
-    vertical-align: middle;
-}
-
-.portalListRow1 .image {
-    padding-left: 2px;
-    padding-right: 3px;
-}
-
-.portalListRow1 .title {
-    width: 100%;
-    padding-left: 2px;
-    padding-right: 5px;
-}
-
-.portalListRow1 .center {
-    white-space: nowrap;
-    padding-right: 5px;
-}
-
-.portalListRow1 .actions {
-    white-space: nowrap;
-    vertical-align: middle;
-    text-align: right;
-}
-
-.portalListRow2 {
-    height: 22px;
-}
-.portalListRow2 .description {
-    vertical-align: middle;
-    text-align: left;
-    padding-left: 2px;
-}
-
-.portalListRow1 .actions img {
-    margin-right: 2px;
-}
-
-.portalListRow1 .rating, .portalListRow2 .rating {
-    white-space: nowrap;
+    margin-bottom: 10px;
 }
 
 /* G A L L E R Y */

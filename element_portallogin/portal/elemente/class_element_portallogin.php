@@ -68,7 +68,7 @@ class class_element_portallogin extends class_element_portal implements interfac
 		        $this->portalReload(getLinkPortalHref($this->getPagename()));
 		    }
 		}
-		
+
 
 		if(!$this->objSession->isLoggedin()) {
 	        $strReturn .= $this->loginForm();
@@ -114,20 +114,21 @@ class class_element_portallogin extends class_element_portal implements interfac
 	private function statusArea() {
         $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_status");
         $arrTemplate = array();
+        $arrTemplate["loggedin_label"] = $this->getText("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
         $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("logoutlink"), "portalLogout");
         $arrTemplate["editprofilelink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("editprofilelink"), "portalEditProfile");
 	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
-	
-	
+
+
 	/**
 	 * Creates a form to edit a users data
 	 *
 	 * @return string
 	 */
 	private function editUserData() {
-	    
+
 	    $arrErrors = array();
 	    $bitForm = true;
 	    //what to do?
@@ -136,21 +137,21 @@ class class_element_portallogin extends class_element_portal implements interfac
 	            if($this->getParam("password") != $this->getParam("password2"))
 	               $arrErrors[] = $this->getText("passwordsUnequal");
 	        }
-	        
+
 	        if(!checkEmailaddress($this->getParam("email")))
                $arrErrors[] = $this->getText("invalidEmailadress");
-                   
+
 	        if(count($arrErrors) == 0)
-               $bitForm = false;  
+               $bitForm = false;
 	    }
-	    
+
 	    if($bitForm) {
     	    $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform");
             $arrTemplate = array();
-            
+
             include_once(_systempath_."/class_modul_user_user.php");
             $objUser = new class_modul_user_user($this->objSession->getUserID());
-            
+
             $arrTemplate["usernameTitle"]= $this->getText("usernameTitle");
             $arrTemplate["username"] = $objUser->getStrUsername();
             $arrTemplate["passwordTitle"] = $this->getText("passwordTitle");
@@ -161,11 +162,11 @@ class class_element_portallogin extends class_element_portal implements interfac
             $arrTemplate["forename"] = $objUser->getStrForename();
             $arrTemplate["nameTitle"] = $this->getText("nameTitle");
             $arrTemplate["name"] = $objUser->getStrName();
-            
-            
+
+
             $arrTemplate["submitTitle"] = $this->getText("userDataSubmit");
             $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
-            
+
             $arrTemplate["formErrors"] = "";
             if(count($arrErrors) > 0) {
                 foreach ($arrErrors as $strOneError) {
@@ -173,7 +174,7 @@ class class_element_portallogin extends class_element_portal implements interfac
                     $arrTemplate["formErrors"] .= "".$this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                 }
             }
-    	    
+
     	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	    }
 	    else {
@@ -184,13 +185,13 @@ class class_element_portallogin extends class_element_portal implements interfac
             $objUser->setStrForename($this->getParam("forename"));
             $objUser->setStrName($this->getParam("name"));
             $objUser->setStrPass($this->getParam("password"));
-            
+
             $objUser->updateObjectToDb();
             $this->portalReload(getLinkPortalHref($this->getPagename()));
-            
+
 	    }
 	}
-	
+
 
     /**
      * Tries to log the user with the given credentials into the system.

@@ -1,36 +1,18 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-
-
-<!-- available placeholders: pic_url, backlink, backlink_image_(1..3), backlink_image_filename_(1..3), backlink_image_systemid_(1..3),
-    fowardlink, forwardlink_image_(1..3), forwardlink_image_filename_(1..3), forwardlink_image_systemid_(1..3), overview, pathnavigation,
-    systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
+<!-- available placeholders: pic_url, systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
  -->
 <picdetail>
     <script type="text/javascript">
         kajonaAjaxHelper.loadAjaxBase();
     </script>
 
-    <table width="85%" border="0" style="text-align: center;">
-        <tr>
-            <td width="20%">&nbsp;</td>
-            <td width="60%"><div style="float: left;">%%pic_name%%</div><div style="float: right;">%%pic_rating%%</div></td>
-            <td width="20%">&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="3" >%%pic_subtitle%%</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>%%pic_url%%</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>%%pic_description%%</td>
-            <td>&nbsp;</td>
-        </tr>
-    </table>
+    <div class="galleryRandom">
+        %%pic_name%% %%pic_subtitle%%<br />
+        %%pic_url%%<br />
+        %%pic_rating%%<br />
+        %%pic_description%%
+    </div>
 </picdetail>
 
 

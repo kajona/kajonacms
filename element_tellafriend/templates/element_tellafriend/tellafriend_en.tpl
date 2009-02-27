@@ -30,4 +30,4 @@ I have found an interesting website:<br />
 %%tellafriend_sender_name%%
 </email_html>
 
-<email_subject>Interesting website at www.kajona.de found</email_subject>
+<email_subject>Website recommendation</email_subject>

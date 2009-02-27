@@ -95,6 +95,9 @@ a.pe_link {
     font-size: 11px !important;
     font-weight: normal !important;
     color: #000000 !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 #pe_classicskin img {

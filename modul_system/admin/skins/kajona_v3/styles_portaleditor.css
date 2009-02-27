@@ -122,12 +122,18 @@
 	color: #ffffff !important;
     text-decoration: none !important;
 	font-weight: normal !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
 	color: #ffffff !important;
 	text-decoration: underline !important;
 	font-weight: normal !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
 }

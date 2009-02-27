@@ -27,7 +27,7 @@
      set the placeholders according to the number set in the admin -->
 <!-- available placeholders: pic_(nr), name_(nr), subtitle_(nr) -->
 <piclist>
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <table width="100%" cellspacing="0">
         <tr>
             <td colspan="7">&nbsp;</td>
         </tr>
