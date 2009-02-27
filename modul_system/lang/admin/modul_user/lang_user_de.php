@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -80,7 +80,7 @@ $lang["modul_titel"]                     = "Benutzer";
 $lang["nachname"]                        = "Nachname:";
 $lang["ort"]                             = "Ort:";
 $lang["passwort"]                        = "Passwort:";
-$lang["passwort2"]                       = "Passwort:";
+$lang["passwort2"]                       = "Passwort (Bestätigung):";
 $lang["plz"]                             = "PLZ:";
 $lang["portal"]                          = "Portal-Login:";
 $lang["quickhelp_edit"]                  = "Dieses Formular dient zum Bearbeiten oder Anlegen eines neuen Benutzers. <br />Wenn der Benutzer aktiv geschaltet wurde, dann darf er sich grunsätzlich am System anmelden.<br />Zusätzlich muss aber der Bereich definiert sein, in dem sich ein Benutzer anmelden darf.";

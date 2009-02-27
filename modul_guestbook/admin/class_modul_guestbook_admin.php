@@ -269,7 +269,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 		if($this->objRights->rightDelete($this->getSystemid())) {
             if(!class_modul_guestbook_guestbook::deleteGuestbook($this->getSystemid()))
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			
+
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -310,9 +310,9 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				 	    $strActions .= $this->objToolkit->listDeleteButton($objPost->getGuestbookPostName() . " - ".timeToString($objPost->getGuestbookPostDate()), $this->getText("post_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid()));
 					if($this->objRights->rightEdit($this->getSystemid()))
 					    $strActions .= $this->objToolkit->listStatusButton($objPost->getSystemid());
-					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), $objPost->getGuestbookPostName()." - ".$objPost->getGuestbookPostEmail()." - ".$objPost->getGuestbookPostPage(), $strActions, " ", $intI++);
+					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), $objPost->getGuestbookPostName()." - ".$objPost->getGuestbookPostEmail()." - ".$objPost->getGuestbookPostPage(), $strActions, " ", $intI);
 					$strReturn .= $this->objToolkit->listRow3("", uniStrReplace("&lt;br /&gt;", "<br />" , $objPost->getGuestbookPostText()), "", "", $intI);
-					$strReturn .= $this->objToolkit->listRow3("","", "", "", $intI++);
+					$intI++;
 				}
 				$strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
 			}
@@ -324,7 +324,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Shows a form to edit the content of a post
 	 *
@@ -347,10 +347,10 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
         }
         else
             $strReturn .= $this->getText("fehler_recht");
-        
-        return $strReturn;  
+
+        return $strReturn;
     }
-    
+
     /**
      * Saves the passed post to the db
      *
@@ -384,7 +384,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $this->setSystemid($strPrevID);
             if(!$bitDelete)
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-			
+
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -407,6 +407,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	}
 
 
-} 
+}
 
 ?>
