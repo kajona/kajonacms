@@ -63,6 +63,7 @@ $lang["moduleFolderviewTitle"]           = "Folderview";
 $lang["nrfilestitle"]                    = "Number of files: ";
 $lang["nrfoldertitle"]                   = "Number of folders: ";
 $lang["ordner_anlegen"]                  = "Create folder";
+$lang["ordner_anlegen_dialogButton"]     = "Create folder";
 $lang["ordner_anlegen_dialogHeader"]     = "Create new folder";
 $lang["ordner_anlegen_erfolg"]           = "Folder was created successfully";
 $lang["ordner_anlegen_fehler"]           = "An error occured while saving the folder";

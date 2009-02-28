@@ -268,7 +268,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                                 function init_fm_newfolder_dialog() {
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                          '".$this->getText("ordner_anlegen", "filemanager")."',
+                                                          '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
                                                           'javascript:filemanagerCreateFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'massSyncArchive\' ); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
