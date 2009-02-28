@@ -7,11 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 151
 
 //editable entries
 $lang["portallogin_error"]               = "Page in case of an error (optional):";
 $lang["portallogin_logout_success"]      = "Page after logging out (optional):";
+$lang["portallogin_profile"]             = "Page to edit the profile (optional):";
+$lang["portallogin_profile_hint"]        = "Another portallogin-element has to be existing on the defined page in order to edit the profile.";
 $lang["portallogin_success"]             = "Page in case of success (optional):";
 $lang["portallogin_template"]            = "Template:";
 ?>

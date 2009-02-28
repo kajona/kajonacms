@@ -22,6 +22,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      *
      */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["version"] 		= "3.1.9";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
@@ -75,6 +76,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$arrFields["portallogin_error"] 		= array("char254", true);
 		$arrFields["portallogin_success"] 		= array("char254", true);
 		$arrFields["portallogin_logout_success"]= array("char254", true);
+        $arrFields["portallogin_profile"]       = array("char254", true);
 		
 		if(!$this->objDB->createTable("element_portallogin", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";

@@ -400,6 +400,7 @@
     portallogin_error       = Page to load in case of error
     portallogin_success     = Page to load in case of success
     portallogin_logout_success = Page to load after logout
+    portallogin_profile     = Page providing the edit-page
 
 //--_element_portalregistration--------------------------------------------------------------------------
     content_id                     = table primary key

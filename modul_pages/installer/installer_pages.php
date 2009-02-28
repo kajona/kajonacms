@@ -18,8 +18,8 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_pages extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -325,6 +325,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_311_319();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -452,6 +457,27 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
+
+        return $strReturn;
+    }
+
+    private function update_319_3195() {
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
+
+        $strReturn .= "Searching for portallogin-element to alter...\n";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='portallogin'";
+        $arrRow = $this->objDB->getRow($strQuery);
+        if($arrRow["COUNT(*)"] != 0) {
+        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_portallogin")."
+        	                   ADD ".$this->objDB->encloseColumnName("portallogin_profile")." VARCHAR (254) NULL ";
+
+        	if(!$this->objDB->_query($strSql))
+        	   $strReturn .= "An error occured!\n";
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.1.95");
 
         return $strReturn;
     }

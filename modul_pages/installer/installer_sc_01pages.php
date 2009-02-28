@@ -68,8 +68,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
-
-
         if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
         else
@@ -104,6 +102,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $strReturn .= "Error creating paragraph element.\n";
 
+        /*
         $strReturn .= "Adding image-element to new page\n";
         $objPagelement = new class_modul_pages_pageelement();
         $objPagelement->setStrPlaceholder("picture1_image");
@@ -118,6 +117,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $strReturn .= "Image element created.\n";
             else
                 $strReturn .= "Error creating image element.\n";
+
+        */
 
         $strReturn .= "Creating system folder...\n";
         include_once(_systempath_."/class_modul_pages_folder.php");

@@ -25,6 +25,7 @@ class class_element_portallogin extends class_element_portal implements interfac
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -117,7 +118,12 @@ class class_element_portallogin extends class_element_portal implements interfac
         $arrTemplate["loggedin_label"] = $this->getText("loggedin_label");
         $arrTemplate["username"] = $this->objSession->getUsername();
         $arrTemplate["logoutlink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("logoutlink"), "portalLogout");
-        $arrTemplate["editprofilelink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("editprofilelink"), "portalEditProfile");
+
+        $strProfileeditpage = $this->getPagename();
+        if($this->arrElementData["portallogin_profile"] != "")
+            $strProfileeditpage = $this->arrElementData["portallogin_profile"];
+
+        $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getText("editprofilelink"), "portalEditProfile");
 	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
