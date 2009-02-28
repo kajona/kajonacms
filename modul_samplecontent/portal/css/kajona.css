@@ -11,9 +11,9 @@
 	  |   Use _webpath_ as constant containing the current webpath, see below
       |
 	  |   This is just a sample file! Modify it to your needs.
-	  |   If you don't use _webpath_ or the function IEOther("IE", "Other"), we
+	  |   If you don't use _webpath_, we
 	  |   recommend to use a static css-file like this one.
-	  |	  IF you need IEOther()) or _webpath_ use a php-file using the following pattern 
+	  |	  IF you need _webpath_ use a php-file using the following pattern 
 	  |   instead of a static css-file:
 	  |   <?php
 	  |		require_once("../../system/functions.php");

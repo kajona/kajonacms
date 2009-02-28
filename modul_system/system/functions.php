@@ -877,6 +877,7 @@ function checkText($strText, $intMin = 1, $intMax = 0) {
 /**
  * Returns a value for IE or for others
  *
+ * @deprecated will be removed in 3.3 or 3.2.1
  * @param string $strIe
  * @param string $strOther
  * @return string
