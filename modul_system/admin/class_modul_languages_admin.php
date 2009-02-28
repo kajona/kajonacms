@@ -25,6 +25,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
      *
      */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_languages";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;

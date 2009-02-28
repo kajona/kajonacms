@@ -20,7 +20,7 @@ class class_modul_languages_language extends class_model implements interface_mo
     private $strName = "";
     private $bitDefault = false;
 
-    private $strLanguagesAvailable = "de,en,fr,pt,ru";
+    private $strLanguagesAvailable = "ar,bg,cs,da,de,el,en,es,fi,fr,ga,he,hr,hu,hy,id,it,ja,ko,nl,no,pl,pt,ro,ru,sk,sl,sv,th,tr,uk,zh";
 
     /**
      * Constructor to create a valid object
