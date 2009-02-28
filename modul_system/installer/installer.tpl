@@ -143,7 +143,7 @@
 <installer_modules_row_installable>
 	    <table class="moduleRowTable installable" cellpadding="0" cellspacing="0">
 	        <tr valign="bottom">
-	            <td rowspan="2" width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" /></td>
+	            <td rowspan="2" width="30px;"><input class="checkbox" type="checkbox" name="moduleInstallBox[installer_%%module_nameShort%%]" id="moduleInstallBox[installer_%%module_nameShort%%]" checked="checked"/></td>
 	            <td colspan="2" valign="bottom" onclick="document.getElementById('moduleInstallBox[installer_%%module_nameShort%%]').click();">
 	                %%module_name%%
 	            </td>
