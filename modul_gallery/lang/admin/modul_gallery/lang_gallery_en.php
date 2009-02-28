@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "", 7 => "", 8 => "");
@@ -21,6 +21,7 @@ $lang["bild_bearbeiten"]                 = "Edit picture";
 $lang["bild_rechte"]                     = "Edit permissions";
 $lang["bild_speichern_fehler"]           = "An error occured while saving picture";
 $lang["browser"]                         = "Browse folders";
+$lang["datei_loeschen_frage"]            = "Do you really want to delete the picture &quot;<b>%%element_name%%</b>&quot;?";
 $lang["fehler_gal"]                      = "An error occured while creating gallery";
 $lang["fehler_gal_bearbeiten"]           = "An error occured while saving gallery";
 $lang["fehler_recht"]                    = "Not enough permissions to perform this action";
@@ -30,7 +31,6 @@ $lang["galerie_liste_leer"]              = "No galleries available";
 $lang["galerie_loeschen_erfolg"]         = "The gallery was deleted successfully";
 $lang["galerie_loeschen_fehler"]         = "An error occured while deleting gallery";
 $lang["galerie_loeschen_frage"]          = "Do you really want to delete the gallery &quot;<b>%%element_name%%</b>&quot;?<br />All stored details will be deleted, too!";
-$lang["datei_loeschen_frage"]            = "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?";
 $lang["galerie_neu"]                     = "Create gallery";
 $lang["galerie_rechte"]                  = "Edit permissions";
 $lang["galerie_syncro"]                  = "Synchronize gallery";
@@ -64,6 +64,7 @@ $lang["required_pic_name"]               = "Title";
 $lang["sortierung_hoch"]                 = "Shift one position up";
 $lang["sortierung_runter"]               = "Shift one position down";
 $lang["speichern"]                       = "Save";
+$lang["syncDialogHeader"]                = "Synchronization";
 $lang["sync_add"]                        = "Added: ";
 $lang["sync_del"]                        = " Deleted: ";
 $lang["sync_upd"]                        = " Updated: ";

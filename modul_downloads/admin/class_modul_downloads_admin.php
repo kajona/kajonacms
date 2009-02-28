@@ -180,8 +180,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			$arrObjArchives = class_modul_downloads_archive::getAllArchives();
 			$intI = 0;
 
-
-
 			//initial js-code needed for common tasks
 			$strJsSyncCode .= $this->objToolkit->jsDialog(3);
 			$strJsSyncCode .= $this->objToolkit->jsDialog(0);
@@ -195,7 +193,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                     kajonaAdminAjax.genericAjaxCall('downloads', 'syncArchive', strSystemid, {
 						    success : function(o) {
 						        archive_hide_screenlock_dialog();
-						        jsDialog_0.setContentRaw(o.responseText+'<br /><a href=\"javascript:jsDialog_0.hide();\">".$this->getText("hideSyncDialog")."</a>');
+						        jsDialog_0.setTitle('".$this->getText("syncDialogHeader")."');
+						        jsDialog_0.setContentRaw(o.responseText+'<br /><br /><input type=\"submit\" name=\"closeButton\" value=\"".$this->getText("hideSyncDialog")."\" class=\"inputSubmitShort\" onclick=\"jsDialog_0.hide(); return false;\" /><br />');
 						        jsDialog_0.init();
 						        kajonaStatusDisplay.displayXMLMessage(o.responseText);
 						    },

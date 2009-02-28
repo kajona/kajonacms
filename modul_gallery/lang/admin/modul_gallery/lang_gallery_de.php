@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 147
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "", 7 => "", 8 => "");
@@ -21,6 +21,7 @@ $lang["bild_bearbeiten"]                 = "Bild bearbeiten";
 $lang["bild_rechte"]                     = "Rechte bearbeiten";
 $lang["bild_speichern_fehler"]           = "Fehler beim Speichern des Bildes";
 $lang["browser"]                         = "Ordnerbrowser";
+$lang["datei_loeschen_frage"]            = "Möchten Sie das Bild &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["fehler_gal"]                      = "Fehler beim Anlegen der Galerie";
 $lang["fehler_gal_bearbeiten"]           = "Fehler beim Bearbeiten der Gallerie";
 $lang["fehler_recht"]                    = "Keine ausreichende Rechte";
@@ -30,7 +31,6 @@ $lang["galerie_liste_leer"]              = "Keine Galerien angelegt";
 $lang["galerie_loeschen_erfolg"]         = "Löschen der Galerie erfolgreich";
 $lang["galerie_loeschen_fehler"]         = "Fehler beim Loeschen der Galerie";
 $lang["galerie_loeschen_frage"]          = "Möchten Sie die Galerie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Dabei werden alle hinterlegten Daten gelöscht!";
-$lang["datei_loeschen_frage"]            = "Möchten Sie das Bild &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["galerie_neu"]                     = "Neue Galerie";
 $lang["galerie_rechte"]                  = "Rechte bearbeiten";
 $lang["galerie_syncro"]                  = "Galerie synchronisieren";
@@ -64,6 +64,7 @@ $lang["required_pic_name"]               = "Titel";
 $lang["sortierung_hoch"]                 = "Eine Position nach oben";
 $lang["sortierung_runter"]               = "Eine Position nach unten";
 $lang["speichern"]                       = "Speichern";
+$lang["syncDialogHeader"]                = "Synchronisierung";
 $lang["sync_add"]                        = "Hinzugefügt: ";
 $lang["sync_del"]                        = " Gelöscht: ";
 $lang["sync_upd"]                        = " Aktualisiert: ";

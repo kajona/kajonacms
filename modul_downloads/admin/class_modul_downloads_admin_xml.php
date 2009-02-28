@@ -50,7 +50,7 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
             $strReturn .= $this->actionSyncArchive();
         else if($strAction == "massSyncArchive")
             $strReturn .= $this->actionMassSyncArchive();
-            
+
 
         return $strReturn;
 	}
@@ -66,24 +66,24 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 	private function actionSyncArchive() {
 		$strReturn = "";
 		$strResult = "";
-		
+
 		$objArchive = new class_modul_downloads_archive($this->getSystemid());
         if($objArchive->rightRight1()) {
             $arrSyncs = class_modul_downloads_file::syncRecursive($objArchive->getSystemid(), $objArchive->getPath());
-            $strResult .= $this->getText("syncro_ende");
-            $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
-            
-            $strReturn .= "<archive>".xmlSafeString(strip_tags($strResult))."</archive>";
+            $strResult .= $this->getText("syncro_ende")."<br />";
+            $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
+
+            $strReturn .= "<archive>".$strResult."</archive>";
         }
         else
-            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
+            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
 
         class_logger::getInstance()->addLogRow("synced archive ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
-            
+
 		return $strReturn;
 	}
-	
-/**
+
+    /**
      * Syncs the gallery and creates a small report
      *
      * @return string
@@ -91,7 +91,7 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
     private function actionMassSyncArchive() {
         $strReturn = "";
         $strResult = "";
-        
+
         //load all galleries
         $arrArchives = class_modul_downloads_archive::getAllArchives();
         $arrSyncs = array( "insert" => 0, "delete" => 0, "update" => 0);
@@ -103,17 +103,16 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
                 $arrSyncs["update"] += $arrTemp["update"];
             }
         }
-        $strResult = $this->getText("syncro_ende");
-        $strResult .= $this->getText("sync_add").$arrSyncs["insert"].$this->getText("sync_del").$arrSyncs["delete"].$this->getText("sync_upd").$arrSyncs["update"];
-            
+        $strResult .= $this->getText("syncro_ende")."<br />";
+        $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
+
         $strReturn .= "<archive>".xmlSafeString(strip_tags($strResult))."</archive>";
-        
-            
-        class_logger::getInstance()->addLogRow("mass synced archives : ".$strResult, class_logger::$levelInfo);
+
+        class_logger::getInstance()->addLogRow("mass synced archives: ".$strResult, class_logger::$levelInfo);
         return $strReturn;
     }
 
 
-} 
+}
 
 ?>
