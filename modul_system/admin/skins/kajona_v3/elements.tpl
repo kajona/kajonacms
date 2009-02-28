@@ -238,6 +238,7 @@ Upload-Field
 
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
+    %%modalDialog%%
 	%%javascript%%
 	
 	<div style="display:inline;">
@@ -246,8 +247,6 @@ Upload-Field for multiple files with progress bar
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
 	</div>
-	
-	%%modalDialog%%
 
 	<div id="kajonaUploadDialog" style="display: none;">
 		<div class="kajonaUploadFilesContainer">
@@ -859,7 +858,7 @@ The language switch sourrounds the buttons
 ---------------------------------------------------------------------------------------------------------
 -- DIALOG -----------------------------------------------------------------------------------------------
 <dialogContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
+	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
 	<div class="bd">
 		<div class="c" id="%%dialog_id%%_content">
 			<!-- filled by js -->
@@ -869,7 +868,7 @@ The language switch sourrounds the buttons
 </div></dialogContainer>
 
 <dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
-	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
+	<div class="hd"><div class="c"><h3 id="%%dialog_id%%_title"><!-- filled by js --></h3></div></div>
 	<div class="bd">
 		<div class="c">
 			<span id="%%dialog_id%%_content"><!-- filled by js --></span><br /><br />
@@ -880,10 +879,10 @@ The language switch sourrounds the buttons
 	<div class="ft"><div class="c"></div></div>
 </div></dialogConfirmationContainer>
 
-<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 120px;">
-    <div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
+<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 100px;">
+    <div class="hd"><div class="c"><h3 id="%%dialog_id%%_title">%%dialog_title%%</h3></div></div>
     <div class="bd">
-        <div class="c">
+        <div class="c" style="margin-left: 45px;">
             <div class="loadingContainer"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>

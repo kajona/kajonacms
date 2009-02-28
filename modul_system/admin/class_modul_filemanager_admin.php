@@ -407,7 +407,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					if(!$bitImage)
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 		   			else
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_lens.gif"));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_crop.gif"));
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
 		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
 
@@ -483,7 +483,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 //React on request passed. Do this before loading the filelist, cause subactions could modify it
     		   	$strExtra = "";
     		   	$bitSpecial = false;
-    		   
+
                 $strExtra .= $this->actionUploadFile();
     		   	//ok, load the list using the repo-data
     		   	$arrViewFilter = array();
@@ -557,7 +557,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         					$strFilename = uniStrTrim($strFilename, 40);
 
         					$strActions = "";
-        		   			$strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 
                             $strFolder = $this->strFolder;
         		   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
@@ -692,7 +691,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strDialog = $this->objToolkit->formInputText("folderName", $this->getText("ordner_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
-                        function init_fm_newfolder_dialog() { 
+                        function init_fm_newfolder_dialog() {
+                            jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getText("ordner_anlegen")."',
                                                   'javascript:filemanagerCreateFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
@@ -700,7 +700,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                       ";
 
         $strReturn .= "</script>";
-        $strReturn .= $this->objToolkit->jsDialog("", 1);
+        $strReturn .= $this->objToolkit->jsDialog(1);
         return $strReturn;
     }
 
@@ -785,7 +785,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$arrTemplate["file_path"] = $arrDetails["filepath"];
 			$arrTemplate["file_path_title"] = $this->getText("datei_pfad");
 
-
 			$arrSize = getimagesize($strFile);
 			$arrTemplate["file_dimensions"] = $arrSize[0]." x ".$arrSize[1];
             $arrTemplate["file_dimensions_title"] = $this->getText("bild_groesse");
@@ -795,7 +794,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
             $arrTemplate["file_lastedit"] = timeToString($arrDetails["filechange"]);
             $arrTemplate["file_lastedit_title"] = $this->getText("datei_bearbeit");
-
 
 			//Generate Dimensions
 			$intHeight = $arrSize[1];
@@ -834,16 +832,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 var fm_file = '".$this->getParam("file")."' ;
                 var fm_folder = '".$this->getParam("folder")."';
 
-                function init_fm_preview_warning_dialog() { jsDialog_0.setContentRaw('".$this->getText("cropWarningPreview")."'); jsDialog_0.init(); }
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
-                function init_fm_screenlock_dialog() { jsDialog_3.setContentRaw('".$this->getText("cropWarningSaving")."'); jsDialog_3.init(); }
+                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
+                function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 
 				</script>";
 
-			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", 0);
-			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("", 1);
-			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog("Bitte warten", 3);
+			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
+			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(3);
 
             $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" \">";
             $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" \">";

@@ -270,6 +270,7 @@ Upload-Field
 
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
+    %%modalDialog%%
 	%%javascript%%
 	
 	<div style="display:inline;">
@@ -278,8 +279,6 @@ Upload-Field for multiple files with progress bar
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
 	</div>
-	
-	%%modalDialog%%
 
 	<div id="kajonaUploadDialog" style="display: none;">
 		<div class="kajonaUploadFilesContainer">
@@ -962,7 +961,7 @@ The language switch sourrounds the buttons
 -- DIALOG -----------------------------------------------------------------------------------------------
 <dialogContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="dialogHeader">
-		<div class="dialogHeaderTitle">%%dialog_name%%</div>
+		<div class="dialogHeaderTitle" id="%%dialog_id%%_title"><!-- filled by js --></div>
 		<div class="dialogHeaderActions"></div>
 		<div style="clear: both;"></div>
 	</div>
@@ -971,7 +970,7 @@ The language switch sourrounds the buttons
 
 <dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="dialogHeader">
-		<div class="dialogHeaderTitle">%%dialog_name%%</div>
+		<div class="dialogHeaderTitle" id="%%dialog_id%%_title"><!-- filled by js --></div>
 		<div class="dialogHeaderActions"><a class="container-close" href="#" onclick="jsDialog_1.hide(); return false;">[X]</a></div>
 		<div style="clear: both;"></div>
 	</div>
@@ -980,5 +979,16 @@ The language switch sourrounds the buttons
 		<input type="submit" name="%%dialog_id%%_confirmButton" id="%%dialog_id%%_confirmButton" value="confirm" class="inputSubmit" /> <input type="submit" name="%%dialog_id%%_cancelButton" id="%%dialog_id%%_cancelButton" value="%%dialog_cancelButton%%" class="inputSubmit" onclick="jsDialog_1.hide(); return false;" />
 	</div>
 </div></dialogConfirmationContainer>
+
+<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%">
+    <div class="dialogHeader">
+        <div class="dialogHeaderTitle" id="%%dialog_id%%_title">%%dialog_title%%</div>
+        <div class="dialogHeaderActions"></div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="dialogContent"><div class="loadingContainer"></div>
+        <div id="%%dialog_id%%_content"><!-- filled by js --></div>
+    </div>
+</div></dialogLoadingContainer>
 
 <dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>

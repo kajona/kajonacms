@@ -162,11 +162,11 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 
 			//initial js-code needed for common tasks
-			$strJsSyncCode .= $this->objToolkit->jsDialog("", 2);
-			$strJsSyncCode .= $this->objToolkit->jsDialog("", 0);
+			$strJsSyncCode .= $this->objToolkit->jsDialog(3);
+			$strJsSyncCode .= $this->objToolkit->jsDialog(0);
 			$strJsSyncCode .= "<script type=\"text/javascript\">
-                function gallery_init_screenlock_dialog() { jsDialog_2.setContentRaw('<img src=\""._skinwebpath_."/loading.gif\" />'); jsDialog_2.init(); }
-                function gallery_hide_screenlock_dialog() { jsDialog_2.hide(); }
+                function gallery_init_screenlock_dialog() { jsDialog_3.init(); }
+                function gallery_hide_screenlock_dialog() { jsDialog_3.hide(); }
 
                 function syncGallery(strSystemid) {
                     gallery_init_screenlock_dialog();
@@ -480,6 +480,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                 $strDialog = $this->objToolkit->formInputText("folderName", $this->getText("ordner_name", "filemanager"));
                 $strReturn .= "<script type=\"text/javascript\">\n
                                 function init_fm_newfolder_dialog() {
+                                    jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                           '".$this->getText("ordner_anlegen", "filemanager")."',
                                                           'javascript:filemanagerCreateFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'gallery\', \'massSyncGallery\' ); jsDialog_1.hide();');
@@ -487,7 +488,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                               ";
 
                 $strReturn .= "</script>";
-                $strReturn .= $this->objToolkit->jsDialog("", 1);
+                $strReturn .= $this->objToolkit->jsDialog(1);
                 $strReturn .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen", "filemanager"), "icon_folderOpen.gif", "accept_icon"));
 
 

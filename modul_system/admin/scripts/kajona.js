@@ -116,6 +116,10 @@ function ModalDialog(strDialogId, intDialogType) {
 	this.dialog = null;
 	this.containerId = strDialogId;
 
+	this.setTitle = function(strTitle) {
+		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
+	}
+	
 	this.setContent = function(strQuestion, strConfirmButton, strLinkHref) {
 		if (intDialogType == 1) {
 			document.getElementById(this.containerId + "_content").innerHTML = strQuestion;
@@ -683,8 +687,6 @@ function KajonaUploader(config) {
 	this.onFileSelect = function(event) {
 		self.fileList = event.fileList;
 
-		
-
 		jsDialog_0.setContentRaw(document.getElementById('kajonaUploadDialog').innerHTML);
 		document.getElementById('kajonaUploadDialog').innerHTML = '';
 		
@@ -986,7 +988,6 @@ var fm_rotate_callback = {
 		document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
 				+ ' x ' + intWidthOld;
 
-		jsDialog_0.hide();
 		hide_fm_screenlock_dialog();
 	},
 	failure : function(o) {

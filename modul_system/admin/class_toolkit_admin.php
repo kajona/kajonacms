@@ -511,8 +511,6 @@ class class_toolkit_admin extends class_toolkit {
 
 		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
-
-
 		return $strReturn;
 	}
 
@@ -536,6 +534,7 @@ class class_toolkit_admin extends class_toolkit {
             $strAllowedFileTypes = "*.*";
 
 		$objConfig = class_config::getInstance();
+		$objText = class_carrier::getInstance()->getObjText();
 
 		$arrTemplate["javascript"] = "
 			<script type=\"text/javascript\">
@@ -570,16 +569,17 @@ class class_toolkit_admin extends class_toolkit {
 						document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
     				}
     			}
+
+    			jsDialog_0.setTitle('".$objText->getText("upload_multiple_dialogHeader", "filemanager", "admin")."');
 			</script>";
 
-		$objText = class_carrier::getInstance()->getObjText();
 		$arrTemplate["upload_fehler_filter"] = $objText->getText("upload_fehler_filter", "filemanager", "admin");
 		$arrTemplate["upload_multiple_uploadFiles"] = $objText->getText("upload_multiple_uploadFiles", "filemanager", "admin");
 		$arrTemplate["upload_multiple_cancel"] = $objText->getText("upload_multiple_cancel", "filemanager", "admin");
 		$arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getText("upload_multiple_totalFilesAndSize", "filemanager", "admin");
 		$arrTemplate["upload_multiple_errorFilesize"] = $objText->getText("upload_multiple_errorFilesize", "filemanager", "admin")." ".bytesToString($objConfig->getPhpMaxUploadSize());
 
-		$arrTemplate["modalDialog"] = $this->jsDialog($objText->getText("upload_multiple_dialogHeader", "filemanager", "admin"), 0);
+		$arrTemplate["modalDialog"] = $this->jsDialog(0);
 
 		//Fallback code if no or old Flash Player available
 		if ($bitFallback) {
@@ -889,13 +889,12 @@ class class_toolkit_admin extends class_toolkit {
 	 */
 	public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
 	    //place it into a standard-js-dialog
-	    //$strDialogId = "delVar".generateSystemid();
-        $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"));
+        $strDialog = $this->jsDialog(1);
 
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
 	    //create the list-button and the js code to show the dialog
-	    $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
+	    $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
 	                                     "",
 	                                     class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"),
 	                                     "icon_ton.gif" );
@@ -989,8 +988,7 @@ class class_toolkit_admin extends class_toolkit {
 
 
 	/**
-	 * Creates the mechanism to fold parts of the site / make them vivsible oder invisible
-	 * In recent times called "klapper"
+	 * Creates the mechanism to fold parts of the site / make them visible or invisible
 	 *
 	 * @param string $strContent
 	 * @param string $strLinkText The text / content,
@@ -1469,17 +1467,15 @@ class class_toolkit_admin extends class_toolkit {
      * The type-param decides what template is used for the dialog-layout. The name of the dialog is built via jsDialog_$intTypeNr.
      * Set the contents via js-calls.
      *
-     * @param string $strTitle
      * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog, 3 = loadingDialog)
      * @return string
      */
-    public function jsDialog($strTitle, $intDialogType) {
+    public function jsDialog($intDialogType) {
         $strContent = "";
         //create the html-part
         $arrTemplate = array();
         $strContainerId = generateSystemid();
         $arrTemplate["dialog_id"] = $strContainerId;
-        $arrTemplate["dialog_name"] = $strTitle;
 
         $strTemplateId = null;
         if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
@@ -1497,6 +1493,7 @@ class class_toolkit_admin extends class_toolkit {
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
         else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+            $arrTemplate["dialog_title"] = class_carrier::getInstance()->getObjText()->getText("dialog_loadingHeader", "system", "admin");
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogLoadingContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
@@ -1512,18 +1509,6 @@ class class_toolkit_admin extends class_toolkit {
         }
 
         return $strContent;
-    }
-
-
-    /**
-     * Creates a confirmation dialog (Action / Cancel button) on the page. By default, the dialog is hidden, so has to be set visible.
-     *
-     * @param string $strTitle
-     * @return string
-     * @see class_toolkit_admin::jsDialog($strTitle, $intDialogType)
-     */
-    public function confirmationDialog($strTitle) {
-        return $this->jsDialog($strTitle, 1);
     }
 
 }

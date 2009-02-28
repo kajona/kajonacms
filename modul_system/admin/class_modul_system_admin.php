@@ -670,7 +670,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 */
 	private function loadWebserverInfos() {
 		$arrReturn = array();
-		$arrReturn[$this->getText("system")] = php_uname();
+		$arrReturn[$this->getText("operatingsystem")] = php_uname();
 		if (@disk_total_space(_realpath_)) {
 		    $arrReturn[$this->getText("speicherplatz")] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
 		}
