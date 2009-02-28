@@ -197,7 +197,7 @@ class class_image {
 			    $strType = $this->strType;
 
 			if($strTarget == "")
-			   $strTarget = "/".$this->strCachepath.$this->generateCachename();
+			   $strTarget = "/".$this->strCachepath.$this->generateCachename(0, 0, $intJpegQuality);
 
 			switch (strtolower($strType)) {
 				case ".jpg":
@@ -231,33 +231,55 @@ class class_image {
 	 */
 	public function sendImageToBrowser($intJpegQuality = 90) {
 	    //Check, if we already got an image
+        $bitFileExistsInFilesystem = false;
 	    if($this->objImage == null && $this->bitPreload) {
 	        if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {
 	            $this->preLoadImage($this->strCachepath.$this->strCachename);
 	        }
 			$this->finalLoadImage();
 	    }
+        
+        
+        $this->saveImage("", true, $intJpegQuality);
 
-		$this->saveImage("", true);
         //and send it to the browser
         if($this->strCachename != null && $this->strCachename != "")
 		    $strType = uniSubstr($this->strCachename, uniStrrpos($this->strCachename, "."));
 		else
 		    $strType = $this->strType;
+
+
 		switch ($strType) {
 			case ".jpg":
 			    header("Content-type: image/jpeg");
-				imagejpeg($this->objImage, "", $intJpegQuality);
 				break;
 			case ".png":
 			    header("Content-type: image/png");
-				imagepng($this->objImage);
 				break;
 			case ".gif":
 			    header("Content-type: image/gif");
+				break;
+			}
+
+        //stream image directly from the filesystems is available
+        if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {
+            $ptrFile = @fopen(_realpath_.$this->strCachepath.$this->strCachename, 'rb');
+            fpassthru($ptrFile);
+            @fclose($ptrFile);
+        }
+        else {
+            switch ($strType) {
+			case ".jpg":
+				imagejpeg($this->objImage, "", $intJpegQuality);
+				break;
+			case ".png":
+				imagepng($this->objImage);
+				break;
+			case ".gif":
 				imagegif($this->objImage);
 				break;
 			}
+        }
 	}
 
 

@@ -50,9 +50,6 @@ class class_flyimage {
     public function __construct() {
         //Loading all configs...
         $objCarrier = class_carrier::getInstance();
-        //ok, all needed constants are set up...
-        include_once(_realpath_."/system/class_image.php");
-        $this->objImage = new class_image(_images_cachepath_);
         //find the params to use
         $this->strFilename = urldecode(getGet("image"));
         //avoid directory traversing
@@ -69,6 +66,10 @@ class class_flyimage {
         $this->intQuality = (int)getGet("quality");
         if($this->intQuality <= 0 || $this->intQuality > 100)
             $this->intQuality = 90;
+
+        //ok, all needed constants are set up...
+        include_once(_realpath_."/system/class_image.php");
+        $this->objImage = new class_image(_images_cachepath_, $this->intQuality);
 
     }
 
@@ -133,6 +134,7 @@ class class_flyimage {
 			//echo "width: ".$intWidthNew." (image: ".$arrImageData[0]." max: ".$this->intMaxWidth.") <br />";
 			//echo "height: ".$intHeightNew." (image:".$arrImageData[1]." max: ".$this->intMaxHeight.")";
 			//ok, the new dimensions are set up, so start manipulating the image
+            
 			$this->objImage->preLoadImage($this->strFilename);
 			if($bitResize)
 		  	    $this->objImage->resizeImage($intWidthNew, $intHeightNew, 0, true);
