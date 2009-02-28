@@ -1393,6 +1393,35 @@ div.percentBeam {
 }
 
 /* Image Cropper */
+.folderview_image_details td.first {
+    white-space: nowrap;
+}
+
+.folderview_image_details .imageContainer {
+    padding-top: 8px;
+    text-align: center;
+}
+
+.folderview_image_details .imageContainer div.image {
+    max-width: 700px;
+    max-height: 400px;
+    overflow: auto;
+    padding-bottom: 5px;
+}
+
+.folderview_image_details .imageContainer div.image div.yui-crop {
+    margin: auto;
+}
+
+.folderview_image_details .imageActions {
+    padding-bottom: 8px;
+    text-align: center;
+}
+
+.folderview_image_details .imageActions a {
+    padding-right: 2px;
+}
+
 .yui-resize-handle {
     background-color: #FFFFFF;  
 }
@@ -1410,4 +1439,3 @@ div.percentBeam {
 .yui-resize-status {
     background-color: #CCCCCC;  
 }
-

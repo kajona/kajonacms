@@ -484,7 +484,7 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 
 .fmBackBar {
     background-color: #CFD7FF;
-    border: 1px solid #5F7BFF;	
+    border: 1px solid #5F7BFF;
 }
 
 .fmBackBar td {
@@ -841,6 +841,27 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 }
 
 /* Image Cropper */
+.folderview_image_details .imageContainer {
+    padding-top: 8px;
+    text-align: center;
+}
+
+.folderview_image_details .imageContainer div.image {
+    max-width: 600px;
+    max-height: 400px;
+    overflow: auto;
+    padding-bottom: 5px;
+}
+
+.folderview_image_details .imageContainer div.image div.yui-crop {
+    margin: auto;
+}
+
+.folderview_image_details .imageActions {
+    padding-bottom: 8px;
+    text-align: center;
+}
+
 .yui-resize-handle {
     background-color: #FFFFFF;	
 }

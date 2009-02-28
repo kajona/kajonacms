@@ -407,19 +407,13 @@ var kajonaAjaxHelper = {
 		var l = new kajonaAjaxHelper.Loader();
 		l.addYUIComponents( [ "imagecropper" ]);
 		l.load(callback);
+	},
 
-		// kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/element/element-beta-min.js');
-	// kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/animation/animation-min.js');
-	// kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/resize/resize-min.js');
-	// kajonaAjaxHelper.addFileToLoad('admin/scripts/yui/imagecropper/imagecropper-beta-min.js');
-
-},
-
-loadDialogBase : function(callback) {
-	var l = new kajonaAjaxHelper.Loader();
-	l.addJavascriptFile(l.yuiBase + "container/container-min.js");
-	l.load(callback);
-}
+	loadDialogBase : function(callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addJavascriptFile(l.yuiBase + "container/container-min.js");
+		l.load(callback);
+	}
 };
 
 var regularCallback = {
@@ -844,30 +838,38 @@ function KajonaUploader(config) {
 //--- image-editor --------------------------------------------------------------------------------------
 
 function filemanagerShowRealsize() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "?x="
-			+ (new Date()).getMilliseconds();
+	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
+		+ (new Date()).getMilliseconds();
 	fm_image_isScaled = false;
+	
+	if (fm_cropObj != null) {
+		fm_cropObj.destroy();
+		fm_cropObj = null;
+	}
 
+	document.getElementById("accept_icon").src = document
+		.getElementById("accept_icon").src.replace("icon_crop_accept.gif",
+		"icon_crop_acceptDisabled.gif");
 }
 
 function filemanagerShowPreview() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl
-			+ "&x=" + (new Date()).getMilliseconds();
+	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
+		+ "&x=" + (new Date()).getMilliseconds();
+	//alert(document.getElementById('fm_filemanagerPic').src);
 	fm_image_isScaled = true;
-	if (fm_cropObj != null)
+	
+	if (fm_cropObj != null) {
 		fm_cropObj.destroy();
+		fm_cropObj = null;
+	}
 
 	document.getElementById("accept_icon").src = document
-			.getElementById("accept_icon").src.replace("icon_crop_accept.gif",
-			"icon_crop_acceptDisabled.gif");
-	fm_cropObj = null;
+		.getElementById("accept_icon").src.replace("icon_crop_accept.gif",
+		"icon_crop_acceptDisabled.gif");
 }
 
 var fm_cropObj = null;
 function filemanagerShowCropping() {
-	/*
-	 * if(fm_image_isScaled) { fm_preview_warning.init(); return; }
-	 */
 	// init the cropping
 	if (fm_cropObj == null) {
 		fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
@@ -876,6 +878,8 @@ function filemanagerShowCropping() {
 		document.getElementById("accept_icon").src = document
 				.getElementById("accept_icon").src.replace(
 				"icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
+		
+		document.getElementById("fm_filemanagerPic_wrap").ondblclick = filemanagerSaveCropping;
 	} else {
 		fm_cropObj.destroy();
 		fm_cropObj = null;
@@ -883,21 +887,18 @@ function filemanagerShowCropping() {
 				.getElementById("accept_icon").src.replace(
 				"icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 	}
-
 }
 
 function filemanagerSaveCropping() {
-	if (fm_cropObj != null)
+	if (fm_cropObj != null) {
 		init_fm_crop_save_warning_dialog();
-		//fm_crop_save_warning.init();
+	}
 }
 
 var cropArea = null;
 function filemanagerSaveCroppingToBackend() {
 	jsDialog_1.hide();
-	init_fm_crop_screenlock_dialog();
-	//fm_crop_save_warning.hide();
-	//fm_crop_screenlock.init();
+	init_fm_screenlock_dialog();
 	cropArea = fm_cropObj.getCropCoords();
 	if (fm_image_isScaled) {
 		// recalculate the "real" crop-coordinates
@@ -930,23 +931,26 @@ var fm_cropping_callback = {
 		document.getElementById('fm_image_size').innerHTML = 'n.a.';
 		document.getElementById('fm_int_realwidth').value = cropArea.width;
 		document.getElementById('fm_int_realheight').value = cropArea.height;
-		filemanagerShowRealsize();
+		
+		if (fm_image_isScaled) {
+			filemanagerShowPreview();
+		} else {
+			filemanagerShowRealsize();
+		}
+		
 		cropArea = null;
 
-		//fm_crop_screenlock.hide();
 		hide_fm_screenlock_dialog();
 	},
 	failure : function(o) {
 		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
 				+ o.responseText);
-		//fm_crop_screenlock.hide();
 		hide_fm_screenlock_dialog();
 	}
 };
 
 function filemanagerRotate(intAngle) {
-	//fm_crop_screenlock.init();
-	init_fm_crop_screenlock_dialog();
+	init_fm_screenlock_dialog();
 	kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
 			fm_rotate_callback);
 }
@@ -963,9 +967,17 @@ var fm_rotate_callback = {
 					"icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
 		}
 
-		// document.getElementById('fm_image_dimensions').innerHTML = 'n.a';
-		filemanagerShowRealsize();
-		// fm_crop_screenlock.hide();
+		//switch width and height
+		var intScaledMaxWidthOld = fm_image_scaledMaxWidth;
+		fm_image_scaledMaxWidth = fm_image_scaledMaxHeight;
+        fm_image_scaledMaxHeight = intScaledMaxWidthOld;
+        
+		if (fm_image_isScaled) {
+			filemanagerShowPreview();
+		} else {
+			filemanagerShowRealsize();
+		}
+		
 		// update size-info & hidden elements
 		var intWidthOld = document.getElementById('fm_int_realwidth').value;
 		var intHeightOld = document.getElementById('fm_int_realheight').value;
@@ -974,14 +986,12 @@ var fm_rotate_callback = {
 		document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
 				+ ' x ' + intWidthOld;
 
-		//fm_crop_screenlock.hide();
 		jsDialog_0.hide();
 		hide_fm_screenlock_dialog();
 	},
 	failure : function(o) {
 		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
 				+ o.responseText);
-		//fm_crop_screenlock.hide();
 		hide_fm_screenlock_dialog();
 	}
 };

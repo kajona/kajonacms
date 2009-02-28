@@ -415,12 +415,11 @@ Infobox used by the filemanager
 <filemanager_infobox>
 <table cellpadding="0" cellspacing="0" class="statusFilemanager">
   <tr>
-    <td>%%foldertitle%% %%folder%%</td>
-    <td style="width: 20%; text-align: right; white-space: nowrap;">%%nrfilestitle%% %%files%%</td>
+    <td style="padding-bottom: 5px;">%%foldertitle%% %%folder%%</td>
+    <td style="text-align: right; white-space: nowrap;" rowspan="2">%%nrfilestitle%% %%files%%<br />%%nrfoldertitle%% %%folders%%</td>
   </tr>
   <tr>
-    <td style="width: 73%;" class="actions">%%actions%%</td>
-    <td style="text-align: right; vertical-align: middle; white-space: nowrap;">%%nrfoldertitle%% %%folders%%</td>
+    <td class="actions">%%actions%%</td>
   </tr>
   <tr>
     <td colspan="2" class="actions">%%extraactions%%</td>
@@ -501,40 +500,33 @@ UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame 
                Replaced by the section folderview_image_details
                
 <folderview_image_details>
-<table border="0" width="100%" cellpadding="0" cellspacing="0" style="">
-    <tr>
-        <td>%%file_pathnavi%%</td>
-    </tr>
-    <tr class="fmBackBar">
-        <td align="center" style="padding: 2px;">%%file_actions%%</td>
-    </tr>
-    <tr>
-        <td align="center" style="padding: 3px;">
-            %%file_image%%
-        </td>
-    </tr>
-    <tr class="fmBackBar">
-        <td>
-            <table style="border: none;">
-                <tr>
-                    <td>%%file_path_title%%</td>
-                    <td colspan="3">%%file_path%% (%%file_name%%)</td>
-                </tr>
-                <tr >
-                    <td>%%file_size_title%%</td>
-                    <td id="fm_image_size">%%file_size%%</td>
-                    <td>%%file_dimensions_title%%</td>
-                    <td id="fm_image_dimensions">%%file_dimensions%%</td>
-                </tr>
-                <tr>
-                    <td>%%file_lastedit_title%%</td>
-                    <td>%%file_lastedit%%</td>
-                    <td></td>
-                    <td></td>
-            </table>
-        </td>
-    </tr>           
-</table>
+<div class="folderview_image_details">
+    %%file_pathnavi%% %%file_name%%
+    <div class="imageContainer">
+        <div class="image">%%file_image%%</div>
+    </div>
+    <div class="imageActions">
+        %%file_actions%%
+    </div>
+    <table>
+        <tr>
+            <td class="first">%%file_path_title%%</td>
+            <td>%%file_path%%</td>
+        </tr>
+        <tr>
+            <td class="first">%%file_size_title%%</td>
+            <td id="fm_image_size">%%file_size%%</td>
+        </tr>
+        <tr>
+            <td class="first">%%file_dimensions_title%%</td>
+            <td id="fm_image_dimensions">%%file_dimensions%%</td>
+        </tr>
+        <tr>
+            <td class="first">%%file_lastedit_title%%</td>
+            <td>%%file_lastedit%%</td>
+        </tr>
+    </table>
+</div>
 %%filemanager_internal_code%%
 %%filemanager_image_js%%
 </folderview_image_details>
@@ -639,12 +631,10 @@ Spacer, used to seperate logical groups
 The following sections are used to display the path-navigations, e.g. used by the navigation module
 
 <path_container>
-<div style="padding-bottom: 5px;">%%pathnavi%%</div>
+%%pathnavi%%
 </path_container>
 
-<path_entry>
-%%pathlink%%&nbsp;&gt;&nbsp;
-</path_entry>
+<path_entry>%%pathlink%%&nbsp;&gt;&nbsp;</path_entry>
 
 ---------------------------------------------------------------------------------------------------------
 --- PREFORMATTED ----------------------------------------------------------------------------------------
@@ -889,5 +879,16 @@ The language switch sourrounds the buttons
 	</div>
 	<div class="ft"><div class="c"></div></div>
 </div></dialogConfirmationContainer>
+
+<dialogLoadingContainer><div class="dialog" id="%%dialog_id%%" style="width: 120px;">
+    <div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
+    <div class="bd">
+        <div class="c">
+            <div class="loadingContainer"></div>
+            <div id="%%dialog_id%%_content"><!-- filled by js --></div>
+        </div>
+    </div>
+    <div class="ft"><div class="c"></div></div>
+</div></dialogLoadingContainer>
 
 <dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>

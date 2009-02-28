@@ -142,21 +142,21 @@ class class_toolkit_admin extends class_toolkit {
 
 		//commands and values for the calendar
 		$arrTemplate["calendarCommands"] = "";
-		
+
 		//init the js-files
 		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
 		//and the css
 		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
 		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
-        
-        
+
+
 		//set up the container div
         $strContainerId = $strName."jscalendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
-        
+
         //init the calendar
         $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
-        
+
         $arrTemplate["calendarCommands"] .="
 	        function initCalWrapper_".$strContainerId."() {
 				if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
@@ -167,8 +167,8 @@ class class_toolkit_admin extends class_toolkit {
 			    YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");
 			    initCal_".$strContainerId."();
 			}
-        "; 
-        
+        ";
+
         $arrTemplate["calendarCommands"] .=" function initCal_".$strContainerId."() { \n";
         $arrTemplate["calendarCommands"] .="    YAHOO.namespace(\"kajona.calendar\"); \n";
         //set up the calendar
@@ -176,8 +176,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="       if (YAHOO.lang.isUndefined(YAHOO.kajona.calendar.cal_".$strContainerId.")) {\n";
         $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId." = new YAHOO.widget.Calendar(\n";
         $arrTemplate["calendarCommands"] .="          \"cal_".$strContainerId."\",\n";
-        $arrTemplate["calendarCommands"] .="          \"".$strContainerId."\" );\n"; 
-        
+        $arrTemplate["calendarCommands"] .="          \"".$strContainerId."\" );\n";
+
         $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"WEEKDAYS_SHORT\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarWeekday", "system", "admin")."]);\n";
         $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"MONTHS_LONG\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarMonth", "system", "admin")."]);\n";
         $arrTemplate["calendarCommands"] .="       } \n";
@@ -195,23 +195,23 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".render();\n";
         $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".selectEvent.subscribe(handleSelect_".$strContainerId.", YAHOO.kajona.calendar.cal_".$strContainerId.", true);\n";
         $arrTemplate["calendarCommands"] .="    } \n";
-    
+
         $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init();\n";
         $arrTemplate["calendarCommands"] .=" }\n";
-        
-        $arrTemplate["calendarCommands"] .=" function handleSelect_".$strContainerId."(type,args,obj) {\n"; 
+
+        $arrTemplate["calendarCommands"] .=" function handleSelect_".$strContainerId."(type,args,obj) {\n";
         $arrTemplate["calendarCommands"] .="    var dates = args[0]; \n";
         $arrTemplate["calendarCommands"] .="    var date = dates[0]; \n";
-        $arrTemplate["calendarCommands"] .="    var year = date[0], month = (date[1] < 10 ? '0'+date[1]:date[1]), day = (date[2] < 10 ? '0'+date[2]:date[2]);\n"; 
+        $arrTemplate["calendarCommands"] .="    var year = date[0], month = (date[1] < 10 ? '0'+date[1]:date[1]), day = (date[2] < 10 ? '0'+date[2]:date[2]);\n";
         //write to fields
 		$arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleDay"]."').value=day+\"\";\n";
 		$arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleMonth"]."').value=month+\"\";\n";
         $arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleYear"]."').value=year+\"\";\n";
         $arrTemplate["calendarCommands"] .="    calClose_".$strContainerId."();\n";
         $arrTemplate["calendarCommands"] .=" } \n";
-        
+
         $arrTemplate["calendarCommands"] .="</script>\n" ;
-		
+
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -412,9 +412,9 @@ class class_toolkit_admin extends class_toolkit {
 
 				var pageDataSource = new YAHOO.util.XHRDataSource(\"xml.php\");
 				pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
-				pageDataSource.responseSchema = { 
-					resultNode : \"page\", 
-					fields : [\"title\"] 
+				pageDataSource.responseSchema = {
+					resultNode : \"page\",
+					fields : [\"title\"]
 				};
 
                 var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
@@ -422,11 +422,11 @@ class class_toolkit_admin extends class_toolkit {
                 	allowBrowserAutocomplete: false,
                 	useShadow: false
 				});
-				pageautocomplete.generateRequest = function(sQuery) { 
-					return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ; 
+				pageautocomplete.generateRequest = function(sQuery) {
+					return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
 				};
 			}
-            
+
             YAHOO.util.Event.onDOMReady(function () {document.getElementById('".$strName."').onfocus = function () {initAC_".$strNameCleaned."();};});
 		</script>
 		";
@@ -499,23 +499,23 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUpload($strName, $strTitle = "", $strClass = "inputText") {
         $strReturn = "";
-        
+
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_upload");
         $arrTemplate = array();
 		$arrTemplate["name"] = $strName;
 		$arrTemplate["title"] = $strTitle;
 		$arrTemplate["class"] = $strClass;
-		
+
 		$objText = class_carrier::getInstance()->getObjText();
 		$arrTemplate["maxSize"] = $objText->getText("max_size", "filemanager", "admin")." ".bytesToString(class_config::getInstance()->getPhpMaxUploadSize());
 
 		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-		
-		
-		
+
+
+
 		return $strReturn;
 	}
-	
+
     /**
      * Returns a input-file element for uploading multiple files with progress bar
      *
@@ -530,21 +530,21 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
-        
+
         $strAllowedFileTypes = uniStrReplace(array(".", ","), array("*.", ";"), $strAllowedFileTypes);
         if($strAllowedFileTypes == "")
             $strAllowedFileTypes = "*.*";
 
 		$objConfig = class_config::getInstance();
-		
+
 		$arrTemplate["javascript"] = "
-			<script type=\"text/javascript\">				
+			<script type=\"text/javascript\">
 				var uploader;
-				
+
 				function initUploader() {
 					window.setTimeout('checkUploader()', 50);
-					
-					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\"; 
+
+					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\";
 					uploader = new KajonaUploader({
 						\"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
 						\"selectLinkId\": \"kajonaUploadSelectLink\",
@@ -560,10 +560,10 @@ class class_toolkit_admin extends class_toolkit {
 		                                      \"inputElement\" : \"".$strName."\"}, //create valid input-name element. no array needed!
 		                \"uploadInputName\": \"".$strName."\"
 					});
-					uploader.init();				
+					uploader.init();
 			    }
 			    kajonaAjaxHelper.loadUploaderBase(initUploader);
-			    
+
 			    function checkUploader() {
 			    	if (uploader.uploader == undefined) {
     					document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
@@ -571,16 +571,16 @@ class class_toolkit_admin extends class_toolkit {
     				}
     			}
 			</script>";
-        
+
 		$objText = class_carrier::getInstance()->getObjText();
 		$arrTemplate["upload_fehler_filter"] = $objText->getText("upload_fehler_filter", "filemanager", "admin");
 		$arrTemplate["upload_multiple_uploadFiles"] = $objText->getText("upload_multiple_uploadFiles", "filemanager", "admin");
 		$arrTemplate["upload_multiple_cancel"] = $objText->getText("upload_multiple_cancel", "filemanager", "admin");
 		$arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getText("upload_multiple_totalFilesAndSize", "filemanager", "admin");
 		$arrTemplate["upload_multiple_errorFilesize"] = $objText->getText("upload_multiple_errorFilesize", "filemanager", "admin")." ".bytesToString($objConfig->getPhpMaxUploadSize());
-		
+
 		$arrTemplate["modalDialog"] = $this->jsDialog($objText->getText("upload_multiple_dialogHeader", "filemanager", "admin"), 0);
-		
+
 		//Fallback code if no or old Flash Player available
 		if ($bitFallback) {
 			$strFallbackForm = $this->formInputUpload($strName, $strTitle);
@@ -589,7 +589,7 @@ class class_toolkit_admin extends class_toolkit {
 		} else {
 		    $arrTemplate["fallbackContent"] = $objText->getText("upload_multiple_errorFlash", "filemanager", "admin");
 		}
-		
+
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
@@ -657,7 +657,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["class"] = $strClass;
 		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
 	}
-	
+
 	/**
 	 * Returns a headline in a form
 	 *
@@ -875,7 +875,7 @@ class class_toolkit_admin extends class_toolkit {
 	}
 
 
-    
+
 
 	/**
 	 * Generates a delete-button. The passed element name and question is shown as a modal dialog
@@ -891,22 +891,22 @@ class class_toolkit_admin extends class_toolkit {
 	    //place it into a standard-js-dialog
 	    //$strDialogId = "delVar".generateSystemid();
         $strDialog = $this->confirmationDialog(class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin"));
-	    
+
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
-        
+
 	    //create the list-button and the js code to show the dialog
-	    $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"", 
-	                                     "", 
-	                                     class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"), 
+	    $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
+	                                     "",
+	                                     class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"),
 	                                     "icon_ton.gif" );
-	    
+
 	    return $this->listButton($strButton).$strDialog;
 	}
-	
+
 	/**
 	 * Generates a button allowing to change the status of the record passed.
 	 * Therefore an ajax-method is called.
-	 * 
+	 *
 	 * @param string $strSystemid
 	 * @return string
 	 */
@@ -944,14 +944,14 @@ class class_toolkit_admin extends class_toolkit {
 				var strInActiveText = '".class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin")."';
 				var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
 				var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
-				
+
 				kajonaAjaxHelper.loadAjaxBase();
 			</script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }
 
 	    $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
-	    
+
 	    return $this->listButton($strButton).$strJavascript;
 	}
 
@@ -1055,10 +1055,10 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "filemanager_infobox");
 		return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
 	}
-    
+
     /**
      * Creates the page to view & manipulate image.
-     * 
+     *
      * @since 3.2
      * @replaces class_toolkit_admin::getFileDetails()
      * @param array $arrContent
@@ -1066,7 +1066,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function getFilemanagerImageDetails($arrContent) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "folderview_image_details");
-        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);	
+        return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 
 
@@ -1142,18 +1142,18 @@ class class_toolkit_admin extends class_toolkit {
 			    elseif ($intCount == $intMax)
 			        $strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowIDLast);
 			    else {
-			    	//allow to hide modules if too much given 
+			    	//allow to hide modules if too much given
 			    	if($intCount >= 8) {
 			    		$strTemp = $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowHiddenID);
 			    		if($strTemp == "")
 			    			$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
 			    		else
-			    			$strRows .= $strTemp;	
+			    			$strRows .= $strTemp;
 			    	}
 			    	else
-			    		$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);	
+			    		$strRows .= $this->objTemplate->fillTemplate($arrOneModule, $strTemplateRowID);
 			    }
-			        
+
 			}
 
 			$intCount++;
@@ -1369,11 +1369,11 @@ class class_toolkit_admin extends class_toolkit {
         return $arrReturn;
     }
 
-    
+
 /*"*****************************************************************************************************/
 // --- Admnwidget / Dashboard ---------------------------------------------------------------------------
 
-    
+
     public function getMainDashboard($arrColumn) {
         $strReturn = "<table class=\"dashBoard\"><tr>";
         foreach ($arrColumn as $strOneColumn)
@@ -1381,7 +1381,7 @@ class class_toolkit_admin extends class_toolkit {
         $strReturn .= "</tr></table>";
         return $strReturn;
     }
-    
+
     /**
      * Generates the header for a column on the dashboard.
      * Inits the ajax-componentes for this list
@@ -1393,7 +1393,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_header");
         return $this->objTemplate->fillTemplate(array("column_id" => $strColumnId), $strTemplateID);
     }
-    
+
     /**
      * The footer of a dashboard column.
      *
@@ -1403,7 +1403,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dashboard_column_footer");
         return $this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
-    
+
     /**
      * The widget-enclose is the code-fragment to be built around the widget itself.
      * Used to handle the widget on the current column.
@@ -1419,7 +1419,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["content"] = $strWidgetContent;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
-    
+
     /**
      * Builds the widget out of its main components.
      *
@@ -1440,7 +1440,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["widget_delete"] = $strDeleteLink;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
-    
+
     /**
      * Generates a text-row in a widget
      *
@@ -1451,7 +1451,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText), $strTemplateID);
     }
-    
+
     /**
      * Generate a separator / divider in a widget
      *
@@ -1461,16 +1461,16 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "adminwidget_separator");
         return $this->objTemplate->fillTemplate(array(""), $strTemplateID);
     }
-    
+
 //--- modal dialog --------------------------------------------------------------------------------------
 
     /**
      * Creates a modal dialog on the page. By default, the dialog is hidden, so has to be set visible.
-     * The type-param decides what template is used for the dialog-layout. The name of the dialog is built via jsDialog_$intTypeNr. 
+     * The type-param decides what template is used for the dialog-layout. The name of the dialog is built via jsDialog_$intTypeNr.
      * Set the contents via js-calls.
      *
      * @param string $strTitle
-     * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog)
+     * @param int $intDialogType (0 = regular modal dialog, 1 = confirmation dialog, 2 = rawDialog, 3 = loadingDialog)
      * @return string
      */
     public function jsDialog($strTitle, $intDialogType) {
@@ -1480,7 +1480,7 @@ class class_toolkit_admin extends class_toolkit {
         $strContainerId = generateSystemid();
         $arrTemplate["dialog_id"] = $strContainerId;
         $arrTemplate["dialog_name"] = $strTitle;
-        
+
         $strTemplateId = null;
         if($intDialogType == 0 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogContainer");
@@ -1488,7 +1488,7 @@ class class_toolkit_admin extends class_toolkit {
         }
         else if($intDialogType == 1 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
             $arrTemplate["dialog_cancelButton"] = class_carrier::getInstance()->getObjText()->getText("dialog_cancelButton", "system", "admin");
-        	
+
         	$strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogConfirmationContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
@@ -1496,17 +1496,21 @@ class class_toolkit_admin extends class_toolkit {
             $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogRawContainer");
             class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
         }
+        else if($intDialogType == 3 && class_carrier::getInstance()->getObjSession()->getSession("jsDialog_".$intDialogType, class_session::$intScopeRequest) === false) {
+            $strTemplateId = $this->objTemplate->readTemplate("/elements.tpl", "dialogLoadingContainer");
+            class_carrier::getInstance()->getObjSession()->setSession("jsDialog_".$intDialogType, "true",  class_session::$intScopeRequest);
+        }
 
         if($strTemplateId != null) {
             $strContent .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateId);
-        
+
 	        //and create the java-script
 	        $strContent .="<script type=\"text/javascript\">
 	        	kajonaAjaxHelper.loadDialogBase();
 	            var jsDialog_".$intDialogType." = new ModalDialog('".$strContainerId."', ".$intDialogType.");
 	        </script>";
         }
-        
+
         return $strContent;
     }
 
@@ -1521,7 +1525,6 @@ class class_toolkit_admin extends class_toolkit {
     public function confirmationDialog($strTitle) {
         return $this->jsDialog($strTitle, 1);
     }
-    
-    
+
 }
 ?>

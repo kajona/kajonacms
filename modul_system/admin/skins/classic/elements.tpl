@@ -613,37 +613,38 @@ UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame 
                Replaced by the section folderview_image_details
                
 <folderview_image_details>
-<table border="0" width="100%" cellpadding="0" cellspacing="0" style="">
+<table width="100%" cellpadding="0" cellspacing="0" class="folderview_image_details">
     <tr>
-        <td>%%file_pathnavi%%</td>
+        <td>%%file_pathnavi%% %%file_name%%</td>
     </tr>
     <tr class="fmBackBar">
-        <td align="center" style="padding: 2px;">%%file_actions%%</td>
+        <td class="imageActions">%%file_actions%%</td>
     </tr>
     <tr>
-        <td align="center" style="padding: 3px;">
-            %%file_image%%
+        <td class="imageContainer">
+            <div class="image">%%file_image%%</div>
         </td>
     </tr>
     <tr class="fmBackBar">
         <td>
-            <table style="border: none;">
+            <table>
                 <tr>
-			        <td>%%file_path_title%%</td>
-			        <td colspan="3">%%file_path%% (%%file_name%%)</td>
-			    </tr>
-			    <tr >
-			        <td>%%file_size_title%%</td>
-			        <td id="fm_image_size">%%file_size%%</td>
-			        <td>%%file_dimensions_title%%</td>
-			        <td id="fm_image_dimensions">%%file_dimensions%%</td>
-			    </tr>
-			    <tr>
-			        <td>%%file_lastedit_title%%</td>
+                    <td>%%file_path_title%%</td>
+                    <td>%%file_path%%</td>
+                </tr>
+                <tr>
+                    <td>%%file_size_title%%</td>
+                    <td id="fm_image_size">%%file_size%%</td>
+                </tr>
+                <tr>
+                    <td>%%file_dimensions_title%%</td>
+                    <td id="fm_image_dimensions">%%file_dimensions%%</td>
+                </tr>
+                <tr>
+                    <td>%%file_lastedit_title%%</td>
                     <td>%%file_lastedit%%</td>
-                    <td></td>
-                    <td></td>
-			</table>
+                </tr>
+            </table>
 		</td>
 	</tr>		    
 </table>
@@ -755,7 +756,7 @@ Spacer, used to seperate logical groups
 The following sections are used to display the path-navigations, e.g. used by the navigation module
 
 <path_container>
-<div style="padding-bottom: 5px;">%%pathnavi%%</div>
+<span>%%pathnavi%%</span>
 </path_container>
 
 <path_entry>
