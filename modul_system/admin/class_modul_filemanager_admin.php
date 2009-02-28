@@ -332,7 +332,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
             $strActions = "";
             $strActions .= $this->generateNewFolderDialogCode();
-            $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
+            if($this->objRights->rightRight1($this->getSystemid()))
+                $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
 
 		   	//Building a status-bar, using the toolkit
 		   	$arrInfobox = array();
@@ -688,9 +689,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         $strReturn = "";
 
         //Build code for create-dialog
-        //$strDialog = $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-        $strDialog = $strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
-		$strDialog .= $this->objToolkit->formInputText("folderName", $this->getText("ordner_name"));
+		$strDialog = $this->objToolkit->formInputText("folderName", $this->getText("ordner_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
                         function init_fm_newfolder_dialog() { 

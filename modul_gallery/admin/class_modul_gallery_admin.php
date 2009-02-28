@@ -476,6 +476,23 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
             //Build the upload form
             if($objFmRepo->rightRight1()) {
+
+                $strDialog = $this->objToolkit->formInputText("folderName", $this->getText("ordner_name", "filemanager"));
+                $strReturn .= "<script type=\"text/javascript\">\n
+                                function init_fm_newfolder_dialog() {
+                                    jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
+                                                          '".$this->getText("ordner_anlegen", "filemanager")."',
+                                                          'javascript:filemanagerCreateFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'gallery\', \'massSyncGallery\' ); jsDialog_1.hide();');
+                                            jsDialog_1.init(); }\n
+                              ";
+
+                $strReturn .= "</script>";
+                $strReturn .= $this->objToolkit->jsDialog("", 1);
+                $strReturn .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen", "filemanager"), "icon_folderOpen.gif", "accept_icon"));
+
+
+
+
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
 

@@ -99,7 +99,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      */
     private function actionCreateFolder() {
         $strReturn = "";
-        if($this->objRights->rightDelete($this->getSystemid())) {
+        if($this->objRights->rightRight1($this->getSystemid())) {
 
             //create repo-instance
             $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
