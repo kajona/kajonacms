@@ -76,15 +76,12 @@ class class_modul_search_portal extends class_portal implements interface_portal
 		if($this->strSearchterm != "")
 			$arrTemplate["suche_term"] = $this->strSearchterm;
 
-		$arrTemplate["form_searchterm_label"] = $this->getText("form_searchterm_label");
-		$arrTemplate["form_submit_label"] = $this->getText("form_submit_label");
-
 		$strPage = $this->arrElementData["search_page"]	;
 		if($strPage == "")
 		  $strPage = $this->getPagename();
 
 		$arrTemplate["action"] = getLinkPortalHref($strPage, "", "search");
-		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
 

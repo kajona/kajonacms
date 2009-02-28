@@ -30,7 +30,7 @@ abstract class class_admin {
 	 */
 	protected $objDB = null;				//Object to the database
 	/**
-	 * Instance of class_toolkit_<area>
+	 * Instance of class_toolkit_admin
 	 *
 	 * @var class_toolkit_admin
 	 */

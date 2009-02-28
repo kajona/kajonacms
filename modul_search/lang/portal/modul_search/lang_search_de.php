@@ -7,14 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 151
 
 //editable entries
-$lang["form_searchterm_label"]           = "Suchbegriff";
-$lang["form_submit_label"]               = "Suchen";
 $lang["hitlist_text1"]                   = "Die Suche nach";
 $lang["hitlist_text2"]                   = "ergab";
 $lang["hitlist_text3"]                   = "Treffer";
+$lang["lang_searchterm_label"]           = "Suchbegriff";
+$lang["lang_submit_label"]               = "Suchen";
 $lang["weiter"]                          = "weiter";
 $lang["zurueck"]                         = "zurück";
 ?>

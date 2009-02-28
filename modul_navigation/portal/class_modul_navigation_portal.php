@@ -31,6 +31,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModul = array();
 		$arrModul["name"] 			= "modul_navigation";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _navigation_modul_id_;
@@ -130,7 +131,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 			
 			//include into a wrapper?
 			$strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-			$strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID, true);
+			$strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
 			if(uniStrlen($strWrappedLevel) > 0)
 			    $strLevel = $strWrappedLevel;
 			
@@ -143,7 +144,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		
 		//and add level 1 wrapper
         $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID, true);
+        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $arrTree[$intCounter] = $strWrappedLevel;
             
@@ -276,7 +277,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		
 		//wrap into the wrapper-section
         $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
-        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID, true);
+        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $strReturn = $strWrappedLevel;
 		
@@ -409,6 +410,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         //Load data for this point
         $objPointData = new class_modul_navigation_point($strSystemid);
 		//and start to create a link and all needed stuff
+        $arrTemp = array();
 		$arrTemp["page_intern"] = $objPointData->getStrPageI();
 		$arrTemp["page_extern"] = $objPointData->getStrPageE();
 		$arrTemp["text"] = $objPointData->getStrName();
@@ -422,14 +424,14 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
 		$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
 		//Fill the tempalte
-		$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId);
+		$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
 		//BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
 		//     didn't supply a first / last section. so we'll try to load a regular point
 		if($strReturn == "" && ($bitFirst || $bitLast)) {
 			$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive");
 			$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
 			//And fill it once more
-			$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId);
+			$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
 		}
 
 		return $strReturn;

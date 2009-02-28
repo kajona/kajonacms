@@ -4,10 +4,11 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                             *
+*	$Id$                                        *
 ********************************************************************************************************/
 
 include_once(_systempath_."/class_modul_system_common.php");
+include_once(_systempath_."/class_lang_wrapper.php");
 
 /**
  * Base class for all module-classes in the portal
@@ -29,7 +30,7 @@ abstract class class_portal  {
 	 */
 	protected $objDB = null;				//Object to the database
 	/**
-	 * Instance of class_toolkit_<area>
+	 * Instance of class_toolkit_portal
 	 *
 	 * @var class_toolkit_portal
 	 */
@@ -210,7 +211,7 @@ abstract class class_portal  {
 	 * @return bool
 	 * @final
 	 */
-	public final  function validateSystemid($strID) {
+	public final function validateSystemid($strID) {
 	    return validateSystemid($strID);
 	}
 
@@ -494,6 +495,31 @@ abstract class class_portal  {
      */
     public function getPortalLanguage() {
         return $this->objSystemCommon->getStrPortalLanguage();
+    }
+
+    /**
+     * Returns an instance of class_lang_wrapper, to be used with
+     * class_template::fill_array()
+     *
+     * @return class_lang_wrapper
+     */
+    public final function getLangWrapper() {
+        return new class_lang_wrapper($this->objText, $this->strArea, $this->arrModule["modul"]);
+    }
+
+    /**
+     * Wrapper to class_template::fillTemplate().
+     * Includes the passing of an class_lang_wrapper by default.
+     * NOTE: Removes placeholders. If unwanted, call directly.
+     *
+     * @see class_template::fill_template
+     * @since 3.2.0
+     * @param <type> $arrContent
+     * @param <type> $strIdentifier
+     * @return <type>
+     */
+    public final function fillTemplate($arrContent, $strIdentifier) {
+        return $this->objTemplate->fillTemplate($arrContent, $strIdentifier, true, $this->getLangWrapper());
     }
 
 

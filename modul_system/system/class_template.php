@@ -150,14 +150,17 @@ class class_template {
 	}
 
 	/**
-	 * Fills a template with values passed in an array
+	 * Fills a template with values passed in an array.
+     * As an optional parameter an intance of class_lang_wrapper can be passed
+     * to have placeholders matching the schema %%lang_...%% filled automatically.
 	 *
 	 * @param mixed $arrContent
 	 * @param string $strIdentifier
 	 * @param bool $bitRemovePlaceholder
+     * @param class_lang_wrapper $objLangWrapper
 	 * @return string The filled Template
 	 */
-	public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = false) {
+	public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true, $objLangWrapper = null) {
 		if(isset($this->arrCacheTemplateSections[$strIdentifier]))
 			$strTemplate = $this->arrCacheTemplateSections[$strIdentifier];
 		else
@@ -168,6 +171,19 @@ class class_template {
 				$strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
 			}
 		}
+
+        //any language-keys to fill?
+        if($objLangWrapper != null && $objLangWrapper instanceof class_lang_wrapper) {
+            //load placeholders
+            $arrTemp = array();
+            preg_match_all("'%%(lang_[A-Za-z0-9_]*)%%'i", $strTemplate, $arrTemp);
+            
+            if(isset($arrTemp[1])) {
+                foreach ($arrTemp[1] as $strStrippedPlaceholders) {
+                    $strTemplate = str_replace("%%".$strStrippedPlaceholders."%%", $objLangWrapper->getLang($strStrippedPlaceholders), $strTemplate);
+                }
+            }
+        }
 
 		if($bitRemovePlaceholder)
 		   $strTemplate = $this->deletePlaceholderRaw($strTemplate);
@@ -256,11 +272,11 @@ class class_template {
 		else
 			return array();
 
-		//Platzhalter suchen
+		//search placeholders
 		$arrTemp = array();
 		preg_match_all("'(%%([A-Za-z0-9_]+?))+?\_([A-Za-z0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
 
-		//Aufbereiten der Platzhalter
+		
 		$intCounter = 0;
 		if(count($arrTemp[0]) > 0) {
 			foreach($arrTemp[0] as $strPlacehoder) {

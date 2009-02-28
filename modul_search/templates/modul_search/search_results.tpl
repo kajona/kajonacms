@@ -3,7 +3,7 @@
 <!-- available placeholders: action, suche_term, form_searchterm_label, form_submit_label -->
 <search_form>
     <form name="searchResultForm" method="post" action="%%action%%" accept-charset="UTF-8">
-        <div><label for="resultSearchterm">%%form_searchterm_label%%:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" /></div><br />
+        <div><label for="resultSearchterm">%%lang_searchterm_label%%:</label><input type="text" name="searchterm" id="resultSearchterm" value="%%suche_term%%" class="inputText" /></div><br />
         <div><label for="Submit">&nbsp;</label><input type="submit" name="Submit" value="%%form_submit_label%%" class="button" /></div><br />
     </form>
 </search_form>
