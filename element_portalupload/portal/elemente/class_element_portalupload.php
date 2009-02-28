@@ -69,8 +69,6 @@ class class_element_portalupload extends class_element_portal implements interfa
                     $strDlFolderId = $this->getParam("systemid");
                
         		$arrTemplate = array();
-                $arrTemplate["portaluploadFileTitle"] = $this->getText("portaluploadFileTitle");
-                $arrTemplate["submitTitle"] = $this->getText("portaluploadSubmitTitle");
                 $arrTemplate["portaluploadDlfolder"] = $strDlFolderId;
                 
         		// check if there was an successfull upload before
@@ -81,7 +79,7 @@ class class_element_portalupload extends class_element_portal implements interfa
         
         	    $arrTemplate["formAction"] = getLinkPortalHref($this->getPagename(), "", $this->getAction(), "", $strDlFolderId);
         
-        		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
     	    }
     	    else {
     	        $strReturn .= $this->getText("portaluploadPathError");

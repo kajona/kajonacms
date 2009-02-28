@@ -7,15 +7,15 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 151
 
 //editable entries
+$lang["lang_portaluploadFileTitle"]      = "File:";
+$lang["lang_portaluploadSubmitTitle"]    = "Upload";
 $lang["portaluploadCopyUploadError"]     = "Error copying the file.";
-$lang["portaluploadFileTitle"]           = "File:";
 $lang["portaluploadFilterError"]         = "Filetype not allowed by filter.";
 $lang["portaluploadNotWritableError"]    = "Folder not writeable.";
 $lang["portaluploadPathError"]           = "Paths configured do not match!";
 $lang["portaluploadPermissionsError"]    = "Not enough permissions.";
-$lang["portaluploadSubmitTitle"]         = "Upload";
 $lang["portaluploadSuccess"]             = "File successfully uploaded.";
 ?>

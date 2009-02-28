@@ -27,6 +27,7 @@ class class_element_tellafriend extends class_element_portal implements interfac
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_tellafriend";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -77,25 +78,15 @@ class class_element_tellafriend extends class_element_portal implements interfac
 		}
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
-
-
-        $arrTemplate["sender"] = $this->getText("sender");
-        $arrTemplate["sender_name"] = $this->getText("sender_name");
         $arrTemplate["tellafriend_sender"] = $this->getParam("tellafriend_sender");
         $arrTemplate["tellafriend_sender_name"] = $this->getParam("tellafriend_sender_name");
-        $arrTemplate["receiver"] = $this->getText("receiver");
-        $arrTemplate["receiver_name"] = $this->getText("receiver_name");
         $arrTemplate["tellafriend_receiver"] = $this->getParam("tellafriend_receiver");
         $arrTemplate["tellafriend_receiver_name"] = $this->getParam("tellafriend_receiver_name");
-        $arrTemplate["message"] = $this->getText("message");
         $arrTemplate["tellafriend_message"] = $this->getParam("tellafriend_message");
-        $arrTemplate["captcha"] = $this->getText("captcha");
-        $arrTemplate["reload_captcha"] = $this->getText("reload_captcha");
-        $arrTemplate["submit"] = $this->getText("submit");
         $arrTemplate["tellafriend_action"] = "sendTellafriend";
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
-		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		return $this->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
 	/**
