@@ -16,7 +16,6 @@ $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeit
 $lang["_filemanager_foldersize_"]        = "Größe anzeigen:";
 $lang["_filemanager_foldersize_hint"]    = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager. Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
 $lang["_filemanager_show_foreign_"]      = "Versteckte Repositories anzeigen:";
-$lang["add_upload_field"]                = "Zusätzliches Uploadfeld hinzufügen";
 $lang["anlegen"]                         = "Ordner anlegen";
 $lang["bild_groesse"]                    = "Bildgröße:";
 $lang["bild_vorschau"]                   = "Vorschau:";

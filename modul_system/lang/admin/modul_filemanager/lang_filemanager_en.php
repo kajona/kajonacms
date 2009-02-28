@@ -16,7 +16,6 @@ $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => 
 $lang["_filemanager_foldersize_"]        = "Calculate size:";
 $lang["_filemanager_foldersize_hint"]    = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager. Deep folder structures can lead to performance problems.";
 $lang["_filemanager_show_foreign_"]      = "Show hidden repositories:";
-$lang["add_upload_field"]                = "Add additional upload field";
 $lang["anlegen"]                         = "Create folder";
 $lang["bild_groesse"]                    = "Image size:";
 $lang["bild_vorschau"]                   = "Preview:";
