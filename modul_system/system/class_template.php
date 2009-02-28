@@ -217,7 +217,7 @@ class class_template {
 	 * @param string $strText
 	 */
 	public function deletePlaceholder() {
-		$this->strTempTemplate =  preg_replace("^%%([A-Zaeoeuea-zaeoeue0-9_\|]*)%%^", "", $this->strTempTemplate);
+		$this->strTempTemplate =  preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $this->strTempTemplate);
 	}
 
 	/**
@@ -226,7 +226,7 @@ class class_template {
 	 * @param string $strText
 	 */
 	private function deletePlaceholderRaw($strText) {
-		return preg_replace("^%%([A-Zaeoeuea-zaeoeue0-9_\|]*)%%^", "", $strText);
+		return preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $strText);
 	}
 
 	/**
@@ -258,7 +258,7 @@ class class_template {
 
 		//Platzhalter suchen
 		$arrTemp = array();
-		preg_match_all("'(%%([A-Zaeoeuea-zaeoeue0-9_]+?))+?\_([A-Zaeoeuea-zaeoeue0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
+		preg_match_all("'(%%([A-Za-z0-9_]+?))+?\_([A-Za-z0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
 
 		//Aufbereiten der Platzhalter
 		$intCounter = 0;
