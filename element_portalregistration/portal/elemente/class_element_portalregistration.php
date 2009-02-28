@@ -28,6 +28,7 @@ class class_element_portalregistration extends class_element_portal implements i
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_portalregistration";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -131,19 +132,10 @@ class class_element_portalregistration extends class_element_portal implements i
             include_once(_systempath_."/class_modul_user_user.php");
             $objUser = new class_modul_user_user($this->objSession->getUserID());
             
-            $arrTemplate["usernameTitle"]= $this->getText("pr_usernameTitle");
             $arrTemplate["username"] = $this->getParam("username");
-            $arrTemplate["passwordTitle"] = $this->getText("pr_passwordTitle");
-            $arrTemplate["passwordTitle2"] = $this->getText("pr_passwordTitle2");
-            $arrTemplate["emailTitle"] = $this->getText("pr_emailTitle");
             $arrTemplate["email"] = $this->getParam("email");
-            $arrTemplate["forenameTitle"] = $this->getText("pr_forenameTitle");
             $arrTemplate["forename"] = $this->getParam("forename");
-            $arrTemplate["nameTitle"] = $this->getText("pr_nameTitle");
             $arrTemplate["name"] = $this->getParam("name");
-            
-            
-            $arrTemplate["submitTitle"] = $this->getText("pr_userDataSubmit");
             $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalCreateAccount");
             
             $arrTemplate["formErrors"] = "";
@@ -154,7 +146,7 @@ class class_element_portalregistration extends class_element_portal implements i
                 }
             }
     	    
-    	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    	    return $this->fillTemplate($arrTemplate, $strTemplateID);
 	    }
 	    else {
 	        //create new user, inactive

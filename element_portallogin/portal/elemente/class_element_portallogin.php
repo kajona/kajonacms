@@ -98,13 +98,10 @@ class class_element_portallogin extends class_element_portal implements interfac
         $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_loginform");
 
 		$arrTemplate = array();
-        $arrTemplate["username"] = $this->getText("username");
-        $arrTemplate["password"] = $this->getText("password");
-        $arrTemplate["login"] = $this->getText("login");
         $arrTemplate["portallogin_action"] = "portalLogin";
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
-		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		return $this->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
 	/**
@@ -158,19 +155,10 @@ class class_element_portallogin extends class_element_portal implements interfac
             include_once(_systempath_."/class_modul_user_user.php");
             $objUser = new class_modul_user_user($this->objSession->getUserID());
 
-            $arrTemplate["usernameTitle"]= $this->getText("usernameTitle");
             $arrTemplate["username"] = $objUser->getStrUsername();
-            $arrTemplate["passwordTitle"] = $this->getText("passwordTitle");
-            $arrTemplate["passwordTitle2"] = $this->getText("passwordTitle2");
-            $arrTemplate["emailTitle"] = $this->getText("emailTitle");
             $arrTemplate["email"] = $objUser->getStrEmail();
-            $arrTemplate["forenameTitle"] = $this->getText("forenameTitle");
             $arrTemplate["forename"] = $objUser->getStrForename();
-            $arrTemplate["nameTitle"] = $this->getText("nameTitle");
             $arrTemplate["name"] = $objUser->getStrName();
-
-
-            $arrTemplate["submitTitle"] = $this->getText("userDataSubmit");
             $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
 
             $arrTemplate["formErrors"] = "";
@@ -181,7 +169,7 @@ class class_element_portallogin extends class_element_portal implements interfac
                 }
             }
 
-    	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    	    return $this->fillTemplate($arrTemplate, $strTemplateID);
 	    }
 	    else {
 	        include_once(_systempath_."/class_modul_user_user.php");

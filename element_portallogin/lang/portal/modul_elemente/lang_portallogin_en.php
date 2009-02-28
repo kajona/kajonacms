@@ -7,22 +7,22 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 151
 
 //editable entries
 $lang["editprofilelink"]                 = "Edit profile";
-$lang["emailTitle"]                      = "Email*:";
-$lang["forenameTitle"]                   = "Forename:";
 $lang["invalidEmailadress"]              = "No valid mailadress.";
+$lang["lang_emailTitle"]                 = "Email*:";
+$lang["lang_forenameTitle"]              = "Forename:";
+$lang["lang_login"]                      = "Login";
+$lang["lang_nameTitle"]                  = "Name:";
+$lang["lang_password"]                   = "Password:";
+$lang["lang_passwordTitle"]              = "Password:";
+$lang["lang_passwordTitle2"]             = "Password:";
+$lang["lang_userDataSubmit"]             = "Save";
+$lang["lang_username"]                   = "Username:";
+$lang["lang_usernameTitle"]              = "Username:";
 $lang["loggedin_label"]                  = "Logged in as";
-$lang["login"]                           = "Login";
 $lang["logoutlink"]                      = "Logout";
-$lang["nameTitle"]                       = "Name:";
-$lang["password"]                        = "Password:";
-$lang["passwordTitle"]                   = "Password:";
-$lang["passwordTitle2"]                  = "Password:";
 $lang["passwordsUnequal"]                = "Passwords not equal.";
-$lang["userDataSubmit"]                  = "Save";
-$lang["username"]                        = "Username:";
-$lang["usernameTitle"]                   = "Username:";
 ?>
