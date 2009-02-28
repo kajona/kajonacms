@@ -20,8 +20,8 @@ class class_installer_system extends class_installer_base implements interface_i
     private $strContentLanguage;
 
 	public function __construct() {
-
-		$arrModul["version"] 			= "3.1.9";
+        $arrModul = array();
+		$arrModul["version"] 			= "3.1.95";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -514,6 +514,11 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -838,13 +843,37 @@ class class_installer_system extends class_installer_base implements interface_i
                 class_modul_pages_pageelement::assignNullElements("en");
                 
         }
-        
-        
-        
 		 
 		return $strReturn;                                          
     }
-	
+
+    private function update_319_3195() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.9 to 3.1.95...\n";
+
+        $strReturn .= "Registering default languageswitch template...\n";
+
+        $strQuery = "SELECT element_id
+                     FROM "._dbprefix_."element
+                     LEFT JOIN "._dbprefix_."element_universal ON (element_id = content_id)
+                     WHERE element_name = 'languageswitch' AND content_id IS null ";
+
+        $arrRows = $this->objDB->getArray($strQuery);
+        foreach($arrRows as $arrOneRow) {
+            $strRowId = $arrOneRow["element_id"];
+            $strReturn .= "Updating element ".$strRowId."\n";
+            $strQuery = "INSERT INTO "._dbprefix_."element_universal
+                         (content_id, char1) VALUES
+                         ('".dbsafeString($strRowId)."', 'languageswitch.tpl')";
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!!!\n";
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.1.95");
+
+        return $strReturn;
+    }
 	
 }
 ?>
