@@ -182,9 +182,9 @@ function getLinkAdminManual($strLinkContent, $strText , $strAlt="", $strImage=""
     $strLink = "";
     if($strImage != "") {
         if(!$bitTooltip)
-            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
         else
-            $strLink = "<a ".$strLinkContent." \" title=\"".$strAlt."\" class=\"showTooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
+            $strLink = "<a ".$strLinkContent."  title=\"".$strAlt."\" class=\"showTooltip\" ".($strLinkId != "" ? "id=\"".$strLinkId."\"" : "")." ><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" title=\"\" ".($strImageId != "" ? "id=\"".$strImageId."\"" : "")." /></a>";
     }
 
     if($strImage == "" && $strText != "")   {

@@ -968,7 +968,7 @@ The language switch sourrounds the buttons
 	<div class="dialogContent" id="%%dialog_id%%_content"><!-- filled by js --></div>
 </div></dialogContainer>
 
-<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%" onmousedown="return false;">
+<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="dialogHeader">
 		<div class="dialogHeaderTitle">%%dialog_name%%</div>
 		<div class="dialogHeaderActions"><a class="container-close" href="#" onclick="jsDialog_1.hide(); return false;">[X]</a></div>

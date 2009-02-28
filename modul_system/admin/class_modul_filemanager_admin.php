@@ -56,7 +56,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     			$strReturn = $this->actionList();
 
     		if($strAction == "openFolder" || $strAction == "renameFile" || $strAction == "deleteFile"
-    		   || $strAction == "deleteFolder" || $strAction == "newFolder" || $strAction == "uploadFile"
+    		   || $strAction == "deleteFolder" || $strAction == "uploadFile"
     		   || $strAction == "imageDetail" )
     			$strReturn = $this->actionFolderContent();
 
@@ -119,7 +119,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     }
 
 
-// --- ListenFunktionen ---------------------------------------------------------------------------------
+// --- ListFunctions ------------------------------------------------------------------------------------
 
 
 	/**
@@ -318,9 +318,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	elseif($this->strAction == "deleteFolder") {
 		   		$strExtra .= $this->actionDeleteFolder();
 		   	}
-		   	elseif($this->strAction == "newFolder") {
-		   		$strExtra .= $this->actionNewFolder();
-		   	}
 		   	elseif ($this->strAction == "imageDetail") {
 		   	    $strExtra .= $this->actionFileDetailview();
 		   	}
@@ -334,8 +331,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 
 		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
             $strActions = "";
-		   	$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld, "", $this->getText("ordner_anlegen"), "icon_folderOpen.gif"));
-			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "uploadFile", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld, "", $this->getText("datei_upload"), "icon_upload.gif"));
+            $strActions .= $this->generateNewFolderDialogCode();
+            $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
 
 		   	//Building a status-bar, using the toolkit
 		   	$arrInfobox = array();
@@ -485,14 +482,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 //React on request passed. Do this before loading the filelist, cause subactions could modify it
     		   	$strExtra = "";
     		   	$bitSpecial = false;
-    		   	if($strAddonAction == "newFolder") {
-    		   	    $bitSpecial = true;
-    		   		$strExtra .= $this->actionNewFolder(true, $strTargetfield);
-    		   	}
-    		   	elseif ($strAddonAction == "uploadFile")  {
-    		   	    $bitSpecial = true;
-    		   		$strExtra .= $this->actionUploadFile(true, $strTargetfield);
-    		   	}
+    		   
+                $strExtra .= $this->actionUploadFile();
     		   	//ok, load the list using the repo-data
     		   	$arrViewFilter = array();
     		   	if($objRepo->getStrViewFilter() != "")
@@ -501,8 +492,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
                 $strActions = "";
                 if($strAddonAction == "") {
-    		   	    $strActions .= $this->objToolkit->listButton(getLinkAdminPopup("folderview", "list", "&fmcommand=newFolder&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld, $this->getText("ordner_anlegen"), $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "200"));
-    			    $strActions .= $this->objToolkit->listButton(getLinkAdminPopup("folderview", "list", "&fmcommand=uploadFile&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld, $this->getText("datei_upload"), $this->getText("datei_upload"), "icon_upload.gif", "300"));
+                    $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
+                    $strActions .= $this->generateNewFolderDialogCode();
                 }
 
     		   	//Building a status-bar, using the toolkit
@@ -689,52 +680,30 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	}
 
 
-	/**
-	 * Creates or shows the form to create a new folder
-	 *
-	 * @return string
-	 */
-	private function actionNewFolder($bitActionFromFolderview = false, $strFormElement = "") {
-		$strReturn = "";
-		//Rights
-		if($this->objRights->rightEdit($this->getSystemid())) {
-			//Create or form?
-			if($this->getParam("createFolderFinal") == "") {
-				//Form
-				if($bitActionFromFolderview)
-				    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("folderview", "list", "fmcommand=newFolder&createFolderFinal=1&form_element=".$strFormElement));
-				else
-				    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newFolder", "createFolderFinal=1"));
-				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-				$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
-				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("anlegen"));
-				$strReturn .= $this->objToolkit->formClose();
-			}
-			else {
-				//Create the folder
-				$strFolder = createFilename(strtolower($this->getParam("ordner_name")), true);
-				//folder already existing?
-				if(!is_dir(_realpath_."/".$this->strFolder."/".$strFolder)) {
-					include_once(_systempath_."/class_filesystem.php");
-					$objFilesystem = new class_filesystem();
-					if($objFilesystem->folderCreate($this->strFolder."/".$strFolder)) {
-						$strReturn = $this->getText("ordner_anlegen_erfolg");
-						if($bitActionFromFolderview)
-						    $strReturn .= "<script type=text/javascript>opener.location.reload();window.close();</script>";
-					}
-					else
-					 	$strReturn = $this->getText("order_anlegen_fehler");
-				}
-				else
-					$strReturn = $this->getText("ordner_anlegen_fehler_l");
-			}
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
+    /**
+     * Generates the code to delete a folder via ajax
+     * @return string
+     */
+    private function generateNewFolderDialogCode() {
+        $strReturn = "";
 
-		return $strReturn;
-	}
+        //Build code for create-dialog
+        //$strDialog = $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+        $strDialog = $strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
+		$strDialog .= $this->objToolkit->formInputText("folderName", $this->getText("ordner_name"));
+
+        $strReturn .= "<script type=\"text/javascript\">\n
+                        function init_fm_newfolder_dialog() { 
+                            jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
+                                                  '".$this->getText("ordner_anlegen")."',
+                                                  'javascript:filemanagerCreateFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
+                                    jsDialog_1.init(); }\n
+                      ";
+
+        $strReturn .= "</script>";
+        $strReturn .= $this->objToolkit->jsDialog("", 1);
+        return $strReturn;
+    }
 
 
 	/**
@@ -742,16 +711,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionUploadFile($bitActionFromFolderview = false, $strFormElement = "") {
+	private function actionUploadFile() {
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getSystemid())) {
 			//Upload-Form
 			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 			
-			if($bitActionFromFolderview)
-			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("folderview", "list", "fmcommand=uploadFile&amp;datei_upload_final=1&amp;form_element=".$strFormElement), "formUpload", "multipart/form-data");
-			else
-			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "uploadFile", "datei_upload_final=1"), "formUpload", "multipart/form-data");
+    	    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "uploadFile", "datei_upload_final=1"), "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
 			
@@ -788,9 +754,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     @unlink($arrSource["tmp_name"]);
                     $strReturn .= $this->getText("upload_fehler_filter");
                 }
-				
-				if($bitActionFromFolderview && $bitSuccess)
-                    $strReturn .= "<script type=text/javascript>opener.location.reload();window.close();</script>";
 			}
 		}
 		else

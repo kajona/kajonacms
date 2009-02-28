@@ -59,6 +59,8 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $strReturn .= $this->actionDeleteFile();
         elseif($strAction == "deleteFolder")
             $strReturn .= $this->actionDeleteFolder();
+        elseif($strAction == "createFolder")
+            $strReturn .= $this->actionCreateFolder();
 
         return $strReturn;
 	}
@@ -92,6 +94,42 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
     }
 
     /**
+     * Create a new folder using the combi of folder & systemid passed
+     * @return string
+     */
+    private function actionCreateFolder() {
+        $strReturn = "";
+        if($this->objRights->rightDelete($this->getSystemid())) {
+
+            //create repo-instance
+            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFolder = $this->getParam("folder");
+
+            //Create the folder
+            //$strFolder = createFilename(strtolower($this->getParam("ordner_name")), true);
+            $intLastSlashPos = strrpos($strFolder, "/");
+            $strFolder = substr($strFolder, 0, $intLastSlashPos)."/". createFilename(substr($strFolder, $intLastSlashPos+1), true);
+            //folder already existing?
+            if(!is_dir(_realpath_."/".$objFmRepo->getStrPath()."/".$strFolder)) {
+                include_once(_systempath_."/class_filesystem.php");
+                $objFilesystem = new class_filesystem();
+                if($objFilesystem->folderCreate($objFmRepo->getStrPath()."/".$strFolder)) {
+                    $strReturn = "<message>".xmlSafeString($this->getText("ordner_anlegen_erfolg"))."</message>";
+                }
+                else
+                    $strReturn = "<error>".xmlSafeString($this->getText("order_anlegen_fehler"))."</error>";
+            }
+            else
+                $strReturn = "<error>".xmlSafeString($this->getText("ordner_anlegen_fehler_l"))."</error>";
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
+        return $strReturn;
+    }
+
+
+    /**
      * Deletes the given file from the filesystem
      * @return string
      */
@@ -107,7 +145,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
             //check if folder is empty
             $arrFilesSub = $objFilesystem->getCompleteList($objFmRepo->getStrPath()."/".$strFolder, array(), array(), array(".", ".."));
-            var_dump($objFmRepo->getStrPath()."/".$strFolder,$arrFilesSub);
             if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
                 if($objFilesystem->folderDelete($objFmRepo->getStrPath()."/".$strFolder))
                     $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
@@ -121,7 +158,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         }
         else
             $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
-
 
         return $strReturn;
     }

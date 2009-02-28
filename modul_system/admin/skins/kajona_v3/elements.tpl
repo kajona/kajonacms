@@ -878,7 +878,7 @@ The language switch sourrounds the buttons
 	<div class="ft"><div class="c"></div></div>
 </div></dialogContainer>
 
-<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%" onmousedown="return false;">
+<dialogConfirmationContainer><div class="dialog" id="%%dialog_id%%">
 	<div class="hd"><div class="c"><h3>%%dialog_name%%</h3></div></div>
 	<div class="bd">
 		<div class="c">

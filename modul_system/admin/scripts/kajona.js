@@ -587,12 +587,51 @@ var kajonaAdminAjax = {
                     kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
                 }
             });
+    },
+
+    createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
+        kajonaAdminAjax.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
+                success : function(o) {
+                    //check if answer contains an error
+                    if(o.responseText.indexOf("<error>") != -1) {
+                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    }
+                    else {
+                        if(strSourceModule != "" && strSourceModuleAction != "") {
+                            kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                                    success : function(o) {
+                                        location.reload();
+                                    },
+                                    failure : function(o) {
+                                        kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                                    }
+                                }
+                            );
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                },
+                failure : function(o) {
+                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                }
+            });
     }
 
 };
 
 // --- FILEMANAGER
 // ------------------------------------------------------------------------------------------------------
+
+function filemanagerCreateFolder(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction) {
+    //add typed folder
+    var strNewFoldername = document.getElementById(strInputId).value;
+    if(strNewFoldername != "") {
+        kajonaAdminAjax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction);
+    }
+}
+
 // Uploader
 function KajonaUploader(config) {
 	var self = this;

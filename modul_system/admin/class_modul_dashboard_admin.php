@@ -89,6 +89,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	    $strReturn = "";
 	    //check needed permissions
 	    if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $strReturn .= $this->objToolkit->jsDialog("", 1);
 	        //load the widgets for each column. currently supporting 3 columns on the dashboard.
 	        $objDashboardmodel = new class_modul_dashboard_widget();
 	        $arrColumns = array();
