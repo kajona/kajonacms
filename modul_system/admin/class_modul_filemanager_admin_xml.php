@@ -80,7 +80,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
             //Delete from filesystem
             $objFilesystem = new class_filesystem();
-            
+            class_logger::getInstance()->addLogRow("deleted file ".$objFmRepo->getStrPath()."/".$strFolder."/".$strFile, class_logger::$levelInfo);
             if($objFilesystem->fileDelete($objFmRepo->getStrPath()."/".$strFolder."/".$strFile))
                 $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
 			else
@@ -111,6 +111,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $strFolder = substr($strFolder, 0, $intLastSlashPos)."/". createFilename(substr($strFolder, $intLastSlashPos+1), true);
             //folder already existing?
             if(!is_dir(_realpath_."/".$objFmRepo->getStrPath()."/".$strFolder)) {
+                class_logger::getInstance()->addLogRow("creating folder ".$objFmRepo->getStrPath()."/".$strFolder, class_logger::$levelInfo);
                 include_once(_systempath_."/class_filesystem.php");
                 $objFilesystem = new class_filesystem();
                 if($objFilesystem->folderCreate($objFmRepo->getStrPath()."/".$strFolder)) {
@@ -146,6 +147,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             //check if folder is empty
             $arrFilesSub = $objFilesystem->getCompleteList($objFmRepo->getStrPath()."/".$strFolder, array(), array(), array(".", ".."));
             if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
+                class_logger::getInstance()->addLogRow("deleted folder ".$objFmRepo->getStrPath()."/".$strFolder, class_logger::$levelInfo);
                 if($objFilesystem->folderDelete($objFmRepo->getStrPath()."/".$strFolder))
                     $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
                 else
