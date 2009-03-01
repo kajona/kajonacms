@@ -7,13 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 151
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Seitencache aktiv:";
+$lang["_pages_cacheenabled_hint"]        = "Für einen funktionierenden Cache muss die Cache-Zeit der Seitenelemente im Modul Seiten korrekt eingestellt werden.";
 $lang["_pages_defaulttemplate_"]         = "Standardtemplate:";
 $lang["_pages_errorpage_"]               = "Fehlerseite:";
 $lang["_pages_indexpage_"]               = "Startseite:";
