@@ -60,6 +60,18 @@ class class_adminwidget_systemlog extends class_adminwidget implements interface
             $strReturn .= $this->widgetText($strLog);
         }
 
+        $strReturn .= $this->widgetSeparator();
+
+        $strLogContent = (is_file(_systempath_."/debug/php.log") ? file_get_contents(_systempath_."/debug/php.log") : "");
+        $arrLogEntries = explode("\n", $strLogContent);
+        $arrLogEntries = array_reverse($arrLogEntries);
+
+        for($intI = 0; $intI <= $this->getFieldValue("nrofrows") && $intI < 10 && $intI < count($arrLogEntries); $intI++ ) {
+            $strLog = htmlToString($arrLogEntries[$intI], true);
+            
+            $strReturn .= $this->widgetText($strLog);
+        }
+
         return $strReturn;
     }
 

@@ -525,6 +525,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         //check needed rights
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strLogContent = class_logger::getInstance()->getLogFileContent();
+            $strPhpLogContent = "";
+            if(is_file(_systempath_."/debug/php.log"))
+                $strPhpLogContent = file_get_contents(_systempath_."/debug/php.log");
+                
             if(uniStrlen($strLogContent) != 0) {
                 //create columns with same width
                 $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
@@ -536,6 +540,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             }
             else
                 $strReturn .= $this->getText("log_empty");
+
+            if($strPhpLogContent != "") {
+                $arrLogEntries = explode("\n", $strPhpLogContent);
+                $arrLogEntries = array_reverse($arrLogEntries);
+                $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 100);
+            }
 
         }
         else

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 151
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -124,7 +124,7 @@ $lang["installer_update"]                = "Update to ";
 $lang["installer_versioninstalled"]      = "Version installed: ";
 $lang["jpg"]                             = "JPG support";
 $lang["keinegd"]                         = "GD-Lib not installed";
-$lang["log_empty"]                       = "No entries in the logfile";
+$lang["log_empty"]                       = "No entries in the system-logfile";
 $lang["memorylimit"]                     = "Memory limit";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_rechte_root"]               = "Rights root-record";
