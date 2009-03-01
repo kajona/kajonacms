@@ -311,11 +311,6 @@ var kajonaAjaxHelper = {
 	// Loader object for dynamically loading additional js and css files
 	Loader : function() {
 		var additionalFileCounter = 0;
-		// if(document.location.href.indexOf('admin/') != -1)
-		// this.jsBase = document.location.href.substr(0,
-		// document.location.href.indexOf('admin/'))+"admin/scripts/";
-		// else
-		// this.jsBase = "admin/scripts/";
 		this.jsBase = KAJONA_WEBPATH + "/admin/scripts/";
 
 		this.yuiBase = this.jsBase + "yui/";
