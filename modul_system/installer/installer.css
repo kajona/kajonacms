@@ -6,13 +6,13 @@ body {
 	background-repeat: repeat-x;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 	text-align: center;
 }
 
 a, a:link, a:visited {
      text-decoration: underline;
-     color: #737373;
+     color: #575757;
 }
 
 a:hover, a:active, a:focus {
@@ -33,7 +33,7 @@ td {
 	vertical-align: top;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 }
 
 
@@ -132,7 +132,7 @@ td {
 
 #installerBox .copyright a:hover, #installerBox .copyright a:active, #installerBox .copyright a:focus {
      text-decoration: none;
-     color: #737373;
+     color: #575757;
 }
 
 
@@ -147,7 +147,7 @@ h1 {
 }
 
 h2 {
-	color: #737373;
+	color: #575757;
 	font-size: 11px;
 	font-weight: bold;
 	margin-top: 13px;
@@ -183,7 +183,7 @@ form br {
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 }
 
 * html .inputText, * html .inputTextShort, * html .inputDate {
@@ -214,7 +214,7 @@ form br {
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 }
 
 .inputWysiwyg {
@@ -233,7 +233,7 @@ form br {
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 }
 
 * html .inputDropdown {
@@ -259,7 +259,7 @@ form br {
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	color: #737373;
+	color: #575757;
 	text-align: left;
 	cursor: pointer;
 }
@@ -299,13 +299,13 @@ form .formText .text {
 /* F I E L D S E T */
 .fieldset {
 	width: 80%;
-    border: 1px solid #737373;
+    border: 1px solid #575757;
     padding: 0 5px 5px 5px;
 }
 
 .fieldset legend {
 	font-weight: bold;
-    color: #737373;
+    color: #575757;
 }
 
 .fieldset .adminList {
@@ -333,7 +333,7 @@ form .formText .text {
 /* P R E F O R M A T T E D */
 
 .preText {
-	border: 1px solid #737373;
+	border: 1px solid #575757;
 	margin: 10px 0 10px 0;
 	background-color: #EDEDED;
 	padding: 8px;
