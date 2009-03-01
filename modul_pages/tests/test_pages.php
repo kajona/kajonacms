@@ -62,10 +62,6 @@ class class_test_pages implements interface_testable {
         $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder("0");
         class_assertions::assertEqual(count($arrPagesAtLevel), 100+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
-        /**
-         * TODO: Pages testen
-         */
-
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
             class_modul_pages_page::deletePage($strOnePageID);

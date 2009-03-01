@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                         *
+*	$Id$                            *
 ********************************************************************************************************/
 
 //Base class
@@ -19,15 +19,13 @@ include_once(_adminpath_."/interface_admin.php");
  * @package modul_system
  */
 class class_modul_folderview_admin extends class_admin  implements interface_admin {
-	//Which paths are allowed to browse?
-	private $strStart = "portal/pics,portal/pics/,/portal/pics,/portal/pics/,/portal/downloads,portal/downloads/,portal/downloads,/portal/downloads";
-    //TODO: why inidacted by netbeans as unused? bug?
 
 	/**
 	 * Constructor, doin nothing but a few inits
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 					= "class_modul_folderview_admin";
 		$arrModule["author"] 				= "sidler@mulchprod.de";
 		$arrModule["moduleId"]				= _filesystem_modul_id_;
