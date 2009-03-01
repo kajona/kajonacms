@@ -532,11 +532,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         		$strReturn .= $this->objToolkit->listFooter();
                 $strReturn .= $this->objToolkit->divider();
                 //For the files, we have to build a data table
-                $arrHeader = array();
-                $arrHeader[0] = "&nbsp;";
-                $arrHeader[1] = "&nbsp;";
-                $arrHeader[2] = "&nbsp;";
-                $arrHeader[6] = "";
+                $arrHeader = null;
                 $arrFilesTemplate = array();
 
                 if(count($arrFiles["files"]) > 0) {

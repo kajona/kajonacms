@@ -816,6 +816,7 @@ class class_toolkit_admin extends class_toolkit {
 		//The Table header & the templates
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_header");
 		$strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateID);
+
 		$strTemplateHeaderHeaderID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_header");
 		$strTemplateHeaderContentID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head");
 		$strTemplateHeaderFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_head_footer");
@@ -827,12 +828,18 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateContentFooterID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
 		$strTemplateFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_footer");
 		//Iterating over the rows
-		$intNrRows = count($arrHeader);
+		$intNrRows = count($arrValues[0]);
+
 		//Starting with the header, column by column
-		$strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
-		foreach ($arrHeader as $strHeader)
-			$strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader), $strTemplateHeaderContentID);
-		$strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderFooterID);
+        if(is_array($arrHeader)) {
+            $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
+            
+            foreach ($arrHeader as $strHeader)
+                $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader), $strTemplateHeaderContentID);
+
+            $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderFooterID);
+        }
+
 		//And the content, row by row, column by column
 		foreach ($arrValues as $arrValueRow) {
 			if(++$intCounter % 2 == 0)
