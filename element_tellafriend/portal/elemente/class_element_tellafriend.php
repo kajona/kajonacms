@@ -70,11 +70,11 @@ class class_element_tellafriend extends class_element_portal implements interfac
 			//Collect errors
 			$strTemplateErrorID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "errorrow");
 			foreach($this->arrError as $strOneError) {
-				$strError .= $this->objTemplate->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
+				$strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
 			}
 			//and the complete errorform
 			$strTemplateErrorFormid = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "errors");
-			$arrTemplate["tellafriend_errors"] =  $this->objTemplate->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
+			$arrTemplate["tellafriend_errors"] =  $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid);
 		}
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
@@ -160,12 +160,12 @@ class class_element_tellafriend extends class_element_portal implements interfac
 	    $arrMessage["tellafriend_sender_name"] = $this->getParam("tellafriend_sender_name");
 	    $arrMessage["tellafriend_message"] = $this->getParam("tellafriend_message");
 	    $strMailTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_html");
-	    $strEmailBody = $this->objTemplate->fillTemplate($arrMessage, $strMailTemplateID, true);
+	    $strEmailBody = $this->fillTemplate($arrMessage, $strMailTemplateID);
 	    $this->objTemplate->setTemplate($strEmailBody);
 	    $this->objTemplate->fillConstants();
 	    $strEmailBody = $this->objTemplate->getTemplate();
 
-	    $strSubject = $this->objTemplate->fillTemplate(array(), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
+	    $strSubject = $this->fillTemplate(array(), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
 
 	    include_once(_systempath_."/class_mail.php");
 	    $objEmail = new class_mail();

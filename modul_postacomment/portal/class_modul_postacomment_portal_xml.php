@@ -90,7 +90,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	            $arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
 	            $arrForm["form_submit_label"] = $this->getText("form_submit_label");
 
-        		$strXMLContent .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
+        		$strXMLContent .= $this->fillTemplate($arrForm, $strTemplateID);
 	        }
 	        else {
 	            //save the post to the db
@@ -123,7 +123,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 				$arrOnePost["postacomment_post_date"] = timeToString($objPost->getIntDate(), true);
 
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "postacomment_post");
-				$strXMLContent .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
+				$strXMLContent .= $this->fillTemplate($arrOnePost, $strTemplateID);
 	        }
 
 		}
@@ -161,15 +161,15 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	    $strTemplateId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->getParam("comment_template"), "validation_error_row");
 	    if(uniStrlen($this->getParam("comment_name")) < 2) {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_name")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_name")), $strTemplateId);
 	    }
 	    if(uniStrlen($this->getParam("comment_message")) < 2) {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
 	    }
 	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
 	    }
 	    return $bitReturn;
 	}

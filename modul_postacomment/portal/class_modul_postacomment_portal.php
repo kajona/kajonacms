@@ -109,7 +109,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                     }
 
 
-    				$strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID);
+    				$strOnePost .= $this->fillTemplate($arrOnePost, $strTemplateID);
 
     				//Add pe code
     			    $arrPeConfig = array(
@@ -150,18 +150,18 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 			$arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
 			$arrForm["form_submit_label"] = $this->getText("form_submit_label");
 
-			$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID);
+			$strForm .= $this->fillTemplate($arrForm, $strTemplateID);
 
 			//button to show the form
 			$strTemplateNewButtonID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
             $arrNewButton = array();
             $arrNewButton["postacomment_write_new"] = $this->getText("postacomment_write_new");
-            $strNewButton = $this->objTemplate->fillTemplate($arrNewButton, $strTemplateNewButtonID);
+            $strNewButton = $this->fillTemplate($arrNewButton, $strTemplateNewButtonID);
 		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
 
-    	$strReturn .= $this->objTemplate->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_list" => $strPosts), $strTemplateID);
+    	$strReturn .= $this->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_list" => $strPosts), $strTemplateID);
 
 		return $strReturn;
 	}
@@ -206,15 +206,15 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	    $strTemplateId = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "validation_error_row");
 	    if(uniStrlen($this->getParam("comment_name")) < 2) {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_name")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_name")), $strTemplateId);
 	    }
 	    if(uniStrlen($this->getParam("comment_message")) < 2) {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_message")), $strTemplateId);
 	    }
 	    if($this->objSession->getCaptchaCode() != $this->getParam("form_captcha") || $this->getParam("form_captcha") == "") {
 	        $bitReturn = false;
-	        $this->strErrors .= $this->objTemplate->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
+	        $this->strErrors .= $this->fillTemplate(array("error" => $this->getText("validation_code")), $strTemplateId);
 	    }
 	    return $bitReturn;
 	}
@@ -248,7 +248,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
                 $arrTemplate["rating_icon_title"] = $this->getText("postacomment_rating_rate1").$intI.$this->getText("postacomment_rating_rate2");
 
-                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
+                $strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
             }
         } else {
             if(!$bitRatingAllowed)
@@ -257,7 +257,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $strRatingBarTitle = $this->getText("postacomment_rating_permissions");
         }
 
-        return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
     }
 
 }

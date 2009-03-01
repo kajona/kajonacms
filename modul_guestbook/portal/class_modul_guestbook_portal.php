@@ -117,7 +117,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 				//replace encoded newlines
 				$arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $objOnePost->getGuestbookPostText());
 				$arrTemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
-				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrTemplatePost, $strTemplatePostID);
+				$arrTemplate["liste_posts"] .= $this->fillTemplate($arrTemplatePost, $strTemplatePostID);
 			}
 		}
 
@@ -128,7 +128,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$arrTemplate["link_back"] = $arrObjPosts["strBack"];
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "list");
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		return $strReturn . "";
 	}
 
@@ -147,7 +147,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
         if(count($this->arrErrors) > 0) {
             $strErrorTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "error_row");
             foreach ($this->arrErrors as $strOneError)
-            $strErrors .= $this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
+            $strErrors .= $this->fillTemplate(array("error" => $strOneError), $strErrorTemplateID);
         }
 
 		//update elements
@@ -165,7 +165,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$arrTemplate["post_code_text"] = $this->getText("post_code_text");
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename(), "", "saveGuestbook");
-        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		return $strReturn;
 	}
 

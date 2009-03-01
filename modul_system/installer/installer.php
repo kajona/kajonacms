@@ -25,7 +25,7 @@ class class_installer {
 	private $strForwardLink = "";
 	private $strBackwardLink = "";
 
-	private $strVersion = "V 3.1.9";
+	private $strVersion = "V 3.1.95";
 
 	/**
 	 * Instance of template-engine
@@ -573,7 +573,7 @@ class class_installer {
 	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryID, true);
      
 	    }
-
+        $arrTemplate = array();
 	    $arrTemplate["installer_progress"] = $strProgess;
 	    $arrTemplate["installer_version"] = $this->strVersion;
 	    $arrTemplate["installer_output"] = $this->strOutput;

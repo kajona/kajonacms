@@ -23,7 +23,8 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
      *
      */
     public function __construct() {
-        $arrModule["version"]       = "3.1.9";
+        $arrModule = array();
+        $arrModule["version"]       = "3.1.95";
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["name_lang"]     = "Element downloads_toplist";
         $arrModule["nummer2"]       = _pages_inhalte_modul_id_;
@@ -72,6 +73,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
         //Register the element
         $strReturn .= "Registering downloads_toplist-element...\n";
         //check, if not already existing
+        $objElement = null;
         try {
             $objElement = class_modul_pages_element::getElement("downloadstoplist");
         }

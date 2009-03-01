@@ -133,7 +133,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
     						if($intImageCounter % $this->arrElementData["gallery_nrow"] == 0) {
     							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-    							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
+    							$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
     							$arrTemplateImage = array();
     						}
 					    }
@@ -145,7 +145,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
     						$arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
 
 							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");
-							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
+							$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
 							$arrTemplateImage = array();
 					    }
 					}
@@ -159,7 +159,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
 						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "folderlist");
-						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID);
+						$arrTemplate["folderlist"] .= $this->fillTemplate($arrFolder, $strTemplateID);
 
 					}
 				}
@@ -167,7 +167,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			//Print remaining images
 			if(count($arrTemplateImage) > 0) {
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-				$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
+				$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
 				$arrTemplateImage= array();
 			}
 		}
@@ -182,7 +182,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		}
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "list");
 		$arrTemplate["pathnavigation"] = $this->generatePathnavi();
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		return $strReturn;
 	}
 
@@ -245,7 +245,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		    $arrImage["pic_rating"] = $this->buildRatingBar($objImage->getFloatRating(), $objImage->getSystemid(), $objImage->isRateableByUser(), $objImage->rightRight2());
 		}
 
-		$strReturn = $this->objTemplate->fillTemplate($arrImage, $strTemplateID);
+		$strReturn = $this->fillTemplate($arrImage, $strTemplateID);
 
 		//Update view counter
 		$objImage->setIntHits($objImage->getIntHits()+1);
@@ -424,7 +424,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrName());
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
 		while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $objData->getSystemid() != $objGallery->getSystemid()) {
 			$objData = new class_modul_gallery_pic($objData->getPrevId());
@@ -435,7 +435,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		    $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid());
    	        $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
-	        $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
+	        $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
        }
 
 
@@ -560,7 +560,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("gallery_rating_rate1").$intI.$this->getText("gallery_rating_rate2");
 
-				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
+				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
 			}
 		} else {
 		    if(!$bitRatingAllowed)
@@ -569,7 +569,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			    $strRatingBarTitle = $this->getText("gallery_rating_permissions");
 		}
 
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
 }

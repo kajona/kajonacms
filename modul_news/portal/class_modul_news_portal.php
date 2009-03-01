@@ -111,7 +111,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					//reset more link?
                     if(uniStrlen($arrOneNews["news_text"]) == 0)
                         $arrOneNews["news_more_link"] = "";
-					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
+					$strOneNews .= $this->fillTemplate($arrOneNews, $strTemplateID);
 
 					//Add pe code
 				    include_once(_portalpath_."/class_elemente_portal.php");
@@ -132,7 +132,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
             $arrWrapperTemplate["link_forward"] = $arrNews["strForward"];
             $arrWrapperTemplate["link_pages"] = $arrNews["strPages"];
             $arrWrapperTemplate["link_back"] = $arrNews["strBack"];
-            $strReturn = $this->objTemplate->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
+            $strReturn = $this->fillTemplate($arrWrapperTemplate, $strWrapperTemplateID);
 		}
 		else {
 			$strReturn .= $this->getText("news_list_empty");
@@ -162,7 +162,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$arrNews["news_text"] = $objNews->getStrNewstext();
 				if($objNews->getStrImage() != "")
 	                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
-				$strReturn .= $this->objTemplate->fillTemplate($arrNews, $strTemplateID);
+				$strReturn .= $this->fillTemplate($arrNews, $strTemplateID);
 
 				//Add pe code
 				$arrPeConfig = array(

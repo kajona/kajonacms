@@ -104,7 +104,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 			            $arrOneFaq["faq_rating"] = $this->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
 			        }
 
-    				$strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID);
+    				$strOneFaq .= $this->fillTemplate($arrOneFaq, $strFaqTemplateID);
 
     				//Add pe code
     			    include_once(_portalpath_."/class_elemente_portal.php");
@@ -127,7 +127,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
     		$arrTemplate["faq_cat_title"] = $objCategory->getStrTitle();
     		$arrTemplate["faq_faqs"] = $strFaqs;
 
-    		$strCats .= $this->objTemplate->fillTemplate($arrTemplate, $strCatTemplateID);
+    		$strCats .= $this->fillTemplate($arrTemplate, $strCatTemplateID);
 		}
 
 		//wrap list container around
@@ -136,7 +136,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 		$arrTemplate = array();
 		$arrTemplate["faq_categories"] = $strCats;
 
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strListTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strListTemplateID);
 
 		return $strReturn;
 	}
@@ -172,7 +172,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
                 $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
                 $arrTemplate["rating_icon_title"] = $this->getText("faqs_rating_rate1").$intI.$this->getText("faqs_rating_rate2");
     
-                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId); 
+                $strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId); 
             }
         } else {
             if(!$bitRatingAllowed)
@@ -181,7 +181,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
                 $strRatingBarTitle = $this->getText("faqs_rating_permissions");
         }
         
-        return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
     }
 
 }

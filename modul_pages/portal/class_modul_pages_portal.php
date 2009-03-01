@@ -258,7 +258,7 @@ class class_modul_pages_portal extends class_portal {
 		include(_portalpath_."/global_includes.php");
 		$arrTemplate = array_merge($arrTemplate, $arrGlobal);
 		//fill the template. the template was read before
-		$strPageContent = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		$strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);
 
         //add the portaleditor toolbar
         if(_pages_portaleditor_ == "true" && $objPageData->rightEdit() && $this->objSession->isAdmin()) {

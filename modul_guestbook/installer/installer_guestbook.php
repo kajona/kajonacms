@@ -18,7 +18,8 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_guestbook extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "guestbook";
 		$arrModule["class_admin"] 	= "class_modul_guestbook_admin";
 		$arrModule["file_admin"] 	= "class_modul_guestbook_admin.php";
@@ -168,69 +169,59 @@ class class_installer_guestbook extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
         
         return $strReturn."\n\n";
 	}
 
 
 	private function update_300_301() {
-	    //Run the updates
 	    $strReturn = "";
         $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.0.1");
-
         return $strReturn;
 	}
 
 	private function update_301_302() {
-	    //Run the updates
 	    $strReturn = "";
         $strReturn .= "Updating 3.0.1 to 3.0.2...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.0.2");
-
         return $strReturn;
 	}
 	
     private function update_302_309() {
-        //Run the updates
         $strReturn = "";
         $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.0.9");
-
         return $strReturn;
     }	
     
 	private function update_309_3095() {
         $strReturn = "";
         $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.0.95");
-
         return $strReturn;
     }
     
     private function update_3095_310() {
         $strReturn = "Updating 3.0.95 to 3.1.0...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.1.0");
-
         return $strReturn;
     }
     
     private function update_310_311() {
         $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.1.1");
-
         return $strReturn;
     }
     
@@ -247,7 +238,12 @@ class class_installer_guestbook extends class_installer_base implements interfac
         return $strReturn;
     }
     
-    
+    private function update_319_3195() {
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("guestbook", "3.1.95");
+        return $strReturn;
+    }
     
 }
 ?>

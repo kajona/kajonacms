@@ -67,13 +67,13 @@ class class_element_downloads_toplist extends class_element_portal implements in
         	$arrTemplate["dltoplist_name"] = $objOneFile->getName();
         	$arrTemplate["dltoplist_rating"] = $objOneFile->getFloatRating();
         	
-        	$strInner .= $this->objTemplate->fillTemplate($arrTemplate, $strInnerTemplateID);
+        	$strInner .= $this->fillTemplate($arrTemplate, $strInnerTemplateID);
         	
             if(++$intCounter > $this->arrElementData["int1"] && $this->arrElementData["int1"] > 0)
                 break;	
         }
         
-        $strReturn .= $this->objTemplate->fillTemplate(array("dltoplist_entries" => $strInner), $strOuterTemplateID);
+        $strReturn .= $this->fillTemplate(array("dltoplist_entries" => $strInner), $strOuterTemplateID);
         
         return $strReturn;
     }

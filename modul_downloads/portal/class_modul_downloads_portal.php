@@ -106,7 +106,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 							$arrTemplate["file_href"] = "";
 						}
 
-						$strFileList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+						$strFileList .= $this->fillTemplate($arrTemplate, $strTemplateID);
 					}
 					elseif ($objOneFile->getType() == 1) {
 					    //Folder
@@ -115,7 +115,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["folder_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid(), "", "", $objOneFile->getName());
 						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
-						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+						$strFolderList .= $this->fillTemplate($arrTemplate, $strTemplateID);
 					}
 				}
 			}
@@ -126,14 +126,14 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$arrTemplate["folderlist"] = $strFolderList;
 			$arrTemplate["filelist"] = $strFileList;
 			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
-			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+			$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		}
 		else {
 			$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "list");
 			$arrTemplate = array();
 			$arrTemplate["filelist"] = $this->getText("liste_leer");
 			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
-			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+			$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		}
 
 		return $strReturn;
@@ -158,7 +158,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         $arrTemplate = array();
 		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
 		while($objFile->getPrevId() != "0" && $objFile->getPrevId() != $objArchive->getPrevId()) {
 		    $objFile = new class_modul_downloads_file($objFile->getPrevId());
@@ -167,7 +167,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		    }
    		    $arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
    	       	$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
-       		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID) . $strReturn;
+       		$strReturn = $this->fillTemplate($arrTemplate, $strTemplateID) . $strReturn;
 		}
 
 		return $strReturn;
@@ -235,7 +235,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2");
 
-				$strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId);
+				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
 			}
 		} else {
 		    if(!$bitRatingAllowed)
@@ -244,7 +244,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			    $strRatingBarTitle = $this->getText("download_rating_permissions");
 		}
 
-		return $this->objTemplate->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
 }

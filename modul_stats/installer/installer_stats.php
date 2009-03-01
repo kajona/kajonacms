@@ -23,7 +23,8 @@ class class_installer_stats extends class_installer_base implements interface_in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -144,6 +145,11 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_311_319();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -257,7 +263,15 @@ class class_installer_stats extends class_installer_base implements interface_in
         return $strReturn;
     }
 
+    private function update_319_3195() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.9 to 3.1.95...\n";
 
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.1.95");
+
+        return $strReturn;
+    }
     
     
 }

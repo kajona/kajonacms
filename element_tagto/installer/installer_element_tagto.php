@@ -23,7 +23,8 @@ class class_installer_element_tagto extends class_installer_base implements inte
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -69,11 +70,13 @@ class class_installer_element_tagto extends class_installer_base implements inte
 		//Register the element
 		$strReturn .= "Registering tagto-element...\n";
 		//check, if not already existing
+        $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("tagto");
 		}
 		catch (class_exception $objEx)  {
 		}
+        
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("tagto");

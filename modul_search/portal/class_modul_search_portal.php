@@ -110,7 +110,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 			else
 				$arrRow["page_link"] = $arrHit["pagelink"];
 			$arrRow["page_description"] = $arrHit["description"];
-			$arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTempalteID);
+			$arrTemplate["hitlist"] .= $this->fillTemplate($arrRow, $strRowTempalteID);
 		}
 
 		//Collect global data
@@ -126,7 +126,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist");
 
-		return $strReturn . $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+		return $strReturn . $this->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
 }

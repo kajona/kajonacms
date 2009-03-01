@@ -22,7 +22,8 @@ class class_installer_element_portalupload extends class_installer_base implemen
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "element_portalupload";
 		$arrModule["name_lang"] 	= "Element portalupload";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -69,6 +70,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
 		//Register the element
         $strReturn .= "Registering portalupload-element...\n";
         //check, if not already existing
+        $objElement = null;
         try {
             $objElement = class_modul_pages_element::getElement("portalupload");
         }

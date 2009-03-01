@@ -121,7 +121,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             $strProfileeditpage = $this->arrElementData["portallogin_profile"];
 
         $arrTemplate["editprofilelink"] = getLinkPortal($strProfileeditpage, "", "", $this->getText("editprofilelink"), "portalEditProfile");
-	    return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	    return $this->fillTemplate($arrTemplate, $strTemplateID);
 	}
 
 
@@ -165,7 +165,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             if(count($arrErrors) > 0) {
                 foreach ($arrErrors as $strOneError) {
                     $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
-                    $arrTemplate["formErrors"] .= "".$this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                    $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                 }
             }
 

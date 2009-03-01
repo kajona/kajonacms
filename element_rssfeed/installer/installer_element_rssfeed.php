@@ -23,7 +23,8 @@ class class_installer_element_rssfeed extends class_installer_base implements in
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["name_lang"] 	= "Element rssfeed";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -69,6 +70,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
 		//Register the element
 		$strReturn .= "Registering rssfeed-element...\n";
 		//check, if not already existing
+        $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("rssfeed");
 		}

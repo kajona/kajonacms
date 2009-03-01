@@ -18,7 +18,8 @@ require_once(_systempath_."/interface_installer.php");
 class class_installer_navigation extends class_installer_base implements interface_installer {
 
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["class_admin"] 	= "class_modul_navigation_admin";
 		$arrModule["file_admin"] 	= "class_modul_navigation_admin.php";
@@ -160,6 +161,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.9") {
+            $strReturn .= $this->update_319_3195();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -241,6 +247,13 @@ class class_installer_navigation extends class_installer_base implements interfa
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("navigation", "3.1.9");
 
+        return $strReturn;
+    }
+
+    private function update_319_3195() {
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.1.95");
         return $strReturn;
     }
 }

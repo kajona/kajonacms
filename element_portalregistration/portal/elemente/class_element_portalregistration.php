@@ -142,7 +142,7 @@ class class_element_portalregistration extends class_element_portal implements i
             if(count($arrErrors) > 0) {
                 foreach ($arrErrors as $strOneError) {
                     $strErrTemplate = $this->objTemplate->readTemplate("/element_portalregistration/".$this->arrElementData["portalregistration_template"], "errorRow");
-                    $arrTemplate["formErrors"] .= "".$this->objTemplate->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                    $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
                 }
             }
     	    

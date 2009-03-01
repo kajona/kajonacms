@@ -32,6 +32,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 */
 	public function __construct($arrElementData) {
         $arrModul = array();
+        $arrModul["modul"]          = "navigation";
 		$arrModul["name"] 			= "modul_navigation";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _navigation_modul_id_;
@@ -131,7 +132,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 			
 			//include into a wrapper?
 			$strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-			$strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
+			$strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
 			if(uniStrlen($strWrappedLevel) > 0)
 			    $strLevel = $strWrappedLevel;
 			
@@ -144,7 +145,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		
 		//and add level 1 wrapper
         $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
+        $strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $arrTree[$intCounter] = $strWrappedLevel;
             
@@ -277,7 +278,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		
 		//wrap into the wrapper-section
         $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
-        $strWrappedLevel = $this->objTemplate->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
+        $strWrappedLevel = $this->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $strReturn = $strWrappedLevel;
 		

@@ -95,7 +95,7 @@ class class_element_rssfeed extends class_element_portal implements interface_po
         		        $arrMessage["post_description"] = (isset($arrOneItem["description"][0]["value"]) ? $arrOneItem["description"][0]["value"] : "");
         		        $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["value"]) ? $arrOneItem["link"][0]["value"] : "");
 
-        	   	        $strContent .= $this->objTemplate->fillTemplate($arrMessage, $strPostTemplateID);
+        	   	        $strContent .= $this->fillTemplate($arrMessage, $strPostTemplateID);
 
         	   	        if(++$intCounter >= $this->arrElementData["int1"])
         	   	           break;
@@ -127,7 +127,7 @@ class class_element_rssfeed extends class_element_portal implements interface_po
                         $arrMessage["post_description"] = (isset($arrOneItem["summary"][0]["value"]) ? $arrOneItem["summary"][0]["value"] : "");
                         $arrMessage["post_link"] = (isset($arrOneItem["link"][0]["attributes"]["href"]) ? $arrOneItem["link"][0]["attributes"]["href"] : "");
 
-                        $strContent .= $this->objTemplate->fillTemplate($arrMessage, $strPostTemplateID);
+                        $strContent .= $this->fillTemplate($arrMessage, $strPostTemplateID);
 
                         if(++$intCounter >= $this->arrElementData["int1"])
                            break;
@@ -142,7 +142,7 @@ class class_element_rssfeed extends class_element_portal implements interface_po
 		}
 
 		$arrTemplate["feed_content"] = $strContent;
-		$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strFeedTemplateID);
+		$strReturn .= $this->fillTemplate($arrTemplate, $strFeedTemplateID);
 
 		return $strReturn;
 	}

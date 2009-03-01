@@ -7,10 +7,10 @@
 
 <!-- available placeholders: href, lang_short, lang_long -->
 <languageswitch_entry>
-<a href="%%href%%">%%lang_short%%</a>
+<a href="%%href%%">%%langname_short%%</a>
 </languageswitch_entry>
 
 <!-- available placeholders: href, lang_short, lang_long -->
 <languageswitch_entry_active>
-<a href="%%href%%">%%lang_short%%</a>
+<a href="%%href%%">%%langname_short%%</a>
 </languageswitch_entry_active>

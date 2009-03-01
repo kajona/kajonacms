@@ -23,7 +23,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.1.9";
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -48,8 +48,8 @@ class class_installer_element_portallogin extends class_installer_base implement
 		    return false;
 		}
 
-	     //check, if not already existing
-	     $objElement = null;
+	    //check, if not already existing
+	    $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("portallogin");
 		}

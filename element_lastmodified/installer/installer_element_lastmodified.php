@@ -23,7 +23,8 @@ class class_installer_element_lastmodified extends class_installer_base implemen
      *
      */
 	public function __construct() {
-		$arrModule["version"] 		= "3.1.9";
+        $arrModule = array();
+		$arrModule["version"] 		= "3.1.95";
 		$arrModule["name"] 			= "element_lastmodified";
 		$arrModule["name_lang"] 	= "Element Lastmodified";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
