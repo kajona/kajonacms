@@ -57,8 +57,6 @@ class class_db {
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 
-		//TODO: can be removed? $this->bitMagicQuotesGPC = (get_magic_quotes_gpc() == 0);
-
 		//Load the defined db-driver
 		$strDriver = $this->objConfig->getConfig("dbdriver");
 		if($strDriver != "%%defaultdriver%%") {

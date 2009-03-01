@@ -804,12 +804,12 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$arrTemplate["file_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight."\" id=\"fm_filemanagerPic\" />";
 
             $arrTemplate["file_actions"] = "";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowRealsize();\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowPreview();\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(90);\"", "",  $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerRotate(270);\"", "",  $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerShowCropping();\"", "",  $this->getText("cropImage"), "icon_crop.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:filemanagerSaveCropping();\"", "",  $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerShowRealsize();\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerShowPreview();\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerRotate(90);\"", "",  $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerRotate(270);\"", "",  $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerShowCropping();\"", "",  $this->getText("cropImage"), "icon_crop.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:kajonaImageEditor.filemanagerSaveCropping();\"", "",  $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"]));
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
@@ -824,7 +824,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 var fm_file = '".$this->getParam("file")."' ;
                 var fm_folder = '".$this->getParam("folder")."';
 
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
+                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:kajonaImageEditor.filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 

@@ -47,7 +47,7 @@ var objMover = {
 // --- MISC
 // ----------------------------------------------------------------------------------------------
 function fold(id, callbackShow) {
-	style = document.getElementById(id).style.display;
+	var style = document.getElementById(id).style.display;
 	if (style == 'none') {
 		document.getElementById(id).style.display = 'block';
 		if (callbackShow != undefined) {
@@ -70,7 +70,7 @@ function foldImage(id, bildid, bild_da, bild_weg) {
 }
 
 function switchLanguage(strLanguageToLoad) {
-	url = window.location.href;
+	var url = window.location.href;
 	url = url.replace(/(\?|&)language=([a-z]+)/, "");
 	if (url.indexOf('?') == -1)
 		window.location.replace(url + '?language=' + strLanguageToLoad);
@@ -167,13 +167,13 @@ function checkRightMatrix() {
 	// mode 1: inheritance
 	if (document.getElementById('inherit').checked) {
 		// loop over all checkboxes to disable them
-		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
 			var objCurElement = document.forms['rightsForm'].elements[intI];
 			if (objCurElement.type == 'checkbox') {
 				if (objCurElement.id != 'inherit') {
 					objCurElement.disabled = true;
 					objCurElement.checked = false;
-					strCurId = "inherit," + objCurElement.id;
+					var strCurId = "inherit," + objCurElement.id;
 					if (document.getElementById(strCurId) != null) {
 						if (document.getElementById(strCurId).value == '1') {
 							objCurElement.checked = true;
@@ -693,8 +693,8 @@ function KajonaUploader(config) {
 	}
 
 	this.createFileList = function() {
-		htmlList = document.getElementById('kajonaUploadFiles');
-		bitFileError = false;
+		var htmlList = document.getElementById('kajonaUploadFiles');
+		var bitFileError = false;
 
 		//count files (self.fileList.length doesn't work here)
 		for (var i in self.fileList) {
@@ -702,8 +702,8 @@ function KajonaUploader(config) {
 		}
 		
 		//sort file list, otherwise the upload will start with the last file in the list
-		sortedFileList = new Array();
-		tempFileCount = 0;
+		var sortedFileList = new Array();
+		var tempFileCount = 0;
 		for (var i in self.fileList) {
 			var entry = self.fileList[i];
 			var entryId = self.fileCount - tempFileCount;
@@ -771,15 +771,15 @@ function KajonaUploader(config) {
 	}
 
 	this.onUploadProgress = function(event) {
-		row = document.getElementById('kajonaUploadFile_' + event['id']);
+		var row = document.getElementById('kajonaUploadFile_' + event['id']);
 		row.className = "active";
-		progress = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
+		var progress = Math.round(100 * (event["bytesLoaded"] / event["bytesTotal"]));
 		YAHOO.util.Dom.getElementsByClassName('progress', 'div', row)[0].innerHTML = progress+"%";
 		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:" + progress + "%;'></div>";
 	}
 
 	this.onUploadComplete = function(event) {
-		row = document.getElementById('kajonaUploadFile_' + event['id']);
+		var row = document.getElementById('kajonaUploadFile_' + event['id']);
 		YAHOO.util.Dom.getElementsByClassName('progress', 'div', row)[0].innerHTML = "100%";
 		YAHOO.util.Dom.getElementsByClassName('progressBar', 'div', row)[0].innerHTML = "<div style='width:100%;'></div>";
 
@@ -834,160 +834,171 @@ function KajonaUploader(config) {
 
 //--- image-editor --------------------------------------------------------------------------------------
 
-function filemanagerShowRealsize() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
-		+ (new Date()).getMilliseconds();
-	fm_image_isScaled = false;
-	
-	if (fm_cropObj != null) {
-		fm_cropObj.destroy();
-		fm_cropObj = null;
-	}
 
-	document.getElementById("accept_icon").src = document
-		.getElementById("accept_icon").src.replace("icon_crop_accept.gif",
-		"icon_crop_acceptDisabled.gif");
-}
+var kajonaImageEditor = {
 
-function filemanagerShowPreview() {
-	document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
-		+ "&x=" + (new Date()).getMilliseconds();
-	//alert(document.getElementById('fm_filemanagerPic').src);
-	fm_image_isScaled = true;
-	
-	if (fm_cropObj != null) {
-		fm_cropObj.destroy();
-		fm_cropObj = null;
-	}
+    cropArea : null,
+    fm_cropObj : null,
+    fm_image_isScaled : true,
 
-	document.getElementById("accept_icon").src = document
-		.getElementById("accept_icon").src.replace("icon_crop_accept.gif",
-		"icon_crop_acceptDisabled.gif");
-}
-
-var fm_cropObj = null;
-function filemanagerShowCropping() {
-	// init the cropping
-	if (fm_cropObj == null) {
-		fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
-			status :true
-		});
-		document.getElementById("accept_icon").src = document
-				.getElementById("accept_icon").src.replace(
-				"icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
-		
-		document.getElementById("fm_filemanagerPic_wrap").ondblclick = filemanagerSaveCropping;
-	} else {
-		fm_cropObj.destroy();
-		fm_cropObj = null;
-		document.getElementById("accept_icon").src = document
-				.getElementById("accept_icon").src.replace(
-				"icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-	}
-}
-
-function filemanagerSaveCropping() {
-	if (fm_cropObj != null) {
-		init_fm_crop_save_warning_dialog();
-	}
-}
-
-var cropArea = null;
-function filemanagerSaveCroppingToBackend() {
-	jsDialog_1.hide();
-	init_fm_screenlock_dialog();
-	cropArea = fm_cropObj.getCropCoords();
-	if (fm_image_isScaled) {
-		// recalculate the "real" crop-coordinates
-		var intScaledWidth = document.getElementById('fm_filemanagerPic').width;
-		var intScaledHeight = document.getElementById('fm_filemanagerPic').height;
-		var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
-		var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
-
-		cropArea.left = Math.floor(cropArea.left * (intOriginalWidth / intScaledWidth));
-		cropArea.top = Math.floor(cropArea.top * (intOriginalHeigth / intScaledHeight));
-		cropArea.width = Math.floor(cropArea.width * (intOriginalWidth / intScaledWidth));
-		cropArea.height = Math.floor(cropArea.height * (intOriginalHeigth / intScaledHeight));
-
-	}
-	kajonaAdminAjax.saveImageCropping(cropArea.left, cropArea.top,
-			cropArea.width, cropArea.height, fm_repo_id, fm_folder, fm_file,
-			fm_cropping_callback);
-}
-
-var fm_cropping_callback = {
-	success : function(o) {
-		kajonaStatusDisplay.displayXMLMessage(o.responseText);
-		fm_cropObj.destroy();
-		fm_cropObj = null;
-		document.getElementById("accept_icon").src = document
-				.getElementById("accept_icon").src.replace(
-				"icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-		document.getElementById('fm_image_dimensions').innerHTML = cropArea.width
-				+ ' x ' + cropArea.height;
-		document.getElementById('fm_image_size').innerHTML = 'n.a.';
-		document.getElementById('fm_int_realwidth').value = cropArea.width;
-		document.getElementById('fm_int_realheight').value = cropArea.height;
-		
-		if (fm_image_isScaled) {
-			filemanagerShowPreview();
-		} else {
-			filemanagerShowRealsize();
-		}
-		
-		cropArea = null;
-
-		hide_fm_screenlock_dialog();
-	},
-	failure : function(o) {
-		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
-				+ o.responseText);
-		hide_fm_screenlock_dialog();
-	}
-};
-
-function filemanagerRotate(intAngle) {
-	init_fm_screenlock_dialog();
-	kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
-			fm_rotate_callback);
-}
-
-var fm_rotate_callback = {
-	success : function(o) {
-		kajonaStatusDisplay.displayXMLMessage(o.responseText);
-
-		if (fm_cropObj != null) {
-			fm_cropObj.destroy();
-			fm_cropObj = null;
-			document.getElementById("accept_icon").src = document
-					.getElementById("accept_icon").src.replace(
-					"icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-		}
-
-		//switch width and height
-		var intScaledMaxWidthOld = fm_image_scaledMaxWidth;
-		fm_image_scaledMaxWidth = fm_image_scaledMaxHeight;
-        fm_image_scaledMaxHeight = intScaledMaxWidthOld;
+    filemanagerShowRealsize : function () {
+        document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
+            + (new Date()).getMilliseconds();
         
-		if (fm_image_isScaled) {
-			filemanagerShowPreview();
-		} else {
-			filemanagerShowRealsize();
-		}
-		
-		// update size-info & hidden elements
-		var intWidthOld = document.getElementById('fm_int_realwidth').value;
-		var intHeightOld = document.getElementById('fm_int_realheight').value;
-		document.getElementById('fm_int_realwidth').value = intHeightOld;
-		document.getElementById('fm_int_realheight').value = intWidthOld;
-		document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
-				+ ' x ' + intWidthOld;
+        kajonaImageEditor.fm_image_isScaled = false;
 
-		hide_fm_screenlock_dialog();
-	},
-	failure : function(o) {
-		kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
-				+ o.responseText);
-		hide_fm_screenlock_dialog();
-	}
+        if (kajonaImageEditor.fm_cropObj != null) {
+            kajonaImageEditor.fm_cropObj.destroy();
+            kajonaImageEditor.fm_cropObj = null;
+        }
+
+        document.getElementById("accept_icon").src = document
+            .getElementById("accept_icon").src.replace("icon_crop_accept.gif",
+            "icon_crop_acceptDisabled.gif");
+    },
+
+    filemanagerShowPreview : function () {
+        document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
+            + "&x=" + (new Date()).getMilliseconds();
+        //alert(document.getElementById('fm_filemanagerPic').src);
+        kajonaImageEditor.fm_image_isScaled = true;
+
+        if (kajonaImageEditor.fm_cropObj != null) {
+            kajonaImageEditor.fm_cropObj.destroy();
+            kajonaImageEditor.fm_cropObj = null;
+        }
+
+        document.getElementById("accept_icon").src = document
+            .getElementById("accept_icon").src.replace("icon_crop_accept.gif",
+            "icon_crop_acceptDisabled.gif");
+    },
+
+    
+    filemanagerShowCropping : function () {
+        // init the cropping
+        if (kajonaImageEditor.fm_cropObj == null) {
+            kajonaImageEditor.fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
+                status :true
+            });
+            document.getElementById("accept_icon").src = document
+                    .getElementById("accept_icon").src.replace(
+                    "icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
+
+            document.getElementById("fm_filemanagerPic_wrap").ondblclick = kajonaImageEditor.filemanagerSaveCropping;
+        } else {
+            kajonaImageEditor.fm_cropObj.destroy();
+            kajonaImageEditor.fm_cropObj = null;
+            document.getElementById("accept_icon").src = document
+                    .getElementById("accept_icon").src.replace(
+                    "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+        }
+    },
+
+    filemanagerSaveCropping : function () {
+        if (kajonaImageEditor.fm_cropObj != null) {
+            init_fm_crop_save_warning_dialog();
+        }
+    },
+
+    
+    filemanagerSaveCroppingToBackend : function () {
+        jsDialog_1.hide();
+        init_fm_screenlock_dialog();
+        kajonaImageEditor.cropArea = kajonaImageEditor.fm_cropObj.getCropCoords();
+        if (fm_image_isScaled) {
+            // recalculate the "real" crop-coordinates
+            var intScaledWidth = document.getElementById('fm_filemanagerPic').width;
+            var intScaledHeight = document.getElementById('fm_filemanagerPic').height;
+            var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
+            var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
+
+            kajonaImageEditor.cropArea.left = Math.floor(kajonaImageEditor.cropArea.left * (intOriginalWidth / intScaledWidth));
+            kajonaImageEditor.cropArea.top = Math.floor(kajonaImageEditor.cropArea.top * (intOriginalHeigth / intScaledHeight));
+            kajonaImageEditor.cropArea.width = Math.floor(kajonaImageEditor.cropArea.width * (intOriginalWidth / intScaledWidth));
+            kajonaImageEditor.cropArea.height = Math.floor(kajonaImageEditor.cropArea.height * (intOriginalHeigth / intScaledHeight));
+
+        }
+        kajonaAdminAjax.saveImageCropping(kajonaImageEditor.cropArea.left, kajonaImageEditor.cropArea.top,
+                kajonaImageEditor.cropArea.width, kajonaImageEditor.cropArea.height, fm_repo_id, fm_folder, fm_file,
+                kajonaImageEditor.fm_cropping_callback);
+    },
+
+    fm_cropping_callback : {
+        success : function(o) {
+            kajonaStatusDisplay.displayXMLMessage(o.responseText);
+            kajonaImageEditor.fm_cropObj.destroy();
+            kajonaImageEditor.fm_cropObj = null;
+            document.getElementById("accept_icon").src = document
+                    .getElementById("accept_icon").src.replace(
+                    "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+            document.getElementById('fm_image_dimensions').innerHTML = kajonaImageEditor.cropArea.width
+                    + ' x ' + kajonaImageEditor.cropArea.height;
+            document.getElementById('fm_image_size').innerHTML = 'n.a.';
+            document.getElementById('fm_int_realwidth').value = kajonaImageEditor.cropArea.width;
+            document.getElementById('fm_int_realheight').value = kajonaImageEditor.cropArea.height;
+
+            if (kajonaImageEditor.fm_image_isScaled) {
+                kajonaImageEditor.filemanagerShowPreview();
+            } else {
+                kajonaImageEditor.filemanagerShowRealsize();
+            }
+
+            kajonaImageEditor.cropArea = null;
+
+            hide_fm_screenlock_dialog();
+        },
+        failure : function(o) {
+            kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
+                    + o.responseText);
+            hide_fm_screenlock_dialog();
+        }
+    },
+
+    filemanagerRotate : function (intAngle) {
+        init_fm_screenlock_dialog();
+        kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
+                kajonaImageEditor.fm_rotate_callback);
+    },
+
+    fm_rotate_callback : {
+        success : function(o) {
+            kajonaStatusDisplay.displayXMLMessage(o.responseText);
+
+            if (kajonaImageEditor.fm_cropObj != null) {
+                kajonaImageEditor.fm_cropObj.destroy();
+                kajonaImageEditor.fm_cropObj = null;
+                document.getElementById("accept_icon").src = document
+                        .getElementById("accept_icon").src.replace(
+                        "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+            }
+
+            //switch width and height
+            var intScaledMaxWidthOld = fm_image_scaledMaxWidth;
+            fm_image_scaledMaxWidth = fm_image_scaledMaxHeight;
+            fm_image_scaledMaxHeight = intScaledMaxWidthOld;
+
+            if (kajonaImageEditor.fm_image_isScaled) {
+                kajonaImageEditor.filemanagerShowPreview();
+            } else {
+                kajonaImageEditor.filemanagerShowRealsize();
+            }
+
+            // update size-info & hidden elements
+            var intWidthOld = document.getElementById('fm_int_realwidth').value;
+            var intHeightOld = document.getElementById('fm_int_realheight').value;
+            document.getElementById('fm_int_realwidth').value = intHeightOld;
+            document.getElementById('fm_int_realheight').value = intWidthOld;
+            document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
+                    + ' x ' + intWidthOld;
+
+            hide_fm_screenlock_dialog();
+        },
+        failure : function(o) {
+            kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
+                    + o.responseText);
+            hide_fm_screenlock_dialog();
+        }
+    }
+
 };
+

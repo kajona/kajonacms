@@ -828,7 +828,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateContentFooterID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
 		$strTemplateFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_footer");
 		//Iterating over the rows
-		$intNrRows = count($arrValues[0]);
+		$intNrRows = (isset($arrValues[0]) ? count($arrValues[0]) : count($arrHeader));
 
 		//Starting with the header, column by column
         if(is_array($arrHeader)) {
