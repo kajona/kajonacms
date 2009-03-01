@@ -27,9 +27,17 @@
 
 <!-- available placeholders: postacomment_write_new -->
 <postacomment_new_button>
-    <script type="text/javascript" language="javascript">
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/postacomment.js");
+    <script type="text/javascript">
+        bitKajonaRatingsAvailable = false;
+        
+        function enableRatingsWrapper() {
+            if (bitKajonaRatingsAvailable) {
+                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            }
+        }
+        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
+        
+        kajonaAjaxHelper.loadAjaxBase(null, "postacomment.js");
     </script>
     <div id="postaCommentButton"><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%postacomment_write_new%%</a></div>
 </postacomment_new_button>
@@ -63,8 +71,7 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+        bitKajonaRatingsAvailable = true;
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">

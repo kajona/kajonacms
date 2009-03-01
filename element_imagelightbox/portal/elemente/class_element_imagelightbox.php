@@ -43,29 +43,29 @@ class class_element_imagelightbox extends class_element_portal implements interf
      */
 	public function loadData() {
 		$strReturn = "";
-		
+
 		$strImage = $this->arrElementData["char1"];
-		
+
 		//Include the javascript-file
-		$strReturn .= "<script language=\"Javascript\" type=\"text/javascript\">\n";
+		$strReturn .= "<script type=\"text/javascript\">\n";
 		$strReturn .= "  kajonaAjaxHelper.addFileToLoad('"._webpath_."/portal/scripts/lightbox.js');\n";
 		$strReturn .= " addCss('"._webpath_."/portal/css/lightbox.css');\n";
 		$strReturn .= "</script>\n";
-		
-		
+
+
 		$strReturn .= "<div>";
-        
+
 		//generate the preview
 		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=800&amp;maxHeight=800\" rel=\"lightbox\" title=\"".$this->arrElementData["char2"]."\">\n";
 		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=200&amp;maxHeight=200\" />\n";
 		$strReturn .= "</a>";
-		
+
 		$strReturn .= "</div>";
-		
+
 		return $strReturn;
 	}
 
-	
+
 
 }
 ?>

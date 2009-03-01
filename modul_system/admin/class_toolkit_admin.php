@@ -144,10 +144,10 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["calendarCommands"] = "";
 
 		//init the js-files
-		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
+		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
 		//and the css
-		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
-		$arrTemplate["calendarCommands"] .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
+		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
+		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
 
 
 		//set up the container div
@@ -833,7 +833,7 @@ class class_toolkit_admin extends class_toolkit {
 		//Starting with the header, column by column
         if(is_array($arrHeader)) {
             $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateHeaderHeaderID);
-            
+
             foreach ($arrHeader as $strHeader)
                 $strReturn .= $this->objTemplate->fillTemplate(array("value" => $strHeader), $strTemplateHeaderContentID);
 

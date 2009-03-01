@@ -3,13 +3,13 @@
 <html>
 <head>
 <link href="_skinwebpath_/styles.css" rel="stylesheet" type="text/css">
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
+<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
 %%head%%
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 	function loginStartup() { document.getElementById('name').focus(); }
 	YAHOO.util.Event.onDOMReady(loginStartup);
 		kajonaAjaxHelper.loadAjaxBase();
@@ -20,10 +20,10 @@
 </head>
 
 <body>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr bgcolor="#FFFFFF">
     <td>
-		<table width="100%"  border="0" cellspacing="0" cellpadding="0" style="background-image: url(_skinwebpath_/header.png)">
+		<table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-image: url(_skinwebpath_/header.png)">
 	 	 <tr>
 			<td><img src="_skinwebpath_/trans.gif" width="18" height="80"></td>
 	     </tr>

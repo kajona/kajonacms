@@ -28,4 +28,3 @@
         </div>
     </div>
 </faq_faq>
-

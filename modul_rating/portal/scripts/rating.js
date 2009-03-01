@@ -30,4 +30,4 @@ function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
 }
 
 //enable tooltips
-function enableTooltipsWrapper() { enableTooltips("showTooltip"); } addLoadEvent(enableTooltipsWrapper);
+function enableTooltipsWrapper() { enableTooltips("showTooltip"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);

@@ -25,18 +25,20 @@
 
 	$arrGlobal["copyright"] 			= "powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a>";
 
-//---Kajona Parts, PLEASE leave them as is---------------------------------------------------------------
+//---Kajona head parts, please leave them as the are----------------------------------------------------------
 
-	$arrGlobal["kajona_head"]			= "<meta name=\"generator\" content=\"Kajona³, www.kajona.de\" />\n";
-	$arrGlobal["kajona_head"]		    .= "    <script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/portal/scripts/kajona.js\"></script>";
-	
+    $arrGlobal["kajona_head"]           = "<script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>\n";
+	$arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/kajona.js\"></script>\n";
+	$arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."';</script>\n";
+	$arrGlobal["kajona_head"]          .= "    <meta name=\"generator\" content=\"Kajona³, www.kajona.de\" />";
+
 /*
-    The next placeholder is used as an extra separator for the page-title. In some cases, module may add additional 
+    The next placeholder is used as an extra separator for the page-title. In some cases, module may add additional
     texts to the current title, e.g. the name of a news. In this case, you can define a separator. This may lead to s.th. like
-    Kajona³ [Welcome | New Kajona version released] instead of Kajona³ [Welcome]. If you don't want any extra separator, feel 
-    free to remove the following line. 
- */	
-	
+    Kajona³ [Welcome | New Kajona version released] instead of Kajona³ [Welcome]. If you don't want any extra separator, feel
+    free to remove the following line.
+ */
+
 	$arrGlobal["kajonaTitleSeparator"] = " | ";
 
 ?>

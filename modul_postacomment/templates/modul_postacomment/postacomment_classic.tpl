@@ -1,7 +1,18 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
 <!-- available placeholders: postacomment_list, postacomment_form, postacomment_new_button -->
-<postacomment_list>   
+<postacomment_list>
+    <script type="text/javascript">
+        bitKajonaRatingsAvailable = false;
+        
+        function enableRatingsWrapper() {
+            if (bitKajonaRatingsAvailable) {
+                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            }
+        }
+        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
+    </script>
+    
     %%postacomment_new_button%%
     %%postacomment_form%%
     %%postacomment_list%%
@@ -57,14 +68,13 @@
 <!-- available placeholders: error -->
 <validation_error_row>
 	&middot; %%error%%<br />
-    <script type="text/javascript">document.getElementById('postaCommentForm').style.display = "block"; addLoadEvent(loadCaptcha);</script>
+    <script type="text/javascript">document.getElementById('postaCommentForm').style.display = "block"; YAHOO.util.Event.onDOMReady(loadCaptcha);</script>
 </validation_error_row>
 
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        kajonaAjaxHelper.loadAjaxBase();
-        kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+        bitKajonaRatingsAvailable = true;
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">

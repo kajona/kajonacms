@@ -3,12 +3,12 @@
 <html>
 <head>
 <link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
-<script language="Javascript" type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
+<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 %%head%%
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
     function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
     YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
     kajonaAjaxHelper.loadAjaxBase();

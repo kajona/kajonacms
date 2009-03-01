@@ -110,6 +110,7 @@ t.style.left=(posx-t.offsetWidth)+"px";
 }
 
 //--- LITTLE HELPERS ------------------------------------------------------------------------------------
+//deprecated, use kajonaAjaxHelper.Loader object instead
 function addCss(file) {
 	var l=document.createElement("link");
 	l.setAttribute("type", "text/css");
@@ -127,6 +128,7 @@ function inArray(needle, haystack) {
     return false;
 }
 
+//deprecated, use YAHOO.util.Event.onDOMReady instead, if YUI loaded
 function addLoadEvent(func) {
 	var oldonload = window.onload;
     if (typeof window.onload != 'function') {
@@ -154,53 +156,105 @@ function fold(id, callbackShow) {
     }
 }
 
-var kajonaAjaxHelper =  {
-	
-	arrayFilesToLoad : new Array(),
-	arrayFilesLoaded : new Array(),
-	bitPastOnload : false,
-	
-	onLoadHandlerFinal : function() {
-        for(i=0;i<kajonaAjaxHelper.arrayFilesToLoad.length;i++) {
-            if(kajonaAjaxHelper.arrayFilesToLoad[i] != null) {
-                kajonaAjaxHelper.addJavascriptFile(kajonaAjaxHelper.arrayFilesToLoad[i]);
-                kajonaAjaxHelper.arrayFilesToLoad[i] = null;
-            }
-        }
-        kajonaAjaxHelper.bitPastOnload = true;
-    },
 
-    addJavascriptFile : function (file) {
-        if(inArray(file, kajonaAjaxHelper.arrayFilesLoaded)) {
-           return;
-        }
-        var l=document.createElement("script");
-        l.setAttribute("type", "text/javascript");
-        l.setAttribute("language", "javascript");
-        l.setAttribute("src", file);
-        document.getElementsByTagName("head").item(0).appendChild(l);
-        intCount = kajonaAjaxHelper.arrayFilesLoaded.length;
-        kajonaAjaxHelper.arrayFilesLoaded[intCount] = file;
-    },
-	
-	loadAjaxBase : function () {
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/yahoo/yahoo-min.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/event/event-min.js');
-		kajonaAjaxHelper.addFileToLoad('portal/scripts/yui/connection/connection-min.js');
-	},
-	
-	
-	addFileToLoad : function(fileName) {
-		if(kajonaAjaxHelper.bitPastOnload) {
-			if(!inArray(fileName, kajonaAjaxHelper.arrayFilesLoaded)) {
-				kajonaAjaxHelper.addJavascriptFile(fileName);
+//--- AJAX-STUFF
+//--------------------------------------------------------------------------------------
+var kajonaAjaxHelper = {
+
+	// Loader object for dynamically loading additional js and css files
+	Loader : function() {
+		var additionalFileCounter = 0;
+		this.jsBase = KAJONA_WEBPATH + "/portal/scripts/";
+
+		this.yuiBase = this.jsBase + "yui/";
+
+		var loader = new YAHOO.util.YUILoader( {
+			base :this.yuiBase,
+
+			// filter: "DEBUG", //use debug versions
+
+			onFailure : function(o) {
+				alert("error: " + YAHOO.lang.dump(o));
 			}
-		}
-		else {
-			intCount = kajonaAjaxHelper.arrayFilesToLoad.length;
-			kajonaAjaxHelper.arrayFilesToLoad[(intCount+1)] = fileName;
-		}
-	}
-};
+		});
 
-addLoadEvent(kajonaAjaxHelper.onLoadHandlerFinal);
+		this.addYUIComponents = function(componentList) {
+			loader.require(componentList);
+		}
+
+		this.addFile = function(file, type) {
+			loader.addModule( {
+				name :"additionalFile" + additionalFileCounter,
+				type :type,
+				skinnable :false,
+				fullpath :file
+			});
+
+			loader.require("additionalFile" + additionalFileCounter);
+			additionalFileCounter++;
+		},
+
+		this.addJavascriptFile = function(filename) {
+			this.addFile(this.jsBase+filename, "js");
+		},
+
+		this.addCssFile = function(fileWithPath) {
+			this.addFile(fileWithPath, "css");
+		},
+
+		this.load = function(callback) {
+			if (callback == null) {
+				callback = function() {
+				};
+			}
+
+			loader.onSuccess = callback;
+			loader.insert();
+		}
+	},
+
+	loadAjaxBase : function(callback, additionalJsFile) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents( [ "connection" ]);
+		
+		if (additionalJsFile != null) {
+			l.addJavascriptFile(additionalJsFile);
+		}
+
+		l.load(callback);
+	},
+
+	loadAnimationBase : function(callback, additionalJsFile) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents( [ "animation" ]);
+		
+		if (additionalJsFile != null) {
+			l.addJavascriptFile(additionalJsFile);
+		}
+		
+		l.load(callback);
+	},
+
+	loadAutocompleteBase : function(callback, additionalJsFile) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents( [ "connection", "datasource", "autocomplete" ]);
+		
+		if (additionalJsFile != null) {
+			l.addJavascriptFile(additionalJsFile);
+		}
+		
+		l.load(callback);
+	},
+
+	loadCalendarBase : function(callback, additionalJsFile) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents( [ "calendar" ]);
+		
+		if (additionalJsFile != null) {
+			l.addJavascriptFile(additionalJsFile);
+		}
+		
+		l.load(callback);
+	}
+
+};

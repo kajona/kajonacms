@@ -29,4 +29,3 @@
         <div class="faqFaqAnswer"><a name="%%faq_systemid%%"></a>%%faq_answer%%</div>
     </div>
 </faq_faq>
-

@@ -3,7 +3,14 @@
 <!-- available placeholders: folderlist, filelist, pathnavigation -->
 <list>
     <script type="text/javascript">
-        kajonaAjaxHelper.loadAjaxBase();
+        bitKajonaRatingsAvailable = false;
+        
+        function enableRatingsWrapper() {
+            if (bitKajonaRatingsAvailable) {
+                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            }
+        }
+        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
     </script>
     <p>%%pathnavigation%%</p>
     <p>
@@ -54,7 +61,7 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        kajonaAjaxHelper.addJavascriptFile("_webpath_/portal/scripts/rating.js");
+        bitKajonaRatingsAvailable = true;
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">

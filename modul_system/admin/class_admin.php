@@ -146,7 +146,7 @@ abstract class class_admin {
 
 		//set the correct language to the text-object
 		$this->objText->setStrTextLanguage($this->objSession->getAdminLanguage(true));
-		
+
 		$this->strTextBase = $this->arrModule["modul"];
 	}
 
@@ -449,7 +449,7 @@ abstract class class_admin {
 	    else
 	        return "";
 	}
-	
+
 	/**
 	 * Writes a key-value-pair to the arrModule
 	 *
@@ -529,7 +529,7 @@ abstract class class_admin {
 		//Now we have to ask the Text-Object to return the text
 		return $this->objText->getText($strName, $strModule, $strArea);
 	}
-	
+
 	/**
 	 * Sets the textbase, so the module used to load texts
 	 * @param string $strTextbase
@@ -605,7 +605,7 @@ abstract class class_admin {
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-		$this->arrOutput["head"] = "<script language=\"Javascript\" type=\"text/javascript\">if(typeof KAJONA_DEBUG == 'undefined' || KAJONA_DEBUG == null) KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."';</script>";
+		$this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."';</script>";
 		//Loading the wanted Template
 		//if requested the pe, load different template
         $strTemplateID = "";
@@ -657,7 +657,7 @@ abstract class class_admin {
             }
             else if ($this->getParam("action") == "newElement") {
                 $strPlaceholderElement = $this->getParam("element");
-                $objElement = class_modul_pages_element::getElement($strPlaceholderElement);    
+                $objElement = class_modul_pages_element::getElement($strPlaceholderElement);
             }
             //Load the class to create an instance
             include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
@@ -672,8 +672,8 @@ abstract class class_admin {
             $strTextname = "quickhelp_".$this->strAction;
             $strText = $this->getText($strTextname);
         }
-        
-        
+
+
         if($strText != "!".$strTextname."!") {
             //Text found, embed the quickhelp into the current skin
             $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
@@ -917,7 +917,7 @@ abstract class class_admin {
      */
     public function adminReload($strUrlToLoad) {
         //No redirect, if close-Command for admin-area should be sent
-        if($this->getParam("peClose") == "") {          
+        if($this->getParam("peClose") == "") {
             header("Location: ".str_replace("&amp;", "&", $strUrlToLoad));
         }
     }

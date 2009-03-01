@@ -24,7 +24,7 @@ include_once(_systempath_."/class_http_statuscodes.php");
 class class_modul_pages_portal extends class_portal {
 
     private $objPagecache;
-    
+
     private static $strAdditionalHeader = "";
 
 	public function __construct() {
@@ -139,12 +139,12 @@ class class_modul_pages_portal extends class_portal {
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
 		}
-		
+
 		//Load the template from the filesystem to get the placeholders
         $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
         $arrRawPlaceholders = array_merge($this->objTemplate->getElements($strTemplateID, 0), $this->objTemplate->getElements($strTemplateID, 1));
-        
+
         $arrPlaceholders = array();
         //and retransform
         foreach ($arrRawPlaceholders as $arrOneRawPlaceholder)
@@ -152,7 +152,7 @@ class class_modul_pages_portal extends class_portal {
 
         //copy for the portaleditor
         $arrPlaceholdersFilled = array();
-		
+
 		//Iterate over all elements and pass control to them
 		//Get back the filled element
 		//Build the array to fill the template
@@ -217,14 +217,14 @@ class class_modul_pages_portal extends class_portal {
                     }
                 }
             }
-            
+
             //array is now set up. loop again to create new-buttons
             $arrPePlaceholdersDone = array();
             foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
                 $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
                 foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
                     if($arrOnePeNewElement != null) {
-                        
+
                         //check if the linked element exists
                         $objPeNewElement = class_modul_pages_element::getElement($arrOnePeNewElement["element"]);
                         if($objPeNewElement != null) {
@@ -240,7 +240,7 @@ class class_modul_pages_portal extends class_portal {
                                 $arrTemplate[$strPeNewPlaceholder] = "";
 
                             $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
-                            
+
                             $arrTemplate[$strPeNewPlaceholder] .= $strLink;
 
                         }
@@ -265,7 +265,7 @@ class class_modul_pages_portal extends class_portal {
 
     		if(!defined("skinwebpath_"))
     		    define("_skinwebpath_", _webpath_."/admin/skins/".$this->objSession->getAdminSkin());
-    		    
+
     		//save back the current portal text language and set the admin-one
     		$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
     		class_carrier::getInstance()->getObjText()->setStrTextLanguage($this->objSession->getAdminLanguage());
@@ -292,11 +292,11 @@ class class_modul_pages_portal extends class_portal {
 
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
     		    //Load portaleditor javascript
-    		    $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
     		    //Load tooltips
-                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
+                $strPeToolbar .= "\n<script type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
-                $strPeToolbar .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
+                $strPeToolbar .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
     		    //The toolbar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
     		    //find closing bracket
@@ -308,11 +308,11 @@ class class_modul_pages_portal extends class_portal {
                 //Button to enable the toolbar & pe
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"kajonaPortalEditorHelper.portalEditorStatus(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
     		    //Load portaleditor javascript
-    		    $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
+    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load tooltips
-                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } addLoadEvent(enableTooltipsWrapper);</script>";
+                $strEnableButton .= "\n<script type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
-                $strEnableButton .= "\n<script language=\"Javascript\" type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
+                $strEnableButton .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
     		    //find closing bracket
@@ -320,7 +320,7 @@ class class_modul_pages_portal extends class_portal {
     		    //and insert the code
     		    $strPageContent = uniSubstr($strPageContent, 0, uniStrpos($strPageContent, "<body")+$intTemp) .$strEnableButton.uniSubstr($strPageContent, uniStrpos($strPageContent, "<body")+$intTemp) ;
             }
-            
+
             //reset the portal texts language
             class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
         }
@@ -338,7 +338,7 @@ class class_modul_pages_portal extends class_portal {
         else {
             $strPageContent = $strHeader.$strPageContent;
         }
-        
+
 		//save the generated Page to the cache
 		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage)
 		   $this->objPagecache->savePageToCache($strPagename, $intMaxCachetime, $this->objSession->getUserID(), $strPageContent);
@@ -361,5 +361,5 @@ class class_modul_pages_portal extends class_portal {
 		self::$strAdditionalHeader = "%%kajonaTitleSeparator%%".$strTitle;
 	}
 
-} 
+}
 ?>

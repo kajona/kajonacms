@@ -344,7 +344,7 @@ Needed Elements: %%error%%, %%form%%
 <login_form>
 %%form%%
 <p class="error" id="loginError">%%error%%</p>
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 	if (navigator.cookieEnabled == false) {
 	  document.getElementById("loginError").innerHTML = "%%loginCookiesInfo%%";
 	}
