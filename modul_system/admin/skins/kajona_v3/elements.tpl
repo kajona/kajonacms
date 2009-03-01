@@ -238,16 +238,16 @@ Upload-Field
 
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
-    %%modalDialog%%
-	%%javascript%%
-	
 	<div style="display:inline;">
 			<div id="kajonaUploadButtonsContainer" style="display: none;">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
 	</div>
-
+	
+    %%modalDialog%%
+    %%javascript%%
+    
 	<div id="kajonaUploadDialog" style="display: none;">
 		<div class="kajonaUploadFilesContainer">
 			<ul id="kajonaUploadFiles" class="kajonaUploadFilesList">
@@ -657,21 +657,21 @@ pe_iconbar, pe_disable
     <div id="peToolbar">
     	<div class="logo"></div>
 		<div class="info">
-			<table cellpadding="0" cellspacing="0" style="height: 36px;">
+			<table cellpadding="0" cellspacing="0">
 				<tbody>
 		            <tr>
 			            <td rowspan="2" style="width: 100%; text-align: center; vertical-align: middle;">%%pe_iconbar%%</td>
-		                <td style="padding-right: 5px; text-align: right; vertical-align: bottom;">%%pe_status_page%%</td>
-		                <td style="padding-right: 20px; vertical-align: bottom;">%%pe_status_page_val%%</td>
-		                <td style="padding-right: 5px; text-align: right; vertical-align: bottom;">%%pe_status_time%%</td>
-		                <td style="padding-right: 20px; vertical-align: bottom;">%%pe_status_time_val%%</td>
+		                <td class="key" style="vertical-align: bottom;">%%pe_status_page%%</td>
+		                <td class="value" style="vertical-align: bottom;">%%pe_status_page_val%%</td>
+		                <td class="key" style="vertical-align: bottom;">%%pe_status_time%%</td>
+		                <td class="value" style="vertical-align: bottom;">%%pe_status_time_val%%</td>
 		                <td rowspan="2" style="text-align: right; vertical-align: top;">%%pe_disable%%</td>
 		            </tr>
 		            <tr>
-		                <td style="padding-right: 5px; text-align: right; vertical-align: top;">%%pe_status_status%%</td>
-		                <td style="padding-right: 20px; vertical-align: top;">%%pe_status_status_val%%</td>
-		                <td style="padding-right: 5px; text-align: right; vertical-align: top;">%%pe_status_autor%%</td>
-		                <td style="padding-right: 20px; vertical-align: top;">%%pe_status_autor_val%%</td>
+		                <td class="key" style="vertical-align: top;">%%pe_status_status%%</td>
+		                <td class="value" style="vertical-align: top;">%%pe_status_status_val%%</td>
+		                <td class="key" style="vertical-align: top;">%%pe_status_autor%%</td>
+		                <td class="value" style="vertical-align: top;">%%pe_status_autor_val%%</td>
 		            </tr>
 	            </tbody>
 	        </table>

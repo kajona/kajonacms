@@ -47,7 +47,7 @@
 #peToolbar {
 	z-index: 1000;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	color: #737373;
+	color: #575757;
 	font-size: 10px;
 	white-space: nowrap;
 	position: fixed;
@@ -56,9 +56,14 @@
     width: 100%;
 }
 
+#peToolbar table {
+    height: 36px;
+    border: none;
+}
+
 #peToolbar td {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	color: #737373;
+	color: #575757;
 	font-size: 10px;
 	white-space: nowrap;
 }
@@ -76,6 +81,16 @@
 	background-repeat: repeat-x;
 	height: 45px;
 	margin-left: 200px;
+}
+
+#peToolbar .info td.key {
+    padding-right: 5px;
+    text-align: right; 
+}
+
+#peToolbar .info td.value {
+    padding-right: 20px;
+    text-align: left; 
 }
 
 #peToolbarSpacer {
