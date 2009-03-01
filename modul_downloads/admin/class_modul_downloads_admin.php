@@ -275,7 +275,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
                 $strReturn .= "</script>";
                 $strReturn .= $this->objToolkit->jsDialog(1);
-                $strReturn .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen", "filemanager"), "icon_folderOpen.gif", "accept_icon"));
+                $strReturn .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen", "filemanager"), "", "", "", "", "", "inputSubmit");
 
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);

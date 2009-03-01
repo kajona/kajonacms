@@ -307,8 +307,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			//Load the files
 			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
+
             //React on request passed. Do this before loading the filelist, cause subactions could modify it
-		   	$strExtra = "";
 		   	if($this->strAction == "renameFile") {
 		   		$strExtra .= $this->actionRenameFile();
 		   	}
@@ -318,12 +318,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	elseif($this->strAction == "deleteFolder") {
 		   		$strExtra .= $this->actionDeleteFolder();
 		   	}
-		   	elseif ($this->strAction == "imageDetail") {
-		   	    $strExtra .= $this->actionFileDetailview();
-		   	}
-		   	else  {
-		   		$strExtra .= $this->actionUploadFile();
-		   	}
+
 		   	//ok, load the list using the repo-data
 		   	$arrViewFilter = array();
 		   	if($objRepo->getStrViewFilter() != "")
@@ -331,9 +326,12 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
 		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
             $strActions = "";
-            $strActions .= $this->generateNewFolderDialogCode();
-            if($this->objRights->rightRight1($this->getSystemid()))
-                $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
+
+            if($this->objRights->rightRight1($this->getSystemid())) {
+                $strActions .= $this->generateNewFolderDialogCode();
+                $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
+                $strActions .= $this->actionUploadFile();
+            }
 
 		   	//Building a status-bar, using the toolkit
 		   	$arrInfobox = array();
@@ -480,11 +478,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     			include_once(_systempath_."/class_filesystem.php");
     			$objFilesystem = new class_filesystem();
     			$strAddonAction = $this->getParam("fmcommand");
-                //React on request passed. Do this before loading the filelist, cause subactions could modify it
-    		   	$strExtra = "";
-    		   	$bitSpecial = false;
 
-                $strExtra .= $this->actionUploadFile();
     		   	//ok, load the list using the repo-data
     		   	$arrViewFilter = array();
     		   	if($objRepo->getStrViewFilter() != "")
@@ -493,14 +487,15 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
                 $strActions = "";
                 if($strAddonAction == "") {
-                    $strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\" ", "",  $this->getText("ordner_anlegen"), "icon_folderOpen.gif", "accept_icon"));
                     $strActions .= $this->generateNewFolderDialogCode();
+                    $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
+                    $strActions .= $this->actionUploadFile();
                 }
 
     		   	//Building a status-bar, using the toolkit
     		   	$arrInfobox = array();
     		   	$arrInfobox["folder"] = $this->strFolder;
-    		   	$arrInfobox["extraactions"] = $strExtra;
+    		   	//$arrInfobox["extraactions"] = $strExtra;
     		   	$arrInfobox["files"] = $arrFiles["nrFiles"];
     		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
     		   	$arrInfobox["actions"] = $strActions;
@@ -513,69 +508,70 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
     			//So, start printing files & folders
     			$intI = 0;
-    			if(!$bitSpecial) {
-    			    $strReturn .= $this->objToolkit->divider();
-        			$strReturn .= $this->objToolkit->listHeader();
-        	  		//Link one folder up?
-        	  		if($this->strFolderOld != "") {
-        	  			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
-        	  			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                        $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
-        	  		}
-        	  		else {
-        	  		    //Link up to repo list
-        	  		    $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
-        	  		}
-        			if(count($arrFiles["folders"]) > 0) {
-        				foreach($arrFiles["folders"] as $strFolder) {
+
+    		    $strReturn .= $this->objToolkit->divider();
+        		$strReturn .= $this->objToolkit->listHeader();
+          		//Link one folder up?
+          		if($this->strFolderOld != "") {
+          			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
+          			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
+                        $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+          		}
+          		else {
+          		    //Link up to repo list
+          		    $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+          		}
+        		if(count($arrFiles["folders"]) > 0) {
+        			foreach($arrFiles["folders"] as $strFolder) {
                             $strAction = "";
-        		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
-        		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
-        				}
+        	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+        	   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
         			}
-        			$strReturn .= $this->objToolkit->listFooter();
-                    $strReturn .= $this->objToolkit->divider();
-                    //For the files, we have to build a data table
-                    $arrHeader = array();
-                    $arrHeader[0] = "&nbsp;";
-                    $arrHeader[1] = "&nbsp;";
-                    $arrHeader[2] = "&nbsp;";
-                    $arrHeader[6] = "";
-                    $arrFilesTemplate = array();
-        	  		if(count($arrFiles["files"]) > 0) {
-        	  		    $intJ = 0;
-        				foreach($arrFiles["files"] as $arrOneFile) {
-        					//Get icon
-        					$arrMime  = $this->objToolkit->mimeType($arrOneFile["filename"]);
+        		}
 
-        					$bitImage = false;
-					        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
-					           $bitImage = true;
+        		$strReturn .= $this->objToolkit->listFooter();
+                $strReturn .= $this->objToolkit->divider();
+                //For the files, we have to build a data table
+                $arrHeader = array();
+                $arrHeader[0] = "&nbsp;";
+                $arrHeader[1] = "&nbsp;";
+                $arrHeader[2] = "&nbsp;";
+                $arrHeader[6] = "";
+                $arrFilesTemplate = array();
 
-        					$strFilename = $arrOneFile["filename"];
-        					//Filename too long?
-        					$strFilename = uniStrTrim($strFilename, 40);
+                if(count($arrFiles["files"]) > 0) {
+          		    $intJ = 0;
+        			foreach($arrFiles["files"] as $arrOneFile) {
+        				//Get icon
+        				$arrMime  = $this->objToolkit->mimeType($arrOneFile["filename"]);
 
-        					$strActions = "";
+        				$bitImage = false;
+				        if($arrMime[1] == "jpg" || $arrMime[1] == "png" || $arrMime[1] == "gif")
+				           $bitImage = true;
 
-                            $strFolder = $this->strFolder;
-        		   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
-        		   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" class=\"showTooltip\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+        				$strFilename = $arrOneFile["filename"];
+        				//Filename too long?
+        				$strFilename = uniStrTrim($strFilename, 40);
 
-				   			// if an image, attach a thumbnail-tooltip
-				   			if ($bitImage) {
-				   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $arrOneFile["filepath"]))."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
-				   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $strImage, true);
-				   			} else
-				   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+        				$strActions = "";
 
-        					$arrFilesTemplate[$intJ][1] = $strFilename;
-        					$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
-        					$arrFilesTemplate[$intJ++][3] = "<div class=\"actions\">".$strActions."</div>";
-        				}
-        	  		}
-        	  		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
-    			}
+                        $strFolder = $this->strFolder;
+        	   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" class=\"showTooltip\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+
+			   			// if an image, attach a thumbnail-tooltip
+			   			if ($bitImage) {
+			   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $arrOneFile["filepath"]))."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
+			   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $strImage, true);
+			   			} else
+			   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);
+
+        				$arrFilesTemplate[$intJ][1] = $strFilename;
+        				$arrFilesTemplate[$intJ][2] = bytesToString($arrOneFile["filesize"]);
+        				$arrFilesTemplate[$intJ++][3] = "<div class=\"actions\">".$strActions."</div>";
+        			}
+          		}
+          		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
     		}
     		else
     			$this->getText("fehler_recht");
