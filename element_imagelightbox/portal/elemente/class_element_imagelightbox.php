@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                             *
+*	$Id$                         *
 ********************************************************************************************************/
 
 //base-class
@@ -19,7 +19,6 @@ require_once(_portalpath_."/interface_portal_element.php");
  */
 class class_element_imagelightbox extends class_element_portal implements interface_portal_element {
 
-    private $arrError = array();
 
 	/**
 	 * Constructor
@@ -27,6 +26,7 @@ class class_element_imagelightbox extends class_element_portal implements interf
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_imagelightbox";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -48,8 +48,9 @@ class class_element_imagelightbox extends class_element_portal implements interf
 
 		//Include the javascript-file
 		$strReturn .= "<script type=\"text/javascript\">\n";
-		$strReturn .= "  kajonaAjaxHelper.addFileToLoad('"._webpath_."/portal/scripts/lightbox.js');\n";
-		$strReturn .= " addCss('"._webpath_."/portal/css/lightbox.css');\n";
+        $strReturn .= "  var lightboxLoader = new kajonaAjaxHelper.Loader();\n";
+		$strReturn .= "  lightboxLoader.addJavascriptFile('lightbox.js'); \n";
+		$strReturn .= "  lightboxLoader.addCssFile('"._webpath_."/portal/css/lightbox.css'); lightboxLoader.load(); \n";
 		$strReturn .= "</script>\n";
 
 
