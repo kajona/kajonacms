@@ -435,7 +435,7 @@ function phpSizeToBytes($strBytes) {
  */
 function bytesToString($intBytes, $bitPhpIni = false) {
 	$strReturn = "";
-	if($intBytes > 0) {
+	if($intBytes >= 0) {
 		$arrFormats = array("B", "KB", "MB", "GB", "TB");
 
 		if($bitPhpIni) {
