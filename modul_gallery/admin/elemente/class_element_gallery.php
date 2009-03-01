@@ -78,6 +78,7 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getText("gallery_template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : "" ));
 
 		//And a lot of inputs
+        $strReturn .= $this->objToolkit->formHeadline($this->getText("headline_list"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_preview"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_p", $this->getText("gallery_maxw_p"), (isset($arrElementData["gallery_maxw_p"]) ? $arrElementData["gallery_maxw_p"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_p", $this->getText("gallery_maxh_p"), (isset($arrElementData["gallery_maxh_p"]) ? $arrElementData["gallery_maxh_p"] : ""));
@@ -86,14 +87,17 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("gallery_imagesperpage_hint"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_imagesperpage", $this->getText("gallery_imagesperpage"), (isset($arrElementData["gallery_imagesperpage"]) ? $arrElementData["gallery_imagesperpage"] : ""));
 
+		$strReturn .= $this->objToolkit->formHeadline($this->getText("headline_detail"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_detail"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_d", $this->getText("gallery_maxw_d"), (isset($arrElementData["gallery_maxw_d"]) ? $arrElementData["gallery_maxw_d"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_d", $this->getText("gallery_maxh_d"), (isset($arrElementData["gallery_maxh_d"]) ? $arrElementData["gallery_maxh_d"] : ""));
 
+		$strReturn .= $this->objToolkit->formHeadline($this->getText("headline_moviestrip"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_movie"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxw_m", $this->getText("gallery_maxw_m"), (isset($arrElementData["gallery_maxw_m"]) ? $arrElementData["gallery_maxw_m"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_maxh_m", $this->getText("gallery_maxh_m"), (isset($arrElementData["gallery_maxh_m"]) ? $arrElementData["gallery_maxh_m"] : ""));
 
+		$strReturn .= $this->objToolkit->formHeadline($this->getText("headline_overlay"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_text"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_text", $this->getText("gallery_text"), (isset($arrElementData["gallery_text"]) ? $arrElementData["gallery_text"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_text_x", $this->getText("gallery_text_x"), (isset($arrElementData["gallery_text_x"]) ? $arrElementData["gallery_text_x"] : ""));

@@ -203,7 +203,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		//Load template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "picdetail");
 		//Collect Data
-		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "12", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
 
 		//previous 3 images
 		$arrImage["backlink"] = ($arrImage["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("backlink"), "detailImage", "", $arrImage["backward_1"] ) : "" );
