@@ -86,6 +86,7 @@ class class_flyimage {
 			//check, if resizing is needed
 			$bitResize = false;
 			if($this->intMaxHeight == 0 && $this->intMaxWidth == 0) {
+                $this->objImage->setBitNeedToSave(false);
 			    $bitResize = false;
 			}
 			else if($arrImageData[0] > $this->intMaxWidth || $arrImageData[1] > $this->intMaxHeight)	{
