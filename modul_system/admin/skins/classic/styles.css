@@ -465,6 +465,15 @@ body { margin: 0px; padding: 0px; background: #FFFFFF; }
 	font-size: 11px;
 	margin: 1px;
 	border: 1px solid #000099;
+    background-color: #FFFFFF;
+    text-decoration: none;
+}
+
+a.inputSubmit {
+    width: 200px;
+    padding: 1px;
+    line-height:20px;
+    text-decoration: none;
 }
 
 .status_filemanager {

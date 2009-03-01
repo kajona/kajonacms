@@ -307,7 +307,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			//Load the files
 			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
-
+            $strExtra = "";
             //React on request passed. Do this before loading the filelist, cause subactions could modify it
 		   	if($this->strAction == "renameFile") {
 		   		$strExtra .= $this->actionRenameFile();

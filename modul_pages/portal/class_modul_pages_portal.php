@@ -219,7 +219,6 @@ class class_modul_pages_portal extends class_portal {
             }
             
             //array is now set up. loop again to create new-buttons
-            //var_dump($arrRawPlaceholdersForPe);
             $arrPePlaceholdersDone = array();
             foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
                 $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];

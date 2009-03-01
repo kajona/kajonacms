@@ -377,7 +377,7 @@ Used to fold elements / hide/unhide elements
 
 Same as above, but using an image to fold / unfold the content
 <layout_folder_pic>
-%%link%%<br /><br /><div id="%%id%%" style="display: %%display%%;">%%content%%</div>
+<div>%%link%%</div><br /><div id="%%id%%" style="display: %%display%%;">%%content%%</div>
 </layout_folder_pic>
 
 A precent-beam to illustrate proportions
