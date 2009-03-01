@@ -86,7 +86,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		//load using the pageview?
         $arrTempImages = array();
         $arrImages = array();
-		if($this->arrElementData["gallery_imagesperpage"] > 1) {
+		if($this->arrElementData["gallery_imagesperpage"] > 0) {
 		    $bitPageview = true;
 		    include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_gallery_pic::getFileCount($this->getSystemid(), false, true));
