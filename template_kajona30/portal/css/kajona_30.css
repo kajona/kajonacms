@@ -507,7 +507,7 @@ h3 {
      text-decoration: none;
 }
 
-#mainNavi ul li a.navi-1-active, #mainNavi ul li a.navi-2-active, #mainNavi ul li a.navi-3-active {
+#mainNavi ul li a.active, #mainNavi ul li a.active, #mainNavi ul li a.active {
 	color: #000000;
 }
 
