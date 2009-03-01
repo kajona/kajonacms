@@ -76,8 +76,6 @@ function switchLanguage(strLanguageToLoad) {
 		window.location.replace(url + '?language=' + strLanguageToLoad);
 	else
 		window.location.replace(url + '&language=' + strLanguageToLoad);
-
-	// TODO: this works with mod-rewrite enabled?
 }
 
 // deprecated, use kajonaAjaxHelper.Loader object instead
