@@ -249,6 +249,13 @@ class class_db {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
+
+        //param validation
+        if((int)$intStart < 0)
+            $intStart = 0;
+
+        if((int)$intEnd < 0)
+            $intEnd = 0;
         //process query
         $strQuery = $this->processQuery($strQuery);
         //generate a hash-value

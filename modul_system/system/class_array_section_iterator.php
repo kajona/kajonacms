@@ -19,7 +19,7 @@ include_once(_systempath_."/class_array_iterator.php");
 class class_array_section_iterator extends class_array_iterator {
 
     private $intTotalElements;
-    private $intPageNumber;
+    private $intPageNumber = 1;
     private $arrSection;
 
 	/**
@@ -54,7 +54,8 @@ class class_array_section_iterator extends class_array_iterator {
      * @param int $intPageNumber
      */
     public function setPageNumber($intPageNumber) {
-        $this->intPageNumber = $intPageNumber;
+        if((int)$intPageNumber > 0)
+            $this->intPageNumber = $intPageNumber;
     }
 
     /**

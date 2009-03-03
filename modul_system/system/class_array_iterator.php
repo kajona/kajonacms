@@ -21,16 +21,16 @@ class class_array_iterator implements interface_iterator {
     private $arrModule = array();
     private $intArrCursor = 0;
 
-    protected $intElementsPerPage;
+    protected $intElementsPerPage = 0;
 
 	/**
 	 * Constructor
 	 *
 	 */
 	public function __construct($arrElements) {
-		$this->arrModul["name"] 		= "class_array_iterator";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
-		$this->arrModul["moduleId"]		= _system_modul_id_;
+		$this->arrModule["name"] 		= "class_array_iterator";
+		$this->arrModule["author"] 		= "sidler@mulchprod.de";
+		$this->arrModule["moduleId"]	= _system_modul_id_;
 
         //Loop over elements to create numeric indizees
         if(count($arrElements) > 0) {
@@ -101,7 +101,8 @@ class class_array_iterator implements interface_iterator {
      * @param int $intElements
      */
     public function setIntElementsPerPage($intElements) {
-        $this->intElementsPerPage = $intElements;
+        if((int) $intElements >= 0)
+            $this->intElementsPerPage = (int)$intElements;
     }
 
     /**
@@ -133,16 +134,20 @@ class class_array_iterator implements interface_iterator {
     }
 
     /**
-     * Returnsthe elements placed on the given page
+     * Returns the elements placed on the given page
      *
      * @param int $intPageNumber
      * @return array
      */
     public function getElementsOnPage($intPageNumber) {
+        if((int)$intPageNumber <= 0)
+            $intPageNumber = 1;
+            
         $arrReturn = array();
         //calc elements to return
         $intStart = ($intPageNumber * $this->intElementsPerPage)-$this->intElementsPerPage;
         $intEnd = $this->intElementsPerPage + $intStart -1;
+
         if($intEnd > $this->getNumberOfElements())
             $intEnd = $this->getNumberOfElements()-1;
 

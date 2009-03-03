@@ -1313,6 +1313,12 @@ class class_toolkit_admin extends class_toolkit {
     public function getPageview($arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
         $arrReturn = array();
 
+        if($intCurrentpage <= 0)
+            $intCurrentpage = 1;
+
+        if($intElementPerPage <= 0)
+            $intElementPerPage = 1;
+
         include_once(_systempath_."/class_array_iterator.php");
         $objArrayIterator = new class_array_iterator($arrData);
         $objArrayIterator->setIntElementsPerPage($intElementPerPage);
