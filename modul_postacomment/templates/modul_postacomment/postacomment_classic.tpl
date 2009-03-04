@@ -54,13 +54,13 @@
 	<div id="postaCommentForm" style="display: none;">
 		<form name="formComment" method="post" action="%%formaction%%" accept-charset="UTF-8">
 			%%validation_errors%%
-			<div><label for="comment_name">%%form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name" value="%%comment_name%%" class="inputText" /></div><br />
-			<div><label for="comment_subject">%%form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject" value="%%comment_subject%%" class="inputText" /></div><br />
-			<div><label for="comment_message">%%form_message_label%%*:</label><textarea name="comment_message" id="comment_message" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
+			<div><label for="comment_name">%%lang_form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name" value="%%comment_name%%" class="inputText" /></div><br />
+			<div><label for="comment_subject">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject" value="%%comment_subject%%" class="inputText" /></div><br />
+			<div><label for="comment_message">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
 			<div id="kajonaCaptchaContainer"><label for="kajonaCaptcha"></label></div><br />
-			<div><label for="form_captcha">%%form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" /></div><br />
-			<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="%%form_captcha_reload_label%%" class="button" /></div><br /><br />
-			<div><label for="Submit"></label><input type="submit" name="Submit" value="%%form_submit_label%%" class="button" /></div><br />
+			<div><label for="form_captcha">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" /></div><br />
+			<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="%%lang_form_captcha_reload_label%%" class="button" /></div><br /><br />
+			<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_form_submit_label%%" class="button" /></div><br />
 		</form>
 	</div>
 </postacomment_form>
@@ -84,4 +84,4 @@
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
-<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%lang_postacomment_rating_rate1%%%%rating_icon_number%%%%lang_postacomment_rating_rate2%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

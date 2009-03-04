@@ -142,14 +142,6 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 			$arrForm["comment_page"] = $this->getPagename();
 			$arrForm["validation_errors"] = $this->strErrors;
 
-			//texts
-			$arrForm["form_name_label"] = $this->getText("form_name_label");
-			$arrForm["form_subject_label"] = $this->getText("form_subject_label");
-			$arrForm["form_message_label"] = $this->getText("form_message_label");
-			$arrForm["form_captcha_label"] = $this->getText("form_captcha_label");
-			$arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
-			$arrForm["form_submit_label"] = $this->getText("form_submit_label");
-
 			$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID, false);
 
 			//button to show the form
@@ -246,7 +238,6 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $arrTemplate["rating_icon_number"] = $intI;
 
                 $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
-                $arrTemplate["rating_icon_title"] = $this->getText("postacomment_rating_rate1").$intI.$this->getText("postacomment_rating_rate2");
 
                 $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId, false);
             }
