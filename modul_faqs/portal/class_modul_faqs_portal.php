@@ -104,7 +104,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 			            $arrOneFaq["faq_rating"] = $this->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
 			        }
 
-    				$strOneFaq .= $this->fillTemplate($arrOneFaq, $strFaqTemplateID);
+    				$strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID, false);
 
     				//Add pe code
     			    include_once(_portalpath_."/class_elemente_portal.php");

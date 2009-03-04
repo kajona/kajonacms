@@ -20,7 +20,6 @@ include_once(_systempath_."/class_modul_navigation_point.php");
  * @package modul_navigation
  */
 class class_modul_navigation_portal extends class_portal implements interface_portal {
-	private $strNavigationId = 0;
 	private $strCurrentSite = "";
 	private $arrTree = array();
 	private $intLevelMax = 0;
@@ -312,7 +311,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * If the page is being linked several times, the deepest point in the tree is searched and returned
 	 *
 	 * @param string $strPagename
-	 * @param strin $strNavigationId
+	 * @param string $strNavigationId
 	 * @return mixed
 	 */
 	public function loadPagePoint($strPagename, $strNavigationId) {

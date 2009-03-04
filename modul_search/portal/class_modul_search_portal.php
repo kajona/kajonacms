@@ -110,7 +110,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 			else
 				$arrRow["page_link"] = $arrHit["pagelink"];
 			$arrRow["page_description"] = $arrHit["description"];
-			$arrTemplate["hitlist"] .= $this->fillTemplate($arrRow, $strRowTempalteID);
+			$arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTempalteID, false);
 		}
 
 		//Collect global data

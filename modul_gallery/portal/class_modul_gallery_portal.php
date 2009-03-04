@@ -133,7 +133,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
     						if($intImageCounter % $this->arrElementData["gallery_nrow"] == 0) {
     							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-    							$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
+    							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
     							$arrTemplateImage = array();
     						}
 					    }
@@ -145,7 +145,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
     						$arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
 
 							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");
-							$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
+							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
 							$arrTemplateImage = array();
 					    }
 					}
@@ -159,7 +159,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
 						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "folderlist");
-						$arrTemplate["folderlist"] .= $this->fillTemplate($arrFolder, $strTemplateID);
+						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID, false);
 
 					}
 				}
@@ -167,7 +167,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			//Print remaining images
 			if(count($arrTemplateImage) > 0) {
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-				$arrTemplate["piclist"] .= $this->fillTemplate($arrTemplateImage, $strTemplateID);
+				$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
 				$arrTemplateImage= array();
 			}
 		}

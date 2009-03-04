@@ -117,7 +117,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 				//replace encoded newlines
 				$arrTemplatePost["post_text"] = uniStrReplace("&lt;br /&gt;", "<br />" , $objOnePost->getGuestbookPostText());
 				$arrTemplatePost["post_date"] = timeToString($objOnePost->getGuestbookPostDate());
-				$arrTemplate["liste_posts"] .= $this->fillTemplate($arrTemplatePost, $strTemplatePostID);
+				$arrTemplate["liste_posts"] .= $this->objTemplate->fillTemplate($arrTemplatePost, $strTemplatePostID, false);
 			}
 		}
 

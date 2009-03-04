@@ -106,7 +106,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 							$arrTemplate["file_href"] = "";
 						}
 
-						$strFileList .= $this->fillTemplate($arrTemplate, $strTemplateID);
+						$strFileList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, false);
 					}
 					elseif ($objOneFile->getType() == 1) {
 					    //Folder
@@ -115,7 +115,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["folder_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["folder_link"] = getLinkPortal($this->getPagename(),  "", "_self", $this->getText("download_ordner_link"), "openDlFolder", "", $objOneFile->getSystemid(), "", "", $objOneFile->getName());
 						$arrTemplate["folder_href"] = getLinkPortalHref($this->getPagename(), "","openDlFolder", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
-						$strFolderList .= $this->fillTemplate($arrTemplate, $strTemplateID);
+						$strFolderList .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, false);
 					}
 				}
 			}

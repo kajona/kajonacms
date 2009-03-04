@@ -109,7 +109,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                     }
 
 
-    				$strOnePost .= $this->fillTemplate($arrOnePost, $strTemplateID);
+    				$strOnePost .= $this->objTemplate->fillTemplate($arrOnePost, $strTemplateID, false);
 
     				//Add pe code
     			    $arrPeConfig = array(
@@ -150,13 +150,13 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 			$arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
 			$arrForm["form_submit_label"] = $this->getText("form_submit_label");
 
-			$strForm .= $this->fillTemplate($arrForm, $strTemplateID);
+			$strForm .= $this->objTemplate->fillTemplate($arrForm, $strTemplateID, false);
 
 			//button to show the form
 			$strTemplateNewButtonID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
             $arrNewButton = array();
             $arrNewButton["postacomment_write_new"] = $this->getText("postacomment_write_new");
-            $strNewButton = $this->fillTemplate($arrNewButton, $strTemplateNewButtonID);
+            $strNewButton = $this->objTemplate->fillTemplate($arrNewButton, $strTemplateNewButtonID, false);
 		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
@@ -248,7 +248,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); hideTooltip(); return false;";
                 $arrTemplate["rating_icon_title"] = $this->getText("postacomment_rating_rate1").$intI.$this->getText("postacomment_rating_rate2");
 
-                $strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
+                $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId, false);
             }
         } else {
             if(!$bitRatingAllowed)

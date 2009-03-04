@@ -111,7 +111,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					//reset more link?
                     if(uniStrlen($arrOneNews["news_text"]) == 0)
                         $arrOneNews["news_more_link"] = "";
-					$strOneNews .= $this->fillTemplate($arrOneNews, $strTemplateID);
+					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID, false);
 
 					//Add pe code
 				    include_once(_portalpath_."/class_elemente_portal.php");
