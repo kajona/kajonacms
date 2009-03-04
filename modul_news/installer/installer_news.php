@@ -160,7 +160,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 	public function update() {
 	    $strReturn = "";
-        //check the version we have and to what version to update
+        //check installed version and to which version we can update
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";

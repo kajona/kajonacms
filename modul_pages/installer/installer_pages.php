@@ -85,7 +85,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Pages -----------------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages...\n";
-		
+
 		$arrFields = array();
 		$arrFields["page_id"] 		= array("char20", false);
 		$arrFields["page_name"] 	= array("char254", true);
@@ -95,7 +95,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Pages_properties ------------------------------------------------------------------------------
 		$strReturn .= "Installing table pages_properties...\n";
-		
+
 		$arrFields = array();
 		$arrFields["pageproperties_id"] 		= array("char20", false);
 		$arrFields["pageproperties_browsername"]= array("char254", true);
@@ -118,7 +118,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["element_class_admin"]	= array("char254", true);
 		$arrFields["element_repeat"] 		= array("int", true);
 		$arrFields["element_cachetime"] 	= array("int", false, "-1");
-		
+
 		if(!$this->objDB->createTable("element", $arrFields, array("element_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -133,7 +133,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["page_element_placeholder_element"]	= array("char254", true);
 		$arrFields["page_element_placeholder_title"] 	= array("char254", true);
 		$arrFields["page_element_placeholder_language"] = array("char20", true);
-		
+
 		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -149,7 +149,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["page_cache_releasetime"]= array("int", true);
 		$arrFields["page_cache_userid"] 	= array("char20", true);
 		$arrFields["page_cache_content"] 	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("page_cache", $arrFields, array("page_cache_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -184,14 +184,14 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Table for paragraphes
 		$strReturn .= "Installing paragraph table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 	= array("char20", false);
 		$arrFields["absatz_titel"]	= array("char254", true);
 		$arrFields["absatz_inhalt"] = array("text", true);
 		$arrFields["absatz_link"]	= array("char254", true);
 		$arrFields["absatz_bild"]	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_absatz", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -218,7 +218,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($arrRow["COUNT(*)"] == 0) {
 			$strQuery = "INSERT INTO "._dbprefix_."element
 							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'row', 'class_element_zeile.php', 'class_element_zeile.php', 1)";
+							('".$this->generateSystemid()."', 'row', 'class_element_zeile.php', 'class_element_zeile.php', 0)";
 			$this->objDB->_query($strQuery);
 			$strReturn .= "Element registered...\n";
 		}
@@ -228,7 +228,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		//Table for images
 		$strReturn .= "Installing image table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 	= array("char20", false);
 		$arrFields["bild_titel"]	= array("char254", true);
@@ -257,7 +257,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		}
 
 		$strReturn .= "Installing universal element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"]= array("char20", false);
 		$arrFields["char1"]		= array("char254", true);
@@ -267,7 +267,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["int2"]		= array("int", true);
 		$arrFields["int3"]		= array("int", true);
 		$arrFields["text"]		= array("text", true);
-		
+
 		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -280,11 +280,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         parent::updateModuleVersion("pages_content", $strNewVersion);
         parent::updateModuleVersion("folderview", $strNewVersion);
 	}
-	
+
 
 	public function update() {
 	    $strReturn = "";
-        //check the version we have and to what version to update
+        //check installed version and to which version we can update
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
@@ -304,17 +304,17 @@ class class_installer_pages extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.0.2") {
             $strReturn .= $this->update_302_309();
         }
-        
+
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
@@ -333,7 +333,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         return $strReturn."\n\n";
 	}
 
-	
+
 
 	private function update_300_301() {
 	    $strReturn = "";
@@ -360,7 +360,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["int2"]		= array("int", true);
 		$arrFields["int3"]		= array("int", true);
 		$arrFields["text"]		= array("text", true);
-		
+
 		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -385,7 +385,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	    return $strReturn;
 	}
-	
+
 	private function update_309_3095() {
 	    $strReturn = "";
 	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
@@ -394,20 +394,20 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	    return $strReturn;
 	}
-	
+
     private function update_3095_310() {
         $strReturn = "";
 
         $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
-        
+
         $strReturn .= "Searching for image-element to alter...\n";
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
         $arrRow = $this->objDB->getRow($strQuery);
         if($arrRow["COUNT(*)"] != 0) {
-        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_bild")."   
+        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_bild")."
         	                   ADD ".$this->objDB->encloseColumnName("bild_x")." INT NULL ,
                                ADD ".$this->objDB->encloseColumnName("bild_y")." INT NULL ";
-        	
+
         	if(!$this->objDB->_query($strSql))
         	   $strReturn .= "An error occured!\n";
         }
@@ -417,12 +417,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         return $strReturn;
     }
-    
+
     private function update_310_311() {
         $strReturn = "";
 
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.1");
 
@@ -443,17 +443,17 @@ class class_installer_pages extends class_installer_base implements interface_in
         $objModule->setStrNameAdmin("class_modul_folderview_admin.php");
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
-            
+
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_pages_fehlerseite_");
         $objConstant->renameConstant("_pages_errorpage_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_pages_startseite_");
         $objConstant->renameConstant("_pages_indexpage_");
 
         $objConstant = class_modul_system_setting::getConfigByName("_pages_templatewechsel_");
         $objConstant->renameConstant("_pages_templatechange_");
-        
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
