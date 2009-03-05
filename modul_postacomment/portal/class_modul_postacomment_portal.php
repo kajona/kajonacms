@@ -146,9 +146,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 
 			//button to show the form
 			$strTemplateNewButtonID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
-            $arrNewButton = array();
-            $arrNewButton["postacomment_write_new"] = $this->getText("postacomment_write_new");
-            $strNewButton = $this->objTemplate->fillTemplate($arrNewButton, $strTemplateNewButtonID, false);
+            $strNewButton = $this->objTemplate->fillTemplate(array(), $strTemplateNewButtonID, false);
 		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");

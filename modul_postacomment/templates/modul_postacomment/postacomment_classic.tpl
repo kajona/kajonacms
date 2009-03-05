@@ -33,7 +33,7 @@
 	</div>
 </postacomment_post>
 
-<!-- available placeholders: postacomment_write_new -->
+<!-- available placeholders: -->
 <postacomment_new_button>
     <div><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%lang_postacomment_write_new%%</a></div>
 </postacomment_new_button>

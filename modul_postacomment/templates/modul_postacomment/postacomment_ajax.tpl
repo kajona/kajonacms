@@ -25,7 +25,7 @@
 	</div>
 </postacomment_post>
 
-<!-- available placeholders: postacomment_write_new -->
+<!-- available placeholders: -->
 <postacomment_new_button>
     <script type="text/javascript">
         bitKajonaRatingsAvailable = false;
@@ -39,7 +39,7 @@
         
         kajonaAjaxHelper.loadAjaxBase(null, "postacomment.js");
     </script>
-    <div id="postaCommentButton"><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%postacomment_write_new%%</a></div>
+    <div id="postaCommentButton"><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%lang_postacomment_write_new%%</a></div>
 </postacomment_new_button>
 
 <!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page -->
