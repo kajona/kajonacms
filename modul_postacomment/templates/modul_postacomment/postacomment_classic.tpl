@@ -35,12 +35,12 @@
 
 <!-- available placeholders: postacomment_write_new -->
 <postacomment_new_button>
-    <div><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%postacomment_write_new%%</a></div>
+    <div><a href="#" onclick="fold('postaCommentForm', loadCaptcha); return false;">%%lang_postacomment_write_new%%</a></div>
 </postacomment_new_button>
 
-<!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page, form_name_label, form_subject_label, form_message_label, form_captcha_label, form_captcha_reload_label, form_submit_label -->
+<!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page -->
 <postacomment_form>
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
         function loadCaptcha() {
             if (document.getElementById("kajonaCaptcha") == undefined) {
                 var i=document.createElement("img");
