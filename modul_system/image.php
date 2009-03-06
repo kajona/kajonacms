@@ -255,7 +255,7 @@ class class_flyimage {
         //$this->objImage->saveImage("/test.jpg");
         //echo "<img src=\""._webpath_."/test.jpg\" />";
         $this->objImage->setBitNeedToSave(false);
-        $this->objImage->sendImageToBrowser(60);
+        $this->objImage->sendImageToBrowser(70);
 
     }
 

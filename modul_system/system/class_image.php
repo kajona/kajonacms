@@ -95,6 +95,7 @@ class class_image {
 	 */
 	public function preLoadImage($strImage) {
 		$bitReturn = false;
+        $strImage = removeDirectoryTraversals($strImage);
 		$this->bitPreload = true;
 		if(is_file(_realpath_.$strImage))  {
 			$strType = strtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
@@ -148,7 +149,9 @@ class class_image {
 	 */
 	public function loadImage($strImage) {
 		$bitReturn = false;
-		//Datei Existent?
+        $strImage = removeDirectoryTraversals($strImage);
+
+		//file existing?
 		if(is_file(_realpath_.$strImage)) {
 			//DateiEndung bestimmen
 			$strType = strtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
@@ -187,6 +190,12 @@ class class_image {
 	public function saveImage($strTarget = "", $bitCache = false, $intJpegQuality = 90) {
 		$bitReturn = false;
 		if($this->bitNeedToSave) {
+            if(!is_numeric($intJpegQuality) || $intJpegQuality < 0)
+                $intJpegQuality = 90;
+
+            if($strTarget != "")
+                $strTarget = removeDirectoryTraversals($strTarget);
+
 			//Wenn Cache Aktiviert, dann unter Cachename speichern
 			if($bitCache && $this->strCachename != "")
 				$strTarget = $this->strCachepath.$this->strCachename;
@@ -239,6 +248,8 @@ class class_image {
 			$this->finalLoadImage();
 	    }
 
+        if(!is_numeric($intJpegQuality) || $intJpegQuality < 0)
+                $intJpegQuality = 90;
 
         $this->saveImage("", true, $intJpegQuality);
 
@@ -295,6 +306,18 @@ class class_image {
 	 */
 	public function resizeImage($intWidth = 0, $intHeight = 0, $intFactor = 0, $bitCache = false) {
 		$bitReturn = false;
+
+        //param validation
+        if(!is_numeric($intWidth) || $intWidth < 0)
+            $intWidth = 0;
+
+        if(!is_numeric($intHeight) || $intHeight < 0)
+            $intHeight = 0;
+
+        if(!is_numeric($intFactor) || $intFactor < 0)
+            $intFactor = 0;
+
+
 		$floatFaktor = $this->intWidth / $this->intHeight;
 		$intWidthNew = $this->intWidth;
 		$intHeightNew = $this->intHeight;
@@ -371,6 +394,17 @@ class class_image {
      * @return bool
      */
     public function cropImage($intXStart, $intYStart, $intWidth, $intHeight) {
+
+        //param-validation
+        if(!is_numeric($intXStart) || $intXStart < 0 )
+            $intXStart = 0;
+        if(!is_numeric($intYStart) || $intYStart < 0 )
+            $intYStart = 0;
+        if(!is_numeric($intWidth) || $intWidth < 0 )
+            $intWidth = 0;
+        if(!is_numeric($intHeight) || $intHeight < 0 )
+            $intHeight = 0;
+
     	$bitReturn = false;
 
         //load the original image
@@ -400,6 +434,9 @@ class class_image {
      */
     public function rotateImage($intAngle) {
     	$bitReturn = false;
+
+        if(!is_numeric($intAngle))
+            $intAngle = 0;
 
         //load the original image
         //Hier bei Bedarf das Bild nachladen

@@ -184,15 +184,18 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             
             //pass to the image-class
             $objImage = new class_image();
-            $objImage->preLoadImage($strFile);
-            if($objImage->rotateImage($this->getParam("angle"))) {
-                if($objImage->saveImage($strFile, false, 100)) { 
-                    class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo); 
-                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";   
+            if($objImage->preLoadImage($strFile)) {
+                if($objImage->rotateImage($this->getParam("angle"))) {
+                    if($objImage->saveImage($strFile, false, 100)) {
+                        class_logger::getInstance()->addLogRow("rotated file ".$strFile, class_logger::$levelInfo);
+                        $strReturn .= "<message>".xmlSafeString($this->getText("xml_rotate_success"))."</message>";
+                    }
+                    else
+                        class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
                 }
-                else
-                    class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
             }
+            else
+                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
             
         }
         else
@@ -224,17 +227,18 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             
             //pass to the image-class
             $objImage = new class_image();
-            $objImage->preLoadImage($strFile);
-            //var_dump($strFile, $this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"));
-            //die();            
-            if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
-            	if($objImage->saveImage($strFile, false, 100)) { 
-                    class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);	
-                    $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";	
-            	}
-                else
-                    class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
+            if($objImage->preLoadImage($strFile)) {
+                if($objImage->cropImage($this->getParam("intX"), $this->getParam("intY"), $this->getParam("intWidth"), $this->getParam("intHeight"))) {
+                    if($objImage->saveImage($strFile, false, 100)) {
+                        class_logger::getInstance()->addLogRow("cropped file ".$strFile, class_logger::$levelInfo);
+                        $strReturn .= "<message>".xmlSafeString($this->getText("xml_cropping_success"))."</message>";
+                    }
+                    else
+                        class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
+                }
             }
+            else
+                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
             
         }
         else

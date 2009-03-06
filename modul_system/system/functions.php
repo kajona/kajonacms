@@ -750,6 +750,16 @@ function urlSafeString($strText) {
 }
 
 /**
+ * Removes traversals like ../ from the passed string
+ * @param string $strFilename
+ * @return string
+ */
+function removeDirectoryTraversals($strFilename) {
+    $strFilename = urldecode($strFilename);
+    return uniStrReplace("..", "", $strFilename);
+}
+
+/**
  * Creates a filename valid for filesystems
  *
  * @param string $strName
