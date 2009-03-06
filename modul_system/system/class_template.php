@@ -176,11 +176,11 @@ class class_template {
         if($objLangWrapper != null && $objLangWrapper instanceof class_lang_wrapper) {
             //load placeholders
             $arrTemp = array();
-            preg_match_all("'%%(lang_[A-Za-z0-9_]*)%%'i", $strTemplate, $arrTemp);
-            
-            if(isset($arrTemp[1])) {
+            preg_match_all("'%%lang_([A-Za-z0-9_]*)%%'i", $strTemplate, $arrTemp);
+ 
+            if(isset($arrTemp[1]) && count($arrTemp[1]) > 0) {
                 foreach ($arrTemp[1] as $strStrippedPlaceholders) {
-                    $strTemplate = str_replace("%%".$strStrippedPlaceholders."%%", $objLangWrapper->getLang($strStrippedPlaceholders), $strTemplate);
+                    $strTemplate = str_replace("%%lang_".$strStrippedPlaceholders."%%", $objLangWrapper->getLang($strStrippedPlaceholders), $strTemplate);
                 }
             }
         }

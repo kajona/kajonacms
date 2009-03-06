@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 151
 
 //editable entries
-$lang["lang_portaluploadFileTitle"]      = "File:";
-$lang["lang_portaluploadSubmitTitle"]    = "Upload";
+$lang["portaluploadFileTitle"]      = "File:";
+$lang["portaluploadSubmitTitle"]    = "Upload";
 $lang["portaluploadCopyUploadError"]     = "Error copying the file.";
 $lang["portaluploadFilterError"]         = "Filetype not allowed by filter.";
 $lang["portaluploadNotWritableError"]    = "Folder not writeable.";

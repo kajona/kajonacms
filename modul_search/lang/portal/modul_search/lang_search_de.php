@@ -13,8 +13,8 @@
 $lang["hitlist_text1"]                   = "Die Suche nach";
 $lang["hitlist_text2"]                   = "ergab";
 $lang["hitlist_text3"]                   = "Treffer";
-$lang["lang_searchterm_label"]           = "Suchbegriff";
-$lang["lang_submit_label"]               = "Suchen";
+$lang["searchterm_label"]           = "Suchbegriff";
+$lang["submit_label"]               = "Suchen";
 $lang["weiter"]                          = "weiter";
 $lang["zurueck"]                         = "zurück";
 ?>

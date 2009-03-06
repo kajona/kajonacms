@@ -10,13 +10,13 @@
 //Kajona Language Editor Core Build 151
 
 //editable entries
-$lang["lang_pr_emailTitle"]              = "Email*:";
-$lang["lang_pr_forenameTitle"]           = "Forename:";
-$lang["lang_pr_nameTitle"]               = "Name:";
-$lang["lang_pr_passwordTitle"]           = "Password*:";
-$lang["lang_pr_passwordTitle2"]          = "Password*:";
-$lang["lang_pr_userDataSubmit"]          = "Save";
-$lang["lang_pr_usernameTitle"]           = "Username*:";
+$lang["pr_emailTitle"]              = "Email*:";
+$lang["pr_forenameTitle"]           = "Forename:";
+$lang["pr_nameTitle"]               = "Name:";
+$lang["pr_passwordTitle"]           = "Password*:";
+$lang["pr_passwordTitle2"]          = "Password*:";
+$lang["pr_userDataSubmit"]          = "Save";
+$lang["pr_usernameTitle"]           = "Username*:";
 $lang["pr_captcha"]                      = "No valid code.";
 $lang["pr_completionErrorStatus"]        = "This account can't be activated.";
 $lang["pr_completionSuccess"]            = "Activation succeeded. You can now log in at the portal.";

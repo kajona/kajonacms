@@ -12,16 +12,16 @@
 //editable entries
 $lang["editprofilelink"]                 = "Profil bearbeiten";
 $lang["invalidEmailadress"]              = "Keine gültige E-Mailadresse.";
-$lang["lang_emailTitle"]                 = "E-Mail*:";
-$lang["lang_forenameTitle"]              = "Vorname:";
-$lang["lang_login"]                      = "Login";
-$lang["lang_nameTitle"]                  = "Nachname:";
-$lang["lang_password"]                   = "Passwort:";
-$lang["lang_passwordTitle"]              = "Passwort:";
-$lang["lang_passwordTitle2"]             = "Passwort:";
-$lang["lang_userDataSubmit"]             = "Speichern";
-$lang["lang_username"]                   = "Benutzername:";
-$lang["lang_usernameTitle"]              = "Benutzername:";
+$lang["emailTitle"]                 = "E-Mail*:";
+$lang["forenameTitle"]              = "Vorname:";
+$lang["login"]                      = "Login";
+$lang["nameTitle"]                  = "Nachname:";
+$lang["password"]                   = "Passwort:";
+$lang["passwordTitle"]              = "Passwort:";
+$lang["passwordTitle2"]             = "Passwort:";
+$lang["userDataSubmit"]             = "Speichern";
+$lang["username"]                   = "Benutzername:";
+$lang["usernameTitle"]              = "Benutzername:";
 $lang["loggedin_label"]                  = "Angemeldet als";
 $lang["logoutlink"]                      = "Logout";
 $lang["passwordsUnequal"]                = "Passwörter unterschiedlich.";

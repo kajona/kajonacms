@@ -10,15 +10,15 @@
 //Kajona Language Editor Core Build 152
 
 //editable entries
-$lang["lang_form_captcha_label"]         = "Code";
-$lang["lang_form_captcha_reload_label"]  = "New code";
-$lang["lang_form_message_label"]         = "Message";
-$lang["lang_form_name_label"]            = "Name";
-$lang["lang_form_subject_label"]         = "Subject";
-$lang["lang_form_submit_label"]          = "Submit";
-$lang["lang_postacomment_rating_rate1"]  = "Rate comment with ";
-$lang["lang_postacomment_rating_rate2"]  = " point(s)!";
-$lang["lang_postacomment_write_new"]     = "Write a comment";
+$lang["form_captcha_label"]         = "Code";
+$lang["form_captcha_reload_label"]  = "New code";
+$lang["form_message_label"]         = "Message";
+$lang["form_name_label"]            = "Name";
+$lang["form_subject_label"]         = "Subject";
+$lang["form_submit_label"]          = "Submit";
+$lang["postacomment_rating_rate1"]  = "Rate comment with ";
+$lang["postacomment_rating_rate2"]  = " point(s)!";
+$lang["postacomment_write_new"]     = "Write a comment";
 $lang["postacomment_empty"]              = "No comments available";
 $lang["postacomment_rating_permissions"] = "Not enough permissions.";
 $lang["postacomment_rating_voted"]       = "You already voted for this comment.";
