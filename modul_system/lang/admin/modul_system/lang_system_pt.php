@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 152
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -179,6 +179,13 @@ $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Sim";
 $lang["systemlog"]                       = "Eventos do sistema";
+$lang["systemtask_compresspicuploads_done"] = "";
+$lang["systemtask_compresspicuploads_found"] = "";
+$lang["systemtask_compresspicuploads_height"] = "";
+$lang["systemtask_compresspicuploads_hint"] = "";
+$lang["systemtask_compresspicuploads_name"] = "";
+$lang["systemtask_compresspicuploads_processed"] = "";
+$lang["systemtask_compresspicuploads_width"] = "";
 $lang["systemtask_dbconsistency_curprev_error"] = "As seguintes relações de nós (pai-filho) estão incorrectas (ligação pai em falta):";
 $lang["systemtask_dbconsistency_curprev_ok"] = "Todas as relações dos nós (pai-filho) estão correctas";
 $lang["systemtask_dbconsistency_date_error"] = "As seguintes datas de registo estão incorrectas (registos de sistema em falta)";

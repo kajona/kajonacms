@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 152
 
 //editable entries
 $lang["browser"]                         = "Open browser";
@@ -47,7 +47,8 @@ $lang["required_navigation_name"]        = "Name";
 $lang["speichern"]                       = "Save";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Error, internal and external target set!";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Error, target not set!";
+$lang["systemtask_navigationcheck_invalidInternal"] = "Error, internal page doesn't exists! (Target:";
 $lang["systemtask_navigationcheck_name"] = "Validate navigationpoints";
 $lang["systemtask_navigationcheck_treescan"] = "Investigate navigation";
-$lang["systemtask_navigationcheck_valid"] = "O.K., Target:";
+$lang["systemtask_navigationcheck_valid"] = "valid (Target:";
 ?>

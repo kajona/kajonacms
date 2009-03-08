@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 151
+//Kajona Language Editor Core Build 152
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -184,6 +184,13 @@ $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Ja";
 $lang["systemlog"]                       = "System-Log";
+$lang["systemtask_compresspicuploads_done"] = "Die Bildverkleinerung und -komprimierung wurde abgeschlossen.";
+$lang["systemtask_compresspicuploads_found"] = "Gefundene Bilder";
+$lang["systemtask_compresspicuploads_height"] = "Maximale Höhe (Pixel)";
+$lang["systemtask_compresspicuploads_hint"] = "Um Speicherplatz zu sparen können Sie alle hochgeladenen Bilder im Ordner \"/portal/pics/upload\" auf die angegebene Maximalgröße verkleinern und neu komprimieren lassen.<br />Beachten Sie, dass dieser Vorgang nicht rückgängig gemacht werden kann und es ggf. zu Qualitätseinbußen kommen kann.<br />Der Vorgang kann einige Minuten in Anspruch nehmen.";
+$lang["systemtask_compresspicuploads_name"] = "Hochgeladene Bilder komprimieren";
+$lang["systemtask_compresspicuploads_processed"] = "Bearbeitete Bilder";
+$lang["systemtask_compresspicuploads_width"] = "Maximale Breite (Pixel)";
 $lang["systemtask_dbconsistency_curprev_error"] = "Folgende Eltern-Kind Beziehungen sind fehlerhaft (fehlender Elternteil):";
 $lang["systemtask_dbconsistency_curprev_ok"] = "Alle Eltern-Kind Beziehungen sind korrekt";
 $lang["systemtask_dbconsistency_date_error"] = "Folgende Datum-Records sind fehlerhaft (fehlender System-Record):";

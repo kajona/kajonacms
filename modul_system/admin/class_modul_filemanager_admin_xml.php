@@ -251,7 +251,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
 	/**
 	 * Tries to save the passed file.
-	 * Therefore, to following post-params should be given:
+	 * Therefore, the following post-params should be given:
 	 * action = fileUpload
 	 * folder = the folder to store the file within
 	 * systemid = the filemanagers' repo-id

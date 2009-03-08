@@ -31,8 +31,8 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         //set the correct text-base
         $this->setStrTextBase("navigation");
     }
-    
-    
+
+
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()
      * @return string
@@ -40,7 +40,7 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
     public function getStrInternalTaskName() {
         return "navigationcheck";
     }
-    
+
     /**
      * @see interface_admin_systemtast::getStrTaskName()
      * @return string
@@ -48,68 +48,82 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
     public function getStrTaskName() {
         return $this->getText("systemtask_navigationcheck_name");
     }
-    
+
     /**
      * @see interface_admin_systemtast::executeTask()
      * @return string
      */
     public function executeTask() {
         $strReturn = "";
-        
+
         //load all navigation points, tree by tree
         $arrTrees = class_modul_navigation_tree::getAllNavis();
         foreach($arrTrees as $objOneTree) {
-            $strReturn .= $this->getText("systemtask_navigationcheck_treescan")." ".$objOneTree->getStrName()."...\n";  
-            $strReturn .= $this->processLevel($objOneTree->getSystemid(), 0);    
+            $strReturn .= $this->getText("systemtask_navigationcheck_treescan")." \"".$objOneTree->getStrName()."\"...<br />";
+            $strReturn .= $this->processLevel($objOneTree->getSystemid(), 0)."<br />";
         }
-        
-        
-        return $this->objToolkit->getPreformatted(array($strReturn));
+
+        return $strReturn;
     }
-    
+
     private function processLevel($intParentId, $intLevel) {
         $strReturn = "";
         $arrNaviPoints = class_modul_navigation_point::getNaviLayer($intParentId);
         foreach($arrNaviPoints as $objOnePoint) {
             for($intI = 0; $intI<=$intLevel; $intI++)
-                $strReturn .= "  ";
-                 
+                $strReturn .= "&nbsp; &nbsp;";
+
             $strReturn .= $this->processSinglePoint($objOnePoint);
             $strReturn .= $this->processLevel($objOnePoint->getSystemid(), $intLevel+1);
         }
-        
+
         return $strReturn;
     }
 
-    
+
     private function processSinglePoint($objPoint) {
         $strReturn = "";
-        
-        $strReturn .= $objPoint->getStrName()." ";
-        
+        $bitError = false;
+
+        $strReturn .= $objPoint->getStrName().": ";
+
         if($objPoint->getStrPageI() == "" && $objPoint->getStrPageE() == "") {
-            $strReturn .= $this->getText("systemtask_navigationcheck_invalidEmpty"); 
+            $strReturn .= $this->getText("systemtask_navigationcheck_invalidEmpty");
+            $bitError = true;
         }
         else if($objPoint->getStrPageI() != "" && $objPoint->getStrPageE() != "") {
             $strReturn .= $this->getText("systemtask_navigationcheck_invalidBoth");
+            $bitError = true;
+        }
+        else if($objPoint->getStrPageI() != "" && $objPoint->getStrPageE() == "") {
+            //try to load internal page and check if it exists
+            $objPage = class_modul_pages_page::getPageByName($objPoint->getStrPageI());
+
+            if($objPage->getSystemid() == "") {
+                $strReturn .= $this->getText("systemtask_navigationcheck_invalidInternal")." ".$objPoint->getStrPageI().")";
+                $bitError = true;
+            } else {
+                $strReturn .= $this->getText("systemtask_navigationcheck_valid")." ".$objPoint->getStrPageI(). $objPoint->getStrPageE().")";
+            }
         }
         else {
-            $strReturn .= $this->getText("systemtask_navigationcheck_valid")." (".$objPoint->getStrPageI(). $objPoint->getStrPageE().")";
-            
+            $strReturn .= $this->getText("systemtask_navigationcheck_valid")." ".$objPoint->getStrPageI(). $objPoint->getStrPageE().")";
         }
-        
-        
-        return $strReturn."\n";
-    
+
+        if ($bitError) {
+            $strReturn = "<b>".$strReturn."</b>";
+        }
+
+        return $strReturn."<br />";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
         return "";
     }
-    
+
 }
 ?>

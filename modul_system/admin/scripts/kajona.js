@@ -751,6 +751,8 @@ function KajonaUploader(config) {
 		}
 		
 		document.getElementById(self.config['cancelLinkId']).onclick = function() {
+			YAHOO.util.Event.removeListener(window, 'beforeunload');
+			
 			self.uploader.cancel();
 			location.reload();
 			return false;
@@ -765,6 +767,9 @@ function KajonaUploader(config) {
 			
 			//show nice progress cursor
 			document.getElementsByTagName("body")[0].style.cursor = "progress";
+			
+            //show confirm box if upload is still running when existing the page
+            YAHOO.util.Event.addListener(window, 'beforeunload', this.showWarningNotComplete);
 		}
 	}
 
@@ -790,6 +795,8 @@ function KajonaUploader(config) {
 	}
 
 	this.onUploadCompleteAll = function() {
+		YAHOO.util.Event.removeListener(window, 'beforeunload');
+		
 		//check if callback method is available
         try {
             kajonaUploaderCallback();
@@ -805,6 +812,7 @@ function KajonaUploader(config) {
 	}
 
 	this.onUploadError = function(event) {
+		YAHOO.util.Event.removeListener(window, 'beforeunload');
 		alert('An error occurred while uploading file "'+self.fileList[event['id']]['name']+'". Please try again.');
 		location.reload();
 	}
@@ -827,6 +835,10 @@ function KajonaUploader(config) {
 		return (intBytes / Math.pow(1024, Math.floor(entity))).toFixed(2) + " "
 				+ entities[entity];
 	}
+
+	this.showWarningNotComplete = function(event) {
+    	event.returnValue = self.config['warningNotComplete'];
+	}
 }
 
 
@@ -845,33 +857,19 @@ var kajonaImageEditor = {
         
         kajonaImageEditor.fm_image_isScaled = false;
 
-        if (kajonaImageEditor.fm_cropObj != null) {
-            kajonaImageEditor.fm_cropObj.destroy();
-            kajonaImageEditor.fm_cropObj = null;
-        }
-
-        document.getElementById("accept_icon").src = document
-            .getElementById("accept_icon").src.replace("icon_crop_accept.gif",
-            "icon_crop_acceptDisabled.gif");
+        kajonaImageEditor.filemanagerHideCropping();
     },
 
     filemanagerShowPreview : function () {
         document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
             + "&x=" + (new Date()).getMilliseconds();
-        //alert(document.getElementById('fm_filemanagerPic').src);
+
         kajonaImageEditor.fm_image_isScaled = true;
 
-        if (kajonaImageEditor.fm_cropObj != null) {
-            kajonaImageEditor.fm_cropObj.destroy();
-            kajonaImageEditor.fm_cropObj = null;
-        }
-
-        document.getElementById("accept_icon").src = document
-            .getElementById("accept_icon").src.replace("icon_crop_accept.gif",
-            "icon_crop_acceptDisabled.gif");
+        kajonaImageEditor.filemanagerHideCropping();
     },
 
-    
+
     filemanagerShowCropping : function () {
         // init the cropping
         if (kajonaImageEditor.fm_cropObj == null) {
@@ -883,7 +881,18 @@ var kajonaImageEditor = {
                     "icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
 
             document.getElementById("fm_filemanagerPic_wrap").ondblclick = kajonaImageEditor.filemanagerSaveCropping;
+            
+            //show confirm box when existing the page without saving the cropping
+            YAHOO.util.Event.addListener(window, 'beforeunload', kajonaImageEditor.filemanagerShowWarningUnsaved);
         } else {
+        	kajonaImageEditor.filemanagerHideCropping();
+        }
+    },
+    
+    filemanagerHideCropping : function () {
+        if (kajonaImageEditor.fm_cropObj != null) {
+        	YAHOO.util.Event.removeListener(window, 'beforeunload');
+        	
             kajonaImageEditor.fm_cropObj.destroy();
             kajonaImageEditor.fm_cropObj = null;
             document.getElementById("accept_icon").src = document
@@ -892,14 +901,19 @@ var kajonaImageEditor = {
         }
     },
 
-    filemanagerSaveCropping : function () {
+    filemanagerShowWarningUnsaved : function (event) {
+    	event.returnValue = fm_warning_unsavedHint;
+    },
+    
+    filemanagerSaveCropping : function () {   	
         if (kajonaImageEditor.fm_cropObj != null) {
+        	YAHOO.util.Event.removeListener(window, 'beforeunload');
+        	
             init_fm_crop_save_warning_dialog();
         }
     },
-
     
-    filemanagerSaveCroppingToBackend : function () {
+    filemanagerSaveCroppingToBackend : function () {  	
         jsDialog_1.hide();
         init_fm_screenlock_dialog();
         kajonaImageEditor.cropArea = kajonaImageEditor.fm_cropObj.getCropCoords();
@@ -952,7 +966,7 @@ var kajonaImageEditor = {
         }
     },
 
-    filemanagerRotate : function (intAngle) {
+    filemanagerRotate : function (intAngle) {   	
         init_fm_screenlock_dialog();
         kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
                 kajonaImageEditor.fm_rotate_callback);

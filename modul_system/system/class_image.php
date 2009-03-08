@@ -272,7 +272,7 @@ class class_image {
 				break;
 			}
 
-        //stream image directly from the filesystems is available
+        //stream image directly from the filesystem if available
         if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {
             $ptrFile = @fopen(_realpath_.$this->strCachepath.$this->strCachename, 'rb');
             fpassthru($ptrFile);

@@ -553,6 +553,7 @@ class class_toolkit_admin extends class_toolkit {
 						\"allowedFileTypes\": \"".$strAllowedFileTypes."\",
 						\"allowedFileTypesDescription\": \"".$strAllowedFileTypes."\",
 						\"maxFileSize\": ".$objConfig->getPhpMaxUploadSize().",
+						\"warningNotComplete\": \"".$objText->getText("upload_multiple_warningNotComplete", "filemanager", "admin")."\",
 						\"uploadUrl\": \""._webpath_."/xml.php?admin=1&module=filemanager&action=fileUpload&".$objConfig->getPhpIni("session.name")."=".class_session::getInstance()->getSessionId()."\",
 						\"uploadUrlParams\": {\"systemid\" : document.getElementById(\"flashuploadSystemid\").value,
 									          \"folder\" : document.getElementById(\"flashuploadFolder\").value,

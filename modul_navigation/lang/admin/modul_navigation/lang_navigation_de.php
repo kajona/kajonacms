@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 152
 
 //editable entries
 $lang["browser"]                         = "Browser öffnen";
@@ -25,7 +25,6 @@ $lang["navigation_erf_loeschen"]         = "Navigation erfolgreich gelöscht";
 $lang["navigation_erfolg"]               = "Navigation erfolgreich angelegt";
 $lang["navigation_image"]                = "Bild:";
 $lang["navigation_loeschen_frage"]       = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
-$lang["navigation_loeschen_link"]        = "Löschen";
 $lang["navigation_name"]                 = "Name:";
 $lang["navigation_page_e"]               = "Externer Verweis:";
 $lang["navigation_page_i"]               = "Interne Seite:";
@@ -48,7 +47,8 @@ $lang["required_navigation_name"]        = "Name";
 $lang["speichern"]                       = "Speichern";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Fehler, internes und externes Ziel gesetzt!";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Fehler, kein Ziel gesetzt!";
+$lang["systemtask_navigationcheck_invalidInternal"] = "Fehler, interne Seite existiert nicht! (Ziel:";
 $lang["systemtask_navigationcheck_name"] = "Navigationspunkte validieren";
 $lang["systemtask_navigationcheck_treescan"] = "Untersuche Navigation";
-$lang["systemtask_navigationcheck_valid"] = "O.K., Ziel:";
+$lang["systemtask_navigationcheck_valid"] = "gültig (Ziel:";
 ?>

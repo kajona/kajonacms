@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 151
+//Kajona Language Editor Core Build 152
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -184,6 +184,13 @@ $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Yes";
 $lang["systemlog"]                       = "System logfile";
+$lang["systemtask_compresspicuploads_done"] = "The resizing and compressing is done.";
+$lang["systemtask_compresspicuploads_found"] = "Found images";
+$lang["systemtask_compresspicuploads_height"] = "Max. height (pixel)";
+$lang["systemtask_compresspicuploads_hint"] = "To save disk space, you can resize and recompress all uploaded pictures in the folder \"/portal/pics/upload\" to the given maximal dimensions.<br />Be aware, that this action can't be reverted and that it may causes loss of picture quality.<br />The process may take a while.";
+$lang["systemtask_compresspicuploads_name"] = "Compress uploaded pictures";
+$lang["systemtask_compresspicuploads_processed"] = "Processed images";
+$lang["systemtask_compresspicuploads_width"] = "Max. width (pixel)";
 $lang["systemtask_dbconsistency_curprev_error"] = "The following parent-child relations are erroneous (missing parent-link):";
 $lang["systemtask_dbconsistency_curprev_ok"] = "All parent-child relations are correct";
 $lang["systemtask_dbconsistency_date_error"] = "The following date-records are erroneous (missing system-record):";

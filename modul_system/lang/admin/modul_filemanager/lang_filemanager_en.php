@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 152
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
@@ -22,9 +22,10 @@ $lang["bild_vorschau"]                   = "Preview:";
 $lang["browser"]                         = "Open folder browser";
 $lang["cropImage"]                       = "Crop image";
 $lang["cropImageAccept"]                 = "Save cropping";
-$lang["cropWarningCrop"]                 = "Crop";
+$lang["cropWarningCrop"]                 = "Yes, crop";
 $lang["cropWarningDialogHeader"]         = "Confirm cropping";
 $lang["cropWarningSaving"]               = "Please note: The cropping affects all usages of the image. Proceed anyway?<br />";
+$lang["cropWarningUnsavedHint"]          = "Your image operations are not saved yet!\\nDo you really want to discard them?\\n\\nPress \'abort\' and double click on the image to save the operations.";
 $lang["datei_bearbeit"]                  = "Date of last modification:";
 $lang["datei_detail"]                    = "Detailed view";
 $lang["datei_erstell"]                   = "Date of creation:";
@@ -110,6 +111,7 @@ $lang["upload_multiple_errorFilesize"]   = "The marked files can't be uploaded d
 $lang["upload_multiple_errorFlash"]      = "Please install <a href=\"http://get.adobe.com/en/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> >= Version 9 to use the comfortable file upload.<br />Alternatively you can use \"Filemanager\" in the top navigation.";
 $lang["upload_multiple_totalFilesAndSize"] = "file(s) with a total of";
 $lang["upload_multiple_uploadFiles"]     = "Upload file(s)";
+$lang["upload_multiple_warningNotComplete"] = "The file upload is still running!\\nDo you really want to abort it?";
 $lang["upload_submit"]                   = "Upload";
 $lang["useFile"]                         = "Apply";
 $lang["xml_cropping_success"]            = "Cropping successful";

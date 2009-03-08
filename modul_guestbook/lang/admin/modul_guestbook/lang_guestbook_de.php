@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 152
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -32,7 +32,6 @@ $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Gästebücher";
 $lang["post_liste_leer"]                 = "Keine Einträge vorhanden";
 $lang["post_loeschen_frage"]             = "Möchten Sie den Eintrag &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["post_loeschen_link"]              = "Löschen";
 $lang["post_text"]                       = "Nachricht:";
 $lang["quickhelp_deletePost"]            = "Soll ein Post gelöscht werden, so muss dies hier bestätigt werden.";
 $lang["quickhelp_editGuestbook"]         = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden. Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann durch einen Admin oder Redakteur freigegeben werden.<br /><br />Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";

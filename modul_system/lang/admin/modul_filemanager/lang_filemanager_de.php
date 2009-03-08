@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 152
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -22,9 +22,10 @@ $lang["bild_vorschau"]                   = "Vorschau:";
 $lang["browser"]                         = "Ordnerbrowser";
 $lang["cropImage"]                       = "Bild zuschneiden";
 $lang["cropImageAccept"]                 = "Zuschneiden speichern";
-$lang["cropWarningCrop"]                 = "Zuschneiden";
+$lang["cropWarningCrop"]                 = "Ja, zuschneiden";
 $lang["cropWarningDialogHeader"]         = "Zuschneiden bestätigen";
 $lang["cropWarningSaving"]               = "Bitte beachten: Das Zuschneiden betrifft alle Verwendungen des Bildes! Trotzdem forfahren?<br />";
+$lang["cropWarningUnsavedHint"]          = "Ihre Änderungen am Bild wurden noch nicht gespeichert!\\nMöchten Sie die Änderungen wirklich verwerfen?\\n\\nZum Speichern der Änderungen wählen Sie \"Abbrechen\" und machen Sie einen Doppelklick auf das Bild.";
 $lang["datei_bearbeit"]                  = "Letzte Änderung:";
 $lang["datei_detail"]                    = "Detailansicht";
 $lang["datei_erstell"]                   = "Erstelldatum:";
@@ -110,6 +111,7 @@ $lang["upload_multiple_errorFilesize"]   = "Die markierten Dateien können auf G
 $lang["upload_multiple_errorFlash"]      = "Bitte installieren Sie sich den <a href=\"http://get.adobe.com/de/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> ab Version 9 um Dateien komfortabel hochladen zu können.<br />Nutzen Sie alternativ den oberen Menüpunkt \"Filemanager\".";
 $lang["upload_multiple_totalFilesAndSize"] = "Datei(en) mit insgesamt";
 $lang["upload_multiple_uploadFiles"]     = "Datei(en) hochladen";
+$lang["upload_multiple_warningNotComplete"] = "Die Datenübertragung ist noch nicht abgeschlossen!\\nMöchten Sie die Übertragung wirklich abbrechen?";
 $lang["upload_submit"]                   = "Hochladen";
 $lang["useFile"]                         = "Übernehmen";
 $lang["xml_cropping_success"]            = "Zuschneiden erfolgreich";
