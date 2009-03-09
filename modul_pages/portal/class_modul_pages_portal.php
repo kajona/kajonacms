@@ -235,7 +235,7 @@ class class_modul_pages_portal extends class_portal {
                             else
                                 $arrPePlaceholdersDone[] = $strArrayKey;
 
-                            //create and register the button to add a new element. Therefore generate an image-tag.
+                            //create and register the button to add a new element
                             if(!isset($arrTemplate[$strPeNewPlaceholder]))
                                 $arrTemplate[$strPeNewPlaceholder] = "";
 

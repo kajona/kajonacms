@@ -142,10 +142,11 @@ if(arrayTableIds == null)
 	        )
 	        var proxyid = proxy.id;
 	        var thisid = this.id;
-	        // Hide the proxy and show the source element when finished with the animation
+	        // Hide and clear the proxy and show the source element when finished with the animation
 	        a.onComplete.subscribe(function() {
 	                Dom.setStyle(proxyid, "visibility", "hidden");
 	                Dom.setStyle(thisid, "visibility", "");
+	                document.getElementById(proxyid).innerHTML = "";
 	            });
 	        a.animate();
 	        //save new pos to backend?
