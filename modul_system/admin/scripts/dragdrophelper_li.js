@@ -10,8 +10,9 @@
  * See the YUI dragdrop-list-example for further infos
  */
 
-if(arrayListIds == null)
+if(arrayListIds == null) {
 	var arrayListIds = new Array();
+}
 
 
 (function() {
@@ -44,8 +45,9 @@ if(arrayListIds == null)
 		   //iterate over all lists available
 		   for(l=0; l<arrayListIds.length; l++) {
 		   	   listId = arrayListIds[l];
-		   	   if(listId == null)
+		   	   if(listId == null) {
 		   	      continue;
+		   	   }
 		   	      
 	           //basic dnd list				
 	           new YAHOO.util.DDTarget(listId);
@@ -78,8 +80,9 @@ if(arrayListIds == null)
 		getCurrentList : function(idOfRow) {
 		   for(l=0; l<arrayListIds.length; l++) {
 		   	   listId = arrayListIds[l];	
-		   	   if(listId == null)
+		   	   if(listId == null) {
 		   	      continue;
+		   	   }
 		   	      
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
@@ -151,8 +154,9 @@ if(arrayListIds == null)
 			//save new pos to backend, if pos changed or ul changed
 			var posAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id);
 			var ulAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id);
-			if(posAfterMove != posBeforeMove || ulBeforeMove != ulAfterMove)
+			if(posAfterMove != posBeforeMove || ulBeforeMove != ulAfterMove) {
 	        	kajonaAdminAjax.setDashboardPos(this.id, kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id), kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id));
+			}
 	    },
 	
 	    onDragDrop: function(e, id) {

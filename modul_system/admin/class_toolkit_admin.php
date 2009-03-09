@@ -143,13 +143,6 @@ class class_toolkit_admin extends class_toolkit {
 		//commands and values for the calendar
 		$arrTemplate["calendarCommands"] = "";
 
-		//init the js-files
-		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">kajonaAjaxHelper.loadCalendarBase();</script>";
-		//and the css
-		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar-core.css\");</script>";
-		$arrTemplate["calendarCommands"] .= "\n<script type=\"text/javascript\">addCss(\""._webpath_."/admin/scripts/yui/calendar/assets/calendar.css\");</script>";
-
-
 		//set up the container div
         $strContainerId = $strName."jscalendarContainer";
         $arrTemplate["calendarContainerId"] = $strContainerId;
@@ -158,6 +151,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
 
         $arrTemplate["calendarCommands"] .="
+            kajonaAjaxHelper.loadCalendarBase();
+
 	        function initCalWrapper_".$strContainerId."() {
 				if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
 					YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");

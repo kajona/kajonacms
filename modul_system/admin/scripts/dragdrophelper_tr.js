@@ -10,8 +10,9 @@
  * See the YUI dragdrop-list-example for further infos
  */
 
-if(arrayTableIds == null)
+if(arrayTableIds == null) {
 	var arrayTableIds = new Array();
+}
 
 (function() {
 	var Dom = YAHOO.util.Dom;
@@ -43,8 +44,9 @@ if(arrayTableIds == null)
 	           new YAHOO.util.DDTarget(listId);
 			   //load items in list
 			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
-			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
+			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody") {
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
+			   }
 
 			   for(i=0;i<arrayListItems.length;i=i+1) {
 			       if(arrayListItems[i].id != null && arrayListItems[i].id != "") {
@@ -58,8 +60,9 @@ if(arrayTableIds == null)
 		   for(l=0; l<arrayTableIds.length; l++) {
 		   	   listId = arrayTableIds[l];
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
-			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
+			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody") {
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
+			   }
 
 		   	   var intCounter = 1;
 			   for(i=0;i<arrayListItems.length;i=i+1) {
@@ -77,8 +80,9 @@ if(arrayTableIds == null)
 		   for(l=0; l<arrayTableIds.length; l++) {
 		   	   listId = arrayTableIds[l];
 		       var arrayListItems = YAHOO.util.Dom.getChildren(listId);
-			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody")
+			   if(arrayListItems[0].nodeName.toLowerCase() == "tbody") {
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
+			   }
 			   for(i=0;i<arrayListItems.length;i=i+1) {
 			 		if(arrayListItems[i].id == idOfRow) {
 			 			return listId;
@@ -108,13 +112,15 @@ if(arrayTableIds == null)
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
 			//jump the inner element up until an tr-element
-			while(!clickEl.nodeName.toLowerCase() == "tr")
+			while(!clickEl.nodeName.toLowerCase() == "tr") {
 				clickEl = clickEl.parentNode;
+			}
 
 			//get table-node
 			var parentNode = clickEl.parentNode;
-			if(parentNode.nodeName.toLowerCase() == "tbody")
+			if(parentNode.nodeName.toLowerCase() == "tbody") {
 				parentNode = parentNode.parentNode;
+			}
 			//make a regular table out of it and make it look like the original
 			dragEl.innerHTML = "<table "+
 						         " class=\""+parentNode.className+"\""+
@@ -151,10 +157,9 @@ if(arrayTableIds == null)
 	        a.animate();
 	        //save new pos to backend?
 			var posAfterMove = kajona.dragndroplist.DDApp.getCurrentPos(this.id);
-			if(posAfterMove != posBeforeMove)
+			if(posAfterMove != posBeforeMove) {
 	        	kajonaAdminAjax.setAbsolutePosition(this.id, posAfterMove, kajona.dragndroplist.DDApp.getCurrentList(this.id));
-	        	
-	        	
+			}
 	    },
 
 	    onDragDrop: function(e, id) {
@@ -165,8 +170,9 @@ if(arrayTableIds == null)
 	            if (!region.intersect(pt)) {
 	                var destEl = Dom.get(id);
 	                var destDD = DDM.getDDById(id);
-	                if(destEl != null && destEl.nodeName.toLowerCase() == "table")
+	                if(destEl != null && destEl.nodeName.toLowerCase() == "table") {
 	                   return;
+	                }
 	                   
 	                destEl.appendChild(this.getEl());
 	                destDD.isEmpty = false;
