@@ -436,12 +436,29 @@ class class_image {
     	$bitReturn = false;
 
         if(!is_numeric($intAngle))
-            $intAngle = 0;
+            return;
 
         //load the original image
-        //Hier bei Bedarf das Bild nachladen
         if($this->objImage == null && $this->bitPreload)
             $this->finalLoadImage();
+
+        //workaround: if the sum of width & height %2 is not 0, one has to be cut by one pixel
+        //TODO: rewrite rotating
+        $bitImageResized = false;
+        if(($this->intWidth + $this->intHeight) % 2 != 0 && $intAngle != 180) {
+
+            //create a new image and copy the new one into
+            $bitImageResized = true;
+
+            $objTempImage = imagecreatetruecolor($this->intWidth+1, $this->intHeight);
+            imagecopy($objTempImage, $this->objImage, 0,0,  0,0,  $this->intWidth, $this->intHeight);
+            imagedestroy($this->objImage);
+            $this->objImage = $objTempImage;
+            $this->intWidth++;
+            //$this->resizeImage($this->intWidth+1, $this->intHeight);
+        }
+
+
 
         //different cases. 180 is easy ;)
         if($intAngle == 180) {
@@ -455,9 +472,9 @@ class class_image {
             $objSquareImage = imagecreatetruecolor($intSquareSize, $intSquareSize);
             //copy the existing image into the new image
             if($this->intWidth > $this->intHeight)
-                imagecopy($objSquareImage, $this->objImage, 0, ($this->intWidth-$this->intHeight)/2, 0, 0, $this->intWidth, $this->intHeight);
+                imagecopy($objSquareImage, $this->objImage, 0, ceil(($this->intWidth-$this->intHeight)/2), 0, 0, $this->intWidth, $this->intHeight);
             else
-                imagecopy($objSquareImage, $this->objImage, ($this->intHeight-$this->intWidth)/2, 0, 0, 0, $this->intWidth, $this->intHeight);
+                imagecopy($objSquareImage, $this->objImage, ceil(($this->intHeight-$this->intWidth)/2), 0, 0, 0, $this->intWidth, $this->intHeight);
 
             //rotate the image
             $objSquareImage = imagerotate($objSquareImage, 90, 0, -1);
@@ -466,11 +483,11 @@ class class_image {
 
             if($this->intWidth > $this->intHeight) {
                 $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
-                imagecopy($this->objImage, $objSquareImage ,0,0, ($this->intWidth-$this->intHeight)/2,0, $this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage ,0,0, ceil(($this->intWidth-$this->intHeight)/2),0, $this->intHeight, $this->intWidth);
             }
             else  {
                 $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
-                imagecopy($this->objImage, $objSquareImage, 0,0, 0,($this->intHeight-$this->intWidth)/2, $this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage, 0,0, 0, ceil(($this->intHeight-$this->intWidth)/2), $this->intHeight, $this->intWidth);
             }
 
 
@@ -486,9 +503,9 @@ class class_image {
             $objSquareImage = imagecreatetruecolor($intSquareSize, $intSquareSize);
             //copy the existing image into the new image
             if($this->intWidth > $this->intHeight)
-                imagecopy($objSquareImage, $this->objImage, 0, ($this->intWidth-$this->intHeight)/2, 0, 0, $this->intWidth, $this->intHeight);
+                imagecopy($objSquareImage, $this->objImage, 0, ceil(($this->intWidth-$this->intHeight)/2), 0, 0, $this->intWidth, $this->intHeight);
             else
-                imagecopy($objSquareImage, $this->objImage, ($this->intHeight-$this->intWidth)/2, 0, 0, 0, $this->intWidth, $this->intHeight);
+                imagecopy($objSquareImage, $this->objImage, ceil(($this->intHeight-$this->intWidth)/2), 0, 0, 0, $this->intWidth, $this->intHeight);
 
             //rotate the image
             $objSquareImage = imagerotate($objSquareImage, 270, 0, -1);
@@ -497,11 +514,11 @@ class class_image {
 
             if($this->intWidth > $this->intHeight) {
                 $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
-                imagecopy($this->objImage, $objSquareImage ,0,0, ($this->intWidth-$this->intHeight)/2,0, $this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage ,0,0, ceil(($this->intWidth-$this->intHeight)/2),0, $this->intHeight, $this->intWidth);
             }
             else  {
                 $this->objImage = imagecreatetruecolor($this->intHeight, $this->intWidth);
-                imagecopy($this->objImage, $objSquareImage, 0,0, 0,($this->intHeight-$this->intWidth)/2, $this->intHeight, $this->intWidth);
+                imagecopy($this->objImage, $objSquareImage, 0,0, 0, ceil(($this->intHeight-$this->intWidth)/2), $this->intHeight, $this->intWidth);
             }
 
         	$intWidthTemp = $this->intWidth;
@@ -510,7 +527,15 @@ class class_image {
             $bitReturn = true;
         }
 
-
+        //recrop to old dimensions?
+        if($bitImageResized) {
+            if($intAngle == 90) {
+                $this->cropImage(0, 1, $this->intWidth, $this->intHeight-1);
+            }
+            elseif($intAngle == 270) {
+                $this->cropImage(0, 0, $this->intWidth, $this->intHeight-1);
+            }
+        }
 
         return $bitReturn;
     }
