@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 163
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -71,8 +71,7 @@ $lang["loginlog"]                        = "Login log";
 $lang["mitglied_loeschen"]               = "Delete user from group";
 $lang["mitglied_loeschen_erfolg"]        = "User was deleted successfully from group";
 $lang["mitglied_loeschen_fehler"]        = "An error occured while deleting user from group";
-$lang["mitglied_loeschen_frage_1"]       = " Do you really want to delete the user &quot;<b>%%element_name%%</b>&quot; from the group";
-$lang["mitglied_loeschen_frage_2"]       = " ?";
+$lang["mitglied_loeschen_frage"]         = "Do you really want to delete the user &quot;<b>%%element_name%%</b>&quot; from the group?";
 $lang["mitglied_speichern_erfolg"]       = "Assignments saved successfully";
 $lang["mitglied_speichern_fehler"]       = "An error occured while saving assignments";
 $lang["modul_rechte"]                    = "Module permissions";

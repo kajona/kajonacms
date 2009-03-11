@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 163
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -35,7 +35,7 @@ $lang["gruppe_bearbeiten"]               = "Изменить группу";
 $lang["gruppe_bearbeiten_x"]             = "Эта группа не может быть изменена";
 $lang["gruppe_loeschen_erfolg"]          = "Группа успешно удалена";
 $lang["gruppe_loeschen_fehler"]          = "Ошибка при удалении группы";
-$lang["gruppe_loeschen_frage"]           = "Действительно удалить группу?";
+$lang["gruppe_loeschen_frage"]           = "Действительно удалить группу &quot;<b>%%element_name%%</b>&quot;?";
 $lang["gruppe_loeschen_x"]               = "Группа не может быть удалена";
 $lang["gruppe_mitglieder"]               = "Показать участников группы";
 $lang["gruppen"]                         = "Группы: ";
@@ -71,8 +71,7 @@ $lang["loginlog"]                        = "Логин лог";
 $lang["mitglied_loeschen"]               = "Удалить участника из группы";
 $lang["mitglied_loeschen_erfolg"]        = "Участник был успешно удален из группы";
 $lang["mitglied_loeschen_fehler"]        = "Ошибка при удалении участника из группы";
-$lang["mitglied_loeschen_frage_1"]       = "Действительно удалить участника из группы?";
-$lang["mitglied_loeschen_frage_2"]       = "Удалить?";
+$lang["mitglied_loeschen_frage"]         = "Действительно удалить участника из группы &quot;<b>%%element_name%%</b>&quot;?";
 $lang["mitglied_speichern_erfolg"]       = "Участие успешно сохранено";
 $lang["mitglied_speichern_fehler"]       = "Ошибка при сохранении участия";
 $lang["modul_rechte"]                    = "Разрешения";
@@ -118,7 +117,7 @@ $lang["user_lastlogin"]                  = "Последний логин:";
 $lang["user_liste"]                      = "Все пользователи";
 $lang["user_loeschen_erfolg"]            = "Пользователь успешно удален";
 $lang["user_loeschen_fehler"]            = "Ошибка при удалении пользователя";
-$lang["user_loeschen_frage"]             = "Действительно удалить пользователя?";
+$lang["user_loeschen_frage"]             = "Действительно удалить пользователя &quot;<b>%%element_name%%</b>&quot;?";
 $lang["user_logins"]                     = "Логины:";
 $lang["user_memberships"]                = "Участие пользователя в группах";
 $lang["user_personaldata"]               = "Личные данные";

@@ -197,7 +197,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     private function actionList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-            
+
             include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers());
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -207,10 +207,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     		$arrUsers = $objArraySectionIterator->getArrayExtended();
     		$arrPageViews = $this->objToolkit->getPageview($arrUsers, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "list", "", _admin_nr_of_rows_);
             $arrUsers = $arrPageViews["elements"];
-            
+
             $strReturn = $this->objToolkit->listHeader();
 
-            
+
             $intI = 0;
             foreach ($arrUsers as $objOneUser) 	{
                 $strActions = "";
@@ -605,7 +605,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     private function actionGroupList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
-            
+
             include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getNumberOfGroups());
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -615,7 +615,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     		$arrGroups = $objArraySectionIterator->getArrayExtended();
     		$arrPageViews = $this->objToolkit->getPageview($arrGroups, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "grouplist", "", _admin_nr_of_rows_);
             $arrGroups = $arrPageViews["elements"];
-            
+
             $strReturn = $this->objToolkit->listHeader();
 
             $intI = 0;
@@ -632,7 +632,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                 }
-                
+
                 //get the number of users per group
                 $intNrOfUsers = count(class_modul_user_group::getGroupMembers($objSingleGroup->getSystemid()));
                 $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName()." (".$intNrOfUsers.")", $strAction, $intI++);
@@ -759,7 +759,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $intI = 0;
                 foreach ($arrMembers as $objSingleMember) {
                     $strAction = $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
-                                 ,$this->getText("mitglied_loeschen_frage_1")." ".$objGroup->getStrName().$this->getText("mitglied_loeschen_frage_2")
+                                 ,$this->getText("mitglied_loeschen_frage")
                                  ,getLinkAdminHref($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
