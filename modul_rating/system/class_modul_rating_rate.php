@@ -137,8 +137,8 @@ class class_modul_rating_rate extends class_model implements interface_model  {
 
     	$floatRatingOriginal = $floatRating;
     	
-    	include_once(_systempath_."/class_modul_rating_algo_absolute.php");
-    	$objRatingAlgo = new class_modul_rating_algo_absolute();
+    	include_once(_systempath_."/class_modul_rating_algo_gaussian.php");
+    	$objRatingAlgo = new class_modul_rating_algo_gaussian();
     	$floatRating = $objRatingAlgo->doRating($this, $floatRating);
     	
         class_logger::getInstance()->addLogRow("updated rating of record ".$this->getSystemid().", added ".$floatRating, class_logger::$levelInfo);
