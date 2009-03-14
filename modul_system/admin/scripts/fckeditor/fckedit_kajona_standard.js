@@ -62,3 +62,9 @@ FCKConfig.ToolbarSets["minimal"] = [
 */
 FCKConfig.ImageUpload = false;
 FCKConfig.LinkUpload = false;
+
+/*
+Disable anti spam email protection due blank screens in IE6/7/8 and Opera
+may be enabled again after the next FCKEditor update
+*/
+FCKConfig.EMailProtection = 'none'; 
