@@ -2,7 +2,7 @@ body {
 	margin: 0 5px 20px 0;
 	padding: 0px;
 	background: #FFFFFF;
-	background-image: url(pics/back.gif);
+	background-image: url(pics/back.png);
 	background-repeat: repeat-x;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -46,32 +46,32 @@ td {
 }
 
 #installerBox .logo {
-	background: url('pics/kajona_logo.gif') top left no-repeat;
+	background: url(pics/kajona_logo.png) top left no-repeat;
 	width: 178px;
 	height: 51px;
 }
 
 #installerBox .topRight {
-	background: url('pics/installer_box_topright.gif') top right no-repeat;
+	background: url(pics/installer_box_topright.png) top right no-repeat;
 	margin: 0 0 0 48px;
 	padding: 0;
 	width: 625px;
 }
 
 #installerBox .topLeft {
-	background: url('pics/installer_box_topleft.gif') top left no-repeat;
+	background: url(pics/installer_box_topleft.png) top left no-repeat;
 	margin: 0;
 	padding: 0;
 }
 
 #installerBox .bottomRight {
-	background: url('pics/installer_box_bottomright.gif') bottom right no-repeat;
+	background: url(pics/installer_box_bottomright.png) bottom right no-repeat;
 	margin: 0;
 	padding: 0;
 }
 
 #installerBox .bottomLeft {
-	background: url('pics/installer_box_bottomleft.gif') bottom left no-repeat;
+	background: url(pics/installer_box_bottomleft.png) bottom left no-repeat;
 	margin: 0;
 	padding: 0;
 }
@@ -104,7 +104,7 @@ td {
 	margin-bottom: 2px;
 	padding-left: 30px;
 	line-height: 22px;
-	background-image: url('pics/progress_bg.png');
+	background-image: url(pics/progress_bg.png);
 	background-position: left top;
 }
 
@@ -172,7 +172,7 @@ form br {
 }
 
 .inputText, .inputTextShort, .inputDate {
-	background-image: url('pics/forms_input_back.gif');
+	background-image: url(pics/forms_input_back.png);
 	background-repeat: repeat-x;
 	padding: 2px 0 0 4px;
 	margin: 0 3px 0 0;
@@ -203,7 +203,7 @@ form br {
 }
 
 .inputTextarea {
-	background-image: url('pics/forms_input_back.gif');
+	background-image: url(pics/forms_input_back.png);
 	background-repeat: repeat-x;
 	padding: 1px 0 0 4px;
 	margin: 0 3px 4px 0;
@@ -222,7 +222,7 @@ form br {
 }
 
 .inputDropdown {
-	background-image: url('pics/forms_input_back.gif');
+	background-image: url(pics/forms_input_back.png);
 	background-repeat: repeat-x;
 	padding: 1px 0 0 0;
 	margin: 0 3px 0 0;
@@ -247,7 +247,7 @@ form br {
 
 .inputSubmit, .inputSubmitShort {
 	background-color: #ffffff;
-	background-image: url('pics/forms_button_back.gif');
+	background-image: url(pics/forms_button_back.png);
 	background-repeat: repeat-x;
 	background-position: left center;
 	padding: 1px 0 3px 15px;

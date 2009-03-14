@@ -29,7 +29,7 @@
 			<td id="moduleNavi">
 				<div>
 					%%mainnavi%%
-					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img id="modulNaviMoreIcon" src="_skinwebpath_/modulenavi_more.gif" /></a>
+					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img id="modulNaviMoreIcon" src="_skinwebpath_/modulenavi_more.png" /></a>
 				</div> 
 				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl"></ul>
@@ -44,7 +44,7 @@
 			    <div id="statusBox">%%login%%</div>
 			    <div id="moduleActionNavi">%%modulenavi%%</div>
 			</td>
-			<td id="contentMain" style="background-image: url('_skinwebpath_/header/%%module_id%%.gif');">
+			<td id="contentMain" style="background-image: url('_skinwebpath_/header/%%module_id%%.png');">
 				<h1>%%moduletitle%%</h1>
 				%%quickhelp%%
 				<div id="contentBox">

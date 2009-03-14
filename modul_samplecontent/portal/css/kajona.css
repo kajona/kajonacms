@@ -259,7 +259,7 @@ h3 {
 }
 
 .inputText, .inputTextShort, .inputDate {
-    background-image: url('../pics/kajona/forms_input_back.gif');
+    background-image: url(../pics/kajona/forms_input_back.gif);
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -274,7 +274,7 @@ h3 {
 }
 
 .inputTextarea {
-    background-image: url('../pics/kajona/forms_input_back.gif');
+    background-image: url(../pics/kajona/forms_input_back.gif);
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -289,7 +289,7 @@ h3 {
 }
 
 .inputTextareaLarge {
-    background-image: url('../pics/kajona/forms_input_back.gif');
+    background-image: url(../pics/kajona/forms_input_back.gif);
     background-repeat: repeat-x;
     padding: 0;
     margin: 0 3px 0 0;
@@ -308,7 +308,7 @@ h3 {
 }
 
 .button, .buttonShort {
-    background-image: url('../pics/kajona/forms_button_back_31.gif');
+    background-image: url(../pics/kajona/forms_button_back_31.gif);
     background-repeat: repeat-x;
     padding: 0 0 3px 15px;
     margin: 8px 0 0 0;
@@ -438,7 +438,7 @@ h3 {
 }
 .newsListTitle {
     float: left;
-    background-image: url('../pics/kajona/news_button_31.gif');
+    background-image: url(../pics/kajona/news_button_31.gif);
     background-repeat: no-repeat;
     text-indent: 15px;
 }
