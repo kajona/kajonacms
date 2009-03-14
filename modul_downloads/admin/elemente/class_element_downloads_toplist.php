@@ -27,13 +27,14 @@ class class_element_downloads_toplist extends class_element_admin implements int
      *
      */
     public function __construct() {
+        $arrModule = array();
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["author"]        = "sidler@mulchprod.de";
         $arrModule["moduleId"]      = _pages_elemente_modul_id_;
         $arrModule["table"]         = _dbprefix_."element_universal";
         $arrModule["modul"]         = "elemente";
 
-        $arrModule["tableColumns"]  = "char1|char,char2|char,char3|char,int1|number";
+        $arrModule["tableColumns"]  = "char1|char,char2|char,int1|number";
 
         parent::__construct($arrModule);
     }
@@ -66,11 +67,6 @@ class class_element_downloads_toplist extends class_element_admin implements int
             }
         }
         $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getText("dl_toplist_template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
-        
-        $arrAlgos = array();
-        $arrAlgos["absolute"] = $this->getText("dl_toplist_algabs");
-        
-        $strReturn .= $this->objToolkit->formInputDropdown("char3", $arrAlgos, $this->getText("dl_toplist_algo"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
         
         $strReturn .= $this->objToolkit->formInputText("int1", $this->getText("dl_toplist_amount"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "5" ));
 

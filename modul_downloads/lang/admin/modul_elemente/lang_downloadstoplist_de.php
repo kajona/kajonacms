@@ -7,11 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 164
 
 //editable entries
-$lang["dl_toplist_algabs"]               = "Absolut";
-$lang["dl_toplist_algo"]                 = "Sortierung:";
 $lang["dl_toplist_amount"]               = "Anzahl Einträge:";
 $lang["dl_toplist_archive"]              = "Archiv:";
 $lang["dl_toplist_template"]             = "Template:";

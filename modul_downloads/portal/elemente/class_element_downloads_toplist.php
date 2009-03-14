@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                 *
+*   $Id$                         *
 ********************************************************************************************************/
 
 
@@ -30,6 +30,7 @@ class class_element_downloads_toplist extends class_element_portal implements in
      * @param mixed $arrElementData
      */
     public function __construct($objElementData) {
+        $arrModule = array();
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["author"]        = "sidler@mulchprod.de";
         $arrModule["moduleId"]      = _pages_elemente_modul_id_;
@@ -49,7 +50,7 @@ class class_element_downloads_toplist extends class_element_portal implements in
         //load the archive
         $arrFiles = class_modul_downloads_file::getAllFilesUnderFolderLevelRecursive($this->arrElementData["char1"]);
         
-        $objSorter = $this->getSortAlgo($this->arrElementData["char3"]);
+        $objSorter = $this->getSortAlgo("absolute");
         $objSorter->setElementsArray($arrFiles);
         $arrFiles = $objSorter->doSorting();
         

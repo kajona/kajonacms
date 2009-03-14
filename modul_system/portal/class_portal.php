@@ -85,7 +85,7 @@ abstract class class_portal  {
 	 * @param string $strSystemid
 	 */
 	public function __construct($arrModule = array(), $arrElementData = array(), $strSystemid = "") {
-		$arrModule["p_name"] 			= "modul_admin";
+		$arrModule["p_name"] 			= "modul_portal";
 		$arrModule["p_author"] 			= "sidler@mulchprod.de";
 		$arrModule["p_nummer"] 			= _system_modul_id_;
         $this->arrElementData           = $arrElementData;
