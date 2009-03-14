@@ -61,7 +61,6 @@ class class_modul_navigation_point extends class_model implements interface_mode
             $this->setStrPageI($arrRow["navigation_page_i"]);
             $this->setStrTarget($arrRow["navigation_target"]);
             $this->setStrImage($arrRow["navigation_image"]);
-
         }
     }
 
@@ -111,7 +110,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 		//End tx
 		if($bitCommit) {
 			$this->objDB->transactionCommit();
-			
+
 			//set the element as last, shift it up once an down again to get a correct order on systemtables
 			$strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".dbsafeString($strPointSystemId)."'";
 			$this->objDB->_query($strQuery);
@@ -227,7 +226,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
         return $this->strPageI;
     }
     public function getStrTarget() {
-        return $this->strTarget;
+        return $this->strTarget != "" ? $this->strTarget : "_self";
     }
     public function getStrImage() {
         return $this->strImage;

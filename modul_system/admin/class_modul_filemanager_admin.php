@@ -834,8 +834,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(1);
 			$arrTemplate["filemanager_image_js"] .= $this->objToolkit->jsDialog(3);
 
-            $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\">";
-            $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\">";
+            $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" />";
+            $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" />";
 
 		}
 		$strReturn .= $this->objToolkit->getFilemanagerImageDetails($arrTemplate);
