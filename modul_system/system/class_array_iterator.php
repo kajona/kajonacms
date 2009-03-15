@@ -21,7 +21,7 @@ class class_array_iterator implements interface_iterator {
     private $arrModule = array();
     private $intArrCursor = 0;
 
-    protected $intElementsPerPage = 0;
+    protected $intElementsPerPage = 100;
 
 	/**
 	 * Constructor
@@ -103,6 +103,8 @@ class class_array_iterator implements interface_iterator {
     public function setIntElementsPerPage($intElements) {
         if((int) $intElements >= 0)
             $this->intElementsPerPage = (int)$intElements;
+        if($intElements == null)
+            $this->intElementsPerPage = 100;
     }
 
     /**
