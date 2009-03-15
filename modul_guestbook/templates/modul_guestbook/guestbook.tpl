@@ -9,7 +9,7 @@
     </div>
 </list>
 
-<!-- available placeholders: post_name, post_name_plain, post_mail_text, post_email, post_page, post_text, post_date -->
+<!-- available placeholders: post_name, post_name_plain, post_email, post_page, post_text, post_date -->
 <post>
     <table>
         <tr>
