@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                         *
+*	$Id$                              *
 ********************************************************************************************************/
 
 //base class
@@ -309,34 +309,35 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             if($this->getParam("userid") != "") {
                 $objUser = new class_modul_user_user($this->getParam("userid"));
-
+                
                 //Form filled with the data
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 if(!$bitSelf)
-                    $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), $objUser->getStrUsername());
+                    $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), ($this->getParam("username") != "" ? $this->getParam("username") : $objUser->getStrUsername()) );
                 $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
                 $strReturn .= $this->objToolkit->formInputPassword("passwort2", $this->getText("passwort2"));
-                $strReturn .= $this->objToolkit->formInputText("email", $this->getText("email"), $objUser->getStrEmail());
-                $strReturn .= $this->objToolkit->formInputText("vorname", $this->getText("vorname") , $objUser->getStrForename());
-                $strReturn .= $this->objToolkit->formInputText("nachname", $this->getText("nachname"), $objUser->getStrName());
-                $strReturn .= $this->objToolkit->formInputText("strasse", $this->getText("strasse"), $objUser->getStrStreet());
-                $strReturn .= $this->objToolkit->formInputText("plz", $this->getText("plz"), $objUser->getStrPostal());
-                $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), $objUser->getStrCity());
-                $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $objUser->getStrTel());
-                $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $objUser->getStrMobile());
-                $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $objUser->getStrDate());
+                $strReturn .= $this->objToolkit->formInputText("email", $this->getText("email"), ($this->getParam("email") != "" ? $this->getParam("email") : $objUser->getStrEmail() ));
+                $strReturn .= $this->objToolkit->formInputText("vorname", $this->getText("vorname") , ($this->getParam("vorname") != "" ? $this->getParam("vorname") : $objUser->getStrForename() ));
+                $strReturn .= $this->objToolkit->formInputText("nachname", $this->getText("nachname"), ($this->getParam("nachname") != "" ? $this->getParam("nachname") : $objUser->getStrName() ));
+                $strReturn .= $this->objToolkit->formInputText("strasse", $this->getText("strasse"), ($this->getParam("strasse") != "" ? $this->getParam("strasse") : $objUser->getStrStreet() ));
+                $strReturn .= $this->objToolkit->formInputText("plz", $this->getText("plz"), ($this->getParam("plz") != "" ? $this->getParam("plz") : $objUser->getStrPostal()));
+                $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), ($this->getParam("ort") != "" ? $this->getParam("ort") : $objUser->getStrCity()));
+                $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), ($this->getParam("tel") != "" ? $this->getParam("tel") : $objUser->getStrTel()));
+                $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), ($this->getParam("handy") != "" ? $this->getParam("handy") : $objUser->getStrMobile() ));
+                $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_));
-                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $objUser->getStrAdminlanguage());
+                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
+                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
                 if(!$bitSelf) {
-                    $strReturn .= $this->objToolkit->formInputCheckbox("admin", $this->getText("admin"), $objUser->getIntAdmin());
-                    $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), $objUser->getIntPortal());
-                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), $objUser->getIntActive());
+                    var_dump(issetPost("portal"));
+                    $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("admin"), ( issetPost("skin") ? ($this->getParam("adminlogin") != "" ? true : false ) :  $objUser->getIntAdmin() ));
+                    $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), ( issetPost("skin") ? ($this->getParam("portal") != "" ? true : false) : $objUser->getIntPortal() ));
+                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), ( issetPost("skin") ?  ($this->getParam("aktiv") != "" ? true : false ) : $objUser->getIntActive() ));
                 }
                 $strReturn .= $this->objToolkit->formInputHidden("userid", $objUser->getSystemid());
                 if($bitSelf)
-                $strReturn .= $this->objToolkit->formInputHidden("modus", "selfedit");
+                    $strReturn .= $this->objToolkit->formInputHidden("modus", "selfedit");
             }
             else {
                 //Blank form
@@ -357,9 +358,9 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("admin", $this->getText("admin"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"));
+                $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("admin"), ($this->getParam("adminlogin") != "" ? true : false ));
+                $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), ($this->getParam("portal") != "" ? true : false ));
+                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), ($this->getParam("aktiv") != "" ? true : false ));
                 $strReturn .= $this->objToolkit->formInputHidden("userid");
 
             }
@@ -388,7 +389,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                         if(checkEmailaddress($this->getParam("email"))) {
                             //Collecting remaining data
                             $intActive = ($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
-                            $intAdmin = ($this->getParam("admin") != "" && $this->getParam("admin") == "checked") ?  1 :  0;
+                            $intAdmin = ($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
                             $intPortal = ($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0;
 
                             $objUser = new class_modul_user_user("");
@@ -439,7 +440,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         else
         return $this->getText( "fehler_recht");
 
-    } //aktion_speichern()
+    } 
 
     /**
 	 * saves a modified user in db, values passed in arrParam
@@ -469,7 +470,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     if(checkEmailaddress($this->getParam("email"))) {
                         //Saving to database
                         $intActive = (($this->getParam("aktiv")) != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
-                        $intAdmin = (($this->getParam("admin")) != "" && $this->getParam("admin") == "checked") ?  1 :  0;
+                        $intAdmin = (($this->getParam("adminlogin")) != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
                         $intPortal = (($this->getParam("portal")) != "" && $this->getParam("portal") == "checked") ?  1 :  0;
                         $objUser = new class_modul_user_user($this->getParam("userid"));
                         if($this->getParam("passwort") == "" || $this->getParam("passwort") == " ") {
@@ -909,7 +910,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $arrPageViews = $this->objToolkit->getPageview($arrLogs, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "loginlog", "", _user_log_nrofrecords_);
             $arrLogs = $arrPageViews["elements"];
 
-
+            $arrRows = array();
             for($intI = 0; $intI < count($arrLogs); $intI++) {
                 $arrRows[$intI] = array();
                 $arrRows[$intI][]	= $arrLogs[$intI]["user_log_id"];
