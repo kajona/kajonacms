@@ -156,14 +156,14 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
 							  AND faqsmem_category = '".dbsafeString($strFilter)."'
-							ORDER BY faqs_question DESC";
+							ORDER BY faqs_question ASC";
 		}
 		else {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."faqs,
 							      "._dbprefix_."system
 							WHERE system_id = faqs_id
-							ORDER BY faqs_question DESC";
+							ORDER BY faqs_question ASC";
 		}
 
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
@@ -211,7 +211,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
     		                     "._dbprefix_."system
     		                WHERE system_id = faqs_id
     		                  AND system_status = 1
-    						ORDER BY faqs_question DESC";
+    						ORDER BY faqs_question ASC";
 		}
 		else {
     		$strQuery = "SELECT system_id
@@ -222,7 +222,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
     		                  AND faqs_id = faqsmem_faq
     		                  AND faqsmem_category = '".dbsafeString($strCat)."'
     		                  AND system_status = 1
-    						ORDER BY faqs_question DESC";
+    						ORDER BY faqs_question ASC";
 		}
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
