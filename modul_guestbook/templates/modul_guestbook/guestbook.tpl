@@ -9,7 +9,7 @@
     </div>
 </list>
 
-<!-- available placeholders: post_name_from, post_name, post_name_plain, post_mail_text, post_email, post_page_text, post_page, post_message_text, post_text, post_date -->
+<!-- available placeholders: post_name, post_name_plain, post_mail_text, post_email, post_page, post_text, post_date -->
 <post>
     <table>
         <tr>
@@ -29,7 +29,7 @@
     </table>
 </post>
 
-<!-- available placeholders: eintragen_fehler, post_name_text, gb_post_name, post_mail_text, gb_post_email, post_message_text, gb_post_text, post_page_text, gb_post_page, post_submit_text, post_code_text, action -->
+<!-- available placeholders: eintragen_fehler, gb_post_name, gb_post_email, gb_post_text, gb_post_page, action -->
 <entry_form>
     <ul>%%eintragen_fehler%%</ul>
     <form name="form1" method="post" action="%%action%%" accept-charset="UTF-8">
