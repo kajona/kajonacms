@@ -323,7 +323,7 @@ class class_installer_gallery extends class_installer_base implements interface_
         $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_bildtypen_");
         $objConstant->renameConstant("_gallery_imagetypes_");
         
-        $objConstant = class_modul_system_setting::getConfigByName("_gallery_search_resultpage_");
+        $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_suche_seite_");
         $objConstant->renameConstant("_gallery_search_resultpage_");
 
         $strReturn .= "Updating module-versions...\n";
