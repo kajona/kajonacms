@@ -150,7 +150,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     }
                     //status: for setting the status of modules, you have to be member of the admin-group
                     $objUser = new class_modul_user_user($this->objSession->getUserID());
-                    $objAdminGroup = new class_modul_user_group(_admin_gruppe_id_);
+                    $objAdminGroup = new class_modul_user_group(_admins_group_id_);
 		   		    if($this->objRights->rightEdit($intModuleSystemID) && $objAdminGroup->isUserMemberInGroup($objUser)) {
 		   		        if($objSingleModule->getStrName() == "system")
 		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
