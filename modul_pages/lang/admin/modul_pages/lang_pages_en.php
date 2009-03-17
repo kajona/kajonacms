@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 151
+//Kajona Language Editor Core Build 163
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -140,7 +140,8 @@ $lang["submit"]                          = "Save";
 $lang["systemtask_flushpagescache_done"] = "Flushing completed.";
 $lang["systemtask_flushpagescache_name"] = "Flush cached pages";
 $lang["template"]                        = "Template:";
-$lang["templateNotSelectedBefore"]       = "ATTENTIION: No template was selected for this page!";
+$lang["templateNotLoaded"]               = "ATTENTION: No template was selected for this page or it couldn't be loaded!";
+$lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br>There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
 ?>

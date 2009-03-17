@@ -146,7 +146,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$arrTemplate["pagepreview"] = getLinkPortal($objPage->getStrName(), "", "_blank", $this->getText("seite_vorschau"), "", "&preview=1", "", "", $this->getLanguageToWorkOn());
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
-			$strTemplateID = $this->objTemplate->readTemplate("templates/modul_pages/".$objPage->getStrTemplate(), "", true);
+            //try to load template, otherwise abort
+			try {
+                $strTemplateID = $this->objTemplate->readTemplate("templates/modul_pages/".$objPage->getStrTemplate(), "", true, true);
+			} catch (class_exception $objException) {
+                $strReturn .= $this->getText("templateNotLoaded");
+                return $strReturn;
+            }
 
 			//Load elements on template, master-page special case!
 			if($objPage->getStrName() == "master")
@@ -302,12 +308,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                     }
                     $strReturn .= $this->objToolkit->listFooter();
 				}
+			} else {
+			    $strReturn .= $this->getText("element_liste_leer");
 			}
-			else
-				$strReturn .= $this->getText("element_liste_leer");
-		}
-		else
+		} else {
 			$strReturn = $this->getText("fehler_recht");
+		}
+
 		return $strReturn;
 	}
 
