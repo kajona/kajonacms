@@ -78,16 +78,13 @@ var kajonaStatusDisplay = {
 		contentBox.innerHTML = strMessage;
 		YAHOO.util.Dom.setStyle(statusBox, "display", "");
 		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
-		//place the element at the right bottom of the page
+		//place the element at the top of the page
 		var screenWidth = YAHOO.util.Dom.getViewportWidth();
-		var screenHeight = YAHOO.util.Dom.getViewportHeight();
-		var scrollHeight = YAHOO.util.Dom.getDocumentScrollTop();
 		var divWidth = statusBox.offsetWidth;
-		var divHeight = statusBox.offsetHeight;
-		var newX = screenWidth - divWidth - 10;
-		var newY = screenHeight - divHeight - 10 + scrollHeight;
+		var newX = screenWidth/2 - divWidth/2;
+		var newY = YAHOO.util.Dom.getDocumentScrollTop() -2;
 		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
-		//start fade-in handler		
+		//start fade-in handler
 		kajonaStatusDisplay.fadeIn();
 	},
 	
@@ -97,31 +94,21 @@ var kajonaStatusDisplay = {
 		var opacity = parseFloat(YAHOO.util.Dom.getStyle(objectToSet, "opacity"));
 		opacity += 0.02;
 		YAHOO.util.Dom.setStyle(objectToSet, "opacity", opacity);
-		//and load us again, or call the startFfadeOut after 2 secs
-		if(opacity < 1.0)
+		//and load us again, or call the startFadeOut after 3 secs
+		if(opacity < 0.8)
 			window.setTimeout("kajonaStatusDisplay.fadeIn()", 30);
 		else
-			window.setTimeout("kajonaStatusDisplay.startFadeOut()", 1000);	
+			window.setTimeout("kajonaStatusDisplay.startFadeOut()", 3000);	
 	},
 	
 	startFadeOut : function() {
+		var statusBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
+		
 		//get the current pos
 		var attributes = { 
-	        points: { by: [0, -400] } 
+	        points: { by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5] }
 	    }; 
-	    kajonaStatusDisplay.animObject = new YAHOO.util.Motion(kajonaStatusDisplay.idOfMessageBox, attributes, 2);
-		kajonaStatusDisplay.fadeOut(); 
+	    kajonaStatusDisplay.animObject = new YAHOO.util.Motion(kajonaStatusDisplay.idOfMessageBox, attributes, 0.5);
 		kajonaStatusDisplay.animObject.animate();
-	},
-	
-	fadeOut : function () {
-		var objectToSet = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
-		//get current opacity
-		var opacity = parseFloat(YAHOO.util.Dom.getStyle(objectToSet, "opacity"));
-		opacity -= 0.05;
-		YAHOO.util.Dom.setStyle(objectToSet, "opacity", opacity);
-		//and load us again, or end all ;)
-		if(opacity > 0.0)
-			window.setTimeout("kajonaStatusDisplay.fadeOut()", 30);
 	}
 };

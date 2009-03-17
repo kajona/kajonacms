@@ -66,7 +66,7 @@
 		</tr>
 	</tbody>
 </table>
-<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsHeader">Status-Info</div><div id="jsStatusBoxContent"></div></div>
+<div id="jsStatusBox" style="display: none; position: fixed;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
 	kajonaAjaxHelper.loadAjaxBase();
 	kajonaAjaxHelper.loadAnimationBase(function() {YAHOO.util.Event.onContentReady("adminModuleNaviUl", naviSetup);});

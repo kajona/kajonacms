@@ -309,7 +309,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             if($this->getParam("userid") != "") {
                 $objUser = new class_modul_user_user($this->getParam("userid"));
-                
+
                 //Form filled with the data
                 $strReturn .= $this->objToolkit->getValidationErrors($this);
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
@@ -330,7 +330,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
                 if(!$bitSelf) {
-                    var_dump(issetPost("portal"));
                     $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("admin"), ( issetPost("skin") ? ($this->getParam("adminlogin") != "" ? true : false ) :  $objUser->getIntAdmin() ));
                     $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), ( issetPost("skin") ? ($this->getParam("portal") != "" ? true : false) : $objUser->getIntPortal() ));
                     $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), ( issetPost("skin") ?  ($this->getParam("aktiv") != "" ? true : false ) : $objUser->getIntActive() ));
@@ -440,7 +439,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         else
         return $this->getText( "fehler_recht");
 
-    } 
+    }
 
     /**
 	 * saves a modified user in db, values passed in arrParam

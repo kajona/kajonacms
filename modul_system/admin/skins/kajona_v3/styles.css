@@ -1063,28 +1063,23 @@ div.percentBeam {
 }
 
 /* J S   S T A T U S   B O X */
+.jsStatusBoxMessage, .jsStatusBoxError {
+	padding: 8px;
+	z-index: 2000;
+	max-width: 400px;
+}
 
 .jsStatusBoxMessage {
-	background-color: #f0f0f0;
-	margin: 2px;
-	border: 1px solid #e3e3e3;
+    background-color: #f0f0f0;
 }
 
 .jsStatusBoxError {
-	background-color: #f0f0f0;
-	margin: 2px;
-	text-align: left;
-	border: 1px solid #F80800;
+	background-color: #ffcccc;
+	border: 2px solid #F80800;
 }
 
-.jsHeader {
-	padding-left: 2px;
-}
-
-#jsStatusBoxContent {
-	padding: 2px;
-	font-family: Arial, Verdana, Helvetica, sans-serif;
-    font-size: 11px;
+.jsStatusBoxHeader {
+	font-weight: bold;
 }
 
 /* A U T O C O M P L E T E */
