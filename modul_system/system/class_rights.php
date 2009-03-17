@@ -581,7 +581,7 @@ class class_rights {
 						FROM "._dbprefix_."user_group_members AS member,
 						     "._dbprefix_."user as users
 						WHERE member.group_member_user_id = users.user_id
-							AND member.group_member_group_id = '"._admin_gruppe_id_."'
+							AND member.group_member_group_id = '"._admins_group_id_."'
 							AND users.user_id='".dbsafeString($strUserid)."'";
 		$arrRow = $this->objDb->getRow($strQuery);
 

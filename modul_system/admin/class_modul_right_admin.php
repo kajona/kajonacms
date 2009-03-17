@@ -327,7 +327,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 				$intInherit = 0;
 
 			//Get AdminID
-			$strAdminId = _admin_gruppe_id_;
+			$strAdminId = _admins_group_id_;
 
 			//Get Groups
 			include_once(_systempath_."/class_modul_user_group.php");

@@ -13,7 +13,7 @@
 $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
-$lang["_admin_gruppe_id_"]               = "ID группы админа:";
+$lang["_admins_group_id_"]               = "ID группы админа:";
 $lang["_admin_skin_default_"]            = "Скин админа по умолчанию:";
 $lang["_guests_group_id_"]               = "ID гостевой группы:";
 $lang["_user_log_nrofrecords_"]          = "Количество строк:";

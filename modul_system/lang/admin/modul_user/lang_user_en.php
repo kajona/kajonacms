@@ -13,7 +13,7 @@
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
-$lang["_admin_gruppe_id_"]               = "ID of the admin group:";
+$lang["_admins_group_id_"]               = "ID of the admin group:";
 $lang["_admin_skin_default_"]            = "Default admin skin:";
 $lang["_guests_group_id_"]               = "ID of the guest group:";
 $lang["_user_log_nrofrecords_"]          = "Number of rows:";

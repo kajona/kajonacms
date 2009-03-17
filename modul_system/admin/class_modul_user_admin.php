@@ -622,7 +622,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $intI = 0;
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
-                if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admin_gruppe_id_) {
+                if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
                     $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
                                   getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));

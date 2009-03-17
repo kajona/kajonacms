@@ -70,7 +70,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		if($strAction == "moduleStatus") {
             //status: for setting the status of modules, you have to be member of the admin-group
             $objUser = new class_modul_user_user($this->objSession->getUserID());
-            $objAdminGroup = new class_modul_user_group(_admin_gruppe_id_);
+            $objAdminGroup = new class_modul_user_group(_admins_group_id_);
    		    if($this->objRights->rightEdit($this->getSystemid()) && $objAdminGroup->isUserMemberInGroup($objUser)) {
     		    $this->setStatus();
     		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
