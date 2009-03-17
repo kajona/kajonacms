@@ -8,7 +8,6 @@
 ********************************************************************************************************/
 /**
  * This class does all the template stuff as loading, parsing, etc..
- * Since 2.1.0.0 using a new templatecache
  *
  * @package modul_system
  */
@@ -21,7 +20,7 @@ class class_template {
 	private $strTempTemplate = "";
 
 	private static $objTemplate = null;
-    
+
     //TODO: reenable
     private $bitSessionCacheEnabled = false;
 
@@ -34,21 +33,21 @@ class class_template {
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
 		$this->strArea = "";
-        
+
         //any caches to load from session?
         $objSession = class_session::getInstance();
         if($this->bitSessionCacheEnabled) {
             $this->arrCacheTemplates = $objSession->getSession("templateSessionCacheTemplate");
             if($this->arrCacheTemplates === false)
                 $this->arrCacheTemplates = array();
-                
+
             $this->arrCacheTemplateSections = $objSession->getSession("templateSessionCacheTemplateSections");
             if($this->arrCacheTemplateSections === false)
-                $this->arrCacheTemplateSections = array();    
+                $this->arrCacheTemplateSections = array();
         }
-            
+
 	}
-    
+
     public function __destruct() {
     	//save cache to session
         class_session::getInstance()->setSession("templateSessionCacheTemplate", $this->arrCacheTemplates);
@@ -57,9 +56,9 @@ class class_template {
 
 
 	/**
-	 * Returns one Instance of the Template-Object, using a singleton pattern
+	 * Returns one instance of the template object, using a singleton pattern
 	 *
-	 * @return object The Template-Object
+	 * @return object The template object
 	 */
 	public static function getInstance() {
 		if(self::$objTemplate == null) {
@@ -70,9 +69,9 @@ class class_template {
 	}
 
 	/**
-	 * Reads a Template from the filesystem
+	 * Reads a template from the filesystem
 	 *
-	 * @param string $StrName
+	 * @param string $strName
 	 * @param string $strSection
 	 * @param bool $bitForce Force the passed template name, not adding the current area
 	 * @param bool $bitThrowErrors If set true, the method throws exceptions in case of errors
@@ -81,12 +80,12 @@ class class_template {
 	 */
 	public function readTemplate($strName, $strSection = "", $bitForce = false, $bitThrowErrors = false) {
 		//avoid directory traversals
-        $strName = uniStrReplace("..", "", $strName);
+        $strName = removeDirectoryTraversals($strName);
 
-        //Adding the current areaprefix
+        //Adding the current area prefix
 		if(!$bitForce && $this->strArea != "portal")
 			$strName = $this->strArea . $strName;
-            
+
 		$strTemplate = "Template not found";
 		$bitKnownTemplate = false;
 		//Is this template already in the cache?
@@ -108,7 +107,7 @@ class class_template {
 			else
 				$strTemplatePath = _templatepath_;
 
-			//We have to read the whole Template from the filesystem
+			//We have to read the whole template from the filesystem
             if(file_exists($strTemplatePath."/".$strName) && is_file($strTemplatePath."/".$strName) && uniSubstr($strName, -4) == ".tpl" ) {
 				$strTemplate = file_get_contents($strTemplatePath."/".$strName);
 				//Saving to the cache
@@ -151,14 +150,14 @@ class class_template {
 
 	/**
 	 * Fills a template with values passed in an array.
-     * As an optional parameter an intance of class_lang_wrapper can be passed
-     * to have placeholders matching the schema %%lang_...%% filled automatically.
+     * As an optional parameter an instance of class_lang_wrapper can be passed
+     * to fill placeholders matching the schema %%lang_...%% automatically.
 	 *
 	 * @param mixed $arrContent
 	 * @param string $strIdentifier
 	 * @param bool $bitRemovePlaceholder
      * @param class_lang_wrapper $objLangWrapper
-	 * @return string The filled Template
+	 * @return string The filled template
 	 */
 	public function fillTemplate($arrContent, $strIdentifier, $bitRemovePlaceholder = true, $objLangWrapper = null) {
 		if(isset($this->arrCacheTemplateSections[$strIdentifier]))
@@ -177,7 +176,7 @@ class class_template {
             //load placeholders
             $arrTemp = array();
             preg_match_all("'%%lang_([A-Za-z0-9_]*)%%'i", $strTemplate, $arrTemp);
- 
+
             if(isset($arrTemp[1]) && count($arrTemp[1]) > 0) {
                 foreach ($arrTemp[1] as $strStrippedPlaceholders) {
                     $strTemplate = str_replace("%%lang_".$strStrippedPlaceholders."%%", $objLangWrapper->getLang($strStrippedPlaceholders), $strTemplate);
@@ -195,7 +194,7 @@ class class_template {
 	 * Fills the current temp-template with the passed values.<br /><b>Make sure to have the wanted template loaded before by using setTemplate()</b>
 	 *
 	 * @param mixed $arrContent
-	 * @return string The filled Template
+	 * @return string The filled template
 	 */
 	public function fillCurrentTemplate($arrContent) {
         $strTemplate = $this->strTempTemplate;
@@ -209,7 +208,7 @@ class class_template {
 
 
 	/**
-	 * Replaces Constants in the Template set by setTemplate()
+	 * Replaces constants in the template set by setTemplate()
 	 *
 	 */
 	public function fillConstants() {
@@ -228,16 +227,16 @@ class class_template {
 	}
 
 	/**
-	 * Deletes Placholder in the Template set by setTemplate()
+	 * Deletes placholder in the template set by setTemplate()
 	 *
 	 * @param string $strText
 	 */
 	public function deletePlaceholder() {
-		$this->strTempTemplate =  preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $this->strTempTemplate);
+		$this->strTempTemplate = preg_replace("^%%([A-Za-z0-9_\|]*)%%^", "", $this->strTempTemplate);
 	}
 
 	/**
-	 * Deletes Placholder in the String
+	 * Deletes placholder in the string
 	 *
 	 * @param string $strText
 	 */
@@ -276,7 +275,7 @@ class class_template {
 		$arrTemp = array();
 		preg_match_all("'(%%([A-Za-z0-9_]+?))+?\_([A-Za-z0-9_\|]+?)%%'i", $strTemplate, $arrTemp);
 
-		
+
 		$intCounter = 0;
 		if(count($arrTemp[0]) > 0) {
 			foreach($arrTemp[0] as $strPlacehoder) {
@@ -336,7 +335,7 @@ class class_template {
 	}
 
 	/**
-	 * Sets the passed Template as the current temp-Template
+	 * Sets the passed template as the current temp-template
 	 *
 	 * @param string $strTemplate
 	 */
@@ -345,12 +344,12 @@ class class_template {
 	}
 
 	/**
-	 * Sets an Area suchs as portal / admin or admin/style/...
+	 * Sets an area such as portal / admin or admin/style/...
 	 *
 	 * @param string $strArea
 	 */
 	public function setArea($strArea) {
-	    //when coming from the installer, do nothing, plz. installer uses force-option when loading templates
+	    //when coming from the installer, do nothing - installer uses force-option when loading templates
 	    if($strArea == "installer")
 	       return;
 
