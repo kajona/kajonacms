@@ -147,11 +147,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
             //try to load template, otherwise abort
+            $strTemplateID = null;
 			try {
                 $strTemplateID = $this->objTemplate->readTemplate("templates/modul_pages/".$objPage->getStrTemplate(), "", true, true);
 			} catch (class_exception $objException) {
-                $strReturn .= $this->getText("templateNotLoaded");
-                return $strReturn;
+                $strReturn .= $this->getText("templateNotLoaded")."<br />";
             }
 
 			//Load elements on template, master-page special case!
@@ -171,13 +171,14 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 
 			//So, loop through the placeholders and check, if theres any element already belonging to this one
+            $intI = 0;
 			if(is_array($arrElementsOnTemplate) && count($arrElementsOnTemplate) > 0) {
 			    //Iterate over every single placeholder provided by the template
 				foreach($arrElementsOnTemplate as $intKeyElementOnTemplate => $arrOneElementOnTemplate) {
 				    //Iterate over every single element-type provided by the placeholder
 					$bitHit = false;
 					$bitOutputAtPlaceholder = false;
-                    $intI = 0;
+                    
 					$strOutputAtPlaceholder = "";
 					//Do we have one or more elements already in db at this placeholder?
 					$bitHit = false;
@@ -291,26 +292,31 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 					}
 				}
 
-				//if there are any pagelements remaining, print a warning and print the elements row
-				if(count($arrElementsOnPage) > 0) {
-				    $strReturn .= $this->objToolkit->divider();
-                    $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
-                    $strReturn .= $this->objToolkit->listHeader();
 
-                    //minimized actions now, plz. this ain't being a real element anymore!
-                    foreach($arrElementsOnPage as $objOneElement) {
-                        //Create a row to handle the element, check all necessary stuff such as locking etc
-						$strActions = "";
-						$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-
-						//Put all Output together
-						$strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
-                    }
-                    $strReturn .= $this->objToolkit->listFooter();
-				}
-			} else {
-			    $strReturn .= $this->getText("element_liste_leer");
+            } else {
+                $strReturn .= $this->getText("element_liste_leer");
 			}
+
+            //if there are any pagelements remaining, print a warning and print the elements row
+            if(count($arrElementsOnPage) > 0) {
+                $strReturn .= $this->objToolkit->divider();
+                $strReturn .= $this->objToolkit->warningBox($this->getText("warning_elementsremaining"));
+                $strReturn .= $this->objToolkit->listHeader();
+
+                //minimized actions now, plz. this ain't being a real element anymore!
+                foreach($arrElementsOnPage as $objOneElement) {
+                    //Create a row to handle the element, check all necessary stuff such as locking etc
+                    $strActions = "";
+                    $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+
+                    //Put all Output together
+                    $strReturn .= $this->objToolkit->listRow2($objOneElement->getStrName() . " (".$objOneElement->getStrElement() . ") - ".$this->getText("placeholder").$objOneElement->getStrPlaceholder(), $strActions, $intI++);
+                }
+                $strReturn .= $this->objToolkit->listFooter();
+            }
+
+
+			
 		} else {
 			$strReturn = $this->getText("fehler_recht");
 		}
