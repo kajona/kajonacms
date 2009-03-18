@@ -7,14 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 125
 
 //editable entries
-$lang["hitlist_text1"]                   = "The search for";
-$lang["hitlist_text2"]                   = "found";
-$lang["hitlist_text3"]                   = "results";
-$lang["searchterm_label"]                = "Search term";
-$lang["submit_label"]                    = "Search";
-$lang["weiter"]                          = "next";
-$lang["zurueck"]                         = "previous";
+$lang["download_datei_link"]             = "Descarregar";
+$lang["download_ordner_link"]            = "Abrir";
+$lang["download_rating_permissions"]     = "Não tem permissões suficientes.";
+$lang["download_rating_rate1"]           = "Ficheiro com nível de";
+$lang["download_rating_rate2"]           = " ponto(s).";
+$lang["download_rating_voted"]           = "Já votou neste ficheiro.";
+$lang["liste_leer"]                      = "Não existem descargas disponíveis.";
 ?>

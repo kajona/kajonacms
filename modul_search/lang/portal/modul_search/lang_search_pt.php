@@ -10,11 +10,11 @@
 //Kajona Language Editor Core Build 163
 
 //editable entries
-$lang["hitlist_text1"]                   = "The search for";
-$lang["hitlist_text2"]                   = "found";
-$lang["hitlist_text3"]                   = "results";
-$lang["searchterm_label"]                = "Search term";
-$lang["submit_label"]                    = "Search";
-$lang["weiter"]                          = "next";
-$lang["zurueck"]                         = "previous";
+$lang["hitlist_text1"]                   = "Procura por";
+$lang["hitlist_text2"]                   = "encontrou";
+$lang["hitlist_text3"]                   = "resultados";
+$lang["searchterm_label"]                = "Item procura";
+$lang["submit_label"]                    = "Procurar";
+$lang["weiter"]                          = "próxima";
+$lang["zurueck"]                         = "anterior";
 ?>

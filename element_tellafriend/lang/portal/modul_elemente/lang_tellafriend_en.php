@@ -7,18 +7,18 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 151
+//Kajona Language Editor Core Build 163
 
 //editable entries
+$lang["captcha"]                         = "Code:";
 $lang["fehler_captcha"]                  = "Please enter the correct verification code";
-$lang["captcha"]                    = "Code:";
-$lang["message"]                    = "Message:";
-$lang["receiver"]                   = "Recipients email address:";
-$lang["receiver_name"]              = "Recipients name:";
-$lang["reload_captcha"]             = "New code";
-$lang["sender"]                     = "Your email address:";
-$lang["sender_name"]                = "Your name:";
-$lang["submit"]                     = "Send";
+$lang["message"]                         = "Message:";
+$lang["receiver"]                        = "Recipients email address:";
+$lang["receiver_name"]                   = "Recipients name:";
+$lang["reload_captcha"]                  = "New code";
+$lang["sender"]                          = "Your email address:";
+$lang["sender_name"]                     = "Your name:";
+$lang["submit"]                          = "Send";
 $lang["tellafriend_receiver"]            = "Please enter the recipients email address";
 $lang["tellafriend_receiver_name"]       = "Please enter the recipients name";
 $lang["tellafriend_sender"]              = "Please enter your email address";

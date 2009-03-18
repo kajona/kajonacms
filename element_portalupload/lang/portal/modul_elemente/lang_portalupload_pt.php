@@ -10,11 +10,12 @@
 //Kajona Language Editor Core Build 163
 
 //editable entries
-$lang["hitlist_text1"]                   = "The search for";
-$lang["hitlist_text2"]                   = "found";
-$lang["hitlist_text3"]                   = "results";
-$lang["searchterm_label"]                = "Search term";
-$lang["submit_label"]                    = "Search";
-$lang["weiter"]                          = "next";
-$lang["zurueck"]                         = "previous";
+$lang["portaluploadCopyUploadError"]     = "Erro a copiar o ficheiro.";
+$lang["portaluploadFileTitle"]           = "Ficheiro:";
+$lang["portaluploadFilterError"]         = "O filtro não permite este tipo de ficheiros.";
+$lang["portaluploadNotWritableError"]    = "A pasta não permite a escrita.";
+$lang["portaluploadPathError"]           = "Os caminhos configurados não coincidem.";
+$lang["portaluploadPermissionsError"]    = "Não tem permissões suficientes.";
+$lang["portaluploadSubmitTitle"]         = "Carregar";
+$lang["portaluploadSuccess"]             = "Ficheiro carregado com sucesso.";
 ?>
