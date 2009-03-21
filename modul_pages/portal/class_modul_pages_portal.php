@@ -79,11 +79,11 @@ class class_modul_pages_portal extends class_portal {
 		$objPageData = class_modul_pages_page::getPageByName($strPagename);
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
-		if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
+        if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightEdit($objPageData->getSystemid())))
 			$bitErrorpage = true;
 
 		//but: if count != 0 && preview && rights:
-		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightView($objPageData->getSystemid()))
+		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
 			$bitErrorpage = false;
 
 		//check, if the template could be loaded
