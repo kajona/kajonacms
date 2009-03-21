@@ -609,6 +609,32 @@ Spacer, used to seperate logical groups
 </moduleactionnavi_spacer>
 
 ---------------------------------------------------------------------------------------------------------
+-- PATH NAVIGATION --------------------------------------------------------------------------------------
+
+The following sections are used to display the path-navigations, e.g. used by the navigation module
+
+<path_container>
+%%pathnavi%%
+</path_container>
+
+<path_entry>%%pathlink%%&nbsp;&gt;&nbsp;</path_entry>
+
+---------------------------------------------------------------------------------------------------------
+-- CONTENT TOOLBAR --------------------------------------------------------------------------------------
+
+<contentToolbar_wrapper>
+    %%entries%%
+</contentToolbar_wrapper>
+
+<contentToolbar_entry>
+    %%entry%%
+</contentToolbar_entry>
+
+<contentToolbar_activeEntry>
+    %%entry%%
+</contentToolbar_activeEntry>
+
+---------------------------------------------------------------------------------------------------------
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
 
 <error_container>
@@ -625,18 +651,7 @@ Spacer, used to seperate logical groups
 </error_row>
 
 ---------------------------------------------------------------------------------------------------------
--- PATH NAVIGATION --------------------------------------------------------------------------------------
-
-The following sections are used to display the path-navigations, e.g. used by the navigation module
-
-<path_container>
-%%pathnavi%%
-</path_container>
-
-<path_entry>%%pathlink%%&nbsp;&gt;&nbsp;</path_entry>
-
----------------------------------------------------------------------------------------------------------
---- PREFORMATTED ----------------------------------------------------------------------------------------
+-- PREFORMATTED -----------------------------------------------------------------------------------------
 
 Used to print pre-formatted text, e.g. log-file contents
 <preformatted>
@@ -646,7 +661,7 @@ Used to print pre-formatted text, e.g. log-file contents
 </preformatted>
 
 ---------------------------------------------------------------------------------------------------------
---- PORTALEDITOR ----------------------------------------------------------------------------------------
+-- PORTALEDITOR -----------------------------------------------------------------------------------------
 
 The following section is the toolbar of the portaleditor, displayed at top of the page.
 The following placeholders are provided by the system:
@@ -706,7 +721,7 @@ No placeholders here, this only sets up the link-content of a new-icon
 </pe_actionNewWrapper>
 
 ---------------------------------------------------------------------------------------------------------
---- LANGUAGES -------------------------------------------------------------------------------------------
+-- LANGUAGES --------------------------------------------------------------------------------------------
 
 A single button, represents one language. Put together in the language-switch
 <language_switch_button>

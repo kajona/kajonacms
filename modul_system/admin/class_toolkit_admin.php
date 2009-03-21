@@ -1188,6 +1188,51 @@ class class_toolkit_admin extends class_toolkit {
 	}
 
 /*"*****************************************************************************************************/
+// --- Path Navigation ----------------------------------------------------------------------------------
+
+	/**
+	 * Generates the layout for a small navigation
+	 *
+	 * @param mixed $arrEntries
+	 * @return string
+	 */
+	public function getPathNavigation($arrEntries) {
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "path_container");
+		$strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "path_entry");
+		$strRows = "";
+		foreach ($arrEntries as $strOneEntry) {
+		    $strRows .= $this->objTemplate->fillTemplate(array("pathlink" => $strOneEntry), $strTemplateRowID);
+		}
+		return $this->objTemplate->fillTemplate(array("pathnavi" => $strRows), $strTemplateID);
+
+	}
+
+/*"*****************************************************************************************************/
+// --- Content Toolbar ----------------------------------------------------------------------------------
+
+	/**
+	 * A content toolbar can be used to group a subset of actions linking different views
+	 *
+	 * @param mixed $arrEntries
+     * @param int $intActiveEntry Array-Counting, so first element is 0, last ist array-length - 1
+	 * @return string
+	 */
+	public function getContentToolbar($arrEntries, $intActiveEntry = -1) {
+		$strTemplateWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_wrapper");
+		$strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry");
+		$strTemplateActiveEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_activeEntry");
+		$strRows = "";
+		foreach ($arrEntries as $intI => $strOneEntry) {
+            if($intI == $intActiveEntry)
+                $strRows .= $this->objTemplate->fillTemplate(array("entry" => $strOneEntry), $strTemplateActiveEntryID);
+            else
+                $strRows .= $this->objTemplate->fillTemplate(array("entry" => $strOneEntry), $strTemplateEntryID);
+		}
+		return $this->objTemplate->fillTemplate(array("entries" => $strRows), $strTemplateWrapperID);
+
+	}
+
+/*"*****************************************************************************************************/
 // --- Validation Errors --------------------------------------------------------------------------------
 
     /**
@@ -1214,25 +1259,7 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
-/*"*****************************************************************************************************/
-// --- Path Navigation ----------------------------------------------------------------------------------
 
-	/**
-	 * Generates the layout for a small navigation
-	 *
-	 * @param mixed $arrEntries
-	 * @return string
-	 */
-	public function getPathNavigation($arrEntries) {
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "path_container");
-		$strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "path_entry");
-		$strRows = "";
-		foreach ($arrEntries as $strOneEntry) {
-		    $strRows .= $this->objTemplate->fillTemplate(array("pathlink" => $strOneEntry), $strTemplateRowID);
-		}
-		return $this->objTemplate->fillTemplate(array("pathnavi" => $strRows), $strTemplateID);
-
-	}
 
 /*"*****************************************************************************************************/
 // --- Pre-formatted ------------------------------------------------------------------------------------
