@@ -24,7 +24,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.1.95";
+		$arrModule["version"] 		= "3.2.0";
 		$arrModule["name"] 			= "element_imagelightbox";
 		$arrModule["name_lang"] 	= "Element imagelightbox";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

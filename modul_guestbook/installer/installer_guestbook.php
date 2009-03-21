@@ -19,7 +19,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.1.95";
+		$arrModule["version"] 		= "3.2.0";
 		$arrModule["name"] 			= "guestbook";
 		$arrModule["class_admin"] 	= "class_modul_guestbook_admin";
 		$arrModule["file_admin"] 	= "class_modul_guestbook_admin.php";
@@ -174,6 +174,11 @@ class class_installer_guestbook extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.1.9") {
             $strReturn .= $this->update_319_3195();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.95") {
+            $strReturn .= $this->update_3195_320();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -242,6 +247,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
         $strReturn = "Updating 3.1.9 to 3.1.95...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("guestbook", "3.1.95");
+        return $strReturn;
+    }
+
+    private function update_3195_320() {
+        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("guestbook", "3.2.0");
         return $strReturn;
     }
     

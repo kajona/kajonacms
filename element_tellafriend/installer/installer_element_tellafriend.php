@@ -24,7 +24,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.1.95";
+		$arrModule["version"] 		= "3.2.0";
 		$arrModule["name"] 			= "element_tellafriend";
 		$arrModule["name_lang"] 	= "Element tellafriend";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;

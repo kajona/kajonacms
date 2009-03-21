@@ -24,7 +24,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.1.95";
+		$arrModule["version"] 		= "3.2.0";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -150,6 +150,11 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_319_3195();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.1.95") {
+            $strReturn .= $this->update_3195_320();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -234,8 +239,6 @@ class class_installer_stats extends class_installer_base implements interface_in
     private function update_310_311() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
-        
-       
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.1");
 
@@ -255,24 +258,28 @@ class class_installer_stats extends class_installer_base implements interface_in
         
         $objConstant = class_modul_system_setting::getConfigByName("_stats_ausschluss_");
         $objConstant->renameConstant("_stats_exclusionlist_");
-        
        
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.9");
-
         return $strReturn;
     }
 
     private function update_319_3195() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.9 to 3.1.95...\n";
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.95");
-
         return $strReturn;
     }
     
+    private function update_3195_320() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.1.95 to 3.2.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.2.0");
+        return $strReturn;
+    }
+
     
 }
 ?>
