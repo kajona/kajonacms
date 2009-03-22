@@ -27,9 +27,6 @@ class class_modul_rating_algo_absolute implements interface_modul_rating_algo {
     	//calc the new rating
         $floatNewRating = (($objSourceRate->getFloatRating() * $objSourceRate->getIntHits()) + $floatNewRating) / ($objSourceRate->getIntHits()+1);
         
-        //round the rating
-        $floatNewRating = round($floatNewRating, 2);
-        
         return $floatNewRating;
     }
 	

@@ -25,12 +25,12 @@ class class_modul_rating_algo_gaussian implements interface_modul_rating_algo {
      * With more ballots being casted on an object those ratings will be assessed less. 
      * This so called "assessment softener factor" depends on the number of ratings one usually expects on the website. 
      * 
-     * With less than 100 votes a factor of 100 is suggested.
-     * With less than 1000 votes a factor of 1000 is recommended and so on...
+     * With less than 100 votes a factor of 10 is suggested.
+     * With less than 1000 votes a factor of 100 is recommended and so on...
      *
      * @var int
      */
-    public static $intAssessmentSoftenerFactor = 100;
+    public static $intAssessmentSoftenerFactor = 10;
 	
 	/**
      * Calculates the new rating
@@ -40,6 +40,7 @@ class class_modul_rating_algo_gaussian implements interface_modul_rating_algo {
      * @return float the new rating
      */
     public function doRating($objSourceRate, $floatNewRating) {
+    	
     	//calc the rating's midpoint depending on the maximum rating value
     	$floatRatingMidpoint = (class_modul_rating_rate::$intMaxRatingValue + 1) / 2;
     	
@@ -55,24 +56,23 @@ class class_modul_rating_algo_gaussian implements interface_modul_rating_algo {
 	    	$floatAssessmentInterval = 0.5 / ($floatRatingMidpoint - 1);
 	    	//calc the assessment on the current rating
 	    	$floatAssessedRating = ($floatRatingMidpoint - $floatNewRating) * $floatAssessmentInterval + $floatNewRating;
+	    	
 	    	//add or subtract a bonus depending on the number of already existing ratings
 	    	$intAdditionSign = 1;
 	    	if ($floatNewRating < $floatRatingMidpoint) {
 	    		$intAdditionSign = -1;
 	    	}
 	    	$floatAssessedRating = $floatAssessedRating + $intAdditionSign * ( $objSourceRate->getIntHits() / class_modul_rating_algo_gaussian::$intAssessmentSoftenerFactor * 2);
+	    	
 	    	//reset the final assessed ratings if they should exceed the user's rating
 	    	//this could only happen with a high number of ratings on an object
 	    	if (($floatNewRating < $floatRatingMidpoint && $floatAssessedRating < $floatNewRating) 
 	    	|| ($floatNewRating > $floatRatingMidpoint && $floatAssessedRating > $floatNewRating)) {
 	    		$floatAssessedRating = $floatNewRating;
 	    	}
-    	}	
+	    	    	}	
     	//calc the new rating
         $floatNewRating = (($objSourceRate->getFloatRating() * $objSourceRate->getIntHits()) + $floatAssessedRating) / ($objSourceRate->getIntHits()+1);
-        
-        //round the rating
-        $floatNewRating = round($floatNewRating, 2);
         
         return $floatNewRating;
     }
