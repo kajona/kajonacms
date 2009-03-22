@@ -96,7 +96,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		//Check rights
 		if(count($arrNews["arrData"]) > 0) {
 			foreach($arrNews["arrData"] as $objOneNews) {
-				if($this->objRights->rightView($objOneNews->getSystemid())) {
+				if($objOneNews instanceof class_modul_news_news && $this->objRights->rightView($objOneNews->getSystemid())) {
 				    $strOneNews = "";
                     $arrOneNews = array();
 					//generate a link to the details
