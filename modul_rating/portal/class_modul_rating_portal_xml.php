@@ -20,8 +20,8 @@ include_once(_systempath_."/class_modul_rating_rate.php");
  * @package modul_rating
  */
 class class_modul_rating_portal_xml extends class_portal implements interface_xml_portal {
-    
-    
+
+
     /**
      * Constructor
      *
@@ -59,7 +59,7 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
      */
     private function actionSaveRating() {
     	$strReturn = "<rating>";
-    	
+
     	//rating already existing?
     	$objRating = class_modul_rating_rate::getRating($this->getSystemid());
     	if($objRating == null) {
@@ -67,14 +67,14 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
     		$objRating->setStrRatingSystemid($this->getSystemid());
     		$objRating->saveObjectToDb();
     	}
-    	
+
     	$objRating->saveRating($this->getParam("rating"));
-  		$strReturn .= $objRating->getFloatRating();
-    	
+  		$strReturn .= round($objRating->getFloatRating(), 2);
+
     	$strReturn .= "</rating>";
     	return $strReturn;
     }
-    
-    
+
+
 }
 ?>

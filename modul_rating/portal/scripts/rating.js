@@ -4,7 +4,6 @@
 //       $Id$ 
 
 function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
-        kajonaAjaxHelper.loadAjaxBase();
         //create a new ajax request. collect data.
         var post_target = 'xml.php?module=rating&action=saveRating';
         //concat to send all values
