@@ -181,10 +181,11 @@ class class_model extends class_root {
     /**
      * Rating of the current file, if module rating is installed.
      *
+     * @param $bitRound Rounds the rating or disables rounding
      * @see interface_sortable_rating
      * @return float
      */
-    public function getFloatRating() {
+    public function getFloatRating($bitRound = true) {
         $floatRating = null;
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
@@ -195,6 +196,9 @@ class class_model extends class_root {
             else
                $floatRating = 0.0;
         }
+
+        if($bitRound)
+            $floatRating = round($floatRating, 2);
 
         return $floatRating;
     }
