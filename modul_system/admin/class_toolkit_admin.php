@@ -536,8 +536,6 @@ class class_toolkit_admin extends class_toolkit {
 				var uploader;
 
 				function initUploader() {
-					window.setTimeout('checkUploader()', 50);
-
 					YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\";
 					uploader = new KajonaUploader({
 						\"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
@@ -559,13 +557,6 @@ class class_toolkit_admin extends class_toolkit {
 			    }
 			    kajonaAjaxHelper.loadUploaderBase(initUploader);
 
-			    function checkUploader() {
-			    	if (uploader.uploader == undefined) {
-    					document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
-						document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
-    				}
-    			}
-
     			jsDialog_0.setTitle('".$objText->getText("upload_multiple_dialogHeader", "filemanager", "admin")."');
 			</script>";
 
@@ -574,6 +565,7 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["upload_multiple_cancel"] = $objText->getText("upload_multiple_cancel", "filemanager", "admin");
 		$arrTemplate["upload_multiple_totalFilesAndSize"] = $objText->getText("upload_multiple_totalFilesAndSize", "filemanager", "admin");
 		$arrTemplate["upload_multiple_errorFilesize"] = $objText->getText("upload_multiple_errorFilesize", "filemanager", "admin")." ".bytesToString($objConfig->getPhpMaxUploadSize());
+		$arrTemplate["upload_multiple_pleaseWait"] = $objText->getText("upload_multiple_pleaseWait", "filemanager", "admin");
 
 		$arrTemplate["modalDialog"] = $this->jsDialog(0);
 

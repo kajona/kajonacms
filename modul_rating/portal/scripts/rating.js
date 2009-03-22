@@ -28,6 +28,3 @@ function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
             }
         }, post_body);
 }
-
-//enable tooltips
-function enableTooltipsWrapper() { enableTooltips("showTooltip"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);

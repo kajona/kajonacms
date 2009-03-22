@@ -33,7 +33,7 @@
 }
 
 /* T O O L T I P */
-.tooltip {
+.kajonaAdminTooltip {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	color: #000000;
 	font-size: 10px;
@@ -1039,27 +1039,11 @@ div.percentBeam {
 
 .languageSwitch {
 	margin: 0 0 10px 0;
-	padding: 0 0 0 20px;
-	height: 19px;
+	padding: 0 0 0 19px;
+	height: 20px;
 	background-image: url(languageswitch_left.gif);
 	background-repeat: no-repeat;
 	background-position: left center;
-}
-
-.languageSwitch a, .languageSwitch a:link, .languageSwitch a:visited {
-	background-color: #c4f3c4;
-	padding: 0 6px 0 6px;
-	height: 19px;
-	line-height: 19px;
-	display: block;
-	float: left;
-    text-decoration: none;
-}
-
-.languageSwitch a.languageButtonActive, .languageSwitch a.languageButtonActive:link, .languageSwitch a.languageButtonActive:visited, .languageSwitch a:hover {
-	color: #ffffff;
-	background-color: #4def4d;
-    text-decoration: none;
 }
 
 /* J S   S T A T U S   B O X */

@@ -553,7 +553,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
                         $strFolder = $this->strFolder;
         	   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
-        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" class=\"showTooltip\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {

@@ -13,8 +13,6 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	%%head%%
 	<script type="text/javascript">
-    	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
-    	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
         kajonaAjaxHelper.loadAjaxBase();
 	</script>
 </head>

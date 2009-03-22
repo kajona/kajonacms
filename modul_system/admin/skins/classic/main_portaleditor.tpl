@@ -8,10 +8,6 @@
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 %%head%%
-<script type="text/javascript">
-	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
-	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
-</script>
 </head>
 
 <body>

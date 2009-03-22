@@ -11,10 +11,6 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	<script type="text/javascript">
-		function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
-    	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
-	</script>
 	%%head%%
 </head>
 <body class="portalEditor">

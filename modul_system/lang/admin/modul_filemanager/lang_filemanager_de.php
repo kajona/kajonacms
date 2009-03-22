@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 163
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -109,6 +109,7 @@ $lang["upload_multiple_cancel"]          = "Abbrechen";
 $lang["upload_multiple_dialogHeader"]    = "Dateien hochladen";
 $lang["upload_multiple_errorFilesize"]   = "Die markierten Dateien können auf Grund ihrer Dateigröße nicht hochgeladen werden.<br />Die maximale Dateigröße beträgt:";
 $lang["upload_multiple_errorFlash"]      = "Bitte installieren Sie sich den <a href=\"http://get.adobe.com/de/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> ab Version 9 um Dateien komfortabel hochladen zu können.<br />Nutzen Sie alternativ den oberen Menüpunkt \"Filemanager\".";
+$lang["upload_multiple_pleaseWait"]      = "Bitte warten...";
 $lang["upload_multiple_totalFilesAndSize"] = "Datei(en) mit insgesamt";
 $lang["upload_multiple_uploadFiles"]     = "Datei(en) hochladen";
 $lang["upload_multiple_warningNotComplete"] = "Die Datenübertragung ist noch nicht abgeschlossen!\\nMöchten Sie die Übertragung wirklich abbrechen?";

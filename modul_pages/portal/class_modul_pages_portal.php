@@ -293,8 +293,6 @@ class class_modul_pages_portal extends class_portal {
     		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
     		    //Load portaleditor javascript
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
-    		    //Load tooltips
-                $strPeToolbar .= "\n<script type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
     		    //The toolbar has to be added right after the body-tag - to generate correct html-code
@@ -309,8 +307,6 @@ class class_modul_pages_portal extends class_portal {
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"kajonaPortalEditorHelper.portalEditorStatus(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
     		    //Load portaleditor javascript
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
-                //Load tooltips
-                $strEnableButton .= "\n<script type=\"text/javascript\">function enableTooltipsWrapper() { enableTooltips(\"showTooltip\"); } YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);</script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
                 //The toobar has to be added right after the body-tag - to generate correct html-code

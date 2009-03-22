@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 163
 
 //editable entries
 $lang["_filemanager_foldersize_"]        = "Вычислить размер:";
@@ -105,6 +105,7 @@ $lang["upload_multiple_cancel"]          = "Отменить";
 $lang["upload_multiple_dialogHeader"]    = "Загрузить файлы";
 $lang["upload_multiple_errorFilesize"]   = "Помеченные файлы не могут быть загружены из-за их размера.<br /> Максимальный размер файла:";
 $lang["upload_multiple_errorFlash"]      = "Пожалуйста, установите <a href=\"http://get.adobe.com/en/flashplayer/\" target=\"_blank\">Adobe Flash Player</a> >= Версию 9 чтобы использовать удобную загрузку файлов.<br />Дополнительно, вы можете использовать файл менеджер в верхней навигации.";
+$lang["upload_multiple_pleaseWait"]      = "Пожалуйста, подождите";
 $lang["upload_multiple_totalFilesAndSize"] = "Файл(ы) в общем количестве";
 $lang["upload_multiple_uploadFiles"]     = "Загрузить файл(ы)";
 $lang["upload_submit"]                   = "Загрузить";

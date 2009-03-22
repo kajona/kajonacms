@@ -239,7 +239,7 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
 	<div style="display:inline;">
-			<div id="kajonaUploadButtonsContainer" style="display: none;">
+			<div id="kajonaUploadButtonsContainer" onmouseover="kajonaAdminTooltip.add(this, '%%upload_multiple_pleaseWait%%');">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
@@ -725,17 +725,17 @@ No placeholders here, this only sets up the link-content of a new-icon
 
 A single button, represents one language. Put together in the language-switch
 <language_switch_button>
-    <a href="javascript:%%onclickHandler%%">%%languageName%%</a>
+    <option onclick="javascript:%%onclickHandler%%">%%languageName%%</option>
 </language_switch_button>
 
 A button for the active language
 <language_switch_button_active>
-    <a href="javascript:%%onclickHandler%%" class="languageButtonActive">%%languageName%%</a>
+    <option onclick="javascript:%%onclickHandler%%" selected="selected" class="languageButtonActive">%%languageName%%</option>
 </language_switch_button_active>
 
 The language switch sourrounds the buttons
 <language_switch>
-<div class="languageSwitch">%%languagebuttons%%</div>
+<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown">%%languagebuttons%%</select></div>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------

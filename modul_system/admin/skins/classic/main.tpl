@@ -9,8 +9,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 %%head%%
 <script type="text/javascript">
-	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
-	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
 	kajonaAjaxHelper.loadAjaxBase();
 	kajonaAjaxHelper.loadAnimationBase();
 </script>
@@ -70,6 +68,6 @@
     <td colspan="4"><div align="center" class="text1">&copy; www.kajona.de | _gentime_ | <a href="http://board.kajona.de/" target="_blank">Support</a></div></td>
   </tr>
 </table>
-<div id="jsStatusBox" style="display: none; position: fixed;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 </body>
 </html>

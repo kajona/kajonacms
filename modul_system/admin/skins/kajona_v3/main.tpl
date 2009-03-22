@@ -12,10 +12,6 @@
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	%%head%%
-    <script type="text/javascript">
-    	function enableTooltipsWrapper() { enableTooltips("showTooltip"); }
-    	YAHOO.util.Event.onDOMReady(enableTooltipsWrapper);
-	</script>
 </head>
 <body>
 
@@ -66,7 +62,8 @@
 		</tr>
 	</tbody>
 </table>
-<div id="jsStatusBox" style="display: none; position: fixed;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+
+<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
 	kajonaAjaxHelper.loadAjaxBase();
 	kajonaAjaxHelper.loadAnimationBase(function() {YAHOO.util.Event.onContentReady("adminModuleNaviUl", naviSetup);});

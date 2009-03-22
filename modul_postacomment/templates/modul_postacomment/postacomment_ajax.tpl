@@ -74,11 +74,11 @@
         bitKajonaRatingsAvailable = true;
     </script>
     <span class="inline-rating-bar">
-    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="htmlTooltip(this, '%%rating_bar_title%%');">
+    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
         <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
         %%rating_icons%%
     </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span>
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
-<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="htmlTooltip(this, '%%lang_postacomment_rating_rate1%%%%rating_icon_number%%%%lang_postacomment_rating_rate2%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="kajonaTooltip.add(this, '%%lang_postacomment_rating_rate1%%%%rating_icon_number%%%%lang_postacomment_rating_rate2%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

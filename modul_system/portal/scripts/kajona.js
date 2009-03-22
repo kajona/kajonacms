@@ -9,120 +9,99 @@ function reloadCaptcha(imageID) {
  	codeImg.src = codeImg.src+"&reload="+timeCode;
 }
 
-// --- TOOLTIPS -------------------------------------------------------------------------
-// based on Bubble Tooltips by Alessandro Fulciniti
-// (http://pro.html.it - http://web-graphics.com)
-function enableTooltips(className) {
-	var links, i, h;
-	if (!document.getElementById || !document.getElementsByTagName) {
-		return;
-	}
-	h = document.createElement("span");
-	h.id = "btc";
-	h.setAttribute("id", "btc");
-	h.style.position = "absolute";
-	h.style.zIndex = 2000;
-	document.getElementsByTagName("body")[0].appendChild(h);
-	links = document.getElementsByTagName("a");
-	for (i = 0; i < links.length; i++) {
-		if (className == null || className.length == 0) {
-			Prepare(links[i]);
-		} else {
-			if (links[i].className == className) {
-				Prepare(links[i])
+//--- TOOLTIPS -------------------------------------------------------------------------
+//originally based on Bubble Tooltips by Alessandro Fulciniti
+//(http://pro.html.it - http://web-graphics.com)
+var kajonaTooltip = {
+	container : null,
+		
+	add : function(objElement, strHtmlContent, bitOpacity) {
+		var tooltip;
+	
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			try {
+				strHtmlContent = objElement.getAttribute("title");
+			} catch (e) {}
+		}
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			return;
+		}
+		
+		//try to remove title
+		try {
+			objElement.removeAttribute("title");
+		} catch (e) {}
+		
+		tooltip = document.createElement("span");
+		tooltip.className = "kajonaTooltip";
+		tooltip.style.display = "block";
+		tooltip.innerHTML = strHtmlContent;
+		
+		if (bitOpacity != false) {
+			tooltip.style.filter = "alpha(opacity:85)";
+			tooltip.style.KHTMLOpacity = "0.85";
+			tooltip.style.MozOpacity = "0.85";
+			tooltip.style.opacity = "0.85";
+		}
+		
+		//create tooltip container and save reference
+		if (kajonaTooltip.container == null) {
+			var h = document.createElement("span");
+			h.id = "kajonaTooltipContainer";
+			h.setAttribute("id", "kajonaTooltipContainer");
+			h.style.position = "absolute";
+			h.style.zIndex = 2000;
+			document.getElementsByTagName("body")[0].appendChild(h);
+			kajonaTooltip.container = h;
+		}
+		
+		objElement.tooltip = tooltip;
+		objElement.onmouseover = kajonaTooltip.show;
+		objElement.onmouseout = kajonaTooltip.hide;
+		objElement.onmousemove = kajonaTooltip.locate;
+		objElement.onmouseover(objElement);
+	},
+	
+	show : function(e) {
+		kajonaTooltip.container.appendChild(this.tooltip);
+		kajonaTooltip.locate(e);
+	},
+	
+	hide : function(e) {
+		try {
+			var c = kajonaTooltip.container;
+			if (c.childNodes.length > 0) {
+				c.removeChild(c.firstChild);
+			}
+		} catch (e) {}
+	},
+	
+	locate : function(e) {
+		var posx = 0, posy = 0, c;
+		if (e == null) {
+			e = window.event;
+		}
+		if (e.pageX || e.pageY) {
+			posx = e.pageX;
+			posy = e.pageY;
+		} else if (e.clientX || e.clientY) {
+			if (document.documentElement.scrollTop) {
+				posx = e.clientX + document.documentElement.scrollLeft;
+				posy = e.clientY + document.documentElement.scrollTop;
+			} else {
+				posx = e.clientX + document.body.scrollLeft;
+				posy = e.clientY + document.body.scrollTop;
 			}
 		}
-	}
-}
-
-function Prepare(el) {
-	var tooltip, t, s;
-	t = el.getAttribute("title");
-	if (t == null || t.length == 0) {
-		return;
-	}
-	el.removeAttribute("title");
-	tooltip = CreateEl("span", "tooltip");
-	s = CreateEl("span", "top");
-	s.appendChild(document.createTextNode(t));
-	tooltip.appendChild(s);
-	setOpacity(tooltip);
-	el.tooltip = tooltip;
-	el.onmouseover = showTooltip;
-	el.onmouseout = hideTooltip;
-	el.onmousemove = Locate;
-}
-
-function htmlTooltip(el, t) {
-	var tooltip, s;
-	if (t == null || t.length == 0) {
-		return;
-	}
-	if (el.getAttribute("title")) {
-		el.removeAttribute("title");
-	}
-	tooltip = CreateEl("span", "tooltip");
-	s = CreateEl("span", "top");
-	s.innerHTML = t;
-	tooltip.appendChild(s);
-	el.tooltip = tooltip;
-	el.onmouseover = showTooltip;
-	el.onmouseout = hideTooltip;
-	el.onmousemove = Locate;
-	el.onmouseover(el);
-}
-
-function showTooltip(e) {
-	document.getElementById("btc").appendChild(this.tooltip);
-	Locate(e);
-}
-
-function hideTooltip(e) {
-	var d = document.getElementById("btc");
-	if (d.childNodes.length > 0) {
-		d.removeChild(d.firstChild);
-	}
-}
-
-function setOpacity(el) {
-	el.style.filter = "alpha(opacity:85)";
-	el.style.KHTMLOpacity = "0.85";
-	el.style.MozOpacity = "0.85";
-	el.style.opacity = "0.85";
-}
-
-function CreateEl(t, c) {
-	var x = document.createElement(t);
-	x.className = c;
-	x.style.display = "block";
-	return (x);
-}
-
-function Locate(e) {
-	var posx = 0, posy = 0, t;
-	if (e == null) {
-		e = window.event;
-	}
-	if (e.pageX || e.pageY) {
-		posx = e.pageX;
-		posy = e.pageY;
-	} else if (e.clientX || e.clientY) {
-		if (document.documentElement.scrollTop) {
-			posx = e.clientX + document.documentElement.scrollLeft;
-			posy = e.clientY + document.documentElement.scrollTop;
-		} else {
-			posx = e.clientX + document.body.scrollLeft;
-			posy = e.clientY + document.body.scrollTop;
+		c = kajonaTooltip.container;
+		var left = (posx - c.offsetWidth);
+		if (left - c.offsetWidth < 0) {
+			left += c.offsetWidth;
 		}
+		c.style.top = (posy + 10) + "px";
+		c.style.left = left + "px";
 	}
-	t = document.getElementById("btc");
-	var left = (posx - t.offsetWidth);
-	if (left - t.offsetWidth < 0) {
-		left += t.offsetWidth;
-	}
-	t.style.top = (posy + 10) + "px";
-	t.style.left = left + "px";
-}
+};
 
 //--- LITTLE HELPERS ------------------------------------------------------------------------------------
 //deprecated, use kajonaAjaxHelper.Loader object instead

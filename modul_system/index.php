@@ -94,7 +94,7 @@ class class_index  {
 
 		$strModule = htmlspecialchars($strModule);
 		$strAction = htmlspecialchars($strAction);
-		
+
 		//Redirect to https?
 		if(_admin_only_https_ == "true") {
 		    if(!issetServer("HTTPS")) {
@@ -232,7 +232,7 @@ class class_index  {
 		$this->strOutput = str_replace("\%\%", "%%", $this->strOutput);
 
 		if(_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
-		    
+
 			$strDebug .= "<pre>Kajona Debug: ";
 
     		//Maybe we need the time used to generate this page
@@ -240,20 +240,20 @@ class class_index  {
     			$arrTimestampEnde = gettimeofday();
     			$intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
     							-($this->arrTimestampStart['sec'] * 1000000 + $this->arrTimestampStart['usec']))/1000000;
-    
+
     			 $strDebug .= "<b>PHP-Time:</b> ".number_format($intTimeUsed, 6)." sec ";
     		}
-    
+
     		//Hows about the queries?
     		if(_dbnumber_) {
     			$strDebug .= "<b>Queries db/cachesize/cached/fired:</b> ".$this->objDB->getNumber()."/".$this->objDB->getCacheSize()."/".$this->objDB->getNumberCache()."/".($this->objDB->getNumber()-$this->objDB->getNumberCache())." ";
     		}
-    
+
     		//anything to say about the templates?
     		if(_templatenr_) {
     			$strDebug .= "<b>Templates cached:</b> ".$this->objTemplate->getNumberCacheSize()." ";
     		}
-    		
+
     		//memory
     		if(_memory_) {
     		    $strDebug .= "<b>Memory:</b> ".bytesToString(memory_get_usage())." ";
@@ -261,21 +261,21 @@ class class_index  {
 
 			$strDebug .= "</pre>\n";
 		}
-		
+
 
 
 	    //check headers, maybe execution could be terminated right here
 	    //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
+
         /*
-
-        Disabled due to problems with IE 6 & 7
-
+        TODO: Was disabled due to problems with IE 6 & 7, please test if problems solved
+        */
         if(checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput))) {
             return;
         }
 
         sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput));
-        */
+
 		//compress output
 		include_once(_systempath_."/class_gzip.php");
 		$objGzip = new class_gzip();

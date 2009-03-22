@@ -193,119 +193,99 @@ function checkRightMatrix() {
 }
 
 // --- TOOLTIPS -------------------------------------------------------------------------
-// based on Bubble Tooltips by Alessandro Fulciniti
+// originally based on Bubble Tooltips by Alessandro Fulciniti
 // (http://pro.html.it - http://web-graphics.com)
-function enableTooltips(className) {
-	var links, i, h;
-	if (!document.getElementById || !document.getElementsByTagName) {
-		return;
-	}
-	h = document.createElement("span");
-	h.id = "btc";
-	h.setAttribute("id", "btc");
-	h.style.position = "absolute";
-	h.style.zIndex = 2000;
-	document.getElementsByTagName("body")[0].appendChild(h);
-	links = document.getElementsByTagName("a");
-	for (i = 0; i < links.length; i++) {
-		if (className == null || className.length == 0) {
-			Prepare(links[i]);
-		} else {
-			if (links[i].className == className) {
-				Prepare(links[i])
+var kajonaAdminTooltip = {
+	container : null,
+		
+	add : function(objElement, strHtmlContent, bitOpacity) {
+		var tooltip;
+	
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			try {
+				strHtmlContent = objElement.getAttribute("title");
+			} catch (e) {}
+		}
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			return;
+		}
+		
+		//try to remove title
+		try {
+			objElement.removeAttribute("title");
+		} catch (e) {}
+		
+		tooltip = document.createElement("span");
+		tooltip.className = "kajonaAdminTooltip";
+		tooltip.style.display = "block";
+		tooltip.innerHTML = strHtmlContent;
+		
+		if (bitOpacity != false) {
+			tooltip.style.filter = "alpha(opacity:85)";
+			tooltip.style.KHTMLOpacity = "0.85";
+			tooltip.style.MozOpacity = "0.85";
+			tooltip.style.opacity = "0.85";
+		}
+		
+		//create tooltip container and save reference
+		if (kajonaAdminTooltip.container == null) {
+			var h = document.createElement("span");
+			h.id = "kajonaAdminTooltipContainer";
+			h.setAttribute("id", "kajonaAdminTooltipContainer");
+			h.style.position = "absolute";
+			h.style.zIndex = 2000;
+			document.getElementsByTagName("body")[0].appendChild(h);
+			kajonaAdminTooltip.container = h;
+		}
+		
+		objElement.tooltip = tooltip;
+		objElement.onmouseover = kajonaAdminTooltip.show;
+		objElement.onmouseout = kajonaAdminTooltip.hide;
+		objElement.onmousemove = kajonaAdminTooltip.locate;
+		objElement.onmouseover(objElement);
+	},
+	
+	show : function(e) {
+		kajonaAdminTooltip.container.appendChild(this.tooltip);
+		kajonaAdminTooltip.locate(e);
+	},
+	
+	hide : function(e) {
+		try {
+			var c = kajonaAdminTooltip.container;
+			if (c.childNodes.length > 0) {
+				c.removeChild(c.firstChild);
+			}
+		} catch (e) {}
+	},
+	
+	locate : function(e) {
+		var posx = 0, posy = 0, c;
+		if (e == null) {
+			e = window.event;
+		}
+		if (e.pageX || e.pageY) {
+			posx = e.pageX;
+			posy = e.pageY;
+		} else if (e.clientX || e.clientY) {
+			if (document.documentElement.scrollTop) {
+				posx = e.clientX + document.documentElement.scrollLeft;
+				posy = e.clientY + document.documentElement.scrollTop;
+			} else {
+				posx = e.clientX + document.body.scrollLeft;
+				posy = e.clientY + document.body.scrollTop;
 			}
 		}
-	}
-}
-
-function Prepare(el) {
-	var tooltip, t, s;
-	t = el.getAttribute("title");
-	if (t == null || t.length == 0) {
-		return;
-	}
-	el.removeAttribute("title");
-	tooltip = CreateEl("span", "tooltip");
-	s = CreateEl("span", "top");
-	s.appendChild(document.createTextNode(t));
-	tooltip.appendChild(s);
-	setOpacity(tooltip);
-	el.tooltip = tooltip;
-	el.onmouseover = showTooltip;
-	el.onmouseout = hideTooltip;
-	el.onmousemove = Locate;
-}
-
-function htmlTooltip(el, t) {
-	var tooltip, s;
-	if (t == null || t.length == 0) {
-		return;
-	}
-	if (el.getAttribute("title")) {
-		el.removeAttribute("title");
-	}
-	tooltip = CreateEl("span", "tooltip");
-	s = CreateEl("span", "top");
-	s.innerHTML = t;
-	tooltip.appendChild(s);
-	el.tooltip = tooltip;
-	el.onmouseover = showTooltip;
-	el.onmouseout = hideTooltip;
-	el.onmousemove = Locate;
-	el.onmouseover(el);
-}
-
-function showTooltip(e) {
-	document.getElementById("btc").appendChild(this.tooltip);
-	Locate(e);
-}
-
-function hideTooltip(e) {
-	var d = document.getElementById("btc");
-	if (d.childNodes.length > 0) {
-		d.removeChild(d.firstChild);
-	}
-}
-
-function setOpacity(el) {
-	el.style.filter = "alpha(opacity:85)";
-	el.style.KHTMLOpacity = "0.85";
-	el.style.MozOpacity = "0.85";
-	el.style.opacity = "0.85";
-}
-
-function CreateEl(t, c) {
-	var x = document.createElement(t);
-	x.className = c;
-	x.style.display = "block";
-	return (x);
-}
-
-function Locate(e) {
-	var posx = 0, posy = 0, t;
-	if (e == null) {
-		e = window.event;
-	}
-	if (e.pageX || e.pageY) {
-		posx = e.pageX;
-		posy = e.pageY;
-	} else if (e.clientX || e.clientY) {
-		if (document.documentElement.scrollTop) {
-			posx = e.clientX + document.documentElement.scrollLeft;
-			posy = e.clientY + document.documentElement.scrollTop;
-		} else {
-			posx = e.clientX + document.body.scrollLeft;
-			posy = e.clientY + document.body.scrollTop;
+		c = kajonaAdminTooltip.container;
+		var left = (posx - c.offsetWidth);
+		if (left - c.offsetWidth < 0) {
+			left += c.offsetWidth;
 		}
+		c.style.top = (posy + 10) + "px";
+		c.style.left = left + "px";
 	}
-	t = document.getElementById("btc");
-	var left = (posx - t.offsetWidth);
-	if (left - t.offsetWidth < 0) {
-		left += t.offsetWidth;
-	}
-	t.style.top = (posy + 10) + "px";
-	t.style.left = left + "px";
-}
+};
+
 
 // --- AJAX-STUFF -----------------------------------------------------------------------
 var kajonaAjaxHelper = {
@@ -447,7 +427,7 @@ var systemStatusCallback = function(o, bitSuccess) {
 				image.setAttribute('alt', strActiveText);
 				link.setAttribute('title', strActiveText);
 			}
-			Prepare(link);
+			kajonaAdminTooltip.add(link);
 		}
 	} else {
 		kajonaStatusDisplay.messageError(o.responseText);
@@ -640,8 +620,17 @@ function KajonaUploader(config) {
 	this.listElementSample;
 	
 	this.init = function() {
-		this.uploader = new YAHOO.widget.Uploader(
-				self.config['overlayContainerId']);
+		//try to load the uploader, show fallback content in case of errors if available
+		try {
+			this.uploader = new YAHOO.widget.Uploader(self.config['overlayContainerId']);
+		} catch (e) {
+			try {
+				document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
+			} catch (e) {}
+			
+			document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
+			return;
+		}
 
 		this.uploader.addListener('contentReady', self.handleContentReady);
 		this.uploader.addListener('fileSelect', self.onFileSelect)
@@ -653,7 +642,8 @@ function KajonaUploader(config) {
 
 		YAHOO.util.Event
 				.onDOMReady( function() {
-					document.getElementById('kajonaUploadButtonsContainer').style.display = 'block';
+					kajonaAdminTooltip.hide();
+					document.getElementById('kajonaUploadButtonsContainer').onmouseover = function() {};
 
 					var uiLayer = YAHOO.util.Dom
 							.getRegion(self.config['selectLinkId']);
