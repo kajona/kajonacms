@@ -59,7 +59,7 @@ var kajonaTooltip = {
 		objElement.onmouseover = kajonaTooltip.show;
 		objElement.onmouseout = kajonaTooltip.hide;
 		objElement.onmousemove = kajonaTooltip.locate;
-		objElement.onmouseover(objElement);
+		objElement.onmouseover();
 	},
 	
 	show : function(e) {

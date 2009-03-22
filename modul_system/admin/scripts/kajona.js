@@ -242,7 +242,7 @@ var kajonaAdminTooltip = {
 		objElement.onmouseover = kajonaAdminTooltip.show;
 		objElement.onmouseout = kajonaAdminTooltip.hide;
 		objElement.onmousemove = kajonaAdminTooltip.locate;
-		objElement.onmouseover(objElement);
+		objElement.onmouseover();
 	},
 	
 	show : function(e) {
@@ -427,6 +427,7 @@ var systemStatusCallback = function(o, bitSuccess) {
 				image.setAttribute('alt', strActiveText);
 				link.setAttribute('title', strActiveText);
 			}
+			kajonaAdminTooltip.hide();
 			kajonaAdminTooltip.add(link);
 		}
 	} else {
