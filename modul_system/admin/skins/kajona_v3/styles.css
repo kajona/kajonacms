@@ -699,10 +699,6 @@ h3 {
 
 /* L I S T S */
 .adminList {
-	width: 715px;
-}
-
-body.folderView .adminList, body.portalEditor .adminList {
 	width: 100%;
 }
 
@@ -1019,7 +1015,7 @@ div.percentBeam {
 
 /* C O N T E N T   T O O L B A R */
 .contentToolbar {
-    width: 715px;
+    width: 100%;
     background-image: url(contenttoolbar_back.gif);
     background-repeat: repeat-x;
     margin: 10px 0 10px 0;
