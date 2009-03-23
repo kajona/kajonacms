@@ -543,10 +543,16 @@ a.inputSubmit {
     line-height: 20px;
     background-repeat: no-repeat;
     padding-left: 25px;
+    margin-right: 15px;
+    white-space: nowrap;
 }
 
 .contentToolbar td.active {
     font-weight: bold;
+}
+
+.contentToolbar td:last-child {
+    width: 100%;
 }
     
 

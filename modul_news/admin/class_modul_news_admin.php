@@ -412,6 +412,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			//Rights
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    $objNews = new class_modul_news_news($this->getSystemid());
+
+			    $arrToolbarEntries = array();
+	            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
+	            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+	            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0);
+
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
@@ -550,6 +556,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		if($this->objRights->rightRight1($this->getSystemid())) {
 			//Load content
 			$objNews = new class_modul_news_news($this->getSystemid());
+
+            $arrToolbarEntries = array();
+            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
+            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1)."<br />";
+
             //Build the form
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNewscontent"));
             $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
