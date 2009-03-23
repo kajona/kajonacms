@@ -18,7 +18,7 @@ include_once(_adminpath_."/class_admin.php");
 class class_element_admin extends class_admin {
 
     private $bitDoValidation = false;
-    
+
 	/**
 	 * Constructor
 	 *
@@ -54,11 +54,11 @@ class class_element_admin extends class_admin {
 
 		//Start by creating the form & action
 		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["p_module"], "saveElement"), "elEditForm");
-		
+
 		//validation errors?
 		if($this->bitDoValidation && !$this->validateForm())
 		    $strReturn .= $this->objToolkit->getValidationErrors($this);
-		
+
 		//add a folder containing optional system-fields
         $strSystemFields = "";
         $arrStart = array("", "", "");
@@ -81,7 +81,7 @@ class class_element_admin extends class_admin {
 		$strSystemFields .= $this->objToolkit->formDateSimple("start", $arrStart[0], $arrStart[1], $arrStart[2], $this->getText("page_element_start", "pages"), false);
 		$strSystemFields .= $this->objToolkit->formDateSimple("end", $arrEnd[0], $arrEnd[1], $arrEnd[2], $this->getText("page_element_end", "pages"), false);
 
-        $strReturn .= $this->objToolkit->getLayoutFolderPic($strSystemFields, $this->getText("page_element_system_folder", "pages"), "icon_folderOpen.gif", "icon_folderClosed.gif", $bitShow );
+        $strReturn .= "<br />".$this->objToolkit->getLayoutFolderPic($strSystemFields, $this->getText("page_element_system_folder", "pages"), "icon_folderOpen.gif", "icon_folderClosed.gif", $bitShow );
 
 		//If its going to be a new element, allow to choose the position
 		if($strMode == "new") {
@@ -175,7 +175,7 @@ class class_element_admin extends class_admin {
 	public function getContentTitle() {
 	    return "";
 	}
-	
+
 	/**
 	 * If the form generated should be validated, pass true. This invokes
 	 * the internal validation and printing of errors.

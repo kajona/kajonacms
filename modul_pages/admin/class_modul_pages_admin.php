@@ -279,7 +279,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	  		$strReturn .= $this->objToolkit->divider();
 
 	  		$strPathNavi = $this->generateFolderNavigation();
-			$strReturn = $strPathNavi . $this->objToolkit->getLayoutFolderPic($strReturn, $this->getText("klapper"));
+			$strReturn = $strPathNavi."<br /><br />".$this->objToolkit->getLayoutFolderPic($strReturn, $this->getText("klapper"));
 
 			//Collect the pages belonging to the current folder to display
 			$arrPages = class_modul_pages_folder::getPagesInFolder($this->strFolderlevel);
