@@ -242,7 +242,7 @@ var kajonaAdminTooltip = {
 		objElement.onmouseover = kajonaAdminTooltip.show;
 		objElement.onmouseout = kajonaAdminTooltip.hide;
 		objElement.onmousemove = kajonaAdminTooltip.locate;
-		objElement.onmouseover();
+		objElement.onmouseover(objElement);
 	},
 	
 	show : function(e) {

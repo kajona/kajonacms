@@ -529,32 +529,40 @@ a.inputSubmit {
     padding: 2px;
 }
 
-.languageswitch {
-	margin-bottom: 5px;
-	background-color: #CFD7FF;
-    border: 1px solid #5F7BFF;
+
+/* C O N T E N T   T O O L B A R */
+.contentToolbar {
+    width: 715px;
+    margin: 10px 0 10px 0;
 }
 
-.languageButton, .languageButton:link, .languageButton:visited, .languageButton:link {
-	text-decoration: none;
-	color: #000000;
-	border-left: 1px solid #dad7ff;
-	border-right: 1px solid #dad7ff;
+.contentToolbar a, .contentToolbar a:link, .contentToolbar a:visited, .contentToolbar a:hover, .contentToolbar a:active, .contentToolbar a:focus {
+    text-decoration: none;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    padding-left: 25px;
 }
 
-.languageButton:hover {
-	color: #000000;
-	border-left: 1px solid #5F7BFF;
-	border-right: 1px solid #5F7BFF;
-	background-color: #ffffff;
+.contentToolbar td.active {
+    font-weight: bold;
+}
+    
+
+/* L A N G U A G E S W I T C H */
+.languageSwitch {
+    padding: 0 0 0 19px;
+    height: 20px;
+    background-image: url(languageswitch_left.gif);
+    background-repeat: no-repeat;
+    background-position: left center;
+    float: right;
 }
 
-.languageButtonActive, .languageButtonActive:link, .languageButtonActive:visited, .languageButtonActive:link {
-	color: #000000;
-	border-left: 1px solid #5F7BFF;
-	border-right: 1px solid #5F7BFF;
-	background-color: #ffffff;
-	text-decoration: none;
+.languageSwitch .inputDropdown {
+    width: 110px;
+    height: 20px;
 }
 
 /* T O O L T I P */

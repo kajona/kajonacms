@@ -1206,13 +1206,13 @@ class class_toolkit_admin extends class_toolkit {
 	 * A content toolbar can be used to group a subset of actions linking different views
 	 *
 	 * @param mixed $arrEntries
-     * @param int $intActiveEntry Array-Counting, so first element is 0, last ist array-length - 1
+     * @param int $intActiveEntry Array-counting, so first element is 0, last is array-length - 1
 	 * @return string
 	 */
 	public function getContentToolbar($arrEntries, $intActiveEntry = -1) {
 		$strTemplateWrapperID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_wrapper");
 		$strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry");
-		$strTemplateActiveEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_activeEntry");
+		$strTemplateActiveEntryID = $this->objTemplate->readTemplate("/elements.tpl", "contentToolbar_entry_active");
 		$strRows = "";
 		foreach ($arrEntries as $intI => $strOneEntry) {
             if($intI == $intActiveEntry)

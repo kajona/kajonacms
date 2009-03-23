@@ -388,24 +388,12 @@ This Section is used to display a few special details about the current page bei
 <page_infobox>
  <table cellpadding="0" cellspacing="0" style="width: 100%;" class="statusPages">
   <tr>
-    <td style="width: 18%;">%%pagenameTitle%%</td>
-    <td style="width: 72%;">%%pagename%%</td>
-    <td style="width: 10%;"></td>
-  </tr>
-  <tr>
     <td style="width: 18%;">%%pagetemplateTitle%%</td>
     <td style="width: 72%;">%%pagetemplate%%</td>
-    <td style="width: 10%;"></td>
-  </tr>
-  <tr>
-    <td>%%lastuserTitle%%</td>
-    <td>%%lastuser%%</td>
-    <td></td>
   </tr>
   <tr>
     <td>%%lasteditTitle%%</td>
-    <td>%%lastedit%%</td>
-    <td align="right">%%pagepreview%%</td>
+    <td>%%lastedit%% %%lastuserTitle%% %%lastuser%%</td>
   </tr>
 </table><br /><br />
 </page_infobox>
@@ -623,16 +611,18 @@ The following sections are used to display the path-navigations, e.g. used by th
 -- CONTENT TOOLBAR --------------------------------------------------------------------------------------
 
 <contentToolbar_wrapper>
-    %%entries%%
+    <table cellpadding="0" cellspacing="0" class="contentToolbar">
+        <tr>%%entries%%</tr>
+    </table>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    %%entry%%
+    <td>%%entry%%</td>
 </contentToolbar_entry>
 
-<contentToolbar_activeEntry>
-    %%entry%%
-</contentToolbar_activeEntry>
+<contentToolbar_entry_active>
+    <td class="active">%%entry%%</td>
+</contentToolbar_entry_active>
 
 ---------------------------------------------------------------------------------------------------------
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
@@ -730,7 +720,7 @@ A single button, represents one language. Put together in the language-switch
 
 A button for the active language
 <language_switch_button_active>
-    <option onclick="javascript:%%onclickHandler%%" selected="selected" class="languageButtonActive">%%languageName%%</option>
+    <option onclick="javascript:%%onclickHandler%%" selected="selected">%%languageName%%</option>
 </language_switch_button_active>
 
 The language switch sourrounds the buttons

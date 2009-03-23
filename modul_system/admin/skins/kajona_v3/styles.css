@@ -953,7 +953,6 @@ form .formText .text {
 
 
 /* W A R N B O X */
-
 .warnbox {
 	width: 400px;
 	border: 1px solid #FF0000;
@@ -970,7 +969,6 @@ form .formText .text {
 
 
 /* P R E F O R M A T T E D */
-
 .preText {
 	border: 1px solid #575757;
 	margin: 10px 0 10px 0;
@@ -985,14 +983,12 @@ form .formText .text {
 
 
 /* D A T E   S E L E C T O R  C O N T A I N E R */
-
 .dateSelector {
 	margin: 0 0 15px 0;
 }
 
 
 /* G R A P H  C O N T A I N E R */
-
 .graphBox {
 	margin: 10px 0 10px 0;
 	text-align: center;
@@ -1021,6 +1017,44 @@ div.percentBeam {
 }
 
 
+/* C O N T E N T   T O O L B A R */
+.contentToolbar {
+    width: 715px;
+    background-image: url(contenttoolbar_back.gif);
+    background-repeat: repeat-x;
+    margin: 10px 0 10px 0;
+}
+
+.contentToolbar a, .contentToolbar a:link, .contentToolbar a:visited, .contentToolbar a:hover, .contentToolbar a:active, .contentToolbar a:focus {
+    text-decoration: none;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    padding-left: 25px;
+}
+
+.contentToolbar td.active {
+    font-weight: bold;
+}
+    
+
+/* L A N G U A G E S W I T C H */
+.languageSwitch {
+    padding: 0 0 0 19px;
+    height: 20px;
+    background-image: url(languageswitch_left.gif);
+    background-repeat: no-repeat;
+    background-position: left center;
+    float: right;
+}
+
+.languageSwitch .inputDropdown {
+    width: 110px;
+    height: 20px;
+}
+
+
 /* F I L E M A N A G E R */
 .statusFilemanager {
 	width: 100%;
@@ -1032,18 +1066,6 @@ div.percentBeam {
 
 .statusFilemanager .actions a {
 	margin-right: 2px;
-}
-
-
-/* L A N G U A G E S W I T C H */
-
-.languageSwitch {
-	margin: 0 0 10px 0;
-	padding: 0 0 0 19px;
-	height: 20px;
-	background-image: url(languageswitch_left.gif);
-	background-repeat: no-repeat;
-	background-position: left center;
 }
 
 /* J S   S T A T U S   B O X */

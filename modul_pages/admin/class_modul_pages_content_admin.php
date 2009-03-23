@@ -126,24 +126,29 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	private function actionList() {
 		$strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
+            //get infos about the page
+            $objPage = new class_modul_pages_page($this->getSystemid());
 
-		    //if languages are installed, present a language switch right here
-	        include_once(_adminpath_."/class_modul_languages_admin.php");
-	        $objLanguages = new class_modul_languages_admin();
-	        $strReturn .= $objLanguages->getLanguageSwitch();
+            $arrToolbarEntries = array();
+            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "newPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
+            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+            $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "", "", $this->getLanguageToWorkOn())."&preview=1\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
 
-			//Get Infos about the page
-			$objPage = new class_modul_pages_page($this->getSystemid());
+            //if languages are installed, present a language switch right here
+            include_once(_adminpath_."/class_modul_languages_admin.php");
+            $objLanguages = new class_modul_languages_admin();
+            $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+
+		    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
+
 			$arrTemplate = array();
-			$arrTemplate["pagename"] = $objPage->getStrName();
 			$arrTemplate["pagetemplate"] = $objPage->getStrTemplate();
 			$arrTemplate["pagetemplateTitle"] = $this->getText("template");
-			$arrTemplate["pagenameTitle"] = $this->getText("pageNameTitle");
+
 			$arrTemplate["lastuserTitle"] = $this->getText("lastuserTitle");
 			$arrTemplate["lasteditTitle"] = $this->getText("lasteditTitle");
 			$arrTemplate["lastuser"] = $objPage->getLastEditUser();
 			$arrTemplate["lastedit"] = timeToString($objPage->getEditDate());
-			$arrTemplate["pagepreview"] = getLinkPortal($objPage->getStrName(), "", "_blank", $this->getText("seite_vorschau"), "", "&preview=1", "", "", $this->getLanguageToWorkOn());
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
             //try to load template, otherwise abort
@@ -178,7 +183,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 				    //Iterate over every single element-type provided by the placeholder
 					$bitHit = false;
 					$bitOutputAtPlaceholder = false;
-                    
+
 					$strOutputAtPlaceholder = "";
 					//Do we have one or more elements already in db at this placeholder?
 					$bitHit = false;
@@ -316,7 +321,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             }
 
 
-			
+
 		} else {
 			$strReturn = $this->getText("fehler_recht");
 		}

@@ -497,26 +497,14 @@ Used to print headline in a form
 
 This Section is used to display a few special details about the current page being edited
 <page_infobox>
- <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="statusPages">
-  <tr>
-    <td width="18%">%%pagenameTitle%%</td>
-    <td width="72%">%%pagename%%</td>
-    <td width="10%"></td>
-  </tr>
+ <table width="100%" border="0" cellspacing="0" cellpadding="0" class="statusPages">
   <tr>
     <td width="18%">%%pagetemplateTitle%%</td>
     <td width="72%">%%pagetemplate%%</td>
-    <td width="10%"></td>
-  </tr>
-  <tr>
-    <td>%%lastuserTitle%%</td>
-    <td>%%lastuser%%</td>
-    <td></td>
   </tr>
   <tr>
     <td>%%lasteditTitle%%</td>
-    <td>%%lastedit%%</td>
-    <td align="right">%%pagepreview%%</td>
+    <td>%%lastedit%% %%lastuserTitle%% %%lastuser%%</td>
   </tr>
 </table><br /><br />
 </page_infobox>
@@ -748,16 +736,18 @@ The following sections are used to display the path-navigations, e.g. used by th
 -- CONTENT TOOLBAR --------------------------------------------------------------------------------------
 
 <contentToolbar_wrapper>
-    %%entries%%
+    <table cellpadding="0" cellspacing="0" class="contentToolbar">
+        <tr>%%entries%%</tr>
+    </table>
 </contentToolbar_wrapper>
 
 <contentToolbar_entry>
-    %%entry%%
+    <td>%%entry%%</td>
 </contentToolbar_entry>
 
-<contentToolbar_activeEntry>
-    %%entry%%
-</contentToolbar_activeEntry>
+<contentToolbar_entry_active>
+    <td class="active">%%entry%%</td>
+</contentToolbar_entry_active>
 
 ---------------------------------------------------------------------------------------------------------
 -- ERROR HANDLING ---------------------------------------------------------------------------------------
@@ -851,17 +841,17 @@ No placeholders here, this only sets up the link-content of a new-icon
 
 A single button, represents one language. Put together in the language-switch
 <language_switch_button>
-    <a href="#" onclick="%%onclickHandler%%" class="languageButton">%%languageName%%</a>
+    <option onclick="javascript:%%onclickHandler%%">%%languageName%%</option>
 </language_switch_button>
 
 A button for the active language
 <language_switch_button_active>
-    <a href="#" onclick="%%onclickHandler%%" class="languageButtonActive">%%languageName%%</a>
+    <option onclick="javascript:%%onclickHandler%%" selected="selected">%%languageName%%</option>
 </language_switch_button_active>
 
 The language switch sourrounds the buttons
 <language_switch>
-<div class="languageswitch">&nbsp;&nbsp;%%languagebuttons%%</div>
+<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown">%%languagebuttons%%</select></div>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------

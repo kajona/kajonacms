@@ -297,7 +297,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    		if($this->objRights->rightEdit($strSystemid))
 	    				$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
 	    			if($this->objRights->rightEdit($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));	
+		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));
 		    		if($this->objRights->rightDelete($strSystemid))
 		    			$strActions .= $this->objToolkit->listDeleteButton($objOneRow->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneRow->getSystemid()));
 		    		if($this->objRights->rightEdit($strSystemid))
@@ -394,20 +394,36 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	 */
 	public function actionNew() {
 		$strReturn = "";
+
 		if($this->getParam("systemid") != "" || $this->getParam("pageid") != "") {
 		    if($this->getParam("systemid") == "" && $this->getParam("pageid") != "")
 		        $this->setSystemid($this->getParam("pageid"));
 		    //edit a page
+
+		    //add a pathnavigation when not in pe mode
+            if($this->getParam("pe") != 1) {
+                $strReturn = $this->getPathNavigation().$strReturn;
+            }
+
 			if($this->objRights->rightEdit($this->getSystemid())) {
-			    //if languages are installed, present a language switch right here
-		        include_once(_adminpath_."/class_modul_languages_admin.php");
-		        $objLanguages = new class_modul_languages_admin();
-                $strReturn .= $objLanguages->getLanguageSwitch();
-				//Start Form
+                //Load data of the page
+                $objPage = new class_modul_pages_page($this->getSystemid());
+
+                $arrToolbarEntries = array();
+                $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("pages", "newPage", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_pageproperties")."</a>";
+                $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("pages_content", "list", "&systemid=".$this->getSystemid())."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+                $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "", "", $this->getLanguageToWorkOn())."&preview=1\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
+
+                //if languages are installed, present a language switch right here
+                include_once(_adminpath_."/class_modul_languages_admin.php");
+                $objLanguages = new class_modul_languages_admin();
+                $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
+
+                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+
+				//Start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
-				//Load data of the page
-				$objPage = new class_modul_pages_page($this->getSystemid());
 
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $objPage->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $objPage->getStrBrowsername());
@@ -441,7 +457,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 						$arrTemplatesDD[$strTemplate] = $strTemplate;
 					}
 				}
-				
+
 				//if no template was selected before, show a warning. can occur when having created new languages
 				if($objPage->getStrTemplate() == "")
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
@@ -455,10 +471,15 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		else {
 			//Mode: Create a new Page
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    //if languages are installed, present a language switch right here
-		        include_once(_adminpath_."/class_modul_languages_admin.php");
-		        $objLanguages = new class_modul_languages_admin();
-		        $strReturn .= $objLanguages->getLanguageSwitch();
+                $arrToolbarEntries = array();
+
+                //if languages are installed, present a language switch right here
+                include_once(_adminpath_."/class_modul_languages_admin.php");
+                $objLanguages = new class_modul_languages_admin();
+                $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
+
+                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+
 				//start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
@@ -644,7 +665,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $strReturn;
 	}
-	
+
 
 //*"*****************************************************************************************************
 //--Folder-Mgmt------------------------------------------------------------------------------------------
@@ -809,7 +830,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$intI = 0;
 			foreach($arrElements as $objOneElement) {
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
-	    		
+
 	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getStrElementId()));
 				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
 			}
@@ -831,13 +852,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		$objFilesystem = new class_filesystem();
     		//load installers available
     		$arrInstallers = $objFilesystem->getFilelist("/installer");
-    		
+
     		if($arrInstallers !== false) {
 
 	    		foreach($arrInstallers as $intKey => $strFile)
 	    			if(strpos($strFile, ".php") === false || strpos($strFile, "installer_element") === false)
 	    				unset($arrInstallers[$intKey]);
-	
+
 	    		if(count($arrInstallers) > 0) {
 	    		    asort($arrInstallers);
 	    		    //Loading each installer
@@ -846,26 +867,26 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	        			//Creating an object....
 	        			$strClass = "class_".str_replace(".php", "", $strInstaller);
 	        			$objInstaller = new $strClass();
-	
+
 	        			$objSystem = class_modul_system_module::getModuleByName("system");
 	        			if($objInstaller instanceof interface_installer ) {
 	                		$bitNeededSysversionInstalled = true;
 	                	    //check, if a min version of the system is needed
 	                		if($objInstaller->getMinSystemVersion() != "") {
 	                		    //the systems version to compare to
-	
+
 	                		    if(version_compare($objInstaller->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
 	                		        $bitNeededSysversionInstalled = false;
 	                		    }
 	                		}
-	
+
 	                		if($bitNeededSysversionInstalled && $objInstaller->hasPostInstalls()) {
 	                		    $arrElementsToInstall[str_replace(".php", "", $strInstaller)] = $objInstaller->getArrModule("name_lang");
 	                		}
 	        			}
 	        		}
 	    		}
-	
+
 	    		//any installers remaining?
 	    		if(count($arrElementsToInstall) > 0 ) {
 	    		    $strReturn .= $this->objToolkit->divider();
@@ -874,7 +895,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		    foreach ($arrElementsToInstall as $strKey => $strInstaller) {
 	    		    	$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $strInstaller, $this->objToolkit->listButton(getLinkAdmin("pages", "installElement", "&elementName=".$strKey, $this->getText("element_install"), $this->getText("element_install"), "icon_install.gif")), $intI++);
 	    		    }
-	
+
 	    		    $strReturn .= $this->objToolkit->listFooter();
 	    		}
     		}
@@ -910,7 +931,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $this->getParam("element_cachetime"));
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
                 $strReturn .= $this->objToolkit->divider();
-                
+
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", 0);
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "new");
 				//Fetch Admin-Classes
@@ -928,7 +949,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $this->getParam("element_portal"));
 
 				$strReturn .= $this->objToolkit->divider();
-				
+
 				//Repeatable?
 				$arrRepeat = array();
 				$arrRepeat[1] = $this->getText("option_ja");
@@ -948,7 +969,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $objData->getIntCachetime());
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
                 $strReturn .= $this->objToolkit->divider();
-				
+
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", $this->getParam("elementid"));
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "edit");
 				//Fetch Admin-Classes
@@ -966,7 +987,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputDropdown("element_portal", $arrClassesPortal, $this->getText("element_portal"), $objData->getStrClassPortal());
 
 				$strReturn .= $this->objToolkit->divider();
-				
+
 				//Repeatable?
 				$arrRepeat = array();
 				$arrRepeat[1] = $this->getText("option_ja");
@@ -1127,8 +1148,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $strReturn;
 	}
-	
-	
+
+
 // -- Helferfunktionen ----------------------------------------------------------------------------------
 
     /**
@@ -1146,7 +1167,30 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             return false;
     }
 
+    /**
+     * Helper to generate a small path-navigation
+     *
+     * @return string
+     */
+    private function getPathNavigation() {
+        $arrPath = $this->getPathArray();
 
+        $arrPathLinks = array();
+        $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=0", "&nbsp;/&nbsp;", " / ");
+
+        foreach($arrPath as $strOneSystemid) {
+            $arrFolder = $this->getSystemRecord($strOneSystemid);
+            //Skip Elements: No sense to show in path-navigations
+            if($arrFolder["system_module_nr"] == _pages_inhalte_modul_id_)
+                continue;
+
+            if($arrFolder["system_module_nr"] == _pages_modul_id_)
+                $arrPathLinks[] = getLinkAdmin("pages", "newPage", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
+            else
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
+        }
+        return $this->objToolkit->getPathNavigation($arrPathLinks);
+    }
 } //class_modul_pages_admin
 
 ?>
