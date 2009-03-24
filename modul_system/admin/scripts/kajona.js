@@ -197,6 +197,8 @@ function checkRightMatrix() {
 // (http://pro.html.it - http://web-graphics.com)
 var kajonaAdminTooltip = {
 	container : null,
+	lastMouseX : 0,
+	lastMouseY : 0,
 		
 	add : function(objElement, strHtmlContent, bitOpacity) {
 		var tooltip;
@@ -276,6 +278,16 @@ var kajonaAdminTooltip = {
 				posy = e.clientY + document.body.scrollTop;
 			}
 		}
+
+		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
+		if (posx == 0 && posy == 0) {
+			posx = kajonaAdminTooltip.lastMouseX;
+			posy = kajonaAdminTooltip.lastMouseY;
+		} else {
+			kajonaAdminTooltip.lastMouseX = posx;
+			kajonaAdminTooltip.lastMouseY = posy;
+		}
+		
 		c = kajonaAdminTooltip.container;
 		var left = (posx - c.offsetWidth);
 		if (left - c.offsetWidth < 0) {

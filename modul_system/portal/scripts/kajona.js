@@ -14,6 +14,8 @@ function reloadCaptcha(imageID) {
 //(http://pro.html.it - http://web-graphics.com)
 var kajonaTooltip = {
 	container : null,
+	lastMouseX : 0,
+	lastMouseY : 0,
 		
 	add : function(objElement, strHtmlContent, bitOpacity) {
 		var tooltip;
@@ -93,6 +95,16 @@ var kajonaTooltip = {
 				posy = e.clientY + document.body.scrollTop;
 			}
 		}
+		
+		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
+		if (posx == 0 && posy == 0) {
+			posx = kajonaTooltip.lastMouseX;
+			posy = kajonaTooltip.lastMouseY;
+		} else {
+			kajonaTooltip.lastMouseX = posx;
+			kajonaTooltip.lastMouseY = posy;
+		}
+		
 		c = kajonaTooltip.container;
 		var left = (posx - c.offsetWidth);
 		if (left - c.offsetWidth < 0) {
