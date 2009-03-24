@@ -148,8 +148,8 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         if($strSystemidfilter !== false)
             $strFilter .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
             
-        if($strLanguagefilter != "")
-            $strFilter .= " AND postacomment_language = '".dbsafeString($strLanguagefilter)."' ";    
+        if($strLanguagefilter != "") //check against '' to remain backwards-compatible
+            $strFilter .= " AND (postacomment_language = '".dbsafeString($strLanguagefilter)."' OR postacomment_language = '')";
         if($bitJustActive)
             $strFilter .= " AND system_status = 1 ";        
         

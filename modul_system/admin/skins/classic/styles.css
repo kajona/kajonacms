@@ -532,8 +532,10 @@ a.inputSubmit {
 
 /* C O N T E N T   T O O L B A R */
 .contentToolbar {
-    width: 715px;
+    width: 100%;
     margin: 10px 0 10px 0;
+    background-repeat: no-repeat;
+    background-color: #CFD7FF;
 }
 
 .contentToolbar a, .contentToolbar a:link, .contentToolbar a:visited, .contentToolbar a:hover, .contentToolbar a:active, .contentToolbar a:focus {
