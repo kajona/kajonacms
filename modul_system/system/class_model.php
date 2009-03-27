@@ -197,7 +197,7 @@ class class_model extends class_root {
                $floatRating = 0.0;
         }
 
-        if($bitRound)
+        if($bitRound && !$floatRating == null)
             $floatRating = round($floatRating, 2);
 
         return $floatRating;
