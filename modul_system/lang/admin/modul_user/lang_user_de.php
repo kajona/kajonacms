@@ -113,12 +113,12 @@ $lang["user_fehler_name"]                = "Bitte Benutzername angeben <a href=\
 $lang["user_fehler_namedoppelt"]         = "Benutzername schon vorhanden, bitte wählen Sie einen anderen Benutzernamen <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_fehler_pass"]                = "Passwörter sind unterschiedlich <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_inactive"]                   = "Status ändern (ist inaktiv)";
-$lang["user_lastlogin"]                  = " Letzer Login: ";
+$lang["user_lastlogin"]                  = "Letzer Login:";
 $lang["user_liste"]                      = "Alle Benutzer";
 $lang["user_loeschen_erfolg"]            = "Benutzer erfolgreich gelöscht";
 $lang["user_loeschen_fehler"]            = "Fehler beim Löschen des Benutzers";
 $lang["user_loeschen_frage"]             = "Möchten Sie den Benutzer &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["user_logins"]                     = "Logins: ";
+$lang["user_logins"]                     = "Logins:";
 $lang["user_memberships"]                = "Gruppenzugehörigkeit des Benutzers ";
 $lang["user_personaldata"]               = "Persönliche Daten";
 $lang["user_system"]                     = "Systemeinstellungen";

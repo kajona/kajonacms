@@ -113,7 +113,7 @@ $lang["user_fehler_name"]                = "Please enter an username <a href=\"j
 $lang["user_fehler_namedoppelt"]         = "The username already exits, please choose another one <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_fehler_pass"]                = "Passwords provided are different <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_inactive"]                   = "Change statis (is inactive)";
-$lang["user_lastlogin"]                  = "Last Login:";
+$lang["user_lastlogin"]                  = "Last login:";
 $lang["user_liste"]                      = "All users";
 $lang["user_loeschen_erfolg"]            = "User was deleted sucessfully";
 $lang["user_loeschen_fehler"]            = "An error occured while deleting user";

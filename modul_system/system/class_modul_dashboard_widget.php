@@ -13,16 +13,16 @@ include_once(_systempath_."/class_modul_system_adminwidget.php");
 
 /**
  * Class to represent a single adminwidget
- * 
+ *
  * @package modul_dashboard
  */
 class class_modul_dashboard_widget extends class_model implements interface_model {
-    
+
     private $strColumn = "";
     private $strUser = "";
     private $strWidgetId = "";
-    
-    
+
+
 	/**
      * Constructor to create a valid object
      *
@@ -43,22 +43,22 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 		if($strSystemid != "")
 		    $this->initObject();
     }
-    
+
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
-        						   "._dbprefix_."system 
+        						   "._dbprefix_."system
         				WHERE system_id = dashboard_id
         				  AND system_id = '".dbsafeString($this->getSystemid())."'";
-        
+
         $arrRow = $this->objDB->getRow($strQuery);
         if(count($arrRow) > 0) {
             $this->setStrUser($arrRow["dashboard_user"]);
             $this->setStrColumn($arrRow["dashboard_column"]);
             $this->setStrWidgetId($arrRow["dashboard_widgetid"]);
         }
-        
+
     }
-    
+
     /**
      * Updates the current widget to the db
      */
@@ -72,7 +72,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
                  WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
-    
+
     /**
      * Deletes the current object and the assigned widget from the db
      *
@@ -92,22 +92,22 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
         return false;
     }
-    
+
     /**
      * Saves a widget as a new one to the database
      *
      */
     public function saveObjectToDb() {
-        
+
         $this->objDB->transactionBegin();
 
         $strDashboardId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "dashboard of user: ".$this->strUser);
         $this->setSystemid($strDashboardId);
-        
+
         class_logger::getInstance()->addLogRow("new dashboardentry for user ".$this->getStrUser(), class_logger::$levelInfo);
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                     (dashboard_id, dashboard_user, dashboard_column, dashboard_widgetid) VALUES
-                    ('".dbsafeString($strDashboardId)."', '".dbsafeString($this->getStrUser())."', 
+                    ('".dbsafeString($strDashboardId)."', '".dbsafeString($this->getStrUser())."',
                     '".dbsafeString($this->getStrColumn())."', '".dbsafeString($this->getStrWidgetId())."')";
 
         if($this->objDB->_query($strQuery)) {
@@ -119,7 +119,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             return false;
         }
     }
-    
+
     /**
      * Looks up the widgets placed in a given column and
      * returns a list of instances
@@ -129,11 +129,11 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      */
     public function getWidgetsForColumn($strColumn) {
         $strQuery = "SELECT system_id
-        			  FROM ".$this->arrModule["table"].", 
-        			  	   "._dbprefix_."system 
+        			  FROM ".$this->arrModule["table"].",
+        			  	   "._dbprefix_."system
         			 WHERE dashboard_user = '".dbsafeString($this->objSession->getUserID())."'
         			   AND dashboard_column = '".dbsafeString($strColumn)."'
-        			   AND dashboard_id = system_id 
+        			   AND dashboard_id = system_id
         	     ORDER BY system_sort ASC ";
         $arrRows = $this->objDB->getArray($strQuery);
         $arrReturn = array();
@@ -141,12 +141,12 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             foreach ($arrRows as $arrOneRow) {
             	$arrReturn[] = new class_modul_dashboard_widget($arrOneRow["system_id"]);
             }
-            
+
         }
         return $arrReturn;
     }
-    
-    
+
+
     /**
      * Returns the correpsponding instance of class_modul_system_adminwidget.
      * User class_modul_system_adminwidget::getConcreteAdminwidget() to obtain
@@ -157,8 +157,8 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function getWidgetmodelForCurrentEntry() {
         return new class_modul_system_adminwidget($this->getStrWidgetId());
     }
-    
-    
+
+
     /**
      * Creates an initial set of widgets to be displayed to new users.
      * NOTE: Low-level variant!
@@ -173,19 +173,19 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $objSystemWidget1 = new class_modul_system_adminwidget();
         $objSystemWidget1->setStrClass("class_adminwidget_systeminfo");
         $objSystemWidget1->setStrContent("a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
-        
+
         $objSystemWidget2 = new class_modul_system_adminwidget();
         $objSystemWidget2->setStrClass("class_adminwidget_note");
-        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.1\";}");
-        
+        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.2\";}");
+
         $objSystemWidget3 = new class_modul_system_adminwidget();
         $objSystemWidget3->setStrClass("class_adminwidget_systemlog");
         $objSystemWidget3->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"5\";}");
-        
+
         $objSystemWidget4 = new class_modul_system_adminwidget();
         $objSystemWidget4->setStrClass("class_adminwidget_systemcheck");
         $objSystemWidget4->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
-        
+
         //and save the widget itself
         if($objSystemWidget1->saveObjectToDb()) {
             $strWidgetId = $objSystemWidget1->getSystemid();
@@ -194,9 +194,9 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column1");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb()) 
-                $bitReturn = false;    
-        }   
+            if(!$objDashboard->saveObjectToDb())
+                $bitReturn = false;
+        }
 
         //and save the widget itself
         if($objSystemWidget2->saveObjectToDb()) {
@@ -206,10 +206,10 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb()) 
-                $bitReturn = false;    
-        }   
-        
+            if(!$objDashboard->saveObjectToDb())
+                $bitReturn = false;
+        }
+
         //and save the widget itself
         if($objSystemWidget3->saveObjectToDb()) {
             $strWidgetId = $objSystemWidget3->getSystemid();
@@ -218,10 +218,10 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb()) 
-                $bitReturn = false;    
-        }   
-        
+            if(!$objDashboard->saveObjectToDb())
+                $bitReturn = false;
+        }
+
         //and save the widget itself
         if($objSystemWidget4->saveObjectToDb()) {
             $strWidgetId = $objSystemWidget4->getSystemid();
@@ -230,14 +230,14 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb()) 
-                $bitReturn = false;    
+            if(!$objDashboard->saveObjectToDb())
+                $bitReturn = false;
         }
-        
+
         return $bitReturn;
     }
-    
-    
+
+
 //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 
     public function setStrColumn($strColumn) {
@@ -249,7 +249,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function setStrWidgetId($strWidgetId) {
         $this->strWidgetId = $strWidgetId;
     }
-    
+
     public function getStrColumn() {
         return $this->strColumn;
     }
@@ -259,7 +259,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function getStrWidgetId() {
         return $this->strWidgetId;
     }
-    
+
 }
 
 
