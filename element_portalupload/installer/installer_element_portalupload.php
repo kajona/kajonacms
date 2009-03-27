@@ -36,7 +36,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.1.9";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

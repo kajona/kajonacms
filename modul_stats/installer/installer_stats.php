@@ -42,7 +42,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.9";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

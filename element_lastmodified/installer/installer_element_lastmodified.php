@@ -36,7 +36,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.9";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

@@ -34,7 +34,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.1.9";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

@@ -38,7 +38,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.9";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

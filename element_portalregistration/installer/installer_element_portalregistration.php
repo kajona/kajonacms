@@ -36,7 +36,7 @@ class class_installer_element_portalregistration extends class_installer_base im
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.0.95";
+	    return "3.2.0";
 	}
 
 	public function hasPostInstalls() {

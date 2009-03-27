@@ -36,7 +36,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
     }
     
     public function getMinSystemVersion() {
-        return "3.0.9";
+        return "3.2.0";
     }
 
     public function hasPostInstalls() {

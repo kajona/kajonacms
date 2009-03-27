@@ -858,14 +858,14 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Registering default languageswitch template...\n";
 
-        $strQuery = "SELECT element_id
-                     FROM "._dbprefix_."element
-                     LEFT JOIN "._dbprefix_."element_universal ON (element_id = content_id)
-                     WHERE element_name = 'languageswitch' AND content_id IS null ";
-
+        $strQuery = "SELECT page_element_id
+                     FROM "._dbprefix_."page_element
+                     LEFT JOIN "._dbprefix_."element_universal ON (page_element_id = content_id)
+                     WHERE page_element_placeholder_element = 'languageswitch' AND content_id IS null ";
         $arrRows = $this->objDB->getArray($strQuery);
+        
         foreach($arrRows as $arrOneRow) {
-            $strRowId = $arrOneRow["element_id"];
+            $strRowId = $arrOneRow["page_element_id"];
             $strReturn .= "Updating element ".$strRowId."\n";
             $strQuery = "INSERT INTO "._dbprefix_."element_universal
                          (content_id, char1) VALUES
