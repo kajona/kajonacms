@@ -164,6 +164,8 @@ class class_installer_samplecontent extends class_installer_base implements inte
         if($arrModul["module_version"] == "3.1.95") {
             $strReturn .= $this->update_3195_320();
         }
+
+        return $strReturn;
 	}
 
 	private function update_300_301() {

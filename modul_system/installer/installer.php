@@ -309,7 +309,6 @@ class class_installer {
 	public function createModuleInstalls() {
 		$strReturn = "";
 		$strInstallLog = "";
-		$strReturn .= "";
 
 		//Is there a module to be updated?
 		if(isset($_GET["update"])) {
@@ -440,7 +439,6 @@ class class_installer {
 	public function installSamplecontent() {
         $strReturn = "";
 		$strInstallLog = "";
-		$strReturn .= "\n\n";
 
 		//Is there a module to be installed or updated?
 		if(isset($_GET["update"])) {
@@ -462,7 +460,6 @@ class class_installer {
                 $strInstallLog .= $objInstaller->doModuleInstall()."";
             }
         }
-        
         
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_samplecontent");

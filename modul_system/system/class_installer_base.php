@@ -107,8 +107,12 @@ abstract class class_installer_base extends class_root {
         }
         else {
             //updates available?
-            if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<"))
-                return "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+            if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
+                if($this->arrModule["name"] == "samplecontent")
+                    return "<a href=\""._webpath_."/installer/installer.php?step=samplecontent&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+                else
+                    return "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+            }
             elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
                 return $this->getText("installer_versioninstalled", "system", "admin").$objModule->getStrVersion();
             
@@ -201,8 +205,9 @@ abstract class class_installer_base extends class_root {
 		}
 		else {
 		    //updates available?
-		    if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<"))
-				$strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+		    if(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "<")) {
+                $strReturn .= "<a href=\""._webpath_."/installer/installer.php?step=install&update=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]." (".$objModule->getStrVersion().")</a>";
+            }
 
 			return $strReturn."<br />";
 		}
