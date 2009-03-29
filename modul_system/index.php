@@ -266,10 +266,6 @@ class class_index  {
 
 	    //check headers, maybe execution could be terminated right here
 	    //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
-
-        /*
-        TODO: Was disabled due to problems with IE 6 & 7, please test if problems solved
-        */
         if(checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput))) {
             return;
         }

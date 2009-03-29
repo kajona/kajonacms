@@ -21,7 +21,8 @@ class class_template {
 
 	private static $objTemplate = null;
 
-    //TODO: reenable
+    //enable this cache on high-performance environments.
+    //since template-caching can be very memory-consumptive, it is disabled by default.
     private $bitSessionCacheEnabled = false;
 
 	/**

@@ -443,7 +443,6 @@ class class_image {
             $this->finalLoadImage();
 
         //workaround: if the sum of width & height %2 is not 0, one has to be cut by one pixel
-        //TODO: rewrite rotating
         $bitImageResized = false;
         if(($this->intWidth + $this->intHeight) % 2 != 0 && $intAngle != 180) {
 
