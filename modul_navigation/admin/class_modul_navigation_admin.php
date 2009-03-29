@@ -27,6 +27,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
      *
      */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_navigation";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;
@@ -76,7 +77,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSaveNaviPoint();
     			    if($strReturn == "")
-    			       $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+    			       $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		    }
     		    else {
                     if($this->getParam("mode") == "new")
@@ -88,15 +89,15 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		if($strAction == "deleteNaviFinal") {
     			$strReturn = $this->actionDeleteNaviFinal();
     			if($strReturn == "")
-    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
     		if($strAction == "naviPointMoveUp") {
     			$strReturn = $this->actionMovePoint("upwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
     		}
     		if($strAction == "naviPointMoveDown") {
     			$strReturn = $this->actionMovePoint("downwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getPrevId() != "0" ? "systemid=".$this->getPrevId() : "")));
     		}
 
 		}
