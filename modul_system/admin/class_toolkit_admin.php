@@ -405,7 +405,7 @@ class class_toolkit_admin extends class_toolkit {
             function initAC_".$strNameCleaned."() {
             	document.getElementById('".$strName."').onfocus = function() {};
 
-				var pageDataSource = new YAHOO.util.XHRDataSource(\"xml.php\");
+				var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
 				pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
 				pageDataSource.responseSchema = {
 					resultNode : \"page\",
