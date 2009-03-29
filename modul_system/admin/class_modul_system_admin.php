@@ -542,7 +542,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->getText("log_empty");
 
             if($strPhpLogContent != "") {
-                $arrLogEntries = explode("\n", $strPhpLogContent);
+                $arrLogEntries = explode("\r", $strPhpLogContent);
                 $arrLogEntries = array_reverse($arrLogEntries);
                 $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 100);
             }

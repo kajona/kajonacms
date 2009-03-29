@@ -28,6 +28,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_system";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _system_modul_id_;
