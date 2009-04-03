@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 179
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -49,6 +49,7 @@ $lang["element_last"]                    = "At the end";
 $lang["element_liste_leer"]              = "No page elements provided by page template";
 $lang["element_loeschen_fehler"]         = "An error occured while deleting page element";
 $lang["element_loeschen_frage"]          = "Do you really want to delete the page element &quot;<b>%%element_name%%</b>&quot;?";
+$lang["element_loeschen_link"]           = "Delete";
 $lang["element_name"]                    = "Name:";
 $lang["element_portal"]                  = "Portal-class:";
 $lang["element_pos"]                     = "Position at placeholder:";

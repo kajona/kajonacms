@@ -38,8 +38,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$arrModule["moduleId"] 		= _pages_modul_id_;
 		$arrModule["modul"]			= "pages";
 		$arrModule["table"]			= _dbprefix_."page";
-		$arrModule["table2"]			= _dbprefix_."page_elemente";
-		$arrModule["table3"]			= _dbprefix_."elemente";
+		$arrModule["table2"]		= _dbprefix_."page_elemente";
+		$arrModule["table3"]		= _dbprefix_."elemente";
 
 		//base class
 		parent::__construct($arrModule);

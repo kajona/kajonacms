@@ -75,7 +75,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		if($strAction == "deleteElementFinal") {
     			$strReturn = $this->actionDeleteElementFinal();
     			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getParam("deleteid")));
+    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getParam("deleteid").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
     		if($strAction == "elementSortUp") {
     			$strReturn = $this->actionShiftElement("up");
@@ -563,9 +563,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		//Rights?
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			$objElement = new class_modul_pages_pageelement($this->getSystemid());
-			$strReturn .= $this->objToolkit->warningBox($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" )
-			             .$this->getText("element_loeschen_frage")
-			             ." <br /><a href=\"".getLinkAdminHref($this->arrModule["modul"], "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
+
+            $strQuestion = uniStrReplace("%%element_name%%", htmlToString($objElement->getStrName(). ($objElement->getStrTitle() != "" ? " - ".$objElement->getStrTitle() : "" ), true), $this->getText("element_loeschen_frage"));
+
+			$strReturn .= $this->objToolkit->warningBox($strQuestion
+			             ." <br /><a href=\"".getLinkAdminHref("pages_content", "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
 			             .$this->getText("element_loeschen_link"));
 		}
 		else
@@ -585,12 +587,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-
 		//Check the rights
 		if($this->objRights->rightDelete($strSystemid)) {
 			//Locked?
 			$strLockId = $this->getLockId($strSystemid);
 			$strPrevId = $this->getPrevId();
+            
 			if($strLockId == "0") {
 			    //delete object
 			    if(!class_modul_pages_pageelement::deletePageElement($strSystemid))

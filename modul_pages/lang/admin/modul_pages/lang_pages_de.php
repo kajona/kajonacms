@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 179
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -49,6 +49,7 @@ $lang["element_last"]                    = "Am Ende des Platzhalters";
 $lang["element_liste_leer"]              = "Keine Elemente im Template vorhanden";
 $lang["element_loeschen_fehler"]         = "Fehler beim Löschen des Elements";
 $lang["element_loeschen_frage"]          = "Möchten Sie das Element &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
+$lang["element_loeschen_link"]           = "Löschen";
 $lang["element_name"]                    = "Name:";
 $lang["element_portal"]                  = "Portal-Klasse:";
 $lang["element_pos"]                     = "Position am Platzhalter:";
