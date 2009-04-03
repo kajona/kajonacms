@@ -78,7 +78,7 @@ class class_modul_news_news extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb($bitMemberships = true) {
+    public function updateObjectToDb($bitMemberships = true, $bitEncodeNewsTitle = false) {
         class_logger::getInstance()->addLogRow("updated news ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setEditDate();
         //Update all needed tables
@@ -86,7 +86,7 @@ class class_modul_news_news extends class_model implements interface_model  {
         $this->updateDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
         //news
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), false)."',
+                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), $bitEncodeNewsTitle)."',
                             news_hits = '".$this->objDB->dbsafeString($this->getIntHits())."',
                             news_intro = '".$this->objDB->dbsafeString($this->getStrIntro(), false)."',
                             news_text = '".$this->objDB->dbsafeString($this->getStrNewstext(), false)."',
@@ -127,7 +127,7 @@ class class_modul_news_news extends class_model implements interface_model  {
         //The news-Table
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                     (news_id, news_title, news_hits) VALUES
-                    ('".$this->objDB->dbsafeString($strNewsId)."', '".$this->objDB->dbsafeString($this->getStrTitle(), false)."', 0)";
+                    ('".$this->objDB->dbsafeString($strNewsId)."', '".$this->objDB->dbsafeString($this->getStrTitle())."', 0)";
 
         //The dates
         $this->createDateRecord($strNewsId, $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());

@@ -500,7 +500,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     }
                 }
                 $objNews->setArrCats($arrCats);
-                if(!$objNews->updateObjectToDb())
+                if(!$objNews->updateObjectToDb(true, true))
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 
 			}
