@@ -27,6 +27,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_news";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
@@ -440,6 +441,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
+                $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
