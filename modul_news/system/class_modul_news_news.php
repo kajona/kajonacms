@@ -287,13 +287,8 @@ class class_modul_news_news extends class_model implements interface_model  {
 		}
 		else
 			$strTime = "";
-
-		// check if all news should be loaded or only news from one category
-		if($strCat != "0") {
-			$strOneCat = "AND newsmem_category = '".dbsafeString($strCat)."'";
-		} else {
-			$strOneCat = "";
-		}
+            
+		
 		
 		//check if news should be ordered de- or ascending
 		if ($intOrder == 0) {
@@ -302,20 +297,35 @@ class class_modul_news_news extends class_model implements interface_model  {
 			$strOrder  = "ASC";
 		}
 
-		$strQuery = "SELECT system_id
-						FROM "._dbprefix_."news,
-						     "._dbprefix_."news_member,
-		                     "._dbprefix_."system,
-		                     "._dbprefix_."system_date
-		                WHERE system_id = news_id
-		                  AND system_id = system_date_id
-		                  AND news_id = newsmem_news
-		                  	".$strOneCat."
-		                  AND system_status = 1
-						  AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
-							".$strTime."
-						  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
-						ORDER BY system_date_start ".$strOrder;
+        if($strCat != "0") {
+            $strQuery = "SELECT system_id
+                            FROM "._dbprefix_."news,
+                                 "._dbprefix_."news_member,
+                                 "._dbprefix_."system,
+                                 "._dbprefix_."system_date
+                            WHERE system_id = news_id
+                              AND system_id = system_date_id
+                              AND news_id = newsmem_news
+                              AND newsmem_category = '".dbsafeString($strCat)."'
+                              AND system_status = 1
+                              AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
+                                ".$strTime."
+                              AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+                            ORDER BY system_date_start ".$strOrder;
+        }
+        else {
+             $strQuery = "SELECT system_id
+                            FROM "._dbprefix_."news,
+                                 "._dbprefix_."system,
+                                 "._dbprefix_."system_date
+                            WHERE system_id = news_id
+                              AND system_id = system_date_id
+                              AND system_status = 1
+                              AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
+                                ".$strTime."
+                              AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+                            ORDER BY system_date_start ".$strOrder;
+        }
 
         if($intStart !== false && $intEnd !== false)
             $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
