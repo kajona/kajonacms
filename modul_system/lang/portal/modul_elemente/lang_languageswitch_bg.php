@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 178
 
 //editable entries
-$lang["lang_bg"]                         = "Bulgarisch";
-$lang["lang_de"]                         = "Deutsch";
-$lang["lang_en"]                         = "Englisch";
-$lang["lang_fr"]                         = "Französisch";
-$lang["lang_pt"]                         = "Portugiesisch";
-$lang["lang_ru"]                         = "Russisch";
+$lang["lang_bg"]                         = "Български";
+$lang["lang_de"]                         = "Немски";
+$lang["lang_en"]                         = "Английски";
+$lang["lang_fr"]                         = "Френски";
+$lang["lang_pt"]                         = "Португалски";
+$lang["lang_ru"]                         = "Руски";
 ?>

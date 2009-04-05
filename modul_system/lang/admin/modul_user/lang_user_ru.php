@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 178
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Просмотр", 1 => "Изменить", 2 => "Удалить", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -42,6 +42,7 @@ $lang["gruppen"]                         = "Группы: ";
 $lang["gruppen_anlegen"]                 = "Создать группу";
 $lang["gruppen_liste"]                   = "Все группы";
 $lang["handy"]                           = "Мобильный телефон:";
+$lang["lang_bg"]                         = "Болгарский";
 $lang["lang_de"]                         = "Deutsch";
 $lang["lang_en"]                         = "English";
 $lang["lang_fr"]                         = "Французский";

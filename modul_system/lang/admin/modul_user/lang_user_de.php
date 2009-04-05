@@ -7,14 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 178
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
-$lang["_admins_group_id_"]               = "ID der Admin-Gruppe:";
 $lang["_admin_skin_default_"]            = "Standard-Admin-Skin:";
+$lang["_admins_group_id_"]               = "ID der Admin-Gruppe:";
 $lang["_guests_group_id_"]               = "ID der Gäste-Gruppe:";
 $lang["_user_log_nrofrecords_"]          = "Anzahl Zeilen:";
 $lang["_user_log_nrofrecords_hint"]      = "Definiert die Anzahl an Zeilen, die im Login-Protokoll ausgegeben werden sollen.";
@@ -42,6 +42,7 @@ $lang["gruppen"]                         = "Gruppen: ";
 $lang["gruppen_anlegen"]                 = "Neue Gruppe";
 $lang["gruppen_liste"]                   = "Alle Gruppen";
 $lang["handy"]                           = "Handy:";
+$lang["lang_bg"]                         = "Bulgarisch";
 $lang["lang_de"]                         = "Deutsch";
 $lang["lang_en"]                         = "Englisch";
 $lang["lang_fr"]                         = "Französisch";

@@ -7,9 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 178
 
 //editable entries
+$lang["lang_bg"]                         = "Bulgarian";
 $lang["lang_de"]                         = "German";
 $lang["lang_en"]                         = "English";
 $lang["lang_fr"]                         = "French";

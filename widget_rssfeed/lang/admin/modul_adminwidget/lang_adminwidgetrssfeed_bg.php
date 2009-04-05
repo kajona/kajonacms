@@ -7,13 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 163
 
 //editable entries
-$lang["lang_bg"]                         = "Bulgarisch";
-$lang["lang_de"]                         = "Deutsch";
-$lang["lang_en"]                         = "Englisch";
-$lang["lang_fr"]                         = "Französisch";
-$lang["lang_pt"]                         = "Portugiesisch";
-$lang["lang_ru"]                         = "Russisch";
+$lang["rssfeed_errorloading"]            = "Грешка При Зареждане на Feeds";
+$lang["rssfeed_errorparsing"]            = "Грешка При Анализ на Feeds";
+$lang["rssfeed_feedurl"]                 = "Feed-URL:";
+$lang["rssfeed_name"]                    = "Newsfeed";
+$lang["rssfeed_posts"]                   = "Номер на постове";
 ?>
