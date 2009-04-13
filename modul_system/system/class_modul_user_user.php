@@ -9,6 +9,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/class_modul_user_group.php");
 
 /**
  * Model for a user
@@ -245,6 +246,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public function deleteUser() {
         class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
+        class_modul_user_group::deleteAllUserMemberships($this);
         $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".dbsafeString($this->getSystemid())."'";
         //call other models that may be interested
         $this->additionalCallsOnDeletion($this->getSystemid());
