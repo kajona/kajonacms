@@ -71,13 +71,13 @@ class class_test_rights implements interface_testable {
 
         echo "\tchecking leaf nodes for inherited rights\n";
         foreach($arrThirdLevelNodes as $strOneRootNode) {
-            class_assertions::assert_equal($objRights->rightView($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assert_equal($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightView($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertEqual($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
         }
 
 
