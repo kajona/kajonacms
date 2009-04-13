@@ -11,7 +11,6 @@ class class_test_rights implements interface_testable {
     public function test() {
 
         $this->testInheritance();
-        $this->testCsv();
     }
 
 
@@ -31,45 +30,78 @@ class class_test_rights implements interface_testable {
         $strUsername = "user_".generateSystemid();
         $objUser->setStrUsername($strUsername);
         $objUser->saveObjectToDb();
-        echo "\id of user: ".$objUser->getSystemid()."\n";
+        echo "\tid of user: ".$objUser->getSystemid()."\n";
 
         echo "\tcreating a test group\n";
         $objGroup = new class_modul_user_group();
         $strName = "name_".generateSystemid();
         $objGroup->setStrName($strName);
         $objGroup->saveObjectToDb();
-        echo "\id of group: ".$objGroup->getSystemid()."\n";
+        echo "\tid of group: ".$objGroup->getSystemid()."\n";
 
         echo "\tadding user to group\n";
         class_modul_user_group::addUserToGroups($objUser, array($objGroup->getSystemid()));
 
-        echo "\creating node-tree\n";
-        $intRootId = $objSystemCommon->createSystemRecord(0, "autotest");
+        echo "\tcreating node-tree\n";
+        $strRootId = $objSystemCommon->createSystemRecord(0, "autotest");
         echo "\tcreating child nodes...\n";
-        $intSecOneId = $objSystemCommon->createSystemRecord($intRootId, "autotest");
-        $intSecTwoId = $objSystemCommon->createSystemRecord($intRootId, "autotest");
+        $strSecOne = $objSystemCommon->createSystemRecord($strRootId, "autotest");
+        $strSecTwo = $objSystemCommon->createSystemRecord($strRootId, "autotest");
 
-        $intThirdOne1 = $objSystemCommon->createSystemRecord($intSecOneId, "autotest");
-        $intThirdOne2 = $objSystemCommon->createSystemRecord($intSecOneId, "autotest");
-        $intThirdTwo1 = $objSystemCommon->createSystemRecord($intSecTwoId, "autotest");
-        $intThirdTwo2 = $objSystemCommon->createSystemRecord($intSecTwoId, "autotest");
+        $strThirdOne1 = $objSystemCommon->createSystemRecord($strSecOne, "autotest");
+        $strThirdOne2 = $objSystemCommon->createSystemRecord($strSecOne, "autotest");
+        $strThirdTwo1 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest");
+        $strThirdTwo2 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest");
 
-        $intThird111 = $objSystemCommon->createSystemRecord($intThirdOne1, "autotest");
-        $intThird112 = $objSystemCommon->createSystemRecord($intThirdOne1, "autotest");
-        $intThird121 = $objSystemCommon->createSystemRecord($intThirdOne2, "autotest");
-        $intThird122 = $objSystemCommon->createSystemRecord($intThirdOne2, "autotest");
-        $intThird211 = $objSystemCommon->createSystemRecord($intThirdTwo1, "autotest");
-        $intThird212 = $objSystemCommon->createSystemRecord($intThirdTwo1, "autotest");
-        $intThird221 = $objSystemCommon->createSystemRecord($intThirdTwo2, "autotest");
-        $intThird222 = $objSystemCommon->createSystemRecord($intThirdTwo2, "autotest");
+        $strThird111 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest");
+        $strThird112 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest");
+        $strThird121 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest");
+        $strThird122 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest");
+        $strThird211 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest");
+        $strThird212 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest");
+        $strThird221 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest");
+        $strThird222 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest");
+        $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 
 
         echo "\tadding group with right view & edit\n";
-        $objRights->addGroupToRight(_guests_group_id_, $intRootId, "view");
-        $objRights->addGroupToRight(_guests_group_id_, $intRootId, "edit");
+        $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "view");
+        $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
+
+        echo "\tchecking leaf nodes for inherited rights\n";
+        foreach($arrThirdLevelNodes as $strOneRootNode) {
+            class_assertions::assert_equal($objRights->rightView($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assert_equal($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+        }
 
 
+
+
+        echo "\tdeleting systemnodes\n";
+        $objSystemCommon->deleteSystemRecord($strThird111);
+        $objSystemCommon->deleteSystemRecord($strThird112);
+        $objSystemCommon->deleteSystemRecord($strThird121);
+        $objSystemCommon->deleteSystemRecord($strThird122);
+        $objSystemCommon->deleteSystemRecord($strThird211);
+        $objSystemCommon->deleteSystemRecord($strThird212);
+        $objSystemCommon->deleteSystemRecord($strThird221);
+        $objSystemCommon->deleteSystemRecord($strThird222);
+
+        $objSystemCommon->deleteSystemRecord($strThirdOne1);
+        $objSystemCommon->deleteSystemRecord($strThirdOne2);
+        $objSystemCommon->deleteSystemRecord($strThirdTwo1);
+        $objSystemCommon->deleteSystemRecord($strThirdTwo2);
+
+        $objSystemCommon->deleteSystemRecord($strSecOne);
+        $objSystemCommon->deleteSystemRecord($strSecTwo);
+
+        $objSystemCommon->deleteSystemRecord($strRootId);
 
         echo "\tdeleting the test user\n";
         $objUser->deleteUser();
