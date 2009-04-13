@@ -240,6 +240,7 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 */
 	public static function deleteGroup($strGroupid) {
 	    class_logger::getInstance()->addLogRow("deleted group with id ".$strGroupid, class_logger::$levelInfo);
+        $this->deleteAllUsersFromCurrentGroup();
         $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id='".dbsafeString($strGroupid)."'";
         return class_carrier::getInstance()->getObjDB()->_query($strQuery);
 	}
