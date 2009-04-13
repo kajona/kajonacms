@@ -197,6 +197,17 @@ class class_modul_user_group extends class_model implements interface_model  {
 	    return $arrReturn;   
 	}
 
+    /**
+	 * Returns an array of groupids the passed user is member
+	 *
+	 * @param string $strUserId
+	 * @return string
+	 */
+	public static function getAllGroupIdsForUserAsString($strUserId) {
+        $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserId);
+	    return implode(",", $arrGroups);
+	}
+
 	/**
 	 * Deletes all memberships of the given USER from ALL groups
 	 *

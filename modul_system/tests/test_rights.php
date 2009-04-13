@@ -43,24 +43,25 @@ class class_test_rights implements interface_testable {
         class_modul_user_group::addUserToGroups($objUser, array($objGroup->getSystemid()));
 
         echo "\tcreating node-tree\n";
-        $strRootId = $objSystemCommon->createSystemRecord(0, "autotest");
+        $strRootId = $objSystemCommon->createSystemRecord(0, "autotest 0");
+        echo "\tid of root-node: ".$strRootId."\n";
         echo "\tcreating child nodes...\n";
-        $strSecOne = $objSystemCommon->createSystemRecord($strRootId, "autotest");
-        $strSecTwo = $objSystemCommon->createSystemRecord($strRootId, "autotest");
+        $strSecOne = $objSystemCommon->createSystemRecord($strRootId, "autotest 01");
+        $strSecTwo = $objSystemCommon->createSystemRecord($strRootId, "autotest 02");
 
-        $strThirdOne1 = $objSystemCommon->createSystemRecord($strSecOne, "autotest");
-        $strThirdOne2 = $objSystemCommon->createSystemRecord($strSecOne, "autotest");
-        $strThirdTwo1 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest");
-        $strThirdTwo2 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest");
+        $strThirdOne1 = $objSystemCommon->createSystemRecord($strSecOne, "autotest 011");
+        $strThirdOne2 = $objSystemCommon->createSystemRecord($strSecOne, "autotest 012");
+        $strThirdTwo1 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest 021");
+        $strThirdTwo2 = $objSystemCommon->createSystemRecord($strSecTwo, "autotest 022");
 
-        $strThird111 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest");
-        $strThird112 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest");
-        $strThird121 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest");
-        $strThird122 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest");
-        $strThird211 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest");
-        $strThird212 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest");
-        $strThird221 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest");
-        $strThird222 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest");
+        $strThird111 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest 0111");
+        $strThird112 = $objSystemCommon->createSystemRecord($strThirdOne1, "autotest 0112");
+        $strThird121 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest 0121");
+        $strThird122 = $objSystemCommon->createSystemRecord($strThirdOne2, "autotest 0122");
+        $strThird211 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest 0211");
+        $strThird212 = $objSystemCommon->createSystemRecord($strThirdTwo1, "autotest 0212");
+        $strThird221 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest 0221");
+        $strThird222 = $objSystemCommon->createSystemRecord($strThirdTwo2, "autotest 0222");
         $arrThirdLevelNodes = array($strThird111, $strThird112, $strThird121, $strThird122, $strThird211, $strThird212, $strThird221, $strThird222);
 
 
@@ -69,21 +70,24 @@ class class_test_rights implements interface_testable {
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "view");
         $objRights->addGroupToRight($objGroup->getSystemid(), $strRootId, "edit");
 
+        $objDB->flushQueryCache();
+        
         echo "\tchecking leaf nodes for inherited rights\n";
         foreach($arrThirdLevelNodes as $strOneRootNode) {
-            class_assertions::assertEqual($objRights->rightView($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), true , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertEqual($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), false , __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertTrue($objRights->rightView($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertTrue($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertFalse($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertFalse($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertFalse($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertFalse($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            class_assertions::assertFalse($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
         }
 
 
 
 
         echo "\tdeleting systemnodes\n";
+        
         $objSystemCommon->deleteSystemRecord($strThird111);
         $objSystemCommon->deleteSystemRecord($strThird112);
         $objSystemCommon->deleteSystemRecord($strThird121);
@@ -107,10 +111,10 @@ class class_test_rights implements interface_testable {
         $objUser->deleteUser();
         echo "\tdeleting the test group\n";
         class_modul_user_group::deleteGroup($objGroup->getSystemid());
-
+        
     }
 
-    
+
 }
 
 ?>

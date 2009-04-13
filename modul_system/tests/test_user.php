@@ -108,6 +108,11 @@ class class_test_user implements interface_testable {
             $objDB->flushQueryCache();
         }
 
+        echo "\tdeleting groups & users\n";
+        foreach(class_modul_user_group::getGroupMembers($objGroup->getSystemid()) as $objOneUser)
+            $objOneUser->deleteUser();
+        class_modul_user_group::deleteGroup($objGroup->getSystemid());
+
 
     }
 

@@ -268,14 +268,19 @@ class class_rights {
 	 */
 	public function rightView($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else 
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
-
+        
 		if($strUserid != "") {
-        	$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["view"]))
 					$bitReturn = true;
@@ -300,14 +305,19 @@ class class_rights {
 	 */
 	public function rightEdit($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["edit"]))
 					$bitReturn = true;
@@ -333,14 +343,19 @@ class class_rights {
 	 */
 	public function rightDelete($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["delete"]))
 					$bitReturn = true;
@@ -367,14 +382,19 @@ class class_rights {
 	 */
 	public function rightRight($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right"]))
 					$bitReturn = true;
@@ -401,14 +421,19 @@ class class_rights {
 	 */
 	public function rightRight1($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right1"]))
 					$bitReturn = true;
@@ -434,14 +459,19 @@ class class_rights {
 	 */
 	public function rightRight2($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right2"]))
 					$bitReturn = true;
@@ -467,14 +497,19 @@ class class_rights {
 	 */
 	public function rightRight3($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right3"]))
 					$bitReturn = true;
@@ -499,14 +534,19 @@ class class_rights {
 	 */
 	public function rightRight4($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right4"]))
 					$bitReturn = true;
@@ -532,14 +572,19 @@ class class_rights {
 	 */
 	public function rightRight5($strSystemid, $strUserid = "") {
 		$bitReturn = false;
-		//Given ID?
-		if($strUserid == "")
+        $arrGroups = array();
+		if($strUserid == "") {
 			$strUserid = $this->objSession->getUserID();
+            if($strUserid != "") {
+                $arrGroups = $this->objSession->getGroupIdsAsArray();
+            }
+        }
+        else
+            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
 		if($strUserid != "") {
-			$arrGroups = $this->objSession->getGroupIdsAsArray();
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["right5"]))
 					$bitReturn = true;
