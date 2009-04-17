@@ -103,8 +103,7 @@ class class_assertions {
             return true;
         }
         else {
-            class_testLogger::getInstance()->addLogRow("assert equal failed: ".$strCallingMethod."\n\tfound ".$value1." expected ".$value2, class_testLogger::$levelError);
-            echo "\t!!! error in ".$strCallingMethod.", got ".$value1." expected ".$value2." \n";
+            class_testLogger::getInstance()->addLogRow("assert equal failed: ".$strCallingMethod."\tfound ".$value1." expected ".$value2, class_testLogger::$levelError);
             class_assertions::$nrOfFailures++;
             return false;
         }
@@ -117,8 +116,7 @@ class class_assertions {
             return true;
         }
         else {
-            class_testLogger::getInstance()->addLogRow("assert true failed: ".$strCallingMethod."\n\tfound ".$value1." expected true", class_testLogger::$levelError);
-            echo "\t!!! error in ".$strCallingMethod."\n";
+            class_testLogger::getInstance()->addLogRow("assert true failed: ".$strCallingMethod."\tfound ".$value1." expected true", class_testLogger::$levelError);
             class_assertions::$nrOfFailures++;
             return false;
         }
@@ -131,8 +129,7 @@ class class_assertions {
             return true;
         }
         else {
-            class_testLogger::getInstance()->addLogRow("assert false failed: ".$strCallingMethod."\n\tfound ".$value1." expected false", class_testLogger::$levelError);
-            echo "\t!!! error in ".$strCallingMethod."\n";
+            class_testLogger::getInstance()->addLogRow("assert false failed: ".$strCallingMethod." -> found ".$value1." expected false", class_testLogger::$levelError);
             class_assertions::$nrOfFailures++;
             return false;
         }
