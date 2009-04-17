@@ -11,6 +11,7 @@ include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
 include_once(_systempath_."/interface_sortable_rating.php");
 include_once(_systempath_."/class_modul_system_common.php");
+include_once(_systempath_."/class_modul_system_module.php");
 
 /**
  * Model for comment itself
