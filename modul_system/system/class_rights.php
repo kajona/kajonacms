@@ -140,6 +140,25 @@ class class_rights {
 		return $bitReturn;
 	}
 
+    /**
+     * Sets the inheritance-status for a single record
+     *
+     * @param bool $bitIsInherited
+     * @param string $strSystemid
+     * @return bool
+     */
+	public function setInherited($bitIsInherited, $strSystemid) {
+		$bitReturn = false;
+        $this->objDb->flushQueryCache();
+        $this->flushRightsCache();
+
+        $strQuery = "UPDATE "._dbprefix_."system_right 
+                        SET right_inherit = ".($bitIsInherited ? 1 : 0)."
+                      WHERE right_id = '".dbsafeString($strSystemid)."'";
+
+        return $this->objDb->_query($strQuery);
+	}
+
 	/**
 	 * Looks up the rights for a given SystemID and going up the tree if needed (inheritance!)
 	 *
@@ -677,6 +696,61 @@ class class_rights {
 	    
 	    return $bitReturn;
 	}
+
+    /**
+	 * Removes a group from a right at a given systemid
+	 * <b>NOTE: By setting rights using this method, inheritance is set to false!!!</b>
+	 *
+	 * @param string $strGroupId
+	 * @param string $strSystemid
+	 * @param string $strRight one of view, edit, delete, right, right1, right2, right3, right4, right5
+	 * @return bool
+	 */
+	public function removeGroupFromRight($strGroupId, $strSystemid, $strRight) {
+	    $bitReturn = true;
+
+	    $this->objDb->flushQueryCache();
+        $this->arrRightsCache = array();
+
+	    //Load the current rights
+	    $arrRights = $this->getArrayRights($strSystemid, false);
+
+	    //rights not given, add now, disabling inheritance
+	    $arrRights["inherit"] = 0;
+
+	    //remove the group
+        if(in_array($strGroupId, $arrRights[$strRight])) {
+            foreach($arrRights[$strRight] as $intKey => $strSingleGroup) {
+                if($strSingleGroup == $strGroupId)
+                    unset($arrRights[$strRight][$intKey]);
+            }
+        }
+
+	    //build a one-dim array
+	    $arrRights["view"] = implode(",", $arrRights["view"]);
+	    $arrRights["edit"] = implode(",", $arrRights["edit"]);
+	    $arrRights["delete"] = implode(",", $arrRights["delete"]);
+	    $arrRights["right"] = implode(",", $arrRights["right"]);
+	    $arrRights["right1"] = implode(",", $arrRights["right1"]);
+	    $arrRights["right2"] = implode(",", $arrRights["right2"]);
+	    $arrRights["right3"] = implode(",", $arrRights["right3"]);
+	    $arrRights["right4"] = implode(",", $arrRights["right4"]);
+	    $arrRights["right5"] = implode(",", $arrRights["right5"]);
+
+	    //and save the row
+	    $bitReturn = $this->setRights($arrRights, $strSystemid);
+
+	    return $bitReturn;
+	}
+
+    /**
+     * Flushes the interal rights cache
+     *
+     * @return void
+     */
+    public function flushRightsCache() {
+        $this->arrRightsCache = array();
+    }
 
 } 
 

@@ -425,6 +425,24 @@ abstract class class_root {
 	    return $this->objDB->_query($strQuery);
 	}
 
+
+    /**
+	 * Gets comment saved with the record
+	 *
+	 * @param string $strSystemid
+	 * @return string
+	 */
+	public function getRecordComment($strSystemid = "") {
+		if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+		$arrRow = $this->getSystemRecord($strSystemid);
+		if(isset($arrRow["system_comment"]))
+			return $arrRow["system_comment"];
+		else
+			return "n.a.";
+	}
+
 	/**
 	 * Returns the name of the user who last edited the record
 	 *
@@ -519,6 +537,26 @@ abstract class class_root {
 			return -1;
 	}
 
+    /**
+	 * Sets the Prev-ID of a record
+	 *
+	 * @param string $strNewPrevId
+	 * @param string $strSystemid If not given, the current objects' systemid is used
+	 * @return bool
+	 */
+	public function setPrevId($strNewPrevId, $strSystemid = "") {
+		if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+        $this->objDB->flushQueryCache();
+        $this->objRights->flushRightsCache();
+        $strQuery = "UPDATE "._dbprefix_."system
+                        SET system_prev_id='".dbsafeString($strNewPrevId)."'
+                      WHERE system_id = '".dbsafeString($strSystemid)."' ";
+
+        return $this->objDB->_query($strQuery);
+	}
+
 
 	/**
 	 * Fetches the number of siblings belonging to the passed systemid
@@ -538,6 +576,33 @@ abstract class class_root {
 	    $arrRow = $this->objDB->getRow($strQuery);
 	    return $arrRow["COUNT(*)"];
 
+	}
+
+
+	/**
+	 * Fetches the records placed as child nodes of the current / passed id.
+     * <b> Only the IDs are fetched since the current object-context is not available!!! </b>
+	 *
+	 * @param string $strSystemid
+	 * @return int
+	 */
+	public function getChildNodesAsIdArray($strSystemid = "") {
+	    if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+	    $strQuery = "SELECT system_id
+					 FROM "._dbprefix_."system
+					 WHERE system_prev_id='".$this->objDB->dbsafeString($strSystemid)."'";
+        
+        $arrReturn = array();
+        $arrTemp =  $this->objDB->getArray($strQuery);
+
+        if(count($arrTemp) > 0)
+            foreach($arrTemp as $arrOneRow)
+                $arrReturn[] = $arrOneRow["system_id"];
+
+
+	    return $arrReturn;
 	}
 
 

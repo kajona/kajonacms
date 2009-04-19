@@ -6,7 +6,8 @@ include_once(_systempath_."/class_modul_user_group.php");
 
 class class_test_rights implements interface_testable {
 
-
+    private $objRights ;
+    private $strUserId;
 
     public function test() {
 
@@ -19,6 +20,7 @@ class class_test_rights implements interface_testable {
         echo "\tRIGHTS INHERITANCE...\n";
         $objDB = class_carrier::getInstance()->getObjDB();
         $objRights = class_carrier::getInstance()->getObjRights();
+        $this->objRights = class_carrier::getInstance()->getObjRights();
         $objSystemCommon = new class_modul_system_common();
 
 
@@ -31,6 +33,7 @@ class class_test_rights implements interface_testable {
         $objUser->setStrUsername($strUsername);
         $objUser->saveObjectToDb();
         echo "\tid of user: ".$objUser->getSystemid()."\n";
+        $this->strUserId = $objUser->getSystemid();
 
         echo "\tcreating a test group\n";
         $objGroup = new class_modul_user_group();
@@ -74,16 +77,138 @@ class class_test_rights implements interface_testable {
         
         echo "\tchecking leaf nodes for inherited rights\n";
         foreach($arrThirdLevelNodes as $strOneRootNode) {
-            class_assertions::assertTrue($objRights->rightView($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertTrue($objRights->rightEdit($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertFalse($objRights->rightRight1($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertFalse($objRights->rightRight2($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertFalse($objRights->rightRight3($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertFalse($objRights->rightRight4($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
-            class_assertions::assertFalse($objRights->rightRight5($strOneRootNode, $objUser->getSystemid()), __FILE__." checkLeafNodesInheritInitial");
+            $this->checkNodeRights($strOneRootNode, true, true);
         }
 
 
+        echo "\tremoving right view from node secTwo\n";
+        $objRights->removeGroupFromRight($objGroup->getSystemid(), $strSecTwo, "view");
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, true, true);
+        $this->checkNodeRights($strSecTwo, false, true);
+        $this->checkNodeRights($strThirdOne1, true, true);
+        $this->checkNodeRights($strThirdOne2, true, true);
+        $this->checkNodeRights($strThirdTwo1, false, true);
+        $this->checkNodeRights($strThirdTwo2, false, true);
+        $this->checkNodeRights($strThird111, true, true);
+        $this->checkNodeRights($strThird112, true, true);
+        $this->checkNodeRights($strThird121, true, true);
+        $this->checkNodeRights($strThird122, true, true);
+        $this->checkNodeRights($strThird211, false, true);
+        $this->checkNodeRights($strThird212, false, true);
+        $this->checkNodeRights($strThird221, false, true);
+        $this->checkNodeRights($strThird222, false, true);
+
+
+        echo "\tmove SecOne as child to 221\n";
+        $objSystemCommon->setPrevId($strThird221, $strSecOne);
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, false, true);
+        $this->checkNodeRights($strSecTwo, false, true);
+        $this->checkNodeRights($strThirdOne1, false, true);
+        $this->checkNodeRights($strThirdOne2, false, true);
+        $this->checkNodeRights($strThirdTwo1, false, true);
+        $this->checkNodeRights($strThirdTwo2, false, true);
+        $this->checkNodeRights($strThird111, false, true);
+        $this->checkNodeRights($strThird112, false, true);
+        $this->checkNodeRights($strThird121, false, true);
+        $this->checkNodeRights($strThird122, false, true);
+        $this->checkNodeRights($strThird211, false, true);
+        $this->checkNodeRights($strThird212, false, true);
+        $this->checkNodeRights($strThird221, false, true);
+        $this->checkNodeRights($strThird222, false, true);
+
+
+        echo "\tsetting rights of third21 to only view\n";
+        $objRights->removeGroupFromRight($objGroup->getSystemid(), $strThirdTwo1, "edit");
+        $objRights->addGroupToRight($objGroup->getSystemid(), $strThirdTwo1, "view");
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, false, true);
+        $this->checkNodeRights($strSecTwo, false, true);
+        $this->checkNodeRights($strThirdOne1, false, true);
+        $this->checkNodeRights($strThirdOne2, false, true);
+        $this->checkNodeRights($strThirdTwo1, true);
+        $this->checkNodeRights($strThirdTwo2, false, true);
+        $this->checkNodeRights($strThird111, false, true);
+        $this->checkNodeRights($strThird112, false, true);
+        $this->checkNodeRights($strThird121, false, true);
+        $this->checkNodeRights($strThird122, false, true);
+        $this->checkNodeRights($strThird211, true);
+        $this->checkNodeRights($strThird212, true);
+        $this->checkNodeRights($strThird221, false, true);
+        $this->checkNodeRights($strThird222, false, true);
+
+
+        echo "\tsetting 211 as parent node for third11\n";
+        $objSystemCommon->setPrevId($strThird211, $strThirdOne1);
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, false, true);
+        $this->checkNodeRights($strSecTwo, false, true);
+        $this->checkNodeRights($strThirdOne1, true);
+        $this->checkNodeRights($strThirdOne2, false, true);
+        $this->checkNodeRights($strThirdTwo1, true);
+        $this->checkNodeRights($strThirdTwo2, false, true);
+        $this->checkNodeRights($strThird111, true);
+        $this->checkNodeRights($strThird112, true);
+        $this->checkNodeRights($strThird121, false, true);
+        $this->checkNodeRights($strThird122, false, true);
+        $this->checkNodeRights($strThird211, true);
+        $this->checkNodeRights($strThird212, true);
+        $this->checkNodeRights($strThird221, false, true);
+        $this->checkNodeRights($strThird222, false, true);
+
+
+        echo "\trebuilding initial tree structure\n";
+        $objSystemCommon->setPrevId($strRootId, $strSecOne); //SecOne still inheriting
+        $objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
+        $objRights->setInherited(true, $strThirdOne1);
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true); 
+        $this->checkNodeRights($strSecOne, true, true); 
+        $this->checkNodeRights($strSecTwo, false, true);
+        $this->checkNodeRights($strThirdOne1, true, true);
+        $this->checkNodeRights($strThirdOne2, true, true);
+        $this->checkNodeRights($strThirdTwo1, true);
+        $this->checkNodeRights($strThirdTwo2, false, true);
+        $this->checkNodeRights($strThird111, true, true);
+        $this->checkNodeRights($strThird112, true, true);
+        $this->checkNodeRights($strThird121, true, true);
+        $this->checkNodeRights($strThird122, true, true);
+        $this->checkNodeRights($strThird211, true);
+        $this->checkNodeRights($strThird212, true);
+        $this->checkNodeRights($strThird221, false, true);
+        $this->checkNodeRights($strThird222, false, true);
+
+
+        echo "\trebuilding initial inheritance structure\n";
+        $objRights->setInherited(true, $strSecTwo);
+        $objRights->setInherited(true, $strThirdTwo1);
+        echo "\tchecking node rights\n";
+        $this->checkNodeRights($strRootId, true, true);
+        $this->checkNodeRights($strSecOne, true, true);
+        $this->checkNodeRights($strSecTwo, true, true);
+        $this->checkNodeRights($strThirdOne1, true, true);
+        $this->checkNodeRights($strThirdOne2, true, true);
+        $this->checkNodeRights($strThirdTwo1, true, true);
+        $this->checkNodeRights($strThirdTwo2, true, true);
+        $this->checkNodeRights($strThird111, true, true);
+        $this->checkNodeRights($strThird112, true, true);
+        $this->checkNodeRights($strThird121, true, true);
+        $this->checkNodeRights($strThird122, true, true);
+        $this->checkNodeRights($strThird211, true, true);
+        $this->checkNodeRights($strThird212, true, true);
+        $this->checkNodeRights($strThird221, true, true);
+        $this->checkNodeRights($strThird222, true, true);
+
+
+
+
+
+        //$this->printTree($strRootId, 1);
 
 
         echo "\tdeleting systemnodes\n";
@@ -113,6 +238,46 @@ class class_test_rights implements interface_testable {
         class_modul_user_group::deleteGroup($objGroup->getSystemid());
         
     }
+
+
+
+    private function checkNodeRights($strNodeId,
+                                     $bitView = false,
+                                     $bitEdit = false,
+                                     $bitDelete = false,
+                                     $bitRights = false,
+                                     $bitRight1 = false,
+                                     $bitRight2 = false,
+                                     $bitRight3 = false,
+                                     $bitRight4 = false,
+                                     $bitRight5 = false) {
+
+        class_assertions::assertEqual($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View");
+        class_assertions::assertEqual($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit");
+        class_assertions::assertEqual($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__." checkNodeRights Delete");
+        class_assertions::assertEqual($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__." checkNodeRights Rights");
+        class_assertions::assertEqual($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right1");
+        class_assertions::assertEqual($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right2");
+        class_assertions::assertEqual($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right3");
+        class_assertions::assertEqual($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right4");
+        class_assertions::assertEqual($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right5");
+
+    }
+
+    private function printTree($strRootNode, $intLevel) {
+        for($i=0; $i<$intLevel; $i++)
+            echo "   ";
+
+        $objCommon = new class_modul_system_common($strRootNode);
+        //var_dump($objCommon->getSystemRecord());
+        echo $objCommon->getRecordComment()."\n";
+
+        //var_dump($objCommon->getChildNodesAsIdArray());
+        foreach($objCommon->getChildNodesAsIdArray() as $strOneId)
+            $this->printTree($strOneId, $intLevel+1);
+    }
+
+
 
 
 }
