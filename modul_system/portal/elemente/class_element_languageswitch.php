@@ -61,13 +61,12 @@ class class_element_languageswitch extends class_element_portal implements inter
             $objPage = class_modul_pages_page::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
-                
-                
+
                 //and the link
                 $arrTemplate = array();
                 $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName());
                 $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
-                $arrTemplate["langname_long"] = $this->getText("langname_".$objOneLanguage->getStrName());
+                $arrTemplate["langname_long"] = $this->getText("lang_".$objOneLanguage->getStrName());
 
                 $strTemplateRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry");
                 $strTemplateActiveRowID = $this->objTemplate->readTemplate("/element_languageswitch/".$this->arrElementData["char1"], "languageswitch_entry_active");

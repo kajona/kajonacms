@@ -5,12 +5,12 @@
     %%languageswitch_entries%%
 </languageswitch_wrapper>
 
-<!-- available placeholders: href, lang_short, lang_long -->
+<!-- available placeholders: href, langname_short, langname_long -->
 <languageswitch_entry>
 <a href="%%href%%">%%langname_short%%</a>
 </languageswitch_entry>
 
-<!-- available placeholders: href, lang_short, lang_long -->
+<!-- available placeholders: href, langname_short, langname_long -->
 <languageswitch_entry_active>
 <a href="%%href%%">%%langname_short%%</a>
 </languageswitch_entry_active>
