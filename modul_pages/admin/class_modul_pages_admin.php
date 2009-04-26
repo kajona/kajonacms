@@ -97,7 +97,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		if($strAction == "deletePageFinal") {
     			$strReturn = $this->actionDeletePageFinal();
     			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+    				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		}
     		if($strAction == "copyPage") {
     		    $strReturn = $this->actionCopyPage();
@@ -629,6 +629,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    $objPage = new class_modul_pages_page($this->getSystemid());
 			//Are there any locked records on this page?
 			if($objPage->getNumberOfLockedElementsOnPage() == 0) {
+
+                //To load the correct list afterwards, save the folder as current folder
+                $this->strFolderlevel = $this->getPrevId();
 
 			    if(!class_modul_pages_page::deletePage($this->getSystemid()))
 			         throw new class_exception("Error deleting page from db", class_exception::$level_ERROR);
