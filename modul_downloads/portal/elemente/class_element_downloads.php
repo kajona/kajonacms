@@ -26,6 +26,7 @@ class class_element_downloads extends class_element_portal implements interface_
      * @param mixed $arrElementData
      */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_downloads";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

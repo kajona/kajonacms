@@ -27,6 +27,7 @@ class class_element_gallery extends class_element_portal implements interface_po
      * @param mixed $arrElementData
      */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_gallery";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

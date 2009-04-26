@@ -25,6 +25,7 @@ class class_element_search extends class_element_portal implements interface_por
      * @param mixed $arrElementData
      */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_suche";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

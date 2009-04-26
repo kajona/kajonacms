@@ -26,6 +26,7 @@ class class_element_navigation extends class_element_portal implements interface
      * @param mixed $arrElementData
      */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_navigation";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -53,7 +54,7 @@ class class_element_navigation extends class_element_portal implements interface
 	}
 	
 	/**
-	 * so anchor here, plz
+	 * no anchor here, plz
 	 *
 	 * @return string
 	 */

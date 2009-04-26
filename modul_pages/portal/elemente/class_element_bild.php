@@ -26,12 +26,13 @@ class class_element_bild extends class_element_portal implements interface_porta
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
-		$arrModul["name"] 			= "element_bild";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]			= _dbprefix_."element_bild";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_bild";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"]			= _dbprefix_."element_bild";
 
-		parent::__construct($arrModul, $objElementData);
+		parent::__construct($arrModule, $objElementData);
 	}
 
 
@@ -76,8 +77,6 @@ class class_element_bild extends class_element_portal implements interface_porta
 		}
 		else
 			$strReturn .= $strImage.$strTitle;
-
-		$strReturn = "<div class=\"bild\">".$strReturn."</div>";
 
 		return $strReturn;
 	}

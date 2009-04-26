@@ -26,12 +26,13 @@ class class_element_absatz extends class_element_portal implements  interface_po
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
-		$arrModul["name"] 			= "element_absatz";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]			= _dbprefix_."element_absatz";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_absatz";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"]			= _dbprefix_."element_absatz";
 
-		parent::__construct($arrModul, $objElementData);
+		parent::__construct($arrModule, $objElementData);
 	}
 
 
@@ -48,7 +49,7 @@ class class_element_absatz extends class_element_portal implements  interface_po
 			$strReturn .= "<h3>".$this->arrElementData["absatz_titel"] . "</h3>\n";
 		//Inhalt?
 		if($this->arrElementData["absatz_inhalt"] != "")
-			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "<br /><br />\n";
+			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "<p>\n";
 		//Bild?
 		if($this->arrElementData["absatz_bild"] != "")
 			$strReturn .= "<img src=\"".$this->arrElementData["absatz_bild"]."\" alt=\"".$this->arrElementData["absatz_bild"]."\" /><br /><br />\n";
@@ -62,8 +63,6 @@ class class_element_absatz extends class_element_portal implements  interface_po
 			    $strReturn .= "<a href=\"".getLinkPortalHref("",$this->arrElementData["absatz_link"])."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
 		}
 
-		$strReturn .="</p>\n";
-		$strReturn = "<div class=\"absatz\">".$strReturn."</div>";
 
 		return $strReturn;
 	}

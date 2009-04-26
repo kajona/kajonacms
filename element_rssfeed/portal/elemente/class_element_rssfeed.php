@@ -19,14 +19,13 @@ require_once(_portalpath_."/interface_portal_element.php");
  */
 class class_element_rssfeed extends class_element_portal implements interface_portal_element {
 
-    private $arrError = array();
-
 	/**
 	 * Constructor
 	 *
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
@@ -42,8 +41,8 @@ class class_element_rssfeed extends class_element_portal implements interface_po
      * @return string the prepared html-output
      */
 	public function loadData() {
-		$strReturn = "";
-
+       $strReturn = "";
+       $strFeed = "";
 	   try {
             include_once(_systempath_."/class_remoteloader.php");
             $objRemoteloader = new class_remoteloader();
