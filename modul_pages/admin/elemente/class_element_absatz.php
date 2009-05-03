@@ -24,13 +24,14 @@ class class_element_absatz extends class_element_admin implements interface_admi
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_absatz";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_absatz";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "";
+		$arrModule["tableColumns"]   = "";
 
 		parent::__construct($arrModule);
 	}
