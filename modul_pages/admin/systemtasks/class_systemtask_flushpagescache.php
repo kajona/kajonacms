@@ -26,7 +26,14 @@ class class_systemtask_flushpagescache extends class_systemtask_base implements 
         parent::__construct();
         $this->setStrTextBase("pages");
     }
-    
+
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string
+     */
+    public function getGroupIdentifier() {
+        return "cache";
+    }
     
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()

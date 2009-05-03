@@ -26,7 +26,14 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
 		parent::__construct();
     }
     
-    
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string 
+     */
+    public function getGroupIdentifier() {
+        return "database";
+    }
+
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()
      * @return string

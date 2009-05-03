@@ -384,9 +384,45 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             }
 
         	$intI = 0;
-            $strReturn .= $this->objToolkit->listHeader();
+        	//loop over the found files and group them
+            $arrTaskGroups = array();
+            foreach ($arrFiles as $strOneFile) {
+        		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
-        	//loop over the found files
+        			//instantiate the current task
+        			include_once(_adminpath_."/systemtasks/".$strOneFile);
+        			$strClassname = uniStrReplace(".php", "", $strOneFile);
+        			$objTask = new $strClassname();
+                    if(!isset($arrTaskGroups[$objTask->getGroupIdentifier()]))
+                        $arrTaskGroups[$objTask->getGroupIdentifier()] = array();
+
+                    $arrTaskGroups[$objTask->getGroupIdentifier()][] = $objTask;
+        		}
+        	}
+
+            foreach($arrTaskGroups as $strGroupName => $arrTasks) {
+                if($strGroupName == "")
+                    $strGroupName = "default";
+
+
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("systemtask_group_".$strGroupName));
+                $strReturn .= $this->objToolkit->listHeader();
+                foreach($arrTasks as $objOneTask) {
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
+	                                                                   $objOneTask->getStrTaskname(),
+	                                                                   $this->objToolkit->listButton(
+	                                                                        getLinkAdmin("system",
+	                                                                                     "systemTasks",
+	                                                                                     "&task=".$objOneTask->getStrInternalTaskName(),
+	                                                                                      $objOneTask->getStrTaskname(),
+	                                                                                      $this->getText("systemtask_run"),
+	                                                                                      "icon_accept.gif")),
+	                                                                   $intI++);
+                }
+                $strReturn .= $this->objToolkit->listFooter();
+            }
+
+            /*$strReturn .= $this->objToolkit->listHeader();
         	foreach ($arrFiles as $strOneFile) {
         		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
@@ -410,7 +446,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         		}
         	}
             $strReturn .= $this->objToolkit->listFooter();
-
+            */
 
 
         	if($strTaskOutput != "") {

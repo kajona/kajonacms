@@ -39,6 +39,15 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         @ini_set("max_execution_time", "3600");
     }
 
+    
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string 
+     */
+    public function getGroupIdentifier() {
+        return "";
+    }
+    
 
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()

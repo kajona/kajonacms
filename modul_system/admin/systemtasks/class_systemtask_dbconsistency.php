@@ -25,7 +25,14 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function __construct() {
         parent::__construct();
     }
-    
+
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string
+     */
+    public function getGroupIdentifier() {
+        return "database";
+    }
     
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()

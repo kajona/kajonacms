@@ -44,6 +44,19 @@ interface interface_admin_systemtask {
 	 * @return string or "" if now form is needed
 	 */
 	public function getAdminForm();
+
+
+    /**
+     * The group identifier is used to group the tasks available in an installation.
+     * Don't use too specific identifierts to avoid having a single group for every task,
+     * refer to a rather general therm, e.g. "caching" or "database".
+     * The identifiert is resolved via the systems' language-files internally.
+     * Currently, there are: "", "database", "cache"
+     *
+     * @return string or "" for default group
+     */
+    public function getGroupIdentifier();
+
 	
 }
 

@@ -32,6 +32,13 @@ class class_systemtask_navigationcheck extends class_systemtask_base implements 
         $this->setStrTextBase("navigation");
     }
 
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string
+     */
+    public function getGroupIdentifier() {
+        return "";
+    }
 
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()

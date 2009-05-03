@@ -26,7 +26,14 @@ class class_systemtask_flushremoteloadercache extends class_systemtask_base impl
 	public function __construct() {
 		parent::__construct();
     }
-    
+
+    /**
+     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @return string
+     */
+    public function getGroupIdentifier() {
+        return "cache";
+    }
     
     /**
      * @see interface_admin_systemtast::getStrInternalTaskName()

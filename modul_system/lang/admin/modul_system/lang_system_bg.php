@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -206,6 +206,9 @@ $lang["systemtask_flushpiccache_name"]   = "Изчисти кеша с изоб�
 $lang["systemtask_flushpiccache_skipped"] = "<br />Брой на пропуснати файлове: ";
 $lang["systemtask_flushremoteloadercache_done"] = "Чистката завършена.";
 $lang["systemtask_flushremoteloadercache_name"] = "Изчисти remoteloadercache";
+$lang["systemtask_group_cache"]          = "";
+$lang["systemtask_group_database"]       = "";
+$lang["systemtask_group_default"]        = "";
 $lang["systemtask_run"]                  = "Приложи";
 $lang["titel_erben"]                     = "Наследи права:";
 $lang["titel_leer"]                      = "<em>Няма име</em>";
