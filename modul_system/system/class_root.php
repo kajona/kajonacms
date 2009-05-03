@@ -463,6 +463,20 @@ abstract class class_root {
 		else
 		    return "System";
 	}
+
+    /**
+	 * Returns the id of the user who last edited the record
+	 *
+	 * @param string $strSystemid
+	 * @return string
+	 */
+	public function getLastEditUserId($strSystemid = "") {
+		if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+        $arrRow = $this->getSystemRecord($strSystemid);
+        return $arrRow["system_lm_user"];
+	}
 	
     /**
      * Sets the name of the user last editing the current record
