@@ -30,6 +30,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_postacomment";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."postacomment";
@@ -73,7 +74,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	private function actionList() {
 		$strReturn = "";
 		$strPosts = "";
 		$strForm = "";
@@ -138,7 +139,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 			$arrForm["comment_subject"] = $this->getParam("comment_subject");
 			$arrForm["comment_message"] = $this->getParam("comment_message");
 			$arrForm["comment_template"] = $this->arrElementData["char1"];
-			$arrForm["comment_systemid"] = $this->getParam("systemid");
+            $arrForm["comment_systemid"] = $this->getSystemid();
 			$arrForm["comment_page"] = $this->getPagename();
 			$arrForm["validation_errors"] = $this->strErrors;
 
@@ -146,12 +147,12 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 
 			//button to show the form
 			$strTemplateNewButtonID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_new_button");
-            $strNewButton = $this->objTemplate->fillTemplate(array(), $strTemplateNewButtonID, false);
+            $strNewButton = $this->objTemplate->fillTemplate(array("comment_systemid" => $this->getSystemid()), $strTemplateNewButtonID, false);
 		}
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
 
-    	$strReturn .= $this->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_list" => $strPosts), $strTemplateID);
+        $strReturn .= $this->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_systemid" => $this->getSystemid(), "postacomment_list" => $strPosts), $strTemplateID);
 
 		return $strReturn;
 	}
@@ -161,7 +162,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 * Saves a post to the databases
 	 *
 	 */
-	public function actionPostComment() {
+	private function actionPostComment() {
 
 	    //pageid or systemid to filter?
 	    if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {

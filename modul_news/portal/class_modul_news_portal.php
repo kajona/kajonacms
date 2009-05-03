@@ -111,6 +111,14 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					//reset more link?
                     if(uniStrlen($arrOneNews["news_text"]) == 0)
                         $arrOneNews["news_more_link"] = "";
+
+
+                    $arrPAC = $this->loadPostacomments($objOneNews->getSystemid());
+                    if($arrPAC != null) {
+                        $arrOneNews["news_nrofcomments"] = $arrPAC["nrOfComments"];
+                        $arrOneNews["news_commentlist"] = $arrPAC["commentList"];
+                    }
+
 					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID, false);
 
 					//Add pe code
@@ -187,5 +195,30 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		return $strReturn;
 	}
 
+
+    private function loadPostacomments($strNewsSystemid) {
+        $objPacModule = class_modul_system_module::getModuleByName("postacomment");
+
+        $arrReturn = array();
+        if($objPacModule != null) {
+            require_once(_systempath_."/class_modul_postacomment_post.php");
+            require_once(_portalpath_."/class_modul_postacomment_portal.php");
+            $arrPosts = class_modul_postacomment_post::loadPostList(false, class_modul_pages_page::getPageByName($this->getPagename())->getSystemid(), $strNewsSystemid, $this->getPortalLanguage());
+
+            //the rendered list
+            $objPacPortal = new class_modul_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
+            $objPacPortal->setSystemid($strNewsSystemid);
+            $strListCode = $objPacPortal->action();
+            
+            //var_dump($strListCode);
+
+            $arrReturn["nrOfComments"] = count($arrPosts);
+            $arrReturn["commentList"] = $strListCode;
+        }
+        else
+            return null;
+
+        return $arrReturn;
+    }
 }
 ?>
