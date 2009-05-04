@@ -80,5 +80,12 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
         return $strReturn;
     }
     
+    /**
+     * @see interface_admin_systemtast::getSubmitParams()
+     * @return string 
+     */
+    public function getSubmitParams() {
+        return "'&dbImportFile='+document.getElementById('dbImportFile').options[document.getElementById('dbImportFile').selectedIndex].value";
+    }
 }
 ?>

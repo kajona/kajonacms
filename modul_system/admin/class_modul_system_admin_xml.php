@@ -49,7 +49,9 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
         if($strAction == "setAbsolutePosition")
             $strReturn .= $this->actionSetAbsolutePosition();
         if($strAction == "setStatus")
-            $strReturn .= $this->actionSetStatus();    
+            $strReturn .= $this->actionSetStatus();
+        if($strAction == "executeSystemTask")
+            $strReturn .= $this->actionExecuteAdminTask();
 
         return $strReturn;
 	}
@@ -101,6 +103,70 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	        
 	    return $strReturn;    
 	}
+
+    /**
+     * Executes a system-/admin task.
+     * Returns the progress-info or the error-/success message and the reload-infos using a
+     * custom xml-structure:
+     * <statusinfo></statusinfo><reloadurl></reloadrul>
+     *
+     * @return string
+     */
+    private function actionExecuteAdminTask() {
+        $strReturn = "";
+        $strTaskOutput = "";
+        if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            if($this->getParam("task") != "") {
+                //include the list of possible tasks
+                include_once(_systempath_."/class_filesystem.php");
+                $objFilesystem = new class_filesystem();
+                $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
+                asort($arrFiles);
+                //search for the matching task
+                foreach ($arrFiles as $strOneFile) {
+                    if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
+
+                        //instantiate the current task
+                        include_once(_adminpath_."/systemtasks/".$strOneFile);
+                        $strClassname = uniStrReplace(".php", "", $strOneFile);
+                        $objTask = new $strClassname();
+                        if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
+
+                            class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
+                            //let the work begin...
+                            $strTempOutput = trim($objTask->executeTask());
+
+                            //progress information?
+                            if($objTask->getStrProgressInformation() != "")
+                                $strTaskOutput .= $objTask->getStrProgressInformation();
+
+                            if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
+                                $strTaskOutput .= $this->objToolkit->percentBeam($strTempOutput, 500);
+                            }
+                            else {
+                                $strTaskOutput .= $strTempOutput;
+                            }
+
+                            //create response-content
+                            $strReturn .= "<statusinfo>".($strTaskOutput)."</statusinfo>\n";
+
+                            //reload requested by worker?
+                            if($objTask->getStrReloadUrl() != "")
+                                $strReturn .= "<reloadurl>".("&task=".$this->getParam("task").$objTask->getStrReloadParam())."</reloadurl>";
+                        	
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+	    else
+	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+	    return $strReturn;    
+    }
 
 
 }

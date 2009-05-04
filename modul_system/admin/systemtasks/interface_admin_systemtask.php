@@ -50,6 +50,15 @@ interface interface_admin_systemtask {
 	 */
 	public function getAdminForm();
 
+    /**
+	 * If a form is generated via getAdminForm(), getSubmitParams returns
+     * the js-code to add the key/values to the post-params
+     * The returned string is added by the framework before submitting the form itself.
+	 *
+	 * @return string or "" if now form is needed
+	 */
+	public function getSubmitParams();
+
 
     /**
      * The group identifier is used to group the tasks available in an installation.

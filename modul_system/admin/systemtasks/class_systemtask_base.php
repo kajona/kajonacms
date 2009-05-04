@@ -94,10 +94,22 @@ abstract class class_systemtask_base {
     		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()));
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("work", "true");
-    		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"));
+    		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"), "Submit", "onclick=\"submitExecution();return false;\"");
     		$strReturn .= $this->objToolkit->formClose();
     		
     		$strReturn .= $this->objToolkit->divider();
+
+            //generate the submit code
+            $strReturn .=" <script type=\"text/javascript\">\n";
+            $strReturn .="  function submitExecution() {    \n";
+            $strReturn .="    var strPostParams = \"\";  \n";
+            $strReturn .="    strPostParams += ".$this->getSubmitParams().";  \n";
+            //$strReturn .="    alert(strPostParams); return false;  \n";
+            $strReturn .="    kajonaSystemtaskHelper.executeTask('".$this->getStrInternalTaskName()."', strPostParams);  \n";
+            $strReturn .="    return false;  \n";
+            $strReturn .="  }    \n";
+
+            $strReturn .=" </script>\n";
     	}
     	
     	return $strReturn;
@@ -119,6 +131,14 @@ abstract class class_systemtask_base {
      *
      */
     public function getAdminForm() {}
+
+    /**
+     * Empty implementation, override in subclass!
+     *
+     */
+    public function getSubmitParams() {
+        return "";
+    }
     
     /**
      * Empty implementation, oveerride in subclass!

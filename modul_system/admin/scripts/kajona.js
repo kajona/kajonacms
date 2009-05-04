@@ -455,7 +455,20 @@ var kajonaAdminAjax = {
 	cropConn :null,
 	rotateConn :null,
 	genericCall :null,
-	
+    systemTaskCall : null,
+
+    executeSystemtask : function(strTaskname, strAdditionalParam, objCallback) {
+		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=executeSystemTask&task='+strTaskname;
+		var postBody = strAdditionalParam;
+
+		if (kajonaAdminAjax.systemTaskCall == null
+				|| !YAHOO.util.Connect
+						.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
+			kajonaAdminAjax.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
+					postTarget, objCallback, postBody);
+		}
+	},
+
 	genericAjaxCall : function(module, action, systemid, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
 		var postBody = 'systemid=' + systemid;
@@ -1019,4 +1032,57 @@ var kajonaImageEditor = {
         }
     }
 
+};
+//TODO: maybe shift to class_modul_system_admin to generate the code as inline-js
+var kajonaSystemtaskHelper =  {
+
+    executeTask : function(strTaskname, strAdditionalParam) {
+        jsDialog_3.setContentRaw("<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"Cancel execution\" />");
+        jsDialog_3.init();
+        kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
+            success : function(o) {
+                jsDialog_3.hide();
+                var strResponseText = o.responseText;
+                //parse text to decide if a reload is necessary
+                if(strResponseText.indexOf("<error>") != -1) {
+                    kajonaStatusDisplay.displayXMLMessage(strResponseText);
+                }
+                else {
+                    var intStart = strResponseText.indexOf("<statusinfo>")+12;
+                    var statusinfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
+                    var strReload = "";
+                    if(strResponseText.indexOf("<reloadurl>") != -1) {
+                        intStart = strResponseText.indexOf("<reloadurl>")+11;
+                        strReload = strResponseText.substr(intStart, strResponseText.indexOf("</reloadurl>")-intStart);
+                    }
+
+                    //show message?
+                    document.getElementById('taskOutput').innerHTML = statusinfo;
+                    if(strReload == "") {
+                        jsDialog_3.hide();
+                    }
+                    else {
+                        kajonaSystemtaskHelper.executeTask(strTaskname, strReload);
+                    }
+                }
+            },
+            
+            failure : function(o) {
+                kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText);
+                jsDialog_3.hide();
+            }
+        }
+
+
+
+        );
+    },
+
+    cancelExecution : function() {
+        document.getElementById('taskOutput').innerHTML = "";
+        if(YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
+           YAHOO.util.Connect.abort(kajonaAdminAjax.systemTaskCall, null, false);
+        }
+        jsDialog_3.hide();
+    }
 };

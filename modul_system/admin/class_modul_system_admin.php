@@ -386,7 +386,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                        	//any form to display?
 	                        	$strForm = $objTask->generateAdminForm();
 	                        	if($strForm != "") {
-	                        	   $strReturn .= $strForm;
+	                        	   $strTaskOutput .= $strForm;
 	                        	}
 	                        	else {
 	                        		//reload the task an fire the action
@@ -424,50 +424,36 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("systemtask_group_".$strGroupName));
                 $strReturn .= $this->objToolkit->listHeader();
                 foreach($arrTasks as $objOneTask) {
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
-	                                                                   $objOneTask->getStrTaskname(),
-	                                                                   $this->objToolkit->listButton(
-	                                                                        getLinkAdmin("system",
-	                                                                                     "systemTasks",
-	                                                                                     "&task=".$objOneTask->getStrInternalTaskName(),
+
+                    //generate the link to execute the task
+                    $strLink = "";
+                    if($objOneTask->generateAdminForm() != "") {
+                        $strLink = getLinkAdmin("system", "systemTasks", "&task=".$objOneTask->getStrInternalTaskName(),
 	                                                                                      $objOneTask->getStrTaskname(),
 	                                                                                      $this->getText("systemtask_run"),
-	                                                                                      "icon_accept.gif")),
+	                                                                                      "icon_accept.gif");
+                    }
+                    else {
+                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); return false;\"",
+                                                                                          "",
+                                                                                          $this->getText("systemtask_run"),
+	                                                                                      "icon_accept.gif");
+                    }
+
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
+	                                                                   $objOneTask->getStrTaskname(),
+	                                                                   $this->objToolkit->listButton($strLink),
 	                                                                   $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
             }
 
-            /*$strReturn .= $this->objToolkit->listHeader();
-        	foreach ($arrFiles as $strOneFile) {
-        		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
-
-        			//instantiate the current task
-        			include_once(_adminpath_."/systemtasks/".$strOneFile);
-        			$strClassname = uniStrReplace(".php", "", $strOneFile);
-        			$objTask = new $strClassname();
-
-        			if($objTask instanceof interface_admin_systemtask ) {
-	                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"),
-	                                                                   $objTask->getStrTaskname(),
-	                                                                   $this->objToolkit->listButton(
-	                                                                        getLinkAdmin("system",
-	                                                                                     "systemTasks",
-	                                                                                     "&task=".$objTask->getStrInternalTaskName(),
-	                                                                                      $objTask->getStrTaskname(),
-	                                                                                      $this->getText("systemtask_run"),
-	                                                                                      "icon_accept.gif")),
-	                                                                   $intI++);
-        			}
-        		}
-        	}
-            $strReturn .= $this->objToolkit->listFooter();
-            */
-
-
-        	if($strTaskOutput != "") {
-        	   $strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
-        	}
+            //include js-code & stuff to handle executions
+            $strReturn .= $this->objToolkit->jsDialog(3);
+                //TODO: move to skins?
+            $strTaskOutput = "<div id=\"taskOutput\" style=\"border: 1px solid red;\">".$strTaskOutput."</div>";
+        	$strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
+        	
 
         }
         else
