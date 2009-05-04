@@ -364,7 +364,23 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         	if($this->getParam("work") == "true") {
                         		 class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
                         		 //let the work begin...
-                        		 $strTaskOutput .= $objTask->executeTask();
+                        		 $strTempOutput = trim($objTask->executeTask());
+
+                                 //progress information?
+                                 if($objTask->getStrProgressInformation() != "")
+                                     $strTaskOutput .= $objTask->getStrProgressInformation();
+
+                                 if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
+                                     $strTaskOutput .= $this->objToolkit->percentBeam($strTempOutput, 500);
+                                 }
+                                 else {
+                                     $strTaskOutput .= $strTempOutput;
+                                 }
+
+                                 //reload requested by worker?
+                                 if($objTask->getStrReloadUrl() != "")
+                                    header("Refresh: 0; ".uniStrReplace("&amp;", "&", $objTask->getStrReloadUrl() ));
+
                         	}
                         	else {
 	                        	//any form to display?
@@ -374,7 +390,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                        	}
 	                        	else {
 	                        		//reload the task an fire the action
-	                        		$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
+	                        		$this->adminReload(getLinkAdminHref("system", "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
 	                        	}
                         	}
                             break;

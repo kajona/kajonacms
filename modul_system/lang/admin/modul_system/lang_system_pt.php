@@ -209,6 +209,7 @@ $lang["systemtask_flushremoteloadercache_name"] = "Descarregar(flush) a memória
 $lang["systemtask_group_cache"]          = "";
 $lang["systemtask_group_database"]       = "";
 $lang["systemtask_group_default"]        = "";
+$lang["systemtask_group_stats"]          = "";
 $lang["systemtask_run"]                  = "Realizar";
 $lang["titel_erben"]                     = "Direitos hierarquicos:";
 $lang["titel_leer"]                      = "<em>sem título defenido</em>";

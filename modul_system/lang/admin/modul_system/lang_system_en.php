@@ -214,6 +214,7 @@ $lang["systemtask_flushremoteloadercache_name"] = "Flush remoteloadercache";
 $lang["systemtask_group_cache"]          = "Cache";
 $lang["systemtask_group_database"]       = "Database";
 $lang["systemtask_group_default"]        = "Default";
+$lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_run"]                  = "Execute";
 $lang["titel_erben"]                     = "Inherit rights:";
 $lang["titel_leer"]                      = "<em>No title defined</em>";

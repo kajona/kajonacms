@@ -214,6 +214,7 @@ $lang["systemtask_flushremoteloadercache_name"] = "Remoteloadercache leeren";
 $lang["systemtask_group_cache"]          = "Zwischenspeicher";
 $lang["systemtask_group_database"]       = "Datenbank";
 $lang["systemtask_group_default"]        = "Standard";
+$lang["systemtask_group_stats"]          = "Statistiken";
 $lang["systemtask_run"]                  = "Ausführen";
 $lang["titel_erben"]                     = "Rechte erben:";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";

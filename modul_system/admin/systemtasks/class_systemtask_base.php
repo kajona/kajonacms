@@ -40,7 +40,26 @@ abstract class class_systemtask_base {
      */
     protected $objToolkit;
 
+    /**
+     * URL used to trigger a reload, e.g. during long tasks
+     * @var string
+     */
+    private $strReloadParam = "";
+
+    /**
+     * Infos regarding the current process
+     * @var string
+     */
+    private $strProgressInformation = "";
+
+    /**
+     *
+     * @var class_modul_system_common
+     */
+    private $objSystemCommon;
+
     public function __construct() {
+        $arrModule = array();
         $arrModule["author"]        = "sidler@mulchprod.de";
         $arrModule["moduleId"]      = _system_modul_id_;
         
@@ -48,21 +67,9 @@ abstract class class_systemtask_base {
         $this->objDB = class_carrier::getInstance()->getObjDB();
         $this->objTexte = class_carrier::getInstance()->getObjText();
         $this->objToolkit = class_carrier::getInstance()->getObjToolkit("admin");
-    }
-    
-    
-    /**
-     * Provides acces to the GET and POST paramy
-     *
-     * @param string $strName
-     * @return string, "" if not found
-     */
-    protected function getParam($strName) {
-    	$arrParams = array_merge(getArrayGet(), getArrayPost());
-    	if(isset($arrParams[$strName]))
-    	   return $arrParams[$strName];
-    	else
-    	   return "";   
+        $this->objSystemCommon = new class_modul_system_common();
+
+
     }
     
     /**
@@ -118,7 +125,71 @@ abstract class class_systemtask_base {
      *
      */
     public function getStrInternalTaskName() {}
+
+    /**
+     *
+     * @param string $strReloadParam
+     */
+    public function setStrReloadParam($strReloadParam) {
+        $this->strReloadParam = $strReloadParam;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getStrReloadParam() {
+        return $this->strReloadParam;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getStrReloadUrl() {
+        if($this->strReloadParam != "")
+            return getLinkAdminHref("system", "systemTasks", "work=true&task=".$this->getStrInternalTaskName().$this->strReloadParam);
+        else
+            return "";
+    }
+
+     /**
+     *
+     * @param string $strProgressInformation
+     */
+    public function setStrProgressInformation($strProgressInformation) {
+        $this->strProgressInformation = $strProgressInformation;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getStrProgressInformation() {
+        return $this->strProgressInformation;
+    }
     
+    /**
+     * Delegate to system-kernel, used to read from params.
+     * Provides acces to the GET and POST params
+     * 
+     * @param string $strKey
+     * @return mixed
+     */
+    public function getParam($strKey) {
+        return $this->objSystemCommon->getParam($strKey);
+    }
+
+    /**
+     * Delegate to system-kernel, used to write to params
+     *
+     * @param string $strKey
+     * @param mixed $strValue
+     * @return void
+     */
+    public function setParam($strKey, $strValue) {
+        return $this->objSystemCommon->setParam($strKey, $strValue);
+    }
 
 }
 ?>

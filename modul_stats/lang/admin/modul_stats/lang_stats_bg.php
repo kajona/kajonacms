@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Секунди";
@@ -49,18 +49,13 @@ $lang["modul_worker"]                    = "Инструменти";
 $lang["progress_worker_lookup"]          = "Прогрес:";
 $lang["quickhelp_list"]                  = "Статистиката осигурява преглед на различни системни дневници. В тези доклади, всички записи са обработени и анализирани да предоставят различни сведения и данни.";
 $lang["quickhelp_statsCommon"]           = "Статистиката осигурява преглед на различни системни дневници. В тези доклади, всички записи са обработени и анализирани да предоставят различни сведения и данни.";
-$lang["quickhelp_worker"]                = "Инструментите се ползват за периодични задачи. Тези задачи могат а бъдат като 'Елеминрай IP-адреси или други. Ползвайки тези задачи, статистиката става все по - точна.";
 $lang["referer_direkt"]                  = "Директен достъп";
 $lang["start"]                           = "От Дата";
 $lang["submit_export"]                   = "Прехвърляне";
 $lang["submit_import"]                   = "Вмъкване";
-$lang["task_csvExportIntro"]             = "С тази задача, съществуващи записи в база данни може да бъде прехвърлена в CSV-файл. В същото време тези записи се трият от база данни! Полезно е когато база данни е пълна със стари записи. Прехвърлени и изтрити записи могат да бъдат внесени по всяко време.";
-$lang["task_exportToCsv"]                = "Прехвърли данни в CSV-файл";
-$lang["task_importFromCsv"]              = "Вмъкни данни от CSV-файл";
-$lang["task_importFromCsvIntro"]         = "Ползвайки тази задача 'Вмъкни данни от CSV-файл', съществуващите данни могат да бъдат внесени в системата. След внасянето, тези записи могат да се използват във всички доклади.";
-$lang["task_ip2c"]                       = "Анализирай държавите спрямо IP-адресите";
-$lang["task_lookup"]                     = "Анализирай IP-адреси (IP -> Hostname)";
-$lang["task_lookupReset"]                = "Нулиране грешни hostnames";
+$lang["systemtask_hostnamelookup_name"]  = "Анализирай IP-адреси (IP -> Hostname)";
+$lang["systemtask_hostnamelookupreset_name"] = "Нулиране грешни hostnames";
+$lang["systemtask_ip2c_name"]            = "Анализирай държавите спрямо IP-адресите";
 $lang["top_browser_gewicht"]             = "Честота / Посещения";
 $lang["top_browser_titel"]               = "Browser";
 $lang["top_country_gewicht"]             = "Посещения";

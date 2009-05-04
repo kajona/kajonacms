@@ -32,8 +32,13 @@ interface interface_admin_systemtask {
 	
 	/**
 	 * Starts the execution of the task.
+     * The return value can have different meanings. If you return a number between 0 and 100,
+     * the system generates a percent-beam indicating the progress. In this case, make sure to set the
+     * reload url via $thjis->setStrReloadParam().
+     * If you return anything different than a number between 0 and 100, the returned text is
+     * rendered as given.
 	 *
-	 * @return string, "" in case of success, otherwise a string-based error-description
+	 * @return string, a number betwenn 0 and 100 to indicate the progress, otherwise a string-based message
 	 */
 	public function executeTask();
 	
@@ -51,7 +56,7 @@ interface interface_admin_systemtask {
      * Don't use too specific identifierts to avoid having a single group for every task,
      * refer to a rather general therm, e.g. "caching" or "database".
      * The identifiert is resolved via the systems' language-files internally.
-     * Currently, there are: "", "database", "cache"
+     * Currently, there are: "", "database", "cache", "stats"
      *
      * @return string or "" for default group
      */

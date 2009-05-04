@@ -209,6 +209,7 @@ $lang["systemtask_flushremoteloadercache_name"] = "Изчисти remoteloaderca
 $lang["systemtask_group_cache"]          = "";
 $lang["systemtask_group_database"]       = "";
 $lang["systemtask_group_default"]        = "";
+$lang["systemtask_group_stats"]          = "";
 $lang["systemtask_run"]                  = "Приложи";
 $lang["titel_erben"]                     = "Наследи права:";
 $lang["titel_leer"]                      = "<em>Няма име</em>";

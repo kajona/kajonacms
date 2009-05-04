@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 183
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Worker", 5 => "", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Anzahl Sekunden:";
@@ -52,18 +52,13 @@ $lang["modul_worker"]                    = "Worker";
 $lang["progress_worker_lookup"]          = "Fortschritt:";
 $lang["quickhelp_list"]                  = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
 $lang["quickhelp_statsCommon"]           = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
-$lang["quickhelp_worker"]                = "Worker werden für regelmäßige Aufgaben verwendet. Dazu gehört unter Anderem der Task 'IP-Adressen auflösen'. Durch Starten dieses Tasks werden alle IP-Adressen in der Datenbank durch ihre entsprechenden Hostnamen ersetzt, sofern dies möglich ist. Hierdurch werden die Statistiken an vielen Stellen besser lesbar.";
 $lang["referer_direkt"]                  = "Direktzugriff";
 $lang["start"]                           = "Start:";
 $lang["submit_export"]                   = "Exportieren";
 $lang["submit_import"]                   = "Importieren";
-$lang["task_csvExportIntro"]             = "Mit diesem Task werden in der Datenbank vorhandene Daten in eine CSV-Datei exportiert und anschließend aus der Datenbank gelöscht. Dies kann dann sinnvoll werden, wenn sich bereits viele Daten in der Datenbank angesammelt haben und hierdurch die Datenbank bereits recht groß geworden ist. Die exportierten Dateien können jederzeit wieder in die Datenbank reimportiert werden, z.B. um diese wieder in den Reports auszuwerten.";
-$lang["task_exportToCsv"]                = "Daten in eine CSV-Datei exportieren";
-$lang["task_importFromCsv"]              = "Daten aus einer CSV-Datei importieren";
-$lang["task_importFromCsvIntro"]         = "Mit Hilfe des aktuellen Tasks 'importFromCsv' können Datensätze, die in einer CSV-Datei vorliegen, in das System importiert werden. Nach dem Import stehen diese Daten dann wieder in allen Reports zur Verfügung.";
-$lang["task_ip2c"]                       = "IP-Adressen nach Ursprungsländern auflösen";
-$lang["task_lookup"]                     = "IP-Adressen auflösen (IP -> Hostname)";
-$lang["task_lookupReset"]                = "Fehlerhafte Hostnames zurücksetzten";
+$lang["systemtask_hostnamelookup_name"]  = "IP-Adressen auflösen (IP -> Hostname)";
+$lang["systemtask_hostnamelookupreset_name"] = "Fehlerhafte Hostnames zurücksetzten";
+$lang["systemtask_ip2c_name"]            = "IP-Adressen nach Ursprungsländern auflösen";
 $lang["top_browser_gewicht"]             = "Häufigkeit / Hits";
 $lang["top_browser_titel"]               = "Browser";
 $lang["top_country_gewicht"]             = "Zugriffe";

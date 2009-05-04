@@ -180,6 +180,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
      *
      * @param string $strFilename
      * @return bool
+     * @deprecated will be removed in future releases
      */
     public function importFromCSV($strFilename) {
         
@@ -226,6 +227,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
      * @param int $intStart
      * @param int $intEnd
      * @return bool
+     * @deprecated will be removed in future releases
      */
     public function exportDataToCsv($strFilename, $intStart, $intEnd) {
         

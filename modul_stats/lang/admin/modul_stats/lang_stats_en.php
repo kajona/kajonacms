@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 183
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Worker", 5 => "", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Number of seconds:";
@@ -52,18 +52,13 @@ $lang["modul_worker"]                    = "Worker";
 $lang["progress_worker_lookup"]          = "Progress:";
 $lang["quickhelp_list"]                  = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
 $lang["quickhelp_statsCommon"]           = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
-$lang["quickhelp_worker"]                = "Worker are used for periodical tasks. This can be tasks like 'Resolve IP-addresses' or other ones. Using this tasks, the stats often become more significant.";
 $lang["referer_direkt"]                  = "Direct access";
 $lang["start"]                           = "Start:";
 $lang["submit_export"]                   = "Export";
 $lang["submit_import"]                   = "Import";
-$lang["task_csvExportIntro"]             = "With this task, existing records from the database can be exported to a CSV-file. Those records are being deleted from the database at the same time! This task can be usefull, if the databse contains many old records. The exported and deleted records can be reimported anytime.";
-$lang["task_exportToCsv"]                = "Export data to CSV-file";
-$lang["task_importFromCsv"]              = "Import data from a CSV-file";
-$lang["task_importFromCsvIntro"]         = "By using the task 'Import data from a CSV-file', records existing in a CSV-file can be imported into the system. After the import, those records can be used in all reports.";
-$lang["task_ip2c"]                       = "Resolve origin countries of ip-addresses";
-$lang["task_lookup"]                     = "Resolve IP-addresses (IP -> Hostname)";
-$lang["task_lookupReset"]                = "Reset erroneous hostnames";
+$lang["systemtask_hostnamelookup_name"]  = "Resolve IP-addresses (IP -> Hostname)";
+$lang["systemtask_hostnamelookupreset_name"] = "Reset erroneous hostnames";
+$lang["systemtask_ip2c_name"]            = "Resolve origin countries of ip-addresses";
 $lang["top_browser_gewicht"]             = "Frequency / Hits";
 $lang["top_browser_titel"]               = "Browser";
 $lang["top_country_gewicht"]             = "Hits";
