@@ -64,7 +64,7 @@ class class_element_downloads_toplist extends class_element_portal implements in
         foreach($arrFiles as $objOneFile) {
         	$arrTemplate = array();
         	$arrTemplate["dltoplist_pos"] = $intCounter;
-        	$arrTemplate["dltoplist_link"] = _webpath_."/downloads.php?systemid=".$objOneFile->getSystemid();
+        	$arrTemplate["dltoplist_link"] = _webpath_."/download.php?systemid=".$objOneFile->getSystemid();
         	$arrTemplate["dltoplist_name"] = $objOneFile->getName();
         	$arrTemplate["dltoplist_rating"] = $objOneFile->getFloatRating();
         	
