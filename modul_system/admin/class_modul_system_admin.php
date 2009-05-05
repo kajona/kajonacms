@@ -410,7 +410,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                                                                                      "icon_accept.gif");
                     }
                     else {
-                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); return false;\"",
+                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); document.getElementById('statusDiv').innerHTML='".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."<br />"."';return false;\"",
                                                                                           "",
                                                                                           $this->getText("systemtask_run"),
 	                                                                                      "icon_accept.gif");
@@ -424,12 +424,18 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listFooter();
             }
 
+
+
+            if($strTaskOutput == "")
+                $strTaskOutput = $this->getText("systemtask_idle");
+
+            $strCancelbutton = "<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" />";
+
+            $strTaskOutput = $this->objToolkit->getSystemtaskStatuswindow($strTaskOutput, $strCancelbutton) ;
             //include js-code & stuff to handle executions
-            $strReturn .= $this->objToolkit->jsDialog(3);
             $strReturn .= "<script type=\"text/javascript\">
-                jsDialog_3.setContentRaw('<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" />');
+                var KAJONA_TASKENGINE_IDLE = '".$this->getText("systemtask_idle")."';
                 </script>";
-            $strTaskOutput = "<div id=\"taskOutput\" style=\"border: 1px solid red;\">".$strTaskOutput."</div>";
         	$strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
         	
 

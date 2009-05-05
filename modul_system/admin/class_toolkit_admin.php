@@ -1539,5 +1539,15 @@ class class_toolkit_admin extends class_toolkit {
         return $strContent;
     }
 
+//--- systemtask statusinfo -----------------------------------------------------------------------------
+
+    public function getSystemtaskStatuswindow($strDefaultStatusInfo, $strCancelbutton) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "systemtask_info");
+        $arrTemplate = array();
+        $arrTemplate["statusinfo"] = $strDefaultStatusInfo;
+        $arrTemplate["cancelbutton"] = $strCancelbutton;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
 }
 ?>

@@ -1036,12 +1036,14 @@ var kajonaImageEditor = {
 //TODO: maybe shift to class_modul_system_admin to generate the code as inline-js
 var kajonaSystemtaskHelper =  {
 
-    executeTask : function(strTaskname, strAdditionalParam) {
+    executeTask : function(strTaskname, strAdditionalParam, boolNoContentReset) {
+        if(boolNoContentReset == null || boolNoContentReset == undefined)
+            document.getElementById('statusDiv').innerHTML = "";
         
-        jsDialog_3.init();
+        document.getElementById('loadingDiv').style.display = "block";
+        //jsDialog_3.init();
         kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
             success : function(o) {
-                jsDialog_3.hide();
                 var strResponseText = o.responseText;
                 //parse text to decide if a reload is necessary
                 if(strResponseText.indexOf("<error>") != -1) {
@@ -1050,6 +1052,7 @@ var kajonaSystemtaskHelper =  {
                 else {
                     var intStart = strResponseText.indexOf("<statusinfo>")+12;
                     var statusinfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
+                    
                     var strReload = "";
                     if(strResponseText.indexOf("<reloadurl>") != -1) {
                         intStart = strResponseText.indexOf("<reloadurl>")+11;
@@ -1057,19 +1060,18 @@ var kajonaSystemtaskHelper =  {
                     }
 
                     //show message?
-                    document.getElementById('taskOutput').innerHTML = statusinfo;
+                    document.getElementById('statusDiv').innerHTML = statusinfo;
                     if(strReload == "") {
-                        jsDialog_3.hide();
+                        document.getElementById('loadingDiv').style.display = "none";
                     }
                     else {
-                        kajonaSystemtaskHelper.executeTask(strTaskname, strReload);
+                        kajonaSystemtaskHelper.executeTask(strTaskname, strReload, true);
                     }
                 }
             },
             
             failure : function(o) {
                 kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText);
-                jsDialog_3.hide();
             }
         }
 
@@ -1079,10 +1081,11 @@ var kajonaSystemtaskHelper =  {
     },
 
     cancelExecution : function() {
-        document.getElementById('taskOutput').innerHTML = "";
+        document.getElementById('statusDiv').innerHTML = KAJONA_TASKENGINE_IDLE;
         if(YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
            YAHOO.util.Connect.abort(kajonaAdminAjax.systemTaskCall, null, false);
         }
-        jsDialog_3.hide();
+        //jsDialog_3.hide();
+        document.getElementById('loadingDiv').style.display = "none";
     }
 };

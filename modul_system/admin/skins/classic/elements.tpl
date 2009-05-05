@@ -487,9 +487,10 @@ Used tp print plaintext in a form
 Used to print headline in a form
 
 <headline_form>
+    <br /> 
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
-		<td width="30%" align="right" class="%%class%%">%%text%%</td>
+		<td width="30%" align="left" class="%%class%%">%%text%%</td>
 		<td class="%%class%%"></td>
 	</tr>
 </table>
@@ -999,3 +1000,17 @@ The language switch sourrounds the buttons
 </div></dialogLoadingContainer>
 
 <dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>
+
+---------------------------------------------------------------------------------------------------------
+-- SYSTEMTASK -------------------------------------------------------------------------------------------
+Should contain HTML-elements with the following ids: loadingDiv, statusDiv, idleInfoDiv
+<systemtask_info>
+    <div style="border: 1px solid #CCCCCC;">
+        <div id="statusDiv" style="float: left;">%%statusinfo%%</div>
+        <div id="loadingDiv" style="display: none; float: right;">
+            <div style="text-align: center;"><img src="_skinwebpath_/loading.gif" alt="Loading" /></div>
+            <div>%%cancelbutton%%</div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+</systemtask_info>
