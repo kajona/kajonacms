@@ -1037,7 +1037,7 @@ var kajonaImageEditor = {
 var kajonaSystemtaskHelper =  {
 
     executeTask : function(strTaskname, strAdditionalParam) {
-        jsDialog_3.setContentRaw("<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"Cancel execution\" />");
+        
         jsDialog_3.init();
         kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
             success : function(o) {

@@ -184,6 +184,7 @@ $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Ja";
 $lang["systemlog"]                       = "System-Log";
+$lang["systemtask_cancel_execution"]     = "Ausführung beenden";
 $lang["systemtask_compresspicuploads_done"] = "Die Bildverkleinerung und -komprimierung wurde abgeschlossen.";
 $lang["systemtask_compresspicuploads_found"] = "Gefundene Bilder";
 $lang["systemtask_compresspicuploads_height"] = "Maximale Höhe (Pixel)";

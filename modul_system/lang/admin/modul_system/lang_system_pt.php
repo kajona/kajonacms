@@ -179,6 +179,7 @@ $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Sim";
 $lang["systemlog"]                       = "Eventos do sistema";
+$lang["systemtask_cancel_execution"]     = "";
 $lang["systemtask_compresspicuploads_done"] = "";
 $lang["systemtask_compresspicuploads_found"] = "";
 $lang["systemtask_compresspicuploads_height"] = "";

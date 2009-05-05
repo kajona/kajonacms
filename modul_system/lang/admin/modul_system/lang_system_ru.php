@@ -179,6 +179,7 @@ $lang["systeminfo_php_safemode"]         = "Безопасный режим";
 $lang["systeminfo_php_urlfopen"]         = "Разрешить url fopen";
 $lang["systeminfo_yes"]                  = "Да";
 $lang["systemlog"]                       = "Логфайл системы";
+$lang["systemtask_cancel_execution"]     = "";
 $lang["systemtask_compresspicuploads_done"] = "Изменения размера и сжатие успешно осуществлено";
 $lang["systemtask_compresspicuploads_found"] = "Найденные картинки";
 $lang["systemtask_compresspicuploads_height"] = "Максимальная длина (пиксель)";

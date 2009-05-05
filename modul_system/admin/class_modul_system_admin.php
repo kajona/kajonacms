@@ -359,40 +359,16 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         $objTask = new $strClassname();
                         if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-
-                        	//fire the task or display a form?
-                        	if($this->getParam("work") == "true") {
-                        		 class_logger::getInstance()->addLogRow("executing task ".$objTask->getStrInternalTaskname(), class_logger::$levelInfo);
-                        		 //let the work begin...
-                        		 $strTempOutput = trim($objTask->executeTask());
-
-                                 //progress information?
-                                 if($objTask->getStrProgressInformation() != "")
-                                     $strTaskOutput .= $objTask->getStrProgressInformation();
-
-                                 if(is_numeric($strTempOutput) && ($strTempOutput >= 0 && $strTempOutput <= 100) ) {
-                                     $strTaskOutput .= $this->objToolkit->percentBeam($strTempOutput, 500);
-                                 }
-                                 else {
-                                     $strTaskOutput .= $strTempOutput;
-                                 }
-
-                                 //reload requested by worker?
-                                 if($objTask->getStrReloadUrl() != "")
-                                    header("Refresh: 0; ".uniStrReplace("&amp;", "&", $objTask->getStrReloadUrl() ));
-
-                        	}
-                        	else {
-	                        	//any form to display?
-	                        	$strForm = $objTask->generateAdminForm();
-	                        	if($strForm != "") {
-	                        	   $strTaskOutput .= $strForm;
-	                        	}
-	                        	else {
-	                        		//reload the task an fire the action
-	                        		$this->adminReload(getLinkAdminHref("system", "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
-	                        	}
-                        	}
+                            //any form to display?
+                            $strForm = $objTask->generateAdminForm();
+                            if($strForm != "") {
+                               $strTaskOutput .= $strForm;
+                            }
+                            else {
+                                //reload the task an fire the action
+                                $this->adminReload(getLinkAdminHref("system", "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
+                            }
+                        	
                             break;
                         }
                     }
@@ -450,7 +426,9 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             //include js-code & stuff to handle executions
             $strReturn .= $this->objToolkit->jsDialog(3);
-                //TODO: move to skins?
+            $strReturn .= "<script type=\"text/javascript\">
+                jsDialog_3.setContentRaw('<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" />');
+                </script>";
             $strTaskOutput = "<div id=\"taskOutput\" style=\"border: 1px solid red;\">".$strTaskOutput."</div>";
         	$strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
         	
