@@ -359,15 +359,24 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         $objTask = new $strClassname();
                         if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
 
-                            //any form to display?
-                            $strForm = $objTask->generateAdminForm();
-                            if($strForm != "") {
-                               $strTaskOutput .= $strForm;
+                            //execute the task or show the form?
+                            if($this->getParam("execute") == "true") {
+                                $strTaskOutput = "
+                                    <script type=\"text/javascript\">
+                                            kajonaAjaxHelper.loadAjaxBase();
+                                            kajonaAjaxHelper.loadAjaxBase( function() {
+                                                kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+                                            }
+                                        );
+                                    </script>";
                             }
                             else {
-                                //reload the task an fire the action
-                                $this->adminReload(getLinkAdminHref("system", "systemTasks", "work=true&task=".$objTask->getStrInternalTaskname()));
+                                $strForm = $objTask->generateAdminForm();
+                                if($strForm != "") {
+                                   $strTaskOutput .= $strForm;
+                                }
                             }
+                            
                         	
                             break;
                         }
@@ -431,10 +440,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             $strCancelbutton = "<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" />";
 
-            $strTaskOutput = $this->objToolkit->getSystemtaskStatuswindow($strTaskOutput, $strCancelbutton) ;
+            $strReturn .= $this->objToolkit->jsDialog(3);
+            $strTaskOutput = $this->objToolkit->getSystemtaskStatuswindow($strTaskOutput) ;
             //include js-code & stuff to handle executions
             $strReturn .= "<script type=\"text/javascript\">
                 var KAJONA_TASKENGINE_IDLE = '".$this->getText("systemtask_idle")."';
+                jsDialog_3.setContentRaw('".$strCancelbutton."');
                 </script>";
         	$strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
         	

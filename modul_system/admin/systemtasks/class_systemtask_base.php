@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                       *
+*   $Id$                               *
 ********************************************************************************************************/
 
 
@@ -93,23 +93,11 @@ abstract class class_systemtask_base {
     	if($strFormContent != "") {
     		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()));
     		$strReturn .= $strFormContent;
-            $strReturn .= $this->objToolkit->formInputHidden("work", "true");
+            $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"), "Submit", "onclick=\"submitExecution();return false;\"");
     		$strReturn .= $this->objToolkit->formClose();
     		
     		$strReturn .= $this->objToolkit->divider();
-
-            //generate the submit code
-            $strReturn .=" <script type=\"text/javascript\">\n";
-            $strReturn .="  function submitExecution() {    \n";
-            $strReturn .="    var strPostParams = \"\";  \n";
-            $strReturn .="    strPostParams += ".$this->getSubmitParams().";  \n";
-            //$strReturn .="    alert(strPostParams); return false;  \n";
-            $strReturn .="    kajonaSystemtaskHelper.executeTask('".$this->getStrInternalTaskName()."', strPostParams);  \n";
-            $strReturn .="    return false;  \n";
-            $strReturn .="  }    \n";
-
-            $strReturn .=" </script>\n";
     	}
     	
     	return $strReturn;
@@ -168,7 +156,7 @@ abstract class class_systemtask_base {
      */
     public function getStrReloadUrl() {
         if($this->strReloadParam != "")
-            return getLinkAdminHref("system", "systemTasks", "work=true&task=".$this->getStrInternalTaskName().$this->strReloadParam);
+            return getLinkAdminHref("system", "systemTasks", "&task=".$this->getStrInternalTaskName().$this->strReloadParam);
         else
             return "";
     }

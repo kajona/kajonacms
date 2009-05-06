@@ -172,7 +172,7 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
      * @return string
      */
     public function getSubmitParams() {
-        return "'&intMaxWidth='+document.getElementById('intMaxWidth').value+'&intMaxHeight='+document.getElementById('intMaxHeight').value";
+        return "&intMaxWidth=".$this->getParam('intMaxWidth')."&intMaxHeight=".$this->getParam('intMaxHeight');
     }
 
 }

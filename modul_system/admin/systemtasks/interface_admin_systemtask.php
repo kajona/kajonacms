@@ -52,10 +52,12 @@ interface interface_admin_systemtask {
 
     /**
 	 * If a form is generated via getAdminForm(), getSubmitParams returns
-     * the js-code to add the key/values to the post-params
-     * The returned string is added by the framework before submitting the form itself.
+     * the params to add  to the post-params.
+     *
+     * Note: This happens after submitting the page. So, you can handle all
+     * actions necessary to be ready to process the values submited by the user via the form.
 	 *
-	 * @return string or "" if now form is needed
+	 * @return string or "" if now params are needed
 	 */
 	public function getSubmitParams();
 

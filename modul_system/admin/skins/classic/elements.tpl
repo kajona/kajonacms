@@ -1009,7 +1009,6 @@ Should contain HTML-elements with the following ids: loadingDiv, statusDiv, idle
         <div id="statusDiv" style="float: left;">%%statusinfo%%</div>
         <div id="loadingDiv" style="display: none; float: right;">
             <div style="text-align: center;"><img src="_skinwebpath_/loading.gif" alt="Loading" /></div>
-            <div>%%cancelbutton%%</div>
         </div>
         <div style="clear: both;"></div>
     </div>

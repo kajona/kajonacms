@@ -85,7 +85,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string 
      */
     public function getSubmitParams() {
-        return "'&dbImportFile='+document.getElementById('dbImportFile').options[document.getElementById('dbImportFile').selectedIndex].value";
+        return "&dbImportFile=".$this->getParam("dbImportFile");
     }
 }
 ?>

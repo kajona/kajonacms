@@ -1033,7 +1033,7 @@ var kajonaImageEditor = {
     }
 
 };
-//TODO: maybe shift to class_modul_system_admin to generate the code as inline-js
+
 var kajonaSystemtaskHelper =  {
 
     executeTask : function(strTaskname, strAdditionalParam, boolNoContentReset) {
@@ -1041,7 +1041,7 @@ var kajonaSystemtaskHelper =  {
             document.getElementById('statusDiv').innerHTML = "";
         
         document.getElementById('loadingDiv').style.display = "block";
-        //jsDialog_3.init();
+        jsDialog_3.init();
         kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
             success : function(o) {
                 var strResponseText = o.responseText;
@@ -1059,10 +1059,14 @@ var kajonaSystemtaskHelper =  {
                         strReload = strResponseText.substr(intStart, strResponseText.indexOf("</reloadurl>")-intStart);
                     }
 
+                     if(statusinfo == "" && strResponseText != "")
+                           statusinfo = strResponseText;
                     //show message?
                     document.getElementById('statusDiv').innerHTML = statusinfo;
+
                     if(strReload == "") {
                         document.getElementById('loadingDiv').style.display = "none";
+                        jsDialog_3.hide();
                     }
                     else {
                         kajonaSystemtaskHelper.executeTask(strTaskname, strReload, true);
@@ -1071,6 +1075,7 @@ var kajonaSystemtaskHelper =  {
             },
             
             failure : function(o) {
+                jsDialog_3.hide();
                 kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText);
             }
         }
@@ -1085,7 +1090,7 @@ var kajonaSystemtaskHelper =  {
         if(YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
            YAHOO.util.Connect.abort(kajonaAdminAjax.systemTaskCall, null, false);
         }
-        //jsDialog_3.hide();
+        jsDialog_3.hide();
         document.getElementById('loadingDiv').style.display = "none";
     }
 };
