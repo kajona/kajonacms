@@ -167,5 +167,13 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         return $strReturn;
     }
 
+    /**
+     * @see interface_admin_systemtast::getSubmitParams()
+     * @return string
+     */
+    public function getSubmitParams() {
+        return "'&intMaxWidth='+document.getElementById('intMaxWidth').value+'&intMaxHeight='+document.getElementById('intMaxHeight').value";
+    }
+
 }
 ?>
