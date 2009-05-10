@@ -21,7 +21,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.0";
+		$arrModul["version"] 			= "3.2.0.9";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -101,6 +101,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_prev_id"] 	= array("char20", false);
 		$arrFields["system_module_nr"] 	= array("int", false);
 		$arrFields["system_sort"] 		= array("int", true);
+		$arrFields["system_owner"]      = array("char20", true);
 		$arrFields["system_lm_user"] 	= array("char20", true);
 		$arrFields["system_lm_time"] 	= array("int", true);
 		$arrFields["system_lock_id"] 	= array("char20", true);
@@ -524,6 +525,11 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.1.95") {
             $strReturn .= $this->update_3195_320();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0") {
+            $strReturn .= $this->update_320_3209();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -885,6 +891,31 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0");
+        return $strReturn;
+    }
+
+    private function update_320_3209() {
+        $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
+
+
+        $strReturn .= "Adding system_owner column to db-schema...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
+        	               ADD ".$this->objDB->encloseColumnName("system_owner")." VARCHAR( 20 ) NULL ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+        $strReturn .= "Updating owner-fields...\n";
+        include_once(_systempath_."/class_modul_system_common.php");
+        $arrRecords = $this->objDB->getArray("SELECT system_id FROM ".$this->objDB->encloseTableName(_dbprefix_."system"));
+        foreach($arrRecords as $strOneSysId) {
+            $objRecord = new class_modul_system_common($strOneSysId["system_id"]);
+            $objRecord->setOwnerId($objRecord->getLastEditUserId());
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.0.9");
         return $strReturn;
     }
 	

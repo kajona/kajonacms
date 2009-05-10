@@ -154,8 +154,16 @@ abstract class class_root {
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
-					 ( system_id, system_prev_id, system_module_nr, system_lm_user, system_lm_time, system_status, system_comment) VALUES
-					 ('".$this->objDB->dbsafeString($strSystemId)."', '".$this->objDB->dbsafeString($strPrevId)."',".(int)$intModulNr." , '".$this->objDB->dbsafeString($this->objSession->getUserID())."' , ".time()." , ".(int)$intStatus.", '".$this->objDB->dbsafeString($strComment)."')";
+					 ( system_id, system_prev_id, system_module_nr, system_owner, system_lm_user, system_lm_time, system_status, system_comment) VALUES
+					 ('".$this->objDB->dbsafeString($strSystemId)."', 
+                      '".$this->objDB->dbsafeString($strPrevId)."',
+                       ".(int)$intModulNr." ,
+                      '".$this->objDB->dbsafeString($this->objSession->getUserID())."',
+                      '".$this->objDB->dbsafeString($this->objSession->getUserID())."' ,
+                       ".time()." ,
+                       ".(int)$intStatus.",
+                      '".$this->objDB->dbsafeString($strComment)."')";
+        
 		//Send the query to the db
 		$this->objDB->_query($strQuery);
 
@@ -533,6 +541,42 @@ abstract class class_root {
 		else
 			return false;
 	}
+
+    /**
+     * Gets the id of the user currently being the owner of the record
+     *
+     * @param string $strSystemid
+     * @return string
+     */
+    public final function getOwnerId($strSystemid = "") {
+        if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+		$arrRow = $this->getSystemRecord($strSystemid);
+		return $arrRow["system_owner"];
+    }
+
+    /**
+     * Sets the id of the user who owns this record
+     *
+     * @param string $strOwner
+     * @param string $strSystemid
+     * @return bool
+     */
+    public final function setOwnerId($strOwner, $strSystemid = "") {
+        if($strSystemid == "")
+			$strSystemid = $this->getSystemid();
+
+		$strQuery = "UPDATE "._dbprefix_."system
+					SET system_owner = '".$this->objDB->dbsafeString($strOwner)."',
+						system_lm_time= ".(int)time()."
+					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
+
+		if($this->objDB->_query($strQuery))
+			return true;
+		else
+			return false;
+    }
 
 	/**
 	 * Gets the Prev-ID of a record

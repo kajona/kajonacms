@@ -13,6 +13,7 @@
 	system_prev_id			= Key to connect to the level above
 	system_module_nr		= Number of the corresponding module
 	system_sort				= Sorting the records
+    system_owner            = User who created to record -> so owns the record
 	system_lm_user			= User who last modified the record
 	system_lm_time			= Time the record was last edited
 	system_lock_id			= ID of user currently locking the record
@@ -242,7 +243,6 @@
 	downloads_hits			= number of donwloads
 	downloads_type			= 0 => file, 1 => folder
     downloads_checksum      = md5-hash of the file
-    downloads_owner         = systemid of the user who created the record
 	downloads_max_kb		= Max Speed to download, 0 = unlimited
 
 //--_downloads_log---------------------------------------------------------------------------------------
