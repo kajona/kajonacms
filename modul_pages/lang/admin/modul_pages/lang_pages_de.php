@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 179
+//Kajona Language Editor Core Build 182
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -113,7 +113,7 @@ $lang["plNew"]                           = "Neuer Platzhalter:";
 $lang["plRename"]                        = "Anpassen";
 $lang["plToUpdate"]                      = "Alter Platzhalter:";
 $lang["plUpdateFalse"]                   = "Beim Umbenennen ist ein Fehler aufgetreten.";
-$lang["plUpdateHelp"]                    = "Hier können die in der Datenbank gespeicherten Platzhalter aktualisiert werden.<br />Dies kann dann nötig werden, wenn ein Platzhalter um ein weiteres mögliches Seitenelement erweitert wurde. In diesem Fall erscheinen die Seitenelement zwar beim Bearbeiten der Seite, nicht aber im Portal. Um dies zu ändern müssen die in der Datenbank hinterlegten Platzhalter an die neuen Platzhalter angepasst werden.<br /> Hierfür ist es notwendig, den Namen des veränderten Templates, den Titel des alten Platzhalters (name_element), sowie des neuen Platzhalters (name_element|element2) anzugeben. Platzhaler sind ohne Prozentzeichen anzugeben.";
+$lang["plUpdateHelp"]                    = "Hier können die in der Datenbank gespeicherten Platzhalter aktualisiert werden.<br />Dies kann dann nötig werden, wenn ein Platzhalter um ein weiteres mögliches Seitenelement erweitert wurde. In diesem Fall erscheinen die Seitenelement zwar beim Bearbeiten der Seite, nicht aber im Portal. Um dies zu ändern müssen die in der Datenbank hinterlegten Platzhalter an die neuen Platzhalter angepasst werden.<br /> Hierfür ist es notwendig, den Namen des veränderten Templates, den Titel des alten Platzhalters (name_element), sowie des neuen Platzhalters (name_element|element2) anzugeben. Platzhalter sind ohne Prozentzeichen anzugeben.";
 $lang["plUpdateTrue"]                    = "Das Umbenennen war erfolgreich.";
 $lang["placeholder"]                     = "Platzhalter: ";
 $lang["quickhelp_editElement"]           = "Dieses Formular dient zum Anlegen und Bearbeiten der Grunddaten von Seitenelementen. Hierfür stehen die folgenden Eingabefelder zur Verfügung:<br /><ul><li>Name: Titel des Elements</li><li>Max. Cachedauer: Zeitdauer in Sekunden, die das Element maximal gecached werden darf.<br />Nach Ablauf dieses Zeitraums wird die Seite neu generiert.</li><li>Admin-Klasse: Klasse, die das Admin-Formular bereitstellt.</li><li>Portal-Klasse: Klasse, die die Portal-Ausgabe übernimmt.</li><li>Wiederholbar: Legt fest, ob ein Element an einem Platzhalter mehrfach angelegt werden darf.</li></ul>";
