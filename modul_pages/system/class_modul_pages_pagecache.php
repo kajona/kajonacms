@@ -129,6 +129,21 @@ class class_modul_pages_pagecache {
                      WHERE page_cache_name = '".$this->objDB->dbsafeString($strPagename)."'";
         return $this->objDB->_query($strQuery);
 	}
+
+    /**
+	 * Removes one page from the cache, but including the current checksum.
+     * This results in less pages deleted then using flushPageFromPagesCache()
+	 *
+	 * @param string $strPagename
+	 * @return bool
+	 */
+	public function flushPageWithChecksumFromPagesCache($strPagename) {
+        $strQuery = "DELETE FROM "._dbprefix_."page_cache
+                     WHERE page_cache_name = '".$this->objDB->dbsafeString($strPagename)."'
+                       AND page_cache_checksum = '".$this->objDB->dbsafeString($this->generateCacheChecksum())."'";
+        return $this->objDB->_query($strQuery);
+	}
+
 }
 
 

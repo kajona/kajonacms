@@ -26,6 +26,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_faqs";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."faqs";
@@ -175,6 +176,8 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
                 $strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
             }
         } else {
+            //disable caching
+            class_modul_pages_portal::disablePageCacheForGeneration();
             if(!$bitRatingAllowed)
                 $strRatingBarTitle = $this->getText("faqs_rating_voted");
             else

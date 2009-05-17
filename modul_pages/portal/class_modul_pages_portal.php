@@ -26,6 +26,7 @@ class class_modul_pages_portal extends class_portal {
     private $objPagecache;
 
     private static $strAdditionalHeader = "";
+    private static $bitPageCacheDisabledForGenerationRun = false;
 
 	public function __construct() {
         $arrModul = array();
@@ -336,8 +337,12 @@ class class_modul_pages_portal extends class_portal {
         }
 
 		//save the generated Page to the cache
-		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage)
+		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage && !self::$bitPageCacheDisabledForGenerationRun) {
 		   $this->objPagecache->savePageToCache($strPagename, $intMaxCachetime, $this->objSession->getUserID(), $strPageContent);
+        }
+        elseif(self::$bitPageCacheDisabledForGenerationRun) {
+            $this->objPagecache->flushPageWithChecksumFromPagesCache($strPagename);
+        }
 
 		$this->strOutput = $strPageContent;
 	}
@@ -356,6 +361,14 @@ class class_modul_pages_portal extends class_portal {
 	public static function registerAdditionalTitle($strTitle) {
 		self::$strAdditionalHeader = "%%kajonaTitleSeparator%%".$strTitle;
 	}
+
+    /**
+     * Disables caching for the current generation
+     * @return void
+     */
+    public static function disablePageCacheForGeneration() {
+        self::$bitPageCacheDisabledForGenerationRun = true;
+    }
 
 }
 ?>

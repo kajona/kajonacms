@@ -241,6 +241,8 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId, false);
             }
         } else {
+            //disable caching
+            class_modul_pages_portal::disablePageCacheForGeneration();
             if(!$bitRatingAllowed)
                 $strRatingBarTitle = $this->getText("postacomment_rating_voted");
             else
