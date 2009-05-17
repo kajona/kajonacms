@@ -159,6 +159,9 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         $objCookie = new class_cookie();
         $objCookie->setCookie("kj_ratingHistory", getCookie("kj_ratingHistory").$this->getSystemid().",");
 
+        //flush the page-cache to have all pages rerendered using the correct values
+        $this->flushCompletePagesCache();
+        
         return $this->updateObjectToDB();
 
     }
