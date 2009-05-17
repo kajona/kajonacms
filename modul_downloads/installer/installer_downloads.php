@@ -67,6 +67,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_size"] 		= array("int", true);
 		$arrFields["downloads_hits"]	 	= array("int", true);
 		$arrFields["downloads_type"]	 	= array("int", true);
+		$arrFields["downloads_cattype"]	 	= array("int", true);
 		$arrFields["downloads_checksum"]	= array("char254", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
 		
@@ -325,6 +326,13 @@ class class_installer_downloads extends class_installer_base implements interfac
 
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
+
+        $strReturn .= "Adding system_owner column to db-schema...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")."
+        	               ADD ".$this->objDB->encloseColumnName("downloads_cattype")." int NULL ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.2.0.9");

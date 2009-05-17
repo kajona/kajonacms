@@ -27,6 +27,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     private $intHits = 0;
     private $intType = 0;
     private $intMaxKb = 0;
+    private $intCatType = 0; //internal, undocumented field. used for kajonabase.net!
 
     /**
      * Constructor to create a valid object
@@ -68,6 +69,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
             $this->setSize($arrRow["downloads_size"]);
             $this->setType($arrRow["downloads_type"]);
             $this->setChecksum($arrRow["downloads_checksum"]);
+            $this->setIntCatType($arrRow["downloads_cattype"]);
         }
     }
 
@@ -89,9 +91,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
 		//Modul-Table
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_checksum) VALUES
+		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_checksum, downloads_cattype) VALUES
 		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."')";
+                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."', ".(int)$this->getIntCatType().")";
 
 		if($this->objDB->_query($strQuery))
 			$bitCommit = true;
@@ -120,7 +122,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
 					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
 					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb()).",
-                        downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."'
+                        downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."',
+                        downloads_cattype='".$this->objDB->dbsafeString($this->getIntCatType())."'
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -421,6 +424,15 @@ class class_modul_downloads_file extends class_model implements interface_model,
     public function setChecksum($strChecksum) {
         $this->strChecksum = $strChecksum;
     }
+
+    public function getIntCatType() {
+        return $this->intCatType;
+    }
+
+    public function setIntCatType($intCatType) {
+        $this->intCatType = $intCatType;
+    }
+
 }
 
 ?>
