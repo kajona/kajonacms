@@ -1010,7 +1010,7 @@ function uniStrrpos($strHaystack, $strNeedle) {
  * @return int
  */
 function uniStripos($strHaystack, $strNeedle) {
-    if(_mbstringloaded_)
+    if(_mbstringloaded_ && function_exists("mb_stripos"))
         return mb_stripos($strHaystack, $strNeedle);
     else
         return stripos($strHaystack, $strNeedle);
