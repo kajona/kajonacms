@@ -164,6 +164,8 @@ class class_element_portalregistration extends class_element_portal implements i
 	        if($objUser->saveObjectToDb()) {
 	        	//group assignments
                 class_modul_user_group::addUserToGroups($objUser,array($this->arrElementData["portalregistration_group"]));
+                //and to the guests to avoid conflicts
+                class_modul_user_group::addUserToGroups($objUser,array(_guests_group_id_));
 	        	//create a mail to allow the user to activate itself
 	        	
                 $strMailContent = $this->getText("pr_email_body");
