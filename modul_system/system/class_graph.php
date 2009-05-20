@@ -268,6 +268,65 @@ class class_graph {
 		$this->setXAxisTickLabels($arrTicks);
 	}
 
+    /**
+	 * Used to create a grouped bar-chart.
+     * Grouping can be done via grouping the bars besides each other or via stacking them.
+	 * A sample-code could be:
+	 *
+	 *  $objGraph = new class_graph();
+	 *  $objGraph->setStrXAxisTitle("x-axis");
+	 *  $objGraph->setStrYAxisTitle("y-axis");
+	 *  $objGraph->setStrGraphTitle("Test Graph");
+	 *  $objGraph->createGroupedBarChart(array( array("value 1" => 4, "value 2" => 5, "value 3" => 2),array("value 1" => 1, "value 2" => 2, "value 3" => 3) ));
+	 *  $objGraph->saveGraph(_images_cachepath_."/graph.png");
+	 *
+	 * @param array $arrValues see the example above for the internal array-structure
+	 * @param int $intWidth
+	 * @param int $intHeight
+	 * @param bool $bitHorizontal
+     * @param bool $bitStacking if set to false, the bars are grouped besides each other. If set to true, the bars are stacked
+	 */
+	public function createGroupedBarChart($arrValues, $intWidth = 400, $intHeight = 200, $bitHorizontal = false, $bitStacking = false) {
+		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
+
+		include_once(_systempath_."/jpgraph/jpgraph_bar.php");
+		$this->createGraphInstance($intWidth, $intHeight);
+
+		//if horozontal, rotate image
+		if($bitHorizontal) {
+            $this->objGraph->Set90AndMargin();
+		}
+
+		$arrTicks = array();
+        $arrBarCharts = array();
+        $floatColorRaiseFactor = 1.0;
+        foreach($arrValues as $arrOneBarValues) {
+            $arrTicks = array();
+            $arrConcreteValues = array();
+            foreach($arrOneBarValues as $strTitle => $intValue) {
+                $arrTicks[] = $strTitle;
+                $arrConcreteValues[] = $intValue;
+            }
+            
+            $objBarPlot = new BarPlot($arrConcreteValues);
+            //$objBarPlot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
+            //$objBarPlot->SetColor("navy");
+            $objBarPlot->SetFillColor("navy:".$floatColorRaiseFactor);
+            $floatColorRaiseFactor += 0.2;
+
+            $arrBarCharts[] = $objBarPlot;
+        }
+        
+        if($bitStacking)
+            $objCombinedPlot = new AccBarPlot($arrBarCharts);
+        else
+            $objCombinedPlot = new GroupBarPlot($arrBarCharts);
+
+		$this->objGraph->Add($objCombinedPlot);
+
+		$this->setXAxisTickLabels($arrTicks);
+	}
+
 
 	/**
 	 * creates a line-plot graph
