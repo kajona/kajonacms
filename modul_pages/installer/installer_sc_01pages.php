@@ -27,8 +27,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
      *
      */
     public function install() {
-    	
+
         $strReturn = "";
+
+        $strReturn .= "Setting default template...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_pages_defaulttemplate_");
+        $objConstant->setStrValue("kajona_demo.tpl");
+        $objConstant->updateObjectToDb();
 
         $strReturn .= "Creating index-site...\n";
         include_once(_systempath_."/class_modul_pages_page.php");
@@ -208,11 +213,11 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
-            
-            
-            
-            
-            
+
+
+
+
+
         $strReturn .= "Creating imprint-site...\n";
         include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
@@ -286,18 +291,18 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                                            Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />
                                            '
                       WHERE content_id = '".dbsafeString($strElementId)."'";
-        }  
-        
+        }
+
         if($this->objDB->_query($strQuery))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
 
 
-            
-            
-            
-            
+
+
+
+
         $strReturn .= "Creating sample page...\n";
         include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
@@ -355,8 +360,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 							SET absatz_titel = 'Standard paragraph',
 								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 							WHERE content_id = '".dbsafeString($strElementId)."'";
-        }  
-        
+        }
+
         if($this->objDB->_query($strQuery))
             $strReturn .= "Paragraph element created.\n";
         else
@@ -424,8 +429,8 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 							SET absatz_titel = 'Standard paragraph on subpage',
 								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 							WHERE content_id = '".dbsafeString($strElementId)."'";
-        }  
-        
+        }
+
         if($this->objDB->_query($strQuery))
             $strReturn .= "Paragraph element created.\n";
         else
@@ -433,11 +438,11 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
@@ -445,6 +450,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
     public function getCorrespondingModule() {
         return "pages";
     }
-    
+
 }
 ?>

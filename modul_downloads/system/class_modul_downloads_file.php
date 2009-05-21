@@ -87,7 +87,6 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		//start with the system-records
 		$strDlID = $this->createSystemRecord($strPrevId, "DL: ".$this->getFilename());
 		$this->setSystemid($strDlID);
-        $this->setOwner($this->objSession->getUserID());
 		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
 		//Modul-Table
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
@@ -127,7 +126,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
-    
+
 
     /**
      * Deletes the given dl-record from the database
@@ -177,7 +176,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 
 		return $arrReturn;
 	}
-	
+
 	/**
 	 * Loads all files, and only file under a given folderlevel recusively.
 	 *
@@ -186,7 +185,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	 */
     public static function getAllFilesUnderFolderLevelRecursive($strFolderlevel) {
         $arrFiles = class_modul_downloads_file::getFilesDB($strFolderlevel);
-        
+
         $arrChilds = array();
         $arrReturn = array();
         foreach ($arrFiles as $objOneFile) {
@@ -198,8 +197,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
            }
         }
         $arrReturn = array_merge($arrReturn, $arrChilds);
-        
-        return $arrReturn;               
+
+        return $arrReturn;
     }
 
    /**
@@ -360,7 +359,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 
 		return $arrReturn;
 	}
-	
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
