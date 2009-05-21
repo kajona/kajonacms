@@ -65,8 +65,6 @@ abstract class class_root {
 	private   $strArea;				        //String containing the current Area - admin or portal or installer or download
 	protected $arrModule;			        //Array containing Infos about the current modul
 	protected $strTemplateArea;		        //String containing the current Area for the templateobject
-	private   $strPortalLanguage = null;    //Language to load on the portal
-	private   $strAdminLanguage = null;     //Language to load on the admin
 
 
 
@@ -1091,16 +1089,12 @@ abstract class class_root {
     /**
      * Returns the language to display contents on the portal
      *
-     * @return string if installed, the current language. Otherwise an empty string is returned
+     * @return string 
      */
     public final function getStrPortalLanguage() {
-        if($this->strPortalLanguage == null) {
-            //not yet initialized
-            include_once(_systempath_."/class_modul_languages_language.php");
-            $objLanguage = new class_modul_languages_language();
-            $this->strPortalLanguage = $objLanguage->getPortalLanguage();
-        }
-        return $this->strPortalLanguage;
+        include_once(_systempath_."/class_modul_languages_language.php");
+        $objLanguage = new class_modul_languages_language();
+        return $objLanguage->getPortalLanguage();
     }
 
 
@@ -1111,16 +1105,12 @@ abstract class class_root {
      * Returns the language to display contents or to edit contents on adminside
      * NOTE: THIS ARE THE CONTENTS, NOT THE TEXTS
      *
-     * @return string if installed, the current language. Otherwise an empty string is returned
+     * @return string 
      */
     public final function getStrAdminLanguageToWorkOn() {
-        if($this->strAdminLanguage == null) {
-            //not yet initalized
-            include_once(_systempath_."/class_modul_languages_language.php");
-            $objLanguage = new class_modul_languages_language();
-            $this->strAdminLanguage = $objLanguage->getAdminLanguage();
-        }
-        return $this->strAdminLanguage;
+        include_once(_systempath_."/class_modul_languages_language.php");
+        $objLanguage = new class_modul_languages_language();
+        return $objLanguage->getAdminLanguage();
     }
 
 }

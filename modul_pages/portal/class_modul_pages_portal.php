@@ -110,6 +110,24 @@ class class_modul_pages_portal extends class_portal {
 			//and load the errorpage itself
 			$strFirstPagename = $strPagename;
 			$strPagename = _pages_errorpage_;
+
+            //check, if the errorpage can be loaded (template). If not possible, switch back to default-language
+            try {
+                $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+            }
+            catch (class_exception $objException) {
+                //check, if we can switch to the default language
+                $objDefaultLang = class_modul_languages_language::getDefaultLanguage();
+                if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
+                    class_logger::getInstance()->addLogRow("Requested page ".$strFirstPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
+                    $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
+                    $strPagename = $strFirstPagename;
+
+                }
+            }
+
+
+
 			$objPageData = class_modul_pages_page::getPageByName($strPagename);
 
 			//check, if the page is enabled and if the rights are given, too
@@ -118,6 +136,8 @@ class class_modul_pages_portal extends class_portal {
 				throw new class_exception("Requested Page ".$strFirstPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
 				return;
 			}
+
+            
 		}
 
 		//react on portaleditor commands
