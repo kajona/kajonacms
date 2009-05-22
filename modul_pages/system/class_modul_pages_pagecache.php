@@ -88,7 +88,7 @@ class class_modul_pages_pagecache {
 	    $strAction = getGet("action");
 	    $strSystemid = getGet("systemid");
 	    //collection to react on "invisible" commands
-	    $strMixed = getGet("pv").getPost("searchterm").getGet("highlight");
+        $strMixed = getGet("pv").getPost("searchterm").getGet("highlight").getCookie("kj_ratingHistory");
 	    include_once(_systempath_."/class_modul_system_common.php");
 	    $objCommon = new class_modul_system_common();
 	    $strLanguage = $objCommon->getStrPortalLanguage();
