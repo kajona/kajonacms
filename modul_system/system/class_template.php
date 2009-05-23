@@ -195,15 +195,18 @@ class class_template {
 	 * Fills the current temp-template with the passed values.<br /><b>Make sure to have the wanted template loaded before by using setTemplate()</b>
 	 *
 	 * @param mixed $arrContent
+     * @param bool $bitRemovePlaceholder
 	 * @return string The filled template
 	 */
-	public function fillCurrentTemplate($arrContent) {
+	public function fillCurrentTemplate($arrContent, $bitRemovePlaceholder = true) {
         $strTemplate = $this->strTempTemplate;
 		if(count($arrContent) >= 1) {
 			foreach($arrContent as $strPlaceholder => $strContent) {
 				$strTemplate = str_replace("%%".$strPlaceholder."%%", $strContent."%%".$strPlaceholder."%%", $strTemplate);
 			}
 		}
+        if($bitRemovePlaceholder)
+		   $strTemplate = $this->deletePlaceholderRaw($strTemplate);
 		return $strTemplate;
 	}
 
