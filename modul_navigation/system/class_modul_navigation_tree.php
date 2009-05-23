@@ -60,6 +60,8 @@ class class_modul_navigation_tree extends class_model implements interface_model
      */
     public function updateObjectToDb() {
         class_logger::getInstance()->addLogRow("updated navigtion ".$this->getSystemid(), class_logger::$levelInfo);
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
         $this->setEditDate();
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."'
@@ -74,6 +76,8 @@ class class_modul_navigation_tree extends class_model implements interface_model
      */
     public function saveObjectToDb() {
         //create a new navigation
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
 		//begin tx
 		$this->objDB->transactionBegin();
 		$bitCommit = true;

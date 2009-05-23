@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["browser"]                         = "Open browser";
@@ -45,6 +45,8 @@ $lang["quickhelp_newNavi"]               = "To create a new navigation tree you 
 $lang["quickhelp_newNaviPoint"]          = "By creating and editing a navigation item you can change its properties. The properties include the item name and the corresponding link. For external websites you can use the field 'External link'. If you want to have an image to be shown instead of the item name, you can use the field 'Image'. You can choose the target of the link with the corresponding drop down.";
 $lang["required_navigation_name"]        = "Name";
 $lang["speichern"]                       = "Save";
+$lang["systemtask_flushnavigationcache_done"] = "Flushing the cache was successfull";
+$lang["systemtask_flushnavigationcache_name"] = "Flush navigationscache";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Error, internal and external target set!";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Error, target not set!";
 $lang["systemtask_navigationcheck_invalidInternal"] = "Error, internal page doesn't exists! (Target:";

@@ -13,6 +13,7 @@ include_once(_portalpath_."/interface_portal.php");
 //Model
 include_once(_systempath_."/class_modul_navigation_tree.php");
 include_once(_systempath_."/class_modul_navigation_point.php");
+include_once(_systempath_."/class_modul_navigation_cache.php");
 
 /**
  * Portal-part of the guestbook. Creates the different navigation-views as sitemap or tree
@@ -40,9 +41,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		parent::__construct($arrModul, $arrElementData);
 
 		//Determin the current site to load
-		$this->strCurrentSite = $this->getParam("page");
-		if($this->strCurrentSite == "")
-		  $this->strCurrentSite = $this->getParam("seite");
+		$this->strCurrentSite = $this->getPagename();
 	}
 
     /**
@@ -52,15 +51,48 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      */
 	public function action() {
 		$strReturn = "";
+
+        //navigation loadable via cache?
+        $strCachedNavi = $this->loadNavigationFromCache();
+        if($strCachedNavi != null)
+            return $strCachedNavi;
+
 		//Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
 			$strReturn = $this->loadNavigationTree();
 		if($this->arrElementData["navigation_mode"] == "sitemap")
 			$strReturn = $this->loadNavigationSitemap();
 
+        //and save back to the cache
+        $this->saveNavigationToCache($strReturn);
+
 		return $strReturn;
 	}
 
+
+// --- Caching ------------------------------------------------------------------------------------------
+    /**
+     * Wrapper to class_modul_navigation_cache::loadNavigationFromCache()
+     * Tries to fetch a generated navi from the database
+     *
+     * @return string or null
+     */
+    private function loadNavigationFromCache() {
+        $objCache = new class_modul_navigation_cache();
+        return $objCache->loadNavigationFromCache($this->arrElementData["navigation_id"], $this->arrElementData["content_id"], $this->getPagename());
+    }
+
+    /**
+     * Wrapper to class_modul_navigation_cache::saveNavigationToCache()
+     * Tries to save a generated navi to the database
+     *
+     * @param string $strGeneratedNavi
+     * @return bool
+     */
+    private function saveNavigationToCache($strGeneratedNavi) {
+        $objCache = new class_modul_navigation_cache();
+        return $objCache->saveNavigationToCache($this->arrElementData["navigation_id"], $this->arrElementData["content_id"], $this->getPagename(), $strGeneratedNavi);
+    }
 
 // --- Baum-Funktionen ----------------------------------------------------------------------------------
 

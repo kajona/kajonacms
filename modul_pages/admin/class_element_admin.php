@@ -176,13 +176,24 @@ class class_element_admin extends class_admin {
 	    return "";
 	}
 
+    /**
+     * Overwrite this method, if you want to execute
+     * some special actions right after saving the element to the db, e.g.
+     * cleanup functions.
+     *
+     * @since 3.2.1
+     * @return void
+     */
+    public function doAfterSaveToDb() {
+    }
+
 	/**
 	 * If the form generated should be validated, pass true. This invokes
 	 * the internal validation and printing of errors.
 	 * By default, the value is false. The framework sets the value, so there no
 	 * need to call this setter in concrete element classes.
 	 *
-	 * @param unknown_type $bitDoValidation
+	 * @param bool $bitDoValidation
 	 */
 	public function setDoValidation($bitDoValidation) {
 	    $this->bitDoValidation = $bitDoValidation;

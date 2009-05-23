@@ -71,6 +71,8 @@ class class_modul_navigation_point extends class_model implements interface_mode
      */
     public function updateObjectToDb() {
         class_logger::getInstance()->addLogRow("updated navipoint ".$this->getSystemid(), class_logger::$levelInfo);
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
         $this->setEditDate();
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
                         SET 	navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
@@ -90,6 +92,8 @@ class class_modul_navigation_point extends class_model implements interface_mode
      */
     public function saveObjectToDb($strPrevID) {
         //New Navigationpoint
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
 		//Start tx
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
@@ -123,6 +127,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 			$this->objDB->transactionRollback();
 			return false;
 		}
+
     }
 
     /**

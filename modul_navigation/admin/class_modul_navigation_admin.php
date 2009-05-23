@@ -13,6 +13,7 @@ include_once(_adminpath_."/interface_admin.php");
 //Model
 include_once(_systempath_."/class_modul_navigation_tree.php");
 include_once(_systempath_."/class_modul_navigation_point.php");
+include_once(_systempath_."/class_modul_navigation_cache.php");
 
 /**
  * Admin-class to manage all navigations
@@ -284,6 +285,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				if(!$objNavi->updateObjectToDb())
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 			}
+
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -408,6 +410,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		    if(!class_modul_navigation_point::deleteNaviPoint($this->getSystemid()))
 		        throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
+
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

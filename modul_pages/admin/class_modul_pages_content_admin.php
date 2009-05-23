@@ -540,6 +540,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    $objSystemCommon->setEndDate($arrDates["end"]);
 			}
 
+            //allow the element to run actions after saving
+            $objElement->doAfterSaveToDb();
+
 
 			//Loading the data of the corresp site
 			$objPage = new class_modul_pages_page($this->getPrevId());

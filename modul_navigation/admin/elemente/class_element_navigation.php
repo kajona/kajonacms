@@ -13,6 +13,7 @@ include_once(_adminpath_."/class_element_admin.php");
 include_once(_adminpath_."/interface_admin_element.php");
 
 include_once(_systempath_."/class_modul_navigation_tree.php");
+include_once(_systempath_."/class_modul_navigation_cache.php");
 /**
  * Admin-Class of the navigation element
  * 
@@ -26,13 +27,14 @@ class class_element_navigation extends class_element_admin implements interface_
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 			= "element_navigation";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModul["table"] 		    = _dbprefix_."element_navigation";
 		$arrModul["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]      = "navigation_id|char,navigation_template|char,navigation_mode|char";
+		$arrModul["tableColumns"]   = "navigation_id|char,navigation_template|char,navigation_mode|char";
 
 		parent::__construct($arrModul);
 	}
@@ -75,6 +77,15 @@ class class_element_navigation extends class_element_admin implements interface_
         $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));
 		return $strReturn;
 	}
+
+    /**
+     * @overwrite class_element_admin::doAfterSaveToDb()
+     * @see class_element_admin::doAfterSaveToDb()
+     */
+    public function doAfterSaveToDb() {
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
+    }
 
 
 }
