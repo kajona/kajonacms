@@ -94,7 +94,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         return $objCache->saveNavigationToCache($this->arrElementData["navigation_id"], $this->arrElementData["content_id"], $this->getPagename(), $strGeneratedNavi);
     }
 
-// --- Baum-Funktionen ----------------------------------------------------------------------------------
+// --- Tree-Functions -----------------------------------------------------------------------------------
 
 	/**
 	 * Creates a common tree-view of the navigation
@@ -105,51 +105,12 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$strReturn = "";
 		$strStack = "";
 
-		//Get Systemid of the current page in the navigations-table
-		//short: find the point in the navigation linking on the current page
-		//First try: The current page found by the constructor
-		$objPagePointData = $this->loadPagePoint($this->strCurrentSite, $this->arrElementData["navigation_id"]);
-		//If we find an empty array, the current page isn't in the tree.
-		//as a workaround we could try to load the point of the page the user has visited before
-		if($objPagePointData == null) {
-			//check if the page is linked in another tree
-            if(!$this->isPageVisibleInOtherNavigation()) { 
-			    $strFallbackPage = $this->objSession->getSession("navi_fallback_page_".$this->arrElementData["navigation_id"]);
-			    if($strFallbackPage !== false) {
-			        $objPagePointData = $this->loadPagePoint($strFallbackPage, $this->arrElementData["navigation_id"]);
-			    }
-			    else {
-			        // Whoa. Now we got a problem. Suggestion: Load the Navigation with no activated point
-			        $objPagePointData = null;
-			    }
-            }
-            else
-                $objPagePointData = null;
-		}
-		else {
-		    //save this page as a fallback page, dependant of the navigation_id / navigation_tree
-		    $this->objSession->setSession("navi_fallback_page_".$this->arrElementData["navigation_id"], $this->strCurrentSite);
-		}
-
-        //Loading the points above
-        $objTemp = $objPagePointData;
-		if($objTemp == null) {
-		  //Special case: no active point found --> load the first level inactive
-		  $strStack = $this->arrElementData["navigation_id"];
-		  $objTemp = new class_modul_navigation_point($this->arrElementData["navigation_id"]);
-		}
-		else {
-		    $strStack = $objTemp->getSystemid();
-		    $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
-		}
-
-        while($objTemp->getPrevId() != "0" && $objTemp->getStrName() != "") {
-            $strStack .= ",".$objTemp->getSystemid();
-            $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
-        }
+        $objPagePointData = $this->getActivePagePointData();
+        $strStack = $this->getActiveIdStack($objPagePointData);
 
 		//path created, build the tree using recursion
-		$this->createTree($strStack, 0, $objTemp->getSystemid());
+		$this->createTree($strStack, 0, $this->arrElementData["navigation_id"]);
+        
 		//Create the tree
 		$intCounter = -1;
 		$arrTree = array();
@@ -210,7 +171,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         //any childs?
         $arrChilds = $this->getNaviLayer($strSystemid);
 
-		//Den aktuellen Punkt mit anbauen
+		//Add the current point
 		//active or inactive
 		if(in_array($strSystemid, $arrStack)) {
 			if(!isset($this->arrTree[$intLevel]))
@@ -316,7 +277,80 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		return $strReturn;
 	}
 
-// --- Hilfsfunktionen ----------------------------------------------------------------------------------
+// --- Helpers ------------------------------------------------------------------------------------------
+
+    /**
+     * Builds a string of concatenated systemids. Those ids are the systemids of the page-points
+     * being active. The delimiter is the ','-char.
+     * Ths ids are sorted top to bottom. So the first one is current active one,
+     * the last one is the last parent being active, so in most cases the node on the
+     * first level of the navigation
+     *
+     * @param class_modul_navigation_point $objActivePoint
+     * @return string
+     */
+    private function getActiveIdStack($objActivePoint) {
+        $strStack = "";
+
+        //Loading the points above
+        $objTemp = $objActivePoint;
+
+		if($objTemp == null) {
+		  //Special case: no active point found --> load the first level inactive
+		  $strStack = $this->arrElementData["navigation_id"];
+		  $objTemp = new class_modul_navigation_point($this->arrElementData["navigation_id"]);
+		}
+		else {
+		    $strStack = $objTemp->getSystemid();
+		    $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
+		}
+
+        while($objTemp->getPrevId() != "0" && $objTemp->getStrName() != "") {
+            $strStack .= ",".$objTemp->getSystemid();
+            $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
+        }
+
+        return $strStack;
+    }
+
+    /**
+     * Tries to find the navigation point being active in the current navigation-tree.
+     * Checks if the fallback-page has to be used, as long as the page is not linked in any other
+     * navigation-element on the current page.
+     *
+     * @return class_modul_navigation_point
+     */
+    private function getActivePagePointData() {
+        $objPagePointData = null;
+
+        //Get Systemid of the current page in the navigations-table
+		//short: find the point in the navigation linking on the current page
+		//First try: The current page found by the constructor
+		$objPagePointData = $this->loadPagePoint($this->strCurrentSite, $this->arrElementData["navigation_id"]);
+		//If we find an empty array, the current page isn't in the tree.
+		//as a workaround we could try to load the point of the page the user has visited before
+		if($objPagePointData == null) {
+			//check if the page is linked in another tree
+            if(!$this->isPageVisibleInOtherNavigation()) {
+			    $strFallbackPage = $this->objSession->getSession("navi_fallback_page_".$this->arrElementData["navigation_id"]);
+			    if($strFallbackPage !== false) {
+			        $objPagePointData = $this->loadPagePoint($strFallbackPage, $this->arrElementData["navigation_id"]);
+			    }
+			    else {
+			        // Whoa. Now we got a problem. Suggestion: Load the Navigation with no activated point
+			        $objPagePointData = null;
+			    }
+            }
+            else
+                $objPagePointData = null;
+		}
+		else {
+		    //save this page as a fallback page, dependant of the navigation_id / navigation_tree
+		    $this->objSession->setSession("navi_fallback_page_".$this->arrElementData["navigation_id"], $this->strCurrentSite);
+		}
+
+        return $objPagePointData;
+    }
 
 
 	/**
@@ -325,7 +359,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param string $strSystemid
 	 * @return mixed Array of objects
 	 */
-	public function getNaviLayer($strSystemid) {
+	private function getNaviLayer($strSystemid) {
 	    $arrObjects = class_modul_navigation_point::getNaviLayer($strSystemid, true);
         $arrReturn = array();
         foreach($arrObjects as $arrOneObject)
@@ -346,7 +380,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param string $strNavigationId
 	 * @return mixed
 	 */
-	public function loadPagePoint($strPagename, $strNavigationId) {
+	private function loadPagePoint($strPagename, $strNavigationId) {
 	    $objPoint = null;
 	    $arrAllPoints = class_modul_navigation_point::loadPagePoint($strPagename);
 
@@ -373,9 +407,9 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * The user may find it confusing, if the current tree remains opened but he clicked
 	 * a navigation-point of another tree.
 	 *
-	 * @return unknown
+	 * @return bool
 	 */
-	public function isPageVisibleInOtherNavigation() {
+	private function isPageVisibleInOtherNavigation() {
 	   
 	   //load the placeholders placed on the current page-template. therefore, instantiate a page-object
        $objPageData = class_modul_pages_page::getPageByName($this->getPagename());
