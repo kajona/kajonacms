@@ -217,8 +217,11 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$strReturn = "";
 		//check rights on the navigation
 		if($this->objRights->rightView($this->arrElementData["navigation_id"])) {
+            //create a stack to highlight the points being active
+            $strStack = $this->getActiveIdStack($this->getActivePagePointData());
+
             //build the navigation
-            $strReturn = $this->sitemapRecursive(1, $this->arrElementData["navigation_id"]);
+            $strReturn = $this->sitemapRecursive(1, $this->arrElementData["navigation_id"], $strStack);
 		}
 		return $strReturn;
 	}
@@ -231,7 +234,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param string $strSystemid
 	 * @return string
 	 */
-	private function sitemapRecursive($intLevel, $strSystemid) {
+	private function sitemapRecursive($intLevel, $strSystemid, $strStack) {
 		$strReturn = "";
 		$arrChilds = $this->getNaviLayer($strSystemid);
 
@@ -245,26 +248,29 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		    $objOneChild = $arrChilds[$intI];
 			//Check the rights
 			if($objOneChild->rightView()) {
+
+                //current point active?
+                $bitActive = false;
+                if(uniStripos($strStack, $objOneChild->getSystemid()) !== false)
+                    $bitActive = true;
+                    
 			    //Create the navigation point
 			    if($intI == 0)
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), false, $intLevel, true);
+				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel, true);
 				elseif ($intI == $intNrOfChilds-1)
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), false, $intLevel, false, true);
+				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel, false, true);
 				else
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), false, $intLevel);
+				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel);
+
 				//And load all points below
-				$strChilds = $this->sitemapRecursive($intLevel+1, $objOneChild->getSystemid());
+				$strChilds = $this->sitemapRecursive($intLevel+1, $objOneChild->getSystemid(), $strStack);
+                
 				//Put the childs below into the current template
 				$this->objTemplate->setTemplate($strCurrentPoint);
 				$arrTemp = array("level".($intLevel+1) => $strChilds);
 				$strTemplate = $this->objTemplate->fillCurrentTemplate($arrTemp);
 				
-				//set the template again to delete placeholders
-				$this->objTemplate->setTemplate($strTemplate);
-				$this->objTemplate->deletePlaceholder();
-				$strReturn .= $this->objTemplate->getTemplate();
-				
-				
+				$strReturn .= $strTemplate;
 			}
 		}
 		
@@ -489,7 +495,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		//Load the correct template
 		$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
 		$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
-		//Fill the tempalte
+		//Fill the template
 		$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
 		//BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
 		//     didn't supply a first / last section. so we'll try to load a regular point
