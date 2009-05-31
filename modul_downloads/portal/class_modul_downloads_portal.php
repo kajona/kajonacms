@@ -70,7 +70,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		    $this->setSystemid($this->arrElementData["download_id"]);
 		}
 
-		$arrObjects = class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true);
+        $arrObjects = $this->getArrFiles();
 
 		if(count($arrObjects) > 0) {
 			$strFileList = "";
@@ -248,6 +248,15 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
 		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
+    
 
+    /**
+     * Loads the array of files to display.
+     *
+     * @return array
+     */
+    protected function getArrFiles() {
+        return class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true);
+    }
 }
 ?>
