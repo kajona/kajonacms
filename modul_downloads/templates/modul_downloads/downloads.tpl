@@ -38,7 +38,7 @@
     </tr>
 </folder>
 
-<!-- available placeholders: file_name, file_description, file_link, file_href, file_hits, file_size, file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed) -->
+<!-- available placeholders: file_name, file_description, file_link, file_detail_href, file_href, file_hits, file_size, file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed) -->
 <file>
     <tr class="portalListRow1">
         <td class="image"><img src="_webpath_/portal/pics/kajona/icon_downloads.gif" /></td>
@@ -72,3 +72,39 @@
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
 <rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="kajonaTooltip.add(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>
+
+
+
+<!-- available placeholders: file_name, file_description, file_link, file_href, file_hits, file_size, file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed)
+ -->
+<filedetail>
+    <script type="text/javascript">
+        bitKajonaRatingsAvailable = false;
+
+        function enableRatingsWrapper() {
+            if (bitKajonaRatingsAvailable) {
+                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            }
+        }
+        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
+    </script>
+    %%pathnavigation%%
+    <div>
+        <div>
+            <div style="float: left;">%%file_name%%</div><div style="float: right;">%%file_rating%%</div>
+            <div style="clear: both;"></div>
+        </div>
+        <div>
+            <div style="float: left;">%%file_size%%</div><div style="float: right;">%%file_link%%</div>
+            <div style="clear: both;"></div>
+        </div>
+        <div>
+            <div style="float: left;">%%file_filename%%</div><div style="float: right;"></div>
+            <div style="clear: both;"></div>
+        </div>
+        <div>
+            %%file_description%%
+            %%file_preview%%
+        </div>
+    </div>
+</filedetail>

@@ -50,7 +50,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		if($this->getParam("action") != "")
 		    $strAction = $this->getParam("action");
 
-		$strReturn = $this->actionList();
+        if($strAction == "detailDownload")
+            $strReturn = $this->actionDetailDownload();
+        else
+            $strReturn = $this->actionList();
+
 		return $strReturn;
 
 	}
@@ -87,6 +91,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
+                        $arrTemplate["file_detail_href"] = getLinkPortalHref($this->getPagename(), "", "detailDownload", "", $objOneFile->getSystemid());
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
 						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
@@ -139,6 +144,55 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		return $strReturn;
 	}
 
+
+    /**
+	 * Prints a image as a detailed-view
+	 * and generates forward / backward links
+	 *
+	 * @return string
+	 */
+	private function actionDetailDownload() {
+		$strReturn = "";
+		//Load record
+		$objFile = new class_modul_downloads_file($this->getSystemid());
+
+		//Load template
+		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "filedetail");
+        $arrFile = array();
+		$arrFile["pathnavigation"] = $this->generatePathnavi(true);
+		$arrFile["systemid"] = $this->getSystemid();
+        $arrFile["file_name"] = $objFile->getName();
+        $arrFile["file_description"] = $objFile->getDescription();
+        $arrFile["file_filename"] = $objFile->getFilename();
+        $arrFile["file_size"] = bytesToString($objFile->getSize());
+        $arrFile["file_hits"] = $objFile->getHits();
+
+        //Right to download?
+        if($this->objRights->rightRight2($objFile->getSystemid())) {
+            $arrFile["file_link"] = "<a href=\""._webpath_."/download.php?systemid=".$objFile->getSystemid()."\">".$this->getText("download_datei_link")."</a>";
+            $arrFile["file_href"] = ""._webpath_."/download.php?systemid=".$objFile->getSystemid()."";
+        }
+        else {
+            $arrFile["file_link"] = $this->getText("download_datei_link");
+            $arrFile["file_href"] = "";
+        }
+
+        //could we get a preview (e.g. if its an image)?
+        $strSuffix = uniSubstr($objFile->getFilename(), uniStrrpos($objFile->getFilename(), "."));
+        if($strSuffix == ".jpg" || $strSuffix == ".gif" || $strSuffix == ".png")
+            $arrFile["file_preview"] = "<img src=\""._webpath_."/image.php?image=".$objFile->getFilename()."&amp;maxWidth=150&amp;maxHeight=100\" />";
+
+
+		//ratings available?
+		if($objFile->getFloatRating() !== null) {
+		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
+		}
+
+		$strReturn = $this->fillTemplate($arrFile, $strTemplateID);
+
+		return $strReturn;
+	}
+
 //---Pfadfunktionen--------------------------------------------------------------------------------------
 
 	/**
@@ -156,7 +210,12 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		      $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
 		}
         $arrTemplate = array();
-		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
+        //check the action for the first entry
+        $strAction = "openDlFolder";
+        if($objFile instanceof class_modul_downloads_file && $objFile->getType() == 0)
+            $strAction = "detailDownload";
+
+		$arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), $strAction, "", $objFile->getSystemid(), "", "", $objFile->getTitle());
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
 		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
