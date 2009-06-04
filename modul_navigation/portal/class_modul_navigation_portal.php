@@ -109,7 +109,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         $strStack = $this->getActiveIdStack($objPagePointData);
 
 		//path created, build the tree using recursion
-		$this->createTree($strStack, 0, $this->arrElementData["navigation_id"]);
+        if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) 
+            $this->createTree($strStack, 0, $this->arrElementData["navigation_id"]);
         
 		//Create the tree
 		$intCounter = -1;
@@ -136,16 +137,18 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		}
 		
 		//and add level 1 wrapper
-        $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
-        $strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
-        if(uniStrlen($strWrappedLevel) > 0)
-            $arrTree[$intCounter] = $strWrappedLevel;
-            
-        
-		$this->objTemplate->setTemplate($arrTree[$intCounter]);
-		$this->objTemplate->deletePlaceholder();
-		$strReturn = $this->objTemplate->getTemplate();
-		
+        if($intCounter != -1) {
+            $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
+            $strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
+            if(uniStrlen($strWrappedLevel) > 0)
+                $arrTree[$intCounter] = $strWrappedLevel;
+
+
+            $this->objTemplate->setTemplate($arrTree[$intCounter]);
+            $this->objTemplate->deletePlaceholder();
+            $strReturn = $this->objTemplate->getTemplate();
+        }
+
 		return $strReturn;
 
 	}
@@ -216,7 +219,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	private function loadNavigationSitemap() {
 		$strReturn = "";
 		//check rights on the navigation
-		if($this->objRights->rightView($this->arrElementData["navigation_id"])) {
+		if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) {
             //create a stack to highlight the points being active
             $strStack = $this->getActiveIdStack($this->getActivePagePointData());
 

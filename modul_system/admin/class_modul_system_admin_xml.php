@@ -94,6 +94,13 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
     	    if(parent::setStatus()) {
     	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
+
+                //try to flush the navigations-cache
+                $objNavi = class_modul_system_module::getModuleByName("navigation");
+                if($objNavi != null) {
+                    include_once(_systempath_."/class_modul_navigation_cache.php");
+                    class_modul_navigation_cache::flushCache();
+                }
     	    }
     	    else
                 $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";
