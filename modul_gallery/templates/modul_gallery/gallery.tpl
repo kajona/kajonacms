@@ -89,7 +89,7 @@
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td>%%pic_url%%</td>
+            <td><img src="%%pic_url%%" border="0" /></td>
             <td>&nbsp;</td>
         </tr>
         <tr>

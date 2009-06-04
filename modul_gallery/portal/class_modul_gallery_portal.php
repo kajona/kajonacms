@@ -335,7 +335,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			//If theres text to put over the image, manipulate image "inline",
 			//otherwise let the work do image.php -> kinda multithreading ;)
 			if($strText == "") {
-				$strReturn = "<img src=\"image.php?image=".urlencode($strImage)."&maxWidth=".$intWidth."&maxHeight=".$intHeight."\" border=\"0\" />";
+				$strReturn = "image.php?image=".urlencode($strImage)."&maxWidth=".$intWidth."&maxHeight=".$intHeight;
 			}
 			else {
 			    //do everything right now
@@ -395,7 +395,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$objImage->imageText($strText, $intTextX, $intTextY, $intTextSize, $strFontColor, $strFont, true);
 					$objImage->saveImage("", true);
 					$strImageName = $objImage->getCachename();
-					$strReturn = "<img src=\"_webpath_"._images_cachepath_.$strImageName."\" border=\"0\" />";
+					$strReturn = "_webpath_"._images_cachepath_.$strImageName;
 					//and release memory
 					$objImage->releaseResources();
 				}
@@ -404,7 +404,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			}
 		}
 		else 	//Nichts zu tun, Bild so ausgeben
-			$strReturn = "<img src=\"_webpath_".$strImage."\" />";
+			$strReturn = "_webpath_".$strImage;
 
 		return $strReturn;
 	}
