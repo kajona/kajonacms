@@ -123,12 +123,16 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 				if($this->objRights->rightView($objOneImage->getSystemid())) {
 					//Folder or image?
 					if($objOneImage->getIntType() == 0) {
-                       //defined nr of images oer row?
+                       //defined nr of images per row?
 					    if($this->arrElementData["gallery_nrow"] > 0) {
     						//Image
-    						$arrTemplateImage["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
+    						$arrTemplateImage["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
+                            $arrTemplateImage["pic_href_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
     						$arrTemplateImage["name_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrName();
     						$arrTemplateImage["subtitle_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrSubtitle();
+
+                            $arrTemplateImage["pic_detail_".$intImageCounter % $this->arrElementData["gallery_nrow"]]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+
     						$intImageCounter++;
 
     						if($intImageCounter % $this->arrElementData["gallery_nrow"] == 0) {
@@ -140,9 +144,11 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 					    //unlimited nr of images per row, no linebreaks
 					    else {
                             //Image
-    						$arrTemplateImage["pic"] = getLinkPortal($this->getPagename(), "", "_self", $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]), "detailImage", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
+    						$arrTemplateImage["pic"] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
+                            $arrTemplateImage["pic_href"] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
     						$arrTemplateImage["name"] = $objOneImage->getStrName();
     						$arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
+                            $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
 
 							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");
 							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
