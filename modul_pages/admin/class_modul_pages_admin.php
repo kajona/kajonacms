@@ -490,6 +490,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputHidden("pageid", "");
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
 				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $this->getParam("folderid"));
+				$strReturn .= $this->objToolkit->formInputHidden("folderid", $this->getParam("folderid"));
 				$strFolder = "";
 				if($this->getParam("folderid") != "") {
 				    $objFolder = new class_modul_pages_folder($this->getParam("folderid"));
