@@ -435,6 +435,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_folder").dirname($objImage->getStrFilename()));
 				}
 				$strReturn .= $this->objToolkit->formTextRow($strImage);
+                $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
 			elseif ($this->getParam("save") == "1") {

@@ -247,6 +247,16 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		$strReturn = $this->fillTemplate($arrImage, $strTemplateID);
 
+        //Add pe code
+        $arrPeConfig = array(
+                                  "pe_module" => "gallery",
+                                  "pe_action_edit" => "editImage",
+                                  "pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
+                            );
+        include_once(_portalpath_."/class_elemente_portal.php");
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig, true);
+
+
 		//Update view counter
 		$objImage->setIntHits($objImage->getIntHits()+1);
 		$objImage->updateObjectToDb(false);
