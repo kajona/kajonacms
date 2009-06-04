@@ -7,9 +7,12 @@
 *	$Id$                                               *
 ********************************************************************************************************/
 
+
+include_once(_systempath_."/class_filesystem.php");
+
 /**
  * class_csv, used to access data stored in csv-files.
- * This class can either be used to write to write to csv-files, or to read from csv-files
+ * This class can either be used to write to csv-files or to read from csv-files
  *
  * @package modul_system
  */
@@ -51,7 +54,7 @@ class class_csv {
 		if($strDelimiter == "")
 		  $this->strDelimiter = class_csv::$str_delimiter_comma;
 
-	    // Try to overwrite PHP memory-limit so also large images can be processed
+	    // Try to overwrite PHP memory-limit so also large files can be processed
 		if (class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 50)
 			@ini_set("memory_limit", "50M");
 	}
@@ -66,26 +69,26 @@ class class_csv {
 	public function createArrayFromFile() {
 	    //all needed params given?
 	    if($this->arrMapping != "" && $this->strFilename != "") {
-	        //load file-content
-	        $strFileContent = file_get_contents(_realpath_.$this->strFilename);
-	        //empty file?
-	        if($strFileContent == "") {
-	            $this->arrData = array();
-	            return true;
-	        }
-	        //regular file. explode rows
-	        $arrRowsInFile = explode("\n", $strFileContent);
-	        //reset fileContent
-	        $strFileContent = "";
-	        //first row are the headers
-	        $strHeader = array_shift($arrRowsInFile);
-	        $arrHeader = explode($this->strDelimiter, $strHeader);
 
-	        $arrFinalArray = array();
-	        //loop over every row
-	        foreach($arrRowsInFile as $intKey => $strOneRow) {
-	            if(uniStrlen($strOneRow) > 0) {
-    	            $arrOneRow = explode($this->strDelimiter, $strOneRow);
+            //init final array
+            $this->arrData = array();
+            $arrFinalArray = array();
+            
+            //open pointer on file
+            $objFilesystem = new class_filesystem();
+            $objFilesystem->openFilePointer($this->strFilename, "r");
+
+            $strRow = $objFilesystem->readLineFromFile();
+            if($strRow === false)
+                return false;
+
+	        //first row are the headers
+            $arrHeader = explode($this->strDelimiter, $strRow);
+
+            $strRow = $objFilesystem->readLineFromFile();
+            while($strRow !== false) {
+                if(uniStrlen($strRow) > 0) {
+                    $arrOneRow = explode($this->strDelimiter, $strRow);
                     $arrCSVRow = array();
                     foreach($arrHeader as $intKey => $strHeader) {
                         //include the mapping specified
@@ -105,11 +108,15 @@ class class_csv {
                     }
                     //add to final array
                     $arrFinalArray[] = $arrCSVRow;
-	            }
-	            //Reset row to 0 to decrease memory consumption
-	            $arrRowsInFile[$intKey] = "";
-	        }
-	        $this->setArrData($arrFinalArray);
+                }
+
+                $strRow = $objFilesystem->readLineFromFile();
+            }
+	        
+            $objFilesystem->closeFilePointer();
+            
+            $this->setArrData($arrFinalArray);
+
 	        return true;
 	    }
 	    else {
@@ -130,7 +137,7 @@ class class_csv {
 	    //all needed values set before?
 	    if($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
 	        //create file-content. use a file-pointer to avoid max-mem-errors
-	        include_once(_systempath_."/class_filesystem.php");
+	        
 	        $objFilesystem = new class_filesystem();
 	        //open file
 	        $objFilesystem->openFilePointer($this->strFilename);

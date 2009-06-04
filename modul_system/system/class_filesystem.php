@@ -292,10 +292,11 @@ class class_filesystem {
 	 * Opens the pointer to a file, used to read from it ot to write to this file
 	 *
 	 * @param string $strFilename
+     * @param string $strMode w = write, r = read
 	 * @return bool
 	 */
-	public function openFilePointer($strFilename) {
-	    $this->objFilePointer = @fopen(_realpath_.$strFilename, "w");
+	public function openFilePointer($strFilename, $strMode = "w") {
+	    $this->objFilePointer = @fopen(_realpath_.$strFilename, $strMode);
 	    if($this->objFilePointer)
 	        return true;
 	    else
@@ -326,6 +327,23 @@ class class_filesystem {
 	    }
 	    return false;
 	}
+
+    /**
+     * Reads a line from the file opened by class_filesystem::openFilePointer(name, "r")
+     *
+     * @return string or false if eof or error
+     */
+    public function readLineFromFile() {
+        $strContent = false;
+
+        if($this->objFilePointer != null) {
+            if(!feof($this->objFilePointer)) {
+                $strContent = trim(fgets($this->objFilePointer));
+            }
+        }
+
+        return $strContent;
+    }
 	
 	/**
 	 * Checks if a file or folder is writeable
