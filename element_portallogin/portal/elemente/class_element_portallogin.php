@@ -11,6 +11,8 @@
 require_once(_portalpath_."/class_elemente_portal.php");
 //Interface
 require_once(_portalpath_."/interface_portal_element.php");
+include_once(_systempath_."/class_modul_user_user.php");
+include_once(_systempath_."/class_mail.php");
 
 /**
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
@@ -72,7 +74,12 @@ class class_element_portallogin extends class_element_portal implements interfac
 
 
 		if(!$this->objSession->isLoggedin()) {
-	        $strReturn .= $this->loginForm();
+
+            if($this->getAction() == "portalLoginReset") {
+                $strReturn .= $this->resetForm();
+            }
+            else
+                $strReturn .= $this->loginForm();
 		}
 		else {
 		    if($this->getParam("action") == "portalEditProfile")
@@ -82,6 +89,55 @@ class class_element_portallogin extends class_element_portal implements interfac
 		}
 
 
+
+		return $strReturn;
+	}
+
+
+    /**
+     * Creates a form to enter the username of the account to reset.
+     *
+     * @return string
+     */
+	private function resetForm() {
+        $strReturn = "";
+
+        if($this->getParam("reset") != "" && getPost("reset") != "") {
+            //try to load the user
+            $arrUser = class_modul_user_user::getAllUsersByName($this->getParam("portallogin_username"), true);
+            if(count($arrUser) == 1) {
+                $objUser = $arrUser[0];
+
+                if($objUser->getStrEmail() != "" && checkEmailaddress($objUser->getStrEmail()) && $objUser->getIntPortal() == 1) {
+                    //generate new pwd
+                    $strPassword = generateSystemid();
+                    $objUser->setStrPass($strPassword);
+                    $objUser->updateObjectToDb();
+
+
+                    //create a mail confirming the change
+                    $objEmail = new class_mail();
+                    $objEmail->setSubject($this->getText("resetemailTitle"));
+                    $objEmail->setHtml($this->getText("resetemailBody")." ".$strPassword);
+                    $objEmail->addTo($objUser->getStrEmail());
+
+                    $objEmail->sendMail();
+                    class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
+
+                    $strReturn .= $this->getText("resetSuccess");
+                }
+            }
+            
+        }
+        else {
+
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_resetform");
+            $arrTemplate = array();
+            $arrTemplate["portallogin_action"] = "portalLoginReset";
+            $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
+            $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
+            $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+        }
 
 		return $strReturn;
 	}
@@ -99,6 +155,7 @@ class class_element_portallogin extends class_element_portal implements interfac
 
 		$arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
+        $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("pwdForgotLink"), "portalLoginReset");
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
 		return $this->fillTemplate($arrTemplate, $strTemplateID);
@@ -152,7 +209,7 @@ class class_element_portallogin extends class_element_portal implements interfac
     	    $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform");
             $arrTemplate = array();
 
-            include_once(_systempath_."/class_modul_user_user.php");
+            
             $objUser = new class_modul_user_user($this->objSession->getUserID());
 
             $arrTemplate["username"] = $objUser->getStrUsername();

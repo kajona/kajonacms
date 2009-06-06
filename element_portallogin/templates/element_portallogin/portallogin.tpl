@@ -4,6 +4,7 @@
 	<div><label for="portallogin_password">%%lang_password%%</label><input type="password" name="portallogin_password" id="portallogin_password" value="%%portallogin_password%%" class="inputText" /></div><br />
 	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_login%%" class="button" /></div><br />
 	<input type="hidden" name="action" value="%%portallogin_action%%" />
+    <div><label></label>%%portallogin_forgotpwdlink%%</div><br />
 </form>
 </portallogin_loginform>
 
@@ -31,3 +32,14 @@
 <errorRow>
 &middot; %%error%%<br />
 </errorRow>
+
+
+<portallogin_resetform>
+    %%lang_resetHint%%
+<form name="portalFormResetPwd" method="post" action="%%action%%" accept-charset="UTF-8">
+	<div><label for="portallogin_username">%%lang_username%%</label><input type="text" name="portallogin_username" id="portallogin_username" value="%%portallogin_username%%" class="inputText" /></div><br />
+	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_resetPwd%%" class="button" /></div><br />
+	<input type="hidden" name="action" value="%%portallogin_action%%" />
+	<input type="hidden" name="reset" value="1" />
+</form>
+</portallogin_resetform>

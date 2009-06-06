@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["editprofilelink"]                 = "Editar perfil";
@@ -22,6 +22,12 @@ $lang["password"]                        = "Palavra-passe:";
 $lang["passwordTitle"]                   = "Palavra-passe:";
 $lang["passwordTitle2"]                  = "Palavra-passe:";
 $lang["passwordsUnequal"]                = "Palavras-passe diferentes.";
+$lang["pwdForgotLink"]                   = "";
+$lang["resetHint"]                       = "";
+$lang["resetPwd"]                        = "";
+$lang["resetSuccess"]                    = "";
+$lang["resetemailBody"]                  = "";
+$lang["resetemailTitle"]                 = "";
 $lang["userDataSubmit"]                  = "Guardar";
 $lang["username"]                        = "Nome de utilizador:";
 $lang["usernameTitle"]                   = "Nome de utilizador:";

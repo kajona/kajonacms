@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["editprofilelink"]                 = "Редактирай профил";
@@ -22,6 +22,12 @@ $lang["password"]                        = "Парола: ";
 $lang["passwordTitle"]                   = "Парола: ";
 $lang["passwordTitle2"]                  = "Парола: ";
 $lang["passwordsUnequal"]                = "Паролите не съвпадат.";
+$lang["pwdForgotLink"]                   = "";
+$lang["resetHint"]                       = "";
+$lang["resetPwd"]                        = "";
+$lang["resetSuccess"]                    = "";
+$lang["resetemailBody"]                  = "";
+$lang["resetemailTitle"]                 = "";
 $lang["userDataSubmit"]                  = "Запази";
 $lang["username"]                        = "Потребителско име: ";
 $lang["usernameTitle"]                   = "Потребителско име: ";
