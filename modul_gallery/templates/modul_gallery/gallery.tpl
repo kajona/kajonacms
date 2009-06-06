@@ -25,7 +25,7 @@
 
 <!-- the following section is used, if theres a defined number of images per row.
      set the placeholders according to the number set in the admin -->
-<!-- available placeholders: pic_(nr), pic_href_(nr), name_(nr), subtitle_(nr), pic_detail_(nr) -->
+<!-- available placeholders: pic_(nr) -->
 <piclist>
     <table width="100%" cellspacing="0">
         <tr>
@@ -33,24 +33,26 @@
         </tr>
         <tr style="text-align: center;">
             <td></td>
-            <td><a href="%%pic_href_0%%"><img src="%%pic_0%%" border="0" /></a></td>
+            <td>%%pic_0%%</td>
             <td></td>
-            <td><a href="%%pic_href_1%%"><img src="%%pic_1%%" border="0" /></a></td>
+            <td>%%pic_1%%</td>
             <td></td>
-            <td><a href="%%pic_href_2%%"><img src="%%pic_2%%" border="0" /></a></td>
+            <td>%%pic_2%%</td>
             <td></td>
-        </tr>
-        <tr style="text-align: center;">
-            <td width="1%">&nbsp;</td>
-            <td width="28%">%%name_0%%</td>
-            <td width="3%">&nbsp;</td>
-            <td width="34%">%%name_1%%</td>
-            <td width="4%">&nbsp;</td>
-            <td width="27%">%%name_2%%</td>
-            <td width="3%">&nbsp;</td>
         </tr>
     </table>
 </piclist>
+
+<!-- represents a single image within the list (defined number of images)
+     available placeholders: pic, pic_href, name, subtitle, pic_detail -->
+<piclist_pic>
+    <div style="text-align: center;">
+        <div><a href="%%pic_href%%"><img src="%%pic%%" border="0" /></a></div>
+        <div>%%name%%</div>
+    </div>
+</piclist_pic>
+
+
 
 <!-- the following section is used, if theres no defined number of images per row.
      This section is called for each image -->
@@ -61,6 +63,9 @@
         <div>%%name%%</div>
     </div>
 </piclist_unlimited>
+
+
+
 
 <!-- available placeholders: pic_url, backlink, backlink_image_(1..3), backlink_image_filename_(1..3), backlink_image_systemid_(1..3),
     fowardlink, forwardlink_image_(1..3), forwardlink_image_filename_(1..3), forwardlink_image_systemid_(1..3), overview, pathnavigation,

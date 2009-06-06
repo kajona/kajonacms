@@ -115,45 +115,52 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrTemplate["folderlist"] = "";
 		$arrTemplate["piclist"] = "";
 
-        $arrTemplateImage = array();
+        
 		if(count($arrImages) > 0) {
 		    $intImageCounter = 0;
+
+            $arrRemainingImages = array();
+
 			foreach ($arrImages as $objOneImage) {
 				//Check rights
 				if($this->objRights->rightView($objOneImage->getSystemid())) {
 					//Folder or image?
 					if($objOneImage->getIntType() == 0) {
-                       //defined nr of images per row?
+                        $arrTemplateImage = array();
+
+                        //create the template-entries for the single image
+                        $arrTemplateImage["pic"] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
+                        $arrTemplateImage["pic_href"] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
+                        $arrTemplateImage["name"] = $objOneImage->getStrName();
+                        $arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
+                        $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+
+
+                        //defined nr of images per row?
 					    if($this->arrElementData["gallery_nrow"] > 0) {
-    						//Image
-    						$arrTemplateImage["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
-                            $arrTemplateImage["pic_href_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
-    						$arrTemplateImage["name_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrName();
-    						$arrTemplateImage["subtitle_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $objOneImage->getStrSubtitle();
 
-                            $arrTemplateImage["pic_detail_".$intImageCounter % $this->arrElementData["gallery_nrow"]]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+                            //render the single image
+                            $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
+							$strCurrentImage = $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
 
-    						$intImageCounter++;
-
-    						if($intImageCounter % $this->arrElementData["gallery_nrow"] == 0) {
+                            $arrRemainingImages["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $strCurrentImage;
+                            
+    						//already rendered enough images?
+    						if(count($arrRemainingImages) == $this->arrElementData["gallery_nrow"]) {
     							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-    							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
-    							$arrTemplateImage = array();
+    							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID);
+    							$arrRemainingImages = array();
     						}
 					    }
-					    //unlimited nr of images per row, no linebreaks
+					    
 					    else {
-                            //Image
-    						$arrTemplateImage["pic"] = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
-                            $arrTemplateImage["pic_href"] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
-    						$arrTemplateImage["name"] = $objOneImage->getStrName();
-    						$arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
-                            $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
-
+                            //unlimited nr of images per row, no linebreaks, print directly
 							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");
-							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
-							$arrTemplateImage = array();
+							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
 					    }
+
+                        $intImageCounter++;
+
 					}
 
 					if($objOneImage->getIntType() == 1) {
@@ -171,10 +178,10 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 				}
 			}
 			//Print remaining images
-			if(count($arrTemplateImage) > 0) {
+			if(count($arrRemainingImages) > 0) {
 				$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-				$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID, false);
-				$arrTemplateImage= array();
+				$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID, false);
+				$arrRemainingImages= array();
 			}
 		}
 		else
