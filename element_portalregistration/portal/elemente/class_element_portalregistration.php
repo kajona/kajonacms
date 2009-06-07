@@ -72,7 +72,7 @@ class class_element_portalregistration extends class_element_portal implements i
 	       $objUser = new class_modul_user_user($this->getParam("systemid"));
 	       
 	       if($objUser->getStrEmail() != "") {
-               if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode")) {
+               if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode")  && $objUser->getStrAuthcode() != "") {
 	               $objUser->setIntActive(1);
 	               $objUser->setStrPass("");
                    $objUser->setStrAuthcode("");

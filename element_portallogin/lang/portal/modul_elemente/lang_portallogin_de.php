@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 183
 
 //editable entries
+$lang["changePwd"]                       = "Passwort ändern";
 $lang["editprofilelink"]                 = "Profil bearbeiten";
 $lang["emailTitle"]                      = "E-Mail*:";
 $lang["forenameTitle"]                   = "Vorname:";
@@ -19,14 +20,18 @@ $lang["login"]                           = "Login";
 $lang["logoutlink"]                      = "Logout";
 $lang["nameTitle"]                       = "Nachname:";
 $lang["password"]                        = "Passwort:";
+$lang["password1"]                       = "Passwort:";
+$lang["password2"]                       = "Passwort bestätigen:";
 $lang["passwordTitle"]                   = "Passwort:";
 $lang["passwordTitle2"]                  = "Passwort:";
 $lang["passwordsUnequal"]                = "Passwörter unterschiedlich.";
 $lang["pwdForgotLink"]                   = "Passwort vergessen";
-$lang["resetHint"]                       = "Bitte geben Sie Ihren Benutzernamen an. An die im Profil hinterlegte E-Mailadresse wird dann eine E-Mail mit dem neuen Passwort gesendet.";
+$lang["pwdHint"]                         = "Bitte geben Sie hier ein neues Passwort an.";
+$lang["resetError"]                      = "Es sind Fehler aufgetreten. Bitte starten Sie den Vorgang erneut.";
+$lang["resetHint"]                       = "Bitte geben Sie Ihren Benutzernamen an. An die im Profil hinterlegte E-Mailadresse wird dann eine E-Mail mit einem Link zum Ändern des Passworts gesendet.";
 $lang["resetPwd"]                        = "Zurücksetzen";
-$lang["resetSuccess"]                    = "Das Passwort wurde zurückgesetzt. Sie sollten Ihr neues Passwort innerhalb der nächsten Minuten per E-Mail erhalten.";
-$lang["resetemailBody"]                  = "Das Passwort ihrers Benutzerkontos wurde zurückgesetzt. Bitte ändern Sie das nachstehende Passwort umgehend nach dem nächsten Login. <br /> Ihr neues Passwort lautet: ";
+$lang["resetSuccess"]                    = "Das Passwort wurde geändert. Sie können sich nun mit diesem anmelden.";
+$lang["resetemailBody"]                  = "Sie haben die Änderung ihres Passworts beantrag. Verwenden Sie den nachfolgenden Link, um für Ihren Account ein neues Passwort zu vergeben:<br />";
 $lang["resetemailTitle"]                 = "Accountpasswort zurückgesetzt";
 $lang["userDataSubmit"]                  = "Speichern";
 $lang["username"]                        = "Benutzername:";

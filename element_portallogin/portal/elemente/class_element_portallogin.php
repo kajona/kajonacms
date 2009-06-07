@@ -78,6 +78,9 @@ class class_element_portallogin extends class_element_portal implements interfac
             if($this->getAction() == "portalLoginReset") {
                 $strReturn .= $this->resetForm();
             }
+            elseif ($this->getAction() == "portalResetPwd") {
+                $strReturn .= $this->newPwdForm();
+            }
             else
                 $strReturn .= $this->loginForm();
 		}
@@ -89,6 +92,70 @@ class class_element_portallogin extends class_element_portal implements interfac
 		}
 
 
+
+		return $strReturn;
+	}
+
+
+    /**
+     * Creates a form to enter the new password of the account to reset.
+     *
+     * @return string
+     */
+	private function newPwdForm() {
+        $strReturn = "";
+
+        if($this->getParam("reset") != "" && getPost("reset") != "") {
+            //try to load the user
+            
+            
+            $objUser = new class_modul_user_user($this->getParam("systemid"));
+            if($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrUsername() != "") {
+                //check the submitted passwords.
+                $strPass1 = trim($this->getParam("portallogin_password1"));
+                $strPass2 = trim($this->getParam("portallogin_password1"));
+
+                if($strPass1 == $strPass2 && checkText($strPass1, 3, 200)) {
+
+                    
+                    $objUser->setStrPass($strPass1);
+                    $objUser->setStrAuthcode("");
+                    $objUser->updateObjectToDb();
+                    
+                    class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
+
+                    $strReturn .= $this->getText("resetSuccess");
+                }
+                else
+                    $strReturn .= $this->getText("resetError");
+            }
+            else
+                $strReturn .= $this->getText("resetError");
+
+
+        }
+        else {
+
+            $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_newpwdform");
+            $arrTemplate = array();
+
+            //check sysid & authcode
+            $objUser = new class_modul_user_user($this->getParam("systemid"));
+            
+            
+            if($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode")) {
+            
+                $arrTemplate["portallogin_action"] = "portalResetPwd";
+                $arrTemplate["portallogin_systemid"] = $this->getParam("systemid");
+                $arrTemplate["portallogin_authcode"] = $this->getParam("authcode");
+                $arrTemplate["portallogin_resetHint"] = "portalLoginReset";
+                $arrTemplate["action"] = getLinkPortalHref($this->getPagename());
+                $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+
+            }
+            else
+                $strReturn .= "Permission Error";
+        }
 
 		return $strReturn;
 	}
@@ -109,22 +176,27 @@ class class_element_portallogin extends class_element_portal implements interfac
                 $objUser = $arrUser[0];
 
                 if($objUser->getStrEmail() != "" && checkEmailaddress($objUser->getStrEmail()) && $objUser->getIntPortal() == 1) {
-                    //generate new pwd
-                    $strPassword = generateSystemid();
-                    $objUser->setStrPass($strPassword);
+
+                    //generate an authcode and save it with the user
+                    $strAuthcode = generateSystemid();
+                    $objUser->setStrPass("");
+                    $objUser->setStrAuthcode($strAuthcode);
                     $objUser->updateObjectToDb();
 
+
+                    $strMailContent = $this->getText("resetemailBody");
+                    $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "systemid=".$objUser->getSystemid()."&authcode=".$strAuthcode);
+                    $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
 
                     //create a mail confirming the change
                     $objEmail = new class_mail();
                     $objEmail->setSubject($this->getText("resetemailTitle"));
-                    $objEmail->setHtml($this->getText("resetemailBody")." ".$strPassword);
+                    $objEmail->setHtml($strMailContent);
                     $objEmail->addTo($objUser->getStrEmail());
 
                     $objEmail->sendMail();
-                    class_logger::getInstance()->addLogRow("changed password of user ".$objUser->getStrUsername(), class_logger::$levelInfo);
 
-                    $strReturn .= $this->getText("resetSuccess");
+                    $strReturn .= $this->getText("resetMailSuccess");
                 }
             }
             

@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 183
 
 //editable entries
+$lang["changePwd"]                       = "";
 $lang["editprofilelink"]                 = "Editar perfil";
 $lang["emailTitle"]                      = "Correio electrónico*:";
 $lang["forenameTitle"]                   = "Apelido:";
@@ -19,10 +20,14 @@ $lang["login"]                           = "Iniciar sessão";
 $lang["logoutlink"]                      = "Desligar";
 $lang["nameTitle"]                       = "Nome:";
 $lang["password"]                        = "Palavra-passe:";
+$lang["password1"]                       = "";
+$lang["password2"]                       = "";
 $lang["passwordTitle"]                   = "Palavra-passe:";
 $lang["passwordTitle2"]                  = "Palavra-passe:";
 $lang["passwordsUnequal"]                = "Palavras-passe diferentes.";
 $lang["pwdForgotLink"]                   = "";
+$lang["pwdHint"]                         = "";
+$lang["resetError"]                      = "";
 $lang["resetHint"]                       = "";
 $lang["resetPwd"]                        = "";
 $lang["resetSuccess"]                    = "";

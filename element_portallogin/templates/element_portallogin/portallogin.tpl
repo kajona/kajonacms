@@ -43,3 +43,17 @@
 	<input type="hidden" name="reset" value="1" />
 </form>
 </portallogin_resetform>
+
+
+<portallogin_newpwdform>
+    %%lang_pwdHint%%
+<form name="portalFormNewPwd" method="post" action="%%action%%" accept-charset="UTF-8">
+	<div><label for="portallogin_password1">%%lang_password1%%</label><input type="password" name="portallogin_password1" id="portallogin_password1" value="" class="inputText" /></div><br />
+	<div><label for="portallogin_password2">%%lang_password2%%</label><input type="password" name="portallogin_password2" id="portallogin_password2" value="" class="inputText" /></div><br />
+	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_changePwd%%" class="button" /></div><br />
+	<input type="hidden" name="action" value="%%portallogin_action%%" />
+	<input type="hidden" name="systemid" value="%%portallogin_systemid%%" />
+	<input type="hidden" name="authcode" value="%%portallogin_authcode%%" />
+	<input type="hidden" name="reset" value="1" />
+</form>
+</portallogin_newpwdform>

@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 183
 
 //editable entries
+$lang["changePwd"]                       = "Change password";
 $lang["editprofilelink"]                 = "Edit profile";
 $lang["emailTitle"]                      = "Email*:";
 $lang["forenameTitle"]                   = "Forename:";
@@ -19,14 +20,18 @@ $lang["login"]                           = "Login";
 $lang["logoutlink"]                      = "Logout";
 $lang["nameTitle"]                       = "Name:";
 $lang["password"]                        = "Password:";
+$lang["password1"]                       = "Password:";
+$lang["password2"]                       = "Confirm password:";
 $lang["passwordTitle"]                   = "Password:";
 $lang["passwordTitle2"]                  = "Password:";
 $lang["passwordsUnequal"]                = "Passwords not equal.";
 $lang["pwdForgotLink"]                   = "Forgot password";
-$lang["resetHint"]                       = "Please provide your username. Afterwards, the account will be given a new password, the password will be sent by mail to the adress saved with the profile.";
+$lang["pwdHint"]                         = "Please provide a new passowrd.";
+$lang["resetError"]                      = "An error occured. Please restart the procedure.";
+$lang["resetHint"]                       = "Please provide your username. Afterwards, an email containing a link to change the password will be sent to the mailadress saved with the profile.";
 $lang["resetPwd"]                        = "Reset";
-$lang["resetSuccess"]                    = "Your password was resetted. You should receive an email containing the new password within a few minutes.";
-$lang["resetemailBody"]                  = "The password of your account was resetted. Please change it to a new one right after your next login. <br /> The new password is:";
+$lang["resetSuccess"]                    = "The password was changed. You can now login using the new password.";
+$lang["resetemailBody"]                  = "You requested to change your password. Please use the following link in order to create a new password for your account:<br />";
 $lang["resetemailTitle"]                 = "Reset account password";
 $lang["userDataSubmit"]                  = "Save";
 $lang["username"]                        = "Username:";

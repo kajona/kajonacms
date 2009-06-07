@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 183
 
 //editable entries
+$lang["changePwd"]                       = "";
 $lang["editprofilelink"]                 = "Редактирай профил";
 $lang["emailTitle"]                      = "Електронна поща*: ";
 $lang["forenameTitle"]                   = "Собствено име";
@@ -19,10 +20,14 @@ $lang["login"]                           = "Вписване";
 $lang["logoutlink"]                      = "Излез";
 $lang["nameTitle"]                       = "Име: ";
 $lang["password"]                        = "Парола: ";
+$lang["password1"]                       = "";
+$lang["password2"]                       = "";
 $lang["passwordTitle"]                   = "Парола: ";
 $lang["passwordTitle2"]                  = "Парола: ";
 $lang["passwordsUnequal"]                = "Паролите не съвпадат.";
 $lang["pwdForgotLink"]                   = "";
+$lang["pwdHint"]                         = "";
+$lang["resetError"]                      = "";
 $lang["resetHint"]                       = "";
 $lang["resetPwd"]                        = "";
 $lang["resetSuccess"]                    = "";
