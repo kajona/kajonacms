@@ -72,9 +72,10 @@ class class_element_portalregistration extends class_element_portal implements i
 	       $objUser = new class_modul_user_user($this->getParam("systemid"));
 	       
 	       if($objUser->getStrEmail() != "") {
-	           if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0) {
+               if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode")) {
 	               $objUser->setIntActive(1);
 	               $objUser->setStrPass("");
+                   $objUser->setStrAuthcode("");
 	               if($objUser->updateObjectToDb()) {
 	                   $strReturn .= $this->getText("pr_completionSuccess");
 	                   if($this->arrElementData["portalregistration_success"] != "")
@@ -159,6 +160,8 @@ class class_element_portalregistration extends class_element_portal implements i
 	        $objUser->setIntActive(0);
 	        $objUser->setIntAdmin(0);
 	        $objUser->setIntPortal(1);
+            $strAuthcode = generateSystemid();
+            $objUser->setStrAuthcode($strAuthcode);
 	        
 	        
 	        if($objUser->saveObjectToDb()) {
@@ -169,7 +172,7 @@ class class_element_portalregistration extends class_element_portal implements i
 	        	//create a mail to allow the user to activate itself
 	        	
                 $strMailContent = $this->getText("pr_email_body");
-                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "systemid=".$objUser->getSystemid());
+                $strTemp = getLinkPortalHref($this->getPagename(), "", "portalCompleteRegistration", "systemid=".$objUser->getSystemid()."&authcode=".$strAuthcode);
                 $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
                 $strMailContent .= $this->getText("pr_email_footer");
                 

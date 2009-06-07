@@ -91,6 +91,7 @@
 	user_portal				= allowed for portal?
 	user_admin_skin			= Skin for the admin-area
 	user_admin_language     = Language selected by the user for the admin
+	user_authcode           = auth code, to be used for special actions, e.g. activating the user
 
 //--_user_group------------------------------------------------------------------------------------------
 	group_id				= table primary key, ID of the group

@@ -198,6 +198,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["user_portal"] 		= array("int", true);
 		$arrFields["user_admin_skin"] 	= array("char254", true);
 		$arrFields["user_admin_language"]=array("char254", true);
+		$arrFields["user_authcode"]     =array("char20", true);
 
 		if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -912,6 +913,13 @@ class class_installer_system extends class_installer_base implements interface_i
             $objRecord = new class_modul_system_common($strOneSysId["system_id"]);
             $objRecord->setOwnerId($objRecord->getLastEditUserId());
         }
+
+        $strReturn .= "Adding user_authcode column to db-schema...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+        	               ADD ".$this->objDB->encloseColumnName("user_authcode")." VARCHAR( 20 ) NULL ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
 
 
         $strReturn .= "Updating module-versions...\n";

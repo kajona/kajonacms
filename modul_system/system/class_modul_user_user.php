@@ -37,6 +37,7 @@ class class_modul_user_user extends class_model implements interface_model  {
     private $intPortal = 0;
     private $strAdminskin = "";
     private $strAdminlanguage = "";
+    private $strAuthcode = "";
 
 
     /**
@@ -94,6 +95,7 @@ class class_modul_user_user extends class_model implements interface_model  {
             $this->setStrAdminskin($arrRow["user_admin_skin"]);
             $this->setStrAdminlanguage($arrRow["user_admin_language"]);
             $this->setSystemid($arrRow["user_id"]);
+            $this->setStrAuthcode($arrRow["user_authcode"]);
         }
     }
 
@@ -122,7 +124,8 @@ class class_modul_user_user extends class_model implements interface_model  {
 					user_admin_skin='".$this->objDB->dbsafeString($this->getStrAdminskin(), $bitHtmlEntities)."',
 					user_admin_language='".$this->objDB->dbsafeString($this->getStrAdminlanguage(), $bitHtmlEntities)."',
 					user_logins = ".(int)$this->getIntLogins().",
-					user_lastlogin = ".(int)$this->getIntLastLogin()."
+					user_lastlogin = ".(int)$this->getIntLastLogin().",
+                    user_authcode = '".dbsafeString($this->getStrAuthcode())."'
 					WHERE user_id = '".$this->objDB->dbsafeString($this->getSystemid(), $bitHtmlEntities)."'";
 
            class_logger::getInstance()->addLogRow("updated user ".$this->getStrUsername(), class_logger::$levelInfo);
@@ -150,7 +153,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 					user_date, user_active,
 					user_admin, user_portal,
 					user_admin_skin, user_admin_language,
-					user_logins, user_lastlogin
+					user_logins, user_lastlogin, user_authcode
 					
 					) VALUES (
 					
@@ -172,7 +175,8 @@ class class_modul_user_user extends class_model implements interface_model  {
 					'".$this->objDB->dbsafeString($this->getStrAdminskin())."',
 					'".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
 					0,
-					0
+					0,
+                    '".$this->objDB->dbsafeString($this->getStrAuthcode())."'
 					)";
 
 		class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
@@ -375,6 +379,16 @@ class class_modul_user_user extends class_model implements interface_model  {
     public function setStrAdminlanguage($strAdminlanguage) {
         $this->strAdminlanguage = $strAdminlanguage;
     }
+
+    public function getStrAuthcode() {
+        return $this->strAuthcode;
+    }
+
+    public function setStrAuthcode($strAuthcode) {
+        $this->strAuthcode = $strAuthcode;
+    }
+
+
 
 }
 ?>
