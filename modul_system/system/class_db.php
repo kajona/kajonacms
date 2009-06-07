@@ -249,7 +249,7 @@ class class_db {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
-
+        $arrReturn = array();
         //param validation
         if((int)$intStart < 0)
             $intStart = 0;
@@ -316,6 +316,7 @@ class class_db {
 	 * @param string $strQuery
 	 */
 	private function getError($strQuery) {
+        $strError = "";
 	    if($this->objDbDriver != null) {
 	       $strError = $this->objDbDriver->getError();
 	    }
@@ -472,11 +473,13 @@ class class_db {
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
      *      int
+     *      long
      *      double
      *      char10
      *      char20
      *      char100
      *      char254
+     *      char500
      *      text
      *
      * @param string $strType
@@ -494,6 +497,7 @@ class class_db {
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
      * 		int
+     *      long
      * 		double
      * 		char10
      * 		char20

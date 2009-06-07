@@ -168,11 +168,13 @@ class class_db_mysql implements interface_db_driver {
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
      *      int
+     *      long
      *      double
      *      char10
      *      char20
      *      char100
      *      char254
+     *      char500
      *      text 
      * 
      * @param string $strType
@@ -183,6 +185,8 @@ class class_db_mysql implements interface_db_driver {
         
         if($strType == "int")
             $strReturn .= " INT ";
+        elseif($strType == "long")
+            $strReturn .= " BIGINT ";
         elseif($strType == "double")
             $strReturn .= " DOUBLE ";    
         elseif($strType == "char10")
@@ -211,6 +215,7 @@ class class_db_mysql implements interface_db_driver {
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
      * 		int
+     *      long
      * 		double
      * 		char10
      * 		char20

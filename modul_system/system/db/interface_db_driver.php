@@ -96,6 +96,7 @@ interface interface_db_driver {
      * $array[string columnName] = array(string datatype, boolean isNull [, default (only if not null)])
      * whereas datatype is one of the following:
      * 		int
+     *      long
      * 		double
      * 		char10
      * 		char20
@@ -184,11 +185,13 @@ interface interface_db_driver {
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
      *      int
+     *      long
      *      double
      *      char10
      *      char20
      *      char100
      *      char254
+     *      char500
      *      text 
      * 
      * @param string $strType
