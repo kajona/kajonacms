@@ -296,7 +296,7 @@ class class_installer {
 		$this->arrInstaller = $objFilesystem->getFilelist("/installer");
 
 		foreach($this->arrInstaller as $intKey => $strFile)
-			if(strpos($strFile, ".php") === false || $strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php")
+			if(strpos($strFile, ".php") === false || $strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
 				unset($this->arrInstaller[$intKey]);
 
 		asort($this->arrInstaller);
