@@ -392,8 +392,9 @@ class class_graph {
 	 * @param array $arrKeyValues
 	 * @param int $intWidth
 	 * @param int $intHeight
+     * @param float $floatCenter position of the pies' center relative to the width
 	 */
-	public function create3DPieChart($arrKeyValues, $intWidth = 300, $intHeight = 200) {
+	public function create3DPieChart($arrKeyValues, $intWidth = 300, $intHeight = 200, $floatCenter = 0.45) {
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
 
 		include_once(_systempath_."/jpgraph/jpgraph_pie.php");
@@ -409,7 +410,7 @@ class class_graph {
 
 		$objPiePlot = new PiePlot3D($arrValues);
 		$objPiePlot->SetSize(0.5);
-		$objPiePlot->SetCenter(0.45);
+		$objPiePlot->SetCenter($floatCenter);
 		$objPiePlot->SetLegends($arrKeys);
 		$this->objGraph->Add($objPiePlot);
 		$this->objGraph->SetShadow(false);

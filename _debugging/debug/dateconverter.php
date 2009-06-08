@@ -9,6 +9,7 @@
 
 require_once("../system/includes.php");
 include_once(_realpath_."/system/class_filesystem.php");
+include_once(_realpath_."/system/class_date.php");
 
 
 echo "<pre>\n";
@@ -42,8 +43,11 @@ echo "\n<input type=\"submit\" value=\"submit\" />\n";
 
 
 echo "\n--- Kajona timestamp handling ---------------------------------------------------\n\n";
-
-
+echo "integer to date: \n";
+$objDateFromInt = new class_date();
+$objDateFromInt->setTimeInOldStyle(getPost("kajonainttime"));
+echo "\tinteger: <input type=\"text\" value=\"".getPost("kajonainttime")."\" name=\"kajonainttime\"/>";
+echo "  --> ".$objDateFromInt."\n";
 
 
 echo "\n<input type=\"submit\" value=\"submit\" />\n";
