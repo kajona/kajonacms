@@ -29,7 +29,7 @@ class class_modul_user_user extends class_model implements interface_model  {
     private $strCity = "";
     private $strTel = "";
     private $strMobile = "";
-    private $strDate = "";
+    private $longDate = "";
     private $intLogins = 0;
     private $intLastlogin = 0;
     private $intActive = 0;
@@ -86,7 +86,7 @@ class class_modul_user_user extends class_model implements interface_model  {
             $this->setStrCity($arrRow["user_city"]);
             $this->setStrTel($arrRow["user_tel"]);
             $this->setStrMobile($arrRow["user_mobile"]);
-            $this->setStrDate($arrRow["user_date"]);
+            $this->setLongDate($arrRow["user_date"]);
             $this->setIntLogins($arrRow["user_logins"]);
             $this->setIntLastLogin($arrRow["user_lastlogin"]);
             $this->setIntActive($arrRow["user_active"]);
@@ -117,7 +117,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 					user_city='".$this->objDB->dbsafeString($this->getStrCity(), $bitHtmlEntities)."',
 					user_tel='".$this->objDB->dbsafeString($this->getStrTel(), $bitHtmlEntities)."',
 					user_mobile='".$this->objDB->dbsafeString($this->getStrMobile(), $bitHtmlEntities)."',
-					user_date='".$this->objDB->dbsafeString($this->getStrDate(), $bitHtmlEntities)."',
+                    user_date=".$this->objDB->dbsafeString($this->getLongDate()).",
 					user_active=".(int)$this->getIntActive().",
 					user_admin=".(int)$this->getIntAdmin().",
 					user_portal=".(int)$this->getIntPortal().",
@@ -168,7 +168,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 					'".$this->objDB->dbsafeString($this->getStrCity())."',
 					'".$this->objDB->dbsafeString($this->getStrTel())."',
 					'".$this->objDB->dbsafeString($this->getStrMobile())."',
-					'".$this->objDB->dbsafeString($this->getStrDate())."',
+                    ".dbsafeString($this->getLongDate()).",
 					".(int)$this->getIntActive().",
 					".(int)$this->getIntAdmin().",
 					".(int)$this->getIntPortal().",
@@ -289,8 +289,8 @@ class class_modul_user_user extends class_model implements interface_model  {
     public function getStrMobile() {
         return $this->strMobile;
     }
-    public function getStrDate() {
-        return $this->strDate;
+    public function getLongDate() {
+        return $this->longDate;
     }
     public function getIntLogins() {
         return $this->intLogins;
@@ -345,8 +345,8 @@ class class_modul_user_user extends class_model implements interface_model  {
     public function setStrMobile($strMobile) {
         $this->strMobile = $strMobile;
     }
-    public function setStrDate($strDate) {
-        $this->strDate = $strDate;
+    public function setLongDate($longDate) {
+        $this->longDate = $longDate;
     }
     public function setIntLogins($intLogins) {
         if($intLogins == "")

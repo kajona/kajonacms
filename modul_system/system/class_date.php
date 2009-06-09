@@ -29,12 +29,17 @@ class class_date {
     private $arrModul;
 
 	/**
-	 * Contructor
+	 * Creates an instance of the class_date an initialises it with the current date.
 	 */
-	public function __construct() {
+	public function __construct($longInitValue = "") {
 		$this->arrModul["name"] 		= "class_date";
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
+
+        if($longInitValue == "")
+            $this->setTimeInOldStyle(time());
+        else
+            $this->setLongTimestamp($longInitValue);
 	}
 
     /**
@@ -45,6 +50,52 @@ class class_date {
     public function __toString() {
         return $this->longTimestamp;
     }
+
+    /**
+     * Sets the current time based on the array of params passed.
+     * The fieldname is the prefix of the form-elements.
+     * The timestamp is generated out of the following form-element, so element of
+     * the params-array:
+     * fieldname_year, fieldname_month, fieldname_day, fieldname_hour, fieldname_minute, fieldname_second
+     * If a single field is not found, 00 is inserted instead.
+     *
+     * @param string $strFieldname
+     * @param array $arrParams 
+     */
+    public function generateDateFromParams($strFieldname, $arrParams) {
+        $intYear = 0000;
+        $intMonth = 00;
+        $intDay = 00;
+        $intHour = 00;
+        $intMinute = 00;
+        $intSecond = 00;
+
+        if(isset($arrParams[$strFieldname."_year"]) && $arrParams[$strFieldname."_year"] != "")
+            $intYear = (int)$arrParams[$strFieldname."_year"];
+
+        if(isset($arrParams[$strFieldname."_month"]) && $arrParams[$strFieldname."_month"] != "")
+            $intMonth = (int)$arrParams[$strFieldname."_month"];
+
+        if(isset($arrParams[$strFieldname."_day"]) && $arrParams[$strFieldname."_day"] != "")
+            $intDay = (int)$arrParams[$strFieldname."_day"];
+
+        if(isset($arrParams[$strFieldname."_hour"]) && $arrParams[$strFieldname."_hour"] != "")
+            $intHour = (int)$arrParams[$strFieldname."_hour"];
+
+        if(isset($arrParams[$strFieldname."_minute"]) && $arrParams[$strFieldname."_minute"] != "")
+            $intMinute = (int)$arrParams[$strFieldname."_minute"];
+
+        if(isset($arrParams[$strFieldname."_second"]) && $arrParams[$strFieldname."_second"] != "")
+            $intMinute = (int)$arrParams[$strFieldname."_second"];
+
+        $this->setIntYear($intYear);
+        $this->setIntMonth($intMonth);
+        $this->setIntDay($intDay);
+        $this->setIntHour($intHour);
+        $this->setIntMin($intMinute);
+        $this->setIntSec($intSecond);
+    }
+
 
     /**
      * Allows to init the current class with an 32Bit int value representing the seconds since 1970.

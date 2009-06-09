@@ -15,6 +15,7 @@ include_once(_adminpath_."/interface_admin.php");
 include_once(_systempath_."/class_modul_user_log.php");
 include_once(_systempath_."/class_modul_user_user.php");
 include_once(_systempath_."/class_modul_user_group.php");
+include_once(_systempath_."/class_date.php");
 
 /**
  * This class provides the user and groupmanagement
@@ -325,7 +326,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), ($this->getParam("ort") != "" ? $this->getParam("ort") : $objUser->getStrCity()));
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), ($this->getParam("tel") != "" ? $this->getParam("tel") : $objUser->getStrTel()));
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), ($this->getParam("handy") != "" ? $this->getParam("handy") : $objUser->getStrMobile() ));
-                $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
+                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), new class_date($objUser->getLongDate()));//("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
+      //          $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
@@ -353,7 +355,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), $this->getParam("ort"));
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $this->getParam("tel"));
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $this->getParam("handy"));
-                $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $this->getParam("gebdatum"));
+                //$strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $this->getParam("gebdatum"));
+                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), new class_date());
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
@@ -391,6 +394,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                             $intAdmin = ($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
                             $intPortal = ($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0;
 
+
+                            //build date
+                            $objDate = new class_date();
+                            $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
+
                             $objUser = new class_modul_user_user("");
                             $objUser->setStrUsername($this->getParam("username"));
                             $objUser->setStrPass($this->getParam("passwort"));
@@ -402,7 +410,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                             $objUser->setStrCity($this->getParam("ort"));
                             $objUser->setStrTel($this->getParam("tel"));
                             $objUser->setStrMobile($this->getParam("handy"));
-                            $objUser->setStrDate($this->getParam("gebdatum"));
+                            $objUser->setLongDate($objDate->getLongTimestamp());
                             $objUser->setStrAdminlanguage($this->getParam("language"));
                             $objUser->setIntActive($intActive);
                             $objUser->setIntAdmin($intAdmin);
@@ -468,78 +476,40 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     //Email-Vorhanden?
                     if(checkEmailaddress($this->getParam("email"))) {
                         //Saving to database
+                        //build date
+                        $objDate = new class_date();
+                        $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
+
                         $intActive = (($this->getParam("aktiv")) != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
                         $intAdmin = (($this->getParam("adminlogin")) != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
                         $intPortal = (($this->getParam("portal")) != "" && $this->getParam("portal") == "checked") ?  1 :  0;
                         $objUser = new class_modul_user_user($this->getParam("userid"));
+
+                        //init with values independent from states
+                        $objUser->setStrEmail($this->getParam("email"));
+                        $objUser->setStrForename($this->getParam("vorname"));
+                        $objUser->setStrName($this->getParam("nachname"));
+                        $objUser->setStrStreet($this->getParam("strasse"));
+                        $objUser->setStrPostal($this->getParam("plz"));
+                        $objUser->setStrCity($this->getParam("ort"));
+                        $objUser->setStrTel($this->getParam("tel"));
+                        $objUser->setStrMobile($this->getParam("handy"));
+                        $objUser->setLongDate($objDate->getLongTimestamp());
+                        $objUser->setStrAdminskin($this->getParam("skin"));
+                        $objUser->setStrAdminlanguage($this->getParam("language"));
+
+
                         if($this->getParam("passwort") == "" || $this->getParam("passwort") == " ") {
-
-                            if(!$bitSelfedit) {
-                                $objUser->setStrUsername($this->getParam("username"));
-                                $objUser->setStrEmail($this->getParam("email"));
-                                $objUser->setStrForename($this->getParam("vorname"));
-                                $objUser->setStrName($this->getParam("nachname"));
-                                $objUser->setStrStreet($this->getParam("strasse"));
-                                $objUser->setStrPostal($this->getParam("plz"));
-                                $objUser->setStrCity($this->getParam("ort"));
-                                $objUser->setStrTel($this->getParam("tel"));
-                                $objUser->setStrMobile($this->getParam("handy"));
-                                $objUser->setStrDate($this->getParam("gebdatum"));
-                                $objUser->setIntActive($intActive);
-                                $objUser->setIntAdmin($intAdmin);
-                                $objUser->setIntPortal($intPortal);
-                                $objUser->setStrAdminskin($this->getParam("skin"));
-                                $objUser->setStrAdminlanguage($this->getParam("language"));
-
-                            }
-                            else {
-                                $objUser->setStrEmail($this->getParam("email"));
-                                $objUser->setStrForename($this->getParam("vorname"));
-                                $objUser->setStrName($this->getParam("nachname"));
-                                $objUser->setStrStreet($this->getParam("strasse"));
-                                $objUser->setStrPostal($this->getParam("plz"));
-                                $objUser->setStrCity($this->getParam("ort"));
-                                $objUser->setStrTel($this->getParam("tel"));
-                                $objUser->setStrMobile($this->getParam("handy"));
-                                $objUser->setStrDate($this->getParam("gebdatum"));
-                                $objUser->setStrAdminskin($this->getParam("skin"));
-                                $objUser->setStrAdminlanguage($this->getParam("language"));
-                            }
+                            $objUser->setStrPass($this->getParam("passwort"));
                         }
-                        else {
-                            if(!$bitSelfedit) {
 
-                                $objUser->setStrUsername($this->getParam("username"));
-                                $objUser->setStrPass($this->getParam("passwort"));
-                                $objUser->setStrEmail($this->getParam("email"));
-                                $objUser->setStrForename($this->getParam("vorname"));
-                                $objUser->setStrName($this->getParam("nachname"));
-                                $objUser->setStrStreet($this->getParam("strasse"));
-                                $objUser->setStrPostal($this->getParam("plz"));
-                                $objUser->setStrCity($this->getParam("ort"));
-                                $objUser->setStrTel($this->getParam("tel"));
-                                $objUser->setStrMobile($this->getParam("handy"));
-                                $objUser->setStrDate($this->getParam("gebdatum"));
-                                $objUser->setIntActive($intActive);
-                                $objUser->setIntAdmin($intAdmin);
-                                $objUser->setIntPortal($intPortal);
-                                $objUser->setStrAdminskin($this->getParam("skin"));
-                                $objUser->setStrAdminlanguage($this->getParam("language"));
-                            }
-                            else {
-                                $objUser->setStrPass($this->getParam("passwort"));
-                                $objUser->setStrEmail($this->getParam("email"));
-                                $objUser->setStrForename($this->getParam("vorname"));
-                                $objUser->setStrName($this->getParam("nachname"));
-                                $objUser->setStrStreet($this->getParam("strasse"));
-                                $objUser->setStrPostal($this->getParam("plz"));
-                                $objUser->setStrCity($this->getParam("ort"));
-                                $objUser->setStrTel($this->getParam("tel"));
-                                $objUser->setStrMobile($this->getParam("handy"));
-                                $objUser->setStrDate($this->getParam("gebdatum"));
-                                $objUser->setStrAdminskin($this->getParam("skin"));
-                                $objUser->setStrAdminlanguage($this->getParam("language"));
-                            }
+
+                        if(!$bitSelfedit) {
+                            $objUser->setStrUsername($this->getParam("username"));
+                            $objUser->setIntActive($intActive);
+                            $objUser->setIntAdmin($intAdmin);
+                            $objUser->setIntPortal($intPortal);
+
                         }
 
                         if($objUser->updateObjectToDb()) {

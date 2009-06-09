@@ -190,7 +190,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["user_city"] 		= array("char254", true);
 		$arrFields["user_tel"] 			= array("char254", true);
 		$arrFields["user_mobile"] 		= array("char254", true);
-		$arrFields["user_date"] 		= array("char254", true);
+		$arrFields["user_date"] 		= array("long", true);
 		$arrFields["user_logins"] 		= array("int", true);
 		$arrFields["user_lastlogin"] 	= array("int", true);
 		$arrFields["user_active"] 		= array("int", true);
@@ -921,6 +921,12 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strSql))
             $strReturn .= "An error occured!\n";
 
+        $strReturn .= "Changeing type of gebdate column to bigint ...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+                        CHANGE ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0.9");

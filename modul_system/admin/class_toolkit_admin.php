@@ -115,6 +115,7 @@ class class_toolkit_admin extends class_toolkit {
 	 * @param bool $bitToday If set true, the current date will be inserted, if no date is passed
 	 * @param string $strClass
 	 * @return string
+     * @deprecated will be removed in 3.3. Use formDateSingle() intead.
 	 */
 	public function formDateSimple($strName = "", $intDay = "", $intMonth = "", $intYear = "", $strTitle = "", $bitToday = true, $strClass = "inputDate") {
 		//no given values, use today
@@ -139,6 +140,103 @@ class class_toolkit_admin extends class_toolkit {
 		$arrTemplate["valueDay"] = $intDay;
 		$arrTemplate["valueMonth"] = $intMonth;
 		$arrTemplate["valueYear"] = $intYear;
+
+		//commands and values for the calendar
+		$arrTemplate["calendarCommands"] = "";
+
+		//set up the container div
+        $strContainerId = $strName."jscalendarContainer";
+        $arrTemplate["calendarContainerId"] = $strContainerId;
+
+        //init the calendar
+        $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
+
+        $arrTemplate["calendarCommands"] .="
+            kajonaAjaxHelper.loadCalendarBase();
+
+	        function initCalWrapper_".$strContainerId."() {
+				if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
+					YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");
+			        window.setTimeout(\"initCalWrapper_".$strContainerId."()\", 1000);
+			        return;
+			    }
+			    YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(\"".$strContainerId."\"), \"loadingContainer\");
+			    initCal_".$strContainerId."();
+			}
+        ";
+
+        $arrTemplate["calendarCommands"] .=" function initCal_".$strContainerId."() { \n";
+        $arrTemplate["calendarCommands"] .="    YAHOO.namespace(\"kajona.calendar\"); \n";
+        //set up the calendar
+        $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init = function() { \n";
+        $arrTemplate["calendarCommands"] .="       if (YAHOO.lang.isUndefined(YAHOO.kajona.calendar.cal_".$strContainerId.")) {\n";
+        $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId." = new YAHOO.widget.Calendar(\n";
+        $arrTemplate["calendarCommands"] .="          \"cal_".$strContainerId."\",\n";
+        $arrTemplate["calendarCommands"] .="          \"".$strContainerId."\" );\n";
+
+        $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"WEEKDAYS_SHORT\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarWeekday", "system", "admin")."]);\n";
+        $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"MONTHS_LONG\", [".class_carrier::getInstance()->getObjText()->getText("toolsetCalendarMonth", "system", "admin")."]);\n";
+        $arrTemplate["calendarCommands"] .="       } \n";
+        //check for values in date form
+        $arrTemplate["calendarCommands"] .="       var formDate = [document.getElementById('".$arrTemplate["titleDay"]."').value, document.getElementById('".$arrTemplate["titleMonth"]."').value, document.getElementById('".$arrTemplate["titleYear"]."').value]; \n";
+        $arrTemplate["calendarCommands"] .="       if (formDate[0] > 0 && formDate[1] > 0 && formDate[2] > 0) {\n";
+        $arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".selectEvent.unsubscribe(handleSelect_".$strContainerId.", YAHOO.kajona.calendar.cal_".$strContainerId.");\n";
+		$arrTemplate["calendarCommands"] .="          YAHOO.kajona.calendar.cal_".$strContainerId.".select(formDate[1]+'/'+formDate[0]+'/'+formDate[2]);\n";
+		$arrTemplate["calendarCommands"] .="          var selectedDates = YAHOO.kajona.calendar.cal_".$strContainerId.".getSelectedDates();\n";
+		$arrTemplate["calendarCommands"] .="          if (selectedDates.length > 0) {\n";
+		$arrTemplate["calendarCommands"] .="             var firstDate = selectedDates[0];\n";
+		$arrTemplate["calendarCommands"] .="             YAHOO.kajona.calendar.cal_".$strContainerId.".cfg.setProperty(\"pagedate\", (firstDate.getMonth()+1) + \"/\" + firstDate.getFullYear());\n";
+        $arrTemplate["calendarCommands"] .="          }\n";
+        $arrTemplate["calendarCommands"] .="       }\n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".render();\n";
+        $arrTemplate["calendarCommands"] .="       YAHOO.kajona.calendar.cal_".$strContainerId.".selectEvent.subscribe(handleSelect_".$strContainerId.", YAHOO.kajona.calendar.cal_".$strContainerId.", true);\n";
+        $arrTemplate["calendarCommands"] .="    } \n";
+
+        $arrTemplate["calendarCommands"] .="    YAHOO.kajona.calendar.init();\n";
+        $arrTemplate["calendarCommands"] .=" }\n";
+
+        $arrTemplate["calendarCommands"] .=" function handleSelect_".$strContainerId."(type,args,obj) {\n";
+        $arrTemplate["calendarCommands"] .="    var dates = args[0]; \n";
+        $arrTemplate["calendarCommands"] .="    var date = dates[0]; \n";
+        $arrTemplate["calendarCommands"] .="    var year = date[0], month = (date[1] < 10 ? '0'+date[1]:date[1]), day = (date[2] < 10 ? '0'+date[2]:date[2]);\n";
+        //write to fields
+		$arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleDay"]."').value=day+\"\";\n";
+		$arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleMonth"]."').value=month+\"\";\n";
+        $arrTemplate["calendarCommands"] .="    document.getElementById('".$arrTemplate["titleYear"]."').value=year+\"\";\n";
+        $arrTemplate["calendarCommands"] .="    calClose_".$strContainerId."();\n";
+        $arrTemplate["calendarCommands"] .=" } \n";
+
+        $arrTemplate["calendarCommands"] .="</script>\n" ;
+
+		return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+	}
+
+
+    /**
+	 * Returns a simple date-form element. By default used to enter a date without a time.
+	 *
+	 * @param string $strName
+     * @param string $strTitle
+	 * @param class_date $objDateToShow
+	 * @param string $strClass
+	 * @return string
+     * @since 3.2.0.9
+	 */
+	public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate") {
+		//check passed param
+        if(!$objDateToShow instanceof class_date)
+        throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
+
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
+        $arrTemplate = array();
+		$arrTemplate["class"] = $strClass;
+		$arrTemplate["titleDay"] = $strName."_day";
+		$arrTemplate["titleMonth"] = $strName."_month";
+		$arrTemplate["titleYear"] = $strName."_year";
+		$arrTemplate["title"] = $strTitle;
+        $arrTemplate["valueDay"] = $objDateToShow->getIntDay();
+        $arrTemplate["valueMonth"] = $objDateToShow->getIntMonth();
+        $arrTemplate["valueYear"] = $objDateToShow->getIntYear();
 
 		//commands and values for the calendar
 		$arrTemplate["calendarCommands"] = "";
