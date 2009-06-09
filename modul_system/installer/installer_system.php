@@ -921,7 +921,7 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strSql))
             $strReturn .= "An error occured!\n";
 
-        $strReturn .= "Changeing type of gebdate column to bigint ...\n";
+        $strReturn .= "Changing type of gebdate column to long ...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                         CHANGE ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
 
