@@ -9,6 +9,7 @@
 
 include_once(_systempath_."/class_model.php");
 include_once(_systempath_."/interface_model.php");
+include_once(_systempath_."/class_modul_navigation_cache.php");
 
 /**
  * Model for a navigation tree itself
@@ -123,14 +124,14 @@ class class_modul_navigation_tree extends class_model implements interface_model
 
         return $arrReturn;
     }
-    
+
 
     /**
      * Looks up a navigation by its name
      *
      * @param string $strName
      * @return class_modul_navigation_tree
-     * @static 
+     * @static
      */
     public static function getNavigationByName($strName) {
         $strQuery = "SELECT system_id
@@ -144,7 +145,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
         if(isset($arrRow["system_id"]))
             return new class_modul_navigation_tree($arrRow["system_id"]);
         else
-            return null;    
+            return null;
 
     }
 

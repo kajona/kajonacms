@@ -41,7 +41,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrModul["tabellen"][] 		= _dbprefix_."filemanager";
 
 		parent::__construct($arrModul);
-		
+
 		//set the correct language
 		$this->strContentLanguage = $this->objSession->getAdminLanguage();
 	}
@@ -85,7 +85,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		else {
 				$strReturn .= "Element already installed!...\n";
 		}
-		
+
 		return $strReturn;
 	}
 
@@ -108,13 +108,13 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_lock_time"] 	= array("int", true);
 		$arrFields["system_status"] 	= array("int", true);
 		$arrFields["system_comment"]	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Rights table ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_right...\n";
-		
+
 		$arrFields = array();
 		$arrFields["right_id"] 		= array("char20", false);
 		$arrFields["right_inherit"] = array("int", true);
@@ -133,7 +133,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		// Modul table ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_module...\n";
-		
+
 		$arrFields = array();
 		$arrFields["module_id"] 			    = array("char20", false);
 		$arrFields["module_nr"]					= array("int", false);
@@ -151,13 +151,13 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		// Date table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table system_date...\n";
-		
+
 		$arrFields = array();
 		$arrFields["system_date_id"] 		= array("char20", false);
 		$arrFields["system_date_start"]		= array("int", true);
 		$arrFields["system_date_end"] 		= array("int", true);
 		$arrFields["system_date_special"] 	= array("int", true);
-		
+
 		if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -170,14 +170,14 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["system_config_value"] 	= array("char254", true);
 		$arrFields["system_config_type"] 	= array("int", true);
 		$arrFields["system_config_module"] 	= array("int", true);
-		
+
 		if(!$this->objDB->createTable("system_config", $arrFields, array("system_config_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		// User table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table user...\n";
-		
+
 		$arrFields = array();
 		$arrFields["user_id"] 			= array("char20", false);
 		$arrFields["user_username"]		= array("char254", true);
@@ -206,7 +206,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		// User group table -----------------------------------------------------------------------------
 		$strReturn .= "Installing table user_group...\n";
-		
+
 		$arrFields = array();
 		$arrFields["group_id"] 			= array("char20", false);
 		$arrFields["group_name"]		= array("char254", true);
@@ -217,7 +217,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		// User group_members table ---------------------------------------------------------------------
 		$strReturn .= "Installing table user_group_members...\n";
-		
+
 		$arrFields = array();
 		$arrFields["group_member_group_id"] 	= array("char20", false);
 		$arrFields["group_member_user_id"]		= array("char20", false);
@@ -228,7 +228,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		// User log table -------------------------------------------------------------------------------
 		$strReturn .= "Installing table user_log...\n";
-		
+
 		$arrFields = array();
 		$arrFields["user_log_id"] 		= array("char20", false);
 		$arrFields["user_log_userid"]	= array("char254", true);
@@ -238,10 +238,10 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("user_log", $arrFields, array("user_log_id")))
 			$strReturn .= "An error occured! ...\n";
-			
+
 		// Sessionmgtm ----------------------------------------------------------------------------------
 		$strReturn .= "Installing table session...\n";
-		
+
 		$arrFields = array();
 		$arrFields["session_id"] 		      = array("char20", false);
 		$arrFields["session_phpid"]	          = array("char254", true);
@@ -253,11 +253,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_lasturl"] 		  = array("char500", true);
 
 		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
-			$strReturn .= "An error occured! ...\n";	
+			$strReturn .= "An error occured! ...\n";
 
 		//Filemanager -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table filemanager...\n";
-		
+
 		$arrFields = array();
 		$arrFields["filemanager_id"] 			= array("char20", false);
 		$arrFields["filemanager_path"]			= array("char254", true);
@@ -269,51 +269,51 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("filemanager", $arrFields, array("filemanager_id")))
 			$strReturn .= "An error occured! ...\n";
 
-        //dashboard & widgets ---------------------------------------------------------------------------			
+        //dashboard & widgets ---------------------------------------------------------------------------
 		$strReturn .= "Installing table dashboard...\n";
-		
+
 		$arrFields = array();
 		$arrFields["dashboard_id"] 			= array("char20", false);
 		$arrFields["dashboard_column"]		= array("char254", true);
 		$arrFields["dashboard_user"] 		= array("char20", true);
 		$arrFields["dashboard_widgetid"] 	= array("char20", true);
-		
+
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Installing table adminwidget...\n";
-		
+
 		$arrFields = array();
 		$arrFields["adminwidget_id"] 		= array("char20", false);
 		$arrFields["adminwidget_class"]		= array("char254", true);
 		$arrFields["adminwidget_content"] 	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
 			$strReturn .= "An error occured! ...\n";
-			
+
 		//remoteloader-cache ----------------------------------------------------------------------------
 		$strReturn .= "Installing table remoteloader_cache...\n";
-			
+
 		$arrFields = array();
 		$arrFields["remoteloader_cache_checksum"]     = array("char40", false);
 		$arrFields["remoteloader_cache_releasetime"]  = array("int", false);
 		$arrFields["remoteloader_cache_response"]     = array("text", false);
-		
+
 		if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
             $strReturn .= "An error occured! ...\n";
-            
+
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
-		
+
 		$arrFields = array();
 		$arrFields["language_id"] 		= array("char20", false);
 		$arrFields["language_name"] 	= array("char254", true);
 		$arrFields["language_default"]  = array("int", true);
 
 		if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
-			$strReturn .= "An error occured! ...\n";            
-			
-			
+			$strReturn .= "An error occured! ...\n";
+
+
 
 		//Now we have to register module by module
 
@@ -329,9 +329,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
         //languages
         $strLanguagesID = $this->registerModule("languages", _languages_modul_id_, "class_modul_languages_portal.php", "class_modul_languages_admin.php", $this->arrModule["version"] , true);
-        
-        
-        
+
+
+
 		//Registering a few constants
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -371,10 +371,10 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-        
+
         //3.1: remoteloader max cachtime --> default 30 min
         $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
-        
+
         //3.2: max session duration
         $this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.2: filemanager hidden repos
@@ -442,12 +442,12 @@ class class_installer_system extends class_installer_base implements interface_i
 					('".$strAdminID."','".$strUserID."')";
 		$this->objDB->_query($strQuery);
 		$strReturn .= "Registered Admin in Admin-Group...\n";
-		
+
 		//try to create a default-dashboard for the admin
 		include_once(_systempath_."/class_modul_dashboard_widget.php");
         $objDashboard = new class_modul_dashboard_widget();
         $objDashboard->createInitialWidgetsForUser($strUserID);
-        
+
         //create a default language
 		$strReturn .= "Creating new default-language\n";
         include_once(_systempath_."/class_modul_languages_language.php");
@@ -457,7 +457,7 @@ class class_installer_system extends class_installer_base implements interface_i
             $objLanguage->setStrName("de");
         else
            $objLanguage->setStrName("en");
-           
+
         $objLanguage->setBitDefault(true);
         $objLanguage->saveObjectToDb();
         $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
@@ -496,22 +496,22 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.0.2") {
             $strReturn .= $this->update_302_309();
         }
-        
+
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.9") {
             $strReturn .= $this->update_309_3095();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.0.95") {
             $strReturn .= $this->update_3095_310();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -531,11 +531,11 @@ class class_installer_system extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
         }
-        
+
         return $strReturn."\n\n";
 	}
 
-	
+
 	private function update_300_301() {
 	    $strReturn = "";
 	    $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
@@ -586,56 +586,56 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $this->registerConstant("_admin_nr_of_rows_", 15, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         $strReturn .= "Registering admin https flag...\n";
 	    $this->registerConstant("_admin_only_https_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-	    
+
 	    //add systems' xml-handler
 	    $strReturn .= "Registering system xml handler...\n";
 	    $objSystemModule = class_modul_system_module::getModuleByName("system");
 	    $objSystemModule->setStrXmlNameAdmin("class_modul_system_admin_xml.php");
 	    if(!$objSystemModule->updateObjectToDb())
 	        $strReturn .= "An error occured!\n";
-	        
-	        
-	    //dashboard & widgets ---------------------------------------------------------------------------			
+
+
+	    //dashboard & widgets ---------------------------------------------------------------------------
 		$strReturn .= "Installing table dashboard...\n";
-		
+
 		$arrFields = array();
 		$arrFields["dashboard_id"] 			= array("char20", false);
 		$arrFields["dashboard_column"]		= array("char254", true);
 		$arrFields["dashboard_user"] 		= array("char20", true);
 		$arrFields["dashboard_widgetid"] 	= array("char20", true);
-		
+
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		$strReturn .= "Installing table adminwidget...\n";
-		
+
 		$arrFields = array();
 		$arrFields["adminwidget_id"] 		= array("char20", false);
 		$arrFields["adminwidget_class"]		= array("char254", true);
 		$arrFields["adminwidget_content"] 	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
-			$strReturn .= "An error occured! ...\n";    
-	        
+			$strReturn .= "An error occured! ...\n";
+
 
         $strReturn .= "Registering new module dashboard...\n";
         $strDashboardID = $this->registerModule("dashboard", _dashboard_modul_id_, "", "class_modul_dashboard_admin.php", $this->arrModule["version"], false, "", "class_modul_dashboard_admin_xml.php");
-        
+
         $strReturn .= "Removing classnames from module-table...\n";
         $strQuery = "ALTER TABLE `"._dbprefix_."system_module`
                         DROP `module_classnameportal`,
                         DROP `module_classnameadmin`;";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
-            
-        $strReturn .= "Register db-cache constant...\n";    
-        $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);    
+
+        $strReturn .= "Register db-cache constant...\n";
+        $this->registerConstant("_system_use_dbcache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 	    $strReturn .= "Creating default dashboard for existing users...\n";
         include_once(_systempath_."/class_modul_dashboard_widget.php");
         include_once(_systempath_."/class_modul_user_user.php");
         $objDashboard = new class_modul_dashboard_widget();
-        
+
         $arrUsers = class_modul_user_user::getAllUsers();
         foreach($arrUsers as $objOneUser) {
             $strReturn .= " found ".$objOneUser->getStrUsername()."\n";
@@ -647,7 +647,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	    return $strReturn;
 	}
-	
+
 	private function update_309_3095() {
 	    $strReturn = "";
 	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
@@ -657,55 +657,55 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	    return $strReturn;
 	}
-	
+
     private function update_3095_310() {
         $strReturn = "";
         $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
-        
+
         $strReturn .= "Installing table remoteloader_cache...\n";
-            
+
         $arrFields = array();
         $arrFields["remoteloader_cache_checksum"]     = array("char40", false);
         $arrFields["remoteloader_cache_releasetime"]  = array("int", false);
         $arrFields["remoteloader_cache_response"]     = array("text", false);
-        
+
         if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
             $strReturn .= "An error occured! ...\n";
-            
+
         //3.1: remoteloader max cachtime --> default 30 min
         $strReturn .= "Registering remoteloader max cachteime constant...\n";
-        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);    
+        $this->registerConstant("_remoteloader_max_cachetime_", 30*60, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.0");
 
         return $strReturn;
     }
-    
+
     private function update_310_311() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
-        
+
         $strReturn .= "Deleting old js-calendar...\n";
         include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $strReturn .= "Deleting old calendar-editor folder...\n";
         if(!$objFilesystem->folderDeleteRecursive("/admin/scripts/jscalendar"))
            $strReturn .= "<b>Error deleting the folder \n /admin/scripts/jscalendar,\nplease delete manually</b>\n";
-        
 
-        
+
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.1");
 
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
-        
-        
+
+
         $strReturn .= "Registering filemanager xml handlers...\n";
         $objFilemanagerModule = class_modul_system_module::getModuleByName("filemanager", true);
         $objFilemanagerModule->setStrXmlNameAdmin("class_modul_filemanager_admin_xml.php");
@@ -728,14 +728,14 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
 
-            
-        //need to install languages?            
+
+        //need to install languages?
         $strReturn .= "Validating if languages are installed...\n";
         $objLanguagesModule = class_modul_system_module::getModuleByName("languages", true);
         if($objLanguagesModule == null)
             $strReturn .= $this->update_319_addLanguages();
 
-            
+
         $strReturn .= "Installing table session...\n";
 		$arrFields = array();
 		$arrFields["session_id"] 		      = array("char20", false);
@@ -748,14 +748,14 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["session_lasturl"] 		  = array("char500", true);
 
 		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
-			$strReturn .= "An error occured! ...\n";	     
-			
+			$strReturn .= "An error occured! ...\n";
+
 		$strReturn .= "Registering session relasetime setting...\n";
 		$this->registerConstant("_system_release_time_", 3600, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         $strReturn .= "Registering filemanager hidden repo setting...\n";
         $this->registerConstant("_filemanager_show_foreign_", "false", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
-        
-        $strReturn .= "Deleting row right_comment from rights-table...\n"; 
+
+        $strReturn .= "Deleting row right_comment from rights-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
                             DROP ".$this->objDB->encloseColumnName("right_comment")."";
         if(!$this->objDB->_query($strQuery))
@@ -766,35 +766,35 @@ class class_installer_system extends class_installer_base implements interface_i
                              ADD ".$this->objDB->encloseColumnName("filemanager_foreign_id")." VARCHAR( 20 ) NULL ";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
-            
+
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_user_log_anzahl_");
         $objConstant->renameConstant("_user_log_nrofrecords_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_gaeste_gruppe_id_");
         $objConstant->renameConstant("_guests_group_id_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_admin_gruppe_id_");
         $objConstant->renameConstant("_admins_group_id_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_filemanager_ordner_groesse_");
         $objConstant->renameConstant("_filemanager_foldersize_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_cachepfad_");
         $objConstant->renameConstant("_images_cachepath_");
-        
-            
-        
+
+
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.1.9");
 
         return $strReturn;
     }
-    
+
     private function update_319_addLanguages() {
         $strReturn = "";
         $strReturn .= "Installing table languages...\n";
-		
+
 		$arrFields = array();
 		$arrFields["language_id"] 		= array("char20", false);
 		$arrFields["language_name"] 	= array("char254", true);
@@ -825,7 +825,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		else {
 				$strReturn .= "Element already installed!...\n";
 		}
-		
+
 		//create default language & assign existing contents
 		$strReturn .= "Creating new default-language\n";
         include_once(_systempath_."/class_modul_languages_language.php");
@@ -835,28 +835,28 @@ class class_installer_system extends class_installer_base implements interface_i
             $objLanguage->setStrName("de");
         else
            $objLanguage->setStrName("en");
-           
+
         $objLanguage->setBitDefault(true);
         $objLanguage->saveObjectToDb();
         $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {
-        
+
             if(include_once(_systempath_."/class_modul_pages_page.php"))
                 class_modul_pages_page::assignNullProperties("de");
             if(include_once(_systempath_."/class_modul_pages_pageelement.php"))
                 class_modul_pages_pageelement::assignNullElements("de");
         }
         else {
-        	
+
             if(include_once(_systempath_."/class_modul_pages_page.php"))
                 class_modul_pages_page::assignNullProperties("en");
             if(include_once(_systempath_."/class_modul_pages_pageelement.php"))
                 class_modul_pages_pageelement::assignNullElements("en");
-                
+
         }
-		 
-		return $strReturn;                                          
+
+		return $strReturn;
     }
 
     private function update_319_3195() {
@@ -870,7 +870,7 @@ class class_installer_system extends class_installer_base implements interface_i
                      LEFT JOIN "._dbprefix_."element_universal ON (page_element_id = content_id)
                      WHERE page_element_placeholder_element = 'languageswitch' AND content_id IS null ";
         $arrRows = $this->objDB->getArray($strQuery);
-        
+
         foreach($arrRows as $arrOneRow) {
             $strRowId = $arrOneRow["page_element_id"];
             $strReturn .= "Updating element ".$strRowId."\n";
@@ -921,7 +921,7 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strSql))
             $strReturn .= "An error occured!\n";
 
-        $strReturn .= "Changing type of gebdate column to long ...\n";
+        $strReturn .= "Changing type of user_date column to long ...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                         CHANGE ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
 
@@ -932,6 +932,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.2.0.9");
         return $strReturn;
     }
-	
+
 }
 ?>
