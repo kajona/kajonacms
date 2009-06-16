@@ -7,9 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["rssfeed_errorloading"]            = "Error loading the feed.";
 $lang["rssfeed_errorparsing"]            = "Error while parsing the feed.";
+$lang["rssfeed_noentry"]                 = "No entries available";
 ?>
