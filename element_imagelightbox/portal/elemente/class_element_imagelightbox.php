@@ -46,18 +46,60 @@ class class_element_imagelightbox extends class_element_portal implements interf
 
 		$strImage = $this->arrElementData["char1"];
 
-		//Include the javascript-file
-		$strReturn .= "<script type=\"text/javascript\">\n";
-        $strReturn .= "  var lightboxLoader = new kajonaAjaxHelper.Loader();\n";
-		$strReturn .= "  lightboxLoader.addJavascriptFile('lightbox.js'); \n";
-		$strReturn .= "  lightboxLoader.addCssFile('"._webpath_."/portal/css/lightbox.css'); lightboxLoader.load(); \n";
-		$strReturn .= "</script>\n";
+		//some javascript
+		$strReturn .= "<script type=\"text/javascript\">
+			if (typeof bitPhotoViewerLoadingStarted == \"undefined\") {
+	            var bitPhotoViewerLoadingStarted = false;
+	            var arrViewers = new Array();
+	        }
 
+	        //add viewer
+	        arrViewers.push(\"pv_".$this->getSystemid()."\");
 
-		$strReturn .= "<div>";
+	        kajonaAjaxHelper.loadPhotoViewerBase = function(callback) {
+	            if (!bitPhotoViewerLoadingStarted) {
+	                bitPhotoViewerLoadingStarted = true;
+
+	                var l = new kajonaAjaxHelper.Loader();
+	                l.addYUIComponents([ \"dragdrop\", \"animation\", \"container\" ]);
+	                l.addJavascriptFile(\"photoviewer/build/photoviewer_base-min.js\");
+	                l.addCssFile(\"_webpath_/portal/scripts/photoviewer/build/photoviewer_base.css\");
+	                l.addCssFile(\"_webpath_/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css\");
+	                l.load(callback);
+	            }
+	        };
+
+	        kajonaAjaxHelper.loadPhotoViewerBase(function () {
+	            YAHOO.photoViewer.config = { viewers: {} };
+
+	            //init all viewers
+	            for (var i=0; i<arrViewers.length; i++) {
+	                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
+	                    properties: {
+	                        id: arrViewers[i],
+	                        grow: 0.2,
+	                        fade: 0.2,
+	                        modal: true,
+	                        dragable: false,
+	                        fixedcenter: true,
+	                        loadFrom: \"html\",
+	                        position: \"absolute\",
+	                        easing: YAHOO.util.Easing.easeBothStrong,
+	                        buttonText: {
+	                            next: \" \",
+	                            prev: \" \",
+	                            close: \"Schließen\"
+	                        }
+	                    }
+	                };
+	            }
+	        });
+		</script>";
+
+		$strReturn .= "<div id=\"pv_".$this->getSystemid()."\">";
 
 		//generate the preview
-		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=800&amp;maxHeight=800\" rel=\"lightbox\" title=\"".$this->arrElementData["char2"]."\">\n";
+		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=800&amp;maxHeight=800\" class=\"photoViewer\" title=\"".$this->arrElementData["char2"]."\">\n";
 		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=200&amp;maxHeight=200\" />\n";
 		$strReturn .= "</a>";
 
@@ -65,7 +107,6 @@ class class_element_imagelightbox extends class_element_portal implements interf
 
 		return $strReturn;
 	}
-
 
 
 }
