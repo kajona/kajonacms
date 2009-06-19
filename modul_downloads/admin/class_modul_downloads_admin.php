@@ -539,10 +539,13 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			     $bitErrors = true;
 			}
 
+			//mode? Show form or save file
 			if($this->getParam("save") == "") {
-				//Crete the form
-				$strReturn .= $this->generatePathNavi();
-				$objFile = new class_modul_downloads_file($this->getSystemid());
+			    $objFile = new class_modul_downloads_file($this->getSystemid());
+
+				$strReturn .= $this->generatePathNavi().basename($objFile->getFilename());
+				$strReturn .= $this->objToolkit->divider();
+
 				if($bitErrors)
                     $strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "editFile"));

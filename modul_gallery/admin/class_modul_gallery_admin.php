@@ -389,52 +389,38 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		        $this->setParam("save", "");
 		    }
 
-			//mode?
+			//mode? Show form or save image
 			if($this->getParam("save") == "") {
 			    $strImage = "";
-				//form
 				$objImage = new class_modul_gallery_pic($this->getSystemid());
 
-				//File or folder?
-				if(is_file(_realpath_.$objImage->getStrFilename())) {
-				    //To create a preview, check if to scale it
-					$arrImagesize = getimagesize(_realpath_.$objImage->getStrFilename());
-					if($arrImagesize[0] < 300 && $arrImagesize[1] < 300)
-						$strImage = "<img src=\""._webpath_.$objImage->getStrFilename()."\" />";
-					else {
-
-						$intRelation = $arrImagesize[0] / $arrImagesize[1];	//Breite / Hoehe. >0: hoch <0: quer
-						if($intRelation > 0) {
-							$intMaxWidth = "300";
-							$intMaxHeigt = (int)($intMaxWidth/ $intRelation);
-						}
-						else {
-							$intMaxHeigt = "300";
-							$intMaxWidth = (int)($intMaxHeigt * $intRelation);
-						}
-						$strImage = "<img src=\""._webpath_."/image.php?image=".$objImage->getStrFilename()."&amp;maxWidth=300&amp;maxHeight=300\" />";
-					}
-				}
-
 				//path-navigation
-				$strReturn .= $this->generatePathNavi();
+				$strReturn .= $this->generatePathNavi().basename($objImage->getStrFilename());
+                $strReturn .= $this->objToolkit->divider();
+
 				//Build the form
 				if(!$bitValidated)
 				    $strReturn .= $this->objToolkit->getValidationErrors($this);
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editImage"));
                 $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("pic_name"), $objImage->getStrName());
-                $strReturn .= $this->objToolkit->formInputText("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());
+                $strReturn .= $this->objToolkit->formInputTextArea("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("pic_description", $this->getText("pic_description"), $objImage->getStrDescription(), "minimal");
 				$strReturn .= $this->objToolkit->formInputHidden("save", "1");
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
-				//additional infos about the image
-				if(is_file(_realpath_.$objImage->getStrFilename())) {
-				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_size").$arrImagesize[0]."x".$arrImagesize[1].$this->getText("pic_size_pixel"));
-				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_filename").basename($objImage->getStrFilename()));
-				    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_folder").dirname($objImage->getStrFilename()));
-				}
-				$strReturn .= $this->objToolkit->formTextRow($strImage);
+
+			    //additional infos and preview of the image
+                if(is_file(_realpath_.$objImage->getStrFilename())) {
+                    $arrImagesize = getimagesize(_realpath_.$objImage->getStrFilename());
+                    $strImage = "<img src=\""._webpath_."/image.php?image=".$objImage->getStrFilename()."&amp;maxWidth=300&amp;maxHeight=300\" />";
+
+                    $strReturn .= $this->objToolkit->divider();
+                    $strReturn .= $this->objToolkit->formTextRow($strImage);
+                    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_size").$arrImagesize[0]."x".$arrImagesize[1].$this->getText("pic_size_pixel"));
+                    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_filename").basename($objImage->getStrFilename()));
+                    $strReturn .= $this->objToolkit->formTextRow($this->getText("pic_folder").dirname($objImage->getStrFilename()));
+                }
+
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
