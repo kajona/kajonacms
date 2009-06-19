@@ -29,7 +29,7 @@ class class_modul_user_user extends class_model implements interface_model  {
     private $strCity = "";
     private $strTel = "";
     private $strMobile = "";
-    private $longDate = "";
+    private $longDate = 0;
     private $intLogins = 0;
     private $intLastlogin = 0;
     private $intActive = 0;
@@ -145,7 +145,7 @@ class class_modul_user_user extends class_model implements interface_model  {
 		$strUserid = generateSystemid();
 		$this->setSystemid($strUserid);
 		$strQuery = "INSERT INTO "._dbprefix_."user (
-					user_id, user_username, 
+					user_id, user_username,
 					user_pass, user_email, user_forename,
 					user_name, 	user_street,
 					user_postal, user_city,
@@ -154,9 +154,9 @@ class class_modul_user_user extends class_model implements interface_model  {
 					user_admin, user_portal,
 					user_admin_skin, user_admin_language,
 					user_logins, user_lastlogin, user_authcode
-					
+
 					) VALUES (
-					
+
 					'".$this->objDB->dbsafeString($strUserid)."',
 					'".$this->objDB->dbsafeString($this->getStrUsername())."',
 					'".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
@@ -200,12 +200,12 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public static function getAllUsers($intStart = false, $intEnd = false) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user ORDER BY user_username ASC";
-        
+
         if($intStart !== false && $intEnd !== false)
             $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
         else
             $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
-            
+
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
@@ -346,6 +346,8 @@ class class_modul_user_user extends class_model implements interface_model  {
         $this->strMobile = $strMobile;
     }
     public function setLongDate($longDate) {
+        if($longDate == "")
+            $longDate = 0;
         $this->longDate = $longDate;
     }
     public function setIntLogins($intLogins) {
