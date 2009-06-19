@@ -44,18 +44,16 @@ class class_element_imagelightbox extends class_element_admin implements interfa
 	 */
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
-    		
+
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputText("char2", $this->getText("imagelightbox_title"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
+		$strReturn .= $this->objToolkit->formInputTextArea("text", $this->getText("imagelightbox_subtitle"), (isset($arrElementData["text"]) ? $arrElementData["text"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("char1", $this->getText("imagelightbox_image"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""),
 		                                               "inputText", getLinkAdminPopup("folderview", "list", "&form_element=char1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		
-		
-		
 
 		return $strReturn;
 	}
-	
+
     /**
      * saves the submitted data to the database
      * It IS wanted to not let the system save the element here!
@@ -70,9 +68,10 @@ class class_element_imagelightbox extends class_element_admin implements interfa
         //And to the database
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
                 char1 = '".dbsafeString($strImage)."',
-                char2 = '".dbsafeString($this->getParam("char2"))."'
+                char2 = '".dbsafeString($this->getParam("char2"))."',
+                text = '".dbsafeString($this->getParam("text"))."'
                 WHERE content_id='".dbsafeString($strSystemid)."'";
-    
+
         if($this->objDB->_query($strQuery))
             return true;
         else
@@ -80,5 +79,5 @@ class class_element_imagelightbox extends class_element_admin implements interfa
     }
 
 
-} 
+}
 ?>

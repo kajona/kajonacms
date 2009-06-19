@@ -16,7 +16,7 @@
 
     <div class="galleryRandom">
         %%pic_name%% %%pic_subtitle%%<br />
-        <img src="%%pic_url%%" border="0" /><br />
+        <img src="%%pic_url%%" /><br />
         %%pic_rating%%<br />
         %%pic_description%%
     </div>

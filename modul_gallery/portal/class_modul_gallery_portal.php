@@ -112,10 +112,11 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		//Loop over every item and collect them
 		$arrTemplate  = array();
+		$arrTemplate["systemid"] = $this->getSystemid();
 		$arrTemplate["folderlist"] = "";
 		$arrTemplate["piclist"] = "";
 
-        
+
 		if(count($arrImages) > 0) {
 		    $intImageCounter = 0;
 
@@ -144,7 +145,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 							$strCurrentImage = $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
 
                             $arrRemainingImages["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $strCurrentImage;
-                            
+
     						//already rendered enough images?
     						if(count($arrRemainingImages) == $this->arrElementData["gallery_nrow"]) {
     							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
@@ -152,7 +153,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
     							$arrRemainingImages = array();
     						}
 					    }
-					    
+
 					    else {
                             //unlimited nr of images per row, no linebreaks, print directly
 							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");

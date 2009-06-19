@@ -18,7 +18,10 @@ require_once(_portalpath_."/interface_portal_element.php");
  * @package modul_pages
  */
 class class_element_imagelightbox extends class_element_portal implements interface_portal_element {
-
+    private $intThumbMaxWidth = 200;
+    private $intThumbMaxHeight = 200;
+    private $intDetailMaxWidth = 800;
+    private $intDetailMaxHeight = 800;
 
 	/**
 	 * Constructor
@@ -53,8 +56,8 @@ class class_element_imagelightbox extends class_element_portal implements interf
 	            var arrViewers = new Array();
 	        }
 
-	        //add viewer
-	        arrViewers.push(\"pv_".$this->getSystemid()."\");
+	        //add viewer: all images with class \"photoViewer\" in the div with the id \"contentContainer\"
+	        arrViewers.push(\"contentContainer\");
 
 	        kajonaAjaxHelper.loadPhotoViewerBase = function(callback) {
 	            if (!bitPhotoViewerLoadingStarted) {
@@ -88,7 +91,7 @@ class class_element_imagelightbox extends class_element_portal implements interf
 	                        buttonText: {
 	                            next: \" \",
 	                            prev: \" \",
-	                            close: \"Schließen\"
+	                            close: \"X\"
 	                        }
 	                    }
 	                };
@@ -96,11 +99,11 @@ class class_element_imagelightbox extends class_element_portal implements interf
 	        });
 		</script>";
 
-		$strReturn .= "<div id=\"pv_".$this->getSystemid()."\">";
+		$strReturn .= "<div class=\"imagelightbox\">";
 
 		//generate the preview
-		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=800&amp;maxHeight=800\" class=\"photoViewer\" title=\"".$this->arrElementData["char2"]."\">\n";
-		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=200&amp;maxHeight=200\" />\n";
+		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=".$this->intDetailMaxWidth."&amp;maxHeight=".$this->intDetailMaxHeight."\" class=\"photoViewer\" title=\"".$this->arrElementData["char2"]."\">\n";
+		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=".$this->intThumbMaxWidth."&amp;maxHeight=".$this->intThumbMaxHeight."\" alt=\"".$this->arrElementData["text"]."\" />\n";
 		$strReturn .= "</a>";
 
 		$strReturn .= "</div>";

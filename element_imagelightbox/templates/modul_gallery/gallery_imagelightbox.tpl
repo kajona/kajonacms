@@ -2,9 +2,58 @@
 
 <!-- available placeholders: systemid, folderlist, piclist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
+    <script type="text/javascript">
+        if (typeof bitPhotoViewerLoadingStarted == "undefined") {
+            var bitPhotoViewerLoadingStarted = false;
+            var arrViewers = new Array();
+        }
+
+        //add viewer
+        arrViewers.push("pv_%%systemid%%");
+        
+        kajonaAjaxHelper.loadPhotoViewerBase = function(callback) {
+            if (!bitPhotoViewerLoadingStarted) {
+                bitPhotoViewerLoadingStarted = true;
+                
+                var l = new kajonaAjaxHelper.Loader();
+                l.addYUIComponents([ "dragdrop", "animation", "container" ]);
+                l.addJavascriptFile("photoviewer/build/photoviewer_base-min.js");
+                l.addCssFile("_webpath_/portal/scripts/photoviewer/build/photoviewer_base.css");
+                l.addCssFile("_webpath_/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css");
+                l.load(callback);
+            }
+        };
+        
+        kajonaAjaxHelper.loadPhotoViewerBase(function () {
+            YAHOO.photoViewer.config = { viewers: {} };
+            
+            //init all viewers
+            for (var i=0; i<arrViewers.length; i++) {
+                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
+                    properties: {
+                        id: arrViewers[i],
+                        grow: 0.2,
+                        fade: 0.2,
+                        modal: true,
+                        dragable: false,
+                        fixedcenter: true,
+                        loadFrom: "html",
+                        position: "absolute",
+                        easing: YAHOO.util.Easing.easeBothStrong,
+                        buttonText: {
+                            next: " ",
+                            prev: " ",
+                            close: "X"
+                        }
+                    }
+                };
+            }
+        });
+    </script>
+    
     <p>%%pathnavigation%%</p>
     <p>%%folderlist%%</p>
-    <p>%%piclist%%</p>
+    <div id="pv_%%systemid%%">%%piclist%%</div>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
@@ -47,7 +96,7 @@
      available placeholders: pic, pic_href, name, subtitle, pic_detail -->
 <piclist_pic>
     <div style="text-align: center;">
-        <div><a href="%%pic_href%%"><img src="%%pic%%" /></a></div>
+        <div><a href="%%pic_detail%%" title="%%name%%" class="photoViewer"><img src="%%pic%%" alt="%%subtitle%%" /></a></div>
         <div>%%name%%</div>
     </div>
 </piclist_pic>
@@ -59,7 +108,7 @@
 <!-- available placeholders: pic, pic_href, name, subtitle, pic_detail -->
 <piclist_unlimited>
     <div style="text-align: center;">
-        <div><a href="%%pic_href%%"><img src="%%pic%%"/></a></div>
+        <div><a href="%%pic_detail%%" title="%%name%%" class="photoViewer"><img src="%%pic%%" alt="%%subtitle%%" /></div>
         <div>%%name%%</div>
     </div>
 </piclist_unlimited>
