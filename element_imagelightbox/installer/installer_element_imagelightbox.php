@@ -34,7 +34,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.0";
 	}
@@ -82,7 +82,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 		    $objElement->setStrClassAdmin("class_element_imagelightbox.php");
 		    $objElement->setStrClassPortal("class_element_imagelightbox.php");
 		    $objElement->setIntCachetime(-1);
-		    $objElement->setIntRepeat(0);
+		    $objElement->setIntRepeat(1);
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
