@@ -108,7 +108,7 @@
 <!-- available placeholders: pic, pic_href, name, subtitle, pic_detail -->
 <piclist_unlimited>
     <div style="text-align: center;">
-        <div><a href="%%pic_detail%%" title="%%name%%" class="photoViewer"><img src="%%pic%%" alt="%%subtitle%%" /></div>
+        <div><a href="%%pic_detail%%" title="%%name%%" class="photoViewer"><img src="%%pic%%" alt="%%subtitle%%" /></a></div>
         <div>%%name%%</div>
     </div>
 </piclist_unlimited>
