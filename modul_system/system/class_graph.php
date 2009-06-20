@@ -241,8 +241,10 @@ class class_graph {
 	 * @param int $intWidth
 	 * @param int $intHeight
 	 * @param bool $bitHorizontal
+     * @param string $strColor either in hex-values: #ccddee or as plaintext
+     * @param string $strFadecolor either in hex-values: #ccddee or as plaintext
 	 */
-	public function createBarChart($arrValues, $intWidth = 400, $intHeight = 200, $bitHorizontal = false) {
+	public function createBarChart($arrValues, $intWidth = 400, $intHeight = 200, $bitHorizontal = false, $strColor = "navy", $strFadeColor = "lightsteelblue") {
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
 
 		include_once(_systempath_."/jpgraph/jpgraph_bar.php");
@@ -261,8 +263,8 @@ class class_graph {
 		}
 
 		$objBarPlot = new BarPlot($arrConcreteValues);
-		$objBarPlot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
-		$objBarPlot->SetColor("navy");
+		$objBarPlot->SetFillGradient($strColor,$strFadeColor,GRAD_MIDVER);
+		$objBarPlot->SetColor($strColor);
 		$this->objGraph->Add($objBarPlot);
 
 		$this->setXAxisTickLabels($arrTicks);
@@ -285,8 +287,9 @@ class class_graph {
 	 * @param int $intHeight
 	 * @param bool $bitHorizontal
      * @param bool $bitStacking if set to false, the bars are grouped besides each other. If set to true, the bars are stacked
+     * @param string $strColor either in hex-values: #ccddee or as plaintext
 	 */
-	public function createGroupedBarChart($arrValues, $intWidth = 400, $intHeight = 200, $bitHorizontal = false, $bitStacking = false) {
+	public function createGroupedBarChart($arrValues, $intWidth = 400, $intHeight = 200, $bitHorizontal = false, $bitStacking = false, $strColor = "navy") {
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
 
 		include_once(_systempath_."/jpgraph/jpgraph_bar.php");
@@ -311,7 +314,7 @@ class class_graph {
             $objBarPlot = new BarPlot($arrConcreteValues);
             //$objBarPlot->SetFillGradient("navy","lightsteelblue",GRAD_MIDVER);
             //$objBarPlot->SetColor("navy");
-            $objBarPlot->SetFillColor("navy:".$floatColorRaiseFactor);
+            $objBarPlot->SetFillColor($strColor.":".$floatColorRaiseFactor);
             $floatColorRaiseFactor += 0.2;
 
             $arrBarCharts[] = $objBarPlot;

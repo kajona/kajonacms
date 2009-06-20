@@ -177,6 +177,19 @@ class class_element_admin extends class_admin {
 	}
 
     /**
+     * Returns a textual description of the current element.
+     * Overwrite this method if you want to return your own information, e.g. version
+     * or licence issues.
+     * 
+     * @return string
+     */
+    public function getElementDescription() {
+        $arrElementInfos = $this->loadElementData();
+        return ;
+    }
+
+
+    /**
      * Overwrite this method, if you want to execute
      * some special actions right after saving the element to the db, e.g.
      * cleanup functions.
