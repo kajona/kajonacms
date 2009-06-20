@@ -156,7 +156,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 					    else {
                             //unlimited nr of images per row, no linebreaks, print directly
-							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_unlimited");
+							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
 							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
 					    }
 

@@ -43,7 +43,7 @@
     </table>
 </piclist>
 
-<!-- represents a single image within the list (defined number of images)
+<!-- represents a single image
      available placeholders: pic, pic_href, name, subtitle, pic_detail -->
 <piclist_pic>
     <div style="text-align: center;">
@@ -51,20 +51,6 @@
         <div>%%name%%</div>
     </div>
 </piclist_pic>
-
-
-
-<!-- the following section is used, if theres no defined number of images per row.
-     This section is called for each image -->
-<!-- available placeholders: pic, pic_href, name, subtitle, pic_detail -->
-<piclist_unlimited>
-    <div style="text-align: center;">
-        <div><a href="%%pic_href%%"><img src="%%pic%%"/></a></div>
-        <div>%%name%%</div>
-    </div>
-</piclist_unlimited>
-
-
 
 
 <!-- available placeholders: pic_url, backlink, backlink_image_(1..3), backlink_image_filename_(1..3), backlink_image_systemid_(1..3),

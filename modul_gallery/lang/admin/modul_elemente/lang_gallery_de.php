@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 183
 
 //editable entries
 $lang["gallery_id"]                      = "Bildergalerie:";
@@ -32,7 +32,7 @@ $lang["headline_moviestrip"]             = "Filmstreifenansicht";
 $lang["headline_overlay"]                = "Bildinschrift (Overlay text)";
 $lang["hint_detail"]                     = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_movie"]                      = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
-$lang["hint_nrow"]                       = "Anzahl Bilder pro Zeile (0 = unbeschränkt, Templateabschnitt piclist_unlimited wird verwendet, > 0 = beschränkt, Templateabschnitt piclist wird verwendet)";
+$lang["hint_nrow"]                       = "Anzahl Bilder pro Zeile (0 = unbeschränkt; > 0 = beschränkt, Templateabschnitt piclist wird verwendet)";
 $lang["hint_preview"]                    = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_text"]                       = "Legt in das Bild der Detailansicht an Stelle (X, Y) einen Text";
 $lang["mode_random"]                     = "Zufalls-Modus";
