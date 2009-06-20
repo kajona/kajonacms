@@ -49,6 +49,7 @@ $lang["intro_worker_lookupip2c"]         = "Hierfür muss die PHP-Option 'allow_
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Statistiken";
 $lang["modul_worker"]                    = "Worker";
+$lang["module_description"]              = "Dieses Modul verwendet JpGraph";
 $lang["progress_worker_lookup"]          = "Fortschritt:";
 $lang["quickhelp_list"]                  = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
 $lang["quickhelp_statsCommon"]           = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";

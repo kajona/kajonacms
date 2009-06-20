@@ -225,6 +225,17 @@ class class_graph {
 	    $this->objGraph->SetMargin($intLeft, $intRight, $intTop, $intBottom);
 	}
 
+    /**
+     * Set the color of the margin-areas, so the color of the area not being
+     * the plot-area.
+     * In most cases this is the background.
+     *
+     * @param string $strColor either in hex-values: #ccddee or as plaintext
+     */
+    public function setMarginColor($strColor) {
+        $this->objGraph->SetMarginColor($strColor);
+    }
+
 
 	/**
 	 * Used to create a bar-chart.

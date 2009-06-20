@@ -142,6 +142,15 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 				$strActions = "";
 				$strCenter = "V ".$objSingleModule->getStrVersion()." &nbsp;(".timeToString($objSingleModule->getIntDate(), true).")";
 		   		$intModuleSystemID= $this->getModuleSystemid($objSingleModule->getStrName());
+
+                $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
+                if($objAdminInstance != null)
+                    $strDescription = $objAdminInstance->getModuleDescription();
+                else
+                    $strDescription = "";
+                $strDescription .= ($strDescription != "" ? "<br />" : "");
+                $strDescription .= $objSingleModule->getStrName()." <br /> ".$objSingleModule->getStrVersion();
+
 		   		if($intModuleSystemID != "") {
 		   		    //sort-icons
                     if($this->objRights->rightEdit($intModuleSystemID)) {
@@ -163,7 +172,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		   		    if($this->objRights->rightRight($intModuleSystemID))
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("modul_rechte"), getRightsImageAdminName($intModuleSystemID)));
 		   		}
-		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif"), $intI++, $objSingleModule->getSystemid());
+		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif", $strDescription), $intI++, $objSingleModule->getSystemid());
 			}
 			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}

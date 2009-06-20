@@ -138,6 +138,23 @@ class class_modul_pages_element extends class_model implements interface_model  
 	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id='".dbsafeString($strElementid)."'";
 	    return class_carrier::getInstance()->getObjDB()->_query($strQuery);
 	}
+
+    /**
+     * Factory method, creates an instance of the admin-element represented by this page-element.
+     * The admin-element won't get initialized by a systemid, so you shouldn't retrieve
+     * it for further usings.
+     *
+     * @return object An instance of the admin-class linked by the current element
+     */
+    public function getAdminElementInstance() {
+        include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
+        //Build the class-name
+        $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
+        //and finally create the object
+        $objElement = new $strElementClass();
+        return $objElement;
+    }
+
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrElementId() {
         return $this->strElementId;

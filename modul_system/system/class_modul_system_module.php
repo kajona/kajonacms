@@ -185,6 +185,25 @@ class class_modul_system_module extends class_model implements interface_model  
 		return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 	}
 
+    /**
+     * Factory method, creates an instance of the admin-module referenced by the current
+     * module-object.
+     * The object returned is not being initialized with a systemid.
+     *
+     * @return object
+     */
+    public function getAdminInstanceOfConcreteModule() {
+        if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
+            include_once(_adminpath_."/".$this->getStrNameAdmin());
+            //creating an instance of the wanted module
+            $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
+            $objModule = new $strClassname();
+            return $objModule;
+        }
+        else
+            return null;
+    }
+
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
         return $this->strName;

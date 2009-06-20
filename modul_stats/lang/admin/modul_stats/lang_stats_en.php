@@ -49,6 +49,7 @@ $lang["intro_worker_lookupip2c"]         = "Therefore the PHP-option 'allow_url_
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Stats";
 $lang["modul_worker"]                    = "Worker";
+$lang["module_description"]              = "This module makes use of JpGraph";
 $lang["progress_worker_lookup"]          = "Progress:";
 $lang["quickhelp_list"]                  = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
 $lang["quickhelp_statsCommon"]           = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";

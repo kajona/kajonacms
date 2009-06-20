@@ -460,6 +460,20 @@ abstract class class_admin {
 	    $this->arrModule[$strKey] = $strValue;
 	}
 
+    /**
+     * Creates a text-based decription of the current module.
+     * Therefore the text-entry module_description should be available.
+     * 
+     * @return string
+     * @since 3.2.1
+     */
+    public function getModuleDescription() {
+        $strDesc = $this->getText("module_description");
+        if($strDesc != "!module_description!")
+            return $strDesc;
+        else
+            return "";
+    }
 
 // --- HistoryMethods -----------------------------------------------------------------------------------
 

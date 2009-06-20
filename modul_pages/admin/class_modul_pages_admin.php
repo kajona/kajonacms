@@ -833,10 +833,15 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$arrElements = class_modul_pages_element::getAllElements();
 			$intI = 0;
 			foreach($arrElements as $objOneElement) {
+
+                $objAdminInstance = $objOneElement->getAdminElementInstance();
+                $strDescription = $objAdminInstance->getElementDescription();
+                $strDescription .= ($strDescription != "" ? "<br /><br />" : "" ).$objOneElement->getStrName();
+
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
 
 	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getStrElementId()));
-				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif"), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
+				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif", $strDescription), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
 			}
 			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), $this->getText("modul_element_neu"), "icon_blank.gif"), $intI++);

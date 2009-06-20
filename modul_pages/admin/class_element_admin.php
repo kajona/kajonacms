@@ -177,15 +177,17 @@ class class_element_admin extends class_admin {
 	}
 
     /**
-     * Returns a textual description of the current element.
-     * Overwrite this method if you want to return your own information, e.g. version
-     * or licence issues.
+     * Returns a textual description of the current element, based
+     * on the lang key element_description.
      * 
      * @return string
+     * @since 3.2.1
      */
     public function getElementDescription() {
-        $arrElementInfos = $this->loadElementData();
-        return ;
+        $strDesc = $this->getText("element_description");
+        if($strDesc == "!element_description!")
+            $strDesc = "";
+        return $strDesc;
     }
 
 
