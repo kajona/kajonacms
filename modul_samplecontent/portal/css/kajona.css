@@ -215,7 +215,7 @@ h3 {
     margin: 0 0 0 10px;
 }
 
-#mainNaviContainer ul ul li a {
+#mainNaviContainer ul ul li a, #mainNaviContainer ul ul li a:link, #mainNaviContainer ul ul li a:visited {
     font-size: 10px;
 	font-weight: normal;
 }
