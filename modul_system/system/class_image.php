@@ -79,7 +79,7 @@ class class_image {
 	public function createBlankImage($strType = ".jpg") {
         $this->strType = $strType;
         if($this->intHeight != 0 && $this->intWidth != 0) {
-            $this->objImage = $this->cre($this->intWidth, $this->intHeight);
+            $this->objImage = $this->createEmtpyImage($this->intWidth, $this->intHeight);
         }
         else
             return false;
