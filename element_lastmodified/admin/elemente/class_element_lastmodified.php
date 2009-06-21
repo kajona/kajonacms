@@ -25,14 +25,15 @@ class class_element_lastmodified extends class_element_admin implements interfac
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_lastmodified";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = "";
-		$arrModul["modul"]			= "elemente";
-		$arrModul["tableColumns"]   = "";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_lastmodified";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= "";
+		$arrModule["modul"]			= "elemente";
+		$arrModule["tableColumns"]  = "";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

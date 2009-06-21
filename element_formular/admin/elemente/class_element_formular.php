@@ -25,15 +25,16 @@ class class_element_formular extends class_element_admin implements interface_ad
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_formular";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_formular";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_formular";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 	    = _dbprefix_."element_formular";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "formular_class|char,formular_email|char,formular_success|char,formular_error|char";
+		$arrModule["tableColumns"]   = "formular_class|char,formular_email|char,formular_success|char,formular_error|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

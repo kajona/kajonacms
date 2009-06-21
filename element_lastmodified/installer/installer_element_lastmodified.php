@@ -70,6 +70,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 		//Register the element
 		$strReturn .= "Registering lastmodified-element...\n";
 		//check, if not already existing
+        $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("lastmodified");
 		}
@@ -82,6 +83,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 		    $objElement->setStrClassPortal("class_element_lastmodified.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}

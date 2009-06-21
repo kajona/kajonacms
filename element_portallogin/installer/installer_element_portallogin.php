@@ -84,18 +84,27 @@ class class_installer_element_portallogin extends class_installer_base implement
 		//Register the element
 		$strReturn .= "Registering portallogin-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='portallogin'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'portallogin', 'class_element_portallogin.php', 'class_element_portallogin.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("portallogin");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("portallogin");
+		    $objElement->setStrClassAdmin("class_element_portallogin.php");
+		    $objElement->setStrClassPortal("class_element_portallogin.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
 			$strReturn .= "Element already installed!...\n";
 		}
+
 		return $strReturn;
 	}
 

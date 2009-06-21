@@ -83,18 +83,26 @@ class class_installer_element_formular extends class_installer_base implements i
 		//Register the element
 		$strReturn .= "Registering formular-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='form'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'form', 'class_element_formular.php', 'class_element_formular.php', 1)";
-			$this->objDB->_query($strQuery);
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-		}
+        $objElement = null;
+        try {
+            $objElement = class_modul_pages_element::getElement("form");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_modul_pages_element();
+            $objElement->setStrName("form");
+            $objElement->setStrClassAdmin("class_element_formular.php");
+            $objElement->setStrClassPortal("class_element_formular.php");
+            $objElement->setIntCachetime(-1);
+            $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+            $objElement->saveObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
 		return $strReturn;
 	}
 

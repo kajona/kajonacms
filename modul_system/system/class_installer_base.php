@@ -235,6 +235,29 @@ abstract class class_installer_base extends class_root {
             if($objModule != null && $this->hasPostInstalls()) {
             	$bitReturn = true;
             }
+
+            //check if required modules are given
+            $arrModulesNeeded = $this->getNeededModules();
+            foreach($arrModulesNeeded as $strOneModule) {
+                try {
+                    $objModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                }
+                catch (class_exception $objException) {
+                    $objModule = null;
+                }
+                if($objModule == null) {
+                    $bitReturn = false;
+                }
+            }
+
+            //check, if a min version of the system is needed
+            if($this->getMinSystemVersion() != "") {
+                //the systems version to compare to
+                $objSystem = class_modul_system_module::getModuleByName("system");
+                if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
+                    $bitReturn = false;
+                }
+            }
         
         }
 
@@ -260,7 +283,7 @@ abstract class class_installer_base extends class_root {
 
         if(strpos($this->arrModule["name"], "element") !== false)
             $objModule = true;
-            
+
         //check, if a min version of the system is needed
         if($this->getMinSystemVersion() != "") {
             //the systems version to compare to
@@ -268,7 +291,27 @@ abstract class class_installer_base extends class_root {
             if($objSystem == null || version_compare($this->getMinSystemVersion(), $objSystem->getStrVersion(), ">")) {
                 return $this->getText("installer_systemversion_needed", "system", "admin").$this->getMinSystemVersion()."<br />";
             }
-        }    
+        }
+
+
+        //check if required modules are given
+        $arrModulesNeeded = $this->getNeededModules();
+        $strNeeded = "";
+        foreach($arrModulesNeeded as $strOneModule) {
+            try {
+                $objTestModule = class_modul_system_module::getModuleByName($strOneModule, true);
+            }
+            catch (class_exception $objException) {
+                $objTestModule = null;
+            }
+            if($objTestModule == null) {
+                $strNeeded .= $strOneModule.", ";
+            }
+        }
+
+        if($strNeeded != "") {
+            return $this->getText("installer_modules_needed", "system", "admin").substr($strNeeded, 0, -2);
+        }
 
         if($objModule != null && $this->hasPostInstalls()) {
             //install link
@@ -276,6 +319,11 @@ abstract class class_installer_base extends class_root {
         }
         else if($objModule == null) {
             return $this->getText("installer_module_notinstalled", "system", "admin");
+        }
+
+        //Update-Link?
+        if($this->hasPostUpdates()) {
+            return "<a href=\""._webpath_."/installer/installer.php?step=postInstall&postUpdate=installer_".$this->arrModule["name"]."\">".$this->getText("installer_update", "system", "admin").$this->arrModule["version"]."</a>";
         }
 
         return "";
@@ -359,6 +407,19 @@ abstract class class_installer_base extends class_root {
         return "\n\n".$strReturn;
 	}
 
+    /**
+	 * Invokes the post-updates of the module
+	 *
+	 */
+	public final function doModulePostUpdate() {
+	    $strReturn = "";
+
+        $strReturn .= $this->postUpdate();
+        $this->objDB->flushQueryCache();
+
+        return "\n\n".$strReturn;
+	}
+
 	/**
 	 * Overwrite this function
 	 *
@@ -394,6 +455,24 @@ abstract class class_installer_base extends class_root {
 	 */
 	protected function postInstall() {
 	}
+
+
+    /**
+     * Used to update the elements installed by the postInstall method, e.g. page-elements
+     * Overwrite if needed
+     *
+     * @return bool
+     */
+    public function hasPostUpdates() {
+        return false;
+    }
+
+    /**
+     * Does all the updating of the installations done after the module-install
+     * Overwrite if needed
+     */
+    public function postUpdate() {
+    }
 
 
 	//--Helpers------------------------------------------------------------------------------------------
@@ -490,6 +569,8 @@ abstract class class_installer_base extends class_root {
 	    else
 	       return false;
 	}
+
+    
 
 }
 

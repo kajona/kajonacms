@@ -58,5 +58,6 @@ interface interface_installer {
      *
      */
     public function postInstall();
+
 }
 ?>

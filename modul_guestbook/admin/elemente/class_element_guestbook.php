@@ -30,15 +30,16 @@ class class_element_guestbook extends class_element_admin implements interface_a
 	 *
 	 */
 	public function __construct(){
-		$arrModul["name"] 			= "element_gaestebuch";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_guestbook";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_gaestebuch";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 	    = _dbprefix_."element_guestbook";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "guestbook_id|char,guestbook_template|char,guestbook_amount|number";
+		$arrModule["tableColumns"]   = "guestbook_id|char,guestbook_template|char,guestbook_amount|number";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
 

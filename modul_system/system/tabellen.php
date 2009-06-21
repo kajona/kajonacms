@@ -129,6 +129,7 @@
 	element_class_admin		= class handling the element in admin
 	element_repeat			= bit: element repeatable?
 	element_cachetime       = Time until the elemente reloads a cached site. -1 = infinite
+	element_version         = Versionnumber of the element
 
 //--_page_element----------------------------------------------------------------------------------------
 	page_element_id							= Table primary key

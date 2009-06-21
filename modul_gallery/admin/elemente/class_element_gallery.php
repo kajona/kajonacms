@@ -28,6 +28,7 @@ class class_element_gallery extends class_element_admin implements interface_adm
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_gallery";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

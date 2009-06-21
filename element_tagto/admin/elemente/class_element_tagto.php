@@ -25,15 +25,16 @@ class class_element_tagto extends class_element_admin implements interface_admin
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_tagto";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_universal";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_tagto";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
 		//char1 => template
-		$arrModul["tableColumns"]   = "char1|char";
+		$arrModule["tableColumns"]  = "char1|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

@@ -380,6 +380,16 @@ class class_installer {
 		$strInstallLog = "";
 		$strReturn .= "";
 
+
+        //Is there a module to be post-updated?
+		if(isset($_GET["postUpdate"])) {
+			$strClass = $_GET["postUpdate"].".php";
+			include_once(_realpath_."/installer/".$strClass);
+		    $strClass = "class_".str_replace(".php", "", $strClass);
+		    $objInstaller = new $strClass();
+	        $strInstallLog .= $objInstaller->doModulePostUpdate();
+		}
+
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
             $arrModulesToInstall = $_POST["moduleInstallBox"];

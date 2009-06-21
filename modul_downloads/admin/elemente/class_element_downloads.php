@@ -28,6 +28,7 @@ class class_element_downloads extends class_element_admin implements interface_a
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_downloads";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

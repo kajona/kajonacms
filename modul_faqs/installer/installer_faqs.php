@@ -118,18 +118,27 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		//Register the element
 		$strReturn .= "Registering faqs-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='faqs'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'faqs', 'class_element_faqs.php', 'class_element_faqs.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("faqs");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("faqs");
+		    $objElement->setStrClassAdmin("class_element_faqs.php");
+		    $objElement->setStrClassPortal("class_element_faqs.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
 			$strReturn .= "Element already installed!...\n";
-			}
+		}
+
 		return $strReturn;
 	}
 

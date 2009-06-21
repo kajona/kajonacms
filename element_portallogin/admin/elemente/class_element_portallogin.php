@@ -25,16 +25,17 @@ class class_element_portallogin extends class_element_admin implements interface
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 			= "element_portallogin";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_portallogin";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+        $arrModule = array();
+		$arrModule["name"] 			= "element_portallogin";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_portallogin";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "portallogin_template|char,portallogin_error|char,portallogin_success|char,portallogin_logout_success|char,portallogin_profile|char";
+		$arrModule["tableColumns"]   = "portallogin_template|char,portallogin_error|char,portallogin_success|char,portallogin_logout_success|char,portallogin_profile|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

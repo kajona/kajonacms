@@ -25,6 +25,7 @@ class class_element_postacomment extends class_element_admin implements interfac
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_postacomment";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

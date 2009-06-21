@@ -72,18 +72,27 @@ class class_installer_system extends class_installer_base implements interface_i
 	public function postInstall() {
 	    //Register the element
 		$strReturn = "Registering languageswitch-element...\n";
-		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'languageswitch', 'class_element_languageswitch.php', 'class_element_languageswitch.php', 0)";
-			$this->objDB->_query($strQuery);
+
+        //check, if not already existing
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("languageswitch");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("languageswitch");
+		    $objElement->setStrClassAdmin("class_element_languageswitch.php");
+		    $objElement->setStrClassPortal("class_element_languageswitch.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
-				$strReturn .= "Element already installed!...\n";
+			$strReturn .= "Element already installed!...\n";
 		}
 
 		return $strReturn;
@@ -813,17 +822,25 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Register the element
 		$strReturn .= "Registering languageswitch-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='languageswitch'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'languageswitch', 'class_element_languageswitch.php', 'class_element_languageswitch.php', 0)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("languageswitch");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("languageswitch");
+		    $objElement->setStrClassAdmin("class_element_languageswitch.php");
+		    $objElement->setStrClassPortal("class_element_languageswitch.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
-				$strReturn .= "Element already installed!...\n";
+			$strReturn .= "Element already installed!...\n";
 		}
 
 		//create default language & assign existing contents

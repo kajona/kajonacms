@@ -25,15 +25,16 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_rssfeed";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_universal";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_rssfeed";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "char1|char,char2|char,int1|number";
+		$arrModule["tableColumns"]   = "char1|char,char2|char,int1|number";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

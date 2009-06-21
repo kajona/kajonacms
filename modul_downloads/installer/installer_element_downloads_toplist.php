@@ -86,6 +86,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
             $objElement->setStrClassPortal("class_element_downloads_toplist.php");
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
             $objElement->saveObjectToDb();
             $strReturn .= "Element registered...\n";
         }

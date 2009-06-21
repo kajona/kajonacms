@@ -176,6 +176,7 @@ class class_element_admin extends class_admin {
 	    return "";
 	}
 
+
     /**
      * Returns a textual description of the current element, based
      * on the lang key element_description.
@@ -184,8 +185,8 @@ class class_element_admin extends class_admin {
      * @since 3.2.1
      */
     public function getElementDescription() {
-        $strDesc = $this->getText("element_description");
-        if($strDesc == "!element_description!")
+        $strDesc = $this->getText($this->arrModule["name"]."_description");
+        if($strDesc == "!".$this->arrModule["name"]."_description!")
             $strDesc = "";
         return $strDesc;
     }

@@ -99,6 +99,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		//Register the element
 		$strReturn .= "Registering postacomment-element...\n";
 		//check, if not already existing
+        $objElement = null;
 		try {
 		    $objElement = class_modul_pages_element::getElement("postacomment");
 		}
@@ -111,6 +112,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		    $objElement->setStrClassPortal("class_element_postacomment.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}

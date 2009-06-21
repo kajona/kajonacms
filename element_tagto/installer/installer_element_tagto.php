@@ -84,6 +84,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 		    $objElement->setStrClassPortal("class_element_tagto.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}

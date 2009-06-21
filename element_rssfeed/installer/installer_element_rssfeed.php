@@ -83,6 +83,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
 		    $objElement->setStrClassPortal("class_element_rssfeed.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}

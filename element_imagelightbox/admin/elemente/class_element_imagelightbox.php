@@ -25,15 +25,16 @@ class class_element_imagelightbox extends class_element_admin implements interfa
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_imagelightbox";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_universal";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_imagelightbox";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "";
+		$arrModule["tableColumns"]   = "";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

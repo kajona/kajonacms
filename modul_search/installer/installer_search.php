@@ -99,19 +99,29 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		//Register the element
 		$strReturn .= "Registering search-element...\n";
-		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='search'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'search', 'class_element_search.php', 'class_element_search.php', 1)";
-			$this->objDB->_query($strQuery);
+        //check, if not already existing
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("search");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("search");
+		    $objElement->setStrClassAdmin("class_element_search.php");
+		    $objElement->setStrClassPortal("class_element_search.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
 			$strReturn .= "Element already installed!...\n";
 		}
+
+
 		return $strReturn;
 	}
 

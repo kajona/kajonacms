@@ -26,6 +26,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_zeile";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

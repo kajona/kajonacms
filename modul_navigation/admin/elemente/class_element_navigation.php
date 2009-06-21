@@ -27,16 +27,16 @@ class class_element_navigation extends class_element_admin implements interface_
 	 *
 	 */
 	public function __construct() {
-        $arrModul = array();
-		$arrModul["name"] 			= "element_navigation";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_navigation";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_navigation";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		    = _dbprefix_."element_navigation";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "navigation_id|char,navigation_template|char,navigation_mode|char";
+		$arrModule["tableColumns"]   = "navigation_id|char,navigation_template|char,navigation_mode|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
 

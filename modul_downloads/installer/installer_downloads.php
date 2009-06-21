@@ -127,18 +127,26 @@ class class_installer_downloads extends class_installer_base implements interfac
 		//Register the element
 		$strReturn .= "Registering downloads-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='downloads'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'downloads', 'class_element_downloads.php', 'class_element_downloads.php', 1)";
-			$this->objDB->_query($strQuery);
-			$strReturn .= "Element registered...\n";
-		}
-		else {
-			$strReturn .= "Element already installed!...\n";
-			}
+        $objElement = null;
+        try {
+            $objElement = class_modul_pages_element::getElement("downloads");
+        }
+        catch (class_exception $objEx)  {
+        }
+        if($objElement == null) {
+            $objElement = new class_modul_pages_element();
+            $objElement->setStrName("downloads");
+            $objElement->setStrClassAdmin("class_element_downloads.php");
+            $objElement->setStrClassPortal("class_element_downloads.php");
+            $objElement->setIntCachetime(-1);
+            $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+            $objElement->saveObjectToDb();
+            $strReturn .= "Element registered...\n";
+        }
+        else {
+            $strReturn .= "Element already installed!...\n";
+        }
 		return $strReturn;
 	}
 

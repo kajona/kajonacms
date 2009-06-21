@@ -28,15 +28,16 @@ class class_element_portalupload extends class_element_admin implements interfac
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_portalupload";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_universal";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_portalupload";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "char1|char,char2|char,char3|char";
+		$arrModule["tableColumns"]   = "char1|char,char2|char,char3|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

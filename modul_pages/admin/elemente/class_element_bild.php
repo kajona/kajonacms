@@ -21,15 +21,16 @@ class class_element_bild extends class_element_admin implements interface_admin_
 
 
 	public function __construct() {
-		$arrModul["name"] 			= "element_bild";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]	 		= _dbprefix_."element_bild";
-		$arrModul["modul"]			= "elemente";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_bild";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"]	 		= _dbprefix_."element_bild";
+		$arrModule["modul"]			= "elemente";
 
-		$arrModul["tableColumns"]   = "";
+		$arrModule["tableColumns"]   = "";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
 

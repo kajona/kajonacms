@@ -24,14 +24,15 @@ class class_element_tellafriend extends class_element_admin implements interface
 	 *
 	 */
 	public function __construct() {
-		$arrModul["name"] 			= "element_tellafriend";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"] 		    = _dbprefix_."element_tellafriend";
-		$arrModul["modul"]			= "elemente";
-		$arrModul["tableColumns"]   = "tellafriend_template|char,tellafriend_error|char,tellafriend_success|char";
+        $arrModule = array();
+		$arrModule["name"] 			= "element_tellafriend";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_tellafriend";
+		$arrModule["modul"]			= "elemente";
+		$arrModule["tableColumns"]  = "tellafriend_template|char,tellafriend_error|char,tellafriend_success|char";
 
-		parent::__construct($arrModul);
+		parent::__construct($arrModule);
 	}
 
    /**

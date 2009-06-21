@@ -19,7 +19,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0";
+		$arrModule["version"] 		= "3.2.0.9";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -118,6 +118,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["element_class_admin"]	= array("char254", true);
 		$arrFields["element_repeat"] 		= array("int", true);
 		$arrFields["element_cachetime"] 	= array("int", false, "-1");
+		$arrFields["element_version"] 	    = array("char20", true);
 
 		if(!$this->objDB->createTable("element", $arrFields, array("element_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -198,13 +199,21 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Register the element
 		$strReturn .= "Registering paragraph...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='paragraph'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'paragraph', 'class_element_absatz.php', 'class_element_absatz.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("paragraph");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("paragraph");
+		    $objElement->setStrClassAdmin("class_element_absatz.php");
+		    $objElement->setStrClassPortal("class_element_absatz.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -213,13 +222,21 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		$strReturn .= "Registering row...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='row'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'row', 'class_element_zeile.php', 'class_element_zeile.php', 0)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("row");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("row");
+		    $objElement->setStrClassAdmin("class_element_zeile.php");
+		    $objElement->setStrClassPortal("class_element_zeile.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(0);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -243,13 +260,21 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//Register the element
 		$strReturn .= "Registering image...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'image', 'class_element_bild.php', 'class_element_bild.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("image");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("image");
+		    $objElement->setStrClassAdmin("class_element_bild.php");
+		    $objElement->setStrClassPortal("class_element_bild.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -333,6 +358,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.95") {
             $strReturn .= $this->update_3195_320();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0") {
+            $strReturn .= $this->update_320_3209();
         }
 
         return $strReturn."\n\n";
@@ -491,6 +521,29 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0");
+        return $strReturn;
+    }
+
+    private function update_320_3209() {
+        $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
+
+        $strReturn = "Altering element-table...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                           ADD ".$this->objDB->encloseColumnName("element_version")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+        $strReturn .= "Updateing element-versions...\n";
+        include_once(_systempath_."/class_modul_pages_element.php");
+        $arrElements = class_modul_pages_element::getAllElements();
+        foreach($arrElements as $objOneElement) {
+            $objOneElement->setStrVersion("3.2.0.9");
+            $objOneElement->updateObjectToDb();
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.0.9");
         return $strReturn;
     }
 

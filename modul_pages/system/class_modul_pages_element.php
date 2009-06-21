@@ -24,6 +24,7 @@ class class_modul_pages_element extends class_model implements interface_model  
     private $strClassAdmin = "";
     private $intRepeat = "";
     private $intCachetime = "";
+    private $strVersion = "";
 
     /**
      * Constructor to create a valid object
@@ -61,6 +62,7 @@ class class_modul_pages_element extends class_model implements interface_model  
         $this->setStrClassPortal($arrRow["element_class_portal"]);
         $this->setIntCachetime($arrRow["element_cachetime"]);
         $this->setIntRepeat($arrRow["element_repeat"]);
+        $this->setStrVersion($arrRow["element_version"]);
 
         $this->setSystemid($arrRow["element_id"]);
     }
@@ -72,10 +74,10 @@ class class_modul_pages_element extends class_model implements interface_model  
      */
     public function saveObjectToDb() {
         $strQuery = "INSERT INTO "._dbprefix_."element
-					(element_id, element_name, element_class_portal, element_class_admin, element_repeat, element_cachetime) VALUES
+					(element_id, element_name, element_class_portal, element_class_admin, element_repeat, element_cachetime, element_version) VALUES
 					('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
 					 '".$this->objDB->dbsafeString($this->getStrClassPortal())."', '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
-					  ".(int)$this->getIntRepeat().", ".(int)$this->getIntCachetime().")";
+                      ".(int)$this->getIntRepeat().", ".(int)$this->getIntCachetime().", '".dbsafeString($this->getStrVersion())."')";
 
 	   return $this->objDB->_query($strQuery);
     }
@@ -91,7 +93,8 @@ class class_modul_pages_element extends class_model implements interface_model  
 						element_class_portal = '".$this->objDB->dbsafeString($this->getStrClassPortal())."',
 						element_class_admin = '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
 						element_cachetime = '".$this->objDB->dbsafeString($this->getIntCachetime())."',
-						element_repeat = ".$this->objDB->dbsafeString($this->getIntRepeat())."
+						element_repeat = ".$this->objDB->dbsafeString($this->getIntRepeat()).",
+                        element_version = '".$this->objDB->dbsafeString($this->getStrVersion())."'
 						WHERE element_id='".$this->objDB->dbsafeString($this->getStrElementId())."'";
 		return $this->objDB->_query($strQuery);
     }
@@ -193,5 +196,15 @@ class class_modul_pages_element extends class_model implements interface_model  
     public function setIntCachetime($intCachetime) {
         $this->intCachetime = $intCachetime;
     }
+
+    public function getStrVersion() {
+        return $this->strVersion;
+    }
+
+    public function setStrVersion($strVersion) {
+        $this->strVersion = $strVersion;
+    }
+
+
 }
 ?>

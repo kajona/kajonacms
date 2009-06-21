@@ -12,7 +12,7 @@ include_once(_adminpath_."/class_element_admin.php");
 //Interface
 include_once(_adminpath_."/interface_admin_element.php");
 /**
- * Class representing the seach element on the admin side
+ * Class representing the search element on the admin side
  *
  * @package modul_search
  *
@@ -24,6 +24,7 @@ class class_element_search extends class_element_admin implements interface_admi
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "element_suche";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;

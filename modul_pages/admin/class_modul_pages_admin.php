@@ -837,14 +837,15 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $objAdminInstance = $objOneElement->getAdminElementInstance();
                 $strDescription = $objAdminInstance->getElementDescription();
                 $strDescription .= ($strDescription != "" ? "<br /><br />" : "" ).$objOneElement->getStrName();
+                $strDescription .= "<br />".$objOneElement->getStrVersion();
 
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getStrElementId(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
 
 	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getStrElementId()));
-				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_dot.gif", $strDescription), $objOneElement->getStrName()." (".$objOneElement->getIntCachetime().")", $strActions, $intI++);
+                $strReturn .= $this->objToolkit->listRow3($objOneElement->getStrName(), " V ".$objOneElement->getStrVersion()." (".$objOneElement->getIntCachetime().")", $strActions, getImageAdmin("icon_dot.gif", $strDescription), $intI++);
 			}
 			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), $this->getText("modul_element_neu"), "icon_blank.gif"), $intI++);
+			    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), $this->getText("modul_element_neu"), "icon_blank.gif"), "", $intI++);
 
 
 			if(uniStrlen($strReturn) != 0)
@@ -889,7 +890,22 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	                		    }
 	                		}
 
-	                		if($bitNeededSysversionInstalled && $objInstaller->hasPostInstalls()) {
+                            //all nneded modules installed?
+                            $bitRequired = true;
+                            $arrModulesNeeded = $objInstaller->getNeededModules();
+                            foreach($arrModulesNeeded as $strOneModule) {
+                                try {
+                                    $objTestModule = class_modul_system_module::getModuleByName($strOneModule, true);
+                                }
+                                catch (class_exception $objException) {
+                                    $objTestModule = null;
+                                }
+                                if($objTestModule == null) {
+                                    $bitRequired = false;
+                                }
+                            }
+
+	                		if($bitRequired && $bitNeededSysversionInstalled && $objInstaller->hasPostInstalls()) {
 	                		    $arrElementsToInstall[str_replace(".php", "", $strInstaller)] = $objInstaller->getArrModule("name_lang");
 	                		}
 	        			}

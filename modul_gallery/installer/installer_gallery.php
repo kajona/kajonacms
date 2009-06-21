@@ -131,27 +131,45 @@ class class_installer_gallery extends class_installer_base implements interface_
 		//Register the element
 		$strReturn .= "Registering gallery-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='gallery'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'gallery', 'class_element_gallery.php', 'class_element_gallery.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("gallery");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("gallery");
+		    $objElement->setStrClassAdmin("class_element_gallery.php");
+		    $objElement->setStrClassPortal("class_element_gallery.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
 			$strReturn .= "Element already installed!...\n";
 		}
+
+
 		$strReturn .= "Registering galleryRandom-element...\n";
 		//check, if not already existing
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='galleryRandom'";
-		$arrRow = $this->objDB->getRow($strQuery);
-		if($arrRow["COUNT(*)"] == 0) {
-			$strQuery = "INSERT INTO "._dbprefix_."element
-							(element_id, element_name, element_class_portal, element_class_admin, element_repeat) VALUES
-							('".$this->generateSystemid()."', 'galleryRandom', 'class_element_gallery.php', 'class_element_galleryRandom.php', 1)";
-			$this->objDB->_query($strQuery);
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("galleryRandom");
+		}
+		catch (class_exception $objEx)  {
+		}
+		if($objElement == null) {
+		    $objElement = new class_modul_pages_element();
+		    $objElement->setStrName("galleryRandom");
+		    $objElement->setStrClassAdmin("class_element_gallery.php");
+		    $objElement->setStrClassPortal("class_element_gallery.php");
+		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntRepeat(1);
+            $objElement->setStrVersion($this->getVersion());
+			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
