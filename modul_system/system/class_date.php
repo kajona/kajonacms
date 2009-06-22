@@ -12,7 +12,7 @@
  * As soon as the most installations will run on PHP >= 5.3.0, this class will be
  * wrapper to phps' DateTime class.
  * Up till then, the class provides a few ways to handle date and convert them to
- * a long value not being limited by the 32 Bit time() boundaries (> 1970 && < 2038).
+ * a long value not being limited by the 32 bit time() boundaries (> 1970 && < 2038).
  * Use this class only in cases the other way won't work, so e.g. for birthdays.
  *
  * @package modul_system
@@ -114,6 +114,11 @@ class class_date {
      * @param int $intYear
      */
     public function setIntYear($intYear) {
+        if(uniStrlen($intYear) == 2)
+            $intYear = "20".$intYear;
+        if(uniStrlen($intYear) == 1)
+            $intYear = "200".$intYear;
+            
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
     }
@@ -124,6 +129,9 @@ class class_date {
      * @param int $intYear
      */
     public function setIntMonth($intMonth) {
+        if($intMonth < 1 || $intMonth > 12)
+            return;
+            
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
     }
@@ -134,6 +142,9 @@ class class_date {
      * @param int $intYear
      */
     public function setIntDay($intDay) {
+        if($intDay < 1 || $intDay > 31)
+            return;
+
         $strDay = sprintf("%02s", $intDay);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strDay, 6, 2);
     }
@@ -144,6 +155,9 @@ class class_date {
      * @param int $intYear
      */
     public function setIntHour($intHour) {
+        if($intHour < 1 || $intHour > 24)
+            return;
+
         $strHour = sprintf("%02s", $intHour);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strHour, 8, 2);
     }
@@ -154,6 +168,9 @@ class class_date {
      * @param int $intYear
      */
     public function setIntMin($intMin) {
+        if($intMin < 1 || $intMin > 59)
+            return;
+
         $strMin = sprintf("%02s", $intMin);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMin, 10, 2);
     }
@@ -164,6 +181,9 @@ class class_date {
      * @param int $intYear
      */
     public function setIntSec($intSec) {
+        if($intSec < 1 || $intSec > 59)
+            return;
+
         $strSec = sprintf("%02s", $intSec);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strSec, 12, 2);
     }
@@ -237,7 +257,8 @@ class class_date {
      * @param long $longTimestamp
      */
     public function setLongTimestamp($longTimestamp) {
-        $this->longTimestamp = $longTimestamp;
+        if(ereg("([0-9]){14}", $longTimestamp))
+            $this->longTimestamp = $longTimestamp;
     }
 
 
