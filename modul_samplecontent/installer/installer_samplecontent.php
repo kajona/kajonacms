@@ -27,7 +27,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.0";
+		$arrModule["version"] 		  = "3.2.0.9";
 		$arrModule["name"] 			  = "samplecontent";
 		$arrModule["class_admin"]  	  = "";
 		$arrModule["file_admin"] 	  = "";
@@ -165,6 +165,11 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strReturn .= $this->update_3195_320();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0") {
+            $strReturn .= $this->update_320_3209();
+        }
+
         return $strReturn;
 	}
 
@@ -232,6 +237,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("samplecontent", "3.2.0");
+        return $strReturn;
+    }
+
+    private function update_320_3209() {
+        $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("samplecontent", "3.2.0.9");
         return $strReturn;
     }
 

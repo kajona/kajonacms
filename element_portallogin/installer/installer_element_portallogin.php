@@ -23,7 +23,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0";
+		$arrModule["version"] 		= "3.2.0.9";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -36,7 +36,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.0.9";
 	}
 
 	public function hasPostInstalls() {

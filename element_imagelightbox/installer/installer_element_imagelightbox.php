@@ -24,7 +24,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0";
+		$arrModule["version"] 		= "3.2.0.9";
 		$arrModule["name"] 			= "element_imagelightbox";
 		$arrModule["name_lang"] 	= "Element imagelightbox";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -36,7 +36,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 	}
 
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.0.9";
 	}
 
 	public function hasPostInstalls() {

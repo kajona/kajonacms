@@ -23,7 +23,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0";
+		$arrModule["version"] 		= "3.2.0.9";
 		$arrModule["name"] 			= "element_portalupload";
 		$arrModule["name_lang"] 	= "Element portalupload";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -36,7 +36,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.0.9";
 	}
 
 	public function hasPostInstalls() {

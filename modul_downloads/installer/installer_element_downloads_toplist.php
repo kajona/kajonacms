@@ -24,7 +24,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
      */
     public function __construct() {
         $arrModule = array();
-        $arrModule["version"]       = "3.2.0";
+        $arrModule["version"]       = "3.2.0.9";
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["name_lang"]     = "Element downloads_toplist";
         $arrModule["nummer2"]       = _pages_inhalte_modul_id_;
@@ -36,7 +36,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
     }
     
     public function getMinSystemVersion() {
-        return "3.2.0";
+        return "3.2.0.9";
     }
 
     public function hasPostInstalls() {
