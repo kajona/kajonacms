@@ -172,6 +172,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 						$arrFolder["folder_subtitle"] = $objOneImage->getStrSubtitle();
 						$arrFolder["folder_link"] = getLinkPortal($this->getPagename(), "", "_self",  $this->getText("galerie_ordner_link"), "imageFolder", "", $objOneImage->getSystemid(), "", "", $objOneImage->getStrName());
 						$arrFolder["folder_href"] = getLinkPortalHref($this->getPagename(), "", "imageFolder", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
+
+                        $objFirstImage = $this->getFirstImageInFolder($objOneImage->getSystemid());
+                        if($objFirstImage != null) {
+                            $arrFolder["folder_preview"] = $this->generateImage($objFirstImage->getStrFilename(), $this->arrElementData["gallery_maxh_p"], $this->arrElementData["gallery_maxw_p"]);
+                        }
+
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "folderlist");
 						$arrTemplate["folderlist"] .= $this->objTemplate->fillTemplate($arrFolder, $strTemplateID, false);
 
@@ -467,6 +473,28 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	}
 
 //---Helferfunktionen------------------------------------------------------------------------------------
+
+
+    /**
+     * Tries to load the fist image under the passed systemid.
+     * If available, the instance is returned, otherwise null
+     *
+     * @param string $strFolderId
+     * @return class_modul_gallery_pic
+     */
+    private function getFirstImageInFolder($strFolderId) {
+        //load the files in the passed folder
+        $arrSubLevel = class_modul_gallery_pic::loadFilesDB($strFolderId, false, true);
+        if(count($arrSubLevel) > 0) {
+            foreach($arrSubLevel as $objOneImage) {
+                if($objOneImage->getIntType() == 0 && $objOneImage->rightView()) {
+                    return $objOneImage;
+                }
+            }
+        }
+
+        return null;
+    }
 
 	/**
 	 * Determins the systemids of the previous / next image
