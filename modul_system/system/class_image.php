@@ -130,8 +130,10 @@ class class_image {
 					$this->objImage = imagecreatefromgif(_realpath_.$this->strImagePathOriginal."/".$this->strImagename);
 					break;
 				}
+
+            class_logger::getInstance()->addLogRow("loaded image ".$this->strImagePathOriginal."/".$this->strImagename, class_logger::$levelInfo);
 			$bitReturn = true;
-			}
+        }
 		else
 			$bitReturn = false;
 
@@ -395,9 +397,10 @@ class class_image {
      * @param int $intYStart
      * @param int $intWidth
      * @param int $intHeight
+     * @param bool $bitCache
      * @return bool
      */
-    public function cropImage($intXStart, $intYStart, $intWidth, $intHeight) {
+    public function cropImage($intXStart, $intYStart, $intWidth, $intHeight, $bitCache = false) {
 
         //param-validation
         if(!is_numeric($intXStart) || $intXStart < 0 )
@@ -408,6 +411,20 @@ class class_image {
             $intWidth = 0;
         if(!is_numeric($intHeight) || $intHeight < 0 )
             $intHeight = 0;
+
+
+
+        //Wenn Cache aktiviert, dann nun den Dateinamen erzeugen
+		if($bitCache) {
+			//Aus den ermittelten Daten einen Namen erzeugen
+			$this->strCachename = $this->generateCachename();
+
+			if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {
+				$this->bitNeedToSave = false;
+				return true;
+			}
+		}
+
 
     	$bitReturn = false;
 
@@ -630,6 +647,115 @@ class class_image {
 
 		return $bitReturn;
 	}
+
+    /**
+     * Wrapper function to resizeImage() and cropImage(). Ensures a proper working of the internal caching.
+     * Please note that cropping is done from within the images center, so there's not that flexibility
+     * as provided by cropImage() being used directly.
+     *
+     * This method is called from image.php and should not be used in other contexts.
+     *
+     * @param int $intMaxSizeWidth
+     * @param int $intMaxSizeHeight
+     * @param int $intCropWidth
+     * @param int $intCropHeight
+     */
+    public function resizeAndCropImage($intMaxSizeWidth, $intMaxSizeHeight, $intCropWidth, $intCropHeight) {
+
+        //Load the image-dimensions
+        $intWidthNew = 0;
+		$intHeightNew = 0;
+
+        $bitResize = false;
+        $bitCropToFixedSize = false;
+
+        $this->strCacheAdd .= $intCropWidth.$intCropHeight;
+
+        //check, if resizing or cropping is needed
+        if($intMaxSizeHeight == 0 && $intMaxSizeWidth == 0 && ($intCropHeight == 0 || $intCropWidth == 0)) {
+            $this->setBitNeedToSave(false);
+            $bitResize = false;
+		}
+        else if($intCropWidth > 0 && $intCropHeight > 0) {
+            $bitResize = true;
+
+            //TODO: caching sometimes doesn't work correctly, I guess because class_image::crop() doesn't use any caching.
+            //TODO: Also it would be nice to enable the use of only one "fixed"-param.
+
+            $floatRelation = $this->intWidth / $this->intHeight; //0 = width, 1 = height
+            $floatNewRelation = $intCropWidth / $intCropHeight;
+
+            if ($floatRelation > $floatNewRelation) {
+                //original image is wider
+                $bitCropToFixedSize = true;
+                $intHeightNew = $intCropHeight;
+                $intWidthNew = (int) ($intCropHeight * $floatRelation);
+            } else if ($floatRelation == $floatNewRelation) {
+                //original image has similar relation, no cropping needed
+                $intWidthNew = $intCropWidth;
+                $intWidthNew = $intCropHeight;
+            } else {
+                //original image is taller
+                $bitCropToFixedSize = true;
+                $intWidthNew = $intCropWidth;
+                $intHeightNew = (int) ($intCropWidth / $floatRelation);
+            }
+        }
+        else if($this->intWidth > $intMaxSizeWidth || $this->intHeight > $intMaxSizeHeight) {
+            $bitResize = true;
+            $floatRelation = $this->intWidth / $this->intHeight; //0 = width, 1 = height
+
+            //choose more restrictive values
+            $intHeightNew = $intMaxSizeHeight;
+            $intWidthNew = $intMaxSizeHeight * $floatRelation;
+
+            if($intMaxSizeHeight == 0) {
+                if($intMaxSizeWidth < $this->intWidth) {
+                    $intWidthNew = $intMaxSizeWidth;
+                    $intHeightNew = $intWidthNew / $floatRelation;
+                }
+                else
+                    $bitResize = false;
+            }
+            elseif ($intMaxSizeWidth == 0) {
+                if($intMaxSizeHeight < $this->intHeight) {
+                    $intHeightNew = $intMaxSizeHeight;
+                    $intWidthNew = $intHeightNew * $floatRelation;
+                }
+                else
+                    $bitResize = false;
+            }
+            elseif ($intHeightNew && $intHeightNew > $intMaxSizeHeight || $intWidthNew > $intMaxSizeWidth) {
+                $intHeightNew = $intMaxSizeWidth / $floatRelation;
+                $intWidthNew = $intMaxSizeWidth;
+            }
+            //round to integers
+            $intHeightNew = (int)$intHeightNew;
+            $intWidthNew = (int)$intWidthNew;
+            //avoid 0-sizes
+            if($intHeightNew < 1)
+                $intHeightNew = 1;
+            if($intWidthNew < 1)
+                $intWidthNew = 1;
+        }
+
+        class_logger::getInstance()->addLogRow("resize to(".$bitResize."): width: ".$intWidthNew." height: ".$intHeightNew.
+                            " crop to(".$bitCropToFixedSize."): width: ".$intCropWidth." height: ".$intCropHeight." ", class_logger::$levelInfo);
+
+        if($bitResize) {
+            $this->resizeImage($intWidthNew, $intHeightNew, 0, true);
+        }
+
+        if($bitCropToFixedSize) {
+            //positioning the image
+            $intXStart = (int)(($intWidthNew - $intCropWidth) / 2);
+            $intYStart = (int)(($intHeightNew - $intCropHeight) / 2);
+
+            $this->cropImage($intXStart, $intYStart, $intCropWidth, $intCropHeight, true);
+        }
+
+			
+    }
 
 //-- RAW-Functions --------------------------------------------------------------------------------------
 

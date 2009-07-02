@@ -38,10 +38,10 @@ if(!require_once("./system/includes.php"))
 class class_flyimage {
 
     private $strFilename;
-    private $intMaxWidth;
-    private $intMaxHeight;
-    private $intFixedWidth;
-    private $intFixedHeight;
+    private $intMaxWidth = 0;
+    private $intMaxHeight = 0;
+    private $intFixedWidth = 0;
+    private $intFixedHeight = 0;
 
     /**
      * Object of class_image
@@ -98,101 +98,17 @@ class class_flyimage {
         $intWidthNew = 0;
 		$intHeightNew = 0;
 		if(is_file(_realpath_.$this->strFilename) && (uniStrpos($this->strFilename, "/portal/pics") !== false || uniStrpos($this->strFilename, "/portal/downloads") !== false)) {
-			$arrImageData = getimagesize(_realpath_.$this->strFilename);
-
-			$bitResize = false;
-            $bitCropToFixedSize = false;
-
-            //check, if resizing or cropping is needed
-			if($this->intMaxHeight == 0 && $this->intMaxWidth == 0 && ($this->intFixedHeight == 0 || $this->intFixedWidth == 0)) {
-                $this->objImage->setBitNeedToSave(false);
-			    $bitResize = false;
-			}
-			else if($this->intFixedWidth > 0 && $this->intFixedHeight > 0) {
-                $bitResize = true;
-
-                //TODO: caching sometimes doesn't work correctly, I guess because class_image::crop() doesn't use any caching.
-                //TODO: Also it would be nice to enable the use of only one "fixed"-param.
-
-			    $floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
-			    $floatNewRelation = $this->intFixedWidth / $this->intFixedHeight;
-
-				if ($floatRelation > $floatNewRelation) {
-					//original image is wider
-					$bitCropToFixedSize = true;
-					$intHeightNew = $this->intFixedHeight;
-					$intWidthNew = (int) ($this->intFixedHeight * $floatRelation);
-				} else if ($floatRelation == $floatNewRelation) {
-				    //original image has similar relation, no cropping needed
-					$intWidthNew = $this->intFixedWidth;
-					$intWidthNew = $this->intFixedHeight;
-				} else {
-					//original image is taller
-					$bitCropToFixedSize = true;
-					$intWidthNew = $this->intFixedWidth;
-					$intHeightNew = (int) ($this->intFixedWidth / $floatRelation);
-				}
-			}
-			else if($arrImageData[0] > $this->intMaxWidth || $arrImageData[1] > $this->intMaxHeight) {
-			    $bitResize = true;
-				$floatRelation = $arrImageData[0] / $arrImageData[1]; //0 = width, 1 = height
-
-				//choose more restrictive values
-			    $intHeightNew = $this->intMaxHeight;
-                $intWidthNew = $this->intMaxHeight * $floatRelation;
-
-                if($this->intMaxHeight == 0) {
-                    if($this->intMaxWidth < $arrImageData[0]) {
-                        $intWidthNew = $this->intMaxWidth;
-                        $intHeightNew = $intWidthNew / $floatRelation;
-                    }
-                    else
-                        $bitResize = false;
-                }
-                elseif ($this->intMaxWidth == 0) {
-                    if($this->intMaxHeight < $arrImageData[1]) {
-                        $intHeightNew = $this->intMaxHeight;
-                        $intWidthNew = $intHeightNew * $floatRelation;
-                    }
-                    else
-                        $bitResize = false;
-                }
-                elseif ($intHeightNew && $intHeightNew > $this->intMaxHeight || $intWidthNew > $this->intMaxWidth) {
-    				$intHeightNew = $this->intMaxWidth / $floatRelation;
-                    $intWidthNew = $this->intMaxWidth;
-                }
-                //round to integers
-                $intHeightNew = (int)$intHeightNew;
-                $intWidthNew = (int)$intWidthNew;
-                //avoid 0-sizes
-                if($intHeightNew < 1)
-                    $intHeightNew = 1;
-                if($intWidthNew < 1)
-                    $intWidthNew = 1;
-			}
+			
 
 			//check headers, maybe execution could be terminated right here
 			if(checkConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight))) {
 			    return;
 			}
 
-			//echo "width: ".$intWidthNew." (image: ".$arrImageData[0]." max: ".$this->intMaxWidth." fixed: ".$this->intFixedWidth.")<br />";
-			//echo "height: ".$intHeightNew." (image:".$arrImageData[1]." max: ".$this->intMaxHeight." fixed: ".$this->intFixedHeight.")<br />";
-			//ok, the new dimensions are set up, so start manipulating the image
 
 			$this->objImage->preLoadImage($this->strFilename);
+            $this->objImage->resizeAndCropImage($this->intMaxWidth, $this->intMaxHeight, $this->intFixedWidth, $this->intFixedHeight);
 
-			if($bitResize) {
-		  	    $this->objImage->resizeImage($intWidthNew, $intHeightNew, 0, true);
-			}
-
-		    if($bitCropToFixedSize) {
-		        //positioning the image
-				$intXStart = (int)(($intWidthNew - $this->intFixedWidth) / 2);
-				$intYStart = (int)(($intHeightNew - $this->intFixedHeight) / 2);
-
-				$this->objImage->cropImage($intXStart, $intYStart, $this->intFixedWidth, $this->intFixedHeight);
-            }
 
 			//send the headers for conditional gets
 			sendConditionalGetHeaders(md5(md5_file(_realpath_.$this->strFilename).$this->intMaxWidth.$this->intMaxHeight.$this->intFixedWidth.$this->intFixedHeight));
@@ -309,7 +225,7 @@ class class_flyimage {
         //echo "<img src=\""._webpath_."/test.jpg\" />";
         $this->objImage->setBitNeedToSave(false);
         $this->objImage->sendImageToBrowser(70);
-
+        $this->objImage->releaseResources();
     }
 
     /**
