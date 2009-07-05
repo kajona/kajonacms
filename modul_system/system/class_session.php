@@ -39,8 +39,7 @@ final class class_session {
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
 		//Loading the needed Objects
-		$objCarrier = class_carrier::getInstance();
-		$this->objDB = $objCarrier->getObjDB();
+		$this->objDB = class_db::getInstance();
 
 		//Generating a session-key using a few characteristic values
 		$this->strKey = md5(_realpath_.getServer("REMOTE_ADDR"));

@@ -54,8 +54,7 @@ class class_db {
 	    $this->arrModule["author"]       = "sidler@mulchprod.de";
 
 
-		$objCarrier = class_carrier::getInstance();
-		$this->objConfig = $objCarrier->getObjConfig();
+		$this->objConfig = class_config::getInstance();
 
 		//Load the defined db-driver
 		$strDriver = $this->objConfig->getConfig("dbdriver");
@@ -66,6 +65,7 @@ class class_db {
 
     		include_once(_systempath_."/db/".$strFilename);
     		$this->objDbDriver = new $strClassname();
+
 		}
 		else {
 		    //Do not throw any exception here, otherwise an endless loop will exit with an overloaded stack frame

@@ -73,8 +73,6 @@ class class_carrier {
 		    require_once(_realpath_."/system/class_db.php");
 		    $this->objDB = class_db::getInstance();
 			//Now we have to set up the database connection
-			/* @var $objConfig class_config */
-			$objConfig = $this->getObjConfig();
 			$this->objDB->dbconnect();
 		}
 		return $this->objDB;
