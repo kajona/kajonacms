@@ -131,6 +131,9 @@ class class_modul_system_module extends class_model implements interface_model  
 	 * @static
 	 */
 	public static function getModuleByName($strName, $bitIgnoreStatus = false) {
+        if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
+            return null;
+            
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ".($bitIgnoreStatus ? "" : " AND system_status=1 " )."ORDER BY module_nr";
 		$arrModules = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrRow = array();

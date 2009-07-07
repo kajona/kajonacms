@@ -140,7 +140,7 @@ class class_db_mysqli implements interface_db_driver {
      * @return mixed
      */
     public function getTables() {
-		$arrTemp = $this->getArray("SHOW TABLE STATUS", false);
+		$arrTemp = $this->getArray("SHOW TABLE STATUS");
     	foreach($arrTemp as $intKey => $arrOneTemp) {
 			$arrTemp[$intKey]["name"] = $arrTemp[$intKey]["Name"];
 		}
@@ -157,7 +157,7 @@ class class_db_mysqli implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".dbsafeString($strTableName), false);
+        $arrTemp = $this->getArray("SHOW COLUMNS FROM ".dbsafeString($strTableName));
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
                         "columnName" => $arrOneColumn["Field"],

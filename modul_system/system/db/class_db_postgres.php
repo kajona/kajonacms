@@ -138,8 +138,7 @@ class class_db_postgres implements interface_db_driver {
 		$arrTemp = $this->getArray(
 				"SELECT *, table_name as name 
 				   FROM information_schema.tables 
-				   WHERE table_schema = 'public'"
-		, false);
+				   WHERE table_schema = 'public'");
 		return $arrTemp;
     }
     
