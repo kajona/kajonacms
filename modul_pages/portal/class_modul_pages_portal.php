@@ -188,7 +188,11 @@ class class_modul_pages_portal extends class_portal {
             else {
                 //create a protocol of placeholders filled
                 //remove from pe-additional-array, pe code is injected by element directly
-                $arrPlaceholdersFilled[] = array("placeholder" => $objOneElementOnPage->getStrPlaceholder(), "name" => $objOneElementOnPage->getStrName(), "element" => $objOneElementOnPage->getStrElement());
+                $arrPlaceholdersFilled[] = array("placeholder" => $objOneElementOnPage->getStrPlaceholder(),
+                                                        "name" => $objOneElementOnPage->getStrName(),
+                                                     "element" => $objOneElementOnPage->getStrElement(),
+                                                  "repeatable" => $objOneElementOnPage->getIntRepeat()
+                                              );
             }
 		    //Check if the max-cachetime is lower than the current one set
 		    //include the "please hide the element" time
@@ -224,16 +228,22 @@ class class_modul_pages_portal extends class_portal {
 		}
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
-        if(_pages_portaleditor_ == "true" && $objPageData->rightEdit() && $this->objSession->isAdmin() && $this->objSession->getSession("pe_disable") != "true" ) {
-            //loop placeholders on template in order to remove already filled ones
+        if(_pages_portaleditor_ == "true" && $this->objSession->getSession("pe_disable") != "true" && $objPageData->rightEdit() && $this->objSession->isAdmin() ) {
+            //loop placeholders on template in order to remove already filled ones not being repeatable
             $arrRawPlaceholdersForPe = $arrRawPlaceholders;
             foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
+
                 foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
                     if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
                         foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
-                            if($arrOneRawElement["name"] == $arrOnePlaceholder["name"] && $arrOneRawElement["element"] == $arrOnePlaceholder["element"]) {
+
+                            if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
                                 $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
                             }
+                            else if($arrOnePlaceholder["repeatable"] == "0") {
+                                $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
+                            }
+
                         }
                     }
                 }
@@ -263,6 +273,7 @@ class class_modul_pages_portal extends class_portal {
                             $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
 
                             $arrTemplate[$strPeNewPlaceholder] .= $strLink;
+                            
 
                         }
                     }
@@ -303,7 +314,7 @@ class class_modul_pages_portal extends class_portal {
     		    $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
     		    $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getEditDate(), false);
 
-                //Add a iconbar
+                //Add an iconbar
     		    $arrPeContents["pe_iconbar"] = "";
     		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_edit"), $this->getText("pe_icon_edit", "pages", "admin"), "icon_pencil.gif");
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";

@@ -132,7 +132,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 		    $objElement->setStrClassAdmin("class_element_navigation.php");
 		    $objElement->setStrClassPortal("class_element_navigation.php");
 		    $objElement->setIntCachetime(-1);
-		    $objElement->setIntRepeat(1);
+		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->saveObjectToDb();
 			$strReturn .= "Element registered...\n";
