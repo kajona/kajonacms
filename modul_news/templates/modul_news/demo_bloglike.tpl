@@ -8,7 +8,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h3>%%news_title%%</h3>
+            <h2>%%news_title%%</h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>

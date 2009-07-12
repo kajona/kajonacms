@@ -5,7 +5,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h3><a href="javascript:fold('cont_%%news_id%%');">%%news_title%%</a></h3>
+            <h2><a href="javascript:fold('cont_%%news_id%%');">%%news_title%%</a></h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>
@@ -36,7 +36,7 @@
 <!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_back_link -->
 <news_detail>
 <div class="newsDetail">
-    <h3>%%news_title%%</h3> %%news_start_date%%
+    <h2>%%news_title%%</h2> %%news_start_date%%
     <p class="newsTeaser">%%news_intro%%</p>
     %%news_image%%
     <p>%%news_text%%</p>

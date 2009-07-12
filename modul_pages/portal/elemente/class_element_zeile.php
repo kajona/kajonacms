@@ -47,7 +47,7 @@ class class_element_zeile extends class_element_portal implements  interface_por
 			$strReturn .= $this->arrElementData["absatz_titel"];
 
 
-		$strReturn = "<h2>".$strReturn."</h2>";
+		$strReturn = "<h1>".$strReturn."</h1>";
 
 		return $strReturn;
 	}

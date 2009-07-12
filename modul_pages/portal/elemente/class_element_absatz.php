@@ -46,7 +46,7 @@ class class_element_absatz extends class_element_portal implements  interface_po
 		$strReturn = "";
 		//Titel gegeben?
 		if($this->arrElementData["absatz_titel"] != "")
-			$strReturn .= "<h3>".$this->arrElementData["absatz_titel"] . "</h3>\n";
+			$strReturn .= "<h2>".$this->arrElementData["absatz_titel"] . "</h2>\n";
 		//Inhalt?
 		if($this->arrElementData["absatz_inhalt"] != "")
 			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "<p>\n";
