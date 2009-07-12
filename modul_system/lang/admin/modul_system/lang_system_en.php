@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 182
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -214,7 +214,7 @@ $lang["systemtask_flushremoteloadercache_done"] = "Flushing completed.";
 $lang["systemtask_flushremoteloadercache_name"] = "Flush remoteloadercache";
 $lang["systemtask_group_cache"]          = "Cache";
 $lang["systemtask_group_database"]       = "Database";
-$lang["systemtask_group_default"]        = "Default";
+$lang["systemtask_group_default"]        = "Miscellaneous";
 $lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_idle"]                 = "There's no running task";
 $lang["systemtask_run"]                  = "Execute";
