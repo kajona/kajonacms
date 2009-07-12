@@ -126,6 +126,7 @@
 	font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
 	padding: 0 2px 2px 2px !important;
+	text-transform: none !important;
 }
 
 .peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited {
@@ -137,6 +138,7 @@
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    text-transform: none !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
@@ -148,4 +150,5 @@
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    text-transform: none !important;
 }
