@@ -47,7 +47,7 @@ class class_element_portalregistration extends class_element_admin implements in
 		$strReturn = "";
 
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("portalregistration_hint"));
-		
+
 		//Build the form
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
@@ -60,7 +60,7 @@ class class_element_portalregistration extends class_element_admin implements in
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("portalregistration_template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" ));
-		
+
 		//Load groups available
 		include_once(_systempath_."/class_modul_user_group.php");
 		$arrGroups = class_modul_user_group::getAllGroups();
@@ -68,9 +68,11 @@ class class_element_portalregistration extends class_element_admin implements in
 		foreach ($arrGroups as $objOneGroup) {
 			$arrGroupsDD[$objOneGroup->getSystemid()] = $objOneGroup->getStrName();
 		}
-		
+
 		$strReturn .= $this->objToolkit->formInputDropdown("portalregistration_group", $arrGroupsDD, $this->getText("portalregistration_group"), (isset($arrElementData["portalregistration_group"]) ? $arrElementData["portalregistration_group"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("portalregistration_success", $this->getText("portalregistration_success"), (isset($arrElementData["portalregistration_success"]) ? $arrElementData["portalregistration_success"] : ""));
+
+		$strReturn .= $this->objToolkit->setElementFocus("portalregistration_template");
 
 		return $strReturn;
 	}

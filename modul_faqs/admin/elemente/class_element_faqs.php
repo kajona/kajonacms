@@ -18,7 +18,7 @@ include_once(_systempath_."/class_filesystem.php");
 
 /**
  * Class representing the admin-part of the faqs element
- * 
+ *
  * @package modul_faqs
  *
  */
@@ -54,7 +54,7 @@ class class_element_faqs extends class_element_admin implements interface_admin_
         $arrCats = array();
         //addd an "i want all" cat ;)
         $arrCats["0"] = $this->getText("all_cats");
-        
+
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
 
@@ -71,7 +71,9 @@ class class_element_faqs extends class_element_admin implements interface_admin_
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getText("faqs_template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "" ));
-        //and finally offer the different modes
+
+		$strReturn .= $this->objToolkit->setElementFocus("faqs_category");
+
 		return $strReturn;
 	}
 

@@ -69,11 +69,11 @@ class class_element_news extends class_element_admin implements interface_admin_
         $arrMode = array( 0 => $this->getText("news_mode_normal"),
         				  1 => $this->getText("news_mode_archive"));
         $strReturn .= $this->objToolkit->formInputDropdown("news_mode", $arrMode, $this->getText("news_mode"), (isset($arrElementData["news_mode"]) ? $arrElementData["news_mode"] : "" ));
-		
+
         $arrOrder = array( 0 => $this->getText("news_order_desc"),
         				   1 => $this->getText("news_order_asc"));
         $strReturn .= $this->objToolkit->formInputDropdown("news_order", $arrOrder, $this->getText("news_order"), (isset($arrElementData["news_order"]) ? $arrElementData["news_order"] : "" ));
-        
+
         //Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
@@ -87,9 +87,12 @@ class class_element_news extends class_element_admin implements interface_admin_
 		$strReturn .= $this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getText("news_template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "" ));
 
         $strReturn .= $this->objToolkit->formInputText("news_amount", $this->getText("news_amount"), (isset($arrElementData["news_amount"]) ? $arrElementData["news_amount"] : ""));
-		return $strReturn;
+
+        $strReturn .= $this->objToolkit->setElementFocus("news_category");
+
+        return $strReturn;
 	}
 
 
-} 
+}
 ?>

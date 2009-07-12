@@ -1094,3 +1094,27 @@ var kajonaSystemtaskHelper =  {
         document.getElementById('loadingDiv').style.display = "none";
     }
 };
+
+
+var kajonaUtils =  {
+    focusHelper : {
+		focusFCKeditor: false,
+		setElementFocus : function(strElementId) {
+			try {
+			    focusElement = YAHOO.util.Dom.get(strElementId);
+			    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
+			    	kajonaUtils.focusHelper.focusFCKeditor = true;
+			    } else {
+			        focusElement.focus();
+			    }
+			} catch (e) {}
+		}
+	}
+};
+
+//gets called when FCKeditor is ready, check if FCKeditor should be focused
+function FCKeditor_OnComplete(editorInstance) {
+    if (kajonaUtils.focusHelper.focusFCKeditor) {
+    	editorInstance.Focus()
+    };
+}

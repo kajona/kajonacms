@@ -59,6 +59,8 @@ class class_element_tellafriend extends class_element_admin implements interface
 		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_error", $this->getText("tellafriend_error"), (isset($arrElementData["tellafriend_error"]) ? $arrElementData["tellafriend_error"] : ""));
 		$strReturn .= $this->objToolkit->formInputPageSelector("tellafriend_success", $this->getText("tellafriend_success"), (isset($arrElementData["tellafriend_success"]) ? $arrElementData["tellafriend_success"] : ""));
 
+		$strReturn .= $this->objToolkit->setElementFocus("tellafriend_template");
+
 		return $strReturn;
 	}
 

@@ -14,8 +14,8 @@ include_once(_adminpath_."/interface_admin_element.php");
 
 /**
  * Class to handle the admin-part of the element
- * 
- * @package modul_languages 
+ *
+ * @package modul_languages
  */
 class class_element_languageswitch extends class_element_admin implements interface_admin_element {
 
@@ -55,6 +55,7 @@ class class_element_languageswitch extends class_element_admin implements interf
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("languageswitch_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
+        $strReturn .= $this->objToolkit->setElementFocus("char1");
 
 		return $strReturn;
 	}
@@ -68,6 +69,6 @@ class class_element_languageswitch extends class_element_admin implements interf
 	    return "";
 	}
 
-	
+
 }
 ?>

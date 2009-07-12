@@ -72,7 +72,9 @@ class class_element_guestbook extends class_element_admin implements interface_a
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getText("guestbook_template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" ));
-        //and finally offer the different modes
+
+		$strReturn .= $this->objToolkit->setElementFocus("guestbook_id");
+
 		return $strReturn;
 	}
 

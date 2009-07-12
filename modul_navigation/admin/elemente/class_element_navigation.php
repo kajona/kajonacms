@@ -16,7 +16,7 @@ include_once(_systempath_."/class_modul_navigation_tree.php");
 include_once(_systempath_."/class_modul_navigation_cache.php");
 /**
  * Admin-Class of the navigation element
- * 
+ *
  * @package modul_navigation
  *
  */
@@ -75,7 +75,10 @@ class class_element_navigation extends class_element_admin implements interface_
         //and finally offer the different modes
         $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));
         $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));
-		return $strReturn;
+
+        $strReturn .= $this->objToolkit->setElementFocus("navigation_template");
+
+        return $strReturn;
 	}
 
     /**

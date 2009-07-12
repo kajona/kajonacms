@@ -61,6 +61,9 @@ class class_element_formular extends class_element_admin implements interface_ad
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("formular_class", $arrClassesDD, $this->getText("formular_class"), (isset($arrElementData["formular_class"]) ? $arrElementData["formular_class"] : "" ));
+
+		$strReturn .= $this->objToolkit->setElementFocus("formular_email");
+
 		return $strReturn;
 	}
 

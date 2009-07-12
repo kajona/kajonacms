@@ -48,6 +48,9 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
+
+		$strReturn .= $this->objToolkit->setElementFocus("absatz_titel");
+
 		return $strReturn;
 	}
 
@@ -60,7 +63,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	    $arrData = $this->loadElementData();
         return uniStrTrim(htmlStripTags($arrData["absatz_titel"]), 60);
 	}
-	
+
 	/**
      * Overwrite this function, if you want to validate passed form-input
      *

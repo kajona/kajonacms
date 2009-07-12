@@ -14,7 +14,7 @@ include_once(_adminpath_."/interface_admin_element.php");
 
 /**
  * Class representing the admin-part of the postacomment element
- * 
+ *
  * @package modul_postacomment
  *
  */
@@ -58,7 +58,9 @@ class class_element_postacomment extends class_element_admin implements interfac
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("postacomment_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
-        //and finally offer the different modes
+
+		$strReturn .= $this->objToolkit->setElementFocus("char1");
+
 		return $strReturn;
 	}
 

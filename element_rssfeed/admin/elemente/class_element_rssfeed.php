@@ -45,7 +45,7 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 	 */
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
-		
+
 		//Build the form
 		//Load the available templates
 		include_once(_systempath_."/class_filesystem.php");
@@ -60,6 +60,8 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("rssfeed_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 		$strReturn .= $this->objToolkit->formInputText("char2", $this->getText("rssfeed_url"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("int1", $this->getText("rssfeed_numberofposts"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
+
+		$strReturn .= $this->objToolkit->setElementFocus("char1");
 
 		return $strReturn;
 	}

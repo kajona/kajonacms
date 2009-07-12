@@ -1651,5 +1651,21 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+//--- misc ----------------------------------------------------------------------------------------------
+
+    /**
+     * Sets the users browser focus to the element with the given id
+     *
+     * @param string $strElementId
+     * @return string
+     */
+    public function setElementFocus($strElementId) {
+        $strReturn = "
+            <script type=\"text/javascript\">
+                kajonaUtils.focusHelper.setElementFocus(\"".$strElementId."\");
+            </script>";
+        return $strReturn;
+    }
+
 }
 ?>
