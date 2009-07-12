@@ -97,7 +97,6 @@ abstract class class_systemtask_base {
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"), "Submit", "onclick=\"submitExecution();return false;\"");
     		$strReturn .= $this->objToolkit->formClose();
     		
-    		$strReturn .= $this->objToolkit->divider();
     	}
     	
     	return $strReturn;
