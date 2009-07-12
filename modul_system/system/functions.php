@@ -338,6 +338,9 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 	//if($strParams != "")
 	//	$strParams = str_replace("&", "&amp;", $strParams);
 
+    if($bitPortalEditor && $intHeight == "500")
+        $intHeight = 690;
+
 	//urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
