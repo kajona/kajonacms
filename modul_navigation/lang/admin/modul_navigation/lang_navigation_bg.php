@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 183
+//Kajona Language Editor Core Build 194
 
 //editable entries
 $lang["browser"]                         = "Отвори browser";
@@ -32,6 +32,7 @@ $lang["navigation_rechte"]               = "Промяна права";
 $lang["navigation_tagetblank"]           = "_blank (отваря се в нов прозорец)";
 $lang["navigation_tagetself"]            = "_self (отваря се в същия прозорец)";
 $lang["navigation_target"]               = "Цел:";
+$lang["_navigation_use_cache_"]          = "";
 $lang["navigationp_anzeigen"]            = "Покажи връзките в навигацията";
 $lang["navigationp_bearbeiten"]          = "Промени връзка";
 $lang["navigationp_hoch"]                = "Премести връзката нагоре";

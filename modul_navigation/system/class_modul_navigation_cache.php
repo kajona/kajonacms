@@ -51,6 +51,10 @@ class class_modul_navigation_cache {
      * @return string or null
      */
     public function loadNavigationFromCache($strNavigationId, $strElementId, $strPagename) {
+
+        if(_navigation_use_cache_ == "false")
+            return null;
+
         $strQuery = "SELECT navigation_cache_content
                        FROM ".$this->arrModule["table"]."
                       WHERE navigation_cache_userid = '".dbsafeString(class_carrier::getInstance()->getObjSession()->getUserID())."'
@@ -73,6 +77,10 @@ class class_modul_navigation_cache {
      * @return bool
      */
     public function saveNavigationToCache($strNavigationId, $strElementId, $strPagename, $strContent)  {
+
+        if(_navigation_use_cache_ == "false")
+            return true;
+
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                     (navigation_cache_id, navigation_cache_page, navigation_cache_userid, navigation_cache_checksum, navigation_cache_content) VALUES
                     ('".dbsafeString(generateSystemid())."',
