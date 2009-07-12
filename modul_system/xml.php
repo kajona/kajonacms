@@ -176,7 +176,7 @@ class class_xml {
      *
      */
     private function sendHeader() {
-        header("Content-Type: text/xml");
+        header("Content-Type: text/xml; charset=utf-8");
     }
 
 }

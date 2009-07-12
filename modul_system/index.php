@@ -270,7 +270,9 @@ class class_index  {
             return;
         }
 
-        sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput));
+        //send headers if not an ie
+        if(strpos(getServer("HTTP_USER_AGENT"), "IE") === false)
+            sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput));
 
 		//compress output
 		include_once(_systempath_."/class_gzip.php");
@@ -299,13 +301,13 @@ $objIndex = new class_index();
 if(_admin_) {
 	$objIndex->loadAdmin();
 	//if needed, uncomment the following line to prevent problems with the encoding
-	//header('Content-Type: text/html; charset=utf-8');
+	header('Content-Type: text/html; charset=utf-8');
 	echo $objIndex->getOutput();
 }
 else {
 	$objIndex->loadPortal();
 	//if needed, uncomment the following line to prevent problems with the encoding
-	//header('Content-Type: text/html; charset=utf-8');
+	header('Content-Type: text/html; charset=utf-8');
 	echo $objIndex->getOutput();
 }
 ?>
