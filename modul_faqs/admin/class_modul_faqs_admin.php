@@ -166,9 +166,9 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
-    		   		           $objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"), 
+    		   		           $objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"),
 				               getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()."&peClose=".$this->getParam("pe"))
-    		   		    ); 
+    		   		    );
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listStatusButton($objOneCategory->getSystemid());
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
@@ -196,25 +196,25 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			$strFaqs = "";
 			foreach($arrFaqs as $objOneFaq) {
 			    if($this->objRights->rightView($objOneFaq->getSystemid())) {
-			    	
-			    	
+
+
 			        //ratings available?
 			        $strRating = "";
                     try {
                         $objMdlRating = class_modul_system_module::getModuleByName("rating");
                         if($objMdlRating != null ) {
-                            include_once(_systempath_."/class_modul_rating_rate.php");  
+                            include_once(_systempath_."/class_modul_rating_rate.php");
                             $objRating = class_modul_rating_rate::getRating($objOneFaq->getSystemid());
                             if($objRating != null)
                                 $strRating .= " - ".$objRating->getFloatRating();
                             else
-                                $strRating .= " - 0.0";    
+                                $strRating .= " - 0.0";
                         }
 
                     }
                     catch (class_exception $objException) { }
-                    
-    				
+
+
                     $strAction = "";
                     if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFaq", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_edit"), "icon_pencil.gif"));
@@ -222,7 +222,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
     		   		           $objOneFaq->getStrQuestion(), $this->getText("faqs_loeschen_frage"),
 				               getLinkAdminHref($this->arrModule["modul"], "deleteFaq", "&systemid=".$objOneFaq->getSystemid()."&faqs_loeschen_final=1&peClose=".$this->getParam("pe"))
-    		   		    );    
+    		   		    );
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneFaq->getSystemid());
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
@@ -269,6 +269,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("faqs_cat_title"), $this->getParam("faqs_cat_title"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
 			}
 			else
 				$strReturn.= $this->getText("fehler_recht");
@@ -285,6 +287,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("faqs_cat_title"), $objCat->getStrTitle());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -361,10 +365,10 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
                 //and the cats
                 $arrCats = class_modul_faqs_category::getCategories();
-                
+
                 if (count($arrCats) > 0)
                     $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
-                
+
                 foreach ($arrCats as $objOneCat) {
             	   $strReturn .= $this->objToolkit->formInputCheckbox("cat[".$objOneCat->getSystemid()."]", $objOneCat->getStrTitle());
                 }
@@ -374,6 +378,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -390,7 +396,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 //and the cats
                 $arrCats = class_modul_faqs_category::getCategories();
                 $arrFaqsMember = class_modul_faqs_category::getFaqsMember($this->getSystemid());
-                
+
                 if (count($arrCats) > 0)
                     $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
 
@@ -408,6 +414,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");

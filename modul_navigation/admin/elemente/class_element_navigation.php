@@ -76,7 +76,7 @@ class class_element_navigation extends class_element_admin implements interface_
         $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));
         $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));
 
-        $strReturn .= $this->objToolkit->setElementFocus("navigation_template");
+        $strReturn .= $this->objToolkit->setBrowserFocus("navigation_template");
 
         return $strReturn;
 	}

@@ -88,7 +88,7 @@ class class_element_galleryRandom extends class_element_admin implements interfa
 		$strReturn .= $this->objToolkit->formInputText("gallery_text_y", $this->getText("gallery_text_y"), (isset($arrElementData["gallery_text_y"]) ? $arrElementData["gallery_text_y"] : ""));
 		$strReturn .= $this->objToolkit->formInputHidden("gallery_mode", "1");
 
-		$strReturn .= $this->objToolkit->setElementFocus("gallery_id");
+		$strReturn .= $this->objToolkit->setBrowserFocus("gallery_id");
 
 		return $strReturn."";
 	}

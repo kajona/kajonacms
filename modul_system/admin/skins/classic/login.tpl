@@ -10,12 +10,11 @@
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
 %%head%%
 <script type="text/javascript">
-	function loginStartup() { document.getElementById('name').focus(); }
-	YAHOO.util.Event.onDOMReady(loginStartup);
-		kajonaAjaxHelper.loadAjaxBase();
-  		kajonaAjaxHelper.loadDragNDropBase();
-  		kajonaAjaxHelper.loadAnimationBase();
-		kajonaAjaxHelper.loadAutocompleteBase();
+	kajonaUtils.focusHelper.setBrowserFocus("name");
+	kajonaAjaxHelper.loadAjaxBase();
+  	kajonaAjaxHelper.loadDragNDropBase();
+  	kajonaAjaxHelper.loadAnimationBase();
+	kajonaAjaxHelper.loadAutocompleteBase();
 </script>
 </head>
 

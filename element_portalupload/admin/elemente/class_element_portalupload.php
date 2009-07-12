@@ -88,7 +88,7 @@ class class_element_portalupload extends class_element_admin implements interfac
 		$strReturn .= $this->objToolkit->formInputDropdown("char2", $arrDlDD, $this->getText("portalupload_download"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
 		$strReturn .= $this->objToolkit->formInputDropdown("char3", $arrFmDD, $this->getText("portalupload_filemanager"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
 
-		$strReturn .= $this->objToolkit->setElementFocus("char1");
+		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
 		return $strReturn;
 	}

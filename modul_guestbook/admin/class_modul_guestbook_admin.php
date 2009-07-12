@@ -200,6 +200,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -218,6 +220,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $objGuestbook->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
 			}
 			else
 				$strReturn = $this->objTemplate("fehler_recht");
@@ -344,6 +348,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
             $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->setBrowserFocus("post_text");
         }
         else
             $strReturn .= $this->getText("fehler_recht");

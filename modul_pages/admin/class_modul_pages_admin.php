@@ -464,6 +464,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("name");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -513,6 +515,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("name");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -692,6 +696,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->formInputHidden("prev_id", $strPrevid);
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 			$strReturn .= $this->objToolkit->formClose();
+
+			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -730,6 +736,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 			$strReturn .= $this->objToolkit->formClose();
+
+			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

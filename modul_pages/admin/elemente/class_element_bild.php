@@ -49,7 +49,7 @@ class class_element_bild extends class_element_admin implements interface_admin_
 		$strReturn .= $this->objToolkit->formInputText("bild_x", $this->getText("bild_x"), (isset($arrElementData["bild_x"]) ? $arrElementData["bild_x"] : "" ));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("bild_xy_hint"));
 		$strReturn .= $this->objToolkit->formInputText("bild_y", $this->getText("bild_y"), (isset($arrElementData["bild_y"]) ? $arrElementData["bild_y"] : "" ));
-		$strReturn .= $this->objToolkit->setElementFocus("bild_titel");
+		$strReturn .= $this->objToolkit->setBrowserFocus("bild_titel");
 
 		return $strReturn;
 	}

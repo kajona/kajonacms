@@ -369,6 +369,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             //End the form
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->setBrowserFocus("username");
         }
         else
             $strReturn .= $this->getText("fehler_recht");
@@ -530,19 +532,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                             throw new class_exception($this->getText("user_fehler"), class_exception::$level_ERROR);
                     }
                     else {
-                        return $this->objToolkit->warningBox($this->getText( "user_fehler_mail"));
+                        return $this->objToolkit->warningBox($this->getText("user_fehler_mail"));
                     }
                 }
                 else {
-                    return $this->objToolkit->warningBox($this->getText( "user_fehler_pass"));
+                    return $this->objToolkit->warningBox($this->getText("user_fehler_pass"));
                 }
             }
             else {
-                return $this->objToolkit->warningBox($this->getText( "user_fehler_name"));
+                return $this->objToolkit->warningBox($this->getText("user_fehler_name"));
             }
         }
         else
-            return $this->getText( "fehler_recht");
+            return $this->getText("fehler_recht");
     }
 
 
@@ -644,6 +646,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->setBrowserFocus("gruppename");
         }
         else
         $strReturn .= $this->getText("fehler_recht");

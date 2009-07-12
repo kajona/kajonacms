@@ -1099,15 +1099,17 @@ var kajonaSystemtaskHelper =  {
 var kajonaUtils =  {
     focusHelper : {
 		focusFCKeditor: false,
-		setElementFocus : function(strElementId) {
-			try {
-			    focusElement = YAHOO.util.Dom.get(strElementId);
-			    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
-			    	kajonaUtils.focusHelper.focusFCKeditor = true;
-			    } else {
-			        focusElement.focus();
-			    }
-			} catch (e) {}
+		setBrowserFocus : function(strElementId) {
+			YAHOO.util.Event.onDOMReady(function() {
+				try {
+				    focusElement = YAHOO.util.Dom.get(strElementId);
+				    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
+				    	kajonaUtils.focusHelper.focusFCKeditor = true;
+				    } else {
+				        focusElement.focus();
+				    }
+				} catch (e) {}
+			});
 		}
 	}
 };

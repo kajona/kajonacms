@@ -13,8 +13,7 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
     %%head%%
 	<script type="text/javascript">
-		function loginStartup() { document.getElementById('name').focus(); }
-    	YAHOO.util.Event.onDOMReady(loginStartup);
+		kajonaUtils.focusHelper.setBrowserFocus("name");
 		kajonaAjaxHelper.loadAjaxBase();
   		kajonaAjaxHelper.loadDragNDropBase();
   		kajonaAjaxHelper.loadAnimationBase();
@@ -42,5 +41,6 @@
 <div class="imgPreload">
 	<img src="_skinwebpath_/loading.gif" alt="" title="" />
 </div>
+
 </body>
 </html>

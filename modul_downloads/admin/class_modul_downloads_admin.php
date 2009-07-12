@@ -421,6 +421,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("archive_title");
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -438,6 +440,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("archive_title");
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -559,6 +563,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("downloads_name");
 			}
 			elseif ($this->getParam("save") == "1") {
 				//Update the record

@@ -72,7 +72,7 @@ class class_element_faqs extends class_element_admin implements interface_admin_
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getText("faqs_template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "" ));
 
-		$strReturn .= $this->objToolkit->setElementFocus("faqs_category");
+		$strReturn .= $this->objToolkit->setBrowserFocus("faqs_category");
 
 		return $strReturn;
 	}

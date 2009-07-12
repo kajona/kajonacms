@@ -219,6 +219,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getText("filemanager_view_filter"), $this->getParam("filemanager_view_filter"));
     			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
 			}
 			else {
 				//save the passed data to database
@@ -271,6 +273,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
     			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
 			}
 			else {
 				//Update the databse
@@ -598,6 +602,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     $strReturn .= $this->objToolkit->formTextRow($this->getText("datei_umbenennen_hinweis"));
                     $strReturn .= $this->objToolkit->formInputSubmit($this->getText("rename"));
                     $strReturn .= $this->objToolkit->formClose();
+
+                    $strReturn .= $this->objToolkit->setBrowserFocus("datei_name");
 				}
 			}
 			else {

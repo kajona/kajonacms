@@ -250,6 +250,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -267,6 +269,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -423,6 +427,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("pic_name");
 			}
 			elseif ($this->getParam("save") == "1") {
 				//Update the opbject

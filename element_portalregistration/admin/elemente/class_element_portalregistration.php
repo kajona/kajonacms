@@ -72,7 +72,7 @@ class class_element_portalregistration extends class_element_admin implements in
 		$strReturn .= $this->objToolkit->formInputDropdown("portalregistration_group", $arrGroupsDD, $this->getText("portalregistration_group"), (isset($arrElementData["portalregistration_group"]) ? $arrElementData["portalregistration_group"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("portalregistration_success", $this->getText("portalregistration_success"), (isset($arrElementData["portalregistration_success"]) ? $arrElementData["portalregistration_success"] : ""));
 
-		$strReturn .= $this->objToolkit->setElementFocus("portalregistration_template");
+		$strReturn .= $this->objToolkit->setBrowserFocus("portalregistration_template");
 
 		return $strReturn;
 	}

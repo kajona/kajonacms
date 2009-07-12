@@ -254,6 +254,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 		    $strReturn .= $this->objToolkit->formClose();
+
+		    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -318,6 +320,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 if($this->getParam("pe") == "1")
                     $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 			}
 			else
 				$strReturn .= $this->obj_texte->get_text($this->modul["modul"], "fehler_recht");
@@ -341,6 +345,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 if($this->getParam("pe") == "1")
                     $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
 			    $strReturn .= $this->objToolkit->formClose();
+
+			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 			}
 			else
 				$strReturn .= $this->obj_texte->get_text($this->modul["modul"], "fehler_recht");
@@ -393,7 +399,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
-	
+
 	/**
 	 * Invokes the deletion of navi-points
 	 *

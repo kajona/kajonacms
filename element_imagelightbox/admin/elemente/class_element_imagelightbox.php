@@ -52,7 +52,7 @@ class class_element_imagelightbox extends class_element_admin implements interfa
 		$strReturn .= $this->objToolkit->formInputText("char1", $this->getText("imagelightbox_image"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""),
 		                                               "inputText", getLinkAdminPopup("folderview", "list", "&form_element=char1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 
-		$strReturn .= $this->objToolkit->setElementFocus("char2");
+		$strReturn .= $this->objToolkit->setBrowserFocus("char2");
 
 		return $strReturn;
 	}

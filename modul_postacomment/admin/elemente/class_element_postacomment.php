@@ -59,7 +59,7 @@ class class_element_postacomment extends class_element_admin implements interfac
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("postacomment_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
-		$strReturn .= $this->objToolkit->setElementFocus("char1");
+		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
 		return $strReturn;
 	}

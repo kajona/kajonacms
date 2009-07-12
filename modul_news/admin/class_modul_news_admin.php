@@ -302,6 +302,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $this->getParam("news_cat_title"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("news_cat_title");
 			}
 			else
 				$strReturn.= $this->getText("fehler_recht");
@@ -318,6 +320,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $objCat->getStrTitle());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("news_cat_title");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -405,6 +409,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("news_title");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -444,6 +450,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
+
+				$strReturn .= $this->objToolkit->setBrowserFocus("news_title");
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -573,6 +581,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
             $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->setBrowserFocus("news_intro");
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

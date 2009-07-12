@@ -49,7 +49,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
 		$strReturn = "";
 		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
 
-		$strReturn .= $this->objToolkit->setElementFocus("absatz_titel");
+		$strReturn .= $this->objToolkit->setBrowserFocus("absatz_titel");
 
 		return $strReturn;
 	}

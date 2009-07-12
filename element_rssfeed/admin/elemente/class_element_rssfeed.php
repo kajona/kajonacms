@@ -61,7 +61,7 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formInputText("char2", $this->getText("rssfeed_url"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("int1", $this->getText("rssfeed_numberofposts"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : ""));
 
-		$strReturn .= $this->objToolkit->setElementFocus("char1");
+		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
 		return $strReturn;
 	}

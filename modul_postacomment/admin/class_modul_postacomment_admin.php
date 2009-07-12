@@ -148,59 +148,59 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		}
 
     		$arrPosts = $objArraySectionIterator->getArrayExtended();
-    		
+
     		$arrPageViews = $this->objToolkit->getPageview($arrPosts, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "postacomment", "list", "&filterId=".$this->getParam("filterId"), _admin_nr_of_rows_);
-            
+
     		$arrPosts = $arrPageViews["elements"];
-            
+
 
 			$strPostRows = "";
-			
+
 			if(is_array($arrPosts) && count($arrPosts) > 0) {
-			 
+
 				foreach($arrPosts as $objOnePost) {
 				    if($this->objRights->rightView($objOnePost->getSystemid())) {
-	    				
+
 	    			 	$objPage = new class_modul_pages_page($objOnePost->getStrAssignedPage());
 	    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
 	                    $strAction = "";
-	                    
-	                    
+
+
 				        //ratings available?
                         try {
                             $objMdlRating = class_modul_system_module::getModuleByName("rating");
                             if($objMdlRating != null) {
-                                include_once(_systempath_."/class_modul_rating_rate.php");  
+                                include_once(_systempath_."/class_modul_rating_rate.php");
                                 $objRating = class_modul_rating_rate::getRating($objOnePost->getSystemid());
                                 if($objRating != null)
                                     $strCenter .= " - ".$objOnePost->getFloatRating();
                                 else
-                                    $strCenter .= " - 0.0";    
+                                    $strCenter .= " - 0.0";
                             }
-    
+
                         }
                         catch (class_exception $objException) { }
-	                    
-	                    
+
+
 	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));
 	    		   		if($this->objRights->rightDelete($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOnePost->getStrTitle(), $this->getText("postacomment_delete_question"), 
+	    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOnePost->getStrTitle(), $this->getText("postacomment_delete_question"),
 	    		   		                  getLinkAdminHref($this->arrModule["modul"], "deletePost", "&systemid=".$objOnePost->getSystemid()."&postacommentDeleteFinal=1".($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))));
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listStatusButton($objOnePost->getSystemid());
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), getRightsImageAdminName($objOnePost->getSystemid())));
-	
+
 	    		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
-	
+
 	    		   		//create the content of the details rows
 	    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrUsername(), 40)." | ".uniStrTrim($objOnePost->getStrTitle(), 60), "", "", $intI);
 	    		   		$strPostRows .= $this->objToolkit->listRow3("", uniStrTrim($objOnePost->getStrComment(), 100), "", "", $intI++);
 				    }
-	
+
 				}
-				
+
 			}
 
 			if(uniStrlen($strPostRows) != 0) {
@@ -280,6 +280,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
 
+            $strReturn .= $this->objToolkit->setBrowserFocus("postacomment_username");
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

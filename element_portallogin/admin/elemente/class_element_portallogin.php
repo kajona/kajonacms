@@ -65,7 +65,7 @@ class class_element_portallogin extends class_element_admin implements interface
         $strReturn .= $this->objToolkit->formTextRow($this->getText("portallogin_profile_hint"));
 		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_profile", $this->getText("portallogin_profile"), (isset($arrElementData["portallogin_profile"]) ? $arrElementData["portallogin_profile"] : ""));
 
-		$strReturn .= $this->objToolkit->setElementFocus("portallogin_template");
+		$strReturn .= $this->objToolkit->setBrowserFocus("portallogin_template");
 
 		return $strReturn;
 	}

@@ -182,6 +182,8 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strReturn .= $this->objToolkit->formInputHidden("step", "2");
 	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetNextStep"));
 	            $strReturn .= $this->objToolkit->formClose();
+
+	            $strReturn .= $this->objToolkit->setBrowserFocus("widget");
 	        }
 	        //step 2: loading the widget and allow it to show a view fields
 	        else if($this->getParam("step") == "2") {

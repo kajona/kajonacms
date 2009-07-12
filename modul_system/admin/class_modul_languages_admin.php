@@ -164,6 +164,8 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("lang_save"));
                 $strReturn .= $this->objToolkit->formClose();
+
+                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
             }
             else
 			    $strReturn = $this->getText("fehler_recht");
@@ -178,6 +180,8 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objLanguage->getSystemid());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("lang_save"));
                 $strReturn .= $this->objToolkit->formClose();
+
+                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
             }
             else
 			    $strReturn = $this->getText("fehler_recht");

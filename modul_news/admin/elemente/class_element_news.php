@@ -88,7 +88,7 @@ class class_element_news extends class_element_admin implements interface_admin_
 
         $strReturn .= $this->objToolkit->formInputText("news_amount", $this->getText("news_amount"), (isset($arrElementData["news_amount"]) ? $arrElementData["news_amount"] : ""));
 
-        $strReturn .= $this->objToolkit->setElementFocus("news_category");
+        $strReturn .= $this->objToolkit->setBrowserFocus("news_category");
 
         return $strReturn;
 	}

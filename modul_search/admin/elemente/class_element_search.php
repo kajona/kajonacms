@@ -62,7 +62,7 @@ class class_element_search extends class_element_admin implements interface_admi
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getText("search_template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" ));
 
-		$strReturn .= $this->objToolkit->setElementFocus("search_amount");
+		$strReturn .= $this->objToolkit->setBrowserFocus("search_amount");
 
 		return $strReturn;
 	}
