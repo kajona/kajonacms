@@ -385,7 +385,6 @@ class class_toolkit_admin extends class_toolkit {
 	 * @return string
 	 */
 	public function percentBeam($floatPercent, $intLength = "300") 	{
-		$strReturn = "";
 		//Calc width
 		$intWidth = $intLength - 50;
 		$intBeamLength = (int)($intWidth * $floatPercent / 100);
@@ -618,6 +617,15 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
+
+        //upload works with session.use_only_cookies=disabled only. of set to enabled, use the fallback upload
+        if(class_carrier::getInstance()->getObjConfig()->getPhpIni("session.use_only_cookies") == "1") {
+            $strReturn = $this->formInputUpload($strName, $strTitle);
+            $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjText()->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
+            return $strReturn;
+        }
+
+
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_uploadFlash");
         $arrTemplate = array();
         $arrTemplate["title"] = $strTitle;
@@ -626,7 +634,7 @@ class class_toolkit_admin extends class_toolkit {
         if($strAllowedFileTypes == "")
             $strAllowedFileTypes = "*.*";
 
-		$objConfig = class_config::getInstance();
+		$objConfig = class_carrier::getInstance()->getObjConfig();
 		$objText = class_carrier::getInstance()->getObjText();
 
 		$arrTemplate["javascript"] = "
@@ -912,9 +920,7 @@ class class_toolkit_admin extends class_toolkit {
 		$strTemplateContentContentID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_1");
 		$strTemplateContentFooterID1 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
 		$strTemplateContentFooterID2 = $this->objTemplate->readTemplate("/elements.tpl", "datalist_column_footer_2");
-		$strTemplateFooterID = $this->objTemplate->readTemplate("/elements.tpl", "datalist_footer");
 		//Iterating over the rows
-		$intNrRows = (isset($arrValues[0]) ? count($arrValues[0]) : count($arrHeader));
 
 		//Starting with the header, column by column
         if(is_array($arrHeader)) {
@@ -1114,7 +1120,6 @@ class class_toolkit_admin extends class_toolkit {
 	 * @return string
 	 */
 	public function getLayoutFolderPic($strContent, $strLinkText = "", $strImageVisible = "icon_folderOpen.gif", $strImageInvisible = "icon_folderClosed.gif", $bitVisible = true) {
-		$arrReturn = array();
 		$strID = str_replace(array(" ", "."), array("", ""), microtime());
 		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder_pic");
         $arrTemplate = array();
