@@ -41,7 +41,7 @@ body, td, input, select, textarea
 
 body, .BackColor
 {
-	background-color: #f7f8fd;
+	background-color: #f7f7f7;
 }
 
 .PopupBody
@@ -62,8 +62,8 @@ body, .BackColor
 {
 	font-weight: bold;
 	font-size: 14pt;
-	color: #0e3460;
-	background-color: #8cb2fd;
+	color: #504845;
+	background-color: #dedede;
 	padding: 3px 10px 3px 10px;
 }
 
@@ -73,16 +73,16 @@ body, .BackColor
 	right: 0px;
 	left: 0px;
 	bottom: 0px;
-	border-top: #466ca6 1px solid;
-	background-color: #8cb2fd;
+	border-top: #cec6b5 1px solid;
+	background-color: #DEDEDE;
 	padding: 7px 10px 7px 10px;
 }
 
 .Button
 {
-	border: #1c3460 1px solid;
-	color: #000a28;
-	background-color: #7096d3;
+	border: #7a7261 1px solid;
+	color: #504845;
+	background-color: #cec6b5;
 }
 
 #btnOk
@@ -92,7 +92,7 @@ body, .BackColor
 
 .DarkBackground
 {
-	background-color: #eaf2f8;
+	background-color: #f2f2f2;
 }
 
 .LightBackground
@@ -102,51 +102,51 @@ body, .BackColor
 
 .PopupTitleBorder
 {
-	border-bottom: #d5d59d 1px solid;
+	border-bottom: #cec6b5 1px solid;
 }
 
 .PopupTabArea
 {
-	color: #0e3460;
-	background-color: #8cb2fd;
+	color: #504845;
+	background-color: #DEDEDE;
 }
 
 .PopupTabEmptyArea
 {
 	padding-left: 10px ;
-	border-bottom: #466ca6 1px solid;
+	border-bottom: #cec6b5 1px solid;
 }
 
 .PopupTab, .PopupTabSelected
 {
-	border-right: #466ca6 1px solid;
-	border-top: #466ca6 1px solid;
-	border-left: #466ca6 1px solid;
+	border-right: #cec6b5 1px solid;
+	border-top: #cec6b5 1px solid;
+	border-left: #cec6b5 1px solid;
 	padding: 3px 5px 3px 5px;
-	color: #0e3460;
+	color: #504845;
 }
 
 .PopupTab
 {
 	margin-top: 1px;
-	border-bottom: #466ca6 1px solid;
+	border-bottom: #cec6b5 1px solid;
 	cursor: pointer;
 	cursor: hand;
 }
 
 .PopupTabSelected
 {
-	font-weight: bold;
+	font-weight:bold;
 	cursor: default;
 	padding-top: 4px;
-	border-bottom: #f7f8fd 1px solid;
-	background-color: #f7f8fd;
+	border-bottom: #f1f1e3 1px solid;
+	background-color: #f7f7f7;
 }
 
 .PopupSelectionBox
 {
-	border: #1e90ff 1px solid !important;
-	background-color: #add8e6 !important;
+	border: #a9a9a9 1px solid !important;
+	background-color: #dcdcdc !important;
 	cursor: pointer;
 	cursor: hand;
 }
@@ -167,7 +167,7 @@ body, .BackColor
 	left: 16px;
 	right: 16px;
 	bottom: 20px;
-	background-color: #f7f8fD;
+	background-color: #f7f7f7;
 	overflow: hidden;
 	z-index: 1;
 }
@@ -373,30 +373,30 @@ body, .BackColor
 
 /*
 	Color Gradient Generator:
-	http://www.herethere.net/~samson/php/color_gradient/?cbegin=0E3460&cend=8cb2fd&steps=4
+	http://www.herethere.net/~samson/php/color_gradient/?cbegin=504845&cend=DEDEDE&steps=4
 */
 
 .throbber_1
 {
-	background-color: #0E3460;
+	background-color: #504845;
 }
 
 .throbber_2
 {
-	background-color: #2D5387;
+	background-color: #736D6B;
 }
 
 .throbber_3
 {
-	background-color: #4D73AE;
+	background-color: #979391;
 }
 
 .throbber_4
 {
-	background-color: #6C92D5;
+	background-color: #BAB8B7;
 }
 
 .throbber_5
 {
-	background-color: #8CB2FD;
+	background-color: #DEDEDE;
 }
