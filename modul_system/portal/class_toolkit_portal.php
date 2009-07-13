@@ -49,14 +49,13 @@ class class_toolkit_portal extends class_toolkit {
         if($intPage <= 0)
             $intPage = 1;
 
-        if($intNumber <= 0)
-            $intNumber = 1;
+        if((int)$intNumber <= 0)
+            $intNumber = 100;
 
 		$arrReturn = 	array("arrData" 	=> array(),
 							  "strForward" 	=> "",
 							  "strBack" 	=> "",
 							  "strPages" 	=> "");
-		$arrTemp = array();
 
 
 		//create array-iterator
@@ -64,15 +63,11 @@ class class_toolkit_portal extends class_toolkit {
 		$objIterator = new class_array_iterator($arrData);
 		$objIterator->setIntElementsPerPage($intNumber);
 
-		//Size of the passed array
-		$intLength = $objIterator->getNumberOfElements();
-
 		//Anything to create?
 		if($objIterator->getNrOfPages() == 1) {
 			$arrReturn["arrData"] = $arrData;
 		}
 		else {
-			$intCounter = 1;
 			$strLinkPages = "";
 			$strLinkForward = "";
 			$strLinkBack = "";
