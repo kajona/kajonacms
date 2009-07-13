@@ -23,8 +23,8 @@ include_once(_systempath_."/class_filesystem.php");
  * @package modul_filemanager
  */
 class class_modul_filemanager_admin_xml extends class_admin implements interface_xml_admin {
-    
-    
+
+
 	/**
 	 * Constructor
 	 *
@@ -88,7 +88,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         }
         else
             $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
-        
+
 
         return $strReturn;
     }
@@ -106,7 +106,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $strFolder = $this->getParam("folder");
 
             //Create the folder
-            //$strFolder = createFilename(strtolower($this->getParam("ordner_name")), true);
             $intLastSlashPos = strrpos($strFolder, "/");
             $strFolder = substr($strFolder, 0, $intLastSlashPos)."/". createFilename(substr($strFolder, $intLastSlashPos+1), true);
             //folder already existing?
@@ -176,12 +175,12 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      */
     private function actionRotateImage(){
     	$strReturn = "";
-        
+
         if($this->objRights->rightEdit($this->getSystemid())) {
             //create repo instance
             $objRepo = new class_modul_filemanager_repo($this->getSystemid());
             $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
-            
+
             //pass to the image-class
             $objImage = new class_image();
             if($objImage->preLoadImage($strFile)) {
@@ -196,15 +195,15 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             }
             else
                 $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
-            
+
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
-        
-        
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
+
         return $strReturn;
     }
-    
+
     /**
      * Tries to save the passed cropping.
      * The following params are needed:
@@ -219,12 +218,12 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      */
     private function actionSaveCropping() {
     	$strReturn = "";
-        
+
         if($this->objRights->rightEdit($this->getSystemid())) {
             //create repo instance
             $objRepo = new class_modul_filemanager_repo($this->getSystemid());
             $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
-            
+
             //pass to the image-class
             $objImage = new class_image();
             if($objImage->preLoadImage($strFile)) {
@@ -238,13 +237,13 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 }
             }
             else
-                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
-            
+                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";    
-        
-        
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
+
         return $strReturn;
     }
 
@@ -261,17 +260,17 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	 */
 	private function actionFileupload() {
 	    $strReturn = "";
-        
+
 	    if($this->objRights->rightRight1($this->getSystemid())) {
 	    	//create repo instance
 	        $objRepo = new class_modul_filemanager_repo($this->getSystemid());
-	    	
+
 	        $strFolder = $objRepo->getStrPath().$this->getParam("folder");
-	        
+
 	        //Handle the fileupload
             $arrSource = $this->getParam($this->getParam("inputElement"));
-            
-            $strTarget = $strFolder."/".createFilename(strtolower($arrSource["name"]));
+
+            $strTarget = $strFolder."/".createFilename($arrSource["name"]);
             include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             if($objFilesystem->isWritable($strFolder)) {
@@ -295,8 +294,8 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             }
             else
                 $strReturn .= "<error>".xmlSafeString($this->getText("xmlupload_error_notWritable"))."</error>";
-            
-	    
+
+
 		}
 		else
 		    $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";

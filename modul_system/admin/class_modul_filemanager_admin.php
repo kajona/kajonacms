@@ -328,14 +328,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	if($objRepo->getStrViewFilter() != "")
 		   		$arrViewFilter = explode(",", $objRepo->getStrViewFilter());
 
-		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
             $strActions = "";
-
             if($this->objRights->rightRight1($this->getSystemid())) {
                 $strActions .= $this->generateNewFolderDialogCode();
                 $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
                 $strActions .= $this->actionUploadFile();
             }
+
+            $arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
 
 		   	//Building a status-bar, using the toolkit
 		   	$arrInfobox = array();
@@ -607,7 +607,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				}
 			}
 			else {
-				$strFilename = createFilename(strtolower($this->getParam("datei_name")));
+				$strFilename = createFilename($this->getParam("datei_name"));
 				//Check existance of old  & new file
 				if($strFilename != "" && is_file(_realpath_."/".$this->strFolder."/".$this->getParam("datei_name_alt"))) {
 					if(!is_file(_realpath_."/".$this->strFolder."/".$strFilename)) {
@@ -730,7 +730,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
 				$bitSuccess = false;
 
-                $strTarget = $this->strFolder."/".createFilename(strtolower($arrSource["name"]));
+                $strTarget = $this->strFolder."/".createFilename($arrSource["name"]);
                 include_once(_systempath_."/class_filesystem.php");
                 $objFilesystem = new class_filesystem();
                 //Check file for correct filters
@@ -742,7 +742,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                         $bitSuccess = true;
 
                         class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
-
                     }
                     else
                         $strReturn .= $this->getText("upload_fehler");
