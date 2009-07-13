@@ -33,11 +33,11 @@ class class_array_section_iterator extends class_array_iterator {
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 
 		$this->intTotalElements = $intNrOfElements;
-        
+
 		parent::__construct(array());
 	}
 
-	
+
     /**
      * Returns the number of elements
      *
@@ -65,7 +65,7 @@ class class_array_section_iterator extends class_array_iterator {
     public function calculateStartPos() {
         return (($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage);
     }
-    
+
     /**
      * Calculates the end-pos of the current array-section
      *
@@ -74,7 +74,7 @@ class class_array_section_iterator extends class_array_iterator {
     public function calculateEndPos() {
         return ($this->intElementsPerPage + ($this->calculateStartPos()-1));
     }
-    
+
     /**
      * Set the section of the array containing the data
      *
@@ -83,7 +83,7 @@ class class_array_section_iterator extends class_array_iterator {
     public function setArraySection($arrSectionContent) {
         $this->arrSection = $arrSectionContent;
     }
-    
+
     /**
      * Creates an array containg only the needed key / value pairs. The other ones are empty.
      *
@@ -98,10 +98,10 @@ class class_array_section_iterator extends class_array_iterator {
         for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++)
             if(isset($this->arrSection[($intI-$this->calculateStartPos())]))
                 $arrReturn[$intI] = $this->arrSection[($intI-$this->calculateStartPos())];
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Returns the elements placed on the given page
      *
@@ -116,7 +116,7 @@ class class_array_section_iterator extends class_array_iterator {
             $intEnd = $this->getNumberOfElements()-1;
 
         for($intI = $intStart; $intI <= $intEnd; $intI++)  {
-            if(!$this->setCursorPostion($intI))
+            if(!$this->setCursorPosition($intI))
                 break;
             $arrReturn[] = $this->arrElements[$this->intArrCursor];
         }

@@ -101,19 +101,20 @@ class class_array_iterator implements interface_iterator {
      * @param int $intElements
      */
     public function setIntElementsPerPage($intElements) {
-        if((int) $intElements >= 0)
+        if((int)$intElements > 0) {
             $this->intElementsPerPage = (int)$intElements;
-        if($intElements == null)
+        } else {
             $this->intElementsPerPage = 100;
+        }
     }
 
     /**
-     * Set the cursor to a definded position
+     * Set the cursor to a defined position
      *
      * @param int $intElement
      * @return bool
      */
-    public function setCursorPostion($intElement) {
+    public function setCursorPosition($intElement) {
         if($this->getNumberOfElements() > $intElement) {
             $this->intArrCursor = $intElement;
             return true;
@@ -144,7 +145,7 @@ class class_array_iterator implements interface_iterator {
     public function getElementsOnPage($intPageNumber) {
         if((int)$intPageNumber <= 0)
             $intPageNumber = 1;
-            
+
         $arrReturn = array();
         //calc elements to return
         $intStart = ($intPageNumber * $this->intElementsPerPage)-$this->intElementsPerPage;
@@ -154,7 +155,7 @@ class class_array_iterator implements interface_iterator {
             $intEnd = $this->getNumberOfElements()-1;
 
         for($intI = $intStart; $intI <= $intEnd; $intI++)  {
-            if(!$this->setCursorPostion($intI))
+            if(!$this->setCursorPosition($intI))
                 break;
             $arrReturn[] = $this->arrElements[$this->intArrCursor];
         }
