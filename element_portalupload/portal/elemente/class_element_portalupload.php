@@ -124,7 +124,7 @@ class class_element_portalupload extends class_element_portal implements interfa
 
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objFilemanagerRepo->getStrUploadFilter());
-                $strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
                 if($objFilemanagerRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
 

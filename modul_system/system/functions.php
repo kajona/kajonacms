@@ -413,7 +413,7 @@ function getRightsImageAdminName($strSystemid) {
 function phpSizeToBytes($strBytes) {
 	$intReturn = 0;
 
-	$strBytes = strtolower($strBytes);
+	$strBytes = uniStrtolower($strBytes);
 
 	if(strpos($strBytes, "m") !== false) {
 		$intReturn = str_replace("m", "", $strBytes);
@@ -772,7 +772,7 @@ function removeDirectoryTraversals($strFilename) {
 function createFilename($strName, $bitFolder = false) {
 	$strReturn = "";
 
-	$strName = strtolower($strName);
+	$strName = uniStrtolower($strName);
 
 	if(!$bitFolder)
 		$strEnding = uniSubstr($strName, (uniStrrpos($strName, ".")+1));
@@ -1033,7 +1033,7 @@ function uniStrlen($strString) {
 }
 
 /**
- * Wrapper to phps strtolower
+ * Wrapper to phps strtolower, due to problems with UTF-8 on some configurations
  *
  * @param string $strString
  * @return string
@@ -1043,6 +1043,19 @@ function uniStrtolower($strString) {
         return mb_strtolower($strString);
     else
         return strtolower($strString);
+}
+
+/**
+ * Wrapper to phps strtoupper, due to problems with UTF-8 on some configurations
+ *
+ * @param string $strString
+ * @return string
+ */
+function uniStrtoupper($strString) {
+    if(_mbstringloaded_)
+        return mb_strtoupper($strString);
+    else
+        return strtoupper($strString);
 }
 
 /**

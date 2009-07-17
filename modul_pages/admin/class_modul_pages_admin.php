@@ -532,7 +532,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	public function actionSavePage() {
 		$strReturn = "";
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			$strName = strtolower($this->getParam("name"));
+			$strName = uniStrtolower($this->getParam("name"));
 			$strDescription = $this->getParam("beschreibung");
 			$strTemplate = $this->getParam("template");
 			$strKeywords = $this->getParam("keywords");
@@ -543,7 +543,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage = new class_modul_pages_page("");
 			    $objPage->setStrBrowsername($strBrowsername);
 			    $objPage->setStrDesc($strDescription);
-			    $objPage->setStrName(strtolower($strName));
+			    $objPage->setStrName(uniStrtolower($strName));
 			    $objPage->setStrTemplate($strTemplate);
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($strSeostring);
@@ -575,7 +575,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	public function actionChangePage() {
 		$strReturn = "";
 		$strPageid = $this->getParam("pageid");
-		$strName = strtolower($this->getParam("name"));
+		$strName = uniStrtolower($this->getParam("name"));
 		$strDescription = $this->getParam("beschreibung");
 		$strBrowsername = $this->getParam("browsername");
 		$strSeostring = $this->getParam("seostring");
@@ -593,7 +593,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage = new class_modul_pages_page($strPageid);
 			    $objPage->setStrBrowsername($strBrowsername);
 			    $objPage->setStrDesc($strDescription);
-			    $objPage->setStrName(strtolower($strName));
+			    $objPage->setStrName(uniStrtolower($strName));
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($strSeostring);
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());

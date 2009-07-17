@@ -219,7 +219,7 @@ class class_modul_pages_portal extends class_portal {
 
 			//any string to highlight?
     		if($this->getParam("highlight") != "") {
-    		    $strHighlight = strtolower($this->getParam("highlight"));
+    		    $strHighlight = uniStrtolower($this->getParam("highlight"));
     		    //search for matches, but exclude tags
     		    $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\"><a name=\"$1\">$1</a></span>", $strElementOutput);
     		}

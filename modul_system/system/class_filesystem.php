@@ -164,7 +164,7 @@ class class_filesystem {
 				$arrReturn["filetype"] = uniSubstr($strFile, $intTemp);
 			else
 				$arrReturn["filetype"] = $strFile;
-			$arrReturn["filetype"] = strtolower($arrReturn["filetype"]);
+			$arrReturn["filetype"] = uniStrtolower($arrReturn["filetype"]);
 			//Size
 			$arrReturn["filesize"] = filesize($strFile);
 			//creatopn

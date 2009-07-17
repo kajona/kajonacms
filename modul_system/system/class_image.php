@@ -98,7 +98,7 @@ class class_image {
         $strImage = removeDirectoryTraversals($strImage);
 		$this->bitPreload = true;
 		if(is_file(_realpath_.$strImage))  {
-			$strType = strtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
+			$strType = uniStrtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
 			$arrInfo = getimagesize(_realpath_.$strImage);
 			$this->intWidth = $arrInfo[0];
 			$this->intHeight = $arrInfo[1];
@@ -156,7 +156,7 @@ class class_image {
 		//file existing?
 		if(is_file(_realpath_.$strImage)) {
 			//DateiEndung bestimmen
-			$strType = strtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
+			$strType = uniStrtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
 			switch ($strType) {
 				case ".jpg":
 					$this->objImage = imagecreatefromjpeg(_realpath_.$strImage);
@@ -210,7 +210,7 @@ class class_image {
 			if($strTarget == "")
 			   $strTarget = "/".$this->strCachepath.$this->generateCachename(0, 0, $intJpegQuality);
 
-			switch (strtolower($strType)) {
+			switch (uniStrtolower($strType)) {
 				case ".jpg":
 					imagejpeg($this->objImage, _realpath_.$strTarget, $intJpegQuality);
 					$bitReturn = true;

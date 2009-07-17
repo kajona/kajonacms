@@ -735,7 +735,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $objFilesystem = new class_filesystem();
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
-                $strSuffix = strtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
+                $strSuffix = uniStrtolower(uniSubstr($arrSource["name"], uniStrrpos($arrSource["name"], ".")));
                 if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                         $strReturn .= $this->getText("upload_erfolg");

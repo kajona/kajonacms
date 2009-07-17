@@ -76,7 +76,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
         $this->setEditDate();
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
                         SET 	navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
-    							navigation_page_i='".$this->objDB->dbsafeString(strtolower($this->getStrPageI()))."',
+    							navigation_page_i='".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
     							navigation_page_e='".$this->objDB->dbsafeString($this->getStrPageE())."',
     							navigation_target='".$this->objDB->dbsafeString($this->getStrTarget())."',
     							navigation_image='".$this->objDB->dbsafeString($this->getStrImage())."'
@@ -105,7 +105,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
 		               (navigation_id, navigation_name, navigation_page_e, navigation_page_i, navigation_target, navigation_image) VALUES
 		               ('".$this->objDB->dbsafeString($strPointSystemId)."', '".$this->objDB->dbsafeString($this->getStrName())."',
-		                '".$this->objDB->dbsafeString($this->getStrPageE())."', '".$this->objDB->dbsafeString(strtolower($this->getStrPageI()))."',
+		                '".$this->objDB->dbsafeString($this->getStrPageE())."', '".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
 		                '".$this->objDB->dbsafeString($this->getStrTarget())."', '".$this->objDB->dbsafeString($this->getStrImage())."')";
 
 		if(!$this->objDB->_query($strQuery))

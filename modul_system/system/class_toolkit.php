@@ -165,7 +165,7 @@ class class_toolkit  {
 		else
 			$strType = $strFilename;
 
-		$strType = strtolower($strType);
+		$strType = uniStrtolower($strType);
 
 		//Known Type?
 		if(isset($arrMime[$strType]))
