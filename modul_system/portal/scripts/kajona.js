@@ -65,6 +65,7 @@ var kajonaTooltip = {
 	},
 	
 	show : function(e) {
+		kajonaTooltip.hide(e);
 		kajonaTooltip.container.appendChild(this.tooltip);
 		kajonaTooltip.locate(e);
 	},

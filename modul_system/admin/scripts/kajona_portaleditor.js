@@ -95,6 +95,7 @@ var kajonaAdminTooltip = {
 	},
 	
 	show : function(e) {
+		kajonaTooltip.hide(e);
 		kajonaAdminTooltip.container.appendChild(this.tooltip);
 		kajonaAdminTooltip.locate(e);
 	},

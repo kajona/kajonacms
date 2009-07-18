@@ -248,6 +248,7 @@ var kajonaAdminTooltip = {
 	},
 	
 	show : function(e) {
+		kajonaAdminTooltip.hide(e);
 		kajonaAdminTooltip.container.appendChild(this.tooltip);
 		kajonaAdminTooltip.locate(e);
 	},
@@ -439,7 +440,7 @@ var systemStatusCallback = function(o, bitSuccess) {
 				image.setAttribute('alt', strActiveText);
 				link.setAttribute('title', strActiveText);
 			}
-			kajonaAdminTooltip.hide();
+			
 			kajonaAdminTooltip.add(link);
 		}
 	} else {

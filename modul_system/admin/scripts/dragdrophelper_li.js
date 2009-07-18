@@ -14,7 +14,6 @@ if(arrayListIds == null) {
 	var arrayListIds = new Array();
 }
 
-
 (function() {
 	var Dom = YAHOO.util.Dom;
 	var Event = YAHOO.util.Event;
@@ -32,9 +31,9 @@ if(arrayListIds == null) {
 	//Basic functions
 	kajona.dragndroplistDashboard.DDApp = {
 		
-		saveInit : function() {
+		safeInit : function() {
 			if(typeof YAHOO == "undefined") {
-                window.setTimeout(kajona.dragndroplistDashboard.DDApp.saveInit(), 1000);
+                window.setTimeout(kajona.dragndroplistDashboard.DDApp.safeInit(), 1000);
                 return;
             }
             
@@ -218,5 +217,5 @@ if(arrayListIds == null) {
 	});
 
 	//and init the app
-	kajona.dragndroplistDashboard.DDApp.saveInit();
+	kajona.dragndroplistDashboard.DDApp.safeInit();
 })();
