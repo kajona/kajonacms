@@ -28,6 +28,7 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_news";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."news";
@@ -38,12 +39,6 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 
 		parent::__construct($arrModule, array());
 
-		//if no sysid was given, try to load from feedname
-		if($this->getParam("feedTitle") != "") {
-		    $objFeed = class_modul_news_feed::getFeedByUrlName($this->getParam("feedTitle"));
-		    if($objFeed !=null)
-		        $this->setSystemid($objFeed->getSystemid());
-		}
 	}
 
 
@@ -69,20 +64,32 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 	 */
 	private function createNewsfeed() {
 	    $strReturn = "";
-        //Load the data of the news-Element
-        $objNewsfeed = new class_modul_news_feed($this->getSystemid());
 
-        //and load all news belonging to the selected cats
-        if($objNewsfeed->getStrCat() != "0")
-            $arrNews = class_modul_news_feed::getNewsList($objNewsfeed->getStrCat());
-        else
-            $arrNews = class_modul_news_feed::getNewsList();
+        //if no sysid was given, try to load from feedname
+        $objNewsfeed = null;
+		if($this->getParam("feedTitle") != "") {
+		    $objNewsfeed = class_modul_news_feed::getFeedByUrlName($this->getParam("feedTitle"));
+		}
 
 
-        $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
+        if($objNewsfeed != null) {
 
-        //and count the request
-        $objNewsfeed->incrementNewsCounter();
+            //and load all news belonging to the selected cats
+            if($objNewsfeed->getStrCat() != "0")
+                $arrNews = class_modul_news_feed::getNewsList($objNewsfeed->getStrCat());
+            else
+                $arrNews = class_modul_news_feed::getNewsList();
+
+            $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
+            
+            //and count the request
+            $objNewsfeed->incrementNewsCounter();
+        }
+        else {
+            $strReturn .= $this->createNewsfeedXML("", "", "", "", array());
+        }
+
+        
 
         return $strReturn;
 	}
