@@ -888,7 +888,7 @@ The language switch sourrounds the buttons
     <div class="hd"><div class="c"><h3 id="%%dialog_id%%_title">%%dialog_title%%</h3></div></div>
     <div class="bd">
         <div class="c" style="margin-left: 45px;">
-            <div class="loadingContainer"></div>
+            <div id="dialogLoadingDiv" class="loadingContainer"></div>
             <div id="%%dialog_id%%_content"><!-- filled by js --></div>
         </div>
     </div>
@@ -896,16 +896,3 @@ The language switch sourrounds the buttons
 </div></dialogLoadingContainer>
 
 <dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>
-
----------------------------------------------------------------------------------------------------------
--- SYSTEMTASK -------------------------------------------------------------------------------------------
-Should contain HTML-elements with the following ids: loadingDiv, statusDiv, idleInfoDiv
-<systemtask_info>
-    <div style="border: 1px solid #CCCCCC;">
-        <div id="statusDiv" style="float: left;">%%statusinfo%%</div>
-        <div id="loadingDiv" style="display: none; float: right;">
-            <div style="text-align: center;"><img src="_skinwebpath_/loading.gif" alt="Loading" /></div>
-        </div>
-        <div style="clear: both;"></div>
-    </div>
-</systemtask_info>

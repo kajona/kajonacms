@@ -200,7 +200,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 						    },
 						    failure : function(o) {
 						        archive_hide_screenlock_dialog();
-						        kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
+						        kajonaStatusDisplay.messageError(\"<b>Request failed!</b>\"
 						                + o.responseText);
 						    }
 						}
@@ -289,7 +289,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 								location.reload();
 							},
 							failure : function(o) {
-								kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\" + o.responseText);
+								kajonaStatusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
 							}
 						}
 						);

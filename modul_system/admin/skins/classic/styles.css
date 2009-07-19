@@ -590,7 +590,7 @@ a.inputSubmit {
 /* J S   S T A T U S   B O X */
 .jsStatusBoxMessage, .jsStatusBoxError {
     padding: 8px;
-    z-index: 2000;
+    z-index: 10000;
     max-width: 400px;
     background-color: #ffffff;
     margin: 2px;

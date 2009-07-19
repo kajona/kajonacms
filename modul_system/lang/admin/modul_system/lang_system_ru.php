@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 182
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -180,6 +180,7 @@ $lang["systeminfo_php_urlfopen"]         = "Разрешить url fopen";
 $lang["systeminfo_yes"]                  = "Да";
 $lang["systemlog"]                       = "Логфайл системы";
 $lang["systemtask_cancel_execution"]     = "";
+$lang["systemtask_close_dialog"]         = "";
 $lang["systemtask_compresspicuploads_done"] = "Изменения размера и сжатие успешно осуществлено";
 $lang["systemtask_compresspicuploads_found"] = "Найденные картинки";
 $lang["systemtask_compresspicuploads_height"] = "Максимальная длина (пиксель)";
@@ -201,6 +202,8 @@ $lang["systemtask_dbimport_error"]       = "Ошибка при создании
 $lang["systemtask_dbimport_file"]        = "Резервная копия:";
 $lang["systemtask_dbimport_name"]        = "Импортировать резервную копию датабазы";
 $lang["systemtask_dbimport_success"]     = "Резервная копия успешно установлена";
+$lang["systemtask_dialog_title"]         = "";
+$lang["systemtask_dialog_title_done"]    = "";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Количество удаленных файлов:";
 $lang["systemtask_flushpiccache_done"]   = "Очистка завершена.";
 $lang["systemtask_flushpiccache_name"]   = "Очистить кеш рисунков";
@@ -211,7 +214,7 @@ $lang["systemtask_group_cache"]          = "";
 $lang["systemtask_group_database"]       = "";
 $lang["systemtask_group_default"]        = "";
 $lang["systemtask_group_stats"]          = "";
-$lang["systemtask_idle"]                 = "";
+$lang["systemtask_progress"]             = "Прогрес:";
 $lang["systemtask_run"]                  = "Выполнить";
 $lang["systemtask_runningtask"]          = "";
 $lang["titel_erben"]                     = "Перенять права:";

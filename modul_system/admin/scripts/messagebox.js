@@ -21,6 +21,9 @@ var kajonaStatusDisplay = {
 	idOfContentBox : "jsStatusBoxContent",
 	classOfMessageBox : "jsStatusBoxMessage",
 	classOfErrorBox : "jsStatusBoxError",
+	timeToFadeOutMessage : 4000,
+	timeToFadeOutError : 10000,
+	timeToFadeOut : null,
 	animObject : null,
 	
 	/**
@@ -53,6 +56,7 @@ var kajonaStatusDisplay = {
 		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
 		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
 		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox);
+		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutMessage;
 		kajonaStatusDisplay.startFadeIn(strMessage);
     },
 
@@ -65,6 +69,7 @@ var kajonaStatusDisplay = {
 		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
 		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
 		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox);
+		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutError;
 		kajonaStatusDisplay.startFadeIn(strMessage);
     },
 	
@@ -94,7 +99,7 @@ var kajonaStatusDisplay = {
 	
 	fadeIn : function () {
 		kajonaStatusDisplay.animObject = new YAHOO.util.Anim(kajonaStatusDisplay.idOfMessageBox, { opacity: { to: 0.8 } }, 1, YAHOO.util.Easing.easeOut);
-		kajonaStatusDisplay.animObject.onComplete.subscribe(function() {window.setTimeout("kajonaStatusDisplay.startFadeOut()", 4000);});
+		kajonaStatusDisplay.animObject.onComplete.subscribe(function() {window.setTimeout("kajonaStatusDisplay.startFadeOut()", timeToFadeOut);});
 		kajonaStatusDisplay.animObject.animate();
 	},
 	

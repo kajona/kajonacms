@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 182
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -180,6 +180,7 @@ $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
 $lang["systeminfo_yes"]                  = "Sim";
 $lang["systemlog"]                       = "Eventos do sistema";
 $lang["systemtask_cancel_execution"]     = "";
+$lang["systemtask_close_dialog"]         = "";
 $lang["systemtask_compresspicuploads_done"] = "";
 $lang["systemtask_compresspicuploads_found"] = "";
 $lang["systemtask_compresspicuploads_height"] = "";
@@ -201,6 +202,8 @@ $lang["systemtask_dbimport_error"]       = "Erro no restauro da cópia de segura
 $lang["systemtask_dbimport_file"]        = "Cópia de Segurança:";
 $lang["systemtask_dbimport_name"]        = "Importar cópia de segurança da Base de Dados";
 $lang["systemtask_dbimport_success"]     = "Restauro da cópia de segurança realizado com sucesso";
+$lang["systemtask_dialog_title"]         = "";
+$lang["systemtask_dialog_title_done"]    = "";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Número de ficheiros eliminados: ";
 $lang["systemtask_flushpiccache_done"]   = "Descarregamento completo.";
 $lang["systemtask_flushpiccache_name"]   = "Descarregar memória temporária das imagens";
@@ -211,7 +214,7 @@ $lang["systemtask_group_cache"]          = "";
 $lang["systemtask_group_database"]       = "";
 $lang["systemtask_group_default"]        = "";
 $lang["systemtask_group_stats"]          = "";
-$lang["systemtask_idle"]                 = "";
+$lang["systemtask_progress"]             = "";
 $lang["systemtask_run"]                  = "Realizar";
 $lang["systemtask_runningtask"]          = "";
 $lang["titel_erben"]                     = "Direitos hierarquicos:";

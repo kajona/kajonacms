@@ -416,7 +416,7 @@ var regularCallback = {
 		kajonaStatusDisplay.displayXMLMessage(o.responseText)
 	},
 	failure : function(o) {
-		kajonaStatusDisplay.messageError("<b>request failed!!!</b>")
+		kajonaStatusDisplay.messageError("<b>Request failed!</b>")
 	}
 };
 
@@ -556,13 +556,13 @@ var kajonaAdminAjax = {
 								location.reload();
 							},
 							failure : function(o) {
-								kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+								kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
 							}
 						}
 						);
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
@@ -580,14 +580,14 @@ var kajonaAdminAjax = {
                                     location.reload();
                                 },
                                 failure : function(o) {
-                                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                                 }
                             }
                         );
                     }
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
@@ -606,7 +606,7 @@ var kajonaAdminAjax = {
                                         location.reload();
                                     },
                                     failure : function(o) {
-                                        kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                                        kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                                     }
                                 }
                             );
@@ -617,7 +617,7 @@ var kajonaAdminAjax = {
                     }
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>request failed!!!</b>" + o.responseText);
+                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     }
@@ -981,7 +981,7 @@ var kajonaImageEditor = {
             hide_fm_screenlock_dialog();
         },
         failure : function(o) {
-            kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
+            kajonaStatusDisplay.messageError("<b>Request failed!</b>"
                     + o.responseText);
             hide_fm_screenlock_dialog();
         }
@@ -1027,7 +1027,7 @@ var kajonaImageEditor = {
             hide_fm_screenlock_dialog();
         },
         failure : function(o) {
-            kajonaStatusDisplay.messageError("<b>request failed!!!</b>"
+            kajonaStatusDisplay.messageError("<b>Request failed!</b>"
                     + o.responseText);
             hide_fm_screenlock_dialog();
         }
@@ -1037,37 +1037,44 @@ var kajonaImageEditor = {
 
 var kajonaSystemtaskHelper =  {
 
-    executeTask : function(strTaskname, strAdditionalParam, boolNoContentReset) {
-        if(boolNoContentReset == null || boolNoContentReset == undefined)
-            document.getElementById('statusDiv').innerHTML = "";
+    executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {
+        if(bitNoContentReset == null || bitNoContentReset == undefined) {
+            jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE);
+            jsDialog_0.setContentRaw(kajonaSystemtaskDialogContent);
+            document.getElementById(jsDialog_0.containerId).style.width = "550px";
+            document.getElementById('systemtaskCancelButton').onclick = kajonaSystemtaskHelper.cancelExecution;
+            jsDialog_0.init();
+        }
         
-        document.getElementById('loadingDiv').style.display = "block";
-        jsDialog_3.init();
         kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
             success : function(o) {
                 var strResponseText = o.responseText;
-                //parse text to decide if a reload is necessary
+                
+                //parse the response and check if it's valid
                 if(strResponseText.indexOf("<error>") != -1) {
                     kajonaStatusDisplay.displayXMLMessage(strResponseText);
                 }
+                else if(strResponseText.indexOf("<statusinfo>") == -1) {
+                	kajonaStatusDisplay.messageError("<b>Request failed!</b><br />"+strResponseText);
+                }
                 else {
                     var intStart = strResponseText.indexOf("<statusinfo>")+12;
-                    var statusinfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
+                    var strStatusInfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
                     
+                    //parse text to decide if a reload is necessary
                     var strReload = "";
                     if(strResponseText.indexOf("<reloadurl>") != -1) {
                         intStart = strResponseText.indexOf("<reloadurl>")+11;
                         strReload = strResponseText.substr(intStart, strResponseText.indexOf("</reloadurl>")-intStart);
                     }
 
-                     if(statusinfo == "" && strResponseText != "")
-                           statusinfo = strResponseText;
-                    //show message?
-                    document.getElementById('statusDiv').innerHTML = statusinfo;
+                    //show status info
+                    document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
 
                     if(strReload == "") {
-                        document.getElementById('loadingDiv').style.display = "none";
-                        jsDialog_3.hide();
+                    	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);
+                    	document.getElementById('systemtaskLoadingDiv').style.display = "none";
+                    	document.getElementById('systemtaskCancelButton').value = KAJONA_SYSTEMTASK_CLOSE;
                     }
                     else {
                         kajonaSystemtaskHelper.executeTask(strTaskname, strReload, true);
@@ -1076,23 +1083,21 @@ var kajonaSystemtaskHelper =  {
             },
             
             failure : function(o) {
-                jsDialog_3.hide();
-                kajonaStatusDisplay.messageError("<b>request failed!!!</b>"+o.responseText);
+                jsDialog_0.hide();
+                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />"+o.responseText);
             }
-        }
-
-
-
-        );
+        });
     },
 
     cancelExecution : function() {
-        document.getElementById('statusDiv').innerHTML = KAJONA_TASKENGINE_IDLE;
         if(YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
            YAHOO.util.Connect.abort(kajonaAdminAjax.systemTaskCall, null, false);
         }
-        jsDialog_3.hide();
-        document.getElementById('loadingDiv').style.display = "none";
+        jsDialog_0.hide();
+    },
+
+    setName : function(strName) {
+    	document.getElementById('systemtaskNameDiv').innerHTML = strName;
     }
 };
 

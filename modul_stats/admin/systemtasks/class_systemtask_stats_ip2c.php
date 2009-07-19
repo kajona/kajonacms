@@ -21,7 +21,7 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
 
     private $strIp2cServer = "ip2c.kajona.de";
 
-    
+
 	/**
 	 * contructor to call the base constructor
 	 */
@@ -29,10 +29,10 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
 		parent::__construct();
         $this->setStrTextBase("stats");
     }
-    
+
     /**
      * @see interface_admin_systemtast::getGroupIdenitfier()
-     * @return string 
+     * @return string
      */
     public function getGroupIdentifier() {
         return "stats";
@@ -45,7 +45,7 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
     public function getStrInternalTaskName() {
     	return "statsip2c";
     }
-    
+
     /**
      * @see interface_admin_systemtast::getStrTaskName()
      * @return string
@@ -53,7 +53,7 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
     public function getStrTaskName() {
     	return $this->getText("systemtask_ip2c_name");
     }
-    
+
     /**
      * @see interface_admin_systemtast::executeTask()
      * @return string
@@ -106,22 +106,19 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
         if($intLookupsDone < 0)
             $intLookupsDone = 0;
 
-        
-        $strReturn .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
         $this->setStrProgressInformation($strReturn);
         $this->setStrReloadParam("&totalCount=".$this->getParam("totalCount"));
-
 
         return $intLookupsDone;
     }
 
     /**
      * @see interface_admin_systemtast::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
     	return "";
     }
-    
+
 }
 ?>

@@ -180,7 +180,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 						    },
 						    failure : function(o) {
 						        gallery_hide_screenlock_dialog();
-						        kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\"
+						        kajonaStatusDisplay.messageError(\"<b>Request failed!</b>\"
 						                + o.responseText);
 						    }
 						}
@@ -496,7 +496,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 								location.reload();
 							},
 							failure : function(o) {
-								kajonaStatusDisplay.messageError(\"<b>request failed!!!</b>\" + o.responseText);
+								kajonaStatusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
 							}
 						}
 						);

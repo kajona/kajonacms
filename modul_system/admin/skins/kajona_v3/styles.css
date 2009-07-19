@@ -1073,7 +1073,7 @@ div.percentBeam {
 /* J S   S T A T U S   B O X */
 .jsStatusBoxMessage, .jsStatusBoxError {
 	padding: 8px;
-	z-index: 2000;
+	z-index: 10000;
 	max-width: 400px;
 }
 
@@ -1219,7 +1219,7 @@ div.percentBeam {
     display: block;
 	visibility: hidden;
 	position: absolute;
-	width: 450px;
+	width: 465px;
 	margin:0px auto;
 	min-width:300px;
 	max-width:650px; /* max-size because of bg-image width */
@@ -1255,7 +1255,7 @@ div.percentBeam {
 .dialog .bd .c {
 	background:transparent url(dialog_cornersmiddle.png) repeat-y right top;
 	margin:0px -43px 0px 60px;
-	padding-right: 48px;
+	padding-right: 60px;
 }
 
 .dialog .ft {

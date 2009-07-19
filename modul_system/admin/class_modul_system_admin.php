@@ -355,7 +355,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
             asort($arrFiles);
 
-
         	//react on special task-commands?
             if($this->getParam("task") != "") {
                 //search for the matching task
@@ -372,11 +371,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                             if($this->getParam("execute") == "true") {
                                 $strTaskOutput = "
                                     <script type=\"text/javascript\">
-                                            kajonaAjaxHelper.loadAjaxBase();
-                                            kajonaAjaxHelper.loadAjaxBase( function() {
-                                                kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-                                            }
-                                        );
+	                                   kajonaAjaxHelper.loadAjaxBase( function() {
+
+	                                       kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+	                                       kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
+	                                    });
                                     </script>";
                             }
                             else {
@@ -385,8 +384,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                                    $strTaskOutput .= $strForm;
                                 }
                             }
-                            
-                        	
+
                             break;
                         }
                     }
@@ -428,7 +426,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                                                                                      "icon_accept.gif");
                     }
                     else {
-                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); document.getElementById('statusDiv').innerHTML='".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."<br />"."';return false;\"",
+                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                                                                                           "",
                                                                                           $this->getText("systemtask_run"),
 	                                                                                      "icon_accept.gif");
@@ -442,22 +440,17 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listFooter();
             }
 
+            $strReturn .= $this->objToolkit->jsDialog(0);
 
-
-            if($strTaskOutput == "")
-                $strTaskOutput = $this->getText("systemtask_idle");
-
-            $strCancelbutton = "<input type=\"submit\" onclick=\"kajonaSystemtaskHelper.cancelExecution(); \" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" />";
-
-            $strReturn .= $this->objToolkit->jsDialog(3);
-            $strTaskOutput = $this->objToolkit->getSystemtaskStatuswindow($strTaskOutput) ;
             //include js-code & stuff to handle executions
+            $strDialogContent = "<div id=\"systemtaskLoadingDiv\" class=\"loadingContainer\"></div><br /><b id=\"systemtaskNameDiv\"></b><br /><br /><div id=\"systemtaskStatusDiv\"></div><br /><input id=\"systemtaskCancelButton\" type=\"submit\" value=\"".$this->getText("systemtask_cancel_execution")."\" class=\"inputSubmit\" /><br />";
             $strReturn .= "<script type=\"text/javascript\">
-                var KAJONA_TASKENGINE_IDLE = '".$this->getText("systemtask_idle")."';
-                jsDialog_3.setContentRaw('".$strCancelbutton."');
+                var KAJONA_SYSTEMTASK_TITLE = '".$this->getText("systemtask_dialog_title")."';
+                var KAJONA_SYSTEMTASK_TITLE_DONE = '".$this->getText("systemtask_dialog_title_done")."';
+                var KAJONA_SYSTEMTASK_CLOSE = '".$this->getText("systemtask_close_dialog")."';
+                var kajonaSystemtaskDialogContent = '".$strDialogContent."';
                 </script>";
         	$strReturn = $strTaskOutput.$this->objToolkit->divider().$strReturn;
-        	
 
         }
         else
@@ -570,7 +563,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $strPhpLogContent = "";
             if(is_file(_systempath_."/debug/php.log"))
                 $strPhpLogContent = file_get_contents(_systempath_."/debug/php.log");
-                
+
             if(uniStrlen($strLogContent) != 0) {
                 //create columns with same width
                 $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);

@@ -27,10 +27,10 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
 		parent::__construct();
         $this->setStrTextBase("stats");
     }
-    
+
     /**
      * @see interface_admin_systemtast::getGroupIdenitfier()
-     * @return string 
+     * @return string
      */
     public function getGroupIdentifier() {
         return "stats";
@@ -43,7 +43,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
     public function getStrInternalTaskName() {
     	return "statshostnamelookup";
     }
-    
+
     /**
      * @see interface_admin_systemtast::getStrTaskName()
      * @return string
@@ -51,7 +51,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
     public function getStrTaskName() {
     	return $this->getText("systemtask_hostnamelookup_name");
     }
-    
+
     /**
      * @see interface_admin_systemtast::executeTask()
      * @return string
@@ -73,7 +73,7 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
 
         $strMessage .= $this->objToolkit->getTextRow($this->getText("intro_worker_lookup"). $this->getParam("totalCount"));
 
-        //Lookup 10 Ips an load the page again
+        //Lookup 10 IPs an load the page again
         for($intI = 0; $intI < 10; $intI++) {
             if(isset($arrIpToLookup[$intI])) {
                 $strIP = $arrIpToLookup[$intI]["stats_ip"];
@@ -90,17 +90,14 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
             }
         }
 
-        //and Create a small progress-info
+        //and create a small progress-info
         $intTotal = $this->getParam("totalCount");
         $floatOnePercent = 100 / $intTotal;
-        //and multiply it with the alredy looked up ips
+        //and multiply it with the alredy looked up IPs
         $intLookupsDone = ((int)$intTotal - count($arrIpToLookup)) * $floatOnePercent;
         $intLookupsDone = round($intLookupsDone, 2);
         if($intLookupsDone < 0)
             $intLookupsDone = 0;
-
-        $strMessage .= $this->objToolkit->getTextRow($this->getText("progress_worker_lookup"));
-        //$strReturn .= $this->objToolkit->percentBeam($intLookupsDone, "500");
 
         $this->setStrProgressInformation($strMessage);
         $this->setStrReloadParam("&totalCount=".$this->getParam("totalCount"));
@@ -110,11 +107,11 @@ class class_systemtask_stats_hostnamelookup extends class_systemtask_base implem
 
     /**
      * @see interface_admin_systemtast::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
     	return "";
     }
-    
+
 }
 ?>

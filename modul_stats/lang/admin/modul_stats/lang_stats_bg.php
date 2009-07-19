@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 183
+//Kajona Language Editor Core Build 182
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Секунди";
@@ -47,7 +47,6 @@ $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Статистиката";
 $lang["modul_worker"]                    = "Инструменти";
 $lang["module_description"]              = "";
-$lang["progress_worker_lookup"]          = "Прогрес:";
 $lang["quickhelp_list"]                  = "Статистиката осигурява преглед на различни системни дневници. В тези доклади, всички записи са обработени и анализирани да предоставят различни сведения и данни.";
 $lang["quickhelp_statsCommon"]           = "Статистиката осигурява преглед на различни системни дневници. В тези доклади, всички записи са обработени и анализирани да предоставят различни сведения и данни.";
 $lang["referer_direkt"]                  = "Директен достъп";
