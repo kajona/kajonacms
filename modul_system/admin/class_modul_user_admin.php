@@ -326,8 +326,13 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), ($this->getParam("ort") != "" ? $this->getParam("ort") : $objUser->getStrCity()));
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), ($this->getParam("tel") != "" ? $this->getParam("tel") : $objUser->getStrTel()));
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), ($this->getParam("handy") != "" ? $this->getParam("handy") : $objUser->getStrMobile() ));
-                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), new class_date($objUser->getLongDate()));//("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
-      //          $strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
+
+                //Create the matching date
+                $objDate = null;
+                if($objUser->getLongDate() > 0)
+                    $objDate = new class_date($objUser->getLongDate());
+
+                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), $objDate);//("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
@@ -355,8 +360,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), $this->getParam("ort"));
                 $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $this->getParam("tel"));
                 $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $this->getParam("handy"));
-                //$strReturn .= $this->objToolkit->formInputText("gebdatum", $this->getText("gebdatum"), $this->getParam("gebdatum"));
-                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), new class_date());
+                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), null);
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
                 $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
                 $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
@@ -399,8 +403,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
                             //build date
                             $objDate = new class_date();
-                            $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
-
+                            if($this->getParam("gebdatum_year") != "" || $this->getParam("gebdatum_month") != "" || $this->getParam("gebdatum_day") != "" )
+                                $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
+                            else
+                                $objDate->setLongTimestamp("00000000000000");
+                            
                             $objUser = new class_modul_user_user("");
                             $objUser->setStrUsername($this->getParam("username"));
                             $objUser->setStrPass($this->getParam("passwort"));
@@ -480,7 +487,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                         //Saving to database
                         //build date
                         $objDate = new class_date();
-                        $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
+                        if($this->getParam("gebdatum_year") != "" || $this->getParam("gebdatum_month") != "" || $this->getParam("gebdatum_day") != "" )
+                                $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
+                            else
+                                $objDate->setLongTimestamp("00000000000000");
 
                         $intActive = (($this->getParam("aktiv")) != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
                         $intAdmin = (($this->getParam("adminlogin")) != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
@@ -627,7 +637,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     private function actionGroupNew() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $strTemplateID = $this->objTemplate->readTemplate("/module/modul_user/admin_newgruppe.tpl");
 
             if($this->getParam("groupid") != "" || $this->getParam("gruppeid") != "") {
                 if($this->getParam("groupid") == "" && $this->getParam("gruppeid") != "")
@@ -836,8 +845,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 * @return string "" in case of success
 	 */
     private function actionSaveMembership() {
-        $strReturn = "";
-        $bitError = false;
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             //Get all Groups
             $arrGroups = class_modul_user_group::getAllGroups();
@@ -879,7 +886,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
 		    $arrLogs = $objArraySectionIterator->getArrayExtended();
 
-            $strRows = "";
             $arrPageViews = $this->objToolkit->getPageview($arrLogs, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "loginlog", "", _user_log_nrofrecords_);
             $arrLogs = $arrPageViews["elements"];
 

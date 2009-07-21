@@ -224,8 +224,8 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate") {
         //check passed param
-        if(!$objDateToShow instanceof class_date)
-        throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
+        if($objDateToShow != null && !$objDateToShow instanceof class_date)
+            throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
 
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
         $arrTemplate = array();
@@ -234,9 +234,9 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["titleMonth"] = $strName."_month";
         $arrTemplate["titleYear"] = $strName."_year";
         $arrTemplate["title"] = $strTitle;
-        $arrTemplate["valueDay"] = $objDateToShow->getIntDay();
-        $arrTemplate["valueMonth"] = $objDateToShow->getIntMonth();
-        $arrTemplate["valueYear"] = $objDateToShow->getIntYear();
+        $arrTemplate["valueDay"] = $objDateToShow != null ? $objDateToShow->getIntDay() : "";
+        $arrTemplate["valueMonth"] = $objDateToShow != null ? $objDateToShow->getIntMonth() : "";
+        $arrTemplate["valueYear"] = $objDateToShow != null ? $objDateToShow->getIntYear() : "";
 
         //commands and values for the calendar
         $arrTemplate["calendarCommands"] = "";
