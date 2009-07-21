@@ -915,7 +915,6 @@ class class_installer_system extends class_installer_base implements interface_i
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
 
-
         $strReturn .= "Adding system_owner column to db-schema...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
         	               ADD ".$this->objDB->encloseColumnName("system_owner")." VARCHAR( 20 ) NULL ";
@@ -939,6 +938,14 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "An error occured!\n";
 
         $strReturn .= "Changing type of user_date column to long ...\n";
+        
+        $strReturn .= "Set default values...\n";
+        $strSql = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+                      SET user_date = NULL where user_date = ''";
+                      
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";              
+        
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                         CHANGE ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
 
