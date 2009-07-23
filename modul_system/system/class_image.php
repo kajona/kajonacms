@@ -679,9 +679,7 @@ class class_image {
         else if($intCropWidth > 0 && $intCropHeight > 0) {
             $bitResize = true;
 
-            //TODO: caching sometimes doesn't work correctly, I guess because class_image::crop() doesn't use any caching.
             //TODO: Also it would be nice to enable the use of only one "fixed"-param.
-
             $floatRelation = $this->intWidth / $this->intHeight; //0 = width, 1 = height
             $floatNewRelation = $intCropWidth / $intCropHeight;
 

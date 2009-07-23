@@ -19,7 +19,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0.9";
+		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["class_admin"] 	= "class_modul_navigation_admin";
 		$arrModule["file_admin"] 	= "class_modul_navigation_admin.php";
@@ -39,7 +39,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.1";
 	}
 
 	public function hasPostInstalls() {
@@ -201,6 +201,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0.9") {
+            $strReturn .= $this->update_3209_321();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -319,6 +324,15 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->registerConstant("_navigation_use_cache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
 
         $this->updateModuleVersion("navigation", "3.2.0.9");
+        return $strReturn;
+    }
+
+    private function update_3209_321() {
+        $strReturn = "Updating 3.2.0.9 to 3.2.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.2.1");
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateElementVersion("navigation", "3.2.1");
         return $strReturn;
     }
 }

@@ -21,7 +21,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.0.9";
+		$arrModul["version"] 			= "3.2.1";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -541,6 +541,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_320_3209();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0.9") {
+            $strReturn .= $this->update_3209_321();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -954,6 +959,17 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0.9");
+        return $strReturn;
+    }
+    
+
+    private function update_3209_321() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.0.9 to 3.2.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.1");
         return $strReturn;
     }
 

@@ -24,7 +24,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
      */
     public function __construct() {
         $arrModule = array();
-        $arrModule["version"]       = "3.2.0.9";
+        $arrModule["version"]       = "3.2.1";
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["name_lang"]     = "Element downloads_toplist";
         $arrModule["nummer2"]       = _pages_inhalte_modul_id_;
@@ -64,6 +64,19 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
         return false;
     }
 
+    public function hasPostUpdates() {
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("downloadstoplist");
+            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
+                return true;
+		}
+		catch (class_exception $objEx)  {
+		}
+
+        return false;
+    }
+
     public function install() {
     }
 
@@ -98,6 +111,22 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
 
 
     public function update() {
+    }
+
+    public function postUpdate() {
+        $strReturn = "";
+        if(class_modul_pages_element::getElement("downloadstoplist")->getStrVersion() == "3.2.0.9") {
+            $strReturn .= $this->postUpdate_3209_321();
+        }
+
+        return $strReturn;
+    }
+
+    public function postUpdate_3209_321() {
+        $strReturn = "";
+        $strReturn = "Updating element downloadstoplist to 3.2.1...\n";
+        $this->updateElementVersion("downloadstoplist", "3.2.1");
+        return $strReturn;
     }
 }
 ?>

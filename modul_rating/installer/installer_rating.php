@@ -20,7 +20,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.0.9";
+		$arrModule["version"] 		  = "3.2.1";
 		$arrModule["name"] 			  = "rating";
 		$arrModule["name_lang"]       = "Module Ratings";
 		$arrModule["moduleId"] 		  = _rating_modul_id_;
@@ -34,7 +34,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.1";
 	}
 
 	public function hasPostInstalls() {
@@ -117,6 +117,11 @@ class class_installer_rating extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0.9") {
+            $strReturn .= $this->update_3209_321();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -146,6 +151,13 @@ class class_installer_rating extends class_installer_base implements interface_i
         $strReturn = "Updating 3.2.0 to 3.2.0.9..\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("rating", "3.2.0.9");
+        return $strReturn;
+    }
+
+    private function update_3209_321() {
+        $strReturn = "Updating 3.2.0.9 to 3.2.1..\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("rating", "3.2.1");
         return $strReturn;
     }
 	

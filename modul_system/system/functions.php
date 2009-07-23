@@ -597,7 +597,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
                     $strHref .= "#".$strAnchor;
 
                 //plus the domain as a prefix
-                $strHref = _webpath_."/".$strHref;
+                $strHref = "_webpath_"."/".$strHref;
 
 
                 $bitRegularLink = false;
@@ -605,7 +605,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 	    }
 
         if($bitRegularLink)
-		    $strHref = _indexpath_."?".($strPageI != "" ? "page=".$strPageI : "" )."".
+		    $strHref = "_indexpath_"."?".($strPageI != "" ? "page=".$strPageI : "" )."".
 		                              ($strSystemid != "" ? "&amp;systemid=".$strSystemid : "" ).
 		                              ($strAction != "" ? "&amp;action=".$strAction : "").
 		                              ($strLanguage != "" ? "&amp;language=".$strLanguage : "").

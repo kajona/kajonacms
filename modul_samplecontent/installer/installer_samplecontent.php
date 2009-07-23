@@ -22,12 +22,10 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
     private $strContentLanguage;
 
-    private $strMasterID = "";
-    private $strIndexID = "";
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.0.9";
+		$arrModule["version"] 		  = "3.2.1";
 		$arrModule["name"] 			  = "samplecontent";
 		$arrModule["class_admin"]  	  = "";
 		$arrModule["file_admin"] 	  = "";
@@ -49,7 +47,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.1";
 	}
 
 	public function hasPostInstalls() {
@@ -170,6 +168,11 @@ class class_installer_samplecontent extends class_installer_base implements inte
             $strReturn .= $this->update_320_3209();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0.9") {
+            $strReturn .= $this->update_3209_321();
+        }
+
         return $strReturn;
 	}
 
@@ -244,6 +247,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("samplecontent", "3.2.0.9");
+        return $strReturn;
+    }
+
+    private function update_3209_321() {
+        $strReturn = "Updating 3.2.0.9 to 3.2.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("samplecontent", "3.2.1");
         return $strReturn;
     }
 

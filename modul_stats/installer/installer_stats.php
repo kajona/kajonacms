@@ -24,7 +24,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0.9";
+		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "stats";
 		$arrModule["class_admin"] 	= "class_modul_stats_admin";
 		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
@@ -42,7 +42,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0";
+	    return "3.2.0.9";
 	}
 
 	public function hasPostInstalls() {
@@ -88,7 +88,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 
 		//register module
-		$strUserID = $this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal.php", "class_modul_stats_admin.php", $this->arrModule["version"], true);
+		$this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal.php", "class_modul_stats_admin.php", $this->arrModule["version"], true);
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -158,6 +158,11 @@ class class_installer_stats extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.0.9") {
+            $strReturn .= $this->update_3209_321();
         }
 
         return $strReturn."\n\n";
@@ -290,6 +295,14 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn .= "Updating 3.2.0 to 3.2.0.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.2.0.9");
+        return $strReturn;
+    }
+
+    private function update_3209_321() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.0.9 to 3.2.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.2.1");
         return $strReturn;
     }
 

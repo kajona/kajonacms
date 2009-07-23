@@ -540,8 +540,27 @@ abstract class class_installer_base extends class_root {
 
 	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
 
-	    return $this->objDB->_query($strQuery);
+	    $bitReturn = $this->objDB->_query($strQuery);
+        $this->objDB->flushQueryCache();
+        return $bitReturn;
 	}
+
+    /**
+     * Updates an element to the given version
+     *
+     * @param string $strElementName
+     * @param string $strVersion
+     */
+    protected function updateElementVersion($strElementName, $strVersion) {
+        $objElement = class_modul_pages_element::getElement($strElementName);
+        if($objElement != null) {
+            $objElement->setStrVersion($strVersion);
+            $objElement->updateObjectToDb();
+
+            class_logger::getInstance()->addLogRow("element ".$strElementName." updated to ".$strVersion, class_logger::$levelInfo);
+        }
+        $this->objDB->flushQueryCache();
+    }
 
 	/**
 	 * Registers a constant to load at system-startup

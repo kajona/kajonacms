@@ -24,7 +24,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.0.9";
+		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
@@ -61,6 +61,19 @@ class class_installer_element_tagto extends class_installer_base implements inte
         return false;
 	}
 
+    public function hasPostUpdates() {
+        $objElement = null;
+		try {
+		    $objElement = class_modul_pages_element::getElement("tagto");
+            if($objElement != null && version_compare($this->arrModule["version"], $objElement->getStrVersion(), ">"))
+                return true;
+		}
+		catch (class_exception $objEx)  {
+		}
+
+        return false;
+    }
+
 	public function install() {
     }
 
@@ -95,9 +108,23 @@ class class_installer_element_tagto extends class_installer_base implements inte
 	}
 
 
-	public function update()
-	{
-
+	public function update() {
 	}
+
+    public function postUpdate() {
+        $strReturn = "";
+        if(class_modul_pages_element::getElement("tagto")->getStrVersion() == "3.2.0.9") {
+            $strReturn .= $this->postUpdate_3209_321();
+        }
+
+        return $strReturn;
+    }
+
+    public function postUpdate_3209_321() {
+        $strReturn = "";
+        $strReturn = "Updating element tagto to 3.2.1...\n";
+        $this->updateElementVersion("tagto", "3.2.1");
+        return $strReturn;
+    }
 }
 ?>
