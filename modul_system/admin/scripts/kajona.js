@@ -1039,6 +1039,11 @@ var kajonaSystemtaskHelper =  {
 
     executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {
         if(bitNoContentReset == null || bitNoContentReset == undefined) {
+
+            if(document.getElementById('taskParamForm') != null) {
+                document.getElementById('taskParamForm').style.display = "none";
+            }
+
             jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE);
             jsDialog_0.setContentRaw(kajonaSystemtaskDialogContent);
             document.getElementById(jsDialog_0.containerId).style.width = "550px";

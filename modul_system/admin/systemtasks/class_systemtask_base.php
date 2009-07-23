@@ -91,7 +91,7 @@ abstract class class_systemtask_base {
     	$strFormContent = $this->getAdminForm();
     	
     	if($strFormContent != "") {
-    		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()));
+    		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm");
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"), "Submit", "onclick=\"submitExecution();return false;\"");

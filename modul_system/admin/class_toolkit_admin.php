@@ -732,7 +732,7 @@ class class_toolkit_admin extends class_toolkit {
     public function formHeader($strAction, $strName = "", $strEncoding = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
         $arrTemplate = array();
-        $arrTemplate["name"] = ($strName != "" ? $strName : "form".time());
+        $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
         $arrTemplate["action"] = $strAction;
         $arrTemplate["enctype"] = $strEncoding;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
