@@ -594,6 +594,8 @@ abstract class class_portal  {
      * @param string $strUrlToLoad
      */
     public function portalReload($strUrlToLoad) {
+        //replace constants in url
+        $strUrlToLoad = str_replace("_webpath_", _webpath_, $strUrlToLoad);
         header("Location: ".str_replace("&amp;", "&", $strUrlToLoad));
     }
 
