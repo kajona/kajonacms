@@ -532,21 +532,6 @@ class class_installer_pages extends class_installer_base implements interface_in
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
 
-        $strReturn = "Altering element-table...\n";
-        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
-                           ADD ".$this->objDB->encloseColumnName("element_version")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL";
-
-        if(!$this->objDB->_query($strSql))
-            $strReturn .= "An error occured!\n";
-
-        $strReturn .= "Updateing element-versions...\n";
-        include_once(_systempath_."/class_modul_pages_element.php");
-        $arrElements = class_modul_pages_element::getAllElements();
-        foreach($arrElements as $objOneElement) {
-            $objOneElement->setStrVersion("3.2.0.9");
-            $objOneElement->updateObjectToDb();
-        }
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0.9");
         return $strReturn;

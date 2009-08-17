@@ -950,12 +950,36 @@ class class_installer_system extends class_installer_base implements interface_i
                       
         if(!$this->objDB->_query($strSql))
             $strReturn .= "An error occured!\n";              
-        
+
+        $strReturn = "Altering user-table...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                         CHANGE ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->encloseColumnName("user_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
 
         if(!$this->objDB->_query($strSql))
             $strReturn .= "An error occured!\n";
+
+        $strReturn = "Altering element-table...\n";
+        $arrTables = $this->objDB->getTables();
+
+        if(in_array(_dbprefix_."element", $arrTables)) {
+            $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                           ADD ".$this->objDB->encloseColumnName("element_version")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL";
+
+            if(!$this->objDB->_query($strSql))
+                $strReturn .= "An error occured!\n";
+
+
+            $strReturn .= "Updating element-versions...\n";
+            include_once(_systempath_."/class_modul_pages_element.php");
+            $arrElements = class_modul_pages_element::getAllElements();
+            foreach($arrElements as $objOneElement) {
+                $objOneElement->setStrVersion("3.2.0.9");
+                $objOneElement->updateObjectToDb();
+            }
+
+
+
+        }
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0.9");
