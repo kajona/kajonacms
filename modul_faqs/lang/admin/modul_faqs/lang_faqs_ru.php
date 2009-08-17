@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 182
 
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Страница результатов:";
@@ -30,7 +30,7 @@ $lang["modul_anlegen"]                   = "Создать часто задав
 $lang["modul_kat_anlegen"]               = "Создать категорию";
 $lang["modul_liste"]                     = "Список";
 $lang["modul_rechte"]                    = "Разрешения модуля";
-$lang["modul_titel"]                     = "Часто задаваемые вопросы";
+$lang["modul_titel"]                     = "ЧАВО";
 $lang["modul_titel2"]                    = "Управление часто задаваемыми вопросами - категория";
 $lang["quickhelp_editCat"]               = "В настоящий момент Вы можете определить только имя категории.";
 $lang["quickhelp_editFaq"]               = "Вы можете изменить основную информацию о часто задаваемых вопросах. Она содержит вопрос и ответ, а так же принадлежность к категориям.";
