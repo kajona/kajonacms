@@ -394,7 +394,9 @@ var kajonaAjaxHelper = {
 
 	loadUploaderBase : function(callback) {
 		var l = new kajonaAjaxHelper.Loader();
-		l.addYUIComponents( [ "uploader" ]);
+		l.addYUIComponents( [ "element" ]);
+		//workaround since YUILoader 2.7.0 tries to load uploader.js instead of uploader-min.js
+		l.addJavascriptFile(l.yuiBase + "uploader/uploader-min.js");
 		l.load(callback);
 	},
 
