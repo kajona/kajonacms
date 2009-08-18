@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: index.php 2655 2009-03-28 19:00:05Z sidler $                                                *
+*   $Id$                                                *
 ********************************************************************************************************/
 
 // check if PHP version is less than the required version 5
