@@ -326,7 +326,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
-        $arrTemplate["content"] = htmlentities($strContent);
+        $arrTemplate["content"] = htmlentities($strContent, ENT_COMPAT, "UTF-8");
         $strReturn .=  $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         //For the Popups, we need the skinwebpath
         $strReturn .= $this->formInputHidden("skinwebpath", _skinwebpath_);
