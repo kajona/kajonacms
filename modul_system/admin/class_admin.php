@@ -932,6 +932,7 @@ abstract class class_admin {
     public function adminReload($strUrlToLoad) {
         //filling constants
         $strUrlToLoad = str_replace("_webpath_", _webpath_, $strUrlToLoad);
+        $strUrlToLoad = str_replace("_indexpath_", _indexpath_, $strUrlToLoad);
         //No redirect, if close-Command for admin-area should be sent
         if($this->getParam("peClose") == "") {
             header("Location: ".str_replace("&amp;", "&", $strUrlToLoad));
