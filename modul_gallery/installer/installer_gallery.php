@@ -188,31 +188,6 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.0") {
-            $strReturn .= $this->update_300_301();
-        }
-        
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.1") {
-            $strReturn .= $this->update_301_302();
-        }
-        
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2") {
-            $strReturn .= $this->update_302_309();
-        }
-        
-		$arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.9") {
-            $strReturn .= $this->update_309_3095();
-        }
-        
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.95") {
-            $strReturn .= $this->update_3095_310();
-        }
-        
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
@@ -246,81 +221,6 @@ class class_installer_gallery extends class_installer_base implements interface_
         return $strReturn."\n\n";
 	}
 
-	private function update_300_301() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
-
-        $strReturn .= "Altering pic-table...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."gallery_pic` ADD `pic_subtitle` VARCHAR( 255 ) NULL ";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-
-        $strQuery = "ALTER TABLE `"._dbprefix_."gallery_pic` CHANGE `pic_description` `pic_description` TEXT  NULL ";
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured!!!\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.0.1");
-
-        return $strReturn;
-	}
-	
-	private function update_301_302() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 3.0.1 to 3.0.2...\n";
-        
-        $strReturn .= "Scanning tables...\n";
-        $arrTables = $this->objDB->getTables();
-        
-        if(in_array(_dbprefix_."element_gallery", $arrTables)) {
-            $strReturn .= "Altering gallery-element-table...\n";
-            $strQuery = "ALTER TABLE `"._dbprefix_."element_gallery` 
-                            ADD `gallery_imagesperpage` INT NULL ,
-                            ADD `gallery_maxw_m` INT NULL;";
-            if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured!!!\n";
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.0.2");
-
-        return $strReturn;
-	}
-	
-    private function update_302_309() {
-        //Run the updates
-        $strReturn = "";
-        $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
-        $strReturn .= "Altering gallery-element-table...\n";
-        $strQuery = "ALTER TABLE `"._dbprefix_."element_gallery` 
-                        ADD `gallery_imagesperpage` INT NULL;";
-        
-        if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured!!!\n";    
-        
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.0.9");
-
-        return $strReturn;
-    }
-    
-	private function update_309_3095() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.0.95");
-        return $strReturn;
-    }
-
-    private function update_3095_310() {
-        $strReturn = "Updating 3.0.95 to 3.1.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.1.0");
-        return $strReturn;
-    }
-    
     private function update_310_311() {
         $strReturn = "Updating 3.1.0 to 3.1.1...\n";
         $strReturn .= "Updating module-versions...\n";

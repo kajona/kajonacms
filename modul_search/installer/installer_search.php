@@ -133,31 +133,6 @@ class class_installer_search extends class_installer_base implements interface_i
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.0") {
-            $strReturn .= $this->update_300_301();
-        }
-        
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.1") {
-            $strReturn .= $this->update_301_302();
-        }
-        
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2") {
-            $strReturn .= $this->update_302_309();
-        }
-        
-		$arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.9") {
-            $strReturn .= $this->update_309_3095();
-        }
-        
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.95") {
-            $strReturn .= $this->update_3095_310();
-        }
-        
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
@@ -191,81 +166,6 @@ class class_installer_search extends class_installer_base implements interface_i
         return $strReturn."\n\n";
 	}
 
-
-	private function update_300_301() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.0.1");
-
-        return $strReturn;
-	}
-	
-	
-	private function update_301_302() {
-	    //Run the updates
-	    $strReturn = "";
-        $strReturn .= "Updating 3.0.1 to 3.0.2...\n";
-        
-        //Tabellen anlegen
-		$strReturn .= "Installing search-log table...\n";
-		
-		$arrFields = array();
-		$arrFields["search_log_id"] 	= array("char20", false);
-		$arrFields["search_log_date"] 	= array("int", true);
-		$arrFields["search_log_query"] 	= array("char254", true);
-		
-		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
-			$strReturn .= "An error occured! ...\n";
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.0.2");
-
-        return $strReturn;
-	}
-	
-    private function update_302_309() {
-        //Run the updates
-        $strReturn = "";
-        $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
-        
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.0.9");
-
-        return $strReturn;
-    }
-    
-	private function update_309_3095() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
-        
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.0.95");
-
-        return $strReturn;
-    }
-    
-    private function update_3095_310() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
-        
-        $strReturn .= "Altering log-table...\n";
-        
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."search_log")." 
-                             ADD ".$this->objDB->encloseColumnName("search_log_language")." VARCHAR( 10 ) NULL ";
-        
-        if(!$this->objDB->_query($strQuery))
-            $strReturn .= "An error occured...\n";
-        
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("search", "3.1.0");
-
-        return $strReturn;
-    }
-    
     private function update_310_311() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";

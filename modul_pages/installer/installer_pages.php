@@ -314,32 +314,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.0") {
-            $strReturn .= $this->update_300_301();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.1") {
-            $strReturn .= $this->update_301_302();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.2") {
-            $strReturn .= $this->update_302_309();
-        }
-
-		$arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.9") {
-            $strReturn .= $this->update_309_3095();
-        }
-
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.0.95") {
-            $strReturn .= $this->update_3095_310();
-        }
-
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
@@ -372,91 +346,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         return $strReturn."\n\n";
 	}
-
-
-
-	private function update_300_301() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.0 to 3.0.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.0.1");
-
-	    return $strReturn;
-	}
-
-	private function update_301_302() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.1 to 3.0.2...\n";
-
-	    $strReturn .= "Creating universal element-table...\n";
-
-		$arrFields = array();
-		$arrFields["content_id"]= array("char20", false);
-		$arrFields["char1"]		= array("char254", true);
-		$arrFields["char2"] 	= array("char254", true);
-		$arrFields["char3"]		= array("char254", true);
-		$arrFields["int1"]		= array("int", true);
-		$arrFields["int2"]		= array("int", true);
-		$arrFields["int3"]		= array("int", true);
-		$arrFields["text"]		= array("text", true);
-
-		if(!$this->objDB->createTable("element_universal", $arrFields, array("content_id")))
-			$strReturn .= "An error occured! ...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.0.2");
-
-	    return $strReturn;
-	}
-
-	private function update_302_309() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.2 to 3.0.9...\n";
-	    //add pages' xml-handler
-	    $strReturn .= "Registering system xml handler...\n";
-	    $objSystemModule = class_modul_system_module::getModuleByName("pages");
-	    $objSystemModule->setStrXmlNameAdmin("class_modul_pages_admin_xml.php");
-	    if(!$objSystemModule->updateObjectToDb())
-	        $strReturn .= "An error occured!\n";
-
-	    $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.0.9");
-
-	    return $strReturn;
-	}
-
-	private function update_309_3095() {
-	    $strReturn = "";
-	    $strReturn .= "Updating 3.0.9 to 3.0.95...\n";
-	    $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.0.95");
-
-	    return $strReturn;
-	}
-
-    private function update_3095_310() {
-        $strReturn = "";
-
-        $strReturn .= "Updating 3.0.95 to 3.1.0...\n";
-
-        $strReturn .= "Searching for image-element to alter...\n";
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='image'";
-        $arrRow = $this->objDB->getRow($strQuery);
-        if($arrRow["COUNT(*)"] != 0) {
-        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_bild")."
-        	                   ADD ".$this->objDB->encloseColumnName("bild_x")." INT NULL ,
-                               ADD ".$this->objDB->encloseColumnName("bild_y")." INT NULL ";
-
-        	if(!$this->objDB->_query($strSql))
-        	   $strReturn .= "An error occured!\n";
-        }
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.1.0");
-
-        return $strReturn;
-    }
 
     private function update_310_311() {
         $strReturn = "";
