@@ -143,7 +143,7 @@ class class_element_tellafriend extends class_element_portal implements interfac
 	        $arrPair = explode("=", $arrOnePart);
 	    	if($arrPair[0] == "page")
 	    	    $strPage = $arrPair[1];
-	    	else if($arrPair[0] == "sytemid")
+	    	else if($arrPair[0] == "systemid")
 	    	    $strSystemid = $arrPair[1];
 	    	else if($arrPair[0] == "action")
 	    	    $strAction= $arrPair[1];
