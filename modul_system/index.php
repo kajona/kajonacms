@@ -115,7 +115,7 @@ class class_index  {
 						    if(issetGet("language")) {
 						        //languages installed?
 						        $objLanguages = $this->getModuleData("languages");
-						        if($objLanguages->getStrNameAdmin() != "") {
+						        if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
 						            include_once(_systempath_."/class_modul_languages_language.php");
 						            $objLanguage = new class_modul_languages_language();
 						            $objLanguage->setStrAdminLanguageToWorkOn(getGet("language"));
