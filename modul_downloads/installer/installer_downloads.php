@@ -192,7 +192,7 @@ class class_installer_downloads extends class_installer_base implements interfac
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.2.1.9") {
+        if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3219();
         }
 
@@ -302,7 +302,7 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("downloads", "3.2.0.9");
+        $this->updateModuleVersion("downloads", "3.2.1.9");
         return $strReturn;
     }
     
