@@ -161,6 +161,10 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	 */
 	public static function deleteNaviPoint($strSystemid) {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$strSystemid, class_logger::$levelInfo);
+
+        //flush the cache
+        class_modul_navigation_cache::flushCache();
+
 	    $objRoot = new class_modul_system_common();
 	    //Check rights for the current point
 	    if($objRoot->getObjRights()->rightDelete($strSystemid)) {
