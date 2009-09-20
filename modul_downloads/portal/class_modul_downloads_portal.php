@@ -70,8 +70,9 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strReturn = "";
 
 		//systemid passed?
-		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree()) {
-		    $this->setSystemid($this->arrElementData["download_id"]);
+		if( $this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
+            if(isset($this->arrElementData["download_id"]))
+                $this->setSystemid($this->arrElementData["download_id"]);
 		}
 
         $arrObjects = $this->getArrFiles();
@@ -203,11 +204,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	private function generatePathnavi() {
 		$strReturn = "";
 		//Load the current records
-		$objArchive = new class_modul_downloads_archive($this->arrElementData["download_id"]);
+		$objArchive = new class_modul_downloads_archive(isset($this->arrElementData["download_id"]) ? $this->arrElementData["download_id"] : "");
 		$objFile = new class_modul_downloads_file($this->getSystemid());
 		//If the record is empty, try to load the archive
 		if($objFile->getFilename() == "") {
-		      $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
+		      $objFile = new class_modul_downloads_archive(isset($this->arrElementData["download_id"]) ? $this->arrElementData["download_id"] : "");
 		}
         $arrTemplate = array();
         //check the action for the first entry
