@@ -189,6 +189,14 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
 		}
 
+        //screenshots available? undocumented feature!
+        if($objFile->getStrScreen1() != "")
+            $arrFile["file_screen_1"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen1())."&maxWidth=250&maxHeight=250\" />";
+        if($objFile->getStrScreen2() != "")
+            $arrFile["file_screen_2"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen2())."&maxWidth=250&maxHeight=250\" />";
+        if($objFile->getStrScreen3() != "")
+            $arrFile["file_screen_3"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=250&maxHeight=250\" />";
+
 		$strReturn = $this->fillTemplate($arrFile, $strTemplateID);
 
 		return $strReturn;
