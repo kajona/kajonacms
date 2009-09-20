@@ -280,15 +280,7 @@ abstract class class_root {
 	 * @return bool
 	 */
 	public function validateSystemid($strID) {
-	    if(uniStrlen($strID) != 20)
-			return false;
-
-		//Check against wrong characters
-		if(uniEreg("([a-z|A-a|0-9])*", $strID)) {
-			return true;
-		}
-		else
-			return false;
+	    return validateSystemid($strID);
 	}
 
 	/**

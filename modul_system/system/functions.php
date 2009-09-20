@@ -747,7 +747,7 @@ function urlSafeString($strText) {
 	$strReturn = str_replace($arrSearch, $arrReplace, $strText);
 
 	//remove all other special characters
-	$strReturn = ereg_replace("[^A-Za-z0-9_-]", "", $strReturn);
+	$strReturn = preg_replace("[^A-Za-z0-9_-]", "", $strReturn);
 
 	return $strReturn;
 }
@@ -834,7 +834,7 @@ function createFilename($strName, $bitFolder = false) {
  */
 function checkEmailaddress($strAddress) {
 	$intTest = uniEreg("([A-Za-z0-9])([A-Za-z0-9]|_|-|\.)*@([A-Za-z0-9]|_|-|\.)+\.([A-Za-z])([A-Za-z])+", $strAddress);
-	if($intTest === false)
+	if($intTest === false || $intTest <= 0)
 		return false;
 	else
 		return true;
@@ -934,11 +934,9 @@ function generateSystemid() {
  * @return bool
  */
 function validateSystemid($strID) {
-    if(strlen($strID) != 20)
-		return false;
-
+    
 	//Check against wrong characters
-	if(ereg("([a-z|A-a|0-9])*", $strID)) {
+	if(preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
 		return true;
 	}
 	else
@@ -1092,51 +1090,7 @@ function uniEreg($strPattern, $strString) {
     if(_mbstringloaded_)
         return mb_ereg($strPattern, $strString);
     else
-        return ereg($strPattern, $strString);
-}
-
-/**
- * Wrapper to phps eregi
- *
- * @param string $strPattern
- * @param string $strString
- * @return int
- */
-function uniEregi($strPattern, $strString) {
-    if(_mbstringloaded_)
-        return mb_eregi($strPattern, $strString);
-    else
-        return eregi($strPattern, $strString);
-}
-
-/**
- * Wrapper to phps ereg_replace
- *
- * @param string $strPattern
- * @param string $strReplacement
- * @param string $strString
- * @return int
- */
-function uniEregReplace($strPattern, $strReplacement, $strString) {
-    if(_mbstringloaded_)
-        return mb_ereg_replace($strPattern, $strReplacement, $strString);
-    else
-        return ereg_replace($strPattern, $strReplacement, $strString);
-}
-
-/**
- * Wrapper to phps eregi_replace
- *
- * @param string $strPattern
- * @param string $strReplacement
- * @param string $strString
- * @return int
- */
-function uniEregiReplace($strPattern, $strReplacement, $strString) {
-    if(_mbstringloaded_)
-        return mb_eregi_replace($strPattern, $strReplacement, $strString);
-    else
-        return eregi_replace($strPattern, $strReplacement, $strString);
+        return preg_match("/".$strPattern."/", $strString);
 }
 
 /**

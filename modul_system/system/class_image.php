@@ -893,9 +893,9 @@ class class_image {
      * @return o
      */
     public function createEmtpyImage($intWidth, $intHeight) {
-        $objImage = imagecreatetruecolor($intWidth, $intHeight);
-        $objTransColor = imagecolorallocatealpha($objImage, 0, 0, 0, 127);
-        imagefill($objImage, 0, 0, $objTransColor);
+        $objImage = @imagecreatetruecolor($intWidth, $intHeight);
+        $objTransColor = @imagecolorallocatealpha($objImage, 0, 0, 0, 127);
+        @imagefill($objImage, 0, 0, $objTransColor);
         return $objImage;
     }
 

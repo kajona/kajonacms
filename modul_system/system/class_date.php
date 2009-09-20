@@ -257,7 +257,7 @@ class class_date {
      * @param long $longTimestamp
      */
     public function setLongTimestamp($longTimestamp) {
-        if(ereg("([0-9]){14}", $longTimestamp))
+        if(uniEreg("([0-9]){14}", $longTimestamp))
             $this->longTimestamp = $longTimestamp;
     }
 
