@@ -21,7 +21,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.1.9";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -70,6 +70,9 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrFields["downloads_cattype"]	 	= array("int", true);
 		$arrFields["downloads_checksum"]	= array("char254", true);
 		$arrFields["downloads_max_kb"] 		= array("int", true);
+        $arrFields["downloads_screen_1"] 	= array("char254", true);
+        $arrFields["downloads_screen_2"] 	= array("char254", true);
+        $arrFields["downloads_screen_3"] 	= array("char254", true);
 		
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -188,6 +191,11 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1.9") {
+            $strReturn .= $this->update_321_3219();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -260,7 +268,7 @@ class class_installer_downloads extends class_installer_base implements interfac
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
 
-        $strReturn .= "Adding system_owner column to db-schema...\n";
+        $strReturn .= "Adding downloads_cattype column to db-schema...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")."
         	               ADD ".$this->objDB->encloseColumnName("downloads_cattype")." int NULL ";
 
@@ -278,6 +286,23 @@ class class_installer_downloads extends class_installer_base implements interfac
         $this->updateModuleVersion("downloads", "3.2.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("downloads", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3219() {
+        $strReturn = "Updating 3.2.1 to 3.2.1.9...\n";
+
+        $strReturn .= "Adding screen-rows column to db-schema...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."downloads_file")."
+        	               ADD ".$this->objDB->encloseColumnName("downloads_screen_1")." ".$this->objDB->getDatatype("char254")." NULL,
+                           ADD ".$this->objDB->encloseColumnName("downloads_screen_2")." ".$this->objDB->getDatatype("char254")." NULL,
+                           ADD ".$this->objDB->encloseColumnName("downloads_screen_3")." ".$this->objDB->getDatatype("char254")." NULL  ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.2.0.9");
         return $strReturn;
     }
     

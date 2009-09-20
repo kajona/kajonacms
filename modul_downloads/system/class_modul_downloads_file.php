@@ -28,6 +28,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
     private $intType = 0;
     private $intMaxKb = 0;
     private $intCatType = 0; //internal, undocumented field. used for kajonabase.net!
+    private $strScreen1 = ""; //internal, undocumented field. used for kajonabase.net!
+    private $strScreen2 = ""; //internal, undocumented field. used for kajonabase.net!
+    private $strScreen3 = ""; //internal, undocumented field. used for kajonabase.net!
 
     /**
      * Constructor to create a valid object
@@ -70,6 +73,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
             $this->setType($arrRow["downloads_type"]);
             $this->setChecksum($arrRow["downloads_checksum"]);
             $this->setIntCatType($arrRow["downloads_cattype"]);
+            $this->setStrScreen1($arrRow["downloads_screen_1"]);
+            $this->setStrScreen2($arrRow["downloads_screen_2"]);
+            $this->setStrScreen3($arrRow["downloads_screen_3"]);
         }
     }
 
@@ -90,9 +96,12 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
 		//Modul-Table
 		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, downloads_checksum, downloads_cattype) VALUES
+		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, 
+                       downloads_checksum, downloads_cattype, downloads_screen_1, downloads_screen_2, downloads_screen_3) VALUES
 		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."', ".(int)$this->getIntCatType().")";
+                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', 
+                       '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."', ".(int)$this->getIntCatType().",
+                       '".dbsafeString($this->getStrScreen1())."', '".dbsafeString($this->getStrScreen2())."', '".dbsafeString($this->getStrScreen3())."')";
 
 		if($this->objDB->_query($strQuery))
 			$bitCommit = true;
@@ -122,7 +131,10 @@ class class_modul_downloads_file extends class_model implements interface_model,
 					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
 					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb()).",
                         downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."',
-                        downloads_cattype='".$this->objDB->dbsafeString($this->getIntCatType())."'
+                        downloads_cattype='".$this->objDB->dbsafeString($this->getIntCatType())."',
+                        downloads_screen_1='".$this->objDB->dbsafeString($this->getStrScreen1())."',
+                        downloads_screen_2='".$this->objDB->dbsafeString($this->getStrScreen2())."',
+                        downloads_screen_3='".$this->objDB->dbsafeString($this->getStrScreen3())."'
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -431,6 +443,31 @@ class class_modul_downloads_file extends class_model implements interface_model,
     public function setIntCatType($intCatType) {
         $this->intCatType = $intCatType;
     }
+
+    public function getStrScreen1() {
+        return $this->strScreen1;
+    }
+
+    public function setStrScreen1($strScreen1) {
+        $this->strScreen1 = $strScreen1;
+    }
+
+    public function getStrScreen2() {
+        return $this->strScreen2;
+    }
+
+    public function setStrScreen2($strScreen2) {
+        $this->strScreen2 = $strScreen2;
+    }
+
+    public function getStrScreen3() {
+        return $this->strScreen3;
+    }
+
+    public function setStrScreen3($strScreen3) {
+        $this->strScreen3 = $strScreen3;
+    }
+
 
 }
 
