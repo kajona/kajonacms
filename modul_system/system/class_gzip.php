@@ -98,18 +98,26 @@ class class_gzip {
         if(file_exists($strFilename) && is_file($strFilename)) {
             //try to open sourcefile
             if($objSourcePointer = gzopen($strFilename, "rb")) {
-                //Loop over filecontent
-                $strContent = "";
-                while(!gzeof($objSourcePointer)) {
-                    $strContent .= gzread($objSourcePointer,  1024 * 512);
+
+                if($objTargetPointer = fopen($strTargetFilename, "wb")) {
+                    //Loop over filecontent
+                    $strContent = "";
+                    while(!gzeof($objSourcePointer)) {
+                        fwrite($objTargetPointer, gzread($objSourcePointer,  1024 * 512));
+                        //$strContent .= gzread($objSourcePointer,  1024 * 512);
+                    }
+                    @gzclose($objSourcePointer);
+                    @fclose($objTargetPointer);
+                    
+                    return true;
+
                 }
-                @gzclose($objSourcePointer);
-
-                //Write the targetfile
-                if(!@file_put_contents($strTargetFilename, $strContent))
+                else  {
+                    @gzclose($objSourcePointer);
                     throw new class_exception("can't write to targetfile ", class_exception::$level_ERROR);
+                }
 
-                return true;
+                
             }
             else {
                 gzclose($objSourcePointer);
