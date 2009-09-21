@@ -193,7 +193,7 @@ class class_rights {
 				//!!!!!!!BUT: There are special cases!!!!!!
 
 				//Special case 1: Folders!
-				if($arrRow["system_module_nr"] == _pages_ordner_id_) {
+				if($arrRow["system_module_nr"] == _pages_folder_id_) {
 					//Pages Root
 					$strQuery = "SELECT *
 								FROM "._dbprefix_."system,

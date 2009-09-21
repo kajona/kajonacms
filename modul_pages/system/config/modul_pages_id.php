@@ -17,9 +17,9 @@
 	define(	"_pages_elemente_modul_id_",				12);
 
 //ID der Ordneransicht
-	define( "_pages_folderview_modul_id",				13);
+	define( "_pages_folderview_modul_id_",				13);
 
 //ID der Ordnerverwaltung
-	define( "_pages_ordner_id_" ,						14);
+	define( "_pages_folder_id_" ,						14);
 
 ?>

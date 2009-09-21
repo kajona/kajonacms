@@ -161,7 +161,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//The pages_content
 		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
-		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
+		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatechange_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);

@@ -36,7 +36,7 @@ class class_modul_pages_folder extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul["name"] 				= "modul_pages";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _pages_ordner_id_;
+		$arrModul["moduleId"] 			= _pages_folder_id_;
 		$arrModul["table"]       		= _dbprefix_."page";
 		$arrModul["modul"]				= "pages";
 
@@ -106,7 +106,7 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 			$strSystemid = 0;
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
-		              WHERE system_module_nr="._pages_ordner_id_."
+		              WHERE system_module_nr="._pages_folder_id_."
 		                AND system_prev_id='".dbsafeString($strSystemid)."'
 		             ORDER BY system_comment ASC";
 
@@ -131,7 +131,7 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 		$strQuery = "UPDATE "._dbprefix_."system
 		              SET  system_prev_id='".dbsafeString($strNewPrevID)."'
 		              WHERE system_id='".dbsafeString($strFolderID)."'
-		                AND system_module_nr="._pages_ordner_id_;
+		                AND system_module_nr="._pages_folder_id_;
 		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
 	}
 
@@ -188,7 +188,7 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	private function getFoldersByName($strName) {
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
-		              WHERE system_module_nr="._pages_ordner_id_."
+		              WHERE system_module_nr="._pages_folder_id_."
 		                AND system_comment ='".dbsafeString($strName)."'
 		             ORDER BY system_comment ASC";
 
