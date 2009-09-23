@@ -741,6 +741,8 @@ function urlSafeString($strText) {
     if($strText == "")
         return "";
 
+	$strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
+
 	$arrSearch  = array(" ", "/", "&", "+", ".", ":", ",", ";", "=", "ä",  "Ä",  "ö",  "Ö",  "ü",  "Ü",  "ß");
 	$arrReplace = array("-", "-", "-", "-", "-", "-", "-", "-", "-", "ae", "Ae", "oe", "Oe", "ue", "Ue", "ss");
 
