@@ -30,25 +30,25 @@
 ########################################PORTAL REWRITING#################################################
 
 # source: page.seo.action.systemid.language
-#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4&language=$5
+#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.([a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4&language=$5 [QSA,L]
 
 # source: page.seo.action.systemid
-#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4
+#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.([0-9a-z]*)\.html  index.php?page=$1&action=$3&systemid=$4 [QSA,L]
 
 # source: page.seo.action
-#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$1&action=$3
+#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.([a-zA-Z]*)\.html  index.php?page=$1&action=$3 [QSA,L]
 
 #source: page.language
-#RewriteRule ^([0-9a-z\_\-]+)\.([a-z]{2,2})\.html  index.php?page=$1&language=$2
+#RewriteRule ^([0-9a-z\_\-]+)\.([a-z]{2,2})\.html  index.php?page=$1&language=$2 [QSA,L]
 
 # source: page.seo
-#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.html  index.php?page=$1
+#RewriteRule ^([0-9a-z\_\-]+)\.(.*)\.html  index.php?page=$1 [QSA,L]
 
 # source: page
-#RewriteRule ^([0-9a-z\_\-]+)\.html  index.php?page=$1
+#RewriteRule ^([0-9a-z\_\-]+)\.html  index.php?page=$1 [QSA,L]
 
 #uncomment the following line to use mod-rewrite for rss-feeds
-#RewriteRule ^([0-9a-z\_\-]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1
+#RewriteRule ^([0-9a-z\_\-]+)\.rss  xml.php?module=news&action=newsFeed&feedTitle=$1 [L]
 
 
 
