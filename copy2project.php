@@ -46,7 +46,7 @@ class class_copy2project {
             echo "      only the last one will be copied back.\n\n";
             echo "init params: \n";
             echo "  base folder:          ".$this->strBasePath."\n";
-            echo "  system folder:        ".$this->strSystemFolderName."\n";
+            echo "  system folder:        ".$this->strBasePath."/".$this->strSystemFolderName."\n";
             echo "  excluded files P2M:   ".implode(", ", $this->arrFileExclusionsP2M)."\n";
             echo "  excluded folders M2P: ".implode(", ", $this->arrFolderExclusionsM2P)."\n";
             echo "  logfile:              ".$this->strLogName."\n";
@@ -55,6 +55,8 @@ class class_copy2project {
             echo "<a href=\"copy2project.php?action=modules2project\">Copies all files to the subfolder \n".$this->strBasePath." --> ".$this->strBasePath."/".$this->strSystemFolderName."</a>\n";
             echo "\n<h3>Copy project 2 modules (Up from ./".$this->strSystemFolderName.")</h3>";
             echo "<a href=\"copy2project.php?action=project2modules\">Copies all files from the subfolder into the module-structure \n".$this->strBasePath."/".$this->strSystemFolderName." --> ".$this->strBasePath."</a>\n";
+            echo "\n<h3>Check consistency of system-folder (".$this->strSystemFolderName.")</h3>";
+            echo "<a href=\"copy2project.php?action=checkProject\">Compares the logfile with the project folder.\nLists all files not exising anymore or existing but not being listed in the logfile.</a>";
         }
         else {
             if($_GET["action"] == "modules2project") {
@@ -76,6 +78,53 @@ class class_copy2project {
 
                 echo $this->strCopyLog;
             }
+            else if($_GET["action"] == "checkProject") {
+                echo "<h3>check project consistency</h3>";
+                $this->checkProject();
+            }
+        }
+    }
+    
+    private function checkProject() {
+        echo "Loading logfile ".$this->strBasePath."/".$this->strLogName."\n\n";
+        $strLogContent = trim(file_get_contents($this->strBasePath."/".$this->strLogName));
+
+        $arrFiles = explode("<eol>", $strLogContent);
+        
+        $arrCleanedUpArray = array();
+        
+        echo "Searching for files being deleted...\n\n";
+        foreach($arrFiles as $strOneFileEntry) {
+            $arrSingleFile = explode("<to>", trim($strOneFileEntry));
+            if(isset($arrSingleFile[0]) && isset($arrSingleFile[1])) {
+                
+                $arrCleanedUpArray[] = $arrSingleFile[0];
+                
+                if(!is_file($arrSingleFile[0])) {
+                    echo "> Sourcefile: ".$arrSingleFile[0]." not existing anymore\n";
+                    echo "      Origin: ".$arrSingleFile[1]."\n";     
+                }
+            }
+        }
+        
+        echo "\n...finished.\n\n";
+        
+        echo "Searching for files being added in the project (and not being copied back to modules)...\n\n";
+        $this->checkProjectRecursive($this->strBasePath."/".$this->strSystemFolderName, $arrCleanedUpArray);
+        echo "\n...finished.\n";
+                
+    }
+    
+    private function checkProjectRecursive($strStartPath, $arrLogArray) {
+    $arrFolderContent = $this->getFolderContent($strStartPath);
+
+        foreach($arrFolderContent["files"] as $strSingleFile) {
+            if(!in_array($strStartPath."/".$strSingleFile, $arrLogArray))
+                echo "> File: ".$strStartPath."/".$strSingleFile." not existing in logfile\n";
+        }
+
+        foreach ($arrFolderContent["folders"] as $strSingleFolder) {
+            $this->checkProjectRecursive($strStartPath."/".$strSingleFolder, $arrLogArray);
         }
     }
 
