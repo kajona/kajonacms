@@ -120,10 +120,6 @@ class class_modul_search_portal extends class_portal implements interface_portal
 		$arrTemplate["link_back"] = $arrHitsFilter["strBack"];
 		$arrTemplate["link_overview"] = $arrHitsFilter["strPages"];
 
-		$arrTemplate["hitlist_text1"] = $this->getText("hitlist_text1");
-		$arrTemplate["hitlist_text2"] = $this->getText("hitlist_text2");
-		$arrTemplate["hitlist_text3"] = $this->getText("hitlist_text3");
-
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist");
 
 		return $strReturn . $this->fillTemplate($arrTemplate, $strTemplateID);

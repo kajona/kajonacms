@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: action, suche_term, form_searchterm_label, form_submit_label -->
+<!-- available placeholders: action, suche_term -->
 <search_form>
     <div class="boxContent">
     <form name="searchform" method="post" action="%%action%%" accept-charset="UTF-8">
@@ -10,7 +10,7 @@
     </div>
 </search_form>
 
-<!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward, hitlist_text1, hitlist_text2, hitlist_text3 -->
+<!-- available placeholders: hitlist, search_term, search_nrresults, link_back, link_overview, link_forward -->
 <search_hitlist></search_hitlist>
 
 <!-- available placeholders: page_link, page_description -->
