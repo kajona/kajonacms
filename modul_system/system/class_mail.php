@@ -8,19 +8,20 @@
 ********************************************************************************************************/
 
 /**
- * This Class can be used to generate an email and to send this email
+ * This class can be used to generate and send emails
  *
  * This class is able to send plaintext mails, html mails, mails with attachements and variations
  * of these. To send a mail, a call could be
  *
  * $objMail = new class_mail();
  * $objMail->setSender("test@kajona.de");
+ * $objMail->setSenderName("Kajona System");
  * $objMail->addTo("sidler@localhost");
- * $objMail->setSubject("kajona testmail");
- * $objMail->setText("Dies ist der normale plain-text");
- * $objMail->setHtml("Dies ist der <br /> normale <b>html-content</b>");
+ * $objMail->setSubject("Kajona³ test mail");
+ * $objMail->setText("This is the plain text");
+ * $objMail->setHtml("This is<br />the <b>html-content</b><br /><img src=\"cid:kajona_poweredby.png\" />");
  * $objMail->addAttachement("/portal/pics/kajona/logo.gif");
- * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png");
+ * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
  * $objMail->sendMail();
  *
  * @package modul_system
@@ -141,13 +142,16 @@ class class_mail {
 
 	/**
 	 * Adds a file to the current mail
-	 * if no mimetype is given, the system tries to lookup the mimetype itself
+	 * If no mimetype is given, the system tries to lookup the mimetype itself.
+	 * Use $bitInline if the attachment shouldn't appear in the list of attachments in the mail client.
+	 * Inline-attachments can be used in html-emails like <img src="cid:your-filename.jpg" />
 	 *
 	 * @param string $strFilename
 	 * @param string $strContentType
+	 * @param bool $bitInline
 	 * @return bool
 	 */
-	public function addAttachement($strFilename, $strContentType = "") {
+	public function addAttachement($strFilename, $strContentType = "", $bitInline = false) {
         if(is_file(_realpath_.$strFilename)) {
             $arrTemp = array();
             $arrTemp["filename"] = _realpath_.$strFilename;
@@ -159,6 +163,10 @@ class class_mail {
                 $arrMime = $objToolkit->mimeType($strFilename);
                 $arrTemp["mimetype"] = $arrMime[0];
             }
+            
+            //attach as inline-attachment?
+            $arrTemp["inline"] = $bitInline;
+
             $this->arrFiles[] = $arrTemp;
             $this->bitFileAttached = true;
             return true;
@@ -273,12 +281,16 @@ class class_mail {
                     $strBody .= "--".$strBoundary.$this->strEndOfLine;
                     $strBody .= "Content-Type: ".$arrOneFile["mimetype"]."; name=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
                     $strBody .= "Content-Transfer-Encoding: base64".$this->strEndOfLine;
-                    $strBody .= "Content-Disposition: attachment; filename=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine.$this->strEndOfLine;
+                    if ($arrOneFile["inline"] == true) {
+                        $strBody .= "Content-Disposition: inline; filename=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
+                        $strBody .= "Content-ID: <".basename($arrOneFile["filename"]).">".$this->strEndOfLine.$this->strEndOfLine;
+                    } else {
+                        $strBody .= "Content-Disposition: attachment; filename=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine.$this->strEndOfLine;
+                    }
                     $strBody .= $strFileContents;
                     $strBody .= $this->strEndOfLine.$this->strEndOfLine;
                 }
             }
-
 
             //finish mail
             if($this->bitFileAttached || $this->bitMultipart)
@@ -294,20 +306,4 @@ class class_mail {
 
 } // class_mail
 
-//test-code
-/*
-include_once("./includes.php");
-class_carrier::getInstance();
-$objMail = new class_mail();
-$objMail->setSender("info@kajona.de");
-$objMail->setSenderName("Kajona System");
-$objMail->addTo("sidler@terrarium.mulchprod.intern");
-
-$objMail->setSubject("kajona test-mail");
-$objMail->setText("Email contents in text-format");
-$objMail->setHtml("Email contents in <b>html</b>-format");
-$objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png");
-
-var_dump($objMail->sendMail());
-*/
 ?>
