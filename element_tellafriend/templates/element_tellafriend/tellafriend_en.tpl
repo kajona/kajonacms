@@ -15,7 +15,7 @@
 </tellafriend_form>
 
 <errors>
-<ul>%%liste_fehler%%<ul>
+<ul>%%liste_fehler%%</ul>
 </errors>
 
 <errorrow>
