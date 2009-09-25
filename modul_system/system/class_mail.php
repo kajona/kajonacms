@@ -17,10 +17,10 @@
  * $objMail->setSender("test@kajona.de");
  * $objMail->setSenderName("Kajona System");
  * $objMail->addTo("sidler@localhost");
- * $objMail->setSubject("Kajona³ test mail");
+ * $objMail->setSubject("Kajona test mail");
  * $objMail->setText("This is the plain text");
  * $objMail->setHtml("This is<br />the <b>html-content</b><br /><img src=\"cid:kajona_poweredby.png\" />");
- * $objMail->addAttachement("/portal/pics/kajona/logo.gif");
+ * $objMail->addAttachement("/portal/pics/kajona/login_logo.gif");
  * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
  * $objMail->sendMail();
  *
@@ -281,7 +281,7 @@ class class_mail {
                     $strBody .= "--".$strBoundary.$this->strEndOfLine;
                     $strBody .= "Content-Type: ".$arrOneFile["mimetype"]."; name=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
                     $strBody .= "Content-Transfer-Encoding: base64".$this->strEndOfLine;
-                    if ($arrOneFile["inline"] == true) {
+                    if ($arrOneFile["inline"] === true) {
                         $strBody .= "Content-Disposition: inline; filename=\"".basename($arrOneFile["filename"])."\"".$this->strEndOfLine;
                         $strBody .= "Content-ID: <".basename($arrOneFile["filename"]).">".$this->strEndOfLine.$this->strEndOfLine;
                     } else {
