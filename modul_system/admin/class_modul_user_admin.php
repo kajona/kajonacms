@@ -511,7 +511,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                         $objUser->setStrAdminlanguage($this->getParam("language"));
 
 
-                        if($this->getParam("passwort") == "" || $this->getParam("passwort") == " ") {
+                        if(trim($this->getParam("passwort")) != "" && $this->getParam("passwort") != " ") {
                             $objUser->setStrPass($this->getParam("passwort"));
                         }
 
