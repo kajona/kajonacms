@@ -155,8 +155,28 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                         AND ip2c_name != 'na' */
                    GROUP BY stats_ip";
     	
-    	return $this->objDB->getArray($strQuery);
+    	return $this->objDB->getArraySection($strQuery, 0, 11);
         
+    }
+
+    /**
+     * Looks up the number of ip not yet resolved to a country
+     *
+     * @return array
+     */
+    public function getNumberOfIp2cLookups() {
+    	$strQuery = "SELECT COUNT(*) as number FROM (SELECT distinct stats_ip
+                       FROM "._dbprefix_."stats_data
+                            LEFT JOIN "._dbprefix_."stats_ip2country
+                                   ON (stats_ip = ip2c_ip)
+                      WHERE ip2c_name IS NULL
+                       /*   OR ip2c_name = ''
+                        AND ip2c_name != 'na' */
+                   GROUP BY stats_ip) as derived";
+
+    	$arrTemp = $this->objDB->getRow($strQuery);
+        return $arrTemp["number"];
+
     }
     
     /**

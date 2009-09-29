@@ -72,7 +72,7 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
 
         //check, if we did anything before
         if($this->getParam("totalCount") == "")
-            $this->setParam("totalCount", count($arrIpToLookup));
+            $this->setParam("totalCount", $objWorker->getNumberOfIp2cLookups());
 
         $strReturn .= $this->objToolkit->getTextRow($this->getText("intro_worker_lookupip2c"). $this->getParam("totalCount"));
 
@@ -101,7 +101,7 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
         $intTotal = $this->getParam("totalCount");
         $floatOnePercent = 100 / $intTotal;
         //and multiply it with the alredy looked up ips
-        $intLookupsDone = ((int)$intTotal - count($arrIpToLookup)) * $floatOnePercent;
+        $intLookupsDone = ((int)$intTotal - $objWorker->getNumberOfIp2cLookups() ) * $floatOnePercent;
         $intLookupsDone = round($intLookupsDone, 2);
         if($intLookupsDone < 0)
             $intLookupsDone = 0;

@@ -111,7 +111,7 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 
 	public function getReportGraph() {
 	    $arrReturn = array();
-	    include_once(_systempath_."/class_graph.php");
+	    include_once(_systempath_."/class_graph_pchart.php");
 	    //generate a graph showing dls per interval
 	    //--- XY-Plot -----------------------------------------------------------------------------------
 		//calc number of plots
@@ -154,13 +154,12 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
     		}
     		//create graph
     		if($intCount > 1) {
-        		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
-        		$objGraph = new class_graph();
-        		$objGraph->createLinePlotChart(715, 160);
-        		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
+        		$objGraph = new class_graph_pchart();
+        		
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
-        		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);
+        		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
+                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		$strFilename = "/portal/pics/cache/stats_topdownloads_plot.png";
                 $objGraph->saveGraph($strFilename);
         		$arrReturn[] = _webpath_.$strFilename;

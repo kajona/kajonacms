@@ -477,6 +477,22 @@ function timeToString($intTime, $bitLong = true) {
 	return $strReturn;
 }
 
+/**
+ * Converts a hex-string to its rgb-values
+ *
+ * @see http://www.jonasjohn.de/snippets/php/hex2rgb.htm
+ * @param string $color
+ * @return array
+ */
+function hex2rgb($color){
+    $color = str_replace('#', '', $color);
+    if (strlen($color) != 6){ return array(0,0,0); }
+    $rgb = array();
+    for ($x=0;$x<3;$x++){
+        $rgb[$x] = hexdec(substr($color,(2*$x),2));
+    }
+    return $rgb;
+}
 
 
 /**

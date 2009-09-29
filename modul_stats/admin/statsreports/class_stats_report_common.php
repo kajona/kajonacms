@@ -11,7 +11,7 @@
 include_once(_adminpath_."/interface_admin_statsreport.php");
 
 /**
- * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
+ * This plugin creates a view common numbers, such as "user online" or "total pagehits"
  *
  * @package modul_stats
  */
@@ -73,6 +73,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
 	public function getReport() {
 	    $strReturn = "";
+        
         //Create Data-table
         $arrHeader = array();
 
@@ -101,6 +102,7 @@ class class_stats_report_common implements interface_admin_statsreports {
         $arrValues[5][] = $this->objTexts->getText("anzahl_online", "stats", "admin");
         $arrValues[5][] = $this->getNumberOfCurrentUsers();
 
+        
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
 		return $strReturn;
@@ -238,7 +240,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             return "0";
 	}
 
-	public function getReportGraph() {
+	public function getReportGraph($bitOfcChart = false) {
 		//load datasets, reloading after 30 days to limit memory consumption
 		$arrHits = array();
 		$arrUser = array();
@@ -292,19 +294,24 @@ class class_stats_report_common implements interface_admin_statsreports {
 
 		//create a graph ->line-graph
 		if($intCount > 1) {
-    		include_once(_systempath_."/class_graph.php");
-    		$objLineGraph = new class_graph();
-    		$objLineGraph->createLinePlotChart(715, 160);
-    		$objLineGraph->addLinePlot($arrHits, "red", "Hits");
-    		$objLineGraph->addLinePlot($arrUser, "blue", "Visitors/Day");
-    		//only about 12 labels make sense
-    		$intTicksAvailable = count($arrTickLabels);
-    		$intIntervall = ceil($intTicksAvailable / 12);
-    		$objLineGraph->setXAxisTickLabels($arrTickLabels, $intIntervall, 0);
-    		$strImagePath = "/portal/pics/cache/stats_common.png";
-    		$objLineGraph->saveGraph($strImagePath);
 
-		  return _webpath_.$strImagePath;
+            include_once(_systempath_."/class_graph_pchart.php");
+            $objChart2 = new class_graph_pchart();
+            $objChart2->setStrGraphTitle("Number of visits / hits");
+            $objChart2->setStrXAxisTitle("Date");
+            $objChart2->setStrYAxisTitle("Hits");
+            $objChart2->setIntWidth(715);
+            $objChart2->setIntHeight(200);
+            $objChart2->addLinePlot($arrHits, "Hits");
+            $objChart2->addLinePlot($arrUser, "Visitors/Day");
+            $objChart2->setArrXAxisTickLabels($arrTickLabels);
+            $strImagePath = "/portal/pics/cache/stats_common.png";
+    		$objChart2->saveGraph($strImagePath);
+
+
+            $this->objDB->flushQueryCache();
+          
+            return _webpath_.$strImagePath;
 		}
 		else
 		  return "";

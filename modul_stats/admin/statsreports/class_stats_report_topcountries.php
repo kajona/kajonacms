@@ -162,7 +162,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 	public function getReportGraph() {
 	    $arrReturn = array();
 
-        include_once(_systempath_."/class_graph.php");
+        include_once(_systempath_."/class_graph_pchart.php");
         $arrData = $this->getTopCountries();
 
         $intSum = 0;
@@ -173,11 +173,15 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
         //max 6 entries
         $intCount = 0;
         $floatPercentageSum = 0;
+        $arrValues = array();
+        $arrLabels = array();
         foreach($arrData as $strName => $intOneSystem) {
             if(++$intCount <= 6) {
                 $floatPercentage = $intOneSystem / $intSum*100;
                 $floatPercentageSum += $floatPercentage;
                 $arrKeyValues[$strName] = $floatPercentage;
+                $arrValues[] = $floatPercentage;
+                $arrLabels[] = $strName;
             }
             else {
                 break;
@@ -186,9 +190,11 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
         //add "others" part?
         if($floatPercentageSum < 99) {
             $arrKeyValues["others"] = 100-$floatPercentageSum;
+            $arrLabels[] = "others";
+            $arrValues[] =  100-$floatPercentageSum;
         }
-        $objGraph = new class_graph();
-        $objGraph->create3DPieChart($arrKeyValues, 715, 200);
+        $objGraph = new class_graph_pchart();
+        $objGraph->createPieChart($arrValues, $arrLabels);
         $strFilename = "/portal/pics/cache/stats_topcountries.png";
         $objGraph->saveGraph($strFilename);
 		$arrReturn[] = _webpath_.$strFilename;

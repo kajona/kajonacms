@@ -183,7 +183,7 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 
 	public function getReportGraph() {
 	    $arrReturn = array();
-        include_once(_systempath_."/class_graph.php");
+        include_once(_systempath_."/class_graph_pchart.php");
         $arrData = $this->getTopSystem();
 
         $intSum = 0;
@@ -194,11 +194,15 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         //max 6 entries
         $intCount = 0;
         $floatPercentageSum = 0;
+        $arrValues = array();
+        $arrLabels = array();
         foreach($arrData as $strName => $intOneSystem) {
             if(++$intCount <= 6) {
                 $floatPercentage = $intOneSystem / $intSum*100;
                 $floatPercentageSum += $floatPercentage;
                 $arrKeyValues[$strName] = $floatPercentage;
+                $arrLabels[] = $strName;
+                $arrValues[] = $floatPercentage;
             }
             else {
                 break;
@@ -207,9 +211,11 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
         //add "others" part?
         if($floatPercentageSum < 99) {
             $arrKeyValues["others"] = 100-$floatPercentageSum;
+            $arrLabels[] = "others";
+            $arrValues[] =  100-$floatPercentageSum;
         }
-        $objGraph = new class_graph();
-        $objGraph->create3DPieChart($arrKeyValues, 715, 200);
+        $objGraph = new class_graph_pchart();
+        $objGraph->createPieChart($arrValues, $arrLabels);
         $strFilename = "/portal/pics/cache/stats_topsystem.png";
         $objGraph->saveGraph($strFilename);
 		$arrReturn[] = _webpath_.$strFilename;
@@ -250,13 +256,12 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 
 		//fehler fangen: mind. 2 datumswerte
 		if(count($arrTickLabels) > 1 && count($arrPlots) > 0) {
-    		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
-    		$objGraph = new class_graph();
-    		$objGraph->createLinePlotChart(715, 160);
-    		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
+    		$objGraph = new class_graph_pchart();
+    		
     		foreach($arrPlots as $arrPlotName => $arrPlotData) {
-    		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);
+    		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
     		}
+            $objGraph->setArrXAxisTickLabels($arrTickLabels);
     		$strFilename = "/portal/pics/cache/stats_topsystem_plot.png";
             $objGraph->saveGraph($strFilename);
     		$arrReturn[] = _webpath_.$strFilename;

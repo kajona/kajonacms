@@ -153,9 +153,11 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
         $arrPages = $this->getTopQueries();
 
 		$arrGraphData = array();
+        $arrLabels = array();
 		$intCount = 1;
 		foreach ($arrPages as $strName => $intHits) {
 		    $arrGraphData[$intCount] = $intHits;
+            $arrLabels[] = $intCount+1;
 		    if($intCount++ >= 8)
 		      break;
 		}
@@ -163,12 +165,14 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 
 	    //generate a bar-chart
 	    if(count($arrGraphData) > 1) {
-    	    include_once(_systempath_."/class_graph.php");
-    	    $objGraph = new class_graph();
-    	    $objGraph->createBarChart($arrGraphData, 715, 200, false);
-    	    $objGraph->setXAxisLabelAngle(0);
+    	    include_once(_systempath_."/class_graph_pchart.php");
+    	    $objGraph = new class_graph_pchart();
+    	    
+            $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_query_titel", "stats", "admin"));
+    	    
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_query_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_query_gewicht", "stats", "admin"));
+            $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $strFilename = "/portal/pics/cache/stats_topqueries.png";
     	    $objGraph->saveGraph($strFilename);
     		return _webpath_.$strFilename;

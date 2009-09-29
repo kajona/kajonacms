@@ -142,13 +142,11 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
         if(count($arrGraphData) > 1) {
     	    //generate a bar-chart
-    	    include_once(_systempath_."/class_graph.php");
-    	    $objGraph = new class_graph();
-    	    $objGraph->createBarChart($arrGraphData, 715, 200, false);
-    	    $objGraph->setXAxisLabelAngle(0);
+    	    include_once(_systempath_."/class_graph_pchart.php");
+    	    $objGraph = new class_graph_pchart();
+    	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
-    	    //$objGraph->setMargin(40, 5, 5, 10);
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
     	    $objGraph->saveGraph($strFilename);
     		$arrReturn[] =  _webpath_.$strFilename;
@@ -183,13 +181,12 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     		}
     		//create graph
     		if($intCount > 1) {
-        		$arrColors = array("", "red", "blue", "green", "yellow", "purple", "black");
-        		$objGraph = new class_graph();
-        		$objGraph->createLinePlotChart(715, 160);
-        		$objGraph->setXAxisTickLabels($arrTickLabels, ceil($intCount / 12));
+        		$objGraph = new class_graph_pchart();
+        		
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
-        		    $objGraph->addLinePlot($arrPlotData, next($arrColors), $arrPlotName);
+        		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
+                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		$strFilename = "/portal/pics/cache/stats_toppages_plot.png";
                 $objGraph->saveGraph($strFilename);
         		$arrReturn[] = _webpath_.$strFilename;
