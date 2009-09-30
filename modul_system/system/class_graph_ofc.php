@@ -99,7 +99,7 @@ class class_graph_ofc {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in bar-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
                 
         }
 
@@ -145,7 +145,7 @@ class class_graph_ofc {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in stackedbar-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
@@ -194,7 +194,7 @@ class class_graph_ofc {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in line-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
@@ -235,7 +235,7 @@ class class_graph_ofc {
      */
     public function createPieChart($arrValues, $arrLegends) {
         if(!$this->intCurrentGraphMode < 0) {
-            throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+            throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;

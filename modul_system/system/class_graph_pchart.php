@@ -104,7 +104,7 @@ class class_graph_pchart {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in bar-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
@@ -113,7 +113,7 @@ class class_graph_pchart {
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
         
-        $this->objDataset->SetSerieName($strLegend, $strSerieName);
+        $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
 	}
 
 
@@ -136,7 +136,7 @@ class class_graph_pchart {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in stackedbar-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
@@ -145,7 +145,7 @@ class class_graph_pchart {
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
         
-        $this->objDataset->SetSerieName($strLegend, $strSerieName);
+        $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
 	}
 
     
@@ -167,7 +167,7 @@ class class_graph_pchart {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in line-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE)
-                throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+                throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
@@ -177,7 +177,7 @@ class class_graph_pchart {
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
         
-        $this->objDataset->SetSerieName($strLegend, $strSerieName);
+        $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
  
 
 
@@ -199,7 +199,7 @@ class class_graph_pchart {
      */
     public function createPieChart($arrValues, $arrLegends) {
         if(!$this->intCurrentGraphMode < 0) {
-            throw new class_exception("Chart already initalized", class_exception::$level_ERROR);
+            throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
@@ -210,6 +210,9 @@ class class_graph_pchart {
         $this->objDataset->AddSerie($strSerieName);
         
         $strSerieName = generateSystemid();
+        
+        foreach($arrLegends as &$strValue)
+            $strValue = $this->stripLegend($strValue);
         
         $this->objDataset->AddPoint($arrLegends, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
@@ -261,8 +264,10 @@ class class_graph_pchart {
         $intTopMargin = 15;
         $intBottomMargin = 30;
         $intLeftMargin = 40;
+        
+        $intLegendWidth = 120;
 
-        $intWidth = $this->intWidth - $intRightMargin;
+        $intWidth = $this->intWidth - $intRightMargin - $intLegendWidth;
         $intHeight = $this->intHeight - $intBottomMargin;
 
         $intLeftStart = $intLeftMargin;
@@ -270,7 +275,7 @@ class class_graph_pchart {
 
         if($this->strYAxisTitle != "") {
             $intLeftStart += 15;
-            $intWidth -= 15;
+            //$intWidth -= 15; //TODO: why not needed?
         }
         
         
@@ -354,10 +359,10 @@ class class_graph_pchart {
         //set up the legend
         if($this->bitRenderLegend) {
             if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) 
-                $this->objChart->drawPieLegend($intLeftStart+5, $intTopStart+5, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
+                $this->objChart->drawPieLegend($intLeftStart, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
             
             else
-                $this->objChart->drawLegend($intLeftStart+5, $intTopStart+5, $this->objDataset->GetDataDescription(),255,255,255);
+                $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10, $intTopStart, $this->objDataset->GetDataDescription(),255,255,255);
         }
 
         //draw the title
@@ -397,6 +402,22 @@ class class_graph_pchart {
         $this->objChart->Render($strFilename);
 	}
 
+	/**
+	 * Inserts a line-break to long legend-values
+	 * 
+	 * @param $strLegend
+	 * @return string
+	 */
+	private function stripLegend($strLegend) {
+	    $intStart = 15;
+	    
+	    while(uniStrlen($strLegend) > $intStart) {
+	        $strLegend = uniSubstr($strLegend, 0, $intStart)."\n".uniSubstr($strLegend, $intStart);
+	        $intStart += 15; 
+	    }
+	        
+	    return $strLegend;    
+	}
 
 
 	/**
