@@ -478,6 +478,34 @@ function timeToString($intTime, $bitLong = true) {
 }
 
 /**
+ * Converts a dateobject to a readable string
+ *
+ * @param class_date $objDate
+ * @param bool $bitLong
+ * @return string
+ */
+function dateToString($objDate, $bitLong = true) {
+	$strReturn = "";
+	if($objDate != null) {
+        //convert to a current date
+		if($bitLong)
+			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleLong", "system", "admin"));
+		else
+			$strReturn = uniStrtolower(class_carrier::getInstance()->getObjText()->getText("dateStyleShort", "system", "admin"));
+
+        //"d.m.Y H:i:s";
+        $strReturn = uniStrReplace("d", $objDate->getIntDay(), $strReturn);
+        $strReturn = uniStrReplace("m", $objDate->getIntMonth(), $strReturn);
+        $strReturn = uniStrReplace("y", $objDate->getIntYear(), $strReturn);
+        $strReturn = uniStrReplace("h", $objDate->getIntHour(), $strReturn);
+        $strReturn = uniStrReplace("i", $objDate->getIntMin(), $strReturn);
+        $strReturn = uniStrReplace("s", $objDate->getIntSec(), $strReturn);
+
+	}
+	return $strReturn;
+}
+
+/**
  * Converts a hex-string to its rgb-values
  *
  * @see http://www.jonasjohn.de/snippets/php/hex2rgb.htm

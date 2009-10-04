@@ -265,7 +265,9 @@ class class_graph_pchart {
         $intBottomMargin = 30;
         $intLeftMargin = 40;
         
-        $intLegendWidth = 120;
+        $intLegendWidth = 0;
+        if($this->bitRenderLegend)
+            $intLegendWidth = 120;
 
         $intWidth = $this->intWidth - $intRightMargin - $intLegendWidth;
         $intHeight = $this->intHeight - $intBottomMargin;
