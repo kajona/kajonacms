@@ -74,29 +74,31 @@ class class_remoteloader {
 	
 	/**
 	 * Builts the query and tries to get the remote content either by a cache-lookup
-	 * or via a remote-connection
+	 * or via a remote-connection. Use $bitForceReload if you want to skip the cache-lookup.
 	 * 
+	 * @param bool $bitForceReload
 	 * @return string
 	 * @throws class_exception
 	 */
-	public function getRemoteContent() {
+	public function getRemoteContent($bitForceReload = false) {
 		
 		$strReturn = false;
 		
 		//check all needed params
 		if((int)$this->intPort < 0 || $this->strHost == "" || $this->strProtocolHeader == "")
-		  throw new class_exception("Not all needed values given", class_exception::$level_ERROR);
-		  
-		//first try: load it via the cache  
-		$strReturn = $this->loadByCache();
+		    throw new class_exception("Not all needed values given", class_exception::$level_ERROR);
 		
-		//if the cache was succesfull, return
-		if($strReturn !== false) {
-			class_logger::getInstance()->addLogRow("remote request found in cache", class_logger::$levelInfo);
-		    return $strReturn;
-		}
+		//first try: load it via the cache
+		if ($bitForceReload === false) {
+		    $strReturn = $this->loadByCache();
 		    
-		
+		    //if the cache was succesfull, return
+	        if($strReturn !== false) {
+	            class_logger::getInstance()->addLogRow("remote request found in cache", class_logger::$levelInfo);
+	            return $strReturn;
+	        }
+		}
+				
 		//second try: file_get_content
 		if($strReturn === false) 
 		    $strReturn = $this->connectByFileGetContents();
@@ -112,20 +114,22 @@ class class_remoteloader {
         //fifth try: sockets
 		if($strReturn === false)
 		    $strReturn = $this->connectViaSocket();
-		    
-		    
+
+
 		//in case of an error, save the result to the cache, too:
 		//the possibility of receiving a regular time within the next interval is rather small.
 		//BUT: reduce the max cachetime to a third of its' original value.
-		if($strReturn === false)
-			$this->intMaxCachetime = (int)($this->intMaxCachetime/3);    
+		if($strReturn === false) {
+			$this->intMaxCachetime = (int)($this->intMaxCachetime/3);
+		}    
 
 		//and clean up the cache
         $this->doCacheCleanup();	
 			
 		//and save to the cache
-		if($strReturn !== false)
-		$this->saveResponseToCache($strReturn);
+		if($strReturn !== false) {
+		    $this->saveResponseToCache($strReturn);
+		}
 
 		//throw a general error?
 		if($strReturn === false) {
@@ -350,7 +354,7 @@ class class_remoteloader {
 		//calculate new releasetime
 		$intReleasetime = time()+(int)$this->intMaxCachetime;
 		
-		$strQuery = "INSERT INTO ".$this->strCacheTable."
+		$strQuery = "REPLACE INTO ".$this->strCacheTable."
 		                    (remoteloader_cache_checksum, remoteloader_cache_releasetime, remoteloader_cache_response) VALUES
 		                    ('".dbsafeString($this->builtCacheChecksum())."', ".(int)$intReleasetime." , '".dbsafeString($strResponse, false)."')";
 		
