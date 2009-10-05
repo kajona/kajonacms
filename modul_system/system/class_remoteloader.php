@@ -351,15 +351,18 @@ class class_remoteloader {
 	 * @return bool
 	 */
 	private function saveResponseToCache($strResponse) {
-		//calculate new releasetime
+		//calculate new releasetime & checksum
 		$intReleasetime = time()+(int)$this->intMaxCachetime;
+		$strChecksum = dbsafeString($this->builtCacheChecksum());
 		
-		$strQuery = "REPLACE INTO ".$this->strCacheTable."
-		                    (remoteloader_cache_checksum, remoteloader_cache_releasetime, remoteloader_cache_response) VALUES
-		                    ('".dbsafeString($this->builtCacheChecksum())."', ".(int)$intReleasetime." , '".dbsafeString($strResponse, false)."')";
+		//delete old cache data
+		class_carrier::getInstance()->getObjDB()->_query("DELETE FROM ".$this->strCacheTable." WHERE remoteloader_cache_checksum = '".$strChecksum."'");
 		
+		$strQuery = "INSERT INTO ".$this->strCacheTable."
+		                 (remoteloader_cache_checksum, remoteloader_cache_releasetime, remoteloader_cache_response) VALUES
+		                 ('".$strChecksum."', ".(int)$intReleasetime." , '".dbsafeString($strResponse, false)."')";
+
 		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
-		
 	}
 	
 	/**
