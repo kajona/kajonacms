@@ -49,7 +49,7 @@ class class_texte {
         
         //load texts from session
         //TODO: reenable before release
-        $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
+        //$this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
         if($this->arrTexts === false)
             $this->arrTexts = array();
 	}
