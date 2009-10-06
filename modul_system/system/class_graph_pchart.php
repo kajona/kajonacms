@@ -34,6 +34,7 @@ class class_graph_pchart {
 
     private $strBackgroundColor = "#EFEFEF";
     private $strGraphBackgroundColor = "#FAFAFA";
+    private $strOuterFrameColor = "#E1E1E1";
     private $strFontColor = "#686868";
     private $strGridColor = "#E6E6E6";
 
@@ -248,10 +249,7 @@ class class_graph_pchart {
 
             $this->objChart->drawFilledRoundedRectangle(2,2,$this->intWidth-3 ,$this->intHeight-3, 5, $arrBackgroundColor[0], $arrBackgroundColor[1], $arrBackgroundColor[2]);
 
-            $arrOuterBack = $arrBackgroundColor;
-            if($arrOuterBack[0] > 10) $arrOuterBack[0] -= 10;
-            if($arrOuterBack[1] > 10) $arrOuterBack[1] -= 10;
-            if($arrOuterBack[1] > 10) $arrOuterBack[2] -= 10;
+            $arrOuterBack = hex2rgb($this->strOuterFrameColor);
 
             $this->objChart->drawRoundedRectangle(0,0,$this->intWidth-1,$this->intHeight-1,5, $arrOuterBack[0], $arrOuterBack[1], $arrOuterBack[2]);
         }
@@ -349,7 +347,7 @@ class class_graph_pchart {
             $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);  
         }
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
-            $this->objChart->drawPieGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), ceil($this->intWidth/2), ceil($this->intHeight/2) , ceil($intHeight/2)+20, PIE_PERCENTAGE, TRUE,50,20,5);  
+            $this->objChart->drawPieGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), ceil($this->intWidth/2)-20, ceil($this->intHeight/2) , ceil($intHeight/2)+20, PIE_PERCENTAGE, TRUE,50,20,5);
         }
 
         
@@ -361,7 +359,7 @@ class class_graph_pchart {
         //set up the legend
         if($this->bitRenderLegend) {
             if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) 
-                $this->objChart->drawPieLegend($intLeftStart, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
+                $this->objChart->drawPieLegend($this->intWidth-$intLegendWidth-$intRightMargin+10, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
             
             else
                 $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10, $intTopStart, $this->objDataset->GetDataDescription(),255,255,255);
@@ -458,6 +456,15 @@ class class_graph_pchart {
      */
     public function setStrBackgroundColor($strColor) {
         $this->strBackgroundColor = $strColor;
+    }
+
+    /**
+     * If using rounded edged, use this color for the outer frame
+     *
+     * @param string $strOuterFrameColor
+     */
+    public function setStrOuterFrameColor($strOuterFrameColor) {
+        $this->strOuterFrameColor = $strOuterFrameColor;
     }
 
     /**
