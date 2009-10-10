@@ -105,12 +105,12 @@ class class_filesystem {
 
 		//Valid dir?
 		if(is_dir(_realpath_ . $strFolder)) {
-			$handler = opendir(_realpath_ . $strFolder);
-			if($handler !== false) {
-				while(($strEntry = readdir($handler)) !== false) {
+			$objFileHandle = opendir(_realpath_ . $strFolder);
+			if($objFileHandle !== false) {
+				while(($strEntry = readdir($objFileHandle)) !== false) {
 					//Folder
 					if(is_dir(_realpath_ . $strFolder ."/". $strEntry) && $bitFolders == true) {
-						//Folder Excluded?
+						//Folder excluded?
 						if(count($arrExcludeFolders) == 0 || !in_array($strEntry, $arrExcludeFolders)) 	{
 							$arrReturn["folders"][$arrReturn["nrFolders"]++] = $strEntry;
 						}
@@ -134,10 +134,12 @@ class class_filesystem {
 						}
 					}
 				}
+
 			}
+			closedir($objFileHandle);
 		}
 
-		//sort Array
+		//sort array
 		asort($arrReturn["files"]);
 		asort($arrReturn["folders"]);
 		return $arrReturn;
@@ -200,19 +202,39 @@ class class_filesystem {
 		return $bitReturn;
 	}
 
-	/**
-	 * Deletes a file from the filesystem
-	 *
-	 * @param string $strFile
-	 * @return bool
-	 */
-	public function fileDelete($strFile) {
-		$bitReturn = false;
-		if(is_file(_realpath_.$strFile)) {
-			$bitReturn = unlink(_realpath_.$strFile);
-		}
-		return $bitReturn;
-	}
+    /**
+     * Copies a file
+     *
+     * @param string $strSource
+     * @param string $strTarget
+     * @param bool $bitForce
+     * @return bool
+     */
+    public function fileCopy($strSource, $strTarget, $bitForce = false) {
+        $bitReturn = false;
+
+        if(is_file(_realpath_."/".$strSource)) {
+            //bitForce: overwrite existing file
+            if(!is_file(_realpath_."/".$strTarget) || $bitForce) {
+                $bitReturn = copy(_realpath_."/".$strSource, _realpath_."/".$strTarget);
+            }
+        }
+        return $bitReturn;
+    }
+
+    /**
+     * Deletes a file from the filesystem
+     *
+     * @param string $strFile
+     * @return bool
+     */
+    public function fileDelete($strFile) {
+        $bitReturn = false;
+        if(is_file(_realpath_.$strFile)) {
+            $bitReturn = unlink(_realpath_.$strFile);
+        }
+        return $bitReturn;
+    }
 
 	/**
 	 * Deletes a folder from the filesystem
@@ -249,24 +271,68 @@ class class_filesystem {
             $bitReturn = $bitReturn && $this->fileDelete($strFolder."/".$strOneFile["filename"]);
         }
 
-        $bitReturn = $bitReturn && $this->folderDelete($strFolder) ;
+        $bitReturn = $bitReturn && $this->folderDelete($strFolder);
 
 
         return $bitReturn;
 	}
 
 	/**
-	 * Creates a folder in the filesystem
+	 * Creates a folder in the filesystem. Use $bitRecursive if you want to create a whole folder tree
 	 *
 	 * @param string $strFolder
+	 * @param bool $bitRecursive
 	 * @return bool
 	 */
-	public function folderCreate($strFolder) {
-		return mkdir(_realpath_.$strFolder, 0777);
+	public function folderCreate($strFolder, $bitRecursive = false) {
+        $bitReturn = true;
+
+        if ($bitRecursive) {
+            $arrRecursiveFolders = explode("/", $strFolder);
+
+            $strFolders = "";
+            foreach ($arrRecursiveFolders as $strOneFolder) {
+                if ($bitReturn === true) {
+                    $strFolders .= "/".$strOneFolder;
+                    if (!is_dir(_realpath_.$strFolders)) {
+                        $bitReturn = $this->folderCreate($strFolders, false);
+                    }
+                }
+            }
+        } else {
+            $bitReturn = mkdir(_realpath_.$strFolder, 0777);
+        }
+
+        return $bitReturn;
 	}
 
+    /**
+     * Fetches the size of a folder recursively
+     *
+     * @param string $strFolder
+     * @param mixed $arrTypes
+     * @param mixed $arrExclude
+     * @param mixed $arrExcludeFolders
+     * @return int
+     */
+    public function folderSize($strFolder, $arrTypes = array(), $arrExclude = array(), $arrExcludeFolders = array(".svn", ".", "..")) {
+        $intReturn = 0;
+
+        $arrFiles = $this->getCompleteList($strFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
+
+        foreach($arrFiles["files"] as $arrFile)
+            $intReturn += $arrFile["filesize"];
+
+        //Call it recursive
+        if(count($arrFiles["folders"]) > 0) {
+            foreach($arrFiles["folders"] as $strOneFolder)
+                $intReturn += $this->folderSize($strFolder."/".$strOneFolder, $arrTypes, $arrExclude, $arrExcludeFolders);
+        }
+        return $intReturn;
+    }
+
 	/**
-	 * Moves a uploded file
+	 * Moves an uploaded file
 	 *
 	 * @param string $strTarget
 	 * @param string $strTempfile
@@ -278,7 +344,7 @@ class class_filesystem {
 		if(is_uploaded_file($strTempfile)) 	{
 			if(@move_uploaded_file($strTempfile, $strTarget)) {
 				@unlink($strTempfile);
-				//Noch ein chmod absetzen
+				//set correct rights
 				@chmod($strTarget, 0777);
 				$bitReturn = true;
 			}
@@ -344,7 +410,7 @@ class class_filesystem {
 
         return $strContent;
     }
-	
+
 	/**
 	 * Checks if a file or folder is writeable
 	 *
@@ -353,7 +419,7 @@ class class_filesystem {
 	 */
 	public function isWritable($strFile) {
 		return is_writable(_realpath_."/".$strFile);
-	}	
+	}
 }
 
 ?>

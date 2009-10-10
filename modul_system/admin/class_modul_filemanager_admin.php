@@ -378,7 +378,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				else
     					$strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loeschen_fehler_l")));
 
-		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
+		   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
 				}
 			}
 			$strReturn .= $this->objToolkit->listFooter();
@@ -529,7 +529,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         			foreach($arrFiles["folders"] as $strFolder) {
                             $strAction = "";
         	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
-        	   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($this->folderSize($this->strFolder."/".$strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."))) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
+        	   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
         			}
         		}
 
@@ -870,36 +870,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		//Add to the repo-path
 		$this->strFolderOld = $strFolder;
 		$this->strFolder = ($objRepo->getStrPath() != "" ? $objRepo->getStrPath() : "").$strFolder;
-	}
-
-
-
-
-	/**
-	 * Fetches the size of a folder recursiv
-	 *
-	 * @param string $strStartFolder
-	 * @param mixed $arrEnding
-	 * @param mixed $arrExclude
-	 * @param mixed $arrFolderExclude
-	 * @return int
-	 */
-	private function folderSize($strStartFolder, $arrEnding, $arrExclude, $arrFolderExclude) {
-		$intReturn = 0;
-		//Filesystemobject
-		include_once(_systempath_."/class_filesystem.php");
-		$objFilesystem = new class_filesystem();
-		$arrFiles = $objFilesystem->getCompleteList($strStartFolder, $arrEnding, $arrExclude, $arrFolderExclude);
-
-		foreach($arrFiles["files"] as $arrFile)
-			$intReturn += $arrFile["filesize"];
-
-		//Call it recursive
-		if(count($arrFiles["folders"]) > 0) {
-			foreach($arrFiles["folders"] as $strFolder)
-				$intReturn += $this->folderSize($strStartFolder."/".$strFolder, $arrEnding, $arrExclude, $arrFolderExclude);
-		}
-		return $intReturn;
 	}
 
 
