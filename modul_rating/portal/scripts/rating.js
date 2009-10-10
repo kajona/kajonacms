@@ -22,8 +22,8 @@ function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
 				var floatNewRating = o.responseXML.documentElement.firstChild.nodeValue;
 	        	try {
 					document.getElementById("kajona_rating_rating_"+strSystemid).innerHTML = floatNewRating;
-					ratingIcons[0].style.width = floatNewRating/intNumberOfIcons*100+"%";
 	        	} catch (e) {}
+	        	ratingIcons[0].style.width = floatNewRating/intNumberOfIcons*100+"%";
             },
             failure: function(o) {
             }
