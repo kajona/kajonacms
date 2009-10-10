@@ -7,7 +7,7 @@
 *   $Id: compress_jscss.php 2353 2008-12-31 15:22:01Z jschroeter $                                           *
 ********************************************************************************************************/
 
-require_once("../../system/includes.php");
+require_once("../system/includes.php");
 include_once(_realpath_."/system/class_filesystem.php");
 
 
@@ -90,10 +90,12 @@ function walkFolderRecursive($strStartFolder) {
 			        //Now do a systemfork
 			        $intTemp = "";
 			        $strResult = system($strCommand, $intTemp);
-			        if ($strResult != 0 || (int)$intTemp != 0) {
-			            echo "\t\t<b>!!ERROR!! output: ".($strResult == 0)." ".$intTemp.")</b>\n";
-			            //delete backup of original file
-			            $objFilesystem->fileDelete($strTargetFileFull);
+			        if (is_file(_realpath_.$strTargetFileCompressed)) {
+			            @chmod(_realpath_.$strTargetFileCompressed, 0777);
+			        } else {
+                        echo "\t\t<b>!!ERROR!! output: ".($strResult == 0)." ".$intTemp.")</b>\n";
+                        //delete backup of original file
+                        $objFilesystem->fileDelete($strTargetFileFull);
 			        }
 				}
 			}

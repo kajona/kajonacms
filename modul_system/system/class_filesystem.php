@@ -217,6 +217,8 @@ class class_filesystem {
             //bitForce: overwrite existing file
             if(!is_file(_realpath_."/".$strTarget) || $bitForce) {
                 $bitReturn = copy(_realpath_."/".$strSource, _realpath_."/".$strTarget);
+                //set correct rights
+                @chmod(_realpath_."/".$strTarget, 0777);
             }
         }
         return $bitReturn;
