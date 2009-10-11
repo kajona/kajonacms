@@ -717,7 +717,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		$arrReturn = array();
 		$arrReturn[$this->getText("operatingsystem")] = php_uname();
         $arrReturn[$this->getText("systeminfo_webserver_version")] = $_SERVER["SERVER_SOFTWARE"];
-        if (@apache_get_modules()) {
+        if (function_exists("apache_get_modules")) {
             $arrReturn[$this->getText("systeminfo_webserver_modules")] = implode(", ", @apache_get_modules());
         }
 	    if (@disk_total_space(_realpath_)) {
