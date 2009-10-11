@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 210
+//Kajona Language Editor Core Build 182
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -177,6 +177,8 @@ $lang["systeminfo_no"]                   = "Нет";
 $lang["systeminfo_php_regglobal"]        = "Зарегистрировать глобалс";
 $lang["systeminfo_php_safemode"]         = "Безопасный режим";
 $lang["systeminfo_php_urlfopen"]         = "Разрешить url fopen";
+$lang["systeminfo_webserver_modules"]    = "Загруженных модулей";
+$lang["systeminfo_webserver_version"]    = "Вебсервер";
 $lang["systeminfo_yes"]                  = "Да";
 $lang["systemlog"]                       = "Логфайл системы";
 $lang["systemtask_cancel_execution"]     = "";

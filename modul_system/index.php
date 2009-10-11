@@ -300,13 +300,11 @@ class class_index  {
 $objIndex = new class_index();
 if(_admin_) {
 	$objIndex->loadAdmin();
-	//if needed, uncomment the following line to prevent problems with the encoding
 	header('Content-Type: text/html; charset=utf-8');
 	echo $objIndex->getOutput();
 }
 else {
 	$objIndex->loadPortal();
-	//if needed, uncomment the following line to prevent problems with the encoding
 	header('Content-Type: text/html; charset=utf-8');
 	echo $objIndex->getOutput();
 }

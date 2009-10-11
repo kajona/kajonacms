@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 210
+//Kajona Language Editor Core Build 182
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -136,7 +136,7 @@ $lang["modul_status_system"]             = "Hmmm. Den System-Kernel deaktivieren
 $lang["modul_titel"]                     = "System";
 $lang["moduleRightsTitle"]               = "Rechte";
 $lang["module_liste"]                    = "Installierte Module";
-$lang["operatingsystem"]                 = "System";
+$lang["operatingsystem"]                 = "Betriebssystem";
 $lang["pageview_backward"]               = "Zurück";
 $lang["pageview_forward"]                = "Weiter";
 $lang["pageview_total"]                  = "Gesamt: ";
@@ -182,6 +182,8 @@ $lang["systeminfo_no"]                   = "Nein";
 $lang["systeminfo_php_regglobal"]        = "Register globals";
 $lang["systeminfo_php_safemode"]         = "Safe mode";
 $lang["systeminfo_php_urlfopen"]         = "Allow url fopen";
+$lang["systeminfo_webserver_modules"]    = "Geladene Module";
+$lang["systeminfo_webserver_version"]    = "Webserver";
 $lang["systeminfo_yes"]                  = "Ja";
 $lang["systemlog"]                       = "System-Log";
 $lang["systemtask_cancel_execution"]     = "Ausführung beenden";

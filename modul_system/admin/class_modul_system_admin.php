@@ -716,9 +716,13 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	private function loadWebserverInfos() {
 		$arrReturn = array();
 		$arrReturn[$this->getText("operatingsystem")] = php_uname();
-		if (@disk_total_space(_realpath_)) {
-		    $arrReturn[$this->getText("speicherplatz")] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
-		}
+        $arrReturn[$this->getText("systeminfo_webserver_version")] = $_SERVER["SERVER_SOFTWARE"];
+        if (@apache_get_modules()) {
+            $arrReturn[$this->getText("systeminfo_webserver_modules")] = implode(", ", @apache_get_modules());
+        }
+	    if (@disk_total_space(_realpath_)) {
+            $arrReturn[$this->getText("speicherplatz")] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
+        }
 		return $arrReturn;
 	}
 
@@ -734,7 +738,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$arrReturn[$this->getText("version")] = $arrGd["GD Version"];
 			$arrReturn[$this->getText("gifread")] = ($arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 			$arrReturn[$this->getText("gifwrite")] = ($arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("jpg")] = ($arrGd["JPG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("jpg")] = (($arrGd["JPG Support"] || $arrGd["JPEG Support"]) ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 			$arrReturn[$this->getText("png")] = ($arrGd["PNG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 		}
 		else
