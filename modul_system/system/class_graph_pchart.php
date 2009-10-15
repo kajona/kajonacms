@@ -43,6 +43,9 @@ class class_graph_pchart {
 
     private $strFont = "/fonts/dejavusans.ttf"; 
     private $arrDefaultColorPalette = array();
+
+    private $intLegendBreakCount = 15;
+    private $intLegendAdditionalMargin = 0;
     
 
 
@@ -359,10 +362,10 @@ class class_graph_pchart {
         //set up the legend
         if($this->bitRenderLegend) {
             if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) 
-                $this->objChart->drawPieLegend($this->intWidth-$intLegendWidth-$intRightMargin+10, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
+                $this->objChart->drawPieLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
             
             else
-                $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10, $intTopStart, $this->objDataset->GetDataDescription(),255,255,255);
+                $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $this->objDataset->GetDataDescription(),255,255,255);
         }
 
         //draw the title
@@ -409,11 +412,11 @@ class class_graph_pchart {
 	 * @return string
 	 */
 	private function stripLegend($strLegend) {
-	    $intStart = 15;
+	    $intStart = $this->intLegendBreakCount;
 	    
 	    while(uniStrlen($strLegend) > $intStart) {
 	        $strLegend = uniSubstr($strLegend, 0, $intStart)."\n".uniSubstr($strLegend, $intStart);
-	        $intStart += 15; 
+	        $intStart += $this->intLegendBreakCount;
 	    }
 	        
 	    return $strLegend;    
@@ -567,6 +570,27 @@ class class_graph_pchart {
     public function setArrColorPalette($arrColorPalette) {
         $this->arrDefaultColorPalette = $arrColorPalette;
     }
+
+    /**
+     * Set the number of chars before a linebreak is inserted into the legend-string
+     *
+     * @param int $intLegendBreakCount
+     */
+    public function setIntLegendBreakCount($intLegendBreakCount) {
+        $this->intLegendBreakCount = $intLegendBreakCount;
+    }
+
+    /**
+     * Shift the legend leftwards
+     *
+     * @param int $intLegendAdditionalMargin
+     */
+    public function setIntLegendAdditionalMargin($intLegendAdditionalMargin) {
+        $this->intLegendAdditionalMargin = $intLegendAdditionalMargin;
+    }
+
+
+
 
 }
 
