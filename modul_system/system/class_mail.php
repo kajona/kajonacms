@@ -169,6 +169,7 @@ class class_mail {
 
             $this->arrFiles[] = $arrTemp;
             $this->bitFileAttached = true;
+            $this->bitMultipart = true;
             return true;
         }
         else
@@ -258,11 +259,13 @@ class class_mail {
                 $strBody .= $this->strEndOfLine.$this->strEndOfLine;
 
                 //html-version
-                $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
-                $strBody .= "Content-Type: text/html; charset=\"utf-8\"".$this->strEndOfLine;
-                $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
-                $strBody .= $this->strHtml;
-                $strBody .= $this->strEndOfLine.$this->strEndOfLine;
+                if($this->strHtml != "") {
+                    $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
+                    $strBody .= "Content-Type: text/html; charset=\"utf-8\"".$this->strEndOfLine;
+                    $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
+                    $strBody .= $this->strHtml;
+                    $strBody .= $this->strEndOfLine.$this->strEndOfLine;
+                }
 
                 if($this->bitFileAttached)
                     $strBody .= "--".$strBoundaryAlt."--".$this->strEndOfLine.$this->strEndOfLine;
