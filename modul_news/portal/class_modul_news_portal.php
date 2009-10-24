@@ -92,6 +92,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 
 		//$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"]);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
+        $strTemplateImageID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list_image");
         $strWrapperTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list_wrapper");
 		//Check rights
 		if(count($arrNews["arrData"]) > 0) {
@@ -107,7 +108,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					$arrOneNews["news_title"] = $objOneNews->getStrTitle();
 					$arrOneNews["news_intro"] = $objOneNews->getStrIntro();
 					$arrOneNews["news_text"] = $objOneNews->getStrNewstext();
-					$arrOneNews["news_image"] = $objOneNews->getStrImage();
+
 					//reset more link?
                     if(uniStrlen($arrOneNews["news_text"]) == 0)
                         $arrOneNews["news_more_link"] = "";
@@ -119,8 +120,14 @@ class class_modul_news_portal extends class_portal implements interface_portal {
                         $arrOneNews["news_commentlist"] = $arrPAC["commentList"];
                     }
 
-					$strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID, false);
-
+                    //load template section with or without image?
+				    if($objOneNews->getStrImage() != "") {
+                        $arrOneNews["news_image"] = urlencode($objOneNews->getStrImage());
+                        $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateImageID);
+                    } else {
+                        $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
+                    }
+					
 					//Add pe code
 				    include_once(_portalpath_."/class_elemente_portal.php");
 				    $arrPeConfig = array(
@@ -159,8 +166,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			//Load record
 			$objNews = new class_modul_news_news($this->getSystemid());
 	        if($objNews->getStatus() == "1") {
-				$strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail");
-				//back link
+        	
                 $arrNews = array();
 				$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
 				$arrNews["news_start_date"] = timeToString($objNews->getIntDateStart(), false);
@@ -168,8 +174,14 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$arrNews["news_title"] = $objNews->getStrTitle();
 				$arrNews["news_intro"] = $objNews->getStrIntro();
 				$arrNews["news_text"] = $objNews->getStrNewstext();
-				if($objNews->getStrImage() != "")
-	                $arrNews["news_image"] = "<img src=\""._webpath_."/image.php?image=".urlencode($objNews->getStrImage())."&amp;maxWidth=400&amp;maxHeight=400\" >";
+				
+	            //load template section with or without image?
+                if($objNews->getStrImage() != "") {
+                    $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail_image");
+                    $arrNews["news_image"] = urlencode($objNews->getStrImage());
+                } else {
+                    $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail");
+                }
 				$strReturn .= $this->fillTemplate($arrNews, $strTemplateID);
 
 				//Add pe code
@@ -180,6 +192,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				                    );
 				include_once(_portalpath_."/class_elemente_portal.php");
 				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
+				
 				//and count the hit
 				$objNews->increaseHits();
 
