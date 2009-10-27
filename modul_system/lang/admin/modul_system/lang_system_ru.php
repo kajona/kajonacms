@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -194,6 +194,8 @@ $lang["systemtask_dbconsistency_curprev_error"] = "Следущая связь p
 $lang["systemtask_dbconsistency_curprev_ok"] = "Все связи parent-child корректны";
 $lang["systemtask_dbconsistency_date_error"] = "Следующие записи даты недействительны (отсутствует системная запись):";
 $lang["systemtask_dbconsistency_date_ok"] = "Все записи даты имеют соответствующие системные записи";
+$lang["systemtask_dbconsistency_firstlevel_error"] = "";
+$lang["systemtask_dbconsistency_firstlevel_ok"] = "";
 $lang["systemtask_dbconsistency_name"]   = "Проверить консистенцию датабазы";
 $lang["systemtask_dbconsistency_right_error"] = "Следующие правовые записи недействительны (отсутствует системная запись):";
 $lang["systemtask_dbconsistency_right_ok"] = "Все правовые записи имееют соответствующие системные записи";

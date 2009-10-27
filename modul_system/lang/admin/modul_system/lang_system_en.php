@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 198
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -199,6 +199,8 @@ $lang["systemtask_dbconsistency_curprev_error"] = "The following parent-child re
 $lang["systemtask_dbconsistency_curprev_ok"] = "All parent-child relations are correct";
 $lang["systemtask_dbconsistency_date_error"] = "The following date-records are erroneous (missing system-record):";
 $lang["systemtask_dbconsistency_date_ok"] = "All date-records have a corresponding system-record";
+$lang["systemtask_dbconsistency_firstlevel_error"] = "Not all first-level-nodes belong to a module";
+$lang["systemtask_dbconsistency_firstlevel_ok"] = "All first-level-nodes belong to a module";
 $lang["systemtask_dbconsistency_name"]   = "Check database consistency";
 $lang["systemtask_dbconsistency_right_error"] = "The following right-records are erroneous (missing system-record):";
 $lang["systemtask_dbconsistency_right_ok"] = "All right-records have a corresponding system-record";

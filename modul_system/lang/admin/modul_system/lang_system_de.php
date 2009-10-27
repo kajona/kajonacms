@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 198
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -199,6 +199,8 @@ $lang["systemtask_dbconsistency_curprev_error"] = "Folgende Eltern-Kind Beziehun
 $lang["systemtask_dbconsistency_curprev_ok"] = "Alle Eltern-Kind Beziehungen sind korrekt";
 $lang["systemtask_dbconsistency_date_error"] = "Folgende Datum-Records sind fehlerhaft (fehlender System-Record):";
 $lang["systemtask_dbconsistency_date_ok"] = "Alle Datum-Records haben einen zugehörigen System-Record";
+$lang["systemtask_dbconsistency_firstlevel_error"] = "Nicht alle Knoten auf erster Ebene gehören zu einem Modul";
+$lang["systemtask_dbconsistency_firstlevel_ok"] = "Alle Knoten auf erster Ebene gehören zu einem Modul";
 $lang["systemtask_dbconsistency_name"]   = "Datenbankkonsistenz überprüfen";
 $lang["systemtask_dbconsistency_right_error"] = "Folgende Rechte-Records sind fehlerhaft (fehlender System-Record):";
 $lang["systemtask_dbconsistency_right_ok"] = "Alle Rechte-Records haben einen zugehörigen System-Record";

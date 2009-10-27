@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -194,6 +194,8 @@ $lang["systemtask_dbconsistency_curprev_error"] = "Следните връзки
 $lang["systemtask_dbconsistency_curprev_ok"] = "Всички връзки parent-child са правилни";
 $lang["systemtask_dbconsistency_date_error"] = "Следните записи на дати са грешни (липсва системен запис)";
 $lang["systemtask_dbconsistency_date_ok"] = "Всички записи на дати кореспондират със системните записи";
+$lang["systemtask_dbconsistency_firstlevel_error"] = "";
+$lang["systemtask_dbconsistency_firstlevel_ok"] = "";
 $lang["systemtask_dbconsistency_name"]   = "Провери съвместимостта на база данни";
 $lang["systemtask_dbconsistency_right_error"] = "Следните right-records са грешни (липсва системен запис)";
 $lang["systemtask_dbconsistency_right_ok"] = "Всички right-records кореспондират със системните записи";

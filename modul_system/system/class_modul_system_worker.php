@@ -65,6 +65,27 @@ class class_modul_system_worker extends class_model implements interface_model  
     public function updateObjectToDb() {
 
     }
+    
+    /**
+     * Checks if there are more nodes on the first level
+     * then modules installed.
+     * 
+     * @return array
+     */
+    public function checkFirstLevelNodeConsistency() {
+        $strQuery = "SELECT system_id, system_comment
+                       FROM "._dbprefix_."system
+                       LEFT JOIN "._dbprefix_."system_module
+                        ON (system_id = module_id)
+                       WHERE module_id IS NULL 
+                         AND system_prev_id = '0' 
+                         AND system_id != '0'";
+        
+        $arrReturn = $this->objDB->getArray($strQuery);
+    
+        return $arrReturn;
+    }
+    
 
     /**
      * Checks, if all system records use a valid system_prev_id
@@ -78,7 +99,7 @@ class class_modul_system_worker extends class_model implements interface_model  
         //fetch all records
         $strQuery = "SELECT system_id, system_prev_id, system_comment
                        FROM "._dbprefix_."system
-                      WHERE system_id != 0";
+                      WHERE system_id != '0'";
         $arrRecords = $this->objDB->getArray($strQuery, false);
         //Check every record for its prev_id. To get valid results, flush the db-cache
         $this->objDB->flushQueryCache();

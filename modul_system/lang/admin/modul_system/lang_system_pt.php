@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -194,6 +194,8 @@ $lang["systemtask_dbconsistency_curprev_error"] = "As seguintes relações de n�
 $lang["systemtask_dbconsistency_curprev_ok"] = "Todas as relações dos nós (pai-filho) estão correctas";
 $lang["systemtask_dbconsistency_date_error"] = "As seguintes datas de registo estão incorrectas (registos de sistema em falta)";
 $lang["systemtask_dbconsistency_date_ok"] = "Todos os registos de datas tem correspondência com os registos do sistema";
+$lang["systemtask_dbconsistency_firstlevel_error"] = "";
+$lang["systemtask_dbconsistency_firstlevel_ok"] = "";
 $lang["systemtask_dbconsistency_name"]   = "Verificar consistência da Base de Dados";
 $lang["systemtask_dbconsistency_right_error"] = "Os seguintes direitos de registo estão incorrectos (registos de sistema em falta):";
 $lang["systemtask_dbconsistency_right_ok"] = "Todos os direitos de registo correspondem com os direitos do sistema";

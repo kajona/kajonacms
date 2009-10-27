@@ -51,7 +51,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     }
     
     /**
-     * @see interface_admin_systemtast::executeTask()
+     * @see interface_admin_systemtask::executeTask()
      * @return string
      */
     public function executeTask() {
@@ -60,6 +60,26 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
         include_once(_systempath_."/class_modul_system_worker.php");
         $objWorker = new class_modul_system_worker();
 
+        //chec 1.level nodes
+        $arrCorruptedRecords = $objWorker->checkFirstLevelNodeConsistency();
+
+        //create the output tables
+        if(count($arrCorruptedRecords) > 0) {
+            //ohoh. errors found. create tow tables
+            $strReturn .= $this->objToolkit->listHeader();
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_disabled.gif"), $this->getText("systemtask_dbconsistency_firstlevel_error"), "", $intI++);
+            foreach($arrCorruptedRecords as $arrRow)  {
+                $strReturn .= $this->objToolkit->listRow2Image("", $arrRow["system_id"]." (".uniStrTrim($arrRow["system_comment"], 20).")" , "", 0);
+            }
+            $strReturn .= $this->objToolkit->listFooter();
+        }
+        else {
+            //no errors found
+            $strReturn .= $this->objToolkit->listHeader();
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_firstlevel_ok"), "", $intI++);
+            $strReturn .= $this->objToolkit->listFooter();
+        }
+        
         //Check system_prev_id => system_id relations
         $arrCorruptedRecords = $objWorker->checkSystemTableCurPrevRelations();
 
