@@ -35,7 +35,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
     public function __construct($strSystemid = "") {
         $arrModul["name"] 				= "modul_gallery";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _bildergalerie_modul_id_;
+		$arrModul["moduleId"] 			= _gallery_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."gallery_pic";
 		$arrModul["modul"]				= "gallery";
 

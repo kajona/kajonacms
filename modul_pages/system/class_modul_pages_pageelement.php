@@ -142,7 +142,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			$strQuery = "UPDATE "._dbprefix_."system SET system_sort = 1 WHERE system_id = '".$this->objDB->dbsafeString($strElementSystemId)."'";
 			$this->objDB->_query($strQuery);
 			//And shift this element one pos up to get correct order on systemtables
-			class_modul_pages_pageelement::actionShiftElement("up", $strElementSystemId);
+			$this->actionShiftElement("up");
 
         }
         elseif ($strPos == "last") {

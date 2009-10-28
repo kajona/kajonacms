@@ -45,7 +45,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		parent::__construct($arrModule);
 
 		//To generate a correct list-view, set a view params
-		$this->strFolderlevel= ($this->getParam("folderid") != "" ? $this->getParam("folderid") : "");
+		$this->strFolderlevel= ($this->getParam("folderid") != "" ? $this->getParam("folderid") : $this->getModuleSystemid($this->arrModule["modul"]));
 
 	}
 
@@ -239,7 +239,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			//Folder-Table
 			//A Folder, to get one level up
-			if($this->strFolderlevel != "" && $this->strFolderlevel != "0") {
+			if($this->strFolderlevel != $this->getModuleSystemid($this->arrModule["modul"]) && $this->strFolderlevel != "0") {
 				//Get data of folder one level above
 				$objPrevFolder = new class_modul_pages_folder($this->strFolderlevel);
 				//Output Row
@@ -432,7 +432,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputHidden("pageid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
 
-				if($objPage->getPrevId() != "0") {
+				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 				    $objFolder = new class_modul_pages_folder($objPage->getPrevId());
 					$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder->getSystemid());
 					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);

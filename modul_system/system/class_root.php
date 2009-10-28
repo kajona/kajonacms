@@ -170,7 +170,10 @@ abstract class class_root {
 			$strQuery = "INSERT INTO "._dbprefix_."system_right
 						 (right_id, right_inherit) VALUES
 						 ('".$this->objDB->dbsafeString($strSystemId)."', 1)";
+            
 			$this->objDB->_query($strQuery);
+            //update rights to inherit
+            $this->objRights->setInherited(true, $strSystemId);
 		}
 
 		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ."(".$strComment.")", class_logger::$levelInfo);
@@ -602,7 +605,12 @@ abstract class class_root {
                         SET system_prev_id='".dbsafeString($strNewPrevId)."'
                       WHERE system_id = '".dbsafeString($strSystemid)."' ";
 
-        return $this->objDB->_query($strQuery);
+        $bitReturn = $this->objDB->_query($strQuery);
+
+        if($bitReturn)
+            $this->objRights->rebuildRightsStructure($strSystemid);
+
+        return $bitReturn;
 	}
 
 
@@ -972,9 +980,10 @@ abstract class class_root {
 	 * until the assigned module-id
 	 *
 	 * @param string $strSystemid
+     * @param string $strStopSystemid
 	 * @return mixed
 	 */
-	public function getPathArray($strSystemid = "") {
+	public function getPathArray($strSystemid = "", $strStopSystemid = "0") {
 		$arrReturn = array();
 
 		if($strSystemid == "") {
@@ -983,7 +992,7 @@ abstract class class_root {
 
 		//loop over all parent-records
 		$strTempId = $strSystemid;
-		while($strTempId != "0" && $strTempId != "" && $strTempId != -1) {
+		while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
 			$arrReturn[] = $strTempId;
 			$strTempId = $this->getPrevId($strTempId);
 		}

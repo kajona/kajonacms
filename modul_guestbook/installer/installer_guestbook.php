@@ -19,14 +19,14 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "guestbook";
 		$arrModule["class_admin"] 	= "class_modul_guestbook_admin";
 		$arrModule["file_admin"] 	= "class_modul_guestbook_admin.php";
 		$arrModule["class_portal"] 	= "class_modul_guestbook_portal";
 		$arrModule["file_portal"] 	= "class_modul_guestbook_portal.php";
 		$arrModule["name_lang"] 	= "Module Guestbook";
-		$arrModule["moduleId"] 		= _gaestebuch_modul_id_;
+		$arrModule["moduleId"] 		= _guestbook_modul_id_;
 
 		$arrModule["tabellen"][]    = _dbprefix_."guestbook_buch";
 		$arrModule["tabellen"][]    = _dbprefix_."guestbook_posts";
@@ -86,10 +86,10 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("guestbook", _gaestebuch_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
+		$strSystemID = $this->registerModule("guestbook", _guestbook_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _gaestebuch_modul_id_);
+		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _guestbook_modul_id_);
 
 		return $strReturn;
 
@@ -173,6 +173,11 @@ class class_installer_guestbook extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.2.0.9") {
             $strReturn .= $this->update_3209_321();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -224,6 +229,40 @@ class class_installer_guestbook extends class_installer_base implements interfac
         $this->updateModuleVersion("guestbook", "3.2.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("guestbook", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
+
+
+        $strReturn .= "Reorganizing guestbooks...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._guestbook_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT guestbook_id
+                       FROM "._dbprefix_."guestbook_book";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating guestbook ".$arrSingleRow["guestbook_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["guestbook_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("guestbook", "3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("guestbook", "3.2.91");
         return $strReturn;
     }
     

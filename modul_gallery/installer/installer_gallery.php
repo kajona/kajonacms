@@ -21,14 +21,14 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["class_admin"] 	= "class_modul_gallery_admin";
 		$arrModule["file_admin"] 	= "class_modul_gallery_admin.php";
 		$arrModule["class_portal"] 	= "class_modul_gallery_portal";
 		$arrModule["file_portal"] 	= "class_modul_gallery_portal.php";
 		$arrModule["name_lang"] 	= "Module Gallery";
-		$arrModule["moduleId"] 		= _bildergalerie_modul_id_;
+		$arrModule["moduleId"] 		= _gallery_modul_id_;
 		$arrModule["tabellen"][]    = _dbprefix_."gallery_gallery";
 		$arrModule["tabellen2"][]   = _dbprefix_."gallery_pic";
 		parent::__construct($arrModule);
@@ -91,12 +91,12 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 
 		//register the module
-		$strSystemID = $this->registerModule("gallery", _bildergalerie_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true, "", "class_modul_gallery_admin_xml.php");
+		$strSystemID = $this->registerModule("gallery", _gallery_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true, "", "class_modul_gallery_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
-		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _bildergalerie_modul_id_);
+		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _gallery_modul_id_);
 
-		$this->registerConstant("_gallery_search_resultpage_", "gallery", class_modul_system_setting::$int_TYPE_PAGE, _bildergalerie_modul_id_);
+		$this->registerConstant("_gallery_search_resultpage_", "gallery", class_modul_system_setting::$int_TYPE_PAGE, _gallery_modul_id_);
 
 		return $strReturn;
 
@@ -218,6 +218,11 @@ class class_installer_gallery extends class_installer_base implements interface_
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -293,6 +298,40 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.2.1");
         $this->updateElementVersion("galleryRandom", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
+
+        $strReturn .= "Reorganizing galleries..\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._gallery_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT gallery_id
+                       FROM "._dbprefix_."gallery_gallery";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating gallery ".$arrSingleRow["gallery_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["gallery_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.2.91");
+        $this->updateElementVersion("galleryRandom", "3.2.91");
         return $strReturn;
     }
     

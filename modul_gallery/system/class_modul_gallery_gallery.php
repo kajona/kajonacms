@@ -34,7 +34,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
         $arrModul = array();
         $arrModul["name"] 				= "modul_gallery";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _bildergalerie_modul_id_;
+		$arrModul["moduleId"] 			= _gallery_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."gallery_gallery";
 		$arrModul["modul"]				= "gallery";
 
@@ -93,7 +93,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
 		//system-tables
-		$strGalID = $this->createSystemRecord(0, "Gallery: ".$this->getStrTitle());
+		$strGalID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Gallery: ".$this->getStrTitle());
 		$this->setSystemid($strGalID);
 		class_logger::getInstance()->addLogRow("new gallery ".$this->getSystemid(), class_logger::$levelInfo);
 		//and the gall itself

@@ -20,7 +20,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.1";
+		$arrModule["version"] 		  = "3.2.91";
 		$arrModule["name"] 			  = "rating";
 		$arrModule["name_lang"]       = "Module Ratings";
 		$arrModule["moduleId"] 		  = _rating_modul_id_;
@@ -122,6 +122,11 @@ class class_installer_rating extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.2.0.9") {
             $strReturn .= $this->update_3209_321();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -158,6 +163,37 @@ class class_installer_rating extends class_installer_base implements interface_i
         $strReturn = "Updating 3.2.0.9 to 3.2.1..\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("rating", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91..\n";
+
+        $strReturn .= "Reorganizing ratings..\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._rating_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT rating_id
+                       FROM "._dbprefix_."rating";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating rating ".$arrSingleRow["rating_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["rating_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("rating", "3.2.91");
         return $strReturn;
     }
 	

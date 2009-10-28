@@ -97,7 +97,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //Start wit the system-recods and a tx
 		$this->objDB->transactionBegin();
 
-        $strRatingId = $this->createSystemRecord(0, "rating for:".$this->getStrRatingSystemid());
+        $strRatingId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "rating for:".$this->getStrRatingSystemid());
         $this->setSystemid($strRatingId);
         class_logger::getInstance()->addLogRow("new rating ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setEditDate();

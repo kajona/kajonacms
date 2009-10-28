@@ -68,6 +68,10 @@ class class_modul_pages_folder extends class_model implements interface_model  {
      */
     public function saveObjectToDb($strPrevId) {
         $bitReturn = false;
+
+        if(!validateSystemid($strPrevId))
+            $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
+
         class_logger::getInstance()->addLogRow("new folder ".$this->getStrName(), class_logger::$levelInfo);
 		if($this->getStrName() != "") 	{
 		    $strFolderID = $this->createSystemRecord($strPrevId, $this->getStrName());
@@ -102,8 +106,9 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getFolderList($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = 0;
+		if(!validateSystemid($strSystemid))
+			$strSystemid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+            
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
 		              WHERE system_module_nr="._pages_folder_id_."
@@ -128,6 +133,10 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function moveFolder($strFolderID, $strNewPrevID) {
+
+        if(!validateSystemid($strNewPrevID))
+            $strNewPrevID = class_modul_system_module::getModuleByName("pages")->getSystemid();
+
 		$strQuery = "UPDATE "._dbprefix_."system
 		              SET  system_prev_id='".dbsafeString($strNewPrevID)."'
 		              WHERE system_id='".dbsafeString($strFolderID)."'
@@ -145,6 +154,11 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function moveSite($strSiteID, $strNewPrevID) {
+
+        if(!validateSystemid($strNewPrevID))
+            $strNewPrevID = class_modul_system_module::getModuleByName("pages")->getSystemid();
+
+
 		$strQuery = "UPDATE "._dbprefix_."system
 		              SET system_prev_id='".dbsafeString($strNewPrevID)."'
 		              WHERE system_id='".dbsafeString($strSiteID)."'
@@ -161,8 +175,9 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getPagesInFolder($strFolderid = "") {
-		if($strFolderid == "")
-			$strFolderid = 0;
+		if(!validateSystemid($strFolderid))
+			$strFolderid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+            
 		$strQuery = "SELECT system_id
 						FROM "._dbprefix_."page as page,
 							 "._dbprefix_."system as system

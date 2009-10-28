@@ -121,7 +121,7 @@ class class_modul_news_news extends class_model implements interface_model  {
         //Start wit the system-recods and a tx
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
-        $strNewsId = $this->createSystemRecord(0, "news:".$this->getStrTitle());
+        $strNewsId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "news:".$this->getStrTitle());
         $this->setSystemid($strNewsId);
         class_logger::getInstance()->addLogRow("new news ".$this->getSystemid(), class_logger::$levelInfo);
         //The news-Table

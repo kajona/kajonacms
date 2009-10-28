@@ -9,6 +9,6 @@
 
 
 //ID der Bildergalerie
-	define( "_bildergalerie_modul_id_",					50);
+	define( "_gallery_modul_id_",					50);
 
 ?>

@@ -84,7 +84,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
 		$bitCommit = true;
 
 		//Get the system-records
-		$strNaviSystemID = $this->createSystemRecord(0, "Navi: ".$this->getStrName());
+		$strNaviSystemID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Navi: ".$this->getStrName());
 		$this->setSystemid($strNaviSystemID);
 		class_logger::getInstance()->addLogRow("new navigation ".$this->getSystemid(), class_logger::$levelInfo);
 		//And the record in the navi-table
@@ -114,7 +114,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."navigation, "._dbprefix_."system
 		             WHERE system_id = navigation_id
-		             AND system_prev_id = '0'
+		             AND system_prev_id = '".dbsafeString(class_modul_system_module::getModuleByName("navigation")->getSystemid())."'
 		             AND system_module_nr = "._navigation_modul_id_."
 		             ORDER BY system_sort ASC, system_comment ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
@@ -137,7 +137,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."navigation, "._dbprefix_."system
                      WHERE system_id = navigation_id
-                     AND system_prev_id = '0'
+                     AND system_prev_id = '".dbsafeString(class_modul_system_module::getModuleByName("navigation")->getSystemid())."'
                      AND navigation_name = '".dbsafeString($strName)."'
                      AND system_module_nr = "._navigation_modul_id_."
                      ORDER BY system_sort ASC, system_comment ASC";

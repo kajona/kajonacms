@@ -48,7 +48,7 @@ echo "<form method=\"post\">";
 echo "Test to run:\n";
 echo "<select name=\"testname\" type=\"dropdown\">";
 foreach ($arrFiles as $strOneFile)
-    echo "<option id=\"".$strOneFile."\">".$strOneFile."</option>";
+    echo "<option id=\"".$strOneFile."\" ".(getPost("testname") == $strOneFile ? "selected" : "")." >".$strOneFile."</option>";
 echo "</select>";
 echo "<input type=\"hidden\" name=\"dotest\" value=\"1\" />";
 echo "<input type=\"submit\" value=\"Run test\" />";

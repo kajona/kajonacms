@@ -32,7 +32,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
         $arrModul = array();
         $arrModul["name"] 				= "modul_guestbook";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _gaestebuch_modul_id_;
+		$arrModul["moduleId"] 			= _guestbook_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."guestbook_book";
 		$arrModul["modul"]				= "guestbook";
 
@@ -75,7 +75,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 
 
 		//create the systemrecord
-		$strGbSystemid = $this->createSystemRecord(0, "GB: ".$this->getGuestbookTitle());
+		$strGbSystemid = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "GB: ".$this->getGuestbookTitle());
         $this->setSystemid($strGbSystemid);
         class_logger::getInstance()->addLogRow("new gb ".$this->getSystemid(), class_logger::$levelInfo);
         //and the book itself

@@ -76,7 +76,7 @@ class class_modul_search_commons extends class_model implements interface_model 
     /**
 	 * Calls the single search-functions, sorts the results and creates the output
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function doSearch($strSearchterm) {
 

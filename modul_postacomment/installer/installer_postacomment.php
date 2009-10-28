@@ -20,7 +20,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.1";
+		$arrModule["version"] 		  = "3.2.91";
 		$arrModule["name"] 			  = "postacomment";
 		$arrModule["class_admin"]  	  = "class_modul_postacomment_admin";
 		$arrModule["file_admin"] 	  = "class_modul_postacomment_admin.php";
@@ -160,6 +160,11 @@ class class_installer_postacomment extends class_installer_base implements inter
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
+
         return $strReturn."\n\n";
 	}
 	
@@ -204,6 +209,39 @@ class class_installer_postacomment extends class_installer_base implements inter
         $this->updateModuleVersion("postacomment", "3.2.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("postacomment", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91..\n";
+        $strReturn .= "Updating module-versions...\n";
+
+        $strReturn .= "Reorganizing comments..\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._postacomment_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT postacomment_id
+                       FROM "._dbprefix_."postacomment";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating comment ".$arrSingleRow["postacomment_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["postacomment_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+        $this->updateModuleVersion("postacomment", "3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("postacomment", "3.2.91");
         return $strReturn;
     }
 

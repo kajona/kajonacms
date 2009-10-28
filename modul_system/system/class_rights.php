@@ -60,60 +60,145 @@ class class_rights {
 	}
 
 
-	/**
-	 * Writes rights to the database
+	
+
+    /**
+     * Helper, shouldn't be called in regular cases.
+     * Rebuilds the complete rights-structure, so saves the rights downwards.
+     *
+     * @param string $strStartId
+     * @return bool
+     */
+    public function rebuildRightsStructure($strStartId = "0") {
+        //load rights from root-node
+        $arrRootRights = $this->getPlainRightRow($strStartId);
+        return $this->setRights($arrRootRights, $strStartId);
+    }
+
+
+    /**
+     * Writes a single rights record to the database.
+     *
+     * @param string $strSystemid
+     * @param array $arrRights
+     * @return bool
+     */
+    private function writeSingleRecord($strSystemid, $arrRights) {
+        //Splitting up the rights
+        $strView    = $arrRights["view"];
+        $strEdit    = $arrRights["edit"];
+        $strDelete  = $arrRights["delete"];
+        $strRights  = $arrRights["right"];
+        $strRight1  = $arrRights["right1"];
+        $strRight2  = $arrRights["right2"];
+        $strRight3  = $arrRights["right3"];
+        $strRight4  = $arrRights["right4"];
+        $strRight5  = $arrRights["right5"];
+        $intInherit = $arrRights["inherit"];
+
+        $strQuery = "UPDATE "._dbprefix_."system_right
+                        SET right_inherit=".(int)$intInherit.",
+                            right_view='".dbsafeString($strView)."',
+                            right_edit='".dbsafeString($strEdit)."',
+                            right_delete='".dbsafeString($strDelete)."',
+                            right_right='".dbsafeString($strRights)."',
+                            right_right1='".dbsafeString($strRight1)."',
+                            right_right2='".dbsafeString($strRight2)."',
+                            right_right3='".dbsafeString($strRight3)."',
+                            right_right4='".dbsafeString($strRight4)."',
+                            right_right5='".dbsafeString($strRight5)."'
+                      WHERE right_id='".dbsafeString($strSystemid)."'";
+
+        if($this->objDb->_query($strQuery)) {
+            //Flush the cache so later lookups will match the new rights
+            $this->objDb->flushQueryCache();
+            $this->arrRightsCache = array();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /**
+	 * Writes rights to the database.
+     * Wrapper to the recursive function class_rights::setRightsRecursive($arrRights, $strSystemid)
 	 *
+     * @see setRightsRecursive($arrRights, $strSystemid)
 	 * @param mixed $arrRights
 	 * @param string $strSystemid
+     * @throws class_exception
 	 * @return bool
 	 */
 	public function setRights($arrRights, $strSystemid) 	{
+	    //start a new tx
+        $this->objDb->transactionBegin();
+
+        $bitSave = $this->setRightsRecursive($arrRights, $strSystemid);
+
+        if($bitSave) {
+            $this->objDb->transactionCommit();
+            class_logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." succeeded", class_logger::$levelInfo);
+        }
+        else {
+            $this->objDb->transactionRollback();
+            class_logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." failed", class_logger::$levelError);
+            include_once(_systempath_."/class_exception.php");
+            throw new class_exception("saving rights of record ".$strSystemid." failed", class_exception::$level_ERROR);
+        }
+
+        return $bitSave;
+
+	}
+
+
+    /**
+     * Set the rights of the passed systemrecord.
+     * Writes the rights down to all records inheriting from the current one.
+     *
+     * @param array $arrRights
+     * @param string $strSystemid
+     * @return bool
+     */
+    private function setRightsRecursive($arrRights, $strSystemid) 	{
+        $bitReturn = true;
+
 	    //check against root-record: here no inheritance
-	    if($strSystemid == "")
+	    if($strSystemid == "" || $strSystemid == "0")
 	        $arrRights["inherit"] = 0;
 
-		if(isset($arrRights["inherit"]) && $arrRights["inherit"] == 1) 	{
-			//Inheritance, nothing special
-			$strQuery = "UPDATE "._dbprefix_."system_right SET right_inherit=1 WHERE right_id='".dbsafeString($strSystemid)."'";
-			if($this->objDb->_query($strQuery))
-				return true;
-			else
-				return false;
-		}
-		else {
-			//Splitting up the rights
-			$strView = $arrRights["view"];
-			$strEdit = $arrRights["edit"];
-			$strDelete = $arrRights["delete"];
-			$strRights = $arrRights["right"];
-			$strRight1 = $arrRights["right1"];
-			$strRight2 = $arrRights["right2"];
-			$strRight3 = $arrRights["right3"];
-			$strRight4 = $arrRights["right4"];
-			$strRight5 = $arrRights["right5"];
+            
+        include_once(_systempath_."/class_modul_system_common.php");
+        $objCommon = new class_modul_system_common();
+        $strPrevSystemid = $objCommon->getPrevId($strSystemid);
 
-			$strQuery = "UPDATE "._dbprefix_."system_right
-						SET right_inherit=0,
-							right_view='".dbsafeString($strView)."',
-							right_edit='".dbsafeString($strEdit)."',
-							right_delete='".dbsafeString($strDelete)."',
-							right_right='".dbsafeString($strRights)."',
-							right_right1='".dbsafeString($strRight1)."',
-							right_right2='".dbsafeString($strRight2)."',
-							right_right3='".dbsafeString($strRight3)."',
-							right_right4='".dbsafeString($strRight4)."',
-							right_right5='".dbsafeString($strRight5)."'
-							WHERE right_id='".dbsafeString($strSystemid)."'";
-			
-			if($this->objDb->_query($strQuery)) {
-				//Flush the cache so later lookups will match the new rights
-				$this->objDb->flushQueryCache();
-				$this->arrRightsCache = array();
-				return true;
-			}
-			else
-				return false;
-		}
+
+        //separate the two possible modes: inheritance or no inheritance
+        //if set to inheritance, set the flag, load the rights from one level above and write the rights down.
+        if(isset($arrRights["inherit"]) && $arrRights["inherit"] == 1) {
+            $arrRights = $this->getPlainRightRow($strPrevSystemid);
+            $arrRights["inherit"] = 1;
+        }
+
+        $bitReturn &= $this->writeSingleRecord($strSystemid, $arrRights);
+        
+        //load all child records in order to update them, too.
+        $arrChilds = $objCommon->getChildNodesAsIdArray($strSystemid);
+        foreach($arrChilds as $strOneChildId) {
+            //this check is needed for strange tree-behaviours!!! DO NOT REMOVE!
+            if($strOneChildId != $strSystemid) {
+
+                $arrChildRights = $this->getPlainRightRow($strOneChildId);
+
+                if($arrChildRights["inherit"] == 1) {
+                    $arrChildRights = $arrRights;
+                    $arrChildRights["inherit"] = 1;
+                }
+                $bitReturn &= $this->setRightsRecursive($arrChildRights, $strOneChildId);
+            }
+        }
+
+        return $bitReturn;
+
 	}
 
     /**
@@ -124,20 +209,8 @@ class class_rights {
      * @return bool
      */
 	public function isInherited($strSystemid) {
-		$bitReturn = false;
-		
-		$strQuery = "SELECT *
-                        FROM "._dbprefix_."system,
-                             "._dbprefix_."system_right
-                        WHERE system_id = '".dbsafeString($strSystemid)."'
-                            AND right_id = system_id ";
-
-        $arrRow = $this->objDb->getRow($strQuery);
-
-        if((isset($arrRow["right_inherit"]) && $arrRow["right_inherit"] == 1))
-            $bitReturn = true;
-		
-		return $bitReturn;
+        $arrRights = $this->getPlainRightRow($strSystemid);
+        return $arrRights["inherit"] == 1;
 	}
 
     /**
@@ -149,14 +222,9 @@ class class_rights {
      */
 	public function setInherited($bitIsInherited, $strSystemid) {
 		$bitReturn = false;
-        $this->objDb->flushQueryCache();
-        $this->flushRightsCache();
-
-        $strQuery = "UPDATE "._dbprefix_."system_right 
-                        SET right_inherit = ".($bitIsInherited ? 1 : 0)."
-                      WHERE right_id = '".dbsafeString($strSystemid)."'";
-
-        return $this->objDb->_query($strQuery);
+        $arrRights = $this->getPlainRightRow($strSystemid);
+        $arrRights["inherit"] = ($bitIsInherited ? 1 : 0);
+        return $this->setRights($arrRights, $strSystemid);
 	}
 
 	/**
@@ -164,116 +232,58 @@ class class_rights {
 	 *
 	 * @param string $strSystemid
 	 * @param bool $bitLoadInherited behave as if loading inherited rights
-	 * @return mixed
+	 * @return array
 	 */
-	public function getRightRow($strSystemid, $bitLoadInherited = false) {
-		$arrReturn = array();
-		$arrRow = array();
-		//Row in Cache?
-		if(isset($this->arrRightsCache[$strSystemid]) && !$bitLoadInherited)
-			return $this->arrRightsCache[$strSystemid];
+	private function getPlainRightRow($strSystemid) {
 
-		$strQuery = "SELECT *
+        $strQuery = "SELECT *
 						FROM "._dbprefix_."system,
 							 "._dbprefix_."system_right
 						WHERE system_id = '".dbsafeString($strSystemid)."'
 							AND right_id = system_id ";
 
-		$arrRow = $this->objDb->getRow($strQuery);
+        $arrRow = $this->objDb->getRow($strQuery);
+        $arrReturnArray = array();
 
-		if((isset($arrRow["right_inherit"]) && $arrRow["right_inherit"] == 1) || $bitLoadInherited) {
-			//Is there any prev_id?
-			if($arrRow["system_prev_id"] != "0") 	{
-				//Loading the previous datarecord using a recursion
-				$arrRow = $this->getRightRow($arrRow["system_prev_id"]);
-			}
-			else {
-				//Inheritance, but NO system_prev_id
-				//So we use the module-node!
-				//!!!!!!!BUT: There are special cases!!!!!!
+        $arrRights["view"]   = isset($arrRow["right_view"]) ? $arrRow["right_view"] : "";
+        $arrRights["edit"]   = isset($arrRow["right_edit"]) ? $arrRow["right_edit"] : "";
+        $arrRights["delete"] = isset($arrRow["right_delete"]) ? $arrRow["right_delete"] : "";
+        $arrRights["right"]  = isset($arrRow["right_right"]) ? $arrRow["right_right"] : "";
+        $arrRights["right1"] = isset($arrRow["right_right1"]) ? $arrRow["right_right1"] : "";
+        $arrRights["right2"] = isset($arrRow["right_right2"]) ? $arrRow["right_right2"] : "";
+        $arrRights["right3"] = isset($arrRow["right_right3"]) ? $arrRow["right_right3"] : "";
+        $arrRights["right4"] = isset($arrRow["right_right4"]) ? $arrRow["right_right4"] : "";
+        $arrRights["right5"] = isset($arrRow["right_right5"]) ? $arrRow["right_right5"] : "";
+        $arrRights["inherit"]= isset($arrRow["right_inherit"]) ? (int)$arrRow["right_inherit"] : 1;
 
-				//Special case 1: Folders!
-				if($arrRow["system_module_nr"] == _pages_folder_id_) {
-					//Pages Root
-					$strQuery = "SELECT *
-								FROM "._dbprefix_."system,
-									 "._dbprefix_."system_right
-								WHERE system_id = '".dbsafeString($this->getModuleSystemid(_pages_modul_id_))."'
-									AND	right_id = system_id ";
-
-					$arrRow = $this->objDb->getRow($strQuery);
-					if($arrRow["right_inherit"] == 1) {
-						//This Record inherits from the global root
-						$strQuery= "SELECT *
-										FROM "._dbprefix_."system,
-											"._dbprefix_."system_right
-										WHERE system_id = '0'
-										  AND system_id = right_id";
-						$arrRow = $this->objDb->getRow($strQuery);
-					}
-				}
-				//Regular Case: Loading the module-node
-				else {
-					$strQuery = "SELECT *
-								FROM "._dbprefix_."system,
-									 "._dbprefix_."system_right
-								WHERE system_id = '".dbsafeString($this->getModuleSystemid($arrRow["system_module_nr"]))."'
-									AND right_id = system_id ";
-
-					$arrRow = $this->objDb->getRow($strQuery);
-					if($arrRow["right_inherit"] == 1) 	{
-						//This Record inherits from the global root
-						$strQuery= "SELECT *
-										FROM "._dbprefix_."system,
-											"._dbprefix_."system_right
-										WHERE system_id = '0'
-										  AND system_id = right_id";
-						$arrRow = $this->objDb->getRow($strQuery);
-					}
-				}
-			}
-		}
-		//Saving in the cache
-		$this->arrRightsCache[$strSystemid] = $arrRow;
-		return $arrRow;
+        return $arrRights;
 	}
 
 
 	/**
 	 * Returns a 2-dimensional Array containg the groups and the assigned rights.
-	 * If the record inherits, the tree is traversed upwards till the base-node is being found.
-	 * In the last case, this is the system-root
 	 *
 	 * @param string $strSystemid
 	 * @param bool $bitLoadInherited behave as if loading inherited rights
 	 * @return mixed
 	 */
-	public function getArrayRights($strSystemid, $bitLoadInherited = false) {
+	public function getArrayRights($strSystemid) {
 		$arrReturn = array();
 
-		//Inheritance?
-		$strQuery = "SELECT *
-					FROM "._dbprefix_."system,
-						 "._dbprefix_."system_right
-					WHERE system_id = '".dbsafeString($strSystemid)."'
-						AND	right_id = system_id";
-
-		$arrTemp = $this->objDb->getRow($strQuery);
-
-		$arrRow = $this->getRightRow($strSystemid, $bitLoadInherited);
+		$arrRow = $this->getPlainRightRow($strSystemid);
 
 		//Exploding the array
-		$arrReturn["view"] = explode(",",(isset($arrRow["right_view"]) ? $arrRow["right_view"] : ""));
-		$arrReturn["edit"] = explode(",",(isset($arrRow["right_edit"]) ? $arrRow["right_edit"] : ""));
-		$arrReturn["delete"] = explode(",",(isset($arrRow["right_delete"]) ? $arrRow["right_delete"] : ""));
-		$arrReturn["right"] = explode(",",(isset($arrRow["right_right"]) ? $arrRow["right_right"] : ""));
-		$arrReturn["right1"] = explode(",",(isset($arrRow["right_right1"]) ? $arrRow["right_right1"] : ""));
-		$arrReturn["right2"] = explode(",",(isset($arrRow["right_right2"]) ? $arrRow["right_right2"] : ""));
-		$arrReturn["right3"] = explode(",",(isset($arrRow["right_right3"]) ? $arrRow["right_right3"] : ""));
-		$arrReturn["right4"] = explode(",",(isset($arrRow["right_right4"]) ? $arrRow["right_right4"] : ""));
-		$arrReturn["right5"] = explode(",",(isset($arrRow["right_right5"]) ? $arrRow["right_right5"] : ""));
+		$arrReturn["view"]   = explode(",",$arrRow["view"]);
+		$arrReturn["edit"]   = explode(",",$arrRow["edit"]);
+		$arrReturn["delete"] = explode(",",$arrRow["delete"]);
+		$arrReturn["right"]  = explode(",",$arrRow["right"]);
+		$arrReturn["right1"] = explode(",",$arrRow["right1"]);
+		$arrReturn["right2"] = explode(",",$arrRow["right2"]);
+		$arrReturn["right3"] = explode(",",$arrRow["right3"]);
+		$arrReturn["right4"] = explode(",",$arrRow["right4"]);
+		$arrReturn["right5"] = explode(",",$arrRow["right5"]);
 
-		$arrReturn["inherit"] = $arrTemp["right_inherit"];
+		$arrReturn["inherit"] = (int)$arrRow["inherit"];
 
 		return $arrReturn;
 	}
@@ -389,8 +399,7 @@ class class_rights {
 		}
 		return $bitReturn;
 	}
-
-
+    
 
 	/**
 	 * Checks if the user has the right to edit the rights of the record

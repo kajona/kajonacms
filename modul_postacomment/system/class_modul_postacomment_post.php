@@ -97,7 +97,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         //Start wit the system-recods and a tx
 		$this->objDB->transactionBegin();
 		
-        $strPostId = $this->createSystemRecord(0, "postacomment:".$this->getStrTitle());
+        $strPostId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "postacomment:".$this->getStrTitle());
         $this->setSystemid($strPostId);
         class_logger::getInstance()->addLogRow("new postacomment ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setIntDate(time());

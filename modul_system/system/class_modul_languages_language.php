@@ -84,7 +84,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
         //Create System-Records
-        $strLanguageSystemId = $this->createSystemRecord(0, "Language: ".$this->getStrName());
+        $strLanguageSystemId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Language: ".$this->getStrName());
         $this->setSystemid($strLanguageSystemId);
         class_logger::getInstance()->addLogRow("new language ".$this->getSystemid(), class_logger::$levelInfo);
 

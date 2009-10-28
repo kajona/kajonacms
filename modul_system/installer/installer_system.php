@@ -21,7 +21,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.1";
+		$arrModul["version"] 			= "3.2.92";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -410,6 +410,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		$this->objDB->_query($strQuery);
 		$strReturn .= "Modified root-rights....\n";
+        $this->objRights->rebuildRightsStructure();
+        $strReturn .= "Rebuilded rights structures...\n";
 
 		//Creating the admin & guest groups
 		$strQuery = "INSERT INTO "._dbprefix_."user_group
@@ -519,6 +521,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0.9") {
             $strReturn .= $this->update_3209_321();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_3292();
         }
 
         return $strReturn."\n\n";
@@ -826,5 +838,127 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 
+    private function update_321_3291() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.1 to 3.2.91...\n";
+
+
+
+
+        $strReturn .= "Reorganizing filemanager repositories...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._filemanager_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system, "._dbprefix_."filemanager
+                      WHERE system_id=filemanager_id
+                        AND system_prev_id = '0'";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating repo ".$arrSingleRow["system_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["system_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+
+        $strReturn .= "Reorganizing languages repositories...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._languages_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system, "._dbprefix_."languages
+                      WHERE system_id=language_id
+                        AND system_prev_id = '0'";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating language ".$arrSingleRow["system_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["system_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.91");
+        return $strReturn;
+    }
+
+
+
+    private function update_3291_3292() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.9.1 to 3.2.92...\n";
+
+        $strReturn.= "Checking number of nodes on second level compared to number of modules installed...\n";
+
+        $strQuery = "SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '0' AND system_id != '0'";
+        $arrNodes = $this->objDB->getArray($strQuery);
+
+        $strQuery = "SELECT module_id FROM "._dbprefix_."system_module";
+        $arrModules = $this->objDB->getArray($strQuery);
+
+        if(count($arrNodes) != count($arrModules)) {
+            $strReturn .= "<b>Error</b>\n";
+            $strReturn.= count($arrNodes)." nodes vs. ".count($arrModules)." modules.\n";
+
+            $arrFlatModules = array();
+            foreach($arrModules as $arrSingleModule) {
+                $arrFlatModules[] = $arrSingleModule["module_id"];
+            }
+
+            foreach($arrNodes as $arrSingleNode) {
+                if(!in_array($arrSingleNode["system_id"], $arrFlatModules))
+                    $strReturn .= "node ".$arrSingleNode["system_id"]." not in list of modules! \n";
+            }
+
+            $strReturn .= "<b>Please upgrade other modules before.\n<b>Aborting update!</b>\n";
+            return $strReturn;
+        }
+        else
+            $strReturn .= " ...numbers are matching.\n";
+
+        $strReturn .= "Rebuilding rights tables...";//TODO rebuild rights
+        if(class_carrier::getInstance()->getObjRights()->rebuildRightsStructure()) {
+            $strReturn .= " ok.\n";
+        }
+        else {
+            $strReturn .= " failed.\n";
+            return $strReturn;
+        }
+
+        
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.92");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.92");
+         
+         
+        return $strReturn;
+    }
 }
 ?>

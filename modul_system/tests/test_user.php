@@ -18,14 +18,13 @@ class class_test_user implements interface_testable {
 
         echo "\tcheck number of users installed...\n";
         $arrUserInstalled = class_modul_user_user::getAllUsers();
-        class_assertions::assertEqual(count($arrUserInstalled), 1, __FILE__." checkNrOfUsers");
-
-
+        $intStartUsers = count($arrUserInstalled);
+        echo "\t ...found ".$intStartUsers." users.\n";
 
         echo "\tcheck number of groups installed...\n";
         $arrGroupsInstalled = class_modul_user_group::getAllGroups();
-        class_assertions::assertEqual(count($arrGroupsInstalled), 2, __FILE__." checkNrOfGroups");
-
+        $intStartGroups = count($arrGroupsInstalled);
+        echo "\t ...found ".$intStartUsers." users.\n";
 
 
         echo "\tcreate 100 users using the model...\n";
@@ -43,7 +42,7 @@ class class_test_user implements interface_testable {
             class_assertions::assertEqual($objUser->getStrUsername(), $strUsername, __FILE__." checkNameOfUserCreated");
         }
         $arrUserInstalled = class_modul_user_user::getAllUsers();
-        class_assertions::assertEqual(count($arrUserInstalled), 101, __FILE__." checkNrOfUsersCreatedByModel");
+        class_assertions::assertEqual(count($arrUserInstalled), (100+$intStartUsers), __FILE__." checkNrOfUsersCreatedByModel");
 
 
 
@@ -61,7 +60,7 @@ class class_test_user implements interface_testable {
             class_assertions::assertEqual($objGroup->getStrName(), $strName, __FILE__." checkNameOfGroupCreated");
         }
         $arrGroupsInstalled = class_modul_user_group::getAllGroups();
-        class_assertions::assertEqual(count($arrGroupsInstalled), 102, __FILE__." checkNrOfGroupsByModel");
+        class_assertions::assertEqual(count($arrGroupsInstalled), (100+$intStartGroups), __FILE__." checkNrOfGroupsByModel");
 
 
 
@@ -75,7 +74,7 @@ class class_test_user implements interface_testable {
 
         echo "\tcheck number of users installed...\n";
         $arrUserInstalled = class_modul_user_user::getAllUsers();
-        class_assertions::assertEqual(count($arrUserInstalled), 1, __FILE__." checkNrOfUsers");
+        class_assertions::assertEqual(count($arrUserInstalled), $intStartUsers, __FILE__." checkNrOfUsers");
 
 
 
@@ -87,7 +86,7 @@ class class_test_user implements interface_testable {
 
         echo "\tcheck number of groups installed...\n";
         $arrGroupsInstalled = class_modul_user_group::getAllGroups();
-        class_assertions::assertEqual(count($arrGroupsInstalled), 2, __FILE__." checkNrOfGroups");
+        class_assertions::assertEqual(count($arrGroupsInstalled), $intStartGroups, __FILE__." checkNrOfGroups");
 
         echo "\ttest group membership handling...\n";
         $objGroup = new class_modul_user_group();
@@ -113,6 +112,15 @@ class class_test_user implements interface_testable {
             $objOneUser->deleteUser();
         class_modul_user_group::deleteGroup($objGroup->getSystemid());
 
+
+        $objDB->flushQueryCache();
+        echo "\tcheck number of users installed is same as at beginning...\n";
+        $arrUserInstalled = class_modul_user_user::getAllUsers();
+        class_assertions::assertEqual(count($arrUserInstalled), $intStartUsers, __FILE__." checkNrOfUsersAtEnd");
+
+        echo "\tcheck number of groups installed is same as at beginning...\n";
+        $arrGroupsInstalled = class_modul_user_group::getAllGroups();
+        class_assertions::assertEqual(count($arrGroupsInstalled), $intStartGroups, __FILE__." checkNrOfGrpupsAtEnd");
 
     }
 

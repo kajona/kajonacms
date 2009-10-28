@@ -66,7 +66,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
 		//system-tables
-		$strArchiveID = $this->createSystemRecord(0, "dl Archive: ".$this->getTitle());
+		$strArchiveID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "dl Archive: ".$this->getTitle());
 		$this->setSystemid($strArchiveID);
 		class_logger::getInstance()->addLogRow("new dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
 		//and the gall itself

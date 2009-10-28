@@ -268,10 +268,11 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-			$arrRightsInherited = $this->objRights->getArrayRights($strSystemID, true);
+            $strPrevId = $this->getPrevId($strSystemID);
+            $arrRightsInherited = $this->objRights->getArrayRights($strPrevId);
+            
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {
                 if($strRightName != "inherit") {
-
                     $intRightCounter = 0;
                     if($strRightName == "view") $intRightCounter = 1;
                     if($strRightName == "edit") $intRightCounter = 2;

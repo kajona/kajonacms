@@ -81,7 +81,7 @@ class class_modul_faqs_category extends class_model implements interface_model  
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
         //Create the system-record
-        $strCatId = $this->createSystemRecord(0, "faqs cat: ".$this->getStrTitle());
+        $strCatId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "faqs cat: ".$this->getStrTitle());
         $this->setSystemid($strCatId);
         class_logger::getInstance()->addLogRow("new faqscat ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."

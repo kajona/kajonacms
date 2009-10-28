@@ -31,7 +31,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
         $arrModul = array();
 		$arrModul["name"] 			= "modul_gallery";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 		= _bildergalerie_modul_id_;
+		$arrModul["moduleId"] 		= _gallery_modul_id_;
 		$arrModul["modul"]			= "gallery";
 
 		//base class

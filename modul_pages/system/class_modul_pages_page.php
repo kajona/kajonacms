@@ -109,6 +109,10 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
 
+        //if no folder is given, place the page under the modules' record
+        if($strFolderid == "0")
+            $strFolderid = $this->getModuleSystemid($this->arrModule["modul"]);
+
 		//Create the system-record
 		if(_pages_newdisabled_ == "true")
 		    $strPageSystemid = $this->createSystemRecord($strFolderid, "PAGE: ".$strName, true, "", "", 0);
@@ -157,6 +161,10 @@ class class_modul_pages_page extends class_model implements interface_model  {
     public function updateObjectToDb($strFolderid = "0") {
         class_logger::getInstance()->addLogRow("updated page ".$this->getSystemid(), class_logger::$levelInfo);
 
+
+        if($strFolderid == "0")
+            $strFolderid = $this->getModuleSystemid($this->arrModule["modul"]);
+
         //Make texts db-safe
 		$strDescription = htmlToString($this->getStrDesc(), false, false);
 		//Do we have a folderid?
@@ -190,7 +198,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
 
 		//and the properties record
-		//properties fpr this language alerady existing?
+		//properties for this language already existing?
 		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table2"]."
 		                 WHERE pageproperties_id='".$this->objDB->dbsafeString($this->getSystemid())."'
 		                   AND pageproperties_language='".$this->objDB->dbsafeString($this->getStrLanguage())."'";

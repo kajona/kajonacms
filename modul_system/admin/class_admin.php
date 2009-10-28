@@ -420,7 +420,8 @@ abstract class class_admin {
 	 * @return string
 	 */
 	public function getModuleSystemid($strModule) {
-	    return $this->objSystemCommon->getModuleSystemid($strModule);
+        $objModule = class_modul_system_module::getModuleByName($strModule);
+        return $objModule->getSystemid();
 	}
 
 	/**
@@ -428,12 +429,16 @@ abstract class class_admin {
 	 * until the assigned module-id
 	 *
 	 * @param string $strSystemid
+     * @param string $strStopSystemid
 	 * @return mixed
 	 */
-	public function getPathArray($strSystemid = "") {
+	public function getPathArray($strSystemid = "", $strStopSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getPathArray($strSystemid);
+        if($strStopSystemid == "")
+            $strStopSystemid = $this->getModuleSystemid($this->arrModule["modul"]);
+            
+		return $this->objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
 	}
 
 	/**

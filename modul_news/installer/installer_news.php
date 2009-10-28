@@ -19,7 +19,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.1";
+		$arrModule["version"] 		  = "3.2.91";
 		$arrModule["name"] 			  = "news";
 		$arrModule["class_admin"]  	  = "class_modul_news_admin";
 		$arrModule["file_admin"] 	  = "class_modul_news_admin.php";
@@ -204,6 +204,11 @@ class class_installer_news extends class_installer_base implements interface_ins
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -272,6 +277,60 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "3.2.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "3.2.1");
+        return $strReturn;
+    }
+
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
+
+
+        $strReturn .= "Reorganizing news...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._news_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT news_id
+                       FROM "._dbprefix_."news";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating news ".$arrSingleRow["news_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["news_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+        $strReturn .= "Reorganizing news-cat...\n";
+
+        $strQuery = "SELECT news_cat_id
+                       FROM "._dbprefix_."news_category";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating news-cats ".$arrSingleRow["news_cat_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["news_cat_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "3.2.91");
         return $strReturn;
     }
 }

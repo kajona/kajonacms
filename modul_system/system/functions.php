@@ -372,6 +372,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @param string $strText
  * @param string $strImage
  * @return string
+ * @todo: move to toolkit
  */
 function getNoticeAdminWithoutAhref($strText, $strImage) {
 	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strText."');\" title=\"\" />";
@@ -384,6 +385,7 @@ function getNoticeAdminWithoutAhref($strText, $strImage) {
  * @param string $strAlt
  * @param bool $bitNoAlt
  * @return string
+ * @todo: move to toolkit
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
 	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strAlt."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )." />";
@@ -395,6 +397,7 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
  *
  * @param string $strSystemid
  * @return string
+ * @todo: move to toolkit
  */
 function getRightsImageAdminName($strSystemid) {
 	if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))

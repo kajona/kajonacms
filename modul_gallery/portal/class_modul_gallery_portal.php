@@ -31,7 +31,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["table"]  			= _dbprefix_."gallery_gallery";
 		$arrModul["table2"] 			= _dbprefix_."gallery_pic";
-		$arrModul["moduleId"] 			= _bildergalerie_modul_id_;
+		$arrModul["moduleId"] 			= _gallery_modul_id_;
 		$arrModul["modul"]  			= "gallery";
 
 		parent::__construct($arrModul, $arrElementData);

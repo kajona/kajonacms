@@ -31,7 +31,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
         $arrModule = array();
 		$arrModule["name"] 				= "modul_gallery";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 			= _bildergalerie_modul_id_;
+		$arrModule["moduleId"] 			= _gallery_modul_id_;
 		$arrModule["table"] 			= _dbprefix_."gallery_gallery";
 		$arrModule["table2"]			= _dbprefix_."gallery_pic";
 		$arrModule["modul"]				= "gallery";

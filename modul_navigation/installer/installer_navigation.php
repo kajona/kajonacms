@@ -19,7 +19,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["class_admin"] 	= "class_modul_navigation_admin";
 		$arrModule["file_admin"] 	= "class_modul_navigation_admin.php";
@@ -181,6 +181,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         if($arrModul["module_version"] == "3.2.0.9") {
             $strReturn .= $this->update_3209_321();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -254,6 +259,44 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.2.1");
         $strReturn .= "Updating module-versions...\n";
         $this->updateElementVersion("navigation", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
+
+        $strReturn .= "Reorganizing navigations...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._navigation_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system
+                      WHERE system_prev_id='0'
+                        AND system_module_nr = "._navigation_modul_id_."
+                        AND system_id != '".dbsafeString($strModuleId)."'";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating navigation ".$arrSingleRow["system_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["system_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.2.91");
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateElementVersion("navigation", "3.2.91");
         return $strReturn;
     }
 }

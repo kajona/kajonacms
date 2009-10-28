@@ -35,7 +35,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 	    	= _dbprefix_."guestbook_book";
 		$arrModule["table2"] 			= _dbprefix_."guestbook_post";
-		$arrModule["moduleId"] 			= _gaestebuch_modul_id_;
+		$arrModule["moduleId"] 			= _guestbook_modul_id_;
 		$arrModule["modul"] 			= "guestbook";
 
         parent::__construct($arrModule, $arrElementData);

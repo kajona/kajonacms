@@ -84,7 +84,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
      * @return bool
      */
     public function saveObjectToDb() {
-         $strRepoSystemId = $this->createSystemRecord(0, "Repo: ".$this->getStrName());
+         $strRepoSystemId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Repo: ".$this->getStrName());
          $this->setSystemid($strRepoSystemId);
          class_logger::getInstance()->addLogRow("new repo ".$strRepoSystemId, class_logger::$levelInfo);
 	     //And the repo-record

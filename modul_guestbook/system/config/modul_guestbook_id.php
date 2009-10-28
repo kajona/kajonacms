@@ -8,6 +8,6 @@
 ********************************************************************************************************/
 
 //ID des Gaestebuch-Moduls
-	define( "_gaestebuch_modul_id_",					35);
+	define( "_guestbook_modul_id_",					35);
 
 ?>

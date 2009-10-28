@@ -21,7 +21,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1.9";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -196,6 +196,11 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_321_3219();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1.9") {
+            $strReturn .= $this->update_3219_3291();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -303,6 +308,42 @@ class class_installer_downloads extends class_installer_base implements interfac
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.2.1.9");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("downloads", "3.2.1.9");
+        return $strReturn;
+    }
+
+    private function update_3219_3291() {
+        $strReturn = "Updating 3.2.1.9 to 3.2.91...\n";
+
+
+        $strReturn .= "Reorganizing download-archives...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._downloads_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT archive_id
+                       FROM "._dbprefix_."downloads_archive";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating archive ".$arrSingleRow["archive_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["archive_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.2.91");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("downloads", "3.2.91");
         return $strReturn;
     }
     

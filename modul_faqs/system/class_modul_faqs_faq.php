@@ -105,7 +105,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
         //Start wit the system-recods and a tx
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
-        $strFaqId = $this->createSystemRecord(0, "faq:".uniSubstr($this->getStrAnswer(), 0, 200));
+        $strFaqId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "faq:".uniSubstr($this->getStrAnswer(), 0, 200));
         $this->setSystemid($strFaqId);
         class_logger::getInstance()->addLogRow("new faq ".$this->getSystemid(), class_logger::$levelInfo);
         //The faqs-Table

@@ -81,7 +81,7 @@ class class_modul_news_category extends class_model implements interface_model  
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
         //Create the system-record
-        $strCatId = $this->createSystemRecord(0, "news cat: ".$this->getStrTitle());
+        $strCatId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "news cat: ".$this->getStrTitle());
         $this->setSystemid($strCatId);
         class_logger::getInstance()->addLogRow("new newscat ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."

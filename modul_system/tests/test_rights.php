@@ -80,6 +80,9 @@ class class_test_rights implements interface_testable {
             $this->checkNodeRights($strOneRootNode, true, true);
         }
 
+//        echo "\n\n\n";
+//        $this->printTree($strRootId, 1);
+//        echo "\n\n\n";
 
         echo "\tremoving right view from node secTwo\n";
         $objRights->removeGroupFromRight($objGroup->getSystemid(), $strSecTwo, "view");
@@ -101,6 +104,7 @@ class class_test_rights implements interface_testable {
         $this->checkNodeRights($strThird222, false, true);
 
 
+
         echo "\tmove SecOne as child to 221\n";
         $objSystemCommon->setPrevId($strThird221, $strSecOne);
         echo "\tchecking node rights\n";
@@ -119,6 +123,7 @@ class class_test_rights implements interface_testable {
         $this->checkNodeRights($strThird212, false, true);
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
+
 
 
         echo "\tsetting rights of third21 to only view\n";
@@ -142,6 +147,7 @@ class class_test_rights implements interface_testable {
         $this->checkNodeRights($strThird222, false, true);
 
 
+
         echo "\tsetting 211 as parent node for third11\n";
         $objSystemCommon->setPrevId($strThird211, $strThirdOne1);
         echo "\tchecking node rights\n";
@@ -160,6 +166,10 @@ class class_test_rights implements interface_testable {
         $this->checkNodeRights($strThird212, true);
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
+
+//        echo "\n\n\n";
+//        $this->printTree($strRootId, 1);
+//        echo "\n\n\n";
 
 
         echo "\trebuilding initial tree structure\n";
@@ -183,6 +193,9 @@ class class_test_rights implements interface_testable {
         $this->checkNodeRights($strThird221, false, true);
         $this->checkNodeRights($strThird222, false, true);
 
+//        echo "\n\n\n";
+//        $this->printTree($strRootId, 1);
+//        echo "\n\n\n";
 
         echo "\trebuilding initial inheritance structure\n";
         $objRights->setInherited(true, $strSecTwo);
@@ -207,9 +220,9 @@ class class_test_rights implements interface_testable {
 
 
 
-
-        //$this->printTree($strRootId, 1);
-
+//        echo "\n\n\n";
+//        $this->printTree($strRootId, 1);
+//        echo "\n\n\n";
 
         echo "\tdeleting systemnodes\n";
         
@@ -252,15 +265,15 @@ class class_test_rights implements interface_testable {
                                      $bitRight4 = false,
                                      $bitRight5 = false) {
 
-        class_assertions::assertEqual($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View");
-        class_assertions::assertEqual($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit");
-        class_assertions::assertEqual($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__." checkNodeRights Delete");
-        class_assertions::assertEqual($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__." checkNodeRights Rights");
-        class_assertions::assertEqual($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right1");
-        class_assertions::assertEqual($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right2");
-        class_assertions::assertEqual($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right3");
-        class_assertions::assertEqual($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right4");
-        class_assertions::assertEqual($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right5");
+        class_assertions::assertEqual($bitView, $this->objRights->rightView($strNodeId, $this->strUserId), __FILE__." checkNodeRights View ".$strNodeId);
+        class_assertions::assertEqual($bitEdit, $this->objRights->rightEdit($strNodeId, $this->strUserId), __FILE__." checkNodeRights Edit ".$strNodeId);
+        class_assertions::assertEqual($bitDelete, $this->objRights->rightDelete($strNodeId, $this->strUserId), __FILE__." checkNodeRights Delete ".$strNodeId);
+        class_assertions::assertEqual($bitRights, $this->objRights->rightRight($strNodeId, $this->strUserId), __FILE__." checkNodeRights Rights".$strNodeId);
+        class_assertions::assertEqual($bitRight1, $this->objRights->rightRight1($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right1".$strNodeId);
+        class_assertions::assertEqual($bitRight2, $this->objRights->rightRight2($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right2".$strNodeId);
+        class_assertions::assertEqual($bitRight3, $this->objRights->rightRight3($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right3".$strNodeId);
+        class_assertions::assertEqual($bitRight4, $this->objRights->rightRight4($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right4".$strNodeId);
+        class_assertions::assertEqual($bitRight5, $this->objRights->rightRight5($strNodeId, $this->strUserId), __FILE__." checkNodeRights Right5".$strNodeId);
 
     }
 
@@ -270,7 +283,7 @@ class class_test_rights implements interface_testable {
 
         $objCommon = new class_modul_system_common($strRootNode);
         //var_dump($objCommon->getSystemRecord());
-        echo $objCommon->getRecordComment()."\n";
+        echo $objCommon->getRecordComment()." / (v: ".$this->objRights->rightView($strRootNode, $this->strUserId)." e: ".$this->objRights->rightEdit($strRootNode, $this->strUserId).") /  ".$objCommon->getSystemid()."\n";
 
         //var_dump($objCommon->getChildNodesAsIdArray());
         foreach($objCommon->getChildNodesAsIdArray() as $strOneId)

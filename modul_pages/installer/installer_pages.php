@@ -19,7 +19,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -344,6 +344,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_3291();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -436,6 +441,68 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.2.1");
         $this->updateElementVersion("paragraph", "3.2.1");
         $this->updateElementVersion("image", "3.2.1");
+        return $strReturn;
+    }
+
+
+    private function update_321_3291() {
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
+
+
+        $strReturn .= "Reorganizing pages...\n";
+
+        $strQuery = "SELECT module_id
+                       FROM "._dbprefix_."system_module
+                      WHERE module_nr = "._pages_modul_id_."";
+        $arrEntries = $this->objDB->getRow($strQuery);
+        $strModuleId = $arrEntries["module_id"];
+
+        $strQuery = "SELECT page_id
+                       FROM "._dbprefix_."page";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating page ".$arrSingleRow["page_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["page_id"])."'";
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+
+        $strReturn .= "Reorganizing folders...\n";
+
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system
+                      WHERE system_module_nr = "._pages_folder_id_."
+                        AND system_prev_id = '0'";
+        $arrEntries = $this->objDB->getArray($strQuery);
+
+
+        foreach($arrEntries as $arrSingleRow) {
+            $strReturn .= " ...updating folder ".$arrSingleRow["system_id"]."";
+            $strQuery = "UPDATE "._dbprefix_."system
+                            SET system_prev_id = '".dbsafeString($strModuleId)."'
+                          WHERE system_id = '".dbsafeString($arrSingleRow["system_id"])."'";
+            
+            if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.91");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.2.91");
+        $this->updateElementVersion("paragraph", "3.2.91");
+        $this->updateElementVersion("image", "3.2.91");
         return $strReturn;
     }
 

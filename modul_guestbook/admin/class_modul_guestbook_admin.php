@@ -28,7 +28,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
         $arrModul = array();
 		$arrModul["name"] 				= "modul_guestbook";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _gaestebuch_modul_id_;
+		$arrModul["moduleId"] 			= _guestbook_modul_id_;
 		$arrModul["table"] 			    = _dbprefix_."guestbook_book";
 		$arrModul["table2"]       		= _dbprefix_."guestbook_post";
 		$arrModul["modul"]				= "guestbook";
