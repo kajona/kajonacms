@@ -7,9 +7,6 @@
 *   $Id$                                     *
 ********************************************************************************************************/
 
-require_once(_systempath_."/class_installer_base.php");
-require_once(_systempath_."/interface_installer.php");
-
 /**
  * Installer of the navigation
  *

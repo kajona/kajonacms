@@ -7,14 +7,6 @@
 *	$Id$                             *
 ********************************************************************************************************/
 
-//Include base classes
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-
-//include needed classes
-include_once(_systempath_."/class_modul_guestbook_post.php");
-include_once(_systempath_."/class_modul_guestbook_guestbook.php");
-
 /**
  * Portal-class of the guestbook. Handles postings
  *
@@ -91,7 +83,6 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		$arrTemplate = array();
 		$arrTemplate["liste_posts"] ="";
         //Load all posts
-        include_once(_systempath_."/class_array_section_iterator.php");
 	    $objArraySectionIterator = new class_array_section_iterator(class_modul_guestbook_post::getPostsCount($this->arrElementData["guestbook_id"], true));
 	    $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["guestbook_amount"]);
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

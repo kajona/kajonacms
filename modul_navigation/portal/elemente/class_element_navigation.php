@@ -7,12 +7,6 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
-
 /**
  * Portal-class of the navigation element, loads the navigation-portal class
  *
@@ -44,7 +38,6 @@ class class_element_navigation extends class_element_portal implements interface
 
         $objNaviModule = class_modul_system_module::getModuleByName("navigation");
 		if($objNaviModule != null) {
-    		require_once(_portalpath_."/".$objNaviModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objNaviModule->getStrNamePortal());
     		$objNavigation = new $strClassName($this->arrElementData);
             $strReturn = $objNavigation->action();

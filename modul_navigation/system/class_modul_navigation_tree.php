@@ -7,10 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_navigation_cache.php");
-
 /**
  * Model for a navigation tree itself
  *

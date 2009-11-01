@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/class_filesystem.php");
-
 /**
  * class_csv, used to access data stored in csv-files.
  * This class can either be used to write to csv-files or to read from csv-files

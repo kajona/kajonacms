@@ -594,11 +594,9 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
     //$strParams = urlencode($strParams);
 
 	//more than one language installed?
-	include_once(_systempath_."/class_modul_languages_language.php");
 	$intNumberOfLanguages = class_modul_languages_language::getNumberOfLanguagesAvailable(true);
 
 	if($strLanguage == "" && $intNumberOfLanguages > 1) {
-		include_once(_systempath_."/class_modul_system_common.php");
 		$objCommon = new class_modul_system_common();
 		$strLanguage = $objCommon->getStrPortalLanguage();
 	}
@@ -611,43 +609,41 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 	    $bitRegularLink = true;
 	    if(_system_mod_rewrite_ == "true") {
 
+            //used later to add seo-relevant keywords
+            $objPage = class_modul_pages_page::getPageByName($strPageI);
+            $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
+            if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
+                $strAddKeys .= "__";
 
-                //used later to add seo-relevant keywords
-                include_once(_systempath_."/class_modul_pages_page.php");
-                $objPage = class_modul_pages_page::getPageByName($strPageI);
-                $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
-                if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
-                    $strAddKeys .= "__";
+            //trim string
+            $strAddKeys = uniStrTrim($strAddKeys, 100, "");
 
-                //trim string
-                $strAddKeys = uniStrTrim($strAddKeys, 100, "");
+            //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
+            //but: special case: just pagename & language
+            if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
+                $strHref .= $strPageI.".".$strLanguage.".html";
+            elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
+                $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
+            elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
+                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
+            elseif($strSystemid != "" && $strLanguage == "")
+                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
+            else
+                $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
 
-                //ok, here we go. scheme for rewrite_links: pagename.addKeywords.action.systemid.language.html
-                //but: special case: just pagename & language
-                if($strAction == ""&& $strSystemid == "" && $strAddKeys == "" && $strLanguage != "")
-                    $strHref .= $strPageI.".".$strLanguage.".html";
-                elseif($strAction == "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref .= $strPageI.($strAddKeys == "" ? "" : ".".$strAddKeys).".html";
-                elseif($strAction != "" && $strSystemid == "" && $strLanguage == "")
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".html";
-                elseif($strSystemid != "" && $strLanguage == "")
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".html";
-                else
-                    $strHref .= $strPageI.".".$strAddKeys.".".$strAction .".".$strSystemid.".".$strLanguage.".html";
+            //params?
+            if($strParams != "")
+                $strHref .= "?".$strParams;
 
-                //params?
-                if($strParams != "")
-                    $strHref .= "?".$strParams;
+            // add anchor if given
+            if($strAnchor != "")
+                $strHref .= "#".$strAnchor;
 
-                // add anchor if given
-                if($strAnchor != "")
-                    $strHref .= "#".$strAnchor;
-
-                //plus the domain as a prefix
-                $strHref = "_webpath_"."/".$strHref;
+            //plus the domain as a prefix
+            $strHref = "_webpath_"."/".$strHref;
 
 
-                $bitRegularLink = false;
+            $bitRegularLink = false;
 
 	    }
 
@@ -1207,8 +1203,7 @@ function checkConditionalGetHeaders($strChecksum) {
     if(issetServer("HTTP_IF_NONE_MATCH")) {
         if(getServer("HTTP_IF_NONE_MATCH") == $strChecksum) {
             //strike. no further actions needed.
-            include_once(_systempath_."/class_http_statuscodes.php");
-            header(class_http_status_codes::$strSC_NOT_MODIFIED);
+            header(class_http_statuscodes::$strSC_NOT_MODIFIED);
             header("ETag: ".$strChecksum);
             header("Cache-Control: max-age=86400, must-revalidate");
 

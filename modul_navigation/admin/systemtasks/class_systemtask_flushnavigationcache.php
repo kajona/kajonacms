@@ -7,10 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-
 /**
  * Flushes the cache holding generated pages
  *
@@ -56,7 +52,6 @@ class class_systemtask_flushnavigationcache extends class_systemtask_base implem
      * @return string
      */
     public function executeTask() {
-        include_once(_systempath_."/class_modul_navigation_cache.php");
         class_modul_navigation_cache::flushCache();
         return $this->getText("systemtask_flushnavigationcache_done");
     }

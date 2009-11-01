@@ -7,12 +7,6 @@
 *	$Id$						        *
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-part of the postacomment-element
  *
@@ -47,7 +41,6 @@ class class_element_postacomment extends class_element_portal implements interfa
 		//Load the data
 		$objpostacommentModule = class_modul_system_module::getModuleByName("postacomment");
 		if($objpostacommentModule != null) {
-    		require_once(_portalpath_."/".$objpostacommentModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objpostacommentModule->getStrNamePortal());
     		$objpostacomment = new $strClassName($this->arrElementData);
             $strReturn = $objpostacomment->action();

@@ -7,11 +7,6 @@
 *	$Id$                        *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
 /**
  * Class to handle the admin-stuff of the portalregistration-element
  *
@@ -50,7 +45,6 @@ class class_element_portalregistration extends class_element_admin implements in
 
 		//Build the form
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/element_portalregistration", ".tpl");
 		$arrTemplatesDD = array();
@@ -62,7 +56,6 @@ class class_element_portalregistration extends class_element_admin implements in
 		$strReturn .= $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("portalregistration_template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" ));
 
 		//Load groups available
-		include_once(_systempath_."/class_modul_user_group.php");
 		$arrGroups = class_modul_user_group::getAllGroups();
 		$arrGroupsDD = array();
 		foreach ($arrGroups as $objOneGroup) {

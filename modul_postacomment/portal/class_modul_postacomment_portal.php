@@ -7,14 +7,6 @@
 *	$Id$							*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-include_once(_portalpath_."/class_elemente_portal.php");
-
-//model
-include_once(_systempath_."/class_modul_postacomment_post.php");
-
 /**
  * Portal-class of the postacomment. Handles thd printing of postacomment lists / detail
  *
@@ -223,7 +215,6 @@ class class_modul_postacomment_portal extends class_portal implements interface_
         $strIcons = "";
         $strRatingBarTitle = "";
 
-        include_once(_systempath_."/class_modul_rating_rate.php");
         $intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 
         //read the templates

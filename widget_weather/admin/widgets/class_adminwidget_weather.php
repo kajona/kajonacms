@@ -7,10 +7,6 @@
 *	$Id$	                            *
 ********************************************************************************************************/
 
-include_once(_adminpath_."/widgets/class_adminwidget.php");
-include_once(_adminpath_."/widgets/interface_adminwidget.php");
-
-
 /**
  * @package modul_dashboard
  *
@@ -54,7 +50,6 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
         
         //request the xml...
         try {
-        	include_once(_systempath_."/class_remoteloader.php");
 	        $objRemoteloader = new class_remoteloader();
 	        $objRemoteloader->setStrHost("weather.yahooapis.com");
 	        $objRemoteloader->setStrQueryParams("/forecastrss?p=".$this->getFieldValue("location")."&u=".$this->getFieldValue("unit"));
@@ -65,7 +60,6 @@ class class_adminwidget_weather extends class_adminwidget implements interface_a
         }
         
         if($strContent != "") {
-        	include_once(_systempath_."/class_xml_parser.php");
         	$objXmlparser = new class_xml_parser();
             $objXmlparser->loadString($strContent);
             

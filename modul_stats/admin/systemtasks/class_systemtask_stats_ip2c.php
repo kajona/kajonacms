@@ -7,11 +7,6 @@
 *   $Id$                                 *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-include_once(_systempath_."/class_modul_stats_worker.php");
-
 /**
  * Resolves the country for a given ip-adress
  *
@@ -82,7 +77,6 @@ class class_systemtask_stats_ip2c extends class_systemtask_base implements inter
                 $strIP = $arrIpToLookup[$intI]["stats_ip"];
 
                 try {
-                    include_once(_systempath_."/class_remoteloader.php");
 		            $objRemoteloader = new class_remoteloader();
 		            $objRemoteloader->setStrHost($this->strIp2cServer);
 		            $objRemoteloader->setStrQueryParams("/ip2c.php?ip=".urlencode($strIP)."&domain=".urlencode(_webpath_)."&checksum=".md5(urldecode(_webpath_).$strIP));

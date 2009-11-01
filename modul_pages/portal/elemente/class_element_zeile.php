@@ -7,11 +7,6 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-Part of the row-element
  *

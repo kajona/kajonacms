@@ -7,11 +7,6 @@
 *   $Id$                            *
 ********************************************************************************************************/
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-
-include_once(_systempath_."/class_modul_filemanager_repo.php");
 
 /**
  * Admin-Parts of the filemanager
@@ -309,7 +304,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		if($this->objRights->rightView($this->getSystemid())) {
 			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 			//Load the files
-			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
             $strExtra = "";
             //React on request passed. Do this before loading the filelist, cause subactions could modify it
@@ -369,7 +363,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                     $strAction = "";
 		   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
 
-    				include_once(_systempath_."/class_filesystem.php");
     				$objFilesystem = new class_filesystem();
     				$arrFilesSub = $objFilesystem->getCompleteList($this->strFolder."/".$strFolder, array(), array(), array(".", ".."));
     				if(count($arrFilesSub["files"]) == 0 && count($arrFilesSub["folders"]) == 0) {
@@ -479,7 +472,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		if($this->objRights->rightView($this->getSystemid())) {
     			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
     			//Load the files
-    			include_once(_systempath_."/class_filesystem.php");
     			$objFilesystem = new class_filesystem();
     			$strAddonAction = $this->getParam("fmcommand");
 
@@ -612,7 +604,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				if($strFilename != "" && is_file(_realpath_."/".$this->strFolder."/".$this->getParam("datei_name_alt"))) {
 					if(!is_file(_realpath_."/".$this->strFolder."/".$strFilename)) {
 						//Rename File
-						include_once(_systempath_."/class_filesystem.php");
 						$objFilesystem = new class_filesystem();
 						if($objFilesystem->fileRename($this->strFolder."/".$this->getParam("datei_name_alt"), $this->strFolder."/".$strFilename))
 							$strReturn = $this->getText("datei_umbenennen_erfolg");
@@ -641,7 +632,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
 			if($objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
 				$strReturn .= $this->getText("datei_loeschen_erfolg");
@@ -663,7 +653,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
 
 			if($objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
@@ -731,7 +720,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$bitSuccess = false;
 
                 $strTarget = $this->strFolder."/".createFilename($arrSource["name"]);
-                include_once(_systempath_."/class_filesystem.php");
                 $objFilesystem = new class_filesystem();
                 //Check file for correct filters
                 $arrAllowed = explode(",", $objRepo->getStrUploadFilter());
@@ -774,7 +762,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		if(is_file($strFile)) {
 
 			//Details der Datei sammeln
-			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
 			$arrDetails = $objFilesystem->getFileDetails($strFile);
 

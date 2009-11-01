@@ -1,7 +1,5 @@
 <?php
 
-include_once(_systempath_."/class_modul_system_common.php");
-
 class class_test_system implements interface_testable {
 
 
@@ -212,7 +210,6 @@ class class_test_system implements interface_testable {
                             array("v15", "v25", "v35")
                             );
 
-        include_once(_systempath_."/class_csv.php");
         $objCsv = new class_csv();
         $objCsv->setArrData($arrValues);
         $objCsv->setArrMapping(array(0 => "c1", 1 => "c2", 2 => "c3"));

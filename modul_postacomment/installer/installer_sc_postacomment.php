@@ -7,9 +7,6 @@
 *   $Id$                         *
 ********************************************************************************************************/
 
-
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the postacomment samplecontent
  *
@@ -111,8 +108,6 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         }
         if($objModule != null) {
 
-	        include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $arrNavis = class_modul_navigation_tree::getAllNavis();
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();

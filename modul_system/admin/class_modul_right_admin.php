@@ -7,10 +7,6 @@
 *   $Id$                                        *
 ********************************************************************************************************/
 
-//base class
-include_once(_adminpath_."/class_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin.php");
 
 /**
  * This class handles the adminside of right-management
@@ -103,7 +99,6 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			//Get Rights
 			$arrRights = $this->objRights->getArrayRights($strSystemID);
 			//Get groups
-			include_once(_systempath_."/class_modul_user_group.php");
 			$arrGroups = class_modul_user_group::getAllGroups();
 
 			//Determin name of the record
@@ -333,7 +328,6 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strAdminId = _admins_group_id_;
 
 			//Get Groups
-			include_once(_systempath_."/class_modul_user_group.php");
 			$arrGroups = class_modul_user_group::getAllGroups();
 
 			$strView = $strAdminId;

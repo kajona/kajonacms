@@ -142,7 +142,6 @@ class class_rights {
         else {
             $this->objDb->transactionRollback();
             class_logger::getInstance()->addLogRow("saving rights of record ".$strSystemid." failed", class_logger::$levelError);
-            include_once(_systempath_."/class_exception.php");
             throw new class_exception("saving rights of record ".$strSystemid." failed", class_exception::$level_ERROR);
         }
 
@@ -167,7 +166,6 @@ class class_rights {
 	        $arrRights["inherit"] = 0;
 
             
-        include_once(_systempath_."/class_modul_system_common.php");
         $objCommon = new class_modul_system_common();
         $strPrevSystemid = $objCommon->getPrevId($strSystemid);
 
@@ -636,7 +634,6 @@ class class_rights {
 	 * @return string
 	 */
 	public function getModuleSystemid($intModuleNr) {
-	    include_once(_systempath_."/class_modul_system_module.php");
 	    return class_modul_system_module::getModuleIdByNr($intModuleNr);
 	}
 

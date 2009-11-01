@@ -1,10 +1,6 @@
 <?php
 
-include_once(_systempath_."/class_modul_filemanager_repo.php");
-
 class class_test_filemanager implements interface_testable {
-
-
 
     public function test() {
         

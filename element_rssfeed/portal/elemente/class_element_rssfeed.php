@@ -7,11 +7,6 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Loads the last-modified date of the current page and prepares it for output
  *
@@ -44,7 +39,6 @@ class class_element_rssfeed extends class_element_portal implements interface_po
        $strReturn = "";
        $strFeed = "";
 	   try {
-            include_once(_systempath_."/class_remoteloader.php");
             $objRemoteloader = new class_remoteloader();
             $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->arrElementData["char2"]));
             $objRemoteloader->setIntPort(0);
@@ -63,7 +57,6 @@ class class_element_rssfeed extends class_element_portal implements interface_po
 		  $strContent = $this->getText("rssfeed_errorloading");
 		}
 		else {
-		    include_once(_systempath_."/class_xml_parser.php");
 		    $objXmlparser = new class_xml_parser();
 		    $objXmlparser->loadString($strFeed);
 

@@ -7,11 +7,6 @@
 *	$Id$							*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_xml_admin.php");
-//model
-include_once(_systempath_."/class_modul_system_common.php");
 
 /**
  * admin-class of the system-module
@@ -98,7 +93,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 //try to flush the navigations-cache
                 $objNavi = class_modul_system_module::getModuleByName("navigation");
                 if($objNavi != null) {
-                    include_once(_systempath_."/class_modul_navigation_cache.php");
                     class_modul_navigation_cache::flushCache();
                 }
     	    }
@@ -126,7 +120,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
             if($this->getParam("task") != "") {
                 //include the list of possible tasks
-                include_once(_systempath_."/class_filesystem.php");
                 $objFilesystem = new class_filesystem();
                 $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
                 asort($arrFiles);
@@ -135,7 +128,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                     if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
                         //instantiate the current task
-                        include_once(_adminpath_."/systemtasks/".$strOneFile);
                         $strClassname = uniStrReplace(".php", "", $strOneFile);
                         $objTask = new $strClassname();
                         if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {

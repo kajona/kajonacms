@@ -7,10 +7,6 @@
 *	$Id$                          *
 ********************************************************************************************************/
 
-require_once(_systempath_."/class_installer_base.php");
-require_once(_systempath_."/interface_installer.php");
-include_once(_systempath_."/class_modul_pages_element.php");
-
 /**
  * Installer to install a tellafriend-element to use in the portal
  *

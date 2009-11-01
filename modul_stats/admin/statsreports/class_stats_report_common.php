@@ -7,9 +7,6 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-
 /**
  * This plugin creates a view common numbers, such as "user online" or "total pagehits"
  *
@@ -295,7 +292,6 @@ class class_stats_report_common implements interface_admin_statsreports {
 		//create a graph ->line-graph
 		if($intCount > 1) {
 
-            include_once(_systempath_."/class_graph_pchart.php");
             $objChart2 = new class_graph_pchart();
             $objChart2->setStrGraphTitle("Number of visits / hits");
             $objChart2->setStrXAxisTitle("Date");

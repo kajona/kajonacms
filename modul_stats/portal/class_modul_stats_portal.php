@@ -7,10 +7,6 @@
 *	$Id$	                                *
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_systempath_."/class_modul_stats_worker.php");
-
 /**
  * Portal-Class of the stats module. Invokes the logging of requests to the database
  *

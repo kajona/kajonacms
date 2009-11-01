@@ -7,8 +7,6 @@
 *	$Id$	                                            *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_modul_system_common.php");
-
 /**
  * The Base-Class for all other admin-classes
  *
@@ -118,7 +116,6 @@ abstract class class_admin {
 
 		//Generating all the needed Objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
-		include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
@@ -585,7 +582,6 @@ abstract class class_admin {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
         return $objPagecache->flushCompletePagesCache();
 	}
@@ -597,7 +593,6 @@ abstract class class_admin {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
 	    return $objPagecache->flushPageFromPagesCache($strPagename);
 	}
@@ -669,7 +664,6 @@ abstract class class_admin {
         //Text for the current action available?
         //different loading when editing page-elements
         if($this->getParam("module") == "pages_content" && ($this->getParam("action") == "editElement" || $this->getParam("action") == "newElement")) {
-            include_once(_systempath_."/class_modul_pages_pageelement.php");
             $objElement = null;
             if($this->getParam("action") == "editElement") {
                 $objElement = new class_modul_pages_pageelement($this->getSystemid());
@@ -721,7 +715,6 @@ abstract class class_admin {
 		if($this->objSession->isLoggedin()) {
 			$strNavigation = "";
 			//Loading all Modules
-			include_once(_systempath_."/class_modul_system_module.php");
 			$arrModules = class_modul_system_module::getModulesInNaviAsArray();
 			$intI = 0;
 			$arrModuleRows = array();
@@ -842,7 +835,6 @@ abstract class class_admin {
 	 *
 	 */
 	protected function getOutputLogin() {
-		include_once(_adminpath_."/class_modul_login_admin.php");
 		$objLogin = new class_modul_login_admin();
 		return $objLogin->getLoginStatus();
 	}

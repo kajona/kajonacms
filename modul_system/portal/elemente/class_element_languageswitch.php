@@ -7,12 +7,6 @@
 *	$Id$                         *
 ********************************************************************************************************/
 
-//Base Class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Portal-Class of the picture element
  *
@@ -51,13 +45,11 @@ class class_element_languageswitch extends class_element_portal implements inter
 
 		$strReturn = "";
 
-        include_once(_systempath_."/class_modul_languages_language.php");
         $arrObjLanguages = class_modul_languages_language::getAllLanguages(true);
         //Iterate over all languages
         $strRows = "";
         foreach($arrObjLanguages as $objOneLanguage) {
             //Check, if the current page has elements
-            include_once(_systempath_."/class_modul_pages_page.php");
             $objPage = class_modul_pages_page::getPageByName($this->getPagename());
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {

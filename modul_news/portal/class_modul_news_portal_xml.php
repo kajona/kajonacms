@@ -7,14 +7,6 @@
 *	$Id$									*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_xml_portal.php");
-//model
-include_once(_systempath_."/class_modul_news_category.php");
-include_once(_systempath_."/class_modul_news_feed.php");
-include_once(_systempath_."/class_modul_news_news.php");
-
 /**
  * Portal-class of the news.
  * Serves xml-requests, e.g. generates news-feeds

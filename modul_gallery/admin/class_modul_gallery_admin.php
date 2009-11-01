@@ -7,15 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-//Base class & interface
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//needed models
-include_once(_systempath_."/class_modul_gallery_gallery.php");
-include_once(_systempath_."/class_modul_gallery_pic.php");
-include_once(_systempath_."/class_modul_filemanager_repo.php");
-
-
 /**
  * Admin-Class of the gallery-module. Used to sync the galleries with the filesystem and to define picture-properties
  *
@@ -541,7 +532,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	try {
 				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
 				        if($objMdlRating != null && $objOneFile->getIntType() != 1) {
-				 	        include_once(_systempath_."/class_modul_rating_rate.php");
 				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
 				 	        if($objRating != null)
 				 	            $strCenter .= " - ".$objRating->getFloatRating();

@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 require_once("../system/includes.php");
-include_once(_realpath_."/system/class_filesystem.php");
-include_once(_realpath_."/system/class_date.php");
 
 
 echo "<pre>\n";

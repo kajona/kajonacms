@@ -10,10 +10,6 @@
 if(!require_once("./system/includes.php"))
 	die("Error including necessary files");
 
-//The base class
-include_once(_realpath_."/system/class_root.php");
-include_once(_realpath_."/system/class_http_statuscodes.php");
-
 
 /**
  * Used to send a file to the user
@@ -28,11 +24,6 @@ class class_download_portal extends class_root {
      */
 	public function __construct() {
 	    parent::__construct(array(), "", "portal");
-
-	    //needed classes
-        include_once(_realpath_."/system/class_modul_downloads_archive.php");
-        include_once(_realpath_."/system/class_modul_downloads_file.php");
-        include_once(_realpath_."/system/class_modul_downloads_logbook.php");
 
         //Increase max execution time
         @ini_set("max_execution_time", "7200");
@@ -117,19 +108,19 @@ class class_download_portal extends class_root {
 					@fclose($ptrFile);
 				}
 				else {
-                    header(class_http_status_codes::$strSC_FORBIDDEN);
+                    header(class_http_statuscodes::$strSC_FORBIDDEN);
                     $bitRedirectToErrorPage = true;
 				}
 				
 			}
 			else {
-				header(class_http_status_codes::$strSC_NOT_FOUND);
+				header(class_http_statuscodes::$strSC_NOT_FOUND);
 				$bitRedirectToErrorPage = true;
 			}
 			
 		}
 		else { 
-            header(class_http_status_codes::$strSC_NOT_FOUND);
+            header(class_http_statuscodes::$strSC_NOT_FOUND);
             $bitRedirectToErrorPage = true;
 		}
 		

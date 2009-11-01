@@ -8,9 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Installer of the news samplecontenht
  *
@@ -37,14 +34,12 @@ class class_installer_sc_news implements interface_sc_installer  {
             $this->strIndexID = $objIndex->getSystemid();
 
         $strReturn .= "Creating new category...\n";
-            include_once(_systempath_."/class_modul_news_category.php");
             $objNewsCategory = new class_modul_news_category();
             $objNewsCategory->setStrTitle("TOP-News");
             $objNewsCategory->saveObjectToDb();
             $strCategoryID = $objNewsCategory->getSystemid();
             $strReturn .= "ID of new category: ".$strCategoryID."\n";
             $strReturn .= "Creating news\n";
-            include_once(_systempath_."/class_modul_news_news.php");
             $objNews = new class_modul_news_news();
 
             if($this->strContentLanguage == "de") {
@@ -66,7 +61,6 @@ class class_installer_sc_news implements interface_sc_installer  {
             $strReturn .= "ID of new news: ".$strNewsId."\n";
             $strReturn .= "Adding news element to the index-page...\n";
             if($this->strIndexID != "") {
-                include_once(_systempath_."/class_modul_pages_pageelement.php");
                 $objPagelement = new class_modul_pages_pageelement();
                 $objPagelement->setStrPlaceholder("news_news");
                 $objPagelement->setStrName("news");
@@ -134,7 +128,6 @@ class class_installer_sc_news implements interface_sc_installer  {
                     $strReturn .= "Error creating headline element.\n";
 
             $strReturn .= "Creating news-feed\n";
-            include_once(_systempath_."/class_modul_news_feed.php");
             $objNewsFeed = new class_modul_news_feed();
             $objNewsFeed->setStrTitle("kajona³ news");
             $objNewsFeed->setStrUrlTitle("kajona_news");
@@ -163,8 +156,6 @@ class class_installer_sc_news implements interface_sc_installer  {
 	        }
 	        if($objModule != null) {
 	        	
-	            include_once(_systempath_."/class_modul_navigation_tree.php");
-	            include_once(_systempath_."/class_modul_navigation_point.php");
 	            $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	            $strTreeId = $objNavi->getSystemid();
 	            

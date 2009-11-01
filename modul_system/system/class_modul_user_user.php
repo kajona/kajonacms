@@ -7,10 +7,6 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_user_group.php");
-
 /**
  * Model for a user
  * Note: Users do not use the classical system-id relation, so no entry in the system-table

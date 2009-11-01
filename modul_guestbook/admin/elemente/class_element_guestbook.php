@@ -8,16 +8,6 @@
 ********************************************************************************************************/
 
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
-
-//include needed classes
-include_once(_systempath_."/class_modul_guestbook_post.php");
-include_once(_systempath_."/class_modul_guestbook_guestbook.php");
-
 /**
  * Class representing the admin-part of the guestbook element
  *
@@ -62,7 +52,6 @@ class class_element_guestbook extends class_element_admin implements interface_a
 		$strReturn .= $this->objToolkit->formInputDropdown("guestbook_id", $arrGuestbooks, $this->getText("guestbook_id"), (isset($arrElementData["guestbook_id"]) ? $arrElementData["guestbook_id"] : "" ));
 		$strReturn .= $this->objToolkit->formInputText("guestbook_amount", $this->getText("guestbook_amount"), (isset($arrElementData["guestbook_amount"]) ? $arrElementData["guestbook_amount"] : ""));
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_guestbook", ".tpl");
 		$arrTemplatesDD = array();

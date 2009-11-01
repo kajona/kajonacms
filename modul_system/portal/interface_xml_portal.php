@@ -7,8 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_xml.php");
-
 /**
  * Interface for all xml-portal-classes (modules)
  * Ensures, that all needed methods are being implemented

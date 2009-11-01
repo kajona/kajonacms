@@ -8,10 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_system_common.php");
-
 /**
  * Class to represent a guestbook book
  *

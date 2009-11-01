@@ -7,9 +7,6 @@
 *	$Id$                                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_lang_wrapper.php");
-
 /**
  * Base class for all module-classes in the portal
  *
@@ -111,7 +108,6 @@ abstract class class_portal  {
 
 		//Generating all the needes Objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
-		include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
@@ -136,7 +132,6 @@ abstract class class_portal  {
 		    $this->setParam("page", $this->getPagename());
 
 		//set the correct language
-        include_once(_systempath_."/class_modul_languages_language.php");
         $objLanguage = new class_modul_languages_language();
         //set current language to the texts-object
         class_texte::getInstance()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
@@ -531,7 +526,6 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
         return $objPagecache->flushCompletePagesCache();
 	}
@@ -543,7 +537,6 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
 	    return $objPagecache->flushPageFromPagesCache($strPagename);
 	}

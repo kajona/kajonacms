@@ -7,11 +7,6 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/interface_sortable_rating.php");
-include_once(_systempath_."/class_modul_system_common.php");
-
 /**
  * Model for pic & folders of the gallery
  *
@@ -256,7 +251,6 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 	    //Load the files in the DB
 		$arrObjDB = class_modul_gallery_pic::loadFilesDB($strPrevID);
 		//Load files and folder from filesystem
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrFilesystem = $objFilesystem->getCompleteList($strPath, explode(",", _gallery_imagetypes_), array(), array(".", "..", ".svn"));
 		//So, lets sync those two arrays

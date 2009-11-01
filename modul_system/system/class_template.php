@@ -360,9 +360,7 @@ class class_template {
 		//If we are in the admin-area, we have to add the current skin
 		if($strArea == "admin") {
 			//We need the session-object
-			include_once(_systempath_."/class_carrier.php");
-			$objCarrier = class_carrier::getInstance();
-			$objSession = $objCarrier->getObjSession();
+			$objSession = class_carrier::getInstance()->getObjSession();
 			$strArea .= "/skins/".$objSession->getAdminSkin();
 			if(!defined("_skinwebpath_"))
 				define("_skinwebpath_", _webpath_."/admin/skins/".$objSession->getAdminSkin());

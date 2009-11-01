@@ -9,8 +9,6 @@
 
 
 
-include_once(_systempath_."/class_socket.php");
-
 /**
  * Class providing a wrapper to remote objects. Provides methods to load text-files (e.g. xml-files)
  * from a remote server. Tries to establish a connection via file_get_contents or via sockets.

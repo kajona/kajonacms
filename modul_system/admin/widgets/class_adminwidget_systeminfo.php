@@ -7,9 +7,6 @@
 *	$Id$	                        *
 ********************************************************************************************************/
 
-include_once(_adminpath_."/widgets/class_adminwidget.php");
-include_once(_adminpath_."/widgets/interface_adminwidget.php");
-
 
 /**
  * @package modul_dashboard
@@ -97,7 +94,6 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         $strXmlVersionList = false;
 
         try {
-            include_once(_systempath_."/class_remoteloader.php");
             $objRemoteloader = new class_remoteloader();
             $objRemoteloader->setStrHost("updatecheck.kajona.de");
             $objRemoteloader->setStrQueryParams($strQueryString);
@@ -112,7 +108,6 @@ class class_adminwidget_systeminfo extends class_adminwidget implements interfac
         }
             
         try {
-            include_once(_systempath_."/class_xml_parser.php");
             $objXmlParser = new class_xml_parser();
             if($objXmlParser->loadString($strXmlVersionList)) {
                 $arrRemoteModules = $objXmlParser->getNodesAttributesAsArray("module");

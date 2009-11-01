@@ -7,11 +7,6 @@
 *   $Id$                              *
 ********************************************************************************************************/
 
-//Base class & interface
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//Model
-include_once(_systempath_."/class_modul_languages_language.php");
 /**
  * Admin-class to manage all languages
  *

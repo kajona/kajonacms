@@ -7,9 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
@@ -213,8 +210,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 
 	public function getReportGraph() {
 	    $arrReturn = array();
-
-        include_once(_systempath_."/class_graph_pchart.php");
 
         //--- PIE-GRAPH ---------------------------------------------------------------------------------
         $arrData = $this->getTopBrowser();

@@ -7,14 +7,6 @@
 *	$Id$									*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-//model
-include_once(_systempath_."/class_modul_news_category.php");
-include_once(_systempath_."/class_modul_news_feed.php");
-include_once(_systempath_."/class_modul_news_news.php");
-
 /**
  * Portal-class of the news. Handles thd printing of news lists / detail
  *
@@ -80,7 +72,6 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 
 
         //Load all posts
-        include_once(_systempath_."/class_array_section_iterator.php");
         $objArraySectionIterator = new class_array_section_iterator(class_modul_news_news::getNewsCountPortal($this->arrElementData["news_mode"], $strFilterId));
 	    $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["news_amount"]);
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -129,7 +120,6 @@ class class_modul_news_portal extends class_portal implements interface_portal {
                     }
 					
 					//Add pe code
-				    include_once(_portalpath_."/class_elemente_portal.php");
 				    $arrPeConfig = array(
 				                              "pe_module" => "news",
 				                              "pe_action_edit" => "editNewscontent",
@@ -190,14 +180,12 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			                              "pe_action_edit" => "editNewscontent",
 			                              "pe_action_edit_params" => "&systemid=".$this->getSystemid()
 				                    );
-				include_once(_portalpath_."/class_elemente_portal.php");
 				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
 				
 				//and count the hit
 				$objNews->increaseHits();
 
 				//set the name of the current news to the page-title via class_pages
-				include_once(_portalpath_."/class_modul_pages_portal.php");
 				class_modul_pages_portal::registerAdditionalTitle($objNews->getStrTitle());
 			}
 			else
@@ -214,8 +202,6 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 
         $arrReturn = array();
         if($objPacModule != null) {
-            require_once(_systempath_."/class_modul_postacomment_post.php");
-            require_once(_portalpath_."/class_modul_postacomment_portal.php");
             $arrPosts = class_modul_postacomment_post::loadPostList(false, class_modul_pages_page::getPageByName($this->getPagename())->getSystemid(), $strNewsSystemid, $this->getPortalLanguage());
 
             //the rendered list

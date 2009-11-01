@@ -7,10 +7,6 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_cookie.php");
-
 /**
  * Model for rating itself
  *
@@ -136,7 +132,6 @@ class class_modul_rating_rate extends class_model implements interface_model  {
 
     	$floatRatingOriginal = $floatRating;
 
-    	include_once(_systempath_."/class_modul_rating_algo_gaussian.php");
     	$objRatingAlgo = new class_modul_rating_algo_gaussian();
     	$floatRating = $objRatingAlgo->doRating($this, $floatRating);
 

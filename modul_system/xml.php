@@ -10,9 +10,6 @@
 if(!require_once("./system/includes.php"))
 	die("Error including necessary files");
 
-//The base class
-include_once(_realpath_."/system/class_root.php");
-
 
 //Determin the area to load
 if(issetGet("admin") && getGet("admin") == 1)
@@ -53,13 +50,10 @@ class class_xml {
 
     public function __construct() {
         //init the system
-        include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 		$this->objDB = $objCarrier->getObjDb();
 		$this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objSession = $objCarrier->getObjSession();
-		
-		include_once(_systempath_."/class_modul_system_module.php");
     }
 
     /**
@@ -88,7 +82,6 @@ class class_xml {
 		else {
 		    //any reaction on language-commmands?
     	    if(issetGet("language")) {
-	            include_once(_systempath_."/class_modul_languages_language.php");
 	            $objLanguage = new class_modul_languages_language();
 	            $objLanguage->setStrPortalLanguage(getGet("language"));
     	    }
@@ -101,8 +94,6 @@ class class_xml {
                     if($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
                         //Load the admin-part
                         if($objModule->getStrXmlNameAdmin() != "") {
-                            //try to include the class and create an instance of it
-                            include_once(_adminpath_."/".$objModule->getStrXmlNameAdmin());
                             $strClassname = str_replace(".php", "", $objModule->getStrXmlNameAdmin());
                             $objModuleRequested = new $strClassname();
                             $strContent = $objModuleRequested->action($strAction);
@@ -115,8 +106,6 @@ class class_xml {
                 else {
                     //Load the portal parts
                     if($objModule->getStrXmlNamePortal() != "") {
-                        //try to include the class and create an instance of it
-                        include_once(_portalpath_."/".$objModule->getStrXmlNamePortal());
                         $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
                         $objModuleRequested = new $strClassname();
                         $strContent = $objModuleRequested->action($strAction);
@@ -138,7 +127,6 @@ class class_xml {
 		$this->sendHeader();
 
 		//compress output
-		include_once(_systempath_."/class_gzip.php");
 		$objGzip = new class_gzip();
 		//return $strCompleteXML;
 		echo $objGzip->compressOutput($strCompleteXML);

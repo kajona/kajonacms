@@ -8,9 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Installer of the faqs samplecontenht
  *
@@ -33,7 +30,6 @@ class class_installer_sc_faqs implements interface_sc_installer  {
             $this->strIndexID = $objIndex->getSystemid();
 
         $strReturn .= "Creating faqs\n";
-        include_once(_systempath_."/class_modul_faqs_faq.php");
         $objFaq1 = new class_modul_faqs_faq();
         $objFaq2 = new class_modul_faqs_faq();
         
@@ -110,8 +106,6 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         }
         if($objModule != null) {
         
-	        include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
 	        

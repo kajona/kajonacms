@@ -7,11 +7,6 @@
 *	$Id$                             *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
 /**
  * Class to handle the admin-stuff of the imagelightbox-element
  *

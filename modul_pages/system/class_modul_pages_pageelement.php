@@ -7,11 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Model for a element assigned to a page. NOT the raw-element!
  *
@@ -542,7 +537,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	 */
 	public static function updatePlaceholders($strTemplate, $strOldPlaceholder, $strNewPlaceholder) {
 	    $bitReturn = true;
-        include_once(_systempath_."/class_modul_pages_page.php");
 	    //Fetch all pages
         $arrObjPages = class_modul_pages_page::getAllPages();
         foreach($arrObjPages as $objOnePage) {

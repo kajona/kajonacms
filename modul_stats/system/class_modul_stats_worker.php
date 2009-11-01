@@ -7,9 +7,6 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Model for a stats-worker
  *
@@ -217,7 +214,6 @@ class class_modul_stats_worker extends class_model implements interface_model  {
         );
         
         //run the transformation
-        include_once(_systempath_."/class_csv.php");
         try {
             $objCsv = new class_csv();
             $objCsv->setArrMapping($arrMapping);
@@ -273,7 +269,6 @@ class class_modul_stats_worker extends class_model implements interface_model  {
             "stats_session" => "stats_session",
         );
         
-        include_once(_systempath_."/class_csv.php");
         try {
             $objCsv = new class_csv();
             $objCsv->setArrData($arrRows);

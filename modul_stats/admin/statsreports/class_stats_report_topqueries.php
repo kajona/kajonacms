@@ -7,8 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
 
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
@@ -165,7 +163,6 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 
 	    //generate a bar-chart
 	    if(count($arrGraphData) > 1) {
-    	    include_once(_systempath_."/class_graph_pchart.php");
     	    $objGraph = new class_graph_pchart();
     	    
             $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_query_titel", "stats", "admin"));

@@ -116,7 +116,6 @@ class class_texte {
         }
         else {
             //try to load the fallback-files
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             //load files
             $arrFiles = $objFilesystem->getFilelist(_langpath_."/".$strArea."/modul_".$strModule);
@@ -153,7 +152,6 @@ class class_texte {
 	private function loadText($strModule, $strArea) {
 
 	    $bitFileMatched = false;
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 
 		//load files

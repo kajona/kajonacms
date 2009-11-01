@@ -7,14 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//base class
-include_once(_portalpath_."/class_portal.php");
-//model
-include_once(_systempath_."/class_modul_pages_element.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-include_once(_systempath_."/class_modul_pages_pageelement.php");
-include_once(_systempath_."/class_http_statuscodes.php");
-
 /**
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
  * page ready for output
@@ -38,7 +30,6 @@ class class_modul_pages_portal extends class_portal {
 		parent::__construct($arrModul);
 
 		//in nearly every case, we'll need a pagecache-object
-		include_once(_systempath_."/class_modul_pages_pagecache.php");
 		$this->objPagecache = new class_modul_pages_pagecache();
 	}
 
@@ -101,11 +92,11 @@ class class_modul_pages_portal extends class_portal {
 			//try to send the correct header
 			//page not found
             if($objPageData->getStrName() == "" || $objPageData->getStatus() != 1)
-			    header(class_http_status_codes::$strSC_NOT_FOUND);
+			    header(class_http_statuscodes::$strSC_NOT_FOUND);
 
 			//user is not allowed to view the page
 			if($objPageData->getStrName() != "" && !$this->objRights->rightView($objPageData->getSystemid()))
-			    header(class_http_status_codes::$strSC_FORBIDDEN);
+			    header(class_http_statuscodes::$strSC_FORBIDDEN);
 
 			//and load the errorpage itself
 			$strFirstPagename = $strPagename;

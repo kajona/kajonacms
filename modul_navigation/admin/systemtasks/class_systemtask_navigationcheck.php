@@ -7,14 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-
-include_once(_systempath_."/class_modul_navigation_point.php");
-include_once(_systempath_."/class_modul_navigation_tree.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Checkes the existing navigation-points for valid internal links.
  *

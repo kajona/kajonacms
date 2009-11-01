@@ -7,13 +7,6 @@
 *	$Id$									*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-//model
-include_once(_systempath_."/class_modul_faqs_category.php");
-include_once(_systempath_."/class_modul_faqs_faq.php");
-
 /**
  * Portal-class of the faqs. Handles the printing of faqs lists / detail
  *
@@ -108,7 +101,6 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
     				$strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID, false);
 
     				//Add pe code
-    			    include_once(_portalpath_."/class_elemente_portal.php");
     			    $arrPeConfig = array(
     			                              "pe_module" => "faqs",
     			                              "pe_action_edit" => "editFaq",
@@ -157,7 +149,6 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
         $strIcons = "";
         $strRatingBarTitle = "";
 
-        include_once(_systempath_."/class_modul_rating_rate.php");
         $intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 
         //read the templates

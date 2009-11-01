@@ -7,10 +7,6 @@
 *   $Id$                               *
 ********************************************************************************************************/
 
-
-include_once(_systempath_."/interface_sc_installer.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Installer of the navigation samplecontent
  *
@@ -37,7 +33,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         
         $strReturn = "";
         $strReturn .= "Creating new mainnavigation-tree\n";
-        include_once(_systempath_."/class_modul_navigation_tree.php");
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("mainnavigation");
         $objNaviTree->saveObjectToDb();
@@ -45,7 +40,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
         
         $strReturn .= "Creating navigation points\n";
-        include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Page 1");
         $objNaviPoint->setStrPageI("page_1");
@@ -57,7 +51,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint->saveObjectToDb($strNaviPointID);
         
         $strReturn .= "Creating new portalnavigation-tree\n";
-        include_once(_systempath_."/class_modul_navigation_tree.php");
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("portalnavigation");
         $objNaviTree->saveObjectToDb();
@@ -65,7 +58,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
         
         $strReturn .= "Creating navigation points\n";
-        include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
@@ -156,14 +148,12 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strReturn .= "Error creating headline element.\n";
             
         $strReturn .= "Creating navigation points\n";
-        include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Sitemap");
         $objNaviPoint->setStrPageI("sitemap");
         $objNaviPoint->saveObjectToDb($strTreePortalId);  
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";  
         
-        include_once(_systempath_."/class_modul_navigation_point.php");
         $objNaviPoint = new class_modul_navigation_point();
         if($this->strContentLanguage == "de")
             $objNaviPoint->setStrName("Impressum");

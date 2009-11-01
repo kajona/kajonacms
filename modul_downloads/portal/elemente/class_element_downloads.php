@@ -7,12 +7,6 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-part of the downloads-element
  *
@@ -45,7 +39,6 @@ class class_element_downloads extends class_element_portal implements interface_
 
         $objDownloadsModule = class_modul_system_module::getModuleByName("downloads");
 		if($objDownloadsModule != null) {
-    		require_once(_portalpath_."/".$objDownloadsModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objDownloadsModule->getStrNamePortal());
     		$objDownloads = new $strClassName($this->arrElementData);
             $strReturn = $objDownloads->action();

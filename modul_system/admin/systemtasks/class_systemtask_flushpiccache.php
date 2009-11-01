@@ -7,9 +7,6 @@
 *   $Id$                          *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
 
 /**
  * Flushes all images saved to the cache
@@ -57,7 +54,6 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     public function executeTask() {
     	$strReturn = "";
     	//fetch the number of images to be deleted
-    	include_once(_systempath_."/class_filesystem.php");
     	$objFilesystem = new class_filesystem();
     	$arrFiles = $objFilesystem->getFilelist(_images_cachepath_, array());
     	$intFilesDeleted = 0;

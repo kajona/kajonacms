@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the guestbook samplecontent
  *
@@ -28,7 +26,6 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $strReturn = "";
 
         $strReturn .= "Creating new guestbook...\n";
-        include_once(_systempath_."/class_modul_guestbook_guestbook.php");
         $objGuestbook = new class_modul_guestbook_guestbook();
         $objGuestbook->setGuestbookTitle("Guestbook");
         $objGuestbook->setGuestbookModerated(1);
@@ -91,8 +88,6 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         }
         if($objModule != null) {
         
-	        include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
 	        

@@ -7,12 +7,6 @@
 *	$Id$						               	*
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-part of the news-element
  *
@@ -47,7 +41,6 @@ class class_element_news extends class_element_portal implements interface_porta
 		//Load the data
 		$objNewsModule = class_modul_system_module::getModuleByName("news");
 		if($objNewsModule != null) {
-    		require_once(_portalpath_."/".$objNewsModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objNewsModule->getStrNamePortal());
     		$objNews = new $strClassName($this->arrElementData);
             $strReturn = $objNews->action();

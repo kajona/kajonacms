@@ -7,7 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_modul_rating_algo.php");
 
 /**
  * Does an assessed rating based on the current rating-value using the concept of the normal distribution by Gauss

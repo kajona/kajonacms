@@ -11,9 +11,6 @@ require_once(_systempath_."/pChart/pChart.class");
 require_once(_systempath_."/pChart/pData.class");
 
 
-require_once(_systempath_."/class_graph_colorpalettes.php");
-
-
 /**
  * This class could be used to create graphs based on the pChart API.
  * pChart renders charts on the serverside and passes them back as images.

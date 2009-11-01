@@ -133,7 +133,6 @@ class class_config {
 	 *             invoke this method on your own. This method is no longer called at system startup!
 	 */
 	public function loadConfigsFilesystem() 	{
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrFiles = $objFilesystem->getFilelist("/system/config/", ".php");
 

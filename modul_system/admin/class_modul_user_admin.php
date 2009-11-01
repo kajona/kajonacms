@@ -7,15 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//base class
-include_once(_adminpath_."/class_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_user_log.php");
-include_once(_systempath_."/class_modul_user_user.php");
-include_once(_systempath_."/class_modul_user_group.php");
-include_once(_systempath_."/class_date.php");
 
 /**
  * This class provides the user and groupmanagement
@@ -199,7 +190,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers());
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -290,7 +280,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
         if($bitRight) {
             //Collecting all skins to offer them
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             $arrSkins = $objFilesystem->getCompleteList(_skinpath_, array(), array(), array(".", ".."), true, false);
             $arrSkinsTemp = $arrSkins["folders"];
@@ -431,7 +420,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                             }
                             else {
                                 //try to create a default-dashboard
-                                include_once(_systempath_."/class_modul_dashboard_widget.php");
                                 $objDashboard = new class_modul_dashboard_widget();
                                 $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
                                 return "";
@@ -526,7 +514,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
                         if($objUser->updateObjectToDb()) {
                         	//Reset the admin-skin cookie to force the new skin
-                        	require_once(_systempath_."/class_cookie.php");
 				    	    $objCookie = new class_cookie();
 				    	    //flush the db-cache
 				    	    $this->objDB->flushQueryCache();
@@ -588,7 +575,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getNumberOfGroups());
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -728,7 +714,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
 
 
-                include_once(_systempath_."/class_array_section_iterator.php");
                 $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getGroupMembersCount($this->getParam("groupid")));
                 $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
                 $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -877,7 +862,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
             //fetch log-rows
-            include_once(_systempath_."/class_array_section_iterator.php");
 		    $objLogbook = new class_modul_user_log();
 		    $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLoginLogsCount());
 		    $objArraySectionIterator->setIntElementsPerPage(_user_log_nrofrecords_);

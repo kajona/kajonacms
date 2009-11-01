@@ -62,8 +62,6 @@ class class_db {
     		//build a class-name & include the driver
     		$strFilename = "class_db_".$strDriver.".php";
     		$strClassname = "class_db_".$strDriver;
-
-    		include_once(_systempath_."/db/".$strFilename);
     		$this->objDbDriver = new $strClassname();
 
 		}
@@ -529,7 +527,6 @@ class class_db {
 	 */
 	public function dumpDb() {
 	    // Check, how many dumps to keep
-	    include_once(_systempath_."/class_filesystem.php");
 	    $objFilesystem = new class_filesystem();
 	    $arrFiles = $objFilesystem->getFilelist("/system/debug/", ".sql");
 
@@ -545,7 +542,6 @@ class class_db {
         $strTargetFilename = "/system/dbdumps/dbdump_".time().".sql";
 	    $bitDump = $this->objDbDriver->dbExport($strTargetFilename, $this->getTables());
 	    if($bitDump == true) {
-	        include_once(_systempath_."/class_gzip.php");
 	        $objGzip = new class_gzip();
 	        try {
     	        $objGzip->compressFile($strTargetFilename, true);
@@ -573,7 +569,6 @@ class class_db {
 	    if(substr($strFilename, -3) == ".gz") {
 	        $bitGzip = true;
 	        //try to decompress
-	        include_once(_systempath_."/class_gzip.php");
 	        $objGzip = new class_gzip();
 	        try {
 	        if($objGzip->decompressFile("/system/dbdumps/".$strFilename))
@@ -590,7 +585,6 @@ class class_db {
 	    $bitImport = $this->objDbDriver->dbImport("/system/dbdumps/".$strFilename);
         //Delete source unzipped file?
         if($bitGzip) {
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             $objFilesystem->fileDelete("/system/dbdumps/".$strFilename);
         }

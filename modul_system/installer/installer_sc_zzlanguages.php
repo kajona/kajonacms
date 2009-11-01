@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the navigation languages
  *

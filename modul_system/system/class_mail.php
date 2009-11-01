@@ -158,7 +158,6 @@ class class_mail {
             //content-type given?
             if($strContentType == "") {
                 //try to find out
-                include_once(_systempath_."/class_toolkit.php");
                 $objToolkit = new class_toolkit();
                 $arrMime = $objToolkit->mimeType($strFilename);
                 $arrTemp["mimetype"] = $arrMime[0];

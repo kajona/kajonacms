@@ -8,16 +8,6 @@
 ********************************************************************************************************/
 
 
-//base class
-include_once(_adminpath_."/class_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_system_module.php");
-include_once(_systempath_."/class_modul_system_setting.php");
-include_once(_systempath_."/class_modul_user_user.php");
-include_once(_systempath_."/class_modul_user_group.php");
-
 /**
  * Class to handle infos about the system and to set systemwide properties
  *
@@ -350,7 +340,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
 
         	//include the list of possible tasks
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             $arrFiles = $objFilesystem->getFilelist(_adminpath_."/systemtasks/", array(".php"));
             asort($arrFiles);
@@ -362,7 +351,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
                         //instantiate the current task
-                        include_once(_adminpath_."/systemtasks/".$strOneFile);
                         $strClassname = uniStrReplace(".php", "", $strOneFile);
                         $objTask = new $strClassname();
                         if($objTask instanceof interface_admin_systemtask && $objTask->getStrInternalTaskname() == $this->getParam("task")) {
@@ -398,7 +386,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         		if($strOneFile != "class_systemtask_base.php" && $strOneFile != "interface_admin_systemtask.php" ) {
 
         			//instantiate the current task
-        			include_once(_adminpath_."/systemtasks/".$strOneFile);
         			$strClassname = uniStrReplace(".php", "", $strOneFile);
         			$objTask = new $strClassname();
                     if(!isset($arrTaskGroups[$objTask->getGroupIdentifier()]))
@@ -480,7 +467,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $this->objDB->flushQueryCache();
             }
 
-            include_once(_systempath_."/class_modul_system_session.php");
             $arrSessions = class_modul_system_session::getAllActiveSessions();
             $arrData = array();
             $arrHeader = array();
@@ -605,7 +591,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             //try to load the xml-file with a list of available updates
             try {
-                include_once(_systempath_."/class_remoteloader.php");
                 $objRemoteloader = new class_remoteloader();
                 $objRemoteloader->setStrHost($this->strUpdateServer);
                 $objRemoteloader->setStrQueryParams($strQueryString);
@@ -620,7 +605,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             }
 
             try {
-                include_once(_systempath_."/class_xml_parser.php");
                 $objXmlParser = new class_xml_parser();
                 if($objXmlParser->loadString($strXmlVersionList)) {
                     $arrRemoteModules = $objXmlParser->getNodesAttributesAsArray("module");
@@ -630,7 +614,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         $arrCleanModules[$arrOneRemoteModule[0]["value"]] = $arrOneRemoteModule[1]["value"];
                     }
                     //Get all installed modules
-                    include_once(_systempath_."/class_modul_system_module.php");
                     $arrModules = class_modul_system_module::getAllModules();
                     $arrHeader = array();
                     $arrHeader[] = $this->getText("update_module_name");

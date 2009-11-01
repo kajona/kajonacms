@@ -57,14 +57,11 @@ class class_installer {
 		//init session-support
 		$this->objSession = class_carrier::getInstance()->getObjSession();
 
-		include_once(_systempath_."/class_modul_system_setting.php");
-
 		//set a different language?
 		if(issetGet("language")) {
 		    if(in_array(getGet("language"), explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"))))
 		        $this->objTexte->setStrTextLanguage(getGet("language"));
 		        //and save to a cookie
-		        require_once(_systempath_."/class_cookie.php");
         	    $objCookie = new class_cookie();
         	    $objCookie->setCookie("adminlanguage", getGet("language"));
 		}
@@ -245,7 +242,6 @@ class class_installer {
 
 	    //if user-moduls is already installed, skip this step
 	    try {
-	        include_once(_systempath_."/class_modul_system_module.php");
 	        $objUser = class_modul_system_module::getModuleByName("user");
 	        if($objUser != null) {
 	            $bitUserInstalled = true;
@@ -290,7 +286,6 @@ class class_installer {
 	 */
 	public function loadInstaller() {
 		//File-Objekt
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		//Ladend der Dateien
 		$this->arrInstaller = $objFilesystem->getFilelist("/installer");

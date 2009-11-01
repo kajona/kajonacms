@@ -1,9 +1,7 @@
 <?php
 
-include_once(_systempath_."/class_modul_system_common.php");
 
 class class_test_charts_pchart implements interface_testable {
-
 
 
     public function test() {     
@@ -11,14 +9,9 @@ class class_test_charts_pchart implements interface_testable {
     }
 
 
-
     private function testCharts() {
 
- 
 
-
-        include_once(_systempath_."/class_graph_pchart.php");
-        include_once(_systempath_."/class_graph_colorpalettes.php");
         srand((double)microtime()*1000000);
         //--- system kernel -------------------------------------------------------------------------------------
         echo "\tcreating a few charts...\n";

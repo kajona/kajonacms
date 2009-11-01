@@ -7,8 +7,6 @@
 *   $Id$                                               *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_root.php");
-
 /**
  * Top-level class for all model-classes
  *
@@ -189,7 +187,6 @@ class class_model extends class_root {
         $floatRating = null;
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
-            include_once(_systempath_."/class_modul_rating_rate.php");
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)
                $floatRating = $objRating->getFloatRating();
@@ -212,7 +209,6 @@ class class_model extends class_root {
         $bitReturn = false;
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
-            include_once(_systempath_."/class_modul_rating_rate.php");
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)
                $bitReturn = $objRating->isRateableByCurrentUser();
@@ -233,7 +229,6 @@ class class_model extends class_root {
         $intHits = 0;
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
-            include_once(_systempath_."/class_modul_rating_rate.php");
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
             if($objRating != null)
                $intHits = $objRating->getIntHits();

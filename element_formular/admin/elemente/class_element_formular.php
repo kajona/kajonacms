@@ -7,12 +7,6 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
 /**
  * Class to handle the admin-stuff of the formular-element
  *
@@ -51,7 +45,6 @@ class class_element_formular extends class_element_admin implements interface_ad
 		$strReturn .= $this->objToolkit->formInputText("formular_success", $this->getText("formular_success"), (isset($arrElementData["formular_success"]) ? $arrElementData["formular_success"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("formular_error", $this->getText("formular_error"), (isset($arrElementData["formular_error"]) ? $arrElementData["formular_error"] : ""));
 		//Load the available classes
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrClasses = $objFilesystem->getFilelist("/portal/forms", ".php");
 		$arrClassesDD = array();

@@ -7,10 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_search_log.php");
-
 /**
  * This class contains a few methods used by the search as little helpers
  *
@@ -94,13 +90,11 @@ class class_modul_search_commons extends class_model implements interface_model 
 		$arrSearch = array();
 
 		//Search for search-plugins
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrSearchPlugins = $objFilesystem->getFilelist(_portalpath_."/searchplugins/", ".php");
 		foreach($arrSearchPlugins as $strOnePlugin) {
 		    //Check, if not the interface
 		    if($strOnePlugin != "interface_search_plugin.php" && uniStrpos($strOnePlugin, "searchdef_pages_" ) === false) {
-		        include_once(_portalpath_."/searchplugins/".$strOnePlugin);
 		        $strClassname = str_replace(".php", "", $strOnePlugin);
 		        $objPlugin = new $strClassname($arrSearchtermPlugin, $strSearchterm);
 		        if($objPlugin instanceof interface_search_plugin) {

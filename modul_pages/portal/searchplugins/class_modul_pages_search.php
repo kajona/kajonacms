@@ -7,8 +7,6 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/searchplugins/interface_search_plugin.php");
 
 /**
  * Search plugin of the pages-module. Searches the configured page-elements and the pages-data.
@@ -38,7 +36,6 @@ class class_modul_pages_search extends class_portal implements interface_search_
         $arrSearch["pages_elements"] = array();
         $arrSearch["page"] = array();
 
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist(_portalpath_."/searchplugins/", array(".php"));
 

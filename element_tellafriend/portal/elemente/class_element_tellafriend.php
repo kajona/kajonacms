@@ -7,11 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Loads the last-modified date of the current page and prepares it for output
  *
@@ -167,7 +162,6 @@ class class_element_tellafriend extends class_element_portal implements interfac
 
 	    $strSubject = $this->fillTemplate(array(), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
 
-	    include_once(_systempath_."/class_mail.php");
 	    $objEmail = new class_mail();
 	    $objEmail->setSender($this->getParam("tellafriend_sender"));
 	    $objEmail->setSenderName($this->getParam("tellafriend_sender_name"));

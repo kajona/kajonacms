@@ -7,7 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_xml.php");
 
 /**
  * Interface for all xml-admin-classes (modules)

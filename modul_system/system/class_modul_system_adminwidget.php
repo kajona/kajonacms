@@ -7,10 +7,6 @@
 *	$Id$	                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_system_common.php");
-
 /**
  * Class to represent a single adminwidget
  * 
@@ -119,14 +115,13 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     /**
      * Looks up all widgets available in the filesystem.
      * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
-     * includes all files to be able to work on the immediatelly
+     * includes all files to be able to work on
      *
      * @return array
      */
     public function getListOfWidgetsAvailable() {
         $arrReturn = array();
         
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         
         $arrFiles = $objFilesystem->getFilelist("/admin/widgets/", array(".php"));
@@ -134,7 +129,6 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         foreach($arrFiles as $strOneFile) {
             if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
                 $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
-                include_once(_adminpath_."/widgets/".$strOneFile);
             }
         }
         
@@ -147,7 +141,6 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      * @return class_adminwidget
      */
     public function getConcreteAdminwidget() {
-        include_once(_adminpath_."/widgets/".$this->getStrClass().".php");
         $objWidget = new $this->strClass();
         //Pass the field-values
         $objWidget->setFieldsAsString($this->getStrContent());

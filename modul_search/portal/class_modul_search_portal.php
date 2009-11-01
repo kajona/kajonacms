@@ -7,11 +7,6 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
-//include base classes
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-include_once(_systempath_."/class_modul_search_commons.php");
-
 /**
  * Portal-Class of the search module. Does all the searching in the database
  *

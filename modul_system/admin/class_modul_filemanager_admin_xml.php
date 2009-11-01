@@ -7,15 +7,6 @@
 *	$Id$						*
 ********************************************************************************************************/
 
-
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_xml_admin.php");
-
-include_once(_systempath_."/class_modul_filemanager_repo.php");
-include_once(_systempath_."/class_image.php");
-include_once(_systempath_."/class_filesystem.php");
-
-
 /**
  * admin-class of the filemananger-module
  * Serves xml-requests, currently to handle uploads
@@ -111,7 +102,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             //folder already existing?
             if(!is_dir(_realpath_."/".$objFmRepo->getStrPath()."/".$strFolder)) {
                 class_logger::getInstance()->addLogRow("creating folder ".$objFmRepo->getStrPath()."/".$strFolder, class_logger::$levelInfo);
-                include_once(_systempath_."/class_filesystem.php");
                 $objFilesystem = new class_filesystem();
                 if($objFilesystem->folderCreate($objFmRepo->getStrPath()."/".$strFolder)) {
                     $strReturn = "<message>".xmlSafeString($this->getText("ordner_anlegen_erfolg"))."</message>";
@@ -271,7 +261,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $arrSource = $this->getParam($this->getParam("inputElement"));
 
             $strTarget = $strFolder."/".createFilename($arrSource["name"]);
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             if($objFilesystem->isWritable($strFolder)) {
 

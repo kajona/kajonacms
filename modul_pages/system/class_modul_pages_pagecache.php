@@ -27,7 +27,6 @@ class class_modul_pages_pagecache {
 		$this->arrModule["author"] 		= "sidler@mulchprod.de";
 
 		//We need a db object
-		include_once(_systempath_."/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 
 		$this->objDB = $objCarrier->getObjDB();
@@ -89,7 +88,6 @@ class class_modul_pages_pagecache {
 	    $strSystemid = getGet("systemid");
 	    //collection to react on "invisible" commands
         $strMixed = getGet("pv").getPost("searchterm").getGet("highlight").getCookie("kj_ratingHistory");
-	    include_once(_systempath_."/class_modul_system_common.php");
 	    $objCommon = new class_modul_system_common();
 	    $strLanguage = $objCommon->getStrPortalLanguage();
         $strKey = md5($strAction.$strSystemid.$strLanguage.$strMixed);

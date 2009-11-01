@@ -7,9 +7,6 @@
 *   $Id$                                *
 ********************************************************************************************************/
 
-
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the pages samplecontent
  *
@@ -36,7 +33,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objConstant->updateObjectToDb();
 
         $strReturn .= "Creating index-site...\n";
-        include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("index");
 
@@ -53,7 +49,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->saveObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
-        include_once(_systempath_."/class_modul_pages_pageelement.php");
         $strReturn .= "Adding headline-element to new page\n";
         $objPagelement = new class_modul_pages_pageelement();
         $objPagelement->setStrPlaceholder("headline_row");
@@ -126,7 +121,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         */
 
         $strReturn .= "Creating system folder...\n";
-        include_once(_systempath_."/class_modul_pages_folder.php");
         $objFolder = new class_modul_pages_folder();
         $objFolder->setStrName("_system");
         $objFolder->saveObjectToDb("0");
@@ -144,7 +138,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating error-site...\n";
-        include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("error");
 
@@ -219,7 +212,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $strReturn .= "Creating imprint-site...\n";
-        include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("imprint");
         if($this->strContentLanguage == "de")
@@ -301,10 +293,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
 
-
-
         $strReturn .= "Creating sample page...\n";
-        include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("page_1");
         if($this->strContentLanguage == "de")
@@ -373,7 +362,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
        $strReturn .= "Creating sample subpage...\n";
-        include_once(_systempath_."/class_modul_pages_page.php");
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("subpage_1");
         if($this->strContentLanguage == "de")

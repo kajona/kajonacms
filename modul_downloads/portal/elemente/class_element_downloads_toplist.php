@@ -7,16 +7,6 @@
 *   $Id$                         *
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
-include_once(_systempath_."/class_modul_downloads_archive.php");
-include_once(_systempath_."/class_modul_downloads_file.php");
-include_once(_systempath_."/class_modul_rating_sort_absolute.php");
-
 /**
  * Portal-part of the downloads_toplist-element
  *

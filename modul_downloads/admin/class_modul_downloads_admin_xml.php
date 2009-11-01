@@ -8,13 +8,6 @@
 ********************************************************************************************************/
 
 
-//Include der Mutter-Klasse
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_xml_admin.php");
-//model
-include_once(_systempath_."/class_modul_downloads_file.php");
-include_once(_systempath_."/class_modul_downloads_archive.php");
-
 /**
  * admin-class of the downloads-module
  * Serves xml-requests, e.g. syncing an archive

@@ -7,9 +7,6 @@
 *	$Id$                             *
 ********************************************************************************************************/
 
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/searchplugins/interface_search_plugin.php");
-
 /**
  * Search plugin of the downloads-module.
  *

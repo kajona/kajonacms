@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the gallery samplecontent
  *
@@ -29,8 +27,6 @@ class class_installer_sc_gallery implements interface_sc_installer  {
 
 
         $strReturn .= "Creating new gallery...\n";
-        include_once(_systempath_."/class_modul_gallery_gallery.php");
-        include_once(_systempath_."/class_modul_gallery_pic.php");
         $objGallery = new class_modul_gallery_gallery();
         $objGallery->setStrTitle("Sample Gallery");
         $objGallery->setStrPath("/portal/pics/upload");
@@ -141,8 +137,6 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         }
         if($objModule != null) {
 
-	        include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
 

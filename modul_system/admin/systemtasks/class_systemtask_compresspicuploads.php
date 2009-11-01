@@ -7,13 +7,6 @@
 *   $Id$                          *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-
-include_once(_systempath_."/class_filesystem.php");
-include_once(_systempath_."/class_image.php");
-
 /**
  * Resizes and compresses all uploaded pictures in /portal/pics/upload to save disk space
  *

@@ -7,9 +7,6 @@
 *	$Id$	                        *
 ********************************************************************************************************/
 
-include_once(_adminpath_."/widgets/class_adminwidget.php");
-include_once(_adminpath_."/widgets/interface_adminwidget.php");
-
 
 /**
  * @package modul_dashboard

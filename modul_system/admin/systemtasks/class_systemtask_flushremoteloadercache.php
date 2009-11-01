@@ -7,11 +7,6 @@
 *   $Id$                 *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-include_once(_systempath_."/class_remoteloader.php");
-
 /**
  * Flushes all images saved to the cache
  *

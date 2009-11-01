@@ -7,12 +7,6 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-part of the gallery-element
  *
@@ -46,7 +40,6 @@ class class_element_gallery extends class_element_portal implements interface_po
 
         $objGalleryModule = class_modul_system_module::getModuleByName("gallery");
 		if($objGalleryModule != null) {
-    		require_once(_portalpath_."/".$objGalleryModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objGalleryModule->getStrNamePortal());
     		$objGallery = new $strClassName($this->arrElementData);
             $strReturn = $objGallery->action();

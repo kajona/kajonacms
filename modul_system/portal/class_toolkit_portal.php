@@ -7,7 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_toolkit.php");
 
 /**
  * Portal-Part of the toolkit.
@@ -59,7 +58,6 @@ class class_toolkit_portal extends class_toolkit {
 
 
 		//create array-iterator
-		include_once(_systempath_."/class_array_iterator.php");
 		$objIterator = new class_array_iterator($arrData);
 		$objIterator->setIntElementsPerPage($intNumber);
 

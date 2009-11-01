@@ -7,10 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-
 /**
  * Flushes the cache holding generated pages
  *
@@ -56,7 +52,6 @@ class class_systemtask_flushpagescache extends class_systemtask_base implements 
      * @return string
      */
     public function executeTask() {
-        include_once(_systempath_."/class_modul_pages_pagecache.php");
         $objPagecache = new class_modul_pages_pagecache();
         $objPagecache->flushCompletePagesCache();
         return $this->getText("systemtask_flushpagescache_done");

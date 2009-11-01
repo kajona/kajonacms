@@ -107,7 +107,6 @@ abstract class class_root {
 
 		//Generating all the needed objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
-		include_once(_realpath_."/system/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 		$this->objConfig = $objCarrier->getObjConfig();
 		$this->objDB = $objCarrier->getObjDB();
@@ -937,15 +936,12 @@ abstract class class_root {
 	    $bitReturn = true;
 
 	    //Look up classes extending class_model
-	    include_once(_systempath_."/class_filesystem.php");
 	    $objFilesystem = new class_filesystem();
 	    $arrFiles = $objFilesystem->getFilelist(_systempath_, array(".php"));
 
 	    foreach ($arrFiles as $strOneFile) {
 	        //just match classes starting with "class_modul"
 	        if(strpos($strOneFile, "class_modul") !== false) {
-	            //include class
-	            include_once(_systempath_."/".$strOneFile);
 
 	            $strClassname = uniStrReplace(".php", "", $strOneFile);
 	            //create instance
@@ -1067,7 +1063,6 @@ abstract class class_root {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
         return $objPagecache->flushCompletePagesCache();
 	}
@@ -1079,7 +1074,6 @@ abstract class class_root {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    include_once(_systempath_."/class_modul_pages_pagecache.php");
 	    $objPagecache = new class_modul_pages_pagecache();
 	    return $objPagecache->flushPageFromPagesCache($strPagename);
 	}
@@ -1093,7 +1087,6 @@ abstract class class_root {
      * @return string 
      */
     public final function getStrPortalLanguage() {
-        include_once(_systempath_."/class_modul_languages_language.php");
         $objLanguage = new class_modul_languages_language();
         return $objLanguage->getPortalLanguage();
     }
@@ -1109,7 +1102,6 @@ abstract class class_root {
      * @return string 
      */
     public final function getStrAdminLanguageToWorkOn() {
-        include_once(_systempath_."/class_modul_languages_language.php");
         $objLanguage = new class_modul_languages_language();
         return $objLanguage->getAdminLanguage();
     }

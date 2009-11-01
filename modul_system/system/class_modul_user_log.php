@@ -7,9 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Model for a user-login-log
  *

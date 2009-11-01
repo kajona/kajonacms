@@ -7,13 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-//needed models
-include_once(_systempath_."/class_modul_gallery_gallery.php");
-include_once(_systempath_."/class_modul_gallery_pic.php");
 
 /**
  * Class representing the admin-part of the gallery element
@@ -49,7 +42,6 @@ class class_element_galleryRandom extends class_element_admin implements interfa
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all galleries
-        include_once(_adminpath_."/class_modul_gallery_admin.php");
         $objGallery = new class_modul_gallery_admin();
         $arrRawGals = class_modul_gallery_gallery::getGalleries();
         $arrGalleries = array();
@@ -66,7 +58,6 @@ class class_element_galleryRandom extends class_element_admin implements interfa
         /* $strReturn .= $this->objToolkit->formTextRow($this->getText("gallery_mode_hint")); */
 		/* $strReturn .= $this->objToolkit->formInputDropdown("gallery_mode", $arrModes, $this->getText("gallery_mode"), (isset($arrElementData["gallery_mode"]) ? $arrElementData["gallery_mode"] : "" ));*/
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_gallery", ".tpl");
 		$arrTemplatesDD = array();

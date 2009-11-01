@@ -7,12 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_faqs_category.php");
-include_once(_systempath_."/class_modul_faqs_faq.php");
 
 /**
  * Admin-Class of the faqs-module. Responsible for editing faqs and organizing them in categories
@@ -203,7 +197,6 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                     try {
                         $objMdlRating = class_modul_system_module::getModuleByName("rating");
                         if($objMdlRating != null ) {
-                            include_once(_systempath_."/class_modul_rating_rate.php");
                             $objRating = class_modul_rating_rate::getRating($objOneFaq->getSystemid());
                             if($objRating != null)
                                 $strRating .= " - ".$objRating->getFloatRating();

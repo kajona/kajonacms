@@ -7,8 +7,6 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
-require_once(_systempath_."/class_installer_base.php");
-require_once(_systempath_."/interface_installer.php");
 
 /**
  * Installer for the system-module
@@ -455,13 +453,11 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strReturn .= "Registered Admin in Admin-Group...\n";
 
 		//try to create a default-dashboard for the admin
-		include_once(_systempath_."/class_modul_dashboard_widget.php");
         $objDashboard = new class_modul_dashboard_widget();
         $objDashboard->createInitialWidgetsForUser($strUserID);
 
         //create a default language
 		$strReturn .= "Creating new default-language\n";
-        include_once(_systempath_."/class_modul_languages_language.php");
         $objLanguage = new class_modul_languages_language();
 
         if($this->strContentLanguage == "de")
@@ -542,7 +538,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
 
         $strReturn .= "Deleting old js-calendar...\n";
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $strReturn .= "Deleting old calendar-editor folder...\n";
         if(!$objFilesystem->folderDeleteRecursive("/admin/scripts/jscalendar"))
@@ -691,7 +686,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		//create default language & assign existing contents
 		$strReturn .= "Creating new default-language\n";
-        include_once(_systempath_."/class_modul_languages_language.php");
         $objLanguage = new class_modul_languages_language();
 
         if($this->strContentLanguage == "de")
@@ -769,7 +763,6 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "An error occured!\n";
 
         $strReturn .= "Updating owner-fields...\n";
-        include_once(_systempath_."/class_modul_system_common.php");
         $arrRecords = $this->objDB->getArray("SELECT system_id FROM ".$this->objDB->encloseTableName(_dbprefix_."system"));
         foreach($arrRecords as $strOneSysId) {
             $objRecord = new class_modul_system_common($strOneSysId["system_id"]);
@@ -811,7 +804,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
             $strReturn .= "Updating element-versions...\n";
-            include_once(_systempath_."/class_modul_pages_element.php");
             $arrElements = class_modul_pages_element::getAllElements();
             foreach($arrElements as $objOneElement) {
                 $objOneElement->setStrVersion("3.2.0.9");

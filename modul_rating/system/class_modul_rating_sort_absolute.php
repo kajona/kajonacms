@@ -7,8 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_modul_rating_sortalgo.php");
-
 /**
  * Does an absolute, linear sorting based on the current rating-value
  * @package modul_rating

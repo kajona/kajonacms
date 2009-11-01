@@ -7,13 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-include_once(_systempath_."/class_modul_user_user.php");
-include_once(_systempath_."/class_mail.php");
-
 /**
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
  *
@@ -301,7 +294,6 @@ class class_element_portallogin extends class_element_portal implements interfac
     	    return $this->fillTemplate($arrTemplate, $strTemplateID);
 	    }
 	    else {
-	        include_once(_systempath_."/class_modul_user_user.php");
             $objUser = new class_modul_user_user($this->objSession->getUserID());
 
             $objUser->setStrEmail($this->getParam("email"));

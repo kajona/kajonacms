@@ -7,11 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-
-//Interface
-include_once(_adminpath_."/interface_admin.php");
 
 /**
  * This class provides a list-view of the folders created in the database / filesystem
@@ -120,7 +115,6 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 	 * @return string
 	 */
 	public function getListFilemanager($strTargetfield) {
-        include_once(_adminpath_."/class_modul_filemanager_admin.php");
         $objFilemanager = new class_modul_filemanager_admin();
         return $objFilemanager->actionFolderContentFolderviewMode($strTargetfield);
 	}
@@ -138,7 +132,6 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 	*/
 	public function getFolderlist($strFolder, $arrSuffix = array(), $arrExclude = array(), $arrExcludeFolder = array(), $bitFolder = true, $bitFiles = false, $strFormElement = "bild", $strDetail = "") {
 	    $strReturn = "";
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrContent = $objFilesystem->getCompleteList($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, false);
 
@@ -188,7 +181,6 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$strReturn = "";
 		$intCounter = 1;
 
-		include_once(_systempath_."/class_modul_pages_folder.php");
 
 		$arrFolder = class_modul_pages_folder::getFolderList($strFolder);
         $objFolder = new class_modul_pages_folder($strFolder);
@@ -282,7 +274,6 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$strReturn = "";
 		$intCounter = 1;
 		//Load all navis
-		include_once(_systempath_."/class_modul_navigation_tree.php");
 		$arrNavis = class_modul_navigation_tree::getAllNavis();
 
 

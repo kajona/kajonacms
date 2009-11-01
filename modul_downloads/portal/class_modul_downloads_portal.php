@@ -7,13 +7,6 @@
 *	$Id$                             *
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-//needed classes
-include_once(_systempath_."/class_modul_downloads_archive.php");
-include_once(_systempath_."/class_modul_downloads_file.php");
-
 /**
  * Downloads Portal. Generates a list of available downloads
  *
@@ -287,7 +280,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strIcons = "";
 		$strRatingBarTitle = "";
 
-		include_once(_systempath_."/class_modul_rating_rate.php");
 		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 
 		//read the templates

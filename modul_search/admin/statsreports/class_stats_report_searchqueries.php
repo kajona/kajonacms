@@ -7,10 +7,6 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-include_once(_systempath_."/class_modul_search_log.php");
-
 /**
  * This plugin shows the list of queries performed by the local searchengine
  *

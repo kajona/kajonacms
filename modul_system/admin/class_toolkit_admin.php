@@ -7,7 +7,6 @@
 *   $Id$                                 *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_toolkit.php");
 
 /**
  * Admin-Part of the toolkit-classes
@@ -1011,7 +1010,6 @@ class class_toolkit_admin extends class_toolkit {
     public function listStatusButton($strSystemid) {
         //read the current status
         $strButton = "";
-        include_once(_systempath_."/class_modul_system_common.php");
         $objRecord = new class_modul_system_common($strSystemid);
         $strImage = "";
         $strNewImage = "";
@@ -1437,7 +1435,6 @@ class class_toolkit_admin extends class_toolkit {
         if($intElementPerPage <= 0)
             $intElementPerPage = 1;
 
-        include_once(_systempath_."/class_array_iterator.php");
         $objArrayIterator = new class_array_iterator($arrData);
         $objArrayIterator->setIntElementsPerPage($intElementPerPage);
         $intNrOfPages = $objArrayIterator->getNrOfPages();

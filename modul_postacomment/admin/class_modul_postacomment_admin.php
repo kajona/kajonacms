@@ -7,12 +7,6 @@
 *	$Id$                          *
 ********************************************************************************************************/
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_postacomment_post.php");
-include_once(_systempath_."/class_modul_pages_page.php");
 
 /**
  * Admin-Class of the postacomment-module. Responsible for listing posts and organizing them
@@ -131,7 +125,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $strReturn .= $this->objToolkit->divider();
 
     		//Load all posts
-            include_once(_systempath_."/class_array_section_iterator.php");
 		    $objPost = new class_modul_postacomment_post();
 
     		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
@@ -170,7 +163,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
                         try {
                             $objMdlRating = class_modul_system_module::getModuleByName("rating");
                             if($objMdlRating != null) {
-                                include_once(_systempath_."/class_modul_rating_rate.php");
                                 $objRating = class_modul_rating_rate::getRating($objOnePost->getSystemid());
                                 if($objRating != null)
                                     $strCenter .= " - ".$objOnePost->getFloatRating();

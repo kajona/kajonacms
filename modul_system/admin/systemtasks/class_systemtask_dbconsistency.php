@@ -7,9 +7,6 @@
 *   $Id$                                        *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
 
 /**
  * Runs a few kajona-specific checks to ensure the db-integrity
@@ -57,7 +54,6 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function executeTask() {
     	$intI = 0;
     	$strReturn = "";
-        include_once(_systempath_."/class_modul_system_worker.php");
         $objWorker = new class_modul_system_worker();
 
         //chec 1.level nodes

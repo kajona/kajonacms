@@ -7,12 +7,6 @@
 *	$Id$						               	*
 ********************************************************************************************************/
 
-
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal-part of the faqs-element
  *
@@ -47,7 +41,6 @@ class class_element_faqs extends class_element_portal implements interface_porta
 		//Load the data
 		$objFaqsModule = class_modul_system_module::getModuleByName("faqs");
 		if($objFaqsModule != null) {
-    		require_once(_portalpath_."/".$objFaqsModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objFaqsModule->getStrNamePortal());
     		$objFaqs = new $strClassName($this->arrElementData);
             $strReturn = $objFaqs->action();

@@ -56,7 +56,6 @@ class class_gzip {
                     @gzclose($objTargetPointer);
                     //Delete the sourcefile?
                     if($bitDeleteSource) {
-                        include_once(_systempath_."/class_filesystem.php");
                         $objFilesystem = new class_filesystem();
                         $objFilesystem->fileDelete(str_replace(_realpath_, "", $strFilename));
                     }

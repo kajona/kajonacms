@@ -7,10 +7,6 @@
 *   $Id$                                        *
 ********************************************************************************************************/
 
-//base class and interface
-include_once(_adminpath_."/systemtasks/class_systemtask_base.php");
-include_once(_adminpath_."/systemtasks/interface_admin_systemtask.php");
-
 /**
  * Restores the database from the filesystem using the current db-driver
  *
@@ -68,7 +64,6 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
     public function getAdminForm() {
     	$strReturn = "";
         //show dropdown to select db-dump
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
         $arrOptions = array();

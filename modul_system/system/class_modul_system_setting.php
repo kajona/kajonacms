@@ -7,9 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Model for a single system-setting
  * Setting are not represented by a record in the system-table

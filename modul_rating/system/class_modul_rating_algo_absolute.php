@@ -7,8 +7,6 @@
 *   $Id$                        *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_modul_rating_algo.php");
-
 /**
  * Does an absolute, linear rating based on the current rating-value
  * @package modul_rating

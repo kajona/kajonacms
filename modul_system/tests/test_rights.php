@@ -1,9 +1,5 @@
 <?php
 
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_modul_user_user.php");
-include_once(_systempath_."/class_modul_user_group.php");
-
 class class_test_rights implements interface_testable {
 
     private $objRights ;

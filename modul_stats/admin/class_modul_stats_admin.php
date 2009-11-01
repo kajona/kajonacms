@@ -6,11 +6,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                  *
 ********************************************************************************************************/
-//Base class
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_stats_worker.php");
 
 /**
  * Admin-Part of the stats, generating all reports an handles requests to workers
@@ -99,12 +94,10 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         //Load all plugins available and create the navigation
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $arrPlugins = $objFilesystem->getFilelist(_adminpath_."/statsreports", ".php");
 
         foreach($arrPlugins as $strOnePlugin) {
-            include_once(_adminpath_."/statsreports/".$strOnePlugin);
             $strClassName = str_replace(".php", "", $strOnePlugin);
 
             $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjText());
@@ -129,12 +122,10 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             $arrPlugins = $objFilesystem->getFilelist(_adminpath_."/statsreports", ".php");
 
             foreach($arrPlugins as $strOnePlugin) {
-                include_once(_adminpath_."/statsreports/".$strOnePlugin);
                 $strClassName = str_replace(".php", "", $strOnePlugin);
                 $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjText());
 

@@ -7,13 +7,6 @@
 *   $Id$                                 *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
-include_once(_systempath_."/class_modul_navigation_tree.php");
-include_once(_systempath_."/class_modul_navigation_cache.php");
 /**
  * Admin-Class of the navigation element
  *
@@ -50,7 +43,6 @@ class class_element_navigation extends class_element_admin implements interface_
 		$strReturn = "";
 		//Load all navigations available
 		if(isset($arrElementData["navigation_id"]) && $arrElementData["navigation_id"] != '') {
-		  include_once(_adminpath_."/class_modul_navigation_admin.php");
 		  $objNavigation = new class_modul_navigation_admin();
 		  $objNavi = new class_modul_navigation_tree($arrElementData["navigation_id"]);
 		  $strNaviName = $objNavi->getStrName();
@@ -62,7 +54,6 @@ class class_element_navigation extends class_element_admin implements interface_
 		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $strNaviName, "inputText", getLinkAdminPopup("folderview", "navigationBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_navigation", ".tpl");
 		$arrTemplatesDD = array();

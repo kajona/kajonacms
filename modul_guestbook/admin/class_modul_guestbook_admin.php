@@ -7,13 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//Base class & interface
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//include needed classes
-include_once(_systempath_."/class_modul_guestbook_post.php");
-include_once(_systempath_."/class_modul_guestbook_guestbook.php");
-
 /**
  * Admin-Class to handle all guestbook-stuff like creating guestbook, deleting posts, ...
  *
@@ -292,7 +285,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 		if($this->objRights->rightView($this->getSystemid())) {
 
 
-            include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_guestbook_post::getPostsCount($this->getSystemid()));
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

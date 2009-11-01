@@ -7,8 +7,6 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
-//base class
-include_once(_adminpath_."/class_admin.php");
 
 /**
  * The base class for all page-elements

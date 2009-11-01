@@ -6,15 +6,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                       *
 ********************************************************************************************************/
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
-include_once(_systempath_."/class_modul_faqs_category.php");
-include_once(_systempath_."/class_modul_faqs_faq.php");
-include_once(_systempath_."/class_filesystem.php");
-
 
 /**
  * Class representing the admin-part of the faqs element

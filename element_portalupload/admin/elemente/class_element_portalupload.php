@@ -7,14 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-
-include_once(_systempath_."/class_modul_downloads_archive.php");
-include_once(_systempath_."/class_modul_filemanager_repo.php");
-
 /**
  * Class to handle the admin-stuff of the portalupload-element
  *
@@ -58,7 +50,6 @@ class class_element_portalupload extends class_element_admin implements interfac
 
 		//Build the form
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/element_portalupload", ".tpl");
 		$arrTemplatesDD = array();

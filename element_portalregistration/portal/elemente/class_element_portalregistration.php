@@ -7,14 +7,6 @@
 *	$Id$                        *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
-include_once(_systempath_."/class_modul_user_user.php");
-include_once(_systempath_."/class_modul_user_group.php");
-
 /**
  * Portal Element to allow users to register themself
  *
@@ -130,7 +122,6 @@ class class_element_portalregistration extends class_element_portal implements i
     	    $strTemplateID = $this->objTemplate->readTemplate("/element_portalregistration/".$this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
             $arrTemplate = array();
             
-            include_once(_systempath_."/class_modul_user_user.php");
             $objUser = new class_modul_user_user($this->objSession->getUserID());
             
             $arrTemplate["username"] = $this->getParam("username");
@@ -181,7 +172,6 @@ class class_element_portalregistration extends class_element_portal implements i
                 $this->objTemplate->deletePlaceholder();
                 $strMailContent = $this->objTemplate->getTemplate();
 	        	
-                include_once(_systempath_."/class_mail.php");
                 $objMail = new class_mail();
                 $objMail->setSubject($this->getText("pr_email_subject"));
                 $objMail->setHtml($strMailContent);

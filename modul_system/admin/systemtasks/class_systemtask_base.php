@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/class_carrier.php");
-
 /**
  * Base class for all systemtasks. Provides a few methods to be used by the concrete tasks.
  *

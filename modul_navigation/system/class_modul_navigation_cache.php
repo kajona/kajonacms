@@ -35,9 +35,7 @@ class class_modul_navigation_cache {
 		$this->arrModule["modul"]			= "navigation";
 
 		//We need a db object
-		include_once(_systempath_."/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
-
 		$this->objDB = $objCarrier->getObjDB();
     }
 

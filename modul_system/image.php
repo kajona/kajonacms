@@ -84,7 +84,6 @@ class class_flyimage {
             $this->intQuality = 90;
 
         //ok, all needed constants are set up...
-        include_once(_realpath_."/system/class_image.php");
         $this->objImage = new class_image(_images_cachepath_, $this->intQuality);
 
     }

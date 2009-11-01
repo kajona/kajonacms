@@ -7,11 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/interface_sortable_rating.php");
-include_once(_systempath_."/class_modul_system_common.php");
-
 /**
  * Model for files & folders of the downloads
  *
@@ -260,7 +255,6 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		$arrDB = class_modul_downloads_file::getFilesDB($strPrevId);
 
 		//Files from filesystem
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrFilesystem = $objFilesystem->getCompleteList($strPath, array(), array(".htaccess"), array(".", "..", ".svn"));
 		//Sync both arrays

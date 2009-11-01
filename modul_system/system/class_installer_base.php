@@ -7,11 +7,6 @@
 *	$Id$                                    *
 ********************************************************************************************************/
 
-//Extend the root-class
-require_once(_realpath_."/system/class_root.php");
-require_once(_realpath_."/system/class_modul_system_module.php");
-include_once(_realpath_."/system/class_modul_pages_element.php");
-
 /**
  * Base class for all installers. Provides some needed function to avoid multiple
  * implementations
@@ -576,7 +571,6 @@ abstract class class_installer_base extends class_root {
 		if(!defined($strName))
 			define($strName, $strValue);
 		
-	    include_once(_systempath_."/class_modul_system_setting.php");
 	    if(!class_modul_system_setting::checkConfigExisting($strName)) {
     	    $objConstant = new class_modul_system_setting("");
     	    $objConstant->setStrName($strName);

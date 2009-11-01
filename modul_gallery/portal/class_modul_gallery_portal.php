@@ -7,13 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-//needed models
-include_once(_systempath_."/class_modul_gallery_gallery.php");
-include_once(_systempath_."/class_modul_gallery_pic.php");
-
 /**
  * Gallery Portal. Loads the thumbnails or detail-views
  *
@@ -88,7 +81,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         $arrImages = array();
 		if($this->arrElementData["gallery_imagesperpage"] > 0) {
 		    $bitPageview = true;
-		    include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_gallery_pic::getFileCount($this->getSystemid(), false, true));
             $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["gallery_imagesperpage"]);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -273,7 +265,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                                   "pe_action_edit" => "editImage",
                                   "pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
                             );
-        include_once(_portalpath_."/class_elemente_portal.php");
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig, true);
 
 
@@ -403,7 +394,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $intWidthNew = 1;
     			}
 
-				include_once(_systempath_."/class_image.php");
 				$objImage = new class_image(_images_cachepath_, $strText);
 				//Edit Picture
 				if($objImage->preLoadImage($strImage)) {
@@ -596,7 +586,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$strIcons = "";
 		$strRatingBarTitle = "";
 
-		include_once(_systempath_."/class_modul_rating_rate.php");
 		$intNumberOfIcons = class_modul_rating_rate::$intMaxRatingValue;
 
 		//read the templates

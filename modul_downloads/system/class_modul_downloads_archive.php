@@ -7,11 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_modul_filemanager_repo.php");
-
 /**
  * Class to represent an archive, used to store download-files and folders
  *

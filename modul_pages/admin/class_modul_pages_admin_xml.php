@@ -8,13 +8,6 @@
 ********************************************************************************************************/
 
 
-//Include der Mutter-Klasse
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_xml_admin.php");
-//model
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * admin-class of the pages-module
  * Serves xml-requests, e.g. a list of available pages

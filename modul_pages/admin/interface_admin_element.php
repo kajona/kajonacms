@@ -21,13 +21,5 @@ interface interface_admin_element {
 	 */
 	public function getEditForm($arrElementData);
 
-	/**
-	 * This Method should handle all the savings to the database
-	 *
-	 * @param string $strSystemid The systemid of the current element
-	 * @deprecated NOT NEEDED ANYMORE, SYSTEM TAKES CARE OF SAVING ELEMENTS!!!!!!!
-	 */
-	//public function actionSave($strSystemid);
-
 }
 ?>

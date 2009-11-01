@@ -7,8 +7,6 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-include_once(_systempath_."/interface_iterator.php");
-
 /**
  * Class to iterator over an array.
  * This class is able to create a pageview-mechanism

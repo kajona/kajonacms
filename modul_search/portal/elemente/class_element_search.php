@@ -7,11 +7,6 @@
 *	$Id$	                                    *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-
 /**
  * Portal element of the search-module
  *
@@ -43,7 +38,6 @@ class class_element_search extends class_element_portal implements interface_por
 		//Load the data
 		$objSearchModule = class_modul_system_module::getModuleByName("search");
 		if($objSearchModule != null) {
-    		require_once(_portalpath_."/".$objSearchModule->getStrNamePortal());
     		$strClassName = uniStrReplace(".php", "", $objSearchModule->getStrNamePortal());
     		$objSearch = new $strClassName($this->arrElementData);
             $strReturn = $objSearch->action();

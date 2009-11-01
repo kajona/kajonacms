@@ -7,9 +7,6 @@
 *   $Id$                                  *
 ********************************************************************************************************/
 
-
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the downloads samplecontent
  *
@@ -29,8 +26,6 @@ class class_installer_sc_downloads implements interface_sc_installer  {
 
         
         $strReturn .= "Creating new downloads...\n";
-        include_once(_systempath_."/class_modul_downloads_archive.php");
-        include_once(_systempath_."/class_modul_downloads_file.php");
         $objDownloads = new class_modul_downloads_archive();
         $objDownloads->setTitle("Sample downloads");
         $objDownloads->setPath("/portal/downloads");
@@ -102,8 +97,6 @@ class class_installer_sc_downloads implements interface_sc_installer  {
             $objModule = null;
         }
         if($objModule != null) {
-	        include_once(_systempath_."/class_modul_navigation_tree.php");
-	        include_once(_systempath_."/class_modul_navigation_point.php");
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
 	        

@@ -6,10 +6,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                              *
 ********************************************************************************************************/
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
 
 
 /**
@@ -48,7 +44,6 @@ class class_element_postacomment extends class_element_admin implements interfac
 		$strReturn = "";
 
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_postacomment", ".tpl");
 		$arrTemplatesDD = array();

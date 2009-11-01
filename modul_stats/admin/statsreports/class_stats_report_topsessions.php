@@ -7,8 +7,6 @@
 *	$Id$                           *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
 
 /**
  * This plugin creates a view showing infos about the sessions

@@ -7,13 +7,6 @@
 *	$Id$                                        *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_admin.php");
-//Interface to implement
-include_once(_adminpath_."/interface_admin.php");
-
-include_once(_systempath_."/class_modul_user_log.php");
-
 /**
  * This class shows a little LoginScreen if the user is net yet loggedin
  *
@@ -127,7 +120,6 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		        $this->objSession->logout();
 		    }
 			//save the current skin as a cookie
-            require_once(_systempath_."/class_cookie.php");
     	    $objCookie = new class_cookie();
     		$objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
     		$objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));

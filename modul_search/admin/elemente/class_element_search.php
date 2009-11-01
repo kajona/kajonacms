@@ -7,10 +7,6 @@
 *	$Id$	                                    *
 ********************************************************************************************************/
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
 /**
  * Class representing the search element on the admin side
  *
@@ -51,7 +47,6 @@ class class_element_search extends class_element_admin implements interface_admi
 		$strReturn .= $this->objToolkit->formInputText("search_amount", $this->getText("search_amount"), (isset($arrElementData["search_amount"]) ? $arrElementData["search_amount"] : ""));
 		$strReturn .= $this->objToolkit->formInputPageSelector("search_page", $this->getText("search_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ));
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_search", ".tpl");
 		$arrTemplatesDD = array();

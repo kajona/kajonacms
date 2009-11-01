@@ -8,13 +8,6 @@
 ********************************************************************************************************/
 
 
-//Include der Mutter-Klasse
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_xml_admin.php");
-//model
-include_once(_systempath_."/class_modul_gallery_pic.php");
-include_once(_systempath_."/class_modul_gallery_gallery.php");
-
 /**
  * admin-class of the gallery-module
  * Serves xml-requests, e.g. syncing a gallery

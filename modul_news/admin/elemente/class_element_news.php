@@ -6,11 +6,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                       *
 ********************************************************************************************************/
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-include_once(_systempath_."/class_modul_news_category.php");
 
 /**
  * Class representing the admin-part of the news element
@@ -75,7 +70,6 @@ class class_element_news extends class_element_admin implements interface_admin_
         $strReturn .= $this->objToolkit->formInputDropdown("news_order", $arrOrder, $this->getText("news_order"), (isset($arrElementData["news_order"]) ? $arrElementData["news_order"] : "" ));
 
         //Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_news", ".tpl");
 		$arrTemplatesDD = array();

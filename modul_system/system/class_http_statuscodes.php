@@ -12,7 +12,7 @@
  *
  * @package modul_system
  */
-class class_http_status_codes {
+class class_http_statuscodes {
 
     
     /**

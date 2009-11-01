@@ -7,13 +7,6 @@
 *	$Id$                                   *
 ********************************************************************************************************/
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_news_category.php");
-include_once(_systempath_."/class_modul_news_feed.php");
-include_once(_systempath_."/class_modul_news_news.php");
 
 /**
  * Admin-Class of the news-module. Responsible for editing news, organizing them in categories and creating feeds
@@ -221,7 +214,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 
     		//Load all news, maybe using a filterid
-            include_once(_systempath_."/class_array_section_iterator.php");
 		    $objNews = new class_modul_news_news();
     		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator($objNews->getNewsCount($this->getParam("filterId")));

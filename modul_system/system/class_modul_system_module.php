@@ -7,9 +7,6 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Model for a single system-module
  * Modules are not represented in the system-table directly. so a moduleid is being used instead
@@ -197,7 +194,6 @@ class class_modul_system_module extends class_model implements interface_model  
      */
     public function getAdminInstanceOfConcreteModule() {
         if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
-            include_once(_adminpath_."/".$this->getStrNameAdmin());
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
             $objModule = new $strClassname();

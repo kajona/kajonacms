@@ -7,9 +7,6 @@
 *	$Id$	                            *
 ********************************************************************************************************/
 
-include_once(_adminpath_."/widgets/class_adminwidget.php");
-include_once(_adminpath_."/widgets/interface_adminwidget.php");
-
 
 /**
  * @package modul_dashboard
@@ -54,7 +51,6 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         $strContent = @file_get_contents($this->getFieldValue("feedurl"));
         
         try {
-            include_once(_systempath_."/class_remoteloader.php");
             $objRemoteloader = new class_remoteloader();
             $objRemoteloader->setStrHost(str_ireplace("http://", "", $this->getFieldValue("feedurl")));
             $objRemoteloader->setIntPort(0);
@@ -65,7 +61,6 @@ class class_adminwidget_rssfeed extends class_adminwidget implements interface_a
         }
         
         if($strContent != "") {
-        	include_once(_systempath_."/class_xml_parser.php");
         	$objXmlparser = new class_xml_parser();
             $objXmlparser->loadString($strContent);
             

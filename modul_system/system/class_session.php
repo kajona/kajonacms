@@ -219,7 +219,6 @@ final class class_session {
 		$strReturn = "";
 
 		//Maybe we can load the skin from the cookie
-	    require_once(_systempath_."/class_cookie.php");
 	    $objCookie = new class_cookie();
 	    $strSkin = $objCookie->getCookie("adminskin");
 	    if($strSkin != "" && $bitUseCookie) {
@@ -248,7 +247,6 @@ final class class_session {
 		$strReturn = "";
 
 		//Maybe we can load the language from the cookie
-	    require_once(_systempath_."/class_cookie.php");
 	    $objCookie = new class_cookie();
 	    $strLanguage = $objCookie->getCookie("adminlanguage");
 	    if($strLanguage != "" && $bitUseCookie) {
@@ -326,8 +324,6 @@ final class class_session {
 	 */
 	public function login($strName, $strPass) {
 	    $bitReturn = false;
-	    include_once(_systempath_."/class_modul_user_user.php");
-	    include_once(_systempath_."/class_modul_user_log.php");
 		//How many users are out there with this username and being active?
 		$arrUsers = class_modul_user_user::getAllUsersByName($strName);
 
@@ -348,7 +344,6 @@ final class class_session {
 							
 							$this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
 							$this->objInternalSession->setStrUserid($objOneUser->getSystemid());
-							include_once(_systempath_."/class_modul_user_group.php");
 	                        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objOneUser->getSystemid()));
 	                        $this->objInternalSession->setStrGroupids($strGroups);
 	                        $this->objInternalSession->updateObjectToDb();
@@ -449,7 +444,6 @@ final class class_session {
 	 * @return class_modul_user_user
 	 */
 	private function getUser() {
-	    include_once(_systempath_."/class_modul_user_user.php");
 	    if($this->objUser != null)
 	       return $this->objUser;
 	       
@@ -550,7 +544,6 @@ final class class_session {
         if(!in_array(_dbprefix_."session", $arrTables))
             return;
 	    
-	    include_once(_systempath_."/class_modul_system_session.php");
 	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
 	        $this->objInternalSession = class_modul_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
 	        
@@ -567,7 +560,6 @@ final class class_session {
 	        
 	    }
 	    
-        include_once(_systempath_."/class_modul_user_group.php");
         $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($this->getUserID()));
         $objSession = new class_modul_system_session();
         $objSession->setStrPHPSessionId($this->getSessionId());

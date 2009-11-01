@@ -8,15 +8,6 @@
 ********************************************************************************************************/
 
 
-//Base class
-include_once(_adminpath_."/class_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_pages_element.php");
-include_once(_systempath_."/class_modul_pages_folder.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-include_once(_systempath_."/class_modul_pages_pageelement.php");
 
 /**
  * This class handles the admin-sided management of the pages
@@ -339,7 +330,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$intI = 0;
 
 			//showing a list using the pageview
-			include_once(_systempath_."/class_array_section_iterator.php");
             $objArraySectionIterator = new class_array_section_iterator(class_modul_pages_page::getNumberOfPagesAvailable());
 		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
@@ -415,7 +405,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
 
                 //if languages are installed, present a language switch right here
-                include_once(_adminpath_."/class_modul_languages_admin.php");
                 $objLanguages = new class_modul_languages_admin();
                 $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
@@ -442,7 +431,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), "", "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 				}
 				//Load the available templates
-				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
 				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				//If set on, the dropdown could be disabled
@@ -476,7 +464,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $arrToolbarEntries = array();
 
                 //if languages are installed, present a language switch right here
-                include_once(_adminpath_."/class_modul_languages_admin.php");
                 $objLanguages = new class_modul_languages_admin();
                 $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
@@ -502,7 +489,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 
 				//Load all the Templates available
-				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
 
 				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
@@ -866,7 +852,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    // ------------------------------------------------------------------------------------------
 		    // any element-installers of elements not yet installed?
 		    $arrElementsToInstall = array();
-		    include_once(_systempath_."/class_filesystem.php");
     		$objFilesystem = new class_filesystem();
     		//load installers available
     		$arrInstallers = $objFilesystem->getFilelist("/installer");
@@ -881,7 +866,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		    asort($arrInstallers);
 	    		    //Loading each installer
 	        		foreach($arrInstallers as $strInstaller) {
-	        			include_once(_realpath_."/installer/".$strInstaller);
 	        			//Creating an object....
 	        			$strClass = "class_".str_replace(".php", "", $strInstaller);
 	        			$objInstaller = new $strClass();
@@ -951,7 +935,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 			//Object to handle the filesystem
-			include_once(_systempath_."/class_filesystem.php");
 			$objFilesystem = new class_filesystem();
 			$strTemplateID = $this->objTemplate->readTemplate("/module/modul_pages/elemente.tpl", "element_neu");
 
@@ -1047,14 +1030,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strElementToInstall = $this->getParam("elementName");
 
-            include_once(_systempath_."/class_filesystem.php");
     		$objFilesystem = new class_filesystem();
     		//load installers available
     		$arrInstallers = $objFilesystem->getFilelist("/installer");
 
     		foreach($arrInstallers as $intKey => $strFile) {
     			if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
-                    include_once(_realpath_."/installer/".$strFile);
         			//Creating an object....
         			$strClass = "class_".str_replace(".php", "", $strFile);
         			$objInstaller = new $strClass();
@@ -1151,7 +1132,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "updatePlaceholder"));
                 //fetch available templates
                 //Load the available templates
-				include_once(_systempath_."/class_filesystem.php");
 				$objFilesystem = new class_filesystem();
 				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				$arrTemplatesDD = array();
@@ -1169,7 +1149,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             else {
                 $strReturn .= $this->objToolkit->getTextRow($this->getText("plUpdateHelp"));
                 $strReturn .= $this->objToolkit->divider();
-                include_once(_systempath_."/class_modul_pages_pageelement.php");
                 if(class_modul_pages_pageelement::updatePlaceholders($this->getParam("template"), $this->getParam("plToUpdate"), $this->getParam("plNew")))
                     $strReturn .= $this->objToolkit->getTextRow($this->getText("plUpdateTrue"));
                 else

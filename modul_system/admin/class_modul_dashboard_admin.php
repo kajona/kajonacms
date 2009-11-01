@@ -7,10 +7,6 @@
 *	$Id$	                            *
 ********************************************************************************************************/
 
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-include_once(_systempath_."/class_modul_system_adminwidget.php");
-include_once(_systempath_."/class_modul_dashboard_widget.php");
 
 /**
  * @package modul_dashboard
@@ -188,7 +184,6 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        //step 2: loading the widget and allow it to show a view fields
 	        else if($this->getParam("step") == "2") {
 	            $strWidgetClass = $this->getParam("widget");
-	            include_once(_adminpath_."/widgets/".$strWidgetClass.".php");
 	            $objWidget = new $strWidgetClass();
 
 	            //ask the widget to generate its form-parts and wrap our elements around
@@ -204,7 +199,6 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        else if($this->getParam("step") == "3") {
 	            //instantiate the concrete widget
 	            $strWidgetClass = $this->getParam("widget");
-	            include_once(_adminpath_."/widgets/".$strWidgetClass.".php");
 	            $objWidget = new $strWidgetClass();
 
 	            //let it process its fields

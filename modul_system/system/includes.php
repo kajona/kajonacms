@@ -57,5 +57,72 @@
 	if(!@include_once(_realpath_."/system/class_carrier.php"))
 		rawIncludeError("carrier-class");
 
+//---Autoloader for classes------------------------------------------------------------------------------
+
+    function __autoload($strClassName) {
+
+        //---ADMIN CLASSES-------------------------------------------------------------------------------
+        //adminwidgets
+        if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
+            if(require(_adminpath_."/widgets/".$strClassName.".php"))
+                return;
+        }
+
+        //systemtasks
+        if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
+            if(require(_adminpath_."/systemtasks/".$strClassName.".php"))
+                return;
+        }
+
+        //statsreports
+        if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
+            if(require(_adminpath_."/statsreports/".$strClassName.".php"))
+                return;
+        }
+
+        //admin classes
+        //TODO: wtf? why strpos needed? whats wron with that regex?
+        if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
+            if(require(_adminpath_."/".$strClassName.".php"))
+                return;
+        }
+
+
+        //---PORTAL CLASSES------------------------------------------------------------------------------
+
+        //search plugins
+        if(preg_match("/(((class)_(.*)search)|((interface_search)(.*)))/", $strClassName)) {
+            if(require(_portalpath_."/searchplugins/".$strClassName.".php"))
+                return;
+        }
+
+        //portal classes
+        if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
+            if(require(_portalpath_."/".$strClassName.".php"))
+                return;
+        }
+
+        //---SYSTEM CLASSES------------------------------------------------------------------------------
+        //db-drivers
+        //system-classes
+        if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
+            if(require(_systempath_."/db/".$strClassName.".php"))
+                return;
+        }
+
+        //system-classes
+        if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
+            if(require(_systempath_."/".$strClassName.".php"))
+                return;
+        }
+
+        
+
+        
+
+        
+        
+    }
+
 
 ?>

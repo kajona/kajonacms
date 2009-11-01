@@ -8,9 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Interface of the seach samplecontent
  *
@@ -102,8 +99,6 @@ class class_installer_sc_search implements interface_sc_installer  {
 	        }
 	        if($objModule != null) {
 	        	
-	            include_once(_systempath_."/class_modul_navigation_tree.php");
-		        include_once(_systempath_."/class_modul_navigation_point.php");
 		        $arrNavis = class_modul_navigation_tree::getAllNavis();
 		        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
 		        $strTreeId = $objNavi->getSystemid();

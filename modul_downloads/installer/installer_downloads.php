@@ -7,11 +7,6 @@
 *	$Id$                                      *
 ********************************************************************************************************/
 
-require_once(_systempath_."/class_installer_base.php");
-require_once(_systempath_."/interface_installer.php");
-require_once(_systempath_."/class_modul_downloads_archive.php");
-require_once(_systempath_."/class_modul_filemanager_repo.php");
-
 /**
  * Installer to install the downloads-module
  *

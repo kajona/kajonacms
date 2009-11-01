@@ -7,9 +7,6 @@
 *	$Id$                               *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Class to provide methods used by the system for db tasks as a db check
  *

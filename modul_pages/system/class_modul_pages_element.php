@@ -7,9 +7,6 @@
 *	$Id$                                *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
  * Elements DON'T have systemids!

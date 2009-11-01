@@ -7,16 +7,6 @@
 *	$Id$                                 *
 ********************************************************************************************************/
 
-include_once(_systempath_."/class_model.php");
-include_once(_systempath_."/interface_model.php");
-include_once(_systempath_."/class_modul_system_common.php");
-
-//model
-include_once(_systempath_."/class_modul_pages_element.php");
-include_once(_systempath_."/class_modul_pages_folder.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-include_once(_systempath_."/class_modul_pages_pageelement.php");
-
 /**
  * This class manages all stuff related with folders, used by pages. Folders just exist in the database,
  * not in the filesystem

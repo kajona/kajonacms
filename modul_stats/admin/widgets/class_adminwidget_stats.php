@@ -7,10 +7,6 @@
 *	$Id$	                       			*
 ********************************************************************************************************/
 
-include_once(_adminpath_."/widgets/class_adminwidget.php");
-include_once(_adminpath_."/widgets/interface_adminwidget.php");
-include_once(_adminpath_."/statsreports/class_stats_report_common.php");
-
 
 /**
  * @package modul_dashboard

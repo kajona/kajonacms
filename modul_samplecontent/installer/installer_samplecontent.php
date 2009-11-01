@@ -7,9 +7,6 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
-require_once(_systempath_."/class_installer_base.php");
-require_once(_systempath_."/interface_installer.php");
-
 /**
  * Class providing an installer for the samplecontent.
  * Samplecontent is not installed as a module, it just creates a few default entries
@@ -57,7 +54,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
    public function install() {
         $strReturn = "";
-        include_once(_systempath_."/class_modul_system_module.php");
         $strPageId = "";
 
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
@@ -68,7 +64,6 @@ class class_installer_samplecontent extends class_installer_base implements inte
         
 		
 		//search for installers available
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
 

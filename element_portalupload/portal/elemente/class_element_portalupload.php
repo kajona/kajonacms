@@ -7,13 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//base-class
-require_once(_portalpath_."/class_elemente_portal.php");
-//Interface
-require_once(_portalpath_."/interface_portal_element.php");
-require_once(_systempath_."/class_modul_filemanager_repo.php");
-require_once(_systempath_."/class_modul_downloads_archive.php");
-
 /**
  * Portal Element to load the login-form, or a small "status" area, providing an logout link
  *
@@ -118,7 +111,6 @@ class class_element_portalupload extends class_element_portal implements interfa
 
             $strTarget = $strPath."/".createFilename($arrSource["name"]);
 
-            include_once(_systempath_."/class_filesystem.php");
             $objFilesystem = new class_filesystem();
             if($objFilesystem->isWritable($strPath)) {
 

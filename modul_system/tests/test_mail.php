@@ -1,12 +1,6 @@
 <?php
 
-// includes
-include_once(_systempath_."/class_modul_system_common.php");
-include_once(_systempath_."/class_mail.php");
-
 class class_test_mail implements interface_testable {
-
-
 
     public function test() {
 

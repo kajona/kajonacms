@@ -8,8 +8,6 @@
 ********************************************************************************************************/
 
 
-include_once(_systempath_."/interface_sc_installer.php");
-
 /**
  * Installer of the filemanager samplecontent
  *
@@ -32,7 +30,6 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
                 mkdir(_realpath_."/portal/pics/upload");
 
             $strReturn .= "Creating new picture repository\n";
-            include_once(_systempath_."/class_modul_filemanager_repo.php");
             $objRepo = new class_modul_filemanager_repo();
 
             if($this->strContentLanguage == "de")
@@ -51,7 +48,6 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
                 mkdir(_realpath_."/portal/downloads");
 
             $strReturn .= "Creating new file repository\n";
-            include_once(_systempath_."/class_modul_filemanager_repo.php");
             $objRepo = new class_modul_filemanager_repo();
 
             if($this->strContentLanguage == "de")

@@ -7,15 +7,6 @@
 *	$Id$                                  *
 ********************************************************************************************************/
 
-
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-//needed classes
-include_once(_systempath_."/class_modul_downloads_archive.php");
-include_once(_systempath_."/class_modul_downloads_file.php");
-
 /**
  * Class representing the admin-part of the downloads element
  *
@@ -50,7 +41,6 @@ class class_element_downloads extends class_element_admin implements interface_a
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all archives
-        include_once(_adminpath_."/class_modul_downloads_admin.php");
         $objDownloads = new class_modul_downloads_admin();
         $arrObjArchs = class_modul_downloads_archive::getAllArchives();
         $arrArchives = array();
@@ -60,7 +50,6 @@ class class_element_downloads extends class_element_admin implements interface_a
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputDropdown("download_id", $arrArchives, $this->getText("download_id"), (isset($arrElementData["download_id"]) ? $arrElementData["download_id"] : "" ));
 		//Load the available templates
-		include_once(_systempath_."/class_filesystem.php");
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_downloads", ".tpl");
 		$arrTemplatesDD = array();

@@ -8,16 +8,6 @@
 ********************************************************************************************************/
 
 
-//Base class & interface
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-
-//needed classes
-include_once(_systempath_."/class_modul_downloads_archive.php");
-include_once(_systempath_."/class_modul_downloads_file.php");
-include_once(_systempath_."/class_modul_downloads_logbook.php");
-
-
 
 /**
  * Admin-Class of the downloads-module. Used to sync the archives with the filesystem and to define file-properties
@@ -333,7 +323,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	try {
 				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
 				        if($objMdlRating != null && $objOneFile->getType() != 1) {
-				 	        include_once(_systempath_."/class_modul_rating_rate.php");
 				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
 				 	        if($objRating != null)
 				 	            $strCenter .= " - ".$objRating->getFloatRating();
@@ -598,7 +587,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 		    $strReturn .= $this->objToolkit->getTextRow(getLinkAdmin("downloads", "deleteLogbook", "", $this->getText("logbuch_loeschen_link"), "")."<br />");
 
-		    include_once(_systempath_."/class_array_section_iterator.php");
 		    $objLogbook = new class_modul_downloads_logbook();
 		    $objArraySectionIterator = new class_array_section_iterator($objLogbook->getLogbookDataCount());
 		    $objArraySectionIterator->setIntElementsPerPage($intNrOfRecordsPerPage);

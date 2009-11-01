@@ -7,9 +7,6 @@
 *	$Id$	                                        *
 ********************************************************************************************************/
 
-//Interface
-include_once(_systempath_."/db/interface_db_driver.php");
-
 /**
  * db-driver for MySQL using the php-mysqli-interface
  *

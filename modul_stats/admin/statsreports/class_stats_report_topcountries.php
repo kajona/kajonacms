@@ -7,9 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-
 /**
  * This plugin creates a list of countries the visitors come from
  *
@@ -162,7 +159,6 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 	public function getReportGraph() {
 	    $arrReturn = array();
 
-        include_once(_systempath_."/class_graph_pchart.php");
         $arrData = $this->getTopCountries();
 
         $intSum = 0;

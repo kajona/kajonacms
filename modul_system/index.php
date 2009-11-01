@@ -33,7 +33,6 @@ else
 
 // --- The Index Class ----------------------------------------------------------------------------------
 
-include_once(_realpath_."/system/class_root.php");
 /**
  * This class controlles the next steps
  *
@@ -116,13 +115,11 @@ class class_index  {
 						        //languages installed?
 						        $objLanguages = $this->getModuleData("languages");
 						        if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-						            include_once(_systempath_."/class_modul_languages_language.php");
 						            $objLanguage = new class_modul_languages_language();
 						            $objLanguage->setStrAdminLanguageToWorkOn(getGet("language"));
 						        }
 						    }
 
-							include_once(_adminpath_."/".$objModulData->getStrNameAdmin());
 							//creating an instance of the wanted module
 							$strClassname = uniStrReplace(".php", "", $objModulData->getStrNameAdmin());
 							$objModule = new $strClassname();
@@ -141,7 +138,6 @@ class class_index  {
 					}
 					else {
 						//Loading the login-Object
-						include_once(_adminpath_."/class_modul_login_admin.php");
 						$objModule = new class_modul_login_admin();
 						$objModule->action("login");
 						$this->strOutput = $objModule->getModuleOutput();
@@ -158,7 +154,6 @@ class class_index  {
 			}
 		}
 		elseif ($strModule == "login") {
-			include_once(_adminpath_."/class_modul_login_admin.php");
 			$objModule = new class_modul_login_admin();
 			$objModule->action($strAction);
 		}
@@ -174,7 +169,6 @@ class class_index  {
 	    //check, if languages are installed
 	    $objLanguages = $this->getModuleData("languages");
 	    if($objLanguages != null && $objLanguages->getStrNameAdmin() != "") {
-	        include_once(_systempath_."/class_modul_languages_language.php");
             $objLanguage = new class_modul_languages_language();
             //any reaction on language-commmands?
             if(issetGet("language"))
@@ -185,7 +179,6 @@ class class_index  {
 		//if stats are installed, log the request now
 		$objStatsModul = $this->getModuleData("stats");
 		if($objStatsModul != null && $objStatsModul->getStrNamePortal() != "") {
-			include_once(_portalpath_."/".$objStatsModul->getStrNamePortal());
 			$strClassname = uniStrReplace(".php", "", $objStatsModul->getStrNamePortal());
 			$objStats = new $strClassname();
 			$objStats->insertStat();
@@ -197,7 +190,6 @@ class class_index  {
 
 		//Create Object the object
 		if($objPagesModule != null && $objPagesModule->getStrNamePortal() != "") {
-			include_once(_portalpath_."/".$objPagesModule->getStrNamePortal());
 			$strClassname = uniStrReplace(".php", "", $objPagesModule->getStrNamePortal());
 			$objPages = new $strClassname();
 			//Clean up the cache
@@ -275,7 +267,6 @@ class class_index  {
             sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].session_id().$this->strOutput));
 
 		//compress output
-		include_once(_systempath_."/class_gzip.php");
 		$objGzip = new class_gzip();
 		return $objGzip->compressOutput($strDebug.$this->strOutput);
 	}
@@ -288,7 +279,6 @@ class class_index  {
 	 * @return class_modul_system_module
 	 */
 	public function getModuleData($strName) {
-	    include_once(_systempath_."/class_modul_system_module.php");
 	    return class_modul_system_module::getModuleByName($strName);
 	}
 

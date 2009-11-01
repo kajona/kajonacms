@@ -7,13 +7,6 @@
 *	$Id$                            *
 ********************************************************************************************************/
 
-//Base class
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
-//Model
-include_once(_systempath_."/class_modul_navigation_tree.php");
-include_once(_systempath_."/class_modul_navigation_point.php");
-include_once(_systempath_."/class_modul_navigation_cache.php");
 
 /**
  * Portal-part of the guestbook. Creates the different navigation-views as sitemap or tree

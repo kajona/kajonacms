@@ -7,13 +7,6 @@
 *   $Id$                             *
 ********************************************************************************************************/
 
-//Base class & interface
-include_once(_adminpath_."/class_admin.php");
-include_once(_adminpath_."/interface_admin.php");
-//Model
-include_once(_systempath_."/class_modul_navigation_tree.php");
-include_once(_systempath_."/class_modul_navigation_point.php");
-include_once(_systempath_."/class_modul_navigation_cache.php");
 
 /**
  * Admin-class to manage all navigations

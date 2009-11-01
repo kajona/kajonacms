@@ -8,13 +8,6 @@ class class_test_pages implements interface_testable {
 
         $objDB = class_carrier::getInstance()->getObjDB();
 
-        // includes
-        include_once(_systempath_."/class_modul_pages_element.php");
-        include_once(_systempath_."/class_modul_pages_folder.php");
-        include_once(_systempath_."/class_modul_pages_page.php");
-        include_once(_systempath_."/class_modul_pages_pageelement.php");
-        
-
         echo "testing module_pages\n";
 
         //pages at startup:

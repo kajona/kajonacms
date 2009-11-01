@@ -6,9 +6,6 @@
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$                                   *
 ********************************************************************************************************/
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_portal.php");
 
 /**
  * Portal-Class to provide a simple contact-form
@@ -130,7 +127,6 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	private function actionSendForm() {
 		$strReturn = "";
 		//Mail-Object
-		include_once(_systempath_."/class_mail.php");
 		$objEmail = new class_mail();
 
 		//Template

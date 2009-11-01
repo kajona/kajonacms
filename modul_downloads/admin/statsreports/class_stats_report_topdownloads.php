@@ -7,10 +7,6 @@
 *	$Id$                         *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-include_once(_systempath_."/class_modul_downloads_logbook.php");
-
 /**
  * This plugin show the list of top download, served by the downloads-module
  *
@@ -111,7 +107,6 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 
 	public function getReportGraph() {
 	    $arrReturn = array();
-	    include_once(_systempath_."/class_graph_pchart.php");
 	    //generate a graph showing dls per interval
 	    //--- XY-Plot -----------------------------------------------------------------------------------
 		//calc number of plots

@@ -7,9 +7,6 @@
 *	$Id$                              *
 ********************************************************************************************************/
 
-//Interface
-include_once(_adminpath_."/interface_admin_statsreport.php");
-
 /**
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
@@ -142,7 +139,6 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
         if(count($arrGraphData) > 1) {
     	    //generate a bar-chart
-    	    include_once(_systempath_."/class_graph_pchart.php");
     	    $objGraph = new class_graph_pchart();
     	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));

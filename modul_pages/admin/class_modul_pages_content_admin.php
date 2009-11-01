@@ -7,15 +7,6 @@
 *	$Id$                          *
 ********************************************************************************************************/
 
-//Base Class
-include_once(_adminpath_."/class_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin.php");
-//model
-include_once(_systempath_."/class_modul_pages_element.php");
-include_once(_systempath_."/class_modul_pages_folder.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-include_once(_systempath_."/class_modul_pages_pageelement.php");
 
 /**
  * This class is used to edit the content of a page. So, to create / delete / modify elements on a
@@ -135,7 +126,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $arrToolbarEntries[2] = "<a href=\"".getLinkPortalHref($objPage->getStrName(), "", "", "&preview=1", "", $this->getLanguageToWorkOn())."\" target=\"_blank\" style=\"background-image:url("._skinwebpath_."/pics/icon_lens.gif);\">".$this->getText("contentToolbar_preview")."</a>";
 
             //if languages are installed, present a language switch right here
-            include_once(_adminpath_."/class_modul_languages_admin.php");
             $objLanguages = new class_modul_languages_admin();
             $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 

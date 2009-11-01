@@ -7,9 +7,6 @@
 *	$Id$	                                    *
 ********************************************************************************************************/
 
-//Interface
-include_once(_systempath_."/db/interface_db_driver.php");
-
 /**
  * db-driver for postgres using the php-postgres-interface
  *

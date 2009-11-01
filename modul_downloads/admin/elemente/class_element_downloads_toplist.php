@@ -8,13 +8,6 @@
 ********************************************************************************************************/
 
 
-//Base-Class
-include_once(_adminpath_."/class_element_admin.php");
-//Interface
-include_once(_adminpath_."/interface_admin_element.php");
-//needed classes
-include_once(_systempath_."/class_modul_downloads_archive.php");
-
 /**
  * Class representing the admin-part of the downloadstoplist element
  *
@@ -57,7 +50,6 @@ class class_element_downloads_toplist extends class_element_admin implements int
         //Build the form
         $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrArchives, $this->getText("dl_toplist_archive"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
         //Load the available templates
-        include_once(_systempath_."/class_filesystem.php");
         $objFilesystem = new class_filesystem();
         $arrTemplates = $objFilesystem->getFilelist("/templates/element_downloads_toplist", ".tpl");
         $arrTemplatesDD = array();

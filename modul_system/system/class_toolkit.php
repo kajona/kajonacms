@@ -37,7 +37,6 @@ class class_toolkit  {
 		$this->arrModul = array_merge($arrModul, $this->arrModul);
 		$this->strSystemid = $strSystemid;
 
-		include_once(_systempath_."/class_carrier.php");
 		$objCarrier = class_carrier::getInstance();
 		$this->objTemplate = $objCarrier->getObjTemplate();
 	}

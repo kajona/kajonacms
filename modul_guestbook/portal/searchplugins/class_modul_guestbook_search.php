@@ -7,9 +7,6 @@
 *	$Id$                             *
 ********************************************************************************************************/
 
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/searchplugins/interface_search_plugin.php");
-
 /**
  * Search plugin of the guestbook-module.
  *
@@ -90,7 +87,6 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 					                    AND system_id = '".dbsafeString($arrOnePost["system_id"])."'";
 					    $arrRow = $this->objDB->getRow($strQuery);
 					    $intAmount = $arrRow["guestbook_amount"];
-					    include_once(_systempath_."/class_modul_guestbook_post.php");
 					    $arrPostsInGB = class_modul_guestbook_post::getPosts($arrOnePost["system_prev_id"], true);
 					    $intCounter = 0;
 					    foreach($arrPostsInGB as $objOnePostInGb) {

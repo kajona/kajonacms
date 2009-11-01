@@ -7,9 +7,6 @@
 *	$Id$								*
 ********************************************************************************************************/
 
-//Base class
-include_once(_portalpath_."/class_portal.php");
-
 /**
  * Base Class for all portal-elements
  *

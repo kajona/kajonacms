@@ -7,13 +7,6 @@
 *	$Id$						*
 ********************************************************************************************************/
 
-//Include der Mutter-Klasse
-include_once(_portalpath_."/class_portal.php");
-include_once(_portalpath_."/interface_xml_portal.php");
-//model
-include_once(_systempath_."/class_modul_postacomment_post.php");
-include_once(_systempath_."/class_modul_pages_page.php");
-
 /**
  * Portal-class of the postacomment-module
  * Serves xml-requests, e.g. saves a sent comment
