@@ -307,7 +307,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		    $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
 		}
 
-        while($objTemp->getPrevId() != "0" && $objTemp->getStrName() != "") {
+        while($objTemp->getPrevId() != $this->getModuleSystemid("navigation") && $objTemp->getStrName() != "") {
             $strStack .= ",".$objTemp->getSystemid();
             $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
         }
@@ -391,7 +391,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	        $intCurCounter = 0;
 	        $objTemp = $objOnePoint;
     	    //now check, if its the correct navigation-tree and count levels
-	        while($objTemp->getPrevid() != "0") {
+	        while($objTemp->getPrevid() != $this->getModuleSystemid("navigation")) {
 	            $objTemp = new class_modul_navigation_point($objTemp->getPrevId());
 	            $intCurCounter++;
 	        }
