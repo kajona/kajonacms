@@ -91,7 +91,7 @@
         //---PORTAL CLASSES------------------------------------------------------------------------------
 
         //search plugins
-        if(preg_match("/(((class)_(.*)search)|((interface_search)(.*)))/", $strClassName)) {
+        if(preg_match("/interface_search(.*)/", $strClassName)) {
             if(require(_portalpath_."/searchplugins/".$strClassName.".php"))
                 return;
         }

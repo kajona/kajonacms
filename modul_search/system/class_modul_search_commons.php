@@ -95,6 +95,7 @@ class class_modul_search_commons extends class_model implements interface_model 
 		foreach($arrSearchPlugins as $strOnePlugin) {
 		    //Check, if not the interface
 		    if($strOnePlugin != "interface_search_plugin.php" && uniStrpos($strOnePlugin, "searchdef_pages_" ) === false) {
+		        include_once(_portalpath_."/searchplugins/".$strOnePlugin);
 		        $strClassname = str_replace(".php", "", $strOnePlugin);
 		        $objPlugin = new $strClassname($arrSearchtermPlugin, $strSearchterm);
 		        if($objPlugin instanceof interface_search_plugin) {
