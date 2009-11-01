@@ -94,7 +94,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$strSystemID = $this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal.php", "class_modul_navigation_admin.php", $this->arrModule["version"] , true);
 
         //constants
-        $this->registerConstant("_navigation_use_cache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
+        $this->registerConstant("_navigation_use_cache_", "false", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
 
 		return $strReturn;
 
@@ -244,7 +244,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Registering systemsetting...\n";
-        $this->registerConstant("_navigation_use_cache_", "true", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
+        $this->registerConstant("_navigation_use_cache_", "false", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
 
         $this->updateModuleVersion("navigation", "3.2.0.9");
         return $strReturn;
