@@ -569,6 +569,11 @@ function getLinkPortal($strPageI, $strPageE, $strTarget = "_self", $strText = ""
 function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParams = "", $strSystemid = "", $strLanguage = "", $strSeoAddon = "") {
 	$strReturn = "";
 	$bitInternal = true;
+
+	//return "#" if neither an internal nor an external page is set
+    if($strPageI == "" && $strPageE == "")
+        return "#";
+
 	//Internal links are more important than external links!
 	if($strPageI == "" && $strPageE != "")
 		$bitInternal = false;
@@ -605,7 +610,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 
     $strHref = "";
 	if($bitInternal) {
-	    //chek, if we could use mod_rewrite
+	    //check, if we could use mod_rewrite
 	    $bitRegularLink = true;
 	    if(_system_mod_rewrite_ == "true") {
 
@@ -979,7 +984,7 @@ function generateSystemid() {
  * @return bool
  */
 function validateSystemid($strID) {
-    
+
 	//Check against wrong characters
 	if(preg_match("/([a-z|A-a|0-9]){20}/", $strID)) {
 		return true;
