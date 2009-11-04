@@ -230,7 +230,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			//Folder-Table
 			//A Folder, to get one level up
-			if($this->strFolderlevel != $this->getModuleSystemid($this->arrModule["modul"]) && $this->strFolderlevel != "0") {
+			if($this->strFolderlevel != $this->getModuleSystemid($this->arrModule["modul"]) && validateSystemid($this->strFolderlevel)) {
 				//Get data of folder one level above
 				$objPrevFolder = new class_modul_pages_folder($this->strFolderlevel);
 				//Output Row
@@ -708,7 +708,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName());
 
-			if($objFolder->getPrevId() != "0") {
+			if($objFolder->getPrevId() != $this->getModuleSystemid("pages")) {
 			    $objFolder2 = new class_modul_pages_folder($objFolder->getPrevId());
 				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder2->getSystemid());
 				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);

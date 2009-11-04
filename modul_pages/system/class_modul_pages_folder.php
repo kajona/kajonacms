@@ -272,6 +272,9 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 
     public function setStrPrevId($strPrevid) {
         //only allowed, if not the same id (loop)
+        if(!validateSystemid($strPrevid))
+            $strPrevid = $this->getModuleSystemid("pages");
+
         if($strPrevid != $this->getSystemid())
             $this->strPrevId = $strPrevid;
     }

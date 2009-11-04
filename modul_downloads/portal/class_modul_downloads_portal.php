@@ -63,7 +63,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strReturn = "";
 
 		//systemid passed?
-		if( $this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
+		if( !validateSystemid($this->getSystemid() ) || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
             if(isset($this->arrElementData["download_id"]))
                 $this->setSystemid($this->arrElementData["download_id"]);
 		}
@@ -221,7 +221,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
 		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
-		while($objFile->getPrevId() != "0" && $objFile->getPrevId() != $objArchive->getPrevId()) {
+		while(validateSystemid($objFile->getPrevId()) && $objFile->getPrevId() != $objArchive->getPrevId()) {
 		    $objFile = new class_modul_downloads_file($objFile->getPrevId());
 		    if($objFile->getFilename() == "") {
 		        $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
@@ -251,7 +251,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
             $objFile = new class_modul_downloads_archive($this->getSystemid());
         }
 
-        while($objFile->getPrevId() != "0" && $this->validateSystemid($objFile->getPrevId()) && $objFile->getPrevId() != $objArchive->getPrevId()) {
+        while(validateSystemid($objFile->getPrevId()) && $objFile->getPrevId() != $objArchive->getPrevId()) {
             $strBackupId = $objFile->getPrevId();
             $objFile = new class_modul_downloads_file($objFile->getPrevId());
             if($objFile->getFilename() == "") {

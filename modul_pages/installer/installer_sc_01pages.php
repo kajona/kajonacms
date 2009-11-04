@@ -123,7 +123,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Creating system folder...\n";
         $objFolder = new class_modul_pages_folder();
         $objFolder->setStrName("_system");
-        $objFolder->saveObjectToDb("0");
+        $objFolder->saveObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strFolderID."\n";
         $strReturn .= "Creating master-page\n";

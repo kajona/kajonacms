@@ -11,14 +11,14 @@ class class_test_pages implements interface_testable {
         echo "testing module_pages\n";
 
         //pages at startup:
-        $intPagesAtStartup = count(class_modul_pages_folder::getPagesInFolder("0"));
+        $intPagesAtStartup = count(class_modul_pages_folder::getPagesInFolder( class_modul_system_module::getModuleByName("pages")->getSystemid() ));
         $objDB->flushQueryCache();
 
 
         echo "\tcreate a new folder...\n";
         $objFolder = new class_modul_pages_folder();
         $objFolder->setStrName("autotest");
-        $objFolder->saveObjectToDb("0");
+        $objFolder->saveObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strTestFolderID = $objFolder->getSystemid();
 
         echo "\tcreate 100 folders using the model...\n";
@@ -52,7 +52,7 @@ class class_test_pages implements interface_testable {
             class_assertions::assertEqual($objPage->getStrTemplate(), "kajona_demo.tpl", __FILE__." checkTemplateOfPageCreated");
         }
 
-        $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder("0");
+        $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
         class_assertions::assertEqual(count($arrPagesAtLevel), 100+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
         echo "\tdeleting pages created...\n";
@@ -61,7 +61,7 @@ class class_test_pages implements interface_testable {
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of pages installed...\n";
-        $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder("0");
+        $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
         class_assertions::assertEqual(count($arrPagesAtLevel), $intPagesAtStartup, __FILE__." checkNrOfPagesAtLevel");
 
         echo "\tdeleting folders created...\n";
@@ -89,7 +89,8 @@ class class_test_pages implements interface_testable {
         }
 
 
-
+        echo"\tdeleting folder...\n";
+        class_modul_pages_folder::deleteFolder($strTestFolderID);
 
     }
 

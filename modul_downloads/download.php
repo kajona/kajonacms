@@ -10,6 +10,8 @@
 if(!require_once("./system/includes.php"))
 	die("Error including necessary files");
 
+//this systemstartup is necessary to have all constants set up
+class_carrier::getInstance();
 
 /**
  * Used to send a file to the user
@@ -27,6 +29,7 @@ class class_download_portal extends class_root {
 
         //Increase max execution time
         @ini_set("max_execution_time", "7200");
+
 
 	}
 
@@ -54,7 +57,7 @@ class class_download_portal extends class_root {
 		
 		$bitRedirectToErrorPage = false;
 		
-		if($this->getSystemid() != "" && $this->getSystemid() != "0") {
+		if(validateSystemid($this->getSystemid() )) {
 
 		    $objFile = new class_modul_downloads_file($this->getSystemid());
 			//Succeeded?

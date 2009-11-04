@@ -186,7 +186,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         $objFolder = new class_modul_pages_folder($strFolder);
 		$strLevelUp = "";
 
-		if($strFolder != "0")
+		if(validateSystemid($strFolder) && $strFolder != $this->getModuleSystemid("pages"))
 			$strLevelUp = $objFolder->getPrevId();
 		//but: when browsing pages the current level should be kept
 		iF($strPageid != "0")

@@ -296,7 +296,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			$strReturn .= $this->objToolkit->dragableListHeader($strListId);
 			//linkto jump one level up
 			$intI = 0;
-			if($this->getPrevId() != "0") {
+			if($this->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"])) {
 				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$this->getPrevId(), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
 			}
 

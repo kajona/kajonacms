@@ -205,6 +205,7 @@ abstract class class_portal  {
 	 * @param string $strtID
 	 * @return bool
 	 * @final
+     * @deprecated use validateSytemid directly
 	 */
 	public final function validateSystemid($strID) {
 	    return validateSystemid($strID);
@@ -258,7 +259,7 @@ abstract class class_portal  {
 	 * @return int
 	 */
 	public function getStatus($strSystemid = "") {
-		if($strSystemid == "0")
+		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		return $this->objSystemCommon->getStatus($strSystemid);
 	}

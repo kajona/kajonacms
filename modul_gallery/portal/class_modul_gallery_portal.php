@@ -71,7 +71,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$strReturn = "";
 
 		//Determin the prev_id to load
-		if($this->getSystemid() == "0" || $this->getSystemid() == "" || $this->getParam("action") != "imageFolder" || !$this->checkIfRequestedIdIsInElementsTree()) {
+		if(!validateSystemid($this->getSystemid()) || $this->getParam("action") != "imageFolder" || !$this->checkIfRequestedIdIsInElementsTree()) {
 		    $this->setSystemid($this->arrElementData["gallery_id"]);
 		}
 
@@ -242,7 +242,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         //current image
         $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid(), "currentPic");
 
-		$arrImage["overview"] = ($objImage->getPrevId() != "0" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("uebersicht"), "imageFolder", "", $objImage->getPrevId()) : "" );
+		$arrImage["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getText("uebersicht"), "imageFolder", "", $objImage->getPrevId());
 		$arrImage["pathnavigation"] = $this->generatePathnavi(true);
 		$arrImage["systemid"] = $this->getSystemid();
 		$arrImage["pic_name"] = $objImage->getStrName();
@@ -446,7 +446,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
 		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
-		while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $objData->getSystemid() != $objGallery->getSystemid()) {
+		while(validateSystemid($objData->getPrevId()) && $objData->getSystemid() != $objGallery->getSystemid()) {
 			$objData = new class_modul_gallery_pic($objData->getPrevId());
 			if($objData->getStrName() == "") {
 		        $objData = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
@@ -557,7 +557,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $objData = new class_modul_gallery_gallery($this->getSystemid());
         }
 
-        while($objData->getPrevId() != "" && $objData->getPrevId() != "0" && $this->validateSystemid($objData->getPrevId())  && $objData->getSystemid() != $objGallery->getSystemid()) {
+        while(validateSystemid($objData->getPrevId())  && $objData->getSystemid() != $objGallery->getSystemid()) {
             $strBackupId = $objData->getPrevId();
             $objData = new class_modul_gallery_pic($objData->getPrevId());
             if($objData->getStrName() == "") {
