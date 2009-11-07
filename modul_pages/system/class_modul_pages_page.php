@@ -481,12 +481,12 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
 	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES
 	        ('".dbsafeString($strIdOfNewPage)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_browsername"])."',
-	        '".dbsafeString($arrOneProperty["pageproperties_keywords"])."',
-	        '".dbsafeString($arrOneProperty["pageproperties_description"])."',
-	        '".dbsafeString($arrOneProperty["pageproperties_template"])."',
-	        '".dbsafeString($arrOneProperty["pageproperties_seostring"])."',
-	        '".dbsafeString($arrOneProperty["pageproperties_language"])."')";
+	        '".dbsafeString($arrOneProperty["pageproperties_browsername"], false)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_keywords"], false)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_description"], false)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_template"], false)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_seostring"], false)."',
+	        '".dbsafeString($arrOneProperty["pageproperties_language"], false)."')";
 
 	        if(!$this->objDB->_query($strQuery)) {
 	            $this->objDB->transactionRollback();
