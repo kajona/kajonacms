@@ -274,9 +274,9 @@ class class_modul_languages_admin extends class_admin implements interface_admin
         $strButtons = "";
         if(count($arrObjLanguages) > 1) {
             foreach ($arrObjLanguages as $objOneLanguage) {
-            	$strButtons .= $this->objToolkit->getLanguageButton($this->getText("lang_".$objOneLanguage->getStrName()),
-            	                                                     "switchLanguage('".$objOneLanguage->getStrName()."')",
-            	                                                     ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false));
+            	$strButtons .= $this->objToolkit->getLanguageButton($objOneLanguage->getStrName(),
+            	                                                    $this->getText("lang_".$objOneLanguage->getStrName()),
+            	                                                    ($objOneLanguage->getStrName() == $this->getLanguageToWorkOn() ? true : false));
             }
 
             $strReturn = $this->objToolkit->getLanguageSwitch($strButtons);

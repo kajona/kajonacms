@@ -715,17 +715,17 @@ No placeholders here, this only sets up the link-content of a new-icon
 
 A single button, represents one language. Put together in the language-switch
 <language_switch_button>
-    <option onclick="javascript:%%onclickHandler%%">%%languageName%%</option>
+    <option value="%%language%%">%%languageName%%</option>
 </language_switch_button>
 
 A button for the active language
 <language_switch_button_active>
-    <option onclick="javascript:%%onclickHandler%%" selected="selected">%%languageName%%</option>
+    <option value="%%language%%" selected="selected">%%languageName%%</option>
 </language_switch_button_active>
 
 The language switch sourrounds the buttons
 <language_switch>
-<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown">%%languagebuttons%%</select></div>
+<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="switchLanguage(this.value);">%%languagebuttons%%</select></div>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
