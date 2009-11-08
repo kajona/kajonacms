@@ -27,7 +27,7 @@ class class_db_sqlite implements interface_db_driver {
      * @return bool
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
-    {throw new Exception("test");
+    {
         $this->strDbFile = '/system/db/'.$strDbName.'.db';
 
         try {
