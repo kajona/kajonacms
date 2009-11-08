@@ -81,6 +81,7 @@
                 <option value="mysql" selected="selected">mysql</option>
                 <option value="mysqli">mysqli</option>
                 <option value="postgres">postgres</option>
+                <option value="sqlite">sqlite</option>
              </select></div><br />
 <div><label for="port">%%config_port%%</label><input type="text" name="port" id="port" class="inputText" /></div><br />
 <div><label for="port"></label>%%config_portinfo%%</div><br />
