@@ -222,5 +222,29 @@ class class_modul_system_common extends class_model implements interface_model  
         return false;
     }
 
+    /**
+     * Getter to return the records ordered by the last modified date.
+     * Can be filter via a given module-id
+     *
+     * @param int $intMaxNrOfRecords
+     * @param int $intModuleFilter
+     * @return array class_modul_system_common
+     * @since 3.3.0
+     */
+    public static function getLastModifiedRecords($intMaxNrOfRecords, $intModuleFilter = false) {
+        $arrReturn = array();
+
+        $strQuery = "SELECT system_id
+                       FROM "._dbprefix_."system
+                   ".($intModuleFilter !== false ? "WHERE system_module_nr = ".(int)$intModuleFilter."" : "")."
+                   ORDER BY system_lm_time DESC";
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, 0, $intMaxNrOfRecords-1);
+        foreach($arrIds as $arrSingleRow) {
+            $arrReturn[] = new class_modul_system_common($arrSingleRow["system_id"]);
+        }
+
+        return $arrReturn;
+    }
 }
 ?>
