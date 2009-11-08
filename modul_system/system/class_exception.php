@@ -159,6 +159,8 @@ class class_exception extends Exception {
      * @param class_excpetion $objException
      */
     public static function globalExceptionHandler($objException) {
+        if (!($objException instanceof class_exception))
+            $objException = new class_exception((string)$objException, class_exception::$level_FATALERROR);
         $objException->processException();
     }
 
