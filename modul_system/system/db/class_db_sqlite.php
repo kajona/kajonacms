@@ -1,6 +1,7 @@
 <?php
 /*"******************************************************************************************************
-*   (c) 2009 by Philipp Wolfer <ph.wolfer@googlemail.com>                                               *
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$	                                        *
@@ -9,6 +10,8 @@
 /**
  * db-driver for sqlite using the php-sqlite-interface
  *
+ * @author (c) 2009 by Philipp Wolfer <ph.wolfer@googlemail.com>
+ * @since 3.3.0
  * @package modul_system
  */
 class class_db_sqlite implements interface_db_driver {
