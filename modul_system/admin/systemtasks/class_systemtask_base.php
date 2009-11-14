@@ -56,6 +56,13 @@ abstract class class_systemtask_base {
      */
     private $objSystemCommon;
 
+    /**
+     * Indicates, wether the form to set up the task is a multipart-form or not (e.g.
+     * for fileuploads)
+     * @var bool
+     */
+    private $bitMultipartform = false;
+
     public function __construct() {
         $arrModule = array();
         $arrModule["author"]        = "sidler@mulchprod.de";
@@ -89,7 +96,10 @@ abstract class class_systemtask_base {
     	$strFormContent = $this->getAdminForm();
     	
     	if($strFormContent != "") {
-    		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm");
+            if($this->bitMultipartform)
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
+            else
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm");
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"), "Submit", "onclick=\"submitExecution();return false;\"");
@@ -195,6 +205,18 @@ abstract class class_systemtask_base {
     public function setParam($strKey, $strValue) {
         return $this->objSystemCommon->setParam($strKey, $strValue);
     }
+
+    /**
+     * Indicates, wether the form to set up the task is a multipart-form or not (e.g.
+     * for fileuploads)
+     * 
+     * @param $bitMultipartform bool
+     */
+    public function setBitMultipartform($bitMultipartform) {
+        $this->bitMultipartform = $bitMultipartform;
+    }
+
+
 
 }
 ?>

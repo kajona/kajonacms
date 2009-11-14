@@ -89,6 +89,7 @@ class class_csv {
                     $arrOneRow = explode($this->strDelimiter, $strRow);
                     $arrCSVRow = array();
                     foreach($arrHeader as $intKey => $strHeader) {
+                        $strHeader = trim($strHeader);
                         //include the mapping specified
                         if($strHeader != "") {
                             //add an encloser?
@@ -235,7 +236,7 @@ class class_csv {
 
 
 	/**
-	 * Set an array of column.mappings. Usedfull if you want different column names or
+	 * Set an array of column.mappings. Usefull if you want different column names or
 	 * to limit the columns to read / write.
 	 * The array is build like
 	 * array( "sourceCol1" => "targetCol1",
