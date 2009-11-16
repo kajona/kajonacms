@@ -933,7 +933,7 @@ class class_installer_system extends class_installer_base implements interface_i
         else
             $strReturn .= " ...numbers are matching.\n";
 
-        $strReturn .= "Rebuilding rights tables...";//TODO rebuild rights
+        $strReturn .= "Rebuilding rights tables...";
         if(class_carrier::getInstance()->getObjRights()->rebuildRightsStructure()) {
             $strReturn .= " ok.\n";
         }

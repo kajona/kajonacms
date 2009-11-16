@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 214
 
 //editable entries
 $lang["_filemanager_foldersize_"]        = "Вычислить размер:";
@@ -27,7 +27,6 @@ $lang["datei_bearbeit"]                  = "Дата последней моди
 $lang["datei_detail"]                    = "Детальный обзор";
 $lang["datei_erstell"]                   = "Дата создания:";
 $lang["datei_groesse"]                   = "Размер файла:";
-$lang["datei_loeschen_erfolg"]           = "Файл успешно удален";
 $lang["datei_loeschen_fehler"]           = "Ошибка при удалении файла";
 $lang["datei_loeschen_frage"]            = "Вы действительно хотите удалить файл &quot;<b>%%element_name%%</b>&quot;?<br />Пожалуйста, обратите внимание на взаимосвязи с другими модулями!";
 $lang["datei_name"]                      = "Имя файла:";
@@ -35,7 +34,6 @@ $lang["datei_oeffnen"]                   = "Открыть файл";
 $lang["datei_pfad"]                      = "Path: ";
 $lang["datei_typ"]                       = "Вид файла:";
 $lang["datei_umbenennen"]                = "Переименовать файл:";
-$lang["datei_umbenennen_erfolg"]         = "Файл успешно переименован";
 $lang["datei_umbenennen_fehler"]         = "Ошибка при переименовании файла!";
 $lang["datei_umbenennen_fehler_z"]       = "Файл с указанным именем уже существует!";
 $lang["datei_umbenennen_hinweis"]        = "Пожалуйста, обратите внимание на то, что переименование файла могло повлиять на другие модули, использующие этот файл, например галереи";
@@ -68,7 +66,6 @@ $lang["ordner_anlegen_fehler"]           = "Ошибка при сохранен
 $lang["ordner_anlegen_fehler_l"]         = "Папка уже существует";
 $lang["ordner_anz"]                      = "Количество папок:";
 $lang["ordner_hoch"]                     = "На один уровень выше";
-$lang["ordner_loeschen_erfolg"]          = "Папка успешно удалена";
 $lang["ordner_loeschen_fehler"]          = "Ошибка при удалении папки!";
 $lang["ordner_loeschen_fehler_l"]        = "Папка непустая!";
 $lang["ordner_loeschen_frage"]           = "Вы действительно хотите удалить папку &quot;<b>%%element_name%%</b>&quot;?";

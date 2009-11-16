@@ -309,12 +309,18 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             //React on request passed. Do this before loading the filelist, cause subactions could modify it
 		   	if($this->strAction == "renameFile") {
 		   		$strExtra .= $this->actionRenameFile();
+                if($strExtra == "")
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
 		   	}
 		   	elseif($this->strAction == "deleteFile") {
 		   		$strExtra .= $this->actionDeleteFile();
+                if($strExtra == "")
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
 		   	}
 		   	elseif($this->strAction == "deleteFolder") {
 		   		$strExtra .= $this->actionDeleteFolder();
+                if($strExtra == "")
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
 		   	}
 
 		   	//ok, load the list using the repo-data
@@ -575,7 +581,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	/**
 	 * Returns the form to rename a file
 	 *
-	 * @return string
+	 * @return string "" in case of success
 	 */
 	private function actionRenameFile() {
 		$strReturn = "";
@@ -605,9 +611,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					if(!is_file(_realpath_."/".$this->strFolder."/".$strFilename)) {
 						//Rename File
 						$objFilesystem = new class_filesystem();
-						if($objFilesystem->fileRename($this->strFolder."/".$this->getParam("datei_name_alt"), $this->strFolder."/".$strFilename))
-							$strReturn = $this->getText("datei_umbenennen_erfolg");
-						else
+						if(!$objFilesystem->fileRename($this->strFolder."/".$this->getParam("datei_name_alt"), $this->strFolder."/".$strFilename))
 						 	$strReturn = $this->getText("datei_umbenennen_fehler");
 					}
 					else
@@ -626,16 +630,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	/**
 	 * Shows the form to delete a file / deletes a file
 	 *
-	 * @return string
+	 * @return string "" in case of success
 	 */
 	private function actionDeleteFile() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			$objFilesystem = new class_filesystem();
-			if($objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
-				$strReturn .= $this->getText("datei_loeschen_erfolg");
-			else
+			if(!$objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
 				$strReturn .= $this->getText("datei_loeschen_fehler");
 		}
 		else
@@ -647,7 +649,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	/**
 	 * Deletes a folder, if empty, shows the warning
 	 *
-	 * @return string
+	 * @return string "" in case of success
 	 */
 	private function actionDeleteFolder() {
 		$strReturn = "";
@@ -655,9 +657,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			$objFilesystem = new class_filesystem();
 
-			if($objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
-				$strReturn .= $this->getText("ordner_loeschen_erfolg");
-			else
+			if(!$objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
 				$strReturn .= $this->getText("ordner_loeschen_fehler");
 		}
 		else

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 214
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
@@ -30,7 +30,6 @@ $lang["datei_bearbeit"]                  = "Date of last modification:";
 $lang["datei_detail"]                    = "Detailed view";
 $lang["datei_erstell"]                   = "Date of creation:";
 $lang["datei_groesse"]                   = "File size:";
-$lang["datei_loeschen_erfolg"]           = "File was deleted successfully";
 $lang["datei_loeschen_fehler"]           = "An error occured while deleting the file";
 $lang["datei_loeschen_frage"]            = "Do you really want to delete the file &quot;<b>%%element_name%%</b>&quot;?<br />Please keep in mind about interdependencies with other modules!";
 $lang["datei_name"]                      = "File name:";
@@ -38,7 +37,6 @@ $lang["datei_oeffnen"]                   = "Show file";
 $lang["datei_pfad"]                      = "Path:";
 $lang["datei_typ"]                       = "File type:";
 $lang["datei_umbenennen"]                = "Rename file";
-$lang["datei_umbenennen_erfolg"]         = "The file was renamed successfully";
 $lang["datei_umbenennen_fehler"]         = "An error occured while renaming file!";
 $lang["datei_umbenennen_fehler_z"]       = "A file with the given file name already exisits!";
 $lang["datei_umbenennen_hinweis"]        = "Please keep in mind, that a renaming could interact with modules using this file e.g. the galleries";
@@ -71,7 +69,6 @@ $lang["ordner_anlegen_fehler"]           = "An error occured while saving the fo
 $lang["ordner_anlegen_fehler_l"]         = "The folder already exists";
 $lang["ordner_anz"]                      = "Number of folders: ";
 $lang["ordner_hoch"]                     = "One level up";
-$lang["ordner_loeschen_erfolg"]          = "The folder was deleted successfully";
 $lang["ordner_loeschen_fehler"]          = "An error occured while deleting folder!";
 $lang["ordner_loeschen_fehler_l"]        = "The folder is not empty!";
 $lang["ordner_loeschen_frage"]           = "Do you really want to delete the folder &quot;<b>%%element_name%%</b>&quot;?";

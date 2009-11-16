@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 214
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -30,7 +30,6 @@ $lang["datei_bearbeit"]                  = "Letzte Änderung:";
 $lang["datei_detail"]                    = "Detailansicht";
 $lang["datei_erstell"]                   = "Erstelldatum:";
 $lang["datei_groesse"]                   = "Dateigröße:";
-$lang["datei_loeschen_erfolg"]           = "Datei erfolgreich gelöscht";
 $lang["datei_loeschen_fehler"]           = "Fehler beim Löschen der Datei";
 $lang["datei_loeschen_frage"]            = "Möchten Sie die Datei &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Bitte Wechselwirkungen mit anderen Modulen bedenken!";
 $lang["datei_name"]                      = "Dateiname:";
@@ -38,7 +37,6 @@ $lang["datei_oeffnen"]                   = "Datei öffnen";
 $lang["datei_pfad"]                      = "Dateipfad:";
 $lang["datei_typ"]                       = "Dateityp:";
 $lang["datei_umbenennen"]                = "Datei umbenennen";
-$lang["datei_umbenennen_erfolg"]         = "Datei erfolgreich umbenannt";
 $lang["datei_umbenennen_fehler"]         = "Fehler beim Umbenennen!";
 $lang["datei_umbenennen_fehler_z"]       = "Der Dateiname ist bereits vergeben!";
 $lang["datei_umbenennen_hinweis"]        = "Bitte beim Umbennen bedenken, dass dies zu Wechselwirkungen mit vorhandenen Modulen wie bsp. der Bildergalerie führen kann";
@@ -71,7 +69,6 @@ $lang["ordner_anlegen_fehler"]           = "Fehler beim Anlegen des Ordners";
 $lang["ordner_anlegen_fehler_l"]         = "Ordner bereits vorhanden";
 $lang["ordner_anz"]                      = "Anzahl Ordner: ";
 $lang["ordner_hoch"]                     = "Eine Ebene nach oben";
-$lang["ordner_loeschen_erfolg"]          = "Ordner erfolgreich gelöscht";
 $lang["ordner_loeschen_fehler"]          = "Fehler beim Löschen des Ordners!";
 $lang["ordner_loeschen_fehler_l"]        = "Der Ordner ist nicht leer!";
 $lang["ordner_loeschen_frage"]           = "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
