@@ -49,7 +49,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		//unlock something? do it now!
 		if($this->getParam("unlockid") != "") {
-			$this->unlockRecord($this->getParam("unlockid"));
+            $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
+            $objLockmanager->unlockRecord();
 		}
 
 		if($strAction == "")

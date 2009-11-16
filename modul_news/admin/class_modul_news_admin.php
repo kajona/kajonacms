@@ -47,6 +47,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 	    try {
 
+            if($this->getParam("adminunlockid") != "") {
+                $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
+                $objLockmanager->unlockRecord(true);
+            }
+
+
     		if($strAction == "list")
     			$strReturn = $this->actionList();
     		if($strAction == "newCat")
@@ -240,12 +246,34 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     $strCenter = "S: ".timeToString($objOneNews->getIntDateStart(), false)
                                .($objOneNews->getIntDateEnd() != 0 ?" E: ".timeToString($objOneNews->getIntDateEnd(), false) : "" )
                                .($objOneNews->getIntDateSpecial() != 0 ? " A: ".timeToString($objOneNews->getIntDateSpecial(), false) : "" );
-                    if($this->objRights->rightEdit($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_grunddaten"), "icon_page.gif"));
-    		   		if($this->objRights->rightRight1($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
-    		   		if($this->objRights->rightDelete($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
+
+                    
+                    $objLockmanager = $objOneNews->getLockManager();
+                    if(!$objLockmanager->isAccessibleForCurrentUser()) {
+                        if($objLockmanager->isUnlockableForCurrentUser() ) {
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin("news", "list", "&filterId=".$this->getParam("filterId")."&adminunlockid=".$objOneNews->getSystemid(), "", $this->getText("news_unlock"), "icon_lockerOpen.gif"));
+                        }
+
+                        if($this->objRights->rightEdit($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_pageLocked.gif"));
+                        if($this->objRights->rightRight1($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_pencilLocked.gif"));
+                        if($this->objRights->rightDelete($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_tonLocked.gif"));
+
+
+                    }
+                    else {
+                        if($this->objRights->rightEdit($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_grunddaten"), "icon_page.gif"));
+                        if($this->objRights->rightRight1($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
+                        if($this->objRights->rightDelete($objOneNews->getSystemid()))
+                            $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
+
+
+                    }
+
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
@@ -412,6 +440,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    $objNews = new class_modul_news_news($this->getSystemid());
 
+                $objNews->getLockManager()->lockRecord();
+                
 			    $arrToolbarEntries = array();
 	            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
 	            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
@@ -505,6 +535,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 if(!$objNews->updateObjectToDb(true, true))
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 
+                $objNews->getLockManager()->unlockRecord();
+
 			}
 			else
 				$strReturn .= $this->getText("fehler_recht");
@@ -559,6 +591,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			//Load content
 			$objNews = new class_modul_news_news($this->getSystemid());
 
+            $objNews->getLockManager()->lockRecord();
+
             $arrToolbarEntries = array();
             $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
             $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
@@ -598,6 +632,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			$objNews->setStrNewstext($this->getParam("news_text"));
 			if(!$objNews->updateObjectToDb(false))
 				throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+
+            $objNews->getLockManager()->unlockRecord();
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");

@@ -138,9 +138,6 @@ abstract class class_admin {
 		if($this->strAction == "")
 		    $this->strAction = "list";
 
-		//Unlock old records still being locked
-		$this->objSystemCommon->unlockOldRecords();
-
 		//set the correct language to the text-object
 		$this->objText->setStrTextLanguage($this->objSession->getAdminLanguage(true));
 
@@ -277,42 +274,6 @@ abstract class class_admin {
 		if($strSystemid == "0")
 			$strSystemid = $this->getSystemid();
 		return $this->objSystemCommon->getStatus($strSystemid);
-	}
-
-	/**
-	 * Returns the userid locking the record
-	 *
-	 * @param string $strSystemid
-	 * @return string
-	 */
-	public function getLockId($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getLockId($strSystemid);
-	}
-
-	/**
-	 * Locks a systemrecord for the current user
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function lockRecord($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->lockRecord($strSystemid);
-	}
-
-	/**
-	 * Unlocks a dataRecord
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function unlockRecord($strSystemid = "")	{
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->unlockRecord($strSystemid);
 	}
 
 	/**

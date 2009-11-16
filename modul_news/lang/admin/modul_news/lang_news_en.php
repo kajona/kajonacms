@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 214
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Edit news", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -53,10 +53,12 @@ $lang["news_grunddaten"]                 = "Edit news basic data";
 $lang["news_image"]                      = "Image:";
 $lang["news_inhalt"]                     = "Edit news";
 $lang["news_intro"]                      = "Teaser:";
+$lang["news_locked"]                     = "Newsrecord is locked";
 $lang["news_loeschen_frage"]             = "Do you really want to delete the news &quot;<b>%%element_name%%</b>&quot;?";
 $lang["news_rechte"]                     = "Change permissions";
 $lang["news_text"]                       = "Long text:";
 $lang["news_title"]                      = "Title:";
+$lang["news_unlock"]                     = "Unlock newsrecord";
 $lang["quickhelp_editCat"]               = "At the moment you just can define the title of a category.";
 $lang["quickhelp_editNews"]              = "You can edit the basic data of a news by creating or editing it. The basic data contains the news title and several dates which can be defined:<ul><li>Start date: from this date on the news is shown on the portal</li><li>End date: from this date on the news is shown neither on the portal nor in the archive</li><li>Archive date: from this date on the news is shown in the archive and no longer on the portal</li></ul>Furthermore the belongings to the categories can be changed here.";
 $lang["quickhelp_editNewsFeed"]          = "You can change the properties of new and existing news feeds here. <br />The details view is used when a subscriber requests a news message. You can delimit the number of news by setting the feed category.<br />You can set the URL of the feed in the field 'Feed URL title' e.g. /newsnfacts.rss. The title should only contain letters and figures (a-z, A-Z, 0-9).";

@@ -312,7 +312,6 @@ abstract class class_root {
 	    return $this->objRights;
 	}
 
-
 	/**
 	 * Negates the status of a systemRecord
 	 *
@@ -341,7 +340,6 @@ abstract class class_root {
 			return false;
 	}
 
-
 	/**
 	 * Gets the status of a systemRecord
 	 *
@@ -361,70 +359,15 @@ abstract class class_root {
 
 	}
 
-	/**
-	 * Returns the userid locking the record
-	 *
-	 * @param string $strSystemid
-	 * @return string
-	 */
-	public function getLockId($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-
-		$arrRow = $this->getSystemRecord($strSystemid);
-		if($arrRow["system_lock_id"] == "")
-			$arrRow["system_lock_id"] = "0";
-			
-		return $arrRow["system_lock_id"];
-	}
-
-	/**
-	 * Locks a systemrecord for the current user
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function lockRecord($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-
-		$strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='".$this->objDB->dbsafeString($this->objSession->getUserID())."',
-						    system_lock_time = '".dbsafeString(time())."'
-						WHERE system_id ='".$this->objDB->dbsafeString($strSystemid)."'";
-		return $this->objDB->_query($strQuery);
-	}
-
-	/**
-	 * Unlocks a dataRecord
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function unlockRecord($strSystemid = "")	{
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-
-		$strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='0'
-						WHERE system_id='".$this->objDB->dbsafeString($strSystemid)."'";
-		return $this->objDB->_query($strQuery);
-	}
-
-
-	/**
-	 * Unlocks records locked passed the defined max-locktime
-	 *
-	 * @return true
-	 */
-	public function unlockOldRecords() {
-	    $intMinTime = time() - _system_lock_maxtime_;
-	    $strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='0'
-						WHERE system_lock_time <='".$this->objDB->dbsafeString($intMinTime)."'";
-	    return $this->objDB->_query($strQuery);
-	}
-
+    /**
+     * Returns an instance of the lockmanager, initialized
+     * with the current systemid.
+     *
+     * @return class_lockmanager
+     */
+    public function getLockManager() {
+        return new class_lockmanager($this->getSystemid());
+    }
 
     /**
 	 * Gets comment saved with the record

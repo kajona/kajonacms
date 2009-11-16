@@ -39,7 +39,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$strReturn = "";
 		//If theres anything to unlock, do it now
 		if($this->getParam("unlockid") != "") {
-			$this->unlockRecord($this->getParam("unlockid"));
+            $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
+            $objLockmanager->unlockRecord();
+		}
+		if($this->getParam("adminunlockid") != "") {
+            $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
+            $objLockmanager->unlockRecord(true);
 		}
 
 		if($this->getSystemid() == "")
@@ -196,24 +201,26 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 						if($bitSamePlaceholder) {
 							$bitHit = true;
+
+                            $objLockmanager = $objOneElementOnPage->getLockManager();
+
 							//Create a row to handle the element, check all necessary stuff such as locking etc
 							$strActions = "";
 							//First step - Record locked? Offer button to unlock? But just as admin! For the user, who locked the record, the unlock-button
 							//won't be visible
-							if($objOneElementOnPage->getStrLockId() != "0" && $objOneElementOnPage->getStrLockId() != $this->objSession->getUserID()) {
+							if(!$objLockmanager->isAccessibleForCurrentUser()) {
 								//So, return a button, if we have an admin in front of us
-								if($this->objRights->userIsAdmin($this->objSession->getUserID())) {
-									$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&unlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
+								if($objLockmanager->isUnlockableForCurrentUser() ) {
+									$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$this->getSystemid()."&adminunlockid=".$objOneElementOnPage->getSystemid(), "", $this->getText("ds_entsperren"), "icon_lockerOpen.gif"));
 								}
 								//If the Element is locked, then its not allowed to edit or delete the record, so disable the icons
 								$strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_pencilLocked.gif"));
 								$strActions .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("ds_gesperrt"), "icon_tonLocked.gif"));
 							}
 							else {
-								//The other case: The Record ain't being locked or is locked by the current user: All actions to take!
 								//if its the user who locked the record, unlock it now
-								if($objOneElementOnPage->getStrLockId() == $this->objSession->getUserID())
-								    $this->unlockRecord($objOneElementOnPage->getSystemid());
+								if($objLockmanager->isLockedByCurrentUser())
+								    $objLockmanager->unlockRecord();
 
 								$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "editElement", "&systemid=".$objOneElementOnPage->getSystemid()."&placeholder=".$arrOneElementOnTemplate["placeholder"], "", $this->getText("element_bearbeiten"), "icon_pencil.gif"));
 								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
@@ -227,7 +234,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 							//The status-icons
     						$strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
 
-							//Rights - could be used, but not up to now not needed, so not yet implemented completly
+							//Rights - could be used, but not up to now not needed, so not yet implemented completely
 							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
 
 							//Put all Output together
@@ -300,7 +307,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
                 //minimized actions now, plz. this ain't being a real element anymore!
                 foreach($arrElementsOnPage as $objOneElement) {
-                    //Create a row to handle the element, check all necessary stuff such as locking etc
                     $strActions = "";
                     $strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(). ($objOneElement->getStrTitle() != "" ? " - ".$objOneElement->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElement->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
@@ -363,17 +369,21 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		//Load the element data
     		$objElement = new class_modul_pages_pageelement($this->getSystemid());
     		//check, if the element isn't locked
-    		if($objElement->getStrLockId() == "0" || $objElement->getStrLockId() == $this->objSession->getUserID()) {
+    		if($objElement->getLockManager()->isAccessibleForCurrentUser()) {
+
+                $objElement->getLockManager()->lockRecord();
+                
     			//Load the class to create an object
     			include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
     			//Build the class-name
     			$strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
     			//and finally create the object
-    			$objElement = new $strElementClass();
+    			$objPageElement = new $strElementClass();
     			if($bitShowErrors)
-    		        $objElement->setDoValidation(true);
-    			$strReturn .= $objElement->actionEdit("edit");
-    			$this->lockRecord();
+    		        $objPageElement->setDoValidation(true);
+    			$strReturn .= $objPageElement->actionEdit("edit");
+                
+    			
     		}
     		else {
     			$strReturn .= $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
@@ -428,6 +438,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			if(!$objPageElement->saveObjectToDb($this->getSystemid(), $strPlaceholder, $strTable, $this->getParam("element_pos")))
 			    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
 			$strElementSystemId = $objPageElement->getSystemid();
+
+            $objLockmanager = new class_lockmanager($strElementSystemId);
+            $objLockmanager->lockRecord();
+
 			//To have the element working as expected, set the systemid
 			//Note: in the param-Array still remains the "wrong" systemid!!
 			$this->setSystemid($strElementSystemId);
@@ -439,9 +453,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		//check, if the element isn't locked
 		$strPageSystemid = $this->getPrevId($this->getSystemid());
 
-		$strLockID = $this->getLockId($this->getSystemid());
+        $objLockmanager = new class_lockmanager($this->getSystemid());
 
-		if($strLockID == "0" || $strLockID == $this->objSession->getUserID()) {
+		if($objLockmanager->isLockedByCurrentUser()) {
 			//Load the data of the current element
 			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
 			//Load the class to create an object
@@ -504,7 +518,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			}
 			//Edit Date & unlock
 			$this->setEditDate($strPageSystemid);
-			$this->unlockRecord();
+			$objLockmanager->unlockRecord();
 			//And update the internal comment and language
 			$objElementData->setStrTitle($this->getParam("page_element_placeholder_title"));
 			$objElementData->setStrLanguage($this->getParam("page_element_placeholder_language"));
@@ -583,10 +597,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		//Check the rights
 		if($this->objRights->rightDelete($strSystemid)) {
 			//Locked?
-			$strLockId = $this->getLockId($strSystemid);
+			$objLockmanager = new class_lockmanager($this->getSystemid());
 			$strPrevId = $this->getPrevId();
             
-			if($strLockId == "0") {
+			if($objLockmanager->isAccessibleForCurrentUser()) {
 			    //delete object
 			    if(!class_modul_pages_pageelement::deletePageElement($strSystemid))
 			        throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);

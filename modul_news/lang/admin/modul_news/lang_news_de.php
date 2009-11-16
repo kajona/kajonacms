@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 214
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "News bearbeiten", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -53,10 +53,12 @@ $lang["news_grunddaten"]                 = "Newsgrunddaten bearbeiten";
 $lang["news_image"]                      = "Bild:";
 $lang["news_inhalt"]                     = "Newsinhalte bearbeiten";
 $lang["news_intro"]                      = "Aufmacher:";
+$lang["news_locked"]                     = "Newsdatensatz ist gesperrt";
 $lang["news_loeschen_frage"]             = "Möchten Sie die News &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["news_rechte"]                     = "Rechte bearbeiten";
 $lang["news_text"]                       = "Langtext:";
 $lang["news_title"]                      = "Titel:";
+$lang["news_unlock"]                     = "Newsdatensatz entsperren";
 $lang["quickhelp_editCat"]               = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 $lang["quickhelp_editNews"]              = "Beim Bearbeiten oder Anlegen einer News werden deren Grunddaten erfasst. Hierzu gehört unter Anderem der Titel der News. Des Weiteren können verschiedene Datumswerte definiert werden: <ul><li>Start-Datum: Ab diesem Datum erscheint die Newsmeldung im Portal</li><li>Ende-Datum: Ab diesem Datum verschwindet die Newsmeldung komplett aus dem Portal, auch aus dem Archiv</li><li>Archiv-Datum: Ab diesem Datum wandert die Newsmeldung in die Archivansicht</li></ul>Zusätzlich können die Zugehörigkeitein zu verschiedenen News-Kategorien angegeben werden.";
 $lang["quickhelp_editNewsFeed"]          = "Mit Hilfe des aktuellen Formulars können die Eigenschaften eines vorhandenen, oder eines anzulegenden Newsfeeds verändert werden.<br />Die Seite 'Detailansicht' wird dann aufgerufen, wenn ein Abonnent des Newsfeeds die Detaildarstellung der Newsmeldung anfordert. Mit der Einstellung 'Kategorie des Feeds' können die im Feed anzuzeigenden Newsmeldungen eingeschränkt werden. <br />Über das Feld URL-Titel wird ein Titel des Feeds festgelegt, anhand dessen der Feed im Internet erreicht werden kann, z.B. /newsnfacts.rss. Dieser Titel sollte nur aus Buchstaben und Ziffern bestehen (a-z, A-Z, 0-9).";
