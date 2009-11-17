@@ -40,6 +40,23 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 		    $this->initObject();
     }
 
+
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."dashboard" => "dashboard_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "dashboard widget ".$this->getSystemid();
+    }
+
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
         						   "._dbprefix_."system
@@ -58,7 +75,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     /**
      * Updates the current widget to the db
      */
-    public function updateObjectToDb() {
+    public function updateStateToDb() {
         class_logger::getInstance()->addLogRow("updated dashboard ".$this->getSystemid(), class_logger::$levelInfo);
         $this->setEditDate();
         $strQuery = "UPDATE ".$this->arrModule["table"]."
@@ -89,32 +106,6 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         return false;
     }
 
-    /**
-     * Saves a widget as a new one to the database
-     *
-     */
-    public function saveObjectToDb() {
-
-        $this->objDB->transactionBegin();
-
-        $strDashboardId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "dashboard of user: ".$this->strUser);
-        $this->setSystemid($strDashboardId);
-
-        class_logger::getInstance()->addLogRow("new dashboardentry for user ".$this->getStrUser(), class_logger::$levelInfo);
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                    (dashboard_id, dashboard_user, dashboard_column, dashboard_widgetid) VALUES
-                    ('".dbsafeString($strDashboardId)."', '".dbsafeString($this->getStrUser())."',
-                    '".dbsafeString($this->getStrColumn())."', '".dbsafeString($this->getStrWidgetId())."')";
-
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-            return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-            return false;
-        }
-    }
 
     /**
      * Looks up the widgets placed in a given column and

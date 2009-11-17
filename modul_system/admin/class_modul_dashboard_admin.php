@@ -217,7 +217,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                     $objDashboard->setStrColumn($this->getParam("column"));
                     $objDashboard->setStrUser($this->objSession->getUserID());
                     $objDashboard->setStrWidgetId($strWidgetId);
-                    if($objDashboard->saveObjectToDb()) {
+                    if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
                         return "";
                     }
                     else
