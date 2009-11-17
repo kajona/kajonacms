@@ -30,17 +30,16 @@ interface interface_model {
     public function initObject();
 
     /**
-     * Method to save this object as a new object to the db
-     * @return bool
-     *
-     */
-    //public function saveObjectToDb();
-
-    /**
      * Method to update the existing record with the new values
      * @return bool
+     *
+     * @todo: updated behaviour
+     * @deprecated use updateStateToDb() instead
      */
     public function updateObjectToDb();
+
+
+
 
 }
 ?>

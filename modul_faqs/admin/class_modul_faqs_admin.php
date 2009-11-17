@@ -296,26 +296,24 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 */
 	private function actionSaveCat() {
 		$strReturn = "";
-		if($this->getParam("mode") == "new") {
-			//Check rights
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $objCat = new class_modul_faqs_category();
-			    $objCat->setStrTitle($this->getParam("faqs_cat_title"));
-			    if(!$objCat->saveObjectToDb())
-			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-			}
-		}
-		elseif($this->getParam("mode") == "edit") {
-		    //"just" update
-			if($this->objRights->rightEdit($this->getSystemid())) {
-				$objCat = new class_modul_faqs_category($this->getSystemid());
-				$objCat->setStrTitle($this->getParam("faqs_cat_title"));
-				if(!$objCat->updateObjectToDb())
-				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
-			}
-			else
-				$strReturn .= $this->getText("fehler_recht");
-		}
+
+        $objCat = null;
+		if($this->getParam("mode") == "new" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objCat = new class_modul_faqs_category();
+        }
+        else if($this->getParam("mode") == "edit" && $this->objRights->rightEdit($this->getSystemid())) {
+            $objCat = new class_modul_faqs_category($this->getSystemid());
+        }
+        
+        if($objCat != null) {
+            $objCat->setStrTitle($this->getParam("faqs_cat_title"));
+            if(!$objCat->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])))
+                throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+
+            
 		return $strReturn;
 	}
 
@@ -328,7 +326,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-           if(!class_modul_faqs_category::deleteCategory($this->getSystemid()))
+            $objCat = new class_modul_faqs_category($this->getSystemid());
+            if(!$objCat->deleteCategory())
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
@@ -424,51 +423,34 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 */
 	private function actionSaveFaq() {
 		$strReturn = "";
-		if($this->getParam("mode") == "new") {
-			//Check rights
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-				$objFaq = new class_modul_faqs_faq();
-				$objFaq->setStrQuestion($this->getParam("faqs_question"));
-				$objFaq->setStrAnswer($this->getParam("faqs_answer"));
-                $arrParams = $this->getAllParams();
-                $arrCats = array();
-                if(isset($arrParams["cat"])) {
-                    foreach($arrParams["cat"] as $strCatID => $strValue) {
-                        $arrCats[$strCatID] = $strValue;
-                    }
-                }
-                $objFaq->setArrCats($arrCats);
-
-                if(!$objFaq->saveObjectToDb())
-                    throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-
-			}
-			else
-				$strReturn .= $this->getText("fehler_recht");
+        $objFaq = null;
+		if($this->getParam("mode") == "new" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objFaq = new class_modul_faqs_faq();
 		}
-		elseif($this->getParam("mode") == "edit") {
-			if($this->objRights->rightEdit($this->getSystemid())) {
-
-				$objFaq = new class_modul_faqs_faq($this->getSystemid());
-				$objFaq->setStrQuestion($this->getParam("faqs_question"));
-				$objFaq->setStrAnswer($this->getParam("faqs_answer"));
-
-                $arrParams = $this->getAllParams();
-                $arrCats = array();
-                if(isset($arrParams["cat"])) {
-                    foreach($arrParams["cat"] as $strCatID => $strValue) {
-                        $arrCats[$strCatID] = $strValue;
-                    }
-                }
-                $objFaq->setArrCats($arrCats);
-                if(!$objFaq->updateObjectToDb())
-                    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
-
-			}
-			else
-				$strReturn .= $this->getText("fehler_recht");
+		elseif($this->getParam("mode") == "edit" && $this->objRights->rightEdit($this->getSystemid())) {
+            $objFaq = new class_modul_faqs_faq($this->getSystemid());
 		}
+
+        if($objFaq != null) {
+
+            $objFaq->setStrQuestion($this->getParam("faqs_question"));
+            $objFaq->setStrAnswer($this->getParam("faqs_answer"));
+
+            $arrParams = $this->getAllParams();
+            $arrCats = array();
+            if(isset($arrParams["cat"])) {
+                foreach($arrParams["cat"] as $strCatID => $strValue) {
+                    $arrCats[$strCatID] = $strValue;
+                }
+            }
+            $objFaq->setArrCats($arrCats);
+            if(!$objFaq->updateObjectToDb( $this->getModuleSystemid($this->arrModule["modul"]) ) )
+                throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+                
 		return $strReturn;
 	}
 
@@ -490,7 +472,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				               .$this->getText("faqs_loeschen_link"));
 			}
 			elseif($this->getParam("faqs_loeschen_final") == "1") {
-			    if(!class_modul_faqs_faq::deleteFaqs($this->getSystemid()))
+                $objFaq = new class_modul_faqs_faq($this->getSystemid());
+			    if(!$objFaq->deleteFaq())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 			}
 		}

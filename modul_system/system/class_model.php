@@ -27,6 +27,135 @@ class class_model extends class_root {
         $this->initObject();
     }
 
+
+// --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
+
+    /**
+     * Saves the current object to the database. Determins, whether the current object has to be inserted
+     * or updated to the database.
+     * In case of an update, the objects' updateStateToDb() method is being called (as required by class_model).
+     * In the case of a new object, a blank record is being created. Thererfore, all tables returned by the 
+     * objects' getObjectTables() method will be filled with a new record (using the same new systemid as the
+     * primary key). The newly created systemid is being set as the current objects' one and can be used in the afterwards
+     * called updateStateToDb() method to reference the correct rows.
+     *
+     * @param string $strPrevId The prev-id of the records, either to be used for the insert or to be used during the update of the record
+     * @param string $strComment Comment to describe the record in the systemtable
+     * @return bool
+     * @since 3.3.0
+     * @throws class_exception
+     * @todo will become final before 3.3.0, please update your implementations of interface_model
+     * @see interface_model
+     */
+    public function updateObjectToDb($strPrevId = false) {
+        $bitCommit = true;
+
+        $this->objDB->transactionBegin();
+
+        //current systemid given? if not, create a new record.
+        if(!validateSystemid($this->getSystemid())) {
+
+            if($strPrevId == false) {
+                //try to find the current modules-one
+                if(isset($this->arrModule["modul"]))
+                    $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
+                else
+                    throw new class_exception("insert with no previd ", class_exception::$level_FATALERROR);
+            }
+
+            //create the new systemrecord
+            $strNewSystemid = $this->createSystemRecord($strPrevId, $this->getObjectDescription());
+
+            if(validateSystemid($strNewSystemid)) {
+                $this->setSystemid($strNewSystemid);
+
+                //Create the foreign records
+                $arrTables = $this->getObjectTables();
+                if(is_array($arrTables)) {
+                    foreach($arrTables as $strTable => $strColumn) {
+                        $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($strTable)."
+                                                (".$this->objDB->encloseColumnName($strColumn).") VALUES
+                                                ('".dbsafeString($strNewSystemid)."') ";
+
+                        if(!$this->objDB->_query($strQuery))
+                            $bitCommit = false;
+                    }
+                }
+
+            }
+            else
+                throw new class_exception("creation of systemrecord failed", class_exception::$level_FATALERROR);
+
+            //all updates are done, start the "real" update
+            $this->objDB->flushQueryCache();
+        }
+
+        //update ourself to the database
+        if(!$this->updateStateToDb())
+            $bitCommit = false;
+
+        //do work to be done afterwards
+        $this->setLastEditUser();
+        $this->setEditDate();
+
+        //new prev-id?
+        if($strPrevId !== false && $this->getPrevId() != $strPrevId)
+            if(!$this->setPrevId($strPrevId))
+                $bitCommit = false;
+
+        //new comment?
+        if($this->getRecordComment() != $this->getObjectDescription())
+            if(!$this->setRecordComment($this->getObjectDescription()))
+                $bitCommit = false;
+
+        if($bitCommit) {
+            $this->objDB->transactionCommit();
+            $bitReturn = true;
+            class_logger::getInstance()->addLogRow("updateObjectToDb() succeeded for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelInfo);
+        }
+        else {
+            $this->objDB->transactionRollback();
+            $bitReturn = false;
+            class_logger::getInstance()->addLogRow("updateObjectToDb() failed for systemid ".$this->getSystemid()." (".$this->getRecordComment().")", class_logger::$levelWarning);
+        }
+
+
+        return $bitReturn;
+    }
+
+    /**
+     * Updates the current object to the database.
+     * Use this method in order to synchronize the objects' internal state
+     * to the database.
+     *
+     * @return bool
+     * @abstract
+     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
+     */
+    protected function updateStateToDb() {}
+
+    /**
+     * Returns the tables being used to store the current objects' state.
+     * The array should contain the name of the table as the key and the name
+     * of the primary-key (so the column name) as the matching value.
+     * E.g.: array(_dbprefix_."pages" => "page_id)
+     *
+     * @return array tablename => table-primary-key-column
+     * @abstract
+     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
+     */
+    protected function getObjectTables() {}
+
+    /**
+     * Returns a human-readable description of the current record.
+     * To be used within the system-table as a comment
+     *
+     * @return string
+     * @abstract
+     * @todo will become abstract before 3.3.0, please update your implementations of interface_model
+     */
+    protected function getObjectDescription() {}
+
 // --- RIGHTS-METHODS -----------------------------------------------------------------------------------
 
     /**

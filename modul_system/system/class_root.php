@@ -175,7 +175,7 @@ abstract class class_root {
             $this->objRights->setInherited(true, $strSystemId);
 		}
 
-		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ."(".$strComment.")", class_logger::$levelInfo);
+		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
 
 		return $strSystemId;
 
@@ -274,6 +274,13 @@ abstract class class_root {
 		else
 			return false;
 	}
+
+    /*
+     * Resets the current systemid
+     */
+    protected function unsetSystemid() {
+        $this->strSystemid = "";
+    }
 
 	/**
 	 * Checks a systemid for the correct syntax
@@ -374,6 +381,7 @@ abstract class class_root {
 	 *
 	 * @param string $strSystemid
 	 * @return string
+     * @todo: still needed?
 	 */
 	public function getRecordComment($strSystemid = "") {
 		if($strSystemid == "")
@@ -384,6 +392,19 @@ abstract class class_root {
 			return $arrRow["system_comment"];
 		else
 			return "n.a.";
+	}
+
+    /**
+	 * Sets the comment saved with a record
+	 *
+	 * @param string $strSystemid
+	 * @return string
+	 */
+	public function setRecordComment($strNewComment) {
+        $strQuery = "UPDATE "._dbprefix_."system
+                        SET system_comment = '".dbsafeString($strNewComment)."'
+                      WHERE system_id = '".dbsafeString($this->getSystemid())."'";
+        return $this->objDB->_query($strQuery);
 	}
 
 	/**

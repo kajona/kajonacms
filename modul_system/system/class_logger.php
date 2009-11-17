@@ -108,7 +108,7 @@ final class class_logger {
         elseif ($intLevel == self::$levelWarning)
             $strLevel = "WARNING";
 
-        $strSessid = class_carrier::getInstance()->getObjSession()->getUserID();
+        $strSessid = class_carrier::getInstance()->getObjSession()->getInternalSessionId();
         $strSessid .= " (".class_carrier::getInstance()->getObjSession()->getUsername().")";
 
         $strText = $strDate." ".$strLevel." ".$strSessid." ".$strMessage."\r\n";

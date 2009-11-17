@@ -503,6 +503,18 @@ final class class_session {
 	    return session_id();
 	}
 
+    /**
+     * Returns the internal session id used by kajona, so NOT by php
+     *
+     * @return string
+     */
+    public function getInternalSessionId() {
+        if($this->objInternalSession != null)
+            return $this->objInternalSession->getSystemid();
+        else
+            return $this->getSessionId();
+    }
+
 	/**
 	 * Encrypts a password using the current hashing-algorithm
 	 *

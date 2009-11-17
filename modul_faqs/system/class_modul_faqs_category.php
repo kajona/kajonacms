@@ -40,14 +40,31 @@ class class_modul_faqs_category extends class_model implements interface_model  
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."faqs_category" => "faqs_cat_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "faq category ".$this->getStrTitle();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
-						"._dbprefix_."system
-						WHERE system_id = faqs_cat_id
-						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+        
+        $strQuery = "SELECT * 
+                       FROM ".$this->arrModule["table"]."
+				      WHERE faqs_cat_id = '".dbsafeString($this->getSystemid())."'";
+
         $arrRow = $this->objDB->getRow($strQuery);
 
         $this->setStrTitle($arrRow["faqs_cat_title"]);
@@ -58,43 +75,15 @@ class class_modul_faqs_category extends class_model implements interface_model  
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated faqscat ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb() {
+        
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                    SET faqs_cat_title ='".$this->objDB->dbsafeString($this->getStrTitle())."'
-					  WHERE faqs_cat_id ='".$this->objDB->dbsafeString($this->getSystemid())."'";
+                        SET faqs_cat_title ='".dbsafeString($this->getStrTitle())."'
+					  WHERE faqs_cat_id ='".dbsafeString($this->getSystemid())."'";
+
 		return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //Create a new record --> start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //Create the system-record
-        $strCatId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "faqs cat: ".$this->getStrTitle());
-        $this->setSystemid($strCatId);
-        class_logger::getInstance()->addLogRow("new faqscat ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                        (faqs_cat_id, faqs_cat_title) VALUES
-                        ('".dbsafeString($strCatId)."', '".dbsafeString($this->getStrTitle())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
 
     /**
 	 * Loads all available categories from the db
@@ -155,15 +144,18 @@ class class_modul_faqs_category extends class_model implements interface_model  
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteCategory($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted faqscat ".$strSystemid, class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common();
+	public function deleteCategory() {
+
+	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
 	    //start by deleting from members an cat table
-        $strQuery1 = "DELETE FROM "._dbprefix_."faqs_category WHERE faqs_cat_id = '".dbsafeString($strSystemid)."'";
-        $strQuery2 = "DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = '".dbsafeString($strSystemid)."'";
-        if(class_carrier::getInstance()->getObjDB()->_query($strQuery1) && class_carrier::getInstance()->getObjDB()->_query($strQuery2)) {
-            if($objRoot->deleteSystemRecord($strSystemid))
+        $strQuery1 = "DELETE FROM "._dbprefix_."faqs_category WHERE faqs_cat_id = '".dbsafeString($this->getSystemid())."'";
+        $strQuery2 = "DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = '".dbsafeString($this->getSystemid())."'";
+
+        if($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2)) {
+            if($this->deleteSystemRecord($strSystemid)) {
+                $this->unsetSystemid();
                 return true;
+            }
         }
         return false;
 	}
