@@ -207,7 +207,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $objLanguage->setStrName($this->getParam("language_name"));
                	$objLanguage->setBitDefault($this->getParam("language_default"));
 
-                if(!$objLanguage->saveObjectToDb())
+                if(!$objLanguage->updateObjectToDb() )
                     throw new class_exception("Error creating new language", class_exception::$level_ERROR);
 	        }
 	        else

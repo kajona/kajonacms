@@ -40,6 +40,23 @@ class class_modul_languages_language extends class_model implements interface_mo
 		    $this->initObject();
     }
 
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."languages" => "language_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "language ".$this->getStrName();
+    }
+
     /**
      * Initalises the current object, if a systemid was given
      *
@@ -61,9 +78,14 @@ class class_modul_languages_language extends class_model implements interface_mo
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated language ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
+
+        //if no other language exists, we have a new default language
+        $arrObjLanguages = class_modul_languages_language::getAllLanguages();
+        if(count($arrObjLanguages) == 0 ) {
+        	$this->setBitDefault(1);
+        }
+        
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET language_name = '".dbsafeString($this->getStrName())."',
                          language_default = '".dbsafeString($this->getBitDefault())."'
@@ -75,7 +97,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      * saves the current object as a new object to the database
      *
      * @return bool
-     */
+     *
     public function saveObjectToDb() {
 		//Start tx
 		$this->objDB->transactionBegin();
@@ -109,6 +131,8 @@ class class_modul_languages_language extends class_model implements interface_mo
 			return false;
 		}
     }
+     *
+     */
 
 
 
@@ -390,8 +414,14 @@ class class_modul_languages_language extends class_model implements interface_mo
         if(count($arrRow) > 0) {
             return new class_modul_languages_language($arrRow["system_id"]);
         }
-        else
+        else {
+            if(count(class_modul_languages_language::getAllLanguages(true)) > 0) {
+                $arrLangs = class_modul_languages_language::getAllLanguages(true);
+                return $arrLangs[0];
+            }
+
             return null;
+        }
     }
 
     /**

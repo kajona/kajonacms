@@ -76,8 +76,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      * Updates the current widget to the db
      */
     public function updateStateToDb() {
-        class_logger::getInstance()->addLogRow("updated dashboard ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+        
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET dashboard_user = '".dbsafeString($this->getStrUser())."',
                        dashboard_column = '".dbsafeString($this->getStrColumn())."',
