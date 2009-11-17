@@ -48,7 +48,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 
 
 	/**
-	 * saves a post in the database an returns the post as html.
+	 * saves a post in the database and returns the post as html.
 	 * In case of missing fields, the form is returned again
 	 *
 	 * @return string
@@ -102,7 +102,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
         	    $objPost->setStrAssignedSystemid($strSystemidfilter);
         	    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
 
-        	    $objPost->saveObjectToDb();
+        	    $objPost->updateObjectToDb();
         	    //reinit post -> encoded entities
         	    $objPost->loadDataFromDb();
 

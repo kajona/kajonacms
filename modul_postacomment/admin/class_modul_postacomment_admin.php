@@ -231,7 +231,8 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 				               .$this->getText("postacomment_delete_link"));
 			}
 			elseif($this->getParam("postacommentDeleteFinal") == "1") {
-			    if(!class_modul_postacomment_post::deletePost($this->getSystemid()))
+                $objPost = new class_modul_postacomment_post($this->getSystemid());
+			    if(!$objPost->deletePost())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 			}
 		}

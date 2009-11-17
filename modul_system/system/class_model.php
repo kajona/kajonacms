@@ -57,8 +57,11 @@ class class_model extends class_root {
 
             if($strPrevId == false) {
                 //try to find the current modules-one
-                if(isset($this->arrModule["modul"]))
+                if(isset($this->arrModule["modul"])) {
                     $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
+                    if(!validateSystemid($strPrevId))
+                        throw new class_exception("automatic determination of module-id failed ", class_exception::$level_FATALERROR);
+                }
                 else
                     throw new class_exception("insert with no previd ", class_exception::$level_FATALERROR);
             }

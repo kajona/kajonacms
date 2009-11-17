@@ -44,6 +44,22 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."postacomment" => "postacomment_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "postacomment for ".$this->getStrAssignedSystemid();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -66,9 +82,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated postacomment ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
                     	postacomment_date		= '".(int)$this->getIntDate()."',
@@ -82,46 +96,6 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //Start wit the system-recods and a tx
-		$this->objDB->transactionBegin();
-		
-        $strPostId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "postacomment:".$this->getStrTitle());
-        $this->setSystemid($strPostId);
-        class_logger::getInstance()->addLogRow("new postacomment ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setIntDate(time());
-        //The news-Table
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                    (postacomment_id, postacomment_date, postacomment_language, postacomment_page, postacomment_systemid, postacomment_username, postacomment_title, postacomment_comment) VALUES
-                    (
-					 '".dbsafeString($this->getSystemid())."', 
-					 ".(int)dbsafeString($this->getIntDate()).",
-					 '".dbsafeString($this->getStrAssignedLanguage())."',
-                     '".dbsafeString($this->getStrAssignedPage())."',
-					 '".dbsafeString($this->getStrAssignedSystemid())."',
-					 '".dbsafeString($this->getStrUsername())."',
-					 '".dbsafeString($this->getStrTitle())."',
-					 '".dbsafeString($this->getStrComment())."' 
-					)";
-
-
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-			return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-			return false;
-        }
-
-    }
-    
-    
     /**
      * Returns a list of posts belongig
      *
@@ -190,17 +164,16 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      * @param string $strSystemid
      * @return bool
      */
-    public static function deletePost($strSystemid) {
-        class_logger::getInstance()->addLogRow("deleted postacomment post ".$strSystemid, class_logger::$levelInfo);
+    public function deletePost() {
+        class_logger::getInstance()->addLogRow("deleted postacomment post ".$this->getSystemid(), class_logger::$levelInfo);
         $objDB = class_carrier::getInstance()->getObjDB();
         //start a tx
 		$objDB->transactionBegin();
 		$bitCommit = false;
 
-        $strQuery = "DELETE FROM "._dbprefix_."postacomment WHERE postacomment_id='".dbsafeString($strSystemid)."'";
-        $objRoot = new class_modul_system_common($strSystemid);
-	    if($objDB->_query($strQuery))    {
-	        if($objRoot->deleteSystemRecord($strSystemid)) {
+        $strQuery = "DELETE FROM "._dbprefix_."postacomment WHERE postacomment_id='".dbsafeString($this->getSystemid())."'";
+	    if($this->objDB->_query($strQuery))    {
+	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }
 	    }
@@ -242,11 +215,11 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         
         //and delete
         foreach($arrPosts1 as $objOnePost) {
-            $bitReturn &= class_modul_postacomment_post::deletePost($objOnePost->getSystemid());
+            $bitReturn &= $objOnePost->deletePost();
         }
         
         foreach($arrPosts2 as $objOnePost) {
-            $bitReturn &= class_modul_postacomment_post::deletePost($objOnePost->getSystemid());
+            $bitReturn &= $objOnePost->deletePost();
         }
             
         return $bitReturn;
@@ -266,6 +239,9 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         return $this->strUsername;
     }
     public function getIntDate() {
+        if($this->intDate == null || $this->intDate != "")
+            $this->intDate = time();
+
         return $this->intDate;
     }
     public function getStrAssignedPage() {

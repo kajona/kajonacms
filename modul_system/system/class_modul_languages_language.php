@@ -94,49 +94,6 @@ class class_modul_languages_language extends class_model implements interface_mo
     }
 
     /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     *
-    public function saveObjectToDb() {
-		//Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //Create System-Records
-        $strLanguageSystemId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Language: ".$this->getStrName());
-        $this->setSystemid($strLanguageSystemId);
-        class_logger::getInstance()->addLogRow("new language ".$this->getSystemid(), class_logger::$levelInfo);
-
-        //if no other language exists, we have a new default language
-        $arrObjLanguages = class_modul_languages_language::getAllLanguages();
-        if(count($arrObjLanguages) == 0 ) {
-        	$this->setBitDefault(1);
-        }
-
-        //insert in languages table
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                     (language_id, language_name, language_default) VALUES
-                     ('".dbsafeString($strLanguageSystemId)."', '".dbsafeString($this->getStrName())."', '".dbsafeString($this->getBitDefault())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
-     *
-     */
-
-
-
-    /**
      * Returns an array of all languages available
      *
      * @param bool $bitJustActive

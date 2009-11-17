@@ -174,7 +174,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    $objPost->setStrAssignedSystemid($strSystemidfilter);
 		    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
 
-		    $objPost->saveObjectToDb();
+		    $objPost->updateObjectToDb();
 	    }
 	}
 
