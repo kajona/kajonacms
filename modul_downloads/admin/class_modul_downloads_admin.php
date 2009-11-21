@@ -378,8 +378,9 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			if(class_modul_downloads_archive::deleteArchiveRecursive($this->getSystemid())) {
-				if(!class_modul_downloads_archive::deleteArchive($this->getSystemid())) {
+            $objArchive = new class_modul_downloads_archive($this->getSystemid());
+			if($objArchive->deleteArchiveRecursive()) {
+				if(!$objArchive->deleteArchive()) {
 				    throw new class_exception($this->getText("archiv_loeschen_fehler"), class_exception::$level_ERROR);
 				}
 		    }

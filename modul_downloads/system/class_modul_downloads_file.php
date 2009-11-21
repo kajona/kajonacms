@@ -48,6 +48,22 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		    $this->initObject();
     }
 
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."downloads_file" => "downloads_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "downloads file ".$this->getFilename();
+    }
+
     /**
      * inits this object with the values from the db. needs a given systemid
      *
@@ -79,7 +95,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     /**
      * Saves the current object as a new object to the database
      *
-     */
+     *
     public function saveObjectToDb($strPrevId) {
         $bitReturn = false;
 		//start tx
@@ -111,25 +127,28 @@ class class_modul_downloads_file extends class_model implements interface_model,
 			return false;
 		}
     }
+     *
+     */
 
     /**
      * Updates the object to the database
      *
      * @return bool
      */
-    public function updateObjectToDB() {
-        class_logger::getInstance()->addLogRow("updated dl-file ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
+					    downloads_hits='".$this->objDB->dbsafeString($this->getHits())."',
+					    downloads_filename='".$this->objDB->dbsafeString($this->getFilename())."',
 					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
 					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
 					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb()).",
                         downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."',
-                        downloads_cattype='".$this->objDB->dbsafeString($this->getIntCatType())."',
                         downloads_screen_1='".$this->objDB->dbsafeString($this->getStrScreen1())."',
                         downloads_screen_2='".$this->objDB->dbsafeString($this->getStrScreen2())."',
-                        downloads_screen_3='".$this->objDB->dbsafeString($this->getStrScreen3())."'
+                        downloads_screen_3='".$this->objDB->dbsafeString($this->getStrScreen3())."',
+                        downloads_cattype=".$this->objDB->dbsafeString($this->getIntCatType()).",
+                        downloads_type=".$this->objDB->dbsafeString($this->getType())."
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -140,18 +159,16 @@ class class_modul_downloads_file extends class_model implements interface_model,
      *
      * @param string $strSystemid
      * @return bool
-     * @static
      */
-    public static function deleteRecord($strSystemid) {
-        class_logger::getInstance()->addLogRow("deleted dl-file ".$strSystemid, class_logger::$levelInfo);
+    public function deleteRecord() {
+        class_logger::getInstance()->addLogRow("deleted dl-file ".$this->getSystemid(), class_logger::$levelInfo);
         $bitReturn = false;
-        $objDB = class_carrier::getInstance()->getObjDB();
-        $objRoot = new class_modul_system_common();
+        $objDB = $this->objDB;
 		//Modul-Table
 		$strQuery = "DELETE FROM "._dbprefix_."downloads_file
-						WHERE downloads_id='".dbsafeString($strSystemid)."'";
+						WHERE downloads_id='".dbsafeString($this->getSystemid())."'";
 		if($objDB->_query($strQuery)) {
-    	    if($objRoot->deleteSystemRecord($strSystemid))
+    	    if($this->deleteSystemRecord($this->getSystemid()))
 			    $bitReturn = true;
 		}
 
@@ -305,16 +322,20 @@ class class_modul_downloads_file extends class_model implements interface_model,
 				//special: folder, then recursive!
 				if($objOneRecordDb->getType() == 1) {
 					//if childs, recursive
-					if(count(class_modul_downloads_file::getFilesDB($objOneRecordDb->getSystemid())) > 0)
-					    class_modul_downloads_archive::deleteArchiveRecursive($objOneRecordDb->getSystemid(), true);
+					if(count(class_modul_downloads_file::getFilesDB($objOneRecordDb->getSystemid())) > 0) {
+					    $objArchive = new class_modul_downloads_archive($objOneRecordDb->getSystemid());
+					    $objArchive->deleteArchiveRecursive($objOneRecordDb->getSystemid(), true);
+                    }
 
-					if(!class_modul_downloads_file::deleteRecord($objOneRecordDb->getSystemid()))
+					$objFile = new class_modul_downloads_file($objOneRecordDb->getSystemid() );
+					if(!$objFile->deleteRecord())
 						$bitCommit = false;
 
                     $arrReturn["delete"]++;
 				}
 				elseif ($objOneRecordDb->getType() == 0)
-					if(!class_modul_downloads_file::deleteRecord($objOneRecordDb->getSystemid()))
+					$objFile = new class_modul_downloads_file($objOneRecordDb->getSystemid());
+					if(!$objFile->deleteRecord($objOneRecordDb->getSystemid()))
 						$bitCommit = false;
 					$arrReturn["delete"]++;
 			}
@@ -338,7 +359,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 			$objDlFile->setFilename($strDlNameIntern);
 			$objDlFile->setSize($intSize);
 			$objDlFile->setType(0);
-			$objDlFile->saveObjectToDb($strPrevId);
+			$objDlFile->updateObjectToDB($strPrevId);
             $arrReturn["insert"]++;
 		}
 
@@ -351,7 +372,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 			$objDlFile->setFilename($strDlFilename);
 			$objDlFile->setSize($intSize);
 			$objDlFile->setType(1);
-			$objDlFile->saveObjectToDb($strPrevId);
+			$objDlFile->updateObjectToDB($strPrevId);
             $arrReturn["insert"]++;
 		}
 		//And call all subfolders

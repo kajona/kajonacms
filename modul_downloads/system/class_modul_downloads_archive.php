@@ -52,6 +52,22 @@ class class_modul_downloads_archive extends class_model implements interface_mod
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."downloads_archive" => "archive_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "downloads archive ".$this->getTitle();
+    }
+
+    /**
      * Creates a new record in the database using the current object
      *
      * @return bool
@@ -61,7 +77,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 		$this->objDB->transactionBegin();
 		$bitCommit = true;
 		//system-tables
-		$strArchiveID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "dl Archive: ".$this->getTitle());
+		$strArchiveID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), $this->getObjectDescription());
 		$this->setSystemid($strArchiveID);
 		class_logger::getInstance()->addLogRow("new dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
 		//and the gall itself
@@ -91,9 +107,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 		}
     }
 
-    public function updateObjectToDB() {
-        class_logger::getInstance()->addLogRow("updated dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET archive_title = '".$this->objDB->dbsafeString($this->getTitle())."',
                          archive_path = '".$this->objDB->dbsafeString($this->getPath())."'
@@ -127,20 +141,19 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	 *
 	 * @param string $strPrevId
 	 * @param bool $bitIgnoreRights
-	 * @static s
 	 * @return bool
 	 */
-	public static function deleteArchiveRecursive($strPrevId, $bitIgnoreRights = false) {
+	public function deleteArchiveRecursive($bitIgnoreRights = false) {
 		$bitReturn = true;
 		$objRoot = new class_modul_system_common();
 
 		//Load the current level
-		$arrFolder = class_modul_downloads_file::getFolderLevel($strPrevId);
+		$arrFolder = class_modul_downloads_file::getFolderLevel($this->getPrevId());
 
 		//Call us foreach folder
 		if(count($arrFolder) > 0) {
 			foreach($arrFolder as $objOneFolder) {
-				if(!class_modul_downloads_archive::deleteArchiveRecursive($objOneFolder->getSystemid())) {
+				if(!$objOneFolder->deleteArchiveRecursive() ) {
 					$bitReturn = false;
 					break;
 				}
@@ -150,15 +163,16 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 		//Delete folders & files
 		if(count($arrFolder) > 0 && $bitReturn) {
 			foreach ($arrFolder as $objOneFolder)
-				if(class_carrier::getInstance()->getObjRights()->rightDelete($objOneFolder->getSystemid()) || $bitIgnoreRights)
-				    class_modul_downloads_file::deleteRecord($objOneFolder->getSystemid());
+				if($this->objRights->rightDelete($objOneFolder->getSystemid()) || $bitIgnoreRights)
+				    $objOneFolder->deleteRecord();
 		}
 
-		$arrFiles = class_modul_downloads_file::getFilesDB($strPrevId, true);
+		$arrFiles = class_modul_downloads_file::getFilesDB($this->getPrevId(), true);
 		if(count($arrFiles) > 0 && $bitReturn) {
 			foreach($arrFiles as $objOneFile)
-				if(class_carrier::getInstance()->getObjRights()->rightDelete($objOneFile->getSystemid()) || $bitIgnoreRights)
-				    class_modul_downloads_file::deleteRecord($objOneFile->getSystemid());
+				if($this->objRights->rightDelete($objOneFile->getSystemid()) || $bitIgnoreRights) {
+				    $objOneFile->deleteRecord();
+                }
 		}
 		return $bitReturn;
 	}
@@ -170,16 +184,15 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteArchive($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted dl-archive ".$strSystemid, class_logger::$levelInfo);
+	public function deleteArchive() {
+	    class_logger::getInstance()->addLogRow("deleted dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
 	    $strQuery = "DELETE FROM "._dbprefix_."downloads_archive
-					WHERE archive_id='".dbsafeString($strSystemid)."'";
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $objRoot = new class_modul_system_common();
+					WHERE archive_id='".dbsafeString($this->getSystemid())."'";
+	    $objDB = $this->objDB;
 	    if($objDB->_query($strQuery)) {
-	       if($objRoot->deleteSystemRecord($strSystemid)) {
+	       if($this->deleteSystemRecord($this->getSystemid())) {
                //and delete the filemanager repo
-                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($strSystemid);
+                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
                 if($objRepo->deleteRepo())
                     return true;
 

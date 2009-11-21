@@ -95,13 +95,13 @@ abstract class class_root {
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
 		//Setting SystemID
-		if($strSystemid == "") {
+		/*if($strSystemid == "") {
 			if(isset($this->arrParams["systemid"]))
 				$this->setSystemid($this->arrParams["systemid"]);
 			else
 				$this->strSystemid = "";
 		}
-		else
+		else*/
 			$this->setSystemid($strSystemid);
 
 

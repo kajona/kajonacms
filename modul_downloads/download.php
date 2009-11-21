@@ -24,8 +24,8 @@ class class_download_portal extends class_root {
      * Constructor
      *
      */
-	public function __construct() {
-	    parent::__construct(array(), "", "portal");
+	public function __construct($strSystemid) {
+	    parent::__construct(array(), $strSystemid, "portal");
 
         //Increase max execution time
         @ini_set("max_execution_time", "7200");
@@ -135,6 +135,6 @@ class class_download_portal extends class_root {
 
 
 //Create a object
-$objDownload = new class_download_portal();
+$objDownload = new class_download_portal(getGet("systemid"));
 $objDownload->action();
 ?>

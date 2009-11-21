@@ -31,6 +31,23 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 
     }
 
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
+    }
+
     /**
      * not implemented
      *
@@ -47,10 +64,10 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
      * not implemented
      *
      */
-    public function updateObjectToDB() {
+    public function updateStateToDb() {
     }
 
-/**
+    /**
 	 * Generates an entry in the logbook an increases the hits-counter
 	 *
 	 * @param mixed $arrFile
