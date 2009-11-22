@@ -49,8 +49,8 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         }
         
         $strReturn .= "Saving faqs...\n";
-        $objFaq1->saveObjectToDb();
-        $objFaq2->saveObjectToDb();
+        $objFaq1->updateObjectToDb();
+        $objFaq2->updateObjectToDb();
 
         
         $strReturn .= "Creating faqs-page\n";

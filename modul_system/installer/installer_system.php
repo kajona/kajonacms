@@ -466,7 +466,7 @@ class class_installer_system extends class_installer_base implements interface_i
            $objLanguage->setStrName("en");
 
         $objLanguage->setBitDefault(true);
-        $objLanguage->saveObjectToDb();
+        $objLanguage->updateObjectToDb();
         $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
 
 		return $strReturn;

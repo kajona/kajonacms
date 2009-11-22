@@ -180,7 +180,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column1");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb())
+            if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
 
@@ -192,7 +192,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb())
+            if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
 
@@ -204,7 +204,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb())
+            if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
 
@@ -216,7 +216,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
-            if(!$objDashboard->saveObjectToDb())
+            if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
 
