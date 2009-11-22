@@ -29,7 +29,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objDownloads = new class_modul_downloads_archive();
         $objDownloads->setTitle("Sample downloads");
         $objDownloads->setPath("/portal/downloads");
-        $objDownloads->saveObjectToDb();
+        $objDownloads->updateObjectToDb();
         $strDownloadsID = $objDownloads->getSystemid();
         
         $strReturn .= "Modify rights to allow guests to download files and rate files...\n";

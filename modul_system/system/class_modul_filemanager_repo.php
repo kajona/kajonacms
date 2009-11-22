@@ -42,7 +42,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
 		    $this->initObject();
     }
 
-     /**
+    /**
      * @see class_model::getObjectTables();
      * @return array
      */
@@ -77,7 +77,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
     }
 
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."filemanager
                      SET filemanager_name = '".$this->objDB->dbsafeString($this->getStrName())."',

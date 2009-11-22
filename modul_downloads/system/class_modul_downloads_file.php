@@ -95,7 +95,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
 					    downloads_hits='".$this->objDB->dbsafeString($this->getHits())."',

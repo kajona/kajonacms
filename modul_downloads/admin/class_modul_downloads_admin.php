@@ -454,7 +454,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $objArchive = new class_modul_downloads_archive("");
 			    $objArchive->setPath($this->getParam("archive_path"));
 			    $objArchive->setTitle($this->getParam("archive_title"));
-			    if(!$objArchive->saveObjectToDb())
+			    if(!$objArchive->updateObjectToDB())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 			}
 			else

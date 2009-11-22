@@ -42,6 +42,23 @@ class class_modul_gallery_gallery extends class_model implements interface_model
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."gallery_gallery" => "gallery_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "gallery ".$this->getStrName();
+    }
+
+
+    /**
      * Initialises the current object, if a systemid was given
      *
      */
@@ -59,9 +76,12 @@ class class_modul_gallery_gallery extends class_model implements interface_model
         }
     }
 
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated gallery ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    /**
+     * Transfers the current state back to the database
+     *
+     * @return bool
+     */
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 					SET gallery_path='".$this->objDB->dbsafeString($this->getStrPath())."',
 					    gallery_title='".$this->objDB->dbsafeString($this->getStrTitle())."'
@@ -79,44 +99,19 @@ class class_modul_gallery_gallery extends class_model implements interface_model
     }
 
     /**
-     * Saves the current object as a new object to the db
+     * @see class_model::onInsertToDb()
      *
-     * @return unknown
+     * @return bool
      */
-    public function saveObjectToDb() {
-        //start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-		//system-tables
-		$strGalID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Gallery: ".$this->getStrTitle());
-		$this->setSystemid($strGalID);
-		class_logger::getInstance()->addLogRow("new gallery ".$this->getSystemid(), class_logger::$levelInfo);
-		//and the gall itself
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		            (gallery_id, gallery_title, gallery_path) VALUES
-		            ('".$this->objDB->dbsafeString($strGalID)."', '".$this->objDB->dbsafeString($this->getStrTitle())."', '".$this->objDB->dbsafeString($this->getStrPath())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-		if($bitCommit) {
-		    $this->objDB->transactionCommit();
-
-            //gallery was created, create an internal filemanager repo
-            $objRepo = new class_modul_filemanager_repo();
-            $objRepo->setStrPath($this->getStrPath());
-            $objRepo->setStrForeignId($this->getSystemid());
-            $objRepo->setStrName("Internal Repo for Gallery ".$this->getSystemid());
-            $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
-            $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
-            $objRepo->updateObjectToDb();
-
-		    return true;
-		}
-		else {
-		    $strReturn = "Rollback!";
-		    $this->objDB->transactionRollback();
-		    return false;
-		}
+    public function onInsertToDb() {
+        //gallery was created, create an internal filemanager repo
+        $objRepo = new class_modul_filemanager_repo();
+        $objRepo->setStrPath($this->getStrPath());
+        $objRepo->setStrForeignId($this->getSystemid());
+        $objRepo->setStrName("Internal Repo for Gallery ".$this->getSystemid());
+        $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
+        $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
+        return $objRepo->updateObjectToDb();
     }
 
     /**
@@ -147,17 +142,15 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteGallery($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted gallery ".$strSystemid, class_logger::$levelInfo);
-	    $objDB = class_carrier::getInstance()->getObjDB();
-        $objRoot = new class_modul_system_common();
+	public function deleteGallery() {
+	    class_logger::getInstance()->addLogRow("deleted gallery ".$this->getSystemid(), class_logger::$levelInfo);
 
 	    $strQuery = "DELETE FROM "._dbprefix_."gallery_gallery
-					WHERE gallery_id='".dbsafeString($strSystemid)."'";
-	    if($objDB->_query($strQuery)) {
-	        if($objRoot->deleteSystemRecord($strSystemid)) {
+					WHERE gallery_id='".dbsafeString($this->getSystemid())."'";
+	    if($this->objDB->_query($strQuery)) {
+	        if($this->deleteSystemRecord($this->getSystemid())) {
                 //and delete the filemanager repo
-                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($strSystemid);
+                $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
                 if($objRepo->deleteRepo())
                     return true;
 	        }
@@ -169,20 +162,18 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 	/**
 	 * Deletes a folder and all subfolders / files from the db
 	 *
-	 * @param string $strPrevID
 	 * @param bool $bitIgnoreRights
 	 * @return bool
 	 */
-	public static function deleteGalleryRecursive($strPrevID, $bitIgnoreRights = false) {
+	public function deleteGalleryRecursive($bitIgnoreRights = false) {
 		$bitReturn = true;
-		$objRoot = new class_modul_system_common();
-	    $objDB = class_carrier::getInstance()->getObjDB();
 		//Load all child-records
-		$objFolders = class_modul_gallery_pic::loadFoldersDB($strPrevID);
+		$objFolders = class_modul_gallery_pic::loadFoldersDB($this->getSystemid());
 		//And call us foreach folder
 		if(count($objFolders) > 0) {
 			foreach($objFolders as $objOneFolder) {
-				if(!class_modul_gallery_gallery::deleteGalleryRecursive($objOneFolder->getSystemid())) {
+                $objGallery = new class_modul_gallery_gallery($objOneFolder->getSystemid());
+				if(!$objGallery->deleteGalleryRecursive()) {
 					$bitReturn = false;
 					break;
 				}
@@ -193,14 +184,14 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 		if(count($objFolders) > 0 && $bitReturn) {
 			foreach ($objFolders as $objOneFolder)
 				if($objOneFolder->rightDelete() || $bitIgnoreRights)
-				    class_modul_gallery_pic::deletePictureRecord($objOneFolder->getSystemid());
+				    $objOneFolder->deletePictureRecord();
 		}
 
-		$objFiles = class_modul_gallery_pic::loadFilesDB($strPrevID, true);
+		$objFiles = class_modul_gallery_pic::loadFilesDB($this->getSystemid(), true);
 		if(count($objFiles) > 0 && $bitReturn) {
 			foreach($objFiles as $objOneFile)
 				if($objOneFile->rightDelete() || $bitIgnoreRights)
-				    class_modul_gallery_pic::deletePictureRecord($objOneFile->getSystemid());
+				    $objOneFile->deletePictureRecord();
 		}
 
 		return $bitReturn;

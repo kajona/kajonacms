@@ -42,6 +42,23 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		    $this->initObject();
     }
 
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."gallery_pic" => "pic_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "gallery pic ".$this->getStrFilename();
+    }
+
     public function initObject() {
         $strQuery = "SELECT *
 						FROM ".$this->arrModule["table"].",
@@ -60,9 +77,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		}
     }
 
-    public function updateObjectToDb($bitHtmlEntities = true) {
-        class_logger::getInstance()->addLogRow("updated pic ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb($bitHtmlEntities = true) {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
                         pic_name = '".$this->objDB->dbsafeString($this->getStrName(), $bitHtmlEntities)."',
                         pic_filename = '".$this->objDB->dbsafeString($this->getStrFilename(), $bitHtmlEntities)."',
@@ -75,38 +90,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
         return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * Saves the current object as a new object to db
-     *
-     * @return bool
-     */
-    public function saveObjectToDb($strPrevID) {
-		//start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //system records
-        $strPicId = $this->createSystemRecord($strPrevID, $this->getStrFilename());
-        $this->setSystemid($strPicId);
-        class_logger::getInstance()->addLogRow("new pic ".$this->getSystemid(), class_logger::$levelInfo);
-		//start with the module
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		          (pic_id, pic_name, pic_filename, pic_description, pic_subtitle, pic_size, pic_hits, pic_type) VALUES
-		          ('".$this->objDB->dbsafeString($strPicId)."', '".$this->objDB->dbsafeString($this->getStrName())."',
-		           '".$this->objDB->dbsafeString($this->getStrFilename())."', '', '".$this->objDB->dbsafeString($this->getStrSubtitle())."', '".(int)$this->getIntSize()."', '0', '".(int)$this->getIntType()."' )";
-		if(!$this->objDB->_query($strQuery)) {
-		    $bitCommit = false;
-		}
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-
-    }
+    
 
     /**
 	 * Loads all files ( & folders) under the given systemid available in the db
@@ -217,15 +201,14 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deletePictureRecord($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted pic ".$strSystemid, class_logger::$levelInfo);
-        $objRoot = new class_modul_system_common();
+	public function deletePictureRecord() {
+	    class_logger::getInstance()->addLogRow("deleted pic ".$this->getSystemid(), class_logger::$levelInfo);
 		$bitReturn = false;
 		//Delete from module-table
 		$strQuery = "DELETE FROM "._dbprefix_."gallery_pic
-						WHERE pic_id='".dbsafeString($strSystemid)."'";
-		if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
-		    if($objRoot->deleteSystemRecord($strSystemid)) {
+						WHERE pic_id='".dbsafeString($this->getSystemid())."'";
+		if($this->objDB->_query($strQuery)) {
+		    if($this->deleteSystemRecord($this->getSystemid())) {
 			    $bitReturn = true;
 		    }
 		}
@@ -300,19 +283,21 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 			foreach($arrObjDB as $objOneFileDB) {
 				//Folders: recursive!
 				if($objOneFileDB->getIntType() == 1) {
-					//if record has childs, recursive, else delete direct
-					if(count(class_modul_gallery_pic::loadFilesDB($objOneFileDB->getSystemid())) > 0)
-                        class_modul_gallery_gallery::deleteGalleryRecursive($objOneFileDB->getSystemid(), true);
+					//if record has childs, recursive, else delete directly
+					if(count(class_modul_gallery_pic::loadFilesDB($objOneFileDB->getSystemid())) > 0) {
+                        $objGallery = new class_modul_gallery_gallery($objOneFileDB->getSystemid());
+                        $objGallery->deleteGalleryRecursive(true);
+                    }
 
                     //and delete the folder
-					if(!class_modul_gallery_pic::deletePictureRecord($objOneFileDB->getSystemid()))
+					if(!$objOneFileDB->deletePictureRecord())
 						$bitCommit = false;
 
 					$arrReturn["delete"]++;
 
 				}
 				elseif ($objOneFileDB->getIntType() == 0)
-					if(!class_modul_gallery_pic::deletePictureRecord($objOneFileDB->getSystemid()))
+					if(!$objOneFileDB->deletePictureRecord())
 						$bitCommit = false;
 
 					$arrReturn["delete"]++;
@@ -338,7 +323,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 			$objPic->setStrName($strPicName);
 			$objPic->setIntSize($intSize);
 			$objPic->setIntType(0);
-            $objPic->saveObjectToDb($strPrevID);
+            $objPic->updateObjectToDb($strPrevID);
 			$arrReturn["insert"]++;
 		}
 
@@ -353,7 +338,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 			$objPic->setStrName($strPicName);
 			$objPic->setIntSize($intSize);
 			$objPic->setIntType(1);
-            $objPic->saveObjectToDb($strPrevID);
+            $objPic->updateObjectToDb($strPrevID);
 			$arrReturn["insert"]++;
 		}
 

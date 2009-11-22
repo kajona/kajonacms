@@ -284,7 +284,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $objGallery->setStrPath($this->getParam("gallery_path"));
 			    $objGallery->setStrTitle($this->getParam("gallery_title"));
 
-			    if(!$objGallery->saveObjectToDb())
+			    if(!$objGallery->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
 			}
@@ -316,8 +316,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		$strReturn = "";
 		//Rechte-Check
 		if($this->objRights->rightDelete($this->getSystemid())) {
-			if(class_modul_gallery_gallery::deleteGalleryRecursive($this->getSystemid())) {
-			    if(!class_modul_gallery_gallery::deleteGallery($this->getSystemid()))
+            $objGallery = new class_modul_gallery_gallery($this->getSystemid());
+
+			if($objGallery->deleteGalleryRecursive()) {
+			    if(!$objGallery->deleteGallery())
 			        throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
 			}
 			else

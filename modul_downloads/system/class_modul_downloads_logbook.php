@@ -64,7 +64,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
      * not implemented
      *
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
     }
 
     /**

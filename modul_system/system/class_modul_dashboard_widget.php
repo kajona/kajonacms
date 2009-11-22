@@ -75,7 +75,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     /**
      * Updates the current widget to the db
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET dashboard_user = '".dbsafeString($this->getStrUser())."',

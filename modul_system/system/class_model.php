@@ -82,8 +82,12 @@ class class_model extends class_root {
 
                         if(!$this->objDB->_query($strQuery))
                             $bitCommit = false;
+
                     }
                 }
+
+                if(!$this->onInsertToDb())
+                    $bitCommit = false;
 
             }
             else
@@ -124,6 +128,16 @@ class class_model extends class_root {
 
 
         return $bitReturn;
+    }
+
+    /**
+     * Overwrite this method if you want to trigger additional commands during the insert
+     * of an object, e.g. to create additional objects / relations
+     * 
+     * @return bool
+     */
+    protected function onInsertToDb() {
+        return true;
     }
 
     /**

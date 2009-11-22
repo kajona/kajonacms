@@ -30,7 +30,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objGallery = new class_modul_gallery_gallery();
         $objGallery->setStrTitle("Sample Gallery");
         $objGallery->setStrPath("/portal/pics/upload");
-        $objGallery->saveObjectToDb();
+        $objGallery->updateObjectToDb();
         $strGalleryID = $objGallery->getSystemid();
 
         $strReturn .= "Sync gallery..\n";

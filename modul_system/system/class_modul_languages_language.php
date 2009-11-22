@@ -78,7 +78,7 @@ class class_modul_languages_language extends class_model implements interface_mo
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
 
         //if no other language exists, we have a new default language
         $arrObjLanguages = class_modul_languages_language::getAllLanguages();

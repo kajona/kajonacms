@@ -68,46 +68,22 @@ class class_modul_downloads_archive extends class_model implements interface_mod
     }
 
     /**
-     * Creates a new record in the database using the current object
+     * @see class_model::onInsertToDb()
      *
      * @return bool
      */
-    public function saveObjectToDb() {
-        //start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-		//system-tables
-		$strArchiveID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), $this->getObjectDescription());
-		$this->setSystemid($strArchiveID);
-		class_logger::getInstance()->addLogRow("new dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
-		//and the gall itself
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		            (archive_id, archive_title, archive_path) VALUES
-		            ('".$this->objDB->dbsafeString($strArchiveID)."', '".$this->objDB->dbsafeString($this->getTitle())."', '".$this->objDB->dbsafeString($this->getPath())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-		if($bitCommit) {
-		    $this->objDB->transactionCommit();
-
-            //archive was created, create an internal filemanager repo
-            $objRepo = new class_modul_filemanager_repo();
-            $objRepo->setStrPath($this->getPath());
-            $objRepo->setStrForeignId($this->getSystemid());
-            $objRepo->setStrName("Internal Repo for DL-Archive ".$this->getSystemid());
-            $objRepo->setStrViewFilter("");
-            $objRepo->setStrUploadFilter("");
-            $objRepo->updateObjectToDb();
-
-		    return true;
-		}
-		else {
-		    $this->objDB->transactionRollback();
-		    return false;
-		}
+    public function onInsertToDb() {
+        //archive was created, create an internal filemanager repo
+        $objRepo = new class_modul_filemanager_repo();
+        $objRepo->setStrPath($this->getPath());
+        $objRepo->setStrForeignId($this->getSystemid());
+        $objRepo->setStrName("Internal Repo for DL-Archive ".$this->getSystemid());
+        $objRepo->setStrViewFilter("");
+        $objRepo->setStrUploadFilter("");
+        return $objRepo->updateObjectToDb();
     }
 
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET archive_title = '".$this->objDB->dbsafeString($this->getTitle())."',
                          archive_path = '".$this->objDB->dbsafeString($this->getPath())."'

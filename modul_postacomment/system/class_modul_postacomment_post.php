@@ -82,7 +82,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
                     	postacomment_date		= '".(int)$this->getIntDate()."',
