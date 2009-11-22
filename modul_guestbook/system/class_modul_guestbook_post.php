@@ -46,6 +46,24 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."guestbook_post" => "guestbook_post_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "guestbook post ".$this->getGuestbookPostDate();
+    }
+
+
+
+    /**
      * initialises the current object if a systemid was given
      *
      */
@@ -64,107 +82,52 @@ class class_modul_guestbook_post extends class_model implements interface_model 
         $this->intGuestbookPostDate = $arrData["guestbook_post_date"];
     }
 
-    /**
-     * saves to current object as a new record to the database.
-     * Set all vars before using the setters
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-
-        //start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //create the systemrecord
-        $strPostSystemid = $this->createSystemRecord($this->strGuestbookID, "GBPost", true, "", "", $this->intGuestbookPostStatus);
-        $this->setSystemid($strPostSystemid);
-        class_logger::getInstance()->addLogRow("new gb-post ".$this->getSystemid(), class_logger::$levelInfo);
-        //and the post itself
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]. "
-                        (	guestbook_post_id, 	guestbook_post_name	, 	guestbook_post_email , 	guestbook_post_page , 	guestbook_post_text	,  guestbook_post_date ) VALUES
-                        ('".$this->objDB->dbsafeString($strPostSystemid)."', '".$this->objDB->dbsafeString($this->strGuestbookPostName)."',
-                         '".$this->objDB->dbsafeString($this->strGuestbookPostEmail)."', '".$this->objDB->dbsafeString($this->strGuestbookPostPage)."',
-                         '".$this->objDB->dbsafeString($this->strGuestbookPostText)."', '".(int)time()."' )";
-        if(!$this->objDB->_query($strQuery))
-            $bitCommit = false;
-
-		//Transaktion beenden
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-
-    }
 
     /**
      * Update the current object in the db
-     * NOT IMPLEMENTED YET
      *
      * @return bool
      *
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("update gb-post ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
-        //Update all needed tables
-        //dates
-        $this->objDB->transactionBegin();
-        $bitCommit = true;
-        
-        //post
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->objDB->encloseTableName($this->arrModule["table"])." 
-                        SET guestbook_post_text = '".dbsafeString($this->getGuestbookPostText(), false)."' 
+                        SET guestbook_post_text = '".dbsafeString($this->getGuestbookPostText(), false)."',
+                            guestbook_post_name = '".dbsafeString($this->getGuestbookPostName())."',
+                            guestbook_post_email = '".dbsafeString($this->getGuestbookPostEmail())."',
+                            guestbook_post_page = '".dbsafeString($this->getGuestbookPostPage())."',
+                            guestbook_post_date = '".dbsafeString($this->getGuestbookPostDate())."'
                       WHERE guestbook_post_id = '".dbsafeString($this->getSystemid())."'"; 
         
-         if(!$this->objDB->_query($strQuery))
-            $bitCommit = false;
-
-        //Transaktion beenden
-        if($bitCommit) {
-            $this->objDB->transactionCommit();
-            return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-            return false;
-        }
-
+        return $this->objDB->_query($strQuery);
     }
 
 
     /**
      * Deltes a post from the database
      *
-     * @param string $strSystemid The post set to be deleted
      * @return bool
      * @static
      */
-    public static function deletePost($strSystemid) {
-        class_logger::getInstance()->addLogRow("deleted dbpost ".$strSystemid, class_logger::$levelInfo);
-        $objDB = class_carrier::getInstance()->getObjDB();
+    public function deletePost() {
+        class_logger::getInstance()->addLogRow("deleted dbpost ".$this->getSystemid(), class_logger::$levelInfo);
         //start a tx
-		$objDB->transactionBegin();
+		$this->objDB->transactionBegin();
 		$bitCommit = false;
 
-        $strQuery = "DELETE FROM "._dbprefix_."guestbook_post WHERE guestbook_post_id='".dbsafeString($strSystemid)."'";
-        $objRoot = new class_modul_system_common($strSystemid);
-	    if($objDB->_query($strQuery))    {
-	        if($objRoot->deleteSystemRecord($strSystemid)) {
+        $strQuery = "DELETE FROM "._dbprefix_."guestbook_post WHERE guestbook_post_id='".dbsafeString($this->getSystemid())."'";
+	    if($this->objDB->_query($strQuery))    {
+	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }
 	    }
 
 	    //End tx
 		if($bitCommit) {
-			$objDB->transactionCommit();
+			$this->objDB->transactionCommit();
 			return true;
 		}
 		else {
-			$objDB->transactionRollback();
+			$this->objDB->transactionRollback();
 			return false;
 		}
     }

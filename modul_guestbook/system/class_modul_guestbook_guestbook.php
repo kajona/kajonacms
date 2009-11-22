@@ -40,6 +40,22 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 		    $this->initObject();
     }
 
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."guestbook_book" => "guestbook_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "guestbook ".$this->getGuestbookTitle();
+    }
+
 
     /**
      * initialises the current object if a systemid was given
@@ -59,46 +75,12 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
     }
 
     /**
-     * Saves the current object as a new guestbook to the database
+     * Adds the right of the guest to sign the book
      *
      * @return bool
      */
-    public function saveObjectToDb() {
-
-        //start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-
-
-		//create the systemrecord
-		$strGbSystemid = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "GB: ".$this->getGuestbookTitle());
-        $this->setSystemid($strGbSystemid);
-        class_logger::getInstance()->addLogRow("new gb ".$this->getSystemid(), class_logger::$levelInfo);
-        //and the book itself
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]." (guestbook_id, guestbook_title, guestbook_moderated) VALUES
-				                    ('".$this->objDB->dbsafeString($strGbSystemid)."', '".$this->objDB->dbsafeString($this->getGuestbookTitle())."',
-				                     '".$this->objDB->dbsafeString($this->getGuestbookModerated())."')";
-
-
-        if(!$this->objDB->_query($strQuery))
-            $bitCommit = false;
-
-        //new guestbooks should be allowed to be signed by guests
-        if($bitCommit) {
-            $this->objRights->addGroupToRight(_guests_group_id_, $strGbSystemid, "right1");
-        }
-
-		//Transaktion beenden
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-
-
+    public function onInsertToDb() {
+        return $this->objRights->addGroupToRight(_guests_group_id_, $this->getSystemid(), "right1");
     }
 
     /**
@@ -106,9 +88,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated gb ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 								SET guestbook_title = '".$this->objDB->dbsafeString($this->getGuestbookTitle())."',
 									guestbook_moderated = ".$this->objDB->dbsafeString($this->getGuestbookModerated())."
@@ -142,30 +122,28 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 	/**
 	 * Deletes a whole guestbook, including all posts in this guestbook from the db
 	 *
-	 * @param string $strSystemid
 	 * @return bool
 	 * @static
 	 */
-    public static function deleteGuestbook($strSystemid) {
-        class_logger::getInstance()->addLogRow("deleted gb ".$strSystemid, class_logger::$levelInfo);
-        $objDB = class_carrier::getInstance()->getObjDB();
+    public function deleteGuestbook() {
+        class_logger::getInstance()->addLogRow("deleted gb ".$this->getSystemid(), class_logger::$levelInfo);
 
 		//start by deleting the posts
-		$objPosts = class_modul_guestbook_post::getPosts($strSystemid);
+		$objPosts = class_modul_guestbook_post::getPosts($this->getSystemid());
 		//Loop over them an delete
+        $bitPosts = true;
 		foreach($objPosts as $objOnePost) {
-            class_modul_guestbook_post::deletePost($objOnePost->getSystemid());
+            $bitPosts &= $objOnePost->deletePost();
 		}
 		//and the book itself
-		$objDB->transactionBegin();
+		$this->objDB->transactionBegin();
 		$bitCommit = false;
-		$objRoot = new class_modul_system_common($strSystemid);
 
 		//and delete the book
-		$strQuery = "DELETE FROM "._dbprefix_."guestbook_book WHERE guestbook_id = '".dbsafeString($strSystemid)."'";
+		$strQuery = "DELETE FROM "._dbprefix_."guestbook_book WHERE guestbook_id = '".dbsafeString($this->getSystemid())."'";
 
-	    if($objDB->_query($strQuery)) {
-	        if($objRoot->deleteSystemRecord($strSystemid))
+	    if($bitPosts && $this->objDB->_query($strQuery)) {
+	        if($this->deleteSystemRecord($strSystemid))
 	            $bitCommit = true;
 	    }
 	    else
@@ -173,11 +151,11 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 
 		//End tx
 		if($bitCommit) {
-			$objDB->transactionCommit();
+			$this->objDB->transactionCommit();
 			return true;
 		}
 		else {
-			$objDB->transactionRollback();
+			$this->objDB->transactionRollback();
 			return false;
 		}
 

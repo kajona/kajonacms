@@ -168,7 +168,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
             $objPost->setGuestbookPostEmail($this->getParam("gb_post_email"));
             $objPost->setGuestbookPostPage($this->getParam("gb_post_page"));
             $objPost->setGuestbookPostText($this->getParam("gb_post_text"));
-
+            $objPost->setGuestbookPostDate(time());
 
 			//Load guestbook data
 			$objGB = $this->getGuestbook($this->arrElementData["guestbook_id"]);
@@ -178,7 +178,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 			    $objPost->setGuestbookPostStatus(0);
 
             //save obj to db
-            if(!$objPost->saveObjectToDb())
+            if(!$objPost->updateObjectToDb($this->arrElementData["guestbook_id"]))
                 throw new class_exception("Error saving entry", class_exception::$level_ERROR);
 
 			//Flush the page from cache

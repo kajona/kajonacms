@@ -236,7 +236,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			    $objGuestbook = new class_modul_guestbook_guestbook();
 			    $objGuestbook->setGuestbookTitle($this->getParam("guestbook_title"));
 			    $objGuestbook->setGuestbookModerated($this->getParam("guestbook_moderated"));
-			    if(!$objGuestbook->saveObjectToDb())
+			    if(!$objGuestbook->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 			}
 			else
@@ -264,7 +264,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	public function actionDeleteGuestbook() {
 		$strReturn = "";
 		if($this->objRights->rightDelete($this->getSystemid())) {
-            if(!class_modul_guestbook_guestbook::deleteGuestbook($this->getSystemid()))
+            $objGB = new class_modul_guestbook_guestbook($this->getSystemid());
+            if(!$objGB->deleteGuestbook())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
 		}
@@ -377,8 +378,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 		if($this->objRights->rightDelete($this->getSystemid())) {
             //Delete from module-table
             $strPrevID = $this->getPrevId();
-
-            $bitDelete = class_modul_guestbook_post::deletePost($this->getSystemid());
+            $objPost = new class_modul_guestbook_post($this->getSystemid());
+            $bitDelete = $objPost->deletePost();
             $this->setSystemid($strPrevID);
             if(!$bitDelete)
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
