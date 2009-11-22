@@ -90,46 +90,6 @@ class class_modul_downloads_file extends class_model implements interface_model,
         }
     }
 
-
-
-    /**
-     * Saves the current object as a new object to the database
-     *
-     *
-    public function saveObjectToDb($strPrevId) {
-        $bitReturn = false;
-		//start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = false;
-		//start with the system-records
-		$strDlID = $this->createSystemRecord($strPrevId, "DL: ".$this->getFilename());
-		$this->setSystemid($strDlID);
-		class_logger::getInstance()->addLogRow("new dl-file ".$this->getSystemid(), class_logger::$levelInfo);
-		//Modul-Table
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		              (downloads_id, downloads_name, downloads_filename, downloads_description, downloads_size, downloads_hits, downloads_type, downloads_max_kb, 
-                       downloads_checksum, downloads_cattype, downloads_screen_1, downloads_screen_2, downloads_screen_3) VALUES
-		              ('".$this->objDB->dbsafeString($strDlID)."', '".$this->objDB->dbsafeString($this->getName())."', '".$this->objDB->dbsafeString($this->getFilename())."',
-                       '', '".$this->objDB->dbsafeString($this->getSize())."', '0', '".$this->objDB->dbsafeString($this->getType())."', '0', 
-                       '".dbsafeString(@md5_file(_realpath_.$this->getFilename()))."', ".(int)$this->getIntCatType().",
-                       '".dbsafeString($this->getStrScreen1())."', '".dbsafeString($this->getStrScreen2())."', '".dbsafeString($this->getStrScreen3())."')";
-
-		if($this->objDB->_query($strQuery))
-			$bitCommit = true;
-
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
-     *
-     */
-
     /**
      * Updates the object to the database
      *

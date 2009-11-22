@@ -108,7 +108,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
             $objRepo->setStrName("Internal Repo for Gallery ".$this->getSystemid());
             $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
             $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
 
 		    return true;
 		}

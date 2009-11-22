@@ -40,7 +40,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $objRepo->setStrPath("/portal/pics/upload");
             $objRepo->setStrUploadFilter(".jpg,.png,.gif,.jpeg");
             $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
             
         $strReturn .= "Creating file upload folder\n";
@@ -58,7 +58,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $objRepo->setStrPath("/portal/downloads");
             $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
             $objRepo->setStrViewFilter(".zip,.pdf,.txt");
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
 		return $strReturn;
     }

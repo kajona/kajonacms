@@ -97,7 +97,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
             $objRepo->setStrName("Internal Repo for DL-Archive ".$this->getSystemid());
             $objRepo->setStrViewFilter("");
             $objRepo->setStrUploadFilter("");
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
 
 		    return true;
 		}

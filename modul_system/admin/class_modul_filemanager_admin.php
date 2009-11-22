@@ -224,7 +224,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$objRepo->setStrPath($this->getParam("filemanager_path"));
 				$objRepo->setStrUploadFilter($this->getParam("filemanager_upload_filter"));
 				$objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
-                if(!$objRepo->saveObjectToDb())
+                if(!$objRepo->updateObjectToDb())
                     throw new class_exception($this->getText("fehler_repo"), class_exception::$level_ERROR);
 			}
 		}

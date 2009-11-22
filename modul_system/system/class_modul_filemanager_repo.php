@@ -42,6 +42,22 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
 		    $this->initObject();
     }
 
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."filemanager" => "filemanager_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "filemnager repo ".$this->getStrName();
+    }
+
 
     /**
      * initalizes the current object with proper values
@@ -61,9 +77,8 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
     }
 
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated repo ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    public function updateStateToDb() {
+
         $strQuery = "UPDATE "._dbprefix_."filemanager
                      SET filemanager_name = '".$this->objDB->dbsafeString($this->getStrName())."',
                          filemanager_path = '".$this->objDB->dbsafeString($this->getStrPath())."',
@@ -75,23 +90,6 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
 
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-         $strRepoSystemId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Repo: ".$this->getStrName());
-         $this->setSystemid($strRepoSystemId);
-         class_logger::getInstance()->addLogRow("new repo ".$strRepoSystemId, class_logger::$levelInfo);
-	     //And the repo-record
-	     $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		                (filemanager_id, filemanager_path, filemanager_name, filemanager_upload_filter, filemanager_view_filter, filemanager_foreign_id) VALUES
-		                ('".$this->objDB->dbsafeString($strRepoSystemId)."', '".$this->objDB->dbsafeString($this->getStrPath())."',
-		                 '".$this->objDB->dbsafeString($this->getStrName())."', '".$this->objDB->dbsafeString($this->getStrUploadFilter())."',
-                         '".$this->objDB->dbsafeString($this->getStrViewFilter())."', '".$this->objDB->dbsafeString($this->getStrForeignId())."')";
-		return $this->objDB->_query($strQuery);
-    }
 
     /**
      * Loads all repos currently available
