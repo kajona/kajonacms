@@ -79,7 +79,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
      *
      * @return bool
      */
-    public function onInsertToDb() {
+    protected function onInsertToDb() {
         return $this->objRights->addGroupToRight(_guests_group_id_, $this->getSystemid(), "right1");
     }
 
@@ -88,7 +88,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
      *
      * @return bool
      */
-    public function updateStateToDb() {
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
 								SET guestbook_title = '".$this->objDB->dbsafeString($this->getGuestbookTitle())."',
 									guestbook_moderated = ".$this->objDB->dbsafeString($this->getGuestbookModerated())."
