@@ -269,7 +269,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			if($this->getParam("mode") == "new") {
 				$objNavi = new class_modul_navigation_tree("");
 				$objNavi->setStrName($this->getParam("navigation_name"));
-				if(!$objNavi->saveObjectToDb())
+				if(!$objNavi->updateObjectToDb())
 				    throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
 			}
@@ -364,7 +364,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				$objPoint->setStrPageE($this->getParam("navigation_page_e"));
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
-				if(!$objPoint->saveObjectToDb($this->getSystemid()))
+				if(!$objPoint->updateObjectToDb($this->getSystemid()))
 				    throw new class_exception("Error saving point-object to db", class_exception::$level_ERROR);
 				//To load a correct list, set the points id as current id
 				$this->setSystemid($objPoint->getSystemid());
@@ -406,8 +406,9 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		    //small trick: call prevID() now, to get the result lateron from the cache ;)
 		    $this->getPrevId();
+            $objNavi = new class_modul_navigation_point($this->getSystemid());
 
-		    if(!class_modul_navigation_point::deleteNaviPoint($this->getSystemid()))
+		    if(!$objNavi->deleteNaviPoint())
 		        throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
 
 		}

@@ -37,6 +37,24 @@ class class_modul_navigation_tree extends class_model implements interface_model
 		    $this->initObject();
     }
 
+
+   /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."navigation" => "navigation_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "navigation tree ".$this->getStrName();
+    }
+
+
     /**
      * Initalises the current object, if a systemid was given
      *
@@ -55,50 +73,16 @@ class class_modul_navigation_tree extends class_model implements interface_model
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated navigtion ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function updateStateToDb() {
         //flush the cache
         class_modul_navigation_cache::flushCache();
-        $this->setEditDate();
+
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."'
                      WHERE navigation_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //create a new navigation
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
-		//begin tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-
-		//Get the system-records
-		$strNaviSystemID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Navi: ".$this->getStrName());
-		$this->setSystemid($strNaviSystemID);
-		class_logger::getInstance()->addLogRow("new navigation ".$this->getSystemid(), class_logger::$levelInfo);
-		//And the record in the navi-table
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]." (navigation_id, navigation_name)
-		            VALUES ('".$this->objDB->dbsafeString($strNaviSystemID)."', '".$this->objDB->dbsafeString($this->getStrName())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
 
     /**
      * Returns an array of all navigation-trees available

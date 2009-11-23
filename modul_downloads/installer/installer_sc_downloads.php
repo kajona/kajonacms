@@ -103,7 +103,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
 	        $objNaviPoint = new class_modul_navigation_point();
 	        $objNaviPoint->setStrName("Downloads");
 	        $objNaviPoint->setStrPageI("downloads");
-	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $objNaviPoint->updateObjectToDb($strTreeId);
 	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
         }
         return $strReturn;

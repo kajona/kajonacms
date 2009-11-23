@@ -112,7 +112,7 @@ class class_installer_sc_search implements interface_sc_installer  {
 		        }
 		            
 		        $objNaviPoint->setStrPageI("search");
-		        $objNaviPoint->saveObjectToDb($strTreeId);
+		        $objNaviPoint->updateObjectToDb($strTreeId);
 		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";    
             }
             

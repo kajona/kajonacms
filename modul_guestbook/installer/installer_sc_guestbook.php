@@ -29,7 +29,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objGuestbook = new class_modul_guestbook_guestbook();
         $objGuestbook->setGuestbookTitle("Guestbook");
         $objGuestbook->setGuestbookModerated(1);
-        $objGuestbook->saveObjectToDb();
+        $objGuestbook->updateObjectToDb();
         $strGuestbookID = $objGuestbook->getSystemid();
         $strReturn .= "ID of new guestbook: ".$strGuestbookID."\n";
 
@@ -97,7 +97,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
 	        else
 	            $objNaviPoint->setStrName("Guestbook");
 	        $objNaviPoint->setStrPageI("guestbook");
-	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $objNaviPoint->updateObjectToDb($strTreeId);
 	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
         }
         return $strReturn;

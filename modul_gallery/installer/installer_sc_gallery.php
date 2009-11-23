@@ -143,7 +143,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
 	        $objNaviPoint = new class_modul_navigation_point();
 	        $objNaviPoint->setStrName("Gallery");
 	        $objNaviPoint->setStrPageI("gallery");
-	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $objNaviPoint->updateObjectToDb($strTreeId);
 	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
         }
         return $strReturn;

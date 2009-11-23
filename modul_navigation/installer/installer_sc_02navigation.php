@@ -35,7 +35,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strReturn .= "Creating new mainnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("mainnavigation");
-        $objNaviTree->saveObjectToDb();
+        $objNaviTree->updateObjectToDb();
         $strTreeId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
         
@@ -43,17 +43,17 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Page 1");
         $objNaviPoint->setStrPageI("page_1");
-        $objNaviPoint->saveObjectToDb($strTreeId);
+        $objNaviPoint->updateObjectToDb($strTreeId);
         $strNaviPointID = $objNaviPoint->getSystemid();
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Subpage 1");
         $objNaviPoint->setStrPageI("subpage_1");
-        $objNaviPoint->saveObjectToDb($strNaviPointID);
+        $objNaviPoint->updateObjectToDb($strNaviPointID);
         
         $strReturn .= "Creating new portalnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("portalnavigation");
-        $objNaviTree->saveObjectToDb();
+        $objNaviTree->updateObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
         
@@ -61,7 +61,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
-        $objNaviPoint->saveObjectToDb($strTreePortalId);
+        $objNaviPoint->updateObjectToDb($strTreePortalId);
         
         
 
@@ -151,7 +151,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Sitemap");
         $objNaviPoint->setStrPageI("sitemap");
-        $objNaviPoint->saveObjectToDb($strTreePortalId);  
+        $objNaviPoint->updateObjectToDb($strTreePortalId);
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";  
         
         $objNaviPoint = new class_modul_navigation_point();
@@ -160,7 +160,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         else    
             $objNaviPoint->setStrName("Imprint");
         $objNaviPoint->setStrPageI("imprint");
-        $objNaviPoint->saveObjectToDb($strTreePortalId);
+        $objNaviPoint->updateObjectToDb($strTreePortalId);
         $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";    
                     
 

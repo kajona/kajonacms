@@ -113,7 +113,7 @@ class class_installer_sc_faqs implements interface_sc_installer  {
 	        $objNaviPoint = new class_modul_navigation_point();
 	        $objNaviPoint->setStrName("FAQs");
 	        $objNaviPoint->setStrPageI("faqs");
-	        $objNaviPoint->saveObjectToDb($strTreeId);
+	        $objNaviPoint->updateObjectToDb($strTreeId);
 	        $strfaqsPointID = $objNaviPoint->getSystemid();
 	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
         }

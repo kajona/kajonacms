@@ -42,6 +42,22 @@ class class_modul_navigation_point extends class_model implements interface_mode
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."navigation" => "navigation_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "navigation point ".$this->getStrName();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -66,11 +82,10 @@ class class_modul_navigation_point extends class_model implements interface_mode
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated navipoint ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function updateStateToDb() {
         //flush the cache
         class_modul_navigation_cache::flushCache();
-        $this->setEditDate();
+
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
                         SET 	navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
     							navigation_page_i='".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
@@ -84,47 +99,18 @@ class class_modul_navigation_point extends class_model implements interface_mode
     /**
      * saves the current object as a new object to the database
      *
-     * @param string $strPrevID id to attach the point to
      * @return bool
      */
-    public function saveObjectToDb($strPrevID) {
-        //New Navigationpoint
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
-		//Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //Create System-Records
-        $strPointSystemId = $this->createSystemRecord($strPrevID, "NaviPoint: ".$this->getStrName());
-        $this->setSystemid($strPointSystemId);
-        class_logger::getInstance()->addLogRow("new navipoint ".$this->getSystemid(), class_logger::$levelInfo);
-		//and the navigation-table
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-		               (navigation_id, navigation_name, navigation_page_e, navigation_page_i, navigation_target, navigation_image) VALUES
-		               ('".$this->objDB->dbsafeString($strPointSystemId)."', '".$this->objDB->dbsafeString($this->getStrName())."',
-		                '".$this->objDB->dbsafeString($this->getStrPageE())."', '".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
-		                '".$this->objDB->dbsafeString($this->getStrTarget())."', '".$this->objDB->dbsafeString($this->getStrImage())."')";
+    protected function onInsertToDb() {
 
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
+        //set the element as last, shift it up once an down again to get a correct order on systemtables
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".dbsafeString($this->getSystemid())."'";
+        $this->objDB->_query($strQuery);
 
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
 
-			//set the element as last, shift it up once an down again to get a correct order on systemtables
-			$strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".dbsafeString($strPointSystemId)."'";
-			$this->objDB->_query($strQuery);
-			//And shift this element one pos up
-			$this->setPosition($strPointSystemId, "upwards");
-			$this->setPosition($strPointSystemId, "downwards");
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-
+        $this->setPosition($this->getSystemid(), "upwards");
+        $this->setPosition($this->getSystemid(), "downwards");
+        return true;
     }
 
     /**
@@ -153,24 +139,23 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	/**
 	 * Deletes a navigation / a point and all childs
 	 *
-	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteNaviPoint($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$strSystemid, class_logger::$levelInfo);
+	public function deleteNaviPoint() {
+	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
         //flush the cache
         class_modul_navigation_cache::flushCache();
 
 	    $objRoot = new class_modul_system_common();
 	    //Check rights for the current point
-	    if($objRoot->getObjRights()->rightDelete($strSystemid)) {
+	    if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
 	        //Are there any childs?
-	       $arrChild = class_modul_navigation_point::getNaviLayer($strSystemid);
+	       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
 	        if(count($arrChild) > 0) {
 	            //Call this method for each child
 	            foreach($arrChild as $objOneChild) {
-	                if(!class_modul_navigation_point::deleteNaviPoint($objOneChild->getSystemid())) {
+	                if(!$objOneChild->deleteNaviPoint()) {
 	                    return false;
 	                }
 	            }
@@ -179,9 +164,9 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	        //Now delete the current point
 	        //start in the navigation-table
 
-	        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id='".dbsafeString($strSystemid)."'";
-	        if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
-		        if($objRoot->deleteSystemRecord($strSystemid)) {
+	        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id='".dbsafeString($this->getSystemid())."'";
+	        if($this->objDB->_query($strQuery)) {
+		        if($this->deleteSystemRecord($this->getSystemid())) {
 		            return true;
 		        }
 	        }
