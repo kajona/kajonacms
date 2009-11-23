@@ -24,7 +24,9 @@ class class_modul_news_news extends class_model implements interface_model  {
     private $intDateEnd = 0;
     private $intDateSpecial = 0;
 
-    private $arrCats = array();
+    private $arrCats = null;
+
+    private $bitTitleChanged = false;
 
     /**
      * Constructor to create a valid object
@@ -49,6 +51,22 @@ class class_modul_news_news extends class_model implements interface_model  {
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."news" => "news_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "news category ".$this->getStrTitle();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -67,6 +85,8 @@ class class_modul_news_news extends class_model implements interface_model  {
          $this->setIntDateEnd($arrRow["system_date_end"]);
          $this->setIntDateStart($arrRow["system_date_start"]);
          $this->setIntDateSpecial($arrRow["system_date_special"]);
+
+         $this->bitTitleChanged = false;
     }
 
     /**
@@ -74,26 +94,25 @@ class class_modul_news_news extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb($bitMemberships = true, $bitEncodeNewsTitle = false) {
-        class_logger::getInstance()->addLogRow("updated news ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
-        //Update all needed tables
+    protected function updateStateToDb() {
+
 	    //dates
         $this->updateDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
+
         //news
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), $bitEncodeNewsTitle)."',
+                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), $this->bitTitleChanged)."',
                             news_hits = '".$this->objDB->dbsafeString($this->getIntHits())."',
                             news_intro = '".$this->objDB->dbsafeString($this->getStrIntro(), false)."',
                             news_text = '".$this->objDB->dbsafeString($this->getStrNewstext(), false)."',
-                            news_image = '".$this->objDB->dbsafeString($this->getStrImage())."'
+                            news_image = '".$this->objDB->dbsafeString($this->getStrImage())."',
+                            news_hits = ".$this->objDB->dbsafeString($this->getIntHits())."
                        WHERE news_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $this->objDB->_query($strQuery);
 
         //delete all relations
-        if($bitMemberships) {
+        if(is_array($this->arrCats)) {
             class_modul_news_category::deleteNewsMemberships($this->getSystemid());
-            $arrParams = $this->getAllParams();
             //insert all memberships
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
@@ -105,6 +124,8 @@ class class_modul_news_news extends class_model implements interface_model  {
             }
         }
 
+        $this->bitTitleChanged = false;
+
         return true;
     }
 
@@ -113,43 +134,23 @@ class class_modul_news_news extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function saveObjectToDb() {
+    protected function onInsertToDb() {
         //Start wit the system-recods and a tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        $strNewsId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "news:".$this->getStrTitle());
-        $this->setSystemid($strNewsId);
-        class_logger::getInstance()->addLogRow("new news ".$this->getSystemid(), class_logger::$levelInfo);
-        //The news-Table
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                    (news_id, news_title, news_hits) VALUES
-                    ('".$this->objDB->dbsafeString($strNewsId)."', '".$this->objDB->dbsafeString($this->getStrTitle())."', 0)";
+        $bitReturn = true;
+        $this->createDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
 
-        //The dates
-        $this->createDateRecord($strNewsId, $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
-
-        if($this->objDB->_query($strQuery)) {
-            //and all memberships
+        //and all memberships
+        if(is_array($this->arrCats)) {
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($strNewsId)."', '".$this->objDB->dbsafeString($strCatID)."')";
+                            ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($strCatID)."')";
                 if(!$this->objDB->_query($strQuery))
-                    $bitCommit = false;
+                    $bitReturn = false;
             }
         }
-        else
-            $bitCommit = false;
 
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+        return $bitReturn;
     }
 
     /**
@@ -226,17 +227,15 @@ class class_modul_news_news extends class_model implements interface_model  {
 	/**
 	 * Deletes the given news and all relating memberships
 	 *
-	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteNews($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted news ".$strSystemid, class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common();
+	public function deleteNews() {
+	    class_logger::getInstance()->addLogRow("deleted news ".$this->getSystemid(), class_logger::$levelInfo);
 	    //Delete memberships
-	    if(class_modul_news_category::deleteNewsMemberships($strSystemid)) {
-			$strQuery = "DELETE FROM "._dbprefix_."news WHERE news_id = '".dbsafeString($strSystemid)."'";
-			if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
-			    if($objRoot->deleteSystemRecord($strSystemid))
+	    if(class_modul_news_category::deleteNewsMemberships($this->getSystemid())) {
+			$strQuery = "DELETE FROM "._dbprefix_."news WHERE news_id = '".dbsafeString($this->getSystemid())."'";
+			if($this->objDB->_query($strQuery)) {
+			    if($this->deleteSystemRecord($this->getSystemid()))
 			        return true;
 			}
 	    }
@@ -377,6 +376,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 
     public function setStrTitle($strTitle) {
         $this->strTitle = $strTitle;
+        $this->bitTitleChanged = true;
     }
     public function setStrIntro($strIntro) {
         $this->strIntro = $strIntro;

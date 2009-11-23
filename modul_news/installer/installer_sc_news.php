@@ -36,7 +36,7 @@ class class_installer_sc_news implements interface_sc_installer  {
         $strReturn .= "Creating new category...\n";
             $objNewsCategory = new class_modul_news_category();
             $objNewsCategory->setStrTitle("TOP-News");
-            $objNewsCategory->saveObjectToDb();
+            $objNewsCategory->updateObjectToDb();
             $strCategoryID = $objNewsCategory->getSystemid();
             $strReturn .= "ID of new category: ".$strCategoryID."\n";
             $strReturn .= "Creating news\n";
@@ -55,8 +55,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
             $objNews->setIntDateStart(time());
             $objNews->setArrCats(array($strCategoryID => 1));
-            $objNews->saveObjectToDb();
-            $objNews->updateObjectToDb(false);
+            $objNews->updateObjectToDb();
             $strNewsId = $objNews->getSystemid();
             $strReturn .= "ID of new news: ".$strNewsId."\n";
             $strReturn .= "Adding news element to the index-page...\n";
@@ -140,8 +139,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
             $objNewsFeed->setStrPage($objPage->getStrName());
             $objNewsFeed->setStrCat("0");
-            $objNewsFeed->saveObjectToDb();
-            $objNewsFeed->updateObjectToDb(false);
+            $objNewsFeed->updateObjectToDb();
             $strNewsFeedId = $objNewsFeed->getSystemid();
             $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
             

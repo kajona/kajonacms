@@ -361,7 +361,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $objNews = new class_modul_news_category("");
 			    $objNews->setStrTitle($this->getParam("news_cat_title"));
-			    if(!$objNews->saveObjectToDb())
+			    if(!$objNews->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 			}
 		}
@@ -388,7 +388,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
-           if(!class_modul_news_category::deleteCategory($this->getSystemid()))
+            $objCat = new class_modul_news_category($this->getSystemid());
+           if(!$objCat->deleteCategory())
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
@@ -501,14 +502,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$objNews->setIntDateSpecial($arrDates["archive"]);
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
-                if(count($arrParams["cat"]) > 0) {
+                if(isset($arrParams["cat"]) && count($arrParams["cat"]) > 0) {
                     foreach($arrParams["cat"] as $strCatID => $strValue) {
                         $arrCats[$strCatID] = $strValue;
                     }
                 }
                 $objNews->setArrCats($arrCats);
 
-                if(!$objNews->saveObjectToDb())
+                if(!$objNews->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
 			}
@@ -562,7 +563,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				               .$this->getText("news_loeschen_link"));
 			}
 			elseif($this->getParam("news_loeschen_final") == "1") {
-			    if(!class_modul_news_news::deleteNews($this->getSystemid()))
+                $objNews = new class_modul_news_news($this->getSystemid());
+			    if(!$objNews->deleteNews())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 			}
 		}
@@ -630,7 +632,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			$objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
 			$objNews->setStrIntro($this->getParam("news_intro"));
 			$objNews->setStrNewstext($this->getParam("news_text"));
-			if(!$objNews->updateObjectToDb(false))
+			if(!$objNews->updateObjectToDb())
 				throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
             $objNews->getLockManager()->unlockRecord();
@@ -724,7 +726,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objFeed->setStrPage($this->getParam("feed_page"));
                 $objFeed->setStrCat($this->getParam("feed_cat"));
 
-                if(!$objFeed->saveObjectToDb())
+                if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
             }
@@ -797,7 +799,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     private function actionDeleteNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if(!class_modul_news_feed::deleteNewsFeed($this->getSystemid()))
+            $objFeed = new class_modul_news_feed($this->getSystemid());
+            if(!$objFeed->deleteNewsFeed())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
         }

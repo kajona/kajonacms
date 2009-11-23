@@ -40,6 +40,22 @@ class class_modul_news_category extends class_model implements interface_model  
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."news_category" => "news_cat_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "news category ".$this->getStrTitle();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -58,43 +74,13 @@ class class_modul_news_category extends class_model implements interface_model  
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated newscar ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                     SET news_cat_title ='".$this->objDB->dbsafeString($this->getStrTitle())."'
 					  WHERE news_cat_id ='".$this->objDB->dbsafeString($this->getSystemid())."'";
 		return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //Create a new record --> start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-        //Create the system-record
-        $strCatId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "news cat: ".$this->getStrTitle());
-        $this->setSystemid($strCatId);
-        class_logger::getInstance()->addLogRow("new newscat ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                        (news_cat_id, news_cat_title) VALUES
-                        ('".$this->objDB->dbsafeString($strCatId)."', '".$this->objDB->dbsafeString($this->getStrTitle())."')";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
 
     /**
 	 * Loads all available categories from the db
@@ -153,14 +139,13 @@ class class_modul_news_category extends class_model implements interface_model  
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public static function deleteCategory($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted newscat ".$strSystemid, class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common();
+	public function deleteCategory() {
+	    class_logger::getInstance()->addLogRow("deleted newscat ".$this->getSystemid(), class_logger::$levelInfo);
 	    //start by deleting from members an cat table
-        $strQuery1 = "DELETE FROM "._dbprefix_."news_category WHERE news_cat_id = '".dbsafeString($strSystemid)."'";
-        $strQuery2 = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = '".dbsafeString($strSystemid)."'";
-        if(class_carrier::getInstance()->getObjDB()->_query($strQuery1) && class_carrier::getInstance()->getObjDB()->_query($strQuery2)) {
-            if($objRoot->deleteSystemRecord($strSystemid))
+        $strQuery1 = "DELETE FROM "._dbprefix_."news_category WHERE news_cat_id = '".dbsafeString($this->getSystemid())."'";
+        $strQuery2 = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = '".dbsafeString($this->getSystemid())."'";
+        if($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2)) {
+            if($this->deleteSystemRecord($this->getSystemid()))
                 return true;
         }
         return false;

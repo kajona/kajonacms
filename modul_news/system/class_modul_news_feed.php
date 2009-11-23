@@ -20,7 +20,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
     private $strDesc = "";
     private $strPage = "";
     private $strCat = "";
-    private $intHits = "";
+    private $intHits = 0;
 
     /**
      * Constructor to create a valid object
@@ -41,6 +41,23 @@ class class_modul_news_feed extends class_model implements interface_model  {
 		//init current object
 		if($strSystemid != "")
 		    $this->initObject();
+    }
+
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."news_feed" => "news_feed_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "news category ".$this->getStrTitle();
     }
 
     /**
@@ -69,46 +86,17 @@ class class_modul_news_feed extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated newsfeed ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET news_feed_title = '".$this->objDB->dbsafeString($this->getStrTitle())."',
                        news_feed_urltitle = '".$this->objDB->dbsafeString($this->getStrUrlTitle())."',
                        news_feed_link = '".$this->objDB->dbsafeString($this->getStrLink())."',
                        news_feed_desc = '".$this->objDB->dbsafeString($this->getStrDesc())."',
                        news_feed_page = '".$this->objDB->dbsafeString($this->getStrPage())."',
-                       news_feed_cat = '".$this->objDB->dbsafeString($this->getStrCat())."'
+                       news_feed_cat = '".$this->objDB->dbsafeString($this->getStrCat())."',
+                       news_feed_hits = '".$this->objDB->dbsafeString($this->getIntHits())."'
                  WHERE news_feed_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
-    }
-
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        $this->objDB->transactionBegin();
-
-        $strNewsID = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "Feed: ".$this->strTitle);
-        $this->setSystemid($strNewsID);
-        class_logger::getInstance()->addLogRow("new newsfeed ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                    (news_feed_id, news_feed_title, news_feed_urltitle, news_feed_link, news_feed_desc, news_feed_page, news_feed_cat, news_feed_hits) VALUES
-                    ('".$this->objDB->dbsafeString($strNewsID)."', '".$this->objDB->dbsafeString($this->getStrTitle())."', '".$this->objDB->dbsafeString($this->getStrUrlTitle())."', '".$this->objDB->dbsafeString($this->getStrLink())."',
-                     '".$this->objDB->dbsafeString($this->getStrDesc())."', '".$this->objDB->dbsafeString($this->getStrPage())."',
-                     '".$this->objDB->dbsafeString($this->getStrCat())."', 0 )";
-
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-            return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-            return false;
-        }
-
     }
 
     /**
@@ -153,17 +141,16 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	/**
 	 * Deletes the given news-feed
 	 *
-	 * @param string $strSystemid
 	 * @return bool
 	 * @static
 	 */
-	public static function deleteNewsFeed($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted newsfeed ".$strSystemid, class_logger::$levelInfo);
+	public function deleteNewsFeed() {
+	    class_logger::getInstance()->addLogRow("deleted newsfeed ".$this->getSystemid(), class_logger::$levelInfo);
 	    $objRoot = new class_modul_system_common();
 	    $strQuery = "DELETE FROM "._dbprefix_."news_feed
-                             WHERE news_feed_id = '".dbsafeString($strSystemid)."'";
-        if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
-            if($objRoot->deleteSystemRecord($strSystemid))
+                             WHERE news_feed_id = '".dbsafeString($this->getSystemid())."'";
+        if($this->objDB->_query($strQuery)) {
+            if($this->deleteSystemRecord($this->getSystemid()))
                 return true;
         }
         return false;
