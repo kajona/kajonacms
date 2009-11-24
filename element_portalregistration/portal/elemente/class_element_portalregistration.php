@@ -155,7 +155,7 @@ class class_element_portalregistration extends class_element_portal implements i
             $objUser->setStrAuthcode($strAuthcode);
 	        
 	        
-	        if($objUser->saveObjectToDb()) {
+	        if($objUser->updateObjectToDb()) {
 	        	//group assignments
                 class_modul_user_group::addUserToGroups($objUser,array($this->arrElementData["portalregistration_group"]));
                 //and to the guests to avoid conflicts

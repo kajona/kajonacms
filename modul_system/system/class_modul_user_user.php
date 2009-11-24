@@ -102,6 +102,51 @@ class class_modul_user_user extends class_model implements interface_model  {
      * @return bool
      */
     public function updateObjectToDb($bitHtmlEntities = true) {
+
+        if($this->getSystemid() == "") {
+            $strUserid = generateSystemid();
+            $this->setSystemid($strUserid);
+            $strQuery = "INSERT INTO "._dbprefix_."user (
+                        user_id, user_username,
+                        user_pass, user_email, user_forename,
+                        user_name, 	user_street,
+                        user_postal, user_city,
+                        user_tel, user_mobile,
+                        user_date, user_active,
+                        user_admin, user_portal,
+                        user_admin_skin, user_admin_language,
+                        user_logins, user_lastlogin, user_authcode
+
+                        ) VALUES (
+
+                        '".$this->objDB->dbsafeString($strUserid)."',
+                        '".$this->objDB->dbsafeString($this->getStrUsername())."',
+                        '".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
+                        '".$this->objDB->dbsafeString($this->getStrEmail())."',
+                        '".$this->objDB->dbsafeString($this->getStrForename())."',
+                        '".$this->objDB->dbsafeString($this->getStrName())."',
+                        '".$this->objDB->dbsafeString($this->getStrStreet())."',
+                        '".$this->objDB->dbsafeString($this->getStrPostal())."',
+                        '".$this->objDB->dbsafeString($this->getStrCity())."',
+                        '".$this->objDB->dbsafeString($this->getStrTel())."',
+                        '".$this->objDB->dbsafeString($this->getStrMobile())."',
+                        ".dbsafeString($this->getLongDate()).",
+                        ".(int)$this->getIntActive().",
+                        ".(int)$this->getIntAdmin().",
+                        ".(int)$this->getIntPortal().",
+                        '".$this->objDB->dbsafeString($this->getStrAdminskin())."',
+                        '".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
+                        0,
+                        0,
+                        '".$this->objDB->dbsafeString($this->getStrAuthcode())."'
+                        )";
+
+            class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
+
+            return $this->objDB->_query($strQuery);
+        }
+        else {
+            
            $strQuery = "UPDATE "._dbprefix_."user SET
 					user_username='".$this->objDB->dbsafeString($this->getStrUsername(), $bitHtmlEntities)."',
 					".($this->getStrPass() != "" ? "user_pass='".$this->objSession->encryptPassword($this->getStrPass(), $bitHtmlEntities)."'," : "")."
@@ -127,65 +172,10 @@ class class_modul_user_user extends class_model implements interface_model  {
            class_logger::getInstance()->addLogRow("updated user ".$this->getStrUsername(), class_logger::$levelInfo);
 
            return $this->objDB->_query($strQuery);
+        }
     }
 
-    /**
-     * Saves the current object as a new user to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //Start TX
-		$this->objDB->transactionBegin();
-		//Get a new Userid
-		$strUserid = generateSystemid();
-		$this->setSystemid($strUserid);
-		$strQuery = "INSERT INTO "._dbprefix_."user (
-					user_id, user_username,
-					user_pass, user_email, user_forename,
-					user_name, 	user_street,
-					user_postal, user_city,
-					user_tel, user_mobile,
-					user_date, user_active,
-					user_admin, user_portal,
-					user_admin_skin, user_admin_language,
-					user_logins, user_lastlogin, user_authcode
-
-					) VALUES (
-
-					'".$this->objDB->dbsafeString($strUserid)."',
-					'".$this->objDB->dbsafeString($this->getStrUsername())."',
-					'".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
-					'".$this->objDB->dbsafeString($this->getStrEmail())."',
-					'".$this->objDB->dbsafeString($this->getStrForename())."',
-					'".$this->objDB->dbsafeString($this->getStrName())."',
-					'".$this->objDB->dbsafeString($this->getStrStreet())."',
-					'".$this->objDB->dbsafeString($this->getStrPostal())."',
-					'".$this->objDB->dbsafeString($this->getStrCity())."',
-					'".$this->objDB->dbsafeString($this->getStrTel())."',
-					'".$this->objDB->dbsafeString($this->getStrMobile())."',
-                    ".dbsafeString($this->getLongDate()).",
-					".(int)$this->getIntActive().",
-					".(int)$this->getIntAdmin().",
-					".(int)$this->getIntPortal().",
-					'".$this->objDB->dbsafeString($this->getStrAdminskin())."',
-					'".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
-					0,
-					0,
-                    '".$this->objDB->dbsafeString($this->getStrAuthcode())."'
-					)";
-
-		class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
-
-		if($this->objDB->_query($strQuery)) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
+   
 
     /**
      * Fetches all available users an returns them in an array
@@ -246,12 +236,24 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public function deleteUser() {
         class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
-        class_modul_user_group::deleteAllUserMemberships($this);
+        $this->deleteAllUserMemberships();
         $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".dbsafeString($this->getSystemid())."'";
         //call other models that may be interested
         $this->additionalCallsOnDeletion($this->getSystemid());
         return $this->objDB->_query($strQuery);
     }
+
+
+    /**
+	 * Deletes all memberships of the given USER from ALL groups
+	 *
+	 * @return bool
+	 * @static
+	 */
+	public function deleteAllUserMemberships() {
+        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_user_id='".dbsafeString($this->getSystemid())."'";
+		return $this->objDB->_query($strQuery);
+	}
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

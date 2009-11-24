@@ -22,19 +22,35 @@ class class_modul_system_common extends class_model implements interface_model  
      * @param string $strSystemid (use "" on new objets)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _system_modul_id_;
-		$arrModul["table"]       		= "";
-		$arrModul["modul"]				= "system";
+        $arrModule = array();
+        $arrModule["name"] 				= "modul_system";
+		$arrModule["author"] 			= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 			= _system_modul_id_;
+		$arrModule["table"]       		= "";
+		$arrModule["modul"]				= "system";
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($arrModule, $strSystemid);
 
 		//init current object
 		if($strSystemid != "")
 		    $this->initObject();
+    }
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
     }
 
     /**
@@ -46,20 +62,10 @@ class class_modul_system_common extends class_model implements interface_model  
     }
 
     /**
-     * Saves the current object as a new object to db.
-     *
-     *
-     */
-    public function saveObjectToDb() {
-
-    }
-
-
-    /**
      * Updates the current object to the database
      *
      */
-    public function updateObjectToDb() {
+    protected function updateStateToDb() {
 
     }
 
@@ -164,11 +170,12 @@ class class_modul_system_common extends class_model implements interface_model  
         $this->objDB->transactionBegin();
         //start by inserting the new systemrecords
         $strQuerySystem = "INSERT INTO "._dbprefix_."system
-        (system_id, system_prev_id, system_module_nr, system_sort, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES 
+        (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES
         	('".dbsafeString($strNewSystemid)."', 
         	'".dbsafeString($strNewSystemPrevId)."', 
         	".dbsafeString($arrSystemRow["system_module_nr"]).",
         	".(dbsafeString($arrSystemRow["system_sort"]) != "" ? dbsafeString($arrSystemRow["system_sort"]) : 0 ).",
+        	'".dbsafeString($arrSystemRow["system_owner"])."',
         	'".dbsafeString($arrSystemRow["system_lm_user"])."',
         	".dbsafeString($arrSystemRow["system_lm_time"]).",
         	'".dbsafeString($arrSystemRow["system_lock_id"])."',

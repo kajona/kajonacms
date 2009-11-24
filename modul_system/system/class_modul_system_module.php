@@ -48,6 +48,23 @@ class class_modul_system_module extends class_model implements interface_model  
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."system_module" => "module_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "Module  ".$this->getStrName();
+    }
+
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -76,8 +93,7 @@ class class_modul_system_module extends class_model implements interface_model  
      * Updates the current object to the database
      * @return bool
      */
-    public function updateObjectToDb() {
-        $this->objDB->transactionBegin();
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
 					  module_name ='".dbsafeString($this->getStrName())."',
 					  module_filenameportal ='".dbsafeString($this->getStrNamePortal())."',
@@ -89,14 +105,7 @@ class class_modul_system_module extends class_model implements interface_model  
 					  module_navigation ='".dbsafeString($this->getIntNavigation())."'
 					WHERE module_id = '".dbsafeString($this->getSystemid())."'				
 					";
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-            return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-            return false;
-        }
+        return$this->objDB->_query($strQuery);
     }
 
     /**

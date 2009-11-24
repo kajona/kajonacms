@@ -27,7 +27,7 @@ class class_test_rights implements interface_testable {
         $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
         $strUsername = "user_".generateSystemid();
         $objUser->setStrUsername($strUsername);
-        $objUser->saveObjectToDb();
+        $objUser->updateObjectToDb();
         echo "\tid of user: ".$objUser->getSystemid()."\n";
         $this->strUserId = $objUser->getSystemid();
 
@@ -35,7 +35,7 @@ class class_test_rights implements interface_testable {
         $objGroup = new class_modul_user_group();
         $strName = "name_".generateSystemid();
         $objGroup->setStrName($strName);
-        $objGroup->saveObjectToDb();
+        $objGroup->updateObjectToDb();
         echo "\tid of group: ".$objGroup->getSystemid()."\n";
 
         echo "\tadding user to group\n";

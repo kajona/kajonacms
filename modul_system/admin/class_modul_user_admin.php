@@ -415,7 +415,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                             $objUser->setIntPortal($intPortal);
                             $objUser->setStrAdminskin($this->getParam("skin"));
 
-                            if(!$objUser->saveObjectToDb()) {
+                            if(!$objUser->updateObjectToDb()) {
                                 throw new class_exception($this->getText("fehler_speichern"), class_exception::$level_ERROR);
                             }
                             else {
@@ -556,8 +556,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             //The user itself
             $objUser = new class_modul_user_user($strUserid);
             $objUser->deleteUser();
-            //Relationships
-            class_modul_user_group::deleteAllUserMemberships($objUser);
             return true;
         }
         return false;
@@ -662,7 +660,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strName = $this->getParam("gruppename");
                 $objGroup = new class_modul_user_group("");
                 $objGroup->setStrName($strName);
-                if($objGroup->saveObjectToDb())
+                if($objGroup->updateObjectToDb())
                     $strReturn .= "";
                 else
                     throw new class_exception($this->getText("gruppe_anlegen_fehler"), class_exception::$level_ERROR);
@@ -773,7 +771,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $objGroup = new class_modul_user_group($this->getParam("groupid"));
             if($objGroup->deleteAllUsersFromCurrentGroup()) {
                 //delete group
-                if(class_modul_user_group::deleteGroup($this->getParam("groupid"))) {
+                if($objGroup->deleteGroup()) {
                     return "";
                 }
                 else
@@ -835,7 +833,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $arrGroups = class_modul_user_group::getAllGroups();
             //In general, we have the case that a user is in one or two groups, so its ok to delete all memberships and save the new memberships
             //So: Delete old memberships
-            class_modul_user_group::deleteAllUserMemberships(new class_modul_user_user($this->getParam("userid")));
+            $objCurUser = new class_modul_user_user($this->getParam("userid"));
+            $objCurUser->deleteAllUserMemberships();
 
             //Searching for groups to enter
             $arrGroupsWanted = array();
@@ -844,7 +843,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $arrGroupsWanted[] = $objSingleGroup->getSystemid();
                 }
             }
-            class_modul_user_group::addUserToGroups(new class_modul_user_user($this->getParam("userid")), $arrGroupsWanted);
+            class_modul_user_group::addUserToGroups($objCurUser, $arrGroupsWanted);
             return "";
         }
         else

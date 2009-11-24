@@ -577,7 +577,7 @@ abstract class class_installer_base extends class_root {
     	    $objConstant->setStrValue($strValue);
     	    $objConstant->setIntType($intType);
     	    $objConstant->setIntModule($intModule);
-    	    return $objConstant->saveObjectToDb();
+    	    return $objConstant->updateObjectToDb();
 	    }
 	    else
 	       return false;

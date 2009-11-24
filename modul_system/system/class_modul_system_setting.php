@@ -87,33 +87,30 @@ class class_modul_system_setting extends class_model implements interface_model 
     }
 
     /**
-     * Saves the current object as a new object to db.
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
-
-        $strQuery = "INSERT INTO "._dbprefix_."system_config
-                    (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
-                    ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
-                     '".$this->objDB->dbsafeString($this->getStrValue())."', '".(int)$this->getIntType()."', '".(int)$this->getIntModule()."')";
-        return $this->objDB->_query($strQuery);
-    }
-
-
-    /**
      * Updates the current object to the database.
      * Only the value is updated!!!
      *
      * @return bool
      */
     public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
 
-        $strQuery = "UPDATE "._dbprefix_."system_config
-                    SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."' WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
-        return $this->objDB->_query($strQuery);
+        if(!class_modul_system_setting::checkConfigExisting($this->getStrName())) {
+            class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
+
+            $strQuery = "INSERT INTO "._dbprefix_."system_config
+                        (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
+                        ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
+                         '".$this->objDB->dbsafeString($this->getStrValue())."', '".(int)$this->getIntType()."', '".(int)$this->getIntModule()."')";
+            return $this->objDB->_query($strQuery);
+        }
+        else {
+
+            class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
+            $strQuery = "UPDATE "._dbprefix_."system_config
+                        SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."'
+                      WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
+            return $this->objDB->_query($strQuery);
+        }
     }
     
     

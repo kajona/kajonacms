@@ -37,6 +37,22 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
 		if($strSystemid != "")
 		    $this->initObject();
     }
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."adminwidget" => "adminwidget_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "adminwidget ".$this->getStrClass();
+    }
     
     /**
      * Inits the object by loading the values from the db
@@ -59,9 +75,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      * Updates the values of the current widget to the db
      *
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET adminwidget_class = '".dbsafeString($this->getStrClass())."',
                        adminwidget_content = '".dbsafeString($this->getStrContent(), false)."'
@@ -87,35 +101,8 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     }
     
     /**
-     * Saves an adminwidget to the database.
-     *
-     */
-    public function saveObjectToDb() {
-        
-        $this->objDB->transactionBegin();
-
-        $strWidgetId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "widget: ".$this->strClass);
-        $this->setSystemid($strWidgetId);
-        
-        class_logger::getInstance()->addLogRow("new widget ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                    (adminwidget_id, adminwidget_class, adminwidget_content) VALUES
-                    ('".dbsafeString($strWidgetId)."', '".dbsafeString($this->getStrClass())."', '".dbsafeString($this->getStrContent(), false)."')";
-
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-            return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-            return false;
-        }
-    }
-    
-    /**
      * Looks up all widgets available in the filesystem.
      * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
-     * includes all files to be able to work on
      *
      * @return array
      */

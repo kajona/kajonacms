@@ -9,7 +9,7 @@
 
 /**
  * Model for a single session. Session are managed by class_session, so there should be no need
- * to create instances directly. 
+ * to create instances directly.
  *
  * @package modul_system
  */
@@ -82,73 +82,57 @@ class class_modul_system_session extends class_model implements interface_model 
      * saves the current object with all its params back to the database
      *
      * @return bool
+     * @overwrite class_model::updateObjectToDb() due to performance issues
      */
     public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), class_logger::$levelInfo);
-        
-        $strQuery = "UPDATE ".$this->arrModule["table"]." SET
-                      session_phpid =  '".dbsafeString($this->getStrPHPSessionId())."',
-                      session_userid = '".dbsafeString($this->getStrUserid())."',
-                      session_groupids =  '".dbsafeString($this->getStrGroupids())."',
-                      session_releasetime =  ".(int)dbsafeString($this->getIntReleasetime()).",
-                      session_loginstatus = '".dbsafeString($this->getStrLoginstatus())."',
-                      session_loginprovider = '".dbsafeString($this->getStrLoginprovider())."', 
-                      session_lasturl =  '".dbsafeString($this->getStrLasturl())."'
-                    WHERE session_id = '".dbsafeString($this->getSystemid())."' ";
-        
-		return $this->objDB->_query($strQuery);
+
+
+        if($this->getSystemid() == "") {
+            $strInternalSessionId = generateSystemid();
+            $this->setSystemid($strInternalSessionId);
+
+            class_logger::getInstance()->addLogRow("new session ".$this->getSystemid(), class_logger::$levelInfo);
+
+            //insert in session table
+            $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+                         (session_id,
+                          session_phpid,
+                          session_userid,
+                          session_groupids,
+                          session_releasetime,
+                          session_loginstatus,
+                          session_loginprovider,
+                          session_lasturl
+                          ) VALUES (
+                          '".dbsafeString($strInternalSessionId)."',
+                          '".dbsafeString($this->getStrPHPSessionId())."',
+                          '".dbsafeString($this->getStrUserid())."',
+                          '".dbsafeString($this->getStrGroupids())."',
+                          ".(int)dbsafeString($this->getIntReleasetime()).",
+                          '".dbsafeString($this->getStrLoginstatus())."',
+                          '".dbsafeString($this->getStrLoginprovider())."',
+                          '".dbsafeString($this->getStrLasturl())."')";
+
+            return $this->objDB->_query($strQuery);
+
+        }
+        else {
+
+            class_logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), class_logger::$levelInfo);
+            $strQuery = "UPDATE ".$this->arrModule["table"]." SET
+                          session_phpid =  '".dbsafeString($this->getStrPHPSessionId())."',
+                          session_userid = '".dbsafeString($this->getStrUserid())."',
+                          session_groupids =  '".dbsafeString($this->getStrGroupids())."',
+                          session_releasetime =  ".(int)dbsafeString($this->getIntReleasetime()).",
+                          session_loginstatus = '".dbsafeString($this->getStrLoginstatus())."',
+                          session_loginprovider = '".dbsafeString($this->getStrLoginprovider())."',
+                          session_lasturl =  '".dbsafeString($this->getStrLasturl())."'
+                        WHERE session_id = '".dbsafeString($this->getSystemid())."' ";
+
+            return $this->objDB->_query($strQuery);
+        }
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-		//Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-		$strInternalSessionId = generateSystemid();
-        //Create System-Records
-        $this->setSystemid($strInternalSessionId);
-        class_logger::getInstance()->addLogRow("new session ".$this->getSystemid(), class_logger::$levelInfo);
-        
-        //insert in session table
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-                     (session_id, 
-                      session_phpid, 
-                      session_userid, 
-                      session_groupids, 
-                      session_releasetime,
-                      session_loginstatus, 
-                      session_loginprovider, 
-                      session_lasturl
-                      ) VALUES (
-                      '".dbsafeString($strInternalSessionId)."', 
-                      '".dbsafeString($this->getStrPHPSessionId())."', 
-                      '".dbsafeString($this->getStrUserid())."',
-                      '".dbsafeString($this->getStrGroupids())."',
-                      ".(int)dbsafeString($this->getIntReleasetime()).",
-                      '".dbsafeString($this->getStrLoginstatus())."',
-                      '".dbsafeString($this->getStrLoginprovider())."',
-                      '".dbsafeString($this->getStrLasturl())."')";
-        
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			$this->bitValid = true;
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
-    }
-   
 
     /**
      * Deletes the current object from the database
@@ -156,25 +140,12 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return bool
      */
     public function deleteObject() {
-        //Start tx
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
         class_logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), class_logger::$levelInfo);
         //start with the modul-table
         $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE session_id = '".dbsafeString($this->getSystemid())."'";
-		if(!$this->objDB->_query($strQuery))
-		    $bitCommit = false;
-
-		//End tx
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+		return $this->objDB->_query($strQuery);
     }
+    
     
     /**
      * Returns, if available, the internal session-object for the passed internal session-id

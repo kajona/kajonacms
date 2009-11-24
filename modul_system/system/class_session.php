@@ -579,7 +579,7 @@ final class class_session {
         $objSession->setStrGroupids($strGroups);
         $objSession->setIntReleasetime(time()+_system_release_time_);
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
-        $objSession->saveObjectToDb();
+        $objSession->updateObjectToDb();
         
         $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());
         $this->objInternalSession = $objSession;

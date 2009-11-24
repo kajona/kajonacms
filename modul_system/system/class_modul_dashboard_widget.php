@@ -41,7 +41,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     }
 
 
-     /**
+    /**
      * @see class_model::getObjectTables();
      * @return array
      */
@@ -173,7 +173,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $objSystemWidget4->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
 
         //and save the widget itself
-        if($objSystemWidget1->saveObjectToDb()) {
+        if($objSystemWidget1->updateObjectToDb()) {
             $strWidgetId = $objSystemWidget1->getSystemid();
             //and save the dashboard-entry
             $objDashboard = new class_modul_dashboard_widget();
@@ -185,7 +185,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         }
 
         //and save the widget itself
-        if($objSystemWidget2->saveObjectToDb()) {
+        if($objSystemWidget2->updateObjectToDb()) {
             $strWidgetId = $objSystemWidget2->getSystemid();
             //and save the dashboard-entry
             $objDashboard = new class_modul_dashboard_widget();
@@ -197,7 +197,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         }
 
         //and save the widget itself
-        if($objSystemWidget3->saveObjectToDb()) {
+        if($objSystemWidget3->updateObjectToDb()) {
             $strWidgetId = $objSystemWidget3->getSystemid();
             //and save the dashboard-entry
             $objDashboard = new class_modul_dashboard_widget();
@@ -209,7 +209,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         }
 
         //and save the widget itself
-        if($objSystemWidget4->saveObjectToDb()) {
+        if($objSystemWidget4->updateObjectToDb()) {
             $strWidgetId = $objSystemWidget4->getSystemid();
             //and save the dashboard-entry
             $objDashboard = new class_modul_dashboard_widget();

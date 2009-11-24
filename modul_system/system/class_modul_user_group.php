@@ -9,6 +9,7 @@
 
 /**
  * Model for a user-group
+ * Groups are not represented in the system-table
  *
  * @package modul_system
  */
@@ -40,6 +41,22 @@ class class_modul_user_group extends class_model implements interface_model  {
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "user group ".$this->getStrName();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -58,26 +75,23 @@ class class_modul_user_group extends class_model implements interface_model  {
      * @return bool
      */
     public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
-        $strQuery = "UPDATE "._dbprefix_."user_group
-						SET group_name='".$this->objDB->dbsafeString($this->getStrName())."'
-						WHERE group_id='".$this->objDB->dbsafeString($this->getSystemid()). "'";
-        return $this->objDB->_query($strQuery);
-    }
-
-    /**
-     * Saves the current object as a new group to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        class_logger::getInstance()->addLogRow("saved new group ".$this->getStrName(), class_logger::$levelInfo);
-        $strGrId = generateSystemid();
-        $this->setSystemid($strGrId);
-		$strQuery = "INSERT INTO "._dbprefix_."user_group
-		              (group_id, group_name) VALUES
-		              ('".$this->objDB->dbsafeString($strGrId)."', '".$this->objDB->dbsafeString($this->getStrName())."')";
-		return $this->objDB->_query($strQuery);
+        //mode-splitting
+        if($this->getSystemid() == "") {
+            class_logger::getInstance()->addLogRow("saved new group ".$this->getStrName(), class_logger::$levelInfo);
+            $strGrId = generateSystemid();
+            $this->setSystemid($strGrId);
+            $strQuery = "INSERT INTO "._dbprefix_."user_group
+                          (group_id, group_name) VALUES
+                          ('".$this->objDB->dbsafeString($strGrId)."', '".$this->objDB->dbsafeString($this->getStrName())."')";
+            return $this->objDB->_query($strQuery);
+        }
+        else {
+            class_logger::getInstance()->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
+            $strQuery = "UPDATE "._dbprefix_."user_group
+                            SET group_name='".$this->objDB->dbsafeString($this->getStrName())."'
+                            WHERE group_id='".$this->objDB->dbsafeString($this->getSystemid()). "'";
+            return $this->objDB->_query($strQuery);
+        }
     }
 
     /**
@@ -206,18 +220,6 @@ class class_modul_user_group extends class_model implements interface_model  {
 	}
 
 	/**
-	 * Deletes all memberships of the given USER from ALL groups
-	 *
-	 * @param class_modul_user_user $objUser
-	 * @return bool
-	 * @static
-	 */
-	public static function deleteAllUserMemberships($objUser) {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_user_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($objUser->getSystemid())."'";
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
-	}
-
-	/**
 	 * Deletes all users from the current group
 	 *
 	 * @return bool
@@ -243,15 +245,13 @@ class class_modul_user_group extends class_model implements interface_model  {
 	/**
 	 * Deletes the given group
 	 *
-	 * @param string $strGroupid
 	 * @return bool
 	 */
-	public static function deleteGroup($strGroupid) {
-	    class_logger::getInstance()->addLogRow("deleted group with id ".$strGroupid, class_logger::$levelInfo);
-        $objGroup = new class_modul_user_group($strGroupid);
-        $objGroup->deleteAllUsersFromCurrentGroup();
-        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id='".dbsafeString($strGroupid)."'";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+	public function deleteGroup() {
+	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
+        $this->deleteAllUsersFromCurrentGroup();
+        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id='".dbsafeString($this->getSystemid())."'";
+        return $this->objDB->_query($strQuery);
 	}
 
 	/**

@@ -29,7 +29,7 @@ class class_test_user implements interface_testable {
             $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
             $strUsername = "user_".generateSystemid();
             $objUser->setStrUsername($strUsername);
-            $objUser->saveObjectToDb();
+            $objUser->updateObjectToDb();
             $arrUsersCreated[] = $objUser->getSystemid();
             $strID = $objUser->getSystemid();
             $objDB->flushQueryCache();
@@ -47,7 +47,7 @@ class class_test_user implements interface_testable {
             $objGroup = new class_modul_user_group();
             $strName = "name_".generateSystemid();
             $objGroup->setStrName($strName);
-            $objGroup->saveObjectToDb();
+            $objGroup->updateObjectToDb();
             $strID = $objGroup->getSystemid();
             $arrGroupsCreated[] = $objGroup->getSystemid();
             $objDB->flushQueryCache();
@@ -86,14 +86,14 @@ class class_test_user implements interface_testable {
         echo "\ttest group membership handling...\n";
         $objGroup = new class_modul_user_group();
         $objGroup->setStrName("AUTOTESTGROUP");
-        $objGroup->saveObjectToDb();
+        $objGroup->updateObjectToDb();
 
         echo "\tadding 100 members to group...\n";
         for ($intI = 0; $intI <= 100; $intI++) {
             $objUser = new class_modul_user_user();
             $objUser->setStrUsername("AUTOTESTUSER_".$intI);
             $objUser->setStrEmail("autotest_".$intI."@kajona.de");
-            $objUser->saveObjectToDb();
+            $objUser->updateObjectToDb();
             //add user to group
             class_modul_user_group::addUserToGroups($objUser, array($objGroup->getSystemid()));
             $arrUsersInGroup = class_modul_user_group::getGroupMembers($objGroup->getSystemid());

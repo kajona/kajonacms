@@ -36,6 +36,24 @@ class class_modul_search_commons extends class_model implements interface_model 
 		    $this->initObject();
     }
 
+
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
+    }
+
+
     /**
      * Initalises the current object, if a systemid was given
      * NOT YET IMPLEMENTED
@@ -50,8 +68,8 @@ class class_modul_search_commons extends class_model implements interface_model 
      * NOT YET IMPLEMENTED
      *
      */
-    public function updateObjectToDb() {
-
+    protected function updateStateToDb() {
+    
     }
 
     /**

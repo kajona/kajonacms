@@ -38,6 +38,22 @@ class class_modul_system_worker extends class_model implements interface_model  
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -46,20 +62,10 @@ class class_modul_system_worker extends class_model implements interface_model  
     }
 
     /**
-     * Saves the current object as a new object to db.
-     *
-     *
-     */
-    public function saveObjectToDb() {
-
-    }
-
-
-    /**
      * Updates the current object to the database
      *
      */
-    public function updateObjectToDb() {
+    protected function updateStateToDb() {
 
     }
     

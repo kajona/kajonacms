@@ -210,7 +210,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $objSystemWidget->setStrContent($objWidget->getFieldsAsString());
 
 	            //and save the widget itself
-	            if($objSystemWidget->saveObjectToDb()) {
+	            if($objSystemWidget->updateObjectToDb()) {
                     $strWidgetId = $objSystemWidget->getSystemid();
                     //and save the dashboard-entry
                     $objDashboard = new class_modul_dashboard_widget();

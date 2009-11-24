@@ -35,6 +35,23 @@ class class_modul_stats_worker extends class_model implements interface_model  {
 		    $this->initObject();
     }
 
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
+    }
+
     /**
      * Initalises the current object, if a systemid was given
      * NOT IMPLEMENTED
@@ -49,7 +66,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
      * NOT IMPELEMENTED
      *
      */
-    public function updateObjectToDb() {
+    protected function updateStateToDb() {
 
     }
 
@@ -244,6 +261,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
      * @param int $intEnd
      * @return bool
      * @deprecated will be removed in future releases
+     * @todo remove, deprecated code
      */
     public function exportDataToCsv($strFilename, $intStart, $intEnd) {
         

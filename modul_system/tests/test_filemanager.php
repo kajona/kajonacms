@@ -16,7 +16,7 @@ class class_test_filemanager implements interface_testable {
             $objRepo->setStrPath("/portal/pics");
             $strName = "Repo_".generateSystemid();
             $objRepo->setStrName($strName);
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
             $strRepoID = $objRepo->getSystemid();
             $arrRepoIDs[] = $strRepoID;
             $objRepo = new class_modul_filemanager_repo($strRepoID);
