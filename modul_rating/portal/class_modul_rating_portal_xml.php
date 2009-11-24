@@ -59,7 +59,7 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
     	if($objRating == null) {
     		$objRating = new class_modul_rating_rate();
     		$objRating->setStrRatingSystemid($this->getSystemid());
-    		$objRating->saveObjectToDb();
+    		$objRating->updateObjectToDb();
     	}
 
     	$objRating->saveRating($this->getParam("rating"));

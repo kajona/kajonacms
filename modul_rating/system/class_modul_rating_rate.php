@@ -50,6 +50,22 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."rating" => "rating_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "rating for ".$this->getStrRatingSystemid();
+    }
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
@@ -71,9 +87,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated rating ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
+    protected function updateStateToDb() {
 
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
                     	rating_systemid		= '".dbsafeString($this->getStrRatingSystemid())."',
@@ -84,41 +98,6 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    public function saveObjectToDb() {
-        //Start wit the system-recods and a tx
-		$this->objDB->transactionBegin();
-
-        $strRatingId = $this->createSystemRecord($this->getModuleSystemid($this->arrModule["modul"]), "rating for:".$this->getStrRatingSystemid());
-        $this->setSystemid($strRatingId);
-        class_logger::getInstance()->addLogRow("new rating ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
-        //The news-Table
-        $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($this->arrModule["table"])."
-                    (rating_id, rating_systemid, rating_checksum, rating_rate, rating_hits) VALUES
-                    (
-					 '".dbsafeString($this->getSystemid())."',
-					 '".dbsafeString($this->getStrRatingSystemid())."',
-					 '".dbsafeString($this->getStrRatingChecksum())."',
-                     '".dbsafeString($this->getFloatRating())."',
-					 '".dbsafeString($this->getIntHits())."'
-					)";
-
-
-        if($this->objDB->_query($strQuery)) {
-            $this->objDB->transactionCommit();
-			return true;
-        }
-        else {
-            $this->objDB->transactionRollback();
-			return false;
-        }
-
-    }
 
     /**
      * Adds a rating-value to the record saved in the db
@@ -157,7 +136,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //flush the page-cache to have all pages rerendered using the correct values
         $this->flushCompletePagesCache();
         
-        return $this->updateObjectToDB();
+        return $this->updateStateToDb();
 
     }
 
