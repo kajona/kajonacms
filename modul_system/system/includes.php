@@ -81,7 +81,7 @@
         }
 
         //admin classes
-        //TODO: wtf? why strpos needed? whats wron with that regex?
+        //TODO: wtf? why strpos needed? whats wrong with that regex?
         if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
             if(require(_adminpath_."/".$strClassName.".php"))
                 return;

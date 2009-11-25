@@ -93,7 +93,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

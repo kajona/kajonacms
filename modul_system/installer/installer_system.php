@@ -86,7 +86,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -677,7 +677,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -694,7 +694,7 @@ class class_installer_system extends class_installer_base implements interface_i
            $objLanguage->setStrName("en");
 
         $objLanguage->setBitDefault(true);
-        $objLanguage->saveObjectToDb();
+        $objLanguage->updateObjectToDb();
         $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
         $strReturn .= "Assigning null-properties and elements to the default language.\n";
         if($this->strContentLanguage == "de") {

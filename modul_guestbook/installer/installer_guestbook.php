@@ -124,7 +124,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

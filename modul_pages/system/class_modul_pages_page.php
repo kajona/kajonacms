@@ -50,6 +50,23 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		    $this->initObject();
     }
 
+
+    /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."page" => "page_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "page ".$this->getStrName();
+    }
+
     /**
      * Initalises the current object, if a systemid was given
      *
@@ -96,101 +113,36 @@ class class_modul_pages_page extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function saveObjectToDb($strFolderid = "0") {
-        //Befor saving to database, filter special chars
-		$strDescription = htmlToString($this->getStrDesc(), false, false);
-		$strName = $this->generateNonexistingPagename($this->getStrName());
-
-		//Start the transaction
-		$this->objDB->transactionBegin();
-		$bitCommit = true;
-
-        //if no folder is given, place the page under the modules' record
-        if($strFolderid == "0")
-            $strFolderid = $this->getModuleSystemid($this->arrModule["modul"]);
+    public function onInsertToDb() {
 
 		//Create the system-record
 		if(_pages_newdisabled_ == "true")
-		    $strPageSystemid = $this->createSystemRecord($strFolderid, "PAGE: ".$strName, true, "", "", 0);
-		else
-		    $strPageSystemid = $this->createSystemRecord($strFolderid, "PAGE: ".$strName);
-
-		$this->setSystemid($strPageSystemid);
-		class_logger::getInstance()->addLogRow("new page ".$strPageSystemid, class_logger::$levelInfo);
-
-		//Saving the page to the pages-table
-		$strQuery = "INSERT INTO ".$this->arrModule["table"]."
-						(page_id, page_name ) VALUES
-						('".$this->objDB->dbsafeString($strPageSystemid)."', '".$this->objDB->dbsafeString($strName)."')";
-
-		if(!$this->objDB->_query($strQuery))
-			$bitCommit = false;
-
-		//and the page-properties
-		$strQuery = "INSERT INTO ".$this->arrModule["table2"]."
-						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
-						 pageproperties_seostring, pageproperties_language) VALUES
-						('".$this->objDB->dbsafeString($strPageSystemid)."', '".$this->objDB->dbsafeString($this->getStrKeywords())."',
-						 '".$this->objDB->dbsafeString($strDescription)."', '".$this->objDB->dbsafeString($this->getStrTemplate())."',
-						 '".$this->objDB->dbsafeString($this->getStrBrowsername())."', '".$this->objDB->dbsafeString($this->getStrSeostring())."',
-						 '".$this->objDB->dbsafeString($this->getStrLanguage())."')";
-
-		if(!$this->objDB->_query($strQuery))
-			$bitCommit = false;
-
-		//Commit or rollback?
-		if($bitCommit) {
-			$this->objDB->transactionCommit();
-			return true;
-		}
-		else {
-			$this->objDB->transactionRollback();
-			return false;
-		}
+            $this->setStatus();
+		
+        return true;
     }
+
+
 
     /**
      * Updates the current object to the database
      *
      * @return bool
      */
-    public function updateObjectToDb($strFolderid = "0") {
-        class_logger::getInstance()->addLogRow("updated page ".$this->getSystemid(), class_logger::$levelInfo);
-
-
-        if($strFolderid == "0")
-            $strFolderid = $this->getModuleSystemid($this->arrModule["modul"]);
+    protected function updateStateToDb() {
+        
 
         //Make texts db-safe
 		$strDescription = htmlToString($this->getStrDesc(), false, false);
-		//Do we have a folderid?
-		$strName = str_replace(" ", "_", $this->getStrName());
-		//Pagename already existng?
-		$strQuery = "SELECT COUNT(*)
-					FROM "._dbprefix_."page
-					WHERE page_name='".$this->objDB->dbsafeString($strName)."' AND page_id!='".$this->objDB->dbsafeString($this->getSystemid())."'";
-		$arrResult = $this->objDB->getRow($strQuery);
-		$intNumber = $arrResult["COUNT(*)"];
-		if($intNumber != 0) {
-			$intCount = 1;
-            $strTemp = "";
-			while($intNumber != 0) {
-				$strTemp = $strName."_".$intCount;
-				$strQuery = "SELECT COUNT(*)
-							FROM "._dbprefix_."page
-							WHERE page_name='".$this->objDB->dbsafeString($strTemp)."'";
-				$arrResult = $this->objDB->getRow($strQuery);
-				$intNumber = $arrResult["COUNT(*)"];
-				$intCount++;
-			}
-			$strName = $strTemp;
-            $this->setStrName($strName);
-		}
+        $strName = $this->generateNonexistingPagename($this->getStrName());
+        $this->setStrName($strName);
+
+
 
 		//Update the baserecord
 		$strQuery = "UPDATE  "._dbprefix_."page
 					SET page_name='".$this->objDB->dbsafeString($strName)."'
-						WHERE page_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+				       WHERE page_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
 
 
 		//and the properties record
@@ -202,7 +154,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
 
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
-		    //Alredy existing, updating properties
+		    //Already existing, updating properties
     		$strQuery2 = "UPDATE  "._dbprefix_."page_properties
     					SET pageproperties_description='".$this->objDB->dbsafeString($strDescription)."',
     						pageproperties_template='".$this->objDB->dbsafeString($this->getStrTemplate())."',
@@ -223,22 +175,9 @@ class class_modul_pages_page extends class_model implements interface_model  {
 						 '".$this->objDB->dbsafeString($this->getStrLanguage())."')";
 		}
 
-		//update the system record to set the new prev-id
-		if($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2)) {
-			$strQuery = "UPDATE "._dbprefix_."system
-						SET SYSTEM_prev_id='".$this->objDB->dbsafeString($strFolderid)."',
-							system_lm_time=".(int)time().",
-							system_lm_user='".$this->objDB->dbsafeString($this->objSession->getUserID())."',
-							system_comment='PAGE: ".$this->objDB->dbsafeString($strName)."'
-							WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+        return ($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2)) ;
 
-			if($this->objDB->_query($strQuery)) {
-			    $this->setEditDate();
-			    return true;
-			}
-		}
-		else
-		  return false;
+		
     }
 
 
@@ -460,10 +399,12 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	        return false;
 	    }
 
+
+        $strNewPagename = $this->generateNonexistingPagename($arrBasicSourcePage["page_name"], false);
 	    //create the foregin record in our table
 	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
 	    			(page_id, page_name) VALUES
-	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"]))."')";
+	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($strNewPagename)."')";
 	    if(!$this->objDB->_query($strQuery)) {
 	        $this->objDB->transactionRollback();
 	        return false;
@@ -471,7 +412,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
         //update the comment in system-table
         $strQuery = "UPDATE "._dbprefix_."system
-                        SET system_comment='PAGE: ".$this->objDB->dbsafeString(dbsafeString($this->generateNonexistingPagename($arrBasicSourcePage["page_name"])))."'
+                        SET system_comment='PAGE: ".$this->objDB->dbsafeString($strNewPagename)."'
                       WHERE system_id = '".$this->objDB->dbsafeString($strIdOfNewPage)."'";
 
         $this->objDB->_query($strQuery);
@@ -510,27 +451,36 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    return true;
 	}
 
-	public function generateNonexistingPagename($strName) {
+    /**
+     * Generates a pagename not yet existing.
+     * Tries to detect if the new name is the name of the current page. If given, the same name
+     * is being returned. Can be suppressed.
+     *
+     * @param string $strName
+     * @param bool $bitWithSelfcheck
+     * @return string
+     */
+	public function generateNonexistingPagename($strName, $bitAvoidSelfchek = true) {
 	    //Filter blanks out of pagename
 		$strName = str_replace(" ", "_", $this->getStrName());
 
 		//Pagename already existing?
-		$strQuery = "SELECT COUNT(*)
+		$strQuery = "SELECT page_id
 					FROM ".$this->arrModule["table"]."
 					WHERE page_name='".$this->objDB->dbsafeString($strName)."'";
 		$arrTemp = $this->objDB->getRow($strQuery);
 
-		$intNumbers = $arrTemp["COUNT(*)"];
-		if($intNumbers != 0) {
+		$intNumbers = count($arrTemp);
+		if($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid()) ) {
 			$intCount = 1;
             $strTemp = "";
-			while($intNumbers != 0) {
+			while($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid()) ) {
 				$strTemp = $strName."_".$intCount;
-				$strQuery = "SELECT COUNT(*)
+				$strQuery = "SELECT page_id
 							FROM ".$this->arrModule["table"] ."
 							WHERE page_name='".$this->objDB->dbsafeString($strTemp)."'";
 				$arrTemp = $this->objDB->getRow($strQuery);
-				$intNumbers = $arrTemp["COUNT(*)"];
+				$intNumbers = count($arrTemp);
 				$intCount++;
 			}
 			$strName = $strTemp;

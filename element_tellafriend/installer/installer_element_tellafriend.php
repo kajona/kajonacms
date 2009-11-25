@@ -107,7 +107,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

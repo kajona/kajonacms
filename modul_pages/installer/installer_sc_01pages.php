@@ -46,7 +46,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb();
+        $objPage->updateObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
         $strReturn .= "Adding headline-element to new page\n";
@@ -123,7 +123,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "Creating system folder...\n";
         $objFolder = new class_modul_pages_folder();
         $objFolder->setStrName("_system");
-        $objFolder->saveObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strFolderID = $objFolder->getSystemid();
         $strReturn .= "ID of new folder: ".$strFolderID."\n";
         $strReturn .= "Creating master-page\n";
@@ -132,7 +132,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("master.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strFolderID);
         $this->strMasterID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strMasterID."\n";
 
@@ -150,7 +150,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strFolderID);
         $strErrorPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
 
@@ -221,7 +221,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
@@ -303,7 +303,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb();
+        $objPage->updateObjectToDb();
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
@@ -371,7 +371,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb();
+        $objPage->updateObjectToDb();
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";

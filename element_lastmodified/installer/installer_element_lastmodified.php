@@ -93,7 +93,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

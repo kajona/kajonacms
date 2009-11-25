@@ -94,7 +94,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * saves the current object as a new object to the database
      *
      * @param string $strPrevId
-     * @param string $strPlaceholder
+     * @param string $strPlaceholder TODO: not needed!
      * @param string $strForeignTable
      * @param string $strPos
      * @return bool
@@ -106,10 +106,12 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		$this->objDB->transactionBegin();
 		//As described, start with the system / right record.
 		//Note: The current systemid is the pageid, so the system_prev_id for the element
-		$strElementSystemId = $this->createSystemRecord($strPrevId, "ELEMENT: ".$strPlaceholder);
+		$strElementSystemId = $this->createSystemRecord($strPrevId, "ELEMENT: ".$this->getStrPlaceholder());
 		$this->setSystemid($strElementSystemId);
 		//And create the row in the Element-Table, if given
         $strQuery = "";
+
+        //TODO: get foreign table automatically
 		if($strForeignTable != "") {
 		    $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES ('".$this->objDB->dbsafeString($strElementSystemId)."')";
 		}

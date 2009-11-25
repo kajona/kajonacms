@@ -18,7 +18,7 @@ class class_test_pages implements interface_testable {
         echo "\tcreate a new folder...\n";
         $objFolder = new class_modul_pages_folder();
         $objFolder->setStrName("autotest");
-        $objFolder->saveObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
         $strTestFolderID = $objFolder->getSystemid();
 
         echo "\tcreate 100 folders using the model...\n";
@@ -26,7 +26,7 @@ class class_test_pages implements interface_testable {
         for($intI =0; $intI < 100; $intI++) {
             $objFolder = new class_modul_pages_folder();
             $objFolder->setStrName("testfolder_".$intI);
-            $objFolder->saveObjectToDb($strTestFolderID);
+            $objFolder->updateObjectToDb($strTestFolderID);
             $strFolderID = $objFolder->getSystemid();
             $arrFoldersCreated[] = $strFolderID;
             $objFolder = new class_modul_pages_folder($strFolderID);
@@ -44,7 +44,7 @@ class class_test_pages implements interface_testable {
             $objPages = new class_modul_pages_page();
             $objPages->setStrName("autotest_".$intI);
             $objPages->setStrTemplate("kajona_demo.tpl");
-            $objPages->saveObjectToDb();
+            $objPages->updateObjectToDb();
             $strPageID = $objPages->getSystemid();
             $arrPagesCreated[] = $strPageID;
             $objPage = new class_modul_pages_page($strPageID);
@@ -66,7 +66,8 @@ class class_test_pages implements interface_testable {
 
         echo "\tdeleting folders created...\n";
         foreach($arrFoldersCreated as $strOneFolderID) {
-            class_modul_pages_folder::deleteFolder($strOneFolderID);
+            $objFolder = new class_modul_pages_folder($strOneFolderID);
+            $objFolder->deleteFolder();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of folders installed...\n";
@@ -90,7 +91,8 @@ class class_test_pages implements interface_testable {
 
 
         echo"\tdeleting folder...\n";
-        class_modul_pages_folder::deleteFolder($strTestFolderID);
+        $objFolder = new class_modul_pages_folder($strTestFolderID);
+        $objFolder->deleteFolder();
 
     }
 

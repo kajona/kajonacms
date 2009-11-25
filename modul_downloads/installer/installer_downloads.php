@@ -139,7 +139,7 @@ class class_installer_downloads extends class_installer_base implements interfac
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-            $objElement->saveObjectToDb();
+            $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
         else {
@@ -230,7 +230,7 @@ class class_installer_downloads extends class_installer_base implements interfac
                 $objRepo->setStrName("Internal Repo for DL-Archive ".$objOneArchive->getSystemid());
                 $objRepo->setStrViewFilter("");
                 $objRepo->setStrUploadFilter("");
-                $objRepo->saveObjectToDb();
+                $objRepo->updateObjectToDb();
 
                 $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
             }

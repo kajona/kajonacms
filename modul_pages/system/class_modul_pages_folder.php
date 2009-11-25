@@ -16,7 +16,6 @@
 class class_modul_pages_folder extends class_model implements interface_model  {
 
     private $strName = "";
-    private $strPrevId = "";
 
     /**
      * Constructor to create a valid object
@@ -27,7 +26,6 @@ class class_modul_pages_folder extends class_model implements interface_model  {
         $arrModul["name"] 				= "modul_pages";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _pages_folder_id_;
-		$arrModul["table"]       		= _dbprefix_."page";
 		$arrModul["modul"]				= "pages";
 
 		//base class
@@ -36,6 +34,23 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 		//init current object
 		if($strSystemid != "")
 		    $this->initObject();
+    }
+
+
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return $this->getStrName();
     }
 
     /**
@@ -47,30 +62,6 @@ class class_modul_pages_folder extends class_model implements interface_model  {
         $arrRow = $this->objDB->getRow($strQuery);
         if(count($arrRow) > 0)
             $this->setStrName($arrRow["system_comment"]);
-            $this->strPrevId = $this->getPrevId();
-    }
-
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @param string $strPrevId
-     * @return bool
-     */
-    public function saveObjectToDb($strPrevId) {
-        $bitReturn = false;
-
-        if(!validateSystemid($strPrevId))
-            $strPrevId = $this->getModuleSystemid($this->arrModule["modul"]);
-
-        class_logger::getInstance()->addLogRow("new folder ".$this->getStrName(), class_logger::$levelInfo);
-		if($this->getStrName() != "") 	{
-		    $strFolderID = $this->createSystemRecord($strPrevId, $this->getStrName());
-			if($strFolderID != "") {
-			    $this->setSystemid($strFolderID);
-			    $bitReturn = true;
-			}
-		}
-		return $bitReturn;
     }
 
     /**
@@ -78,14 +69,9 @@ class class_modul_pages_folder extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb() {
+    protected function updateStateToDb() {
         class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
-        $this->setEditDate();
-		$strQuery = "UPDATE "._dbprefix_."system
-					 SET system_comment='".$this->objDB->dbsafeString($this->getStrName())."',
-					     system_prev_id='".dbsafeString($this->strPrevId)."'
-					 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-		return $this->objDB->_query($strQuery);
+        return true;
     }
 
     /**
@@ -209,15 +195,12 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	 * Deletes a folder from the systems,
 	 * currently just, if the folder is empty
 	 *
-	 * @param string $strFolderid
 	 * @return bool
-	 * @static
 	 */
-	public static function deleteFolder($strFolderid) {
-	    class_logger::getInstance()->addLogRow("deleted folder ".$strFolderid, class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common($strFolderid);
-	    if(count(class_modul_pages_folder::getFolderList($strFolderid)) == 0 && count(class_modul_pages_folder::getPagesInFolder($strFolderid)) == 0)
-	        return $objRoot->deleteSystemRecord($strFolderid);
+	public function deleteFolder() {
+	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
+	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0)
+	        return $this->deleteSystemRecord($strFolderid);
 	    else
 	        return false;
 	}
@@ -267,16 +250,6 @@ class class_modul_pages_folder extends class_model implements interface_model  {
                 $strNameNew = $this->checkFolderName($strName, ++$intCounter);
         }
         return $strNameNew;
-    }
-
-
-    public function setStrPrevId($strPrevid) {
-        //only allowed, if not the same id (loop)
-        if(!validateSystemid($strPrevid))
-            $strPrevid = $this->getModuleSystemid("pages");
-
-        if($strPrevid != $this->getSystemid())
-            $this->strPrevId = $strPrevid;
     }
 
 }

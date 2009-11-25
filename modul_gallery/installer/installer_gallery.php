@@ -140,7 +140,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -164,7 +164,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {
@@ -241,7 +241,7 @@ class class_installer_gallery extends class_installer_base implements interface_
             $objRepo->setStrName("Internal Repo for Gallery ".$objOneGallery->getSystemid());
             $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
             $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
-            $objRepo->saveObjectToDb();
+            $objRepo->updateObjectToDb();
 
             $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
         }

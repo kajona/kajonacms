@@ -111,7 +111,7 @@ class class_installer_search extends class_installer_base implements interface_i
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

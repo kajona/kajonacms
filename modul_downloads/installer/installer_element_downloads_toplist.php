@@ -96,7 +96,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-            $objElement->saveObjectToDb();
+            $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
         else {

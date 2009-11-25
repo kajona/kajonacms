@@ -94,7 +94,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
             $objElement->setIntCachetime(-1);
             $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-            $objElement->saveObjectToDb();
+            $objElement->updateObjectToDb();
             $strReturn .= "Element registered...\n";
         }
         else {

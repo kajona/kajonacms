@@ -44,7 +44,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             //set language to "" - being update by the languages sc installer later
             $objPage->setStrLanguage("");    
             $objPage->setStrTemplate("kajona_demo.tpl");
-            $objPage->saveObjectToDb();
+            $objPage->updateObjectToDb();
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding search-element to new page\n";

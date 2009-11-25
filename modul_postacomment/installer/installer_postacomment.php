@@ -109,7 +109,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
-			$objElement->saveObjectToDb();
+			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
 		}
 		else {

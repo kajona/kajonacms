@@ -15,7 +15,6 @@
  */
 class class_modul_pages_element extends class_model implements interface_model  {
 
-    private $strElementId = "";
     private $strName = "";
     private $strClassPortal = "";
     private $strClassAdmin = "";
@@ -39,7 +38,7 @@ class class_modul_pages_element extends class_model implements interface_model  
 		//base class
 		parent::__construct($arrModul, "");
 
-		$this->setStrElementId($strSystemid);
+        $this->setSystemid($strSystemid);
 
 		//init current object
 		if($strSystemid != "")
@@ -47,11 +46,28 @@ class class_modul_pages_element extends class_model implements interface_model  
     }
 
     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array();
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "";
+    }
+
+
+    /**
      * Initalises the current object, if a systemid was given
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id='".$this->objDB->dbsafeString($this->getStrElementId())."'";
+        $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
 
         $this->setStrName($arrRow["element_name"]);
@@ -64,36 +80,36 @@ class class_modul_pages_element extends class_model implements interface_model  
         $this->setSystemid($arrRow["element_id"]);
     }
 
+    
     /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
+     * Updates the current object to the database
+     * @overwrites class_model::updateObjectToDb()
      */
-    public function saveObjectToDb() {
-        $strQuery = "INSERT INTO "._dbprefix_."element
+    public function updateObjectToDb() {
+        if($this->getSystemid() == "") {
+
+            $strElementid = generateSystemid();
+            $this->setSystemid($strElementid);
+
+            $strQuery = "INSERT INTO "._dbprefix_."element
 					(element_id, element_name, element_class_portal, element_class_admin, element_repeat, element_cachetime, element_version) VALUES
-					('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
+					('".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
 					 '".$this->objDB->dbsafeString($this->getStrClassPortal())."', '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
                       ".(int)$this->getIntRepeat().", ".(int)$this->getIntCachetime().", '".dbsafeString($this->getStrVersion())."')";
 
-	   return $this->objDB->_query($strQuery);
-    }
-
-    /**
-     * Updates the current object to the database
-     *
-     */
-    public function updateObjectToDb() {
-        $this->setEditDate();
-        $strQuery = "UPDATE "._dbprefix_."element SET
-						element_name = '".$this->objDB->dbsafeString($this->getStrName())."',
-						element_class_portal = '".$this->objDB->dbsafeString($this->getStrClassPortal())."',
-						element_class_admin = '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
-						element_cachetime = '".$this->objDB->dbsafeString($this->getIntCachetime())."',
-						element_repeat = ".$this->objDB->dbsafeString($this->getIntRepeat()).",
-                        element_version = '".$this->objDB->dbsafeString($this->getStrVersion())."'
-						WHERE element_id='".$this->objDB->dbsafeString($this->getStrElementId())."'";
-		return $this->objDB->_query($strQuery);
+            return $this->objDB->_query($strQuery);
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."element SET
+                            element_name = '".$this->objDB->dbsafeString($this->getStrName())."',
+                            element_class_portal = '".$this->objDB->dbsafeString($this->getStrClassPortal())."',
+                            element_class_admin = '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
+                            element_cachetime = '".$this->objDB->dbsafeString($this->getIntCachetime())."',
+                            element_repeat = ".$this->objDB->dbsafeString($this->getIntRepeat()).",
+                            element_version = '".$this->objDB->dbsafeString($this->getStrVersion())."'
+                            WHERE element_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+            return $this->objDB->_query($strQuery);
+        }
     }
 
     /**
@@ -131,12 +147,11 @@ class class_modul_pages_element extends class_model implements interface_model  
 	/**
 	 * Deletes one element
 	 *
-	 * @param string $strElementid
 	 * @return bool
 	 */
-	public static function deleteElement($strElementid) {
-	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id='".dbsafeString($strElementid)."'";
-	    return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+	public function deleteElement() {
+	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id='".dbsafeString($this->getSystemid())."'";
+	    return $this->objDB->_query($strQuery);
 	}
 
     /**
@@ -156,9 +171,7 @@ class class_modul_pages_element extends class_model implements interface_model  
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
-    public function getStrElementId() {
-        return $this->strElementId;
-    }
+    
     public function getStrName() {
         return $this->strName;
     }
@@ -175,9 +188,7 @@ class class_modul_pages_element extends class_model implements interface_model  
         return $this->intCachetime;
     }
 
-    public function setStrElementId($strElementId) {
-        $this->strElementId = $strElementId;
-    }
+   
     public function setStrName($strName) {
         $this->strName = $strName;
     }

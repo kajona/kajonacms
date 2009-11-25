@@ -106,7 +106,7 @@ class class_model extends class_root {
         $this->setEditDate();
 
         //new prev-id?
-        if($strPrevId !== false && $this->getPrevId() != $strPrevId)
+        if($strPrevId !== false && $this->getPrevId() != $strPrevId && $this->getSystemid() != $strPrevId && (validateSystemid($strPrevId) || $strPrevId = "0"))
             if(!$this->setPrevId($strPrevId))
                 $bitCommit = false;
 

@@ -87,7 +87,7 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPage->setStrTemplate("kajona_demo.tpl");
             //set language to "" - being update by the languages sc installer later
             $objPage->setStrLanguage("");
-            $objPage->saveObjectToDb();
+            $objPage->updateObjectToDb();
             $strNewsdetailsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
             $strReturn .= "Adding newsdetails to new page\n";

@@ -33,7 +33,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->saveObjectToDb();
+        $objPage->updateObjectToDb();
 
         $strPostacommentPageID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strPostacommentPageID."\n";
