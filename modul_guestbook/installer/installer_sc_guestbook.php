@@ -51,7 +51,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("gb1_guestbook");
         $objPagelement->setStrName("gb1");
         $objPagelement->setStrElement("guestbook");
-        $objPagelement->saveObjectToDb($strGuestbookpageID, "gb1_guestbook", _dbprefix_."element_guestbook", "first");
+        $objPagelement->updateObjectToDb($strGuestbookpageID);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_guestbook
                         SET guestbook_id='".dbsafeString($strGuestbookID)."',
@@ -68,7 +68,7 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strGuestbookpageID, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strGuestbookpageID);
         $strElementId = $objPagelement->getSystemid();
          $strQuery = "UPDATE "._dbprefix_."element_absatz
                             SET absatz_titel = 'Guestbook'

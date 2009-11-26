@@ -64,7 +64,7 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $objPagelement->setStrPlaceholder("news_news");
                 $objPagelement->setStrName("news");
                 $objPagelement->setStrElement("news");
-                $objPagelement->saveObjectToDb($this->strIndexID, "news_news", _dbprefix_."element_news", "first");
+                $objPagelement->updateObjectToDb($this->strIndexID);
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_news
                                 SET news_category='".dbsafeString($strCategoryID)."',
@@ -95,7 +95,7 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("news_news");
             $objPagelement->setStrName("news");
             $objPagelement->setStrElement("news");
-            $objPagelement->saveObjectToDb($strNewsdetailsId, "news_news", _dbprefix_."element_news", "first");
+            $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_news
                             SET news_category='".dbsafeString($strCategoryID)."',
@@ -116,7 +116,7 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
-            $objPagelement->saveObjectToDb($strNewsdetailsId, "headline_row", _dbprefix_."element_absatz", "first");
+            $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();
              $strQuery = "UPDATE "._dbprefix_."element_absatz
                                 SET absatz_titel = 'News'

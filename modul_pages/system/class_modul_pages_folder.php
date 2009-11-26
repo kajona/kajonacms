@@ -200,7 +200,7 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	public function deleteFolder() {
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
 	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0)
-	        return $this->deleteSystemRecord($strFolderid);
+	        return $this->deleteSystemRecord($this->getSystemid());
 	    else
 	        return false;
 	}

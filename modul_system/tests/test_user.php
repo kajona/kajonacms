@@ -75,7 +75,8 @@ class class_test_user implements interface_testable {
 
         echo "\tdeleting groups created...\n";
         foreach($arrGroupsCreated as $strOneGroup) {
-            class_modul_user_group::deleteGroup($strOneGroup);
+            $objOneGroup = new class_modul_user_group($strOneGroup);
+            $objOneGroup->deleteGroup();
             $objDB->flushQueryCache();
         }
 
@@ -105,7 +106,7 @@ class class_test_user implements interface_testable {
         echo "\tdeleting groups & users\n";
         foreach(class_modul_user_group::getGroupMembers($objGroup->getSystemid()) as $objOneUser)
             $objOneUser->deleteUser();
-        class_modul_user_group::deleteGroup($objGroup->getSystemid());
+        $objGroup->deleteGroup();
 
 
         $objDB->flushQueryCache();

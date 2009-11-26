@@ -73,7 +73,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("mastermainnavi_navigation");
             $objPagelement->setStrName("mastermainnavi");
             $objPagelement->setStrElement("navigation");
-            $objPagelement->saveObjectToDb($this->strMasterID, "mastermainnavi_navigation", _dbprefix_."element_navigation", "first");
+            $objPagelement->updateObjectToDb($this->strMasterID);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id='".dbsafeString($strTreeId)."',
@@ -92,7 +92,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
             $objPagelement->setStrName("masterportalnavi");
             $objPagelement->setStrElement("navigation");
-            $objPagelement->saveObjectToDb($this->strMasterID, "masterportalnavi_navigation", _dbprefix_."element_navigation", "first");
+            $objPagelement->updateObjectToDb($this->strMasterID);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_navigation
                             SET navigation_id='".dbsafeString($strTreePortalId)."',
@@ -120,7 +120,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("sitemap_navigation");
         $objPagelement->setStrName("sitemap");
         $objPagelement->setStrElement("navigation");
-        $objPagelement->saveObjectToDb($strSitemapId, "sitemap_navigation", _dbprefix_."element_navigation", "first");
+        $objPagelement->updateObjectToDb($strSitemapId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_navigation
                         SET navigation_id='".dbsafeString($strTreeId)."',
@@ -137,7 +137,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strSitemapId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strSitemapId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_absatz
                         SET absatz_titel = 'Sitemap'

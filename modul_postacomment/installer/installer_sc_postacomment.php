@@ -42,7 +42,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("comments_postacomment");
         $objPagelement->setStrName("comments");
         $objPagelement->setStrElement("postacomment");
-        $objPagelement->saveObjectToDb($strPostacommentPageID, "comments_postacomment", _dbprefix_."element_universal", "first");
+        $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
 
         $strQuery = "UPDATE "._dbprefix_."element_universal
@@ -59,7 +59,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strPostacommentPageID, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_absatz
                             SET absatz_titel = 'Postacomment Sample'
@@ -74,7 +74,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strPostacommentPageID, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {

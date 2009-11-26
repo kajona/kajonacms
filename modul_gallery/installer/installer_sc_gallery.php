@@ -58,7 +58,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("bilder_gallery");
         $objPagelement->setStrName("bilder");
         $objPagelement->setStrElement("gallery");
-        $objPagelement->saveObjectToDb($strGalleryPageId, "bilder_gallery", _dbprefix_."element_gallery", "first");
+        $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_gallery
                         SET gallery_id = '".dbsafeString($strGalleryID)."',
@@ -88,7 +88,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strGalleryPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_absatz
                             SET absatz_titel = 'Gallery'
@@ -104,7 +104,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strGalleryPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {

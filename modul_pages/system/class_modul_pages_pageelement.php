@@ -20,8 +20,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     private $strTitle = "";
     private $strLanguage = "";
 
-    private $strLockId = "";
-
     private $strClassAdmin = "";
     private $strClassPortal = "";
     private $intCachetime = -1;
@@ -52,6 +50,24 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		    $this->initObject();
     }
 
+
+     /**
+     * @see class_model::getObjectTables();
+     * @return array
+     */
+    protected function getObjectTables() {
+        return array(_dbprefix_."page_element" => "page_element_id");
+    }
+
+    /**
+     * @see class_model::getObjectDescription();
+     * @return string
+     */
+    protected function getObjectDescription() {
+        return "page element ".$this->getStrName();
+    }
+
+
     /**
      * Initalises the current object, if a systemid was given
      *
@@ -75,7 +91,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     		$this->setStrElement($arrRow["page_element_placeholder_element"]);
     		$this->setStrTitle($arrRow["page_element_placeholder_title"]);
     		$this->setStrLanguage($arrRow["page_element_placeholder_language"]);
-    		$this->strLockId = $arrRow["system_lock_id"];
     		$this->setStrClassAdmin($arrRow["element_class_admin"]);
             $this->setStrClassPortal($arrRow["element_class_portal"]);
             $this->setIntCachetime($arrRow["element_cachetime"]);
@@ -93,65 +108,46 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     /**
      * saves the current object as a new object to the database
      *
-     * @param string $strPrevId
-     * @param string $strPlaceholder TODO: not needed!
-     * @param string $strForeignTable
-     * @param string $strPos
      * @return bool
      */
-    public function saveObjectToDb($strPrevId, $strPlaceholder, $strForeignTable, $strPos) {
+    protected function onInsertToDb() {
 
-        //So, lets do the magic - create the records
-		//For Security, we're using a tx --> create system & right records, then the element-record, and the page_element_record
-		$this->objDB->transactionBegin();
-		//As described, start with the system / right record.
-		//Note: The current systemid is the pageid, so the system_prev_id for the element
-		$strElementSystemId = $this->createSystemRecord($strPrevId, "ELEMENT: ".$this->getStrPlaceholder());
-		$this->setSystemid($strElementSystemId);
+
+        $objElementdefinitionToCreate = class_modul_pages_element::getElement($this->getStrElement());
+        include_once(_adminpath_."/elemente/".$objElementdefinitionToCreate->getStrClassAdmin());
+        //Build the class-name
+        $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
+        //and finally create the object
+        $objElement = new $strElementClass();
+        $strForeignTable = $objElement->getTable();
+
+
 		//And create the row in the Element-Table, if given
-        $strQuery = "";
-
-        //TODO: get foreign table automatically
 		if($strForeignTable != "") {
-		    $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES ('".$this->objDB->dbsafeString($strElementSystemId)."')";
-		}
-		else {
-		    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."page_element";
-		}
-		//The record in the page_element_table
-		$strQuery2 = "INSERT INTO "._dbprefix_."page_element
-						(page_element_id, page_element_placeholder_placeholder, page_element_placeholder_name, page_element_placeholder_element, page_element_placeholder_language) VALUES
-						('".$this->objDB->dbsafeString($strElementSystemId)."', '".$this->objDB->dbsafeString($this->getStrPlaceholder())."',
-						 '".$this->objDB->dbsafeString($this->getStrName())."', '".$this->objDB->dbsafeString($this->getStrElement())."',
-						 '".$this->objDB->dbsafeString($this->getStrLanguage())."')";
-
-		class_logger::getInstance()->addLogRow("new page-element ".$strElementSystemId, class_logger::$levelInfo);
-
-		if($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2))
-			$this->objDB->transactionCommit();
-		else {
-			$this->objDB->transactionRollback();
-			return false;
+		    $strQuery = "INSERT INTO ".$strForeignTable." (content_id) VALUES ('".$this->objDB->dbsafeString($this->getSystemid())."')";
+            $this->objDB->_query($strQuery);
 		}
 
-        if($strPos == "first") {
-			//As a special feature, we set the element as 2 in the array. so we can shift it one position up an have it on top of list
-			$strQuery = "UPDATE "._dbprefix_."system SET system_sort = 1 WHERE system_id = '".$this->objDB->dbsafeString($strElementSystemId)."'";
-			$this->objDB->_query($strQuery);
-			//And shift this element one pos up to get correct order on systemtables
-			$this->actionShiftElement("up");
+        //shift it to the first position by default
+        //As a special feature, we set the element as 2 in the array. so we can shift it one position up an have it on top of list
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 1 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+        $this->objDB->_query($strQuery);
+        //And shift this element one pos up to get correct order on systemtables
+        $this->actionShiftElement("up");
 
-        }
-        elseif ($strPos == "last") {
-			//set the element as last, shift it up once an down again to get a correct order on systemtables
-			$strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".$this->objDB->dbsafeString($strElementSystemId)."'";
-			$this->objDB->_query($strQuery);
-			//And shift this element one pos up
-			$this->actionShiftElement("up");
-			$this->actionShiftElement("down");
-        }
 
         return true;
+    }
+
+    /**
+     * Shifts the current element to the last position of the current level
+     */
+    public function shiftToLastPosition() {
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+        $this->objDB->_query($strQuery);
+        //And shift this element one pos up
+        $this->actionShiftElement("up");
+        $this->actionShiftElement("down");
     }
 
     /**
@@ -160,14 +156,14 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      *
      * @return bool
      */
-    public function updateObjectToDb() {
-        class_logger::getInstance()->addLogRow("updated page-element ".$this->getSystemid(), class_logger::$levelInfo);
+    protected function updateStateToDb() {
         $strQuery = "UPDATE "._dbprefix_."page_element
 							SET page_element_placeholder_title = '".$this->objDB->dbsafeString($this->getStrTitle(false))."',
 							    page_element_placeholder_language = '".$this->objDB->dbsafeString($this->getStrLanguage())."',
-							    page_element_placeholder_placeholder = '".$this->objDB->dbsafeString($this->getStrPlaceholder())."'
+							    page_element_placeholder_placeholder = '".$this->objDB->dbsafeString($this->getStrPlaceholder())."',
+							    page_element_placeholder_name = '".$this->objDB->dbsafeString($this->getStrName())."',
+							    page_element_placeholder_element = '".$this->objDB->dbsafeString($this->getStrElement())."'
 							WHERE page_element_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $this->setEditDate();
         return $this->objDB->_query($strQuery);
     }
 
@@ -601,12 +597,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $objElement->setSystemid($this->getSystemid());
         return $objElement->getContentTitle();
     }
-    public function getStrLockId() {
-    	if($this->strLockId == "")
-    		return "0";
-    	
-        return $this->strLockId;
-    }
+
     public function getStrClassPortal() {
         return $this->strClassPortal;
     }

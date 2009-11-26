@@ -70,7 +70,7 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("faqs_faqs");
         $objPagelement->setStrName("faqs");
         $objPagelement->setStrElement("faqs");
-        $objPagelement->saveObjectToDb($strFaqsPageId, "faqs_faqs", _dbprefix_."element_faqs", "first");
+        $objPagelement->updateObjectToDb($strFaqsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_faqs
                         SET faqs_category=0,
@@ -86,7 +86,7 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strFaqsPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strFaqsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_absatz
                          SET absatz_titel = 'FAQs'

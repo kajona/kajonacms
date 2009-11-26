@@ -427,17 +427,18 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    return $strReturn;
 			}
 
-			//Get the table used by the element to create the record
-			$strTable = $objElement->getTable();
-
 			//So, lets do the magic - create the records
 			$objPageElement = new class_modul_pages_pageelement("");
 			$objPageElement->setStrName($strPlaceholderName);
 			$objPageElement->setStrPlaceholder($strPlaceholder);
 			$objPageElement->setStrElement($strPlaceholderElement);
-			if(!$objPageElement->saveObjectToDb($this->getSystemid(), $strPlaceholder, $strTable, $this->getParam("element_pos")))
+			if(!$objPageElement->updateObjectToDb($this->getSystemid()))
 			    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
 			$strElementSystemId = $objPageElement->getSystemid();
+
+            //shift to last position? first is default.
+            if($this->getParam("element_pos") == "last")
+                $objPageElement->shiftToLastPosition();
 
             $objLockmanager = new class_lockmanager($strElementSystemId);
             $objLockmanager->lockRecord();

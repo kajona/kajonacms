@@ -40,7 +40,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                 $objPagelement->setStrPlaceholder("masterswitch_languageswitch");
                 $objPagelement->setStrName("masterswitch");
                 $objPagelement->setStrElement("languageswitch");
-                $objPagelement->saveObjectToDb($this->strMasterID, "masterswitch_languageswitch", _dbprefix_."element_universal", "first");
+                $objPagelement->updateObjectToDb($this->strMasterID);
                 $strElementId = $objPagelement->getSystemid();
                 $strReturn .= "ID of element: ".$strElementId."\n";
                 $strReturn .= "Element created.\n";

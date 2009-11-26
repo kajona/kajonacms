@@ -94,15 +94,7 @@ abstract class class_root {
 
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
-		//Setting SystemID
-		/*if($strSystemid == "") {
-			if(isset($this->arrParams["systemid"]))
-				$this->setSystemid($this->arrParams["systemid"]);
-			else
-				$this->strSystemid = "";
-		}
-		else*/
-			$this->setSystemid($strSystemid);
+        $this->setSystemid($strSystemid);
 
 
 		//Generating all the needed objects. For this we use our cool cool carrier-object

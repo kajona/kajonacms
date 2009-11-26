@@ -58,7 +58,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("dl1_downloads");
         $objPagelement->setStrName("dl1");
         $objPagelement->setStrElement("downloads");
-        $objPagelement->saveObjectToDb($strDownloadsPageId, "dl1_downloads", _dbprefix_."element_downloads", "first");
+        $objPagelement->updateObjectToDb($strDownloadsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_downloads 
                         SET download_id = '".dbsafeString($strDownloadsID)."',
@@ -76,7 +76,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strDownloadsPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strDownloadsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_absatz
                             SET absatz_titel = 'Downloads'

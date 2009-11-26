@@ -52,7 +52,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("results_search");
             $objPagelement->setStrName("results");
             $objPagelement->setStrElement("search");
-            $objPagelement->saveObjectToDb($strSearchresultsId, "results_search", _dbprefix_."element_search", "first");
+            $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
              $strQuery = "UPDATE "._dbprefix_."element_search
                                 SET search_template = 'search_results.tpl',
@@ -69,7 +69,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
             $objPagelement->setStrElement("row");
-            $objPagelement->saveObjectToDb($strSearchresultsId, "headline_row", _dbprefix_."element_absatz", "first");
+            $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
 
             if($this->strContentLanguage == "de") {

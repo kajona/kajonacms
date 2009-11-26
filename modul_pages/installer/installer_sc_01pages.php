@@ -54,7 +54,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($this->strIndexID, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($this->strIndexID);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
@@ -78,7 +78,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($this->strIndexID, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($this->strIndexID);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
@@ -108,7 +108,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("picture1_image");
         $objPagelement->setStrName("picture1");
         $objPagelement->setStrElement("image");
-        $objPagelement->saveObjectToDb($this->strIndexID, "picture1_image", _dbprefix_."element_bild", "first");
+        $objPagelement->updateObjectToDb($this->strIndexID);
         $strElementId = $objPagelement->getSystemid();
          $strQuery = "UPDATE "._dbprefix_."element_bild
                             SET bild_bild = '/portal/pics/kajona/login_logo.gif'
@@ -159,7 +159,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strErrorPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strErrorPageId);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
@@ -183,7 +183,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strErrorPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strErrorPageId);
         $strElementId = $objPagelement->getSystemid();
 
 
@@ -229,7 +229,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strImprintPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strImprintPageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_absatz
@@ -252,7 +252,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strImprintPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strImprintPageId);
         $strElementId = $objPagelement->getSystemid();
 
 
@@ -311,7 +311,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strSamplePageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strSamplePageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_absatz
@@ -334,7 +334,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strSamplePageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strSamplePageId);
         $strElementId = $objPagelement->getSystemid();
 
 
@@ -379,7 +379,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("headline_row");
         $objPagelement->setStrName("headline");
         $objPagelement->setStrElement("row");
-        $objPagelement->saveObjectToDb($strSampleSubPageId, "headline_row", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strSampleSubPageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_absatz
@@ -402,7 +402,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrPlaceholder("text_paragraph");
         $objPagelement->setStrName("text");
         $objPagelement->setStrElement("paragraph");
-        $objPagelement->saveObjectToDb($strSampleSubPageId, "text_paragraph", _dbprefix_."element_absatz", "first");
+        $objPagelement->updateObjectToDb($strSampleSubPageId);
         $strElementId = $objPagelement->getSystemid();
 
 

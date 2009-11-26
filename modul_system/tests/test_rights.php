@@ -244,7 +244,7 @@ class class_test_rights implements interface_testable {
         echo "\tdeleting the test user\n";
         $objUser->deleteUser();
         echo "\tdeleting the test group\n";
-        class_modul_user_group::deleteGroup($objGroup->getSystemid());
+        $objGroup->deleteGroup();
         
     }
 
