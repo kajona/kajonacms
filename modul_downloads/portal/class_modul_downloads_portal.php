@@ -61,14 +61,14 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 */
 	public function actionList() {
 		$strReturn = "";
-
+//$this->objRights->rebuildRightsStructure();
 		//systemid passed?
 		if( !validateSystemid($this->getSystemid() ) || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
             if(isset($this->arrElementData["download_id"]))
                 $this->setSystemid($this->arrElementData["download_id"]);
 		}
 
-        if($this->arrElementData["download_amount"] == "" || $this->arrElementData["download_amount"] < 1)
+        if(!isset($this->arrElementData["download_amount"]) || $this->arrElementData["download_amount"] == "" || (int)$this->arrElementData["download_amount"] < 1)
             $this->arrElementData["download_amount"] = 99999;
 
         //Load all files
