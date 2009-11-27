@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: folderlist, filelist, pathnavigation -->
+<!-- available placeholders: folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <script type="text/javascript">
         bitKajonaRatingsAvailable = false;
