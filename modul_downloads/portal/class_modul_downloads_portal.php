@@ -68,6 +68,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                 $this->setSystemid($this->arrElementData["download_id"]);
 		}
 
+        if($this->arrElementData["download_amount"] == "" || $this->arrElementData["download_amount"] < 1)
+            $this->arrElementData["download_amount"] = 99999;
 
         //Load all files
 	    $objArraySectionIterator = new class_array_section_iterator($this->getNumberOfEntriesOnLevel());
