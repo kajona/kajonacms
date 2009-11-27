@@ -16,7 +16,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.91";
+		$arrModule["version"] 		= "3.2.92";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["class_admin"] 	= "class_modul_downloads_admin";
 		$arrModule["file_admin"] 	= "class_modul_downloads_admin.php";
@@ -196,6 +196,16 @@ class class_installer_downloads extends class_installer_base implements interfac
             $strReturn .= $this->update_3219_3291();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1.9") {
+            $strReturn .= $this->update_3219_3291();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_3292();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -339,6 +349,26 @@ class class_installer_downloads extends class_installer_base implements interfac
         $this->updateModuleVersion("downloads", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("downloads", "3.2.91");
+        return $strReturn;
+    }
+
+
+    private function update_3291_3292() {
+        $strReturn = "Updating 3.2.9.1 to 3.2.92...\n";
+
+
+        $strReturn .= "Extending element table...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_downloads")."
+        	               ADD ".$this->objDB->encloseColumnName("download_amount")." ".$this->objDB->getDatatype("int")." NULL ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.2.92");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("downloads", "3.2.92");
         return $strReturn;
     }
     

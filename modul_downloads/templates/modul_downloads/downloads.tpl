@@ -23,6 +23,7 @@
             %%filelist%%
         </table>
     </p>
+    %%link_back%% %%link_pages%% %%link_forward%%
 </list>
 
 <!-- available placeholders: folder_name, folder_description, folder_link, folder_href -->

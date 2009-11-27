@@ -68,12 +68,26 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                 $this->setSystemid($this->arrElementData["download_id"]);
 		}
 
-        $arrObjects = $this->getArrFiles();
 
-		if(count($arrObjects) > 0) {
+        //Load all files
+	    $objArraySectionIterator = new class_array_section_iterator($this->getNumberOfEntriesOnLevel());
+	    $objArraySectionIterator->setIntElementsPerPage($this->arrElementData["download_amount"]);
+	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+	    $objArraySectionIterator->setArraySection($this->getArrFiles($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+	    $arrObjects = $objArraySectionIterator->getArrayExtended();
+
+		$arrObjects = $this->objToolkit->pager($this->arrElementData["download_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrObjects);
+
+
+
+
+       // $arrObjects = $this->getArrFiles();
+
+		if(count($arrObjects["arrData"]) > 0) {
 			$strFileList = "";
 			$strFolderList = "";
-			foreach($arrObjects as $objOneFile) {
+			foreach($arrObjects["arrData"] as $objOneFile) {
 				//check rights
 				if($this->objRights->rightView($objOneFile->getSystemid())) {
 					$arrTemplate = array();
@@ -125,6 +139,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$arrTemplate["folderlist"] = $strFolderList;
 			$arrTemplate["filelist"] = $strFileList;
 			$arrTemplate["pathnavigation"] = $this->generatePathnavi();
+            $arrTemplate["link_forward"] = $arrObjects["strForward"];
+            $arrTemplate["link_pages"] = $arrObjects["strPages"];
+            $arrTemplate["link_back"] = $arrObjects["strBack"];
+
 			$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		}
 		else {
@@ -315,8 +333,12 @@ class class_modul_downloads_portal extends class_portal implements interface_por
      *
      * @return array
      */
-    protected function getArrFiles() {
-        return class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true);
+    protected function getArrFiles($intStart, $intEnd) {
+        return class_modul_downloads_file::getFilesDB($this->getSystemid(), false, true, $intStart, $intEnd);
+    }
+
+    protected function getNumberOfEntriesOnLevel() {
+        return class_modul_downloads_file::getNumberOfFilesDB($this->getSystemid(), false, true);
     }
 }
 ?>

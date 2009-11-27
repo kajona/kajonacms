@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 101
 
 //editable entries
+$lang["download_amount"]                 = "Downloads per page:";
 $lang["download_id"]                     = "Archive:";
 $lang["download_template"]               = "Template:";
 ?>

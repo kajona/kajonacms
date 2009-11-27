@@ -17,4 +17,6 @@ $lang["download_rating_rate1"]           = "Rate file with ";
 $lang["download_rating_rate2"]           = " point(s)!";
 $lang["download_rating_voted"]           = "You already voted for this file.";
 $lang["liste_leer"]                      = "No downloads available";
+$lang["weiter"]                          = "next";
+$lang["zurueck"]                         = "previous";
 ?>

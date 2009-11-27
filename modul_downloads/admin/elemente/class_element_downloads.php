@@ -26,7 +26,7 @@ class class_element_downloads extends class_element_admin implements interface_a
 		$arrModule["table"] 		= _dbprefix_."element_downloads";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]  = "download_id|char,download_template|char";
+		$arrModule["tableColumns"]  = "download_id|char,download_template|char,download_amount|number";
 
 		parent::__construct($arrModule);
 	}
@@ -59,6 +59,8 @@ class class_element_downloads extends class_element_admin implements interface_a
 			}
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("download_template", $arrTemplatesDD, $this->getText("download_template"), (isset($arrElementData["download_template"]) ? $arrElementData["download_template"] : "" ));
+
+        $strReturn .= $this->objToolkit->formInputText("download_amount", $this->getText("download_amount"), (isset($arrElementData["download_amount"]) ? $arrElementData["download_amount"] : ""));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("download_id");
 

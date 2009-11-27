@@ -17,4 +17,6 @@ $lang["download_rating_rate1"]           = "Datei mit ";
 $lang["download_rating_rate2"]           = " Punkt(en) bewerten!";
 $lang["download_rating_voted"]           = "Diese Datei wurde bereits bewertet.";
 $lang["liste_leer"]                      = "Keine Downloads vorhanden";
+$lang["weiter"]                          = "weiter";
+$lang["zurueck"]                         = "zurück";
 ?>

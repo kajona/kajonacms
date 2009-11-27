@@ -190,10 +190,12 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	 *
 	 * @param string $strPrevId
 	 * @param bool $bitFilesOnly
+     * @param int $intStartNr
+     * @param int $intEndNr
 	 * @return mixed
 	 * @static
 	 */
-	public static function getFilesDB($strPrevId, $bitFilesOnly = false, $bitJustActive = false) {
+	public static function getFilesDB($strPrevId, $bitFilesOnly = false, $bitJustActive = false, $intStartNr = false, $intEndNr = false) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system,
 		                           "._dbprefix_."downloads_file
 						WHERE system_id = downloads_id
@@ -206,12 +208,41 @@ class class_modul_downloads_file extends class_model implements interface_model,
 
 		$objDB = class_carrier::getInstance()->getObjDB();
 
-		$arrIds =  $objDB->getArray($strQuery);
+        if($intStartNr !== false && $intEndNr !== false)
+            $arrIds =  $objDB->getArraySection($strQuery, $intStartNr, $intEndNr);
+        else
+            $arrIds =  $objDB->getArray($strQuery);
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_downloads_file($arrOneId["system_id"]);
 
 		return $arrReturn;
+	}
+
+
+    /**
+	 * Loads the number of files
+	 *
+	 * @param string $strPrevId
+	 * @param bool $bitFilesOnly
+	 * @return mixed
+	 * @static
+	 */
+	public static function getNumberOfFilesDB($strPrevId, $bitFilesOnly = false, $bitJustActive = false) {
+		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system,
+		                           "._dbprefix_."downloads_file
+						WHERE system_id = downloads_id
+						  AND system_prev_id='".dbsafeString($strPrevId)."'
+							".(!$bitFilesOnly ? "" : " AND downloads_type = 0 ")."
+							".(!$bitJustActive ? "" : " AND system_status = 1 ")."
+						ORDER BY system_sort ASC,
+							downloads_type DESC,
+							downloads_name ASC";
+
+		$objDB = class_carrier::getInstance()->getObjDB();
+
+		$arrRow =  $objDB->getRow($strQuery);
+		return $arrRow["COUNT(*)"];
 	}
 
    /**
