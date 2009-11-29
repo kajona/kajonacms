@@ -37,6 +37,14 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 */
 	public function action($strAction = "") {
 		$strReturn = "";
+
+
+        //sync?
+        if($this->getParam("resync") == "true") {
+            $this->actionSyncInternal();
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "&systemid=".$this->getSystemid()));
+        }
+
         if($strAction == "")
             $strAction = "list";
 
@@ -556,7 +564,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   			else {
                             //the filemanager edit action
                             if($objFmRepo != null) {
-                                $strAction .= $this->objToolkit->listButton(getLinkAdmin("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."", "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
+                                $strAction .= $this->objToolkit->listButton(getLinkAdmin("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."&galleryId=".$this->getSystemid(), "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
                             }
 			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("image_properties"), "icon_pencil.gif"));
                         }
@@ -596,6 +604,14 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	}
 
 
+
+    private function actionSyncInternal() {
+        if($this->objRights->rightRight1($this->getSystemid()) ) {
+            $arrPathIds = $this->getPathArray();
+            $objGallery = new class_modul_gallery_gallery(array_shift($arrPathIds));
+            $arrTemp = class_modul_gallery_pic::syncRecursive($objGallery->getSystemid(), $objGallery->getStrPath());
+        }
+    }
 
 
 // --- Sortierung ---------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 214
+//Kajona Language Editor Core Build 213
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -17,6 +17,7 @@ $lang["_filemanager_foldersize_"]        = "Größe anzeigen:";
 $lang["_filemanager_foldersize_hint"]    = "Aktiviert oder deaktiviert das rekursive Bestimmen der Ordnergrößen im Filemanager. Bei tiefen Verzeichnishierarchien kann dies zu Performanceeinschränkungen führen.";
 $lang["_filemanager_show_foreign_"]      = "Versteckte Repositories anzeigen:";
 $lang["anlegen"]                         = "Ordner anlegen";
+$lang["backToGallery"]                   = "Zurück zur Bildergalerie";
 $lang["bild_groesse"]                    = "Bildgröße:";
 $lang["bild_vorschau"]                   = "Vorschau:";
 $lang["browser"]                         = "Ordnerbrowser";
