@@ -27,7 +27,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$arrModul["table3"] 			= _dbprefix_."downloads_logs";
 		$arrModul["moduleId"] 			= _downloads_modul_id_;
 		$arrModul["modul"] 			    = "downloads";
-
+        
 		parent::__construct($arrModul, $arrElementData);
 	}
 
@@ -180,6 +180,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         $arrFile["file_filename"] = $objFile->getFilename();
         $arrFile["file_size"] = bytesToString($objFile->getSize());
         $arrFile["file_hits"] = $objFile->getHits();
+        $arrFile["file_lmtime"] = timeToString($objFile->getEditDate());
 
         //Right to download?
         if($this->objRights->rightRight2($objFile->getSystemid())) {
@@ -204,11 +205,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
         //screenshots available? undocumented feature!
         if($objFile->getStrScreen1() != "")
-            $arrFile["file_screen_1"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen1())."&maxWidth=250&maxHeight=250\" />";
+            $arrFile["file_screen_1"] = "<a title=\"1\" href=\""._webpath_."/image.php?image=".urlencode($objFile->getStrScreen1())."&maxWidth=500&maxHeight=500\"  class=\"photoViewer\"><img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen1())."&maxWidth=250&maxHeight=250\" /></a>";
         if($objFile->getStrScreen2() != "")
-            $arrFile["file_screen_2"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen2())."&maxWidth=250&maxHeight=250\" />";
+            $arrFile["file_screen_2"] = "<a title=\"2\" href=\""._webpath_."/image.php?image=".urlencode($objFile->getStrScreen2())."&maxWidth=500&maxHeight=500\"  class=\"photoViewer\"><img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen2())."&maxWidth=250&maxHeight=250\" /></a>";
         if($objFile->getStrScreen3() != "")
-            $arrFile["file_screen_3"] = "<img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=250&maxHeight=250\" />";
+            $arrFile["file_screen_3"] = "<a title=\"3\" href=\""._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=500&maxHeight=500\"  class=\"photoViewer\"><img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=250&maxHeight=250\" /></a>";
 
 		$strReturn = $this->fillTemplate($arrFile, $strTemplateID);
 
@@ -244,7 +245,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		while(validateSystemid($objFile->getPrevId()) && $objFile->getPrevId() != $objArchive->getPrevId()) {
 		    $objFile = new class_modul_downloads_file($objFile->getPrevId());
 		    if($objFile->getFilename() == "") {
-		        $objFile = new class_modul_downloads_archive($this->arrElementData["download_id"]);
+		        $objFile = new class_modul_downloads_archive(isset($this->arrElementData["download_id"]) ? $this->arrElementData["download_id"] : "");
 		    }
    		    $arrTemplate["path_level"] = getLinkPortal($this->getPagename(), "", "_self", $objFile->getTitle(), "openDlFolder", "", $objFile->getSystemid(), "", "", $objFile->getTitle());
    	       	$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "pathnavi_entry");
