@@ -36,4 +36,5 @@ $lang["resetemailTitle"]                 = "Accountpasswort zurückgesetzt";
 $lang["userDataSubmit"]                  = "Speichern";
 $lang["username"]                        = "Benutzername:";
 $lang["usernameTitle"]                   = "Benutzername:";
+$lang["signup"]                          = "Registrieren";
 ?>
