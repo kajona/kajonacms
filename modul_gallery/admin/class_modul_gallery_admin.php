@@ -191,11 +191,11 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   			//snyc is allowed. create js-code for ajax-syncing
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:syncGallery('".$objOneGallery->getSystemid()."');\"",  "", $this->getText("galerie_syncro"), "icon_sync.gif"));
 			   		}
-			   		if($objOneGallery->rightEdit())
+			   		if($objOneGallery->rightRight3())
 			   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"],  "editGallery", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_bearbeiten"), "icon_pencil.gif"));
-			   		if($objOneGallery->rightDelete())
+			   		if($objOneGallery->rightRight3())
 			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGallery->getStrTitle(), $this->getText("galerie_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid()));
-			   		if($objOneGallery->rightRight())
+			   		if($objOneGallery->rightRight3())
 		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), getRightsImageAdminName($objOneGallery->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
 				}
@@ -203,7 +203,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 
 
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+			if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newGallery", "", $this->getText("galerie_neu"), $this->getText("galerie_neu"), "icon_blank.gif"), $intI++);
 
 			if(uniStrlen($strReturn) != 0)
@@ -231,7 +231,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		$strReturn = "";
 		if($strMode == "new") {
 			//right
-			if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+			if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
@@ -248,7 +248,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				$strReturn = $this->getText("fehler_recht");
 		}
 		elseif ($strMode == "edit") {
-			if($this->objRights->rightEdit($this->getSystemid())) 	{
+			if($this->objRights->rightRight3($this->getSystemid())) 	{
 			    //Load the gallery
 			    $objGallery = new class_modul_gallery_gallery($this->getSystemid());
 			    //Build a form
@@ -279,7 +279,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		//Modus checken
 		if($this->getParam("mode") == "new") {
 			//Rechte checken
-			if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+			if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $objGallery = new class_modul_gallery_gallery();
 			    $objGallery->setStrPath($this->getParam("gallery_path"));
 			    $objGallery->setStrTitle($this->getParam("gallery_title"));
@@ -293,7 +293,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			//Right-Check
-			if($this->objRights->rightEdit($this->getSystemid())) {
+			if($this->objRights->rightRight3($this->getSystemid())) {
 			    $objGallery = new class_modul_gallery_gallery($this->getSystemid());
 			    $objGallery->setStrPath($this->getParam("gallery_path"));
 			    $objGallery->setStrTitle($this->getParam("gallery_title"));
@@ -315,7 +315,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	private function actionDeleteGallery() {
 		$strReturn = "";
 		//Rechte-Check
-		if($this->objRights->rightDelete($this->getSystemid())) {
+		if($this->objRights->rightRight3($this->getSystemid())) {
             $objGallery = new class_modul_gallery_gallery($this->getSystemid());
 
 			if($objGallery->deleteGalleryRecursive()) {

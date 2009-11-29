@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 147
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "Gallery Eigenschaften", 7 => "", 8 => "");
 
 //editable entries
 $lang["_gallery_imagetypes_"]            = "Bildtypen:";
