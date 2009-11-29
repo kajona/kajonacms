@@ -39,7 +39,7 @@ class class_modul_user_user extends class_model implements interface_model  {
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      * @param bool $bitLoadPassword
      */
     public function __construct($strSystemid = "", $bitLoadPassword = false) {

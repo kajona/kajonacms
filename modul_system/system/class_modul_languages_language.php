@@ -22,7 +22,7 @@ class class_modul_languages_language extends class_model implements interface_mo
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();

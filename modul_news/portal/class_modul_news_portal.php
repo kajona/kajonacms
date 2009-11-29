@@ -101,7 +101,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					$arrOneNews["news_text"] = $objOneNews->getStrNewstext();
 
 					//reset more link?
-                    if(uniStrlen($arrOneNews["news_text"]) == 0)
+                    if(uniStrlen(htmlStripTags($arrOneNews["news_text"])) == 0)
                         $arrOneNews["news_more_link"] = "";
 
 

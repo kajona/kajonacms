@@ -24,7 +24,7 @@ class class_modul_navigation_cache {
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct() {
         $this->arrModule = array();

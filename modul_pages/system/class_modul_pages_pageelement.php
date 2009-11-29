@@ -32,7 +32,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
@@ -590,7 +590,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     public function getStrTitle($bitClever = true) {
         if($this->strTitle != "" || !$bitClever)
             return $this->strTitle;
-        //Create an instance of the objet and let it serve the comment...
+        //Create an instance of the object and let it serve the comment...
         $strClassname = str_replace(".php", "", $this->getStrClassAdmin());
         include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
         $objElement = new $strClassname();

@@ -30,7 +30,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
         $arrModule = array();

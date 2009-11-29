@@ -25,7 +25,7 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
     /**
      * Constructor to create a valid object
      *
-     * @param string $strSystemid (use "" on new objets)
+     * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
         $arrModul["name"] 				= "modul_gallery";
