@@ -604,7 +604,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNewscontent"));
             $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
 		    $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
-		    $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&folder=/portal/pics&suffix=.jpg|.gif|.png&form_element=news_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		    $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
