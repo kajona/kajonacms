@@ -101,7 +101,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
-                        $arrTemplate["file_detail_href"] = getLinkPortalHref($this->getPagename(), "", "detailDownload", "", $objOneFile->getSystemid());
+                        $arrTemplate["file_detail_href"] = getLinkPortalHref($this->getPagename(), "", "detailDownload", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
 						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
@@ -212,6 +212,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
             $arrFile["file_screen_3"] = "<a title=\"3\" href=\""._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=500&maxHeight=500\"  class=\"photoViewer\"><img src="._webpath_."/image.php?image=".urlencode($objFile->getStrScreen3())."&maxWidth=250&maxHeight=250\" /></a>";
 
 		$strReturn = $this->fillTemplate($arrFile, $strTemplateID);
+
+
+        //add the filename to the title
+        class_modul_pages_portal::registerAdditionalTitle($objFile->getName());
 
 		return $strReturn;
 	}
