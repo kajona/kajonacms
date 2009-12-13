@@ -79,7 +79,7 @@ class class_image {
 	public function createBlankImage($strType = ".jpg") {
         $this->strType = $strType;
         if($this->intHeight != 0 && $this->intWidth != 0) {
-            $this->objImage = $this->createEmtpyImage($this->intWidth, $this->intHeight);
+            $this->objImage = $this->createEmptyImage($this->intWidth, $this->intHeight);
         }
         else
             return false;
@@ -125,6 +125,8 @@ class class_image {
 					break;
 				case ".png":
 					$this->objImage = imagecreatefrompng(_realpath_.$this->strImagePathOriginal."/".$this->strImagename);
+					imagealphablending($this->objImage, false);
+                    imagesavealpha($this->objImage, true);
 					break;
 				case ".gif":
 					$this->objImage = imagecreatefromgif(_realpath_.$this->strImagePathOriginal."/".$this->strImagename);
@@ -155,7 +157,7 @@ class class_image {
 
 		//file existing?
 		if(is_file(_realpath_.$strImage)) {
-			//DateiEndung bestimmen
+			//get file type
 			$strType = uniStrtolower(uniSubstr($strImage, uniStrrpos($strImage, ".")));
 			switch ($strType) {
 				case ".jpg":
@@ -198,10 +200,10 @@ class class_image {
             if($strTarget != "")
                 $strTarget = removeDirectoryTraversals($strTarget);
 
-			//Wenn Cache Aktiviert, dann unter Cachename speichern
+			//If cache enabled, save with cachename
 			if($bitCache && $this->strCachename != "")
 				$strTarget = $this->strCachepath.$this->strCachename;
-			//DateiEndung bestimmen
+			//get file type
 			if($strTarget != "")
 			    $strType = uniSubstr($strTarget, uniStrrpos($strTarget, "."));
 			else
@@ -216,8 +218,6 @@ class class_image {
 					$bitReturn = true;
 					break;
 				case ".png":
-                    imagealphablending($this->objImage, false);
-                    imagesavealpha($this->objImage, true);
 					imagepng($this->objImage, _realpath_.$strTarget);
 					$bitReturn = true;
 					break;
@@ -288,8 +288,6 @@ class class_image {
 				imagejpeg($this->objImage, "", $intJpegQuality);
 				break;
 			case ".png":
-                imagealphablending($this->objImage, false);
-                imagesavealpha($this->objImage, true);
 				imagepng($this->objImage);
 				break;
 			case ".gif":
@@ -372,10 +370,9 @@ class class_image {
 			$this->finalLoadImage();
 
 		//Abmessungen bestimmt, nun damit ein neues Bild anlegen
-        $objImageResized = $this->createEmtpyImage($intWidthNew, $intHeightNew);
+        $objImageResized = $this->createEmptyImage($intWidthNew, $intHeightNew);
 
 		//Nun den Inhalt des alten Bildes skaliert in das neue Bild legen
-		//imagecopyresized($obj_bild_resized, $this->obj_bild, 0, 0, 0, 0, $int_breite_neu, $int_hoehe_neu, $this->int_breite, $this->int_hoehe);
 		imagecopyresampled($objImageResized, $this->objImage, 0, 0, 0, 0, $intWidthNew, $intHeightNew, $this->intWidth, $this->intHeight);
 
 		//Dieses Bild als neues verwenden
@@ -434,7 +431,7 @@ class class_image {
             $this->finalLoadImage();
 
         //create a new image using the desired size
-        $objImageCropped = $this->createEmtpyImage($intWidth, $intHeight);
+        $objImageCropped = $this->createEmptyImage($intWidth, $intHeight);
 
         //copy the selected region
         imagecopy($objImageCropped, $this->objImage, 0, 0, $intXStart, $intYStart, $intWidth, $intHeight);
@@ -470,7 +467,7 @@ class class_image {
             //create a new image and copy the new one into
             $bitImageResized = true;
 
-            $objTempImage = $this->createEmtpyImage($this->intWidth+1, $this->intHeight);
+            $objTempImage = $this->createEmptyImage($this->intWidth+1, $this->intHeight);
 
             imagecopy($objTempImage, $this->objImage, 0,0,  0,0,  $this->intWidth, $this->intHeight);
             imagedestroy($this->objImage);
@@ -490,7 +487,7 @@ class class_image {
 
             //Set up the temp image
             $intSquareSize = $this->intWidth > $this->intHeight ? $this->intWidth : $this->intHeight;
-            $objSquareImage = $this->createEmtpyImage($intSquareSize, $intSquareSize);
+            $objSquareImage = $this->createEmptyImage($intSquareSize, $intSquareSize);
             //copy the existing image into the new image
             if($this->intWidth > $this->intHeight)
                 imagecopy($objSquareImage, $this->objImage, 0, ceil(($this->intWidth-$this->intHeight)/2), 0, 0, $this->intWidth, $this->intHeight);
@@ -503,11 +500,11 @@ class class_image {
             imagedestroy($this->objImage);
 
             if($this->intWidth > $this->intHeight) {
-                $this->objImage = $this->createEmtpyImage($this->intHeight, $this->intWidth);
+                $this->objImage = $this->createEmptyImage($this->intHeight, $this->intWidth);
                 imagecopy($this->objImage, $objSquareImage ,0,0, ceil(($this->intWidth-$this->intHeight)/2),0, $this->intHeight, $this->intWidth);
             }
             else  {
-                $this->objImage = $this->createEmtpyImage($this->intHeight, $this->intWidth);
+                $this->objImage = $this->createEmptyImage($this->intHeight, $this->intWidth);
                 imagecopy($this->objImage, $objSquareImage, 0,0, 0, ceil(($this->intHeight-$this->intWidth)/2), $this->intHeight, $this->intWidth);
             }
 
@@ -521,7 +518,7 @@ class class_image {
 
             //Set up the temp image
             $intSquareSize = $this->intWidth > $this->intHeight ? $this->intWidth : $this->intHeight;
-            $objSquareImage = $this->createEmtpyImage($intSquareSize, $intSquareSize);
+            $objSquareImage = $this->createEmptyImage($intSquareSize, $intSquareSize);
             //copy the existing image into the new image
             if($this->intWidth > $this->intHeight)
                 imagecopy($objSquareImage, $this->objImage, 0, ceil(($this->intWidth-$this->intHeight)/2), 0, 0, $this->intWidth, $this->intHeight);
@@ -534,11 +531,11 @@ class class_image {
             imagedestroy($this->objImage);
 
             if($this->intWidth > $this->intHeight) {
-                $this->objImage = $this->createEmtpyImage($this->intHeight, $this->intWidth);
+                $this->objImage = $this->createEmptyImage($this->intHeight, $this->intWidth);
                 imagecopy($this->objImage, $objSquareImage ,0,0, ceil(($this->intWidth-$this->intHeight)/2),0, $this->intHeight, $this->intWidth);
             }
             else  {
-                $this->objImage = $this->createEmtpyImage($this->intHeight, $this->intWidth);
+                $this->objImage = $this->createEmptyImage($this->intHeight, $this->intWidth);
                 imagecopy($this->objImage, $objSquareImage, 0,0, 0, ceil(($this->intHeight-$this->intWidth)/2), $this->intHeight, $this->intWidth);
             }
 
@@ -753,7 +750,7 @@ class class_image {
             $this->cropImage($intXStart, $intYStart, $intCropWidth, $intCropHeight, true);
         }
 
-			
+
     }
 
 //-- RAW-Functions --------------------------------------------------------------------------------------
@@ -893,10 +890,11 @@ class class_image {
      * @param int $intWidth
      * @return o
      */
-    public function createEmtpyImage($intWidth, $intHeight) {
+    public function createEmptyImage($intWidth, $intHeight) {
         $objImage = @imagecreatetruecolor($intWidth, $intHeight);
-        $objTransColor = @imagecolorallocatealpha($objImage, 0, 0, 0, 127);
-        @imagefill($objImage, 0, 0, $objTransColor);
+        imagealphablending($objImage, false);
+        imagesavealpha($objImage, true);
+
         return $objImage;
     }
 
