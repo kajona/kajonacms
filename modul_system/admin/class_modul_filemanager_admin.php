@@ -141,7 +141,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editRepo", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_bearbeiten"), "icon_folderProperties.gif"));
 			   		if($this->objRights->rightRight2($objOneRepo->getSystemid()))
 			   		    $strActions .= $this->objToolkit->listDeleteButton($objOneRepo->getStrName(), $this->getText("repo_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteRepo", "&systemid=".$objOneRepo->getSystemid()));
-		   			if($this->objRights->rightRight2($objOneRepo->getSystemid()))
+		   			if($this->objRights->rightRight($objOneRepo->getSystemid()))
 			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_rechte"), getRightsImageAdminName($objOneRepo->getSystemid())));
 
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneRepo->getStrName(), $strActions, $intI++);
