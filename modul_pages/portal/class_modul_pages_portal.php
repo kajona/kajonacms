@@ -146,10 +146,14 @@ class class_modul_pages_portal extends class_portal {
 	    $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
 		//If theres a master-page, load elements on that, too
 		$objMasterData = class_modul_pages_page::getPageByName("master");
+        $bitEditPermissionOnMasterPage = false;
 		if($objMasterData->getStrName() != "") {
 			$arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
+            if($objMasterData->rightEdit())
+                $bitEditPermissionOnMasterPage = true;
+
 		}
 
 		//Load the template from the filesystem to get the placeholders
@@ -284,7 +288,7 @@ class class_modul_pages_portal extends class_portal {
 		$strPageContent = $this->fillTemplate($arrTemplate, $strTemplateID);
 
         //add the portaleditor toolbar
-        if(_pages_portaleditor_ == "true" && $objPageData->rightEdit() && $this->objSession->isAdmin()) {
+        if(_pages_portaleditor_ == "true" && ($objPageData->rightEdit()  || $bitEditPermissionOnMasterPage) && $this->objSession->isAdmin()) {
 
     		if(!defined("skinwebpath_"))
     		    define("_skinwebpath_", _webpath_."/admin/skins/".$this->objSession->getAdminSkin());
