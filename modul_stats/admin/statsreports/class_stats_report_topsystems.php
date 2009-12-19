@@ -46,7 +46,11 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 		$this->objDB = $objDB;
 
 		//parse browser (browscap.ini)
-		$arrBrowserGiven = parse_ini_file(_systempath_."/php_browscap.ini", true);
+		if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $arrBrowserGiven = parse_ini_file(_systempath_."/php_browscap.ini", true, INI_SCANNER_RAW);
+        }else{
+            $arrBrowserGiven = parse_ini_file(_systempath_."/php_browscap.ini", true);
+        }
 
 		//Update Array once to handle regex
 		$arrSearch =  array( ".", "+", "^", "$", "!", "{", "}", "(", ")", "]", "[", "*", "?", "#");
