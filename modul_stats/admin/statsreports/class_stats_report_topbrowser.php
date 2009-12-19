@@ -47,7 +47,6 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 
 
 		//parse browser (php_browscap.ini)
-		//$arrBrowserGiven = parse_ini_file(_systempath_."/php_browscap.ini", true);
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
             $arrBrowserGiven = parse_ini_file(_systempath_."/php_browscap.ini", true, INI_SCANNER_RAW);
         }else{
