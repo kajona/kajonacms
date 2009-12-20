@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 214
+//Kajona Language Editor Core Build 215
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страницата с резултати";
@@ -18,6 +18,8 @@ $lang["contentToolbar_content"]          = "Редактирай съдържа�
 $lang["contentToolbar_properties"]       = "Редактирай настройки";
 $lang["editNewsFeed"]                    = "Редактирай feed";
 $lang["end"]                             = "До Дата:";
+$lang["feed_amount"]                     = "";
+$lang["feed_amount_hint"]                = "";
 $lang["feed_cat"]                        = "Feed категория:";
 $lang["feed_cat_all"]                    = "Всички категории";
 $lang["feed_desc"]                       = "Feed описание:";

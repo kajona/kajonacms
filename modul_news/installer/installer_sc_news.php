@@ -139,6 +139,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
             $objNewsFeed->setStrPage($objPage->getStrName());
             $objNewsFeed->setStrCat("0");
+            $objNewsFeed->setIntAmount(25);
             $objNewsFeed->updateObjectToDb();
             $strNewsFeedId = $objNewsFeed->getSystemid();
             $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";

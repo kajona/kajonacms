@@ -21,6 +21,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
     private $strPage = "";
     private $strCat = "";
     private $intHits = 0;
+    private $intAmount = 0;
 
     /**
      * Constructor to create a valid object
@@ -78,6 +79,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	    $this->setStrPage($arrRow["news_feed_page"]);
 	    $this->setStrCat($arrRow["news_feed_cat"]);
 	    $this->setIntHits($arrRow["news_feed_hits"]);
+	    $this->setIntAmount($arrRow["news_feed_amount"]);
 
     }
 
@@ -94,7 +96,8 @@ class class_modul_news_feed extends class_model implements interface_model  {
                        news_feed_desc = '".$this->objDB->dbsafeString($this->getStrDesc())."',
                        news_feed_page = '".$this->objDB->dbsafeString($this->getStrPage())."',
                        news_feed_cat = '".$this->objDB->dbsafeString($this->getStrCat())."',
-                       news_feed_hits = '".$this->objDB->dbsafeString($this->getIntHits())."'
+                       news_feed_hits = '".$this->objDB->dbsafeString($this->getIntHits())."',
+                       news_feed_amount = '".$this->objDB->dbsafeString($this->getIntAmount())."'
                  WHERE news_feed_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -171,10 +174,11 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	 * if passed, the filter is used to load the news of the given category
 	 *
 	 * @param string $strFilter
+     * @param int $intAmount
 	 * @return mixed
 	 * @static
 	 */
-	public static function getNewsList($strFilter = "") {
+	public static function getNewsList($strFilter = "", $intAmount = 0) {
         $strQuery = "";
 	    $intNow = time();
 		if($strFilter != "") {
@@ -207,7 +211,10 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							ORDER BY system_date_start DESC";
 		}
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        if($intAmount > 0)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, 0, $intAmount-1);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -261,5 +268,15 @@ class class_modul_news_feed extends class_model implements interface_model  {
     private function setIntHits($intHits) {
         $this->intHits = $intHits;
     }
+
+    public function getIntAmount() {
+        return $this->intAmount;
+    }
+
+    public function setIntAmount($intAmount) {
+        $this->intAmount = $intAmount;
+    }
+
+    
 }
 ?>

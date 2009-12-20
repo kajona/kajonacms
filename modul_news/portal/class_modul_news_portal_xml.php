@@ -68,9 +68,9 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 
             //and load all news belonging to the selected cats
             if($objNewsfeed->getStrCat() != "0")
-                $arrNews = class_modul_news_feed::getNewsList($objNewsfeed->getStrCat());
+                $arrNews = class_modul_news_feed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
             else
-                $arrNews = class_modul_news_feed::getNewsList();
+                $arrNews = class_modul_news_feed::getNewsList("", $objNewsfeed->getIntAmount());
 
             $strReturn .= $this->createNewsfeedXML($objNewsfeed->getStrTitle(), $objNewsfeed->getStrLink(), $objNewsfeed->getStrDesc(), $objNewsfeed->getStrPage(), $arrNews);
             

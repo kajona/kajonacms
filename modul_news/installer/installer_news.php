@@ -16,7 +16,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.91";
+		$arrModule["version"] 		  = "3.2.92";
 		$arrModule["name"] 			  = "news";
 		$arrModule["class_admin"]  	  = "class_modul_news_admin";
 		$arrModule["file_admin"] 	  = "class_modul_news_admin.php";
@@ -100,6 +100,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_feed_page"] 	= array("char254", true);
 		$arrFields["news_feed_cat"] 	= array("char20", true);
 		$arrFields["news_feed_hits"] 	= array("int", true);
+		$arrFields["news_feed_amount"] 	= array("int", true);
 		
 		if(!$this->objDB->createTable("news_feed", $arrFields, array("news_feed_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -204,6 +205,11 @@ class class_installer_news extends class_installer_base implements interface_ins
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3291();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_3292();
         }
 
         return $strReturn."\n\n";
@@ -328,6 +334,24 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "3.2.91");
+        return $strReturn;
+    }
+
+
+    private function update_3291_3292() {
+        $strReturn = "Updating 3.2.91 to 3.2.92...\n";
+
+        $strReturn .= "Altering news-feed-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news_feed")."
+                        ADD ".$this->objDB->encloseColumnName("news_feed_amount")." INT NULL;";
+        
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured!!!\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "3.2.92");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "3.2.92");
         return $strReturn;
     }
 }

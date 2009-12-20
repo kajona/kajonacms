@@ -705,6 +705,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $this->getParam("feed_link"));
                 $strReturn .= $this->objToolkit->formInputText("feed_desc", $this->getText("feed_desc"), $this->getParam("feed_desc"));
                 $strReturn .= $this->objToolkit->formInputPageSelector("feed_page", $this->getText("feed_page"), $this->getParam("feed_page"));
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("feed_amount_hint"));
+                $strReturn .= $this->objToolkit->formInputText("feed_amount", $this->getText("feed_amount"), $this->getParam("feed_amount"));
                 //Dropdown with all cats
                 $arrNewsCats = class_modul_news_category::getCategories();
                 $arrCatsDD = array();
@@ -725,6 +727,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objFeed->setStrDesc($this->getParam("feed_desc"));
                 $objFeed->setStrPage($this->getParam("feed_page"));
                 $objFeed->setStrCat($this->getParam("feed_cat"));
+                $objFeed->setIntAmount($this->getParam("feed_amount"));
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
@@ -761,6 +764,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("feed_link", $this->getText("feed_link"), $objFeed->getStrLink());
                 $strReturn .= $this->objToolkit->formInputText("feed_desc", $this->getText("feed_desc"), $objFeed->getStrDesc());
                 $strReturn .= $this->objToolkit->formInputPageSelector("feed_page", $this->getText("feed_page"), $objFeed->getStrPage());
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("feed_amount_hint"));
+                $strReturn .= $this->objToolkit->formInputText("feed_amount", $this->getText("feed_amount"), $objFeed->getIntAmount());
                 //Dropdown with all cats
                 $arrNewsCats = class_modul_news_category::getCategories();
                 $arrCatsDD = array();
@@ -782,6 +787,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objFeed->setStrDesc($this->getParam("feed_desc"));
                 $objFeed->setStrPage($this->getParam("feed_page"));
                 $objFeed->setStrCat($this->getParam("feed_cat"));
+                $objFeed->setIntAmount($this->getParam("feed_amount"));
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 214
+//Kajona Language Editor Core Build 215
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Edit news", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -21,6 +21,8 @@ $lang["contentToolbar_content"]          = "Edit content";
 $lang["contentToolbar_properties"]       = "Edit properties";
 $lang["editNewsFeed"]                    = "Edit feed";
 $lang["end"]                             = "End date:";
+$lang["feed_amount"]                     = "Number of news:";
+$lang["feed_amount_hint"]                = "Number of news per feed (0=unlimited)";
 $lang["feed_cat"]                        = "Feed category:";
 $lang["feed_cat_all"]                    = "All categories";
 $lang["feed_desc"]                       = "Feed description:";
