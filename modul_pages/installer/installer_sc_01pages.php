@@ -27,6 +27,12 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
         $strReturn = "";
 
+
+        $strReturn .= "Shifting pages to first position...\n";
+        $objPagesModule = class_modul_system_module::getModuleByName("pages");
+        $objCommon = new class_modul_system_common();
+        $objCommon->setAbsolutePosition($objPagesModule->getSystemid(), 1);
+
         $strReturn .= "Setting default template...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_pages_defaulttemplate_");
         $objConstant->setStrValue("kajona_demo.tpl");
