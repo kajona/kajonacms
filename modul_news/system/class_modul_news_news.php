@@ -63,7 +63,7 @@ class class_modul_news_news extends class_model implements interface_model  {
      * @return string
      */
     protected function getObjectDescription() {
-        return "news category ".$this->getStrTitle();
+        return "news posting ".$this->getStrTitle();
     }
 
     /**
@@ -110,7 +110,7 @@ class class_modul_news_news extends class_model implements interface_model  {
                        WHERE news_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $this->objDB->_query($strQuery);
 
-        //delete all relations
+        //delete all relations & set them up again
         if(is_array($this->arrCats)) {
             class_modul_news_category::deleteNewsMemberships($this->getSystemid());
             //insert all memberships

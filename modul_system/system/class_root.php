@@ -603,7 +603,8 @@ abstract class class_root {
 
 	    $strQuery = "SELECT system_id
 					 FROM "._dbprefix_."system
-					 WHERE system_prev_id='".$this->objDB->dbsafeString($strSystemid)."'";
+					 WHERE system_prev_id='".$this->objDB->dbsafeString($strSystemid)."'
+                     ORDER BY system_sort ASC";
         
         $arrReturn = array();
         $arrTemp =  $this->objDB->getArray($strQuery);
