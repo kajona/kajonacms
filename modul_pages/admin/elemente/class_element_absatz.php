@@ -39,7 +39,11 @@ class class_element_absatz extends class_element_admin implements interface_admi
 	 * @return string
 	 */
 	public function getEditForm($arrElementData)	{
+
+        //$arrElementData["absatz_inhalt"] = uniStrReplace("%%", "\%\%", $arrElementData["absatz_inhalt"]);
+        
 		$strReturn = "";
+
 		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
 		$strReturn .= $this->objToolkit->formWysiwygEditor("absatz_inhalt", $this->getText("absatz_inhalt"), (isset($arrElementData["absatz_inhalt"]) ? $arrElementData["absatz_inhalt"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("absatz_bild", $this->getText("absatz_bild"), (isset($arrElementData["absatz_bild"]) ? $arrElementData["absatz_bild"] : ""), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=absatz_bild", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
@@ -61,6 +65,7 @@ class class_element_absatz extends class_element_admin implements interface_admi
 		$strImage = $this->getParam("absatz_bild");
 		//We have to replace the webpath to remain flexible
 		$strContent = str_replace(_webpath_, "_webpath_", $strContent);
+        $strContent = uniStrReplace("%%", "\%\%", $strContent);
 		$strImage = str_replace(_webpath_, "_webpath_", $strImage);
 		//Secure the text
 		//$strContent = htmlToString($strContent, false, false);
