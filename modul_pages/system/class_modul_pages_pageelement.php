@@ -35,15 +35,15 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
-        $arrModul = array();
-        $arrModul["name"] 				= "modul_pages_content";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
-		$arrModul["moduleId"] 			= _pages_inhalte_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."page_element";
-		$arrModul["modul"]				= "pages_content";
+        $arrModule = array();
+        $arrModule["name"] 				= "modul_pages_content";
+		$arrModule["author"] 			= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 			= _pages_content_modul_id_;
+		$arrModule["table"]       		= _dbprefix_."page_element";
+		$arrModule["modul"]				= "pages_content";
 
 		//base class
-		parent::__construct($arrModul, $strSystemid);
+		parent::__construct($arrModule, $strSystemid);
 
 		//init current object
 		if($strSystemid != "")
@@ -378,23 +378,22 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     }
 
     /**
-	 * Shifts an element up or down
-	 * This is a special implementation, because we don't have the usual system_prev_id relations
-	 * Note: Could be optimized!
-	 *
-	 * @param string $strMode up || down
-	 * @return string "" in case of success
-	 */
-	public function actionShiftElement($strMode = "up") {
-		$strReturn = "";
-		//Load the current Element
-		//Load all Elements on this page, sorted by the system_sort field
-		$strQuery = "SELECT *
+     * Helper, loads all elements registered at a single placeholder
+     *
+     * @param string $strElementId
+     * @param string $strLanguage
+     * @param string $strPlaceholder
+     * @return array
+     */
+    private function getSortedElementsAtPlaceholder() {
+
+        $strQuery = "SELECT *
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
 						 WHERE system_prev_id='".$this->objDB->dbsafeString($this->getPrevId())."'
 						   AND page_element_placeholder_element = element_name
+                           AND page_element_placeholder_language = '".dbsafeString($this->getStrLanguage())."'
 						   AND system_id = page_element_id
 						 ORDER BY page_element_placeholder_placeholder ASC,
 						 		system_sort ASC";
@@ -407,6 +406,115 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_placeholder_placeholder"])
 				$arrElementsOnPlaceholder[] = $arrOneElementOnPage;
 		}
+
+        return $arrElementsOnPlaceholder;
+    }
+
+    
+    /**
+     * Sets the position of an element using a given value.
+     *
+     * @param <type> $intAbsolutePosition
+     * @return <type>
+     * @see class_root::setAbsolutePosition($strIdToSet, $intPosition)
+     */
+    public function setAbsolutePosition($strIdToSet, $intPosition) {
+        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new pos ".$intPosition, class_logger::$levelInfo);
+		$strReturn = "";
+
+		//to have a better array-like handling, decrease pos by one.
+		//remind to add at the end when saving to db
+		$intPosition--;
+
+		//No caching here to allow mutliple shiftings per request
+		$arrElements = $this->getSortedElementsAtPlaceholder();
+
+		//more than one record to set?
+		if(count($arrElements) <= 1)
+			return;
+
+		//senseless new pos?
+		if($intPosition < 0 || $intPosition >= count($arrElements))
+		    return;
+
+
+		//searching the current element to get to know if element should be
+		//sorted up- or downwards
+		$bitSortDown = false;
+		$bitSortUp = false;
+		$intHitKey = 0;
+		for($intI = 0; $intI < count($arrElements); $intI++) {
+			if($arrElements[$intI]["system_id"] == $this->getSystemid()) {
+				if($intI < $intPosition)
+					$bitSortDown = true;
+				if($intI >= $intPosition+1)
+					$bitSortUp = true;
+
+				$intHitKey = $intI;
+			}
+		}
+
+		//sort up?
+		if($bitSortUp) {
+			//move the record to be shifted to the wanted pos
+			$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=".((int)$intPosition+1)."
+								WHERE system_id='".dbsafeString($this->getSystemid())."'";
+			$this->objDB->_query($strQuery);
+
+			//start at the pos to be reached and move all one down
+			for($intI = 0; $intI < count($arrElements); $intI++) {
+				//move all other one pos down, except the last in the interval:
+				//already moved...
+				if($intI >= $intPosition && $intI < $intHitKey) {
+					$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=system_sort+1
+								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
+					$this->objDB->_query($strQuery);
+				}
+			}
+		}
+
+		if($bitSortDown) {
+			//move the record to be shifted to the wanted pos
+			$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=".((int)$intPosition+1)."
+								WHERE system_id='".dbsafeString($this->getSystemid())."'";
+			$this->objDB->_query($strQuery);
+
+			//start at the pos to be reached and move all one down
+			for($intI = 0; $intI < count($arrElements); $intI++) {
+				//move all other one pos down, except the last in the interval:
+				//already moved...
+				if($intI > $intHitKey && $intI <= $intPosition) {
+					$strQuery = "UPDATE "._dbprefix_."system
+								SET system_sort=system_sort-1
+								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
+					$this->objDB->_query($strQuery);
+				}
+			}
+		}
+        
+        
+    }
+
+    /**
+	 * Shifts an element up or down
+	 * This is a special implementation, because we don't have the usual system_prev_id relations.
+     * Creates an initial sorting.
+	 * Note: Could be optimized!
+	 *
+     * @param string  $strIdToShift  no effect
+	 * @param string $strMode up || down
+	 * @return string "" in case of success
+     * @see class_root::setPosition($strIdToShift, $strDirection = "upwards")
+	 */
+	public function setPosition($strIdToShift, $strMode = "up") {
+        class_logger::getInstance()->addLogRow("move element ".$this->getSystemid()." to new direction ".$strMode, class_logger::$levelInfo);
+		$strReturn = "";
+		//Iterate over all elements to sort out
+		$arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
+		
 
 		//Iterate again to move the element
 		$arrElementsSorted = array();
@@ -450,11 +558,14 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		}
 
 		//Loading the data of the corresp site
+        $this->objDB->flushQueryCache();
 		$objPage = new class_modul_pages_page($this->getPrevId());
 		$this->flushPageFromPagesCache($objPage->getStrName());
 
 		return $strReturn;
 	}
+
+    
 
 	/**
 	 * Deletes the element from the system-tables, also from the foreign-element-tables

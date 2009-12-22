@@ -21,6 +21,8 @@ if(arrayTableIds == null) {
 
 	var posBeforeMove = -1;
 
+    var sourceTableId = -1;
+
 	//create namespaces
 	var kajona = { };
 	kajona.dragndroplist = {};
@@ -38,8 +40,8 @@ if(arrayTableIds == null) {
 	
     	init: function() {
 		   //iterate over all lists available
-		   for(l=0; l<arrayTableIds.length; l++) {
-		   	   listId = arrayTableIds[l];
+		   for(var l=0; l<arrayTableIds.length; l++) {
+		   	   var listId = arrayTableIds[l];
 	           //basic dnd list
 	           new YAHOO.util.DDTarget(listId);
 			   //load items in list
@@ -48,7 +50,7 @@ if(arrayTableIds == null) {
 		   	   	  arrayListItems = arrayListItems[0].childNodes;
 			   }
 
-			   for(i=0;i<arrayListItems.length;i=i+1) {
+			   for(var i=0;i<arrayListItems.length;i=i+1) {
 			       if(arrayListItems[i].id != null && arrayListItems[i].id != "") {
 			   		  Dom.setStyle(arrayListItems[i], "cursor", "move");
 		 			  new kajona.dragndroplist.DDList(arrayListItems[i].id);
@@ -121,6 +123,9 @@ if(arrayTableIds == null) {
 			if(parentNode.nodeName.toLowerCase() == "tbody") {
 				parentNode = parentNode.parentNode;
 			}
+
+            sourceTableId = parentNode.id;
+
 			//make a regular table out of it and make it look like the original
 			dragEl.innerHTML = "<table "+
 						         " class=\""+parentNode.className+"\""+
@@ -196,7 +201,19 @@ if(arrayTableIds == null) {
 	        var destEl = Dom.get(id);
 	        // We are only concerned with list items, we ignore the dragover notifications for the table.
 	        if (destEl.nodeName.toLowerCase() == "tr") {
-	            var orig_p = srcEl.parentNode;
+
+                if(bitOnlySameTable != undefined && bitOnlySameTable == true) {
+                    //check, if it's the same table selected as a target
+                    //get table-node
+                    var parentNode = destEl.parentNode;
+                    if(parentNode.nodeName.toLowerCase() == "tbody") {
+                        parentNode = parentNode.parentNode;
+                    }
+                    var targetTableId = parentNode.id;
+                    if(targetTableId != sourceTableId)
+                        return;
+                }
+
 	            var p = destEl.parentNode;
 	            if (this.goingUp) {
 	                p.insertBefore(srcEl, destEl); // insert above

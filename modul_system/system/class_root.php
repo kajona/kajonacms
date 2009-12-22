@@ -359,6 +359,25 @@ abstract class class_root {
 	}
 
     /**
+	 * Gets the module id / module nr of a systemRecord
+	 *
+	 * @param string $strSystemid
+	 * @return int
+	 */
+	public function getRecordModuleNr($strSystemid = "") {
+		if($strSystemid == "0")
+			$strSystemid = $this->getSystemid();
+
+		//Get the current status
+		$arrRow = $this->getSystemRecord($strSystemid);
+		if(count($arrRow) > 1)
+			return $arrRow["system_module_nr"];
+		else
+			return 0;
+
+	}
+
+    /**
      * Returns an instance of the lockmanager, initialized
      * with the current systemid.
      *
@@ -705,7 +724,7 @@ abstract class class_root {
 		if(count($arrElements) <= 1)
 			return;
 
-		//sensless new pos?
+		//senseless new pos?
 		if($intPosition < 0 || $intPosition >= count($arrElements))
 		    return;
 
@@ -716,7 +735,7 @@ abstract class class_root {
 		    $this->objDB->flushQueryCache();
 		}
 
-		//searching the current element to get to know, if element should be
+		//searching the current element to get to know if element should be
 		//sorted up- or downwards
 		$bitSortDown = false;
 		$bitSortUp = false;
@@ -740,7 +759,7 @@ abstract class class_root {
 								WHERE system_id='".dbsafeString($strIdToSet)."'";
 			$this->objDB->_query($strQuery);
 
-			//start at the pos to be reached a move all one down
+			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
 				//already moved...
@@ -760,7 +779,7 @@ abstract class class_root {
 								WHERE system_id='".dbsafeString($strIdToSet)."'";
 			$this->objDB->_query($strQuery);
 
-			//start at the pos to be reached a move all one down
+			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
 				//move all other one pos down, except the last in the interval:
 				//already moved...

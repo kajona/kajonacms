@@ -23,7 +23,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_lastmodified";
 		$arrModule["name_lang"] 	= "Element Lastmodified";
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		parent::__construct($arrModule);
 	}
 

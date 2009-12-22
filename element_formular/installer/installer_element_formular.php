@@ -23,7 +23,7 @@ class class_installer_element_formular extends class_installer_base implements i
 		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_formular";
 		$arrModule["name_lang"] 	= "Element Form";
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		$arrModule["tabellen"][]    = _dbprefix_."element_formular";
 		parent::__construct($arrModule);
 	}

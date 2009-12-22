@@ -23,7 +23,7 @@ class class_installer_element_portalupload extends class_installer_base implemen
 		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_portalupload";
 		$arrModule["name_lang"] 	= "Element portalupload";
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		$arrModule["tabellen"][]    = _dbprefix_."element_universal";
 		parent::__construct($arrModule);
 	}

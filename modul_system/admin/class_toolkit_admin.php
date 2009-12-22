@@ -794,11 +794,13 @@ class class_toolkit_admin extends class_toolkit {
      * Returns the htmlcode needed to start a proper list, supporting drag n drop to
      * reorder list-items
      *
+     * @param string $strListId
+     * @param bool $bitOnlySameTable dropping only allowed within the same table or also in other tables
      * @return string
      */
-    public function dragableListHeader($strListId) {
+    public function dragableListHeader($strListId, $bitOnlySameTable = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "dragable_list_header");
-        return $this->objTemplate->fillTemplate(array("listid" => $strListId), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array("listid" => $strListId, "sameTable" => $bitOnlySameTable? "true" : "false"), $strTemplateID);
     }
 
     /**
@@ -814,6 +816,7 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns the code to finish the opened list
      *
+     * @param string $strListId
      * @return string
      */
     public function dragableListFooter($strListId) {

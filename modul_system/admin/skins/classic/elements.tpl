@@ -31,6 +31,8 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     } else {
         arrayTableIds[(arrayTableIds.length +0)] = "%%listid%%";
 	}
+
+    var bitOnlySameTable = %%sameTable%%;
 </script>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" id="%%listid%%" class="dragList">
 </dragable_list_header>

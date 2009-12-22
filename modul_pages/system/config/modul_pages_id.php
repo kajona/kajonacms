@@ -4,14 +4,18 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                                           *
+*	$Id$                                          *
 ********************************************************************************************************/
 
 //Id des Seiten-Moduls
 	define(	"_pages_modul_id_", 						10);
 
 //ID der Inhalts-Verwaltung
+    /**
+     * @deprected migrate to _pages_content_modul_id_ instead.
+     */
 	define(	"_pages_inhalte_modul_id_",					11);
+	define(	"_pages_content_modul_id_",					11);
 
 //ID der Element-Verwaltung
 	define(	"_pages_elemente_modul_id_",				12);

@@ -31,6 +31,8 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
     } else {
         arrayTableIds[(arrayTableIds.length +0)] = "%%listid%%";
 	}
+
+    var bitOnlySameTable = %%sameTable%%;
 </script>
 <table cellspacing="0" cellpadding="0" id="%%listid%%" class="adminList">
 </dragable_list_header>
@@ -55,7 +57,7 @@ Part 1 - every 2nd entry
 </list_row_2_1>
 Part 2 - every 2nd entry. Usefull if different css-classes are used every single row
 <list_row_2_2>
-<tr class="adminListRow2">
+<tr id="%%listitemid%%" class="adminListRow2">
 	<td class="title">%%title%%</td>
     <td class="actions">%%actions%%</td>
  </tr>
@@ -83,7 +85,7 @@ Row in a list containing 2 Elements, NO leading picture, 2nd variation
 Used rather for info-lists than for edit-lists, e.g. the systeminfos
 Part 1 - every 2nd entry
 <list_row_2_1_b>
-<tr class="adminListRow1">
+<tr id="%%listitemid%%" class="adminListRow1">
 	<td class="title" style="width: 30%;">%%title%%</td>
     <td class="centerWrap">%%actions%%</td>
  </tr>

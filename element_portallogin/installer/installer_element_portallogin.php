@@ -23,7 +23,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		$arrModule["tabellen"][]    = _dbprefix_."element_portallogin";
 		parent::__construct($arrModule);
 	}

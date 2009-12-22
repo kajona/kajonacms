@@ -23,7 +23,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	public function __construct($arrElementData) {
 		$arrModule["name"] 				= "formular_kontakt";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 			= _pages_inhalte_modul_id_;
+		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "pages";
 		$arrModule["template"]			= "/element_form/contact.tpl";
 

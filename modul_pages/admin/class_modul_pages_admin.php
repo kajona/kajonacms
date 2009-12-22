@@ -1200,7 +1200,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         foreach($arrPath as $strOneSystemid) {
             $arrFolder = $this->getSystemRecord($strOneSystemid);
             //Skip Elements: No sense to show in path-navigations
-            if($arrFolder["system_module_nr"] == _pages_inhalte_modul_id_)
+            if($arrFolder["system_module_nr"] == _pages_content_modul_id_)
                 continue;
 
             if($arrFolder["system_module_nr"] == _pages_modul_id_)

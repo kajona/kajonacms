@@ -23,7 +23,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
         $arrModule = array();
 		$arrModule["name"] 				= "modul_pages_elemente";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["moduleId"] 			= _pages_inhalte_modul_id_;
+		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "pages";
 
 		//Calling the base class
@@ -238,7 +238,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
 
 							//Put all Output together
-							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrElement() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++);
+							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrElement() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
 							$bitOutputAtPlaceholder = true;
 
 							//remove the element from the array
@@ -279,9 +279,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 					}
 
 					if((int)uniStrlen($strOutputAtPlaceholder) > 0) {
-                        $strReturn .= $this->objToolkit->listHeader();
+                        $strListId = generateSystemid();
+                        //$strReturn .= $this->objToolkit->listHeader();
+                        $strReturn .= $this->objToolkit->dragableListHeader($strListId, true);
                         $strReturn .= $strOutputAtPlaceholder;
-                        $strReturn .= $this->objToolkit->listFooter();
+                        //$strReturn .= $this->objToolkit->listFooter();
+                        $strReturn .= $this->objToolkit->dragableListFooter($strListId);
 					}
 
 					//Done with this placeholder, so its time to draw a divider or offer the possibility to add a new element
@@ -636,7 +639,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		    $strSystemid = $this->getSystemid();
 		//Create the objecet
 		$objElement = new class_modul_pages_pageelement($strSystemid);
-		return $objElement->actionShiftElement($strMode);
+		return $objElement->setPosition($strSystemid, $strMode);
 	}
 
 
@@ -654,7 +657,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		foreach($arrPath as $strOneSystemid) {
 			$arrFolder = $this->getSystemRecord($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigations
-			if($arrFolder["system_module_nr"] == _pages_inhalte_modul_id_)
+			if($arrFolder["system_module_nr"] == _pages_content_modul_id_)
 				continue;
 
 			if($arrFolder["system_module_nr"] == _pages_modul_id_)

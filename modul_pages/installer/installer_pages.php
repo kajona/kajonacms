@@ -30,8 +30,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrModule["name_lang2"] 	= "Module Pages Content";
 		$arrModule["name_lang3"] 	= "Module Folderview";
 		$arrModule["moduleId"] 		= _pages_modul_id_;
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
-		$arrModule["nummer3"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
+		$arrModule["nummer3"] 		= _pages_content_modul_id_;
 
 		$arrModule["tabellen"][] 	= _dbprefix_."pages";
 		$arrModule["tabellen"][] 	= _dbprefix_."pages_elemente";
@@ -156,7 +156,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//the pages
 		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages_portal.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
 		//The pages_content
-		$strRightID = $this->registerModule("pages_content", _pages_inhalte_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
+		$strRightID = $this->registerModule("pages_content", _pages_content_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
 		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 

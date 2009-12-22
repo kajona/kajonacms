@@ -23,7 +23,7 @@ class class_installer_element_portalregistration extends class_installer_base im
 		$arrModule["version"] 		= "3.2.1";
 		$arrModule["name"] 			= "element_portalregistration";
 		$arrModule["name_lang"] 	= "Element portalregistration";
-		$arrModule["nummer2"] 		= _pages_inhalte_modul_id_;
+		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		$arrModule["tabellen"][]    = _dbprefix_."element_portalregistration";
 		parent::__construct($arrModule);
 	}
