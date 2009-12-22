@@ -339,6 +339,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
                 $strActions .= $this->actionUploadFile();
             }
+            $strActions .= $this->generateRenameFileDialogCode();
 
             $arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
 
@@ -414,7 +415,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 		   			else
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_crop.gif"));
-		   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "renameFile", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_umbenennen"), "icon_pencil.gif"));
+
+		   			$strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_renameFile_dialog('".$arrOneFile["filename"]."');\"", $this->getText("datei_umbenennen"), $this->getText("datei_umbenennen"), "icon_pencil.gif"));
 		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
 
 		   			// if an image, attach a thumbnail-tooltip
@@ -584,55 +586,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	}
 
 	/**
-	 * Returns the form to rename a file
-	 *
-	 * @return string "" in case of success
-	 */
-	private function actionRenameFile() {
-		$strReturn = "";
-		//Check rights
-		if($this->objRights->rightEdit($this->getSystemid())) {
-			//Rename or form?
-			if($this->getParam("datei_umbenennen_final") == "") {
-				//Check existance of file
-				if(is_file(_realpath_."/".$this->strFolder."/".$this->getParam("file"))) {
-					//Form
-					$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "renameFile", "datei_umbenennen_final=1"));
-					$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-					$strReturn .= $this->objToolkit->formInputHidden("datei_name_alt", $this->getParam("file"));
-					$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
-                    $strReturn .= $this->objToolkit->formInputText("datei_name", $this->getText("datei_name"), $this->getParam("file"));
-                    $strReturn .= $this->objToolkit->formTextRow($this->getText("datei_umbenennen_hinweis"));
-                    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("rename"));
-                    $strReturn .= $this->objToolkit->formClose();
-
-                    $strReturn .= $this->objToolkit->setBrowserFocus("datei_name");
-				}
-			}
-			else {
-				$strFilename = createFilename($this->getParam("datei_name"));
-				//Check existance of old  & new file
-				if($strFilename != "" && is_file(_realpath_."/".$this->strFolder."/".$this->getParam("datei_name_alt"))) {
-					if(!is_file(_realpath_."/".$this->strFolder."/".$strFilename)) {
-						//Rename File
-						$objFilesystem = new class_filesystem();
-						if(!$objFilesystem->fileRename($this->strFolder."/".$this->getParam("datei_name_alt"), $this->strFolder."/".$strFilename))
-						 	$strReturn = $this->getText("datei_umbenennen_fehler");
-					}
-					else
-						$strReturn = $this->getText("datei_umbenennen_fehler_z");
-				}
-				else
-					$strReturn = "fehler!";
-			}
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-
-		return $strReturn;
-	}
-
-	/**
 	 * Shows the form to delete a file / deletes a file
 	 *
 	 * @return string "" in case of success
@@ -689,6 +642,36 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                                                   '".$this->getText("ordner_anlegen_dialogButton")."',
                                                   'javascript:filemanagerCreateFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
                                     jsDialog_1.init(); }\n
+                      ";
+
+        $strReturn .= "</script>";
+        $strReturn .= $this->objToolkit->jsDialog(1);
+        return $strReturn;
+    }
+
+
+    /**
+     * Generates the code to delete renaming of a file to ajax calls
+     * @return string
+     */
+    private function generateRenameFileDialogCode() {
+        $strReturn = "";
+
+        //Build code for create-dialog
+		$strDialog = $this->objToolkit->formInputText("fileName", $this->getText("datei_name"));
+
+        $strReturn .= "<script type=\"text/javascript\">\n
+                        
+                        function init_fm_renameFile_dialog(strFilename) {
+                            jsDialog_1.setTitle('".$this->getText("datei_umbenennen")."');
+                            jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
+                                                  '".$this->getText("rename")."',
+                                                  'javascript:filemanagerRenameFile(\'fileName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \''+strFilename+'\', \'\', \'\' ); jsDialog_1.hide();');
+                                                                                       //strInputId,          strRepoId,                     strRepoFolder, strOldName, strSourceModule, strSourceAction
+                                    jsDialog_1.init(); 
+                            document.getElementById('fileName').value = strFilename;
+
+                            }\n
                       ";
 
         $strReturn .= "</script>";

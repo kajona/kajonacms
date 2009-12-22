@@ -48,6 +48,8 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
             $strReturn .= $this->actionRotateImage();
         elseif($strAction == "deleteFile")
             $strReturn .= $this->actionDeleteFile();
+        elseif($strAction == "renameFile")
+            $strReturn .= $this->actionRenameFile();
         elseif($strAction == "deleteFolder")
             $strReturn .= $this->actionDeleteFolder();
         elseif($strAction == "createFolder")
@@ -80,6 +82,45 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
         else
             $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
 
+
+        return $strReturn;
+    }
+
+
+    /**
+     * Create a new folder using the combi of folder & systemid passed
+     * @return string
+     */
+    private function actionRenameFile() {
+        $strReturn = "";
+        if($this->objRights->rightRight1($this->getSystemid())) {
+
+            //create repo-instance
+            $objFmRepo = new class_modul_filemanager_repo($this->getSystemid());
+            $strFolder = $objFmRepo->getStrPath()."/".$this->getParam("folder");
+
+
+            $strFilename = createFilename($this->getParam("newFilename"));
+            //Check existance of old  & new file
+            if($strFilename != "" && is_file(_realpath_."/".$strFolder."/".$this->getParam("oldFilename"))) {
+                if(!is_file(_realpath_."/".$strFolder."/".$strFilename)) {
+                    //Rename File
+                    $objFilesystem = new class_filesystem();
+                    if($objFilesystem->fileRename($strFolder."/".$this->getParam("oldFilename"), $strFolder."/".$strFilename))
+                        $strReturn = "<message></message>";
+                    else
+                        $strReturn = "<error>".xmlSafeString($this->getText("datei_umbenennen_fehler"))."</error>";
+
+                }
+                else
+                    $strReturn = "<error>".xmlSafeString($this->getText("datei_umbenennen_fehler_z"))."</error>";
+            }
+            else
+                $strReturn = "<error>an error occured</error>";
+
+        }
+        else
+            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
 
         return $strReturn;
     }

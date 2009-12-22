@@ -622,6 +622,36 @@ var kajonaAdminAjax = {
                     kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
+    },
+
+    renameFile : function (strFmRepoId, strNewFilename, strOldFilename, strFolder, strSourceModule, strSourceModuleAction) {
+        kajonaAdminAjax.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
+                success : function(o) {
+                    //check if answer contains an error
+                    if(o.responseText.indexOf("<error>") != -1) {
+                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    }
+                    else {
+                        if(strSourceModule != "" && strSourceModuleAction != "") {
+                            kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                                    success : function(o) {
+                                        location.reload();
+                                    },
+                                    failure : function(o) {
+                                        kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                                    }
+                                }
+                            );
+                        }
+                        else {
+                            location.reload();
+                        }
+                    }
+                },
+                failure : function(o) {
+                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                }
+            });
     }
 
 };
@@ -633,6 +663,14 @@ function filemanagerCreateFolder(strInputId, strRepoId, strRepoFolder, strSource
     var strNewFoldername = document.getElementById(strInputId).value;
     if(strNewFoldername != "") {
         kajonaAdminAjax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction);
+    }
+}
+
+function filemanagerRenameFile(strInputId, strRepoId, strRepoFolder, strOldName, strSourceModule, strSourceAction) {
+    //add typed folder
+    var strNewFilename = document.getElementById(strInputId).value;
+    if(strNewFilename != "") {
+        kajonaAdminAjax.renameFile(strRepoId, strNewFilename, strOldName, strRepoFolder, strSourceModule, strSourceAction);
     }
 }
 
