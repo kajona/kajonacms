@@ -373,7 +373,6 @@ abstract class class_root {
 	 *
 	 * @param string $strSystemid
 	 * @return string
-     * @todo: still needed?
 	 */
 	public function getRecordComment($strSystemid = "") {
 		if($strSystemid == "")

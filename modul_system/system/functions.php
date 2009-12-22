@@ -367,12 +367,12 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 }
 
 /**
- * Generates a Mouse-Overn for an image, but doesn't generate a a-tag sourrounding the image
+ * Generates a Mouse-Over for an image, but doesn't generate a a-tag sourrounding the image
+ * Located in functions.php since used by the portaleditor
  *
  * @param string $strText
  * @param string $strImage
  * @return string
- * @todo: move to toolkit
  */
 function getNoticeAdminWithoutAhref($strText, $strImage) {
 	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strText."');\" title=\"\" />";

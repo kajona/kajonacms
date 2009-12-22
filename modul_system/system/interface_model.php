@@ -33,7 +33,7 @@ interface interface_model {
      * Method to update the existing record with the new values
      * @return bool
      *
-     * @todo: updated behaviour
+     * @todo: remove method pre 3.3.0
      * @deprecated use updateStateToDb() instead
      */
     public function updateObjectToDb();
