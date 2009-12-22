@@ -51,8 +51,10 @@ class class_template {
 
     public function __destruct() {
     	//save cache to session
-        class_session::getInstance()->setSession("templateSessionCacheTemplate", $this->arrCacheTemplates);
-        class_session::getInstance()->setSession("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
+        if($this->bitSessionCacheEnabled) {
+            class_session::getInstance()->setSession("templateSessionCacheTemplate", $this->arrCacheTemplates);
+            class_session::getInstance()->setSession("templateSessionCacheTemplateSections", $this->arrCacheTemplateSections);
+        }
     }
 
 

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 183
+//Kajona Language Editor Core Build 215
 
 //editable entries
 $lang["gallery_id"]                      = "Gallery:";
@@ -21,7 +21,6 @@ $lang["gallery_maxw_m"]                  = "Max width:";
 $lang["gallery_maxw_p"]                  = "Max height:";
 $lang["gallery_mode"]                    = "Element-mode";
 $lang["gallery_mode_hint"]               = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery. The values defined in the detail-view section are applied.";
-$lang["gallery_nrow"]                    = "Number of images per row:";
 $lang["gallery_template"]                = "Template:";
 $lang["gallery_text"]                    = "Inscription:";
 $lang["gallery_text_x"]                  = "X-axis:";
@@ -32,7 +31,6 @@ $lang["headline_moviestrip"]             = "Moviestrip view";
 $lang["headline_overlay"]                = "Overlay text";
 $lang["hint_detail"]                     = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
 $lang["hint_movie"]                      = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
-$lang["hint_nrow"]                       = "Number of images per row (0 = unlimited; > 0 = limited, templatesection piclist is used)";
 $lang["hint_preview"]                    = "If the picture exceeds one of the values, it will be scaled (0 = no scaling)";
 $lang["hint_text"]                       = "Places a text at the position (X, Y) into the image when in detail-mode";
 $lang["mode_random"]                     = "Random-mode";

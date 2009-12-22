@@ -114,6 +114,9 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
             $arrRemainingImages = array();
 
+            //calc number of images outside the loop
+            $intNrOfPicsPerRow = $this->getImagesPerRow($this->arrElementData["gallery_template"]);
+
 			foreach ($arrImages as $objOneImage) {
 				//Check rights
 				if($this->objRights->rightView($objOneImage->getSystemid())) {
@@ -128,29 +131,18 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
                         $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
 
+                        //render the single image
+                        $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
+                        $strCurrentImage = $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
 
-                        //defined nr of images per row?
-					    if($this->arrElementData["gallery_nrow"] > 0) {
+                        $arrRemainingImages["pic_".$intImageCounter % $intNrOfPicsPerRow] = $strCurrentImage;
 
-                            //render the single image
-                            $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
-							$strCurrentImage = $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
-
-                            $arrRemainingImages["pic_".$intImageCounter % $this->arrElementData["gallery_nrow"]] = $strCurrentImage;
-
-    						//already rendered enough images?
-    						if(count($arrRemainingImages) == $this->arrElementData["gallery_nrow"]) {
-    							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
-    							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID);
-    							$arrRemainingImages = array();
-    						}
-					    }
-
-					    else {
-                            //unlimited nr of images per row, no linebreaks, print directly
-							$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
-							$arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrTemplateImage, $strTemplateID);
-					    }
+                        //already rendered enough images?
+                        if(count($arrRemainingImages) == $intNrOfPicsPerRow) {
+                            $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist");
+                            $arrTemplate["piclist"] .= $this->objTemplate->fillTemplate($arrRemainingImages, $strTemplateID);
+                            $arrRemainingImages = array();
+                        }
 
                         $intImageCounter++;
 
@@ -615,5 +607,18 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
 
+    /**
+     * Calculates the number of images per row as defined in the template.
+     *
+     * @param string $strTemplate
+     * @return int
+     */
+    private function getImagesPerRow($strTemplate) {
+
+        $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$strTemplate, "piclist");
+        $arrElements = $this->objTemplate->getElements($strTemplateID);
+        return count($arrElements);
+
+    }
 }
 ?>

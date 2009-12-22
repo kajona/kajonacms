@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 183
+//Kajona Language Editor Core Build 215
 
 //editable entries
 $lang["gallery_id"]                      = "Bildergalerie:";
@@ -21,7 +21,6 @@ $lang["gallery_maxw_m"]                  = "Maximale Breite:";
 $lang["gallery_maxw_p"]                  = "Maximale Breite:";
 $lang["gallery_mode"]                    = "Element-Modus";
 $lang["gallery_mode_hint"]               = "Definiert den Modus des Elements: Normaler Listen-/Detailmodus, oder ein Zufallsbild aus der gewählten Galerie. Es gelten die in der Detail-Ansicht definierten Werte.";
-$lang["gallery_nrow"]                    = "Anzahl Bilder pro Zeile:";
 $lang["gallery_template"]                = "Template:";
 $lang["gallery_text"]                    = "Inschrift:";
 $lang["gallery_text_x"]                  = "X-Achse:";
@@ -32,7 +31,6 @@ $lang["headline_moviestrip"]             = "Filmstreifenansicht";
 $lang["headline_overlay"]                = "Bildinschrift (Overlay text)";
 $lang["hint_detail"]                     = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_movie"]                      = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
-$lang["hint_nrow"]                       = "Anzahl Bilder pro Zeile (0 = unbeschränkt; > 0 = beschränkt, Templateabschnitt piclist wird verwendet)";
 $lang["hint_preview"]                    = "Wenn das Bild einen der Werte überschreitet, wird es skaliert (0 = keine Skalierung)";
 $lang["hint_text"]                       = "Legt in das Bild der Detailansicht an Stelle (X, Y) einen Text";
 $lang["mode_random"]                     = "Zufalls-Modus";

@@ -57,7 +57,7 @@
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
-<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_link, folder_href -->
+<!-- available placeholders: folder_name, folder_description, folder_subtitle, folder_link, folder_href, folder_preview -->
 <folderlist>
     <table cellspacing="0" class="portalList">
         <tr class="portalListRow1">
@@ -72,22 +72,19 @@
     </table>
 </folderlist>
 
-<!-- the following section is used, if theres a defined number of images per row.
-     set the placeholders according to the number set in the admin -->
+<!-- the following section is used to wrapp a list of images, e.g. in order to build a table.
+     If you'd like to have a behaviour like rendering an unlimited list of images per row, use s.th.
+     like <piclist>%%pic_0%%</piclist> -->
 <!-- available placeholders: pic_(nr) -->
 <piclist>
     <table width="100%" cellspacing="0">
         <tr>
-            <td colspan="7">&nbsp;</td>
+            <td colspan="3">&nbsp;</td>
         </tr>
         <tr style="text-align: center;">
-            <td></td>
-            <td>%%pic_0%%</td>
-            <td></td>
-            <td>%%pic_1%%</td>
-            <td></td>
-            <td>%%pic_2%%</td>
-            <td></td>
+            <td width="33%">%%pic_0%%</td>
+            <td width="33%">%%pic_1%%</td>
+            <td width="33%">%%pic_2%%</td>
         </tr>
     </table>
 </piclist>

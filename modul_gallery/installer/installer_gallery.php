@@ -16,7 +16,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.91";
+		$arrModule["version"] 		= "3.2.92";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["class_admin"] 	= "class_modul_gallery_admin";
 		$arrModule["file_admin"] 	= "class_modul_gallery_admin.php";
@@ -114,7 +114,6 @@ class class_installer_gallery extends class_installer_base implements interface_
 		$arrFields["gallery_maxw_d"] 		= array("int", true);
 		$arrFields["gallery_maxh_m"] 		= array("int", true);
 		$arrFields["gallery_maxw_m"] 		= array("int", true);
-		$arrFields["gallery_nrow"] 			= array("int", true);
 		$arrFields["gallery_imagesperpage"] = array("int", true);
 		$arrFields["gallery_text"] 			= array("char254", true);
 		$arrFields["gallery_text_x"] 		= array("int", true);
@@ -216,6 +215,11 @@ class class_installer_gallery extends class_installer_base implements interface_
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3291();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_3292();
         }
 
         return $strReturn."\n\n";
@@ -327,6 +331,28 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.2.91");
         $this->updateElementVersion("galleryRandom", "3.2.91");
+        return $strReturn;
+    }
+
+    private function update_3291_3292() {
+        $strReturn = "Updating 3.2.91 to 3.2.92...\n";
+
+
+        if(in_array(_dbprefix_."element_gallery", $this->objDB->getTables())) {
+            $strReturn .= "Updating gallery-element table...\n";
+            
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_gallery")."
+                                DROP ".$this->objDB->encloseColumnName("gallery_nrow").";";
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!!!\n";
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.2.92");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.2.92");
+        $this->updateElementVersion("galleryRandom", "3.2.92");
         return $strReturn;
     }
     
