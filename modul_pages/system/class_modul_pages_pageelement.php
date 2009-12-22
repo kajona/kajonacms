@@ -133,7 +133,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 1 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $this->objDB->_query($strQuery);
         //And shift this element one pos up to get correct order on systemtables
-        $this->actionShiftElement("up");
+        $this->setPosition(null, "up");
 
 
         return true;
@@ -146,8 +146,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $this->objDB->_query($strQuery);
         //And shift this element one pos up
-        $this->actionShiftElement("up");
-        $this->actionShiftElement("down");
+        $this->setPosition(null, "up");
+        $this->setPosition(null, "down");
     }
 
     /**
