@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Portal-class of the postacomment. Handles thd printing of postacomment lists / detail
+ * Portal-class of the postacomment. Handles the printing of postacomment lists / detail
  *
  * @package modul_postacomment
  */
@@ -98,7 +98,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
     				$arrOnePost["postacomment_post_date"] = timeToString($objOnePost->getIntDate(), true);
     			    //ratings available?
                     if($objOnePost->getFloatRating() !== null) {
-                        $arrOnePost["postacomment_post_rating"] = $this->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
+                        $arrOnePost["postacomment_post_rating"] = $this->buildRatingBar($objOnePost->getFloatRating(), $objOnePost->getIntRatingHits(), $objOnePost->getSystemid(), $objOnePost->isRateableByUser(), $objOnePost->rightRight2());
                     }
 
 
@@ -207,11 +207,12 @@ class class_modul_postacomment_portal extends class_portal implements interface_
      * Creates the needed js-links and image-tags as defined by the template.
      *
      * @param float $floatRating
+     * @param int $intRatings
      * @param string $strSystemid
      * @param bool $bitRatingAllowed
      * @return string
      */
-    private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+    private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
         $strIcons = "";
         $strRatingBarTitle = "";
 
@@ -240,7 +241,10 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $strRatingBarTitle = $this->getText("postacomment_rating_permissions");
         }
 
-        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,
+                                         "rating_rating" => $floatRating, "rating_hits" => $intRatings,
+                                         "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
+                                         "system_id" => $strSystemid, 2), $strTemplateBarId);
     }
 
 }

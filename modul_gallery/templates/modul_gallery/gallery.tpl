@@ -101,7 +101,7 @@
 %%pathnavigation_point%% >
 </pathnavigation_level>
 
-<!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_ratingPercent, system_id -->
+<!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
         bitKajonaRatingsAvailable = true;
@@ -110,7 +110,7 @@
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
         <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
         %%rating_icons%%
-    </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span>
+    </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%% (%%rating_hits%%)</span>
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
