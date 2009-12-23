@@ -4,11 +4,13 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$								*
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 182
 
-// --- Module texts -------------------------------------------------------------------------------------
-
-$lang["postacomment_template"]          = "Template:";
-
+//editable entries
+$lang["postacomment_actionfilter"]       = "Action-filter:";
+$lang["postacomment_actionfilter_hint"]  = "If set, the comment-field and comment-list is only shown having a matching action-command.";
+$lang["postacomment_template"]           = "Template:";
 ?>

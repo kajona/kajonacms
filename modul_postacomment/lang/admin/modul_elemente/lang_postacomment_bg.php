@@ -7,8 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 182
 
 //editable entries
+$lang["postacomment_actionfilter"]       = "";
+$lang["postacomment_actionfilter_hint"]  = "";
 $lang["postacomment_template"]           = "Шаблон:";
 ?>

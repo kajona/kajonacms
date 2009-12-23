@@ -41,6 +41,13 @@ class class_element_postacomment extends class_element_portal implements interfa
 		//Load the data
 		$objpostacommentModule = class_modul_system_module::getModuleByName("postacomment");
 		if($objpostacommentModule != null) {
+
+            //action-filter set within the element?
+            if(trim($this->arrElementData["char2"]) != "") {
+                if($this->getParam("action") != $this->arrElementData["char2"])
+                    return;
+            }
+
     		$strClassName = uniStrReplace(".php", "", $objpostacommentModule->getStrNamePortal());
     		$objpostacomment = new $strClassName($this->arrElementData);
             $strReturn = $objpostacomment->action();
