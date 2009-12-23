@@ -22,7 +22,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     private $intHits = 0;
     private $intType = 0;
     private $intMaxKb = 0;
-    private $intCatType = 0; //internal, undocumented field. used for kajonabase.net!
+    private $intCatType = -1; //internal, undocumented field. used for kajonabase.net!
     private $strScreen1 = ""; //internal, undocumented field. used for kajonabase.net!
     private $strScreen2 = ""; //internal, undocumented field. used for kajonabase.net!
     private $strScreen3 = ""; //internal, undocumented field. used for kajonabase.net!
