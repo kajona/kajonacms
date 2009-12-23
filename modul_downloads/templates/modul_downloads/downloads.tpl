@@ -39,7 +39,10 @@
     </tr>
 </folder>
 
-<!-- available placeholders: file_name, file_description, file_link, file_detail_href, file_href, file_hits, file_size, file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed) -->
+<!-- available placeholders: file_name, file_description, file_link, file_detail_href, file_href, file_hits, file_size, 
+                             file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed),
+                             file_owner, file_lmtime
+-->
 <file>
     <tr class="portalListRow1">
         <td class="image"><img src="_webpath_/portal/pics/kajona/icon_downloads.gif" /></td>
@@ -76,7 +79,9 @@
 
 
 
-<!-- available placeholders: file_name, file_description, file_link, file_href, file_hits, file_size, file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed)
+<!-- available placeholders: file_name, file_description, file_link, file_href, file_hits, file_size, 
+                             file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed),
+                             file_owner, file_lmtime
  -->
 <filedetail>
     <script type="text/javascript">

@@ -102,6 +102,11 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
                         $arrTemplate["file_detail_href"] = getLinkPortalHref($this->getPagename(), "", "detailDownload", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
+                        $arrTemplate["file_lmtime"] = timeToString($objOneFile->getEditDate());
+                        if(validateSystemid($objOneFile->getOwnerId())) {
+                            $objUser = new class_modul_user_user($objOneFile->getOwnerId());
+                            $arrTemplate["file_owner"] = $objUser->getStrUsername();
+                        }
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
 						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
@@ -191,6 +196,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         $arrFile["file_size"] = bytesToString($objFile->getSize());
         $arrFile["file_hits"] = $objFile->getHits();
         $arrFile["file_lmtime"] = timeToString($objFile->getEditDate());
+        if(validateSystemid($objFile->getOwnerId())) {
+            $objUser = new class_modul_user_user($objFile->getOwnerId());
+            $arrFile["file_owner"] = $objUser->getStrUsername();
+        }
 
         //Right to download?
         if($this->objRights->rightRight2($objFile->getSystemid())) {
