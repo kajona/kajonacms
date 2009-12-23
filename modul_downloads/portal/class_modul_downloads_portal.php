@@ -109,7 +109,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                         }
 						//ratings available?
 						if($objOneFile->getFloatRating() !== null) {
-						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
+						    $arrTemplate["file_rating"] = $this->buildRatingBar($objOneFile->getFloatRating(), $objOneFile->getIntRatingHits(), $objOneFile->getSystemid(), $objOneFile->isRateableByUser(), $objOneFile->rightRight4());
 						}
 
 						//could we get a preview (e.g. if its an image)?
@@ -221,7 +221,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
 		//ratings available?
 		if($objFile->getFloatRating() !== null) {
-		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
+		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objOneFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
 		}
 
         //screenshots available? undocumented feature!
@@ -333,11 +333,12 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 * Creates the needed js-links and image-tags as defined by the template.
 	 *
 	 * @param float $floatRating
+     * @param int $intRatings
 	 * @param string $strSystemid
 	 * @param bool $bitRatingAllowed
 	 * @return string
 	 */
-	private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+	private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
 		$strIcons = "";
 		$strRatingBarTitle = "";
 
@@ -367,7 +368,10 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			    $strRatingBarTitle = $this->getText("download_rating_permissions");
 		}
 
-		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,
+                                         "rating_rating" => $floatRating, "rating_hits" => $intRatings,
+                                         "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
+                                         "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
     
 
