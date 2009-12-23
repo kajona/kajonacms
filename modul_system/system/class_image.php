@@ -888,11 +888,13 @@ class class_image {
      *
      * @param int $intHeight
      * @param int $intWidth
-     * @return o
+     * @return objImage
      */
     public function createEmptyImage($intWidth, $intHeight) {
         $objImage = @imagecreatetruecolor($intWidth, $intHeight);
-        imagealphablending($objImage, false);
+
+        //FIXME TODO: only a quick fix. when enabling , the font-rendering crashes
+        //imagealphablending($objImage, false);
         imagesavealpha($objImage, true);
 
         return $objImage;
@@ -983,7 +985,7 @@ class class_image {
 
 	/**
 	 * Returns the current image-resource-object.
-	 * Why the hell do you need it? Think tiwce!
+	 * Why the hell do you need it? Think twice!
 	 *
 	 * @return resource
 	 */
