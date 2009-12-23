@@ -424,32 +424,35 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		//Load the current record
 		$objData = new class_modul_gallery_pic($this->getSystemid());
 		$objGallery = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
-		//If the record is empty, try to load the gallery
-		if($objData->getStrName() == "") {
-		      $objData = new class_modul_gallery_gallery($this->getSystemid());
-		}
-        $arrTemplate = array();
-		//Name and link
-		if($bitCurrentViewIsDetail)
-			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "detailImage", "", $objData->getSystemid(), "", "", $objData->getStrName());
-		else
-			$arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrName());
 
-		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
-		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+            if($objGallery->rightView()) {
+            //If the record is empty, try to load the gallery
+            if($objData->getStrName() == "") {
+                  $objData = new class_modul_gallery_gallery($this->getSystemid());
+            }
+            $arrTemplate = array();
+            //Name and link
+            if($bitCurrentViewIsDetail)
+                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "detailImage", "", $objData->getSystemid(), "", "", $objData->getStrName());
+            else
+                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid(), "", "", $objData->getStrName());
 
-		while(validateSystemid($objData->getPrevId()) && $objData->getSystemid() != $objGallery->getSystemid()) {
-			$objData = new class_modul_gallery_pic($objData->getPrevId());
-			if($objData->getStrName() == "") {
-		        $objData = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
-		        $bitGalStart = true;
-		    }
+            $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
+            $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
-		    $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid());
-   	        $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
-	        $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
-       }
+            while(validateSystemid($objData->getPrevId()) && $objData->getSystemid() != $objGallery->getSystemid()) {
+                $objData = new class_modul_gallery_pic($objData->getPrevId());
+                if($objData->getStrName() == "") {
+                    $objData = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
+                    $bitGalStart = true;
+                }
 
+                $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid());
+                $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "pathnavigation_level");
+                $strReturn = $this->fillTemplate($arrTemplate, $strTemplateID). $strReturn;
+            }
+
+        }
 
 		return $strReturn;
 	}
