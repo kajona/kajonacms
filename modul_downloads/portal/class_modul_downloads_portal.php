@@ -221,7 +221,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
 		//ratings available?
 		if($objFile->getFloatRating() !== null) {
-		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objOneFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
+		    $arrFile["file_rating"] = $this->buildRatingBar($objFile->getFloatRating(), $objFile->getIntRatingHits(), $objFile->getSystemid(), $objFile->isRateableByUser(), $objFile->rightRight2());
 		}
 
         //screenshots available? undocumented feature!
