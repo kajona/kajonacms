@@ -20,7 +20,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.2.91";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -87,6 +87,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$arrFields["portallogin_success"] 		= array("char254", true);
 		$arrFields["portallogin_logout_success"]= array("char254", true);
         $arrFields["portallogin_profile"]       = array("char254", true);
+        $arrFields["portallogin_pwdforgot"]     = array("char254", true);
 		
 		if(!$this->objDB->createTable("element_portallogin", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -127,6 +128,11 @@ class class_installer_element_portallogin extends class_installer_base implement
         if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.2.0.9") {
             $strReturn .= $this->postUpdate_3209_321();
         }
+        $this->objDB->flushQueryCache();
+
+        if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.2.1") {
+            $strReturn .= $this->postUpdate_321_3291();
+        }
 
         return $strReturn;
     }
@@ -135,6 +141,21 @@ class class_installer_element_portallogin extends class_installer_base implement
         $strReturn = "";
         $strReturn = "Updating element portallogin to 3.2.1...\n";
         $this->updateElementVersion("portallogin", "3.2.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_321_3291() {
+        $strReturn = "";
+        $strReturn = "Updating element portallogin to 3.2.91...\n";
+
+        $strReturn .= "Updating element table...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_portallogin")."
+                           ADD ".$this->objDB->encloseColumnName("portallogin_pwdforgot")." VARCHAR (254) NULL ";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+        $this->updateElementVersion("portallogin", "3.2.91");
         return $strReturn;
     }
 }

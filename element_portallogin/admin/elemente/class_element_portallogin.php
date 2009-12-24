@@ -28,7 +28,7 @@ class class_element_portallogin extends class_element_admin implements interface
 		$arrModule["table"] 		= _dbprefix_."element_portallogin";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "portallogin_template|char,portallogin_error|char,portallogin_success|char,portallogin_logout_success|char,portallogin_profile|char";
+		$arrModule["tableColumns"]   = "portallogin_template|char,portallogin_error|char,portallogin_success|char,portallogin_logout_success|char,portallogin_profile|char,portallogin_pwdforgot|char";
 
 		parent::__construct($arrModule);
 	}
@@ -58,6 +58,7 @@ class class_element_portallogin extends class_element_admin implements interface
 		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_logout_success", $this->getText("portallogin_logout_success"), (isset($arrElementData["portallogin_logout_success"]) ? $arrElementData["portallogin_logout_success"] : ""));
         $strReturn .= $this->objToolkit->formTextRow($this->getText("portallogin_profile_hint"));
 		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_profile", $this->getText("portallogin_profile"), (isset($arrElementData["portallogin_profile"]) ? $arrElementData["portallogin_profile"] : ""));
+		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_pwdforgot", $this->getText("portallogin_pwdforgot"), (isset($arrElementData["portallogin_pwdforgot"]) ? $arrElementData["portallogin_pwdforgot"] : ""));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("portallogin_template");
 

@@ -220,7 +220,9 @@ class class_element_portallogin extends class_element_portal implements interfac
 
 		$arrTemplate = array();
         $arrTemplate["portallogin_action"] = "portalLogin";
-        $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($this->getPagename(), "", "", $this->getText("pwdForgotLink"), "portalLoginReset");
+
+        $strPwdPage = $this->arrElementData["portallogin_pwdforgot"] != "" ? $this->arrElementData["portallogin_pwdforgot"]  : $this->getPagename();
+        $arrTemplate["portallogin_forgotpwdlink"] = getLinkPortal($strPwdPage, "", "", $this->getText("pwdForgotLink"), "portalLoginReset");
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
 		return $this->fillTemplate($arrTemplate, $strTemplateID);
