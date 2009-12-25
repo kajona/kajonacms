@@ -37,4 +37,5 @@ $lang["userDataSubmit"]                  = "Save";
 $lang["username"]                        = "Username:";
 $lang["usernameTitle"]                   = "Username:";
 $lang["signup"]                          = "Create account";
+$lang["resetMailSuccess"]                = "An email containing a link to change your password was sent to the adress provided with your profile.";
 ?>

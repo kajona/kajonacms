@@ -181,6 +181,11 @@ class class_element_portallogin extends class_element_portal implements interfac
                     $strTemp = getLinkPortalHref($this->getPagename(), "", "portalResetPwd", "systemid=".$objUser->getSystemid()."&authcode=".$strAuthcode);
                     $strMailContent .= html_entity_decode("<a href=\"".$strTemp."\">".$strTemp."</a>");
 
+                    $this->objTemplate->setTemplate($strMailContent);
+                    $this->objTemplate->fillConstants();
+                    $this->objTemplate->deletePlaceholder();
+                    $strMailContent = $this->objTemplate->getTemplate();
+
                     //create a mail confirming the change
                     $objEmail = new class_mail();
                     $objEmail->setSubject($this->getText("resetemailTitle"));
