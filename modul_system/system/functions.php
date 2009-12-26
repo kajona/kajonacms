@@ -797,7 +797,7 @@ function urlSafeString($strText) {
 	$strReturn = str_replace($arrSearch, $arrReplace, $strText);
 
 	//remove all other special characters
-	$strReturn = preg_replace("[^A-Za-z0-9_-]", "", $strReturn);
+	$strReturn = preg_replace("/[^A-Za-z0-9_-]/", "", $strReturn);
 
 	return $strReturn;
 }
