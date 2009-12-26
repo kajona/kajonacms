@@ -24,7 +24,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		$arrModule["name"] 				= "formular_kontakt";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
-		$arrModule["modul"]				= "pages";
+		$arrModule["modul"]				= "elemente";
 		$arrModule["template"]			= "/element_form/contact.tpl";
 
 		//base class
@@ -137,7 +137,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		$objEmail->setText($this->objTemplate->getTemplate());
 		$objEmail->addTo($this->arrElementData["formular_email"]);
 		$objEmail->setSender($this->getParam("absender_email"));
-		$objEmail->setSubject("Nachricht per Kontaktformular");
+		$objEmail->setSubject($this->getText("formContact_mail_subject"));
 		if($objEmail->sendMail())
 			$strReturn = $this->arrElementData["formular_success"];
 		else
