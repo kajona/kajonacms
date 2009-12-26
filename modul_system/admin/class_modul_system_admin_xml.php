@@ -69,9 +69,12 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             //there is a different mode for page-elements, catch now
             $objCommon = new class_modul_system_common($this->getSystemid());
             if($objCommon->getRecordModuleNr() == _pages_content_modul_id_ && $intNewPos != "") {
-                
                 $objElement = new class_modul_pages_pageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($this->getSystemid(), $intNewPos);
+            }
+            else if($objCommon->getRecordModuleNr() == _navigation_modul_id_ && $intNewPos != "") {
+                $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
+                class_modul_navigation_cache::flushCache();
             }
             else {
 
