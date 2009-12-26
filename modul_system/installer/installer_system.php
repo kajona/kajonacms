@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.92";
+		$arrModul["version"] 			= "3.2.93";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -161,9 +161,9 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		$arrFields = array();
 		$arrFields["system_date_id"] 		= array("char20", false);
-		$arrFields["system_date_start"]		= array("int", true);
-		$arrFields["system_date_end"] 		= array("int", true);
-		$arrFields["system_date_special"] 	= array("int", true);
+		$arrFields["system_date_start"]		= array("long", true);
+		$arrFields["system_date_end"] 		= array("long", true);
+		$arrFields["system_date_special"] 	= array("long", true);
 
 		if(!$this->objDB->createTable("system_date", $arrFields, array("system_date_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -527,6 +527,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.91") {
             $strReturn .= $this->update_3291_3292();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.92") {
+            $strReturn .= $this->update_3292_3293();
         }
 
         return $strReturn."\n\n";
@@ -903,7 +908,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
     private function update_3291_3292() {
         $strReturn = "";
-        $strReturn .= "Updating 3.2.9.1 to 3.2.92...\n";
+        $strReturn .= "Updating 3.2.91 to 3.2.92...\n";
 
         $strReturn.= "Checking number of nodes on second level compared to number of modules installed...\n";
 
@@ -950,6 +955,81 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.2.92");
          
          
+        return $strReturn;
+    }
+
+    private function update_3292_3293() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.92 to 3.2.93...\n";
+
+
+        $strReturn = "Altering system-date-table...\n";
+        $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                        CHANGE ".$this->objDB->encloseColumnName("system_date_start")." ".$this->objDB->encloseColumnName("system_date_start")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL,
+                        CHANGE ".$this->objDB->encloseColumnName("system_date_end")." ".$this->objDB->encloseColumnName("system_date_end")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL,
+                        CHANGE ".$this->objDB->encloseColumnName("system_date_special")." ".$this->objDB->encloseColumnName("system_date_special")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL";
+
+        if(!$this->objDB->_query($strSql))
+            $strReturn .= "An error occured!\n";
+
+        $strReturn .= "Updating saved timestamps...\n";
+
+        $strReturn .= "... start dates...\n";
+        $strQuery = "SELECT system_date_start, system_date_id
+                       FROM ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                      WHERE system_date_start IS NOT NULL 
+                        AND system_date_start != 0 ";
+        $arrEntries = $this->objDB->getArray($strQuery);
+        foreach($arrEntries as $arrSingleEntry) {
+            $objDate = new class_date($arrSingleEntry["system_date_start"]);
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                           SET system_date_start = ".$objDate->getLongTimestamp()."
+                         WHERE system_date_id = '".$arrSingleEntry["system_date_id"]."' ";
+
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!\n";
+        }
+
+        $strReturn .= "... end dates...\n";
+        $strQuery = "SELECT system_date_end, system_date_id
+                       FROM ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                      WHERE system_date_end IS NOT NULL
+                        AND system_date_end != 0 ";
+        $arrEntries = $this->objDB->getArray($strQuery);
+        foreach($arrEntries as $arrSingleEntry) {
+            $objDate = new class_date($arrSingleEntry["system_date_end"]);
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                           SET system_date_end = ".$objDate->getLongTimestamp()."
+                         WHERE system_date_id = '".$arrSingleEntry["system_date_id"]."' ";
+
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!\n";
+        }
+
+        $strReturn .= "... special dates...\n";
+        $strQuery = "SELECT system_date_special, system_date_id
+                       FROM ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                      WHERE system_date_special IS NOT NULL
+                        AND system_date_special != 0 ";
+        $arrEntries = $this->objDB->getArray($strQuery);
+        foreach($arrEntries as $arrSingleEntry) {
+            $objDate = new class_date($arrSingleEntry["system_date_special"]);
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
+                           SET system_date_special = ".$objDate->getLongTimestamp()."
+                         WHERE system_date_id = '".$arrSingleEntry["system_date_id"]."' ";
+
+            if(!$this->objDB->_query($strQuery))
+                $strReturn .= "An error occured!\n";
+        }
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.93");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.93");
+
+
         return $strReturn;
     }
 }

@@ -243,9 +243,9 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			foreach($arrNews as $objOneNews) {
 			    if($this->objRights->rightView($objOneNews->getSystemid())) {
                     $strAction = "";
-                    $strCenter = "S: ".timeToString($objOneNews->getIntDateStart(), false)
-                               .($objOneNews->getIntDateEnd() != 0 ?" E: ".timeToString($objOneNews->getIntDateEnd(), false) : "" )
-                               .($objOneNews->getIntDateSpecial() != 0 ? " A: ".timeToString($objOneNews->getIntDateSpecial(), false) : "" );
+                    $strCenter = "S: ".dateToString(new class_date($objOneNews->getIntDateStart()), false)
+                               .($objOneNews->getIntDateEnd() != 0 ?" E: ".dateToString(new class_date($objOneNews->getIntDateEnd()), false) : "" )
+                               .($objOneNews->getIntDateSpecial() != 0 ? " A: ".dateToString(new class_date($objOneNews->getIntDateSpecial()), false) : "" );
 
                     
                     $objLockmanager = $objOneNews->getLockManager();
@@ -416,8 +416,11 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
-                //The date selector
-                $strReturn .= $this->objToolkit->formDate(0, 0, 0, $this->getText("start"), $this->getText("end"), $this->getText("archive"));
+                //The date selectors
+                $strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), new class_date());
+                $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), null);
+                $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), null);
+
                 //and the cats
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
@@ -452,8 +455,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
-                //The date selector
-                $strReturn .= $this->objToolkit->formDate($objNews->getIntDateStart(), $objNews->getIntDateEnd(), $objNews->getIntDateSpecial(), $this->getText("start"), $this->getText("end"), $this->getText("archive"));
+                //The date selectors
+                $strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), $objNews->getIntDateStart() != 0 ? new class_date($objNews->getIntDateStart()) : null);
+                $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), $objNews->getIntDateEnd() != 0 ? new class_date($objNews->getIntDateEnd()) : null);
+                $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), $objNews->getIntDateSpecial() != 0 ? new class_date($objNews->getIntDateSpecial()) : null);
                 //and the cats
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
@@ -493,13 +498,22 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		if($this->getParam("mode") == "new") {
 			//Check rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-				$arrDates = $this->objToolkit->generateDateTimestamps($this->getAllParams());
+
+                //parse passed dates
+                $objStartDate = new class_date("0");
+                $objStartDate->generateDateFromParams("start", $this->getAllParams());
+                $objEndDate = new class_date("0");
+                $objEndDate->generateDateFromParams("end", $this->getAllParams());
+                $objArchiveDate = new class_date("0");
+                $objArchiveDate->generateDateFromParams("archive", $this->getAllParams());
 
 				$objNews = new class_modul_news_news("");
 				$objNews->setStrTitle($this->getParam("news_title"));
-				$objNews->setIntDateEnd($arrDates["end"]);
-				$objNews->setIntDateStart($arrDates["start"]);
-				$objNews->setIntDateSpecial($arrDates["archive"]);
+
+                $objNews->setIntDateStart($objStartDate->getLongTimestamp());
+                $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
+                $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
+                
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
                 if(isset($arrParams["cat"]) && count($arrParams["cat"]) > 0) {
@@ -518,13 +532,23 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		}
 		elseif($this->getParam("mode") == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
-			    $arrDates = $this->objToolkit->generateDateTimestamps($this->getAllParams());
+
+                //parse passed dates
+                $objStartDate = new class_date("0");
+                $objStartDate->generateDateFromParams("start", $this->getAllParams());
+                $objEndDate = new class_date("0");
+                $objEndDate->generateDateFromParams("end", $this->getAllParams());
+                $objArchiveDate = new class_date("0");
+                $objArchiveDate->generateDateFromParams("archive", $this->getAllParams());
 
 				$objNews = new class_modul_news_news($this->getSystemid());
 				$objNews->setStrTitle($this->getParam("news_title"));
-				$objNews->setIntDateEnd($arrDates["end"]);
-				$objNews->setIntDateStart($arrDates["start"]);
-				$objNews->setIntDateSpecial($arrDates["archive"]);
+
+                $objNews->setIntDateStart($objStartDate->getLongTimestamp());
+                $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
+                $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
+
+				
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
                 if(count($arrParams["cat"]) > 0) {

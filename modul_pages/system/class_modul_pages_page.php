@@ -133,7 +133,6 @@ class class_modul_pages_page extends class_model implements interface_model  {
         
 
         //Make texts db-safe
-		$strDescription = htmlToString($this->getStrDesc(), false, false);
         $strName = $this->generateNonexistingPagename($this->getStrName());
         $this->setStrName($strName);
 
@@ -156,7 +155,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
     		$strQuery2 = "UPDATE  "._dbprefix_."page_properties
-    					SET pageproperties_description='".$this->objDB->dbsafeString($strDescription)."',
+    					SET pageproperties_description='".$this->objDB->dbsafeString($this->getStrDesc())."',
     						pageproperties_template='".$this->objDB->dbsafeString($this->getStrTemplate())."',
     						pageproperties_keywords='".$this->objDB->dbsafeString($this->getStrKeywords())."',
     						pageproperties_browsername='".$this->objDB->dbsafeString($this->getStrBrowsername())."',
@@ -170,7 +169,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
 						 pageproperties_seostring, pageproperties_language) VALUES
 						('".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($this->getStrKeywords())."',
-						 '".$this->objDB->dbsafeString($strDescription)."', '".$this->objDB->dbsafeString($this->getStrTemplate())."',
+						 '".$this->objDB->dbsafeString($this->getStrDesc())."', '".$this->objDB->dbsafeString($this->getStrTemplate())."',
 						 '".$this->objDB->dbsafeString($this->getStrBrowsername())."', '".$this->objDB->dbsafeString($this->getStrSeostring())."',
 						 '".$this->objDB->dbsafeString($this->getStrLanguage())."')";
 		}

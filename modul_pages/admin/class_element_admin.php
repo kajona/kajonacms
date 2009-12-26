@@ -62,12 +62,16 @@ class class_element_admin extends class_admin {
         $arrStart = array("", "", "");
         $arrEnd = array("", "", "");
         $bitShow = false;
+
+        $objStartDate = null;
         if(isset($arrElementData["system_date_start"]) && (int)$arrElementData["system_date_start"] > 0) {
-            $arrStart = explode(".", date("d.m.Y", $arrElementData["system_date_start"]));
+            $objStartDate = new class_date($arrElementData["system_date_start"]);
             $bitShow = true;
         }
+
+        $objEndDate = null;
         if(isset($arrElementData["system_date_end"]) && (int)$arrElementData["system_date_end"] > 0) {
-            $arrEnd = explode(".", date("d.m.Y", $arrElementData["system_date_end"]));
+            $objEndDate = new class_date($arrElementData["system_date_end"]);
             $bitShow = true;
         }
 
@@ -76,8 +80,10 @@ class class_element_admin extends class_admin {
             $bitShow = true;
 
 		$strSystemFields .= $this->objToolkit->formInputText("page_element_placeholder_title", $this->getText("page_element_placeholder_title", "pages"), $strInternalTitle);
-		$strSystemFields .= $this->objToolkit->formDateSimple("start", $arrStart[0], $arrStart[1], $arrStart[2], $this->getText("page_element_start", "pages"), false);
-		$strSystemFields .= $this->objToolkit->formDateSimple("end", $arrEnd[0], $arrEnd[1], $arrEnd[2], $this->getText("page_element_end", "pages"), false);
+
+        $strSystemFields .= $this->objToolkit->formDateSingle("start", $this->getText("page_element_start", "pages"), $objStartDate);
+		$strSystemFields .= $this->objToolkit->formDateSingle("end", $this->getText("page_element_end", "pages"), $objEndDate);
+
 
         $strReturn .= "<br />".$this->objToolkit->getLayoutFolderPic($strSystemFields, $this->getText("page_element_system_folder", "pages"), "icon_folderOpen.gif", "icon_folderClosed.gif", $bitShow );
 

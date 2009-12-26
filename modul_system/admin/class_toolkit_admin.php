@@ -114,7 +114,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitToday If set true, the current date will be inserted, if no date is passed
      * @param string $strClass
      * @return string
-     * @deprecated will be removed in 3.3. Use formDateSingle() intead.
+     * @deprecated will be removed in 3.3.x Use formDateSingle() intead.
      */
     public function formDateSimple($strName = "", $intDay = "", $intMonth = "", $intYear = "", $strTitle = "", $bitToday = true, $strClass = "inputDate") {
         //no given values, use today

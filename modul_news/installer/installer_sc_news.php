@@ -53,7 +53,7 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $objNews->setStrIntro("Kajona installed successfully...");
             }
 
-            $objNews->setIntDateStart(time());
+            $objNews->setIntDateStart(class_date::getCurrentTimestamp());
             $objNews->setArrCats(array($strCategoryID => 1));
             $objNews->updateObjectToDb();
             $strNewsId = $objNews->getSystemid();

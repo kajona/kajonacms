@@ -119,6 +119,8 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
             if($this->objRights->rightView($objOneNews->getSystemid())) {
 
                 $objOneNews->setStrIntro(xmlSafeString($objOneNews->getStrIntro()));
+                $objDate = new class_date($objOneNews->getIntDateStart());
+                $intTime = mktime($objDate->getIntHour(), $objDate->getIntMin(), $objDate->getIntSec(), $objDate->getIntMonth(), $objDate->getIntDay(), $objDate->getIntYear());
 
                 $strReturn .=
                  "        <item>\n"
@@ -126,7 +128,7 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 			    ."            <link>".getLinkPortalHref($strPage, "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle())."</link>\n"
 			    ."            <guid isPermaLink=\"false\">".$objOneNews->getSystemid()."</guid>\n"
 			    ."            <description>".xmlSafeString($objOneNews->getStrIntro())."</description>\n"
-			    ."            <pubDate>".strftime("%a, %d %b %Y 00:00:00 GMT", $objOneNews->getIntDateStart())."</pubDate>\n"
+			    ."            <pubDate>".strftime("%a, %d %b %Y %H:%m:00 GMT", $intTime)."</pubDate>\n"
 		        ."        </item>\n";
 
             }

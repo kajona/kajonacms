@@ -94,7 +94,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					//generate a link to the details
 					$arrOneNews["news_more_link"] = getLinkPortal($this->arrElementData["news_detailspage"], "", "", $this->getText("news_mehr"), "newsDetail", "", $objOneNews->getSystemid(), "", "", $objOneNews->getStrTitle());
 					$arrOneNews["news_more_link_href"] = getLinkPortalHref($this->arrElementData["news_detailspage"], "", "newsDetail", "", $objOneNews->getSystemid(), "", $objOneNews->getStrTitle());
-					$arrOneNews["news_start_date"] = timeToString($objOneNews->getIntDateStart(), false);
+					$arrOneNews["news_start_date"] = dateToString(new class_date($objOneNews->getIntDateStart()), false);
 					$arrOneNews["news_id"] = $objOneNews->getSystemid();
 					$arrOneNews["news_title"] = $objOneNews->getStrTitle();
 					$arrOneNews["news_intro"] = $objOneNews->getStrIntro();

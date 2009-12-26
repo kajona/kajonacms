@@ -82,12 +82,14 @@ class class_modul_system_common extends class_model implements interface_model  
     /**
      * Sets the start date of the current systemid
      *
-     * @param int $intStartDate
+     * @param class_date $objStartDate
      * @return bool
      */
-    public function setStartDate($intStartDate) {
+    public function setStartDate($objStartDate) {
         //check, if an insert or an update is needed
         $strQuery = "";
+
+        $intStartDate = $objStartDate->getLongTimestamp();
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -105,12 +107,14 @@ class class_modul_system_common extends class_model implements interface_model  
     /**
      * Sets the end date of the current systemid
      *
-     * @param int $intEndDate
+     * @param class_date $objEndDate
      * @return bool
      */
-    public function setEndDate($intEndDate) {
+    public function setEndDate($objEndDate) {
         //check, if an insert or an update is needed
         $strQuery = "";
+
+        $intEndDate = $objEndDate->getLongTimestamp();
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
@@ -128,12 +132,14 @@ class class_modul_system_common extends class_model implements interface_model  
     /**
      * Sets the special date of the current systemid
      *
-     * @param int $intSpecialDate
+     * @param class_date $objSpecialDate
      * @return bool
      */
-    public function setSpecialDate($intSpecialDate) {
+    public function setSpecialDate($objSpecialDate) {
         //check, if an insert or an update is needed
         $strQuery = "";
+
+        $intSpecialDate = $objSpecialDate->getLongTimestamp();
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date

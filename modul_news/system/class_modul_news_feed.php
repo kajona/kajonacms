@@ -180,7 +180,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	 */
 	public static function getNewsList($strFilter = "", $intAmount = 0) {
         $strQuery = "";
-	    $intNow = time();
+	    $intNow = class_date::getCurrentTimestamp();
 		if($strFilter != "") {
 			$strQuery = "SELECT *
 							FROM  "._dbprefix_."news,

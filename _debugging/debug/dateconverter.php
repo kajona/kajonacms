@@ -48,8 +48,17 @@ echo "\tinteger: <input type=\"text\" value=\"".getPost("kajonainttime")."\" nam
 echo "  --> ".$objDateFromInt."\n";
 
 
+$objDateFromInt = new class_date(getPost("kajonainttime"));
+echo "\tinteger: <input type=\"text\" value=\"".getPost("kajonainttime")."\" name=\"kajonainttime\"/>";
+echo "  --> ".$objDateFromInt."\n";
+
+
+
+
 echo "\n<input type=\"submit\" value=\"submit\" />\n";
 echo "</form>";
+
+echo "\ncurrent time: ".class_date::getCurrentTimestamp()."\n";
 
 echo "\n\n";
 echo "+-------------------------------------------------------------------------------+\n";

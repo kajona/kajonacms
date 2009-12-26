@@ -710,7 +710,7 @@ function splitUpLink($strLink) {
 
 
 /**
- * Changes HTML to databasable ;) strings
+ * Changes HTML to simple printable strings
  *
  * @param string $strHtml
  * @param bool $bitEntities

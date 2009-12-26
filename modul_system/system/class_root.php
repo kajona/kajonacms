@@ -175,35 +175,65 @@ abstract class class_root {
 
 	/**
 	 * Creates a record in the date table. Make sure to use a proper system-id!
+	 * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
+     * int-values.
 	 *
 	 * @param string $strSystemid
-	 * @param int $intStart
-	 * @param int $intEnd
-	 * @param int $intSpecial
+	 * @param class_date $objStartDate
+	 * @param class_date $objEndDate
+	 * @param class_date $objSpecialDate
 	 * @return bool
 	 */
-	public function createDateRecord($strSystemid, $intStart = 0, $intEnd = 0, $intSpecial = 0) {
+	public function createDateRecord($strSystemid, $objStartDate = null, $objEndDate = null, $objSpecialDate = null) {
+        $intStart = 0;
+        $intEnd = 0;
+        $intSpecial = 0;
+
+        if($objStartDate != null && $objStartDate instanceof class_date)
+            $intStart = $objStartDate->getLongTimestamp();
+
+        if($objEndDate != null && $objEndDate instanceof class_date)
+            $intEnd = $objEndDate->getLongTimestamp();
+
+        if($objSpecialDate != null && $objSpecialDate instanceof class_date)
+            $intSpecial = $objSpecialDate->getLongTimestamp();
+        
 	    $strQuery = "INSERT INTO "._dbprefix_."system_date
 	                  (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
-	                  ('".$this->objDB->dbsafeString($strSystemid)."', '".(int)$intStart."', '".(int)$intEnd."', '".(int)$intSpecial."')";
+	                  ('".$this->objDB->dbsafeString($strSystemid)."', ".$intStart.", ".$intEnd.", ".$intSpecial.")";
 	    return $this->objDB->_query($strQuery);
 	}
 
     /**
 	 * Updates a record in the date table. Make sure to use a proper system-id!
+     * Up from Kajona V3.3, the signature changed. Pass instances of class_date instead of
+     * int-values.
 	 *
 	 * @param string $strSystemid
-	 * @param int $intStart
-	 * @param int $intEnd
-	 * @param int $intSpecial
+	 * @param class_date $objStartDate
+	 * @param class_date $objEndDate
+	 * @param class_date $objSpecialDate
 	 * @return bool
 	 */
-	public function updateDateRecord($strSystemid, $intStart = 0, $intEnd = 0, $intSpecial = 0) {
+	public function updateDateRecord($strSystemid, $objStartDate = null, $objEndDate = null, $objSpecialDate = null) {
+        $intStart = 0;
+        $intEnd = 0;
+        $intSpecial = 0;
+
+        if($objStartDate != null && $objStartDate instanceof class_date)
+            $intStart = $objStartDate->getLongTimestamp();
+
+        if($objEndDate != null && $objEndDate instanceof class_date)
+            $intEnd = $objEndDate->getLongTimestamp();
+
+        if($objSpecialDate != null && $objSpecialDate instanceof class_date)
+            $intSpecial = $objSpecialDate->getLongTimestamp();
+
 	    $strQuery = "UPDATE "._dbprefix_."system_date
-	                  SET system_date_start = ".(int)$intStart.",
-	                      system_date_end = ".(int)$intEnd.",
-	                      system_date_special = ".(int)$intSpecial."
-	                  WHERE system_date_id = '".$this->objDB->dbsafeString($strSystemid)."'";
+	                  SET system_date_start = ".$intStart.",
+	                      system_date_end = ".$intEnd.",
+	                      system_date_special = ".$intSpecial."
+	                WHERE system_date_id = '".$this->objDB->dbsafeString($strSystemid)."'";
 	    return $this->objDB->_query($strQuery);
 	}
 

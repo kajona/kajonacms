@@ -535,17 +535,21 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 
 			//check, if we have to update the date-records
-			$arrDates = $this->objToolkit->generateDateTimestamps($this->getAllParams());
+            $objStartDate = new class_date("0");
+            $objEndDate = new class_date("0");
+            $objStartDate->generateDateFromParams("start", $this->getAllParams());
+            $objEndDate->generateDateFromParams("end", $this->getAllParams());
+
 			$objSystemCommon = new class_modul_system_common($this->getSystemid());
-			if($arrDates["start"] == 0 && $arrDates["end"] == 0 && $arrDates["archive"] == 0) {
+			if($objStartDate->getIntYear() == "0000" && $objEndDate->getIntYear() == "0000") {
 			    //Delete the record (maybe) existing in the dates-table
 			    if(!$objSystemCommon->deleteDateRecord())
 			        throw new class_exception("Error deleting dates from db", class_exception::$level_ERROR);
 			}
 			else {
 			    //inserts needed
-			    $objSystemCommon->setStartDate($arrDates["start"]);
-			    $objSystemCommon->setEndDate($arrDates["end"]);
+			    $objSystemCommon->setStartDate($objStartDate);
+			    $objSystemCommon->setEndDate($objEndDate);
 			}
 
             //allow the element to run actions after saving

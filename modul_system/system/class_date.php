@@ -36,10 +36,19 @@ class class_date {
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 
-        if($longInitValue == "")
+
+        if($longInitValue == "") {
             $this->setTimeInOldStyle(time());
-        else
-            $this->setLongTimestamp($longInitValue);
+        }
+        else if($longInitValue == "0") {
+            $this->setLongTimestamp("00000000000000");
+        }
+        else {
+            if(strlen($longInitValue) == 14)
+                $this->setLongTimestamp($longInitValue);
+            else
+                $this->setTimeInOldStyle($longInitValue);
+        }
 	}
 
     /**
@@ -52,9 +61,18 @@ class class_date {
     }
 
     /**
+     * Generates a long-timestamp of the current time
+     * @return long
+     */
+    public static function getCurrentTimestamp() {
+        $objDate = new class_date();
+        return $objDate->getLongTimestamp();
+    }
+
+    /**
      * Sets the current time based on the array of params passed.
      * The fieldname is the prefix of the form-elements.
-     * The timestamp is generated out of the following form-element, so element of
+     * The timestamp is generated out of the following form-elements, so element of
      * the params-array:
      * fieldname_year, fieldname_month, fieldname_day, fieldname_hour, fieldname_minute, fieldname_second
      * If a single field is not found, 00 is inserted instead.
@@ -63,7 +81,7 @@ class class_date {
      * @param array $arrParams 
      */
     public function generateDateFromParams($strFieldname, $arrParams) {
-        $intYear = 0000;
+        $intYear = "0000";
         $intMonth = 00;
         $intDay = 00;
         $intHour = 00;
@@ -154,8 +172,8 @@ class class_date {
      *
      * @param int $intYear
      */
-    public function setIntHour($intHour) {
-        if($intHour < 1 || $intHour > 24)
+    public function setIntHour($intHour, $bitForce = false) {
+        if(!$bitForce && ($intHour < 1 || $intHour > 24))
             return;
 
         $strHour = sprintf("%02s", $intHour);
@@ -167,8 +185,8 @@ class class_date {
      *
      * @param int $intYear
      */
-    public function setIntMin($intMin) {
-        if($intMin < 1 || $intMin > 59)
+    public function setIntMin($intMin, $bitForce = false) {
+        if(!$bitForce && ($intMin < 1 || $intMin > 59))
             return;
 
         $strMin = sprintf("%02s", $intMin);
@@ -180,8 +198,8 @@ class class_date {
      *
      * @param int $intYear
      */
-    public function setIntSec($intSec) {
-        if($intSec < 1 || $intSec > 59)
+    public function setIntSec($intSec, $bitForce = false) {
+        if(!$bitForce && ($intSec < 1 || $intSec > 59))
             return;
 
         $strSec = sprintf("%02s", $intSec);

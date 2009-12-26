@@ -20,9 +20,9 @@ class class_modul_news_news extends class_model implements interface_model  {
     private $strIntro = "";
     private $strText = "";
 
-    private $intDateStart = 0;
-    private $intDateEnd = 0;
-    private $intDateSpecial = 0;
+    private $longDateStart = 0;
+    private $longDateEnd = 0;
+    private $longDateSpecial = 0;
 
     private $arrCats = null;
 
@@ -95,9 +95,22 @@ class class_modul_news_news extends class_model implements interface_model  {
      * @return bool
      */
     protected function updateStateToDb() {
+    
+        $objStartDate = null;
+        $objEndDate = null;
+        $objSpecialDate = null;
+
+        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "")
+            $objStartDate = new class_date($this->getIntDateStart());
+
+        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "")
+            $objEndDate = new class_date($this->getIntDateEnd());
+
+        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "")
+            $objSpecialDate = new class_date($this->getIntDateSpecial());
 
 	    //dates
-        $this->updateDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
+        $this->updateDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
 
         //news
         $strQuery = "UPDATE ".$this->arrModule["table"]."
@@ -137,7 +150,23 @@ class class_modul_news_news extends class_model implements interface_model  {
     protected function onInsertToDb() {
         //Start wit the system-recods and a tx
         $bitReturn = true;
-        $this->createDateRecord($this->getSystemid(), $this->getIntDateStart(), $this->getIntDateEnd(), $this->getIntDateSpecial());
+
+        $objStartDate = null;
+        $objEndDate = null;
+        $objSpecialDate = null;
+
+        if($this->getIntDateStart() != 0 && $this->getIntDateStart() != "")
+            $objStartDate = new class_date($this->getIntDateStart());
+
+        if($this->getIntDateEnd() != 0 && $this->getIntDateEnd() != "")
+            $objEndDate = new class_date($this->getIntDateEnd());
+
+        if($this->getIntDateSpecial() != 0 && $this->getIntDateSpecial() != "")
+            $objSpecialDate = new class_date($this->getIntDateSpecial());
+
+	    //dates
+        $this->createDateRecord($this->getSystemid(), $objStartDate, $objEndDate, $objSpecialDate);
+
 
         //and all memberships
         if(is_array($this->arrCats)) {
@@ -270,15 +299,15 @@ class class_modul_news_news extends class_model implements interface_model  {
 		$arrReturn = array();
         $strOrder = "";
         $strOneCat = "";
-		$intNow = time();
+		$longNow = class_date::getCurrentTimestamp();
 		//Get Timeintervall
 		if($intMode == "0") {
 			//Regular news
-			$strTime  = "AND (system_date_special IS NULL OR (system_date_special > ".(int)$intNow." OR system_date_special = 0))";
+			$strTime  = "AND (system_date_special IS NULL OR (system_date_special > ".$longNow." OR system_date_special = 0))";
 		}
 		elseif($intMode == "1") {
 			//Archivnews
-			$strTime = "AND (system_date_special < ".(int)$intNow." AND system_date_special IS NOT NULL AND system_date_special != 0)";
+			$strTime = "AND (system_date_special < ".$longNow." AND system_date_special IS NOT NULL AND system_date_special != 0)";
 		}
 		else
 			$strTime = "";
@@ -303,9 +332,9 @@ class class_modul_news_news extends class_model implements interface_model  {
                               AND news_id = newsmem_news
                               AND newsmem_category = '".dbsafeString($strCat)."'
                               AND system_status = 1
-                              AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
+                              AND (system_date_start IS NULL or(system_date_start < ".$longNow." OR system_date_start = 0))
                                 ".$strTime."
-                              AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+                              AND (system_date_end IS NULL or (system_date_end > ".$longNow." OR system_date_end = 0))
                             ORDER BY system_date_start ".$strOrder;
         }
         else {
@@ -316,9 +345,9 @@ class class_modul_news_news extends class_model implements interface_model  {
                             WHERE system_id = news_id
                               AND system_id = system_date_id
                               AND system_status = 1
-                              AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
+                              AND (system_date_start IS NULL or(system_date_start < ".$longNow." OR system_date_start = 0))
                                 ".$strTime."
-                              AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+                              AND (system_date_end IS NULL or (system_date_end > ".$longNow." OR system_date_end = 0))
                             ORDER BY system_date_start ".$strOrder;
         }
 
@@ -362,13 +391,13 @@ class class_modul_news_news extends class_model implements interface_model  {
         return $this->intHits;
     }
     public function getIntDateStart() {
-        return $this->intDateStart;
+        return $this->longDateStart;
     }
     public function getIntDateEnd() {
-        return $this->intDateEnd;
+        return $this->longDateEnd;
     }
     public function getIntDateSpecial() {
-        return $this->intDateSpecial;
+        return $this->longDateSpecial;
     }
     public function getArrCats() {
         return $this->arrCats;
@@ -391,13 +420,13 @@ class class_modul_news_news extends class_model implements interface_model  {
         $this->intHits = $intHits;
     }
     public function setIntDateStart($intDateStart) {
-        $this->intDateStart = $intDateStart;
+        $this->longDateStart = $intDateStart;
     }
     public function setIntDateEnd($intDateEnd) {
-        $this->intDateEnd = $intDateEnd;
+        $this->longDateEnd = $intDateEnd;
     }
     public function setIntDateSpecial($intDateSpecial) {
-        $this->intDateSpecial = $intDateSpecial;
+        $this->longDateSpecial = $intDateSpecial;
     }
     public function setArrCats($arrCats) {
         $this->arrCats = $arrCats;
