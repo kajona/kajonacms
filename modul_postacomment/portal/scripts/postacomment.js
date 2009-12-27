@@ -32,7 +32,10 @@ function submitPostacommentForm()  {
         this.strSystemId = strSystemId;
 		//create a new ajax request. collect data.
         var comment_name = document.getElementById('comment_name'+strSystemId).value;
-        var comment_subject = document.getElementById('comment_subject'+strSystemId).value;
+        var comment_subject = "";
+        try {
+        	comment_subject = document.getElementById('comment_subject'+strSystemId).value;
+        } catch (e) {}
         var comment_message = document.getElementById('comment_message'+strSystemId).value;
         var form_captcha = document.getElementById('form_captcha'+strSystemId).value;
         var comment_template = document.getElementById('comment_template'+strSystemId).value;
