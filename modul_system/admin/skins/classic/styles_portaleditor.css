@@ -39,6 +39,7 @@
 
 /* P O R T A L E D I T O R  E N A B L E   B U T T O N */
 #peEnableButton {
+    z-index: 1000;
 	position: fixed;
 	top: 0px;
 	right: 0px;
