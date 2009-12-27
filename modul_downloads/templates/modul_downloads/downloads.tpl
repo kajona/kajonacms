@@ -116,7 +116,7 @@
 </filedetail>
 
 
-<!-- available placeholders: img_filename -->
+<!-- available placeholders: img_filename, img_title -->
 <img_preview>
-    <img src="_webpath_/image.php?image=%%img_filename%%&amp;maxWidth=150&amp;maxHeight=100" alt="%%img_filename%%"/>
+    <img src="_webpath_/image.php?image=%%img_filename%%&amp;maxWidth=150&amp;maxHeight=100" alt="%%img_title%%"/>
 </img_preview>

@@ -98,7 +98,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                         //File
 						$strTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "file");
 						$arrTemplate["file_name"] = $objOneFile->getName();
-						$arrTemplate["file_description"] = $objOneFile->getDescription()."";
+						$arrTemplate["file_description"] = $objOneFile->getDescription();
 						$arrTemplate["file_hits"] = $objOneFile->getHits();
 						$arrTemplate["file_size"] = bytesToString($objOneFile->getSize());
                         $arrTemplate["file_detail_href"] = getLinkPortalHref($this->getPagename(), "", "detailDownload", "", $objOneFile->getSystemid(), "", $objOneFile->getName());
@@ -116,13 +116,13 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 						$strSuffix = uniSubstr($objOneFile->getFilename(), uniStrrpos($objOneFile->getFilename(), "."));
 						if($strSuffix == ".jpg" || $strSuffix == ".gif" || $strSuffix == ".png") {
                             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_preview");
-                            $arrTemplate["file_preview"] = $this->objTemplate->fillTemplate(array("img_filename" => urlencode($objOneFile->getFilename()) ), $strPreviewTemplateID);
+                            $arrTemplate["file_preview"] = $this->objTemplate->fillTemplate(array("img_title" => $objOneFile->getName(), "img_filename" => urlencode($objOneFile->getFilename()) ), $strPreviewTemplateID);
                         }
 
                         //screenshot 1 given? -> provide a preview for the list
                         if($objOneFile->getStrScreen1() != "") {
                             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_preview");
-                            $arrTemplate["file_screen_1"] = $this->objTemplate->fillTemplate(array("img_filename" => urlencode($objOneFile->getStrScreen1()) ), $strPreviewTemplateID);
+                            $arrTemplate["file_screen_1"] = $this->objTemplate->fillTemplate(array("img_title" => $objOneFile->getName(), "img_filename" => urlencode($objOneFile->getStrScreen1()) ), $strPreviewTemplateID);
                         }
 
 
@@ -215,7 +215,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         $strSuffix = uniSubstr($objFile->getFilename(), uniStrrpos($objFile->getFilename(), "."));
         if($strSuffix == ".jpg" || $strSuffix == ".gif" || $strSuffix == ".png") {
             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_preview");
-            $arrFile["file_preview"] = $this->objTemplate->fillTemplate(array("img_filename" => urlencode($objFile->getFilename()) ), $strPreviewTemplateID);
+            $arrFile["file_preview"] = $this->objTemplate->fillTemplate(array("img_title" => $objFile->getName(), "img_filename" => urlencode($objFile->getFilename()) ), $strPreviewTemplateID);
         }
 
 
@@ -227,19 +227,19 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         //screenshots available? undocumented feature!
         if($objFile->getStrScreen1() != "") {
             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_screenshot_list");
-            $arrFile["file_screen_1"] = $this->objTemplate->fillTemplate(array("img_title" => "", "img_filename" => urlencode($objFile->getStrScreen1()) ), $strPreviewTemplateID);
+            $arrFile["file_screen_1"] = $this->objTemplate->fillTemplate(array("img_title" => $objFile->getName(), "img_filename" => urlencode($objFile->getStrScreen1()) ), $strPreviewTemplateID);
 
             //provide a detailed view, too
             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_screenshot_detail");
-            $arrFile["file_screen_detail"] = $this->objTemplate->fillTemplate(array("img_filename" => urlencode($objFile->getStrScreen1()) ), $strPreviewTemplateID);
+            $arrFile["file_screen_detail"] = $this->objTemplate->fillTemplate(array("img_title" => $objFile->getName(), "img_filename" => urlencode($objFile->getStrScreen1()) ), $strPreviewTemplateID);
         }
         if($objFile->getStrScreen2() != "") {
             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_screenshot_list");
-            $arrFile["file_screen_2"] = $this->objTemplate->fillTemplate(array("img_title" => "", "img_filename" => urlencode($objFile->getStrScreen2()) ), $strPreviewTemplateID);
+            $arrFile["file_screen_2"] = $this->objTemplate->fillTemplate(array("img_title" => $objFile->getName(), "img_filename" => urlencode($objFile->getStrScreen2()) ), $strPreviewTemplateID);
         }
         if($objFile->getStrScreen3() != "") {
             $strPreviewTemplateID = $this->objTemplate->readTemplate("/modul_downloads/".$this->arrElementData["download_template"], "img_screenshot_list");
-            $arrFile["file_screen_3"] = $this->objTemplate->fillTemplate(array("img_title" => "", "img_filename" => urlencode($objFile->getStrScreen3()) ), $strPreviewTemplateID);
+            $arrFile["file_screen_3"] = $this->objTemplate->fillTemplate(array("img_title" => $objFile->getName(), "img_filename" => urlencode($objFile->getStrScreen3()) ), $strPreviewTemplateID);
         }
 
 		$strReturn = $this->fillTemplate($arrFile, $strTemplateID);
