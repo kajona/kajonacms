@@ -239,7 +239,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         return $this->strUsername;
     }
     public function getIntDate() {
-        if($this->intDate == null || $this->intDate != "")
+        if($this->intDate == null || $this->intDate == "")
             $this->intDate = time();
 
         return $this->intDate;
