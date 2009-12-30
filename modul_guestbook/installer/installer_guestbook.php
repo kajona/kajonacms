@@ -25,7 +25,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$arrModule["name_lang"] 	= "Module Guestbook";
 		$arrModule["moduleId"] 		= _guestbook_modul_id_;
 
-		$arrModule["tabellen"][]    = _dbprefix_."guestbook_buch";
+		$arrModule["tabellen"][]    = _dbprefix_."guestbook_book";
 		$arrModule["tabellen"][]    = _dbprefix_."guestbook_posts";
 		$arrModule["tabellen"][]    = _dbprefix_."elemente_guestbook";
 		parent::__construct($arrModule);
