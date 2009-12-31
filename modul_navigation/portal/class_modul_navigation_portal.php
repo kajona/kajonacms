@@ -9,7 +9,7 @@
 
 
 /**
- * Portal-part of the guestbook. Creates the different navigation-views as sitemap or tree
+ * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree
  *
  * @package modul_navigation
  */
