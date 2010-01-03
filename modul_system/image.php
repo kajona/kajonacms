@@ -162,14 +162,14 @@ class class_flyimage {
         $this->objImage->drawFilledRectangle(0, 0, $intWidth, $intHeight, $intWhite);
 
         //draw vertical lines
-        $intStart = 0;
-        while($intStart < $intWidth) {
+        $intStart = 5;
+        while($intStart < $intWidth-5) {
             $this->objImage->drawLine($intStart, 0, $intStart, $intWidth, $this->generateGreyLikeColor());
             $intStart += rand(10, 17);
         }
         //draw horizontal lines
-        $intStart = 0;
-        while($intStart < $intWidth) {
+        $intStart = 5;
+        while($intStart < $intHeight-5) {
             $this->objImage->drawLine(0, $intStart, $intWhite, $intStart, $this->generateGreyLikeColor());
             $intStart += rand(10, 17);
         }
