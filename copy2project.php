@@ -17,6 +17,8 @@ class class_copy2project {
     private $strSystemFolderName = "kajona";
 
     private $arrFileExclusionsP2M = array("config.php",
+                                          ".htaccess",
+                                          "global_includes.php",
                                           "systemlog.log",
                                           "dblog.log" );
 
