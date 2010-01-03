@@ -58,7 +58,7 @@
 			<td id="footerRightCorner"></td>
 		</tr>
 		<tr>
-			<td colspan="4" id="copyright">&copy; 2009 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
+			<td colspan="4" id="copyright">&copy; 2010 <a href="http://www.kajona.de" target="_blank" title="Kajona³ CMS - empowering your content">Kajona³</a></td>
 		</tr>
 	</tbody>
 </table>
