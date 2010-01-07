@@ -34,16 +34,17 @@ class class_modul_rating_sort_absolute implements interface_modul_rating_sortalg
     	$arrToSort = array();
     	foreach($this->arrElements as $objOneElement) {
     		$floatRating = $objOneElement->getFloatRating();
+            
     		//avoid replacement of files having the same rating
-    		while(isset($arrToSort[$floatRating]))
+    		while(isset($arrToSort["".$floatRating]))
     		  $floatRating += 0.0001;
     		  
-    		$arrToSort[$floatRating] = $objOneElement;
+    		$arrToSort["".$floatRating] = $objOneElement;
     	}
-    	
+
     	ksort($arrToSort, SORT_NUMERIC);
     	$arrToSort = array_reverse($arrToSort);
-    	
+        
     	return $arrToSort;
     }
 	
