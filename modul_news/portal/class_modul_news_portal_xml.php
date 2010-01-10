@@ -66,7 +66,7 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 
         if($objNewsfeed != null) {
 
-            //and load all news belonging to the selected cats
+            //and load all news belonging to the selected category
             if($objNewsfeed->getStrCat() != "0")
                 $arrNews = class_modul_news_feed::getNewsList($objNewsfeed->getStrCat(), $objNewsfeed->getIntAmount());
             else
