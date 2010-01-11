@@ -227,7 +227,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 				foreach($arrPages as $objSinglePage) {
 					//Should we generate a link ?
 					if($this->getParam("bit_link") != "")
-						$arrSinglePage["name2"] = '_indexpath_'."?page=".$objSinglePage->getStrName();
+						$arrSinglePage["name2"] = getLinkPortalHref($objSinglePage->getStrName());
 					else
 						$arrSinglePage["name2"] = $objSinglePage->getStrName();
 
