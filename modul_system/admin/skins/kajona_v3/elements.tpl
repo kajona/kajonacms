@@ -297,6 +297,21 @@ function is called after selecting a date, e.g. to hide the calendar
 	<script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script>
 	%%calendarCommands%%
 </input_date_simple>
+<input_datetime_simple>
+	<div><label for="%%titleDay%%">%%title%% </label>
+		<input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
+		<input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
+		<input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
+		<a href="#" onclick="fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%); return false;"><img src="_skinwebpath_/pics/icon_calendar.gif" alt="" /></a>
+
+        <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+		<input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+
+		<div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div>
+	</div><br />
+	<script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script>
+	%%calendarCommands%%
+</input_datetime_simple>
 
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,

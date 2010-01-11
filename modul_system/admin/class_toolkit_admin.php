@@ -145,24 +145,32 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param class_date $objDateToShow
      * @param string $strClass
+     * @param boolean $bitWithTime
      * @return string
      * @since 3.2.0.9
      */
-    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate") {
+    public function formDateSingle($strName, $strTitle, $objDateToShow, $strClass = "inputDate", $bitWithTime = false) {
         //check passed param
         if($objDateToShow != null && !$objDateToShow instanceof class_date)
             throw new class_exception("param passed to class_toolkit_admin::formDateSingle is not an instance of class_date", class_exception::$level_ERROR);
 
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
+        if($bitWithTime)
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_datetime_simple");
+        else
+            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_date_simple");
         $arrTemplate = array();
         $arrTemplate["class"] = $strClass;
         $arrTemplate["titleDay"] = $strName."_day";
         $arrTemplate["titleMonth"] = $strName."_month";
         $arrTemplate["titleYear"] = $strName."_year";
+        $arrTemplate["titleHour"] = $strName."_hour";
+        $arrTemplate["titleMin"] = $strName."_minute";
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["valueDay"] = $objDateToShow != null ? $objDateToShow->getIntDay() : "";
         $arrTemplate["valueMonth"] = $objDateToShow != null ? $objDateToShow->getIntMonth() : "";
         $arrTemplate["valueYear"] = $objDateToShow != null ? $objDateToShow->getIntYear() : "";
+        $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
+        $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
 
         //commands and values for the calendar
         $arrTemplate["calendarCommands"] = "";

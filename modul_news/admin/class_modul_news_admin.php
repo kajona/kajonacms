@@ -416,7 +416,9 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
-                //The date selectors
+                //The date selectors, using only dates.
+                //if you want to use dateTime pickers, use s.th. like the line below
+                //$strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), new class_date(), "inputDate", true);
                 $strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), new class_date());
                 $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), null);
                 $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), null);
@@ -455,7 +457,9 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
-                //The date selectors
+                //The date selectors, using only dates.
+                //if you want to use dateTime pickers, use s.th. like the line below
+                //$strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), $objNews->getIntDateStart() != 0 ? new class_date($objNews->getIntDateStart()) : null, "inputDate", true);
                 $strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), $objNews->getIntDateStart() != 0 ? new class_date($objNews->getIntDateStart()) : null);
                 $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), $objNews->getIntDateEnd() != 0 ? new class_date($objNews->getIntDateEnd()) : null);
                 $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), $objNews->getIntDateSpecial() != 0 ? new class_date($objNews->getIntDateSpecial()) : null);

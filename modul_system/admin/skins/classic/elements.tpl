@@ -349,6 +349,36 @@ function is called after selecting a date, e.g. to hide the calendar
 </table>
 %%calendarCommands%%
 </input_date_simple>
+<input_datetime_simple>
+<table width="90%" cellpadding="2" cellspacing="0">
+	<tr>
+		<td width="30%" class="listecontent" align="right" valign="top" style="padding-top: 6px;">%%title%%</td>
+		<td>
+    		<table>
+    		  <tr>
+    		      <td>
+    		          <input name="%%titleDay%%" id="%%titleDay%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueDay%%" />
+            		  <input name="%%titleMonth%%" id="%%titleMonth%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMonth%%" />
+            		  <input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
+
+                      <input name="%%titleHour%%" id="%%titleHour%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueHour%%" />
+                      <input name="%%titleMin%%" id="%%titleMin%%" type="text" class="%%class%%" size="2" maxlength="2" value="%%valueMin%%" />
+
+            	  </td>
+            	  <td>
+            		  <a href="javascript:fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
+    		      </td>
+    		  </tr>
+    		</table>
+	    </td>
+	</tr>
+	<tr>
+	   <td></td>
+	   <td><div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script></td>
+	</tr>
+</table>
+%%calendarCommands%%
+</input_datetime_simple>
 
 A page-selector.
 If you want to use ajax to load a list of proposals on entering a char,
