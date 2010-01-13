@@ -70,7 +70,6 @@ class class_installer_sc_gallery implements interface_sc_installer  {
                             gallery_maxw_d = 600,
                             gallery_maxh_m = 45,
                             gallery_maxw_m = 70,
-                            gallery_nrow = 3,
                             gallery_imagesperpage = 6,
                             gallery_text = '(c) kajona.de',
                             gallery_text_x = 5,
