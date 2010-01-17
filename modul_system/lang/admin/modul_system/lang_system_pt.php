@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 221
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -154,6 +154,7 @@ $lang["session_loggedin"]                = "Ligado em";
 $lang["session_loggedout"]               = "Convidado";
 $lang["session_logout"]                  = "Sessão inválida";
 $lang["session_portal"]                  = "Portal, página:";
+$lang["session_portal_imagegeneration"]  = "";
 $lang["session_status"]                  = "Estado";
 $lang["session_username"]                = "nome de utilizador";
 $lang["session_valid"]                   = "Válido até";

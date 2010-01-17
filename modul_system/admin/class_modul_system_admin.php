@@ -467,7 +467,20 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $this->objDB->flushQueryCache();
             }
 
-            $arrSessions = class_modul_system_session::getAllActiveSessions();
+
+
+            //showing a list using the pageview
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_system_session::getNumberOfActiveSessions());
+		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+		    $objArraySectionIterator->setArraySection(class_modul_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+		    $arrSessions = $objArraySectionIterator->getArrayExtended();
+    		$arrPageViews = $this->objToolkit->getPageview($arrSessions, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "system", "systemSessions", "", _admin_nr_of_rows_);
+            $arrSessions = $arrPageViews["elements"];
+
+
+            //$arrSessions = class_modul_system_session::getAllActiveSessions();
             $arrData = array();
             $arrHeader = array();
             $arrHeader[0] = "";
@@ -496,6 +509,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 if(uniStrpos($strLastUrl, "?") !== false)
                     $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
                 $strActivity = "";
+
                 if(uniStrpos($strLastUrl, "admin=1") !== false) {
                     $strActivity .= $this->getText("session_admin");
                     foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
@@ -514,6 +528,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                             if($arrUrlParam[0] == "page")
                                 $strActivity .= $arrUrlParam[1];
                         }
+
+                        if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                            $strActivity .= $this->getText("session_portal_imagegeneration");
+                        }
                     }
                 }
 
@@ -525,6 +543,9 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $arrData[] = $arrRowData;
             }
             $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+
+            if(count($arrSessions) > 0)
+			    $strReturn .= $arrPageViews["pageview"];
 
         }
         else

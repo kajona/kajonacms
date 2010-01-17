@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 221
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -154,6 +154,7 @@ $lang["session_loggedin"]                = "Вписан";
 $lang["session_loggedout"]               = "Гост";
 $lang["session_logout"]                  = "Невалидна сесия";
 $lang["session_portal"]                  = "Портал, страница:";
+$lang["session_portal_imagegeneration"]  = "";
 $lang["session_status"]                  = "Статут";
 $lang["session_username"]                = "Потребителско име";
 $lang["session_valid"]                   = "Валидна до";

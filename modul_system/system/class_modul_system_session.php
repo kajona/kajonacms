@@ -165,16 +165,36 @@ class class_modul_system_session extends class_model implements interface_model 
     /**
      * Returns, if available, the internal session-object for the passed internal session-id
      *
-     * @param sring $strSessionid
+     * @param int $intStart
+     * @param int $intEnd
      * @return array
      */
-    public static function getAllActiveSessions() {
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray("SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time());
+    public static function getAllActiveSessions($intStart = null, $intEnd = null) {
+
+        $strQuery = "SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()." ORDER BY session_releasetime DESC, session_id ASC";
+
+        if($intStart != null && $intEnd != null)
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_system_session($arrOneId["session_id"]);
             
         return $arrReturn;    
+    }
+
+    /**
+     * Returns the number of session currently being active
+     *
+     * @return int
+     */
+    public static function getNumberOfActiveSessions() {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()." ORDER BY session_releasetime DESC, session_id ASC";
+
+        $arrRow =  class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        return $arrRow["COUNT(*)"];
     }
     
 
