@@ -88,9 +88,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 	    $objArraySectionIterator->setArraySection(class_modul_guestbook_post::getPostsSection($this->arrElementData["guestbook_id"], true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-	    $arrObjPosts = $objArraySectionIterator->getArrayExtended();
-
-		$arrObjPosts = $this->objToolkit->pager($this->arrElementData["guestbook_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrObjPosts);
+		$arrObjPosts = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("weiter"), $this->getText("zurueck"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""));
 
 		//and put posts into a template
 		foreach($arrObjPosts["arrData"] as $objOnePost) {
