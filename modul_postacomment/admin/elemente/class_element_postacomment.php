@@ -29,7 +29,7 @@ class class_element_postacomment extends class_element_admin implements interfac
 		$arrModule["modul"]			= "elemente";
 
 		//char1: template
-		$arrModule["tableColumns"]  = "char1|char,char2|char";
+		$arrModule["tableColumns"]  = "char1|char,char2|char,int1|number";
 
 		parent::__construct($arrModule);
 	}
@@ -56,6 +56,7 @@ class class_element_postacomment extends class_element_admin implements interfac
 
         $strReturn .= $this->objToolkit->formTextRow($this->getText("postacomment_actionfilter_hint"));
         $strReturn .= $this->objToolkit->formInputText("char2", $this->getText("postacomment_actionfilter"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
+        $strReturn .= $this->objToolkit->formInputText("int1", $this->getText("postacomment_numberofposts"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 

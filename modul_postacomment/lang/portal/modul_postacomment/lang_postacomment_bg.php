@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 223
 
 //editable entries
 $lang["form_captcha_label"]              = "Код";
@@ -16,7 +16,9 @@ $lang["form_message_label"]              = "Съобщение";
 $lang["form_name_label"]                 = "Име";
 $lang["form_subject_label"]              = "Тема";
 $lang["form_submit_label"]               = "Запиши";
+$lang["postacomment_prev"]               = "";
 $lang["postacomment_empty"]              = "Няма налични коментари";
+$lang["postacomment_next"]               = "";
 $lang["postacomment_rating_permissions"] = "Нямате достатъчно права.";
 $lang["postacomment_rating_rate1"]       = "Оцени коментар с";
 $lang["postacomment_rating_rate2"]       = " точки!";

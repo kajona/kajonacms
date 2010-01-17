@@ -146,14 +146,27 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     /**
      * Counts the number of posts currently in the database
      *
-     * @params string $strPageid
+     * @param bool $bitJustActive
+     * @param string $strPagefilter
+     * @param string $strSystemidfilter false to ignore the filter
      * @return int
      */
-    public function getNumberOfPostsAvailable($strPageid = "") {
-        $strQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table"]."";
+    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "") {
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id ";
+        
         if($strPageid != "")
-            $strQuery .= " WHERE postacomment_page='".dbsafeString($strPageid)."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+            $strQuery .= " AND postacomment_page='".dbsafeString($strPageid)."'";
+        
+        if($bitJustActive)
+            $strQuery .= " AND system_status = 1 ";
+
+        if($strSystemidfilter !== false)
+            $strQuery .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
+
+        if($strLanguagefilter != "") //check against '' to remain backwards-compatible
+            $strQuery .= " AND (postacomment_language = '".dbsafeString($strLanguagefilter)."' OR postacomment_language = '')";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
         return $arrRow["COUNT(*)"];
     }
     

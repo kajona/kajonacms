@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 223
 
 //editable entries
 $lang["form_captcha_label"]              = "Code";
@@ -16,7 +16,9 @@ $lang["form_message_label"]              = "Nachricht";
 $lang["form_name_label"]                 = "Name";
 $lang["form_subject_label"]              = "Betreff";
 $lang["form_submit_label"]               = "Absenden";
+$lang["postacomment_prev"]               = "Zurück";
 $lang["postacomment_empty"]              = "Bisher sind noch keine Kommentare vorhanden";
+$lang["postacomment_next"]               = "Weiter";
 $lang["postacomment_rating_permissions"] = "Keine ausreichenden Rechte.";
 $lang["postacomment_rating_rate1"]       = "Kommentar mit ";
 $lang["postacomment_rating_rate2"]       = " Punkt(en) bewerten!";

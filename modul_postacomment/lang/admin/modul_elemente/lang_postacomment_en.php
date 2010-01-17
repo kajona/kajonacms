@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 223
 
 //editable entries
 $lang["postacomment_actionfilter"]       = "Action-filter:";
-$lang["postacomment_actionfilter_hint"]  = "If set, the comment-field and comment-list is only shown having a matching action-command.";
+$lang["postacomment_actionfilter_hint"]  = "If set, the comment-field and comment-list is only shown having a matching action-command. Should be left empty in most cases.";
+$lang["postacomment_numberofposts"]      = "Number of posts (0=unlimited)";
 $lang["postacomment_template"]           = "Template:";
 ?>

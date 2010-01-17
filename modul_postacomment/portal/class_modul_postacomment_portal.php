@@ -80,14 +80,40 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 
 		$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
 
+        $intNrOfPosts = $this->arrElementData["int1"];
+        if($intNrOfPosts == "" || $intNrOfPosts <= 0)
+            $intNrOfPosts = 999999;
+
 
 		//Load postacomment
-		$arrComments = class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage());
+		//$arrComments = class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage());
+
+
+        //Load all posts
+	    $objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage()));
+	    $objArraySectionIterator->setIntElementsPerPage($intNrOfPosts);
+	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1));
+	    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+	    $arrComments = $objArraySectionIterator->getArrayExtended();
+
+        //params to add?
+        $strAdd = "";
+        if($this->getParam("action") != "")
+            $strAdd .= "&action=".$this->getParam("action");
+        if($this->getParam("systemid") != "")
+            $strAdd .= "&systemid=".$this->getParam("systemid");
+        if($this->getParam("pv") != "")
+            $strAdd .= "&pv=".$this->getParam("pv");
+
+		$arrComments = $this->objToolkit->pager($intNrOfPosts, ($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1), $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrComments, $strAdd, "pvPAC");
+
+
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_post");
 		//Check rights
 		if(count($arrComments) > 0) {
-    		foreach($arrComments as $objOnePost) {
+    		foreach($arrComments["arrData"] as $objOnePost) {
     			if($this->objRights->rightView($objOnePost->getSystemid())) {
     			    $strOnePost = "";
     				$arrOnePost = array();
@@ -144,7 +170,19 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		//add sourrounding list template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_list");
 
-        $strReturn .= $this->fillTemplate(array("postacomment_form" => $strForm, "postacomment_new_button" => $strNewButton, "postacomment_systemid" => $this->getSystemid(), "postacomment_list" => $strPosts), $strTemplateID);
+
+        //link to the post-form & pageview links
+        $arrTemplate = array();
+        $arrTemplate["postacomment_forward"] = $arrComments["strForward"];
+        $arrTemplate["postacomment_pages"] = $arrComments["strPages"];
+        $arrTemplate["postacomment_back"] = $arrComments["strBack"];
+        $arrTemplate["postacomment_form"] = $strForm;
+        $arrTemplate["postacomment_new_button"] = $strNewButton;
+        $arrTemplate["postacomment_systemid"] = $this->getSystemid();
+        $arrTemplate["postacomment_list"] = $strPosts;
+
+
+        $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
 		return $strReturn;
 	}

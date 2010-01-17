@@ -1,6 +1,6 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: postacomment_list, postacomment_form, postacomment_new_button, postacomment_systemid -->
+<!-- available placeholders: postacomment_list, postacomment_form, postacomment_new_button, postacomment_back, postacomment_pages, postacomment_forward -->
 <postacomment_list>  
     %%postacomment_new_button%%
     <div id="postacommentFormWrapper%%postacomment_systemid%%">
@@ -8,6 +8,7 @@
     </div>
     
     %%postacomment_list%%
+    <p>%%postacomment_back%% %%postacomment_pages%% %%postacomment_forward%%</p>
 </postacomment_list>
 
 <!-- available placeholders: postacomment_post_name, postacomment_post_subject, postacomment_post_message, postacomment_post_date, postacomment_post_systemid, postacomment_post_rating (if module rating installed) -->

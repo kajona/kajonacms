@@ -128,13 +128,13 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 		    $objPost = new class_modul_postacomment_post();
 
     		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
-    			$objArraySectionIterator = new class_array_section_iterator($objPost->getNumberOfPostsAvailable($this->getParam("filterId")));
+    			$objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(false, $this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     			$objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
     			$objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, $this->getParam("filterId"), false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
     		}
     		else {
-    		    $objArraySectionIterator = new class_array_section_iterator($objPost->getNumberOfPostsAvailable());
+    		    $objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(false));
     		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
     		    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, "", false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));

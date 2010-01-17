@@ -16,6 +16,7 @@
  */
 class class_toolkit_portal extends class_toolkit {
 
+
 	public function __construct($strSystemid = 0) {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_elemente_admin";
@@ -37,13 +38,14 @@ class class_toolkit_portal extends class_toolkit {
 	 * @param string $strPage title of the targetpage
 	 * @param mixed $arrData the array of records
 	 * @param string $strAdd additional params
+     * @param string $strPvParam the param used to create the pagenumber-entries
 	 * @return mixed array containing the created data:
 	 * 						return => [arrData] = array containing the shortened data
 	 * 								  [strForward] = link to the next page
 	 * 								  [strBack]	= link to the previous page
 	 * 								  [strPages] = Pager ( [0][1] ...)
 	 */
-	public function pager($intNumber, $intPage = 1, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "") {
+	public function pager($intNumber, $intPage = 1, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
 
         if($intPage <= 0)
             $intPage = 1;
@@ -74,10 +76,10 @@ class class_toolkit_portal extends class_toolkit {
 
 			//FowardLink
 			if($intPage < $objIterator->getNrOfPages())
-				$strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&pv=".($intPage+1).$strAdd);
+				$strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
 			//BackLink
 			if($intPage > 1)
-				$strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&pv=".($intPage-1).$strAdd);
+				$strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
 			//Page-Links
 			$strLinkPages = "";
 			if($intNumber == 0)
@@ -188,6 +190,9 @@ class class_toolkit_portal extends class_toolkit {
         $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
         return $strReturn;
     }
+
+
+    
 
 }
 ?>
