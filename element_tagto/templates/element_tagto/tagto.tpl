@@ -1,16 +1,15 @@
 <tagtos>
 <div class="tagto">
-    <a href="http://slashdot.org/bookmark.pl?url=%%pageurl%%" target="_blank">
-        <img src="_webpath_/portal/pics/kajona/slashdot.gif" /> slashdot
-    </a>&nbsp;
-    <a href="http://www.digg.com/submit?phase=2&amp;url=%%pageurl%%" target="_blank">
-        <img src="_webpath_/portal/pics/kajona/digg.gif" /> digg
-    </a> &nbsp;
-    <a href="http://del.icio.us/post?url=%%pageurl%%" target="_blank">
-        <img src="_webpath_/portal/pics/kajona/delicious.png" /> del.icio.us
-    </a> &nbsp;
-    <a href="http://furl.net/storeIt.jsp?u=%%pageurl%%" target="_blank">
-        <img src="_webpath_/portal/pics/kajona/furl.gif" /> furl
-    </a>
+    <!-- AddThis Button BEGIN -->
+    <div class="addthis_toolbox addthis_default_style">
+    <a href="http://www.addthis.com/bookmark.php?v=250&amp;username=xa-4b5349055f78c159" class="addthis_button_compact">Share</a>
+    <span class="addthis_separator">|</span>
+    <a class="addthis_button_facebook"></a>
+    <a class="addthis_button_myspace"></a>
+    <a class="addthis_button_google"></a>
+    <a class="addthis_button_twitter"></a>
+    </div>
+    <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=xa-4b5349055f78c159"></script>
+    <!-- AddThis Button END -->
 </div>
 </tagtos>

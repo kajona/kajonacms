@@ -80,7 +80,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 
 		$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
 
-        $intNrOfPosts = $this->arrElementData["int1"];
+        $intNrOfPosts = isset($this->arrElementData["int1"]) ? $this->arrElementData["int1"] : 0;
         if($intNrOfPosts == "" || $intNrOfPosts <= 0)
             $intNrOfPosts = 999999;
 
