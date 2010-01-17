@@ -196,28 +196,53 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 		return $strReturn;
 	}
 
-
+    /**
+     * Loads and renders the list of comments provdided by the current news-entry
+     */
     private function loadPostacomments($strNewsSystemid) {
-        $objPacModule = class_modul_system_module::getModuleByName("postacomment");
 
-        $arrReturn = array();
-        if($objPacModule != null) {
-            $arrPosts = class_modul_postacomment_post::loadPostList(false, class_modul_pages_page::getPageByName($this->getPagename())->getSystemid(), $strNewsSystemid, $this->getPortalLanguage());
+        if($this->isPostacommentOnTemplate($this->arrElementData["news_template"])) {
 
-            //the rendered list
-            $objPacPortal = new class_modul_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
-            $objPacPortal->setSystemid($strNewsSystemid);
-            $strListCode = $objPacPortal->action();
-            
-            //var_dump($strListCode);
+            $objPacModule = class_modul_system_module::getModuleByName("postacomment");
 
-            $arrReturn["nrOfComments"] = count($arrPosts);
-            $arrReturn["commentList"] = $strListCode;
+            $arrReturn = array();
+            if($objPacModule != null) {
+                $arrPosts = class_modul_postacomment_post::loadPostList(false, class_modul_pages_page::getPageByName($this->getPagename())->getSystemid(), $strNewsSystemid, $this->getPortalLanguage());
+
+                //the rendered list
+                $objPacPortal = new class_modul_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
+                $objPacPortal->setSystemid($strNewsSystemid);
+                $strListCode = $objPacPortal->action();
+                //var_dump($strListCode);
+
+                $arrReturn["nrOfComments"] = count($arrPosts);
+                $arrReturn["commentList"] = $strListCode;
+            }
+            else
+                return null;
+
+            return $arrReturn;
+
         }
-        else
-            return null;
 
-        return $arrReturn;
+        return null;
+    }
+
+    /**
+     * Checks, if the current template provides placeholders needed to show comments.
+     * Ohterwise, the postacomment-module won't be even called.
+     *
+     * @param string $strTemplate
+     * @return bool
+     */
+    private function isPostacommentOnTemplate($strTemplate) {
+
+        $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
+        $arrElements = $this->objTemplate->getElements($strTemplateID);
+
+        return $this->objTemplate->containesPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containesPlaceholder($strTemplateID, "news_nrofcomments");
+
+
     }
 }
 ?>

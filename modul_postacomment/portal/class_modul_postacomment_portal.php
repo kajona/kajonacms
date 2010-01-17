@@ -81,13 +81,6 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		$strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
 
         $intNrOfPosts = isset($this->arrElementData["int1"]) ? $this->arrElementData["int1"] : 0;
-        if($intNrOfPosts == "" || $intNrOfPosts <= 0)
-            $intNrOfPosts = 999999;
-
-
-		//Load postacomment
-		//$arrComments = class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage());
-
 
         //Load all posts
 	    $objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage()));

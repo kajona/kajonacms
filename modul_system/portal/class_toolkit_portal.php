@@ -103,9 +103,9 @@ class class_toolkit_portal extends class_toolkit {
 
                 if($bitDisplay) {
                     if($intI == $intPage)
-    					$strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&pv=".$intI.$strAdd)."</strong>";
+    					$strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
     				else
-    					$strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&pv=".$intI.$strAdd);
+    					$strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
                 }
                 $intCounter2++;
             }

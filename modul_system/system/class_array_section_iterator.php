@@ -75,21 +75,21 @@ class class_array_section_iterator extends class_array_iterator {
     /**
      * Set the section of the array containing the data
      *
-     * @param unknown_type $arrSectionContent
+     * @param array $arrSectionContent
      */
     public function setArraySection($arrSectionContent) {
         $this->arrSection = $arrSectionContent;
     }
 
     /**
-     * Creates an array containg only the needed key / value pairs. The other ones are empty.
+     * Creates an array contaning only the needed key / value pairs. The other ones are empty.
      *
      * @return array
      */
     public function getArrayExtended() {
         $arrReturn = array();
         for($intI = 0; $intI < $this->intTotalElements; $intI++) {
-            $arrReturn[] = "";
+            $arrReturn[] = null;
         }
         //load data
         for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++)

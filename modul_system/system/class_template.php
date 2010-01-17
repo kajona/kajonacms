@@ -261,6 +261,22 @@ class class_template {
 		return $strTemp;
 	}
 
+    /**
+     * Checks if the template referenced by the identifier containes the placeholder provided
+     * by the second param.
+     *
+     * @param string $strIdentifier
+     * @param string $strPlaceholdername
+     * @return bool
+     */
+    public function containesPlaceholder($strIdentifier, $strPlaceholdername) {
+        $arrElements = $this->getElements($strIdentifier);
+        foreach($arrElements as $arrSinglePlaceholder)
+            if($arrSinglePlaceholder["placeholder"] == $strPlaceholdername)
+                return true;
+
+        return false;
+    }
 
 	/**
 	 * Returns the elements in a given template
