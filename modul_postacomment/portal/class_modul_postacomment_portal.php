@@ -88,7 +88,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1));
 	    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-	    $arrComments = $objArraySectionIterator->getArrayExtended();
+        
 
         //params to add?
         $strAdd = "";
@@ -99,8 +99,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
         if($this->getParam("pv") != "")
             $strAdd .= "&pv=".$this->getParam("pv");
 
-		$arrComments = $this->objToolkit->pager($intNrOfPosts, ($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1), $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrComments, $strAdd, "pvPAC");
-
+		$arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $strAdd, "pvPAC");
 
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_post");

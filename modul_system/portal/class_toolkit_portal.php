@@ -120,6 +120,86 @@ class class_toolkit_portal extends class_toolkit {
 		return $arrReturn;
 	}
 
+
+
+    /**
+	 * Creates a forward / backward pager out of the passed array
+	 *
+	 * @param class_array_section_iterator $objArraySectionIterator
+	 * @param string $strForward text for the forwardlink
+	 * @param string $strBack text for the backwardslink
+	 * @param string $strAction action on the targetpage
+	 * @param string $strPage title of the targetpage
+	 * @param string $strAdd additional params
+     * @param string $strPvParam the param used to create the pagenumber-entries
+	 * @return mixed array containing the created data:
+	 * 						return => [arrData] = array containing the shortened data
+	 * 								  [strForward] = link to the next page
+	 * 								  [strBack]	= link to the previous page
+	 * 								  [strPages] = Pager ( [0][1] ...)
+	 */
+	public function simplePager($objArraySectionIterator, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
+
+		$arrReturn = 	array("arrData" 	=> array(),
+							  "strForward" 	=> "",
+							  "strBack" 	=> "",
+							  "strPages" 	=> "");
+
+
+		//Anything to create?
+		if($objArraySectionIterator->getNrOfPages() == 1) {
+			$arrReturn["arrData"] = $arrData;
+		}
+		else {
+			$strLinkPages = "";
+			$strLinkForward = "";
+			$strLinkBack = "";
+
+			$arrReturn["arrData"] = $objArraySectionIterator->getArrayExtended(true);
+
+            $intPage = $objArraySectionIterator->getPageNumber();
+
+			//FowardLink
+			if($intPage < $objArraySectionIterator->getNrOfPages())
+				$strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
+			//BackLink
+			if($intPage > 1)
+				$strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
+
+
+			//just load the current +-6 pages and the first/last +-3
+            $intCounter2 = 1;
+            for($intI = 1; $intI <= $objArraySectionIterator->getNrOfPages(); $intI++) {
+                $bitDisplay = false;
+                if($intCounter2 <= 3) {
+                    $bitDisplay = true;
+                }
+                elseif ($intCounter2 >= ($objArraySectionIterator->getNrOfPages()-3)) {
+                    $bitDisplay = true;
+                }
+                elseif ($intCounter2 >= ($intPage-6) && $intCounter2 <= ($intPage+6)) {
+                    $bitDisplay = true;
+                }
+
+
+                if($bitDisplay) {
+                    if($intI == $intPage)
+    					$strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+    				else
+    					$strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+                }
+                $intCounter2++;
+            }
+
+
+			$arrReturn["strForward"] = $strLinkForward;
+			$arrReturn["strBack"] = $strLinkBack;
+			$arrReturn["strPages"] = $strLinkPages;
+		}
+
+		return $arrReturn;
+	}
+
 // ******************************************************************************************************
 // --- PORTALEDITOR -------------------------------------------------------------------------------------
 

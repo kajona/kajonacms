@@ -55,6 +55,10 @@ class class_array_section_iterator extends class_array_iterator {
             $this->intPageNumber = $intPageNumber;
     }
 
+    public function getPageNumber() {
+        return $this->intPageNumber;
+    }
+
     /**
      * calculates the start-pos of the current array-section
      *
@@ -82,14 +86,19 @@ class class_array_section_iterator extends class_array_iterator {
     }
 
     /**
-     * Creates an array contaning only the needed key / value pairs. The other ones are empty.
+     * Creates an array containing only the needed key / value pairs. The other ones are empty.
      *
+     * @param bool $bitCompressed if set to true, the array will be reduced to elements containing a value.
+     *             otherwise, the array is left as described, so filled with null values.
      * @return array
      */
-    public function getArrayExtended() {
+    public function getArrayExtended($bitCompressed = false) {
         $arrReturn = array();
-        for($intI = 0; $intI < $this->intTotalElements; $intI++) {
-            $arrReturn[] = null;
+
+        if(!$bitCompressed) {
+            for($intI = 0; $intI < $this->intTotalElements; $intI++) {
+                $arrReturn[] = null;
+            }
         }
         //load data
         for($intI = $this->calculateStartPos(); $intI <= $this->calculateEndPos(); $intI++)
@@ -119,5 +128,7 @@ class class_array_section_iterator extends class_array_iterator {
         }
         return $arrReturn;
     }
+
+    
 }
 ?>
