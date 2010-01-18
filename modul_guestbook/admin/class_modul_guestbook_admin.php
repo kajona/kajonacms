@@ -291,8 +291,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_guestbook_post::getPostsSection($this->getSystemid(), false, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrPosts = $objArraySectionIterator->getArrayExtended();
-            $arrPageViews = $this->objToolkit->getPageview($arrPosts, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "guestbook", "viewGuestbook", "&systemid=".$this->getSystemid(), _admin_nr_of_rows_);
+            $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "guestbook", "viewGuestbook", "&systemid=".$this->getSystemid());
             $arrPosts = $arrPageViews["elements"];
 
             $intI = 0;

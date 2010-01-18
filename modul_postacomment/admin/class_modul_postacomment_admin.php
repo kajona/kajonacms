@@ -140,9 +140,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(false, "", false, "", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
     		}
 
-    		$arrPosts = $objArraySectionIterator->getArrayExtended();
-
-    		$arrPageViews = $this->objToolkit->getPageview($arrPosts, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "postacomment", "list", "&filterId=".$this->getParam("filterId"), _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "postacomment", "list", "&filterId=".$this->getParam("filterId"));
 
     		$arrPosts = $arrPageViews["elements"];
 

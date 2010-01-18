@@ -151,7 +151,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      * @param string $strSystemidfilter false to ignore the filter
      * @return int
      */
-    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = "", $strLanguagefilter = "") {
+    public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = false, $strLanguagefilter = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id ";
         
         if($strPageid != "")

@@ -195,8 +195,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_user_user::getAllUsers($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrUsers = $objArraySectionIterator->getArrayExtended();
-    		$arrPageViews = $this->objToolkit->getPageview($arrUsers, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "list", "", _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "list");
             $arrUsers = $arrPageViews["elements"];
 
             $strReturn = $this->objToolkit->listHeader();
@@ -578,8 +577,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrGroups = $objArraySectionIterator->getArrayExtended();
-    		$arrPageViews = $this->objToolkit->getPageview($arrGroups, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "grouplist", "", _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "grouplist");
             $arrGroups = $arrPageViews["elements"];
 
             $strReturn = $this->objToolkit->listHeader();
@@ -717,8 +715,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
                 $objArraySectionIterator->setArraySection(class_modul_user_group::getGroupMembers($this->getParam("groupid"), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-                $arrMembers = $objArraySectionIterator->getArrayExtended();
-                $arrPageViews = $this->objToolkit->getPageview($arrMembers, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "groupmember", "groupid=".$this->getParam("groupid"), _admin_nr_of_rows_);
+                $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupmember", "groupid=".$this->getParam("groupid"));
                 $arrMembers = $arrPageViews["elements"];
 
                 $strReturn .= $this->objToolkit->listHeader();
@@ -867,13 +864,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection($objLogbook->getLoginLogsSection($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrLogs = $objArraySectionIterator->getArrayExtended();
-
-            $arrPageViews = $this->objToolkit->getPageview($arrLogs, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "user", "loginlog", "", _user_log_nrofrecords_);
+            $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "loginlog");
             $arrLogs = $arrPageViews["elements"];
 
             $arrRows = array();
-            for($intI = 0; $intI < count($arrLogs); $intI++) {
+            foreach(array_keys($arrLogs) as $intI) {
                 $arrRows[$intI] = array();
                 $arrRows[$intI][]	= $arrLogs[$intI]["user_log_id"];
                 $arrRows[$intI][]	= ($arrLogs[$intI]["user_username"] != "" ? $arrLogs[$intI]["user_username"] : $arrLogs[$intI]["user_log_userid"]);

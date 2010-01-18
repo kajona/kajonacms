@@ -234,8 +234,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		    $objArraySectionIterator->setArraySection(class_modul_news_news::getNewsList("", $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
     		}
 
-    		$arrNews = $objArraySectionIterator->getArrayExtended();
-    		$arrPageViews = $this->objToolkit->getPageview($arrNews, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "news", "list", "&filterId=".$this->getParam("filterId"), _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "news", "list", "&filterId=".$this->getParam("filterId"));
             $arrNews = $arrPageViews["elements"];
 
 

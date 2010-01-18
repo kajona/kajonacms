@@ -475,8 +475,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection(class_modul_system_session::getAllActiveSessions($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrSessions = $objArraySectionIterator->getArrayExtended();
-    		$arrPageViews = $this->objToolkit->getPageview($arrSessions, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "system", "systemSessions", "", _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemSessions");
             $arrSessions = $arrPageViews["elements"];
 
 

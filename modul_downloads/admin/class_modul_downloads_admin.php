@@ -594,8 +594,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection($objLogbook->getLogbookSection($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrLogsRaw = $objArraySectionIterator->getArrayExtended();
-		    $arrPageViews = $this->objToolkit->getPageview($arrLogsRaw, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "downloads", "logbook", "", $intNrOfRecordsPerPage);
+		    $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "downloads", "logbook");
 
             $arrLogsRaw = $arrPageViews["elements"];
 		    $arrLogs = array();

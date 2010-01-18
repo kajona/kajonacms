@@ -1363,6 +1363,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strLinkAdd
      * @param int $intElementPerPage
      * @return mixed a one-dimensional array: ["elements"] and ["pageview"]
+     *
+     * @deprecated migrate to getSimplePageview instead!
      */
     public function getPageview($arrData, $intCurrentpage, $strModule, $strAction, $strLinkAdd = "", $intElementPerPage = 15) {
         $arrReturn = array();
@@ -1379,6 +1381,80 @@ class class_toolkit_admin extends class_toolkit {
         $intNrOfElements = $objArrayIterator->getNumberOfElements();
 
         $arrReturn["elements"] = $objArrayIterator->getElementsOnPage($intCurrentpage);
+        //read templates
+        $strTemplateBodyID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_body");
+        $strTemplateForwardID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_link_forward");
+        $strTemplateBackwardID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_link_backward");
+        $strTemplateListID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_page_list");
+        $strTemplateListItemActiveID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_list_item_active");
+        $strTemplateListItemID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_list_item");
+        //build layout
+        $arrTemplate = array();
+
+        $strListItems = "";
+
+        //just load the current +-4 pages and the first/last +-2
+        $intCounter2 = 1;
+        for($intI = 1; $intI <= $intNrOfPages; $intI++) {
+            $bitDisplay = false;
+            if($intCounter2 <= 2) {
+                $bitDisplay = true;
+            }
+            elseif ($intCounter2 >= ($intNrOfPages-1)) {
+                $bitDisplay = true;
+            }
+            elseif ($intCounter2 >= ($intCurrentpage-2) && $intCounter2 <= ($intCurrentpage+2)) {
+                $bitDisplay = true;
+            }
+
+
+            if($bitDisplay) {
+                $arrLinkTemplate = array();
+                $arrLinkTemplate["href"] = getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".$intI);
+                $arrLinkTemplate["pageNr"] = $intI;
+
+                if($intI == $intCurrentpage)
+                    $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemActiveID);
+                else
+                    $strListItems .= $this->objTemplate->fillTemplate($arrLinkTemplate, $strTemplateListItemID);
+            }
+            $intCounter2++;
+        }
+        $arrTemplate["pageList"] = $this->objTemplate->fillTemplate(array("pageListItems" => $strListItems), $strTemplateListID);
+        $arrTemplate["nrOfElementsText"] = class_carrier::getInstance()->getObjText()->getText("pageview_total", "system", "admin");
+        $arrTemplate["nrOfElements"] = $intNrOfElements;
+        if($intCurrentpage < $intNrOfPages)
+            $arrTemplate["linkForward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("pageview_forward", "system", "admin"),
+                                                                                 "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage+1))), $strTemplateForwardID);
+        if($intCurrentpage > 1)
+            $arrTemplate["linkBackward"] = $this->objTemplate->fillTemplate(array("linkText" => class_carrier::getInstance()->getObjText()->getText("pageview_backward", "system", "admin"),
+                                                                                  "href" => getLinkAdminHref($strModule, $strAction, $strLinkAdd."&pv=".($intCurrentpage-1))), $strTemplateBackwardID);
+
+
+        $arrReturn["pageview"] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateBodyID);
+        return $arrReturn;
+    }
+
+    /**
+     * Creates a pageview
+     *
+     * @param class_array_section_iterator $objArraySectionIterator
+     * @param string $strModule
+     * @param string $strAction
+     * @param string $strLinkAdd
+     * @return mixed a two-dimensional array: ["elements"] and ["pageview"]
+     * @since 3.3.0
+     */
+    public function getSimplePageview($objArraySectionIterator, $strModule, $strAction, $strLinkAdd = "") {
+        $arrReturn = array();
+
+        $intCurrentpage = $objArraySectionIterator->getPageNumber();
+        $intNrOfPages = $objArraySectionIterator->getNrOfPages();
+        $intNrOfElements = $objArraySectionIterator->getNumberOfElements();
+
+        
+        $arrReturn["elements"] = $objArraySectionIterator->getArrayExtended(true);
+        
         //read templates
         $strTemplateBodyID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_body");
         $strTemplateForwardID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_link_forward");

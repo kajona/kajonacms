@@ -336,8 +336,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection(class_modul_pages_page::getAllPages($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrPages = $objArraySectionIterator->getArrayExtended();
-    		$arrPageViews = $this->objToolkit->getPageview($arrPages, (int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1), "pages", "listAll", "", _admin_nr_of_rows_);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "pages", "listAll");
             $arrPages = $arrPageViews["elements"];
 
 			foreach($arrPages as $objPage) {
