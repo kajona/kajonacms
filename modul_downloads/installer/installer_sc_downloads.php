@@ -28,7 +28,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $strReturn .= "Creating new downloads...\n";
         $objDownloads = new class_modul_downloads_archive();
         $objDownloads->setTitle("Sample downloads");
-        $objDownloads->setPath("/portal/downloads");
+        $objDownloads->setPath("/portal/downloads/samples");
         $objDownloads->updateObjectToDb();
         $strDownloadsID = $objDownloads->getSystemid();
         

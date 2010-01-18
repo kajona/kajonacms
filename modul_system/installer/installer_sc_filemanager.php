@@ -44,8 +44,8 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
             
         $strReturn .= "Creating file upload folder\n";
-            if(!is_dir(_portalpath_."/downloads"))
-                mkdir(_realpath_."/portal/downloads");
+            if(!is_dir(_portalpath_."/downloads/public"))
+                mkdir(_realpath_."/portal/downloads/public");
 
             $strReturn .= "Creating new file repository\n";
             $objRepo = new class_modul_filemanager_repo();
@@ -55,7 +55,7 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             else
                 $objRepo->setStrName("File uploads");
 
-            $objRepo->setStrPath("/portal/downloads");
+            $objRepo->setStrPath("/portal/downloads/public");
             $objRepo->setStrUploadFilter(".zip,.pdf,.txt");
             $objRepo->setStrViewFilter(".zip,.pdf,.txt");
             $objRepo->updateObjectToDb();
