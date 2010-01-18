@@ -314,7 +314,7 @@ class class_copy2project {
 
 echo "<pre>";
 
-echo "<h2>Copy 2 Project</h2>";
+echo "<h2><a href=\"copy2project.php\">Copy 2 Project</a></h2>";
 
 
 
