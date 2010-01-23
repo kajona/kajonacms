@@ -3,7 +3,9 @@
 <!-- available placeholders: folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+        if (typeof bitKajonaRatingsAvailable == "undefined") {  
+            bitKajonaRatingsAvailable = false;
+        }
         
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {
@@ -85,7 +87,9 @@
  -->
 <filedetail>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+        if (typeof bitKajonaRatingsAvailable == "undefined") {  
+            bitKajonaRatingsAvailable = false;
+        }
 
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {

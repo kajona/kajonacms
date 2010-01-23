@@ -29,7 +29,9 @@
 <!-- available placeholders: comment_systemid -->
 <postacomment_new_button>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+	    if (typeof bitKajonaRatingsAvailable == "undefined") {  
+	        bitKajonaRatingsAvailable = false;
+	    }
         
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {

@@ -3,7 +3,9 @@
 <!-- available placeholders: faq_categories -->
 <faqs_list>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+	    if (typeof bitKajonaRatingsAvailable == "undefined") {  
+	        bitKajonaRatingsAvailable = false;
+	    }
         
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {

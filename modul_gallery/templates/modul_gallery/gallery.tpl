@@ -56,7 +56,9 @@
  -->
 <picdetail>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+        if (typeof bitKajonaRatingsAvailable == "undefined") {  
+            bitKajonaRatingsAvailable = false;
+        }
         
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {

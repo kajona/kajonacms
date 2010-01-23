@@ -3,7 +3,9 @@
 <!-- available placeholders: postacomment_list, postacomment_form, postacomment_new_button, postacomment_back, postacomment_pages, postacomment_forward -->
 <postacomment_list>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = false;
+	    if (typeof bitKajonaRatingsAvailable == "undefined") {  
+	        bitKajonaRatingsAvailable = false;
+	    }
         
         function enableRatingsWrapper() {
             if (bitKajonaRatingsAvailable) {
