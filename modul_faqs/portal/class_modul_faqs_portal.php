@@ -175,7 +175,10 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
                 $strRatingBarTitle = $this->getText("faqs_rating_permissions");
         }
 
-        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle, "rating_rating" => $floatRating, "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100), "system_id" => $strSystemid, 2), $strTemplateBarId);
+        return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,
+                                         "rating_rating" => $floatRating, "rating_hits" => $intRatings,
+                                         "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
+                                         "system_id" => $strSystemid, 2), $strTemplateBarId);
     }
 
 }

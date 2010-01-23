@@ -19,11 +19,15 @@ function kajonaRating(strSystemid, floatRating, intNumberOfIcons) {
         YAHOO.util.Connect.asyncRequest('POST', post_target, {
             success: function(o) {
 				//display new rating
-				var floatNewRating = o.responseXML.documentElement.firstChild.nodeValue;
+        		var floatNewRating = o.responseXML.documentElement.firstChild.nodeValue;	
+        		ratingIcons[0].style.width = floatNewRating/intNumberOfIcons*100+"%";
 	        	try {
 					document.getElementById("kajona_rating_rating_"+strSystemid).innerHTML = floatNewRating;
 	        	} catch (e) {}
-	        	ratingIcons[0].style.width = floatNewRating/intNumberOfIcons*100+"%";
+	        	try {
+					var hits = document.getElementById("kajona_rating_hits_"+strSystemid);
+					hits.innerHTML = parseInt(hits.innerHTML) + 1;
+	        	} catch (e) {}
             },
             failure: function(o) {
             }

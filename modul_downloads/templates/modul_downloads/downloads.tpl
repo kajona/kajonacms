@@ -73,7 +73,7 @@
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
         <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
         %%rating_icons%%
-    </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%% (%%rating_hits%%)</span>
+    </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span> (<span id="kajona_rating_hits_%%system_id%%">%%rating_hits%%</span>)
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
