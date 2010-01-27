@@ -107,7 +107,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
                         downloads_screen_1='".$this->objDB->dbsafeString($this->getStrScreen1())."',
                         downloads_screen_2='".$this->objDB->dbsafeString($this->getStrScreen2())."',
                         downloads_screen_3='".$this->objDB->dbsafeString($this->getStrScreen3())."',
-                        downloads_cattype=".$this->objDB->dbsafeString($this->getIntCatType()).",
+                        downloads_cattype=".(int)$this->objDB->dbsafeString($this->getIntCatType()).",
                         downloads_type=".$this->objDB->dbsafeString($this->getType())."
 				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
@@ -447,6 +447,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
     }
 
     public function setIntCatType($intCatType) {
+        if($intCatType != "" && is_numeric($intCatType))
         $this->intCatType = $intCatType;
     }
 
