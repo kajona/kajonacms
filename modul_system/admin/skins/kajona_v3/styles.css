@@ -1438,3 +1438,31 @@ div.percentBeam {
 .yui-resize-status {
     background-color: #CCCCCC;  
 }
+
+
+/* Tree-View */
+.treeViewWrapper {
+    overflow: auto;
+    width: 200px;
+}
+
+.treeView-pagenode {
+    display:block;
+    height: 22px;
+    padding-left: 23px;
+    background-image: url(./pics/icon_page.gif);
+    background-repeat: no-repeat;
+}
+
+.treeView-foldernode {
+    display:block;
+    height: 22px;
+    padding-left: 20px;
+    padding-left: 23px;
+    background-image: url(./pics/icon_folderClosed.gif);
+    background-repeat: no-repeat;
+}
+
+a.treeView-pagenode, a.treeView-foldernode {
+    text-decoration: none;
+}

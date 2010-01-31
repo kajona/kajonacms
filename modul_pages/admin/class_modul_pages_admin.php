@@ -229,13 +229,14 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$arrFolder = class_modul_pages_folder::getFolderList($this->strFolderlevel);
 			$intI = 0;
 
+            $strFolder = "";
 			//Folder-Table
 			//A Folder, to get one level up
 			if($this->strFolderlevel != $this->getModuleSystemid($this->arrModule["modul"]) && validateSystemid($this->strFolderlevel)) {
 				//Get data of folder one level above
 				$objPrevFolder = new class_modul_pages_folder($this->strFolderlevel);
 				//Output Row
-		  		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getText("pages_hoch"), $this->getText("pages_hoch"), "icon_folderActionLevelup.gif")), $intI++);
+		  		$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getText("pages_hoch"), $this->getText("pages_hoch"), "icon_folderActionLevelup.gif")), $intI++);
 			}
 
 			//So, lets loop through the folders
@@ -257,21 +258,22 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    		}
 			    		if($this->objRights->rightRight($objSingleFolder->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objSingleFolder->getSystemid())));
-			  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strActions, $intI++);
+			  			$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strActions, $intI++);
 					}
 				}
 			}
 
 			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
+			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
 
-			if(uniStrlen($strReturn) != 0)
-	  		    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+			if(uniStrlen($strFolder) != 0)
+	  		    $strFolder = $this->objToolkit->listHeader().$strFolder.$this->objToolkit->listFooter();
 
-	  		$strReturn .= $this->objToolkit->divider();
+	  		$strFolder .= $this->objToolkit->divider();
 
-	  		$strPathNavi = $this->generateFolderNavigation();
-			$strReturn = $strPathNavi."<br /><br />".$this->objToolkit->getLayoutFolderPic($strReturn, $this->getText("klapper"));
+	  		
+			$strFolder = $this->objToolkit->getLayoutFolderPic($strFolder, $this->getText("klapper"));
+
 
 			//Collect the pages belonging to the current folder to display
 			$arrPages = class_modul_pages_folder::getPagesInFolder($this->strFolderlevel);
@@ -309,7 +311,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if(count($arrPages) == 0)
 				$strPages .= $this->getText("liste_seiten_leer");
 
-			$strReturn .= $strPages;
+            $strPathNavi = $this->generateFolderNavigation();
+			$strReturn .= $strPathNavi."<br /><br />".$this->generateTreeView($strFolder.$strPages);
 
 		}
 		else
@@ -797,10 +800,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	}
 
 	/**
-	 * Creates a pathnavigation through all folders till the current page / fodler
+	 * Creates a pathnavigation through all folders till the current page / folder
 	 *
 	 */
-	private function generateFolderNavigation () {
+	private function generateFolderNavigation() {
 		$strReturn = "";
 		//Provide a small path-navigation to know where we are...
 		$arrPath = $this->getPathArray($this->strFolderlevel);
@@ -814,6 +817,24 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
+
+    /**
+     * Generates the code needed to render the pages and folder as a tree-view element.
+     * The elements themselves are loaded via ajax, so only the root-node and the initial
+     * folding-params are generated right here.
+     *
+     * @param string $strSideContent
+     * @return string
+     */
+    private function generateTreeView($strSideContent) {
+        $strReturn = "";
+
+        //generate the array of ids to expand initially
+        $arrNodes = $this->getPathArray($this->strFolderlevel);
+        array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
+        $strReturn .= $this->objToolkit->getTreeview("kajonaAdminAjax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle());
+        return $strReturn;
+    }
 
 
 //*"*****************************************************************************************************

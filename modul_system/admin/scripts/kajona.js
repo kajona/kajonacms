@@ -410,7 +410,14 @@ var kajonaAjaxHelper = {
 		var l = new kajonaAjaxHelper.Loader();
 		l.addJavascriptFile(l.yuiBase + "container/container-min.js");
 		l.load(callback);
+	},
+    
+    loadTreeviewBase : function(callback) {
+		var l = new kajonaAjaxHelper.Loader();
+		l.addYUIComponents( [ "treeview", "connection" ]);
+		l.load(callback);
 	}
+
 };
 
 var regularCallback = {
@@ -652,6 +659,78 @@ var kajonaAdminAjax = {
                     kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
+    },
+
+    loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
+        var nodeSystemid = node.systemid;
+        kajonaAdminAjax.genericAjaxCall("pages", "getChildnodes", nodeSystemid  , {
+            success : function(o) {
+                //check if answer contains an error
+                if(o.responseText.indexOf("<error>") != -1) {
+                    kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    o.argument.fnLoadComplete();
+                }
+                else {
+                    //success, start transforming the childs to tree-view nodes
+                    //TODO: use xml parser instead of string-parsing
+                    //process nodes
+                    var intStart = o.responseText.indexOf("<folders>")+9;
+                    var strFolders = o.responseText.substr(intStart, o.responseText.indexOf("</folders>")-intStart);
+
+                    while(strFolders.indexOf("<folder>") != -1 ) {
+                        var intFolderStart = strFolders.indexOf("<folder>")+8;
+                        var intFolderEnd = strFolders.indexOf("</folder>")-intFolderStart;
+                        var strSingleFolder = strFolders.substr(intFolderStart, intFolderEnd);
+
+                        var intTemp = strSingleFolder.indexOf("<name>")+6;
+                        var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
+
+                        intTemp = strSingleFolder.indexOf("<systemid>")+10;
+                        var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
+
+                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:"index.php?admin=1&module=pages&action=list&folderid="+strSystemid }, node);
+                        tempNode.systemid = strSystemid;
+                        tempNode.labelStyle = "treeView-foldernode";
+
+                        strFolders = strFolders.substr(strFolders.indexOf("</folder>")+9);
+                    }
+
+                    intStart = o.responseText.indexOf("<pages>")+7;
+                    var strPages = o.responseText.substr(intStart, o.responseText.indexOf("</pages>")-intStart);
+
+                    while(strPages.indexOf("<page>") != -1 ) {
+                        var intPageStart = strPages.indexOf("<page>")+6;
+                        var intPageEnd = strPages.indexOf("</page>")-intPageStart;
+                        var strSinglePage = strPages.substr(intPageStart, intPageEnd);
+
+                        intTemp = strSinglePage.indexOf("<name>")+6;
+                        strName = strSinglePage.substr(intTemp, strSinglePage.indexOf("</name>")-intTemp);
+
+                        intTemp = strSinglePage.indexOf("<systemid>")+10;
+                        strSystemid = strSinglePage.substr(intTemp, strSinglePage.indexOf("</systemid>")-intTemp);
+
+                        tempNode = new YAHOO.widget.TextNode({ label:strName, href:"index.php?admin=1&module=pages_content&action=list&systemid="+strSystemid+""}, node);
+                        tempNode.systemid = strSystemid;
+                        tempNode.isLeaf = true;
+                        tempNode.labelStyle = "treeView-pagenode";
+
+                        strPages = strPages.substr(strPages.indexOf("</page>")+7);
+                    }
+
+                    o.argument.fnLoadComplete();
+                    kajonaUtils.checkInitialTreeViewToggling();
+                }
+            },
+            failure : function(o) {
+                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+            },
+            argument: {
+                "node": node,
+                "fnLoadComplete": fnLoadComplete
+            },
+
+            timeout: 7000
+        });
     }
 
 };
@@ -1162,7 +1241,17 @@ var kajonaUtils =  {
 				} catch (e) {}
 			});
 		}
-	}
+	},
+
+    checkInitialTreeViewToggling : function() {
+        if(arrTreeViewExpanders.length > 0) {
+            var strValue = arrTreeViewExpanders.shift();
+            var objNode = tree.getNodeByProperty("systemid", strValue);
+            if(objNode != null) {
+                objNode.expand();
+            }
+        }
+    }
 };
 
 //gets called when FCKeditor is ready, check if FCKeditor should be focused

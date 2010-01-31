@@ -1092,7 +1092,7 @@ class class_toolkit_admin extends class_toolkit {
      * Creates the page to view & manipulate image.
      *
      * @since 3.2
-     * @replaces class_toolkit_admin::getFileDetails()
+     * @replace class_toolkit_admin::getFileDetails()
      * @param array $arrContent
      * @return string
      */
@@ -1353,6 +1353,9 @@ class class_toolkit_admin extends class_toolkit {
     }
 
 
+/*"*****************************************************************************************************/
+// --- Pageview mechanism ------------------------------------------------------------------------------
+
     /**
      * Creates a pageview
      *
@@ -1511,7 +1514,7 @@ class class_toolkit_admin extends class_toolkit {
 
 
 /*"*****************************************************************************************************/
-// --- Admnwidget / Dashboard ---------------------------------------------------------------------------
+// --- Adminwidget / Dashboard --------------------------------------------------------------------------
 
 
     public function getMainDashboard($arrColumn) {
@@ -1670,7 +1673,34 @@ class class_toolkit_admin extends class_toolkit {
         return $strReturn;
     }
 
-    
+    /**
+     * Create a tree-view UI-element. Please not, that currently it's only possible to use
+     * one tree-view per page.
+     * The nodes are loaded via AJAX by calling the method passed as the first arg.
+     * The optional third param is an ordered list of systemid identifying the nodes to expand initially.
+     *
+     * @param string $strLoadNodeDataFunction
+     * @param string $strRootNodeSystemid
+     * @param array $arrNodesToExpand
+     * @param string $strSideContent
+     * @param string $strRootNodeTitle
+     * @return string
+     */
+    public function getTreeview($strLoadNodeDataFunction, $strRootNodeSystemid, $arrNodesToExpand = array(), $strSideContent = "", $strRootNodeTitle = " ") {
+        $arrTemplate = array();
+        $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
+        $arrTemplate["loadNodeDataFunction"] = $strLoadNodeDataFunction;
+        $arrTemplate["sideContent"] = $strSideContent;
+        $arrTemplate["rootNodeTitle"] = $strRootNodeTitle;
+        $arrTemplate["treeviewExpanders"] = "";
+        for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
+            $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";
+            if($intI < count($arrNodesToExpand)-1)
+                $arrTemplate["treeviewExpanders"] .= ",";
+        }
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "treeview");
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
 
 }
 ?>

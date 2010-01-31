@@ -41,6 +41,10 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
         if($strAction == "getPagesByFilter")
             $strReturn .= $this->actionGetPagesByFilter();
 
+        if($strAction == "getChildnodes")
+            $strReturn .= $this->getChildNodes();
+
+
         return $strReturn;
 	}
 
@@ -59,13 +63,51 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 
         $strReturn .= "<pages>\n";
         foreach ($arrPages as $objOnePage) {
-            $strReturn .= "  <page>\n";
-            $strReturn .= "    <title>".xmlSafeString($objOnePage->getStrName())."</title>\n";
-            $strReturn .= "  </page>\n";
+            if($objOnePage->rightView()) {
+                $strReturn .= "  <page>\n";
+                $strReturn .= "    <title>".xmlSafeString($objOnePage->getStrName())."</title>\n";
+                $strReturn .= "  </page>\n";
+            }
         }
         $strReturn .= "</pages>\n";
 		return $strReturn;
 	}
+
+    /**
+     * Fetches all child-nodes (so folders an pages) of the passed node.
+     * Used by the tree-view in module-pages.
+     *
+     * @return string
+     * @since 3.3.0
+     */
+    private function getChildNodes() {
+        $strReturn = "";
+
+        $arrFolder = class_modul_pages_folder::getFolderList($this->getSystemid());
+
+        $strReturn .= "<folders>";
+        if(count($arrFolder) > 0) {
+            foreach ($arrFolder as $objSingleFolder) {
+                if($objSingleFolder->rightView()) {
+                    $strReturn .= "<folder><name>".xmlSafeString($objSingleFolder->getStrName())."</name><systemid>".$objSingleFolder->getSystemid()."</systemid></folder>";
+                }
+            }
+        }
+        $strReturn .= "</folders>";
+
+        $strReturn .= "<pages>";
+        $arrPages = class_modul_pages_folder::getPagesInFolder($this->getSystemid());
+        if(count($arrPages) > 0) {
+            foreach ($arrPages as $objSinglePage) {
+                if($objSinglePage->rightView()) {
+                    $strReturn .= "<page><name>".xmlSafeString($objSinglePage->getStrName())."</name><systemid>".$objSinglePage->getSystemid()."</systemid></page>";
+                }
+            }
+        }
+        $strReturn .= "</pages>";
+
+        return $strReturn;
+    }
 
 
 } //class_modul_pages_admin_xml

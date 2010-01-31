@@ -1032,3 +1032,45 @@ The language switch sourrounds the buttons
 </div></dialogLoadingContainer>
 
 <dialogRawContainer><div class="dialog" id="%%dialog_id%%"><span id="%%dialog_id%%_content"><!-- filled by js --></span></div></dialogRawContainer>
+
+
+---------------------------------------------------------------------------------------------------------
+-- TREE VIEW --------------------------------------------------------------------------------------------
+
+<treeview>
+    <table width="100%" cellpadding="3">
+        <tr>
+            <td valign="top" width="250" >
+                <div class="treeViewWrapper">
+                    <div id="treeDiv"></div>
+                </div>
+            </td>
+            <td valign="top" style="border-left: 1px solid #000099;">
+                %%sideContent%%
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+    var tree;
+    var arrTreeViewExpanders = new Array(%%treeviewExpanders%%);
+    //anonymous function wraps the remainder of the logic:
+    (function() {
+        //function to initialize the tree:
+        function treeInit() {
+            //instantiate the tree:
+            tree = new YAHOO.widget.TreeView("treeDiv");
+            tree.setDynamicLoad(%%loadNodeDataFunction%%);
+
+            var root = tree.getRoot();
+            var tempNode = new YAHOO.widget.TextNode('%%rootNodeTitle%%', root, false);
+            tempNode.systemid = '%%rootNodeSystemid%%';
+            //The tree is not created in the DOM until this method is called:
+            tree.draw();
+            kajonaUtils.checkInitialTreeViewToggling();
+        }
+        //Add an onDOMReady handler to build the tree when the document is ready
+        kajonaAjaxHelper.loadTreeviewBase(treeInit);
+
+    })();
+    </script>
+</treeview>
