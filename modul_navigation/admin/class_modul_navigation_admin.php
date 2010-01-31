@@ -179,15 +179,14 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		}
     		else {
     			//Load a sublevel of elements
-    			//start with a path-navigation
-    			$strReturn .= $this->getPathNavigation();
+                $strNaviReturn = "";
                 $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
                 $strListID = generateSystemid();
-    			$strReturn .= $this->objToolkit->dragableListHeader($strListID);
+    			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
     			$strPrevID = $this->getPrevId($this->getSystemid());
     			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID, $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
-    			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
+    			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
                 //And loop through the regular points
     			foreach($arrNavigations as $objOneNavigation) {
     				//check rights
@@ -209,12 +208,14 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 
-    		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
+    		  			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
     				}
     	  		}
     	  		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    	  		    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
-    	  		$strReturn .= $this->objToolkit->dragableListFooter($strListID);
+    	  		    $strNaviReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
+    	  		$strNaviReturn .= $this->objToolkit->dragableListFooter($strListID);
+
+                $strReturn .= $this->getPathNavigation().$this->generateTreeView($strNaviReturn);
     		}
 		}
 		else
@@ -447,6 +448,25 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		}
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
+
+
+    /**
+     * Generates the code needed to render the nodes as a tree-view element.
+     * The elements themselves are loaded via ajax, so only the root-node and the initial
+     * folding-params are generated right here.
+     *
+     * @param string $strSideContent
+     * @return string
+     */
+    private function generateTreeView($strSideContent) {
+        $strReturn = "";
+
+        //generate the array of ids to expand initially
+        $arrNodes = $this->getPathArray();
+        //array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
+        $strReturn .= $this->objToolkit->getTreeview("kajonaAdminAjax.loadNavigationTreeViewNodes", $arrNodes[0], $arrNodes, $strSideContent, $this->getOutputModuleTitle());
+        return $strReturn;
+    }
 
 
 } //class_modul_navigation_admin

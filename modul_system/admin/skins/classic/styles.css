@@ -926,9 +926,17 @@ a.inputSubmit {
     background-repeat: no-repeat;
 }
 
-a.treeView-pagenode, a.treeView-foldernode {
+a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
     text-decoration: none;
     color: #000000;
+}
+
+.treeView-navigationnode {
+    display:block;
+    height: 22px;
+    padding-left: 23px;
+    background-image: url(./pics/icon_treeLeaf.gif);
+    background-repeat: no-repeat;
 }
 
 .treeView-foldernode {

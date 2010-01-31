@@ -731,6 +731,55 @@ var kajonaAdminAjax = {
 
             timeout: 7000
         });
+    },
+
+    loadNavigationTreeViewNodes : function (node, fnLoadComplete)  {
+        var nodeSystemid = node.systemid;
+        kajonaAdminAjax.genericAjaxCall("navigation", "getChildnodes", nodeSystemid  , {
+            success : function(o) {
+                //check if answer contains an error
+                if(o.responseText.indexOf("<error>") != -1) {
+                    kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    o.argument.fnLoadComplete();
+                }
+                else {
+                    //success, start transforming the childs to tree-view nodes
+                    //TODO: use xml parser instead of string-parsing
+                    //process nodes
+                    var strPoints = o.responseText;
+
+                    while(strPoints.indexOf("<point>") != -1 ) {
+                        var intFolderStart = strPoints.indexOf("<point>")+7;
+                        var intFolderEnd = strPoints.indexOf("</point>")-intFolderStart;
+                        var strSingleFolder = strPoints.substr(intFolderStart, intFolderEnd);
+
+                        var intTemp = strSingleFolder.indexOf("<name>")+6;
+                        var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
+
+                        intTemp = strSingleFolder.indexOf("<systemid>")+10;
+                        var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
+
+                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:"index.php?admin=1&module=navigation&action=editNaviPoint&systemid="+strSystemid }, node);
+                        tempNode.systemid = strSystemid;
+                        tempNode.labelStyle = "treeView-navigationnode";
+
+                        strPoints = strPoints.substr(strPoints.indexOf("</point>")+8);
+                    }
+
+                    o.argument.fnLoadComplete();
+                    kajonaUtils.checkInitialTreeViewToggling();
+                }
+            },
+            failure : function(o) {
+                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+            },
+            argument: {
+                "node": node,
+                "fnLoadComplete": fnLoadComplete
+            },
+
+            timeout: 7000
+        });
     }
 
 };
