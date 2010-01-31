@@ -149,15 +149,16 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 */
 	public function getVisitors() {
 		$intReturn = 0;
-		$strQuery = "SELECT stats_ip , stats_browser
+		$strQuery = "SELECT COUNT(DISTINCT stats_ip,  stats_browser) as number
 						FROM ".$this->arrModule["table"]."
 						WHERE stats_date >= ".(int)$this->intDateStart."
-								AND stats_date <= ".(int)$this->intDateEnd."
-						GROUP BY stats_ip, stats_browser";
-		$arrVisitor = $this->objDB->getArray($strQuery);
-		$intReturn = count($arrVisitor);
+								AND stats_date <= ".(int)$this->intDateEnd."";
+		$arrVisitor = $this->objDB->getRow($strQuery);
+		$intReturn = $arrVisitor["number"];
 		return $intReturn;
 	}
+
+    
 
 	/**
 	 * Returns the number of visitors

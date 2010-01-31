@@ -95,7 +95,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 
     			    //ratings available?
 			        if($objOneFaq->getFloatRating() !== null) {
-			            $arrOneFaq["faq_rating"] = $this->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
+			            $arrOneFaq["faq_rating"] = $this->buildRatingBar($objOneFaq->getFloatRating(), $objOneFaq->getIntRatingHits(), $objOneFaq->getSystemid(), $objOneFaq->isRateableByUser(), $objOneFaq->rightRight1());
 			        }
 
     				$strOneFaq .= $this->objTemplate->fillTemplate($arrOneFaq, $strFaqTemplateID, false);
@@ -145,7 +145,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
      * @param bool $bitRatingAllowed
      * @return string
      */
-    private function buildRatingBar($floatRating, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
+    private function buildRatingBar($floatRating, $intRatings, $strSystemid, $bitRatingAllowed = true, $bitPermissions = true) {
         $strIcons = "";
         $strRatingBarTitle = "";
 
