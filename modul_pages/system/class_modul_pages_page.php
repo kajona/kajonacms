@@ -438,7 +438,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    $arrElementsOnSource = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 	    if(count($arrElementsOnSource) > 0) {
     	    foreach ($arrElementsOnSource as $objOneSourceElement) {
-    	        if(!$objOneSourceElement->copyElementToPage($strIdOfNewPage)) {
+    	        if($objOneSourceElement->copyElementToPage($strIdOfNewPage) != null) {
     	            $this->objDB->transactionRollback();
     	            return false;
     	        }

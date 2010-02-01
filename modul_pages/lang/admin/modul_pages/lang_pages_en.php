@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 179
+//Kajona Language Editor Core Build 227
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -31,6 +31,15 @@ $lang["browsername"]                     = "Browser title:";
 $lang["contentToolbar_content"]          = "Edit content";
 $lang["contentToolbar_pageproperties"]   = "Edit properties";
 $lang["contentToolbar_preview"]          = "Page preview (Portaleditor)";
+$lang["copyElement_element"]             = "Source element:";
+$lang["copyElement_err_placeholder"]     = "On the target page are no matching placeholders.";
+$lang["copyElement_language"]            = "Target language:";
+$lang["copyElement_language_header"]     = "Name the target language";
+$lang["copyElement_page"]                = "Target page:";
+$lang["copyElement_page_header"]         = "Name the target page";
+$lang["copyElement_placeholder"]         = "Target placeholder:";
+$lang["copyElement_placeholder_header"]  = "Name the target placeholder";
+$lang["copyElement_template"]            = "Template:";
 $lang["ds_entsperren"]                   = "Unlock record";
 $lang["ds_gesperrt"]                     = "The record is currently locked";
 $lang["ds_seite_gesperrt"]               = "The page can\'t be deleted, it contains locked records";
@@ -41,6 +50,7 @@ $lang["element_bearbeiten"]              = "Edit element";
 $lang["element_bearbeiten_fehler"]       = "An error occured while saving page element";
 $lang["element_cachetime"]               = "Max. cache duration:";
 $lang["element_cachetime_hint"]          = "in seconds (-1 = no caching)";
+$lang["element_copy"]                    = "Copy element";
 $lang["element_first"]                   = "At the beginning";
 $lang["element_hoch"]                    = "Shift element up";
 $lang["element_install"]                 = "Install element";
@@ -96,6 +106,7 @@ $lang["pages_ordner_edit"]               = "Edit folder";
 $lang["pages_ordner_loeschen_frage"]     = "Do you really want to delete the folder &quot;<b>%%element_name%%</b>&quot;?";
 $lang["pages_ordner_oeffnen"]            = "Open folder";
 $lang["pages_ordner_rechte"]             = "Edit permissions";
+$lang["pe_copy"]                         = "Copy";
 $lang["pe_delete"]                       = "Delete";
 $lang["pe_disable"]                      = "Set portaleditor temporary inactive";
 $lang["pe_edit"]                         = "Edit";
@@ -116,6 +127,7 @@ $lang["plUpdateFalse"]                   = "An error occured while updating plac
 $lang["plUpdateHelp"]                    = "Here you are able to update placeholders saved in the database.<br />This can be necessary if a placeholder was extended by another possible page element. In this case the new element will appear in the admin, but remains invisible in the portal. To change this, placeholders saved in the database have to be updated to the new placeholders.<br />To do so, you need the name of the changed template, the title of the old placeholder (name_element) and the name of the new placeholder (e.g. name_element|element2). The placeholder should be provided without percent signs.";
 $lang["plUpdateTrue"]                    = "Update was successfull.";
 $lang["placeholder"]                     = "Placeholder: ";
+$lang["quickhelp_copyElement"]           = "To copy an element, you have to follow a three-step procedure. The first step sets up the target language, the second the target page and the third step the target placeholder.";
 $lang["quickhelp_editElement"]           = "This form is used to create or modify the basic data of page elements. Therefore, you are able to set the following fields:<br /><ul><li>Name: Title of the element</li><li>Max. cache duration: Duration in seconds the element is valid in the cache.<br />After this duration, the page will be regenerated with the next request.</li><li>Admin-class: class containing the admin-forms.</li><li>Portal-class: class responsible to generate the portal-output.</li><li>Repeatable: Defines, whether an element is allowed more than once at a placeholder or not.</li></ul>";
 $lang["quickhelp_editFolder"]            = "To create or rename a folder, a folder name can be set here.";
 $lang["quickhelp_flushCache"]            = "Congratulations - the page cache was flushed a few seconds ago ;-)";
@@ -139,6 +151,7 @@ $lang["seite_loeschen_frage"]            = "Do you really want to delete the pag
 $lang["seite_rechte"]                    = "Edit permissions";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["submit"]                          = "Save";
+$lang["submit_change"]                   = "Change";
 $lang["systemtask_flushpagescache_done"] = "Flushing completed.";
 $lang["systemtask_flushpagescache_name"] = "Flush cached pages";
 $lang["template"]                        = "Template:";

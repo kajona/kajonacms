@@ -172,7 +172,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      * This copy includes the records in the elements' foreign tables
      *
      * @param string $strNewPage
-     * @return bool
+     * @return class_modul_pages_pageelement the new element or null in case of an error
      */
     public function copyElementToPage($strNewPage) {
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
@@ -201,7 +201,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         
         if(!$this->objDB->_query($strQuery)) {
             $this->objDB->transactionRollback();
-            return false;
+            return null;
         }
         
         //now the tricky part - the elements content-table...
@@ -248,13 +248,16 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			
 	        if(!$this->objDB->_query($strQuery)) {
 	            $this->objDB->transactionRollback();
-	            return false;
+	            return null;
 	        }		
 		}
 
         //ok, all done. return.
         $this->objDB->transactionCommit();
-        return true;
+
+        //create an instance of the new element and return it
+        $objNewElement = new class_modul_pages_pageelement($strIdOfNewPageelement);
+        return $objNewElement;
     }
     
     

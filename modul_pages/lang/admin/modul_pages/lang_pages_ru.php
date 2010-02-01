@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 227
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кэш страницы включен:";
@@ -28,6 +28,15 @@ $lang["browsername"]                     = "Имя браузера:";
 $lang["contentToolbar_content"]          = "Изменить содержание";
 $lang["contentToolbar_pageproperties"]   = "Изменить настройки";
 $lang["contentToolbar_preview"]          = "Предпросмотр страницы (Редактор портала)";
+$lang["copyElement_element"]             = "";
+$lang["copyElement_err_placeholder"]     = "";
+$lang["copyElement_language"]            = "";
+$lang["copyElement_language_header"]     = "";
+$lang["copyElement_page"]                = "";
+$lang["copyElement_page_header"]         = "";
+$lang["copyElement_placeholder"]         = "";
+$lang["copyElement_placeholder_header"]  = "";
+$lang["copyElement_template"]            = "";
 $lang["ds_entsperren"]                   = "Разблокировать запись";
 $lang["ds_gesperrt"]                     = "Запись временно заблокирована";
 $lang["ds_seite_gesperrt"]               = "Страница не может быть удалена, так как она содержит заблокированные записи";
@@ -38,6 +47,7 @@ $lang["element_bearbeiten"]              = "Изменить элемент";
 $lang["element_bearbeiten_fehler"]       = "Ошибка при сохранении элемента страницы";
 $lang["element_cachetime"]               = "Максимальное время продолжительности кэша:";
 $lang["element_cachetime_hint"]          = "в секундах (-1 = нет кэша)";
+$lang["element_copy"]                    = "";
 $lang["element_first"]                   = "В начало";
 $lang["element_hoch"]                    = "Переместить элемент наверх";
 $lang["element_install"]                 = "Установить элемент";
@@ -93,6 +103,7 @@ $lang["pages_ordner_edit"]               = "Изменить папку";
 $lang["pages_ordner_loeschen_frage"]     = "Вы действительно хотите удалить папку &quot;<b>%%element_name%%</b>&quot;?";
 $lang["pages_ordner_oeffnen"]            = "Открыть папку";
 $lang["pages_ordner_rechte"]             = "Изменить разрешения";
+$lang["pe_copy"]                         = "";
 $lang["pe_delete"]                       = "Удалить";
 $lang["pe_disable"]                      = "Временно деактевировать редактор портала";
 $lang["pe_edit"]                         = "Изменить";
@@ -113,6 +124,7 @@ $lang["plUpdateFalse"]                   = "Ошибка при обновлен
 $lang["plUpdateHelp"]                    = "Здесь Вы можете обновить контейнеры, которые сохранены в датабазе.<br />Это может оказаться необходимым, если контейнер был дополнен другим элементов страницы. В этом случае новый элемент появится в администрации, но останется невидимым на портале. Чтобы это изменить, сохраненные в датабазе контейнеры должны быть обновлены. <br />Чтобы это сделать, Вам необходимо имя измененного шаблона, имя старого контейнера (имя_элемента) и имя нового контейнера (например имя_элемента|элемент2). Контейнер следует называть без использования процентного знака.";
 $lang["plUpdateTrue"]                    = "Обновление прошло успешно.";
 $lang["placeholder"]                     = "Контейнер:";
+$lang["quickhelp_copyElement"]           = "";
 $lang["quickhelp_editElement"]           = "Эта форма используется для создания или модификации базовой информации о элементах страницы. Поэтому Вы можете установить следущие поля:<br /><ul><li>Имя: Имя элемента</li><li>Максимальное время продолжительности кэша: Продолжительность действительности элемента кэша в секундах.<br />После этой продолжительности, страница будет регенерирована при следущем запросе.</li><li>Админ-класс: тип, содержащий администраторские формы</li><li>Портал-класс: тип, ответственный за создание конечных данных портала.</li><li>Повторающийся: определяет, разрешен ли элемент больше одного раза в контейнере или нет.</li></ul>";
 $lang["quickhelp_editFolder"]            = "Для создания или переименования папки, имя папки может быть установлено здесь.";
 $lang["quickhelp_flushCache"]            = "Поздравления! - кэш страницы был очищен несколько секунд назад ;-)";
@@ -136,6 +148,7 @@ $lang["seite_loeschen_frage"]            = "Вы действительно хо
 $lang["seite_rechte"]                    = "Изменить разрешения";
 $lang["seostring"]                       = "SEO-URL-Ключевые слова:";
 $lang["submit"]                          = "Сохранить";
+$lang["submit_change"]                   = "";
 $lang["systemtask_flushpagescache_done"] = "Очистка завершена.";
 $lang["systemtask_flushpagescache_name"] = "Очистить кэшовые страницы";
 $lang["template"]                        = "Шаблон:";

@@ -83,6 +83,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     			if($strReturn == "")
     				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
+            if($strAction == "copyElement") {
+                $strReturn = $this->actionCopyElement();
+                if($strReturn == "")
+                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+            }
 
     		//add a pathnavigation when not in pe mode
     		if($this->getParam("pe") != 1) {
@@ -226,7 +231,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 								$strActions .= $this->objToolkit->listDeleteButton($objOneElementOnPage->getStrName(). ($objOneElementOnPage->getStrTitle() != "" ? " - ".$objOneElementOnPage->getStrTitle() : "" ), $this->getText("element_loeschen_frage"), getLinkAdminHref("pages_content", "deleteElementFinal", "&systemid=".$objOneElementOnPage->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 							}
 
-							//The Icons to sort the list
+							//The Icons to sort the list and to copy the element
+    		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
 							$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortUp", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_hoch"), "icon_arrowUp.gif"));
 							$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortDown", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_runter"), "icon_arrowDown.gif"));
 
@@ -645,6 +651,138 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$objElement = new class_modul_pages_pageelement($strSystemid);
 		return $objElement->setPosition($strSystemid, $strMode);
 	}
+
+    /**
+     * Provides a form to set up the params needed to copy a single element from one placeholder to another.
+     * Collects the target language, the target page and the target placeholder, invokes the copy-procedure.
+     *
+     * @return string, "" in case of success
+     */
+    private function actionCopyElement() {
+        $strReturn = "";
+
+        if($this->objRights->rightEdit($this->getSystemid())) {
+
+            $objLang = class_modul_languages_language::getLanguageByName($this->getLanguageToWorkOn());
+            $objPage = new class_modul_pages_page($this->getPrevId());
+
+            $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
+
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement());
+            //step one: language selection
+            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_language_header"));
+            if($this->getParam("copyElement_language") != "")
+                $objLang = new class_modul_languages_language($this->getParam("copyElement_language"));
+
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_language")." ".$objLang->getStrName());
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
+
+            $arrLanguages = class_modul_languages_language::getAllLanguages(true);
+            $arrLanguageDD = array();
+            foreach($arrLanguages as $objSingleLanguage)
+                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $objSingleLanguage->getStrName();
+
+            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
+            $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
+            $strReturn .= $this->objToolkit->formClose();
+            
+
+            //step two: page selection
+            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_page_header"));
+            if($this->getParam("copyElement_page") != "") {
+                $objPage = class_modul_pages_page::getPageByName($this->getParam("copyElement_page"));
+                $objPage->setStrLanguage($objLang->getStrName());
+                $objPage->initObject();
+            }
+
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_page")." ".$objPage->getStrName());
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
+            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getText("copyElement_page"));
+            $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
+            $strReturn .= $this->objToolkit->formClose();
+
+
+            //step three: placeholder-selection
+            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_placeholder_header"));
+           
+
+            //here comes the tricky part. load the template, analyze the placeholders and validate all those against things like repeatable and more...
+            $strTemplate = $objPage->getStrTemplate();
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_template")." ".$strTemplate);
+            //load the placeholders
+            $strTemplateId = $this->objTemplate->readTemplate("/templates/modul_pages/".$strTemplate, "", true);
+            $arrPlaceholders = $this->objTemplate->getElements($strTemplateId);
+            $arrPlaceholdersDD = array();
+
+            foreach($arrPlaceholders as $arrSinglePlaceholder) {
+
+                foreach($arrSinglePlaceholder["elementlist"] as $arrSinglePlaceholderlist) {
+                    if($objSourceElement->getStrElement() == $arrSinglePlaceholderlist["element"]) {
+                        if($objSourceElement->getIntRepeat() == 1) {
+                            //repeatable, ok in every case
+                            $arrPlaceholdersDD[$arrSinglePlaceholder["placeholder"]] = $arrSinglePlaceholder["placeholder"];
+                        }
+                        else {
+                            //not repeatable - element already existing at placeholder?
+                            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPage->getSystemid(), false, $objLang->getStrName());
+                            //loop in order to find same element-types - other elements may be possible due to piped placeholders, too
+                            $bitAdd = true;
+                            //var_dump($arrElementsOnPage);
+                            foreach($arrElementsOnPage as $objSingleElementOnPage) {
+
+                                if($objSingleElementOnPage->getStrElement() == $objSourceElement->getStrElement())
+                                    $bitAdd = false;
+                            }
+
+                            if($bitAdd)
+                                $arrPlaceholdersDD[$arrSinglePlaceholder["placeholder"]] = $arrSinglePlaceholder["placeholder"];
+                        }
+                    }
+                }
+            }
+
+
+
+            if(count($arrPlaceholdersDD) == 0) {
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_err_placeholder"));
+            }
+            else {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
+                $strReturn .= $this->objToolkit->formInputDropdown("copyElement_placeholder", $arrPlaceholdersDD, $this->getText("copyElement_placeholder"));
+                $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
+                $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+                $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formClose();
+            }
+
+
+            //any actions to take?
+            if($this->getParam("copyElement_placeholder") != "") {
+                $objNewElement = $objSourceElement->copyElementToPage($objPage->getSystemid());
+                $objNewElement->setStrLanguage( $objLang->getStrName() );
+                $objNewElement->setStrPlaceholder($this->getParam("copyElement_placeholder"));
+                if($objNewElement->updateObjectToDb()) {
+                    $this->setSystemid($objNewElement->getSystemid());
+                    $strReturn = "";
+                }
+                else
+                    throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);
+
+            }
+
+        }
+        else
+			$strReturn = $this->getText("fehler_recht");
+        return $strReturn;
+    }
 
 
 	/**

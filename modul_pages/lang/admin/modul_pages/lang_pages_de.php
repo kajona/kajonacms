@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 227
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -31,6 +31,15 @@ $lang["browsername"]                     = "Browsertitel:";
 $lang["contentToolbar_content"]          = "Inhalte bearbeiten";
 $lang["contentToolbar_pageproperties"]   = "Grunddaten bearbeiten";
 $lang["contentToolbar_preview"]          = "Seitenvorschau (Portaleditor)";
+$lang["copyElement_element"]             = "Quellelement:";
+$lang["copyElement_err_placeholder"]     = "Auf der Zielseite befinden sich keine in Frage kommenden Platzhalter.";
+$lang["copyElement_language"]            = "Zielsprache:";
+$lang["copyElement_language_header"]     = "Bestimmen der Zielsprache";
+$lang["copyElement_page"]                = "Zielseite:";
+$lang["copyElement_page_header"]         = "Bestimmen der Zielseite";
+$lang["copyElement_placeholder"]         = "Zielplatzhalter:";
+$lang["copyElement_placeholder_header"]  = "Bestimmen des Zielplatzhalters";
+$lang["copyElement_template"]            = "Template:";
 $lang["ds_entsperren"]                   = "Datensatz entsperren";
 $lang["ds_gesperrt"]                     = "Der Datensatz ist momentan gesperrt";
 $lang["ds_seite_gesperrt"]               = "Die Seite kann nicht gelöscht werden, da sie gesperrte Datensätze beinhaltet";
@@ -41,6 +50,7 @@ $lang["element_bearbeiten"]              = "Element bearbeiten";
 $lang["element_bearbeiten_fehler"]       = "Fehler beim Bearbeiten des Elements";
 $lang["element_cachetime"]               = "Max. Cachedauer:";
 $lang["element_cachetime_hint"]          = "in Sekunden (-1 = kein Caching)";
+$lang["element_copy"]                    = "Element kopieren";
 $lang["element_first"]                   = "Am Anfang des Platzhalters";
 $lang["element_hoch"]                    = "Element nach oben verschieben";
 $lang["element_install"]                 = "Element installieren";
@@ -96,6 +106,7 @@ $lang["pages_ordner_edit"]               = "Ordner bearbeiten";
 $lang["pages_ordner_loeschen_frage"]     = "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["pages_ordner_oeffnen"]            = "Ordner öffnen";
 $lang["pages_ordner_rechte"]             = "Rechte bearbeiten";
+$lang["pe_copy"]                         = "Kopieren";
 $lang["pe_delete"]                       = "Löschen";
 $lang["pe_disable"]                      = "Den Portaleditor temporär deaktivieren";
 $lang["pe_edit"]                         = "Bearbeiten";
@@ -116,6 +127,7 @@ $lang["plUpdateFalse"]                   = "Beim Umbenennen ist ein Fehler aufge
 $lang["plUpdateHelp"]                    = "Hier können die in der Datenbank gespeicherten Platzhalter aktualisiert werden.<br />Dies kann dann nötig werden, wenn ein Platzhalter um ein weiteres mögliches Seitenelement erweitert wurde. In diesem Fall erscheinen die Seitenelement zwar beim Bearbeiten der Seite, nicht aber im Portal. Um dies zu ändern müssen die in der Datenbank hinterlegten Platzhalter an die neuen Platzhalter angepasst werden.<br /> Hierfür ist es notwendig, den Namen des veränderten Templates, den Titel des alten Platzhalters (name_element), sowie des neuen Platzhalters (name_element|element2) anzugeben. Platzhalter sind ohne Prozentzeichen anzugeben.";
 $lang["plUpdateTrue"]                    = "Das Umbenennen war erfolgreich.";
 $lang["placeholder"]                     = "Platzhalter: ";
+$lang["quickhelp_copyElement"]           = "Um ein Element zu kopieren, müssen drei Schritte vorgenommen werden. Im ersten Schritt wird die Zielsprache, im zweiten Schritt die Zielseite und im dritten Schritt der Platzhalter der Zielseite bestimmt.";
 $lang["quickhelp_editElement"]           = "Dieses Formular dient zum Anlegen und Bearbeiten der Grunddaten von Seitenelementen. Hierfür stehen die folgenden Eingabefelder zur Verfügung:<br /><ul><li>Name: Titel des Elements</li><li>Max. Cachedauer: Zeitdauer in Sekunden, die das Element maximal gecached werden darf.<br />Nach Ablauf dieses Zeitraums wird die Seite neu generiert.</li><li>Admin-Klasse: Klasse, die das Admin-Formular bereitstellt.</li><li>Portal-Klasse: Klasse, die die Portal-Ausgabe übernimmt.</li><li>Wiederholbar: Legt fest, ob ein Element an einem Platzhalter mehrfach angelegt werden darf.</li></ul>";
 $lang["quickhelp_editFolder"]            = "Zum Anlegen oder Umbenennen eines Ordners kann hier der Name des Ordners definiert werden.";
 $lang["quickhelp_flushCache"]            = "Herzlichen Glückwunsch - der Seitencache wurde soeben geleert ;-)";
@@ -139,6 +151,7 @@ $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%el
 $lang["seite_rechte"]                    = "Rechte bearbeiten";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["submit"]                          = "Speichern";
+$lang["submit_change"]                   = "Ändern";
 $lang["systemtask_flushpagescache_done"] = "Leeren abgeschlossen.";
 $lang["systemtask_flushpagescache_name"] = "Seitencache leeren";
 $lang["template"]                        = "Template:";

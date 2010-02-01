@@ -167,6 +167,24 @@ class class_element_portal extends class_portal {
                 }
 
                 //---------------------------------------------------
+                //link to copy an element to the same or another placeholder
+                $strCopyLink = "";
+                //standard: pages_content. 
+                if($strModule == "pages_content") {
+                    //Load element-data
+                    $objElement = new class_modul_pages_pageelement($strSystemid);
+                    if($objElement->getIntRepeat() == 1) {
+                        $strNewLink = getLinkAdminPopup("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "500", "650", "", false, true);
+                    }
+                }
+                else {
+                    //Use Module-config to generate link
+                    if(isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
+                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "500", "650", "", false, true);
+                    }
+                }
+
+                //---------------------------------------------------
                 //link to delete the current element
                 $strDeleteLink = "";
                 //standard: pages_content.
