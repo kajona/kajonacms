@@ -706,9 +706,15 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @return string
      */
-    public function formClose() {
+    public function formClose($bitIncludePeFields = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_close");
-        return $this->objTemplate->fillTemplate(array(), $strTemplateID);
+        $strPeFields = "";
+        if($bitIncludePeFields) {
+            $arrParams = getAllPassedParams();
+            if(array_key_exists("pe", $arrParams))
+                $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
+        }
+        return $strPeFields.$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
 
 

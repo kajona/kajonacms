@@ -266,8 +266,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $this->getParam("postacomment_comment"));
             }
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            if($this->getParam("pe") == "1")
-                $strReturn .= $this->objToolkit->formInputHidden("pe", "1");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
             $strReturn .= $this->objToolkit->formClose();
 

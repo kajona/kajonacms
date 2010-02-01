@@ -685,7 +685,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
-            $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
             $strReturn .= $this->objToolkit->formClose();
             
@@ -703,7 +702,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getText("copyElement_page"));
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
             $strReturn .= $this->objToolkit->formClose();
 
@@ -758,7 +756,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                 $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
                 $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-                $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
                 $strReturn .= $this->objToolkit->formClose();
             }

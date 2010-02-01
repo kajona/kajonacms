@@ -311,8 +311,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $this->getParam("navigation_target"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
-                if($this->getParam("pe") == "1")
-                    $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
@@ -336,8 +334,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $objPoint->getStrTarget());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
-                if($this->getParam("pe") == "1")
-                    $strReturn .= $this->objToolkit->formInputHidden("pe", $this->getParam("pe"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
