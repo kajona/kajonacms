@@ -55,9 +55,8 @@
     		<div><label for="comment_name">%%lang_form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
     		<div><label for="comment_subject">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
     		<div><label for="comment_message">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
-    		<div id="kajonaCaptchaContainer%%comment_systemid%%"><label for="kajonaCaptcha"></label></div><br />
-    		<div><label for="form_captcha">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha%%comment_systemid%%" class="inputText" /></div><br />
-    		<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha%%comment_systemid%%')" value="%%lang_form_captcha_reload_label%%" class="button" /></div><br /><br />
+    		<div><label for="kajonaCaptcha"></label><span id="kajonaCaptchaContainer%%comment_systemid%%"></span> (<a href="#" onclick="reloadCaptcha('kajonaCaptcha'); return false;">%%lang_form_captcha_reload_label%%</a>)</div><br />
+    		<div><label for="form_captcha">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha%%comment_systemid%%" class="inputText" /></div><br /><br />
     		<div><label for="Submit"></label><input type="button" name="Submit" value="%%lang_form_submit_label%%" class="button" onclick="postacommentSubmitWrapper('%%comment_systemid%%');" /></div><br />
     		<input type="hidden" name="comment_template" id="comment_template%%comment_systemid%%" value="%%comment_template%%" />
             <input type="hidden" name="comment_systemid" id="comment_systemid%%comment_systemid%%" value="%%comment_systemid%%" />

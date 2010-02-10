@@ -37,9 +37,8 @@
         <div><label for="gb_post_email">%%lang_post_mail_text%%*:</label><input type="text" name="gb_post_email" id="gb_post_email" value="%%gb_post_email%%" class="inputText" /></div><br />
         <div><label for="gb_post_page">%%lang_post_page_text%%:</label><input type="text" name="gb_post_page" id="gb_post_page" value="%%gb_post_page%%" class="inputText" /></div><br />
         <div><label for="gb_post_text">%%lang_post_message_text%%*:</label><textarea name="gb_post_text" id="gb_post_text" class="inputTextarea">%%gb_post_text%%</textarea></div><br /><br />
-        <div><label for="kajonaCaptcha"></label><img id="kajonaCaptcha" src="_webpath_/image.php?image=kajonaCaptcha&amp;maxWidth=180" /></div><br />
-    	<div><label for="gb_post_captcha">Code*:</label><input type="text" name="gb_post_captcha" id="gb_post_captcha" class="inputText" /></div><br />
-    	<div><label for="Reload"></label><input type="button" name="Reload" onclick="reloadCaptcha('kajonaCaptcha')" value="%%lang_post_code_text%%" class="button" /></div><br /><br />
+        <div><label for="kajonaCaptcha"></label><img id="kajonaCaptcha" src="_webpath_/image.php?image=kajonaCaptcha&amp;maxWidth=180" /> (<a href="#" onclick="reloadCaptcha('kajonaCaptcha'); return false;">%%lang_post_code_text%%</a>)</div><br />
+    	<div><label for="gb_post_captcha">Code*:</label><input type="text" name="gb_post_captcha" id="gb_post_captcha" class="inputText" /></div><br /><br />
     	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_post_submit_text%%" class="button" /></div><br />
     </form>
 </entry_form>

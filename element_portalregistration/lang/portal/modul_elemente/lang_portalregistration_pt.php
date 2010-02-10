@@ -7,9 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 198
 
 //editable entries
+$lang["captcha_reload"]                  = "Código não é legível?";
+$lang["captcha_label"]                   = "Segurança bacalhau:*";
 $lang["pr_captcha"]                      = "Código inválido.";
 $lang["pr_completionErrorStatus"]        = "Esta conta não pode ser activada.";
 $lang["pr_completionSuccess"]            = "Activação com sucesso. Agora já pode iniciar o acesso ao portal.";

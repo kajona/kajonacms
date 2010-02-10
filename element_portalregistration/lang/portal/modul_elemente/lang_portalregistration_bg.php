@@ -7,9 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 198
 
 //editable entries
+$lang["captcha_reload"]                  = "Кодексът не чете?";
+$lang["captcha_label"]                   = "Сигурност треска:*";
 $lang["pr_captcha"]                      = "Невалиден код.";
 $lang["pr_completionErrorStatus"]        = "Акаунта не може да бъде активиран.";
 $lang["pr_completionSuccess"]            = "Акаунта успешно активиран. Вече можете да се впишете в портала.";
