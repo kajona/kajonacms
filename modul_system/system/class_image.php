@@ -576,8 +576,8 @@ class class_image {
 		$bitReturn = false;
 
 		//Cache?
-		if($bitCache) 	{
-			//Aus den ermittelten Daten einen Namen erzeugen
+		if($bitCache) {
+			//create cache name
 			$this->strCachename = $this->generateCachename();
 			if(is_file(_realpath_.$this->strCachepath.$this->strCachename)) {
 				$this->bitNeedToSave = false;
@@ -585,12 +585,12 @@ class class_image {
 			}
 		}
 
-		//Hier bei Bedarf das Bild nachladen
+		//load image
 		if($this->objImage == null && $this->bitPreload)
 			$this->finalLoadImage();
 
 		$intColor = 0;
-	    //Farbe bestimmen
+	    //set color
         if(is_int($strColor)) {
             $intColor = $strColor;
         }else{
@@ -598,10 +598,12 @@ class class_image {
             $intColor = imagecolorallocate($this->objImage, $arrayColors[0], $arrayColors[1], $arrayColors[2]);
         }
 
-		//Schrift laden
+		//load font
         if(is_file(_systempath_."/fonts/".$strFont) && function_exists("imagefttext")) {
             $strText = html_entity_decode($strText, ENT_COMPAT, "UTF-8");
+            imagealphablending($this->objImage, true);
 			@imagefttext($this->objImage, $intSize, $intAngle, $intX, $intY, $intColor, _systempath_."/fonts/".$strFont, $strText);
+			imagealphablending($this->objImage, false);
 		}
 
 		return $bitReturn;
@@ -893,8 +895,7 @@ class class_image {
     public function createEmptyImage($intWidth, $intHeight) {
         $objImage = @imagecreatetruecolor($intWidth, $intHeight);
 
-        //FIXME TODO: only a quick fix. when enabling , the font-rendering crashes
-        //imagealphablending($objImage, false);
+        imagealphablending($objImage, false); //crashes font-rendering, so set true before rendering fonts
         imagesavealpha($objImage, true);
 
         return $objImage;
