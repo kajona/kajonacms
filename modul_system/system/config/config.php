@@ -10,7 +10,7 @@
 /*
     NOTE:
 
-    Since Kajona 2.1 it's possible to define all needed values using the installer!
+    Since Kajona 2.1 it's possible to define all needed values using the installer.
 
     This file allows to specify different server-configs.
 
@@ -18,7 +18,7 @@
 
     The following database-drivers could be used with Kajona:
 
-    mysql, mysqli, postgres
+    mysql, mysqli, postgres, sqlite
 
 
 */
@@ -74,11 +74,11 @@ default:
 
 //--common settings -------------------------------------------------------------------------------------
 
-    $config['diradmin']             = "/admin";	                               //Path containing the admin-classes
+    $config['diradmin']             = "/admin";                                //Path containing the admin-classes
     $config['dirportal']            = "/portal";                               //Path containing the portal-classes
     $config['dirtemplates']         = "/templates";                            //Path containing the templates
     $config['dirsystem']            = "/system";                               //Path containing the system classes
-    $config['dirlang']              = "/lang";	                               //Path containing the language-files
+    $config['dirlang']              = "/lang";                                //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
 
     $config['adminlangs']           = "de,en,pt,ru,bg";                        //Available languages for the administration

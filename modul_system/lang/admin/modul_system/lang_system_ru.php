@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 221
+//Kajona Language Editor Core Build 227
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -78,7 +78,7 @@ $lang["installer_config_dbport"]         = "Порт датабазы:";
 $lang["installer_config_dbportinfo"]     = "Для использования стандартного порта, оставить свободным.";
 $lang["installer_config_dbprefix"]       = "Префикс таблицы:";
 $lang["installer_config_dbusername"]     = "Пользователь датабазы:";
-$lang["installer_config_intro"]          = "<b>Настроить доступ к датабазе </b><br /><br />Заметка: Вебсерверу необходимы разрешения для /system/config/config.php.<br />Отсутствие данных для датабаз -сервер, -пользователь, -пароль и -имя неразрешены.<br /><br />В случае, если вы не хотите вводить данные, измените файл конфигурации /system/config/config.php вручную, используя текстовый редактор. Для дополнительной информации обратитесь к справочнику.<br /><br /><b>ВНИМАНИЕ:</b> PostgreSQL драйвер все еще находится на стадии альфа и может быть использован только для пробных заданий.<br /><br />";
+$lang["installer_config_intro"]          = "<b>Настроить доступ к датабазе </b><br /><br />Заметка: Вебсерверу необходимы разрешения для /system/config/config.php.<br />Отсутствие данных для датабаз -сервер, -пользователь, -пароль и -имя неразрешены.<br /><br />В случае, если вы не хотите вводить данные, измените файл конфигурации /system/config/config.php вручную, используя текстовый редактор. Для дополнительной информации обратитесь к справочнику.<br /><br />";
 $lang["installer_config_write"]          = "Сохранить в config.php";
 $lang["installer_elements_found"]        = "<b>Установка элементов страницы</b><br /><br />Выбрать какие элементы страницы будут установлены<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Успешного использования Kajona!";

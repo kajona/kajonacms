@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 221
+//Kajona Language Editor Core Build 227
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -78,7 +78,7 @@ $lang["installer_config_dbport"]         = "Porta Base de Dados:";
 $lang["installer_config_dbportinfo"]     = "Para usar a porta por defeito, deixe em branco.";
 $lang["installer_config_dbprefix"]       = "Prefixo Tabela:";
 $lang["installer_config_dbusername"]     = "Utilizador Base de Dados:";
-$lang["installer_config_intro"]          = "<b>Configure o acesso à base de dados</b><br /><br />Nota: O servidor de internet precisa de permissões de escrita em /system/config/config.php.<br />Campos vazios para o servidor de base de dados, -utilizador, -palavra-passe e -nome não são permitidos.<br /><br />No caso de pretender deixar os campos em branco, terá de editar o ficheiro config  /system/config/config.php manualmente utilizando um editor de texto. Para mais informações, consulte o manual.<br /><br /><b>ATENÇÃO:</b> o controlador PostgreSQL ainda se encontra numa versão incial (alpha) e deverá ser utilizado APENAS em ambientes de teste..<br /><br />";
+$lang["installer_config_intro"]          = "<b>Configure o acesso à base de dados</b><br /><br />Nota: O servidor de internet precisa de permissões de escrita em /system/config/config.php.<br />Campos vazios para o servidor de base de dados, -utilizador, -palavra-passe e -nome não são permitidos.<br /><br />No caso de pretender deixar os campos em branco, terá de editar o ficheiro config  /system/config/config.php manualmente utilizando um editor de texto. Para mais informações, consulte o manual.<br /><br />";
 $lang["installer_config_write"]          = "Guardar em config.php";
 $lang["installer_elements_found"]        = "<b>instalação dos elementos da página</b><br /><br />Seleccione qual dos elementos encontrados pretende instalar:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Divirta-se a utilizar o Kajona!";

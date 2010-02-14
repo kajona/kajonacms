@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 221
+//Kajona Language Editor Core Build 227
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -83,7 +83,7 @@ $lang["installer_config_dbport"]         = "Datenbankport:";
 $lang["installer_config_dbportinfo"]     = "Für den Standardport bitte leer lassen";
 $lang["installer_config_dbprefix"]       = "Tabellenpräfix:";
 $lang["installer_config_dbusername"]     = "Datenbankbenutzer:";
-$lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</b><br /><br />Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br /><br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br /><br /><b>ACHTUNG:</b> Der PostgreSQL Treiber befindet sich noch im Alpha-Stadium und sollte nur in Test-Umgebungen verwendet werden.<br /><br />";
+$lang["installer_config_intro"]          = "<b>Datenbankeinstellungen erfassen</b><br /><br />Anmerkung: Der Webserver benötigt Schreibrechte auf die Datei /system/config/config.php.<br />Leere Werte für den Datenbankserver, -benutzer, -passwort und -name sind nicht zugelassen.<br /><br />Für den Fall, dass Sie einen dieser Werte leer lassen möchten, bearbeiten Sie bitte die Datei /system/config/config.php manuell mit einem Texteditor, Näheres hierzu finden Sie im Handbuch.<br /><br />";
 $lang["installer_config_write"]          = "In config.php speichern";
 $lang["installer_elements_found"]        = "<b>Installation der Seitenelemente</b><br /><br />Bitte wählen Sie die Seitenelemente aus, die Sie installieren möchten:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Wir wünschen viel Spaß mit Kajona!";

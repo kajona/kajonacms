@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 221
+//Kajona Language Editor Core Build 227
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -83,7 +83,7 @@ $lang["installer_config_dbport"]         = "Database port:";
 $lang["installer_config_dbportinfo"]     = "To use a standard-port, leave empty.";
 $lang["installer_config_dbprefix"]       = "Table prefix:";
 $lang["installer_config_dbusername"]     = "Database user:";
-$lang["installer_config_intro"]          = "<b>Set up database-access</b><br /><br />Note: The webserver needs write-permissions on /system/config/config.php.<br />Empty values for the database server, -user, -password and -name are not allowed.<br /><br />In the case you want to use emtpy values, edit the config-file /system/config/config.php manually using a text-editor. For further informations, refer to the manual.<br /><br /><b>ATTENTION:</b> The PostgreSQL driver is still in an alpha stadium and should be used in test environments only.<br /><br />";
+$lang["installer_config_intro"]          = "<b>Set up database-access</b><br /><br />Note: The webserver needs write-permissions on /system/config/config.php.<br />Empty values for the database server, -user, -password and -name are not allowed.<br /><br />In the case you want to use emtpy values, edit the config-file /system/config/config.php manually using a text-editor. For further informations, refer to the manual.<br /><br />";
 $lang["installer_config_write"]          = "Save to config.php";
 $lang["installer_elements_found"]        = "<b>Installation of the page elements</b><br /><br />Select which of the found page elements you want to install:<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Have fun using Kajona!";

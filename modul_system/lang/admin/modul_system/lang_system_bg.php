@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 221
+//Kajona Language Editor Core Build 227
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -78,7 +78,7 @@ $lang["installer_config_dbport"]         = "Порт база данни:";
 $lang["installer_config_dbportinfo"]     = "Оставете празно ако ползвате стандартен порт.";
 $lang["installer_config_dbprefix"]       = "Префикс таблици:";
 $lang["installer_config_dbusername"]     = "Потребител база данни:";
-$lang["installer_config_intro"]          = "<b>Създаване на достъп за база данни</b><br /><br />Забележка: Уеб сървърът трябва да има права върху /system/config/config.php.<br />Празни стойности за <b>Сървър база данни, -Потребител, -Парола и -Име</b> не са позволени.<br /><br />В случай, че искате да оставите празни стойности, редактирайте  /system/config/config.php ръчно, ползвайки текстов редактор. За повече информация, погледнете в документацията.<br /><br /><b>ВНИМАНИЕ:</b> PostgreSQL базата данни е в тестов вариант и трябва да се ползва само в тестова среда.<br /><br />";
+$lang["installer_config_intro"]          = "<b>Създаване на достъп за база данни</b><br /><br />Забележка: Уеб сървърът трябва да има права върху /system/config/config.php.<br />Празни стойности за <b>Сървър база данни, -Потребител, -Парола и -Име</b> не са позволени.<br /><br />В случай, че искате да оставите празни стойности, редактирайте  /system/config/config.php ръчно, ползвайки текстов редактор. За повече информация, погледнете в документацията.<br /><br />";
 $lang["installer_config_write"]          = "Запази в config.php";
 $lang["installer_elements_found"]        = "<b>Инсталация на елементи към страниците</b><br /><br />Изберете кои от намерените елементи искате да инсталирате :<br /><br />";
 $lang["installer_finish_closer"]         = "<br />Забавлявайте се с Kajona!";
