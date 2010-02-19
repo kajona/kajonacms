@@ -158,7 +158,7 @@ class class_csv {
 	        $strRow .= "\n";
 	        //write header to file
 	        $objFilesystem->writeToFile($strRow);
-	        //iterate over the data array tp write it to the file
+	        //iterate over the data array to write it to the file
 	        foreach ($this->arrData as $arrOneRow) {
 	            $strRow = "";
 	            foreach($this->arrMapping as $strSourceCol => $strTargetCol) {
