@@ -49,8 +49,11 @@ class class_csv {
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 
-		if($strDelimiter == "")
-		  $this->strDelimiter = class_csv::$str_delimiter_comma;
+		if($strDelimiter == "") {
+		    $this->strDelimiter = class_csv::$str_delimiter_comma;
+		} else {
+		    $this->strDelimiter = $strDelimiter;
+		}
 
 	    // Try to overwrite PHP memory-limit so also large files can be processed
 		if (class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 50)
@@ -71,7 +74,7 @@ class class_csv {
             //init final array
             $this->arrData = array();
             $arrFinalArray = array();
-            
+
             //open pointer on file
             $objFilesystem = new class_filesystem();
             $objFilesystem->openFilePointer($this->strFilename, "r");
@@ -111,9 +114,9 @@ class class_csv {
 
                 $strRow = $objFilesystem->readLineFromFile();
             }
-	        
+
             $objFilesystem->closeFilePointer();
-            
+
             $this->setArrData($arrFinalArray);
 
 	        return true;
@@ -136,7 +139,7 @@ class class_csv {
 	    //all needed values set before?
 	    if($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
 	        //create file-content. use a file-pointer to avoid max-mem-errors
-	        
+
 	        $objFilesystem = new class_filesystem();
 	        //open file
 	        $objFilesystem->openFilePointer($this->strFilename);
