@@ -180,12 +180,12 @@ class class_csv {
 	            //and write to file
 	            $objFilesystem->writeToFile($strRow);
 	        }
-	        //anc close the filepointer...
+	        //and close the filepointer...
 	        $objFilesystem->closeFilePointer();
 	        return true;
 	    }
 	    else {
-	        throw new class_exception("cant proceed, needed values missing", class_exception::$level_ERROR);
+	        throw new class_exception("can't proceed, needed values missing", class_exception::$level_ERROR);
 	    }
 	    return false;
 	}
@@ -236,7 +236,7 @@ class class_csv {
 
 
 	/**
-	 * Set an array of column.mappings. Usefull if you want different column names or
+	 * Set an array of column-mappings. Usefull if you want different column names or
 	 * to limit the columns to read / write.
 	 * The array is build like
 	 * array( "sourceCol1" => "targetCol1",
