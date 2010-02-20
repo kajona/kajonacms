@@ -237,7 +237,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strElement."').value='".$arrSinglePage["name2"]."'; self.close(); \">".getImageAdmin("icon_accept.gif")."</a>");
 					$strReturn .= $this->objToolkit->listRow2($objSinglePage->getStrName(), $strAction, $intCounter++);
 				}
-				$this->objToolkit->listFooter();
+				$strReturn .= $this->objToolkit->listFooter();
 			}
 		}
 
@@ -259,7 +259,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 					$strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strElement."').value='".$arrSinglePage["name2"]."'; self.close(); \">".getImageAdmin("icon_accept.gif")."</a>");
 					$strReturn .= $this->objToolkit->listRow2($objOnePageelement->getStrTitle()."(".$objOnePageelement->getStrName().")", $strAction, $intCounter++);
                 }
-                $this->objToolkit->listFooter();
+                $strReturn .= $this->objToolkit->listFooter();
             }
 		}
 
