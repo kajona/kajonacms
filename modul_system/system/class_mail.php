@@ -192,6 +192,10 @@ class class_mail {
 			//Building the mail
 			$strTo = implode(", ", $this->arrayTo);
 			//Sender
+            if($this->strSender == "")
+                $this->strSender = _system_admin_email_;
+
+
 			if($this->strSender != "") {
 			    //build the from-arguments
 			    if($this->strSenderName != "")
