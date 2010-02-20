@@ -662,19 +662,20 @@ class class_db {
 	 * Makes a string db-safe
 	 *
 	 * @param string $strString
-	 * @param bool $bitHtmlEntitites
+	 * @param bool $bitHtmlSpecialChars
 	 * @return string
 	 */
-	public function dbsafeString($strString, $bitHtmlEntitites = true) {
+	public function dbsafeString($strString, $bitHtmlSpecialChars = true) {
+
 	    //already escaped by php?
 	    if(get_magic_quotes_gpc() == 1) {
 	       $strString = stripslashes($strString);
 	    }
 	    $strString = addslashes($strString);
 
-	    if($bitHtmlEntitites) {
-	        $strString = htmlentities($strString, ENT_COMPAT, "UTF-8");
-	    }
+        //escape special chars
+        if($bitHtmlSpecialChars)
+            $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8", false);
 
 	    return $strString;
 	}
@@ -687,7 +688,6 @@ class class_db {
 	    $this->arrQueryCache = array();
 	}
 
-
 	/**
      * Allows the db-driver to add database-specific surroundings to column-names.
      * E.g. needed by the mysql-drivers
@@ -699,7 +699,7 @@ class class_db {
     	return $this->objDbDriver->encloseColumnName($strColumn);
     }
 
-/**
+    /**
      * Allows the db-driver to add database-specific surroundings to table-names.
      * E.g. needed by the mysql-drivers
      *
