@@ -72,6 +72,13 @@ FCKConfig.EMailProtection = 'none';
 /*
     Flipping default enter / shift-enter behaviour.
     This avoids <p> wrappers by default
- */
+*/
 FCKConfig.EnterMode = 'br' ;
 FCKConfig.ShiftEnterMode = 'p' ;
+
+/*
+    Disable the conversion of special chars into html entities
+*/
+FCKConfig.ProcessHTMLEntities	= false ;
+FCKConfig.IncludeLatinEntities	= false ;
+FCKConfig.IncludeGreekEntities	= false ;
