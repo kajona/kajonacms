@@ -244,54 +244,51 @@ class class_toolkit_admin extends class_toolkit {
 
 
     /**
-     * Returns a text-field using the cool wysiwyg
+     * Returns a text-field using the cool WYSIWYG editor
+     * You can use the different toolbar sets defined in /admin/scripts/ckeditor/config.js
      *
      * @param string $strName
      * @param string $strTitle
      * @param string $strContent
+     * @param string $strToolbarset
      * @return string
      */
     public function formWysiwygEditor($strName = "inhalt", $strTitle = "", $strContent = "", $strToolbarset = "standard") {
         $strReturn = "";
-        //Import fckedit js
-        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/fckeditor/fckeditor.js\"></script>\n";
-        //Create the html-input element
-        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_fckedit");
+
+        //create the html-input element
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["content"] = htmlentities($strContent, ENT_COMPAT, "UTF-8");
         $strReturn .=  $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-        //For the Popups, we need the skinwebpath
+        //for the popups, we need the skinwebpath
         $strReturn .= $this->formInputHidden("skinwebpath", _skinwebpath_);
-        //Init the editor
-        $strReturn .= " <script type=\"text/javascript\">\n";
-        $strReturn .= " var sBasePath='"._webpath_."/admin/scripts/fckeditor/' ; \n";
-        $strReturn .= " var objFCKeditor = new FCKeditor( '".$strName."' ) ; \n";
-        //Load the default kajona-config.
-
-        //To load role-based editors, this would be the right place to load a different config
-        $strReturn .= " objFCKeditor.Config[\"CustomConfigurationsPath\"] = \""._webpath_."/admin/scripts/fckeditor/fckedit_kajona_standard.js\" ;\n";
 
         //set the language the user defined for the admin
         $strLanguage = class_session::getInstance()->getAdminLanguage();
         if($strLanguage == "")
-            $strLanguage = "de";
-        $strReturn .= " objFCKeditor.Config[\"AutoDetectLanguage\"] = \"false\" ; \n";
-        $strReturn .= " objFCKeditor.Config[\"DefaultLanguage\"]    = \"".$strLanguage."\" ; \n";
+            $strLanguage = "en";
 
-        $strReturn .= " objFCKeditor.BasePath = sBasePath ; \n";
-        //Set the skin-directory
-        $strReturn .= " objFCKeditor.Config[\"SkinPath\"] = \""._skinwebpath_."/fckeditor/\" ; \n";
-        //Load the defined toolbar
-        $strReturn .= " objFCKeditor.ToolbarSet = \"".$strToolbarset."\" ; \n";
+        //include the settings made by admin skin
+        $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_ckeditor_inits");
+        $strTemplateInit = $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
 
-        //include the settings made by the admin-skins
-        $strTemplateInitID = $this->objTemplate->readTemplate("/elements.tpl", "wysiwyg_fckedit_inits");
-        $strReturn .= $this->objTemplate->fillTemplate(array(), $strTemplateInitID);
-
-        $strReturn .= " objFCKeditor.ReplaceTextarea() ; \n";
-        $strReturn .= " </script>\n";
+        //to add role-based editors, you could load a different toolbar or also a different CKEditor config file
+        //the editor code
+        $strReturn .= " <script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/ckeditor/ckeditor.js\"></script>\n";
+        $strReturn .= " <script type=\"text/javascript\">\n";
+        $strReturn .= "
+            var ckeditorConfig = {
+                customConfig : 'config_kajona_standard.js',
+                toolbar : '".$strToolbarset."',
+                ".$strTemplateInit."
+                language : '".$strLanguage."'
+	        };
+            CKEDITOR.replace('".$strName."', ckeditorConfig);
+        ";
+        $strReturn .= "</script>\n";
 
         return $strReturn;
     }
@@ -1461,9 +1458,9 @@ class class_toolkit_admin extends class_toolkit {
         $intNrOfPages = $objArraySectionIterator->getNrOfPages();
         $intNrOfElements = $objArraySectionIterator->getNumberOfElements();
 
-        
+
         $arrReturn["elements"] = $objArraySectionIterator->getArrayExtended(true);
-        
+
         //read templates
         $strTemplateBodyID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_body");
         $strTemplateForwardID = $this->objTemplate->readTemplate("/elements.tpl", "pageview_link_forward");

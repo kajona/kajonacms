@@ -1277,13 +1277,12 @@ var kajonaSystemtaskHelper =  {
 
 var kajonaUtils =  {
     focusHelper : {
-		focusFCKeditor: false,
 		setBrowserFocus : function(strElementId) {
 			YAHOO.util.Event.onDOMReady(function() {
 				try {
 				    focusElement = YAHOO.util.Dom.get(strElementId);
 				    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
-				    	kajonaUtils.focusHelper.focusFCKeditor = true;
+				    	CKEDITOR.config.startupFocus = true;
 				    } else {
 				        focusElement.focus();
 				    }
@@ -1302,10 +1301,3 @@ var kajonaUtils =  {
         }
     }
 };
-
-//gets called when FCKeditor is ready, check if FCKeditor should be focused
-function FCKeditor_OnComplete(editorInstance) {
-    if (kajonaUtils.focusHelper.focusFCKeditor) {
-    	editorInstance.Focus()
-    };
-}

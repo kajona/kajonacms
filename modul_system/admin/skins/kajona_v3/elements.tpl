@@ -538,19 +538,23 @@ UPDATE IN 3.2: The sections folderview_detail_frame and folderview_detail_frame 
 ---------------------------------------------------------------------------------------------------------
 -- WYSIWYG EDITOR ---------------------------------------------------------------------------------------
 
-NOTE: This section not just defines the layout, it also inits the wysiwyg editor. Change settings with care!
+NOTE: This section not just defines the layout, it also inits the WYSIWYG editor. Change settings with care!
 
-The textarea-field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
-<wysiwyg_fckedit>
-<div><label for="%%name%%">%%title%%</label><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg">%%content%%</textarea></div><br />
-</wysiwyg_fckedit>
+The textarea field to replace by the editor. If the editor can't be loaded, a plain textfield is shown instead
+<wysiwyg_ckeditor>
+<div><label for="%%name%%">%%title%%</label><br /><textarea name="%%name%%" id="%%name%%" class="inputWysiwyg">%%content%%</textarea></div><br />
+</wysiwyg_ckeditor>
 
-A few settings to customize the editor. Up to now, those are:
-Width, Height
-<wysiwyg_fckedit_inits>
-    objFCKeditor.Width = 600;
-    objFCKeditor.Height = 400;
-</wysiwyg_fckedit_inits>
+A few settings to customize the editor. They are added right into the CKEditor configuration.
+Please refer to the CKEditor documentation to see what's possible here
+<wysiwyg_ckeditor_inits>
+    width : 610,
+    height : 250,
+    resize_minWidth : 610,
+    resize_maxWidth : 610,
+    skin : 'office2003,_skinwebpath_/ckeditor/',
+    uiColor : '#9AB8F3',
+</wysiwyg_ckeditor_inits>
 
 ---------------------------------------------------------------------------------------------------------
 -- MODULE NAVIGATION ------------------------------------------------------------------------------------
