@@ -59,5 +59,11 @@ CKEDITOR.editorConfig = function(config) {
     //flipping default enter / shift-enter behaviour. This avoids <p> wrappers by default
     config.enterMode = CKEDITOR.ENTER_BR;
     config.shiftEnterMode = CKEDITOR.ENTER_P;
+    
+    //add URLs to Kajona folderview for selecting pages and images
+    config.filebrowserBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=ckeditor&bit_link=1';
+    config.filebrowserImageBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=list&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1';
+    config.filebrowserWindowWidth = 500;
+    config.filebrowserWindowHeight = 500;
 
 };

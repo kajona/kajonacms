@@ -1299,5 +1299,19 @@ var kajonaUtils =  {
                 objNode.expand();
             }
         }
-    }
+    },
+	
+    /*
+     * called when the user selects an page/folder/file out of a folderview popup
+     */
+    folderviewSelectCallback : function(arrTargetsValues) {
+    	for (var i in arrTargetsValues) {
+	    	if (arrTargetsValues[i][0] == "ckeditor") {
+	    		CKEDITOR.tools.callFunction(2, arrTargetsValues[i][1]);
+	    	} else {
+	    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
+	    	}
+    	}
+	}
+
 };

@@ -562,7 +562,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
                         $strFolder = $this->strFolder;
         	   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
-        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strTargetfield."').value='".$strValue."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onclick=\"window.opener.kajonaUtils.folderviewSelectCallback([['".$strTargetfield."', '".$strValue."']]); self.close();\">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {
@@ -661,14 +661,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		$strDialog = $this->objToolkit->formInputText("fileName", $this->getText("datei_name"));
 
         $strReturn .= "<script type=\"text/javascript\">\n
-                        
+
                         function init_fm_renameFile_dialog(strFilename) {
                             jsDialog_1.setTitle('".$this->getText("datei_umbenennen")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getText("rename")."',
                                                   'javascript:filemanagerRenameFile(\'fileName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \''+strFilename+'\', \'\', \'\' ); jsDialog_1.hide();');
                                                                                        //strInputId,          strRepoId,                     strRepoFolder, strOldName, strSourceModule, strSourceAction
-                                    jsDialog_1.init(); 
+                                    jsDialog_1.init();
                             document.getElementById('fileName').value = strFilename;
 
                             }\n
