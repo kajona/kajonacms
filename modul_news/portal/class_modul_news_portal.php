@@ -159,7 +159,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
         	
                 $arrNews = array();
 				$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
-				$arrNews["news_start_date"] = timeToString($objNews->getIntDateStart(), false);
+				$arrNews["news_start_date"] = dateToString(new class_date($objNews->getIntDateStart()), false);
 				$arrNews["news_id"] = $objNews->getSystemid();
 				$arrNews["news_title"] = $objNews->getStrTitle();
 				$arrNews["news_intro"] = $objNews->getStrIntro();
