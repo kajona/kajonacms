@@ -31,14 +31,14 @@ CKEDITOR.editorConfig = function(config) {
     config.toolbar_standard =
         [
             ['Source','Save','-','Cut','Copy','Paste','PasteText','PasteFromWord','-'],
-            ['Undo','Redo','-','RemoveFormat'],['Maximize'],
+            ['Undo','Redo','-','RemoveFormat'],
             ['Link','Unlink','Anchor'],
             ['Image','Table','HorizontalRule','SpecialChar'],
             '/',
             ['Font','FontSize'],
             ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
             ['NumberedList','BulletedList','-','Outdent','Indent'],
-            ['TextColor','BGColor']
+            ['TextColor','BGColor'],['Maximize']
         ];
     
     //limited toolbar, e.g. used for the downloads and the gallery
