@@ -16,6 +16,8 @@
 class class_modul_navigation_admin extends class_admin implements interface_admin {
     private $strAction;
 
+    private $strPeAddon = "";
+
     /**
      * Constructor
      *
@@ -37,6 +39,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	public function action($strAction = "") {
 	    $strReturn = "";
+
+        if($this->getParam("pe") == "1")
+            $this->strPeAddon = "&pe=1";
+
 		if($strAction == "")
 			$strAction ="list";
 
@@ -87,11 +93,11 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		}
     		if($strAction == "naviPointMoveUp") {
     			$strReturn = $this->actionMovePoint("upwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId()));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().$this->strPeAddon));
     		}
     		if($strAction == "naviPointMoveDown") {
     			$strReturn = $this->actionMovePoint("downwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId()));
+    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().$this->strPeAddon));
     		}
 
 		}
@@ -185,7 +191,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
     			$strPrevID = $this->getPrevId($this->getSystemid());
-    			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID, $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
+    			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
     			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
                 //And loop through the regular points
     			foreach($arrNavigations as $objOneNavigation) {
@@ -194,28 +200,31 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     					$strName = $objOneNavigation->getStrName() . " (".$objOneNavigation->getStrPageI().($objOneNavigation->getStrPageE() != "" ? " ".$objOneNavigation->getStrPageE() : "").") ";
     					$strAction = "";
     					if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNaviPoint", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_bearbeiten"), "icon_pencil.gif"));
+    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNaviPoint", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_bearbeiten"), "icon_pencil.gif"));
     		    		if($this->objRights->rightView($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
+    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
-    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveUp", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_hoch"), "icon_arrowUp.gif"));
+    		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveUp", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_hoch"), "icon_arrowUp.gif"));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
-    					    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveDown", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_runter"), "icon_arrowDown.gif"));
+    					    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveDown", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_runter"), "icon_arrowDown.gif"));
     					if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
-    					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid()));
-    		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
+    					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon));
+    		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()) && $this->strPeAddon == "")
     		    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
-    		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()))
+    		    		if($this->objRights->rightRight($objOneNavigation->getSystemid()) && $this->strPeAddon == "")
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigationp_recht"), getRightsImageAdminName($objOneNavigation->getSystemid())));
 
     		  			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $strName, $strAction, $intI++, "" , $objOneNavigation->getSystemid());
     				}
     	  		}
     	  		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    	  		    $strNaviReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
+    	  		    $strNaviReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
     	  		$strNaviReturn .= $this->objToolkit->dragableListFooter($strListID);
 
-                $strReturn .= $this->getPathNavigation().$this->generateTreeView($strNaviReturn);
+                if($this->strPeAddon != "")
+                    $strReturn .= $this->getPathNavigation().$strNaviReturn;
+                else
+                    $strReturn .= $this->getPathNavigation().$this->generateTreeView($strNaviReturn);
     		}
 		}
 		else

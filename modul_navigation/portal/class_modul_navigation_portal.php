@@ -59,6 +59,18 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         //and save back to the cache
         $this->saveNavigationToCache($strReturn);
 
+        //Add pe code
+        $arrPeConfig = array(
+                                  "pe_module" => "navigation",
+                                  "pe_action_edit" => "list",
+                                  "pe_action_edit_params" => "&systemid=".$this->arrElementData["navigation_id"],
+                                  "pe_action_new" => "",
+                                  "pe_action_new_params" => "",
+                                  "pe_action_delete" => "",
+                                  "pe_action_delete_params" => ""
+                            );
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig, true);
+
 		return $strReturn;
 	}
 
