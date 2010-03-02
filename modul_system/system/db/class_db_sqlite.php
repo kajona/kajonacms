@@ -271,7 +271,7 @@ class class_db_sqlite implements interface_db_driver {
     {
         $arrReturn = array();
         $arrReturn["dbdriver"] = "sqlite-extension";
-        $arrReturn["dbserver"] = "SQLite ".$this->strDbFile;
+        $arrReturn["dbserver"] = "SQLite ".sqlite_libversion();
         $arrReturn["dbclient"] = "";
         $arrReturn["dbconnection"] = "";
         return $arrReturn;
