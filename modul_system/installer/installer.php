@@ -288,7 +288,7 @@ class class_installer {
 		//File-Objekt
 		$objFilesystem = new class_filesystem();
 		//Ladend der Dateien
-		$this->arrInstaller = $objFilesystem->getFilelist("/installer");
+		$this->arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
 
 		foreach($this->arrInstaller as $intKey => $strFile)
 			if(strpos($strFile, ".php") === false || $strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
