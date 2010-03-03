@@ -386,7 +386,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $intWidthNew = 1;
     			}
 
-				$objImage = new class_image(_images_cachepath_, $strText);
+				$objImage = new class_image($strText);
 				//Edit Picture
 				if($objImage->preLoadImage($strImage)) {
 					//resize the image

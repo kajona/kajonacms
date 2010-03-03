@@ -39,7 +39,7 @@ class class_image {
 	private $strCacheAdd;
 	private $strImagename;
 	private $strCachename;
-	private $strType;
+	private $strType = ".jpg";
 	private $strImagePathOriginal;
 
 	private $bitNeedToSave;
@@ -47,15 +47,15 @@ class class_image {
 	/**
 	 * Contructor
 	 *
-	 * @param string $strCachepath Path, where the cached images are saved
-	 * @param string $strCacheAdd Additional string to add
+	 * @param string $strCacheAdd Additional string to add for the caching
 	 */
-	public function __construct($strCachepath = "", $strCacheAdd = "") {
+	public function __construct( $strCacheAdd = "") {
 		$this->arrModul["name"] 		= "class_bild";
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 
-		$this->strCachepath = $strCachepath;
+
+		$this->strCachepath = _images_cachepath_;
 		$this->strCacheAdd = $strCacheAdd;
 		$this->bitNeedToSave = true;
 		$this->bitPreload = false;
@@ -892,7 +892,7 @@ class class_image {
      * @param int $intWidth
      * @return objImage
      */
-    public function createEmptyImage($intWidth, $intHeight) {
+    private function createEmptyImage($intWidth, $intHeight) {
         $objImage = @imagecreatetruecolor($intWidth, $intHeight);
 
         imagealphablending($objImage, false); //crashes font-rendering, so set true before rendering fonts

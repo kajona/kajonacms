@@ -109,6 +109,19 @@ class class_assertions {
         }
     }
 
+    public static function assertNotEqual($value1, $value2, $strCallingMethod) {
+        if($value1 != $value2) {
+            class_testLogger::getInstance()->addLogRow("assert not equal succeeded: ".$strCallingMethod, class_testLogger::$levelInfo);
+            class_assertions::$nrOfSuccesses++;
+            return true;
+        }
+        else {
+            class_testLogger::getInstance()->addLogRow("assert not equal failed: ".$strCallingMethod."\tfound ".$value1." expected to differ ".$value2, class_testLogger::$levelError);
+            class_assertions::$nrOfFailures++;
+            return false;
+        }
+    }
+
     public static function assertTrue($value1, $strCallingMethod) {
         if($value1 === true) {
             class_testLogger::getInstance()->addLogRow("assert true succeeded: ".$strCallingMethod, class_testLogger::$levelInfo);

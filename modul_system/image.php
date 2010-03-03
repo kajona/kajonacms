@@ -84,7 +84,7 @@ class class_flyimage {
             $this->intQuality = 90;
 
         //ok, all needed constants are set up...
-        $this->objImage = new class_image(_images_cachepath_, $this->intQuality);
+        $this->objImage = new class_image($this->intQuality);
 
     }
 
