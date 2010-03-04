@@ -41,7 +41,7 @@ class class_element_absatz extends class_element_admin implements interface_admi
 	public function getEditForm($arrElementData)	{
 
         //$arrElementData["absatz_inhalt"] = uniStrReplace("%%", "\%\%", $arrElementData["absatz_inhalt"]);
-        
+
 		$strReturn = "";
 
 		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
@@ -61,15 +61,12 @@ class class_element_absatz extends class_element_admin implements interface_admi
 	 * @return bool
 	 */
 	public function actionSave($strSystemid) {
-		$strContent = $this->getParam("absatz_inhalt");
-		$strImage = $this->getParam("absatz_bild");
-		//We have to replace the webpath to remain flexible
-		$strContent = str_replace(_webpath_, "_webpath_", $strContent);
-        $strContent = uniStrReplace("%%", "\%\%", $strContent);
-		$strImage = str_replace(_webpath_, "_webpath_", $strImage);
-		//Secure the text
-		//$strContent = htmlToString($strContent, false, false);
-		//And to the database
+
+	    //do some cleanups
+        $strContent = processWysiwygHtmlContent($this->getParam("absatz_inhalt"));
+		$strImage = str_replace(_webpath_, "_webpath_", $this->getParam("absatz_bild"));
+
+		//and save to database
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
 				absatz_titel = '".dbsafeString($this->getParam("absatz_titel"))."',
 				absatz_inhalt = '".dbsafeString($strContent, false)."',

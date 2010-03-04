@@ -560,7 +560,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				//Update the record
 				$objFile = new class_modul_downloads_file($this->getSystemid());
 				$objFile->setName($this->getParam("downloads_name"));
-				$objFile->setDescription($this->getParam("downloads_description"));
+				$objFile->setDescription(processWysiwygHtmlContent($this->getParam("downloads_description")));
 				$objFile->setMaxKb($this->getParam("downloads_max_kb"));
 
 				if(!$objFile->updateObjectToDB())

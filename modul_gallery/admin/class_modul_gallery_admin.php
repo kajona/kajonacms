@@ -435,7 +435,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				//Update the opbject
 				$objImage = new class_modul_gallery_pic($this->getSystemid());
 				$objImage->setStrName($this->getParam("pic_name"));
-				$objImage->setStrDescription($this->getParam("pic_description"));
+				$objImage->setStrDescription(processWysiwygHtmlContent($this->getParam("pic_description")));
 				$objImage->setStrSubtitle($this->getParam("pic_subtitle"));
 				if(!$objImage->updateObjectToDb())
 				    throw new class_exception($this->getText("bild_speichern_fehler"), class_exception::$level_ERROR);

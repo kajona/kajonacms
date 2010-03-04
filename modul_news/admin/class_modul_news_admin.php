@@ -246,7 +246,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                                .($objOneNews->getIntDateEnd() != 0 ?" E: ".dateToString(new class_date($objOneNews->getIntDateEnd()), false) : "" )
                                .($objOneNews->getIntDateSpecial() != 0 ? " A: ".dateToString(new class_date($objOneNews->getIntDateSpecial()), false) : "" );
 
-                    
+
                     $objLockmanager = $objOneNews->getLockManager();
                     if(!$objLockmanager->isAccessibleForCurrentUser()) {
                         if($objLockmanager->isUnlockableForCurrentUser() ) {
@@ -446,7 +446,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $objNews = new class_modul_news_news($this->getSystemid());
 
                 $objNews->getLockManager()->lockRecord();
-                
+
 			    $arrToolbarEntries = array();
 	            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
 	            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
@@ -516,7 +516,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->setIntDateStart($objStartDate->getLongTimestamp());
                 $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
                 $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
-                
+
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
                 if(isset($arrParams["cat"]) && count($arrParams["cat"]) > 0) {
@@ -551,7 +551,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
                 $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
 
-				
+
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
                 if(count($arrParams["cat"]) > 0) {
@@ -658,7 +658,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			$objNews = new class_modul_news_news($this->getSystemid());
 			$objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
 			$objNews->setStrIntro($this->getParam("news_intro"));
-			$objNews->setStrNewstext($this->getParam("news_text"));
+			$objNews->setStrNewstext(processWysiwygHtmlContent($this->getParam("news_text")));
 			if(!$objNews->updateObjectToDb())
 				throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 

@@ -764,6 +764,44 @@ function htmlStripTags ($strHtml, $strAllowTags = "") {
 }
 
 /**
+ * This function does a few cleanups and optimizations on HTML content generated via the WYSIWYG editor.
+ * Should be used everytime before HTML content generated via the WYSIWYG editor is going to be saved.
+ * E.g. it replaces absolute URLs with dynamic _webpath_ and synchronizes the width/height style-values set
+ * by WYSIWYG editor for on-the-fly images (starting with image.php?image=...)
+ *
+ * For example:
+ *      <img src="http://www.mydomain.com/image.php?image=/portal/pics/myimage.jpg&maxHeight=200" style="width: 100px; height: 100px" />
+ * becomes
+ *      <img src="_webpath_/image.php?image=/portal/pics/myimage.jpg&maxHeight=100" style="width: 100px; height: 100px" />
+ *
+ * @param string $strHtmlContent
+ * @return string
+ */
+function processWysiwygHtmlContent($strHtmlContent) {
+    //replace the webpath to remain flexible
+    $strHtmlContent = uniStrReplace(_webpath_, "_webpath_", $strHtmlContent);
+
+    $strHtmlContent = uniStrReplace("%%", "\%\%", $strHtmlContent);
+
+    //synchronize the width/height style-values set via WYSIWYG editor for on-the-fly images
+    $arrImages = "";
+    preg_match_all('!image.php\?image=([/\-._a-zA-Z0-9]*)([&;=a-zA-Z0-9]*)\" ([\"\'&;:\ =a-zA-Z0-9]*)width: ([0-9]*)px; height: ([0-9]*)px;!', $strHtmlContent, $arrImages);
+    for($i = 0; $i < sizeof($arrImages[0]); ++$i) {
+        $strSearch = $arrImages[0][$i];
+        $strNewWidth = $arrImages[4][$i];
+        $strNewHeight = $arrImages[5][$i];
+
+        //only add one parameter to optimize unproportional scaling
+        $strScalingParams = $strNewWidth >= $strNewHeight ? "&maxWidth=".$strNewWidth : "&maxHeight=".$strNewHeight;
+
+        $strReplace = "image.php?image=".$arrImages[1][$i].$strScalingParams."\" ".$arrImages[3][$i]."width: ".$strNewWidth."px; height: ".$strNewHeight."px;";
+        $strHtmlContent = uniStrReplace($strSearch, $strReplace, $strHtmlContent);
+    }
+
+    return $strHtmlContent;
+}
+
+/**
  * @deprecated Doesn't make that much sense?!
  * @todo please check if needed, maybe remove method
  * Encodes an url to be more safe but being less strict than urlencode()
@@ -935,22 +973,6 @@ function checkText($strText, $intMin = 1, $intMax = 0) {
 			$bitReturn = true;
 	}
 	return $bitReturn;
-}
-
-/**
- * Returns a value for IE or for others
- *
- * @deprecated will be removed in 3.3 or 3.2.1
- * @param string $strIe
- * @param string $strOther
- * @return string
- */
-function IEOther($strIe, $strOther) {
-	$strBrowser = getServer("HTTP_USER_AGENT");
-	if(strpos($strBrowser, "IE") !== false)
-		return $strIe;
-	else
-		return $strOther;
 }
 
 

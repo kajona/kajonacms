@@ -358,7 +358,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
         $strReturn = "";
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_guestbook_post($this->getSystemid());
-            $objPost->setGuestbookPostText(uniStrReplace(_webpath_, "", $this->getParam("post_text")));
+            $objPost->setGuestbookPostText(processWysiwygHtmlContent($this->getParam("post_text")));
             if(!$objPost->updateObjectToDb())
                 throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
         }

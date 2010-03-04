@@ -304,7 +304,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
         else if($this->getParam("mode") == "edit" && $this->objRights->rightEdit($this->getSystemid())) {
             $objCat = new class_modul_faqs_category($this->getSystemid());
         }
-        
+
         if($objCat != null) {
             $objCat->setStrTitle($this->getParam("faqs_cat_title"));
             if(!$objCat->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])))
@@ -313,7 +313,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
         else
             $strReturn .= $this->getText("fehler_recht");
 
-            
+
 		return $strReturn;
 	}
 
@@ -435,7 +435,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
         if($objFaq != null) {
 
             $objFaq->setStrQuestion($this->getParam("faqs_question"));
-            $objFaq->setStrAnswer($this->getParam("faqs_answer"));
+            $objFaq->setStrAnswer(processWysiwygHtmlContent($this->getParam("faqs_answer")));
 
             $arrParams = $this->getAllParams();
             $arrCats = array();
@@ -450,7 +450,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
         }
         else
             $strReturn .= $this->getText("fehler_recht");
-                
+
 		return $strReturn;
 	}
 
