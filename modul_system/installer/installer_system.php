@@ -387,6 +387,10 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.2: filemanager hidden repos
         $this->registerConstant("_filemanager_show_foreign_", "false", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
 
+        //3.3: filemanager repo-ids for an image- and a file-browser - values set lateron via the filemanager samplecontent installer
+        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
 		//BUT: We have to modify the right-record of the system
@@ -1046,6 +1050,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $objFilesystem = new class_filesystem();
         if(!$objFilesystem->folderDeleteRecursive("/admin/scripts/fckeditor"))
            $strReturn .= "<b>Error deleting the folder \n /admin/scripts/fckeditor,\nplease delete manually</b>\n";
+
+        $strReturn .= "Registering filemanager defaul repo-id-settings...\n";
+        $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+        $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.94");

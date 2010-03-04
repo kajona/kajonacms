@@ -7,12 +7,14 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 213
+//Kajona Language Editor Core Build 229
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
 
 //editable entries
+$lang["_filemanager_default_filesrepoid_"] = "Default file-repository:";
+$lang["_filemanager_default_imagesrepoid_"] = "Default images-respository:";
 $lang["_filemanager_foldersize_"]        = "Calculate size:";
 $lang["_filemanager_foldersize_hint"]    = "Activates or deactivates the recursive calculation of the size of a folder in the filemanager. Deep folder structures can lead to performance problems.";
 $lang["_filemanager_show_foreign_"]      = "Show hidden repositories:";

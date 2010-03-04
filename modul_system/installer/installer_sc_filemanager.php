@@ -42,6 +42,11 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $objRepo->setStrViewFilter(".jpg,.png,.gif,.jpeg");
             $objRepo->updateObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
+
+            $strReturn .= "Setting the repository as the default images repository\n";
+            $objSetting = class_modul_system_setting::getConfigByName("_filemanager_default_imagesrepoid_");
+            $objSetting->setStrValue($objRepo->getSystemid());
+            $objSetting->updateObjectToDb();
             
         $strReturn .= "Creating file upload folder\n";
             if(!is_dir(_portalpath_."/downloads/public"))
@@ -60,6 +65,13 @@ class class_installer_sc_filemanager implements interface_sc_installer  {
             $objRepo->setStrViewFilter(".zip,.pdf,.txt");
             $objRepo->updateObjectToDb();
             $strReturn .= "ID of new repo: ".$objRepo->getSystemid()."\n";
+
+            $strReturn .= "Setting the repository as the default files repository\n";
+            $objSetting = class_modul_system_setting::getConfigByName("_filemanager_default_filesrepoid_");
+            $objSetting->setStrValue($objRepo->getSystemid());
+            $objSetting->updateObjectToDb();
+
+
 		return $strReturn;
     }
     

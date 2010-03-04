@@ -7,9 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 213
+//Kajona Language Editor Core Build 229
 
 //editable entries
+$lang["_filemanager_default_filesrepoid_"] = "";
+$lang["_filemanager_default_imagesrepoid_"] = "";
 $lang["_filemanager_foldersize_"]        = "Вычислить размер:";
 $lang["_filemanager_foldersize_hint"]    = "Активирует и деактивирует рекурсивное подсчитывание размера папки в файл менеджере. Глубокие структуры папок могут привести к ошибкам исполнения действий.";
 $lang["_filemanager_show_foreign_"]      = "Показать скрытые базы:";
