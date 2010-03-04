@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.93";
+		$arrModul["version"] 			= "3.2.94";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -534,6 +534,11 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_3292_3293();
         }
 
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.93") {
+            $strReturn .= $this->update_3293_3294();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -782,13 +787,13 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "An error occured!\n";
 
         $strReturn .= "Changing type of user_date column to long ...\n";
-        
+
         $strReturn .= "Set default values...\n";
         $strSql = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."user")."
                       SET user_date = NULL where user_date = ''";
-                      
+
         if(!$this->objDB->_query($strSql))
-            $strReturn .= "An error occured!\n";              
+            $strReturn .= "An error occured!\n";
 
         $strReturn = "Altering user-table...\n";
         $strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
@@ -823,7 +828,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.2.0.9");
         return $strReturn;
     }
-    
+
 
     private function update_3209_321() {
         $strReturn = "";
@@ -947,14 +952,14 @@ class class_installer_system extends class_installer_base implements interface_i
             return $strReturn;
         }
 
-        
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.92");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.2.92");
-         
-         
+
+
         return $strReturn;
     }
 
@@ -977,7 +982,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "... start dates...\n";
         $strQuery = "SELECT system_date_start, system_date_id
                        FROM ".$this->objDB->encloseTableName(_dbprefix_."system_date")."
-                      WHERE system_date_start IS NOT NULL 
+                      WHERE system_date_start IS NOT NULL
                         AND system_date_start != 0 ";
         $arrEntries = $this->objDB->getArray($strQuery);
         foreach($arrEntries as $arrSingleEntry) {
@@ -1030,6 +1035,22 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.2.93");
 
 
+        return $strReturn;
+    }
+
+    private function update_3293_3294() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.93 to 3.2.94...\n";
+
+        $strReturn .= "Deleting old FCKeditor files since it's replaced by CKEditor...\n";
+        $objFilesystem = new class_filesystem();
+        if(!$objFilesystem->folderDeleteRecursive("/admin/scripts/fckeditor"))
+           $strReturn .= "<b>Error deleting the folder \n /admin/scripts/fckeditor,\nplease delete manually</b>\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.94");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.94");
         return $strReturn;
     }
 }
