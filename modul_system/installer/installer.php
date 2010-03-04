@@ -69,12 +69,12 @@ class class_installer {
 		  //init correct text-file handling as in admins
 		  $this->objTexte->setStrTextLanguage($this->objSession->getAdminLanguage(true));
         }
-        
+
 	}
 
 
 	/**
-	 * Action-Block to control the behaviour
+	 * Action block to control the behaviour
 	 *
 	 */
 	public function action() {
@@ -285,14 +285,14 @@ class class_installer {
 	 *
 	 */
 	public function loadInstaller() {
-		//File-Objekt
 		$objFilesystem = new class_filesystem();
-		//Ladend der Dateien
+		//load all installer files
 		$this->arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
 
-		foreach($this->arrInstaller as $intKey => $strFile)
-			if(strpos($strFile, ".php") === false || $strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
+		foreach($this->arrInstaller as $intKey => $strFile) {
+			if($strFile == "installer.php" || $strFile == "class_installer_base.php" || $strFile == "interface_installer.php" || $strFile == "index.php")
 				unset($this->arrInstaller[$intKey]);
+		}
 
 		asort($this->arrInstaller);
 	}
@@ -313,7 +313,7 @@ class class_installer {
 		    $objInstaller = new $strClass();
 	        $strInstallLog .= $objInstaller->doModuleUpdate();
 		}
-        
+
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
@@ -325,15 +325,15 @@ class class_installer {
                 $strInstallLog .= $objInstaller->doModuleInstall()."";
             }
         }
-        
-        
+
+
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_modules_found");
 
         $strRows = "";
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row", true);
         $strTemplateIDInstallable = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_row_installable", true);
-        
+
 		//Loading each installer
 		foreach($this->arrInstaller as $strInstaller) {
 			include_once(_realpath_."/installer/".$strInstaller);
@@ -347,20 +347,20 @@ class class_installer {
                $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
                $arrTemplate["module_version"] = $objInstaller->getVersion();
                $arrTemplate["module_hint"] = $objInstaller->getModuleInstallInfo();
-               
+
                if ($objInstaller->isModuleInstallable()) {
 					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
                } else {
 					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
                }
-               
+
             }
 		}
-        
+
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_modules_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
-        
+
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=loginData");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=postInstall");
@@ -396,8 +396,8 @@ class class_installer {
                 $strInstallLog .= $objInstaller->doPostInstall()."";
             }
         }
-        
-        
+
+
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_elements_found");
 
@@ -417,20 +417,20 @@ class class_installer {
                $arrTemplate["module_nameShort"] = $objInstaller->getModuleNameShort();
                $arrTemplate["module_version"] = $objInstaller->getVersion();
                $arrTemplate["module_hint"] = $objInstaller->getModulePostInstallInfo();
-               
+
 			   if ($objInstaller->isModulePostInstallable()) {
 					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateIDInstallable);
                } else {
 					$strRows .= $this->objTemplates->fillTemplate($arrTemplate, $strTemplateID);
                }
-               
+
             }
 		}
-        
+
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_elements_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
-        
+
 		$this->strOutput .= $strReturn;
 		$this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php?step=install");
 		$this->strForwardLink = $this->getForwardLink(_webpath_."/installer/installer.php?step=samplecontent");
@@ -453,7 +453,7 @@ class class_installer {
 		    $objInstaller = new $strClass();
 	        $strInstallLog .= $objInstaller->doModuleUpdate();
 		}
-        
+
         //module-installs to loop?
         if(isset($_POST["moduleInstallBox"]) && is_array($_POST["moduleInstallBox"])) {
             $arrModulesToInstall = $_POST["moduleInstallBox"];
@@ -465,7 +465,7 @@ class class_installer {
                 $strInstallLog .= $objInstaller->doModuleInstall()."";
             }
         }
-        
+
         $this->strLogfile = $strInstallLog;
 		$strReturn .= $this->getText("installer_samplecontent");
 
@@ -498,7 +498,7 @@ class class_installer {
 
 		if(!$bitInstallerFound)
 		    header("Location: "._webpath_."/installer/installer.php?step=finish");
-            
+
         //wrap in form
         $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_samplecontent_form", true);
         $strReturn .= $this->objTemplates->fillTemplate(array("module_rows" => $strRows, "button_install" => $this->getText("installer_install")), $strTemplateID);
@@ -540,13 +540,13 @@ class class_installer {
                                                                         "systemlog" => $this->getText("installer_systemlog")
                                                                   ), $strTemplateID);
 	    }
-	    
-	    
+
+
 	    //build the progress-entries
 	    $strCurrentCommand = (isset($_GET["step"]) ? $_GET["step"] : "" );
 	    if($strCurrentCommand == "")
 	       $strCurrentCommand = "phpsettings";
-	       
+
 	    $arrProgessEntries = array(
 	       "phpsettings" => $this->getText("installer_step_phpsettings"),
 	       "config" => $this->getText("installer_step_dbsettings"),
@@ -556,7 +556,7 @@ class class_installer {
 	       "samplecontent" => $this->getText("installer_step_samplecontent"),
 	       "finish" => $this->getText("installer_step_finish"),
 	    );
-	    
+
 	    $strProgess = "";
 	    $strTemplateEntryTodoID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry", true);
 	    $strTemplateEntryCurrentID = $this->objTemplates->readTemplate("installer/installer.tpl", "installer_progress_entry_current", true);
@@ -573,7 +573,7 @@ class class_installer {
 	    	    $strTemplateEntryID = $strTemplateEntryTodoID;
 	    	} else
 	    	    $strProgess .= $this->objTemplates->fillTemplate($arrTemplateEntry, $strTemplateEntryID, true);
-     
+
 	    }
         $arrTemplate = array();
 	    $arrTemplate["installer_progress"] = $strProgess;
