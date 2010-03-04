@@ -33,12 +33,12 @@ CKEDITOR.editorConfig = function(config) {
             ['Source','Save','-','Cut','Copy','Paste','PasteText','PasteFromWord','-'],
             ['Undo','Redo','-','RemoveFormat'],
             ['Link','Unlink','Anchor'],
-            ['Image','Table','HorizontalRule','SpecialChar'],
+            ['Image','Table','HorizontalRule','SpecialChar'],['Maximize'],
             '/',
             ['Font','FontSize'],
             ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
             ['NumberedList','BulletedList','-','Outdent','Indent'],
-            ['TextColor','BGColor'],['Maximize']
+            ['TextColor','BGColor']
         ];
     
     //limited toolbar, e.g. used for the downloads and the gallery
@@ -59,13 +59,5 @@ CKEDITOR.editorConfig = function(config) {
     //flipping default enter / shift-enter behaviour. This avoids <p> wrappers by default
     config.enterMode = CKEDITOR.ENTER_BR;
     config.shiftEnterMode = CKEDITOR.ENTER_P;
-    
-    //add URLs to Kajona folderview for selecting pages and images
-    config.filebrowserBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=ckeditor&bit_link=1';
-    config.filebrowserImageBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=list&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1';
-    config.filebrowserWindowWidth = '400';
-    config.filebrowserWindowHeight = '500';
-    config.filebrowserImageWindowWidth = '400';
-    config.filebrowserImageWindowWindowHeight = '500';
 
 };

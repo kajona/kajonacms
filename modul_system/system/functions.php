@@ -326,14 +326,14 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
  * @param string $strText
  * @param string $strAlt
  * @param string $strImage
- * @param int $intHeight
  * @param int $intWidth
+ * @param int $intHeight
  * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
  * @return string
  */
-function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intHeight = "500", $intWidth = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
     $strLink = "";
 	//if($strParams != "")
 	//	$strParams = str_replace("&", "&amp;", $strParams);
@@ -678,11 +678,11 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
  * @param string $strParams
  * @param string $strSystemid
  * @param string $strTitle
- * @param int $intHeight
  * @param int $intWidth
+ * @param int $intHeight
  * @return string
  */
-function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intHeight = "500", $intWidth = "500") {
+function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = "", $strSystemid = "", $strTitle = "", $intWidth = "500", $intHeight = "500") {
 
     $strLink = getLinkPortalHref($strPageI, $strPageE, $strAction, $strParams, $strSystemid);
 

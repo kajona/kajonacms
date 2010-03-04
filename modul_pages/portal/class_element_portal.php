@@ -114,16 +114,16 @@ class class_element_portal extends class_portal {
         if(_pages_portaleditor_ == "true" && class_carrier::getInstance()->getObjRights()->rightEdit($strSystemid) && class_carrier::getInstance()->getObjSession()->isAdmin()) {
 
             if(class_carrier::getInstance()->getObjSession()->getSession("pe_disable") != "true" ) {
-            	
+
             	//switch the text-language temporary
             	$strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
-                
+
                 //fetch the language to set the correct admin-lang
                 $objLanguages = new class_modul_languages_language();
                 $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
-                
-            	
+
+
                 $strModule = "pages_content";
                 $strAction = "editElement";
                 //param-inits ---------------------------------------
@@ -139,12 +139,12 @@ class class_element_portal extends class_portal {
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     //Load element-data
-                    $strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "500", "650", "", false, true);
+                    $strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
-                        $strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -156,31 +156,31 @@ class class_element_portal extends class_portal {
                     //Load element-data
                     $objElement = new class_modul_pages_pageelement($strSystemid);
                     if($objElement->getIntRepeat() == 1) {
-                        $strNewLink = getLinkAdminPopup("pages_content", "newElement", "&placeholder=".$objElement->getStrPlaceholder()."&element=".$objElement->getStrElement()."&systemid=".$objElement->getPrevId().$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strNewLink = getLinkAdminPopup("pages_content", "newElement", "&placeholder=".$objElement->getStrPlaceholder()."&element=".$objElement->getStrElement()."&systemid=".$objElement->getPrevId().$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
-                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
                 //---------------------------------------------------
                 //link to copy an element to the same or another placeholder
                 $strCopyLink = "";
-                //standard: pages_content. 
+                //standard: pages_content.
                 if($strModule == "pages_content") {
                     //Load element-data
                     $objElement = new class_modul_pages_pageelement($strSystemid);
                     if($objElement->getIntRepeat() == 1) {
-                        $strNewLink = getLinkAdminPopup("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strNewLink = getLinkAdminPopup("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
-                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -189,12 +189,12 @@ class class_element_portal extends class_portal {
                 $strDeleteLink = "";
                 //standard: pages_content.
                 if($strModule == "pages_content") {
-                    $strDeleteLink = getLinkAdminPopup("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "500", "650", "", false, true);
+                    $strDeleteLink = getLinkAdminPopup("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "680", "500", "", false, true);
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
-                        $strDeleteLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_delete_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strDeleteLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_delete_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -205,12 +205,12 @@ class class_element_portal extends class_portal {
                 if($strModule == "pages_content") {
                     $objElement = new class_modul_pages_pageelement($strSystemid);
                     if($objElement->getIntRepeat() == 1)
-                        $strShiftUp = getLinkAdminPopup("pages_content", "elementSortUp", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strShiftUp = getLinkAdminPopup("pages_content", "elementSortUp", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "680", "500", "", false, true);
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_shiftUp"]) && $arrConfig["pe_action_shiftUp"] != "") {
-                        $strShiftUp = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftUp"], $arrConfig["pe_action_shiftUp_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strShiftUp = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftUp"], $arrConfig["pe_action_shiftUp_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -221,12 +221,12 @@ class class_element_portal extends class_portal {
                 if($strModule == "pages_content") {
                     $objElement = new class_modul_pages_pageelement($strSystemid);
                     if($objElement->getIntRepeat() == 1)
-                        $strShiftDown = getLinkAdminPopup("pages_content", "elementSortDown", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strShiftDown = getLinkAdminPopup("pages_content", "elementSortDown", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "680", "500", "", false, true);
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_shiftDown"]) && $arrConfig["pe_action_shiftDown"] != "") {
-                        $strShiftDown = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftDown"], $arrConfig["pe_action_shiftDown_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "500", "650", "", false, true);
+                        $strShiftDown = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftDown"], $arrConfig["pe_action_shiftDown_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -237,7 +237,7 @@ class class_element_portal extends class_portal {
                     $strReturn .= "<br />";
                 }
                 $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strNewLink, $strDeleteLink, $strShiftUp, $strShiftDown), $strContent);
-                
+
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
             }
@@ -272,14 +272,14 @@ class class_element_portal extends class_portal {
                                        "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement,
                                         class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonContent(),
                                         class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"),
-                                        "", "500", "650", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
-        
+                                        "", "680", "500", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
+
         $strElement = getLinkAdminPopup("pages_content",
                                        "newElement",
                                        "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement,
                                         $strElement,
                                         class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"),
-                                        "", "500", "650", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
+                                        "", "680", "500", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
 
         $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strElement, $strReturn);
 
@@ -297,7 +297,7 @@ class class_element_portal extends class_portal {
 	protected function loadData() {
 	    return "Element needs to overwrite loadData()!";
 	}
-	
+
 	/**
 	 * Generates an anchor tag enabling navigation-points to jump to specific page-elements.
 	 * can be overwritten by subclasses

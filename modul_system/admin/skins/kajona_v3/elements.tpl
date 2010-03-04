@@ -548,12 +548,16 @@ The textarea field to replace by the editor. If the editor can't be loaded, a pl
 A few settings to customize the editor. They are added right into the CKEditor configuration.
 Please refer to the CKEditor documentation to see what's possible here
 <wysiwyg_ckeditor_inits>
-    width : 610,
+    width : 640,
     height : 250,
-    resize_minWidth : 610,
-    resize_maxWidth : 610,
+    resize_minWidth : 640,
+    resize_maxWidth : 640,
     skin : 'office2003,_skinwebpath_/ckeditor/',
     uiColor : '#9AB8F3',
+    filebrowserWindowWidth : 400,
+    filebrowserWindowHeight : 500,
+    filebrowserImageWindowWidth : 400,
+    filebrowserImageWindowWindowHeight : 500,
 </wysiwyg_ckeditor_inits>
 
 ---------------------------------------------------------------------------------------------------------
