@@ -25,6 +25,21 @@
  * 		-> In this case, the image-object is created the time it is being worked on, before the pointer $this->objImage is null.
  * 		   Before creating the image-object, $this->bitPreload remains false, afterwards it is set to true
  *
+ * A few additional words related to caching and the constructor-param:
+ * If you only want to resize the image you don't have to care, everything is handled within the class itself.
+ * But, as soon as you'll want to perform different or additional operations, e.g. resizing and cutting, overlaying
+ * or embedding text, you have to "tell" the class what operations will come.
+ * This can be done by using the constructor-param $strCacheAdd.
+ * Example:
+ * You want to resize an image an place a text at a certain position within the image.
+ * The resizing & resize-caching itself is handled by the class, you don't have to care.
+ * BUT: if you don't specify additional caching params the class, when it comes to resizing, the class won't
+ * know that there'll be additional operations and creates the cachename based on the resize-params, only - what
+ * will lead to a wrong result.
+ * So make sure to pass the later operations as an additional cache param when creating an instance of class_image:
+ * $objImage = new class_image($strInlayText.$intTextXPos.$intTextYPos).
+ * This guarantees a valid cachename based on both operations, the resizing and the text-overlay.
+ *
  * @package modul_system
  */
 class class_image {
@@ -200,9 +215,11 @@ class class_image {
             if($strTarget != "")
                 $strTarget = removeDirectoryTraversals($strTarget);
 
-			//If cache enabled, save with cachename
-			if($bitCache && $this->strCachename != "")
-				$strTarget = $this->strCachepath.$this->strCachename;
+            if($bitCache){
+                $this->generateCachename();
+                $strTarget = $this->strCachepath.$this->strCachename;
+            }
+
 			//get file type
 			if($strTarget != "")
 			    $strType = uniSubstr($strTarget, uniStrrpos($strTarget, "."));
@@ -917,6 +934,8 @@ class class_image {
 		$intFilesize = @filesize(_realpath_.$this->strImagePathOriginal."/".$this->strImagename);
 
 		$strReturn = md5($this->strImagePathOriginal.$this->strImagename.$intHeight.$intWidth.$this->strCacheAdd.$intFilesize).$this->strType;
+
+        $this->strCachename = $strReturn;
 
 		return $strReturn;
 	}

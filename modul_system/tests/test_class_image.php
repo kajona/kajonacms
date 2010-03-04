@@ -30,7 +30,7 @@ class class_test_class_image implements interface_testable {
         class_assertions::assertNotEqual($strResizeCacheName1 , "", __FILE__." getCachenameAfterResize");
 
         echo "\tcachename: ".$strResizeCacheName1."\n";
-        //echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName1."\"/>";
+        echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName1."\"/>";
 
         echo "\treplay test...\n";
         echo "\timage: ".$strImage."\n";
@@ -85,6 +85,18 @@ class class_test_class_image implements interface_testable {
         echo "\tcachename: ".$strResizeCacheName3."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName4."\"/>";
 
+        echo "\ttest image overlay.\n";
+
+        $objImage = new class_image("overlay".$strResizeCacheName4);
+        $objImage->preLoadImage($strImage);
+        $objImage->resizeAndCropImage(300, 300, 300, 300);
+
+        $objImage->overlayImage(_images_cachepath_.$strResizeCacheName4, 10, 10, true);
+        $objImage->saveImage("", true);
+        $strResizeCacheName5 = $objImage->getCachename();
+
+        echo "\tcachename: ".$strResizeCacheName5."\n";
+        echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName5."\"/>";
 
 
 
