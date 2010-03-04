@@ -259,28 +259,27 @@ h2 {
 }
 
 .inputText, .inputTextShort, .inputDate {
-    background-image: url(../pics/kajona/forms_input_back.gif);
+    background-image: url(../pics/kajona/forms_input_back.png);
     background-repeat: repeat-x;
-    padding: 0;
+    padding: 2px 0 3px 4px;
     margin: 0 3px 0 0;
     display: block;
     float: left;
-    width: 180px;
-    height: 16px;
+    width: 176px;
     border: 1px solid #c2c2c2;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;
     color: #737373;
 }
 
-.inputTextarea {
-    background-image: url(../pics/kajona/forms_input_back.gif);
+.inputTextarea, .inputTextareaLarge {
+    background-image: url(../pics/kajona/forms_input_back.png);
     background-repeat: repeat-x;
-    padding: 0;
+    padding: 1px 0 0 4px;
     margin: 0 3px 0 0;
     display: block;
     float: left;
-    width: 180px;
+    width: 176px;
     height: 50px;
     border: 1px solid #c2c2c2;
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -289,18 +288,8 @@ h2 {
 }
 
 .inputTextareaLarge {
-    background-image: url(../pics/kajona/forms_input_back.gif);
-    background-repeat: repeat-x;
-    padding: 0;
-    margin: 0 3px 0 0;
-    display: block;
-    float: left;
     width: 300px;
-    height:150px;
-    border: 1px solid #c2c2c2;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    color: #737373;
+    height: 150px;
 }
 
 .inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
@@ -308,14 +297,14 @@ h2 {
 }
 
 .button, .buttonShort {
-    background-image: url(../pics/kajona/forms_button_back_31.gif);
+    background-image: url(../pics/kajona/forms_button_back_31.png);
     background-repeat: repeat-x;
-    padding: 0 0 3px 15px;
+    background-position: left center;
+    padding: 2px 0 3px 15px;
     margin: 8px 0 0 0;
     display: block;
     float: left;
     width: 182px;
-    height: 18px;
     border: 1px solid #c2c2c2;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 11px;

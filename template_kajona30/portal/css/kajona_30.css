@@ -7,8 +7,6 @@
 *	$Id$									                *
 ********************************************************************************************************/
 
-
-
 /*
 	NOTE:------------------------------------------------------------------------------------------------
 	  |   Use _webpath_ as constant containing the current webpath, see below
@@ -25,7 +23,6 @@
 	  |	  ?>
 	  \--------------------------------------------------------------------------------------------------
 */
-
 
 
 /* C A L E N D A R  O V E R L A Y */
@@ -334,7 +331,7 @@ h3 {
 }
 
 .inputText, .inputTextShort, .inputDate {
-	background-image: url('../pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.png');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -357,7 +354,7 @@ h3 {
 }
 
 .inputTextarea {
-	background-image: url('../pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.png');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -372,7 +369,7 @@ h3 {
 }
 
 .inputTextareaLarge {
-	background-image: url('../pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.png');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -387,7 +384,7 @@ h3 {
 }
 
 .inputDropdown {
-	background-image: url('../pics/kajona/forms_input_back.gif');
+	background-image: url('../pics/kajona/forms_input_back.png');
 	background-repeat: repeat-x;
 	padding: 0;
 	margin: 0 3px 0 0;
@@ -406,7 +403,7 @@ h3 {
 }
 
 .button, .buttonShort {
-	background-image: url('../pics/kajona/forms_button_back.gif');
+	background-image: url('../pics/kajona/forms_button_back.png');
 	background-repeat: repeat-x;
 	padding: 0 0 3px 15px;
 	margin: 8px 0 0 0;

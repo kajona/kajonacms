@@ -801,12 +801,11 @@ form br {
 .inputText, .inputTextShort, .inputDate {
 	background-image: url(forms_input_back.png);
 	background-repeat: repeat-x;
-	padding: 2px 0 0 4px;
+	padding: 2px 0 3px 4px;
 	margin: 0 3px 0 0;
 	display: block;
 	float: left;
 	width: 280px;
-	height: 16px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -822,11 +821,11 @@ form br {
 }
 
 .inputDate {
-	width: 30px;
+	width: 34px;
 }
 
 * html .inputDate {
-	width: 35px;
+	width: 37px;
 }
 
 .inputTextarea {
@@ -852,11 +851,11 @@ form br {
 	background-image: url(forms_input_back.png);
 	background-repeat: repeat-x;
 	padding: 1px 0 0 0;
+	padding: 2px 2px 1px 2px;
 	margin: 0 3px 0 0;
 	display: block;
 	float: left;
 	width: 286px;
-	height: 18px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -877,12 +876,11 @@ form br {
 	background-image: url(forms_button_back.png);
 	background-repeat: repeat-x;
 	background-position: left center;
-	padding: 1px 0 3px 15px;
+	padding: 2px 0 3px 15px;
 	margin: 8px 0 0 0;
 	display: block;
 	float: left;
 	width: 156px;
-	height: 20px;
 	border: 1px solid #c2c2c2;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
@@ -901,6 +899,10 @@ a.inputSubmit, a.inputSubmitShort {
 
 * html .inputSubmit {
 	width: 150px;
+}
+
+*+html .inputSubmit {
+    padding-left: 17px;
 }
 
 .inputSubmitShort {
