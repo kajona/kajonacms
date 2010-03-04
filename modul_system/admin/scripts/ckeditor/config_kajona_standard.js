@@ -63,7 +63,9 @@ CKEDITOR.editorConfig = function(config) {
     //add URLs to Kajona folderview for selecting pages and images
     config.filebrowserBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=pagesFolderBrowser&pages=1&form_element=ckeditor&bit_link=1';
     config.filebrowserImageBrowseUrl = KAJONA_WEBPATH+'/index.php?admin=1&module=folderview&action=list&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1';
-    config.filebrowserWindowWidth = 500;
-    config.filebrowserWindowHeight = 500;
+    config.filebrowserWindowWidth = '400';
+    config.filebrowserWindowHeight = '500';
+    config.filebrowserImageWindowWidth = '400';
+    config.filebrowserImageWindowWindowHeight = '500';
 
 };
