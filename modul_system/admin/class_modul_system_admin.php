@@ -817,8 +817,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		case "sqlite":
 			foreach($arrTables as $arrTable) {
 				$intNumber++;
-				$intSizeData += $arrTable["Data_length"];
-				$intSizeIndex += $arrTable["Index_length"];
+				//$intSizeData += $arrTable["Data_length"];
+				//$intSizeIndex += $arrTable["Index_length"];
 			}
 			$arrInfo = $this->objDB->getDbInfo();
 			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
