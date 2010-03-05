@@ -561,12 +561,19 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
         				$strActions = "";
 
                         $strFolder = $this->strFolder;
-        	   			$strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
+
+                        //add image.php if it's an image and file will be passed to CKEditor
+                        //further processing is done in processWysiwygHtmlContent() when saving the content edited via CKEditor
+                        if ($bitImage && $strTargetfield == "ckeditor") {
+        	   			     $strValue = _webpath_."/image.php?image=".$strFolder."/".$arrOneFile["filename"];
+                        } else {
+                            $strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
+                        }
         	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onclick=\"window.opener.kajonaUtils.folderviewSelectCallback([['".$strTargetfield."', '".$strValue."']]); self.close();\">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {
-			   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $arrOneFile["filepath"]))."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
+			   			    $strImage = "<div class=\'loadingContainer\'><img src=\\'"._webpath_."/image.php?image=".urlencode($strFolder."/".$arrOneFile["filename"])."&amp;maxWidth=100&amp;maxHeight=100\\' /></div>";
 			   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $strImage, true);
 			   			} else
 			   			    $arrFilesTemplate[$intJ][0] = getImageAdmin($arrMime[2], $arrMime[0]);

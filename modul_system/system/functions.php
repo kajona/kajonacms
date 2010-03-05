@@ -785,7 +785,7 @@ function processWysiwygHtmlContent($strHtmlContent) {
 
     //synchronize the width/height style-values set via WYSIWYG editor for on-the-fly images
     $arrImages = "";
-    preg_match_all('!image.php\?image=([/\-._a-zA-Z0-9]*)([&;=a-zA-Z0-9]*)\" ([\"\'&;:\ =a-zA-Z0-9]*)width: ([0-9]*)px; height: ([0-9]*)px;!', $strHtmlContent, $arrImages);
+    preg_match_all('!image\.php\?image=([/\-\._a-zA-Z0-9]*)([&;=a-zA-Z0-9]*)\" ([\"\'&;:\ =a-zA-Z0-9]*)width: ([0-9]*)px; height: ([0-9]*)px;!', $strHtmlContent, $arrImages);
     for($i = 0; $i < sizeof($arrImages[0]); ++$i) {
         $strSearch = $arrImages[0][$i];
         $strNewWidth = $arrImages[4][$i];
@@ -810,8 +810,8 @@ function processWysiwygHtmlContent($strHtmlContent) {
  * @return string
  */
 function saveUrlEncode($strText) {
-	$arraySearch = array( 	" ");
-	$arrayReplace = array(	"%20");
+	$arraySearch = array(" ");
+	$arrayReplace = array("%20");
 	return str_replace($arraySearch, $arrayReplace, $strText);
 }
 
