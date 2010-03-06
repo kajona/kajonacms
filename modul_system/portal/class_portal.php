@@ -122,7 +122,8 @@ abstract class class_portal  {
 		$this->objTemplate->setArea($this->strArea);
 
 		//Writing to the history
-	    $this->setHistory();
+        if(!defined("_xmlLoader_"))
+            $this->setHistory();
 
 		//And keep the action
 		$this->strAction = $this->getParam("action");
