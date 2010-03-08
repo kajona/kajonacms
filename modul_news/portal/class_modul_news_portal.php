@@ -77,9 +77,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
         $objArraySectionIterator->setArraySection(class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"], $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-	    $arrNews = $objArraySectionIterator->getArrayExtended();
-
-		$arrNews = $this->objToolkit->pager($this->arrElementData["news_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("forward"), $this->getText("backward"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrNews);
+		$arrNews = $this->objToolkit->simplePager($objArraySectionIterator,$this->getText("forward"), $this->getText("backward"), "", $this->getPagename());
 
 		//$arrNews = class_modul_news_news::loadListNewsPortal($this->arrElementData["news_mode"], $strFilterId, $this->arrElementData["news_order"]);
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");

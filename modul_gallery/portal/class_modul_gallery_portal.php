@@ -86,14 +86,11 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_gallery_pic::loadFilesDBSection($this->getSystemid(), false, true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-		    $arrImages = $objArraySectionIterator->getArrayExtended();
-		    $arrTempImages = $this->objToolkit->pager($this->arrElementData["gallery_imagesperpage"],
-		                                              ($this->getParam("pv") != "" ? $this->getParam("pv") : 1),
+		    $arrTempImages = $this->objToolkit->simplePager($objArraySectionIterator,
 		                                              $this->getText("forwardlink"),
 		                                              $this->getText("backlink"),
 		                                              $this->getParam("action"),
-		                                              ($this->getParam("page") != "" ? $this->getParam("page") : ""),
-		                                              $arrImages,
+		                                              $this->getPagename(),
 		                                              "&systemid=".$this->getSystemid());
 		    $arrImages = $arrTempImages["arrData"];
 		}

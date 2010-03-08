@@ -77,9 +77,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 	    $objArraySectionIterator->setArraySection($this->getArrFiles($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-	    $arrObjects = $objArraySectionIterator->getArrayExtended();
 
-		$arrObjects = $this->objToolkit->pager($this->arrElementData["download_amount"], ($this->getParam("pv") != "" ? $this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $arrObjects);
+		$arrObjects = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("weiter"), $this->getText("zurueck"), "openDlFolder", $this->getPagename(), "&systemid=".$this->getSystemid());
 
 
 
