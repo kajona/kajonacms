@@ -187,10 +187,11 @@ class class_toolkit_portal extends class_toolkit {
             $intCounter2++;
         }
 
-
-        $arrReturn["strForward"] = $strLinkForward;
-        $arrReturn["strBack"] = $strLinkBack;
-        $arrReturn["strPages"] = $strLinkPages;
+        if($objArraySectionIterator->getNrOfPages() > 1) {
+            $arrReturn["strForward"] = $strLinkForward;
+            $arrReturn["strBack"] = $strLinkBack;
+            $arrReturn["strPages"] = $strLinkPages;
+        }
 
 		return $arrReturn;
 	}

@@ -99,7 +99,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
         if($this->getParam("pv") != "")
             $strAdd .= "&pv=".$this->getParam("pv");
 
-		$arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", ($this->getParam("page") != "" ? $this->getParam("page") : ""), $strAdd, "pvPAC");
+		$arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", $this->getPagename(), $strAdd, "pvPAC");
 
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_post");
