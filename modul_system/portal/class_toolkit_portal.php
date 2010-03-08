@@ -146,56 +146,51 @@ class class_toolkit_portal extends class_toolkit {
 							  "strPages" 	=> "");
 
 
-		//Anything to create?
-		if($objArraySectionIterator->getNrOfPages() == 1) {
-			$arrReturn["arrData"] = $arrData;
-		}
-		else {
-			$strLinkPages = "";
-			$strLinkForward = "";
-			$strLinkBack = "";
 
-			$arrReturn["arrData"] = $objArraySectionIterator->getArrayExtended(true);
+        $strLinkPages = "";
+        $strLinkForward = "";
+        $strLinkBack = "";
 
-            $intPage = $objArraySectionIterator->getPageNumber();
+        $arrReturn["arrData"] = $objArraySectionIterator->getArrayExtended(true);
 
-			//FowardLink
-			if($intPage < $objArraySectionIterator->getNrOfPages())
-				$strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
-			//BackLink
-			if($intPage > 1)
-				$strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
+        $intPage = $objArraySectionIterator->getPageNumber();
+
+        //FowardLink
+        if($intPage < $objArraySectionIterator->getNrOfPages())
+            $strLinkForward = getLinkPortal($strPage, "", null, $strForward, $strAction, "&".$strPvParam."=".($intPage+1).$strAdd);
+        //BackLink
+        if($intPage > 1)
+            $strLinkBack = getLinkPortal($strPage, "", null, $strBack, $strAction, "&".$strPvParam."=".($intPage-1).$strAdd);
 
 
-			//just load the current +-6 pages and the first/last +-3
-            $intCounter2 = 1;
-            for($intI = 1; $intI <= $objArraySectionIterator->getNrOfPages(); $intI++) {
-                $bitDisplay = false;
-                if($intCounter2 <= 3) {
-                    $bitDisplay = true;
-                }
-                elseif ($intCounter2 >= ($objArraySectionIterator->getNrOfPages()-3)) {
-                    $bitDisplay = true;
-                }
-                elseif ($intCounter2 >= ($intPage-6) && $intCounter2 <= ($intPage+6)) {
-                    $bitDisplay = true;
-                }
-
-
-                if($bitDisplay) {
-                    if($intI == $intPage)
-    					$strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
-    				else
-    					$strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
-                }
-                $intCounter2++;
+        //just load the current +-6 pages and the first/last +-3
+        $intCounter2 = 1;
+        for($intI = 1; $intI <= $objArraySectionIterator->getNrOfPages(); $intI++) {
+            $bitDisplay = false;
+            if($intCounter2 <= 3) {
+                $bitDisplay = true;
+            }
+            elseif ($intCounter2 >= ($objArraySectionIterator->getNrOfPages()-3)) {
+                $bitDisplay = true;
+            }
+            elseif ($intCounter2 >= ($intPage-6) && $intCounter2 <= ($intPage+6)) {
+                $bitDisplay = true;
             }
 
 
-			$arrReturn["strForward"] = $strLinkForward;
-			$arrReturn["strBack"] = $strLinkBack;
-			$arrReturn["strPages"] = $strLinkPages;
-		}
+            if($bitDisplay) {
+                if($intI == $intPage)
+                    $strLinkPages .= "  <strong>".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd)."</strong>";
+                else
+                    $strLinkPages .= "  ".getLinkPortal($strPage, "", null, "[".$intI."]", $strAction, "&".$strPvParam."=".$intI.$strAdd);
+            }
+            $intCounter2++;
+        }
+
+
+        $arrReturn["strForward"] = $strLinkForward;
+        $arrReturn["strBack"] = $strLinkBack;
+        $arrReturn["strPages"] = $strLinkPages;
 
 		return $arrReturn;
 	}
