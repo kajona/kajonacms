@@ -667,15 +667,15 @@ class class_db {
 	 */
 	public function dbsafeString($strString, $bitHtmlSpecialChars = true) {
 
+        //escape special chars
+        if($bitHtmlSpecialChars)
+            $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8", false);
+
 	    //already escaped by php?
 	    if(get_magic_quotes_gpc() == 1) {
 	       $strString = stripslashes($strString);
 	    }
 	    $strString = addslashes($strString);
-
-        //escape special chars
-        if($bitHtmlSpecialChars)
-            $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8", false);
 
 	    return $strString;
 	}
