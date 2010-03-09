@@ -43,7 +43,7 @@ class class_element_absatz extends class_element_portal implements  interface_po
 			$strReturn .= "<h2>".$this->arrElementData["absatz_titel"] . "</h2>\n";
 		//Inhalt?
 		if($this->arrElementData["absatz_inhalt"] != "")
-			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "<p>\n";
+			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "</p>\n";
 		//Bild?
 		if($this->arrElementData["absatz_bild"] != "")
 			$strReturn .= "<img src=\"".$this->arrElementData["absatz_bild"]."\" alt=\"".$this->arrElementData["absatz_bild"]."\" /><br /><br />\n";
