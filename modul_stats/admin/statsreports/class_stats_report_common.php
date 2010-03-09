@@ -238,7 +238,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             return "0";
 	}
 
-	public function getReportGraph($bitOfcChart = false) {
+	public function getReportGraph() {
 		//load datasets, reloading after 30 days to limit memory consumption
 		$arrHits = array();
 		$arrUser = array();
@@ -294,21 +294,33 @@ class class_stats_report_common implements interface_admin_statsreports {
 		if($intCount > 1) {
 
             $objChart2 = new class_graph_pchart();
-            $objChart2->setStrGraphTitle("Number of visits / hits");
+            $objChart2->setStrGraphTitle("Number of hits");
             $objChart2->setStrXAxisTitle("Date");
             $objChart2->setStrYAxisTitle("Hits");
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
             $objChart2->addLinePlot($arrHits, "Hits");
-            $objChart2->addLinePlot($arrUser, "Visitors/Day");
+            //$objChart2->addLinePlot($arrUser, "Visitors/Day");
             $objChart2->setArrXAxisTickLabels($arrTickLabels);
-            $strImagePath = "/portal/pics/cache/stats_common.png";
-    		$objChart2->saveGraph($strImagePath);
+            $strImagePath1 = "/portal/pics/cache/stats_common_1.png";
+    		$objChart2->saveGraph($strImagePath1);
+
+            $objChart3 = new class_graph_pchart();
+            $objChart3->setStrGraphTitle("Number of visits");
+            $objChart3->setStrXAxisTitle("Date");
+            $objChart3->setStrYAxisTitle("Visits");
+            $objChart3->setIntWidth(715);
+            $objChart3->setIntHeight(200);
+            //$objChart3->addLinePlot($arrHits, "Hits");
+            $objChart3->addLinePlot($arrUser, "Visitors/Day");
+            $objChart3->setArrXAxisTickLabels($arrTickLabels);
+            $strImagePath2 = "/portal/pics/cache/stats_common_2.png";
+    		$objChart3->saveGraph($strImagePath2);
 
 
             $this->objDB->flushQueryCache();
           
-            return _webpath_.$strImagePath;
+            return array(_webpath_.$strImagePath1, _webpath_.$strImagePath2);
 		}
 		else
 		  return "";
