@@ -46,15 +46,15 @@ class class_element_absatz extends class_element_portal implements  interface_po
 			$strReturn .= "<p>".$this->arrElementData["absatz_inhalt"] . "</p>\n";
 		//Bild?
 		if($this->arrElementData["absatz_bild"] != "")
-			$strReturn .= "<img src=\"".$this->arrElementData["absatz_bild"]."\" alt=\"".$this->arrElementData["absatz_bild"]."\" /><br /><br />\n";
+			$strReturn .= "<img src=\"".$this->arrElementData["absatz_bild"]."\" alt=\"".$this->arrElementData["absatz_titel"]."\" /><br /><br />\n";
 		//Link?
 		if($this->arrElementData["absatz_link"] != "") {
 		    //internal page?
 		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["absatz_link"]);
 		    if($objPage->getStrName() != "")
-			    $strReturn .= "<a href=\"".getLinkPortalHref($this->arrElementData["absatz_link"], "")."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref($this->arrElementData["absatz_link"], "")."\">".$this->arrElementData["absatz_link"]."</a>\n";
 			else
-			    $strReturn .= "<a href=\"".getLinkPortalHref("",$this->arrElementData["absatz_link"])."\" target=\"_self\" >".$this->arrElementData["absatz_link"]."</a>\n";
+			    $strReturn .= "<a href=\"".getLinkPortalHref("", $this->arrElementData["absatz_link"])."\">".$this->arrElementData["absatz_link"]."</a>\n";
 		}
 
 
