@@ -4,7 +4,7 @@
 *   (c) 2007-2009 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                                   *
+*   $Id$                                            *
 ********************************************************************************************************/
 
 
@@ -84,8 +84,44 @@ class class_copy2project {
             }
         }
     }
-    
+
+
+    private function addFilesToLogfile() {
+        echo "Adding submitted files to logfile. \n<b>You still have to execute a copy-run afterwards.</b>\n";
+        echo "Adding files to module ".$_POST["targetModule"]."...\n\n";
+
+
+        if(!isset($_POST["files"]) || count($_POST["files"]) == 0) {
+            echo "no files to add.\n\n";
+            return;
+        }
+
+        $strLogContent = file_get_contents($this->strBasePath."/".$this->strLogName); 
+
+        foreach($_POST["files"] as $strOneFile => $strValue) {
+            $strOneFile = str_replace($this->strBasePath."/".$this->strSystemFolderName, "", $strOneFile);
+
+            $strSource = $this->strBasePath."/".$_POST["targetModule"]."".$strOneFile;
+            $strTarget = $this->strBasePath."/".$this->strSystemFolderName."".$strOneFile;
+
+            echo $strOneFile."\n";
+            echo "\t".$strTarget." to ".$strSource;
+
+            $strLogContent .= $strTarget."<to>".$strSource."<eol>\n";
+        }
+
+        file_put_contents($this->strBasePath."/".$this->strLogName, $strLogContent);
+
+        echo "\n\n";
+    }
+
+
     private function checkProject() {
+
+        if(isset($_POST["submit"])) {
+            $this->addFilesToLogfile();
+        }
+
         echo "Loading logfile ".$this->strBasePath."/".$this->strLogName."\n\n";
         $strLogContent = trim(file_get_contents($this->strBasePath."/".$this->strLogName));
 
@@ -110,7 +146,21 @@ class class_copy2project {
         echo "\n...finished.\n\n";
         
         echo "Searching for files being added in the project (and not being copied back to modules)...\n\n";
+        echo "Add selected files to module:\n";
+        echo "<form method=\"POST\" >\n";
+
+        $arrFolderContent = $this->getFolderContent($this->strBasePath);
+        echo "<select name=\"targetModule\" >\n";
+        foreach($arrFolderContent["folders"] as $strOneFolder) {
+            if($strOneFolder != $this->strSystemFolderName && !in_array($strOneFolder, $this->arrFolderExclusionsM2P))
+                echo "<option value=\"".$strOneFolder."\" >".$strOneFolder."</option>\n";
+        }
+        echo "</select>\n\n";
+        
         $this->checkProjectRecursive($this->strBasePath."/".$this->strSystemFolderName, $arrCleanedUpArray);
+
+        echo "\n<input type=\"submit\" name=\"submit\" value=\"Add to logfile\" />\n";
+        echo "</form>";
         echo "\n...finished.\n";
                 
     }
@@ -120,7 +170,7 @@ class class_copy2project {
 
         foreach($arrFolderContent["files"] as $strSingleFile) {
             if(!in_array($strStartPath."/".$strSingleFile, $arrLogArray))
-                echo "> File: ".$strStartPath."/".$strSingleFile." not existing in logfile\n";
+                echo "<input type=\"checkbox\" name=\"files[".$strStartPath."/".$strSingleFile."]\" >File: ".$strStartPath."/".$strSingleFile." not existing in logfile\n";
         }
 
         foreach ($arrFolderContent["folders"] as $strSingleFolder) {
@@ -314,7 +364,7 @@ class class_copy2project {
 
 echo "<pre>";
 
-echo "<h2><a href=\"copy2project.php\">Copy 2 Project</a></h2>";
+echo "<h2><a href=\"copy2project.php\">Copy 2 Project [".dirname(__FILE__)."]</a></h2>";
 
 
 
