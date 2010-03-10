@@ -17,7 +17,7 @@ class class_modul_pages_portal extends class_portal {
 
     private $objPagecache;
 
-    private static $strAdditionalHeader = "";
+    private static $strAdditionalTitle = "";
     private static $bitPageCacheDisabledForGenerationRun = false;
 
 	public function __construct() {
@@ -128,7 +128,7 @@ class class_modul_pages_portal extends class_portal {
 				return;
 			}
 
-            
+
 		}
 
 		//react on portaleditor commands
@@ -268,7 +268,7 @@ class class_modul_pages_portal extends class_portal {
                             $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
 
                             $arrTemplate[$strPeNewPlaceholder] .= $strLink;
-                            
+
 
                         }
                     }
@@ -279,7 +279,7 @@ class class_modul_pages_portal extends class_portal {
 		$arrTemplate["description"] = $objPageData->getStrDesc();
 		$arrTemplate["keywords"] = $objPageData->getStrKeywords();
 		$arrTemplate["title"] = $objPageData->getStrBrowsername();
-		$arrTemplate["additionalTitle"] = self::$strAdditionalHeader;
+		$arrTemplate["additionalTitle"] = self::$strAdditionalTitle;
 		//Include the $arrGlobal Elements
 		$arrGlobal = array();
 		include(_portalpath_."/global_includes.php");
@@ -379,13 +379,13 @@ class class_modul_pages_portal extends class_portal {
 	}
 
 	/**
-	 * Sets the passed text as an additional title-information.
-	 * If set, the separator-placeholder from global-includes will be included, too.
+	 * Sets the passed text as an additional title information.
+	 * If set, the separator placeholder from global_includes.php will be included, too.
 	 * @param string $strTitle
 	 * @return void
 	 */
 	public static function registerAdditionalTitle($strTitle) {
-		self::$strAdditionalHeader = "%%kajonaTitleSeparator%%".$strTitle;
+		self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
 	}
 
     /**

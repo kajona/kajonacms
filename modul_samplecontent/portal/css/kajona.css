@@ -93,7 +93,6 @@ h2 {
 	padding-bottom: 20px;
     width: 900px;
     top: 20px;
-    border: none;
 }
 
 #logoHeaderHeader {
@@ -157,7 +156,6 @@ h2 {
 }
 
 #mainNaviContainer {
-    border: none;
     width: 130px;
     float: left;
     padding-top: 33px;

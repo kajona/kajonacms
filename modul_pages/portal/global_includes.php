@@ -35,8 +35,7 @@
 /*
     The next placeholder is used as an extra separator for the page-title. In some cases, module may add additional
     texts to the current title, e.g. the name of a news. In this case, you can define a separator. This may lead to s.th. like
-    Kajona³ [Welcome | New Kajona version released] instead of Kajona³ [Welcome]. If you don't want any extra separator, feel
-    free to remove the following line.
+    "New Kajona version released | Welcome | Kajona³" instead of "Welcome | Kajona³". Feel free to modify the following line.
  */
 
 	$arrGlobal["kajonaTitleSeparator"] = " | ";

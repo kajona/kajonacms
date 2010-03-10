@@ -37,7 +37,7 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
                 $strReturn .= "ID of master page: ".$this->strMasterID."\n";
     
                 $objPagelement = new class_modul_pages_pageelement();
-                $objPagelement->setStrPlaceholder("masterswitch_languageswitch");
+                $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
                 $objPagelement->setStrName("masterswitch");
                 $objPagelement->setStrElement("languageswitch");
                 $objPagelement->updateObjectToDb($this->strMasterID);

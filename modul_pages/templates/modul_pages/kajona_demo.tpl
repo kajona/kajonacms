@@ -4,7 +4,7 @@
 <head>
     <link href="_webpath_/portal/css/kajona.css" rel="stylesheet" type="text/css" />
     %%kajona_head%%
-    <title>Kajona³ [%%title%%%%additionalTitle%%]</title>
+    <title>%additionalTitle%%%%title%%% | Kajona³</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="imagetoolbar" content="no" />
@@ -27,7 +27,7 @@
     <div id="mainContainer">
         <div id="portalNaviContainer">
             <div id="languageSwitchContainer">
-                %%masterswitch_languageswitch%%
+                %%masterlanguageswitch_languageswitch%%
             </div>
             <div id="pNaviContainer">   
                 %%masterportalnavi_navigation%%
