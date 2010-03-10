@@ -22,7 +22,7 @@ interface interface_model {
     public function __construct($strSystemid = "");
 
     /**
-     * responisble to create a valid object. being called at time of
+     * responsible to create a valid object. being called at time of
      * object creation, if systemid given.
      * The model-class itself is responsible to invoke this method!
      *
@@ -33,7 +33,7 @@ interface interface_model {
      * Method to update the existing record with the new values
      * @return bool
      *
-     * @todo: remove method pre 3.3.0
+     * @todo remove method pre 3.3.0
      * @deprecated use updateStateToDb() instead
      */
     public function updateObjectToDb();

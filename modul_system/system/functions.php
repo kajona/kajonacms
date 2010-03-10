@@ -367,25 +367,26 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 }
 
 /**
- * Generates a Mouse-Over for an image, but doesn't generate a a-tag sourrounding the image
+ * Generates a tooltip for an image, but doesn't generate a a-tag surrounding the image
  * Located in functions.php since used by the portaleditor
  *
  * @param string $strText
  * @param string $strImage
  * @return string
+ * @todo combine with getImageAdmin()?
  */
 function getNoticeAdminWithoutAhref($strText, $strImage) {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strText."');\" title=\"\" />";
+	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strText."');\" alt=\"\" title=\"\" />";
 }
 
 /**
- * Returns a image-tag with sourrounding mouse-overtag
+ * Returns an image-tag with surrounding tooltip
  *
  * @param string $strImage
  * @param string $strAlt
  * @param bool $bitNoAlt
  * @return string
- * @todo: move to toolkit
+ * @todo move to toolkit
  */
 function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
 	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"kajonaAdminTooltip.add(this, '".$strAlt."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )." />";
@@ -397,7 +398,7 @@ function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
  *
  * @param string $strSystemid
  * @return string
- * @todo: move to toolkit
+ * @todo move to toolkit
  */
 function getRightsImageAdminName($strSystemid) {
 	if(class_carrier::getInstance()->getObjRights()->isInherited($strSystemid))
