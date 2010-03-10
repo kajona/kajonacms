@@ -4,7 +4,7 @@
 <head>
     <link href="_webpath_/portal/css/kajona.css" rel="stylesheet" type="text/css" />
     %%kajona_head%%
-    <title>%additionalTitle%%%%title%%% | Kajona³</title>
+    <title>%%additionalTitle%%%%title%% | Kajona³</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="robots" content="index, follow" />
     <meta http-equiv="imagetoolbar" content="no" />
