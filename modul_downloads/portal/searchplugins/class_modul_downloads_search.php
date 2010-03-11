@@ -38,7 +38,8 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 
 
     public function doSearch() {
-        $this->searchDownloads();
+        if(class_modul_system_module::getModuleByName("downloads"))
+            $this->searchDownloads();
         return $this->arrHits;
     }
 

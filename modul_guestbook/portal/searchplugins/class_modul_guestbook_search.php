@@ -37,7 +37,8 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 
 
     public function doSearch() {
-        $this->searchGuestbook();
+        if(class_modul_system_module::getModuleByName("guestbook"))
+            $this->searchGuestbook();
         return $this->arrHits;
     }
 

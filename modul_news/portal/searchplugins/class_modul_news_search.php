@@ -37,7 +37,8 @@ class class_modul_news_search extends class_portal implements interface_search_p
 
 
     public function doSearch() {
-        $this->searchNews();
+        if(class_modul_system_module::getModuleByName("news"))
+            $this->searchNews();
         return $this->arrHits;
     }
 

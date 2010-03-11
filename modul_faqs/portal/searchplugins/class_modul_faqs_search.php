@@ -35,7 +35,8 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 
 
     public function doSearch() {
-        $this->searchFaqs();
+        if(class_modul_system_module::getModuleByName("faqs"))
+            $this->searchFaqs();
         return $this->arrHits;
     }
 

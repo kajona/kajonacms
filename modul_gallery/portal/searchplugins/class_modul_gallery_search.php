@@ -39,7 +39,8 @@ class class_modul_gallery_search extends class_portal implements interface_searc
 
 
     public function doSearch() {
-        $this->searchGallery();
+        if(class_modul_system_module::getModuleByName("gallery"))
+          $this->searchGallery();
         return $this->arrHits;
     }
 
