@@ -395,6 +395,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    $objCommon = new class_modul_system_common($this->getSystemid());
 	    if(!$objCommon->copyCurrentSystemrecord($strIdOfNewPage)) {
 	        $this->objDB->transactionRollback();
+            class_logger::getInstance()->addLogRow("error while duplicating systemrecord ".$this->getSystemid()." to ".$strIdOfNewPage, class_logger::$levelError);
 	        return false;
 	    }
 
@@ -406,6 +407,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($strNewPagename)."')";
 	    if(!$this->objDB->_query($strQuery)) {
 	        $this->objDB->transactionRollback();
+            class_logger::getInstance()->addLogRow("error while creating record in table ".$this->arrModule["table"], class_logger::$levelError);
 	        return false;
 	    }
 
@@ -430,6 +432,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
 	        if(!$this->objDB->_query($strQuery)) {
 	            $this->objDB->transactionRollback();
+                class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
 	            return false;
 	        }
 	    }
@@ -438,8 +441,9 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	    $arrElementsOnSource = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 	    if(count($arrElementsOnSource) > 0) {
     	    foreach ($arrElementsOnSource as $objOneSourceElement) {
-    	        if($objOneSourceElement->copyElementToPage($strIdOfNewPage) != null) {
+    	        if($objOneSourceElement->copyElementToPage($strIdOfNewPage) == null) {
     	            $this->objDB->transactionRollback();
+                    class_logger::getInstance()->addLogRow("error while copying page element ".$objOneSourceElement->getStrName(), class_logger::$levelError);
     	            return false;
     	        }
     	    }
