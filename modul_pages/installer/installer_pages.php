@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.91";
+		$arrModule["version"] 		= "3.2.92";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -189,13 +189,14 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$strReturn .= "Installing paragraph table...\n";
 
 		$arrFields = array();
-		$arrFields["content_id"] 	= array("char20", false);
-		$arrFields["absatz_titel"]	= array("char254", true);
-		$arrFields["absatz_inhalt"] = array("text", true);
-		$arrFields["absatz_link"]	= array("char254", true);
-		$arrFields["absatz_bild"]	= array("char254", true);
+		$arrFields["content_id"]        = array("char20", false);
+		$arrFields["paragraph_title"]	= array("char254", true);
+		$arrFields["paragraph_content"] = array("text", true);
+		$arrFields["paragraph_link"]	= array("char254", true);
+		$arrFields["paragraph_image"]	= array("char254", true);
+		$arrFields["paragraph_template"]= array("char254", true);
 
-		if(!$this->objDB->createTable("element_absatz", $arrFields, array("content_id")))
+		if(!$this->objDB->createTable("element_paragraph", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -210,8 +211,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("paragraph");
-		    $objElement->setStrClassAdmin("class_element_absatz.php");
-		    $objElement->setStrClassPortal("class_element_absatz.php");
+		    $objElement->setStrClassAdmin("class_element_paragraph.php");
+		    $objElement->setStrClassPortal("class_element_paragraph.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
@@ -349,6 +350,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3291();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_3292();
         }
 
         return $strReturn."\n\n";
@@ -505,6 +511,46 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.2.91");
         $this->updateElementVersion("paragraph", "3.2.91");
         $this->updateElementVersion("image", "3.2.91");
+        return $strReturn;
+    }
+
+
+    private function update_3291_3292() {
+        $strReturn = "Updating 3.2.91 to 3.2.92...\n";
+
+
+        $strReturn .= "Transforming old element absatz to element paragraph...\n";
+
+        $arrTables = $this->objDB->getTables();
+        if(in_array(_dbprefix_."element_absatz", $arrTables) && !in_array(_dbprefix_."element_paragraph", $arrTables)) {
+            $strReturn .= "Renaming table to element_paragraph\n";
+            $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_absatz")." TO ".$this->objDB->encloseTableName(_dbprefix_."element_paragraph")."";
+            $this->objDB->_query($strQuery);
+
+            $strReturn .= "Adding row paragraph_template...\n";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_paragraph")."
+                               CHANGE ".$this->objDB->encloseColumnName("absatz_titel")." ".$this->objDB->encloseColumnName("paragraph_title")." ".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("absatz_inhalt")." ".$this->objDB->encloseColumnName("paragraph_content")." ".$this->objDB->getDatatype("text")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("absatz_link")." ".$this->objDB->encloseColumnName("paragraph_link")." ".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("absatz_bild")."  ".$this->objDB->encloseColumnName("paragraph_image")."".$this->objDB->getDatatype("char254")." NULL,
+        	                   ADD ".$this->objDB->encloseColumnName("paragraph_template")." ".$this->objDB->getDatatype("char254")." NULL ";
+
+            $this->objDB->_query($strQuery);
+
+            $strReturn .= "Setting new classes to existing element...\n";
+            $objElement = class_modul_pages_element::getElement("paragraph");
+            $objElement->setStrClassAdmin("class_element_paragraph.php");
+            $objElement->setStrClassPortal("class_element_paragraph.php");
+            $objElement->updateObjectToDb();
+        }
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.92");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.2.92");
+        $this->updateElementVersion("paragraph", "3.2.92");
+        $this->updateElementVersion("image", "3.2.92");
         return $strReturn;
     }
 

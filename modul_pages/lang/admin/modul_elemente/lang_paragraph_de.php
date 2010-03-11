@@ -7,15 +7,16 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 229
 
 //editable entries
-$lang["absatz_bild"]                     = "Bild:";
-$lang["absatz_inhalt"]                   = "Text:";
-$lang["absatz_link"]                     = "Link:";
-$lang["absatz_titel"]                    = "Titel:";
+$lang["paragraph_image"]                 = "Bild:";
+$lang["paragraph_content"]               = "Text:";
+$lang["paragraph_link"]                  = "Link:";
+$lang["paragraph_title"]                 = "Titel:";
 $lang["browser"]                         = "Browser öffnen";
 $lang["page_element_placeholder_title"]  = "Interner Titel:";
+$lang["paragraph_template"]              = "Template:";
 $lang["quickhelp_element_absatz"]        = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 $lang["required_absatz_titel"]           = "Titel";
 $lang["submit"]                          = "Speichern";

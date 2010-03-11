@@ -25,10 +25,10 @@ class class_element_zeile extends class_element_admin implements interface_admin
 		$arrModule["name"] 			= "element_zeile";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]			= _dbprefix_."element_absatz";
+		$arrModule["table"]			= _dbprefix_."element_paragraph";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]  = "absatz_titel|char";
+		$arrModule["tableColumns"]  = "paragraph_title|char";
 
 		parent::__construct($arrModule);
 	}
@@ -42,9 +42,9 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	 */
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
-		$strReturn .= $this->objToolkit->formInputText("absatz_titel", $this->getText("absatz_titel"), (isset($arrElementData["absatz_titel"]) ? $arrElementData["absatz_titel"] : ""));
+		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("paragraph_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 
-		$strReturn .= $this->objToolkit->setBrowserFocus("absatz_titel");
+		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
 
 		return $strReturn;
 	}
@@ -56,7 +56,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	 */
 	public function getContentTitle() {
 	    $arrData = $this->loadElementData();
-        return uniStrTrim(htmlStripTags($arrData["absatz_titel"]), 60);
+        return uniStrTrim(htmlStripTags($arrData["paragraph_title"]), 60);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class class_element_zeile extends class_element_admin implements interface_admin
      * @return mixed
      */
     protected function getRequiredFields() {
-        return array("absatz_titel" => "string");
+        return array("paragraph_title" => "string");
     }
 
 

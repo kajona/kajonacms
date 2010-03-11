@@ -23,7 +23,7 @@ class class_element_zeile extends class_element_portal implements  interface_por
 		$arrModul["name"] 			= "element_zeile";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModul["table"]			= _dbprefix_."element_absatz";
+		$arrModul["table"]			= _dbprefix_."element_paragraph";
 
 		parent::__construct($arrModul, $objElementData);
 	}
@@ -38,8 +38,8 @@ class class_element_zeile extends class_element_portal implements  interface_por
 
 		$strReturn = "";
 		//Titel gegeben?
-		if($this->arrElementData["absatz_titel"] != "")
-			$strReturn .= $this->arrElementData["absatz_titel"];
+		if($this->arrElementData["paragraph_title"] != "")
+			$strReturn .= $this->arrElementData["paragraph_title"];
 
 
 		$strReturn = "<h1>".$strReturn."</h1>";
