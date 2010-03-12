@@ -10,11 +10,12 @@
 //Kajona Language Editor Core Build 101
 
 //editable entries
-$lang["bild_bild"]                       = "Image:";
-$lang["bild_link"]                       = "Link:";
-$lang["bild_titel"]                      = "Title:";
-$lang["bild_x"]                          = "Maximum width:";
-$lang["bild_xy_hint"]                    = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";
-$lang["bild_y"]                          = "Maximum height:";
+$lang["image_image"]                     = "Image:";
+$lang["image_link"]                      = "Link:";
+$lang["image_title"]                     = "Title:";
+$lang["image_x"]                         = "Maximum width:";
+$lang["image_xy_hint"]                   = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";
+$lang["image_y"]                         = "Maximum height:";
+$lang["image_template"]                  = "Template:";
 $lang["browser"]                         = "Open browser";
 ?>

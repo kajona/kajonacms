@@ -10,11 +10,12 @@
 //Kajona Language Editor Core Build 163
 
 //editable entries
-$lang["bild_bild"]                       = "Изображение";
-$lang["bild_link"]                       = "Линк:";
-$lang["bild_titel"]                      = "Име";
-$lang["bild_x"]                          = "Максимална ширина:";
-$lang["bild_xy_hint"]                    = "Ползвайки 0, изображението ще е в оригиналния си размер.";
-$lang["bild_y"]                          = "Максимална дължина:";
+$lang["image_image"]                     = "Изображение:";
+$lang["image_link"]                      = "Линк:";
+$lang["image_title"]                     = "Име";
+$lang["image_x"]                         = "Максимална ширина:";
+$lang["image_xy_hint"]                   = "Ползвайки 0, изображението ще е в оригиналния си размер.";
+$lang["image_y"]                         = "Максимална дължина:";
+$lang["image_template"]                  = "Шаблон:";
 $lang["browser"]                         = "Отвори browser";
 ?>
