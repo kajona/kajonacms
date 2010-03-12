@@ -666,6 +666,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objLang = class_modul_languages_language::getLanguageByName($this->getLanguageToWorkOn());
             $objPage = new class_modul_pages_page($this->getPrevId());
 
+            if($this->getParam("copyElement_page_input") != "")
+                $this->setParam("copyElement_page", $this->getParam("copyElement_page_input"));
+
+            if($this->getParam("copyElement_language_input") != "")
+                $this->setParam("copyElement_language", $this->getParam("copyElement_language_input"));
+
             $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
 
             $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement());
@@ -682,7 +688,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             foreach($arrLanguages as $objSingleLanguage)
                 $arrLanguageDD[$objSingleLanguage->getSystemid()] = $objSingleLanguage->getStrName();
 
-            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
+            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language_input", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
@@ -699,7 +705,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
             $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_page")." ".$objPage->getStrName());
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
-            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getText("copyElement_page"));
+            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page_input", $this->getText("copyElement_page"));
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
