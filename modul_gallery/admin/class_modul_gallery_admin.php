@@ -652,6 +652,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	}
 
 
-} //class_modul_gallery_admin
+}
 
 ?>

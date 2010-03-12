@@ -18,7 +18,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	private $intDateStart;
 	private $intDateEnd;
 	private $intInterval;
-	
+
 
 	/**
 	 * Constructor
@@ -229,5 +229,5 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	}
 
 
-} //class_modul_stats_admin
+}
 ?>

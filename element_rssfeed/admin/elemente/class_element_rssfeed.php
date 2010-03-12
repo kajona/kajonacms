@@ -62,5 +62,5 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 	}
 
 
-} //class_element_downloads.php
+}
 ?>

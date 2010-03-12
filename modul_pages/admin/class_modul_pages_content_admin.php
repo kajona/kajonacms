@@ -381,7 +381,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		if($objElement->getLockManager()->isAccessibleForCurrentUser()) {
 
                 $objElement->getLockManager()->lockRecord();
-                
+
     			//Load the class to create an object
     			include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
     			//Build the class-name
@@ -391,8 +391,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     			if($bitShowErrors)
     		        $objPageElement->setDoValidation(true);
     			$strReturn .= $objPageElement->actionEdit("edit");
-                
-    			
+
+
     		}
     		else {
     			$strReturn .= $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
@@ -613,7 +613,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//Locked?
 			$objLockmanager = new class_lockmanager($this->getSystemid());
 			$strPrevId = $this->getPrevId();
-            
+
 			if($objLockmanager->isAccessibleForCurrentUser()) {
 			    //delete object
 			    if(!class_modul_pages_pageelement::deletePageElement($strSystemid))
@@ -687,7 +687,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
             $strReturn .= $this->objToolkit->formClose();
-            
+
 
             //step two: page selection
             $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_page_header"));
@@ -708,7 +708,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
             //step three: placeholder-selection
             $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_placeholder_header"));
-           
+
 
             //here comes the tricky part. load the template, analyze the placeholders and validate all those against things like repeatable and more...
             $strTemplate = $objPage->getStrTemplate();
@@ -807,5 +807,5 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
 
-} //class_modul_pages_inhalte_admin
+}
 ?>

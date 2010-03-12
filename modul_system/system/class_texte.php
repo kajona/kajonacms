@@ -17,7 +17,7 @@ class class_texte {
 	private $arrModul;
 
 	/**
-	 * This is the default language. 
+	 * This is the default language.
 	 *
 	 * @var string
 	 */
@@ -44,16 +44,16 @@ class class_texte {
 		$this->arrModul["t_name"] 		= "class_texte";
 		$this->arrModul["t_author"]		= "sidler@mulchprod.de";
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
-		
+
 		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
-        
+
         //load texts from session
         //TODO: reenable before release
         //$this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
         if($this->arrTexts === false)
             $this->arrTexts = array();
 	}
-    
+
     public function __destruct() {
     	//save texts to session
         class_session::getInstance()->setSession("textSessionCache", $this->arrTexts);
@@ -166,7 +166,7 @@ class class_texte {
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strLanguage && $this->strLanguage != "") {
 			 	    $bitFileMatched = true;
                     $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strLanguage, $this->arrTexts);
-                    
+
 			 	}
 			}
 			if($bitFileMatched)
@@ -180,7 +180,7 @@ class class_texte {
 
 			 	if($arrName[0] == "lang" && $arrName[2] == $this->strFallbackLanguage) {
                     $this->loadAndMergeTextfile($strArea, $strModule, $strFile, $this->strFallbackLanguage, $this->arrTexts);
-                    
+
 			 	}
 			}
 		}
@@ -220,7 +220,7 @@ class class_texte {
 
 	    $this->strLanguage = $strLanguage;
 	}
-	
+
 	/**
 	 * Gets the current language set to the class_texte
 	 *
@@ -230,5 +230,5 @@ class class_texte {
 		return $this->strLanguage;
 	}
 
-} //class_texte()
+}
 ?>

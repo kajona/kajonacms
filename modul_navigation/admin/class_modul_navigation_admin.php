@@ -474,6 +474,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     }
 
 
-} //class_modul_navigation_admin
+}
 
 ?>

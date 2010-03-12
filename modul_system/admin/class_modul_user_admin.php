@@ -395,7 +395,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                                 $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
                             else
                                 $objDate->setLongTimestamp("00000000000000");
-                            
+
                             $objUser = new class_modul_user_user("");
                             $objUser->setStrUsername($this->getParam("username"));
                             $objUser->setStrPass($this->getParam("passwort"));
@@ -938,5 +938,5 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $bitPass;
     }
 
-} //class_modul_user_admin()
+}
 ?>

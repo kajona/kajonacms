@@ -59,5 +59,5 @@ class class_element_tagto extends class_element_admin implements interface_admin
 	}
 
 
-} //class_element_tagto.php
+}
 ?>

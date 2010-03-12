@@ -271,7 +271,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 	  		$strFolder .= $this->objToolkit->divider();
 
-	  		
+
 			$strFolder = $this->objToolkit->getLayoutFolderPic($strFolder, $this->getText("klapper"));
 
 
@@ -1230,6 +1230,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         }
         return $this->objToolkit->getPathNavigation($arrPathLinks);
     }
-} //class_modul_pages_admin
+}
 
 ?>

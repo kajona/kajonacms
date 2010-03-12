@@ -682,6 +682,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	    return $this->objToolkit->getPathNavigation($arrEntries);
 	}
 
-} //class_modul_downlodas_admin
+}
 
 ?>

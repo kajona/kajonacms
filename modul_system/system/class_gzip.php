@@ -107,7 +107,7 @@ class class_gzip {
                     }
                     @gzclose($objSourcePointer);
                     @fclose($objTargetPointer);
-                    
+
                     return true;
 
                 }
@@ -116,7 +116,7 @@ class class_gzip {
                     throw new class_exception("can't write to targetfile ", class_exception::$level_ERROR);
                 }
 
-                
+
             }
             else {
                 gzclose($objSourcePointer);
@@ -139,7 +139,7 @@ class class_gzip {
 	 * @return string
 	 */
 	public function compressOutput($strContent) {
-        
+
         if(defined("_system_output_gzip_") && _system_output_gzip_ == "true" && strpos(getServer("HTTP_ACCEPT_ENCODING"), "gzip") !== false) {
             //header to browser
             header("Content-Encoding: gzip");
@@ -151,6 +151,6 @@ class class_gzip {
 	}
 
 
-} // class_gzip
+}
 
 ?>

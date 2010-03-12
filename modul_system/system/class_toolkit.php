@@ -178,7 +178,7 @@ class class_toolkit  {
 		return $arrReturn;
 	}
 
-} //class_toolkit()
+}
 
 
 ?>

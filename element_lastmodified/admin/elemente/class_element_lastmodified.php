@@ -9,7 +9,7 @@
 
 /**
  * Class to handle the admin-stuff of the lastmodified-element
- * 
+ *
  * @package modul_pages
  *
  */
@@ -43,5 +43,5 @@ class class_element_lastmodified extends class_element_admin implements interfac
 	}
 
 
-} //class_element_lastmodified.php
+}
 ?>

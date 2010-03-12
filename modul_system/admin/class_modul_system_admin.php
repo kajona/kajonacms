@@ -862,6 +862,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         return null;
 	}
 
-}//class_modul_system_admin
+}
 
 ?>

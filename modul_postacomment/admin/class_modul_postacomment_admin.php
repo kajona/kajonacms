@@ -302,6 +302,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	}
 
 
-} //class_modul_postacomment_admin
+}
 
 ?>

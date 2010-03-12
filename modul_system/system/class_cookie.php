@@ -51,6 +51,6 @@ class class_cookie {
 	    return getCookie($strName);
 	}
 
-} //class_cookie
+}
 
 ?>

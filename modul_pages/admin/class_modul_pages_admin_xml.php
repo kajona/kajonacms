@@ -110,6 +110,6 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
     }
 
 
-} //class_modul_pages_admin_xml
+}
 
 ?>

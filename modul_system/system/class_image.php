@@ -1013,6 +1013,6 @@ class class_image {
 	    return $this->objImage;
 	}
 
-} //class_image
+}
 
 ?>

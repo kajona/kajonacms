@@ -162,7 +162,7 @@ class class_mail {
                 $arrMime = $objToolkit->mimeType($strFilename);
                 $arrTemp["mimetype"] = $arrMime[0];
             }
-            
+
             //attach as inline-attachment?
             $arrTemp["inline"] = $bitInline;
 
@@ -310,6 +310,6 @@ class class_mail {
 		return $bitReturn;
 	}
 
-} // class_mail
+}
 
 ?>

@@ -46,5 +46,5 @@ class class_element_formular extends class_element_portal implements interface_p
 		return $strReturn;
 	}
 
-}	 //class_element_formular
+}
 ?>

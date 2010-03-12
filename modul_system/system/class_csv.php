@@ -266,6 +266,6 @@ class class_csv {
 	    $this->strTextEncloser = $strEncloser;
 	}
 
-} // class_csv
+}
 
 ?>

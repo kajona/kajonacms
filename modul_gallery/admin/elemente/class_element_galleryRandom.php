@@ -85,5 +85,5 @@ class class_element_galleryRandom extends class_element_admin implements interfa
 	}
 
 
-} //class_element_downloads.php
+}
 ?>

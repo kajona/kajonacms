@@ -71,5 +71,5 @@ class class_element_portalregistration extends class_element_admin implements in
 	}
 
 
-} //class_element_downloads.php
+}
 ?>

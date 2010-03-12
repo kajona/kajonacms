@@ -68,5 +68,5 @@ class class_element_downloads extends class_element_admin implements interface_a
 	}
 
 
-} //class_element_downloads.php
+}
 ?>

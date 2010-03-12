@@ -96,7 +96,7 @@ class class_db {
 	        $this->objDbDriver->transactionRollback();
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
-        
+
         class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
 	    if($this->objDbDriver !== null)
 	        $this->objDbDriver->dbclose();
@@ -710,5 +710,5 @@ class class_db {
         return $this->objDbDriver->encloseTableName($strTable);
     }
 
-} //class_db
+}
 ?>
