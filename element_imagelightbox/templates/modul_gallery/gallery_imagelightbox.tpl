@@ -3,52 +3,45 @@
 <!-- available placeholders: systemid, folderlist, piclist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <script type="text/javascript">
-        if (typeof bitPhotoViewerLoadingStarted == "undefined") {
-            var bitPhotoViewerLoadingStarted = false;
+        if (YAHOO.lang.isUndefined(arrViewers)) {
             var arrViewers = new Array();
+
+            YAHOO.util.Event.onDOMReady(function () {
+                YAHOO.namespace("YAHOO.photoViewer");
+                YAHOO.photoViewer.config = { viewers: {} };
+
+                //init all viewers
+                for (var i=0; i<arrViewers.length; i++) {
+                    YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
+                        properties: {
+                            id: arrViewers[i],
+                            grow: 0.2,
+                            fade: 0.2,
+                            modal: true,
+                            dragable: false,
+                            fixedcenter: true,
+                            loadFrom: "html",
+                            position: "absolute",
+                            buttonText: {
+                                next: " ",
+                                prev: " ",
+                                close: "X"
+                            }
+                        }
+                    };
+                }
+            });
+            
+            kajonaAjaxHelper.Loader.load(
+                ["dragdrop", "animation", "container"],
+            	[KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base-min.js",
+            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.css",
+            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css"]
+            );
         }
 
         //add viewer
         arrViewers.push("pv_%%systemid%%");
-        
-        kajonaAjaxHelper.loadPhotoViewerBase = function(callback) {
-            if (!bitPhotoViewerLoadingStarted) {
-                bitPhotoViewerLoadingStarted = true;
-                
-                var l = new kajonaAjaxHelper.Loader();
-                l.addYUIComponents([ "dragdrop", "animation", "container" ]);
-                l.addJavascriptFile("photoviewer/build/photoviewer_base-min.js");
-                l.addCssFile("_webpath_/portal/scripts/photoviewer/build/photoviewer_base.css");
-                l.addCssFile("_webpath_/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css");
-                l.load(callback);
-            }
-        };
-        
-        kajonaAjaxHelper.loadPhotoViewerBase(function () {
-            YAHOO.photoViewer.config = { viewers: {} };
-            
-            //init all viewers
-            for (var i=0; i<arrViewers.length; i++) {
-                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-                    properties: {
-                        id: arrViewers[i],
-                        grow: 0.2,
-                        fade: 0.2,
-                        modal: true,
-                        dragable: false,
-                        fixedcenter: true,
-                        loadFrom: "html",
-                        position: "absolute",
-                        easing: YAHOO.util.Easing.easeBothStrong,
-                        buttonText: {
-                            next: " ",
-                            prev: " ",
-                            close: "X"
-                        }
-                    }
-                };
-            }
-        });
     </script>
     
     <p>%%pathnavigation%%</p>
@@ -105,18 +98,6 @@
     systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
  -->
 <picdetail>
-    <script type="text/javascript">
-	    if (typeof bitKajonaRatingsAvailable == "undefined") {  
-	        bitKajonaRatingsAvailable = false;
-	    }
-        
-        function enableRatingsWrapper() {
-            if (bitKajonaRatingsAvailable) {
-                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
-            }
-        }
-        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
-    </script>
     %%pathnavigation%%
     <table width="85%" border="0" style="text-align: center;">
         <tr>
@@ -156,7 +137,10 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = true;
+	    if (typeof bitKajonaRatingsLoaded == "undefined") {
+	        kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+	        var bitKajonaRatingsLoaded = true;
+	    }
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">

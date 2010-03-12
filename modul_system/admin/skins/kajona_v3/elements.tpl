@@ -958,7 +958,7 @@ The language switch sourrounds the buttons
             tree.draw();
             kajonaUtils.checkInitialTreeViewToggling();
         }
-        //Add an onDOMReady handler to build the tree when the document is ready
+        //build the tree when files are loaded
         kajonaAjaxHelper.loadTreeviewBase(treeInit);
 
     })();

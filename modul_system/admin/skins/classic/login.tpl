@@ -4,11 +4,11 @@
 <head>
 <link href="_skinwebpath_/styles.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+%%head%%
 <script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
-%%head%%
 <script type="text/javascript">
 	kajonaUtils.focusHelper.setBrowserFocus("name");
 	kajonaAjaxHelper.loadAjaxBase();

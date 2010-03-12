@@ -4,6 +4,7 @@
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
 	<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+    %%head%%
 	<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%webpathTitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -11,7 +12,6 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	%%head%%
 </head>
 <body>
 
@@ -65,33 +65,31 @@
 
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadAjaxBase();
-	kajonaAjaxHelper.loadAnimationBase(function() {YAHOO.util.Event.onContentReady("adminModuleNaviUl", naviSetup);});
-	
 	var moduleNaviHiddenTimeout = undefined;
-	function naviSetup() {
-		var list = YAHOO.util.Dom.get('adminModuleNaviUl');
-		var arrayChildren = YAHOO.util.Dom.getChildren(list);
-		
-		var intEntriesVisible = 0;
-		for(intI = 0; intI < arrayChildren.length; intI++) {
-			if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
-				nodeToMove = arrayChildren[intI];
-			
-				YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
-				var tmpNode = nodeToMove.cloneNode(true);
-				tmpNode.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
-				tmpNode.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
-				
-				document.getElementById('naviCollectorUl').appendChild(tmpNode);
-				document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
-				intEntriesVisible++;
-			}
-		}
-		
-		if(intEntriesVisible == 0)
-		   document.getElementById('modulNaviMoreIcon').style.display='none';
-	}
+	kajonaAjaxHelper.loadAjaxBase();
+	kajonaAjaxHelper.loadAnimationBase(function naviSetup() {
+        var list = YAHOO.util.Dom.get('adminModuleNaviUl');
+        var arrayChildren = YAHOO.util.Dom.getChildren(list);
+        
+        var intEntriesVisible = 0;
+        for(intI = 0; intI < arrayChildren.length; intI++) {
+            if(YAHOO.util.Dom.hasClass(arrayChildren[intI], 'adminModuleNaviHidden')) {
+                nodeToMove = arrayChildren[intI];
+            
+                YAHOO.util.Dom.setStyle(nodeToMove, "display", "block");
+                var tmpNode = nodeToMove.cloneNode(true);
+                tmpNode.onmouseout = function() {moduleNaviHiddenTimeout = window.setTimeout('hideMenu()', 1000);};
+                tmpNode.onmouseover = function() {window.clearTimeout(moduleNaviHiddenTimeout);};
+                
+                document.getElementById('naviCollectorUl').appendChild(tmpNode);
+                document.getElementById('adminModuleNaviUl').removeChild(nodeToMove);
+                intEntriesVisible++;
+            }
+        }
+        
+        if(intEntriesVisible == 0)
+           document.getElementById('modulNaviMoreIcon').style.display='none';
+    });
 	
 	function showMenu() {
 		YAHOO.util.Dom.setStyle('moduleNaviHidden', "opacity", 0);

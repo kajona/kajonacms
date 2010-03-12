@@ -100,11 +100,10 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		}
 
 		//Loop over every item and collect them
-		$arrTemplate  = array();
-		$arrTemplate["systemid"] = $this->getSystemid();
+		$arrTemplate = array();
+		$arrTemplate["systemid"] = $this->arrElementData["content_id"];
 		$arrTemplate["folderlist"] = "";
 		$arrTemplate["piclist"] = "";
-
 
 		if(count($arrImages) > 0) {
 		    $intImageCounter = 0;

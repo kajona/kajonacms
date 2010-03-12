@@ -2,18 +2,6 @@
 
 <!-- available placeholders: folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
-    <script type="text/javascript">
-        if (typeof bitKajonaRatingsAvailable == "undefined") {  
-            bitKajonaRatingsAvailable = false;
-        }
-        
-        function enableRatingsWrapper() {
-            if (bitKajonaRatingsAvailable) {
-                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
-            }
-        }
-        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
-    </script>
     <p>%%pathnavigation%%</p>
     <p>
         <table cellspacing="0" class="portalList">
@@ -67,7 +55,10 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = true;
+        if (typeof bitKajonaRatingsLoaded == "undefined") {
+            kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            var bitKajonaRatingsLoaded = true;
+        }
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
@@ -86,18 +77,6 @@
                              file_owner, file_lmtime
  -->
 <filedetail>
-    <script type="text/javascript">
-        if (typeof bitKajonaRatingsAvailable == "undefined") {  
-            bitKajonaRatingsAvailable = false;
-        }
-
-        function enableRatingsWrapper() {
-            if (bitKajonaRatingsAvailable) {
-                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
-            }
-        }
-        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
-    </script>
     %%pathnavigation%%
     <div>
         <div>

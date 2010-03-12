@@ -46,52 +46,45 @@ class class_element_imagelightbox extends class_element_portal implements interf
 
 		//some javascript
 		$strReturn .= "<script type=\"text/javascript\">
-			if (typeof bitPhotoViewerLoadingStarted == \"undefined\") {
-	            var bitPhotoViewerLoadingStarted = false;
+	        if (YAHOO.lang.isUndefined(arrViewers)) {
 	            var arrViewers = new Array();
-	        }
 
-	        //add viewer: all images with class \"photoViewer\" in the div with the id \"contentContainer\"
-	        arrViewers.push(\"contentContainer\");
+	            //add viewer: all images with class \"photoViewer\" in the div with the id \"contentContainer\"
+	            arrViewers.push(\"contentContainer\");
 
-	        kajonaAjaxHelper.loadPhotoViewerBase = function(callback) {
-	            if (!bitPhotoViewerLoadingStarted) {
-	                bitPhotoViewerLoadingStarted = true;
+	            YAHOO.util.Event.onDOMReady(function () {
+	                YAHOO.namespace(\"YAHOO.photoViewer\");
+	                YAHOO.photoViewer.config = { viewers: {} };
 
-	                var l = new kajonaAjaxHelper.Loader();
-	                l.addYUIComponents([ \"dragdrop\", \"animation\", \"container\" ]);
-	                l.addJavascriptFile(\"photoviewer/build/photoviewer_base-min.js\");
-	                l.addCssFile(\"_webpath_/portal/scripts/photoviewer/build/photoviewer_base.css\");
-	                l.addCssFile(\"_webpath_/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css\");
-	                l.load(callback);
-	            }
-	        };
-
-	        kajonaAjaxHelper.loadPhotoViewerBase(function () {
-	            YAHOO.photoViewer.config = { viewers: {} };
-
-	            //init all viewers
-	            for (var i=0; i<arrViewers.length; i++) {
-	                YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-	                    properties: {
-	                        id: arrViewers[i],
-	                        grow: 0.2,
-	                        fade: 0.2,
-	                        modal: true,
-	                        dragable: false,
-	                        fixedcenter: true,
-	                        loadFrom: \"html\",
-	                        position: \"absolute\",
-	                        easing: YAHOO.util.Easing.easeBothStrong,
-	                        buttonText: {
-	                            next: \" \",
-	                            prev: \" \",
-	                            close: \"X\"
+	                //init all viewers
+	                for (var i=0; i<arrViewers.length; i++) {
+	                    YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
+	                        properties: {
+	                            id: arrViewers[i],
+	                            grow: 0.2,
+	                            fade: 0.2,
+	                            modal: true,
+	                            dragable: false,
+	                            fixedcenter: true,
+	                            loadFrom: \"html\",
+	                            position: \"absolute\",
+	                            buttonText: {
+	                                next: \" \",
+	                                prev: \" \",
+	                                close: \"X\"
+	                            }
 	                        }
-	                    }
-	                };
-	            }
-	        });
+	                    };
+	                }
+	            });
+
+	            kajonaAjaxHelper.Loader.load(
+	                [\"dragdrop\", \"animation\", \"container\"],
+	                [KAJONA_WEBPATH+\"/portal/scripts/photoviewer/build/photoviewer_base-min.js\",
+	                 KAJONA_WEBPATH+\"/portal/scripts/photoviewer/build/photoviewer_base.css\",
+	                 KAJONA_WEBPATH+\"/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css\"]
+	            );
+	        }
 		</script>";
 
 		$strReturn .= "<div class=\"imagelightbox\">";

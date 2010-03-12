@@ -360,7 +360,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                                 $strTaskOutput = "
                                     <script type=\"text/javascript\">
 	                                   kajonaAjaxHelper.loadAjaxBase( function() {
-
 	                                       kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
 	                                       kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
 	                                    });
@@ -813,7 +812,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
 			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
-			
+
 		case "sqlite":
 			foreach($arrTables as $arrTable) {
 				$intNumber++;

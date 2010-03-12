@@ -74,7 +74,6 @@ var kajonaStatusDisplay = {
     },
 	
 	startFadeIn : function(strMessage) {
-		kajonaAjaxHelper.loadAnimationBase();
 		//currently animated?
 		if(kajonaStatusDisplay.animObject != null && kajonaStatusDisplay.animObject.isAnimated()) {
 			kajonaStatusDisplay.animObject.stop(true);
@@ -115,3 +114,4 @@ var kajonaStatusDisplay = {
 		kajonaStatusDisplay.animObject.animate();
 	}
 };
+kajonaAjaxHelper.loadAnimationBase();

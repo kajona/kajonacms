@@ -55,18 +55,6 @@
     systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
  -->
 <picdetail>
-    <script type="text/javascript">
-        if (typeof bitKajonaRatingsAvailable == "undefined") {  
-            bitKajonaRatingsAvailable = false;
-        }
-        
-        function enableRatingsWrapper() {
-            if (bitKajonaRatingsAvailable) {
-                kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
-            }
-        }
-        YAHOO.util.Event.onDOMReady(enableRatingsWrapper);
-    </script>
     %%pathnavigation%%
     <table width="85%" border="0" style="text-align: center;">
         <tr>
@@ -106,7 +94,10 @@
 <!-- available placeholders: rating_icons, rating_bar_title, rating_rating, rating_hits, rating_ratingPercent, system_id -->
 <rating_bar>
     <script type="text/javascript">
-        bitKajonaRatingsAvailable = true;
+        if (typeof bitKajonaRatingsLoaded == "undefined") {
+            kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+            var bitKajonaRatingsLoaded = true;
+        }
     </script>
     <span class="inline-rating-bar">
     <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">

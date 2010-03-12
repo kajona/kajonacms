@@ -154,18 +154,3 @@ function addCss(file) {
 	l.setAttribute("href", file);
 	document.getElementsByTagName("head")[0].appendChild(l);
 }
-
-//deprecated, use YAHOO.util.Event.onDOMReady instead, if YUI loaded
-function addLoadEvent(func) {
-	var oldonload = window.onload;
-    if (typeof window.onload != 'function') {
-		window.onload = func;
-	} else {
-		window.onload = function() {
-			if(oldonload) {
-				oldonload();
-			}
-			func();
-		};
-	}
-}

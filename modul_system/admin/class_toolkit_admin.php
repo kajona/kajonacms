@@ -428,32 +428,26 @@ class class_toolkit_admin extends class_toolkit {
                                                    "ordneransicht");
 
 
-        $strNameCleaned = uniStrReplace(array("", "[", "]"), array("_", "bo", "bc"), $strName);
         $arrTemplate["ajaxScript"] = "
-        <script type=\"text/javascript\" language=\"Javascript\">
-            kajonaAjaxHelper.loadAutocompleteBase();
-            function initAC_".$strNameCleaned."() {
-                document.getElementById('".$strName."').onfocus = function() {};
+	        <script type=\"text/javascript\">
+	            kajonaAjaxHelper.loadAutocompleteBase(function () {
+	                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
+	                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
+	                pageDataSource.responseSchema = {
+	                    resultNode : \"page\",
+	                    fields : [\"title\"]
+	                };
 
-                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
-                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
-                pageDataSource.responseSchema = {
-                    resultNode : \"page\",
-                    fields : [\"title\"]
-                };
-
-                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
-                    queryMatchCase: false,
-                    allowBrowserAutocomplete: false,
-                    useShadow: false
-                });
-                pageautocomplete.generateRequest = function(sQuery) {
-                    return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
-                };
-            }
-
-            YAHOO.util.Event.onDOMReady(function () {document.getElementById('".$strName."').onfocus = function () {initAC_".$strNameCleaned."();};});
-        </script>
+	                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
+	                    queryMatchCase: false,
+	                    allowBrowserAutocomplete: false,
+	                    useShadow: false
+	                });
+	                pageautocomplete.generateRequest = function(sQuery) {
+	                    return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
+	                };
+	            });
+	        </script>
         ";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
