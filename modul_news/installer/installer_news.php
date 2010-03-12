@@ -24,18 +24,13 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrModule["file_portal"] 	  = "class_modul_news_portal.php";
 		$arrModule["name_lang"] 	  = "Module News";
 		$arrModule["moduleId"] 		  = _news_modul_id_;
-
-		$arrModule["tabellen"][]      = _dbprefix_."news";
-		$arrModule["tabellen"][]      = _dbprefix_."news_category";
-		$arrModule["tabellen"][]      = _dbprefix_."news_member";
-		$arrModule["tabellen"][]      = _dbprefix_."element_news";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -55,7 +50,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//news cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_category...\n";
-		
+
 		$arrFields = array();
 		$arrFields["news_cat_id"] 		= array("char20", false);
 		$arrFields["news_cat_title"] 	= array("char254", true);
@@ -65,7 +60,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//news----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news...\n";
-		
+
 		$arrFields = array();
 		$arrFields["news_id"] 		= array("char20", false);
 		$arrFields["news_title"] 	= array("char254", true);
@@ -79,7 +74,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//news_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_member...\n";
-		
+
 		$arrFields = array();
 		$arrFields["newsmem_id"] 		= array("char20", false);
 		$arrFields["newsmem_news"]	 	= array("char20", true);
@@ -90,7 +85,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//news_feed--------------------------------------------------------------------------------------
 		$strReturn .= "Installing table news_feed...\n";
-		
+
 		$arrFields = array();
 		$arrFields["news_feed_id"] 		= array("char20", false);
 		$arrFields["news_feed_title"] 	= array("char254", true);
@@ -101,7 +96,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 		$arrFields["news_feed_cat"] 	= array("char20", true);
 		$arrFields["news_feed_hits"] 	= array("int", true);
 		$arrFields["news_feed_amount"] 	= array("int", true);
-		
+
 		if(!$this->objDB->createTable("news_feed", $arrFields, array("news_feed_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -123,7 +118,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 		//Table for page-element
 		$strReturn .= "Installing news-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 		= array("char20", false);
 		$arrFields["news_category"] 	= array("char20", true);
@@ -133,7 +128,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         $arrFields["news_amount"] 		= array("int", true);
 		$arrFields["news_detailspage"] 	= array("char254", true);
 		$arrFields["news_template"] 	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_news", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -176,7 +171,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 		$arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -221,12 +216,12 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "3.1.1");
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Scanning tables...\n";
         $arrTables = $this->objDB->getTables();
-        
+
         if(in_array(_dbprefix_."element_news", $arrTables)) {
             $strReturn .= "Altering news-element-table...\n";
             $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
@@ -234,19 +229,19 @@ class class_installer_news extends class_installer_base implements interface_ins
                             ADD ".$this->objDB->encloseColumnName("news_amount")." INT NULL;";
             if(!$this->objDB->_query($strQuery))
                 $strReturn .= "An error occured!!!\n";
-            
+
             $strReturn .= "Updating news-element-table...\n";
             $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
             				SET news_order = 0;";
             if(!$this->objDB->_query($strQuery))
                 $strReturn .= "An error occured!!!\n";
-                
+
         }
-        
+
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_news_suche_seite_");
         $objConstant->renameConstant("_news_search_resultpage_");
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("news", "3.1.9");
 
@@ -329,7 +324,7 @@ class class_installer_news extends class_installer_base implements interface_ins
                 $strReturn .= " ...failed!!!\n";
         }
 
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("news", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
@@ -344,7 +339,7 @@ class class_installer_news extends class_installer_base implements interface_ins
         $strReturn .= "Altering news-feed-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."news_feed")."
                         ADD ".$this->objDB->encloseColumnName("news_feed_amount")." INT NULL;";
-        
+
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured!!!\n";
 

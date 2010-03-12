@@ -45,5 +45,5 @@ class class_element_search extends class_element_portal implements interface_por
 		return $strReturn;
 	}
 
-}	 //class_element_absatz
+}
 ?>

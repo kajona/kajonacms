@@ -17,7 +17,7 @@ class class_installer_sc_news implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
-    
+
     private $strIndexID = "";
 
     /**
@@ -27,7 +27,7 @@ class class_installer_sc_news implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
         $strNewsdetailsId = "";
-        
+
         //search the index page
         $objIndex = class_modul_pages_page::getPageByName("index");
         if($objIndex != null)
@@ -118,8 +118,8 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPagelement->setStrElement("row");
             $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();
-             $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'News'
+             $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'News'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
                 if($this->objDB->_query($strQuery))
                     $strReturn .= "Headline element created.\n";
@@ -143,9 +143,9 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objNewsFeed->updateObjectToDb();
             $strNewsFeedId = $objNewsFeed->getSystemid();
             $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
-            
+
             $strReturn .= "Creating navigation entries...\n";
-            
+
             //navigations installed?
 	        try {
 	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
@@ -154,25 +154,25 @@ class class_installer_sc_news implements interface_sc_installer  {
 	            $objModule = null;
 	        }
 	        if($objModule != null) {
-	        	
+
 	            $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	            $strTreeId = $objNavi->getSystemid();
-	            
+
 	            $objNaviPoint = new class_modul_navigation_point();
 	            $objNaviPoint->setStrName("News");
 	            $objNaviPoint->setStrPageI("index");
 	            $objNaviPoint->updateObjectToDb($strTreeId);
 	            $strNewsPointID = $objNaviPoint->getSystemid();
 	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-	            
+
 	        }
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
@@ -180,6 +180,6 @@ class class_installer_sc_news implements interface_sc_installer  {
     public function getCorrespondingModule() {
         return "news";
     }
-    
+
 }
 ?>

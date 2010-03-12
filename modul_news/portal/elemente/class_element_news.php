@@ -48,5 +48,5 @@ class class_element_news extends class_element_portal implements interface_porta
 		return $strReturn;
 	}
 
-}	 //class_element_absatz
+}
 ?>

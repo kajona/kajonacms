@@ -47,5 +47,5 @@ class class_element_zeile extends class_element_portal implements  interface_por
 		return $strReturn;
 	}
 
-}	 //class_element_absatz
+}
 ?>

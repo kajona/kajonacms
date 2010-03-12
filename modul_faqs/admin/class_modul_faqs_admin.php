@@ -9,7 +9,7 @@
 
 
 /**
- * Admin-Class of the faqs-module. Responsible for editing faqs and organizing them in categories
+ * Admin class of the faqs-module. Responsible for editing faqs and organizing them in categories
  *
  * @package modul_faqs
  */

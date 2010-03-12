@@ -53,7 +53,7 @@
 	module_version			= Installed version
 	module_date				= Installation-date
 	module_navigation		= Module appears in the admin-list: 0 = false, 1 = true
-	
+
 //--_session---------------------------------------------------------------------------------------------
     session_id              = table primary key
     session_phpid           = matching php-sessionid
@@ -190,7 +190,7 @@
 
 //--_stats_ip2country------------------------------------------------------------------------------------
     ip2c_ip                 = ip, primary key
-    ip2c_name               = name of the country    
+    ip2c_name               = name of the country
 
 //--_news_category---------------------------------------------------------------------------------------
 	news_cat_id	       		= table primary key
@@ -311,7 +311,7 @@
     remoteloader_cache_checksum     = checksum and primary key
     remoteloader_cache_releasetime  = timestamp the entry gets invalid
     remoteloader_cache_response     = saved response
-   
+
 //--_rating----------------------------------------------------------------------------------------------
     rating_id               = table primary key
     rating_systemid         = systemid of the record the rating belongs to
@@ -322,18 +322,18 @@
 //--_rating_history--------------------------------------------------------------------------------------
     rating_history_id       = table primary key
     rating_history_rating   = id of the corresponding rating
-    rating_history_user     = user id of the user 
-	
+    rating_history_user     = user id of the user
+
 
 !!!!!!!!!!!!!!!!!!!!!!!!!! ALL ELEMENT TABLES NEED THE COLUMN content_id AS primary key !!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!! ALL COLUMNS HAVE TO PERMIT NULL-VALUES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+!!!!!!!!!!!!!!!!!!!!!!!!!! ALL COLUMNS HAVE TO PERMIT NULL-VALUES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-//--_element_absatz--------------------------------------------------------------------------------------
+//--_element_paragraph-----------------------------------------------------------------------------------
 	content_id				= table primary key
-	absatz_titel			= Title of the pargraph
-	absatz_inhalt			= Text of the paragraph
-	absatz_link				= Link
-	absatz_bild				= Picture
+	paragraph_title			= Title of the pargraph
+	paragraph_content			= Text of the paragraph
+	paragraph_link				= Link
+	paragraph_image				= Picture
 
 //--_element_bild----------------------------------------------------------------------------------------
 	content_id				= table primary key

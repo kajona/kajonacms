@@ -61,8 +61,8 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Postacomment Sample'
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Postacomment Sample'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
@@ -78,16 +78,16 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = '',
-                                absatz_inhalt ='Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden. Um die Ajax-Funktionen dieses Moduls
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = '',
+                                paragraph_content ='Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden. Um die Ajax-Funktionen dieses Moduls
                                                 zu nutzen, kann über die Administration das Template des Postacomment-Seitenelements verändert werden.'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = '',
-                                    absatz_inhalt ='By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = '',
+                                    paragraph_content ='By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
                                                     switch the template to be used by the postacomment-pageelement by using the admin-backend.'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }

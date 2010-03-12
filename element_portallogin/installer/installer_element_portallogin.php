@@ -24,14 +24,13 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."element_portallogin";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.0.9";
 	}
@@ -79,7 +78,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 
        	//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 				= array("char20", false);
 		$arrFields["portallogin_template"] 		= array("char254", true);
@@ -88,7 +87,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$arrFields["portallogin_logout_success"]= array("char254", true);
         $arrFields["portallogin_profile"]       = array("char254", true);
         $arrFields["portallogin_pwdforgot"]     = array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_portallogin", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 

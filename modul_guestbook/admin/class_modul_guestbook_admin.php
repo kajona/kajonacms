@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Admin-Class to handle all guestbook-stuff like creating guestbook, deleting posts, ...
+ * Admin class to handle all guestbook-stuff like creating guestbook, deleting posts, ...
  *
  * @package modul_guestbook
  */

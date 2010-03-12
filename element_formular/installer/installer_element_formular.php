@@ -24,14 +24,13 @@ class class_installer_element_formular extends class_installer_base implements i
 		$arrModule["name"] 			= "element_formular";
 		$arrModule["name_lang"] 	= "Element Form";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."element_formular";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.0.9";
 	}
@@ -78,14 +77,14 @@ class class_installer_element_formular extends class_installer_base implements i
 
 		//Table for page-element
 		$strReturn .= "Installing formular-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 		= array("char20", false);
 		$arrFields["formular_class"] 	= array("char254", true);
 		$arrFields["formular_email"] 	= array("char254", true);
 		$arrFields["formular_success"] 	= array("text", true);
 		$arrFields["formular_error"] 	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("element_formular", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 

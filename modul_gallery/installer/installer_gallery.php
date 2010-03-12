@@ -24,8 +24,6 @@ class class_installer_gallery extends class_installer_base implements interface_
 		$arrModule["file_portal"] 	= "class_modul_gallery_portal.php";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."gallery_gallery";
-		$arrModule["tabellen2"][]   = _dbprefix_."gallery_pic";
 		parent::__construct($arrModule);
 	}
 
@@ -46,7 +44,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         return false;
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -59,7 +57,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 		//gallery ---------------------------------------------------------------------------------------
 		$strReturn .= "Installing table gallery_gallery...\n";
-		
+
 		$arrFields = array();
 		$arrFields["gallery_id"] 	= array("char20", false);
 		$arrFields["gallery_path"] 	= array("char254", true);
@@ -70,7 +68,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 		//gallery_pic -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table gallery_pic...\n";
-		
+
 		$arrFields = array();
 		$arrFields["pic_id"] 			= array("char20", false);
 		$arrFields["pic_name"] 			= array("char254", true);
@@ -102,7 +100,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 		//Table for page-element
 		$strReturn .= "Installing gallery-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 			= array("char20", false);
 		$arrFields["gallery_id"] 			= array("char20", true);
@@ -118,7 +116,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		$arrFields["gallery_text"] 			= array("char254", true);
 		$arrFields["gallery_text_x"] 		= array("int", true);
 		$arrFields["gallery_text_y"] 		= array("int", true);
-		
+
 		if(!$this->objDB->createTable("element_gallery", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -249,17 +247,17 @@ class class_installer_gallery extends class_installer_base implements interface_
 
             $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
         }
-        
+
         $strReturn .= "Registering xml-classes...\n";
         $objModule = class_modul_system_module::getModuleByName("gallery", true);
         $objModule->setStrXmlNameAdmin("class_modul_gallery_admin_xml.php");
         if(!$objModule->updateObjectToDb())
             $strReturn .= "An error occured!\n";
-        
+
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_bildtypen_");
         $objConstant->renameConstant("_gallery_imagetypes_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_suche_seite_");
         $objConstant->renameConstant("_gallery_search_resultpage_");
 
@@ -325,7 +323,7 @@ class class_installer_gallery extends class_installer_base implements interface_
             else
                 $strReturn .= " ...failed!!!\n";
         }
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("gallery", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
@@ -340,7 +338,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         if(in_array(_dbprefix_."element_gallery", $this->objDB->getTables())) {
             $strReturn .= "Updating gallery-element table...\n";
-            
+
             $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_gallery")."
                                 DROP ".$this->objDB->encloseColumnName("gallery_nrow").";";
             if(!$this->objDB->_query($strQuery))
@@ -355,6 +353,6 @@ class class_installer_gallery extends class_installer_base implements interface_
         $this->updateElementVersion("galleryRandom", "3.2.92");
         return $strReturn;
     }
-    
+
 }
 ?>

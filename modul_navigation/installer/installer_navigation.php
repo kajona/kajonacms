@@ -24,17 +24,13 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$arrModule["file_portal"] 	= "class_modul_navigation_portal.php";
 		$arrModule["name_lang"] 	= "Module Navigation";
 		$arrModule["moduleId"] 		= _navigation_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."navigation";
-		$arrModule["tabellen"][]    = _dbprefix_."navigation_cache";
-		$arrModule["tabellen"][]    = _dbprefix_."elemente_navigation";
-
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -66,7 +62,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 		//navigation-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table navigation...\n";
-		
+
 		$arrFields = array();
 		$arrFields["navigation_id"] 		= array("char20", false);
 		$arrFields["navigation_name"] 		= array("char254", true);
@@ -104,13 +100,13 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$strReturn = "";
 
 		$strReturn .= "Installing navigation-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 			= array("char20", false);
 		$arrFields["navigation_id"] 		= array("char20", true);
 		$arrFields["navigation_template"] 	= array("char254", true);
 		$arrFields["navigation_mode"] 		= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_navigation", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -153,7 +149,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -188,7 +184,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         if($arrModul["module_version"] == "3.2.91") {
             $strReturn .= $this->update_3291_3292();
         }
-        
+
         return $strReturn."\n\n";
 	}
 
@@ -201,11 +197,11 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
-        
+
         $strReturn .= "Removing css-column from element-table...\n";
         $strQuery = "ALTER TABLE `"._dbprefix_."element_navigation`
                         DROP `navigation_css`;";
@@ -294,7 +290,7 @@ class class_installer_navigation extends class_installer_base implements interfa
         }
 
 
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("navigation", "3.2.91");
         $strReturn .= "Updating module-versions...\n";

@@ -17,7 +17,7 @@ $lang["paragraph_title"]                 = "Title:";
 $lang["browser"]                         = "Open browser";
 $lang["page_element_placeholder_title"]  = "Internal title:";
 $lang["paragraph_template"]              = "Template:";
-$lang["quickhelp_element_absatz"]        = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
-$lang["required_absatz_titel"]           = "Title";
+$lang["quickhelp_element_paragraph"]     = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
+$lang["required_paragraph_title"]        = "Title";
 $lang["submit"]                          = "Save";
 ?>

@@ -28,14 +28,13 @@ class class_installer_search extends class_installer_base implements interface_i
 		$arrModule["file_portal"] 	= "class_modul_search_portal.php";
 		$arrModule["name_lang"] 	= "Module Search";
 		$arrModule["moduleId"] 		= _suche_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."element_search";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -61,13 +60,13 @@ class class_installer_search extends class_installer_base implements interface_i
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
 		//Tabellen anlegen
 		$strReturn .= "Installing search-log table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["search_log_id"] 	  = array("char20", false);
 		$arrFields["search_log_date"] 	  = array("int", true);
 		$arrFields["search_log_query"] 	  = array("char254", true);
 		$arrFields["search_log_language"] = array("char10", true);
-		
+
 		if(!$this->objDB->createTable("search_log", $arrFields, array("search_log_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -84,13 +83,13 @@ class class_installer_search extends class_installer_base implements interface_i
 
 		//Table for page-element
 		$strReturn .= "Installing search-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 		= array("char20", false);
 		$arrFields["search_template"] 	= array("char254", true);
 		$arrFields["search_amount"] 	= array("int", true);
 		$arrFields["search_page"] 		= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_search", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -134,7 +133,7 @@ class class_installer_search extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -166,17 +165,17 @@ class class_installer_search extends class_installer_base implements interface_i
     private function update_310_311() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.1.1");
 
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.1.9");
 

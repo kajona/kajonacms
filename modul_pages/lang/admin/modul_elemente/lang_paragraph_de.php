@@ -17,7 +17,7 @@ $lang["paragraph_title"]                 = "Titel:";
 $lang["browser"]                         = "Browser öffnen";
 $lang["page_element_placeholder_title"]  = "Interner Titel:";
 $lang["paragraph_template"]              = "Template:";
-$lang["quickhelp_element_absatz"]        = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
-$lang["required_absatz_titel"]           = "Titel";
+$lang["quickhelp_element_paragraph"]     = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
+$lang["required_paragraph_title"]        = "Titel";
 $lang["submit"]                          = "Speichern";
 ?>

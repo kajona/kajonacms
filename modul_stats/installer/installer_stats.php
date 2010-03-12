@@ -29,7 +29,6 @@ class class_installer_stats extends class_installer_base implements interface_in
 		$arrModule["file_portal"] 	= "class_modul_stats_portal.php";
 		$arrModule["name_lang"] 	= "Module Stats";
 		$arrModule["moduleId"] 		= _stats_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."stats_daten";
 		parent::__construct($arrModule);
 
 	}
@@ -37,7 +36,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.0.9";
 	}
@@ -59,7 +58,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 		//Stats table -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table stats...\n";
-		
+
 		$arrFields = array();
 		$arrFields["stats_id"] 		= array("char20", false);
 		$arrFields["stats_ip"] 		= array("char20", true);
@@ -75,7 +74,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Installing table ip2country...\n";
-        
+
         $arrFields = array();
 		$arrFields["ip2c_ip"] 		= array("char20", false);
 		$arrFields["ip2c_name"] 	= array("char100", false);
@@ -98,7 +97,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 	public function postInstall() {
     }
 
-    
+
 
 	public function update() {
 	    $strReturn = "";
@@ -111,7 +110,7 @@ class class_installer_stats extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -148,7 +147,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
@@ -156,13 +155,13 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_stats_anzahl_liste_");
         $objConstant->renameConstant("_stats_nrofrecords_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_stats_zeitraum_online_");
         $objConstant->renameConstant("_stats_duration_online_");
-        
+
         $objConstant = class_modul_system_setting::getConfigByName("_stats_ausschluss_");
         $objConstant->renameConstant("_stats_exclusionlist_");
-       
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.9");
         return $strReturn;
@@ -175,7 +174,7 @@ class class_installer_stats extends class_installer_base implements interface_in
         $this->updateModuleVersion("stats", "3.1.95");
         return $strReturn;
     }
-    
+
     private function update_3195_320() {
         $strReturn = "";
         $strReturn .= "Updating 3.1.95 to 3.2.0...\n";
@@ -200,6 +199,6 @@ class class_installer_stats extends class_installer_base implements interface_in
         return $strReturn;
     }
 
-    
+
 }
 ?>

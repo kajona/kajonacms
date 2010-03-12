@@ -17,7 +17,7 @@ class class_installer_sc_search implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
-    
+
     private $strMasterID = "";
 
     /**
@@ -26,7 +26,7 @@ class class_installer_sc_search implements interface_sc_installer  {
      */
     public function install() {
         $strReturn = "";
-        
+
         //search the master page
         $objMaster = class_modul_pages_page::getPageByName("master");
         if($objMaster != null)
@@ -42,7 +42,7 @@ class class_installer_sc_search implements interface_sc_installer  {
                 $objPage->setStrBrowsername("Search results");
 
             //set language to "" - being update by the languages sc installer later
-            $objPage->setStrLanguage("");    
+            $objPage->setStrLanguage("");
             $objPage->setStrTemplate("kajona_demo.tpl");
             $objPage->updateObjectToDb();
             $strSearchresultsId = $objPage->getSystemid();
@@ -73,13 +73,13 @@ class class_installer_sc_search implements interface_sc_installer  {
             $strElementId = $objPagelement->getSystemid();
 
             if($this->strContentLanguage == "de") {
-                $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'Suchergebnisse'
+                $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'Suchergebnisse'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
             }
             else {
-                $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'Search results'
+                $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'Search results'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
             }
 
@@ -88,7 +88,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             else
                 $strReturn .= "Error creating headline element.\n";
 
-            $strReturn .= "Creating navigation point.\n"; 
+            $strReturn .= "Creating navigation point.\n";
 
             //navigations installed?
 	        try {
@@ -98,11 +98,11 @@ class class_installer_sc_search implements interface_sc_installer  {
 	            $objModule = null;
 	        }
 	        if($objModule != null) {
-	        	
+
 		        $arrNavis = class_modul_navigation_tree::getAllNavis();
 		        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
 		        $strTreeId = $objNavi->getSystemid();
-		        
+
 		        $objNaviPoint = new class_modul_navigation_point();
 		        if($this->strContentLanguage == "de") {
 		            $objNaviPoint->setStrName("Suche");
@@ -110,19 +110,19 @@ class class_installer_sc_search implements interface_sc_installer  {
 		        else {
 		        	$objNaviPoint->setStrName("Search");
 		        }
-		            
+
 		        $objNaviPoint->setStrPageI("search");
 		        $objNaviPoint->updateObjectToDb($strTreeId);
-		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";    
+		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
             }
-            
+
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }

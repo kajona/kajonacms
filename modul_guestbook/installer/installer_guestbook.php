@@ -24,17 +24,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$arrModule["file_portal"] 	= "class_modul_guestbook_portal.php";
 		$arrModule["name_lang"] 	= "Module Guestbook";
 		$arrModule["moduleId"] 		= _guestbook_modul_id_;
-
-		$arrModule["tabellen"][]    = _dbprefix_."guestbook_book";
-		$arrModule["tabellen"][]    = _dbprefix_."guestbook_posts";
-		$arrModule["tabellen"][]    = _dbprefix_."elemente_guestbook";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -63,13 +59,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$arrFields["guestbook_id"] 		  = array("char20", false);
 		$arrFields["guestbook_title"] 	  = array("char254", true);
 		$arrFields["guestbook_moderated"] = array("int", true);
-		
+
 		if(!$this->objDB->createTable("guestbook_book", $arrFields, array("guestbook_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//guestbook_post----------------------------------------------------------------------------------
 		$strReturn .= "Installing table guestbook_post...\n";
-		
+
 		$arrFields = array();
 		$arrFields["guestbook_post_id"]   = array("char20", false);
 		$arrFields["guestbook_post_name"] = array("char254", true);
@@ -97,13 +93,13 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 		//Table for page-element
 		$strReturn .= "Installing guestbook-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"]   		= array("char20", false);
 		$arrFields["guestbook_id"] 		= array("char20", true);
 		$arrFields["guestbook_template"]= array("char254", true);
 		$arrFields["guestbook_amount"] 	= array("int", true);
-		
+
 		if(!$this->objDB->createTable("element_guestbook", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -145,7 +141,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -175,7 +171,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3291();
         }
-        
+
         return $strReturn."\n\n";
 	}
 
@@ -185,10 +181,10 @@ class class_installer_guestbook extends class_installer_base implements interfac
         $this->updateModuleVersion("guestbook", "3.1.1");
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
-        
+
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_guestbook_suche_seite_");
         $objConstant->renameConstant("_guestbook_search_resultpage_");
@@ -198,7 +194,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         return $strReturn;
     }
-    
+
     private function update_319_3195() {
         $strReturn = "Updating 3.1.9 to 3.1.95...\n";
         $strReturn .= "Updating module-versions...\n";
@@ -262,6 +258,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
         $this->updateElementVersion("guestbook", "3.2.91");
         return $strReturn;
     }
-    
+
 }
 ?>

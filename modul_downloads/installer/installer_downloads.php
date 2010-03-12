@@ -24,16 +24,13 @@ class class_installer_downloads extends class_installer_base implements interfac
 		$arrModule["file_portal"] 	= "class_modul_downloads_portal.php";
 		$arrModule["name_lang"] 	= "Module Downloads";
 		$arrModule["moduleId"] 		= _downloads_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."downloads_file";
-		$arrModule["tabellen"][]    = _dbprefix_."downloads_log";
-		$arrModule["tabellen"][]    = _dbprefix_."downloads_archive";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -68,13 +65,13 @@ class class_installer_downloads extends class_installer_base implements interfac
         $arrFields["downloads_screen_1"] 	= array("char254", true);
         $arrFields["downloads_screen_2"] 	= array("char254", true);
         $arrFields["downloads_screen_3"] 	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("downloads_file", $arrFields, array("downloads_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//downloads_log----------------------------------------------------------------------------------
 		$strReturn .= "Installing table downloads_log...\n";
-		
+
 		$arrFields = array();
 		$arrFields["downloads_log_id"] 		= array("char20", false);
 		$arrFields["downloads_log_date"] 	= array("int", true);
@@ -87,12 +84,12 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 		//downloads_archive----------------------------------------------------------------------------------
 		$strReturn .= "Installing table downloads_archive...\n";
-		
+
 		$arrFields = array();
 		$arrFields["archive_id"] 		= array("char20", false);
 		$arrFields["archive_path"] 		= array("char254", true);
 		$arrFields["archive_title"] 	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("downloads_archive", $arrFields, array("archive_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -113,13 +110,13 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 		//Table for page-element
 		$strReturn .= "Installing downloads-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 		= array("char20", false);
 		$arrFields["download_id"] 		= array("char20", true);
 		$arrFields["download_template"] = array("char254", true);
 		$arrFields["download_amount"]   = array("int", true);
-		
+
 		if(!$this->objDB->createTable("element_downloads", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -161,7 +158,7 @@ class class_installer_downloads extends class_installer_base implements interfac
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -212,13 +209,13 @@ class class_installer_downloads extends class_installer_base implements interfac
 
     private function update_310_311() {
         $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("downloads", "3.1.1");
 
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Updating module-versions...\n";
@@ -372,6 +369,6 @@ class class_installer_downloads extends class_installer_base implements interfac
         $this->updateElementVersion("downloads", "3.2.92");
         return $strReturn;
     }
-    
+
 }
 ?>

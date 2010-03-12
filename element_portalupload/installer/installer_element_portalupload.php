@@ -24,14 +24,13 @@ class class_installer_element_portalupload extends class_installer_base implemen
 		$arrModule["name"] 			= "element_portalupload";
 		$arrModule["name_lang"] 	= "Element portalupload";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
-		$arrModule["tabellen"][]    = _dbprefix_."element_universal";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages", "downloads");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.0.9";
 	}

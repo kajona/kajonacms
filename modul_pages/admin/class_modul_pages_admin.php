@@ -975,7 +975,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", 0);
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "new");
-				//Fetch Admin-Classes
+				//Fetch Admin classes
 				$arrClasses = $objFilesystem->getFilelist("/admin/elemente", ".php");
 				$arrClassesAdmin = array();
 				foreach($arrClasses as $strClass)
@@ -1013,7 +1013,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				$strReturn .= $this->objToolkit->formInputHidden("elementid", $this->getParam("elementid"));
 				$strReturn .= $this->objToolkit->formInputHidden("modus", "edit");
-				//Fetch Admin-Classes
+				//Fetch Admin classes
 				$arrClasses = $objFilesystem->getFilelist("/admin/elemente", ".php");
 				$arrClassesAdmin = array();
 				foreach($arrClasses as $strClass)

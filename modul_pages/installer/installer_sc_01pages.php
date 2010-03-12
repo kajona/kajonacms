@@ -64,13 +64,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Willkommen'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Willkommen'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'Welcome'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'Welcome'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -88,16 +88,16 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Herzlichen Glückwunsch!',
-                                absatz_inhalt ='Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Herzlichen Glückwunsch!',
+                                paragraph_content ='Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
                                                 Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'Congratulations!',
-                                    absatz_inhalt ='This installation of Kajona was successful. Have fun using Kajona!<br />
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'Congratulations!',
+                                    paragraph_content ='This installation of Kajona was successful. Have fun using Kajona!<br />
                                                      For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
@@ -169,13 +169,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Fehler'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Fehler'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Error'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Error'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -194,16 +194,16 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                        SET absatz_titel = 'Ein Fehler ist aufgetreten',
-                           absatz_inhalt ='Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = 'Ein Fehler ist aufgetreten',
+                           paragraph_content ='Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />
                                            Bitte versuchen Sie die letzte Aktion erneut.'
                       WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = 'An error occured',
-                                    absatz_inhalt ='Maybe the requested page doesn\'t exist anymore.<br />
+             $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = 'An error occured',
+                                    paragraph_content ='Maybe the requested page doesn\'t exist anymore.<br />
                                                     Please try it again later.'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
@@ -238,13 +238,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strImprintPageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Impressum'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Impressum'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Imprint'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Imprint'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -263,9 +263,9 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                        SET absatz_titel = 'Impressum',
-                           absatz_inhalt ='Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = 'Impressum',
+                           paragraph_content ='Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
                                            Nachname, Name<br />
                                            Straße und Hausnummer<br />
                                            PLZ, Ort<br />
@@ -277,9 +277,9 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                       WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_absatz
-                        SET absatz_titel = 'Imprint',
-                           absatz_inhalt ='Please provide your contact details.<br />
+             $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = 'Imprint',
+                           paragraph_content ='Please provide your contact details.<br />
                                            Name, Forename<br />
                                            Street<br />
                                            Zip, City<br />
@@ -320,13 +320,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strSamplePageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Beispielseite 1'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Beispielseite 1'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Sample page 1'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Sample page 1'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -345,15 +345,15 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-							SET absatz_titel = 'Standard-Absatz',
-								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+							SET paragraph_title = 'Standard-Absatz',
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 						 	WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_absatz
-							SET absatz_titel = 'Standard paragraph',
-								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+             $strQuery = "UPDATE "._dbprefix_."element_paragraph
+							SET paragraph_title = 'Standard paragraph',
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 							WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -388,13 +388,13 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strSampleSubPageId);
         $strElementId = $objPagelement->getSystemid();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Beispiel-Unterseite 1'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Beispiel-Unterseite 1'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Sample subpage 1'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Sample subpage 1'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -413,15 +413,15 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-							SET absatz_titel = 'Standard-Absatz auf Unterseite',
-								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+							SET paragraph_title = 'Standard-Absatz auf Unterseite',
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 						 	WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_absatz
-							SET absatz_titel = 'Standard paragraph on subpage',
-								absatz_inhalt ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+             $strQuery = "UPDATE "._dbprefix_."element_paragraph
+							SET paragraph_title = 'Standard paragraph on subpage',
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
 							WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 

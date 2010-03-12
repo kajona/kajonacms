@@ -69,5 +69,5 @@ class class_element_faqs extends class_element_admin implements interface_admin_
 	}
 
 
-} //class_element_absatz.php
+}
 ?>

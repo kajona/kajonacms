@@ -17,7 +17,7 @@ $lang["paragraph_title"]                 = "Име";
 $lang["browser"]                         = "Отвори browser";
 $lang["page_element_placeholder_title"]  = "Вътрешно име:";
 $lang["paragraph_template"]              = "";
-$lang["quickhelp_element_absatz"]        = "Тук можете да въведете съдържанието на параграфи с помощта на удобен редактор.";
-$lang["required_absatz_titel"]           = "Име";
+$lang["quickhelp_element_paragraph"]     = "Тук можете да въведете съдържанието на параграфи с помощта на удобен редактор.";
+$lang["required_paragraph_title"]        = "Име";
 $lang["submit"]                          = "Запази";
 ?>

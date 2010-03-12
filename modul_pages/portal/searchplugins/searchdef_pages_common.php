@@ -5,14 +5,14 @@
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id$                                  *
-********************************************************************************************************/ 
+********************************************************************************************************/
 
 
 //Tables & rows of page-elements
-$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_titel";
-$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_inhalt";
-$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_link";
-$arrSearch["pages_elements"][_dbprefix_."element_absatz"][] = "absatz_bild";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_title";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_content";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_link";
+$arrSearch["pages_elements"][_dbprefix_."element_paragraph"][] = "paragraph_image";
 $arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_titel";
 $arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_bild";
 $arrSearch["pages_elements"][_dbprefix_."element_bild"][] = "bild_link";

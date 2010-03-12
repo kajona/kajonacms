@@ -10,7 +10,7 @@
 
 
 /**
- * Admin-Class of the downloads-module. Used to sync the archives with the filesystem and to define file-properties
+ * Admin class of the downloads-module. Used to sync the archives with the filesystem and to define file-properties
  *
  * @package modul_downloads
  */

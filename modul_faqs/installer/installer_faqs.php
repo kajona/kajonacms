@@ -24,18 +24,13 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrModule["file_portal"] 	  = "class_modul_faqs_portal.php";
 		$arrModule["name_lang"] 	  = "Module FAQs";
 		$arrModule["moduleId"] 		  = _faqs_modul_id_;
-
-		$arrModule["tabellen"][]      = _dbprefix_."faqs";
-		$arrModule["tabellen"][]      = _dbprefix_."faqs_category";
-		$arrModule["tabellen"][]      = _dbprefix_."faqs_member";
-		$arrModule["tabellen"][]      = _dbprefix_."element_faqs";
 		parent::__construct($arrModule);
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -55,7 +50,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 		//faqs cat-------------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_category...\n";
-		
+
 		$arrFields = array();
 		$arrFields["faqs_cat_id"] 		= array("char20", false);
 		$arrFields["faqs_cat_title"]	= array("char254", true);
@@ -70,13 +65,13 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		$arrFields["faqs_id"] 		= array("char20", false);
 		$arrFields["faqs_question"]	= array("text", true);
 		$arrFields["faqs_answer"]	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("faqs", $arrFields, array("faqs_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//faqs_member----------------------------------------------------------------------------------
 		$strReturn .= "Installing table faqs_member...\n";
-		
+
 		$arrFields = array();
 		$arrFields["faqsmem_id"] 		= array("char20", false);
 		$arrFields["faqsmem_faq"]		= array("char20", false);
@@ -103,12 +98,12 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 		//Table for page-element
 		$strReturn .= "Installing faqs-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 	= array("char20", false);
 		$arrFields["faqs_category"]	= array("char20", true);
 		$arrFields["faqs_template"]	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_faqs", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -190,14 +185,14 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("faqs", "3.1.1");
         return $strReturn;
-    }   
-    
+    }
+
     private function update_311_319() {
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_faqs_suche_seite_");
         $objConstant->renameConstant("_faqs_search_resultpage_");
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("faqs", "3.1.9");
         return $strReturn;
@@ -287,6 +282,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         return $strReturn;
     }
 
-    
+
 }
 ?>

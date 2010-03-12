@@ -70,8 +70,8 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strGuestbookpageID);
         $strElementId = $objPagelement->getSystemid();
-         $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Guestbook'
+         $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Guestbook'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
             if($this->objDB->_query($strQuery))
                 $strReturn .= "Headline element created.\n";
@@ -87,10 +87,10 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
             $objModule = null;
         }
         if($objModule != null) {
-        
+
 	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
 	        $strTreeId = $objNavi->getSystemid();
-	        
+
 	        $objNaviPoint = new class_modul_navigation_point();
 	        if($this->strContentLanguage == "de")
 	            $objNaviPoint->setStrName("Gästebuch");
@@ -102,11 +102,11 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         }
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }
@@ -114,6 +114,6 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
     public function getCorrespondingModule() {
         return "guestbook";
     }
-    
+
 }
 ?>

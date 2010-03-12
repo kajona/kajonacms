@@ -9,7 +9,7 @@
 
 
 /**
- * Admin-Class of the postacomment-module. Responsible for listing posts and organizing them
+ * Admin class of the postacomment-module. Responsible for listing posts and organizing them
  *
  * @package modul_postacomment
  */

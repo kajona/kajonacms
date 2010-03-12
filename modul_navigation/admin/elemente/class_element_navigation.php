@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Admin-Class of the navigation element
+ * Admin class of the navigation element
  *
  * @package modul_navigation
  *

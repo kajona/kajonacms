@@ -10,7 +10,7 @@
 
 
 /**
- * Admin-Class to handle the paragraphs
+ * Admin class to handle the paragraphs
  * @package modul_pages
  *
  */
@@ -69,5 +69,5 @@ class class_element_zeile extends class_element_admin implements interface_admin
     }
 
 
-} //class_element_absatz.php
+}
 ?>

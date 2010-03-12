@@ -16,7 +16,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
 
     private $objDB;
     private $strContentLanguage;
-    
+
     private $strMasterID = "";
 
     /**
@@ -24,13 +24,13 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
      *
      */
     public function install() {
-        
+
         //search the master page
         $objMaster = class_modul_pages_page::getPageByName("master");
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
-        
-        
+
+
         $strReturn = "";
         $strReturn .= "Creating new mainnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
@@ -38,7 +38,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviTree->updateObjectToDb();
         $strTreeId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
-        
+
         $strReturn .= "Creating navigation points\n";
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Page 1");
@@ -49,21 +49,21 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objNaviPoint->setStrName("Subpage 1");
         $objNaviPoint->setStrPageI("subpage_1");
         $objNaviPoint->updateObjectToDb($strNaviPointID);
-        
+
         $strReturn .= "Creating new portalnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("portalnavigation");
         $objNaviTree->updateObjectToDb();
         $strTreePortalId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreePortalId."\n";
-        
+
         $strReturn .= "Creating navigation points\n";
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Home");
         $objNaviPoint->setStrPageI("index");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
-        
-        
+
+
 
         if($this->strMasterID != "") {
             $strReturn .= "Adding mainnavigation to master page\n";
@@ -84,7 +84,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                 $strReturn .= "Navigation element created.\n";
             else
                 $strReturn .= "Error creating navigation element.\n";
-                
+
             $strReturn .= "Adding portalnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
@@ -102,9 +102,9 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             if($this->objDB->_query($strQuery))
                 $strReturn .= "Navigation element created.\n";
             else
-                $strReturn .= "Error creating navigation element.\n";    
+                $strReturn .= "Error creating navigation element.\n";
         }
-        
+
         $strReturn .= "Creating simple sitemap...\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("sitemap");
@@ -139,38 +139,38 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strSitemapId);
         $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_absatz
-                        SET absatz_titel = 'Sitemap'
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = 'Sitemap'
                       WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
-            
+
         $strReturn .= "Creating navigation points\n";
         $objNaviPoint = new class_modul_navigation_point();
         $objNaviPoint->setStrName("Sitemap");
         $objNaviPoint->setStrPageI("sitemap");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
-        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";  
-        
+        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
+
         $objNaviPoint = new class_modul_navigation_point();
         if($this->strContentLanguage == "de")
             $objNaviPoint->setStrName("Impressum");
-        else    
+        else
             $objNaviPoint->setStrName("Imprint");
         $objNaviPoint->setStrPageI("imprint");
         $objNaviPoint->updateObjectToDb($strTreePortalId);
-        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";    
-                    
+        $strReturn .= "ID of new navigation point ".$objNaviPoint->getSystemid().".\n";
+
 
         return $strReturn;
     }
-    
+
     public function setObjDb($objDb) {
         $this->objDB = $objDb;
     }
-    
+
     public function setStrContentlanguage($strContentlanguage) {
         $this->strContentLanguage = $strContentlanguage;
     }

@@ -30,19 +30,16 @@ class class_installer_samplecontent extends class_installer_base implements inte
 		$arrModule["file_portal"] 	  = "";
 		$arrModule["name_lang"] 	  = "Module Samplecontent";
 		$arrModule["moduleId"] 		  = _samplecontent_modul_id_;
-
-		$arrModule["tabellen"][]      = _dbprefix_."languages";
 		parent::__construct($arrModule);
 
 		//set the correct language
         $this->strContentLanguage = $this->objSession->getAdminLanguage();
-        
 	}
 
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.2.1";
 	}
@@ -57,12 +54,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strPageId = "";
 
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
-		
+
 		//Register the module
         $strReturn .= "\nRegistering module\n";
         $strSystemID = $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
-        
-		
+
+
 		//search for installers available
 		$objFilesystem = new class_filesystem();
 		$arrInstaller = $objFilesystem->getFilelist("/installer", array(".php"));
@@ -72,7 +69,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
                 unset($arrInstaller[$intKey]);
 
         asort($arrInstaller);
-        
+
         $strReturn .= "Loading installers...\n";
         foreach ($arrInstaller as $strOneInstaller) {
             $strReturn .= "\n\nInstaller found: ".$strOneInstaller."\n";
@@ -80,7 +77,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
             //Creating an object....
             $strClass = "class_".str_replace(".php", "", $strOneInstaller);
             $objInstaller = new $strClass();
-            
+
             if($objInstaller instanceof interface_sc_installer ) {
                 $strModule = $objInstaller->getCorrespondingModule();
                 $strReturn .= "Module ".$strModule."...\n";
@@ -117,7 +114,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
         if($arrModul["module_version"] == "3.1.0") {
             $strReturn .= $this->update_310_311();
         }
-        
+
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.1.1") {
             $strReturn .= $this->update_311_319();
@@ -152,7 +149,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $this->updateModuleVersion("samplecontent", "3.1.1");
         return $strReturn;
     }
-    
+
     private function update_311_319() {
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Updating module-versions...\n";

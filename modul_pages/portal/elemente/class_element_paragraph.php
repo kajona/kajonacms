@@ -21,7 +21,7 @@ class class_element_paragraph extends class_element_portal implements  interface
 	 */
 	public function __construct($objElementData) {
         $arrModule = array();
-		$arrModule["name"] 			= "element_absatz";
+		$arrModule["name"] 			= "element_paragraph";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_paragraph";
@@ -49,7 +49,7 @@ class class_element_paragraph extends class_element_portal implements  interface
         $this->arrElementData["paragraph_image_tag"] = "";
         if($this->arrElementData["paragraph_image"] != "")
 			$this->arrElementData["paragraph_image_tag"] .= "<img src=\"".$this->arrElementData["paragraph_image"]."\" alt=\"".$this->arrElementData["paragraph_title"]."\" />\n";
-            
+
         $this->arrElementData["paragraph_link_tag"] = "";
         if($this->arrElementData["paragraph_link"] != "") {
 		    //internal page?
@@ -65,5 +65,5 @@ class class_element_paragraph extends class_element_portal implements  interface
         return $strReturn;
 	}
 
-}	 //class_element_absatz
+}
 ?>

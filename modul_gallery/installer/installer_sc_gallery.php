@@ -89,8 +89,8 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = 'Gallery'
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = 'Gallery'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
@@ -107,15 +107,15 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                            SET absatz_titel = '',
-                                absatz_inhalt ='Alle Beispielbilder &copy by kajona.de'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = '',
+                                paragraph_content ='Alle Beispielbilder &copy by kajona.de'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_absatz
-                                SET absatz_titel = '',
-                                    absatz_inhalt ='All sample images &copy; by kajona.de'
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = '',
+                                    paragraph_content ='All sample images &copy; by kajona.de'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 

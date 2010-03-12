@@ -9,7 +9,7 @@
 
 
 /**
- * Admin-Class of the news-module. Responsible for editing news, organizing them in categories and creating feeds
+ * Admin class of the news-module. Responsible for editing news, organizing them in categories and creating feeds
  *
  * @package modul_news
  */

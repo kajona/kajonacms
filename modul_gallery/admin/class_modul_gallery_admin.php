@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Admin-Class of the gallery-module. Used to sync the galleries with the filesystem and to define picture-properties
+ * Admin class of the gallery-module. Used to sync the galleries with the filesystem and to define picture-properties
  *
  * @package modul_gallery
  */

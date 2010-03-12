@@ -32,12 +32,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrModule["moduleId"] 		= _pages_modul_id_;
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
 		$arrModule["nummer3"] 		= _pages_content_modul_id_;
-
-		$arrModule["tabellen"][] 	= _dbprefix_."pages";
-		$arrModule["tabellen"][] 	= _dbprefix_."pages_elemente";
-		$arrModule["tabellen"][] 	= _dbprefix_."elemente_absatz";
-		$arrModule["tabellen"][] 	= _dbprefix_."elemente_bild";
-
 		parent::__construct($arrModule);
 	}
 
@@ -496,7 +490,7 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strQuery = "UPDATE "._dbprefix_."system
                             SET system_prev_id = '".dbsafeString($strModuleId)."'
                           WHERE system_id = '".dbsafeString($arrSingleRow["system_id"])."'";
-            
+
             if($this->objDB->_query($strQuery))
                 $strReturn .= " ...ok\n";
             else

@@ -46,5 +46,5 @@ class class_element_guestbook extends class_element_portal implements interface_
 		return $strReturn;
 	}
 
-}	 //class_element_absatz
+}
 ?>

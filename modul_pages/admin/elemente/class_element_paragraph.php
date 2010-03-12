@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * Admin-Class to handle the paragraphs
+ * Admin class to handle the paragraphs
  *
  * @package modul_pages
  */
@@ -20,7 +20,7 @@ class class_element_paragraph extends class_element_admin implements interface_a
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 			= "element_absatz";
+		$arrModule["name"] 			= "element_paragraph";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_paragraph";
@@ -40,7 +40,7 @@ class class_element_paragraph extends class_element_admin implements interface_a
 	 */
 	public function getEditForm($arrElementData)	{
 
-        //$arrElementData["absatz_inhalt"] = uniStrReplace("%%", "\%\%", $arrElementData["absatz_inhalt"]);
+        //$arrElementData["paragraph_content"] = uniStrReplace("%%", "\%\%", $arrElementData["paragraph_content"]);
 
 		$strReturn = "";
 
@@ -108,5 +108,5 @@ class class_element_paragraph extends class_element_admin implements interface_a
 	}
 
 
-} //class_element_absatz.php
+}
 ?>
