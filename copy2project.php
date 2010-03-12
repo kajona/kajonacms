@@ -169,8 +169,10 @@ class class_copy2project {
     $arrFolderContent = $this->getFolderContent($strStartPath);
 
         foreach($arrFolderContent["files"] as $strSingleFile) {
-            if(!in_array($strStartPath."/".$strSingleFile, $arrLogArray))
-                echo "<input type=\"checkbox\" name=\"files[".$strStartPath."/".$strSingleFile."]\" >File: ".$strStartPath."/".$strSingleFile." not existing in logfile\n";
+            if(!in_array($strStartPath."/".$strSingleFile, $arrLogArray)) {
+                $strFileId = "file_".$strStartPath.$strSingleFile;
+                echo "<input type=\"checkbox\" id=\"".$strFileId."\" name=\"files[".$strStartPath."/".$strSingleFile."]\" ><label for=\"".$strFileId."\"> ".$strStartPath."/".$strSingleFile."</label>\n";
+            }
         }
 
         foreach ($arrFolderContent["folders"] as $strSingleFolder) {
