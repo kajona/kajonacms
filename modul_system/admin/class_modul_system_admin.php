@@ -359,10 +359,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                             if($this->getParam("execute") == "true") {
                                 $strTaskOutput = "
                                     <script type=\"text/javascript\">
+                                       kajonaAjaxHelper.loadDialogBase( function() {
 	                                   kajonaAjaxHelper.loadAjaxBase( function() {
 	                                       kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
 	                                       kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
-	                                    });
+	                                    })
+                                     })   ;
                                     </script>";
                             }
                             else {
