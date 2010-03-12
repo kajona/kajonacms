@@ -331,17 +331,19 @@
 //--_element_paragraph-----------------------------------------------------------------------------------
 	content_id				= table primary key
 	paragraph_title			= Title of the pargraph
-	paragraph_content			= Text of the paragraph
-	paragraph_link				= Link
-	paragraph_image				= Picture
+	paragraph_content		= Text of the paragraph
+	paragraph_link			= Link
+	paragraph_image			= Picture
+	paragraph_template		= Template
 
-//--_element_bild----------------------------------------------------------------------------------------
+//--_element_image --------------------------------------------------------------------------------------
 	content_id				= table primary key
-	bild_titel				= title / alt tag
-	bild_link				= additional link
-	bild_bild				= image
-    bild_x                  = max width
-    bild_y                  = max height
+	image_title				= title / alt tag
+	image_link				= additional link
+	image_image				= image
+    image_x                 = max width
+    image_y                 = max height
+    image_template          = template
 
 //--_element_navigation----------------------------------------------------------------------------------
 	content_id		       	= table primary key

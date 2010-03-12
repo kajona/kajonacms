@@ -12,7 +12,7 @@
  *
  * @package modul_pages
  */
-class class_element_zeile extends class_element_portal implements  interface_portal_element {
+class class_element_row extends class_element_portal implements  interface_portal_element {
 
 	/**
 	 * Constructor
@@ -20,7 +20,7 @@ class class_element_zeile extends class_element_portal implements  interface_por
 	 * @param mixed $arrElementData
 	 */
 	public function __construct($objElementData) {
-		$arrModul["name"] 			= "element_zeile";
+		$arrModul["name"] 			= "element_row";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModul["table"]			= _dbprefix_."element_paragraph";
@@ -37,12 +37,16 @@ class class_element_zeile extends class_element_portal implements  interface_por
 	public function loadData() {
 
 		$strReturn = "";
-		//Titel gegeben?
-		if($this->arrElementData["paragraph_title"] != "")
-			$strReturn .= $this->arrElementData["paragraph_title"];
 
+        $strTemplate = $this->arrElementData["paragraph_template"];
 
-		$strReturn = "<h1>".$strReturn."</h1>";
+        //fallback
+        if($strTemplate == "")
+            $strTemplate = "row.tpl";
+
+        $strTemplateID = $this->objTemplate->readTemplate("/element_row/".$strTemplate, "row");
+
+        $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
 
 		return $strReturn;
 	}

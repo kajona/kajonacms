@@ -14,7 +14,7 @@
  * @package modul_pages
  *
  */
-class class_element_zeile extends class_element_admin implements interface_admin_element {
+class class_element_row extends class_element_admin implements interface_admin_element {
 
 	/**
 	 * Contructor
@@ -22,13 +22,13 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 			= "element_zeile";
+		$arrModule["name"] 			= "element_row";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]			= _dbprefix_."element_paragraph";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]  = "paragraph_title|char";
+		$arrModule["tableColumns"]  = "paragraph_title|char,paragraph_template|char";
 
 		parent::__construct($arrModule);
 	}
@@ -43,6 +43,18 @@ class class_element_zeile extends class_element_admin implements interface_admin
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("paragraph_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
+
+        //load templates
+		$objFilesystem = new class_filesystem();
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_row", ".tpl");
+		$arrTemplatesDD = array();
+		if(count($arrTemplates) > 0) {
+			foreach($arrTemplates as $strTemplate) {
+				$arrTemplatesDD[$strTemplate] = $strTemplate;
+			}
+		}
+		$strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
+
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
 

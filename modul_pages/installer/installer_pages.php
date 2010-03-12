@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.92";
+		$arrModule["version"] 		= "3.2.93";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -228,8 +228,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("row");
-		    $objElement->setStrClassAdmin("class_element_zeile.php");
-		    $objElement->setStrClassPortal("class_element_zeile.php");
+		    $objElement->setStrClassAdmin("class_element_row.php");
+		    $objElement->setStrClassPortal("class_element_row.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
@@ -244,14 +244,15 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$strReturn .= "Installing image table...\n";
 
 		$arrFields = array();
-		$arrFields["content_id"] 	= array("char20", false);
-		$arrFields["bild_titel"]	= array("char254", true);
-		$arrFields["bild_link"] 	= array("char254", true);
-		$arrFields["bild_bild"]		= array("char254", true);
-		$arrFields["bild_x"]        = array("int", true);
-		$arrFields["bild_y"]        = array("int", true);
+		$arrFields["content_id"] 	 = array("char20", false);
+		$arrFields["image_title"]	 = array("char254", true);
+		$arrFields["image_link"] 	 = array("char254", true);
+		$arrFields["image_image"]	 = array("char254", true);
+		$arrFields["image_x"]        = array("int", true);
+		$arrFields["image_y"]        = array("int", true);
+		$arrFields["image_tempalte"] = array("char254", true);
 
-		if(!$this->objDB->createTable("element_bild", $arrFields, array("content_id")))
+		if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -266,8 +267,8 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("image");
-		    $objElement->setStrClassAdmin("class_element_bild.php");
-		    $objElement->setStrClassPortal("class_element_bild.php");
+		    $objElement->setStrClassAdmin("class_element_image.php");
+		    $objElement->setStrClassPortal("class_element_image.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
@@ -349,6 +350,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.91") {
             $strReturn .= $this->update_3291_3292();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.92") {
+            $strReturn .= $this->update_3292_3293();
         }
 
         return $strReturn."\n\n";
@@ -545,6 +551,53 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.2.92");
         $this->updateElementVersion("paragraph", "3.2.92");
         $this->updateElementVersion("image", "3.2.92");
+        return $strReturn;
+    }
+
+    private function update_3292_3293() {
+        $strReturn = "Updating 3.2.92 to 3.2.93...\n";
+
+
+        $strReturn .= "Transforming old element bild to element image...\n";
+
+        $arrTables = $this->objDB->getTables();
+        if(in_array(_dbprefix_."element_bild", $arrTables) && !in_array(_dbprefix_."element_image", $arrTables)) {
+            $strReturn .= "Renaming table to element_image\n";
+            $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_bild")." TO ".$this->objDB->encloseTableName(_dbprefix_."element_image")."";
+            $this->objDB->_query($strQuery);
+
+            $strReturn .= "Adding row paragraph_template...\n";
+            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_image")."
+                               CHANGE ".$this->objDB->encloseColumnName("bild_titel")." ".$this->objDB->encloseColumnName("image_title")." ".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("bild_link")." ".$this->objDB->encloseColumnName("image_link")." ".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("bild_bild")."  ".$this->objDB->encloseColumnName("image_image")."".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("bild_x")."  ".$this->objDB->encloseColumnName("image_x")."".$this->objDB->getDatatype("char254")." NULL,
+                               CHANGE ".$this->objDB->encloseColumnName("bild_y")."  ".$this->objDB->encloseColumnName("image_y")."".$this->objDB->getDatatype("char254")." NULL,
+        	                   ADD ".$this->objDB->encloseColumnName("image_template")." ".$this->objDB->getDatatype("char254")." NULL ";
+
+            $this->objDB->_query($strQuery);
+
+            $strReturn .= "Setting new classes to existing element image...\n";
+            $objElement = class_modul_pages_element::getElement("image");
+            $objElement->setStrClassAdmin("class_element_image.php");
+            $objElement->setStrClassPortal("class_element_image.php");
+            $objElement->updateObjectToDb();
+        }
+
+
+        $strReturn .= "Setting new classes to existing element row...\n";
+        $objElement = class_modul_pages_element::getElement("row");
+        $objElement->setStrClassAdmin("class_element_row.php");
+        $objElement->setStrClassPortal("class_element_row.php");
+        $objElement->updateObjectToDb();
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.93");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.2.93");
+        $this->updateElementVersion("paragraph", "3.2.93");
+        $this->updateElementVersion("image", "3.2.93");
         return $strReturn;
     }
 

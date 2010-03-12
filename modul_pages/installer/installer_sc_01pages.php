@@ -108,23 +108,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $strReturn .= "Error creating paragraph element.\n";
 
-        /*
-        $strReturn .= "Adding image-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("picture1_image");
-        $objPagelement->setStrName("picture1");
-        $objPagelement->setStrElement("image");
-        $objPagelement->updateObjectToDb($this->strIndexID);
-        $strElementId = $objPagelement->getSystemid();
-         $strQuery = "UPDATE "._dbprefix_."element_bild
-                            SET bild_bild = '/portal/pics/kajona/login_logo.gif'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
-                $strReturn .= "Image element created.\n";
-            else
-                $strReturn .= "Error creating image element.\n";
-
-        */
 
         $strReturn .= "Creating system folder...\n";
         $objFolder = new class_modul_pages_folder();
