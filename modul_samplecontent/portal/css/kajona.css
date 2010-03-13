@@ -389,16 +389,13 @@ h2 {
 }
 
 /* E L E M E N T  I M A G E */
-.bild {
+.element_image {
     margin-bottom: 10px;
 }
 
 /* E L E M E N T  T A G T O */
-.tagto a {
-    text-decoration: none;
-    border: 1px solid #cccccc;
-    padding: 1px;
-    padding-top: 5px;
+.element_tagto {
+    font-size: 12px;
 }
 
 /* E L E M E N T  L A N G U A G E S W I T C H */
