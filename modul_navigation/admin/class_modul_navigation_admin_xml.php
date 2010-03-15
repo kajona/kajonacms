@@ -56,7 +56,11 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
         if(count($arrNavigations) > 0) {
             foreach ($arrNavigations as $objSinglePoint) {
                 if($objSinglePoint->rightView()) {
-                    $strReturn .= "<point><name>".xmlSafeString($objSinglePoint->getStrName())."</name><systemid>".$objSinglePoint->getSystemid()."</systemid></point>";
+                    $strReturn .= "<point>";
+                    $strReturn .= "<name>".xmlSafeString($objSinglePoint->getStrName())."</name>";
+                    $strReturn .= "<systemid>".$objSinglePoint->getSystemid()."</systemid>";
+                    $strReturn .= "<link>".getLinkAdminHref("navigation", "editNaviPoint", "&systemid=".$objSinglePoint->getSystemid())."</link>";
+                    $strReturn .= "</point>";
                 }
             }
         }

@@ -781,7 +781,10 @@ var kajonaAdminAjax = {
                         intTemp = strSingleFolder.indexOf("<systemid>")+10;
                         var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
 
-                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:"index.php?admin=1&module=pages&action=list&folderid="+strSystemid }, node);
+                        intTemp = strSingleFolder.indexOf("<link>")+6;
+                        var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
+
+                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-foldernode";
 
@@ -802,7 +805,10 @@ var kajonaAdminAjax = {
                         intTemp = strSinglePage.indexOf("<systemid>")+10;
                         strSystemid = strSinglePage.substr(intTemp, strSinglePage.indexOf("</systemid>")-intTemp);
 
-                        tempNode = new YAHOO.widget.TextNode({ label:strName, href:"index.php?admin=1&module=pages_content&action=list&systemid="+strSystemid+""}, node);
+                        intTemp = strSinglePage.indexOf("<link>")+6;
+                        strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
+
+                        tempNode = new YAHOO.widget.TextNode({ label:strName, href:strLink}, node);
                         tempNode.systemid = strSystemid;
                         tempNode.isLeaf = true;
                         tempNode.labelStyle = "treeView-pagenode";
@@ -852,7 +858,10 @@ var kajonaAdminAjax = {
                         intTemp = strSingleFolder.indexOf("<systemid>")+10;
                         var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
 
-                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:"index.php?admin=1&module=navigation&action=editNaviPoint&systemid="+strSystemid }, node);
+                        intTemp = strSingleFolder.indexOf("<link>")+6;
+                        var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
+
+                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-navigationnode";
 
