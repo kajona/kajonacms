@@ -45,7 +45,7 @@ $arrFoldersToInclude = array(
 //exclude folders and their subfolders
 $arrFoldersToExclude = array(
     "/admin/scripts/yui",
-    "/admin/scripts/fckeditor",
+    "/admin/scripts/ckeditor",
     "/portal/scripts/yui"
 );
 

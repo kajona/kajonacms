@@ -675,7 +675,7 @@ YAHOO.photoViewer.base = function(){
 		}
 	}; // end finishLoad
 	function createControls(){
-		var controlsZ = 99999999999999999999;
+		var controlsZ = 9999999;
 		var defaultPlayText = properties.slideShow.controlsText.pause;
 		var playClass = "photoViewer-pause";
 		// build controls
@@ -837,12 +837,12 @@ YAHOO.photoViewer.base = function(){
 	function adjustControls(){
 		if (YAHOO.env.ua.ie < 7){  
 			if (controlsDom){
-				var top = (lib.d.getViewportHeight() - controlsDom.offsetHeight) + (lib.d.getDocumentScrollTop() - 10);
+				var top = (lib.d.getViewportHeight() - controlsDom.offsetHeight) + (lib.d.getDocumentScrollTop() - 30);
 				lib.d.setY(controlsDom, top);
 			}
 		}
 		else{
-			var bottom = 10 - lib.d.getDocumentScrollTop();
+			var bottom = 30 - lib.d.getDocumentScrollTop();
 			lib.d.setStyle(controlsDom, "bottom", bottom + "px");
 		}
 		var width = lib.d.getRegion(controlsDom).right - lib.d.getRegion(controlsDom).left;

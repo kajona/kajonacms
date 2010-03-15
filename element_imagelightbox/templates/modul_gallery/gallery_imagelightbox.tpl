@@ -17,7 +17,7 @@
                             id: arrViewers[i],
                             grow: 0.2,
                             fade: 0.2,
-                            modal: true,
+                            modal: true, 
                             dragable: false,
                             fixedcenter: true,
                             loadFrom: "html",
@@ -26,6 +26,17 @@
                                 next: " ",
                                 prev: " ",
                                 close: "X"
+                            },
+                            /* remove/rename the slideShow property to disable slideshow feature */
+                            slideShow: {
+                            	autoStart: false,
+                            	duration: 3500,
+                            	controlsText: {
+                            	    play: " ",
+                            	    pause: " ",
+                            	    stop: " ",
+                            	    display: "{0}/{1}"
+	                            }
                             }
                         }
                     };
@@ -34,9 +45,8 @@
             
             kajonaAjaxHelper.Loader.load(
                 ["dragdrop", "animation", "container"],
-            	[KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base-min.js",
-            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.css",
-            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css"]
+            	[KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.js",
+            	 KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css"]
             );
         }
 
