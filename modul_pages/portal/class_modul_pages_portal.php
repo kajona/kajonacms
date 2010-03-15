@@ -322,6 +322,7 @@ class class_modul_pages_portal extends class_portal {
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
+                $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor_ie.css\");</script><![endif]-->";
     		    //The toolbar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
     		    //find closing bracket
@@ -336,6 +337,7 @@ class class_modul_pages_portal extends class_portal {
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
+                $strEnableButton .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor_ie.css\");</script><![endif]-->";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
     		    //find closing bracket

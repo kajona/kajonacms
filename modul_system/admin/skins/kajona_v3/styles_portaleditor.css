@@ -108,7 +108,7 @@
 
 .peContainerHover {
 	display: block !important;
-	border: 1px solid #00e800 !important;
+	outline: 1px solid #00e800 !important;
 }
 
 .peContainerOut .menuOut {

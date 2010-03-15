@@ -1,0 +1,28 @@
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: styles_portaleditor.css 3081 2010-01-03 10:14:41Z sidler $	                                                    *
+********************************************************************************************************/
+
+/*
+    NOTE:------------------------------------------------------------------------------------------------
+      |   Use _webpath_ as constant containing the current webpath, see below
+      |
+      |   This is just a sample file! Modify it to your needs.
+      |   If you don't use _webpath_, we recommend to use a static css-file like this one.
+      |   If you need _webpath_, use a php-file using the following pattern instead of a static css-file:
+      |   <?php
+      |     require_once("../../system/functions.php");
+      |     header("Content-type: text/css");
+      |     echo " all your css stuff goes here ";
+      |   ?>    
+      \--------------------------------------------------------------------------------------------------
+*/
+
+
+/* P O R T A L E D I T O R   C O N T A I N E R */
+.peContainerHover {
+	border: 1px solid #00e800 !important;
+}
