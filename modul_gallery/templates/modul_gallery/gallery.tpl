@@ -3,8 +3,8 @@
 <!-- available placeholders: systemid, folderlist, piclist, pathnavigation, link_back, link_pages, link_forward -->
 <list>
     <p>%%pathnavigation%%</p>
-    <p>%%folderlist%%</p>
-    <p>%%piclist%%</p>
+    %%folderlist%%
+    %%piclist%%
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
 
@@ -23,7 +23,7 @@
     </table>
 </folderlist>
 
-<!-- the following section is used to wrapp a list of images, e.g. in order to build a table.
+<!-- the following section is used to wrap a list of images, e.g. in order to build a table.
      If you'd like to have a behaviour like rendering an unlimited list of images per row, use s.th.
      like < piclist >%%pic_0%%</ piclist > -->
 <!-- available placeholders: pic_(nr) -->
@@ -44,7 +44,7 @@
      available placeholders: pic, pic_href, name, subtitle, pic_detail -->
 <piclist_pic>
     <div style="text-align: center;">
-        <div><a href="%%pic_href%%"><img src="%%pic%%" /></a></div>
+        <div><a href="%%pic_href%%"><img src="%%pic%%" alt="%%name%%" /></a></div>
         <div>%%name%%</div>
     </div>
 </piclist_pic>
@@ -63,11 +63,11 @@
             <td width="20%">&nbsp;</td>
         </tr>
         <tr>
-            <td colspan="3" >%%pic_subtitle%%</td>
+            <td colspan="3">%%pic_subtitle%%</td>
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><img src="%%pic_url%%" border="0" /></td>
+            <td><img src="%%pic_url%%" alt="%%name%%" /></td>
             <td>&nbsp;</td>
         </tr>
         <tr>

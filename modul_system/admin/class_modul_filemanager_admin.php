@@ -808,8 +808,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
                 kajonaAjaxHelper.loadImagecropperBase();
 
-                var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&quality=80';
-                var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&maxWidth=__width__&maxHeight=__height__';
+                var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;quality=80';
+                var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=__width__&amp;maxHeight=__height__';
                 var fm_image_scaledMaxWidth = $intWidth;
                 var fm_image_scaledMaxHeight = $intHeight;
                 var fm_image_isScaled = true;

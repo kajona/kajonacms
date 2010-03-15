@@ -793,7 +793,7 @@ function processWysiwygHtmlContent($strHtmlContent) {
         $strNewHeight = $arrImages[5][$i];
 
         //only add one parameter to optimize unproportional scaling
-        $strScalingParams = $strNewWidth >= $strNewHeight ? "&maxWidth=".$strNewWidth : "&maxHeight=".$strNewHeight;
+        $strScalingParams = $strNewWidth >= $strNewHeight ? "&amp;maxWidth=".$strNewWidth : "&amp;maxHeight=".$strNewHeight;
 
         $strReplace = "image.php?image=".$arrImages[1][$i].$strScalingParams."\" ".$arrImages[3][$i]."width: ".$strNewWidth."px; height: ".$strNewHeight."px;";
         $strHtmlContent = uniStrReplace($strSearch, $strReplace, $strHtmlContent);

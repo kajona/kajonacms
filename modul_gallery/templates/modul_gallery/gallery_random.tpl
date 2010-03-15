@@ -1,11 +1,10 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: pic_url, systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
- -->
+<!-- available placeholders: pic_url, systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed) -->
 <picdetail>
     <div class="galleryRandom">
         %%pic_name%% %%pic_subtitle%%<br />
-        <img src="%%pic_url%%" /><br />
+        <img src="%%pic_url%%" alt="%%pic_name%%" /><br />
         %%pic_rating%%<br />
         %%pic_description%%
     </div>

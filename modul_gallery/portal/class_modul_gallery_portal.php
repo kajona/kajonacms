@@ -210,7 +210,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["backward_".$intI] != "") {
                 $objImageBack = new class_modul_gallery_pic($arrImage["backward_".$intI]);
-                $arrImage["backlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageBack->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageBack->getSystemid(), "", "", $objImageBack->getStrName());
+                $arrImage["backlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageBack->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageBack->getSystemid(), "", "", $objImageBack->getStrName());
                 $arrImage["backlink_image_filename_".$intI] = urlencode($objImageBack->getStrFilename());
                 $arrImage["backlink_image_systemid_".$intI] = $objImageBack->getSystemid();
             }
@@ -221,14 +221,14 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["forward_".$intI] != "") {
                 $objImageFwd = new class_modul_gallery_pic($arrImage["forward_".$intI]);
-                $arrImage["forwardlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageFwd->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageFwd->getSystemid(), "", "", $objImageFwd->getStrName());
+                $arrImage["forwardlink_image_".$intI] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImageFwd->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImageFwd->getSystemid(), "", "", $objImageFwd->getStrName());
                 $arrImage["forwardlink_image_filename_".$intI] = urlencode($objImageFwd->getStrFilename());
                 $arrImage["forwardlink_image_systemid_".$intI] = $objImageFwd->getSystemid();
             }
         }
 
         //current image
-        $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&maxWidth=".$this->arrElementData["gallery_maxw_m"]."&maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid(), "currentPic");
+        $arrImage["pic_small"] = getLinkPortal($this->getPagename(), "", "", "<img src=\"image.php?image=".$objImage->getStrFilename()."&amp;maxWidth=".$this->arrElementData["gallery_maxw_m"]."&amp;maxHeight=".$this->arrElementData["gallery_maxh_m"]."\" border=\"0\"/>", "detailImage", "", $objImage->getSystemid(), "currentPic");
 
 		$arrImage["overview"] = getLinkPortal($this->getPagename(), "", "",  $this->getText("uebersicht"), "imageFolder", "", $objImage->getPrevId());
 		$arrImage["pathnavigation"] = $this->generatePathnavi(true);
@@ -334,7 +334,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 			//If theres text to put over the image, manipulate image "inline",
 			//otherwise let the work do image.php -> kinda multithreading ;)
 			if($strText == "") {
-				$strReturn = "image.php?image=".urlencode($strImage)."&maxWidth=".$intWidth."&maxHeight=".$intHeight;
+				$strReturn = "image.php?image=".urlencode($strImage)."&amp;maxWidth=".$intWidth."&amp;maxHeight=".$intHeight;
 			}
 			else {
 			    //do everything right now

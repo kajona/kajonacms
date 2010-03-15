@@ -45,7 +45,7 @@
     </script>
     
     <p>%%pathnavigation%%</p>
-    <p>%%folderlist%%</p>
+    %%folderlist%%
     <div id="pv_%%systemid%%">%%piclist%%</div>
     <p align="center">%%link_back%% %%link_pages%% %%link_forward%%</p>
 </list>
@@ -65,9 +65,9 @@
     </table>
 </folderlist>
 
-<!-- the following section is used to wrapp a list of images, e.g. in order to build a table.
+<!-- the following section is used to wrap a list of images, e.g. in order to build a table.
      If you'd like to have a behaviour like rendering an unlimited list of images per row, use s.th.
-     like <piclist>%%pic_0%%</piclist> -->
+     like < piclist >%%pic_0%%</ piclist > -->
 <!-- available placeholders: pic_(nr) -->
 <piclist>
     <table width="100%" cellspacing="0">
@@ -98,35 +98,7 @@
     systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
  -->
 <picdetail>
-    %%pathnavigation%%
-    <table width="85%" border="0" style="text-align: center;">
-        <tr>
-            <td width="20%">&nbsp;</td>
-            <td width="60%"><div style="float: left;">%%pic_name%%</div><div style="float: right;">%%pic_rating%%</div></td>
-            <td width="20%">&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="3" >%%pic_subtitle%%</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td><img src="%%pic_url%%" border="0" /></td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>%%pic_description%%</td>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>%%backlink%%</td>
-            <td>%%overview%%</td>
-            <td style="text-align: right;">%%forwardlink%%</td>
-        </tr>
-        <tr>
-            <td colspan="3" class="picstrip">%%backlink_image_3%%%%backlink_image_2%%%%backlink_image_1%%%%pic_small%%%%forwardlink_image_1%%%%forwardlink_image_2%%%%forwardlink_image_3%%</td>
-        </tr>
-    </table>
+    <!-- not used for imagelightbox -->
 </picdetail>
 
 <!-- available placeholders: pathnavigation_point -->

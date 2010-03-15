@@ -109,7 +109,7 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = '',
-                                paragraph_content ='Alle Beispielbilder &copy by kajona.de'
+                                paragraph_content ='Alle Beispielbilder &copy; by kajona.de'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
