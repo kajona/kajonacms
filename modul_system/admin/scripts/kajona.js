@@ -782,10 +782,14 @@ var kajonaAdminAjax = {
 
                         intTemp = strSingleFolder.indexOf("<link>")+6;
                         var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
+                        
+                        intTemp = strSingleFolder.indexOf("<isleaf>")+8;
+                        var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
                         var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-foldernode";
+                        tempNode.isLeaf = strLeaf == "true";
 
                         strFolders = strFolders.substr(strFolders.indexOf("</folder>")+9);
                     }
@@ -859,10 +863,14 @@ var kajonaAdminAjax = {
 
                         intTemp = strSingleFolder.indexOf("<link>")+6;
                         var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
+                        
+                        intTemp = strSingleFolder.indexOf("<isleaf>")+8;
+                        var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
                         var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-navigationnode";
+                        tempNode.isLeaf = strLeaf == "true";
 
                         strPoints = strPoints.substr(strPoints.indexOf("</point>")+8);
                     }

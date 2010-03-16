@@ -60,6 +60,7 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
                     $strReturn .= "<name>".xmlSafeString($objSinglePoint->getStrName())."</name>";
                     $strReturn .= "<systemid>".$objSinglePoint->getSystemid()."</systemid>";
                     $strReturn .= "<link>".getLinkAdminHref("navigation", "editNaviPoint", "&systemid=".$objSinglePoint->getSystemid())."</link>";
+                    $strReturn .= "<isleaf>".(count(class_modul_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                     $strReturn .= "</point>";
                 }
             }

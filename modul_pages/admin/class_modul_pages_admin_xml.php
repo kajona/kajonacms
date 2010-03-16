@@ -93,6 +93,7 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
                     $strReturn .= "<name>".xmlSafeString($objSingleFolder->getStrName())."</name>";
                     $strReturn .= "<systemid>".$objSingleFolder->getSystemid()."</systemid>";
                     $strReturn .= "<link>".getLinkAdminHref("pages", "list", "folderid=".$objSingleFolder->getSystemid())."</link>";
+                    $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                     $strReturn .= "</folder>";
                 }
             }
