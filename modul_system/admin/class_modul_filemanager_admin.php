@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
@@ -829,7 +829,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
             $arrTemplate["filemanager_internal_code"] = "<input type=\"hidden\" name=\"fm_int_realwidth\" id=\"fm_int_realwidth\" value=\"".$arrSize[0]."\" />";
             $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"fm_int_realheight\" id=\"fm_int_realheight\" value=\"".$arrSize[1]."\" />";
-            $arrTemplate["filemanager_internal_code"] .= "<input type=\"text\" name=\"galleryId\" id=\"galleryId\" value=\"".$this->getParam("galleryId")."\" />";
+            $arrTemplate["filemanager_internal_code"] .= "<input type=\"hidden\" name=\"galleryId\" id=\"galleryId\" value=\"".$this->getParam("galleryId")."\" />";
 
 		}
 		$strReturn .= $this->objToolkit->getFilemanagerImageDetails($arrTemplate);
