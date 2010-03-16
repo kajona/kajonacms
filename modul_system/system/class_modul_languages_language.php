@@ -409,6 +409,7 @@ class class_modul_languages_language extends class_model implements interface_mo
         }
     }
 
+
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function setStrName($strName) {

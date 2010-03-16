@@ -130,6 +130,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
     		}
 
+            if($strAction == "editLanguageset") {
+                $strReturn .= $this->actionEditLanguageset();
+            }
+            if($strAction == "assignToLanguageset") {
+                $this->actionAssignToLanguageset();
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
+            }
+
 	    }
 	    catch (class_exception $objException) {
 		    $objException->processException();
@@ -269,9 +277,15 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                             $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
                         if($this->objRights->rightDelete($objOneNews->getSystemid()))
                             $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
-
-
                     }
+
+                    if($this->objRights->rightEdit($objOneNews->getSystemid())) {
+                        //more than one language available?
+                        if(class_modul_languages_language::getNumberOfLanguagesAvailable() > 1) {
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editLanguageset", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_languageset"), "icon_language.gif"));
+                        }
+                    }
+
 
     		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
@@ -301,7 +315,57 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		return $strReturn;
 	}
 
-// -- News-Kategorien -----------------------------------------------------------------------------------
+
+    /**
+     * @return string
+     */
+    private function actionEditLanguageset() {
+        $strReturn = "";
+
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+
+            if($objLanguageset == null) {
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("languageset_notmaintained"));
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_addtolanguage"));
+
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "assignToLanguageset"));
+                $arrLanguages = class_modul_languages_language::getAllLanguages();
+                $arrDropdown = array();
+                foreach($arrLanguages as $objOneLanguage)
+                    $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
+                
+                $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formClose();
+            }
+            else {
+
+                $objLanguage = new class_modul_languages_language($objLanguageset->getLanguageidForSystemid($this->getSystemid()));
+
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("languageset_currentlanuage"));
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("lang_".$objLanguage->getStrName() , "languages"));
+            }
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+
+        return $strReturn;
+    }
+
+    private function actionAssignToLanguageset() {
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+
+            $objTargetLanguage = new class_modul_languages_language($this->getParam("languageset_language"));
+
+            if($objLanguageset == null && $objTargetLanguage->getStrName() != "") {
+                $objLanguageset = new class_modul_languages_languageset();
+                $objLanguageset->setSystemidForLanguageid($this->getSystemid(), $objTargetLanguage->getSystemid());
+            }
+        }
+    }
 
 	/**
 	 * Show the form to create or edit a news cat

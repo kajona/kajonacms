@@ -1,4 +1,4 @@
-<?php
+
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
@@ -265,6 +265,10 @@
     language_name           = Name of the language
     language_default        = Bool-flag if language is default language
 
+//--_languages_languagesets------------------------------------------------------------------------------
+    languageset_id          = table primary key
+    languageset_language    = id of the language
+    languageset_systemid    = id of the systemrecord
 
 //--_faqs_category---------------------------------------------------------------------------------------
 	faqs_cat_id	       		= table primary key
@@ -434,5 +438,3 @@
     int3                    = int field 3
     text                    = text field
 
-*/
-?>

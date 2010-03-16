@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.94";
+		$arrModul["version"] 			= "3.2.95";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -27,16 +27,6 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrModul["file_portal"] 		= "";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
-
-		$arrModul["tabellen"][] 		= _dbprefix_."system";
-		$arrModul["tabellen"][] 		= _dbprefix_."system_right";
-		$arrModul["tabellen"][] 		= _dbprefix_."system_module";
-		$arrModul["tabellen"][] 		= _dbprefix_."system_date";
-		$arrModul["tabellen"][] 		= _dbprefix_."user";
-		$arrModul["tabellen"][] 		= _dbprefix_."user_group";
-		$arrModul["tabellen"][] 		= _dbprefix_."user_group_members";
-		$arrModul["tabellen"][] 		= _dbprefix_."user_log";
-		$arrModul["tabellen"][] 		= _dbprefix_."filemanager";
 
 		parent::__construct($arrModul);
 
@@ -320,6 +310,16 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("languages", $arrFields, array("language_id")))
 			$strReturn .= "An error occured! ...\n";
 
+        $strReturn .= "Installing table languages_languageset...\n";
+
+		$arrFields = array();
+		$arrFields["languageset_id"] 		= array("char20", false);
+		$arrFields["languageset_language"] 	= array("char20", true);
+		$arrFields["languageset_systemid"]  = array("char20", true);
+
+		if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
+			$strReturn .= "An error occured! ...\n";
+
 
 
 		//Now we have to register module by module
@@ -541,6 +541,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.93") {
             $strReturn .= $this->update_3293_3294();
+        }
+
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.94") {
+            $strReturn .= $this->update_3294_3295();
         }
 
         return $strReturn."\n\n";
@@ -1060,6 +1065,28 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.2.94");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.2.94");
+        return $strReturn;
+    }
+
+    private function update_3294_3295() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.94 to 3.2.95...\n";
+
+        $strReturn .= "Installing table languages_languageset...\n";
+
+		$arrFields = array();
+		$arrFields["languageset_id"] 		= array("char20", false);
+		$arrFields["languageset_language"] 	= array("char20", true);
+		$arrFields["languageset_systemid"]  = array("char20", true);
+
+		if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
+			$strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.95");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.95");
         return $strReturn;
     }
 }

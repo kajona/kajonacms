@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 215
+//Kajona Language Editor Core Build 233
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страница результатов:";
@@ -36,6 +36,10 @@ $lang["kat_bearbeiten"]                  = "Изменить категорию"
 $lang["kat_loeschen_frage"]              = "Вы действительно хотите удалить категорию &quot;<b>%%element_name%%</b>&quot;?";
 $lang["kat_rechte"]                      = "Изменить разрешения";
 $lang["klapper"]                         = "Показать / Скрыть категорию";
+$lang["languageset_addtolanguage"]       = "";
+$lang["languageset_currentlanuage"]      = "";
+$lang["languageset_language"]            = "";
+$lang["languageset_notmaintained"]       = "";
 $lang["liste_leer"]                      = "Нет новостей";
 $lang["modul_anlegen"]                   = "Создать новость";
 $lang["modul_kat_anlegen"]               = "Создать категорию";
@@ -52,6 +56,7 @@ $lang["news_grunddaten"]                 = "Изменить исходную и
 $lang["news_image"]                      = "Изображение:";
 $lang["news_inhalt"]                     = "Изменить новости";
 $lang["news_intro"]                      = "Пробник:";
+$lang["news_languageset"]                = "";
 $lang["news_locked"]                     = "";
 $lang["news_loeschen_frage"]             = "Вы действительно хотите удалить новости &quot;<b>%%element_name%%</b>&quot;?";
 $lang["news_rechte"]                     = "Изменить разрешения";
@@ -59,6 +64,7 @@ $lang["news_text"]                       = "Длинный текст:";
 $lang["news_title"]                      = "Имя:";
 $lang["news_unlock"]                     = "";
 $lang["quickhelp_editCat"]               = "В настоящий момент Вы можете установить только имя категории.";
+$lang["quickhelp_editLanguageset"]       = "";
 $lang["quickhelp_editNews"]              = "Вы можете изменить или создать исходную информацию новостей. Исходная информация содержит имя новостей и несколько дат, которые могут быть заданы:<ul><li>Начальная дата: начиная с этой даты новости будут показаны на портале</li><li>Конечная дата: начиная с этой даты новости не отображаются ни на портале, ни в архиве</li><li>Дата архивации: начиная с этой даты новости показываются в архиве, а не на портале</li></ul>Дополнительно здесь может быть изменена принадлежность к категориям.";
 $lang["quickhelp_editNewsFeed"]          = "Здесь вы можете изменить настройки новых и уже существующих лент.<br />Детальное отображение используется когда подписчик запросил новостное сообщение. Вы можете ограницить количество новостей при установке категории ленты.<br />Вы можете установить URL ленты в поле \"Имя URL ленты\", например /newsnfacts.rss. Имя должно содержать только буквы и цифры (а-я, А-Я, 0-9).";
 $lang["quickhelp_editNewscontent"]       = "Вы можете изменить содержание новостей здесь.";
