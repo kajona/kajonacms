@@ -222,86 +222,93 @@ var kajonaAjaxHelper = {
 			}
 		},
 		
-		/*
-		 * load([ "connection" ], [ "" ], callback);
-		 * 
-		 */
 		load : function(arrYuiComponents, arrFiles, callback) {
-			var yuiLoader;
-			
-			//decide if a new YUILoader instance should be created
-			//all files added before the onDOMReady event uses the same instance
-			if (this.bitBeforeDOMReady && YAHOO.lang.isNull(this.yuiLoaderBeforeDOMReady)) {
-				this.yuiLoaderBeforeDOMReady = this.createYuiLoader();
-				yuiLoader = this.yuiLoaderBeforeDOMReady;
-				
-				//start loading right after DOM is ready
-				YAHOO.util.Event.onDOMReady(function () {
-					kajonaAjaxHelper.Loader.yuiLoaderBeforeDOMReady.insert();
-					kajonaAjaxHelper.Loader.bitBeforeDOMReady = false;
-				});
-			} else if (this.bitBeforeDOMReady) {
-				yuiLoader = this.yuiLoaderBeforeDOMReady;
-			} else {
-				yuiLoader = this.createYuiLoader();
-			}
-			
-			//list of required modules to load
-			var arrRequiredModules = [];
+			var arrYuiComponentsToWaitFor = [];
+			var arrFilesToWaitFor = [];		
+			var arrYuiComponentsToLoad = [];
+			var arrFilesToLoad = [];
 
-			//add YUI components, but only if they are not already requested or loaded
+			//check YUI components, if they are already loaded or requested
 			if (YAHOO.lang.isArray(arrYuiComponents)) {
-				arrRequiredModules = arrRequiredModules.concat(arrYuiComponents);
 				for (var i = 0; i < arrYuiComponents.length; i++) {
 					if (!(arrYuiComponents[i] in this.arrLoadedModules)) {
+						arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
 						if (!(arrYuiComponents[i] in this.arrRequestedModules)) {
-							yuiLoader.require(arrYuiComponents[i]);
-							this.arrRequestedModules[arrYuiComponents[i]] = true;
+							arrYuiComponentsToLoad.push(arrYuiComponents[i]);
 						}
 					}
 				}
 			}
 			
-			//add own JS/CSS files, but only if they are not already requested or loaded
+			//check own JS/CSS files, if they are already loaded or requested
 			if (YAHOO.lang.isArray(arrFiles)) {
-				arrRequiredModules = arrRequiredModules.concat(arrFiles);
 				for (var i = 0; i < arrFiles.length; i++) {
 					if (!(arrFiles[i] in this.arrLoadedModules)) {
+						arrFilesToWaitFor.push(arrFiles[i]);
 						if (!(arrFiles[i] in this.arrRequestedModules)) {
-							yuiLoader.addModule( {
-								name : arrFiles[i],
-								type : arrFiles[i].substr(arrFiles[i].length-2, 2) == 'js' ? 'js' : 'css',
-								skinnable : false,
-								fullpath : arrFiles[i]
-							});
-		
-							yuiLoader.require(arrFiles[i]);
-							this.arrRequestedModules[arrFiles[i]] = true;
+							arrFilesToLoad.push(arrFiles[i]);
 						}
 					}
 				}
 			}
-			
+
 			//if all modules are already loaded, execute the callback
-			if (arrRequiredModules.length == 0) {
+			if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
 				if (YAHOO.lang.isFunction(callback)) {
 					callback();
 				}
 			} else {
+				var yuiLoader;
+				
+				//are there components/files to load which are not already requested?
+				if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
+					//decide if a new YUILoader instance should be created
+					//all files added before the onDOMReady event uses the same instance
+					if (this.bitBeforeDOMReady && YAHOO.lang.isNull(this.yuiLoaderBeforeDOMReady)) {
+						this.yuiLoaderBeforeDOMReady = this.createYuiLoader();
+						yuiLoader = this.yuiLoaderBeforeDOMReady;
+						
+						//start loading right after DOM is ready
+						YAHOO.util.Event.onDOMReady(function () {
+							kajonaAjaxHelper.Loader.yuiLoaderBeforeDOMReady.insert();
+							kajonaAjaxHelper.Loader.bitBeforeDOMReady = false;
+						});
+					} else if (this.bitBeforeDOMReady) {
+						yuiLoader = this.yuiLoaderBeforeDOMReady;
+					} else {
+						yuiLoader = this.createYuiLoader();
+					}
+					
+					for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
+						yuiLoader.require(arrYuiComponentsToLoad[i]);
+						this.arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+					}
+					for (var i = 0; i < arrFilesToLoad.length; i++) {
+						yuiLoader.addModule( {
+							name : arrFilesToLoad[i],
+							type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
+							skinnable : false,
+							fullpath : arrFilesToLoad[i]
+						});
+	
+						yuiLoader.require(arrFilesToLoad[i]);
+						this.arrRequestedModules[arrFilesToLoad[i]] = true;
+					}
+				}
+				
 				//register the callback to be called later on
 				if (YAHOO.lang.isFunction(callback)) {
 					this.arrCallbacks.push({
 						'callback' : callback,
-						'requiredModules' : arrRequiredModules
+						'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
 					});
 				}
-
+				
 				//fire YUILoader if this function is called after the onDOMReady event
-				if (!this.bitBeforeDOMReady) {
+				if ((arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) && !this.bitBeforeDOMReady) {
 					yuiLoader.insert();
 				}
 			}
-			
 		}
 	},
 			

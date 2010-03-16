@@ -236,7 +236,8 @@ class class_toolkit_portal extends class_toolkit {
             $arrRowTemplate["href"] = $arrTemp["href"];
             $arrTemplate["actionlinks"] .= $this->objTemplate->fillTemplate($arrRowTemplate, $strTemplateRowID);
         }
-        $arrTemplate["systemid"] = $strSystemid;
+        //FIXME: added random string to systemid, since e.g. one navigation tree can exist multiple times an a page. Maybe there's a better way to fix this. 
+        $arrTemplate["systemid"] = $strSystemid."_".generateSystemid();
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
         return $strReturn;

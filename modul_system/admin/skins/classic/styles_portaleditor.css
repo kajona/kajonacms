@@ -87,15 +87,26 @@
 	border: 1px solid black !important;
 	font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
+	text-align: left !important;
 }
 
 a.pe_link {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
     font-size: 11px !important;
-    font-weight: normal !important;
     color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 14px !important;
+    border: none !important;
+    outline: none !important;
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
 }
 
 #pe_classicskin img {

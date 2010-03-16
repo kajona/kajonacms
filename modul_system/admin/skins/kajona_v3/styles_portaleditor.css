@@ -126,11 +126,13 @@
 	background-color: #00e800 !important;
 	font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
+	text-align: left !important;
 	padding: 0 2px 2px 2px !important;
 	text-transform: none !important;
 }
 
-.peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited {
+.peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited,
+.peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
     font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
 	color: #ffffff !important;
@@ -140,16 +142,15 @@
     padding: 0 !important;
     margin: 0 !important;
     text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 14px !important;
+    border: none !important;
+    outline: none !important;
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
-    font-family: Verdana, Arial, Helvetica, sans-serif !important;
-	font-size: 11px !important;
-	color: #ffffff !important;
 	text-decoration: underline !important;
-	font-weight: normal !important;
-    background: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    text-transform: none !important;
 }

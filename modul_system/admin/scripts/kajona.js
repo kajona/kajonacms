@@ -350,86 +350,93 @@ var kajonaAjaxHelper = {
 			}
 		},
 		
-		/*
-		 * load([ "connection" ], [ "" ], callback);
-		 * 
-		 */
 		load : function(arrYuiComponents, arrFiles, callback) {
-			var yuiLoader;
-			
-			//decide if a new YUILoader instance should be created
-			//all files added before the onDOMReady event uses the same instance
-			if (this.bitBeforeDOMReady && YAHOO.lang.isNull(this.yuiLoaderBeforeDOMReady)) {
-				this.yuiLoaderBeforeDOMReady = this.createYuiLoader();
-				yuiLoader = this.yuiLoaderBeforeDOMReady;
-				
-				//start loading right after DOM is ready
-				YAHOO.util.Event.onDOMReady(function () {
-					kajonaAjaxHelper.Loader.yuiLoaderBeforeDOMReady.insert();
-					kajonaAjaxHelper.Loader.bitBeforeDOMReady = false;
-				});
-			} else if (this.bitBeforeDOMReady) {
-				yuiLoader = this.yuiLoaderBeforeDOMReady;
-			} else {
-				yuiLoader = this.createYuiLoader();
-			}
-			
-			//list of required modules to load
-			var arrRequiredModules = [];
+			var arrYuiComponentsToWaitFor = [];
+			var arrFilesToWaitFor = [];		
+			var arrYuiComponentsToLoad = [];
+			var arrFilesToLoad = [];
 
-			//add YUI components, but only if they are not already requested or loaded
+			//check YUI components, if they are already loaded or requested
 			if (YAHOO.lang.isArray(arrYuiComponents)) {
-				arrRequiredModules = arrRequiredModules.concat(arrYuiComponents);
 				for (var i = 0; i < arrYuiComponents.length; i++) {
 					if (!(arrYuiComponents[i] in this.arrLoadedModules)) {
+						arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
 						if (!(arrYuiComponents[i] in this.arrRequestedModules)) {
-							yuiLoader.require(arrYuiComponents[i]);
-							this.arrRequestedModules[arrYuiComponents[i]] = true;
+							arrYuiComponentsToLoad.push(arrYuiComponents[i]);
 						}
 					}
 				}
 			}
 			
-			//add own JS/CSS files, but only if they are not already requested or loaded
+			//check own JS/CSS files, if they are already loaded or requested
 			if (YAHOO.lang.isArray(arrFiles)) {
-				arrRequiredModules = arrRequiredModules.concat(arrFiles);
 				for (var i = 0; i < arrFiles.length; i++) {
 					if (!(arrFiles[i] in this.arrLoadedModules)) {
+						arrFilesToWaitFor.push(arrFiles[i]);
 						if (!(arrFiles[i] in this.arrRequestedModules)) {
-							yuiLoader.addModule( {
-								name : arrFiles[i],
-								type : arrFiles[i].substr(arrFiles[i].length-2, 2) == 'js' ? 'js' : 'css',
-								skinnable : false,
-								fullpath : arrFiles[i]
-							});
-		
-							yuiLoader.require(arrFiles[i]);
-							this.arrRequestedModules[arrFiles[i]] = true;
+							arrFilesToLoad.push(arrFiles[i]);
 						}
 					}
 				}
 			}
-			
+
 			//if all modules are already loaded, execute the callback
-			if (arrRequiredModules.length == 0) {
+			if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
 				if (YAHOO.lang.isFunction(callback)) {
 					callback();
 				}
 			} else {
+				var yuiLoader;
+				
+				//are there components/files to load which are not already requested?
+				if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
+					//decide if a new YUILoader instance should be created
+					//all files added before the onDOMReady event uses the same instance
+					if (this.bitBeforeDOMReady && YAHOO.lang.isNull(this.yuiLoaderBeforeDOMReady)) {
+						this.yuiLoaderBeforeDOMReady = this.createYuiLoader();
+						yuiLoader = this.yuiLoaderBeforeDOMReady;
+						
+						//start loading right after DOM is ready
+						YAHOO.util.Event.onDOMReady(function () {
+							kajonaAjaxHelper.Loader.yuiLoaderBeforeDOMReady.insert();
+							kajonaAjaxHelper.Loader.bitBeforeDOMReady = false;
+						});
+					} else if (this.bitBeforeDOMReady) {
+						yuiLoader = this.yuiLoaderBeforeDOMReady;
+					} else {
+						yuiLoader = this.createYuiLoader();
+					}
+					
+					for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
+						yuiLoader.require(arrYuiComponentsToLoad[i]);
+						this.arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+					}
+					for (var i = 0; i < arrFilesToLoad.length; i++) {
+						yuiLoader.addModule( {
+							name : arrFilesToLoad[i],
+							type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
+							skinnable : false,
+							fullpath : arrFilesToLoad[i]
+						});
+	
+						yuiLoader.require(arrFilesToLoad[i]);
+						this.arrRequestedModules[arrFilesToLoad[i]] = true;
+					}
+				}
+				
 				//register the callback to be called later on
 				if (YAHOO.lang.isFunction(callback)) {
 					this.arrCallbacks.push({
 						'callback' : callback,
-						'requiredModules' : arrRequiredModules
+						'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
 					});
 				}
-
+				
 				//fire YUILoader if this function is called after the onDOMReady event
-				if (!this.bitBeforeDOMReady) {
+				if ((arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) && !this.bitBeforeDOMReady) {
 					yuiLoader.insert();
 				}
 			}
-			
 		}
 	},
 			
@@ -437,7 +444,7 @@ var kajonaAjaxHelper = {
 	 * For compatibility with Kajona templates pre 3.3.0
 	 */
 	convertAdditionalFiles : function(additionalFiles) {
-		var scriptBase = KAJONA_WEBPATH + "/portal/scripts/";
+		var scriptBase = KAJONA_WEBPATH + "/admin/scripts/";
 		if (YAHOO.lang.isString(additionalFiles)) {
 			//convert to array and add webpath
 			return new Array(scriptBase + additionalFiles);
@@ -456,15 +463,7 @@ var kajonaAjaxHelper = {
 	 * Predefined helper functions
 	 */
 	loadAjaxBase : function(callback, additionalFiles) {
-		var customFiles = [
-		    KAJONA_WEBPATH + "/admin/scripts/messagebox.js"
-		];
-		
-		if (!YAHOO.lang.isUndefined(additionalFiles)) {
-			customFiles.push(this.convertAdditionalFiles(additionalFiles));
-		}
-
-		this.Loader.load([ "connection" ], customFiles, callback);
+		this.Loader.load([ "connection" ], this.convertAdditionalFiles(additionalFiles), callback);
 	},
 	
 	loadDragNDropBase : function(callback, additionalFiles) {
@@ -1374,6 +1373,119 @@ var kajonaSystemtaskHelper =  {
     setName : function(strName) {
     	document.getElementById('systemtaskNameDiv').innerHTML = strName;
     }
+};
+
+
+/**
+ * General way to display a status message.
+ * Therefore, the html-page should provide the following elements as noted as instance-vars:
+ * - div,   id: jsStatusBox    				the box to be animated
+ * 		 class: jsStatusBoxMessage			class in case of an informal message
+ * 		 class: jsStatusBoxError		    class in case of an error message
+ * - div,   id: jsStatusBoxContent			the box to place the message-content into
+ * 
+ * Pass a xml-response from a Kajona server to displayXMLMessage() to start the logic
+ * or use messageOK() / messageError() passing a regular string
+ */
+var kajonaStatusDisplay = {
+	idOfMessageBox : "jsStatusBox",
+	idOfContentBox : "jsStatusBoxContent",
+	classOfMessageBox : "jsStatusBoxMessage",
+	classOfErrorBox : "jsStatusBoxError",
+	timeToFadeOutMessage : 4000,
+	timeToFadeOutError : 10000,
+	timeToFadeOut : null,
+	animObject : null,
+	
+	/**
+	 * General entrance point. Use this method to pass an xml-response from the kajona server.
+	 * Tries to find a message- or an error-tag an invokes the corresponding methods
+	 * 
+	 * @param {String} message
+	 */
+	displayXMLMessage : function(message) {
+		//decide, whether to show an error or a message, message only in debug mode
+		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0) {
+			var intStart = message.indexOf("<message>")+9;
+			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
+			kajonaStatusDisplay.messageOK(responseText);
+		}
+		
+		if(message.indexOf("<error>") != -1) {
+			var intStart = message.indexOf("<error>")+7;
+			var responseText = message.substr(intStart, message.indexOf("</error>")-intStart);
+			kajonaStatusDisplay.messageError(responseText);
+		}
+	},
+	
+	/**
+	 * Creates a informal message box containg the passed content
+	 * 
+	 * @param {String} strMessage
+	 */
+    messageOK : function(strMessage) {
+		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
+		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
+		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox);
+		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutMessage;
+		kajonaStatusDisplay.startFadeIn(strMessage);
+    },
+
+	/**
+	 * Creates an error message box containg the passed content
+	 * 
+	 * @param {String} strMessage
+	 */
+    messageError : function(strMessage) {
+		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
+		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
+		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox);
+		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutError;
+		kajonaStatusDisplay.startFadeIn(strMessage);
+    },
+	
+	startFadeIn : function(strMessage) {
+		kajonaAjaxHelper.loadAnimationBase(function() {
+    		//currently animated?
+    		if(kajonaStatusDisplay.animObject != null && kajonaStatusDisplay.animObject.isAnimated()) {
+    			kajonaStatusDisplay.animObject.stop(true);
+    			kajonaStatusDisplay.animObject.onComplete.unsubscribeAll();
+    		}
+    		var statusBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
+    		var contentBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfContentBox);
+    		contentBox.innerHTML = strMessage;
+    		YAHOO.util.Dom.setStyle(statusBox, "display", "");
+    		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
+    		
+    		//place the element at the top of the page
+    		var screenWidth = YAHOO.util.Dom.getViewportWidth();
+    		var divWidth = statusBox.offsetWidth;
+    		var newX = screenWidth/2 - divWidth/2;
+    		var newY = YAHOO.util.Dom.getDocumentScrollTop() -2;
+    		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
+
+    		//start fade-in handler
+    		kajonaStatusDisplay.fadeIn();
+		});
+	},
+	
+	fadeIn : function () {
+		kajonaStatusDisplay.animObject = new YAHOO.util.Anim(kajonaStatusDisplay.idOfMessageBox, { opacity: { to: 0.8 } }, 1, YAHOO.util.Easing.easeOut);
+		kajonaStatusDisplay.animObject.onComplete.subscribe(function() {window.setTimeout("kajonaStatusDisplay.startFadeOut()", kajonaStatusDisplay.timeToFadeOut);});
+		kajonaStatusDisplay.animObject.animate();
+	},
+	
+	startFadeOut : function() {
+		var statusBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
+		
+		//get the current pos
+		var attributes = {
+	        points: { by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5] }
+	    };
+	    kajonaStatusDisplay.animObject = new YAHOO.util.Motion(statusBox, attributes, 0.5);
+	    kajonaStatusDisplay.animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle(kajonaStatusDisplay.idOfMessageBox, "display", "none");});
+		kajonaStatusDisplay.animObject.animate();
+	}
 };
 
 
