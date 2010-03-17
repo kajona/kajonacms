@@ -212,5 +212,13 @@ class class_modul_languages_languageset extends class_model implements interface
         return new $objLanguageset;
     }
    
+    /**
+     * Returns the list of current associations
+     * 
+     * @return array
+     */
+    public function getArrLanguageSet() {
+        return $this->arrLanguageSet;
+    }
 }
 ?>

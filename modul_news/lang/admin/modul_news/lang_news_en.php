@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 233
+//Kajona Language Editor Core Build 198
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Edit news", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -39,10 +39,16 @@ $lang["kat_bearbeiten"]                  = "Edit category";
 $lang["kat_loeschen_frage"]              = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $lang["kat_rechte"]                      = "Change permissions";
 $lang["klapper"]                         = "Show/hide category";
+$lang["languageset_addnewstolanguage"]   = "Assign a news-item to a language";
 $lang["languageset_addtolanguage"]       = "Assign to a language";
-$lang["languageset_currentlanuage"]      = "The news-entry is currently assigend to the following language:";
+$lang["languageset_assign"]              = "Edit assignment";
+$lang["languageset_currentlanguage"]     = "The news-entry is currently assigend to the following language:";
 $lang["languageset_language"]            = "Language:";
+$lang["languageset_maintainlanguages"]   = "Assign news-items";
+$lang["languageset_news"]                = "News-item:";
+$lang["languageset_news_na"]             = "Not maintained";
 $lang["languageset_notmaintained"]       = "At the moment the news-item is not assigend to any language. A languageswitch in the portal is not available automatically.";
+$lang["languageset_remove"]              = "Delete assignment";
 $lang["liste_leer"]                      = "No news available";
 $lang["modul_anlegen"]                   = "Create news";
 $lang["modul_kat_anlegen"]               = "Create category";

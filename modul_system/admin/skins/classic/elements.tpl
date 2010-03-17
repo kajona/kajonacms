@@ -202,7 +202,7 @@ Dropdown
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
       <td width="30%" class="listecontent" align="right">%%title%%</td>
-      <td><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></td>
+      <td><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%% %%addons%%>%%options%%</select></td>
     </tr>
 </table>
 </input_dropdown>

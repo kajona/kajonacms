@@ -137,6 +137,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $this->actionAssignToLanguageset();
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
             }
+	        if($strAction == "removeFromLanguageset") {
+                $this->actionRemoveFromLanguageset();
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
+            }
+	        if($strAction == "addNewsToLanguageset") {
+                $this->actionAddNewsToLanguageset();
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
+            }
 
 	    }
 	    catch (class_exception $objException) {
@@ -343,9 +351,65 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             else {
 
                 $objLanguage = new class_modul_languages_language($objLanguageset->getLanguageidForSystemid($this->getSystemid()));
-
-                $strReturn .= $this->objToolkit->formTextRow($this->getText("languageset_currentlanuage"));
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_addtolanguage"));
+                $strReturn .= $this->objToolkit->formTextRow($this->getText("languageset_currentlanguage"));
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("lang_".$objLanguage->getStrName() , "languages"));
+                
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_maintainlanguages"));
+                
+                $arrLanguages = class_modul_languages_language::getAllLanguages();
+                
+                $strReturn .= $this->objToolkit->listHeader();
+                $intI = 0;
+                $intNrOfUnassigned = 0;
+                $arrMaintainedLanguages = array();
+                foreach($arrLanguages as $objOneLanguage) {
+                    
+                    $strNewsid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
+                    $strActions = "";
+                    if($strNewsid != null) {
+                        $arrMaintainedLanguages[] = $objOneLanguage->getSystemid();
+                        $objNews = new class_modul_news_news($strNewsid);
+                        $strNewsName = $objNews->getStrTitle();
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "removeFromLanguageset", "&systemid=".$objNews->getSystemid(), "", $this->getText("languageset_remove"), "icon_ton.gif"));
+                        $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName() , "languages").": ".$strNewsName, $strActions, $intI++);
+                    }
+                    else {
+                        $intNrOfUnassigned++;
+                        //$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "addToLanguageset", "&systemid=".$objNews->getSystemid()."&languageid=".$objOneLanguage->getSystemid(), "", $this->getText("languageset_assign"), "icon_pencil.gif"));
+                        $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName() , "languages").": ".$this->getText("languageset_news_na"), $strActions, $intI++);
+                    }    
+                    
+                }
+                
+                $strReturn .= $this->objToolkit->listFooter();
+                
+                //provide a form to add further news-items
+                if($intNrOfUnassigned > 0) {
+                    $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_addnewstolanguage"));
+
+                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "addNewsToLanguageset"));
+                    $arrLanguages = class_modul_languages_language::getAllLanguages();
+                    $arrDropdown = array();
+                    foreach($arrLanguages as $objOneLanguage)
+                        if(!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages))
+                            $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
+                    
+                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
+                    
+                    
+                    $arrNews = class_modul_news_news::getNewsList();
+                    $arrDropdown = array();
+                    foreach($arrNews as $objOneNews)
+                        if(class_modul_languages_languageset::getLanguagesetForSystemid($objOneNews->getSystemid()) == null)
+                            $arrDropdown[$objOneNews->getSystemid()] = $objOneNews->getStrTitle();
+                    
+                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_news", $arrDropdown, $this->getText("languageset_news"));
+                    
+                    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+    				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+    				$strReturn .= $this->objToolkit->formClose();    
+                }
             }
         }
         else
@@ -353,16 +417,34 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
         return $strReturn;
     }
-
+    
+    private function actionAddNewsToLanguageset() {
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            //load the languageset for the current systemid
+            $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+            $objTargetLanguage = new class_modul_languages_language($this->getParam("languageset_language"));
+            if($objLanguageset != null && $objTargetLanguage->getStrName() != "") {
+                $objLanguageset->setSystemidForLanguageid($this->getParam("languageset_news"), $objTargetLanguage->getSystemid());
+            }
+        }
+    }
+    
     private function actionAssignToLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
-
             $objTargetLanguage = new class_modul_languages_language($this->getParam("languageset_language"));
-
             if($objLanguageset == null && $objTargetLanguage->getStrName() != "") {
                 $objLanguageset = new class_modul_languages_languageset();
                 $objLanguageset->setSystemidForLanguageid($this->getSystemid(), $objTargetLanguage->getSystemid());
+            }
+        }
+    }
+    
+    private function actionRemoveFromLanguageset() {
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+            if($objLanguageset != null) {
+                $objLanguageset->removeSystemidFromLanguageeset($this->getSystemid());
             }
         }
     }
@@ -514,6 +596,20 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $arrToolbarEntries = array();
 	            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
 	            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+	            
+                //search the languages maintained
+                $objLanguageManager = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+                if($objLanguageManager != null) {
+                    $arrToolbarEntries[2] = "<div class=\"languageSwitch\">";
+                    $arrMaintained = $objLanguageManager->getArrLanguageSet();
+                    $arrDD = array();
+                    foreach($arrMaintained as $strLanguageId => $strSystemid) {
+                        $objLanguage = new class_modul_languages_language($strLanguageId);
+                        $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
+                    }
+                    $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNews")."&systemid='+this.value;\"");
+                    $arrToolbarEntries[2] .= "</div>";
+                }
 	            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0);
 
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
@@ -689,6 +785,22 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $arrToolbarEntries = array();
             $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
             $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
+            
+            
+            //search the languages maintained
+            $objLanguageManager = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
+            if($objLanguageManager != null) {
+                $arrToolbarEntries[2] = "<div class=\"languageSwitch\">";
+                $arrMaintained = $objLanguageManager->getArrLanguageSet();
+                $arrDD = array();
+                foreach($arrMaintained as $strLanguageId => $strSystemid) {
+                    $objLanguage = new class_modul_languages_language($strLanguageId);
+                    $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
+                }
+                $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNewscontent")."&systemid='+this.value;\"");
+                $arrToolbarEntries[2] .= "</div>";
+            }
+            
             $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1)."<br />";
 
             //Build the form

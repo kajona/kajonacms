@@ -623,9 +623,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strKeySelected
      * @param string $strClass
      * @param bool $bitEnabled
+     * @param string $strAddons
      * @return string
      */
-    public function formInputDropdown($strName, $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "inputDropdown", $bitEnabled = true) {
+    public function formInputDropdown($strName, $arrKeyValues, $strTitle = "", $strKeySelected = "", $strClass = "inputDropdown", $bitEnabled = true, $strAddons = "") {
         $strOptions = "";
         $strTemplateOptionID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row");
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
@@ -646,6 +647,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["class"] = $strClass;
         $arrTemplate["disabled"] = ($bitEnabled ? "" : "disabled=\"disabled\"");
         $arrTemplate["options"] = $strOptions;
+        $arrTemplate["addons"] = $strAddons;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 

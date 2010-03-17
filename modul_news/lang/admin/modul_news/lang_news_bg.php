@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 233
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страницата с резултати";
@@ -36,10 +36,16 @@ $lang["kat_bearbeiten"]                  = "Редактирай категор�
 $lang["kat_loeschen_frage"]              = "Наистина ли искате да премахнете категорията &quot;<b>%%element_name%%</b>&quot;?";
 $lang["kat_rechte"]                      = "Промени права";
 $lang["klapper"]                         = "Покажи/скрий категорията";
+$lang["languageset_addnewstolanguage"]   = "";
 $lang["languageset_addtolanguage"]       = "";
-$lang["languageset_currentlanuage"]      = "";
+$lang["languageset_assign"]              = "";
+$lang["languageset_currentlanguage"]     = "";
 $lang["languageset_language"]            = "";
+$lang["languageset_maintainlanguages"]   = "";
+$lang["languageset_news"]                = "";
+$lang["languageset_news_na"]             = "";
 $lang["languageset_notmaintained"]       = "";
+$lang["languageset_remove"]              = "";
 $lang["liste_leer"]                      = "Няма новини";
 $lang["modul_anlegen"]                   = "Създай новини";
 $lang["modul_kat_anlegen"]               = "Създай категория";

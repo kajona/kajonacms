@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 233
+//Kajona Language Editor Core Build 198
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "News bearbeiten", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -39,10 +39,16 @@ $lang["kat_bearbeiten"]                  = "Kategorie bearbeiten";
 $lang["kat_loeschen_frage"]              = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["kat_rechte"]                      = "Rechte bearbeiten";
 $lang["klapper"]                         = "Kategorien ein-/ausblenden";
+$lang["languageset_addnewstolanguage"]   = "Newsbeitrag einer Sprache zuordnen";
 $lang["languageset_addtolanguage"]       = "Einer Sprache zuordnen";
-$lang["languageset_currentlanuage"]      = "Der Newseintrag ist aktuell folgender Sprache zugeordnet:";
+$lang["languageset_assign"]              = "Zuordnung bearbeiten";
+$lang["languageset_currentlanguage"]     = "Der Newseintrag ist aktuell folgender Sprache zugeordnet:";
 $lang["languageset_language"]            = "Sprache:";
+$lang["languageset_maintainlanguages"]   = "News-Beiträge zuordnen";
+$lang["languageset_news"]                = "Newsbeitrag:";
+$lang["languageset_news_na"]             = "Nicht gepflegt";
 $lang["languageset_notmaintained"]       = "Aktuell ist der Newsbeitrag keiner Sprache zugeordnet. Eine Sprachumschaltung ist von daher nicht automatisch möglich.";
+$lang["languageset_remove"]              = "Zuordnung löschen";
 $lang["liste_leer"]                      = "Keine News angelegt";
 $lang["modul_anlegen"]                   = "News anlegen";
 $lang["modul_kat_anlegen"]               = "Kategorie anlegen";

@@ -197,7 +197,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 
 Dropdown
 <input_dropdown>
-	<div><label for="%%name%%">%%title%% </label><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%%>%%options%%</select></div><br />
+	<div><label for="%%name%%">%%title%% </label><select name="%%name%%" id="%%name%%" class="%%class%%" %%disabled%% %%addons%%>%%options%%</select></div><br />
 </input_dropdown>
 
 <input_dropdown_row>
