@@ -46,6 +46,10 @@ class class_element_languageswitch extends class_element_portal implements inter
 		$strReturn = "";
 
         $arrObjLanguages = class_modul_languages_language::getAllLanguages(true);
+
+        //load the languageset in order to generate more specific switches
+        $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getParam("systemid"));
+
         //Iterate over all languages
         $strRows = "";
         foreach($arrObjLanguages as $objOneLanguage) {
@@ -54,9 +58,21 @@ class class_element_languageswitch extends class_element_portal implements inter
             $objPage->setStrLanguage($objOneLanguage->getStrName());
             if((int)$objPage->getNumberOfElementsOnPage(true) > 0) {
 
+
+                $strTargetSystemid = null;
+                if($objLanguageset != null) {
+                    $strTargetSystemid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
+                }
+
                 //and the link
                 $arrTemplate = array();
-                $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName());
+                if($strTargetSystemid == null) {
+                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName());
+                }
+                else {
+                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName());
+                }
+                
                 $arrTemplate["langname_short"] = $objOneLanguage->getStrName();
                 $arrTemplate["langname_long"] = $this->getText("lang_".$objOneLanguage->getStrName());
 

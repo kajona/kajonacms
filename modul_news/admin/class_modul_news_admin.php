@@ -607,7 +607,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                         $objLanguage = new class_modul_languages_language($strLanguageId);
                         $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
                     }
-                    $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNews")."&systemid='+this.value;\"");
+                    $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNews").(_system_mod_rewrite_ ? "?" : "&")."systemid='+this.value;\"");
                     $arrToolbarEntries[2] .= "</div>";
                 }
 	            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0);
@@ -797,7 +797,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     $objLanguage = new class_modul_languages_language($strLanguageId);
                     $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
                 }
-                $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNewscontent")."&systemid='+this.value;\"");
+                $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNewscontent").(_system_mod_rewrite_ ? "?" : "&")."systemid='+this.value;\"");
                 $arrToolbarEntries[2] .= "</div>";
             }
             
