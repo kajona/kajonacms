@@ -54,7 +54,10 @@ class class_carrier {
 			//so, lets init the constants
             $objConfig->loadConfigsDatabase($objDB);
             //and init the internal session
-            self::$objCarrier->getObjSession()->initInternalSession();
+            //SIR 2010/03: deactivated session startup right here.
+            //The session-start is handled by class_session internally to avoid
+            //senseless db-updates, e.g. when manipulating images
+            //self::$objCarrier->getObjSession()->initInternalSession();
             $objDB->loadCacheFromSession();
 		}
 

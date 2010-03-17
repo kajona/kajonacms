@@ -68,12 +68,18 @@ class class_modul_pages_pagecache {
 	 */
 	public function savePageToCache($strPagename, $intCachetime, $strUserid, $strPage) {
 
-	    $strQuery = "INSERT INTO "._dbprefix_."page_cache
-	       (page_cache_id, page_cache_name, page_cache_checksum, page_cache_createtime, page_cache_releasetime, page_cache_userid, page_cache_content) VALUES
-	       ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($strPagename)."', '".$this->objDB->dbsafeString($this->generateCacheChecksum())."',
-	        '".(int)time()."', '".(int)(time()+$intCachetime)."', '".$this->objDB->dbsafeString($strUserid)."', '".$this->objDB->dbsafeString($strPage, false)."')";
+        //only save to cache if valid more than one second
+        if($intCachetime > 0) {
 
-	    return $this->objDB->_query($strQuery);
+            $strQuery = "INSERT INTO "._dbprefix_."page_cache
+               (page_cache_id, page_cache_name, page_cache_checksum, page_cache_createtime, page_cache_releasetime, page_cache_userid, page_cache_content) VALUES
+               ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($strPagename)."', '".$this->objDB->dbsafeString($this->generateCacheChecksum())."',
+                '".(int)time()."', '".(int)(time()+$intCachetime)."', '".$this->objDB->dbsafeString($strUserid)."', '".$this->objDB->dbsafeString($strPage, false)."')";
+
+            return $this->objDB->_query($strQuery);
+        }
+        else
+            return true;
 	}
 
 

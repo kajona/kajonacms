@@ -299,6 +299,10 @@ class class_db {
 	 */
 	private function writeDbLog($strText) {
 	    $arrStack = debug_backtrace();
+
+        //foreach($arrStack as $arrSingle)
+        //    $strText .= $arrSingle["file"]."@".$arrSingle["function"]."\n";
+
 		$strText = date("G:i:s, d-m-y"). "\t\t".
 		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
 		                 "\r\n"
@@ -430,7 +434,34 @@ class class_db {
 	public function getTables($bitAll = false) {
 		$arrReturn = array();
 		if($this->objDbDriver != null) {
-    		$arrTemp = $this->objDbDriver->getTables();
+
+            $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
+            $strQueryMd5 = md5($strFakeQuery);
+            
+            $bitCache = true;
+            if(defined("_system_use_dbcache_") && _system_use_dbcache_ == "false")
+                $bitCache = false;
+
+            if($bitCache) {
+                if(isset($this->arrQueryCache[$strQueryMd5])) {
+                    //Increasing Cache counter
+                    $this->intNumberCache++;
+                    $arrTemp = $this->arrQueryCache[$strQueryMd5];
+                }
+                else {
+                    $arrTemp = $this->objDbDriver->getTables();
+                    if(_dblog_)
+                        $this->writeDbLog($strFakeQuery);
+                }
+            }
+            else {
+                $arrTemp = $this->objDbDriver->getTables();
+                if(_dblog_)
+                    $this->writeDbLog($strFakeQuery);
+            }
+
+            if($bitCache)
+                $this->arrQueryCache[$strQueryMd5] = $arrTemp;
 
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
@@ -452,6 +483,9 @@ class class_db {
     		    }
     		}
 		}
+
+        
+
 		return $arrReturn;
 	}
 
@@ -685,6 +719,7 @@ class class_db {
 	 *
 	 */
 	public function flushQueryCache() {
+        //class_logger::getInstance()->addLogRow("Flushing query cache", class_logger::$levelInfo);
 	    $this->arrQueryCache = array();
 	}
 

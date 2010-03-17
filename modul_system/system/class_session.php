@@ -24,6 +24,7 @@ final class class_session {
 	public static $intScopeRequest = 2;
 
 	private static $objSession = null;
+    private $bitLazyLoaded = false;
 	
 	/**
 	 * Instance of internal kajona-session
@@ -72,7 +73,7 @@ final class class_session {
 	 * @return bool
 	 */
 	private function sessionStart() {
-		//New seesion needes, oder using the already started?
+		//New session needed or using the already started one?
 		if(!session_id()) {
 			if(session_start())
 				$bitReturn = true;
@@ -186,8 +187,8 @@ final class class_session {
 	 * @return bool
 	 */
 	public function isLoggedin() {
-		if($this->objInternalSession != null)
-		    return $this->objInternalSession->isLoggedIn();
+		if($this->getObjInternalSession() != null)
+		    return $this->getObjInternalSession()->isLoggedIn();
 		else 
 		    return false;    
 		  
@@ -342,11 +343,11 @@ final class class_session {
 							//No htmlentitiesencoding here !!!
 							$objOneUser->updateObjectToDb(false);
 							
-							$this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
-							$this->objInternalSession->setStrUserid($objOneUser->getSystemid());
+							$this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
+							$this->getObjInternalSession()->setStrUserid($objOneUser->getSystemid());
 	                        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objOneUser->getSystemid()));
-	                        $this->objInternalSession->setStrGroupids($strGroups);
-	                        $this->objInternalSession->updateObjectToDb();
+	                        $this->getObjInternalSession()->setStrGroupids($strGroups);
+	                        $this->getObjInternalSession()->updateObjectToDb();
 	                        $this->objUser = $objOneUser;
 	                        
 	                        //Drop a line to the logger
@@ -390,9 +391,9 @@ final class class_session {
 	public function logout() {
 	    class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
 	    
-	    $this->objInternalSession->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
-	    $this->objInternalSession->updateObjectToDb();
-	    $this->objInternalSession->deleteObject();
+	    $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
+	    $this->getObjInternalSession()->updateObjectToDb();
+	    $this->getObjInternalSession()->deleteObject();
 	    $this->objInternalSession = null;
 	    $this->objUser = null;
 		if (isset($_COOKIE[session_name()])) {
@@ -414,7 +415,7 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUsername() {
-		if($this->isLoggedin() && $this->objInternalSession != null) {
+		if($this->isLoggedin() && $this->getObjInternalSession() != null) {
 			$strUsername = $this->getUser()->getStrUsername();
 		}
 		else {
@@ -429,8 +430,8 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUserID() {
-		if($this->objInternalSession != null && $this->isLoggedin()) {
-			$strUserid = $this->objInternalSession->getStrUserid();
+		if($this->getObjInternalSession() != null && $this->isLoggedin()) {
+			$strUserid = $this->getObjInternalSession()->getStrUserid();
 		}
 		else {
 			$strUserid = "";
@@ -470,8 +471,8 @@ final class class_session {
 	 * @return string
 	 */
 	public function getGroupIdsAsString() {
-	    if($this->objInternalSession != null ) {
-			$strGroupids = $this->objInternalSession->getStrGroupids();
+	    if($this->getObjInternalSession() != null ) {
+			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
 		else {
 			$strGroupids = _guests_group_id_;
@@ -485,8 +486,8 @@ final class class_session {
 	 * @return array
 	 */
 	public function getGroupIdsAsArray() {
-	    if($this->objInternalSession != null ) {
-			$strGroupids = $this->objInternalSession->getStrGroupids();
+	    if($this->getObjInternalSession() != null ) {
+			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
 		else {
 			$strGroupids = _guests_group_id_;
@@ -509,8 +510,8 @@ final class class_session {
      * @return string
      */
     public function getInternalSessionId() {
-        if($this->objInternalSession != null)
-            return $this->objInternalSession->getSystemid();
+        if($this->getObjInternalSession() != null)
+            return $this->getObjInternalSession()->getSystemid();
         else
             return $this->getSessionId();
     }
@@ -550,7 +551,8 @@ final class class_session {
 	 *
 	 */
 	public function initInternalSession() {
-	    
+
+        $this->bitLazyLoaded = true;
 	    
 	    $arrTables = $this->objDB->getTables();
         if(!in_array(_dbprefix_."session", $arrTables))
@@ -587,6 +589,15 @@ final class class_session {
         if($this->getUserID() != "")
 	       $this->objUser = new class_modul_user_user($this->getUserID());
 	}
+
+    private function getObjInternalSession() {
+
+        //lazy loading
+        if($this->objInternalSession == null && !$this->bitLazyLoaded)
+            $this->initInternalSession();
+        
+        return $this->objInternalSession;
+    }
 
 }
 
