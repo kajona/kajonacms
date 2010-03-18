@@ -751,6 +751,7 @@ a.inputSubmit {
     font-family: Arial, Verdana, Helvetica, sans-serif;
     color: #000000;
     font-size: 11px;
+    outline: none;
 }
 
 .adminwidgetHeader, .dialogHeader {
@@ -780,6 +781,12 @@ a.inputSubmit {
 .adminwidgetContent, .dialogContent {
 	padding: 2px;
 	font-size: 11px;
+}
+
+/* special for system task container */
+#systemtaskStatusDiv {
+    max-height: 300px;
+    overflow: auto;
 }
 
 .dashBoard ul {

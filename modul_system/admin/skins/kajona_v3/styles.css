@@ -1225,6 +1225,7 @@ div.percentBeam {
 	margin:0px auto;
 	min-width:300px;
 	max-width:650px; /* max-size because of bg-image width */
+	outline: none;
 }
 
 .dialog .hd .c,
@@ -1274,7 +1275,13 @@ div.percentBeam {
 	margin-right: 20px;
 }
 
-/* IE6 fixes for dialog*/
+/* special for system task container */
+#systemtaskStatusDiv {
+    max-height: 300px;
+    overflow: auto;
+}
+
+/* IE6 fixes for dialog */
 * html .dialog {
 	background-color: #ffffff;
 	border: 2px solid #00e800;

@@ -160,12 +160,3 @@
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
 	text-decoration: underline !important;
 }
-
-#peWysiwygToolbar {
-    z-index: 999999999;
-    position: fixed;
-    width: 100%;
-}
-#peWysiwygBottom {
-    display: none;
-}
