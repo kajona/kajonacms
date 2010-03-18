@@ -7,15 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 233
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
 $lang["_admin_nr_of_rows_hint"]          = "Количество записей в списке админа, если поддерживается модулем. Может быть изменено модулем!";
 $lang["_admin_only_https_"]              = "Админ только через HTTPS:";
 $lang["_admin_only_https_hint"]          = "Принуждает к использованию HTTPS при загрузке раздела администрации. Для этой функции вебсервер должен поддерживать HTTPS";
-$lang["_images_cachepath_"]              = "Картинки cache path:";
-$lang["_images_cachepath_hint"]          = "Временно созданные картинки хранятся в этой папке";
 $lang["_remoteloader_max_cachetime_"]    = "Время в кеше внешних источников:";
 $lang["_remoteloader_max_cachetime_hint"] = "Время в секундах кеша внешне загруженного содержания (например RSS-ленты).";
 $lang["_system_admin_email_"]            = "Email админа:";

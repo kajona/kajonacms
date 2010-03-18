@@ -45,8 +45,6 @@ class class_texte {
 		$this->arrModul["t_author"]		= "sidler@mulchprod.de";
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
 
-		$this->strLanguage = class_carrier::getInstance()->getObjConfig()->getConfig("portallanguage");
-
         //load texts from session
         //TODO: reenable before release
         //$this->arrTexts = class_session::getInstance()->getSession("textSessionCache");

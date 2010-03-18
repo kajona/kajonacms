@@ -69,13 +69,13 @@ default:
     $config['dirportal']            = "/portal";                               //Path containing the portal-classes
     $config['dirtemplates']         = "/templates";                            //Path containing the templates
     $config['dirsystem']            = "/system";                               //Path containing the system classes
-    $config['dirlang']              = "/lang";                                //Path containing the language-files
+    $config['dirlang']              = "/lang";                                 //Path containing the language-files
     $config['dirskins']             = "/skins";                                //Path containing the skin-files
+
+    $config["images_cachepath"]     = "/portal/pics/cache/";                   //Path used to store the cached and manipulated images
 
     $config['adminlangs']           = "de,en,pt,ru,bg";                        //Available languages for the administration
 
-    $config['portallanguage']       = "de";                                    //This is the default language for texts being loaded in the portal.
-                                                                               //Please note: This setting is only used, if no languages are installed.
 
 
 //--system settings--------------------------------------------------------------------------------------

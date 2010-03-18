@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.95";
+		$arrModul["version"] 			= "3.2.96";
 		$arrModul["name"] 				= "system";
 		$arrModul["class_admin"] 		= "class_modul_system_admin";
 		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
@@ -355,9 +355,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_system_portal_disable_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
         $this->registerConstant("_system_portal_disablepage_", "", class_modul_system_setting::$int_TYPE_PAGE, _system_modul_id_);
 
-        //new in 2.1.1.0: cachepath now in the system-settings
-        $this->registerConstant("_images_cachepath_", "/portal/pics/cache/", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
-
         //New in 3.0: Number of db-dumps to hold
 	    $this->registerConstant("_system_dbdump_amount_", 5, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
 	    //new in 3.0: mod-rewrite on / off
@@ -546,6 +543,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.94") {
             $strReturn .= $this->update_3294_3295();
+        }
+
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.95") {
+            $strReturn .= $this->update_3295_3296();
         }
 
         return $strReturn."\n\n";
@@ -1087,6 +1089,26 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.2.95");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.2.95");
+        return $strReturn;
+    }
+
+    private function update_3295_3296() {
+        $strReturn = "";
+        $strReturn .= "Updating 3.2.95 to 3.2.96...\n";
+
+        $strReturn .= "Removing setting _images_cachepath_...\n";
+
+        $strQuery = "DELETE FROM ".$this->objDB->encloseTableName(_dbprefix_."system_config")."
+                           WHERE ".$this->objDB->encloseColumnName("system_config_name")." = '_images_cachepath_'";
+
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.2.96");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.2.96");
         return $strReturn;
     }
 }

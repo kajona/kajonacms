@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 233
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -19,8 +19,6 @@ $lang["_admin_nr_of_rows_"]              = "Number of records per page:";
 $lang["_admin_nr_of_rows_hint"]          = "Number of records in the admin-lists, if supported by the module. Can be redefined by a module!";
 $lang["_admin_only_https_"]              = "Admin only via HTTPS:";
 $lang["_admin_only_https_hint"]          = "Forces the use of HTTPS when loading the administration. The webserver has to support HTTPS to use this option.";
-$lang["_images_cachepath_"]              = "Images cache path:";
-$lang["_images_cachepath_hint"]          = "Temporary created images are stored in this folder.";
 $lang["_remoteloader_max_cachetime_"]    = "Cache time of external sources:";
 $lang["_remoteloader_max_cachetime_hint"] = "Time in seconds to cache externally loaded contents (e.g. RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Admin Email:";

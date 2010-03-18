@@ -7,15 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 233
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
 $lang["_admin_nr_of_rows_hint"]          = "Número de registos na lista administrativa, se suportados pelo módulo. Pode ser redefenido por um módulo!";
 $lang["_admin_only_https_"]              = "Administrador só via HTTPS:";
 $lang["_admin_only_https_hint"]          = "Forçar o uso de HTTPS quando carregar a administração. O servidor de internet tem de suportar HTTPS para usar esta opção.";
-$lang["_images_cachepath_"]              = "Pasta de imagens temporárias (cache):";
-$lang["_images_cachepath_hint"]          = "Imagens temporárias criadas são armazenadas nesta pasta. ";
 $lang["_remoteloader_max_cachetime_"]    = "Memória temporária de fontes externas:";
 $lang["_remoteloader_max_cachetime_hint"] = "Tempo em segundos para carregar conteúdos do exterior (ex: RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Correio Electrónico Administrador:";

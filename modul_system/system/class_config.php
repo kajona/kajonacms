@@ -53,6 +53,12 @@ class class_config {
 		define("_templatenr_", 		$this->getDebug("templatenr"));
 		define("_memory_",          $this->getDebug("memory"));
 
+        
+        if($this->getConfig("images_cachepath") != "")
+            define("_images_cachepath_", $this->getConfig("images_cachepath"));
+        else
+            define("_images_cachepath_", "/portal/pics/cache/");
+
 	}
 
 	/**
