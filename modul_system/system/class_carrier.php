@@ -52,7 +52,8 @@ class class_carrier {
 			$objConfig = self::$objCarrier->getObjConfig();
 			$objDB = self::$objCarrier->getObjDB();
 			//so, lets init the constants
-            $objConfig->loadConfigsDatabase($objDB);
+            if(!defined("_config_block_loading_"))
+                $objConfig->loadConfigsDatabase($objDB);
             //and init the internal session
             //SIR 2010/03: deactivated session startup right here.
             //The session-start is handled by class_session internally to avoid
@@ -76,7 +77,8 @@ class class_carrier {
 		    require_once(_realpath_."/system/class_db.php");
 		    $this->objDB = class_db::getInstance();
 			//Now we have to set up the database connection
-			$this->objDB->dbconnect();
+            //SIR 2010/03: connection is established on request, lazy loading
+			//$this->objDB->dbconnect();
 		}
 		return $this->objDB;
 	}

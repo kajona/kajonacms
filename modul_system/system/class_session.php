@@ -599,6 +599,12 @@ final class class_session {
         return $this->objInternalSession;
     }
 
+    public function getBitLazyLoaded() {
+        return $this->bitLazyLoaded;
+    }
+
+    
+
 }
 
 

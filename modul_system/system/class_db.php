@@ -43,6 +43,14 @@ class class_db {
 	 */
 	private $bitCurrentTxIsDirty = false;
 
+    /**
+     * Flag indicating if the internal connection was setup.
+     * Needed to have a proper lazy-connection initalization.
+     *
+     * @var bool
+     */
+    private $bitConnected = false;
+
 
 	/**
 	 * Constructor
@@ -97,9 +105,11 @@ class class_db {
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
 
-        class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
-	    if($this->objDbDriver !== null)
+        
+	    if($this->objDbDriver !== null && $this->bitConnected) {
+            class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
 	        $this->objDbDriver->dbclose();
+        }
 
         //save cache to session
         //reset cache after ~10 times to avoid mem-errors
@@ -144,6 +154,8 @@ class class_db {
 	        catch (class_exception $objException) {
                 $objException->processException();
 	        }
+
+            $this->bitConnected = true;
 	    }
 	}
 
@@ -154,6 +166,9 @@ class class_db {
 	 * @return bool
 	 */
 	public function _query($strQuery) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+
 		$bitReturn = false;
 
 		if(_dblog_)
@@ -198,6 +213,9 @@ class class_db {
 	 * @return array
 	 */
 	public function getArray($strQuery, $bitCache = true) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 		$strQuery = $this->processQuery($strQuery);
 		//Increasing global counter
 		$this->intNumber++;
@@ -247,6 +265,9 @@ class class_db {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
         $arrReturn = array();
         //param validation
         if((int)$intStart < 0)
@@ -318,6 +339,9 @@ class class_db {
 	 * @param string $strQuery
 	 */
 	private function getError($strQuery) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
         $strError = "";
 	    if($this->objDbDriver != null) {
 	       $strError = $this->objDbDriver->getError();
@@ -360,6 +384,9 @@ class class_db {
 	 *
 	 */
 	public function transactionBegin() {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    if($this->objDbDriver != null) {
 	        //just start a new tx, if no other tx is open
 	        if($this->intNumberOfOpenTransactions == 0)
@@ -376,6 +403,9 @@ class class_db {
 	 *
 	 */
 	public function transactionCommit() {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    if($this->objDbDriver != null) {
 
 	        //check, if the current tx is allowed to be commited
@@ -404,6 +434,9 @@ class class_db {
 	 *
 	 */
 	public function transactionRollback() {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    if($this->objDbDriver != null) {
 
 		    if($this->intNumberOfOpenTransactions == 1) {
@@ -432,6 +465,9 @@ class class_db {
 	 * @return array
 	 */
 	public function getTables($bitAll = false) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 		$arrReturn = array();
 		if($this->objDbDriver != null) {
 
@@ -498,6 +534,9 @@ class class_db {
      * @return array
      */
     public function getColumnsOfTable($strTableName) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
         return $this->objDbDriver->getColumnsOfTable($strTableName);
     }
 
@@ -546,6 +585,9 @@ class class_db {
      * @return bool
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
         $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if(!$bitReturn)
         	$this->getError("");
@@ -560,6 +602,9 @@ class class_db {
 	 * @return bool
 	 */
 	public function dumpDb() {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    // Check, how many dumps to keep
 	    $objFilesystem = new class_filesystem();
 	    $arrFiles = $objFilesystem->getFilelist("/system/debug/", ".sql");
@@ -598,6 +643,9 @@ class class_db {
 	 * @return bool
 	 */
 	public function importDb($strFilename) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    //gz file?
 	    $bitGzip = false;
 	    if(substr($strFilename, -3) == ".gz") {
@@ -658,6 +706,9 @@ class class_db {
 	}
 
 	public function getDbInfo() {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+        
 	    if($this->objDbDriver != null) {
             return $this->objDbDriver->getDbInfo();
 	    }
