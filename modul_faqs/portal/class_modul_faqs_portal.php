@@ -110,7 +110,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
     			                              "pe_action_delete" => "deleteFaq",
     			                              "pe_action_delete_params" => "&systemid=".$objOneFaq->getSystemid()
     			                        );
-    			    $strFaqs .= class_element_portal::addPortalEditorCode($strOneFaq, $objOneFaq->getSystemid(), $arrPeConfig, true);
+    			    $strFaqs .= class_element_portal::addPortalEditorCode($strOneFaq, $objOneFaq->getSystemid(), $arrPeConfig);
     			}
     		}
 

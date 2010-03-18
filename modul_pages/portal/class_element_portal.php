@@ -103,11 +103,10 @@ class class_element_portal extends class_portal {
 	 * @param string $strContent elements' output
 	 * @param string $strSystemid elements' systemid
 	 * @param array $arrConfig : pe_module, pe_action, [pe_action_new, pe_action_new_params]
-	 * @param bool $bitSpace add space before code?
 	 * @return string
 	 * @static
 	 */
-	public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig, $bitSpace = false) {
+	public static function addPortalEditorCode($strContent, $strSystemid, $arrConfig) {
 	    $strEditorDiv = "";
         $strReturn = "";
 
@@ -233,9 +232,6 @@ class class_element_portal extends class_portal {
                 //---------------------------------------------------
                 // layout generation
 
-                if($bitSpace) {
-                    $strReturn .= "<br />";
-                }
                 $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strNewLink, $strDeleteLink, $strShiftUp, $strShiftDown), $strContent);
 
                 //reset the portal texts language

@@ -69,7 +69,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                                   "pe_action_delete" => "",
                                   "pe_action_delete_params" => ""
                             );
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig, true);
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
 
 		return $strReturn;
 	}
@@ -114,9 +114,9 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         $strStack = $this->getActiveIdStack($objPagePointData);
 
 		//path created, build the tree using recursion
-        if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) 
+        if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1)
             $this->createTree($strStack, 0, $this->arrElementData["navigation_id"]);
-        
+
 		//Create the tree
 		$intCounter = -1;
 		$arrTree = array();
@@ -127,20 +127,20 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$arrTemp = array();
 		while($intCounter > 1) {
 			$strLevel = $arrTree[$intCounter];
-			
+
 			//include into a wrapper?
 			$strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
 			$strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
 			if(uniStrlen($strWrappedLevel) > 0)
 			    $strLevel = $strWrappedLevel;
-			
+
 			$arrTemp["level".$intCounter] = $strLevel;
-			
+
 			$this->objTemplate->setTemplate($arrTree[$intCounter-1]);
 			$arrTree[$intCounter-1] = $this->objTemplate->fillCurrentTemplate($arrTemp);
 			$intCounter--;
 		}
-		
+
 		//and add level 1 wrapper
         if($intCounter != -1) {
             $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
@@ -261,7 +261,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                 $bitActive = false;
                 if(uniStripos($strStack, $objOneChild->getSystemid()) !== false)
                     $bitActive = true;
-                    
+
 			    //Create the navigation point
 			    if($intI == 0)
 				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel, true);
@@ -272,22 +272,22 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 				//And load all points below
 				$strChilds = $this->sitemapRecursive($intLevel+1, $objOneChild->getSystemid(), $strStack);
-                
+
 				//Put the childs below into the current template
 				$this->objTemplate->setTemplate($strCurrentPoint);
 				$arrTemp = array("level".($intLevel+1) => $strChilds);
 				$strTemplate = $this->objTemplate->fillCurrentTemplate($arrTemp);
-				
+
 				$strReturn .= $strTemplate;
 			}
 		}
-		
+
 		//wrap into the wrapper-section
         $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
         $strWrappedLevel = $this->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $strReturn = $strWrappedLevel;
-		
+
 		return $strReturn;
 	}
 
@@ -414,7 +414,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	    }
 	    return $objPoint;
 	}
-	
+
 	/**
 	 * Searches the current page in other navigation-trees found on the current page.
 	 * This can be usefull to avoid a session-based "opening" of the current tree.
@@ -424,7 +424,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @return bool
 	 */
 	private function isPageVisibleInOtherNavigation() {
-	   
+
 	   //load the placeholders placed on the current page-template. therefore, instantiate a page-object
        $objPageData = class_modul_pages_page::getPageByName($this->getPagename());
        $objMasterPageData = class_modul_pages_page::getPageByName("master");
@@ -433,7 +433,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
            $strTemplateId = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate());
            $arrElementsTemplate = $this->objTemplate->getElements($strTemplateId);
            $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1));
-           
+
            //loop elements to remove navigation-elements. to do so, get the current elements-name (maybe the user renamed the default "navigation")
           // var_dump($this->arrElementData);
           // var_dump($arrElementsTemplate);
@@ -442,36 +442,36 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                   //loop the elements-list
                   foreach($arrPlaceholder["elementlist"] as $arrOneElement) {
                       if($arrOneElement["element"] == $this->arrElementData["page_element_placeholder_element"]) {
-                      	
+
                           //seems as we have a navigation-element different than the current one.
                           //check, if the element is installed on the current page
                           $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
                           //maybe on the masters-page?
                           if($objElement == null)
                               $objElement = class_modul_pages_pageelement::getElementByPlaceholderAndPage($objMasterPageData->getSystemid(), $arrPlaceholder["placeholder"], $this->getPortalLanguage());
-                              
+
                           if($objElement != null) {
-                              //wohooooo, an element was found. 
+                              //wohooooo, an element was found.
                               //check, if the current point is in the tree linked by the navigation - if it's a different navigation....
                           	  //load the real-pageelement
                           	  $objRealElement = new class_element_navigation($objElement);
                           	  $arrContent = $objRealElement->getElementContent($objElement->getSystemid());
-                          	  
+
                           	  if($arrContent["navigation_mode"] == "tree" && $this->loadPagePoint($this->strCurrentSite, $arrContent["navigation_id"]) != null) {
                           	      //jepp, page found in another tree, so return true
                           	      return true;
                           	  }
-                            
+
                           }
-                              
-                      	
+
+
                       }
-                  
+
                   }
-               	
+
                }
            }
-	   
+
        }
 	   return false;
 	}

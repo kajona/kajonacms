@@ -79,6 +79,12 @@
 	position: absolute !important;
 	border: none !important;
 	display: block !important;
+	margin: -15px 0 0 -1px !important;
+}
+
+/* for nested containers */
+.peContainerHover .peContainerHover .menuHover {
+    margin: -1px 0 0 -1px !important;
 }
 
 .peContainerHover .menuHover .actions {

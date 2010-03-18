@@ -119,6 +119,12 @@
 	position: absolute !important;
 	border: none !important;
 	display: block !important;
+	margin: -15px 0 0 -1px !important;
+}
+
+/* for nested containers */
+.peContainerHover .peContainerHover .menuHover {
+    margin: -1px 0 0 -1px !important;
 }
 
 .peContainerHover .menuHover .actions {
@@ -127,7 +133,7 @@
 	font-family: Verdana, Arial, Helvetica, sans-serif !important;
 	font-size: 11px !important;
 	text-align: left !important;
-	padding: 0 2px 2px 2px !important;
+	padding: 0 0 2px 0 !important;
 	text-transform: none !important;
 }
 
@@ -139,7 +145,7 @@
     text-decoration: none !important;
 	font-weight: normal !important;
     background: none !important;
-    padding: 0 !important;
+    padding: 0 2px 0 2px !important;
     margin: 0 !important;
     text-transform: none !important;
     letter-spacing: normal !important;
@@ -153,4 +159,13 @@
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
 	text-decoration: underline !important;
+}
+
+#peWysiwygToolbar {
+    z-index: 999999999;
+    position: fixed;
+    width: 100%;
+}
+#peWysiwygBottom {
+    display: none;
 }

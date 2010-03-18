@@ -116,7 +116,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
                     } else {
                         $strOneNews .= $this->objTemplate->fillTemplate($arrOneNews, $strTemplateID);
                     }
-					
+
 					//Add pe code
 				    $arrPeConfig = array(
 				                              "pe_module" => "news",
@@ -127,7 +127,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				                              "pe_action_delete" => "deleteNews",
 				                              "pe_action_delete_params" => "&systemid=".$objOneNews->getSystemid()
 				                        );
-				    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig, true);
+				    $strReturn .= class_element_portal::addPortalEditorCode($strOneNews, $objOneNews->getSystemid(), $arrPeConfig);
 				}
 			}
             $arrWrapperTemplate = array();
@@ -154,7 +154,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			//Load record
 			$objNews = new class_modul_news_news($this->getSystemid());
 	        if($objNews->getStatus() == "1") {
-        	
+
                 $arrNews = array();
 				$arrNews["news_back_link"] = "<a href=\"javascript:history.back();\">".$this->getText("news_zurueck")."</a>";
 				$arrNews["news_start_date"] = dateToString(new class_date($objNews->getIntDateStart()), false);
@@ -162,7 +162,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$arrNews["news_title"] = $objNews->getStrTitle();
 				$arrNews["news_intro"] = $objNews->getStrIntro();
 				$arrNews["news_text"] = $objNews->getStrNewstext();
-				
+
 	            //load template section with or without image?
                 if($objNews->getStrImage() != "") {
                     $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail_image");
@@ -178,8 +178,8 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 			                              "pe_action_edit" => "editNewscontent",
 			                              "pe_action_edit_params" => "&systemid=".$this->getSystemid()
 				                    );
-				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig, true);
-				
+				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig);
+
 				//and count the hit
 				$objNews->increaseHits();
 

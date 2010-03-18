@@ -26,3 +26,12 @@
 .peContainerHover {
 	border: 1px solid #00e800 !important;
 }
+
+.peContainerHover .menuHover {
+    margin: -14px 0 0 -1px !important;
+}
+
+/* for nested containers */
+.peContainerHover .peContainerHover .menuHover {
+    margin: 0 0 0 -1px !important;
+}

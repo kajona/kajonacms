@@ -253,7 +253,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                                   "pe_action_edit" => "editImage",
                                   "pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
                             );
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig, true);
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig);
 
 
 		//Update view counter

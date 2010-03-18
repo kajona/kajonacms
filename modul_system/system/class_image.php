@@ -64,8 +64,8 @@ class class_image {
 	 *
 	 * @param string $strCacheAdd Additional string to add for the caching
 	 */
-	public function __construct( $strCacheAdd = "") {
-		$this->arrModul["name"] 		= "class_bild";
+	public function __construct($strCacheAdd = "") {
+		$this->arrModul["name"] 		= "class_image";
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 

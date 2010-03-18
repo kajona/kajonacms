@@ -88,7 +88,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	    $objArraySectionIterator->setPageNumber((int)($this->getParam("pvPAC") != "" ? $this->getParam("pvPAC") : 1));
 	    $objArraySectionIterator->setArraySection(class_modul_postacomment_post::loadPostList(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage(), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-        
+
 
         //params to add?
         $strAdd = "";
@@ -132,7 +132,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
     			                              "pe_action_delete" => "deletePost",
     			                              "pe_action_delete_params" => "&systemid=".$objOnePost->getSystemid()
     			                        );
-    			    $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig, true);
+    			    $strPosts .= class_element_portal::addPortalEditorCode($strOnePost, $objOnePost->getSystemid(), $arrPeConfig);
     			}
     		}
 
