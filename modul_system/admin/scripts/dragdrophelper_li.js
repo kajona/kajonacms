@@ -54,7 +54,6 @@ if(arrayListIds == null) {
 			   //load items in list
 			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-			   		Dom.setStyle(arrayListItems[i], "cursor", "move");
 		 			new kajona.dragndroplistDashboard.DDList(arrayListItems[i].id);
 		   	   }
 		   }
@@ -104,6 +103,14 @@ if(arrayListIds == null) {
 	    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
 	    this.goingUp = false;
 	    this.lastY = 0;
+	    //check if a child element has the css class "ddHandle"
+	    var arrHandle = Dom.getElementsByClassName("ddHandle", null, this.getEl());
+	    if (arrHandle.length >= 1) {
+		    Dom.setAttribute(arrHandle[0], "id", "ddHandle_"+id);
+		    this.setHandleElId("ddHandle_"+id);
+	    } else {
+	    	Dom.setStyle(this.getEl(), "cursor", "move");
+	    }
 	};
 
 	YAHOO.extend(kajona.dragndroplistDashboard.DDList, YAHOO.util.DDProxy, {

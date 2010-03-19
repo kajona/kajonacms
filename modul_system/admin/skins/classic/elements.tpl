@@ -962,7 +962,7 @@ The language switch sourrounds the buttons
 
 <adminwidget_widget>
 <div class="adminwidget" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;">
-	<div class="adminwidgetHeader">
+	<div class="adminwidgetHeader ddHandle">
 		<div class="adminwidgetHeaderTitle">%%widget_name%%</div>
 		<div class="adminwidgetHeaderActions">%%widget_edit%% %%widget_delete%%</div>
 		<div style="clear: both;"></div>
