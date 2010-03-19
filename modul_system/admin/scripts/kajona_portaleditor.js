@@ -36,6 +36,13 @@ var kajonaPortalEditorHelper = {
 	    } else {
 	        window.location.replace(url+'&pe='+status);
 	    }
+	},
+	
+	closeDialog: function () {
+	    var bitClose = confirm("Änderungen verwerfen und schließen?");
+	    if(bitClose) {
+	    	peDialog.hide();
+	    }
 	}
 }
 
@@ -153,4 +160,64 @@ function addCss(file) {
 	l.setAttribute("rel", "stylesheet");
 	l.setAttribute("href", file);
 	document.getElementsByTagName("head")[0].appendChild(l);
+}
+
+
+function ModalDialog(strDialogId, intDialogType) {
+	this.dialog = null;
+	this.containerId = strDialogId;
+
+	this.setTitle = function(strTitle) {
+		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
+	}
+	
+	this.setContent = function(strQuestion, strConfirmButton, strLinkHref) {
+		if (intDialogType == 1) {
+			document.getElementById(this.containerId + "_content").innerHTML = strQuestion;
+			var confirmButton = document.getElementById(this.containerId
+					+ "_confirmButton");
+			confirmButton.value = strConfirmButton;
+			confirmButton.onclick = function() {
+				window.location = strLinkHref;
+				return false;
+			};
+		}
+	}
+
+	this.setContentRaw = function(strContent) {
+		document.getElementById(this.containerId + "_content").innerHTML = strContent;
+		//center the dialog (later() as workaround to add a minimal delay)
+		YAHOO.lang.later(10, this, function() {this.dialog.center();});
+	}
+	
+	this.setContentIFrame = function(strUrl) {
+		document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"450\" frameborder=\"0\" name=\"peIFrame\"></iframe>";
+		//center the dialog (later() as workaround to add a minimal delay)
+		YAHOO.lang.later(10, this, function() {this.dialog.center();});
+	}
+
+	this.init = function() {
+		document.body.style.overflow = "hidden";
+		
+		this.dialog = new YAHOO.widget.Panel(this.containerId, {
+			fixedcenter :true,
+			close :false,
+			draggable :false,
+			zindex :4000,
+			modal :true,
+			visible :true
+		});
+
+		this.dialog.render(document.body);
+		this.dialog.show();
+		this.dialog.focusLast();
+	}
+
+	this.hide = function() {
+		document.body.style.overflow = "auto";
+		try {
+			this.dialog.hide();
+		}
+		catch (e) {};
+	}
 }

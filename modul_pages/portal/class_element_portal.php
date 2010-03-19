@@ -138,12 +138,17 @@ class class_element_portal extends class_portal {
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     //Load element-data
-                    $strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
+                    //$strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
+                    $strEditUrl = getLinkAdminHref($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                    $strEditLink = "<a href=\"#\" onclick=\"peDialog.setContentIFrame('".$strEditUrl."'); peDialog.init(); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
+
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
-                        $strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
+                        //$strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strEditUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
+                        $strEditLink = "<a href=\"#\" onclick=\"peDialog.setContentIFrame('".$strEditUrl."'); peDialog.init(); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
                     }
                 }
 

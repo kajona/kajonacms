@@ -160,3 +160,125 @@
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
 	text-decoration: underline !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* DIALOG */
+
+/* Dialog classes */
+/* based on http://www.schillmania.com/content/projects/even-more-rounded-corners/ */
+.dialog {
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    width: 665px;
+    outline: none;
+    -webkit-box-shadow: 0 0 60px -10px #000000;
+    -moz-box-shadow: 0 0 60px -10px #000000;
+    box-shadow: 0 0 60px -10px #000000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 5px 10px 10px 10px;
+    text-align: left;
+    /*border: 1px solid #d0d0d0 !important;*/
+    background: url(loading.gif) center center no-repeat #ffffff;
+    /*
+    behavior: url(ie-css3.htc);
+    */
+    -ms-filter:"progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4)";
+    filter:progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4);
+    
+   
+}
+
+
+.dialog .close {
+    text-align: right;
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+.dialog iframe {
+    border: none;
+}
+
+
+
+.yui-overlay,
+.yui-panel-container {
+    visibility:hidden;
+    position:absolute;
+    z-index: 2;
+}
+
+.mask {
+    z-index: 1; 
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.2;
+    opacity:.20;
+    filter: alpha(opacity=20);
+    background-color:#000000;
+}
+
+.yui-panel-container.show-scrollbars {
+    overflow: visible;
+}
+
+.yui-panel-container.show-scrollbars .underlay {
+    overflow: auto;
+}
+
+/* Panel underlay styles */
+
+.yui-panel-container .underlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+}
+
+.yui-panel-container.matte {
+    padding: 3px;
+    background-color: #fff;
+}
+
+
+/* 
+   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
+   the Panel's content changes, to force Safari 2.x to redraw the underlay.
+   We attempt to choose a CSS property which has no visual impact when added,
+   removed, but still causes Safari to redraw
+*/
+.yui-panel-container.shadow .underlay.yui-force-redraw {
+    padding-bottom: 1px;
+}
+
+.yui-effect-fade .underlay {
+    display:none;
+}
+
+.yui-panel {
+    visibility:hidden;
+    border-collapse:separate;
+    position:relative;
+    left:0;
+    top:0;
+    border:none;
+    z-index:1;
+    overflow:hidden;
+}

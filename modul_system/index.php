@@ -128,7 +128,7 @@ class class_index  {
 							$objModule->action($strAction);
 							//React, if admin was opened by the portaleditor
 							if(getPost("peClose") == "1" || getGet("peClose") == "1")
-							    $this->strOutput = "<html><head></head><body onload=\"opener.location.reload();window.close();\"></body></html>";
+							    $this->strOutput = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
 							else
 							    $this->strOutput = $objModule->getModuleOutput();
 						}

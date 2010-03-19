@@ -93,6 +93,12 @@ body.folderView, body.portalEditor {
 	text-align: left;
 }
 
+body.portalEditor {
+    margin: 0px;
+    background-image: none;
+    padding-right: 8px;
+}
+
 a, a:link, a:visited {
      text-decoration: underline;
      color: #575757;

@@ -684,6 +684,20 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
+<div class="dialog" id="peDialog">
+    <div class="close"><a href="#" onclick="kajonaPortalEditorHelper.closeDialog(); return false;">X</a></div>
+    <div id="peDialog_content">
+        <!-- filled by js -->
+    </div>
+</div>
+<script type="text/javascript" src="_webpath_/admin/scripts/yui/container/container-min.js"></script>
+<script type="text/javascript">
+var peDialog;
+YAHOO.util.Event.onDOMReady(function () {
+                peDialog = new ModalDialog('peDialog', 0);
+});
+                </script>
+
     <div id="peToolbar">
     	<div class="logo"></div>
 		<div class="info">

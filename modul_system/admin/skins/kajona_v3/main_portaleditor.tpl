@@ -14,12 +14,13 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body class="portalEditor">
-<div class="imgPreload">
-	<img src="_skinwebpath_/loading.gif" alt="" title="" />
-</div>
 
-<h1>%%moduletitle%%</h1>
+<!-- <h1>%%moduletitle%%</h1> -->
 %%content%%
+
+<div class="imgPreload">
+    <img src="_skinwebpath_/loading.gif" alt="" title="" />
+</div>
 
 </body>
 </html>
