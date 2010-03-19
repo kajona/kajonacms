@@ -72,6 +72,7 @@ YAHOO.photoViewer.base = function(){
 	var controlThumbs = [];
 	var lastControlThumb = null;
 	var registeredThumbs = 0;
+	var keyListener = [];
 
 	// public
 	this.init = function(id){
@@ -80,6 +81,7 @@ YAHOO.photoViewer.base = function(){
 		if (properties.template){
 			createTemplate();
 		}
+		
 		//set up property defaults
 		properties.state = 0; // 0 = closed, 1 = open
 		properties.xy = (properties.position ==  "relative") ? [0,0] : properties.xy;
@@ -262,6 +264,11 @@ YAHOO.photoViewer.base = function(){
 			}
 			events.closeviewer.fire(that);
 			properties.state = 0;
+			
+			//disable key listener
+			for (var i=0; i < keyListener.length; i++) {
+				keyListener[i].disable();
+			}
 		};
 		beforeNext(onNext);
 	}; // end close
@@ -433,7 +440,18 @@ YAHOO.photoViewer.base = function(){
 			if (properties.slideShow) { if (properties.slideShow.controlsText) createControls(); }
 			if (YAHOO.env.ua.ie == 0 || YAHOO.env.ua.ie == 7) { lib.e.on(showcaseImage, "load", viewerLoaded); }
 			else { that.checkLoadForIe(); }
+			
+			//add key listeners
+			keyListener.push(new YAHOO.util.KeyListener(document, { keys:27 }, that.close));
+			keyListener.push(new YAHOO.util.KeyListener(document, { keys:39 }, that.next));
+			keyListener.push(new YAHOO.util.KeyListener(document, { keys:37 }, that.prev));
+			keyListener.push(new YAHOO.util.KeyListener(document, { keys:32 }, btnPlay));
 		}
+		
+		for (var i=0; i < keyListener.length; i++) {
+			keyListener[i].enable();
+		}
+		
 		var thumbImage = lib.e.getTarget(e) ? lib.d.get(properties.id + "-thumb_" + lib.e.getTarget(e).parentNode.index).getElementsByTagName("img")[0] : e.getElementsByTagName("img")[0];
 		var thumbAnchor = thumbImage.parentNode;
 		var titleText = thumbAnchor.getAttribute("title").length ? thumbAnchor.getAttribute("title") : "";
@@ -626,8 +644,8 @@ YAHOO.photoViewer.base = function(){
 			lib.d.getRegion(headerDom).bottom - lib.d.getRegion(headerDom).top + 
 			lib.d.getRegion(footerDom).bottom - lib.d.getRegion(footerDom).top
 		;
-		var topTo = (lib.d.getViewportHeight()/2) - (heightTo/2) - 20 + lib.d.getDocumentScrollTop();
-		var leftTo = (lib.d.getViewportWidth()/2) - (widthTo/2) - 20 + lib.d.getDocumentScrollLeft();
+		var topTo = (lib.d.getViewportHeight()/2) - (heightTo/2) - parseInt(lib.d.getStyle(viewerDom, "padding-top")) + lib.d.getDocumentScrollTop();
+		var leftTo = (lib.d.getViewportWidth()/2) - (widthTo/2) - parseInt(lib.d.getStyle(viewerDom, "padding-left")) + lib.d.getDocumentScrollLeft();
 		var attr = {width:{to:widthTo},height:{to:heightTo},top:{to:topTo},left:{to:leftTo}};
 		if (!properties.fixedcenter){ // dont update XY
 			var x = eval(properties.xy)[0];
@@ -1001,7 +1019,7 @@ YAHOO.photoViewer.base = function(){
 		lib.d.setStyle(maskDom, "width", width + "px");
 		lib.d.setStyle(maskDom, "height", height + "px");
 		lib.d.setStyle(maskDom, "top", lib.d.getDocumentScrollTop() + "px");
-		lib.d.setStyle(maskDom, "left", lib.d.getDocumentScrollLeft() + "px");
+		lib.d.setStyle(maskDom, "left", lib.d.getDocumentScrollLeft() + "px");		
 	}; // end adjustPosition
 	function isVisible(el){
 		return viewer.cfg.config.visible.value;
