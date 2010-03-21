@@ -740,10 +740,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		if(function_exists("gd_info")) 	{
 			$arrGd = gd_info();
 			$arrReturn[$this->getText("version")] = $arrGd["GD Version"];
-			$arrReturn[$this->getText("gifread")] = ($arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("gifwrite")] = ($arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("jpg")] = (($arrGd["JPG Support"] || $arrGd["JPEG Support"]) ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("png")] = ($arrGd["PNG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("gifread")] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("gifwrite")] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("jpg")] = (( (isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"]) ) ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
+			$arrReturn[$this->getText("png")] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
 		}
 		else
 			$arrReturn[""] = $this->getText("keinegd");
