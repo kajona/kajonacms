@@ -230,22 +230,27 @@ class class_modul_pages_portal extends class_portal {
 
                 foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
                     if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
+                        
                         foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
-
-                            if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
-                                $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
-                            }
-                            else if($arrOnePlaceholder["repeatable"] == "0") {
-                                $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
+                           
+                            if($arrOnePlaceholder["element"] == $arrOneRawElement["element"]) {
+                                if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
+                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
+                                }
+                                else if($arrOnePlaceholder["repeatable"] == "0") {
+                                    $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
+                                }
                             }
 
                         }
+                        
                     }
                 }
             }
 
             //array is now set up. loop again to create new-buttons
             $arrPePlaceholdersDone = array();
+            $arrPeNewButtons = array();
             foreach($arrRawPlaceholdersForPe as $arrOneRawPlaceholderForPe) {
                 $strPeNewPlaceholder = $arrOneRawPlaceholderForPe["placeholder"];
                 foreach($arrOneRawPlaceholderForPe["elementlist"] as $arrOnePeNewElement) {
@@ -256,25 +261,38 @@ class class_modul_pages_portal extends class_portal {
                         if($objPeNewElement != null) {
                             //placeholder processed before?
                             $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
+                            
                             if(in_array($strArrayKey, $arrPePlaceholdersDone))
                                 continue;
                             else
                                 $arrPePlaceholdersDone[] = $strArrayKey;
 
                             //create and register the button to add a new element
-                            if(!isset($arrTemplate[$strPeNewPlaceholder]))
-                                $arrTemplate[$strPeNewPlaceholder] = "";
+                            if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
+                                $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
                             $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
 
-                            $arrTemplate[$strPeNewPlaceholder] .= $strLink;
+                            $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
 
 
                         }
                     }
                 }
             }
+            
+            //loop pe-new code in order to add the wrappers and assign the code to the matching placeholder
+            foreach($arrPeNewButtons as $strPlaceholderName => $strNewButtons) {
+                
+                if(!isset($arrTemplate[$strPlaceholderName]))
+                    $arrTemplate[$strPlaceholderName] = "";
+
+                $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);    
+                $arrTemplate[$strPlaceholderName] .= $strNewButtons;
+            }
         }
+        
+         
 
 		$arrTemplate["description"] = $objPageData->getStrDesc();
 		$arrTemplate["keywords"] = $objPageData->getStrKeywords();

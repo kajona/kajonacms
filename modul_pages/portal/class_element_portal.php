@@ -289,6 +289,20 @@ class class_element_portal extends class_portal {
 
         return $strReturn;
     }
+    
+	/**
+     * Generates a wrapper for the single new-buttons at a given placeholder
+     * 
+     * @param string $strPlaceholder
+     * @param string $strContent
+     * @return string
+     * @static
+     */
+    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContent) {
+        $strReturn = "";
+        $strReturn .= $strContent;
+        return $strReturn;
+    }
 
 	/**
 	 * Dummy method, element needs to overwrite it
