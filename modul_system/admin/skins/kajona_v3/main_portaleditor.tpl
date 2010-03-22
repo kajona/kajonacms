@@ -12,6 +12,11 @@
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
+	<script type="text/javascript">
+	YAHOO.util.Event.onDOMReady(function() {
+        new YAHOO.util.KeyListener(document, { keys:27 }, parent.kajonaPortalEditorHelper.closeDialog).enable();
+	});
+	</script>
 </head>
 <body class="portalEditor">
 

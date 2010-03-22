@@ -327,7 +327,7 @@ var kajonaAjaxHelper = {
 					kajonaAjaxHelper.Loader.checkCallbacks();
 				}
 			});
-			
+
 			return yuiLoader;
 		},
 		
@@ -407,7 +407,7 @@ var kajonaAjaxHelper = {
 						yuiLoader = this.yuiLoaderBeforeDOMReady;
 					} else {
 						yuiLoader = this.createYuiLoader();
-					}
+					}			
 					
 					for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
 						yuiLoader.require(arrYuiComponentsToLoad[i]);

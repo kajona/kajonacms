@@ -697,6 +697,10 @@ YAHOO.util.Event.onDOMReady(function () {
                 peDialog = new ModalDialog('peDialog', 0);
 });
                 </script>
+                
+	<script type="text/javascript">
+		var kajonaPeNewMenus = [];
+	</script>
 
     <div id="peToolbar">
     	<div class="logo"></div>
@@ -740,13 +744,25 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 %%link_complete%%
 </pe_actionToolbar_link>
 
-No placeholders here, this only sets up the link-content of a new-icon
+Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
 <pe_actionNew>
-    <img src="_skinwebpath_/pics/icon_blank.gif" alt="" />
+    kajonaPeNewMenus["%%placeholder%%"]["elements"].push({
+        element: '%%element%%',
+        elementName: '%%elementName%%',
+        elementHref: '%%elementHref%%'
+    });
 </pe_actionNew>
 
+Displays the new element button
 <pe_actionNewWrapper>
-    <div>%%newlink%% %%elementName%%</div>
+    <a href="#" class="peButtonNew" onclick="kajonaPortalEditorHelper.showNewMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="kajonaAdminTooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
+	<script type="text/javascript">
+		kajonaPeNewMenus["%%placeholder%%"] = [];
+		kajonaPeNewMenus["%%placeholder%%"]["placeholderName"] = "%%placeholderName%%";
+		kajonaPeNewMenus["%%placeholder%%"]["elements"] = [];
+		%%contentElements%%
+	</script>
 </pe_actionNewWrapper>
 
 ---------------------------------------------------------------------------------------------------------
@@ -762,7 +778,7 @@ A button for the active language
     <option value="%%language%%" selected="selected">%%languageName%%</option>
 </language_switch_button_active>
 
-The language switch sourrounds the buttons
+The language switch surrounds the buttons
 <language_switch>
 <div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="switchLanguage(this.value);">%%languagebuttons%%</select></div>
 </language_switch>

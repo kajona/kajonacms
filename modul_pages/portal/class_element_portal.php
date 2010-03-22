@@ -140,7 +140,7 @@ class class_element_portal extends class_portal {
                     //Load element-data
                     //$strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                     $strEditUrl = getLinkAdminHref($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
-                    $strEditLink = "<a href=\"#\" onclick=\"peDialog.setContentIFrame('".$strEditUrl."'); peDialog.init(); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
+                    $strEditLink = "<a href=\"#\" onclick=\"kajonaPortalEditorHelper.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
 
                 }
                 else {
@@ -148,7 +148,7 @@ class class_element_portal extends class_portal {
                     if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
                         //$strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                         $strEditUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
-                        $strEditLink = "<a href=\"#\" onclick=\"peDialog.setContentIFrame('".$strEditUrl."'); peDialog.init(); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
+                        $strEditLink = "<a href=\"#\" onclick=\"kajonaPortalEditorHelper.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
                     }
                 }
 
@@ -268,40 +268,40 @@ class class_element_portal extends class_portal {
         $objLanguages = new class_modul_languages_language();
         $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
-        $strReturn =  getLinkAdminPopup("pages_content",
-                                       "newElement",
-                                       "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement,
-                                        class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonContent(),
-                                        class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"),
-                                        "", "680", "500", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
+        $strTooltipText = class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin");
+        //TODO: get translated element name
+        $strElementName = $strElement;
+        $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
 
-        $strElement = getLinkAdminPopup("pages_content",
-                                       "newElement",
-                                       "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement,
-                                        $strElement,
-                                        class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"),
-                                        "", "680", "500", class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), true, true);
-
-        $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strElement, $strReturn);
+        $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref);
 
         //reset the portal texts language
         class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
 
         return $strReturn;
     }
-    
+
 	/**
      * Generates a wrapper for the single new-buttons at a given placeholder
-     * 
+     *
      * @param string $strPlaceholder
      * @param string $strContent
      * @return string
      * @static
      */
-    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContent) {
-        $strReturn = "";
-        $strReturn .= $strContent;
-        return $strReturn;
+    public static function getPortaleditorNewWrapperCode($strPlaceholder, $strContentElements) {
+        $strPlaceholderClean = uniSubstr($strPlaceholder, 0, uniStrpos($strPlaceholder, "_"));
+
+        //switch the text-language temporary
+        $strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
+        class_carrier::getInstance()->getObjText()->setStrTextLanguage(class_carrier::getInstance()->getObjSession()->getAdminLanguage());
+
+        $strLabel = class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin");
+
+        //reset the portal texts language
+        class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);
+
+        return class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButtonWrapper($strPlaceholder, $strPlaceholderClean, $strLabel, $strContentElements);
     }
 
 	/**

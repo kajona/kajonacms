@@ -116,16 +116,6 @@ var kajonaTooltip = {
 	}
 };
 
-//--- LITTLE HELPERS ------------------------------------------------------------------------------------
-//deprecated, use kajonaAjaxHelper.Loader object instead
-function addCss(file) {
-	var l=document.createElement("link");
-	l.setAttribute("type", "text/css");
-	l.setAttribute("rel", "stylesheet");
-	l.setAttribute("href", file);
-	document.getElementsByTagName("head")[0].appendChild(l);
-}
-
 function inArray(needle, haystack) {
     for (var i = 0; i < haystack.length; i++) {
         if (haystack[i] == needle) {
@@ -187,7 +177,7 @@ var kajonaAjaxHelper = {
 					'replaceStr': ".js?123"
 					},
 				*/
-		
+				
 				onFailure : function(o) {
 					alert("File loading failed: " + YAHOO.lang.dump(o));
 				},

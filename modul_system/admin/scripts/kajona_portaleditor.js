@@ -4,6 +4,7 @@
 //       $Id$
 
 var kajonaPortalEditorHelper = {
+	
 	portalEditorHover: function (elementSysId) {
 	    divElement = document.getElementById('container_'+elementSysId);
 	    divElement.className="peContainerHover";
@@ -38,12 +39,54 @@ var kajonaPortalEditorHelper = {
 	    }
 	},
 	
+	openDialog: function (strUrl) {
+		peDialog.setContentIFrame(strUrl);
+		peDialog.init();
+	},
+	
 	closeDialog: function () {
 	    var bitClose = confirm("Änderungen verwerfen und schließen?");
 	    if(bitClose) {
 	    	peDialog.hide();
 	    }
+	},
+	
+	showNewMenu: function (strPlaceholder, objAttach) {
+		kajonaAdminTooltip.hide();
+		
+		kajonaAjaxHelper.Loader.load(["menu"], null, function() {
+			var arrPlaceholder = kajonaPeNewMenus[strPlaceholder];
+			var arrElements = arrPlaceholder["elements"];
+			var menu;
+			
+			if (YAHOO.lang.isUndefined(arrPlaceholder["menu"])) {
+				arrPlaceholder["menu"] = menu = new YAHOO.widget.Menu("menu_"+strPlaceholder, {
+					shadow: false,
+					lazyLoad: true
+				});
+				
+				var handleClick = function (strType, arrArgs, objElement) {
+					kajonaPortalEditorHelper.openDialog(objElement.elementHref);
+				}
+
+				for (var i=0; i<arrElements.length; i++) {
+					var e = arrElements[i];
+					menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
+				}
+				menu.setItemGroupTitle(arrPlaceholder.placeholderName, 0);
+				
+				menu.render("menuContainer_"+strPlaceholder);
+			} else {
+				menu = arrPlaceholder["menu"];
+			}
+			var buttonRegion = YAHOO.util.Region.getRegion(objAttach);
+			menu.cfg.setProperty("x", buttonRegion.right-8);
+			menu.cfg.setProperty("y", buttonRegion.top);
+			menu.show();
+		});
+
 	}
+
 }
 
 //--- TOOLTIPS -------------------------------------------------------------------------
@@ -102,18 +145,17 @@ var kajonaAdminTooltip = {
 	},
 	
 	show : function(e) {
-		kajonaTooltip.hide(e);
+		kajonaAdminTooltip.hide(e);
 		kajonaAdminTooltip.container.appendChild(this.tooltip);
 		kajonaAdminTooltip.locate(e);
 	},
 	
 	hide : function(e) {
-		try {
-			var c = kajonaAdminTooltip.container;
-			if (c.childNodes.length > 0) {
-				c.removeChild(c.firstChild);
-			}
-		} catch (e) {}
+		var c = kajonaAdminTooltip.container;
+		
+		if (c != null && c.childNodes.length > 0) {
+			c.removeChild(c.firstChild);
+		}
 	},
 	
 	locate : function(e) {

@@ -236,10 +236,21 @@ class class_toolkit_portal extends class_toolkit {
             $arrRowTemplate["href"] = $arrTemp["href"];
             $arrTemplate["actionlinks"] .= $this->objTemplate->fillTemplate($arrRowTemplate, $strTemplateRowID);
         }
-        //FIXME: added random string to systemid, since e.g. one navigation tree can exist multiple times an a page. Maybe there's a better way to fix this. 
+        //FIXME: added random string to systemid, since e.g. one navigation tree can exist multiple times an a page. Maybe there's a better way to fix this.
         $arrTemplate["systemid"] = $strSystemid."_".generateSystemid();
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        return $strReturn;
+    }
+
+    /**
+     * Loads the link-content to be used when generating a new-icon-link
+     * @return string
+     */
+    public function getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref) {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNew", true);
+        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "placeholderClean" => $strPlaceholderClean, "element" => $strElement, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
         return $strReturn;
     }
 
@@ -250,26 +261,13 @@ class class_toolkit_portal extends class_toolkit {
      * @param string $strNewLink
      * @return string
      */
-    public function getPeNewButtonWrapper($strElementName, $strNewLink) {
+    public function getPeNewButtonWrapper($strPlaceholder, $strPlaceholderName, $strLabel, $strContentElements) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNewWrapper", true);
-        $strReturn = $this->objTemplate->fillTemplate(array("elementName" => $strElementName, "newlink" => $strNewLink), $strTemplateWrapperID);
+        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "placeholderName" => $strPlaceholderName, "label" => $strLabel, "contentElements" => $strContentElements), $strTemplateWrapperID);
         return $strReturn;
     }
 
-    /**
-     * Loads the link-content to be used when generating a new-icon-link
-     * @return string
-     */
-    public function getPeNewButtonContent() {
-        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
-        $strTemplateID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNew", true);
-        $strReturn = $this->objTemplate->fillTemplate(array(), $strTemplateID);
-        return $strReturn;
-    }
-
-
-    
 
 }
 ?>

@@ -868,6 +868,27 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 %%link_complete%%
 </pe_actionToolbar_link>
 
+Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
+<pe_actionNew>
+    kajonaPeNewMenus["%%placeholder%%"]["elements"].push({
+        element: '%%element%%',
+        elementName: '%%elementName%%',
+        elementHref: '%%elementHref%%'
+    });
+</pe_actionNew>
+
+Displays the new element button
+<pe_actionNewWrapper>
+    <a href="#" class="peButtonNew" onclick="kajonaPortalEditorHelper.showNewMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="kajonaAdminTooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
+    <script type="text/javascript">
+        kajonaPeNewMenus["%%placeholder%%"] = [];
+        kajonaPeNewMenus["%%placeholder%%"]["placeholderName"] = "%%placeholderName%%";
+        kajonaPeNewMenus["%%placeholder%%"]["elements"] = [];
+        %%contentElements%%
+    </script>
+</pe_actionNewWrapper>
+
 No placeholders here, this only sets up the link-content of a new-icon
 <pe_actionNew>
     <img src="_skinwebpath_/pics/icon_blank.gif" alt="" />
@@ -962,7 +983,7 @@ The language switch sourrounds the buttons
 
 <adminwidget_widget>
 <div class="adminwidget" style="font-family: Arial, Verdana, Helvetica, sans-serif; font-size: 11px;">
-	<div class="adminwidgetHeader ddHandle">
+	<div class="adminwidgetHeader">
 		<div class="adminwidgetHeaderTitle">%%widget_name%%</div>
 		<div class="adminwidgetHeaderActions">%%widget_edit%% %%widget_delete%%</div>
 		<div style="clear: both;"></div>
