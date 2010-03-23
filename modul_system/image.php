@@ -255,7 +255,7 @@ class class_flyimage {
     }
 }
 
-define("_config_block_loading_", true);
+define("_block_config_db_loading_", true);
 
 $objImage = new class_flyimage();
 if($objImage->getImageFilename() == "kajonaCaptcha")

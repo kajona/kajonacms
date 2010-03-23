@@ -250,7 +250,7 @@ class class_toolkit_portal extends class_toolkit {
     public function getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref) {
         $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
         $strTemplateID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_actionNew", true);
-        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "placeholderClean" => $strPlaceholderClean, "element" => $strElement, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
+        $strReturn = $this->objTemplate->fillTemplate(array("placeholder" => $strPlaceholder, "element" => $strElement, "elementName" => $strElementName, "elementHref" => $strElementHref), $strTemplateID);
         return $strReturn;
     }
 
