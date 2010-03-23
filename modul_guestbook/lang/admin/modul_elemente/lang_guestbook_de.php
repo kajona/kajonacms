@@ -4,13 +4,14 @@
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                       *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 237
 
-// --- Module texts -------------------------------------------------------------------------------------
-
-$lang["guestbook_id"]                             = "Gästebuch:";
-$lang["guestbook_amount"]                         = "Anzahl Einträge pro Seite:";
-$lang["guestbook_template"]                       = "Template:";
-
+//editable entries
+$lang["element_guestbook_name"]          = "Gästebuch";
+$lang["guestbook_amount"]                = "Anzahl Einträge pro Seite:";
+$lang["guestbook_id"]                    = "Gästebuch:";
+$lang["guestbook_template"]              = "Template:";
 ?>

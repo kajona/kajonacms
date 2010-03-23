@@ -699,6 +699,19 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     }
 
     /**
+     * Returns a readable representation of the current elements' name.
+     * Searches the lang-file for an entry element_NAME_name.
+     *
+     * @return string
+     */
+    public function getStrReadableName() {
+        $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrElement()."_name", "elemente", "admin");
+        if($strName == "!element_".$this->getStrElement()."_name!")
+            $strName = $this->getStrElement();
+        return $strName;
+    }
+
+    /**
      * Returns a title.
      * If no title was specified, it creates an instance of the current element and
      * class getContentTitle() to get an title

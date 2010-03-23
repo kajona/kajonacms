@@ -7,9 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 237
 
 //editable entries
+$lang["element_guestbook_name"]          = "";
 $lang["guestbook_amount"]                = "Количество постов на странице:";
 $lang["guestbook_id"]                    = "Гостевая книга:";
 $lang["guestbook_template"]              = "Шаблон:";

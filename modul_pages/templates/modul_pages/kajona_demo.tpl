@@ -52,13 +52,9 @@
                 %%results_search%%
                 %%sitemap_navigation%%
                 %%faqs_faqs%%
-				%%events_eventplanner%%
                 %%comments_postacomment%%
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
-                %%mixed2_portalupload|baseregistration%%
-                %%mixed3_baseupload%%
-                %%mixed4_mybase%%
-                %%mixed5_basetopratelist|basetophitlist|basedownloads%%
+                %%mixed2_portalupload%%
             </div>
             <div class="clearer"></div>
         </div>

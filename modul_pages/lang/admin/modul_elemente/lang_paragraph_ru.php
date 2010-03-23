@@ -7,16 +7,17 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 229
+//Kajona Language Editor Core Build 237
 
 //editable entries
-$lang["paragraph_image"]                 = "Изображение:";
-$lang["paragraph_content"]               = "Текст:";
-$lang["paragraph_link"]                  = "Ссылка:";
-$lang["paragraph_title"]                 = "Имя:";
 $lang["browser"]                         = "Открыть браузер";
+$lang["element_paragraph_name"]          = "";
 $lang["page_element_placeholder_title"]  = "Внутреннее имя";
+$lang["paragraph_content"]               = "Текст:";
+$lang["paragraph_image"]                 = "Изображение:";
+$lang["paragraph_link"]                  = "Ссылка:";
 $lang["paragraph_template"]              = "Шаблон:";
+$lang["paragraph_title"]                 = "Имя:";
 $lang["quickhelp_element_paragraph"]     = "Здесь Вы можете ввести содержание параграфа, используя удобный и мощный редактор.";
 $lang["required_paragraph_title"]        = "Имя";
 $lang["submit"]                          = "Сохранить";

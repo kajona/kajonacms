@@ -7,15 +7,16 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 152
+//Kajona Language Editor Core Build 237
 
 //editable entries
+$lang["browser"]                         = "Открыть браузер";
+$lang["element_image_name"]              = "";
 $lang["image_image"]                     = "Изображение:";
 $lang["image_link"]                      = "Ссылка:";
+$lang["image_template"]                  = "Шаблон:";
 $lang["image_title"]                     = "Имя:";
 $lang["image_x"]                         = "Максимальная ширина:";
 $lang["image_xy_hint"]                   = "При использовании 0 изображение будет отображено в оригинале и не будет нормированно.";
 $lang["image_y"]                         = "Максимальная длина:";
-$lang["image_template"]                  = "Шаблон:";
-$lang["browser"]                         = "Открыть браузер";
 ?>

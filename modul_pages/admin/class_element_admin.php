@@ -195,7 +195,6 @@ class class_element_admin extends class_admin {
         return $strDesc;
     }
 
-
     /**
      * Overwrite this method, if you want to execute
      * some special actions right after saving the element to the db, e.g.

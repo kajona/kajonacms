@@ -188,6 +188,19 @@ class class_modul_pages_element extends class_model implements interface_model  
         return $this->intCachetime;
     }
 
+    /**
+     * Returns a readable representation of the current elements' name.
+     * Searches the lang-file for an entry element_NAME_name.
+     *
+     * @return string
+     */
+    public function getStrReadableName() {
+        $strName = class_carrier::getInstance()->getObjText()->getText("element_".$this->getStrName()."_name", "elemente", "admin");
+        if($strName == "!element_".$this->getStrName()."_name!")
+            $strName = $this->getStrName();
+        return $strName;
+    }
+
    
     public function setStrName($strName) {
         $this->strName = $strName;

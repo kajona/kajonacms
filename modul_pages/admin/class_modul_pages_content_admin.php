@@ -244,7 +244,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
 
 							//Put all Output together
-							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrElement() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
+							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrReadableName() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
 							$bitOutputAtPlaceholder = true;
 
 							//remove the element from the array
@@ -262,7 +262,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
         						if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
             						//So, the Row for a new element: element is repeatable or not yet created
             						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_blank.gif"));
-            						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
+            						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrReadableName() . ")", $strActions, $intI++);
             						$bitOutputAtPlaceholder = true;
             					}
             					else {
