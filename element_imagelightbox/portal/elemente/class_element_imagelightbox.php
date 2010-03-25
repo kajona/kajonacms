@@ -13,10 +13,6 @@
  * @package modul_pages
  */
 class class_element_imagelightbox extends class_element_portal implements interface_portal_element {
-    private $intThumbMaxWidth = 200;
-    private $intThumbMaxHeight = 200;
-    private $intDetailMaxWidth = 800;
-    private $intDetailMaxHeight = 800;
 
 	/**
 	 * Constructor
@@ -44,67 +40,19 @@ class class_element_imagelightbox extends class_element_portal implements interf
 
 		$strImage = $this->arrElementData["char1"];
 
-		//some javascript
-		$strReturn .= "<script type=\"text/javascript\">
-	        if (YAHOO.lang.isUndefined(arrViewers)) {
-	            var arrViewers = new Array();
+        $arrTemplate = array();
+        $arrTemplate["title"] = $this->arrElementData["char2"];
+        $arrTemplate["image"] = $this->arrElementData["char1"];
+        $arrTemplate["description"] = $this->arrElementData["text"];
 
-	            //add viewer: all images with class \"photoViewer\" in the div with the id \"contentContainer\"
-	            arrViewers.push(\"contentContainer\");
+        //fallback for old elements
+        if($this->arrElementData["char3"] == "")
+            $this->arrElementData["char3"] = "imagelightbox.tpl";
 
-	            YAHOO.util.Event.onDOMReady(function () {
-	                YAHOO.namespace(\"YAHOO.photoViewer\");
-	                YAHOO.photoViewer.config = { viewers: {} };
+		
 
-	                //init all viewers
-	                for (var i=0; i<arrViewers.length; i++) {
-	                    YAHOO.photoViewer.config.viewers[arrViewers[i]] = {
-	                        properties: {
-	                            id: arrViewers[i],
-	                            grow: 0.2,
-	                            fade: 0.2,
-	                            modal: true,
-	                            dragable: false,
-	                            fixedcenter: true,
-	                            loadFrom: \"html\",
-	                            position: \"absolute\",
-	                            buttonText: {
-	                                next: \" \",
-	                                prev: \" \",
-	                                close: \"X\"
-	                            },
-	                            /* remove/rename the slideShow property to disable slideshow feature */
-	                            slideShow: {
-	                                autoStart: false,
-	                                duration: 3500,
-	                                controlsText: {
-	                                    play: \" \",
-	                                    pause: \" \",
-	                                    stop: \" \",
-	                                    display: \"{0}/{1}\"
-	                                }
-	                            }
-	                        }
-	                    };
-	                }
-	            });
-
-	            KAJONA.portal.loader.load(
-	                [\"dragdrop\", \"animation\", \"container\"],
-	                [KAJONA_WEBPATH+\"/portal/scripts/photoviewer/build/photoviewer_base.js\",
-	                 KAJONA_WEBPATH+\"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css\"]
-	            );
-	        }
-		</script>";
-
-		$strReturn .= "<div class=\"imagelightbox\">";
-
-		//generate the preview
-		$strReturn .= "<a href=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=".$this->intDetailMaxWidth."&amp;maxHeight=".$this->intDetailMaxHeight."\" class=\"photoViewer\" title=\"".$this->arrElementData["char2"]."\">\n";
-		$strReturn .= "<img src=\""._webpath_."/image.php?image=".$strImage."&amp;maxWidth=".$this->intThumbMaxWidth."&amp;maxHeight=".$this->intThumbMaxHeight."\" alt=\"".$this->arrElementData["text"]."\" />\n";
-		$strReturn .= "</a>";
-
-		$strReturn .= "</div>";
+        $strTemplateID = $this->objTemplate->readTemplate("/element_imagelightbox/".$this->arrElementData["char3"], "imagelightbox");
+        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
 		return $strReturn;
 	}

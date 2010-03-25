@@ -45,7 +45,20 @@ class class_element_imagelightbox extends class_element_admin implements interfa
 		$strReturn .= $this->objToolkit->formInputText("char2", $this->getText("imagelightbox_title"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : ""));
 		$strReturn .= $this->objToolkit->formInputTextArea("text", $this->getText("imagelightbox_subtitle"), (isset($arrElementData["text"]) ? $arrElementData["text"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("char1", $this->getText("imagelightbox_image"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : ""),
-		                                               "inputText", getLinkAdminPopup("folderview", "list", "&form_element=char1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		                                               "inputText", getLinkAdminPopup("folderview", "list", "&form_element=char1&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+
+        //load templates
+		$objFilesystem = new class_filesystem();
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_imagelightbox", ".tpl");
+		$arrTemplatesDD = array();
+		if(count($arrTemplates) > 0) {
+			foreach($arrTemplates as $strTemplate) {
+				$arrTemplatesDD[$strTemplate] = $strTemplate;
+			}
+		}
+		$strReturn .= $this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getText("imagelightbox_template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
+
+		
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char2");
 
@@ -67,6 +80,7 @@ class class_element_imagelightbox extends class_element_admin implements interfa
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
                 char1 = '".dbsafeString($strImage)."',
                 char2 = '".dbsafeString($this->getParam("char2"))."',
+                char3 = '".dbsafeString($this->getParam("char3"))."',
                 text = '".dbsafeString($this->getParam("text"))."'
                 WHERE content_id='".dbsafeString($strSystemid)."'";
 

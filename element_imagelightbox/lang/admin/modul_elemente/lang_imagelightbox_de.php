@@ -7,10 +7,11 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 237
 
 //editable entries
 $lang["imagelightbox_image"]             = "Bild:";
 $lang["imagelightbox_subtitle"]          = "Untertitel:";
+$lang["imagelightbox_template"]          = "Template:";
 $lang["imagelightbox_title"]             = "Titel:";
 ?>
