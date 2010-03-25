@@ -590,7 +590,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 				$arrTemplate = array();
 				$arrTemplate["rating_icon_number"] = $intI;
 
-			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); kajonaTooltip.hide(); return false;";
+			    $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("gallery_rating_rate1").$intI.$this->getText("gallery_rating_rate2");
 
 				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);

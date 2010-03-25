@@ -20,7 +20,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h2><a href="javascript:fold('cont_%%news_id%%');">%%news_title%%</a></h2>
+            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;">%%news_title%%</a></h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>
@@ -39,7 +39,7 @@
 <div class="newsList">
     <div class="newsListHeader">
         <div class="newsListTitle">
-            <h2><a href="javascript:fold('cont_%%news_id%%');">%%news_title%%</a></h2>
+            <h2><a href="#" onclick="KAJONA.util.fold('cont_%%news_id%%'); return false;">%%news_title%%</a></h2>
         </div>
         <div class="newsListMore">%%news_start_date%%</div>
         <div class="clearer"></div>

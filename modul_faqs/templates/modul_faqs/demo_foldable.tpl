@@ -22,7 +22,7 @@
             <table cellspacing="0" class="portalList">
                 <tr class="portalListRow1">
                     <td class="image"><img src="_webpath_/portal/pics/kajona/icon_question.gif" /></td>
-                    <td class="title"><a href="javascript:fold('%%faq_systemid%%');">%%faq_question%%</a></td>
+                    <td class="title"><a href="#" onclick="KAJONA.util.fold('%%faq_systemid%%'); return false;">%%faq_question%%</a></td>
                     <td class="rating">%%faq_rating%%</td>
                 </tr>
             </table>
@@ -35,16 +35,16 @@
 <rating_bar>
     <script type="text/javascript">
         if (typeof bitKajonaRatingsLoaded == "undefined") {
-            kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+        	KAJONA.portal.loader.loadAjaxBase(null, "rating.js");
             var bitKajonaRatingsLoaded = true;
         }
     </script>
     <span class="inline-rating-bar">
-    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
+    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="KAJONA.portal.tooltip.add(this, '%%rating_bar_title%%');">
         <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
         %%rating_icons%%
     </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span> (<span id="kajona_rating_hits_%%system_id%%">%%rating_hits%%</span>)
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
-<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="kajonaTooltip.add(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="KAJONA.portal.tooltip.add(this, '%%rating_icon_title%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

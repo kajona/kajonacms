@@ -89,7 +89,7 @@ class class_element_imagelightbox extends class_element_portal implements interf
 	                }
 	            });
 
-	            kajonaAjaxHelper.Loader.load(
+	            KAJONA.portal.loader.load(
 	                [\"dragdrop\", \"animation\", \"container\"],
 	                [KAJONA_WEBPATH+\"/portal/scripts/photoviewer/build/photoviewer_base.js\",
 	                 KAJONA_WEBPATH+\"/portal/scripts/photoviewer/assets/skins/kajona/kajona.css\"]

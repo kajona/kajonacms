@@ -6,16 +6,16 @@
 var kajonaPortalEditorHelper = {
 	
 	portalEditorHover: function (elementSysId) {
-	    divElement = document.getElementById('container_'+elementSysId);
+	    var divElement = document.getElementById('container_'+elementSysId);
 	    divElement.className="peContainerHover";
-	    menuElement = document.getElementById('menu_'+elementSysId);
+	    var menuElement = document.getElementById('menu_'+elementSysId);
 	    menuElement.className="menuHover";
 	},
 	
 	portalEditorOut: function (elementSysId) {
-	    divElement = document.getElementById('container_'+elementSysId);
+		var divElement = document.getElementById('container_'+elementSysId);
 		divElement.className="peContainerOut";
-	    menuElement = document.getElementById('menu_'+elementSysId);
+		var menuElement = document.getElementById('menu_'+elementSysId);
 	    menuElement.className="menuOut";
 	},
 	

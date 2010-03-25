@@ -11,7 +11,7 @@
             <a class="addthis_button_twitter"></a>
         </div>
         <script type="text/javascript">
-            kajonaAjaxHelper.Loader.load(null, ["http://s7.addthis.com/js/250/addthis_widget.js"], function() {
+            KAJONA.portal.loader.load(null, ["http://s7.addthis.com/js/250/addthis_widget.js"], function() {
                 YAHOO.lang.later(100, this, function() {document.getElementById("addthis_toolbar").style.display = "block";});
             });
         </script>

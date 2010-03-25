@@ -27,7 +27,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$arrModul["table3"] 			= _dbprefix_."downloads_logs";
 		$arrModul["moduleId"] 			= _downloads_modul_id_;
 		$arrModul["modul"] 			    = "downloads";
-        
+
 		parent::__construct($arrModul, $arrElementData);
 	}
 
@@ -263,7 +263,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$objArchive = new class_modul_downloads_archive(isset($this->arrElementData["download_id"]) ? $this->arrElementData["download_id"] : "");
 
         if($objArchive->rightView()) {
-            
+
             $objFile = new class_modul_downloads_file($this->getSystemid());
             //If the record is empty, try to load the archive
             if($objFile->getFilename() == "") {
@@ -353,7 +353,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 				$arrTemplate = array();
 				$arrTemplate["rating_icon_number"] = $intI;
 
-			    $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); kajonaTooltip.hide(); return false;";
+			    $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
        		    $arrTemplate["rating_icon_title"] = $this->getText("download_rating_rate1").$intI.$this->getText("download_rating_rate2");
 
 				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
@@ -372,7 +372,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                                          "rating_ratingPercent" => ($floatRating/$intNumberOfIcons*100),
                                          "system_id" => $strSystemid, 2), $strTemplateBarId);
 	}
-    
+
 
     /**
      * Loads the array of files to display.

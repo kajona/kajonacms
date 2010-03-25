@@ -258,7 +258,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
                 $arrTemplate = array();
                 $arrTemplate["rating_icon_number"] = $intI;
 
-                $arrTemplate["rating_icon_onclick"] = "kajonaRating('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); kajonaTooltip.hide(); return false;";
+                $arrTemplate["rating_icon_onclick"] = "KAJONA.portal.rating.rate('".$strSystemid."', '".$intI.".0', ".$intNumberOfIcons."); return false;";
 
                 $strIcons .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateIconId, false);
             }

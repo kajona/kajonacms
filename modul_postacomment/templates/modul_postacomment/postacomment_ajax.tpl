@@ -28,28 +28,25 @@
 
 <!-- available placeholders: comment_systemid -->
 <postacomment_new_button>
-    <script type="text/javascript">
-        kajonaAjaxHelper.loadAjaxBase(null, "postacomment.js");
-    </script>
-    <div id="postaCommentButton%%comment_systemid%%"><a href="#" onclick="fold('postaCommentForm%%comment_systemid%%', loadCaptcha('%%comment_systemid%%')); return false;">%%lang_postacomment_write_new%%</a></div>
+    <div id="postaCommentButton_%%comment_systemid%%"><a href="#" onclick="KAJONA.portal.loader.loadAjaxBase(null, 'postacomment.js'); KAJONA.util.fold('postaCommentForm_%%comment_systemid%%', function() {KAJONA.portal.loadCaptcha('%%comment_systemid%%', 180);}); return false;">%%lang_postacomment_write_new%%</a></div>
 </postacomment_new_button>
 
 <!-- available placeholders: formaction, comment_name, comment_subject, comment_message, comment_template, comment_systemid, comment_page -->
 <postacomment_form>
-    <div id="postaCommentForm%%comment_systemid%%" style="display: none;">
-    	<form name="formComment" accept-charset="UTF-8">
+    <div id="postaCommentForm_%%comment_systemid%%" style="display: none;">
+    	<form name="formComment" accept-charset="UTF-8" id="formComment_%%comment_systemid%%" onsubmit="KAJONA.portal.postacomment.submit('%%comment_systemid%%'); return false;">
     		<ul>
-    		%%validation_errors%%
+    		    %%validation_errors%%
     		</ul>
-    		<div><label for="comment_name">%%lang_form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
-    		<div><label for="comment_subject">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
-    		<div><label for="comment_message">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
-    		<div><label for="kajonaCaptcha"></label><span id="kajonaCaptchaContainer%%comment_systemid%%"></span> (<a href="#" onclick="reloadCaptcha('kajonaCaptcha'); return false;">%%lang_form_captcha_reload_label%%</a>)</div><br />
-    		<div><label for="form_captcha">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha%%comment_systemid%%" class="inputText" /></div><br /><br />
-    		<div><label for="Submit"></label><input type="button" name="Submit" value="%%lang_form_submit_label%%" class="button" onclick="postacommentSubmitWrapper('%%comment_systemid%%');" /></div><br />
-    		<input type="hidden" name="comment_template" id="comment_template%%comment_systemid%%" value="%%comment_template%%" />
-            <input type="hidden" name="comment_systemid" id="comment_systemid%%comment_systemid%%" value="%%comment_systemid%%" />
-            <input type="hidden" name="comment_page" id="comment_page%%comment_systemid%%" value="%%comment_page%%" />
+    		<div><label for="comment_name_%%comment_systemid%%">%%lang_form_name_label%%*:</label><input type="text" name="comment_name" id="comment_name_%%comment_systemid%%" value="%%comment_name%%" class="inputText" /></div><br />
+    		<div><label for="comment_subject_%%comment_systemid%%">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
+    		<div><label for="comment_message_%%comment_systemid%%">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
+    		<div><label for="kajonaCaptcha_%%comment_systemid%%"></label><span id="kajonaCaptcha_%%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">%%lang_form_captcha_reload_label%%</a>)</div><br />
+    		<div><label for="form_captcha_%%comment_systemid%%">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" /></div><br /><br />
+    		<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="submit" value="%%lang_form_submit_label%%" id="comment_submit_%%comment_systemid%%" class="button" /></div><br />
+    		<input type="hidden" name="comment_template" value="%%comment_template%%" />
+            <input type="hidden" name="comment_systemid" value="%%comment_systemid%%" />
+            <input type="hidden" name="comment_page" value="%%comment_page%%" />
     	</form>
     </div>
 </postacomment_form>
@@ -63,16 +60,16 @@
 <rating_bar>
     <script type="text/javascript">
 	    if (typeof bitKajonaRatingsLoaded == "undefined") {
-	        kajonaAjaxHelper.loadAjaxBase(null, "rating.js");
+	    	KAJONA.portal.loader.loadAjaxBase(null, "rating.js");
 	        var bitKajonaRatingsLoaded = true;
 	    }
     </script>
     <span class="inline-rating-bar">
-    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="kajonaTooltip.add(this, '%%rating_bar_title%%');">
+    <ul class="rating-icon" id="kajona_rating_%%system_id%%" onmouseover="KAJONA.portal.tooltip.add(this, '%%rating_bar_title%%');">
         <li class="current-rating" style="width:%%rating_ratingPercent%%%;"></li>
         %%rating_icons%%
     </ul></span> <span id="kajona_rating_rating_%%system_id%%">%%rating_rating%%</span> (<span id="kajona_rating_hits_%%system_id%%">%%rating_hits%%</span>)
 </rating_bar>
 
 <!-- available placeholders: rating_icon_number, rating_icon_onclick, rating_icon_title -->
-<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="kajonaTooltip.add(this, '%%lang_postacomment_rating_rate1%%%%rating_icon_number%%%%lang_postacomment_rating_rate2%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>
+<rating_icon><li><a href="#" onclick="%%rating_icon_onclick%%" onmouseover="KAJONA.portal.tooltip.add(this, '%%lang_postacomment_rating_rate1%%%%rating_icon_number%%%%lang_postacomment_rating_rate2%%');" class="icon-%%rating_icon_number%%">%%rating_icon_number%%</a></li></rating_icon>

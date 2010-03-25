@@ -32,7 +32,7 @@
         <div id="cont_%%news_id%%">
             <div>%%news_intro%%</div>
             <div>%%news_text%%</div>
-            <div><a href="javascript:fold('pac_%%news_id%%');">Comments: %%news_nrofcomments%%</a></div>
+            <div><a href="#" onclick="KAJONA.util.fold('pac_%%news_id%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
             <div id="pac_%%news_id%%" style="display: none;">
                 %%news_commentlist%%
             </div>
@@ -57,7 +57,7 @@
             <img src="image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
             <div>%%news_intro%%</div>
             <div>%%news_text%%</div>
-            <div><a href="javascript:fold('pac_%%news_id%%');">Comments: %%news_nrofcomments%%</a></div>
+            <div><a href="#" onclick="KAJONA.util.fold('pac_%%news_id%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
             <div id="pac_%%news_id%%" style="display: none;">
                 %%news_commentlist%%
             </div>
