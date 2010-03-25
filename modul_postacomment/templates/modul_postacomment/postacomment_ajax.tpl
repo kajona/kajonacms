@@ -3,7 +3,7 @@
 <!-- available placeholders: postacomment_list, postacomment_form, postacomment_new_button, postacomment_back, postacomment_pages, postacomment_forward -->
 <postacomment_list>  
     %%postacomment_new_button%%
-    <div id="postacommentFormWrapper%%postacomment_systemid%%">
+    <div id="postacommentFormWrapper_%%postacomment_systemid%%">
         %%postacomment_form%%
     </div>
     

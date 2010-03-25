@@ -379,25 +379,6 @@ KAJONA.portal.tooltip = (function() {
 }());
 
 
-Test = function() {
-	var privateVar = 0;
-
-	function show () {
-		alert(privateVar);
-	}
-	
-	function hide (e) {
-		privateVar++;
-		show();
-	}
-	
-	//public variables and methods
-	return {
-		hide : hide
-	}
-}();
-
-
 /*
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * 
