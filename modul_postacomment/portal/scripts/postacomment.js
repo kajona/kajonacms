@@ -13,7 +13,7 @@ KAJONA.portal.postacomment = (function() {
 	/*
 	 * Sends the comment to the server and refreshes the page
 	 * 
-	 * @param {String} strSystemid
+	 * @param {String} strSystemId
 	 * @public
 	 */
 	function submit(strSystemId) {
@@ -48,7 +48,7 @@ KAJONA.portal.postacomment = (function() {
 	 * Internal function to display the response
 	 * 
 	 * @param {Object} objResponse
-	 * @param {String} strSystemid
+	 * @param {String} strSystemId
 	 * @private
 	 */
 	function setResponseText(objResponse, strSystemId) {
@@ -59,10 +59,11 @@ KAJONA.portal.postacomment = (function() {
 		document.getElementById('postacommentFormWrapper_'+strSystemId).innerHTML = responseText;
 		
 		//check if form is available -> validation errors occured, so show form and reload captcha
-		if (document.getElementById("kajonaCaptchaContainer_"+strSystemId) != undefined) {
+		if (document.getElementById("postaCommentForm_"+strSystemId) != undefined) {
 			KAJONA.portal.loadCaptcha(strSystemId);
-			document.getElementById('postaCommentForm_'+strSystemId).style.display = "block";
+            document.getElementById('postaCommentForm_'+strSystemId).style.display = "block";
 		}
+        
 	}
 	
 	//public variables and methods
