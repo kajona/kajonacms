@@ -385,6 +385,9 @@ h2 {
     border: 1px solid #00e800;
     padding: 4px;
     max-width: 200px;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 /* E L E M E N T  I M A G E */

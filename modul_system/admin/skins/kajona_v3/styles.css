@@ -42,7 +42,9 @@
 	border: 1px solid #00e800;
 	padding: 4px;
     max-width: 200px;
-    z-index: 2000;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 /* L O A D I N G   C O N T A I N E R */
@@ -59,6 +61,9 @@
 	left: 580px;
 	width: 143px;
 	height: 137px;
+	-webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 .yui-calcontainer {
@@ -344,6 +349,9 @@ html>body #moduleNavi ul span {
 	top: 0px;
 	left: 0px;
 	border: 1px solid #00e800;
+	-webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 #moduleNaviHidden ul {
@@ -1125,6 +1133,9 @@ div.percentBeam {
 	background: #ffffff;
 	overflow: hidden;
 	z-index: 9050;
+	-webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 /* styles for results list */

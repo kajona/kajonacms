@@ -31,7 +31,9 @@
     border: 1px solid #00e800;
     padding: 4px;
     max-width: 200px;
-    z-index: 2000;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 
@@ -327,9 +329,9 @@
 
 .yui-skin-sam .yuimenu .bd {
     border: solid 1px #00e800 !important;
-    -webkit-box-shadow: 5px 5px 10px -5px #000000;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
     -moz-box-shadow: 2px 2px 5px -3px #000000;
-    bdfox-shadow: 0 0 10px -10px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
 }
 
 .yui-skin-sam .yuimenu {
