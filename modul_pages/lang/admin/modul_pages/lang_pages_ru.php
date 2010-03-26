@@ -105,6 +105,7 @@ $lang["pages_ordner_oeffnen"]            = "Открыть папку";
 $lang["pages_ordner_rechte"]             = "Изменить разрешения";
 $lang["pe_copy"]                         = "";
 $lang["pe_delete"]                       = "Удалить";
+$lang["pe_dialog_close_warning"]         = "Вы хотите, чтобы закрыть редактор и отбросить возможные изменения?";
 $lang["pe_disable"]                      = "Временно деактевировать редактор портала";
 $lang["pe_edit"]                         = "Изменить";
 $lang["pe_enable"]                       = "Активировать редактор портала";

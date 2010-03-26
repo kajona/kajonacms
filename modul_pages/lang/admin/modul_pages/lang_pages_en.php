@@ -108,6 +108,7 @@ $lang["pages_ordner_oeffnen"]            = "Open folder";
 $lang["pages_ordner_rechte"]             = "Edit permissions";
 $lang["pe_copy"]                         = "Copy";
 $lang["pe_delete"]                       = "Delete";
+$lang["pe_dialog_close_warning"]         = "Do you want to close the editor and discard possible modifications?";
 $lang["pe_disable"]                      = "Set portaleditor temporary inactive";
 $lang["pe_edit"]                         = "Edit";
 $lang["pe_enable"]                       = "Set portaleditor active";

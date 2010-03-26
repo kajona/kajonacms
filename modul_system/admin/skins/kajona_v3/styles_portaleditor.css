@@ -177,22 +177,14 @@
 }
 
 
-
-
-
-
-
-
-
 /* DIALOG */
 
 /* Dialog classes */
-/* based on http://www.schillmania.com/content/projects/even-more-rounded-corners/ */
-.dialog {
+.peDialog {
     display: block;
     visibility: hidden;
     position: absolute;
-    width: 665px;
+    width: 685px;
     outline: none;
     -webkit-box-shadow: 0 0 60px -10px #000000;
     -moz-box-shadow: 0 0 60px -10px #000000;
@@ -200,30 +192,66 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    padding: 5px 10px 10px 10px;
-    text-align: left;
-    /*border: 1px solid #d0d0d0 !important;*/
     background: url(loading.gif) center center no-repeat #ffffff;
-    /*
-    behavior: url(ie-css3.htc);
-    */
+    text-align: left;
+    border: 1px solid #d0d0d0 !important;
+
     -ms-filter:"progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4)";
     filter:progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4);
-    
-   
 }
 
+.peDialog .hd {
+    background-color: #C4F3C4;
+    height: 17px;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 11px;
+    padding-top: 3px;
+}
 
-.dialog .close {
-    text-align: right;
-    padding-bottom: 5px;
+.peDialog .hd .close {
+    right: 0;
+    top: 0;
+    position: absolute;
     font-weight: bold;
 }
 
-.dialog iframe {
+.peDialog .hd .close a {
+	display: block;
+    padding: 3px 6px 3px 6px;
+}
+
+.peDialog .bd {
+    padding: 5px 10px 10px 10px;
+    height: 450px;
+}
+
+.peDialog .bd iframe {
     border: none;
 }
 
+.peDialog .yui-resize-handle-br {
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    background-image: url(../../scripts/yui/resize/assets/skins/sam/layout_sprite.png);
+	background-repeat: no-repeat;
+	background-position: -22px -62px;
+    cursor: se-resize;
+}
+
+#peDialog_c.hide-scrollbars .yui-resize .bd {
+    overflow: hidden;
+}
+
+#peDialog_c.show-scrollbars .yui-resize .bd {
+    overflow: auto;
+}
 
 
 .yui-overlay,
@@ -253,23 +281,6 @@
     overflow: auto;
 }
 
-/* Panel underlay styles */
-
-.yui-panel-container .underlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-
-}
-
-.yui-panel-container.matte {
-    padding: 3px;
-    background-color: #fff;
-}
-
-
 /* 
    Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
    the Panel's content changes, to force Safari 2.x to redraw the underlay.
@@ -278,10 +289,6 @@
 */
 .yui-panel-container.shadow .underlay.yui-force-redraw {
     padding-bottom: 1px;
-}
-
-.yui-effect-fade .underlay {
-    display:none;
 }
 
 .yui-panel {
@@ -294,15 +301,6 @@
     z-index:1;
     overflow:hidden;
 }
-
-
-
-
-
-
-
-
-
 
 
 

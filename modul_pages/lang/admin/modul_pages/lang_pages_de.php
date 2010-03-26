@@ -108,6 +108,7 @@ $lang["pages_ordner_oeffnen"]            = "Ordner öffnen";
 $lang["pages_ordner_rechte"]             = "Rechte bearbeiten";
 $lang["pe_copy"]                         = "Kopieren";
 $lang["pe_delete"]                       = "Löschen";
+$lang["pe_dialog_close_warning"]         = "Wollen Sie den Editor schließen und mögliche Änderungen verwerfen?";
 $lang["pe_disable"]                      = "Den Portaleditor temporär deaktivieren";
 $lang["pe_edit"]                         = "Bearbeiten";
 $lang["pe_enable"]                       = "Den Portaleditor aktivieren";

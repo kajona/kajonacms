@@ -685,7 +685,7 @@ pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_va
 pe_iconbar, pe_disable
 <pe_toolbar>
 	<div class="peDialog" id="peDialog">
-	    <div class="hd">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
+	    <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
 	    <div class="bd" id="peDialog_content">
 	        <!-- filled by js -->
 	    </div>
@@ -693,8 +693,9 @@ pe_iconbar, pe_disable
 
 	<script type="text/javascript">
 		var peDialog;
+		KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
 		YAHOO.util.Event.onDOMReady(function () {
-		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0);
+		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
 		});
 	</script>
 

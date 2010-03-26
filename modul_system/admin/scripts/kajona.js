@@ -6,8 +6,12 @@
 if (typeof KAJONA == "undefined") {
 	var KAJONA = {
 		util: {},
-		portal: {},
-		admin: {}
+		portal: {
+			lang: {}
+		},
+		admin: {
+			lang: {}
+		}
 	};
 }
 
@@ -652,9 +656,10 @@ KAJONA.admin.statusDisplay = {
 /**
  * Object to show a modal dialog
  */
-KAJONA.admin.ModalDialog = function(strDialogId, intDialogType) {
-	this.dialog = null;
+KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bitResizing) {
+	this.dialog;
 	this.containerId = strDialogId;
+	this.iframeId;
 
 	this.setTitle = function(strTitle) {
 		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
@@ -678,27 +683,100 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType) {
 		//center the dialog (later() as workaround to add a minimal delay)
 		YAHOO.lang.later(10, this, function() {this.dialog.center();});
 	}
+	
+	this.setContentIFrame = function(strUrl) {
+		this.iframeId = this.containerId+"_iframe";
+		document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
+	}
 
 	this.init = function() {
 		this.dialog = new YAHOO.widget.Panel(this.containerId, {
-			fixedcenter :true,
-			close :false,
-			draggable :false,
-			zindex :4000,
-			modal :true,
-			visible :true
+			fixedcenter: true,
+			close: false,
+			draggable: false,
+			dragOnly: true,
+			underlay: "none",
+			constraintoviewport: true,
+			zindex: 4000,
+			modal: true,
+			visible: true
 		});
 
 		this.dialog.render(document.body);
 		this.dialog.show();
 		this.dialog.focusLast();
+		
+		//TODO: dynamically loading of dragdrop/resize files
+		if (bitDragging) {
+			this.enableDragging();
+		}
+		if (bitResizing) {
+			this.enableResizing();
+		}
 	}
-
+	
 	this.hide = function() {
 		try {
 			this.dialog.hide();
 		}
 		catch (e) {};
+	}
+	
+	this.enableDragging = function() {
+		this.dialog.cfg.setProperty("draggable", true);
+
+		this.dialog.dragEvent.subscribe(function(o, event) {
+			//hide iframe while dragging, if available
+			if (!YAHOO.lang.isUndefined(this.iframeId)) {
+				if (event[0] == "startDrag") {
+					YAHOO.util.Dom.setStyle(this.iframeId, "visibility", "hidden");
+				} else if (event[0] == "endDrag") {
+					YAHOO.util.Dom.setStyle(this.iframeId, "visibility", "visible");
+				}
+			}
+        }, this, true);
+	}
+	
+	this.enableResizing = function() {
+		var resize = new YAHOO.util.Resize(this.containerId, {
+            handles: ["br"],
+            autoRatio: false,
+            minWidth: 400,
+            minHeight: 300,
+            status: false 
+        });
+		
+        resize.on("startResize", function(args) {
+		    if (this.dialog.cfg.getProperty("constraintoviewport")) {
+                var D = YAHOO.util.Dom;
+
+                var clientRegion = D.getClientRegion();
+                var elRegion = D.getRegion(this.element);
+
+                resize.set("maxWidth", clientRegion.right - elRegion.left - YAHOO.widget.Overlay.VIEWPORT_OFFSET);
+                resize.set("maxHeight", clientRegion.bottom - elRegion.top - YAHOO.widget.Overlay.VIEWPORT_OFFSET);
+            } else {
+                resize.set("maxWidth", null);
+                resize.set("maxHeight", null);
+        	}
+
+			//hide iframe while resizing, if available
+			if (!YAHOO.lang.isUndefined(this.iframeId)) {
+				YAHOO.util.Dom.setStyle(this.containerId+"_iframe", "visibility", "hidden");
+			}
+        }, this, true);
+
+        resize.on("resize", function(args) {
+            var panelHeight = args.height;
+            this.dialog.cfg.setProperty("height", panelHeight + "px");
+        }, this, true);
+        
+        resize.on("endResize", function(args) {
+			//show iframe after resize, if available
+			if (!YAHOO.lang.isUndefined(this.iframeId)) {
+				YAHOO.util.Dom.setStyle(this.containerId+"_iframe", "visibility", "visible");
+			}
+        }, this, true);
 	}
 }
 

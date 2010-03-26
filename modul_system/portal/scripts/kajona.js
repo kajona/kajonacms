@@ -6,8 +6,12 @@
 if (typeof KAJONA == "undefined") {
 	var KAJONA = {
 		util: {},
-		portal: {},
-		admin: {}
+		portal: {
+			lang: {}
+		},
+		admin: {
+			lang: {}
+		}
 	};
 }
 
