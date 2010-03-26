@@ -1035,7 +1035,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["content"] = $strContent;
         $arrTemplate["display"] = ($bitVisible ? "block" : "none");
         $arrReturn[0] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-        $arrReturn[1] = "<a href=\"javascript:fold('".$strID."')\">".$strLinkText."</a>";
+        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."')\">".$strLinkText."</a>";
         return $arrReturn;
     }
 
@@ -1057,7 +1057,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["id"] = $strID;
         $arrTemplate["content"] = $strContent;
         $arrTemplate["display"] = ($bitVisible ? "block" : "none");
-        $arrTemplate["link"] = "<a href=\"javascript:foldImage('".$strID."', '".$strID."_img', '"._skinwebpath_."/pics/".$strImageVisible."', '"._skinwebpath_."/pics/".$strImageInvisible."')\" title=\"".$strLinkText."\">".getImageAdmin(($bitVisible ? $strImageVisible : $strImageInvisible), $strLinkText, false, $strID."_img")."</a>";
+        $arrTemplate["link"] = "<a href=\"javascript:KAJONA.util.foldImage('".$strID."', '".$strID."_img', '"._skinwebpath_."/pics/".$strImageVisible."', '"._skinwebpath_."/pics/".$strImageInvisible."')\" title=\"".$strLinkText."\">".getImageAdmin(($bitVisible ? $strImageVisible : $strImageInvisible), $strLinkText, false, $strID."_img")."</a>";
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

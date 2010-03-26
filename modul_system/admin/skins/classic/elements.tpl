@@ -336,7 +336,7 @@ function is called after selecting a date, e.g. to hide the calendar
             		  <input name="%%titleYear%%" id="%%titleYear%%" type="text" class="%%class%%" size="4" maxlength="4" value="%%valueYear%%" />
             	  </td>
             	  <td>
-            		  <a href="javascript:fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
+            		  <a href="javascript:KAJONA.util.fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
     		      </td>
     		  </tr>
     		</table>
@@ -344,7 +344,7 @@ function is called after selecting a date, e.g. to hide the calendar
 	</tr>
 	<tr>
 	   <td></td>
-	   <td><div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script></td>
+	   <td><div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { KAJONA.util.fold('%%calendarContainerId%%'); }; </script></td>
 	</tr>
 </table>
 %%calendarCommands%%
@@ -366,7 +366,7 @@ function is called after selecting a date, e.g. to hide the calendar
 
             	  </td>
             	  <td>
-            		  <a href="javascript:fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
+            		  <a href="javascript:KAJONA.util.fold('%%calendarContainerId%%', initCalWrapper_%%calendarContainerId%%);"><img src="_skinwebpath_/pics/icon_calendar.gif" border="0" /></a>
     		      </td>
     		  </tr>
     		</table>
@@ -374,7 +374,7 @@ function is called after selecting a date, e.g. to hide the calendar
 	</tr>
 	<tr>
 	   <td></td>
-	   <td><div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { fold('%%calendarContainerId%%'); }; </script></td>
+	   <td><div id="%%calendarContainerId%%" style="display: none;" class="calendarOverlay"></div><script type="text/javascript"> function calClose_%%calendarContainerId%%() { KAJONA.util.fold('%%calendarContainerId%%'); }; </script></td>
 	</tr>
 </table>
 %%calendarCommands%%
