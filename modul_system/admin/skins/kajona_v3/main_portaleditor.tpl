@@ -14,7 +14,7 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript">
 	YAHOO.util.Event.onDOMReady(function() {
-        new YAHOO.util.KeyListener(document, { keys:27 }, parent.kajonaPortalEditorHelper.closeDialog).enable();
+        new YAHOO.util.KeyListener(document, { keys:27 }, parent.KAJONA.admin.portaleditor.closeDialog).enable();
 	});
 	</script>
 </head>

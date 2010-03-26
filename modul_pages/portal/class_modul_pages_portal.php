@@ -230,9 +230,9 @@ class class_modul_pages_portal extends class_portal {
 
                 foreach($arrRawPlaceholdersForPe as &$arrOneRawPlaceholder) {
                     if($arrOneRawPlaceholder["placeholder"] == $arrOnePlaceholder["placeholder"]) {
-                        
+
                         foreach($arrOneRawPlaceholder["elementlist"] as $intElementKey => $arrOneRawElement) {
-                           
+
                             if($arrOnePlaceholder["element"] == $arrOneRawElement["element"]) {
                                 if(uniSubstr($arrOneRawElement["name"], 0, 5) == "master") {
                                     $arrOneRawPlaceholder["elementlist"][$intElementKey] = null;
@@ -243,7 +243,7 @@ class class_modul_pages_portal extends class_portal {
                             }
 
                         }
-                        
+
                     }
                 }
             }
@@ -261,7 +261,7 @@ class class_modul_pages_portal extends class_portal {
                         if($objPeNewElement != null) {
                             //placeholder processed before?
                             $strArrayKey = $strPeNewPlaceholder.$objPeNewElement->getStrName();
-                            
+
                             if(in_array($strArrayKey, $arrPePlaceholdersDone))
                                 continue;
                             else
@@ -280,19 +280,19 @@ class class_modul_pages_portal extends class_portal {
                     }
                 }
             }
-            
+
             //loop pe-new code in order to add the wrappers and assign the code to the matching placeholder
             foreach($arrPeNewButtons as $strPlaceholderName => $strNewButtons) {
-                
+
                 if(!isset($arrTemplate[$strPlaceholderName]))
                     $arrTemplate[$strPlaceholderName] = "";
 
-                $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);    
+                $strNewButtons = class_element_portal::getPortaleditorNewWrapperCode($strPlaceholderName, $strNewButtons);
                 $arrTemplate[$strPlaceholderName] .= $strNewButtons;
             }
         }
-        
-         
+
+
 
 		$arrTemplate["description"] = $objPageData->getStrDesc();
 		$arrTemplate["keywords"] = $objPageData->getStrKeywords();
@@ -333,15 +333,18 @@ class class_modul_pages_portal extends class_portal {
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
     		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages", "newPage", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_page"), $this->getText("pe_icon_page", "pages", "admin"), "icon_page.gif");
 
-    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"kajonaPortalEditorHelper.portalEditorStatus(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
+    		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
-    		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
-    		    //Load portaleditor javascript
+    		    //Load YUI and portaleditor javascript
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>";
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load portaleditor styles
-                $strPeToolbar .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
-                $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor_ie.css\");</script><![endif]-->";
-    		    //The toolbar has to be added right after the body-tag - to generate correct html-code
+                $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.loadPortaleditorBase();</script>";
+                $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";
+                $strPeToolbar .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor_ie.css\"]);</script><![endif]-->";
+    		    $strPeToolbar .= $this->objToolkit->getPeToolbar($arrPeContents);
+
+                //The toolbar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStrpos($strPageContent, "<body"));
     		    //find closing bracket
     		    $intTemp = uniStrpos($strTemp, ">")+1;
@@ -350,12 +353,13 @@ class class_modul_pages_portal extends class_portal {
             }
             else {
                 //Button to enable the toolbar & pe
-                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"kajonaPortalEditorHelper.portalEditorStatus(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
-    		    //Load portaleditor javascript
+                $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
+    		    //Load YUI and portaleditor javascript
+    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>";
     		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load portaleditor styles
-                $strEnableButton .= "\n<script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor.css\");</script>";
-                $strEnableButton .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">addCss(\""._skinwebpath_."/styles_portaleditor_ie.css\");</script><![endif]-->";
+                $strEnableButton .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";
+                $strEnableButton .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor_ie.css\"]);</script><![endif]-->";
                 //The toobar has to be added right after the body-tag - to generate correct html-code
     		    $strTemp = uniSubstr($strPageContent, uniStripos($strPageContent, "<body"));
     		    //find closing bracket

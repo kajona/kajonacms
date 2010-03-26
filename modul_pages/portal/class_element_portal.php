@@ -140,7 +140,7 @@ class class_element_portal extends class_portal {
                     //Load element-data
                     //$strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                     $strEditUrl = getLinkAdminHref($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
-                    $strEditLink = "<a href=\"#\" onclick=\"kajonaPortalEditorHelper.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
+                    $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
 
                 }
                 else {
@@ -148,7 +148,7 @@ class class_element_portal extends class_portal {
                     if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
                         //$strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                         $strEditUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
-                        $strEditLink = "<a href=\"#\" onclick=\"kajonaPortalEditorHelper.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
+                        $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
                     }
                 }
 
@@ -193,12 +193,14 @@ class class_element_portal extends class_portal {
                 $strDeleteLink = "";
                 //standard: pages_content.
                 if($strModule == "pages_content") {
-                    $strDeleteLink = getLinkAdminPopup("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "680", "500", "", false, true);
+                    $strDeleteUrl = getLinkAdminHref("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                    $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
-                        $strDeleteLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_delete_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strDeleteUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
+                        $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin")."</a>";
                     }
                 }
 

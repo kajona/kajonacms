@@ -63,8 +63,6 @@ KAJONA.util.fold = function (strElementId, objCallbackShow) {
 KAJONA.util.Loader = function (strScriptBase) {
 	var scriptBase = KAJONA_WEBPATH + strScriptBase;
 	var yuiBase = scriptBase + "yui/";
-	var yuiLoaderBeforeDOMReady = null;
-	var bitBeforeDOMReady = true;
 	var arrRequestedModules = {};
 	var arrLoadedModules = {};
 	var arrCallbacks = [];
@@ -151,26 +149,17 @@ KAJONA.util.Loader = function (strScriptBase) {
 				callback();
 			}
 		} else {
-			var yuiLoader;
-			
-			//are there components/files to load which are not already requested?
-			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
-				//decide if a new YUILoader instance should be created
-				//all files added before the onDOMReady event uses the same instance
-				if (bitBeforeDOMReady && YAHOO.lang.isNull(yuiLoaderBeforeDOMReady)) {
-					yuiLoaderBeforeDOMReady = createYuiLoader();
-					yuiLoader = yuiLoaderBeforeDOMReady;
+			//register the callback to be called later on
+			if (YAHOO.lang.isFunction(callback)) {
+				arrCallbacks.push({
+					'callback' : callback,
+					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
+				});
+			}
 					
-					//start loading right after DOM is ready
-					YAHOO.util.Event.onDOMReady(function () {
-						yuiLoaderBeforeDOMReady.insert();
-						bitBeforeDOMReady = false;
-					});
-				} else if (this.bitBeforeDOMReady) {
-					yuiLoader = yuiLoaderBeforeDOMReady;
-				} else {
-					yuiLoader = createYuiLoader();
-				}
+			//are there components/files to load which are not already requested?
+			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {	
+				var yuiLoader = createYuiLoader();
 				
 				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
 					yuiLoader.require(arrYuiComponentsToLoad[i]);
@@ -187,19 +176,11 @@ KAJONA.util.Loader = function (strScriptBase) {
 					yuiLoader.require(arrFilesToLoad[i]);
 					arrRequestedModules[arrFilesToLoad[i]] = true;
 				}
-			}
-			
-			//register the callback to be called later on
-			if (YAHOO.lang.isFunction(callback)) {
-				arrCallbacks.push({
-					'callback' : callback,
-					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
+				
+				//fire YUILoader after the onDOMReady event
+				YAHOO.util.Event.onDOMReady(function () {
+					yuiLoader.insert();
 				});
-			}
-			
-			//fire YUILoader if this function is called after the onDOMReady event
-			if ((arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) && !bitBeforeDOMReady) {
-				yuiLoader.insert();
 			}
 		}
 	}
@@ -355,9 +336,8 @@ KAJONA.portal.tooltip = (function() {
 	}
 	
 	function show(objEvent) {
-		var tooltip = objEvent.tooltip ? objEvent.tooltip : objEvent.target.tooltip;
 		hide();
-		container.appendChild(tooltip);
+		container.appendChild(this.tooltip);
 		locate(objEvent);
 	}
 	
