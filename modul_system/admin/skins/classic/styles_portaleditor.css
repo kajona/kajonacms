@@ -32,7 +32,6 @@
     border: 1px solid #000099;
     padding: 4px;
     max-width: 200px;
-    z-index: 2000;
 }
 
 
@@ -79,7 +78,7 @@
 	position: absolute !important;
 	border: none !important;
 	display: block !important;
-	margin: -15px 0 0 -1px !important;
+    margin: -17px 0 0 -1px !important;
 }
 
 /* for nested containers */
@@ -88,15 +87,161 @@
 }
 
 .peContainerHover .menuHover .actions {
-	display: inline !important;
-	background-color: #FFFFFF !important;
 	border: 1px solid black !important;
-	font-family: Verdana, Arial, Helvetica, sans-serif !important;
-	font-size: 11px !important;
-	text-align: left !important;
+	display: block !important;
+    background-color: #ffffff !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    text-align: left !important;
+    padding: 1px 3px 2px 3px !important;
+    text-transform: none !important;
 }
 
-a.pe_link {
+.peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited,
+.peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+    background: none !important;
+    padding: 0 2px 0 2px !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 14px !important;
+    border: none !important;
+    outline: none !important;
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+.peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
+    text-decoration: underline !important;
+}
+
+#pe_classicskin img {
+	border: none !important;
+}
+
+
+.peButtonNew {
+    margin-bottom: 2px;
+}
+
+.peButtonNew img {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* DIALOG */
+.peDialog {
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    width: 730px;
+    outline: none;
+    background: url(loading.gif) center center no-repeat #ffffff;
+    text-align: left;
+    border: 1px solid #000099 !important;
+}
+
+.peDialog .hd {
+    background-color: #CFD7FF;
+    height: 17px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 11px;
+    padding-top: 3px;
+}
+
+.peDialog .hd .close {
+    right: 0;
+    top: 0;
+    position: absolute;
+    font-weight: bold;
+}
+
+.peDialog .hd .close a {
+    display: block;
+    padding: 3px 6px 3px 6px;
+}
+
+.peDialog .bd {
+    padding: 5px 10px 10px 10px;
+    height: 450px;
+}
+
+.peDialog .bd iframe {
+    border: none;
+}
+
+.peDialog .yui-resize-handle-br {
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    background-image: url(../../scripts/yui/resize/assets/skins/sam/layout_sprite.png);
+    background-repeat: no-repeat;
+    background-position: -22px -62px;
+    cursor: se-resize;
+}
+
+#peDialog_c.hide-scrollbars .yui-resize .bd {
+    overflow: hidden;
+}
+
+#peDialog_c.show-scrollbars .yui-resize .bd {
+    overflow: auto;
+}
+
+
+.yui-overlay,
+.yui-panel-container {
+    visibility:hidden;
+    position:absolute;
+    z-index: 2;
+}
+
+.mask {
+    z-index: 1; 
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.2;
+    opacity:.20;
+    filter: alpha(opacity=20);
+    background-color:#000000;
+}
+
+.yui-panel-container.show-scrollbars {
+    overflow: visible;
+}
+
+.yui-panel-container.show-scrollbars .underlay {
+    overflow: auto;
+}
+
+.yui-panel {
+    visibility:hidden;
+    border-collapse:separate;
+    position:relative;
+    left:0;
+    top:0;
+    border:none;
+    z-index:1;
+    overflow:hidden;
+}
+
+
+
+
+/* MenuBar style rules */
+.yui-skin-sam {
     font-family: Verdana, Arial, Helvetica, sans-serif !important;
     font-size: 11px !important;
     color: #000000 !important;
@@ -110,11 +255,38 @@ a.pe_link {
     line-height: 14px !important;
     border: none !important;
     outline: none !important;
-    display: inline !important;
     width: auto !important;
     height: auto !important;
+    text-align: left !important;
 }
 
-#pe_classicskin img {
-	border: none !important;
+.yui-skin-sam .yuimenu .bd {
+    border: solid 1px #000099 !important;
+}
+
+.yui-skin-sam .yuimenu {
+    font-size: 11px !important;
+    
+ }
+
+.yui-skin-sam .yuimenu h6 { 
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px 0 0 0;
+    color: #a4a4a4;
+    font-size: 11px !important;
+}
+
+.yui-skin-sam .yuimenuitemlabel {
+    color: #575757 !important;
+    cursor: pointer !important;
+    outline: none !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected {
+    background-color: #f0f0f0 !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected .yuimenuitemlabel{
+    color: #000000 !important;
 }

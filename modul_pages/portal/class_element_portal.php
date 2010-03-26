@@ -138,35 +138,14 @@ class class_element_portal extends class_portal {
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     //Load element-data
-                    //$strEditLink = getLinkAdminPopup($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                     $strEditUrl = getLinkAdminHref($strModule, $strAction, "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
                     $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
-
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_edit"]) && $arrConfig["pe_action_edit"] != "") {
-                        //$strEditLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin"), "", "680", "500", "", false, true);
                         $strEditUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_edit"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
                         $strEditLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_edit", "pages", "admin")."</a>";
-                    }
-                }
-
-                //---------------------------------------------------
-                //link to create a new element
-                $strNewLink = "";
-                //standard: pages_content. test, if element is allowed multiple times at one placeholder
-                if($strModule == "pages_content") {
-                    //Load element-data
-                    $objElement = new class_modul_pages_pageelement($strSystemid);
-                    if($objElement->getIntRepeat() == 1) {
-                        $strNewLink = getLinkAdminPopup("pages_content", "newElement", "&placeholder=".$objElement->getStrPlaceholder()."&element=".$objElement->getStrElement()."&systemid=".$objElement->getPrevId().$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "680", "500", "", false, true);
-                    }
-                }
-                else {
-                    //Use Module-config to generate link
-                    if(isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
-                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin"), "", "680", "500", "", false, true);
                     }
                 }
 
@@ -178,13 +157,15 @@ class class_element_portal extends class_portal {
                     //Load element-data
                     $objElement = new class_modul_pages_pageelement($strSystemid);
                     if($objElement->getIntRepeat() == 1) {
-                        $strNewLink = getLinkAdminPopup("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strCopyUrl = getLinkAdminHref("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                        $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin")."</a>";
                     }
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_copy"]) && $arrConfig["pe_action_copy"] != "") {
-                        $strNewLink = getLinkAdminPopup($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strCopyUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_copy"], $arrConfig["pe_action_copy_params"].$strAdminLangParam."&pe=1");
+                        $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin")."</a>";
                     }
                 }
 
@@ -205,41 +186,45 @@ class class_element_portal extends class_portal {
                 }
 
                 //---------------------------------------------------
+                //TODO: check if there are more than one elements in current placeholder before showing shift buttons
+
                 //link to shift element up
-                $strShiftUp = "";
+                $strShiftUpLink = "";
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     $objElement = new class_modul_pages_pageelement($strSystemid);
-                    if($objElement->getIntRepeat() == 1)
-                        $strShiftUp = getLinkAdminPopup("pages_content", "elementSortUp", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "680", "500", "", false, true);
+                    $strShiftUpUrl = getLinkAdminHref("pages_content", "elementSortUp", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                    $strShiftUpLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftUpUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_shiftUp"]) && $arrConfig["pe_action_shiftUp"] != "") {
-                        $strShiftUp = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftUp"], $arrConfig["pe_action_shiftUp_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strShiftUpUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_shiftUp"], $arrConfig["pe_action_shiftUp_params"].$strAdminLangParam."&pe=1");
+                        $strShiftUpLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftUpUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_shiftUp", "pages", "admin")."</a>";
                     }
                 }
 
                 //---------------------------------------------------
                 //link to shift element down
-                $strShiftDown = "";
+                $strShiftDownLink = "";
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     $objElement = new class_modul_pages_pageelement($strSystemid);
-                    if($objElement->getIntRepeat() == 1)
-                        $strShiftDown = getLinkAdminPopup("pages_content", "elementSortDown", "&systemid=".$strSystemid.$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "680", "500", "", false, true);
+                    $strShiftDownUrl = getLinkAdminHref("pages_content", "elementSortDown", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                    $strShiftDownLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftDownUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_shiftDown"]) && $arrConfig["pe_action_shiftDown"] != "") {
-                        $strShiftDown = getLinkAdminPopup($strModule, $arrConfig["pe_action_shiftDown"], $arrConfig["pe_action_shiftDown_params"].$strAdminLangParam, class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin"), "", "680", "500", "", false, true);
+                        $strShiftDownUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_shiftDown"], $arrConfig["pe_action_shiftDown_params"].$strAdminLangParam."&pe=1");
+                        $strShiftDownLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftDownUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin")."</a>";
                     }
                 }
 
                 //---------------------------------------------------
                 // layout generation
 
-                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strNewLink, $strDeleteLink, $strShiftUp, $strShiftDown), $strContent);
+                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strCopyLink, $strDeleteLink, $strShiftUpLink, $strShiftDownLink), $strContent);
 
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);

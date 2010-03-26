@@ -20,7 +20,6 @@
 </head>
 <body class="portalEditor">
 
-<!-- <h1>%%moduletitle%%</h1> -->
 %%content%%
 
 <div class="imgPreload">

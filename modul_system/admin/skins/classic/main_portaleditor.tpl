@@ -8,6 +8,11 @@
 <script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady(function() {
+    new YAHOO.util.KeyListener(document, { keys:27 }, parent.KAJONA.admin.portaleditor.closeDialog).enable();
+});
+</script>
 </head>
 
 <body>

@@ -35,3 +35,8 @@
 .peContainerHover .peContainerHover .menuHover {
     margin: 0 0 0 -1px !important;
 }
+
+.peDialog {
+    -ms-filter:"progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4)";
+    filter:progid:DXImageTransform.Microsoft.DropShadow(color=#333333, offx=4, offy=4);
+}

@@ -336,7 +336,7 @@ class class_modul_pages_portal extends class_portal {
 
     		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
-    		    //Load YUI and portaleditor javascript
+    		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>";
     		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
                 //Load portaleditor styles

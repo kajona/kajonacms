@@ -827,6 +827,21 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
+    <div class="peDialog" id="peDialog">
+        <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
+        <div class="bd" id="peDialog_content">
+            <!-- filled by js -->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var peDialog;
+        KAJONA.admin.lang["pe_dialog_close_warning"] = "%%pe_dialog_close_warning%%";
+        YAHOO.util.Event.onDOMReady(function () {
+            peDialog = new KAJONA.admin.ModalDialog('peDialog', 0, true, true);
+        });
+    </script>
+    
     <div id="pe_classicskin">
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
             <tr style="font-family: verdana, arial; font-size: 10px; white-space: nowrap;">
@@ -853,7 +868,7 @@ pe_iconbar, pe_disable
 </pe_toolbar>
 
 <pe_actionToolbar>
-<div id="container_%%systemid%%" class="peContainerOut" onmouseover="KAJONA.admin.portaleditor.showActions('%%systemid%%')" onmouseout="KAJONA.admin.portaleditor.hideActions(('%%systemid%%')">
+<div id="container_%%systemid%%" class="peContainerOut" onmouseover="KAJONA.admin.portaleditor.showActions('%%systemid%%')" onmouseout="KAJONA.admin.portaleditor.hideActions('%%systemid%%')">
     <div id="menu_%%systemid%%" class="menuOut">
         <div class="actions">
             %%actionlinks%%
@@ -870,32 +885,22 @@ Possible placeholders: %%link_complete%%, %%name%%, %%href%%
 
 Code to add single elements to portaleditors new element menu (will be inserted in pe_actionNewWrapper)
 <pe_actionNew>
-    kajonaPeNewMenus["%%placeholder%%"]["elements"].push({
-        element: '%%element%%',
-        elementName: '%%elementName%%',
-        elementHref: '%%elementHref%%'
-    });
+    {
+        element: "%%element%%",
+        elementName: "%%elementName%%",
+        elementHref: "%%elementHref%%"
+    },
 </pe_actionNew>
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="kajonaPortalEditorHelper.showNewMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_blank.gif" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
     <script type="text/javascript">
-        kajonaPeNewMenus["%%placeholder%%"] = [];
-        kajonaPeNewMenus["%%placeholder%%"]["placeholderName"] = "%%placeholderName%%";
-        kajonaPeNewMenus["%%placeholder%%"]["elements"] = [];
-        %%contentElements%%
+        KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
+            %%contentElements%%
+        ]);
     </script>
-</pe_actionNewWrapper>
-
-No placeholders here, this only sets up the link-content of a new-icon
-<pe_actionNew>
-    <img src="_skinwebpath_/pics/icon_blank.gif" alt="" />
-</pe_actionNew>
-
-<pe_actionNewWrapper>
-    <div>%%newlink%% %%elementName%%</div>
 </pe_actionNewWrapper>
 
 ---------------------------------------------------------------------------------------------------------
