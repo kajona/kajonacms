@@ -51,7 +51,9 @@ class class_element_tagto extends class_element_admin implements interface_admin
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tagto_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+
+		
+        $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tagto_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 

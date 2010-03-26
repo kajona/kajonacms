@@ -61,7 +61,11 @@ class class_element_faqs extends class_element_admin implements interface_admin_
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-		$strReturn .= $this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getText("faqs_template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "" ));
+
+		if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getText("faqs_template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("faqs_template", $arrTemplatesDD, $this->getText("faqs_template"), (isset($arrElementData["faqs_template"]) ? $arrElementData["faqs_template"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("faqs_category");
 

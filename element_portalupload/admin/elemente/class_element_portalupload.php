@@ -75,7 +75,11 @@ class class_element_portalupload extends class_element_admin implements interfac
 		}
 
 
-		$strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+		if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+        
 		$strReturn .= $this->objToolkit->formInputDropdown("char2", $arrDlDD, $this->getText("portalupload_download"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
 		$strReturn .= $this->objToolkit->formInputDropdown("char3", $arrFmDD, $this->getText("portalupload_filemanager"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
 

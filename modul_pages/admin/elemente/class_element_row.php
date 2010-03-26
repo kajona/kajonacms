@@ -53,7 +53,11 @@ class class_element_row extends class_element_admin implements interface_admin_e
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-		$strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
+
+		if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
 
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");

@@ -78,7 +78,11 @@ class class_element_news extends class_element_admin implements interface_admin_
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-		$strReturn .= $this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getText("news_template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "" ));
+
+		if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getText("news_template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("news_template", $arrTemplatesDD, $this->getText("news_template"), (isset($arrElementData["news_template"]) ? $arrElementData["news_template"] : "" ));
 
         $strReturn .= $this->objToolkit->formInputText("news_amount", $this->getText("news_amount"), (isset($arrElementData["news_amount"]) ? $arrElementData["news_amount"] : ""));
 

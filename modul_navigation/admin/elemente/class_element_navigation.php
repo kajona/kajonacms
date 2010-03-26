@@ -62,7 +62,12 @@ class class_element_navigation extends class_element_admin implements interface_
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-		$strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
+
+		if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
+        
         //and finally offer the different modes
         $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));
         $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));

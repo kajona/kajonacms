@@ -58,7 +58,11 @@ class class_element_downloads_toplist extends class_element_admin implements int
                 $arrTemplatesDD[$strTemplate] = $strTemplate;
             }
         }
-        $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getText("dl_toplist_template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
+
+        if(count($arrTemplates) == 1)
+            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getText("dl_toplist_template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("char2", $arrTemplatesDD, $this->getText("dl_toplist_template"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
 
         $strReturn .= $this->objToolkit->formInputText("int1", $this->getText("dl_toplist_amount"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "5" ));
 
