@@ -162,7 +162,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
         $objSystemWidget2 = new class_modul_system_adminwidget();
         $objSystemWidget2->setStrClass("class_adminwidget_note");
-        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.2\";}");
+        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.3\";}");
 
         $objSystemWidget3 = new class_modul_system_adminwidget();
         $objSystemWidget3->setStrClass("class_adminwidget_systemlog");
