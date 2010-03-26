@@ -569,7 +569,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                         } else {
                             $strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
                         }
-        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"kajonaAdminTooltip.add(this);\" onclick=\"window.opener.kajonaUtils.folderviewSelectCallback([['".$strTargetfield."', '".$strValue."']]); self.close();\">".getImageAdmin("icon_accept.gif"));
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['".$strTargetfield."', '".$strValue."']]); self.close();\">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {
@@ -647,7 +647,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                             jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getText("ordner_anlegen_dialogButton")."',
-                                                  'javascript:filemanagerCreateFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
+                                                  'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
                                     jsDialog_1.init(); }\n
                       ";
 
@@ -673,7 +673,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                             jsDialog_1.setTitle('".$this->getText("datei_umbenennen")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                   '".$this->getText("rename")."',
-                                                  'javascript:filemanagerRenameFile(\'fileName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \''+strFilename+'\', \'\', \'\' ); jsDialog_1.hide();');
+                                                  'javascript:KAJONA.admin.filemanager.renameFile(\'fileName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \''+strFilename+'\', \'\', \'\' ); jsDialog_1.hide();');
                                                                                        //strInputId,          strRepoId,                     strRepoFolder, strOldName, strSourceModule, strSourceAction
                                     jsDialog_1.init();
                             document.getElementById('fileName').value = strFilename;
@@ -797,19 +797,19 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $arrTemplate["file_actions"] .= "&nbsp;&nbsp;&nbsp;";
             }
 
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerShowRealsize(); return false;\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerShowPreview(); return false;\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerRotate(90); return false;\"", "", $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerRotate(270); return false;\"", "", $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerShowCropping(); return false;\"", "", $this->getText("cropImage"), "icon_crop.gif"));
-            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"kajonaImageEditor.filemanagerSaveCropping(); return false;\"", "", $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showRealSize(); return false;\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showPreview(); return false;\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(90); return false;\"", "", $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(270); return false;\"", "", $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showCropping(); return false;\"", "", $this->getText("cropImage"), "icon_crop.gif"));
+            $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.saveCropping(); return false;\"", "", $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."&galleryId=".$this->getParam("galleryId").($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"]));
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
-                kajonaAjaxHelper.loadImagecropperBase();
+                KAJONA.admin.loader.loadImagecropperBase();
 
-                var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;quality=80';
-                var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&amp;maxWidth=__width__&amp;maxHeight=__height__';
+                var fm_image_rawurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&quality=80';
+                var fm_image_scaledurl = '"._webpath_."/image.php?image=".urlencode(str_replace(_realpath_, "", $strFile))."&maxWidth=__width__&maxHeight=__height__';
                 var fm_image_scaledMaxWidth = $intWidth;
                 var fm_image_scaledMaxHeight = $intHeight;
                 var fm_image_isScaled = true;
@@ -818,7 +818,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 var fm_folder = '".$this->getParam("folder")."';
                 var fm_warning_unsavedHint = '".$this->getText("cropWarningUnsavedHint")."';
 
-                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:kajonaImageEditor.filemanagerSaveCroppingToBackend()'); jsDialog_1.init(); }
+                function init_fm_crop_save_warning_dialog() { jsDialog_1.setTitle('".$this->getText("cropWarningDialogHeader")."'); jsDialog_1.setContent('".$this->getText("cropWarningSaving")."', '".$this->getText("cropWarningCrop")."', 'javascript:KAJONA.admin.filemanager.imageEditor.saveCroppingToBackend()'); jsDialog_1.init(); }
                 function init_fm_screenlock_dialog() { jsDialog_3.init(); }
                 function hide_fm_screenlock_dialog() { jsDialog_3.hide(); }
 

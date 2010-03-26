@@ -13,11 +13,11 @@
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript">
-		kajonaUtils.focusHelper.setBrowserFocus("name");
-		kajonaAjaxHelper.loadAjaxBase();
-  		kajonaAjaxHelper.loadDragNDropBase();
-  		kajonaAjaxHelper.loadAnimationBase();
-		kajonaAjaxHelper.loadAutocompleteBase();
+		KAJONA.util.setBrowserFocus("name");
+		KAJONA.admin.loader.loadAjaxBase();
+  		KAJONA.admin.loader.loadDragNDropBase();
+  		KAJONA.admin.loader.loadAnimationBase();
+		KAJONA.admin.loader.loadAutocompleteBase();
 	</script>
 </head>
 <body class="login">

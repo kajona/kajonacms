@@ -67,11 +67,11 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	public function getOutputContent() {
 		return $this->strTemp;
 	}
-	
+
     protected function getOutputModuleTitle() {
         return $this->getText("moduleRightsTitle");
     }
-	
+
 
 
 //*"*******************************************************************************************************
@@ -83,7 +83,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	 * @return string
 	 */
 	private function actionChange() {
-		
+
 		$strReturn = "";
 		$strSystemID = "";
 		//Determing the systemid
@@ -115,21 +115,21 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			    $strModule = "system";
             else if($arrSystemRecord["system_module_nr"] == _pages_folder_id_)
                 $strModule = "pages";
-			else {   
+			else {
 			    $strTempId = class_modul_system_module::getModuleIdByNr($arrSystemRecord["system_module_nr"]);
 			    $objModule = new class_modul_system_module($strTempId);
 			    $strModule = $objModule->getStrName();
 			}
-			
+
 			$arrHeaderRow = $this->getText("permissions_header", $strModule, "admin");
-			
+
 			if($arrHeaderRow == "!permissions_header!")
 			    $arrHeaderRow = $this->getText("permissions_default_header", "system", "admin");
-			    
-			if($strSystemID == "0")    
+
+			if($strSystemID == "0")
 			    $arrHeaderRow = $this->getText("permissions_root_header", "system", "admin");
-			 
-			
+
+
 			$arrTitles = $arrHeaderRow;
 			$arrTemplateTotal = array();
 			$arrTemplateTotal["title0"] = $arrTitles[0];
@@ -265,7 +265,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			//place all inheritance-rights as hidden-fields to support the change-js script
             $strPrevId = $this->getPrevId($strSystemID);
             $arrRightsInherited = $this->objRights->getArrayRights($strPrevId);
-            
+
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {
                 if($strRightName != "inherit") {
                     $intRightCounter = 0;
@@ -289,7 +289,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			//Close the form
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 			$strReturn .= $this->objToolkit->formClose();
-			$strReturn .= "<script type=\"text/javascript\">checkRightMatrix();</script>";
+			$strReturn .= "<script type=\"text/javascript\">KAJONA.admin.checkRightMatrix();</script>";
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");

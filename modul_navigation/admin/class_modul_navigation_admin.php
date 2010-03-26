@@ -469,7 +469,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray();
         //array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
-        $strReturn .= $this->objToolkit->getTreeview("kajonaAdminAjax.loadNavigationTreeViewNodes", $arrNodes[0], $arrNodes, $strSideContent, $this->getOutputModuleTitle());
+        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadNavigationTreeViewNodes", $arrNodes[0], $arrNodes, $strSideContent, $this->getOutputModuleTitle());
         return $strReturn;
     }
 

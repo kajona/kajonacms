@@ -10,11 +10,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="SHORTCUT ICON" href="_webpath_/favicon.ico">
 <script type="text/javascript">
-	kajonaUtils.focusHelper.setBrowserFocus("name");
-	kajonaAjaxHelper.loadAjaxBase();
-  	kajonaAjaxHelper.loadDragNDropBase();
-  	kajonaAjaxHelper.loadAnimationBase();
-	kajonaAjaxHelper.loadAutocompleteBase();
+	KAJONA.util.setBrowserFocus("name");
+	KAJONA.admin.loader.loadAjaxBase();
+  	KAJONA.admin.loader.loadDragNDropBase();
+  	KAJONA.admin.loader.loadAnimationBase();
+	KAJONA.admin.loader.loadAutocompleteBase();
 </script>
 </head>
 

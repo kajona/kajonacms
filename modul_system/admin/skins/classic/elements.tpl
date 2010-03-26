@@ -25,7 +25,7 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadDragNDropBase(null, "dragdrophelper_tr.js");
+	KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_tr.js");
 	if(arrayTableIds == null) {
         var arrayTableIds = new Array("%%listid%%");
     } else {
@@ -276,7 +276,7 @@ Upload-Field for multiple files with progress bar
 	%%javascript%%
 	
 	<div style="display:inline;">
-			<div id="kajonaUploadButtonsContainer" onmouseover="kajonaAdminTooltip.add(this, '%%upload_multiple_pleaseWait%%');">
+			<div id="kajonaUploadButtonsContainer" onmouseover="KAJONA.admin.tooltip.add(this, '%%upload_multiple_pleaseWait%%');">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
@@ -621,7 +621,7 @@ The following sections specify the layout of the rights-mgmt
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
       <td width="10%" class="listecontent">%%title%%</td>
-      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="checkRightMatrix();" %%checked%% /></div></td>
+      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% /></div></td>
     </tr>
 </table>
 </rights_form_inherit>
@@ -879,7 +879,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="kajonaPortalEditorHelper.showNewMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="kajonaAdminTooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="kajonaPortalEditorHelper.showNewMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
     <script type="text/javascript">
         kajonaPeNewMenus["%%placeholder%%"] = [];
@@ -913,7 +913,7 @@ A button for the active language
 
 The language switch sourrounds the buttons
 <language_switch>
-<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="switchLanguage(this.value);">%%languagebuttons%%</select></div>
+<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="KAJONA.admin.switchLanguage(this.value);">%%languagebuttons%%</select></div>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
@@ -934,11 +934,11 @@ The language switch sourrounds the buttons
         }
 
         //Register mover for the help-layer
-		document.onmousemove = checkMousePosition;
-		document.onmouseup = objMover.unsetMousePressed;
+		document.onmousemove = KAJONA.util.mover.checkMousePosition;
+		document.onmouseup = KAJONA.util.mover.unsetMousePressed;
     </script>
     <div id="quickhelp" style=" width: 400px; display: none; background: #ffffff; border: 1px solid #000099;"
-           onmousedown="objMover.setMousePressed(this)" onmouseup="objMover.unsetMousePressed()" >
+           onmousedown="KAJONA.util.mover.setMousePressed(this)" onmouseup="KAJONA.util.mover.unsetMousePressed()" >
         <div style="height: 20px;"><table width="100%"><tr><td align="left" class="modulheadkurz">%%title%%</td></tr></table></div>
         <div style="height: 20px;"><table width="100%"><tr><td align="right"><a href="#" onclick="hideQuickHelp();">[X]</a></td></tr></table></div>
         <div style="/* height: 220px; */padding: 5px;  text-align: left; margin-right: 20px;">%%text%%</div>
@@ -994,7 +994,7 @@ The language switch sourrounds the buttons
 
 <dashboard_column_header>
 	<script type="text/javascript">
-    	kajonaAjaxHelper.loadDragNDropBase(null, "dragdrophelper_li.js");
+    	KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_li.js");
     	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
         } else {
@@ -1095,10 +1095,10 @@ The language switch sourrounds the buttons
             tempNode.systemid = '%%rootNodeSystemid%%';
             //The tree is not created in the DOM until this method is called:
             tree.draw();
-            kajonaUtils.checkInitialTreeViewToggling();
+            KAJONA.admin.treeview.checkInitialTreeViewToggling();
         }
         //build the tree when files are loaded
-        kajonaAjaxHelper.loadTreeviewBase(treeInit);
+        KAJONA.admin.loader.loadTreeviewBase(treeInit);
 
     })();
     </script>

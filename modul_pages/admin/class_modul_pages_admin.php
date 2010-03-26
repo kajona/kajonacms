@@ -832,7 +832,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         //generate the array of ids to expand initially
         $arrNodes = $this->getPathArray($this->strFolderlevel);
         array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
-        $strReturn .= $this->objToolkit->getTreeview("kajonaAdminAjax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle());
+        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle());
         return $strReturn;
     }
 

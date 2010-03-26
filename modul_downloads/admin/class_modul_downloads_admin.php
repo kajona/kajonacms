@@ -180,17 +180,17 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                 function syncArchive(strSystemid) {
                     archive_init_screenlock_dialog();
 
-                    kajonaAdminAjax.genericAjaxCall('downloads', 'syncArchive', strSystemid, {
+                    KAJONA.admin.ajax.genericAjaxCall('downloads', 'syncArchive', strSystemid, {
 						    success : function(o) {
 						        archive_hide_screenlock_dialog();
 						        jsDialog_0.setTitle('".$this->getText("syncDialogHeader")."');
 						        jsDialog_0.setContentRaw(o.responseText+'<br /><br /><input type=\"submit\" name=\"closeButton\" value=\"".$this->getText("hideSyncDialog")."\" class=\"inputSubmitShort\" onclick=\"jsDialog_0.hide(); return false;\" /><br />');
 						        jsDialog_0.init();
-						        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+						        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
 						    },
 						    failure : function(o) {
 						        archive_hide_screenlock_dialog();
-						        kajonaStatusDisplay.messageError(\"<b>Request failed!</b>\"
+						        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b>\"
 						                + o.responseText);
 						    }
 						}
@@ -259,7 +259,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                           '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
-                                                          'javascript:filemanagerCreateFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'massSyncArchive\' ); jsDialog_1.hide();');
+                                                          'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'massSyncArchive\' ); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
 
@@ -274,12 +274,12 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 				$strReturn .= "<script type=\"text/javascript\">
 					function kajonaUploaderCallback() {
-						kajonaAdminAjax.genericAjaxCall('downloads', 'massSyncArchive', '', {
+						KAJONA.admin.ajax.genericAjaxCall('downloads', 'massSyncArchive', '', {
 							success : function(o) {
 								location.reload();
 							},
 							failure : function(o) {
-								kajonaStatusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+								KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
 							}
 						}
 						);
@@ -346,9 +346,9 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getType() == 0)
-                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
                         else
-                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:kajonaAdminAjax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
                     }
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))

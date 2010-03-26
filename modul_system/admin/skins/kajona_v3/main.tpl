@@ -66,8 +66,8 @@
 <div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
 <script type="text/javascript">
 	var moduleNaviHiddenTimeout = undefined;
-	kajonaAjaxHelper.loadAjaxBase();
-	kajonaAjaxHelper.loadAnimationBase(function naviSetup() {
+	KAJONA.admin.loader.loadAjaxBase();
+	KAJONA.admin.loader.loadAnimationBase(function naviSetup() {
         var list = YAHOO.util.Dom.get('adminModuleNaviUl');
         var arrayChildren = YAHOO.util.Dom.getChildren(list);
         

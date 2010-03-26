@@ -78,7 +78,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
 
         $arrTemplate["calendarCommands"] .="
-            kajonaAjaxHelper.loadCalendarBase();
+            KAJONA.admin.loader.loadCalendarBase();
 
             function initCalWrapper_".$strContainerId."() {
                 if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
@@ -183,7 +183,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["calendarCommands"] .="<script type=\"text/javascript\">\n";
 
         $arrTemplate["calendarCommands"] .="
-            kajonaAjaxHelper.loadCalendarBase();
+            KAJONA.admin.loader.loadCalendarBase();
 
             function initCalWrapper_".$strContainerId."() {
                 if(typeof YAHOO == \"undefined\" || typeof YAHOO.widget.Calendar == \"undefined\") {
@@ -430,7 +430,7 @@ class class_toolkit_admin extends class_toolkit {
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
-	            kajonaAjaxHelper.loadAutocompleteBase(function () {
+	            KAJONA.admin.loader.loadAutocompleteBase(function () {
 	                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
 	                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
 	                pageDataSource.responseSchema = {
@@ -570,7 +570,7 @@ class class_toolkit_admin extends class_toolkit {
 
                 function initUploader() {
                     YAHOO.widget.Uploader.SWFURL = \""._webpath_."/admin/scripts/yui/uploader/assets/uploader.swf\";
-                    uploader = new KajonaUploader({
+                    uploader = new KAJONA.admin.filemanager.Uploader({
                         \"overlayContainerId\": \"kajonaUploadButtonsOverlay\",
                         \"selectLinkId\": \"kajonaUploadSelectLink\",
                         \"uploadLinkId\": \"kajonaUploadUploadLink\",
@@ -588,7 +588,7 @@ class class_toolkit_admin extends class_toolkit {
                     });
                     uploader.init();
                 }
-                kajonaAjaxHelper.loadUploaderBase(initUploader);
+                KAJONA.admin.loader.loadUploaderBase(initUploader);
 
                 jsDialog_0.setTitle('".$objText->getText("upload_multiple_dialogHeader", "filemanager", "admin")."');
             </script>";
@@ -964,13 +964,7 @@ class class_toolkit_admin extends class_toolkit {
             $strText = class_carrier::getInstance()->getObjText()->getText("status_inactive", "system", "admin");
         }
 
-        $strJavascript = "<script type=\"text/javascript\">
-            var statusCallback_".$strSystemid." = {
-                success: function(o) { systemStatusCallback(o, true); },
-                failure: function(o) { systemStatusCallback(o, false); },
-                argument: ['".$strSystemid."']
-            };
-        </script>";
+        $strJavascript = "";
 
         //output texts and image paths only once
         if(class_carrier::getInstance()->getObjSession()->getSession("statusButton", class_session::$intScopeRequest) === false) {
@@ -980,12 +974,12 @@ class class_toolkit_admin extends class_toolkit {
                 var strActiveImageSrc = '"._skinwebpath_."/pics/icon_enabled.gif';
                 var strInActiveImageSrc = '"._skinwebpath_."/pics/icon_disabled.gif';
 
-                kajonaAjaxHelper.loadAjaxBase();
+                KAJONA.admin.loader.loadAjaxBase();
             </script>";
             class_carrier::getInstance()->getObjSession()->setSession("statusButton", "true", class_session::$intScopeRequest);
         }
 
-        $strButton = getLinkAdminManual("href=\"javascript:kajonaAdminAjax.setSystemStatus('".$strSystemid."', statusCallback_".$strSystemid." );\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
+        $strButton = getLinkAdminManual("href=\"javascript:KAJONA.admin.ajax.setSystemStatus('".$strSystemid."');\"", "", $strText, $strImage, "statusImage_".$strSystemid, "statusLink_".$strSystemid);
 
         return $this->listButton($strButton).$strJavascript;
     }
@@ -1649,8 +1643,8 @@ class class_toolkit_admin extends class_toolkit {
 
             //and create the java-script
             $strContent .="<script type=\"text/javascript\">
-                kajonaAjaxHelper.loadDialogBase();
-                var jsDialog_".$intDialogType." = new ModalDialog('".$strContainerId."', ".$intDialogType.");
+                KAJONA.admin.loader.loadDialogBase();
+                var jsDialog_".$intDialogType." = new KAJONA.admin.ModalDialog('".$strContainerId."', ".$intDialogType.");
             </script>";
         }
 
@@ -1669,7 +1663,7 @@ class class_toolkit_admin extends class_toolkit {
     public function setBrowserFocus($strElementId) {
         $strReturn = "
             <script type=\"text/javascript\">
-                kajonaUtils.focusHelper.setBrowserFocus(\"".$strElementId."\");
+                KAJONA.util.setBrowserFocus(\"".$strElementId."\");
             </script>";
         return $strReturn;
     }

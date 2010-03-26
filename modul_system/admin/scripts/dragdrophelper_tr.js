@@ -11,8 +11,11 @@
  */
 
 if(arrayTableIds == null) {
-	var arrayTableIds = new Array();
+	var arrayTableIds = [];
 }
+
+//create namespaces
+KAJONA.admin.dragndroplist = {};
 
 (function() {
 	var Dom = YAHOO.util.Dom;
@@ -23,19 +26,16 @@ if(arrayTableIds == null) {
 
     var sourceTableId = -1;
 
-	//create namespaces
-	var kajona = { };
-	kajona.dragndroplist = {};
 	//Basic functions
-	kajona.dragndroplist.DDApp = {
+	KAJONA.admin.dragndroplist.DDApp = {
 	
 		safeInit : function() {
 			if(typeof YAHOO == "undefined") {
-                window.setTimeout(kajona.dragndroplist.DDApp.safeInit(), 1000);
+                window.setTimeout(KAJONA.admin.dragndroplist.DDApp.safeInit(), 1000);
                 return;
             }
             
-            kajona.dragndroplist.DDApp.init();
+            KAJONA.admin.dragndroplist.DDApp.init();
 		},
 	
     	init: function() {
@@ -53,7 +53,7 @@ if(arrayTableIds == null) {
 			   for(var i=0;i<arrayListItems.length;i=i+1) {
 			       if(arrayListItems[i].id != null && arrayListItems[i].id != "") {
 			   		  Dom.setStyle(arrayListItems[i], "cursor", "move");
-		 			  new kajona.dragndroplist.DDList(arrayListItems[i].id);
+		 			  new KAJONA.admin.dragndroplist.DDList(arrayListItems[i].id);
 			       }
 		   	   }
 		   }
@@ -94,22 +94,22 @@ if(arrayTableIds == null) {
 	    }
 	};
 
-	kajona.dragndroplist.DDList = function(id, sGroup, config) {
-	    kajona.dragndroplist.DDList.superclass.constructor.call(this, id, sGroup, config);
+	KAJONA.admin.dragndroplist.DDList = function(id, sGroup, config) {
+	    KAJONA.admin.dragndroplist.DDList.superclass.constructor.call(this, id, sGroup, config);
 	    var el = this.getDragEl();
 	    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
 	    this.goingUp = false;
 	    this.lastY = 0;
 	};
 
-	YAHOO.extend(kajona.dragndroplist.DDList, YAHOO.util.DDProxy, {
+	YAHOO.extend(KAJONA.admin.dragndroplist.DDList, YAHOO.util.DDProxy, {
 
 	    startDrag: function(x, y) {
 	        // make the proxy look like the source element
 	        var dragEl = this.getDragEl();
 	        var clickEl = this.getEl();
 			//save the start-pos
-			posBeforeMove = kajona.dragndroplist.DDApp.getCurrentPos(clickEl.id);
+			posBeforeMove = KAJONA.admin.dragndroplist.DDApp.getCurrentPos(clickEl.id);
 			
 	        Dom.setStyle(clickEl, "visibility", "hidden");
 	        dragEl.innerHTML = clickEl.innerHTML;
@@ -161,9 +161,9 @@ if(arrayTableIds == null) {
 	            });
 	        a.animate();
 	        //save new pos to backend?
-			var posAfterMove = kajona.dragndroplist.DDApp.getCurrentPos(this.id);
+			var posAfterMove = KAJONA.admin.dragndroplist.DDApp.getCurrentPos(this.id);
 			if(posAfterMove != posBeforeMove) {
-	        	kajonaAdminAjax.setAbsolutePosition(this.id, posAfterMove, kajona.dragndroplist.DDApp.getCurrentList(this.id));
+	        	KAJONA.admin.ajax.setAbsolutePosition(this.id, posAfterMove, KAJONA.admin.dragndroplist.DDApp.getCurrentList(this.id));
 			}
 	    },
 
@@ -226,5 +226,5 @@ if(arrayTableIds == null) {
 	});
 
 	//and init the app
-	kajona.dragndroplist.DDApp.safeInit();
+	KAJONA.admin.dragndroplist.DDApp.safeInit();
 })();

@@ -25,7 +25,7 @@ background using the ajaxHelper.
 Loads the yui-script-helper and adds the table to the drag-n-dropable tables getting parsed later
 <dragable_list_header>
 <script type="text/javascript">
-	kajonaAjaxHelper.loadDragNDropBase(null, "dragdrophelper_tr.js");
+	KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_tr.js");
 	if(arrayTableIds == null) {
         var arrayTableIds = new Array("%%listid%%");
     } else {
@@ -241,7 +241,7 @@ Upload-Field
 Upload-Field for multiple files with progress bar
 <input_uploadFlash>
 	<div style="display:inline;">
-			<div id="kajonaUploadButtonsContainer" onmouseover="kajonaAdminTooltip.add(this, '%%upload_multiple_pleaseWait%%');">
+			<div id="kajonaUploadButtonsContainer" onmouseover="KAJONA.admin.tooltip.add(this, '%%upload_multiple_pleaseWait%%');">
 				<div id="kajonaUploadButtonsOverlay" style="position:absolute; z-index:2"></div>
 				<div style="z-index:1"><a id="kajonaUploadSelectLink" href="#" class="inputSubmit">%%upload_multiple_uploadFiles%%</a></div>
 			</div>
@@ -492,7 +492,7 @@ The following sections specify the layout of the rights-mgmt
 <table cellpadding="0" cellspacing="0" style="width: 90%;">
 	<tr>
       <td style="width: 10%;" class="listecontent">%%title%%</td>
-      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="checkRightMatrix();" %%checked%% /></div></td>
+      <td><div align="left"><input name="%%name%%" type="checkbox" id="%%name%%" value="1" onclick="this.blur();" onchange="KAJONA.admin.checkRightMatrix();" %%checked%% /></div></td>
     </tr>
 </table>
 </rights_form_inherit>
@@ -694,7 +694,7 @@ pe_iconbar, pe_disable
 	<script type="text/javascript">
 		var peDialog;
 		YAHOO.util.Event.onDOMReady(function () {
-		    peDialog = new ModalDialog('peDialog', 0);
+		    peDialog = new KAJONA.admin.ModalDialog('peDialog', 0);
 		});
 	</script>
 
@@ -775,7 +775,7 @@ A button for the active language
 
 The language switch surrounds the buttons
 <language_switch>
-<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="switchLanguage(this.value);">%%languagebuttons%%</select></div>
+<div class="languageSwitch"><select name="switchLanguage" class="inputDropdown" onchange="KAJONA.admin.switchLanguage(this.value);">%%languagebuttons%%</select></div>
 </language_switch>
 
 ---------------------------------------------------------------------------------------------------------
@@ -800,10 +800,10 @@ The language switch surrounds the buttons
         }
 
         //Register mover for the help-layer
-		document.onmousemove = checkMousePosition;
-		document.onmouseup=objMover.unsetMousePressed;
+		document.onmousemove = KAJONA.util.mover.checkMousePosition;
+		document.onmouseup = KAJONA.util.mover.unsetMousePressed;
     </script>
-    <div id="quickHelp" onmousedown="objMover.setMousePressed(this)" onmouseup="objMover.unsetMousePressed()" onselectstart="return false;">
+    <div id="quickHelp" onmousedown="KAJONA.util.mover.setMousePressed(this)" onmouseup="KAJONA.util.mover.unsetMousePressed()" onselectstart="return false;">
 		<div class="hd">
 			<div class="title">%%title%%</div>
 			<div class="c"><a href="javascript:hideQuickHelp();">[X]</a></div>
@@ -883,7 +883,7 @@ The language switch surrounds the buttons
 <dashboard_column_header>
 	<br />
 	<script type="text/javascript">
-    	kajonaAjaxHelper.loadDragNDropBase(null, "dragdrophelper_li.js");
+    	KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_li.js");
     	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
         } else {
@@ -981,10 +981,10 @@ The language switch surrounds the buttons
             tempNode.systemid = '%%rootNodeSystemid%%';
             //The tree is not created in the DOM until this method is called:
             tree.draw();
-            kajonaUtils.checkInitialTreeViewToggling();
+            KAJONA.admin.treeview.checkInitialTreeViewToggling();
         }
         //build the tree when files are loaded
-        kajonaAjaxHelper.loadTreeviewBase(treeInit);
+        KAJONA.admin.loader.loadTreeviewBase(treeInit);
 
     })();
     </script>

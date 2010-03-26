@@ -11,8 +11,11 @@
  */
 
 if(arrayListIds == null) {
-	var arrayListIds = new Array();
+	var arrayListIds = [];
 }
+
+//create namespaces
+KAJONA.admin.dragndroplistDashboard = {};
 
 (function() {
 	var Dom = YAHOO.util.Dom;
@@ -25,19 +28,16 @@ if(arrayListIds == null) {
 	var backgroundColor = "#FFFFFF";
 	var paddingBottom = "0";
 
-	//create namespaces
-	var kajona = { };
-	kajona.dragndroplistDashboard = {};
 	//Basic functions
-	kajona.dragndroplistDashboard.DDApp = {
+	KAJONA.admin.dragndroplistDashboard.DDApp = {
 		
 		safeInit : function() {
 			if(typeof YAHOO == "undefined") {
-                window.setTimeout(kajona.dragndroplistDashboard.DDApp.safeInit(), 1000);
+                window.setTimeout(KAJONA.admin.dragndroplistDashboard.DDApp.safeInit(), 1000);
                 return;
             }
             
-            kajona.dragndroplistDashboard.DDApp.init();
+            KAJONA.admin.dragndroplistDashboard.DDApp.init();
 		},
 	
     	init: function() {
@@ -54,7 +54,7 @@ if(arrayListIds == null) {
 			   //load items in list
 			   var arrayListItems = YAHOO.util.Dom.getChildren(listId);
 			   for(i=0;i<arrayListItems.length;i=i+1) {
-		 			new kajona.dragndroplistDashboard.DDList(arrayListItems[i].id);
+		 			new KAJONA.admin.dragndroplistDashboard.DDList(arrayListItems[i].id);
 		   	   }
 		   }
     	},
@@ -97,8 +97,8 @@ if(arrayListIds == null) {
 	    }
 	};
 
-	kajona.dragndroplistDashboard.DDList = function(id, sGroup, config) {
-	    kajona.dragndroplistDashboard.DDList.superclass.constructor.call(this, id, sGroup, config);
+	KAJONA.admin.dragndroplistDashboard.DDList = function(id, sGroup, config) {
+	    KAJONA.admin.dragndroplistDashboard.DDList.superclass.constructor.call(this, id, sGroup, config);
 	    var el = this.getDragEl();
 	    Dom.setStyle(el, "opacity", 0.67); // The proxy is slightly transparent
 	    this.goingUp = false;
@@ -113,7 +113,7 @@ if(arrayListIds == null) {
 	    }
 	};
 
-	YAHOO.extend(kajona.dragndroplistDashboard.DDList, YAHOO.util.DDProxy, {
+	YAHOO.extend(KAJONA.admin.dragndroplistDashboard.DDList, YAHOO.util.DDProxy, {
 	
 	    startDrag: function(x, y) {
 	        // make the proxy look like the source element
@@ -121,8 +121,8 @@ if(arrayListIds == null) {
 	        var clickEl = this.getEl();
 			
 			//save the start-pos and ul
-			posBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(clickEl.id);
-			ulBeforeMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(clickEl.id);
+			posBeforeMove = KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentPos(clickEl.id);
+			ulBeforeMove = KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentList(clickEl.id);
 			backgroundColor = Dom.getStyle(ulBeforeMove, "background-color");
 			paddingBottom = Dom.getStyle(ulBeforeMove, "padding-bottom");
 			
@@ -155,13 +155,13 @@ if(arrayListIds == null) {
 	        a.animate();
 	        
 	        //reset the color of the target-ul
-	        kajona.dragndroplistDashboard.DDApp.resetUlBackground(kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id));	
+	        KAJONA.admin.dragndroplistDashboard.DDApp.resetUlBackground(KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentList(this.id));	
 	        
 			//save new pos to backend, if pos changed or ul changed
-			var posAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id);
-			var ulAfterMove = kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id);
+			var posAfterMove = KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentPos(this.id);
+			var ulAfterMove = KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentList(this.id);
 			if(posAfterMove != posBeforeMove || ulBeforeMove != ulAfterMove) {
-	        	kajonaAdminAjax.setDashboardPos(this.id, kajona.dragndroplistDashboard.DDApp.getCurrentPos(this.id), kajona.dragndroplistDashboard.DDApp.getCurrentList(this.id));
+	        	KAJONA.admin.ajax.setDashboardPos(this.id, KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentPos(this.id), KAJONA.admin.dragndroplistDashboard.DDApp.getCurrentList(this.id));
 			}
 	    },
 	
@@ -216,7 +216,7 @@ if(arrayListIds == null) {
 	        var destEl = Dom.get(id);
 	        //highlight uls
 	        if (destEl.nodeName.toLowerCase() == "ul") {
-	        	kajona.dragndroplistDashboard.DDApp.resetUlBackground(destEl);	
+	        	KAJONA.admin.dragndroplistDashboard.DDApp.resetUlBackground(destEl);	
 	        }
 	        
 	    }
@@ -224,5 +224,5 @@ if(arrayListIds == null) {
 	});
 
 	//and init the app
-	kajona.dragndroplistDashboard.DDApp.safeInit();
+	KAJONA.admin.dragndroplistDashboard.DDApp.safeInit();
 })();

@@ -9,8 +9,8 @@
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
-	kajonaAjaxHelper.loadAjaxBase();
-	kajonaAjaxHelper.loadAnimationBase();
+	KAJONA.admin.loader.loadAjaxBase();
+	KAJONA.admin.loader.loadAnimationBase();
 </script>
 </head>
 

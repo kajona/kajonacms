@@ -18,7 +18,7 @@ if (typeof KAJONA == "undefined") {
  * -------------------------------------------------------------------------
  */
 
-/*
+/**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
  * 
@@ -150,9 +150,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 		}
 	}
 
-	/*
-	 * For compatibility with Kajona templates pre 3.3.0
-	 */
+	//for compatibility with Kajona templates pre 3.3.0
 	this.convertAdditionalFiles = function(additionalFiles) {
 		if (YAHOO.lang.isString(additionalFiles)) {
 			//convert to array and add webpath
@@ -177,7 +175,7 @@ KAJONA.util.Loader = function (strScriptBase) {
  */
 
 
-/* 
+/** 
  * Tooltips
  * 
  * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
@@ -303,7 +301,6 @@ KAJONA.admin.tooltip = (function() {
 
 
 KAJONA.admin.portaleditor = {
-		
 	objPlaceholderWithElements: {},
 
 	showActions: function (elementSysId) {
@@ -360,7 +357,7 @@ KAJONA.admin.portaleditor = {
 	},
 	
 	showNewElementMenu: function (strPlaceholder, objAttach) {
-		kajonaAdminTooltip.hide();
+		KAJONA.admin.tooltip.hide();
 
 		var arrPlaceholder = this.objPlaceholderWithElements[strPlaceholder];
 		var arrElements = arrPlaceholder["elements"];
@@ -391,13 +388,13 @@ KAJONA.admin.portaleditor = {
 		menu.cfg.setProperty("y", buttonRegion.top);
 		menu.show();
 	}
-
-}
-
+};
 
 
-
-function ModalDialog(strDialogId, intDialogType) {
+/**
+ * Object to show a modal dialog
+ */
+KAJONA.admin.ModalDialog = function(strDialogId, intDialogType) {
 	this.dialog = null;
 	this.containerId = strDialogId;
 
@@ -431,8 +428,6 @@ function ModalDialog(strDialogId, intDialogType) {
 	}
 
 	this.init = function() {
-		document.body.style.overflow = "hidden";
-		
 		this.dialog = new YAHOO.widget.Panel(this.containerId, {
 			fixedcenter :true,
 			close :false,
@@ -448,7 +443,6 @@ function ModalDialog(strDialogId, intDialogType) {
 	}
 
 	this.hide = function() {
-		document.body.style.overflow = "auto";
 		try {
 			this.dialog.hide();
 		}
@@ -458,7 +452,8 @@ function ModalDialog(strDialogId, intDialogType) {
 
 
 
-/*
+
+/**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * 
  * Simply use any of the predefined helpers, e.g.:
@@ -482,9 +477,3 @@ KAJONA.admin.loader = new KAJONA.util.Loader("/admin/scripts/");
 KAJONA.admin.loader.loadPortaleditorBase = function(objCallback, arrAdditionalFiles) {
 	this.load([ "menu", "container" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
-
-/* 
- * aliases to stay compatible with old templates
- * will be removed with Kajona 3.4 or 3.5
- */
-var kajonaAdminTooltip = KAJONA.admin.tooltip;

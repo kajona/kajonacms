@@ -3,72 +3,495 @@
 //       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt
 //       $Id$
 
-//--- GLOBAL ELEMENTS, MOVER ------------------------------------------------------------
-var currentMouseXPos;
-var currentMouseYPos;
-// used for "the mover" ;)
-var objToMove = null;
-var objDiffX = 0;
-var objDiffY = 0;
-
-checkMousePosition = function(e) {
-	if (document.all) {
-		currentMouseXPos = event.clientX + document.body.scrollLeft;
-		currentMouseYPos = event.clientY + document.body.scrollTop;
-	} else {
-		currentMouseXPos = e.pageX;
-		currentMouseYPos = e.pageY;
-	}
-
-	if (objToMove != null) {
-		objToMove.style.left = currentMouseXPos - objDiffX + "px";
-		objToMove.style.top = currentMouseYPos - objDiffY + "px";
-	}
+if (typeof KAJONA == "undefined") {
+	var KAJONA = {
+		util: {},
+		portal: {},
+		admin: {}
+	};
 }
 
-var objMover = {
-	mousePressed :0,
-	objPosX :0,
-	objPosY :0,
-	diffX :0,
-	diffY :0,
 
-	setMousePressed : function(obj) {
+/* 
+ * -------------------------------------------------------------------------
+ * Global functions
+ * -------------------------------------------------------------------------
+ */
+
+
+/**
+ * Checks if the given array contains the given string
+ * 
+ * @param {String} strNeedle
+ * @param {String[]} arrHaystack
+ */
+KAJONA.util.inArray = function (strNeedle, arrHaystack) {
+    for (var i = 0; i < arrHaystack.length; i++) {
+        if (arrHaystack[i] == strNeedle) {
+            return true;
+        }
+    }
+    return false;
+};
+
+/**
+ * Used to show/hide an html element
+ * 
+ * @param {String} strElementId
+ * @param {Function} objCallbackShow
+ */
+KAJONA.util.fold = function (strElementId, objCallbackShow) {
+	var element = document.getElementById(strElementId);
+	if (element.style.display == 'none') 	{
+		element.style.display = 'block';
+		if (objCallbackShow != undefined) {
+			objCallbackShow();
+		}
+    }
+    else {
+    	element.style.display = 'none';
+    }
+};
+
+/**
+ * Used to show/hide an html element and switch an image (e.g. a button)
+ * 
+ * @param {String} strElementId
+ * @param {String} strImageId
+ * @param {String} strImageVisible
+ * @param {String} strImageHidden
+ */
+KAJONA.util.foldImage = function (strElementId, strImageId, strImageVisible, strImageHidden) {
+	var element = document.getElementById(strElementId);
+	var image = document.getElementById(strImageId);
+	if (element.style.display == 'none') 	{
+		element.style.display = 'block';
+		image.src = strImageVisible;
+    }
+    else {
+    	element.style.display = 'none';
+    	image.src = strImageHidden;
+    }
+};
+
+KAJONA.util.setBrowserFocus = function (strElementId) {
+	YAHOO.util.Event.onDOMReady(function() {
+		try {
+		    focusElement = YAHOO.util.Dom.get(strElementId);
+		    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
+		    	CKEDITOR.config.startupFocus = true;
+		    } else {
+		        focusElement.focus();
+		    }
+		} catch (e) {}
+	});
+};
+
+/** 
+ * some functions to track the mouse position and move an element
+ * @deprecated will be removed with Kajona 3.4 or 3.5, use YUI Panel instead
+ */
+KAJONA.util.mover = (function() {
+	var currentMouseXPos;
+	var currentMouseYPos;
+	var objToMove = null;
+	var objDiffX = 0;
+	var objDiffY = 0;
+	
+	function checkMousePosition(e) {
+		if (document.all) {
+			currentMouseXPos = event.clientX + document.body.scrollLeft;
+			currentMouseYPos = event.clientY + document.body.scrollTop;
+		} else {
+			currentMouseXPos = e.pageX;
+			currentMouseYPos = e.pageY;
+		}
+
+		if (objToMove != null) {
+			objToMove.style.left = currentMouseXPos - objDiffX + "px";
+			objToMove.style.top = currentMouseYPos - objDiffY + "px";
+		}
+	}
+	
+	function setMousePressed(obj) {
 		objToMove = obj;
 		objDiffX = currentMouseXPos - objToMove.offsetLeft;
 		objDiffY = currentMouseYPos - objToMove.offsetTop;
-	},
+	}
 
-	unsetMousePressed : function() {
+	function unsetMousePressed() {
 		objToMove = null;
 	}
-}
 
-// --- MISC -----------------------------------------------------------------------------
-function fold(id, callbackShow) {
-	var style = document.getElementById(id).style.display;
-	if (style == 'none') {
-		document.getElementById(id).style.display = 'block';
-		if (callbackShow != undefined) {
-			callbackShow();
+	
+	//public variables and methods
+	return {
+		checkMousePosition : checkMousePosition,
+		setMousePressed : setMousePressed,
+		unsetMousePressed : unsetMousePressed
+	}
+}());
+
+/**
+ * Loader for dynamically loading additional js and css files after the onDOMReady event
+ * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
+ * 
+ * @param {String} strScriptBase
+ * @see specific instances KAJONA.portal.loader or KAJONA.admin.loader
+ */
+KAJONA.util.Loader = function (strScriptBase) {
+	var scriptBase = KAJONA_WEBPATH + strScriptBase;
+	var yuiBase = scriptBase + "yui/";
+	var arrRequestedModules = {};
+	var arrLoadedModules = {};
+	var arrCallbacks = [];
+	
+	function createYuiLoader() {
+		//create instance of YUILoader
+		var yuiLoader = new YAHOO.util.YUILoader({
+			base : yuiBase,
+	
+			//filter: "DEBUG", //use debug versions
+			/* TODO: add cache buster
+			filter: { 
+				'searchExp': "\\.js", 
+				'replaceStr': ".js?123"
+				},
+			*/
+			
+			onFailure : function(o) {
+				alert("File loading failed: " + YAHOO.lang.dump(o));
+			},
+							
+			onProgress : function(o) {			
+				arrLoadedModules[o.name] = true;
+				checkCallbacks();
+			}
+		});
+		
+		return yuiLoader;
+	}
+	
+	function checkCallbacks() {
+		//check if we're ready to call some registered callbacks
+		for (var i = 0; i < arrCallbacks.length; i++) {
+			if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
+				var bitCallback = true;
+				for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
+					if (!(arrCallbacks[i].requiredModules[j] in arrLoadedModules)) {
+						bitCallback = false;
+					}
+				}
+				
+				//execute callback and delete it so it won't get called again
+				if (bitCallback) {
+					arrCallbacks[i].callback();
+					delete arrCallbacks[i];
+				}
+			}
 		}
-	} else {
-		document.getElementById(id).style.display = 'none';
 	}
-}
+	
+	this.load = function(arrYuiComponents, arrFiles, callback) {
+		var arrYuiComponentsToWaitFor = [];
+		var arrFilesToWaitFor = [];		
+		var arrYuiComponentsToLoad = [];
+		var arrFilesToLoad = [];
 
-function foldImage(id, bildid, bild_da, bild_weg) {
-	style = document.getElementById(id).style.display;
-	if (style == 'none') {
-		document.getElementById(id).style.display = 'block';
-		document.getElementById(bildid).src = bild_da;
-	} else {
-		document.getElementById(id).style.display = 'none';
-		document.getElementById(bildid).src = bild_weg;
+		//check YUI components, if they are already loaded or requested
+		if (YAHOO.lang.isArray(arrYuiComponents)) {
+			for (var i = 0; i < arrYuiComponents.length; i++) {
+				if (!(arrYuiComponents[i] in arrLoadedModules)) {
+					arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
+					if (!(arrYuiComponents[i] in arrRequestedModules)) {
+						arrYuiComponentsToLoad.push(arrYuiComponents[i]);
+					}
+				}
+			}
+		}
+		
+		//check own JS/CSS files, if they are already loaded or requested
+		if (YAHOO.lang.isArray(arrFiles)) {
+			for (var i = 0; i < arrFiles.length; i++) {
+				if (!(arrFiles[i] in arrLoadedModules)) {
+					arrFilesToWaitFor.push(arrFiles[i]);
+					if (!(arrFiles[i] in arrRequestedModules)) {
+						arrFilesToLoad.push(arrFiles[i]);
+					}
+				}
+			}
+		}
+
+		//if all modules are already loaded, execute the callback
+		if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
+			if (YAHOO.lang.isFunction(callback)) {
+				callback();
+			}
+		} else {
+			//register the callback to be called later on
+			if (YAHOO.lang.isFunction(callback)) {
+				arrCallbacks.push({
+					'callback' : callback,
+					'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
+				});
+			}
+					
+			//are there components/files to load which are not already requested?
+			if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {	
+				var yuiLoader = createYuiLoader();
+				
+				for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
+					yuiLoader.require(arrYuiComponentsToLoad[i]);
+					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
+				}
+				for (var i = 0; i < arrFilesToLoad.length; i++) {
+					yuiLoader.addModule( {
+						name : arrFilesToLoad[i],
+						type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
+						skinnable : false,
+						fullpath : arrFilesToLoad[i]
+					});
+
+					yuiLoader.require(arrFilesToLoad[i]);
+					arrRequestedModules[arrFilesToLoad[i]] = true;
+				}
+				
+				//fire YUILoader after the onDOMReady event
+				YAHOO.util.Event.onDOMReady(function () {
+					yuiLoader.insert();
+				});
+			}
+		}
 	}
-}
 
-function switchLanguage(strLanguageToLoad) {
+	//for compatibility with Kajona templates pre 3.3.0
+	this.convertAdditionalFiles = function(additionalFiles) {
+		if (YAHOO.lang.isString(additionalFiles)) {
+			//convert to array and add webpath
+			return new Array(scriptBase + additionalFiles);
+		} else if (YAHOO.lang.isArray(additionalFiles)) {
+			//add webpath
+			for (var i = 0; i < additionalFiles.length; i++) {
+				additionalFiles[i] = scriptBase + additionalFiles[i];
+			}
+			return additionalFiles;
+		} else {
+			return null;
+		}
+	}
+};
+
+
+/* 
+ * -------------------------------------------------------------------------
+ * Admin-specific functions
+ * -------------------------------------------------------------------------
+ */
+
+/**
+ * Loader for dynamically loading additional js and css files after the onDOMReady event
+ * 
+ * Simply use any of the predefined helpers, e.g.:
+ * 	   KAJONA.admin.loader.loadAjaxBase(callback, "rating.js");
+ * 
+ * Or if you want to add your custom YUI components and own files (with absolute path), e.g.:
+ *     KAJONA.admin.loader.load(
+ *         ["dragdrop", "animation", "container"],
+ *         [KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base-min.js",
+ *          KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.css",
+ *          KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css"],
+ *         callback
+ *     );
+ *
+ */
+KAJONA.admin.loader = new KAJONA.util.Loader("/admin/scripts/");
+
+/*
+ * extend the loader with predefined helper functions
+ */
+KAJONA.admin.loader.loadAjaxBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadDragNDropBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "connection", "animation", "dragdrop" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadAnimationBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "animation" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles) {
+	var arrCustomFiles = [
+	    KAJONA_WEBPATH + "/admin/scripts/yui/calendar/calendar-min.js",
+        KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css",
+	];
+	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
+		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
+	}
+	this.load(null, arrCustomFiles, objCallback);
+};
+
+KAJONA.admin.loader.loadUploaderBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "uploader" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "imagecropper" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
+	var arrCustomFiles = [
+	    KAJONA_WEBPATH + "/admin/scripts/yui/container/container-min.js"
+	];
+	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
+		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
+	}
+	this.load(null, arrCustomFiles, objCallback);
+};
+
+KAJONA.admin.loader.loadTreeviewBase = function(objCallback, arrAdditionalFiles) {
+	this.load([ "treeview", "connection" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+};
+
+
+/** 
+ * Tooltips
+ * 
+ * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
+ */
+KAJONA.admin.tooltip = (function() {
+	var container;
+	var lastMouseX = 0;
+	var lastMouseY = 0;
+	
+	function locate(e) {
+		var posx = 0, posy = 0, c;
+		if (e == null) {
+			e = window.event;
+		}
+		if (e.pageX || e.pageY) {
+			posx = e.pageX;
+			posy = e.pageY;
+		} else if (e.clientX || e.clientY) {
+			if (document.documentElement.scrollTop) {
+				posx = e.clientX + document.documentElement.scrollLeft;
+				posy = e.clientY + document.documentElement.scrollTop;
+			} else {
+				posx = e.clientX + document.body.scrollLeft;
+				posy = e.clientY + document.body.scrollTop;
+			}
+		}
+		
+		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
+		if (posx == 0 && posy == 0) {
+			posx = lastMouseX;
+			posy = lastMouseY;
+		} else {
+			lastMouseX = posx;
+			lastMouseY = posy;
+		}
+		
+		c = container;
+		var left = (posx - c.offsetWidth);
+		if (left - c.offsetWidth < 0) {
+			left += c.offsetWidth;
+		}
+		c.style.top = (posy + 10) + "px";
+		c.style.left = left + "px";
+	}
+	
+	function add(objElement, strHtmlContent, bitOpacity) {
+		var tooltip;
+	
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			try {
+				strHtmlContent = objElement.getAttribute("title");
+			} catch (e) {}
+		}
+		if (strHtmlContent == null || strHtmlContent.length == 0) {
+			return;
+		}
+		
+		//try to remove title
+		try {
+			objElement.removeAttribute("title");
+		} catch (e) {}
+		
+		tooltip = document.createElement("span");
+		tooltip.className = "kajonaAdminTooltip";
+		tooltip.style.display = "block";
+		tooltip.innerHTML = strHtmlContent;
+		
+		if (bitOpacity != false) {
+			tooltip.style.filter = "alpha(opacity:85)";
+			tooltip.style.KHTMLOpacity = "0.85";
+			tooltip.style.MozOpacity = "0.85";
+			tooltip.style.opacity = "0.85";
+		}
+		
+		//create tooltip container and save reference
+		if (container == null) {
+			var h = document.createElement("span");
+			h.id = "kajonaTooltipContainer";
+			h.setAttribute("id", "kajonaTooltipContainer");
+			h.style.position = "absolute";
+			h.style.zIndex = "2000";
+			document.getElementsByTagName("body")[0].appendChild(h);
+			container = h;
+		}
+		
+		objElement.tooltip = tooltip;
+		objElement.onmouseover = show;
+		objElement.onmouseout = hide;
+		objElement.onmousemove = locate;
+		objElement.onmouseover(objElement);
+	}
+	
+	function show(objEvent) {
+		hide();
+		container.appendChild(this.tooltip);
+		locate(objEvent);
+	}
+	
+	function hide() {
+		try {
+			var c = container;
+			if (c.childNodes.length > 0) {
+				c.removeChild(c.firstChild);
+			}
+		} catch (e) {}
+	}
+	
+	//public variables and methods
+	return {
+		add : add,
+		show : show,
+		hide : hide
+	}
+}());
+
+/**
+ * called when the user selects an page/folder/file out of a folderview popup
+ */
+KAJONA.admin.folderviewSelectCallback = function(arrTargetsValues) {
+	for (var i in arrTargetsValues) {
+    	if (arrTargetsValues[i][0] == "ckeditor") {
+    		CKEDITOR.tools.callFunction(2, arrTargetsValues[i][1]);
+    	} else {
+    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
+    	}
+	}
+};
+
+/**
+ * switches the edited language in admin
+ */
+KAJONA.admin.switchLanguage = function(strLanguageToLoad) {
 	var url = window.location.href;
 	url = url.replace(/(\?|&)language=([a-z]+)/, "");
 	if (url.indexOf('?') == -1) {
@@ -78,16 +501,158 @@ function switchLanguage(strLanguageToLoad) {
 	}
 }
 
-function inArray(needle, haystack) {
-	for ( var i = 0; i < haystack.length; i++) {
-		if (haystack[i] == needle) {
-			return true;
+/**
+ * little helper function for the system right matrix
+ */
+KAJONA.admin.checkRightMatrix = function() {
+	// mode 1: inheritance
+	if (document.getElementById('inherit').checked) {
+		// loop over all checkboxes to disable them
+		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+			var objCurElement = document.forms['rightsForm'].elements[intI];
+			if (objCurElement.type == 'checkbox') {
+				if (objCurElement.id != 'inherit') {
+					objCurElement.disabled = true;
+					objCurElement.checked = false;
+					var strCurId = "inherit," + objCurElement.id;
+					if (document.getElementById(strCurId) != null) {
+						if (document.getElementById(strCurId).value == '1') {
+							objCurElement.checked = true;
+						}
+					}
+				}
+			}
+		}
+	} else {
+		// mode 2: no inheritance, make all checkboxes editable
+		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
+			var objCurElement = document.forms['rightsForm'].elements[intI];
+			if (objCurElement.type == 'checkbox') {
+				if (objCurElement.id != 'inherit') {
+					objCurElement.disabled = false;
+				}
+			}
 		}
 	}
-	return false;
 }
 
-function ModalDialog(strDialogId, intDialogType) {
+/**
+ * General way to display a status message.
+ * Therefore, the html-page should provide the following elements as noted as instance-vars:
+ * - div,   id: jsStatusBox    				the box to be animated
+ * 		 class: jsStatusBoxMessage			class in case of an informal message
+ * 		 class: jsStatusBoxError		    class in case of an error message
+ * - div,   id: jsStatusBoxContent			the box to place the message-content into
+ * 
+ * Pass a xml-response from a Kajona server to displayXMLMessage() to start the logic
+ * or use messageOK() / messageError() passing a regular string
+ */
+KAJONA.admin.statusDisplay = {
+	idOfMessageBox : "jsStatusBox",
+	idOfContentBox : "jsStatusBoxContent",
+	classOfMessageBox : "jsStatusBoxMessage",
+	classOfErrorBox : "jsStatusBoxError",
+	timeToFadeOutMessage : 4000,
+	timeToFadeOutError : 10000,
+	timeToFadeOut : null,
+	animObject : null,
+	
+	/**
+	 * General entrance point. Use this method to pass an xml-response from the kajona server.
+	 * Tries to find a message- or an error-tag an invokes the corresponding methods
+	 * 
+	 * @param {String} message
+	 */
+	displayXMLMessage : function(message) {
+		//decide, whether to show an error or a message, message only in debug mode
+		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0) {
+			var intStart = message.indexOf("<message>")+9;
+			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
+			this.messageOK(responseText);
+		}
+		
+		if(message.indexOf("<error>") != -1) {
+			var intStart = message.indexOf("<error>")+7;
+			var responseText = message.substr(intStart, message.indexOf("</error>")-intStart);
+			this.messageError(responseText);
+		}
+	},
+	
+	/**
+	 * Creates a informal message box containg the passed content
+	 * 
+	 * @param {String} strMessage
+	 */
+    messageOK : function(strMessage) {
+		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfMessageBox)
+		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfErrorBox)
+		YAHOO.util.Dom.addClass(this.idOfMessageBox, this.classOfMessageBox);
+		this.timeToFadeOut = this.timeToFadeOutMessage;
+		this.startFadeIn(strMessage);
+    },
+
+	/**
+	 * Creates an error message box containg the passed content
+	 * 
+	 * @param {String} strMessage
+	 */
+    messageError : function(strMessage) {
+		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfMessageBox)
+		YAHOO.util.Dom.removeClass(this.idOfMessageBox, this.classOfErrorBox)
+		YAHOO.util.Dom.addClass(this.idOfMessageBox, this.classOfErrorBox);
+		this.timeToFadeOut = this.timeToFadeOutError;
+		this.startFadeIn(strMessage);
+    },
+	
+	startFadeIn : function(strMessage) {
+		//currently animated?
+		if(this.animObject != null && this.animObject.isAnimated()) {
+			this.animObject.stop(true);
+			this.animObject.onComplete.unsubscribeAll();
+		}
+		var statusBox = YAHOO.util.Dom.get(this.idOfMessageBox);
+		var contentBox = YAHOO.util.Dom.get(this.idOfContentBox);
+		contentBox.innerHTML = strMessage;
+		YAHOO.util.Dom.setStyle(statusBox, "display", "");
+		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
+		
+		//place the element at the top of the page
+		var screenWidth = YAHOO.util.Dom.getViewportWidth();
+		var divWidth = statusBox.offsetWidth;
+		var newX = screenWidth/2 - divWidth/2;
+		var newY = YAHOO.util.Dom.getDocumentScrollTop() -2;
+		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
+
+		//start fade-in handler
+    	KAJONA.admin.loader.loadAnimationBase(function() {
+    		KAJONA.admin.statusDisplay.fadeIn();
+		});
+	},
+	
+	fadeIn : function () {
+		this.animObject = new YAHOO.util.Anim(this.idOfMessageBox, { opacity: { to: 0.8 } }, 1, YAHOO.util.Easing.easeOut);
+		this.animObject.onComplete.subscribe(function() {window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut);});
+		this.animObject.animate();
+	},
+	
+	startFadeOut : function() {
+		var statusBox = YAHOO.util.Dom.get(this.idOfMessageBox);
+		
+		//get the current pos
+		var attributes = {
+	        points: { by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5] }
+	    };
+	    this.animObject = new YAHOO.util.Motion(statusBox, attributes, 0.5);
+	    this.animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle(this.idOfMessageBox, "display", "none");});
+		this.animObject.animate();
+	}
+};
+
+
+/**
+ * Object to show a modal dialog
+ */
+KAJONA.admin.ModalDialog = function(strDialogId, intDialogType) {
 	this.dialog = null;
 	this.containerId = strDialogId;
 
@@ -138,437 +703,111 @@ function ModalDialog(strDialogId, intDialogType) {
 }
 
 
-// --- RIGHTS-STUFF ---------------------------------------------------------------------
-function checkRightMatrix() {
-	// mode 1: inheritance
-	if (document.getElementById('inherit').checked) {
-		// loop over all checkboxes to disable them
-		for (var intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = true;
-					objCurElement.checked = false;
-					var strCurId = "inherit," + objCurElement.id;
-					if (document.getElementById(strCurId) != null) {
-						if (document.getElementById(strCurId).value == '1') {
-							objCurElement.checked = true;
-						}
-					}
-				}
-			}
-		}
-	} else {
-		// mode 2: no inheritance, make all checkboxes editable
-		for (intI = 0; intI < document.forms['rightsForm'].elements.length; intI++) {
-			var objCurElement = document.forms['rightsForm'].elements[intI];
-			if (objCurElement.type == 'checkbox') {
-				if (objCurElement.id != 'inherit') {
-					objCurElement.disabled = false;
-				}
-			}
-		}
-	}
-}
+/**
+ * Functions to execute system tasks
+ */
+KAJONA.admin.systemtask = {
+    executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {
+        if(bitNoContentReset == null || bitNoContentReset == undefined) {
 
-// --- TOOLTIPS -------------------------------------------------------------------------
-// originally based on Bubble Tooltips by Alessandro Fulciniti
-// (http://pro.html.it - http://web-graphics.com)
-var kajonaAdminTooltip = {
-	container : null,
-	lastMouseX : 0,
-	lastMouseY : 0,
-		
-	add : function(objElement, strHtmlContent, bitOpacity) {
-		var tooltip;
-	
-		if (strHtmlContent == null || strHtmlContent.length == 0) {
-			try {
-				strHtmlContent = objElement.getAttribute("title");
-			} catch (e) {}
-		}
-		if (strHtmlContent == null || strHtmlContent.length == 0) {
-			return;
-		}
-		
-		//try to remove title
-		try {
-			objElement.removeAttribute("title");
-		} catch (e) {}
-		
-		tooltip = document.createElement("span");
-		tooltip.className = "kajonaAdminTooltip";
-		tooltip.style.display = "block";
-		tooltip.innerHTML = strHtmlContent;
-		
-		if (bitOpacity != false) {
-			tooltip.style.filter = "alpha(opacity:85)";
-			tooltip.style.KHTMLOpacity = "0.85";
-			tooltip.style.MozOpacity = "0.85";
-			tooltip.style.opacity = "0.85";
-		}
-		
-		//create tooltip container and save reference
-		if (kajonaAdminTooltip.container == null) {
-			var h = document.createElement("span");
-			h.id = "kajonaAdminTooltipContainer";
-			h.setAttribute("id", "kajonaAdminTooltipContainer");
-			h.style.position = "absolute";
-			h.style.zIndex = 2000;
-			document.getElementsByTagName("body")[0].appendChild(h);
-			kajonaAdminTooltip.container = h;
-		}
-		
-		objElement.tooltip = tooltip;
-		objElement.onmouseover = kajonaAdminTooltip.show;
-		objElement.onmouseout = kajonaAdminTooltip.hide;
-		objElement.onmousemove = kajonaAdminTooltip.locate;
-		objElement.onmouseover(objElement);
-	},
-	
-	show : function(e) {
-		kajonaAdminTooltip.hide(e);
-		kajonaAdminTooltip.container.appendChild(this.tooltip);
-		kajonaAdminTooltip.locate(e);
-	},
-	
-	hide : function(e) {
-		try {
-			var c = kajonaAdminTooltip.container;
-			if (c.childNodes.length > 0) {
-				c.removeChild(c.firstChild);
-			}
-		} catch (e) {}
-	},
-	
-	locate : function(e) {
-		var posx = 0, posy = 0, c;
-		if (e == null) {
-			e = window.event;
-		}
-		if (e.pageX || e.pageY) {
-			posx = e.pageX;
-			posy = e.pageY;
-		} else if (e.clientX || e.clientY) {
-			if (document.documentElement.scrollTop) {
-				posx = e.clientX + document.documentElement.scrollLeft;
-				posy = e.clientY + document.documentElement.scrollTop;
-			} else {
-				posx = e.clientX + document.body.scrollLeft;
-				posy = e.clientY + document.body.scrollTop;
-			}
-		}
+            if(document.getElementById('taskParamForm') != null) {
+                document.getElementById('taskParamForm').style.display = "none";
+            }
 
-		//save current x and y pos (needed to show tooltip at right position if it's added by onclick)
-		if (posx == 0 && posy == 0) {
-			posx = kajonaAdminTooltip.lastMouseX;
-			posy = kajonaAdminTooltip.lastMouseY;
-		} else {
-			kajonaAdminTooltip.lastMouseX = posx;
-			kajonaAdminTooltip.lastMouseY = posy;
-		}
-		
-		c = kajonaAdminTooltip.container;
-		var left = (posx - c.offsetWidth);
-		if (left - c.offsetWidth < 0) {
-			left += c.offsetWidth;
-		}
-		c.style.top = (posy + 10) + "px";
-		c.style.left = left + "px";
-	}
+            jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE);
+            jsDialog_0.setContentRaw(kajonaSystemtaskDialogContent);
+            document.getElementById(jsDialog_0.containerId).style.width = "550px";
+            document.getElementById('systemtaskCancelButton').onclick = this.cancelExecution;
+            jsDialog_0.init();
+        }
+        
+        KAJONA.admin.ajax.executeSystemtask(strTaskname, strAdditionalParam, {
+            success : function(o) {
+                var strResponseText = o.responseText;
+                
+                //parse the response and check if it's valid
+                if(strResponseText.indexOf("<error>") != -1) {
+                    KAJONA.admin.statusDisplay.displayXMLMessage(strResponseText);
+                }
+                else if(strResponseText.indexOf("<statusinfo>") == -1) {
+                	KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />"+strResponseText);
+                }
+                else {
+                    var intStart = strResponseText.indexOf("<statusinfo>")+12;
+                    var strStatusInfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
+                    
+                    //parse text to decide if a reload is necessary
+                    var strReload = "";
+                    if(strResponseText.indexOf("<reloadurl>") != -1) {
+                        intStart = strResponseText.indexOf("<reloadurl>")+11;
+                        strReload = strResponseText.substr(intStart, strResponseText.indexOf("</reloadurl>")-intStart);
+                    }
+
+                    //show status info
+                    document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
+                    //center the dialog again (later() as workaround to add a minimal delay)
+                    YAHOO.lang.later(10, this, function() {jsDialog_0.dialog.center();});
+
+                    if(strReload == "") {
+                    	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);
+                    	document.getElementById('systemtaskLoadingDiv').style.display = "none";
+                    	document.getElementById('systemtaskCancelButton').value = KAJONA_SYSTEMTASK_CLOSE;
+                    }
+                    else {
+                    	KAJONA.admin.systemtask.executeTask(strTaskname, strReload, true);
+                    }
+                }
+            },
+            
+            failure : function(o) {
+                jsDialog_0.hide();
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />"+o.responseText);
+            }
+        });
+    },
+
+    cancelExecution : function() {
+        if(YAHOO.util.Connect.isCallInProgress(KAJONA.admin.ajax.systemTaskCall)) {
+           YAHOO.util.Connect.abort(KAJONA.admin.ajax.systemTaskCall, null, false);
+        }
+        jsDialog_0.hide();
+    },
+
+    setName : function(strName) {
+    	document.getElementById('systemtaskNameDiv').innerHTML = strName;
+    }
 };
 
-
-// --- AJAX-STUFF -----------------------------------------------------------------------
-var kajonaAjaxHelper = {
-
-	/*
-	 * Loader for dynamically loading additional js and css files after the onDOMReady event
-	 * 
-	 * Simply use any of the predefined helpers, e.g.:
-	 * 	   kajonaAjaxHelper.loadAjaxBase(callback, "rating.js");
-	 * 
-	 * Or if you want to add your custom YUI components and own files (with absolute path), e.g.:
-	 *     kajonaAjaxHelper.Loader.load(
-	 *         ["dragdrop", "animation", "container"],
-	 *         [KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base-min.js",
-	 *          KAJONA_WEBPATH+"/portal/scripts/photoviewer/build/photoviewer_base.css",
-	 *          KAJONA_WEBPATH+"/portal/scripts/photoviewer/assets/skins/vanillamin/vanillamin.css"],
-	 *         callback
-	 *     );
-	 */
-	Loader : {
-		yuiBase : KAJONA_WEBPATH + "/admin/scripts/yui/",
-		yuiLoaderBeforeDOMReady : null,
-		bitBeforeDOMReady : true,
-		arrRequestedModules : {},
-		arrLoadedModules : {},
-		arrCallbacks : [],
-		
-		createYuiLoader : function () {
-			//create instance of YUILoader
-			var yuiLoader = new YAHOO.util.YUILoader({
-				base : this.yuiBase,
-		
-				//filter: "DEBUG", //use debug versions
-				/* TODO: add cache buster
-				filter: { 
-					'searchExp': "\\.js", 
-					'replaceStr': ".js?123"
-					},
-				*/
-		
-				onFailure : function(o) {
-					alert("File loading failed: " + YAHOO.lang.dump(o));
-				},
-								
-				onProgress : function(o) {			
-					kajonaAjaxHelper.Loader.arrLoadedModules[o.name] = true;
-					kajonaAjaxHelper.Loader.checkCallbacks();
-				}
-			});
-
-			return yuiLoader;
+/**
+ * AJAX functions for connecting to the server
+ */
+KAJONA.admin.ajax = {
+	posConn: null,
+	pagesConn: null,
+	dashboardConn: null,
+	statusConn: null,
+	cropConn: null,
+	rotateConn: null,
+	genericCall: null,
+    systemTaskCall: null,
+    
+    regularCallback: {
+		success : function(o) {
+			KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText)
 		},
-		
-		checkCallbacks : function() {
-			//check if we're ready to call some registered callbacks
-			var arrCallbacks = kajonaAjaxHelper.Loader.arrCallbacks;
-			for (var i = 0; i < arrCallbacks.length; i++) {
-				if (!YAHOO.lang.isUndefined(arrCallbacks[i])) {
-					var bitCallback = true;
-					for (var j = 0; j < arrCallbacks[i].requiredModules.length; j++) {
-						if (!(arrCallbacks[i].requiredModules[j] in this.arrLoadedModules)) {
-							bitCallback = false;
-						}
-					}
-					
-					//execute callback and delete it so it won't get called again
-					if (bitCallback) {
-						arrCallbacks[i].callback();
-						delete arrCallbacks[i];
-					}
-				}
-			}
-		},
-		
-		load : function(arrYuiComponents, arrFiles, callback) {
-			var arrYuiComponentsToWaitFor = [];
-			var arrFilesToWaitFor = [];		
-			var arrYuiComponentsToLoad = [];
-			var arrFilesToLoad = [];
-
-			//check YUI components, if they are already loaded or requested
-			if (YAHOO.lang.isArray(arrYuiComponents)) {
-				for (var i = 0; i < arrYuiComponents.length; i++) {
-					if (!(arrYuiComponents[i] in this.arrLoadedModules)) {
-						arrYuiComponentsToWaitFor.push(arrYuiComponents[i]);
-						if (!(arrYuiComponents[i] in this.arrRequestedModules)) {
-							arrYuiComponentsToLoad.push(arrYuiComponents[i]);
-						}
-					}
-				}
-			}
-			
-			//check own JS/CSS files, if they are already loaded or requested
-			if (YAHOO.lang.isArray(arrFiles)) {
-				for (var i = 0; i < arrFiles.length; i++) {
-					if (!(arrFiles[i] in this.arrLoadedModules)) {
-						arrFilesToWaitFor.push(arrFiles[i]);
-						if (!(arrFiles[i] in this.arrRequestedModules)) {
-							arrFilesToLoad.push(arrFiles[i]);
-						}
-					}
-				}
-			}
-
-			//if all modules are already loaded, execute the callback
-			if (arrYuiComponentsToWaitFor.length == 0 && arrFilesToWaitFor.length == 0) {
-				if (YAHOO.lang.isFunction(callback)) {
-					callback();
-				}
-			} else {
-				var yuiLoader;
-				
-				//are there components/files to load which are not already requested?
-				if (arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) {
-					//decide if a new YUILoader instance should be created
-					//all files added before the onDOMReady event uses the same instance
-					if (this.bitBeforeDOMReady && YAHOO.lang.isNull(this.yuiLoaderBeforeDOMReady)) {
-						this.yuiLoaderBeforeDOMReady = this.createYuiLoader();
-						yuiLoader = this.yuiLoaderBeforeDOMReady;
-						
-						//start loading right after DOM is ready
-						YAHOO.util.Event.onDOMReady(function () {
-							kajonaAjaxHelper.Loader.yuiLoaderBeforeDOMReady.insert();
-							kajonaAjaxHelper.Loader.bitBeforeDOMReady = false;
-						});
-					} else if (this.bitBeforeDOMReady) {
-						yuiLoader = this.yuiLoaderBeforeDOMReady;
-					} else {
-						yuiLoader = this.createYuiLoader();
-					}			
-					
-					for (var i = 0; i < arrYuiComponentsToLoad.length; i++) {
-						yuiLoader.require(arrYuiComponentsToLoad[i]);
-						this.arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
-					}
-					for (var i = 0; i < arrFilesToLoad.length; i++) {
-						yuiLoader.addModule( {
-							name : arrFilesToLoad[i],
-							type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
-							skinnable : false,
-							fullpath : arrFilesToLoad[i]
-						});
-	
-						yuiLoader.require(arrFilesToLoad[i]);
-						this.arrRequestedModules[arrFilesToLoad[i]] = true;
-					}
-				}
-				
-				//register the callback to be called later on
-				if (YAHOO.lang.isFunction(callback)) {
-					this.arrCallbacks.push({
-						'callback' : callback,
-						'requiredModules' : arrYuiComponentsToWaitFor.concat(arrFilesToWaitFor)
-					});
-				}
-				
-				//fire YUILoader if this function is called after the onDOMReady event
-				if ((arrYuiComponentsToLoad.length > 0 || arrFilesToLoad.length > 0) && !this.bitBeforeDOMReady) {
-					yuiLoader.insert();
-				}
-			}
+		failure : function(o) {
+			KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>")
 		}
 	},
-			
-	/*
-	 * For compatibility with Kajona templates pre 3.3.0
-	 */
-	convertAdditionalFiles : function(additionalFiles) {
-		var scriptBase = KAJONA_WEBPATH + "/admin/scripts/";
-		if (YAHOO.lang.isString(additionalFiles)) {
-			//convert to array and add webpath
-			return new Array(scriptBase + additionalFiles);
-		} else if (YAHOO.lang.isArray(additionalFiles)) {
-			//add webpath
-			for (var i = 0; i < additionalFiles.length; i++) {
-				additionalFiles[i] = scriptBase + additionalFiles[i];
-			}
-			return additionalFiles;
-		} else {
-			return null;
-		}
-	},
-	
-	/*
-	 * Predefined helper functions
-	 */
-	loadAjaxBase : function(callback, additionalFiles) {
-		this.Loader.load([ "connection" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadDragNDropBase : function(callback, additionalFiles) {
-		this.Loader.load([ "connection", "animation", "dragdrop" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadAnimationBase : function(callback, additionalFiles) {
-		this.Loader.load([ "animation" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadAutocompleteBase : function(callback, additionalFiles) {
-		this.Loader.load([ "connection", "datasource", "autocomplete" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadCalendarBase : function(callback, additionalFiles) {
-		var customFiles = [
-		    KAJONA_WEBPATH + "/admin/scripts/yui/calendar/calendar-min.js",
-            KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css",
-		];
-		if (!YAHOO.lang.isUndefined(additionalFiles)) {
-			customFiles.push(this.convertAdditionalFiles(additionalFiles));
-		}
-		this.Loader.load(null, customFiles, callback);
-	},
-	
-	loadUploaderBase : function(callback, additionalFiles) {
-		this.Loader.load([ "uploader" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadImagecropperBase : function(callback, additionalFiles) {
-		this.Loader.load([ "imagecropper" ], this.convertAdditionalFiles(additionalFiles), callback);
-	},
-	
-	loadDialogBase : function(callback, additionalFiles) {
-		var customFiles = [
-		    KAJONA_WEBPATH + "/admin/scripts/yui/container/container-min.js"
-		];
-		if (!YAHOO.lang.isUndefined(additionalFiles)) {
-			customFiles.push(this.convertAdditionalFiles(additionalFiles));
-		}
-		this.Loader.load(null, customFiles, callback);
-	},
-	
-	loadTreeviewBase : function(callback, additionalFiles) {
-		this.Loader.load([ "treeview", "connection" ], this.convertAdditionalFiles(additionalFiles), callback);
-	}
-};
-
-var regularCallback = {
-	success : function(o) {
-		kajonaStatusDisplay.displayXMLMessage(o.responseText)
-	},
-	failure : function(o) {
-		kajonaStatusDisplay.messageError("<b>Request failed!</b>")
-	}
-};
-
-var systemStatusCallback = function(o, bitSuccess) {
-	if (bitSuccess) {
-		kajonaStatusDisplay.displayXMLMessage(o.responseText);
-
-		var strSystemid = o.argument[0];
-
-		if (o.responseText.indexOf('<error>') == -1
-				&& o.responseText.indexOf('<html>') == -1) {
-			var image = document.getElementById('statusImage_' + strSystemid);
-			var link = document.getElementById('statusLink_' + strSystemid);
-
-			if (image.src.indexOf('icon_enabled.gif') != -1) {
-				image.src = strInActiveImageSrc;
-				image.setAttribute('alt', strInActiveText);
-				link.setAttribute('title', strInActiveText);
-			} else {
-				image.src = strActiveImageSrc;
-				image.setAttribute('alt', strActiveText);
-				link.setAttribute('title', strActiveText);
-			}
-			
-			kajonaAdminTooltip.add(link);
-		}
-	} else {
-		kajonaStatusDisplay.messageError(o.responseText);
-	}
-};
-
-var kajonaAdminAjax = {
-	posConn :null,
-	pagesConn :null,
-	dashboardConn :null,
-	statusConn :null,
-	cropConn :null,
-	rotateConn :null,
-	genericCall :null,
-    systemTaskCall : null,
 
     executeSystemtask : function(strTaskname, strAdditionalParam, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=executeSystemTask&task='+strTaskname;
 		var postBody = strAdditionalParam;
 
-		if (kajonaAdminAjax.systemTaskCall == null
+		if (this.systemTaskCall == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
-			kajonaAdminAjax.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
+						.isCallInProgress(this.systemTaskCall)) {
+			this.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
 					postTarget, objCallback, postBody);
 		}
 	},
@@ -577,10 +816,10 @@ var kajonaAdminAjax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
 		var postBody = 'systemid=' + systemid;
 	
-		if (kajonaAdminAjax.genericCall == null
+		if (this.genericCall == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.genericCall)) {
-			kajonaAdminAjax.genericCall = YAHOO.util.Connect.asyncRequest(
+						.isCallInProgress(this.genericCall)) {
+			this.genericCall = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
@@ -589,11 +828,11 @@ var kajonaAdminAjax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition';
 		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
 
-		if (kajonaAdminAjax.posConn == null
+		if (this.posConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.posConn)) {
-			kajonaAdminAjax.posConn = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, regularCallback, postBody);
+						.isCallInProgress(this.posConn)) {
+			this.posConn = YAHOO.util.Connect.asyncRequest('POST',
+					postTarget, this.regularCallback, postBody);
 		}
 	},
 
@@ -602,22 +841,47 @@ var kajonaAdminAjax = {
 		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos
 				+ '&listId=' + strIdOfList;
 
-		if (kajonaAdminAjax.dashboardConn == null
+		if (this.dashboardConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.dashboardConn)) {
-			kajonaAdminAjax.dashboardConn = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, regularCallback, postBody);
+						.isCallInProgress(this.dashboardConn)) {
+			this.dashboardConn = YAHOO.util.Connect.asyncRequest(
+					'POST', postTarget, this.regularCallback, postBody);
 		}
 	},
 
-	setSystemStatus : function(systemIdToSet, objCallback) {
+	setSystemStatus : function(strSystemIdToSet) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setStatus';
-		var postBody = 'systemid=' + systemIdToSet;
+		var postBody = 'systemid=' + strSystemIdToSet;
+		
+        var objCallback = {
+            success: function(o) { 
+				KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+			
+				if (o.responseText.indexOf('<error>') == -1 && o.responseText.indexOf('<html>') == -1) {
+					var image = document.getElementById('statusImage_' + strSystemIdToSet);
+					var link = document.getElementById('statusLink_' + strSystemIdToSet);
+			
+					if (image.src.indexOf('icon_enabled.gif') != -1) {
+						image.src = strInActiveImageSrc;
+						image.setAttribute('alt', strInActiveText);
+						link.setAttribute('title', strInActiveText);
+					} else {
+						image.src = strActiveImageSrc;
+						image.setAttribute('alt', strActiveText);
+						link.setAttribute('title', strActiveText);
+					}
+					
+					KAJONA.admin.tooltip.add(link);
+				}
+        	},
+        	
+            failure: function(o) { 
+        		KAJONA.admin.statusDisplay.messageError(o.responseText);
+        	}
+        };
 
-		if (kajonaAdminAjax.statusConn == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.statusConn)) {
-			kajonaAdminAjax.statusConn = YAHOO.util.Connect.asyncRequest(
+		if (this.statusConn == null || !YAHOO.util.Connect.isCallInProgress(this.statusConn)) {
+			this.statusConn = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
@@ -629,10 +893,10 @@ var kajonaAdminAjax = {
 				+ '&file=' + strFile + '&intX=' + intX + '&intY=' + intY
 				+ '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
 
-		if (kajonaAdminAjax.cropConn == null
+		if (this.cropConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.cropConn)) {
-			kajonaAdminAjax.cropConn = YAHOO.util.Connect.asyncRequest('POST',
+						.isCallInProgress(this.cropConn)) {
+			this.cropConn = YAHOO.util.Connect.asyncRequest('POST',
 					postTarget, objCallback, postBody);
 		}
 	},
@@ -643,73 +907,73 @@ var kajonaAdminAjax = {
 		var postBody = 'systemid=' + strRepoId + '&folder=' + strFolder
 				+ '&file=' + strFile + '&angle=' + intAngle + '';
 
-		if (kajonaAdminAjax.rotateConn == null
+		if (this.rotateConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(kajonaAdminAjax.rotateConn)) {
-			kajonaAdminAjax.rotateConn = YAHOO.util.Connect.asyncRequest(
+						.isCallInProgress(this.rotateConn)) {
+			this.rotateConn = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
 
     deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction) {
-        kajonaAdminAjax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
+        this.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
                 success : function(o) {
-                    kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                    this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
 							success : function(o) {
 								location.reload();
 							},
 							failure : function(o) {
-								kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+								KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
 							}
 						}
 						);
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
 
     deleteFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
-        kajonaAdminAjax.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
+        this.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
-                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     }
                     else {
-                        kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                        this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                 success : function(o) {
                                     location.reload();
                                 },
                                 failure : function(o) {
-                                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                                 }
                             }
                         );
                     }
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
 
     createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
-        kajonaAdminAjax.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
+        this.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
-                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     }
                     else {
                         if(strSourceModule != "" && strSourceModuleAction != "") {
-                            kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                            this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                     success : function(o) {
                                         location.reload();
                                     },
                                     failure : function(o) {
-                                        kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                                     }
                                 }
                             );
@@ -720,26 +984,26 @@ var kajonaAdminAjax = {
                     }
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
 
     renameFile : function (strFmRepoId, strNewFilename, strOldFilename, strFolder, strSourceModule, strSourceModuleAction) {
-        kajonaAdminAjax.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
+        this.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
-                        kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                        KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     }
                     else {
                         if(strSourceModule != "" && strSourceModuleAction != "") {
-                            kajonaAdminAjax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                            this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                     success : function(o) {
                                         location.reload();
                                     },
                                     failure : function(o) {
-                                        kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                                        KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                                     }
                                 }
                             );
@@ -750,18 +1014,18 @@ var kajonaAdminAjax = {
                     }
                 },
                 failure : function(o) {
-                    kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                    KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
                 }
             });
     },
 
     loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        kajonaAdminAjax.genericAjaxCall("pages", "getChildnodes", nodeSystemid  , {
+        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildnodes", nodeSystemid, {
             success : function(o) {
                 //check if answer contains an error
                 if(o.responseText.indexOf("<error>") != -1) {
-                    kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     o.argument.fnLoadComplete();
                 }
                 else {
@@ -822,11 +1086,11 @@ var kajonaAdminAjax = {
                     }
 
                     o.argument.fnLoadComplete();
-                    kajonaUtils.checkInitialTreeViewToggling();
+                    KAJONA.admin.treeview.checkInitialTreeViewToggling();
                 }
             },
             failure : function(o) {
-                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
             },
             argument: {
                 "node": node,
@@ -839,11 +1103,11 @@ var kajonaAdminAjax = {
 
     loadNavigationTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        kajonaAdminAjax.genericAjaxCall("navigation", "getChildnodes", nodeSystemid  , {
+        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildnodes", nodeSystemid, {
             success : function(o) {
                 //check if answer contains an error
                 if(o.responseText.indexOf("<error>") != -1) {
-                    kajonaStatusDisplay.displayXMLMessage(o.responseText);
+                    KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     o.argument.fnLoadComplete();
                 }
                 else {
@@ -878,11 +1142,11 @@ var kajonaAdminAjax = {
                     }
 
                     o.argument.fnLoadComplete();
-                    kajonaUtils.checkInitialTreeViewToggling();
+                    KAJONA.admin.treeview.checkInitialTreeViewToggling();
                 }
             },
             failure : function(o) {
-                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
             },
             argument: {
                 "node": node,
@@ -896,25 +1160,23 @@ var kajonaAdminAjax = {
 };
 
 // --- FILEMANAGER ----------------------------------------------------------------------
+KAJONA.admin.filemanager = {
+	createFolder : function(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction) {
+	    var strNewFoldername = document.getElementById(strInputId).value;
+	    if(strNewFoldername != "") {
+	        KAJONA.admin.ajax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction);
+	    }
+	},
+	
+	renameFile : function(strInputId, strRepoId, strRepoFolder, strOldName, strSourceModule, strSourceAction) {
+	    var strNewFilename = document.getElementById(strInputId).value;
+	    if(strNewFilename != "") {
+	        KAJONA.admin.ajax.renameFile(strRepoId, strNewFilename, strOldName, strRepoFolder, strSourceModule, strSourceAction);
+	    }
+	}	
+};
 
-function filemanagerCreateFolder(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction) {
-    //add typed folder
-    var strNewFoldername = document.getElementById(strInputId).value;
-    if(strNewFoldername != "") {
-        kajonaAdminAjax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction);
-    }
-}
-
-function filemanagerRenameFile(strInputId, strRepoId, strRepoFolder, strOldName, strSourceModule, strSourceAction) {
-    //add typed folder
-    var strNewFilename = document.getElementById(strInputId).value;
-    if(strNewFilename != "") {
-        kajonaAdminAjax.renameFile(strRepoId, strNewFilename, strOldName, strRepoFolder, strSourceModule, strSourceAction);
-    }
-}
-
-// Uploader
-function KajonaUploader(config) {
+KAJONA.admin.filemanager.Uploader = function(config) {
 	var self = this;
 
 	this.config = config;
@@ -948,7 +1210,7 @@ function KajonaUploader(config) {
 
 		YAHOO.util.Event
 				.onDOMReady( function() {
-					kajonaAdminTooltip.hide();
+					KAJONA.admin.tooltip.hide();
 					document.getElementById('kajonaUploadButtonsContainer').onmouseover = function() {};
 
 					var uiLayer = YAHOO.util.Dom
@@ -1145,78 +1407,75 @@ function KajonaUploader(config) {
 
 
 //--- image-editor ----------------------------------------------------------------------
-var kajonaImageEditor = {
-
+KAJONA.admin.filemanager.imageEditor = {
     cropArea : null,
     fm_cropObj : null,
     fm_image_isScaled : true,
 
-    filemanagerShowRealsize : function () {
+    showRealSize : function () {
         document.getElementById('fm_filemanagerPic').src = fm_image_rawurl + "&x="
             + (new Date()).getMilliseconds();
         
-        kajonaImageEditor.fm_image_isScaled = false;
+        this.fm_image_isScaled = false;
 
-        kajonaImageEditor.filemanagerHideCropping();
+        this.hideCropping();
     },
 
-    filemanagerShowPreview : function () {
+    showPreview : function () {
         document.getElementById('fm_filemanagerPic').src = fm_image_scaledurl.replace("__width__", fm_image_scaledMaxWidth).replace("__height__", fm_image_scaledMaxHeight)
             + "&x=" + (new Date()).getMilliseconds();
+        this.fm_image_isScaled = true;
 
-        kajonaImageEditor.fm_image_isScaled = true;
-
-        kajonaImageEditor.filemanagerHideCropping();
+        this.hideCropping();
     },
 
-
-    filemanagerShowCropping : function () {
+    showCropping : function () {
         // init the cropping
-        if (kajonaImageEditor.fm_cropObj == null) {
-            kajonaImageEditor.fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
+        if (this.fm_cropObj == null) {
+        	this.fm_cropObj = new YAHOO.widget.ImageCropper('fm_filemanagerPic', {
                 status :true
             });
             document.getElementById("accept_icon").src = document
                     .getElementById("accept_icon").src.replace(
                     "icon_crop_acceptDisabled.gif", "icon_crop_accept.gif");
 
-            document.getElementById("fm_filemanagerPic_wrap").ondblclick = kajonaImageEditor.filemanagerSaveCropping;
+            YAHOO.util.Event.addListener("fm_filemanagerPic_wrap", 'dblclick', function (event) {
+            	KAJONA.admin.filemanager.imageEditor.saveCropping();
+            });
             
             //show confirm box when existing the page without saving the cropping
-            YAHOO.util.Event.addListener(window, 'beforeunload', kajonaImageEditor.filemanagerShowWarningUnsaved);
+            YAHOO.util.Event.addListener(window, 'beforeunload', function (event) {
+            	event.returnValue = fm_warning_unsavedHint;
+            });
         } else {
-        	kajonaImageEditor.filemanagerHideCropping();
+        	this.hideCropping();
         }
     },
     
-    filemanagerHideCropping : function () {
-        if (kajonaImageEditor.fm_cropObj != null) {
+    hideCropping : function () {
+        if (this.fm_cropObj != null) {
         	YAHOO.util.Event.removeListener(window, 'beforeunload');
         	
-            kajonaImageEditor.fm_cropObj.destroy();
-            kajonaImageEditor.fm_cropObj = null;
+        	this.fm_cropObj.destroy();
+        	this.fm_cropObj = null;
             document.getElementById("accept_icon").src = document
                     .getElementById("accept_icon").src.replace(
                     "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
         }
     },
-
-    filemanagerShowWarningUnsaved : function (event) {
-    	event.returnValue = fm_warning_unsavedHint;
-    },
-    
-    filemanagerSaveCropping : function () {   	
-        if (kajonaImageEditor.fm_cropObj != null) {
+   
+    saveCropping : function () {   	
+        if (this.fm_cropObj != null) {
         	YAHOO.util.Event.removeListener(window, 'beforeunload');
         	
             init_fm_crop_save_warning_dialog();
         }
     },
     
-    filemanagerSaveCroppingToBackend : function () {  	
+    saveCroppingToBackend : function () {  	
         jsDialog_1.hide();
         init_fm_screenlock_dialog();
-        kajonaImageEditor.cropArea = kajonaImageEditor.fm_cropObj.getCropCoords();
+        this.cropArea = this.fm_cropObj.getCropCoords();
         if (fm_image_isScaled) {
             // recalculate the "real" crop-coordinates
             var intScaledWidth = document.getElementById('fm_filemanagerPic').width;
@@ -1224,320 +1483,108 @@ var kajonaImageEditor = {
             var intOriginalWidth = document.getElementById('fm_int_realwidth').value;
             var intOriginalHeigth = document.getElementById('fm_int_realheight').value;
 
-            kajonaImageEditor.cropArea.left = Math.floor(kajonaImageEditor.cropArea.left * (intOriginalWidth / intScaledWidth));
-            kajonaImageEditor.cropArea.top = Math.floor(kajonaImageEditor.cropArea.top * (intOriginalHeigth / intScaledHeight));
-            kajonaImageEditor.cropArea.width = Math.floor(kajonaImageEditor.cropArea.width * (intOriginalWidth / intScaledWidth));
-            kajonaImageEditor.cropArea.height = Math.floor(kajonaImageEditor.cropArea.height * (intOriginalHeigth / intScaledHeight));
-
+            this.cropArea.left = Math.floor(this.cropArea.left * (intOriginalWidth / intScaledWidth));
+            this.cropArea.top = Math.floor(this.cropArea.top * (intOriginalHeigth / intScaledHeight));
+            this.cropArea.width = Math.floor(this.cropArea.width * (intOriginalWidth / intScaledWidth));
+            this.cropArea.height = Math.floor(this.cropArea.height * (intOriginalHeigth / intScaledHeight));
         }
-        kajonaAdminAjax.saveImageCropping(kajonaImageEditor.cropArea.left, kajonaImageEditor.cropArea.top,
-                kajonaImageEditor.cropArea.width, kajonaImageEditor.cropArea.height, fm_repo_id, fm_folder, fm_file,
-                kajonaImageEditor.fm_cropping_callback);
-    },
-
-    fm_cropping_callback : {
-        success : function(o) {
-            kajonaStatusDisplay.displayXMLMessage(o.responseText);
-            kajonaImageEditor.fm_cropObj.destroy();
-            kajonaImageEditor.fm_cropObj = null;
-            document.getElementById("accept_icon").src = document
-                    .getElementById("accept_icon").src.replace(
-                    "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-            document.getElementById('fm_image_dimensions').innerHTML = kajonaImageEditor.cropArea.width
-                    + ' x ' + kajonaImageEditor.cropArea.height;
-            document.getElementById('fm_image_size').innerHTML = 'n.a.';
-            document.getElementById('fm_int_realwidth').value = kajonaImageEditor.cropArea.width;
-            document.getElementById('fm_int_realheight').value = kajonaImageEditor.cropArea.height;
-
-            if (kajonaImageEditor.fm_image_isScaled) {
-                kajonaImageEditor.filemanagerShowPreview();
-            } else {
-                kajonaImageEditor.filemanagerShowRealsize();
-            }
-
-            kajonaImageEditor.cropArea = null;
-
-            hide_fm_screenlock_dialog();
-        },
-        failure : function(o) {
-            kajonaStatusDisplay.messageError("<b>Request failed!</b>"
-                    + o.responseText);
-            hide_fm_screenlock_dialog();
-        }
-    },
-
-    filemanagerRotate : function (intAngle) {   	
-        init_fm_screenlock_dialog();
-        kajonaAdminAjax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file,
-                kajonaImageEditor.fm_rotate_callback);
-    },
-
-    fm_rotate_callback : {
-        success : function(o) {
-            kajonaStatusDisplay.displayXMLMessage(o.responseText);
-
-            if (kajonaImageEditor.fm_cropObj != null) {
-                kajonaImageEditor.fm_cropObj.destroy();
-                kajonaImageEditor.fm_cropObj = null;
+        
+        var callback = {
+            success : function(o) {
+        		var iE = KAJONA.admin.filemanager.imageEditor;
+                KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
+                iE.fm_cropObj.destroy();
+                iE.fm_cropObj = null;
                 document.getElementById("accept_icon").src = document
                         .getElementById("accept_icon").src.replace(
                         "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
-            }
+                document.getElementById('fm_image_dimensions').innerHTML = iE.cropArea.width
+                        + ' x ' + iE.cropArea.height;
+                document.getElementById('fm_image_size').innerHTML = 'n.a.';
+                document.getElementById('fm_int_realwidth').value = iE.cropArea.width;
+                document.getElementById('fm_int_realheight').value = iE.cropArea.height;
 
-            //switch width and height
-            var intScaledMaxWidthOld = fm_image_scaledMaxWidth;
-            fm_image_scaledMaxWidth = fm_image_scaledMaxHeight;
-            fm_image_scaledMaxHeight = intScaledMaxWidthOld;
-
-            if (kajonaImageEditor.fm_image_isScaled) {
-                kajonaImageEditor.filemanagerShowPreview();
-            } else {
-                kajonaImageEditor.filemanagerShowRealsize();
-            }
-
-            // update size-info & hidden elements
-            var intWidthOld = document.getElementById('fm_int_realwidth').value;
-            var intHeightOld = document.getElementById('fm_int_realheight').value;
-            document.getElementById('fm_int_realwidth').value = intHeightOld;
-            document.getElementById('fm_int_realheight').value = intWidthOld;
-            document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
-                    + ' x ' + intWidthOld;
-
-            hide_fm_screenlock_dialog();
-        },
-        failure : function(o) {
-            kajonaStatusDisplay.messageError("<b>Request failed!</b>"
-                    + o.responseText);
-            hide_fm_screenlock_dialog();
-        }
-    }
-
-};
-
-var kajonaSystemtaskHelper =  {
-
-    executeTask : function(strTaskname, strAdditionalParam, bitNoContentReset) {
-        if(bitNoContentReset == null || bitNoContentReset == undefined) {
-
-            if(document.getElementById('taskParamForm') != null) {
-                document.getElementById('taskParamForm').style.display = "none";
-            }
-
-            jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE);
-            jsDialog_0.setContentRaw(kajonaSystemtaskDialogContent);
-            document.getElementById(jsDialog_0.containerId).style.width = "550px";
-            document.getElementById('systemtaskCancelButton').onclick = kajonaSystemtaskHelper.cancelExecution;
-            jsDialog_0.init();
-        }
-        
-        kajonaAdminAjax.executeSystemtask(strTaskname, strAdditionalParam, {
-            success : function(o) {
-                var strResponseText = o.responseText;
-                
-                //parse the response and check if it's valid
-                if(strResponseText.indexOf("<error>") != -1) {
-                    kajonaStatusDisplay.displayXMLMessage(strResponseText);
+                if (this.fm_image_isScaled) {
+                	iE.showPreview();
+                } else {
+                	iE.showRealSize();
                 }
-                else if(strResponseText.indexOf("<statusinfo>") == -1) {
-                	kajonaStatusDisplay.messageError("<b>Request failed!</b><br />"+strResponseText);
-                }
-                else {
-                    var intStart = strResponseText.indexOf("<statusinfo>")+12;
-                    var strStatusInfo = strResponseText.substr(intStart, strResponseText.indexOf("</statusinfo>")-intStart);
-                    
-                    //parse text to decide if a reload is necessary
-                    var strReload = "";
-                    if(strResponseText.indexOf("<reloadurl>") != -1) {
-                        intStart = strResponseText.indexOf("<reloadurl>")+11;
-                        strReload = strResponseText.substr(intStart, strResponseText.indexOf("</reloadurl>")-intStart);
-                    }
 
-                    //show status info
-                    document.getElementById('systemtaskStatusDiv').innerHTML = strStatusInfo;
-                    //center the dialog again (later() as workaround to add a minimal delay)
-                    YAHOO.lang.later(10, this, function() {jsDialog_0.dialog.center();});
+                iE.cropArea = null;
 
-                    if(strReload == "") {
-                    	jsDialog_0.setTitle(KAJONA_SYSTEMTASK_TITLE_DONE);
-                    	document.getElementById('systemtaskLoadingDiv').style.display = "none";
-                    	document.getElementById('systemtaskCancelButton').value = KAJONA_SYSTEMTASK_CLOSE;
-                    }
-                    else {
-                        kajonaSystemtaskHelper.executeTask(strTaskname, strReload, true);
-                    }
-                }
+                hide_fm_screenlock_dialog();
             },
-            
             failure : function(o) {
-                jsDialog_0.hide();
-                kajonaStatusDisplay.messageError("<b>Request failed!</b><br />"+o.responseText);
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"
+                        + o.responseText);
+                hide_fm_screenlock_dialog();
             }
-        });
+        };
+        
+        KAJONA.admin.ajax.saveImageCropping(this.cropArea.left, this.cropArea.top,
+        		this.cropArea.width, this.cropArea.height, fm_repo_id, fm_folder, fm_file, callback);
     },
 
-    cancelExecution : function() {
-        if(YAHOO.util.Connect.isCallInProgress(kajonaAdminAjax.systemTaskCall)) {
-           YAHOO.util.Connect.abort(kajonaAdminAjax.systemTaskCall, null, false);
-        }
-        jsDialog_0.hide();
-    },
+    rotate : function (intAngle) {   	
+        init_fm_screenlock_dialog();
+        
+        var callback = {
+            success : function(o) {
+        		var iE = KAJONA.admin.filemanager.imageEditor;
+                KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
 
-    setName : function(strName) {
-    	document.getElementById('systemtaskNameDiv').innerHTML = strName;
+                if (iE.fm_cropObj != null) {
+                	iE.fm_cropObj.destroy();
+                	iE.fm_cropObj = null;
+                    document.getElementById("accept_icon").src = document
+                            .getElementById("accept_icon").src.replace(
+                            "icon_crop_accept.gif", "icon_crop_acceptDisabled.gif");
+                }
+
+                //switch width and height
+                var intScaledMaxWidthOld = fm_image_scaledMaxWidth;
+                fm_image_scaledMaxWidth = fm_image_scaledMaxHeight;
+                fm_image_scaledMaxHeight = intScaledMaxWidthOld;
+
+                if (iE.fm_image_isScaled) {
+                	iE.showPreview();
+                } else {
+                	iE.showRealSize();
+                }
+
+                // update size-info & hidden elements
+                var intWidthOld = document.getElementById('fm_int_realwidth').value;
+                var intHeightOld = document.getElementById('fm_int_realheight').value;
+                document.getElementById('fm_int_realwidth').value = intHeightOld;
+                document.getElementById('fm_int_realheight').value = intWidthOld;
+                document.getElementById('fm_image_dimensions').innerHTML = intHeightOld
+                        + ' x ' + intWidthOld;
+
+                hide_fm_screenlock_dialog();
+            },
+            failure : function(o) {
+                KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b>"
+                        + o.responseText);
+                hide_fm_screenlock_dialog();
+            }
+        };
+        
+        KAJONA.admin.ajax.saveImageRotating(intAngle, fm_repo_id, fm_folder, fm_file, callback);
     }
+
 };
 
 
 /**
- * General way to display a status message.
- * Therefore, the html-page should provide the following elements as noted as instance-vars:
- * - div,   id: jsStatusBox    				the box to be animated
- * 		 class: jsStatusBoxMessage			class in case of an informal message
- * 		 class: jsStatusBoxError		    class in case of an error message
- * - div,   id: jsStatusBoxContent			the box to place the message-content into
- * 
- * Pass a xml-response from a Kajona server to displayXMLMessage() to start the logic
- * or use messageOK() / messageError() passing a regular string
+ * Treeview functions
  */
-var kajonaStatusDisplay = {
-	idOfMessageBox : "jsStatusBox",
-	idOfContentBox : "jsStatusBoxContent",
-	classOfMessageBox : "jsStatusBoxMessage",
-	classOfErrorBox : "jsStatusBoxError",
-	timeToFadeOutMessage : 4000,
-	timeToFadeOutError : 10000,
-	timeToFadeOut : null,
-	animObject : null,
-	
-	/**
-	 * General entrance point. Use this method to pass an xml-response from the kajona server.
-	 * Tries to find a message- or an error-tag an invokes the corresponding methods
-	 * 
-	 * @param {String} message
-	 */
-	displayXMLMessage : function(message) {
-		//decide, whether to show an error or a message, message only in debug mode
-		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0) {
-			var intStart = message.indexOf("<message>")+9;
-			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
-			kajonaStatusDisplay.messageOK(responseText);
-		}
-		
-		if(message.indexOf("<error>") != -1) {
-			var intStart = message.indexOf("<error>")+7;
-			var responseText = message.substr(intStart, message.indexOf("</error>")-intStart);
-			kajonaStatusDisplay.messageError(responseText);
-		}
-	},
-	
-	/**
-	 * Creates a informal message box containg the passed content
-	 * 
-	 * @param {String} strMessage
-	 */
-    messageOK : function(strMessage) {
-		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
-		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
-		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox);
-		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutMessage;
-		kajonaStatusDisplay.startFadeIn(strMessage);
-    },
-
-	/**
-	 * Creates an error message box containg the passed content
-	 * 
-	 * @param {String} strMessage
-	 */
-    messageError : function(strMessage) {
-		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfMessageBox)
-		YAHOO.util.Dom.removeClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox)
-		YAHOO.util.Dom.addClass(kajonaStatusDisplay.idOfMessageBox, kajonaStatusDisplay.classOfErrorBox);
-		kajonaStatusDisplay.timeToFadeOut = kajonaStatusDisplay.timeToFadeOutError;
-		kajonaStatusDisplay.startFadeIn(strMessage);
-    },
-	
-	startFadeIn : function(strMessage) {
-		kajonaAjaxHelper.loadAnimationBase(function() {
-    		//currently animated?
-    		if(kajonaStatusDisplay.animObject != null && kajonaStatusDisplay.animObject.isAnimated()) {
-    			kajonaStatusDisplay.animObject.stop(true);
-    			kajonaStatusDisplay.animObject.onComplete.unsubscribeAll();
-    		}
-    		var statusBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
-    		var contentBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfContentBox);
-    		contentBox.innerHTML = strMessage;
-    		YAHOO.util.Dom.setStyle(statusBox, "display", "");
-    		YAHOO.util.Dom.setStyle(statusBox, "opacity", 0.0);
-    		
-    		//place the element at the top of the page
-    		var screenWidth = YAHOO.util.Dom.getViewportWidth();
-    		var divWidth = statusBox.offsetWidth;
-    		var newX = screenWidth/2 - divWidth/2;
-    		var newY = YAHOO.util.Dom.getDocumentScrollTop() -2;
-    		YAHOO.util.Dom.setXY(statusBox, new Array(newX, newY));
-
-    		//start fade-in handler
-    		kajonaStatusDisplay.fadeIn();
-		});
-	},
-	
-	fadeIn : function () {
-		kajonaStatusDisplay.animObject = new YAHOO.util.Anim(kajonaStatusDisplay.idOfMessageBox, { opacity: { to: 0.8 } }, 1, YAHOO.util.Easing.easeOut);
-		kajonaStatusDisplay.animObject.onComplete.subscribe(function() {window.setTimeout("kajonaStatusDisplay.startFadeOut()", kajonaStatusDisplay.timeToFadeOut);});
-		kajonaStatusDisplay.animObject.animate();
-	},
-	
-	startFadeOut : function() {
-		var statusBox = YAHOO.util.Dom.get(kajonaStatusDisplay.idOfMessageBox);
-		
-		//get the current pos
-		var attributes = {
-	        points: { by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5] }
-	    };
-	    kajonaStatusDisplay.animObject = new YAHOO.util.Motion(statusBox, attributes, 0.5);
-	    kajonaStatusDisplay.animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle(kajonaStatusDisplay.idOfMessageBox, "display", "none");});
-		kajonaStatusDisplay.animObject.animate();
-	}
-};
-
-
-var kajonaUtils = {
-    focusHelper : {
-		setBrowserFocus : function(strElementId) {
-			YAHOO.util.Event.onDOMReady(function() {
-				try {
-				    focusElement = YAHOO.util.Dom.get(strElementId);
-				    if (YAHOO.util.Dom.hasClass(focusElement, "inputWysiwyg")) {
-				    	CKEDITOR.config.startupFocus = true;
-				    } else {
-				        focusElement.focus();
-				    }
-				} catch (e) {}
-			});
-		}
-	},
-
-    checkInitialTreeViewToggling : function() {
-        if(arrTreeViewExpanders.length > 0) {
-            var strValue = arrTreeViewExpanders.shift();
-            var objNode = tree.getNodeByProperty("systemid", strValue);
-            if(objNode != null) {
-                objNode.expand();
-            }
+KAJONA.admin.treeview = {};
+KAJONA.admin.treeview.checkInitialTreeViewToggling = function() {
+    if(arrTreeViewExpanders.length > 0) {
+        var strValue = arrTreeViewExpanders.shift();
+        var objNode = tree.getNodeByProperty("systemid", strValue);
+        if(objNode != null) {
+            objNode.expand();
         }
-    },
-	
-    /*
-     * called when the user selects an page/folder/file out of a folderview popup
-     */
-    folderviewSelectCallback : function(arrTargetsValues) {
-    	for (var i in arrTargetsValues) {
-	    	if (arrTargetsValues[i][0] == "ckeditor") {
-	    		CKEDITOR.tools.callFunction(2, arrTargetsValues[i][1]);
-	    	} else {
-	    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
-	    	}
-    	}
-	}
-
+    }
 };

@@ -19,7 +19,7 @@ if (typeof KAJONA == "undefined") {
  */
 
 
-/*
+/**
  * Checks if the given array contains the given string
  * 
  * @param {String} strNeedle
@@ -32,9 +32,9 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
         }
     }
     return false;
-}
+};
 
-/*
+/**
  * Used to show/hide an html element
  * 
  * @param {String} strElementId
@@ -51,9 +51,9 @@ KAJONA.util.fold = function (strElementId, objCallbackShow) {
     else {
     	element.style.display = 'none';
     }
-}
+};
 
-/*
+/**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * Please only use the specific instances KAJONA.portal.loader or KAJONA.admin.loader
  * 
@@ -185,9 +185,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 		}
 	}
 
-	/*
-	 * For compatibility with Kajona templates pre 3.3.0
-	 */
+	//for compatibility with Kajona templates pre 3.3.0
 	this.convertAdditionalFiles = function(additionalFiles) {
 		if (YAHOO.lang.isString(additionalFiles)) {
 			//convert to array and add webpath
@@ -212,7 +210,7 @@ KAJONA.util.Loader = function (strScriptBase) {
  */
 
 
-/*
+/**
  * Loads/Reloads the Kajona captcha image with the given element id
  * 
  * @param {String} strImageId
@@ -240,9 +238,9 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
 		var objImg = document.getElementById(imgID);
 		objImg.src = objImg.src + "&reload="+timeCode;
 	}
-}
+};
 
-/* 
+/** 
  * Tooltips
  * 
  * originally based on Bubble Tooltips by Alessandro Fulciniti (http://pro.html.it - http://web-graphics.com)
@@ -359,7 +357,7 @@ KAJONA.portal.tooltip = (function() {
 }());
 
 
-/*
+/**
  * Loader for dynamically loading additional js and css files after the onDOMReady event
  * 
  * Simply use any of the predefined helpers, e.g.:

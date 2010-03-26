@@ -13,7 +13,7 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	%%head%%
 	<script type="text/javascript">
-        kajonaAjaxHelper.loadAjaxBase();
+        KAJONA.admin.loader.loadAjaxBase();
 	</script>
 </head>
 <body class="folderView">

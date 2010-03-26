@@ -359,10 +359,10 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                             if($this->getParam("execute") == "true") {
                                 $strTaskOutput = "
                                     <script type=\"text/javascript\">
-                                       kajonaAjaxHelper.loadDialogBase( function() {
-	                                   kajonaAjaxHelper.loadAjaxBase( function() {
-	                                       kajonaSystemtaskHelper.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
-	                                       kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
+                                       KAJONA.admin.loader.loadDialogBase( function() {
+	                                   KAJONA.admin.loader.loadAjaxBase( function() {
+	                                       KAJONA.admin.systemtask.executeTask('".$objTask->getStrInternalTaskname()."', '".$objTask->getSubmitParams()."');
+	                                       KAJONA.admin.systemtask.setName('".$this->getText("systemtask_runningtask")." ".$objTask->getStrTaskName()."');
 	                                    })
                                      })   ;
                                     </script>";
@@ -414,7 +414,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	                                                                                      "icon_accept.gif");
                     }
                     else {
-                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"kajonaSystemtaskHelper.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); kajonaSystemtaskHelper.setName('".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
+                        $strLink = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.systemtask.executeTask('".$objOneTask->getStrInternalTaskName()."', ''); KAJONA.admin.systemtask.setName('".$this->getText("systemtask_runningtask")." ".$objOneTask->getStrTaskName()."');return false;\"",
                                                                                           "",
                                                                                           $this->getText("systemtask_run"),
 	                                                                                      "icon_accept.gif");
