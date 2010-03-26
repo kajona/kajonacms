@@ -57,7 +57,7 @@ class class_element_imagelightbox extends class_element_admin implements interfa
 			}
 		}
 		if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getText("imagelightbox_template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getText("imagelightbox_template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char3", $arrTemplatesDD, $this->getText("imagelightbox_template"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
 

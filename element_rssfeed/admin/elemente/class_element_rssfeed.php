@@ -54,7 +54,7 @@ class class_element_rssfeed extends class_element_admin implements interface_adm
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("rssfeed_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("rssfeed_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("rssfeed_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
         

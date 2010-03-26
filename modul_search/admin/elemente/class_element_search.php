@@ -57,7 +57,7 @@ class class_element_search extends class_element_admin implements interface_admi
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getText("search_template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getText("search_template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("search_template", $arrTemplatesDD, $this->getText("search_template"), (isset($arrElementData["search_template"]) ? $arrElementData["search_template"] : "" ));
 

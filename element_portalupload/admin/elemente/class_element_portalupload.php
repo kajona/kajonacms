@@ -76,7 +76,7 @@ class class_element_portalupload extends class_element_admin implements interfac
 
 
 		if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("portalupload_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
         

@@ -68,7 +68,7 @@ class class_element_galleryRandom extends class_element_admin implements interfa
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getText("gallery_template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getText("gallery_template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("gallery_template", $arrTemplatesDD, $this->getText("gallery_template"), (isset($arrElementData["gallery_template"]) ? $arrElementData["gallery_template"] : "" ));
         //And a lot of inputs

@@ -236,7 +236,7 @@ class class_element_admin extends class_admin {
      * @param string $strContent
      * @since 3.3
      */
-    protected final function addHiddenFormElement($strContent) {
+    protected final function addOptionalFormElement($strContent) {
         $this->strSystemFormElements .= $strContent;
     }
 }

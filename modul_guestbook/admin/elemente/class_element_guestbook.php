@@ -62,7 +62,7 @@ class class_element_guestbook extends class_element_admin implements interface_a
 		}
 		
         if(count($arrTemplates) == 1)
-            $this->addHiddenFormElement($this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getText("guestbook_template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getText("guestbook_template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("guestbook_template", $arrTemplatesDD, $this->getText("guestbook_template"), (isset($arrElementData["guestbook_template"]) ? $arrElementData["guestbook_template"] : "" ));
 
