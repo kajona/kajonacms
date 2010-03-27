@@ -245,7 +245,7 @@ class class_element_portal extends class_portal {
      * @return string
      * @static
      */
-    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, $strElement) {
+    public static function getPortaleditorNewCode($strSystemid, $strPlaceholder, $strElement, $strElementName) {
         $strReturn = "";
         //switch the text-language temporary
         $strPortalLanguage = class_carrier::getInstance()->getObjText()->getStrTextLanguage();
@@ -256,8 +256,6 @@ class class_element_portal extends class_portal {
         $strAdminLangParam = "&language=".$objLanguages->getPortalLanguage();
 
         $strTooltipText = class_carrier::getInstance()->getObjText()->getText("pe_new", "pages", "admin");
-        //TODO: get translated element name
-        $strElementName = $strElement;
         $strElementHref = getLinkAdminHref("pages_content", "newElement", "&systemid=".$strSystemid.$strAdminLangParam."&placeholder=".$strPlaceholder."&element=".$strElement."&pe=1");
 
         $strReturn = class_carrier::getInstance()->getObjToolkit("portal")->getPeNewButton($strPlaceholder, $strElement, $strElementName, $strElementHref);

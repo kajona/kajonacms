@@ -271,7 +271,8 @@ class class_modul_pages_portal extends class_portal {
                             if(!isset($arrPeNewButtons[$strPeNewPlaceholder]))
                                 $arrPeNewButtons[$strPeNewPlaceholder] = "";
 
-                            $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName());
+                            $strElementReadableName = $objPeNewElement->getStrReadableName() != $objPeNewElement->getStrName() ? ($objPeNewElement->getStrReadableName()." (".$objPeNewElement->getStrName().")") : $objPeNewElement->getStrName();
+                            $strLink = class_element_portal::getPortaleditorNewCode($objPageData->getSystemid(), $strPeNewPlaceholder, $objPeNewElement->getStrName(), $strElementReadableName);
 
                             $arrPeNewButtons[$strPeNewPlaceholder] .= $strLink;
 
