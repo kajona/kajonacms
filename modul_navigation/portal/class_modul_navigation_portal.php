@@ -499,6 +499,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$arrTemp["target"] = $objPointData->getStrTarget();
 		if($objPointData->getStrImage() != "") {
 			$arrTemp["image"] = getLinkPortal($arrTemp["page_intern"], $arrTemp["page_extern"], $objPointData->getStrTarget(), "<img src=\""._webpath_.$objPointData->getStrImage()."\" border=\"0\" alt=\"".$arrTemp["text"]."\"/>");
+            $arrTemp["image_src"] = $objPointData->getStrImage();
+            /** @deprecated will be removed in later releases */
             $arrTemp["image_raw"] = $objPointData->getStrImage();
         }
 
