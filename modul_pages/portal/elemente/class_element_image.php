@@ -62,9 +62,9 @@ class class_element_image extends class_element_portal implements interface_port
             $intMaxHeight = (int)$this->arrElementData["image_y"];
 
         if($intMaxHeight > 0 || $intMaxWidth > 0)
-            $this->arrElementData["image_src"] = _webpath_."/image.php?image=".urlencode($this->arrElementData["image_image"])."&amp;maxWidth=".$intMaxWidth."&amp;maxHeight=".$intMaxHeight;
+            $this->arrElementData["image_src"] = "/image.php?image=".urlencode($this->arrElementData["image_image"])."&amp;maxWidth=".$intMaxWidth."&amp;maxHeight=".$intMaxHeight;
         else
-            $this->arrElementData["image_src"] = _webpath_.$this->arrElementData["image_image"];
+            $this->arrElementData["image_src"] = $this->arrElementData["image_image"];
 
 		//Link?
 		if($this->arrElementData["image_link"] != "") {
