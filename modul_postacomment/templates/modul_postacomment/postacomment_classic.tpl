@@ -39,7 +39,7 @@
 			<div><label for="comment_subject_%%comment_systemid%%">%%lang_form_subject_label%%:</label><input type="text" name="comment_subject" id="comment_subject_%%comment_systemid%%" value="%%comment_subject%%" class="inputText" /></div><br />
 			<div><label for="comment_message_%%comment_systemid%%">%%lang_form_message_label%%*:</label><textarea name="comment_message" id="comment_message_%%comment_systemid%%" class="inputTextareaLarge">%%comment_message%%</textarea></div><br /><br />
 			<div><label for="kajonaCaptcha_%comment_systemid%%"></label><span id="kajonaCaptcha_%comment_systemid%%"></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('%%comment_systemid%%'); return false;">%%lang_form_captcha_reload_label%%</a>)</div><br />
-			<div><label for="form_captcha_%%comment_systemid%%">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" /></div><br /><br />
+			<div><label for="form_captcha_%%comment_systemid%%">%%lang_form_captcha_label%%*:</label><input type="text" name="form_captcha" id="form_captcha_%%comment_systemid%%" class="inputText" autocomplete="off" /></div><br /><br />
 			<div><label for="comment_submit_%%comment_systemid%%"></label><input type="submit" name="Submit" value="%%lang_form_submit_label%%" id="comment_submit_%%comment_systemid%%" class="button" /></div><br />
 		</form>
 	</div>

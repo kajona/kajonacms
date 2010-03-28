@@ -73,11 +73,11 @@ class class_element_tellafriend extends class_element_portal implements interfac
 		}
 
         $strTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "tellafriend_form");
-        $arrTemplate["tellafriend_sender"] = $this->getParam("tellafriend_sender");
-        $arrTemplate["tellafriend_sender_name"] = $this->getParam("tellafriend_sender_name");
-        $arrTemplate["tellafriend_receiver"] = $this->getParam("tellafriend_receiver");
-        $arrTemplate["tellafriend_receiver_name"] = $this->getParam("tellafriend_receiver_name");
-        $arrTemplate["tellafriend_message"] = $this->getParam("tellafriend_message");
+        $arrTemplate["tellafriend_sender"] = htmlToString($this->getParam("tellafriend_sender"), true);
+        $arrTemplate["tellafriend_sender_name"] = htmlToString($this->getParam("tellafriend_sender_name"), true);
+        $arrTemplate["tellafriend_receiver"] = htmlToString($this->getParam("tellafriend_receiver"), true);
+        $arrTemplate["tellafriend_receiver_name"] = htmlToString($this->getParam("tellafriend_receiver_name"), true);
+        $arrTemplate["tellafriend_message"] = htmlToString($this->getParam("tellafriend_message"), true);
         $arrTemplate["tellafriend_action"] = "sendTellafriend";
 
 		$arrTemplate["action"] = getLinkPortalHref($this->getPagename());
@@ -151,17 +151,19 @@ class class_element_tellafriend extends class_element_portal implements interfac
 	    $strHref = getLinkPortalHref($strPage, "", $strAction, $strParams, $strSystemid, $this->getPortalLanguage());
 	    $arrMessage = array();
 	    $arrMessage["tellafriend_url"] = "<a href=\"".$strHref."\">".$strHref."</a>";
-	    $arrMessage["tellafriend_receiver_name"] = $this->getParam("tellafriend_receiver_name");
-	    $arrMessage["tellafriend_sender_name"] = $this->getParam("tellafriend_sender_name");
-	    $arrMessage["tellafriend_message"] = $this->getParam("tellafriend_message");
+	    $arrMessage["tellafriend_receiver_name"] = htmlStripTags($this->getParam("tellafriend_receiver_name"));
+	    $arrMessage["tellafriend_sender_name"] = htmlStripTags($this->getParam("tellafriend_sender_name"));
+	    $arrMessage["tellafriend_message"] = htmlStripTags($this->getParam("tellafriend_message"));
 	    $strMailTemplateID = $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_html");
 	    $strEmailBody = $this->fillTemplate($arrMessage, $strMailTemplateID);
 	    $this->objTemplate->setTemplate($strEmailBody);
 	    $this->objTemplate->fillConstants();
 	    $strEmailBody = $this->objTemplate->getTemplate();
 
-	    $strSubject = $this->fillTemplate(array(), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
+	    //TODO: check if we have to remove critical characters here?
+	    $strSubject = $this->fillTemplate(array("tellafriend_sender_name" => htmlStripTags($this->getParam("tellafriend_sender_name"))), $this->objTemplate->readTemplate("/element_tellafriend/".$this->arrElementData["tellafriend_template"], "email_subject"));
 
+	    //TODO: check if we have to remove critical characters here?
 	    $objEmail = new class_mail();
 	    $objEmail->setSender($this->getParam("tellafriend_sender"));
 	    $objEmail->setSenderName($this->getParam("tellafriend_sender_name"));

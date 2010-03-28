@@ -41,7 +41,7 @@
 </piclist>
 
 <!-- represents a single image
-     available placeholders: pic, pic_href, name, subtitle, pic_detail -->
+     available placeholders: pic, pic_href, name, subtitle, pic_detail, pic_description, pic_size, pic_hits -->
 <piclist_pic>
     <div style="text-align: center;">
         <div><a href="%%pic_href%%"><img src="%%pic%%" alt="%%name%%" /></a></div>

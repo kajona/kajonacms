@@ -126,6 +126,9 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $arrTemplateImage["name"] = $objOneImage->getStrName();
                         $arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
                         $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+                        $arrTemplateImage["pic_description"] = $objOneImage->getStrDescription();
+				        $arrTemplateImage["pic_size"] = $objOneImage->getIntSize();
+				        $arrTemplateImage["pic_hits"] = $objOneImage->getIntHits();
 
                         //render the single image
                         $strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "piclist_pic");
@@ -249,12 +252,14 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
         //Add pe code
         $arrPeConfig = array(
-                                  "pe_module" => "gallery",
-                                  "pe_action_edit" => "editImage",
-                                  "pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
-                            );
+			"pe_module" => "gallery",
+			"pe_action_edit" => "editImage",
+			"pe_action_edit_params" => "&systemid=".$objImage->getSystemid()
+		);
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig);
 
+        //set the name of the current image to the page title via class_pages
+        class_modul_pages_portal::registerAdditionalTitle($objImage->getStrName());
 
 		//Update view counter
 		$objImage->setIntHits($objImage->getIntHits()+1);
