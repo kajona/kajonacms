@@ -1,7 +1,7 @@
 ﻿/*
     This file customizes the CKEditor to the requirements of Kajona.
 
-    $Id: fckedit_kajona_standard.js 2720 2009-04-26 17:31:16Z sidler $
+    $Id$
 */
 
 CKEDITOR.editorConfig = function(config) {

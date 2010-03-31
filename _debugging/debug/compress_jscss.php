@@ -4,7 +4,7 @@
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: compress_jscss.php 2353 2008-12-31 15:22:01Z jschroeter $                                           *
+*   $Id$                                           *
 ********************************************************************************************************/
 
 require_once("../system/includes.php");
