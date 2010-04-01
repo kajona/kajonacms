@@ -754,7 +754,7 @@ class class_db {
 
         //escape special chars
         if($bitHtmlSpecialChars)
-            $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8", false);
+            $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8");
 
 	    //already escaped by php?
 	    if(get_magic_quotes_gpc() == 1) {
