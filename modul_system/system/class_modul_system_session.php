@@ -191,7 +191,7 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return int
      */
     public static function getNumberOfActiveSessions() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()." ORDER BY session_releasetime DESC, session_id ASC";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()."";
 
         $arrRow =  class_carrier::getInstance()->getObjDB()->getRow($strQuery);
         return $arrRow["COUNT(*)"];
