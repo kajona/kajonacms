@@ -58,7 +58,7 @@
 .calendarOverlay {
 	position: absolute;
 	margin-top: -10px;
-	left: 580px;
+	margin-left: 10px;
 	width: 143px;
 	height: 137px;
 	-webkit-box-shadow: 2px 2px 5px -3px #000000;

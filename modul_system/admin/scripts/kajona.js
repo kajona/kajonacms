@@ -1666,3 +1666,58 @@ KAJONA.admin.treeview.checkInitialTreeViewToggling = function() {
         }
     }
 };
+
+
+/**
+ * Calendar functions
+ */
+KAJONA.admin.calendar = {};
+KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContainerId, objButton) {
+	KAJONA.util.fold(strCalendarContainerId, function() {
+		//positioning the calendar container
+		var btnRegion = YAHOO.util.Region.getRegion(objButton);
+		YAHOO.util.Dom.setStyle(strCalendarContainerId, "left", btnRegion.left+"px");
+
+		//show nice loading animation while loading the calendar files
+		YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
+		KAJONA.admin.loader.loadCalendarBase(function() {
+	    	KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
+	    	YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
+	    });
+	});
+};
+
+KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContainerId) {	
+	var calendar = new YAHOO.widget.Calendar(strCalendarContainerId);
+	calendar.cfg.setProperty("WEEKDAYS_SHORT", KAJONA.admin.lang.toolsetCalendarWeekday);
+	calendar.cfg.setProperty("MONTHS_LONG", KAJONA.admin.lang.toolsetCalendarMonth);
+
+	var handleSelect = function(type, args, obj) {
+		var dates = args[0];
+		var date = dates[0];
+		var year = date[0], month = (date[1] < 10 ? '0'+date[1]:date[1]), day = (date[2] < 10 ? '0'+date[2]:date[2]);
+		//write to fields
+		document.getElementById(strCalendarId+"_day").value = day;
+		document.getElementById(strCalendarId+"_month").value = month;
+		document.getElementById(strCalendarId+"_year").value = year;
+		
+		KAJONA.util.fold(strCalendarContainerId);
+		calendar.destroy();
+	};
+	calendar.selectEvent.unsubscribe(handleSelect, calendar);
+	
+	//check for values in date form
+	var formDate = [document.getElementById(strCalendarId+"_day").value, document.getElementById(strCalendarId+"_month").value, document.getElementById(strCalendarId+"_year").value];
+	if (formDate[0] > 0 && formDate[1] > 0 && formDate[2] > 0) {
+		calendar.select(formDate[1]+'/'+formDate[0]+'/'+formDate[2]);
+
+		var selectedDates = calendar.getSelectedDates();
+		if (selectedDates.length > 0) {
+			var firstDate = selectedDates[0];
+			calendar.cfg.setProperty("pagedate", (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
+		}
+	}
+
+	calendar.selectEvent.subscribe(handleSelect, calendar, true);
+	calendar.render();
+};
