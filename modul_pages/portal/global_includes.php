@@ -18,7 +18,7 @@
 
     %%nameOfPlaceholder%%
 
-    At the time of generation, this placeholder will be replaced by the speicified content:
+    At the time of generation, this placeholder will be replaced by the specified content:
 
     Value of placeholder
 */
@@ -30,7 +30,9 @@
     $arrGlobal["kajona_head"]           = "<script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>\n";
     $arrGlobal["kajona_head"]          .= "    <script type=\"text/javascript\">KAJONA_WEBPATH = '"._webpath_."';</script>\n";
     $arrGlobal["kajona_head"]		   .= "    <script type=\"text/javascript\" src=\""._webpath_."/portal/scripts/kajona.js\"></script>\n";
-	$arrGlobal["kajona_head"]          .= "    <meta name=\"generator\" content=\"Kajona³, www.kajona.de\" />";
+    $arrGlobal["kajona_head"]          .= "    <meta http-equiv=\"content-language\" content=\"".$this->getPortalLanguage()."\" />\n";
+    $arrGlobal["kajona_head"]          .= "    <meta name=\"generator\" content=\"Kajona³, www.kajona.de\" />";
+
 
 /*
     The next placeholder is used as an extra separator for the page-title. In some cases, module may add additional

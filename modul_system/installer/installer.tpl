@@ -6,7 +6,6 @@
 	<title>Kajona³ installer</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<meta http-equiv="imagetoolbar" content="no" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" href="_webpath_/installer/installer.css" type="text/css" />

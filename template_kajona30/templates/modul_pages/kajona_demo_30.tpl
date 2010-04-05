@@ -2,16 +2,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <link href="_webpath_/portal/css/kajona_30.css" rel="stylesheet" type="text/css" />
+    %%kajona_head%%
 	<title>%%additionalTitle%%%%title%% | Kajona³</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="index, follow" />
-	<meta http-equiv="imagetoolbar" content="no" />
-	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<meta name="description" content="%%description%%" />
 	<meta name="keywords" content="%%keywords%%" />
-	<link href="_webpath_/portal/css/kajona_30.css" rel="stylesheet" type="text/css" />
 	<link rel="alternate" type="application/rss+xml" title="Kajona³ news" href="_webpath_/xml.php?module=news&amp;action=newsFeed&amp;feedTitle=kajona_news" />
-	%%kajona_head%%
+    <link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 </head>
 <body>
 
