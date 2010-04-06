@@ -341,7 +341,7 @@ KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles)
 };
 
 KAJONA.admin.loader.loadUploaderBase = function(objCallback, arrAdditionalFiles) {
-	this.load([ "uploader" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
+	this.load([ "uploader", "swf" ], this.convertAdditionalFiles(arrAdditionalFiles), objCallback);
 };
 
 KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFiles) {
@@ -1266,10 +1266,8 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 	this.listElementSample;
 	
 	this.init = function() {
-		//try to load the uploader, show fallback content in case of errors if available
-		try {
-			this.uploader = new YAHOO.widget.Uploader(self.config['overlayContainerId']);
-		} catch (e) {
+		//check if Flash Player is available in needed version, otherwise abort and show fallback upload
+		if (!YAHOO.util.SWFDetect.isFlashVersionAtLeast(9.045)) {
 			try {
 				document.getElementById('kajonaUploadFallbackContainer').style.display = 'block';
 			} catch (e) {}
@@ -1277,7 +1275,8 @@ KAJONA.admin.filemanager.Uploader = function(config) {
 			document.getElementById('kajonaUploadButtonsContainer').style.display = 'none';
 			return;
 		}
-
+		
+		this.uploader = new YAHOO.widget.Uploader(self.config['overlayContainerId']);
 		this.uploader.addListener('contentReady', self.handleContentReady);
 		this.uploader.addListener('fileSelect', self.onFileSelect)
 		this.uploader.addListener('uploadStart', self.onUploadStart);
