@@ -106,7 +106,7 @@ abstract class class_adminwidget {
      * @param string $strContent
      */
     public final function setFieldsAsString($strContent) {
-        $arrFieldsToLoad = unserialize($strContent);
+        $arrFieldsToLoad = unserialize(stripslashes($strContent));
         foreach($this->arrPersistenceKeys as $strOneKey) {
             if(isset($arrFieldsToLoad[$strOneKey])) {
                 $this->setFieldValue($strOneKey, $arrFieldsToLoad[$strOneKey]);   
