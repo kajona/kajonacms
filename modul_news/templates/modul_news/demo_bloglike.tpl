@@ -54,7 +54,7 @@
     </div>
     <div class="newsListTeaser">
         <div id="cont_%%news_id%%">
-            <img src="image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
+            <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
             <div>%%news_intro%%</div>
             <div>%%news_text%%</div>
             <div><a href="#" onclick="KAJONA.util.fold('pac_%%news_id%%'); return false;">Comments: %%news_nrofcomments%%</a></div>

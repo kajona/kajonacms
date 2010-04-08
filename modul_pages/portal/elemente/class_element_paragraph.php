@@ -44,20 +44,32 @@ class class_element_paragraph extends class_element_portal implements  interface
         if($strTemplate == "")
             $strTemplate = "paragraph.tpl";
 
-        $strTemplateID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph");
 
-        $this->arrElementData["paragraph_image_tag"] = "";
-        if($this->arrElementData["paragraph_image"] != "")
-			$this->arrElementData["paragraph_image_tag"] .= "<img src=\"".$this->arrElementData["paragraph_image"]."\" alt=\"".$this->arrElementData["paragraph_title"]."\" />\n";
+        //choose template section
+        $strTemplateSection = "paragraph";
+        if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
+            $strTemplateSection = "paragraph_image_link";
+        } else if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] == "") {
+            $strTemplateSection = "paragraph_image";
+        } else if ($this->arrElementData["paragraph_image"] == "" && $this->arrElementData["paragraph_link"] != "") {
+            $strTemplateSection = "paragraph_link";
+        }
 
-        $this->arrElementData["paragraph_link_tag"] = "";
+        $strTemplateID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, $strTemplateSection);
+
+        if($this->arrElementData["paragraph_image"] != "") {
+            //remove the webpath (was added for paragraphs saved pre 3.3.0)
+            $this->arrElementData["paragraph_image"] = str_replace("_webpath_", "", $this->arrElementData["paragraph_image"]);
+            $this->arrElementData["paragraph_image"] = urlencode($this->arrElementData["paragraph_image"]);
+        }
+
         if($this->arrElementData["paragraph_link"] != "") {
 		    //internal page?
 		    $objPage = class_modul_pages_page::getPageByName($this->arrElementData["paragraph_link"]);
 		    if($objPage->getStrName() != "")
-			    $this->arrElementData["paragraph_link_tag"] .= "<a href=\"".getLinkPortalHref($this->arrElementData["paragraph_link"], "")."\">".$this->arrElementData["paragraph_link"]."</a>\n";
+			    $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
 			else
-			    $this->arrElementData["paragraph_link_tag"] .= "<a href=\"".getLinkPortalHref("", $this->arrElementData["paragraph_link"])."\">".$this->arrElementData["paragraph_link"]."</a>\n";
+			    $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
 		}
 
         $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);

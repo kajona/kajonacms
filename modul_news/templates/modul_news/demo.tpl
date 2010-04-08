@@ -44,7 +44,7 @@
     </div>
     <div class="newsListTeaser">
         <div>
-	        <img src="image.php?image=%%news_image%%&amp;maxWidth=150&amp;maxHeight=150" alt="%%news_title%%" />
+	        <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=150&amp;maxHeight=150" alt="%%news_title%%" />
 	        %%news_intro%% %%news_more_link%%
         </div>
     </div>
@@ -69,7 +69,7 @@
 <div class="newsDetail">
     <h2>%%news_title%%</h2> %%news_start_date%%
     <p class="newsTeaser">%%news_intro%%</p>
-    <img src="image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
+    <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
     <p>%%news_text%%</p>
     <p>%%news_back_link%%</p>
 </div>

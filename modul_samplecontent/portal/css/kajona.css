@@ -390,6 +390,13 @@ h2 {
     box-shadow: 2px 2px 5px -3px #000000;
 }
 
+
+/* E L E M E N T  P A R A G R A P H */
+.element_paragraph_image {
+    float: right;
+    margin: 0 0px 10px 10px;
+}
+
 /* E L E M E N T  I M A G E */
 .element_image {
     margin-bottom: 10px;

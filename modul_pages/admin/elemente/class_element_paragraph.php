@@ -80,7 +80,7 @@ class class_element_paragraph extends class_element_admin implements interface_a
 
 	    //do some cleanups
         $strContent = processWysiwygHtmlContent($this->getParam("paragraph_content"));
-		$strImage = str_replace(_webpath_, "_webpath_", $this->getParam("paragraph_image"));
+		$strImage = str_replace(_webpath_, "", $this->getParam("paragraph_image"));
 
 		//and save to database
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
