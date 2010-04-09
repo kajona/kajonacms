@@ -4,13 +4,13 @@
 <head>
 	<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
 	<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+    %%head%%
 	<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 	<title>Kajona³ admin [%%moduletitle%%]</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<meta name="generator" content="Kajona³, www.kajona.de" />
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
-	%%head%%
 	<script type="text/javascript">
         KAJONA.admin.loader.loadAjaxBase();
 	</script>

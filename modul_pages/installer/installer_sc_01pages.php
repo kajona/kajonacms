@@ -91,14 +91,16 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = 'Herzlichen Glückwunsch!',
                                 paragraph_content ='Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
-                                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
+                                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>',
+                                paragraph_image = '/portal/pics/upload/samples/P3197800.JPG'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = 'Congratulations!',
                                     paragraph_content ='This installation of Kajona was successful. Have fun using Kajona!<br />
-                                                     For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>'
+                                                     For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>',
+                                    paragraph_image = '/portal/pics/upload/samples/P3197800.JPG'
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
@@ -330,13 +332,17 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
 							SET paragraph_title = 'Standard-Absatz',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+								paragraph_image = '/portal/pics/upload/samples/IMG_3000.JPG',
+								paragraph_link = 'http://www.kajona.de/'
 						 	WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
              $strQuery = "UPDATE "._dbprefix_."element_paragraph
 							SET paragraph_title = 'Standard paragraph',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
+								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
+								paragraph_image = '/portal/pics/upload/samples/IMG_3000.JPG',
+                                paragraph_link = 'http://www.kajona.de/'
 							WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 

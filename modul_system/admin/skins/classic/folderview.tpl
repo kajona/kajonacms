@@ -4,10 +4,10 @@
 <head>
 <link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
 <script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+%%head%%
 <script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-%%head%%
 <script type="text/javascript">
     KAJONA.admin.loader.loadAjaxBase();
 </script>
