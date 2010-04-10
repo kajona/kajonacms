@@ -16,7 +16,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.91";
+		$arrModule["version"] 		  = "3.3.0";
 		$arrModule["name"] 			  = "rating";
 		$arrModule["name_lang"]       = "Module Ratings";
 		$arrModule["moduleId"] 		  = _rating_modul_id_;
@@ -123,6 +123,11 @@ class class_installer_rating extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.2.1") {
             $strReturn .= $this->update_321_3291();
         }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_330();
+        }
         
         return $strReturn."\n\n";
 	}
@@ -190,6 +195,14 @@ class class_installer_rating extends class_installer_base implements interface_i
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("rating", "3.2.91");
+        return $strReturn;
+    }
+
+    private function update_3291_330() {
+        $strReturn = "Updating 3.2.91 to 3.3.0..\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("rating", "3.3.0");
         return $strReturn;
     }
 	

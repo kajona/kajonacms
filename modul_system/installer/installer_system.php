@@ -19,12 +19,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.2.96";
+		$arrModul["version"] 			= "3.3.0";
 		$arrModul["name"] 				= "system";
-		$arrModul["class_admin"] 		= "class_modul_system_admin";
-		$arrModul["file_admin"] 		= "class_modul_system_admin.php";
-		$arrModul["class_portal"]		= "";
-		$arrModul["file_portal"] 		= "";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 
@@ -550,13 +546,17 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_3295_3296();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.96") {
+            $strReturn .= $this->update_3296_330();
+        }
+
         return $strReturn."\n\n";
 	}
 
 
     private function update_310_311() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
+        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
 
         $strReturn .= "Deleting old js-calendar...\n";
         $objFilesystem = new class_filesystem();
@@ -573,8 +573,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_311_319() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
 
 
         $strReturn .= "Registering filemanager xml handlers...\n";
@@ -663,8 +662,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_319_addLanguages() {
-        $strReturn = "";
-        $strReturn .= "Installing table languages...\n";
+        $strReturn = "Installing table languages...\n";
 
 		$arrFields = array();
 		$arrFields["language_id"] 		= array("char20", false);
@@ -738,8 +736,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_319_3195() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.9 to 3.1.95...\n";
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
 
         $strReturn .= "Registering default languageswitch template...\n";
 
@@ -766,8 +763,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_3195_320() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.95 to 3.2.0...\n";
+        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.0");
         return $strReturn;
@@ -852,11 +848,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_321_3291() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.1 to 3.2.91...\n";
-
-
-
+        $strReturn = "Updating 3.2.1 to 3.2.91...\n";
 
         $strReturn .= "Reorganizing filemanager repositories...\n";
 
@@ -923,8 +915,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
     private function update_3291_3292() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.91 to 3.2.92...\n";
+        $strReturn = "Updating 3.2.91 to 3.2.92...\n";
 
         $strReturn.= "Checking number of nodes on second level compared to number of modules installed...\n";
 
@@ -975,8 +966,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_3292_3293() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.92 to 3.2.93...\n";
+        $strReturn = "Updating 3.2.92 to 3.2.93...\n";
 
 
         $strReturn = "Altering system-date-table...\n";
@@ -1050,8 +1040,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_3293_3294() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.93 to 3.2.94...\n";
+        $strReturn = "Updating 3.2.93 to 3.2.94...\n";
 
         $strReturn .= "Deleting old FCKeditor files since it's replaced by CKEditor...\n";
         $objFilesystem = new class_filesystem();
@@ -1071,8 +1060,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_3294_3295() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.94 to 3.2.95...\n";
+        $strReturn = "Updating 3.2.94 to 3.2.95...\n";
 
         $strReturn .= "Installing table languages_languageset...\n";
 
@@ -1093,8 +1081,7 @@ class class_installer_system extends class_installer_base implements interface_i
     }
 
     private function update_3295_3296() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.95 to 3.2.96...\n";
+        $strReturn = "Updating 3.2.95 to 3.2.96...\n";
 
         $strReturn .= "Removing setting _images_cachepath_...\n";
 
@@ -1109,6 +1096,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.2.96");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.2.96");
+        return $strReturn;
+    }
+
+    private function update_3296_330() {
+        $strReturn = "Updating 3.2.96 to 3.3.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.0");
         return $strReturn;
     }
 }

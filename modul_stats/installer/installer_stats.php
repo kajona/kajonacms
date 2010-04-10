@@ -21,12 +21,8 @@ class class_installer_stats extends class_installer_base implements interface_in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.3.0";
 		$arrModule["name"] 			= "stats";
-		$arrModule["class_admin"] 	= "class_modul_stats_admin";
-		$arrModule["file_admin"] 	= "class_modul_stats_admin.php";
-		$arrModule["class_portal"] 	= "class_modul_stats_portal";
-		$arrModule["file_portal"] 	= "class_modul_stats_portal.php";
 		$arrModule["name_lang"] 	= "Module Stats";
 		$arrModule["moduleId"] 		= _stats_modul_id_;
 		parent::__construct($arrModule);
@@ -136,12 +132,16 @@ class class_installer_stats extends class_installer_base implements interface_in
             $strReturn .= $this->update_3209_321();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.1") {
+            $strReturn .= $this->update_321_330();
+        }
+
         return $strReturn."\n\n";
 	}
 
     private function update_310_311() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
+        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.1");
 
@@ -149,8 +149,7 @@ class class_installer_stats extends class_installer_base implements interface_in
     }
 
     private function update_311_319() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
+        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
 
         $strReturn .= "Updating system-constants...\n";
         $objConstant = class_modul_system_setting::getConfigByName("_stats_anzahl_liste_");
@@ -168,34 +167,37 @@ class class_installer_stats extends class_installer_base implements interface_in
     }
 
     private function update_319_3195() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.9 to 3.1.95...\n";
+        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.1.95");
         return $strReturn;
     }
 
     private function update_3195_320() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.1.95 to 3.2.0...\n";
+        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.2.0");
         return $strReturn;
     }
 
     private function update_320_3209() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.0 to 3.2.0.9...\n";
+        $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.2.0.9");
         return $strReturn;
     }
 
     private function update_3209_321() {
-        $strReturn = "";
-        $strReturn .= "Updating 3.2.0.9 to 3.2.1...\n";
+        $strReturn = "Updating 3.2.0.9 to 3.2.1...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.2.1");
+        return $strReturn;
+    }
+
+    private function update_321_330() {
+        $strReturn = "Updating 3.2.1 to 3.3.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.3.0");
         return $strReturn;
     }
 

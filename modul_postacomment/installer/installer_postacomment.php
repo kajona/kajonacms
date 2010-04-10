@@ -16,12 +16,8 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.91";
+		$arrModule["version"] 		  = "3.3.0";
 		$arrModule["name"] 			  = "postacomment";
-		$arrModule["class_admin"]  	  = "class_modul_postacomment_admin";
-		$arrModule["file_admin"] 	  = "class_modul_postacomment_admin.php";
-		$arrModule["class_portal"] 	  = "class_modul_postacomment_portal";
-		$arrModule["file_portal"] 	  = "class_modul_postacomment_portal.php";
 		$arrModule["name_lang"] 	  = "Module Postacomment";
 		$arrModule["moduleId"] 		  = _postacomment_modul_id_;
 
@@ -161,6 +157,11 @@ class class_installer_postacomment extends class_installer_base implements inter
             $strReturn .= $this->update_321_3291();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_330();
+        }
+
         return $strReturn."\n\n";
 	}
 	
@@ -238,6 +239,16 @@ class class_installer_postacomment extends class_installer_base implements inter
         $this->updateModuleVersion("postacomment", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("postacomment", "3.2.91");
+        return $strReturn;
+    }
+
+    private function update_3291_330() {
+        $strReturn = "Updating 3.2.91 to 3.3.0..\n";
+        $strReturn .= "Updating module-versions...\n";
+
+        $this->updateModuleVersion("postacomment", "3.3.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("postacomment", "3.3.0");
         return $strReturn;
     }
 

@@ -20,7 +20,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.3.0";
 		$arrModule["name"] 			= "element_tellafriend";
 		$arrModule["name_lang"] 	= "Element tellafriend";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -76,8 +76,6 @@ class class_installer_element_tellafriend extends class_installer_base implement
     public function postInstall() {
 		$strReturn = "";
 
-		$strReturn = "";
-
 		//Table for page-element
 		$strReturn .= "Installing tellafriend-element table...\n";
 		
@@ -125,15 +123,26 @@ class class_installer_element_tellafriend extends class_installer_base implement
         $strReturn = "";
         if(class_modul_pages_element::getElement("tellafriend")->getStrVersion() == "3.2.0.9") {
             $strReturn .= $this->postUpdate_3209_321();
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_modul_pages_element::getElement("tellafriend")->getStrVersion() == "3.2.1") {
+            $strReturn .= $this->postUpdate_321_330();
+            $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
 
     public function postUpdate_3209_321() {
-        $strReturn = "";
         $strReturn = "Updating element tellafriend to 3.2.1...\n";
         $this->updateElementVersion("tellafriend", "3.2.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_321_330() {
+        $strReturn = "Updating element tellafriend to 3.3.0...\n";
+        $this->updateElementVersion("tellafriend", "3.3.0");
         return $strReturn;
     }
 }

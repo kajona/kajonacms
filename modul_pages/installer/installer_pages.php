@@ -16,22 +16,12 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.93";
+		$arrModule["version"] 		= "3.3.0";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
-		$arrModule["class_admin3"] 	= "class_modul_folderview_admin";
-		$arrModule["file_admin3"] 	= "class_modul_folderview_admin.php";
-		$arrModule["class_portal2"] = "";
-		$arrModule["class_portal3"] = "";
-		$arrModule["file_portal2"] 	= "";
-		$arrModule["file_portal3"] 	= "";
 		$arrModule["name_lang"] 	= "Module Pages";
-		$arrModule["name_lang2"] 	= "Module Pages Content";
-		$arrModule["name_lang3"] 	= "Module Folderview";
 		$arrModule["moduleId"] 		= _pages_modul_id_;
-		$arrModule["nummer2"] 		= _pages_content_modul_id_;
-		$arrModule["nummer3"] 		= _pages_content_modul_id_;
 		parent::__construct($arrModule);
 	}
 
@@ -357,6 +347,11 @@ class class_installer_pages extends class_installer_base implements interface_in
             $strReturn .= $this->update_3292_3293();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.93") {
+            $strReturn .= $this->update_3293_330();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -598,6 +593,19 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.2.93");
         $this->updateElementVersion("paragraph", "3.2.93");
         $this->updateElementVersion("image", "3.2.93");
+        return $strReturn;
+    }
+
+    private function update_3293_330() {
+        $strReturn = "Updating 3.2.93 to 3.3.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.0");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.0");
+        $this->updateElementVersion("paragraph", "3.3.0");
+        $this->updateElementVersion("image", "3.3.0");
         return $strReturn;
     }
 

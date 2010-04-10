@@ -20,7 +20,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.1";
+		$arrModule["version"] 		= "3.3.0";
 		$arrModule["name"] 			= "element_imagelightbox";
 		$arrModule["name_lang"] 	= "Element imagelightbox";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -110,15 +110,26 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
         $strReturn = "";
         if(class_modul_pages_element::getElement("imagelightbox")->getStrVersion() == "3.2.0.9") {
             $strReturn .= $this->postUpdate_3209_321();
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_modul_pages_element::getElement("imagelightbox")->getStrVersion() == "3.2.1") {
+            $strReturn .= $this->postUpdate_321_330();
+            $this->objDB->flushQueryCache();
         }
 
         return $strReturn;
     }
 
     public function postUpdate_3209_321() {
-        $strReturn = "";
         $strReturn = "Updating element imagelightbox to 3.2.1...\n";
         $this->updateElementVersion("imagelightbox", "3.2.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_321_330() {
+        $strReturn = "Updating element imagelightbox to 3.3.0...\n";
+        $this->updateElementVersion("imagelightbox", "3.3.0");
         return $strReturn;
     }
 }

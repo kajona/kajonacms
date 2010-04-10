@@ -4,7 +4,7 @@
 *   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                                *
+*   $Id$                                           *
 ********************************************************************************************************/
 //includes...
 include_once("../system/includes.php");
@@ -25,7 +25,7 @@ class class_installer {
 	private $strForwardLink = "";
 	private $strBackwardLink = "";
 
-	private $strVersion = "V 3.2.96";
+	private $strVersion = "V 3.3.0";
 
 	/**
 	 * Instance of template-engine

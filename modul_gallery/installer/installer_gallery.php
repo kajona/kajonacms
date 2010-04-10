@@ -16,12 +16,8 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.2.92";
+		$arrModule["version"] 		= "3.3.0";
 		$arrModule["name"] 			= "gallery";
-		$arrModule["class_admin"] 	= "class_modul_gallery_admin";
-		$arrModule["file_admin"] 	= "class_modul_gallery_admin.php";
-		$arrModule["class_portal"] 	= "class_modul_gallery_portal";
-		$arrModule["file_portal"] 	= "class_modul_gallery_portal.php";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
 		parent::__construct($arrModule);
@@ -220,6 +216,11 @@ class class_installer_gallery extends class_installer_base implements interface_
             $strReturn .= $this->update_3291_3292();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.92") {
+            $strReturn .= $this->update_3292_330();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -335,7 +336,6 @@ class class_installer_gallery extends class_installer_base implements interface_
     private function update_3291_3292() {
         $strReturn = "Updating 3.2.91 to 3.2.92...\n";
 
-
         if(in_array(_dbprefix_."element_gallery", $this->objDB->getTables())) {
             $strReturn .= "Updating gallery-element table...\n";
 
@@ -351,6 +351,16 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.2.92");
         $this->updateElementVersion("galleryRandom", "3.2.92");
+        return $strReturn;
+    }
+
+    private function update_3292_330() {
+        $strReturn = "Updating 3.2.92 to 3.3.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.3.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.3.0");
+        $this->updateElementVersion("galleryRandom", "3.3.0");
         return $strReturn;
     }
 

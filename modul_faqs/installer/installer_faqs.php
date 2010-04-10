@@ -16,12 +16,8 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.2.91";
+		$arrModule["version"] 		  = "3.3.0";
 		$arrModule["name"] 			  = "faqs";
-		$arrModule["class_admin"]  	  = "class_modul_faqs_admin";
-		$arrModule["file_admin"] 	  = "class_modul_faqs_admin.php";
-		$arrModule["class_portal"] 	  = "class_modul_faqs_portal";
-		$arrModule["file_portal"] 	  = "class_modul_faqs_portal.php";
 		$arrModule["name_lang"] 	  = "Module FAQs";
 		$arrModule["moduleId"] 		  = _faqs_modul_id_;
 		parent::__construct($arrModule);
@@ -177,6 +173,11 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $strReturn .= $this->update_321_3291();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.2.91") {
+            $strReturn .= $this->update_3291_330();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -232,7 +233,6 @@ class class_installer_faqs extends class_installer_base implements interface_ins
     private function update_321_3291() {
         $strReturn = "Updating 3.2.1 to 3.2.91...\n";
 
-
         $strReturn .= "Reorganizing faqs..\n";
 
         $strQuery = "SELECT module_id
@@ -279,6 +279,15 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "3.2.91");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("faqs", "3.2.91");
+        return $strReturn;
+    }
+
+    private function update_3291_330() {
+        $strReturn = "Updating 3.2.91 to 3.3.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "3.3.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("faqs", "3.3.0");
         return $strReturn;
     }
 
