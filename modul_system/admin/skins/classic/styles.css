@@ -242,6 +242,23 @@ img {
     border: 1px solid #dad7ff;
 }
 
+.fieldset legend img {
+    vertical-align: middle;
+}
+
+.optionalElementsWrapper .fieldset {
+    border-color: transparent;
+}
+
+.optionalElementsWrapper .fieldset legend a {
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.optionalElementsWrapperVisible .fieldset {
+    border-color: #dad7ff;
+}
+
 /* Links */
 
 a:link, a:visited, a:active {

@@ -41,7 +41,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param bool $bitToday If set true, the current date will be inserted, if no date is passed
      * @param string $strClass
      * @return string
-     * @deprecated will be removed in 3.3.x Use formDateSingle() intead.
+     * @deprecated will be removed in 3.3.x Use formDateSingle() instead.
      */
     public function formDateSimple($strName = "", $intDay = "", $intMonth = "", $intYear = "", $strTitle = "", $bitToday = true, $strClass = "inputDate") {
         //no given values, use today
@@ -556,6 +556,22 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Creates a foldable wrapper around optional form fields
+     *
+     * @param string $strContent
+     * @param string $strTitle
+     * @param bool $bitVisible
+     * @return string
+     */
+    public function formOptionalElementsWrapper($strContent, $strTitle = "", $bitVisible = false) {
+        $strId = generateSystemid();
+        $strCallbackVisible = "function() {YAHOO.util.Dom.addClass('".$strId."', 'optionalElementsWrapperVisible'); }";
+        $strCallbackInvisible = "function() {YAHOO.util.Dom.removeClass('".$strId."', 'optionalElementsWrapperVisible'); }";
+        $arrFolder = $this->getLayoutFolder($strContent, "<img src=\""._skinwebpath_."/pics/icon_folderClosed.gif\" alt=\"\" /> ".$strTitle, $bitVisible, $strCallbackVisible, $strCallbackInvisible);
+        return "<br /><div id=\"".$strId."\" class=\"optionalElementsWrapper".($bitVisible ? " optionalElementsWrapperVisible" : "")."\">".$this->getFieldset($arrFolder[1], $arrFolder[0])."</div>";
+    }
+
+    /**
      * Returns a single TextRow in a form
      *
      * @param string $strText
@@ -911,10 +927,12 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strContent
      * @param string $strLinkText The text / content,
      * @param bool $bitVisible
+     * @param string $strCallbackVisible JS function
+     * @param string $strCallbackInvisible JS function
      * @return mixed 0: The html-layout code
      *               1: The link to fold / unfold
      */
-    public function getLayoutFolder($strContent, $strLinkText, $bitVisible = false) {
+    public function getLayoutFolder($strContent, $strLinkText, $bitVisible = false, $strCallbackVisible = "", $strCallbackInvisible = "") {
         $arrReturn = array();
         $strID = str_replace(array(" ", "."), array("", ""), microtime());
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "layout_folder");
@@ -923,13 +941,12 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["content"] = $strContent;
         $arrTemplate["display"] = ($bitVisible ? "block" : "none");
         $arrReturn[0] = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."')\">".$strLinkText."</a>";
+        $arrReturn[1] = "<a href=\"javascript:KAJONA.util.fold('".$strID."', ". ($strCallbackVisible != "" ? $strCallbackVisible : "null") .", ". ($strCallbackInvisible != "" ? $strCallbackInvisible : "null") .");\">".$strLinkText."</a>";
         return $arrReturn;
     }
 
     /**
-     * Creates the mechanism to fold parts of the site / make them vivsible oder invisible
-     * In recent times called "klapper"
+     * Creates the mechanism to fold parts of the site / make them vivsible or invisible
      *
      * @param string $strContent
      * @param string $strLinkText Mouseovertext
@@ -993,7 +1010,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strClass
      * @return string
      */
-    public function getFieldset($strTitle, $strContent, $strClass="fieldset") {
+    public function getFieldset($strTitle, $strContent, $strClass = "fieldset") {
         //remove old placeholder from content
         $this->objTemplate->setTemplate($strContent);
         $this->objTemplate->deletePlaceholder();

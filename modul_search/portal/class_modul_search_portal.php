@@ -97,7 +97,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 		//Resize Array to wanted size
 		$arrHitsFilter = $this->objToolkit->pager($this->arrElementData["search_amount"], ($this->getParam("pv") != "" ? (int)$this->getParam("pv") : 1), $this->getText("weiter"), $this->getText("zurueck"), "search", ($this->arrElementData["search_page"] != "" ? $this->arrElementData["search_page"] : $this->getPagename()), $arrHitsSorted, "&searchterm=".urlencode(html_entity_decode($this->strSearchterm, ENT_COMPAT, "UTF-8")));
 
-        $strRowTempalteID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
+        $strRowTemplateID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_hitlist_hit");
 		foreach($arrHitsFilter["arrData"] as $strPage => $arrHit) {
             $arrRow = array();
 			if(!isset($arrHit["pagelink"]))
@@ -105,7 +105,7 @@ class class_modul_search_portal extends class_portal implements interface_portal
 			else
 				$arrRow["page_link"] = $arrHit["pagelink"];
 			$arrRow["page_description"] = $arrHit["description"];
-			$arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTempalteID, false);
+			$arrTemplate["hitlist"] .= $this->objTemplate->fillTemplate($arrRow, $strRowTemplateID, false);
 		}
 
 		//Collect global data

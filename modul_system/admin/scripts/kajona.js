@@ -42,18 +42,22 @@ KAJONA.util.inArray = function (strNeedle, arrHaystack) {
  * Used to show/hide an html element
  * 
  * @param {String} strElementId
- * @param {Function} objCallbackShow
+ * @param {Function} objCallbackVisible
+ * @param {Function} objCallbackInvisible
  */
-KAJONA.util.fold = function (strElementId, objCallbackShow) {
+KAJONA.util.fold = function (strElementId, objCallbackVisible, objCallbackInvisible) {
 	var element = document.getElementById(strElementId);
 	if (element.style.display == 'none') 	{
 		element.style.display = 'block';
-		if (objCallbackShow != undefined) {
-			objCallbackShow();
+		if (YAHOO.lang.isFunction(objCallbackVisible)) {
+			objCallbackVisible();
 		}
     }
     else {
     	element.style.display = 'none';
+		if (YAHOO.lang.isFunction(objCallbackInvisible)) {
+			objCallbackInvisible();
+		}
     }
 };
 

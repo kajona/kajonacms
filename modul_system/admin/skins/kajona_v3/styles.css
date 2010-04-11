@@ -87,19 +87,19 @@ body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	color: #575757;
+	text-align: left;
 }
 
 body.login {
 	text-align: center;
 }
 
-body.folderView, body.portalEditor {
+body.folderView {
 	margin: 15px;
-	text-align: left;
 }
 
 body.portalEditor {
-    margin: 0px;
+    margin: 0 0 0 8px;
     background-image: none;
     padding-right: 8px;
 }
@@ -949,9 +949,12 @@ form .formText .text {
 
 /* F I E L D S E T */
 .fieldset {
-	width: 80%;
-    border: 1px solid #575757;
+    border: 1px solid #c2c2c2;
     padding: 0 5px 5px 5px;
+    margin-left: -8px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .fieldset legend {
@@ -959,8 +962,37 @@ form .formText .text {
     color: #575757;
 }
 
+.fieldset legend img {
+    vertical-align: middle;
+}
+
+.fieldset > div {
+    padding: 6px;
+}
+
 .fieldset .adminList {
     width: 100%;
+}
+
+.optionalElementsWrapper .fieldset {
+    border-color: transparent;
+}
+
+.optionalElementsWrapper .fieldset legend a {
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.optionalElementsWrapper .fieldset > div {
+    padding: 0;
+}
+
+.optionalElementsWrapperVisible .fieldset {
+    border-color: #c2c2c2;
+}
+
+.optionalElementsWrapperVisible .fieldset > div {
+    padding: 6px;
 }
 
 
@@ -970,6 +1002,9 @@ form .formText .text {
 	border: 1px solid #FF0000;
 	margin: 5px auto 10px auto;
 	padding: 8px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .warnbox h3 {

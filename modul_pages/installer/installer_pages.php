@@ -240,7 +240,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["image_image"]	 = array("char254", true);
 		$arrFields["image_x"]        = array("int", true);
 		$arrFields["image_y"]        = array("int", true);
-		$arrFields["image_tempalte"] = array("char254", true);
+		$arrFields["image_template"] = array("char254", true);
 
 		if(!$this->objDB->createTable("element_image", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";

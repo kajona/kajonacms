@@ -95,7 +95,7 @@ class class_element_admin extends class_admin {
         //add content from sub-classes
         $strSystemFields .= $this->strSystemFormElements;
 
-        $strReturn .= "<br />".$this->objToolkit->getLayoutFolderPic($strSystemFields, $this->getText("page_element_system_folder", "pages"), "icon_folderOpen.gif", "icon_folderClosed.gif", $bitShow );
+        $strReturn .= $this->objToolkit->formOptionalElementsWrapper($strSystemFields, $this->getText("page_element_system_folder", "pages"), $bitShow);
 
 		//If its going to be a new element, allow to choose the position
 		if($strMode == "new") {
@@ -194,7 +194,7 @@ class class_element_admin extends class_admin {
     /**
      * Returns a textual description of the current element, based
      * on the lang key element_description.
-     * 
+     *
      * @return string
      * @since 3.2.1
      */

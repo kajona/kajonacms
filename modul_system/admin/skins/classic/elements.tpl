@@ -398,7 +398,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements
 <layout_folder>
-<div id="%%id%%" style="display: %%display%%;">%%content%%<br /><br /></div>
+<div id="%%id%%" style="display: %%display%%;">%%content%%</div>
 </layout_folder>
 
 Same as above, but using an image to fold / unfold the content
@@ -418,7 +418,7 @@ A precent-beam to illustrate proportions
 
 A fieldset to structure logical sections
 <misc_fieldset>
-<fieldset class="%%class%%"><legend>%%title%%</legend>%%content%%</fieldset><br />
+<fieldset class="%%class%%"><legend>%%title%%</legend><div>%%content%%</div></fieldset><br />
 </misc_fieldset>
 
 <graph_container>

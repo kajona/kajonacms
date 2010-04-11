@@ -44,27 +44,17 @@ class class_element_image extends class_element_portal implements interface_port
         if($strTemplate == "")
             $strTemplate = "image.tpl";
 
+        //choose template section
         if($this->arrElementData["image_link"] != "")
-            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "imageWithLink");
+            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image_link");
         else
-            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "imageWithoutLink");
+            $strTemplateID = $this->objTemplate->readTemplate("/element_image/".$strTemplate, "image");
 
+        $this->arrElementData["image_src"] = urlencode($this->arrElementData["image_image"]);
 
-		
-        //scale the image?
-        $intMaxWidth = 0;
-        $intMaxHeight = 0;
-
-        if($this->arrElementData["image_x"] != "" && $this->arrElementData["image_x"] != 0)
-            $intMaxWidth = (int)$this->arrElementData["image_x"];
-
-        if($this->arrElementData["image_y"] != "" && $this->arrElementData["image_y"] != 0)
-            $intMaxHeight = (int)$this->arrElementData["image_y"];
-
-        if($intMaxHeight > 0 || $intMaxWidth > 0)
-            $this->arrElementData["image_src"] = "/image.php?image=".urlencode($this->arrElementData["image_image"])."&amp;maxWidth=".$intMaxWidth."&amp;maxHeight=".$intMaxHeight;
-        else
-            $this->arrElementData["image_src"] = $this->arrElementData["image_image"];
+        //TODO: rename db columns as well and remove this two lines
+        $this->arrElementData["image_width"] = $this->arrElementData["image_x"];
+        $this->arrElementData["image_height"] = $this->arrElementData["image_y"];
 
 		//Link?
 		if($this->arrElementData["image_link"] != "") {
@@ -73,7 +63,7 @@ class class_element_image extends class_element_portal implements interface_port
 		    if($objPage->getStrName() != "")
 			    $this->arrElementData["link_href"] = getLinkPortalHref($this->arrElementData["image_link"], "");
 			else
-			    $this->arrElementData["link_href"] = getLinkPortalHref("",$this->arrElementData["image_link"]);
+			    $this->arrElementData["link_href"] = getLinkPortalHref("", $this->arrElementData["image_link"]);
 		}
 
 

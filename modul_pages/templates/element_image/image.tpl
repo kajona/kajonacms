@@ -1,17 +1,21 @@
 <!-- see section "Template-API" of module manual for a list of available placeholders -->
 
-<!-- available placeholders: link_href, image_src, image_title, image_x, image_y -->
-<imageWithLink>
-    <div class="element_image">
-        <a href="%%link_href%%"><img src="_webpath_%%image_src%%" alt="%%image_title%%" /></a><br />
-        %%image_title%%
-    </div>
-</imageWithLink>
+<!-- This templates uses static image sizes to resize the image.
+     Feel free to use the dynamic placeholders image_width/height which contain
+     the values entered in the optional fields of the image element. -->
 
-<!-- available placeholders: image_src, image_title, image_x, image_y -->
-<imageWithoutLink>
+<!-- available placeholders: image_src, image_title, image_width, image_height -->
+<image>
     <div class="element_image">
-        <img src="_webpath_%%image_src%%" alt="%%image_title%%" /><br />
+        <img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" /><br />
         %%image_title%%
     </div>
-</imageWithoutLink>
+</image>
+
+<!-- available placeholders: link_href, image_src, image_title, image_width, image_height -->
+<image_link>
+    <div class="element_image">
+        <a href="%%link_href%%"><img src="_webpath_/image.php?image=%%image_src%%&amp;maxWidth=200&amp;maxHeight=200" alt="%%image_title%%" /></a><br />
+        %%image_title%%
+    </div>
+</image_link>

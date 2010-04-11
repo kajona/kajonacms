@@ -40,10 +40,17 @@ class class_element_image extends class_element_admin implements interface_admin
 		$strReturn .= $this->objToolkit->formInputText("image_title", $this->getText("image_title"), (isset($arrElementData["image_title"]) ? $arrElementData["image_title"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("image_link", $this->getText("image_link"), (isset($arrElementData["image_link"]) ? $arrElementData["image_link"] : "" ));
 		$strReturn .= $this->objToolkit->formInputText("image_image", $this->getText("image_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : "" ), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=image_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-		$strReturn .= $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
-		$strReturn .= $this->objToolkit->formInputText("image_x", $this->getText("image_x"), (isset($arrElementData["image_x"]) ? $arrElementData["image_x"] : "" ));
-		$strReturn .= $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
-		$strReturn .= $this->objToolkit->formInputText("image_y", $this->getText("image_y"), (isset($arrElementData["image_y"]) ? $arrElementData["image_y"] : "" ));
+
+		$strXY = $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
+		$strXY .= $this->objToolkit->formInputText("image_x", $this->getText("image_x"), (isset($arrElementData["image_x"]) ? $arrElementData["image_x"] : "" ));
+		$strXY .= $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
+		$strXY .= $this->objToolkit->formInputText("image_y", $this->getText("image_y"), (isset($arrElementData["image_y"]) ? $arrElementData["image_y"] : "" ));
+
+		if ($arrElementData["image_x"] > 0 || $arrElementData["image_y"] > 0) {
+		    $strReturn .= $strXY;
+		} else {
+		    $this->addOptionalFormElement($strXY);
+		}
 
         //load templates
 		$objFilesystem = new class_filesystem();
@@ -54,7 +61,7 @@ class class_element_image extends class_element_admin implements interface_admin
 				$arrTemplatesDD[$strTemplate] = $strTemplate;
 			}
 		}
-        
+
         if(count($arrTemplates) == 1)
             $this->addOptionalFormElement($this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getText("image_template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "" )));
         else
