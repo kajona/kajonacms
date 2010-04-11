@@ -15,9 +15,15 @@
 class class_modul_stats_admin extends class_admin implements interface_admin {
 
 	//class vars
-	private $intDateStart;
-	private $intDateEnd;
-	private $intInterval;
+    /**
+     * @var class_date
+     */
+	private $objDateStart;
+    /**
+     * @var class_date
+     */
+	private $objDateEnd;
+	private $intInterval = 2;
 
 
 	/**
@@ -36,21 +42,19 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 		parent::__construct($arrModule);
 
 		 //Start: first day of current month
-		$this->intDateStart = strtotime(strftime("%Y-%m",time())."-01");
+		$intDateStart = strtotime(strftime("%Y-%m",time())."-01");
+        $this->objDateStart = new class_date();
+        $this->objDateStart->setTimeInOldStyle($intDateStart);
+        
 		//End: Current Day of month
-		$this->intDateEnd = time()+86400;
+		$intDateEnd = time()+86400;
+        $this->objDateEnd = new class_date();
+        $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
 		//Write start & end date to the params array
-		$arrStart = explode(".", date("d.m.Y", $this->intDateStart));
-		$arrEnd = explode(".", date("d.m.Y", $this->intDateEnd));
-		if($this->getParam("filter") == "") {
-			$this->setParam("start_datum_tag", $arrStart[0]);
-			$this->setParam("start_datum_monat", $arrStart[1]);
-			$this->setParam("start_datum_jahr", $arrStart[2]);
-			$this->setParam("ende_datum_tag", $arrEnd[0]);
-			$this->setParam("ende_datum_monat", $arrEnd[1]);
-			$this->setParam("ende_datum_jahr", $arrEnd[2]);
-		}
+		//$arrStart = explode(".", date("d.m.Y", $this->intDateStart));
+		//$arrEnd = explode(".", date("d.m.Y", $this->intDateEnd));
+		
 
 		//stats may take time -> increase the time available
         @ini_set("max_execution_time", "500");
@@ -130,8 +134,11 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
                 $objPlugin = new $strClassName($this->objDB, $this->objToolkit, $this->getObjText());
 
                 if($objPlugin->getReportCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
-                    $objPlugin->setEndDate($this->intDateEnd);
-                    $objPlugin->setStartDate($this->intDateStart);
+                    //get date-params as ints
+                    $intStartDate = mktime($this->objDateStart->getIntHour(), $this->objDateStart->getIntMin(), $this->objDateStart->getIntSec(), $this->objDateStart->getIntMonth() , $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
+                    $intEndDate = mktime($this->objDateEnd->getIntHour(), $this->objDateEnd->getIntMin(), $this->objDateEnd->getIntSec(), $this->objDateEnd->getIntMonth() , $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
+                    $objPlugin->setEndDate($intEndDate);
+                    $objPlugin->setStartDate($intStartDate);
                     $objPlugin->setInterval($this->intInterval);
 
                     $arrImage = $objPlugin->getReportGraph();
@@ -169,20 +176,13 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	private function createDateSelector($objReport = null) {
 		$strReturn = "";
 
-		$intDayStart = $this->getParam("start_datum_tag");
-		$intMonthStart = $this->getParam("start_datum_monat");
-		$intYearStart = $this->getParam("start_datum_jahr");
-		$intDayEnd = $this->getParam("ende_datum_tag");
-		$intMonthEnd = $this->getParam("ende_datum_monat");
-		$intYearEnd = $this->getParam("ende_datum_jahr");
-
 		//And create the selector
         $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getParam("action")));
         $strReturn .= $this->objToolkit->formInputHidden("sort", $this->getParam("sort"));
         $strReturn .= $this->objToolkit->formInputHidden("action", $this->getParam("action"));
         $strReturn .= $this->objToolkit->formInputHidden("filter", "true");
-        $strReturn .= $this->objToolkit->formDateSimple("start", $intDayStart, $intMonthStart, $intYearStart, $this->getText("start"));
-        $strReturn .= $this->objToolkit->formDateSimple("ende", $intDayEnd, $intMonthEnd, $intYearEnd, $this->getText("ende"));
+        $strReturn .= $this->objToolkit->formDateSingle("start", $this->getText("start"), $this->objDateStart);
+        $strReturn .= $this->objToolkit->formDateSingle("end", $this->getText("ende"),  $this->objDateEnd);
 
         //create intervall dropdown?
         if($objReport != null) {
@@ -211,21 +211,21 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	private function processDates() {
-	    $intDayStart = $this->getParam("start_datum_tag");
-		$intMonthStart = $this->getParam("start_datum_monat");
-		$intYearStart = $this->getParam("start_datum_jahr");
-		$intDayEnd = $this->getParam("ende_datum_tag");
-		$intMonthEnd = $this->getParam("ende_datum_monat");
-		$intYearEnd = $this->getParam("ende_datum_jahr");
 
-		//Set the class-vars
-		$this->intDateStart = strtotime($intYearStart."-".$intMonthStart."-".$intDayStart);
-		$this->intDateEnd = strtotime($intYearEnd."-".$intMonthEnd."-".$intDayEnd);
+        if($this->getParam("filter") == "true") {
 
-		if($this->getParam("interval") != "")
-		    $this->intInterval = (int)$this->getParam("interval");
-		else
-		    $this->intInterval = 2;
+            $this->objDateStart = new class_date();
+            $this->objDateStart->generateDateFromParams("start", $this->getAllParams());
+
+            $this->objDateEnd = new class_date();
+            $this->objDateEnd->generateDateFromParams("end", $this->getAllParams());
+
+
+            if($this->getParam("interval") != "")
+                $this->intInterval = (int)$this->getParam("interval");
+            else
+                $this->intInterval = 2;
+        }
 	}
 
 
