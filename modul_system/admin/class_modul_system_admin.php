@@ -131,7 +131,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			foreach($arrModules as $objSingleModule) {
 				$strActions = "";
 				$strCenter = "V ".$objSingleModule->getStrVersion()." &nbsp;(".timeToString($objSingleModule->getIntDate(), true).")";
-		   		$intModuleSystemID= $this->getModuleSystemid($objSingleModule->getStrName());
+		   		$intModuleSystemID= $objSingleModule->getSystemid();
 
                 $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
                 if($objAdminInstance != null)
