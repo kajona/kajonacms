@@ -77,17 +77,15 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		//pageid or systemid to filter?
 		$strSystemidfilter = "";
 		$strPagefilter = $this->strPagefilter;
-        
+
 		if($this->getSystemid() != "")
 		    $strSystemidfilter = $this->getSystemid();
-
-var_dump($strPagefilter === null);
 
         if($strPagefilter === null)
             $strPagefilter = class_modul_pages_page::getPageByName($this->getPagename())->getSystemid();
 
         $intNrOfPosts = isset($this->arrElementData["int1"]) ? $this->arrElementData["int1"] : 0;
-var_dump($strPagefilter);
+
         //Load all posts
 	    $objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(true, $strPagefilter, $strSystemidfilter, $this->getPortalLanguage()));
 	    $objArraySectionIterator->setIntElementsPerPage($intNrOfPosts);
@@ -286,7 +284,7 @@ var_dump($strPagefilter);
     /**
      * If you want to set a sepcial page to be used for loading and rendering the portal list, use this
      * setter. Pass the systemid (!) of the page to load.
-     * 
+     *
      * @param string $strPagefilter
      */
     public function setStrPagefilter($strPagefilter) {
