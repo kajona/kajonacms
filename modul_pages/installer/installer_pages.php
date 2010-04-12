@@ -461,7 +461,10 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strModuleId = $arrEntries["module_id"];
 
         $strQuery = "SELECT page_id
-                       FROM "._dbprefix_."page";
+                       FROM "._dbprefix_."page,
+                            "._dbprefix_."system
+                       WHERE page_id=system_id
+                         AND system_prev_id = '0'";
         $arrEntries = $this->objDB->getArray($strQuery);
 
         foreach($arrEntries as $arrSingleRow) {
