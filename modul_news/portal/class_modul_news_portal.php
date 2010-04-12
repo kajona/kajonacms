@@ -204,13 +204,13 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 
             $arrReturn = array();
             if($objPacModule != null) {
-                $arrPosts = class_modul_postacomment_post::loadPostList(false, class_modul_pages_page::getPageByName($this->getPagename())->getSystemid(), $strNewsSystemid, $this->getPortalLanguage());
+                $arrPosts = class_modul_postacomment_post::loadPostList(false, "", $strNewsSystemid, $this->getPortalLanguage());
 
                 //the rendered list
                 $objPacPortal = new class_modul_postacomment_portal(array("char1" => "postacomment_ajax.tpl"));
                 $objPacPortal->setSystemid($strNewsSystemid);
+                $objPacPortal->setStrPagefilter("");
                 $strListCode = $objPacPortal->action();
-                //var_dump($strListCode);
 
                 $arrReturn["nrOfComments"] = count($arrPosts);
                 $arrReturn["commentList"] = $strListCode;
