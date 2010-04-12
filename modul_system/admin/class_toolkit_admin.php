@@ -173,7 +173,7 @@ class class_toolkit_admin extends class_toolkit {
                 toolbar : '".$strToolbarset."',
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
-                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "pagesFolderBrowser", "pages=1&form_element=ckeditor&bit_link=1"))."',
+                filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
                 filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "list", "systemid="._filemanager_default_imagesrepoid_."&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace('".$strName."', ckeditorConfig);

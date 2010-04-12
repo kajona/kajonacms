@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 229
+//Kajona Language Editor Core Build 241
 
 //editable entries
 $lang["_filemanager_default_filesrepoid_"] = "";
@@ -112,6 +112,8 @@ $lang["upload_multiple_uploadFiles"]     = "Загрузить файл(ы)";
 $lang["upload_multiple_warningNotComplete"] = "Загрузка файла еще не завершена!\\nВы действительно хотите отменить ее?";
 $lang["upload_submit"]                   = "Загрузить";
 $lang["useFile"]                         = "Применить";
+$lang["wysiwygFilesBrowser"]             = "";
+$lang["wysiwygPagesBrowser"]             = "";
 $lang["xml_cropping_success"]            = "Кроп прошел успешно";
 $lang["xml_error_permissions"]           = "Недостаточно прав";
 $lang["xml_rotate_success"]              = "Вращение прошло успешно";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 229
+//Kajona Language Editor Core Build 241
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
@@ -115,6 +115,8 @@ $lang["upload_multiple_uploadFiles"]     = "Datei(en) hochladen";
 $lang["upload_multiple_warningNotComplete"] = "Die Datenübertragung ist noch nicht abgeschlossen!\\nMöchten Sie die Übertragung wirklich abbrechen?";
 $lang["upload_submit"]                   = "Hochladen";
 $lang["useFile"]                         = "Übernehmen";
+$lang["wysiwygFilesBrowser"]             = "Dateien durchsuchen";
+$lang["wysiwygPagesBrowser"]             = "Seiten durchsuchen";
 $lang["xml_cropping_success"]            = "Zuschneiden erfolgreich";
 $lang["xml_error_permissions"]           = "Keine ausreichenden Rechte";
 $lang["xml_rotate_success"]              = "Drehen erfolgreich";
