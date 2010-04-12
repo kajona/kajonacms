@@ -156,10 +156,8 @@ class class_element_portal extends class_portal {
                 if($strModule == "pages_content") {
                     //Load element-data
                     $objElement = new class_modul_pages_pageelement($strSystemid);
-                    if($objElement->getIntRepeat() == 1) {
-                        $strCopyUrl = getLinkAdminHref("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
-                        $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin")."</a>";
-                    }
+                    $strCopyUrl = getLinkAdminHref("pages_content", "copyElement", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
+                    $strCopyLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strCopyUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_copy", "pages", "admin")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
