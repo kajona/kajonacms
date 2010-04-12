@@ -391,7 +391,7 @@ KAJONA.admin.portaleditor = {
 			menu = arrPlaceholder["menu"];
 		}
 		var buttonRegion = YAHOO.util.Region.getRegion(objAttach);
-		menu.cfg.setProperty("x", buttonRegion.right-8);
+		menu.cfg.setProperty("x", buttonRegion.left);
 		menu.cfg.setProperty("y", buttonRegion.top);
 		menu.show();
 	}

@@ -424,7 +424,7 @@ h2 {
 
 /* N E W S */
 .newsList {
-    border: 1px solid #ffffff;
+	margin-bottom: 10px;
 }
 .newsListHeader {
     background-color: #f0f0f0;
@@ -462,6 +462,15 @@ h2 {
 }
 .newsDetail img {
     margin: 5px;
+}
+
+/* Template: demo_bloglike.tpl */
+.newsListBlog {
+    margin-bottom: 8px;
+}
+.newsListBlog p {
+    padding: 0;
+    margin: 0;
 }
 
 /* S E A R C H */

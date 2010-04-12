@@ -30,7 +30,7 @@ CKEDITOR.editorConfig = function(config) {
     //default toolbar, e.g. used for the page paragraphs
     config.toolbar_standard =
         [
-            ['Source','Save','-','Cut','Copy','Paste','PasteText','PasteFromWord','-'],
+            ['Source','Save','-','Cut','Copy','Paste','PasteText','-'],
             ['Undo','Redo','-','RemoveFormat'],
             ['Link','Unlink','Anchor'],
             ['Image','Table','HorizontalRule','SpecialChar'],['Maximize'],
@@ -55,9 +55,5 @@ CKEDITOR.editorConfig = function(config) {
     config.entities = false;
     config.entities_greek = false;
     config.entities_latin = false;
-
-    //flipping default enter / shift-enter behaviour. This avoids <p> wrappers by default
-    config.enterMode = CKEDITOR.ENTER_BR;
-    config.shiftEnterMode = CKEDITOR.ENTER_P;
 
 };

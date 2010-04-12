@@ -20,7 +20,7 @@
 
 <!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_more_link, news_more_link_href -->
 <news_list>
-<div class="newsList">
+<div class="newsListBlog">
     <div class="newsListHeader">
         <div class="newsListTitle">
             <h2>%%news_title%%</h2>
@@ -29,9 +29,9 @@
         <div class="clearer"></div>
     </div>
     <div class="newsListTeaser">
-        <div id="cont_%%news_id%%">
-            <div>%%news_intro%%</div>
-            <div>%%news_text%%</div>
+        <div>
+            <p class="newsTeaser">%%news_intro%%</p>
+            %%news_text%%
             <div><a href="#" onclick="KAJONA.util.fold('pac_%%news_id%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
             <div id="pac_%%news_id%%" style="display: none;">
                 %%news_commentlist%%
@@ -44,7 +44,7 @@
 
 <!-- available placeholders: news_id, news_start_date, news_title, news_intro, news_text, news_image, news_more_link, news_more_link_href -->
 <news_list_image>
-<div class="newsList">
+<div class="newsListBlog">
     <div class="newsListHeader">
         <div class="newsListTitle">
             <h2>%%news_title%%</h2>
@@ -53,10 +53,10 @@
         <div class="clearer"></div>
     </div>
     <div class="newsListTeaser">
-        <div id="cont_%%news_id%%">
+        <div>
             <img src="_webpath_/image.php?image=%%news_image%%&amp;maxWidth=400&amp;maxHeight=600" alt="%%news_title%%" />
-            <div>%%news_intro%%</div>
-            <div>%%news_text%%</div>
+            <p class="newsTeaser">%%news_intro%%</p>
+            %%news_text%%
             <div><a href="#" onclick="KAJONA.util.fold('pac_%%news_id%%'); return false;">Comments: %%news_nrofcomments%%</a></div>
             <div id="pac_%%news_id%%" style="display: none;">
                 %%news_commentlist%%

@@ -169,6 +169,9 @@
 
 .peButtonNew {
     margin-bottom: 2px;
+    display: block;
+    width: 20px;
+    height: 20px;
 }
 
 .peButtonNew img {
@@ -319,8 +322,8 @@
 
 .yui-skin-sam .yuimenu {
     font-size: 11px !important;
-    
- }
+    padding: 12px 0 0 12px;
+}
 
 .yui-skin-sam .yuimenu h6 { 
     border-style: solid;
