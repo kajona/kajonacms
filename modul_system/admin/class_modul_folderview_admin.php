@@ -250,12 +250,12 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 
                     //Should we generate a link ?
 					if($this->getParam("bit_link") != "")
-						$arrSinglePage["name2"] = '_indexpath_'."?page=".$objPage->getStrName()."#".$objOnePageelement->getSystemid();
+						$arrSinglePage["name2"] = getLinkPortalHref($objPage->getStrName())."#".$objOnePageelement->getSystemid();
 					else
 						$arrSinglePage["name2"] = $objPage->getStrName()."#".$objOnePageelement->getSystemid();
 
 					$strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]); self.close();\">".getImageAdmin("icon_accept.gif")."</a>");
-					$strReturn .= $this->objToolkit->listRow2($objOnePageelement->getStrTitle()."(".$objOnePageelement->getStrName().")", $strAction, $intCounter++);
+					$strReturn .= $this->objToolkit->listRow2($objOnePageelement->getStrTitle()." (".$objOnePageelement->getStrName().")", $strAction, $intCounter++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
             }

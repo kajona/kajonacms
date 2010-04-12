@@ -177,33 +177,33 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     public function copyElementToPage($strNewPage) {
         class_logger::getInstance()->addLogRow("copy pageelement ".$this->getSystemid(), class_logger::$levelInfo);
         $this->objDB->transactionBegin();
-        
+
         $strIdOfNewPageelement = generateSystemid();
-        
+
         //working directly on the db is much easier right here!
         //start by making a copy of the sysrecords, attaching them to the new page
         $objCommon = new class_modul_system_common($this->getSystemid());
         $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
-        
+
         //fetch data of the current element
         $arrCurrentElement = $this->objDB->getRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_element_id = '".dbsafeString($this->getSystemid())."'");
-        
+
         //save data as foreign data of the new record
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]." 
-        			(page_element_id, page_element_placeholder_placeholder, page_element_placeholder_name, page_element_placeholder_element, page_element_placeholder_title, page_element_placeholder_language) VALUES 
+        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+        			(page_element_id, page_element_placeholder_placeholder, page_element_placeholder_name, page_element_placeholder_element, page_element_placeholder_title, page_element_placeholder_language) VALUES
         			(
-        			'".dbsafeString($strIdOfNewPageelement)."', 
-        			'".dbsafeString($arrCurrentElement["page_element_placeholder_placeholder"])."', 
+        			'".dbsafeString($strIdOfNewPageelement)."',
+        			'".dbsafeString($arrCurrentElement["page_element_placeholder_placeholder"])."',
         			'".dbsafeString($arrCurrentElement["page_element_placeholder_name"])."',
         			'".dbsafeString($arrCurrentElement["page_element_placeholder_element"])."',
         			'".dbsafeString($arrCurrentElement["page_element_placeholder_title"])."',
         			'".dbsafeString($arrCurrentElement["page_element_placeholder_language"])."')";
-        
+
         if(!$this->objDB->_query($strQuery)) {
             $this->objDB->transactionRollback();
             return null;
         }
-        
+
         //now the tricky part - the elements content-table...
         //get elements table-name
         include_once(_adminpath_."/elemente/".$this->getStrClassAdmin());
@@ -211,21 +211,21 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		$objElement = new $strElementClass();
 		//Fetch the table
 		$strElementTable = $objElement->getTable();
-		
+
 		//just copy, if a table was given
 		if($strElementTable != "") {
 			//load the old row
 			$arrContentRow = $this->objDB->getRow("SELECT * FROM ".$strElementTable." WHERE content_id = '".dbsafeString($this->getSystemid())."'");
-	        
+
 			//load the Columns of the table
 			$arrColumns = $this->objDB->getColumnsOfTable($strElementTable);
-			
+
 			//build the new insert
 			$strQuery = "INSERT INTO ".$strElementTable." ( ";
 			foreach ($arrColumns as $arrOneColumn)
 	            $strQuery .= " ".$this->objDB->encloseColumnName($arrOneColumn["columnName"]).",";
-	
-	        //remove last comma    
+
+	        //remove last comma
 	        $strQuery = uniSubstr($strQuery, 0, -1);
 	        $strQuery .= ") VALUES ( ";
 	        foreach ($arrColumns as $arrOneColumn) {
@@ -245,11 +245,11 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	        }
 	        $strQuery = uniSubstr($strQuery, 0, -1);
 	        $strQuery .= ")";
-			
+
 	        if(!$this->objDB->_query($strQuery)) {
 	            $this->objDB->transactionRollback();
 	            return null;
-	        }		
+	        }
 		}
 
         //ok, all done. return.
@@ -259,8 +259,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $objNewElement = new class_modul_pages_pageelement($strIdOfNewPageelement);
         return $objNewElement;
     }
-    
-    
+
+
     /**
      * Loads all Elements on the given page known by the system, so db-sided, not template-sided
      *
@@ -310,9 +310,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		return $arrReturn;
     }
-    
-    
-    
+
+
+
 	/**
      * Loads all Elements on the given ignoring both, status and language
      *
@@ -340,7 +340,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		return $arrReturn;
     }
-    
+
     /**
      * Tries to load an element identified by the pageId, the name of the placeholder and the language.
      * If no matchin element was found, null is returned.
@@ -377,12 +377,12 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 
         if(count($arrIds) == 1) {
-            return (new class_modul_pages_pageelement($arrIds[0]["system_id"]));	
+            return (new class_modul_pages_pageelement($arrIds[0]["system_id"]));
         }
         else {
         	return null;
         }
-    
+
     }
 
     /**
@@ -418,7 +418,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         return $arrElementsOnPlaceholder;
     }
 
-    
+
     /**
      * Sets the position of an element using a given value.
      *
@@ -502,8 +502,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 				}
 			}
 		}
-        
-        
+
+
     }
 
     /**
@@ -522,7 +522,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		$strReturn = "";
 		//Iterate over all elements to sort out
 		$arrElementsOnPlaceholder = $this->getSortedElementsAtPlaceholder();
-		
+
 
 		//Iterate again to move the element
 		$arrElementsSorted = array();
@@ -573,7 +573,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		return $strReturn;
 	}
 
-    
+
 
 	/**
 	 * Deletes the element from the system-tables, also from the foreign-element-tables
@@ -714,9 +714,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     /**
      * Returns a title.
      * If no title was specified, it creates an instance of the current element and
-     * class getContentTitle() to get an title
+     * calls getContentTitle() to get an title
      *
-     * @param bool $bitClever diables the loading by using an instance of the element
+     * @param bool $bitClever disables the loading by using an instance of the element
      * @return string
      */
     public function getStrTitle($bitClever = true) {

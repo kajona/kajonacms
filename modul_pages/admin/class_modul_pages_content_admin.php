@@ -674,7 +674,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
             $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
 
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement());
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement()." (".$objSourceElement->getStrTitle().")");
             //step one: language selection
             $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_language_header"));
             if($this->getParam("copyElement_language") != "")
