@@ -198,7 +198,6 @@ class class_modul_news_portal extends class_portal implements interface_portal {
      * Loads and renders the list of comments provdided by the current news-entry
      */
     private function loadPostacomments($strNewsSystemid) {
-
         if($this->isPostacommentOnTemplate($this->arrElementData["news_template"])) {
 
             $objPacModule = class_modul_system_module::getModuleByName("postacomment");
@@ -234,13 +233,10 @@ class class_modul_news_portal extends class_portal implements interface_portal {
      * @return bool
      */
     private function isPostacommentOnTemplate($strTemplate) {
-
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
         $arrElements = $this->objTemplate->getElements($strTemplateID);
 
         return $this->objTemplate->containesPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containesPlaceholder($strTemplateID, "news_nrofcomments");
-
-
     }
 }
 ?>

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["eintragen"]                       = "Eintragen";
@@ -16,8 +16,9 @@ $lang["fehler_recht"]                    = "Keine Rechte für diese Aktion";
 $lang["insert_error_email"]              = "Fehlende E-Mailadresse";
 $lang["insert_error_name"]               = "Fehlender Name";
 $lang["insert_error_post"]               = "Fehlender Text";
-$lang["post_code_text"]                  = "Neuen Code anfordern";
-$lang["post_mail_text"]                  = "Email";
+$lang["post_captcha_reload_text"]        = "Code nicht lesbar?";
+$lang["post_captcha_text"]               = "Sicherheits-Code";
+$lang["post_mail_text"]                  = "E-Mail";
 $lang["post_message_text"]               = "Nachricht";
 $lang["post_name_from"]                  = "von";
 $lang["post_name_text"]                  = "Name";

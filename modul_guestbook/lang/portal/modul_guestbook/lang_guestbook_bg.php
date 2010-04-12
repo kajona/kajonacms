@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["eintragen"]                       = "Впиши";
@@ -16,7 +16,8 @@ $lang["fehler_recht"]                    = "Нямате достатъчно п
 $lang["insert_error_email"]              = "Липсва електронна поща";
 $lang["insert_error_name"]               = "Липсва име";
 $lang["insert_error_post"]               = "Липсва коментар";
-$lang["post_code_text"]                  = "Поискай нов код";
+$lang["post_captcha_reload_text"]        = "Кодексът не се чете?";
+$lang["post_captcha_text"]               = "Код за сигурност";
 $lang["post_mail_text"]                  = "Електронна поща";
 $lang["post_message_text"]               = "Съобщение";
 $lang["post_name_from"]                  = "от";

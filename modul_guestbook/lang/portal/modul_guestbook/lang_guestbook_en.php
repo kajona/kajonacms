@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 147
+//Kajona Language Editor Core Build 198
 
 //editable entries
 $lang["eintragen"]                       = "Sign";
@@ -16,7 +16,8 @@ $lang["fehler_recht"]                    = "Not enough permissions to perform th
 $lang["insert_error_email"]              = "Missin eMail adress";
 $lang["insert_error_name"]               = "Missing name";
 $lang["insert_error_post"]               = "Missing post";
-$lang["post_code_text"]                  = "Request new code";
+$lang["post_captcha_reload_text"]        = "Code not readable?";
+$lang["post_captcha_text"]               = "Security code";
 $lang["post_mail_text"]                  = "Email";
 $lang["post_message_text"]               = "Message";
 $lang["post_name_from"]                  = "from";

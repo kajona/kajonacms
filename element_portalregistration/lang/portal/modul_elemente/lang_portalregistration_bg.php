@@ -10,8 +10,8 @@
 //Kajona Language Editor Core Build 198
 
 //editable entries
-$lang["captcha_reload"]                  = "Кодексът не чете?";
-$lang["captcha_label"]                   = "Сигурност треска:*";
+$lang["captcha_label"]                   = "Код за сигурност:*";
+$lang["captcha_reload"]                  = "Кодексът не се чете?";
 $lang["pr_captcha"]                      = "Невалиден код.";
 $lang["pr_completionErrorStatus"]        = "Акаунта не може да бъде активиран.";
 $lang["pr_completionSuccess"]            = "Акаунта успешно активиран. Вече можете да се впишете в портала.";

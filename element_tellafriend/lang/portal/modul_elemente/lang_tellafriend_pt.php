@@ -7,15 +7,15 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 163
+//Kajona Language Editor Core Build 198
 
 //editable entries
-$lang["captcha"]                         = "Código:";
+$lang["captcha"]                         = "Código de segurança:";
 $lang["fehler_captcha"]                  = "Por favor introduza o código de verificação correcto";
 $lang["message"]                         = "Mensagem:";
 $lang["receiver"]                        = "Correio electrónico dos destinatários:";
 $lang["receiver_name"]                   = "Nome destinatários:";
-$lang["reload_captcha"]                  = "Novo código";
+$lang["reload_captcha"]                  = "O código não é legível?";
 $lang["sender"]                          = "O seu correio electrónico:";
 $lang["sender_name"]                     = "O seu nome:";
 $lang["submit"]                          = "Enviar";
