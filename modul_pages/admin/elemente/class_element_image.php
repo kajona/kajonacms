@@ -46,7 +46,7 @@ class class_element_image extends class_element_admin implements interface_admin
 		$strXY .= $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
 		$strXY .= $this->objToolkit->formInputText("image_y", $this->getText("image_y"), (isset($arrElementData["image_y"]) ? $arrElementData["image_y"] : "" ));
 
-		if ($arrElementData["image_x"] > 0 || $arrElementData["image_y"] > 0) {
+		if ( (isset($arrElementData["image_x"]) && $arrElementData["image_x"] > 0 ) || ( isset($arrElementData["image_y"]) && $arrElementData["image_y"] > 0 )) {
 		    $strReturn .= $strXY;
 		} else {
 		    $this->addOptionalFormElement($strXY);
