@@ -544,7 +544,6 @@ class class_installer_pages extends class_installer_base implements interface_in
                                SET ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_paragraph.php'
                                WHERE ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_absatz.php'";
             $this->objDB->_query($strQuery);
-            var_dump($strQuery);
         }
 
         $strReturn .= "Updating module-versions...\n";
