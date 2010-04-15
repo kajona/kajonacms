@@ -100,6 +100,12 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         if($strAction == "browserChooser")
             $strReturn = $this->browserChooser();
 
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderviewSelectCallback()
+        //so we don't have to pass through the param with all requests
+	    if ($this->getParam("CKEditorFuncNum") != "") {
+            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderviewSelectCallbackCKEditorFuncNum = ".$this->getParam("CKEditorFuncNum")."</script>";
+        }
+
 		$this->strOutput = $strReturn;
 	}
 
@@ -289,6 +295,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 
     private function browserChooser() {
         $strReturn = "";
+
 		$intCounter = 1;
         $strReturn .= $this->objToolkit->listHeader();
 

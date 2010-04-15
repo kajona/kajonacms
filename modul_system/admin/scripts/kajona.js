@@ -484,12 +484,18 @@ KAJONA.admin.tooltip = (function() {
 }());
 
 /**
+ * holds CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderviewSelectCallback()
+ * so we don't have to pass through the param with all requests
+ */
+KAJONA.admin.folderviewSelectCallbackCKEditorFuncNum = 0;
+
+/**
  * called when the user selects an page/folder/file out of a folderview popup
  */
 KAJONA.admin.folderviewSelectCallback = function(arrTargetsValues) {
 	for (var i in arrTargetsValues) {
     	if (arrTargetsValues[i][0] == "ckeditor") {
-    		CKEDITOR.tools.callFunction(2, arrTargetsValues[i][1]);
+    		CKEDITOR.tools.callFunction(this.folderviewSelectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
     	} else {
     		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
     	}
