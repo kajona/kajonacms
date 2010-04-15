@@ -366,10 +366,10 @@
 	color:#d8d8d8;
 }
 a.photoViewer-prev:hover{
-	background:url(prev.gif) no-repeat top left;
+	background:url(prev.png) no-repeat top left;
 }
 a.photoViewer-next:hover{
-	background:url(next.gif) no-repeat top right;
+	background:url(next.png) no-repeat top right;
 }
 .photoViewer-close{
 	padding:0;
