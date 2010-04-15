@@ -302,7 +302,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         $strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "pagesFolderBrowser", "&pages=1&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getText("wysiwygPagesBrowser"), $this->getText("wysiwygPagesBrowser"), "icon_folderActionOpen.gif"));
         $strReturn .= $this->objToolkit->listRow2($this->getText("wysiwygPagesBrowser"), $strAction, $intCounter++);
 
-        $strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&pages=1&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getText("wysiwygFilesBrowser"), $this->getText("wysiwygFilesBrowser"), "icon_folderActionOpen.gif"));
+        $strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&systemid="._filemanager_default_filesrepoid_."&form_element=".$this->getParam("form_element")."&bit_link=1", $this->getText("wysiwygFilesBrowser"), $this->getText("wysiwygFilesBrowser"), "icon_folderActionOpen.gif"));
         $strReturn .= $this->objToolkit->listRow2($this->getText("wysiwygFilesBrowser"), $strAction, $intCounter++);
 
         $strReturn .= $this->objToolkit->listFooter();

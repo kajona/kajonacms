@@ -892,10 +892,10 @@ KAJONA.admin.ajax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=executeSystemTask&task='+strTaskname;
 		var postBody = strAdditionalParam;
 
-		if (this.systemTaskCall == null
+		if (KAJONA.admin.ajax.systemTaskCall == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.systemTaskCall)) {
-			this.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
+						.isCallInProgress(KAJONA.admin.ajax.systemTaskCall)) {
+			KAJONA.admin.ajax.systemTaskCall = YAHOO.util.Connect.asyncRequest('POST',
 					postTarget, objCallback, postBody);
 		}
 	},
@@ -904,10 +904,10 @@ KAJONA.admin.ajax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
 		var postBody = 'systemid=' + systemid;
 	
-		if (this.genericCall == null
+		if (KAJONA.admin.ajax.genericCall == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.genericCall)) {
-			this.genericCall = YAHOO.util.Connect.asyncRequest(
+						.isCallInProgress(KAJONA.admin.ajax.genericCall)) {
+			KAJONA.admin.ajax.genericCall = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
@@ -916,11 +916,11 @@ KAJONA.admin.ajax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition';
 		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
 
-		if (this.posConn == null
+		if (KAJONA.admin.ajax.posConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.posConn)) {
-			this.posConn = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, this.regularCallback, postBody);
+						.isCallInProgress(KAJONA.admin.ajax.posConn)) {
+			KAJONA.admin.ajax.posConn = YAHOO.util.Connect.asyncRequest('POST',
+					postTarget, KAJONA.admin.ajax.regularCallback, postBody);
 		}
 	},
 
@@ -929,11 +929,11 @@ KAJONA.admin.ajax = {
 		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos
 				+ '&listId=' + strIdOfList;
 
-		if (this.dashboardConn == null
+		if (KAJONA.admin.ajax.dashboardConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.dashboardConn)) {
-			this.dashboardConn = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, this.regularCallback, postBody);
+						.isCallInProgress(KAJONA.admin.ajax.dashboardConn)) {
+			KAJONA.admin.ajax.dashboardConn = YAHOO.util.Connect.asyncRequest(
+					'POST', postTarget, KAJONA.admin.ajax.regularCallback, postBody);
 		}
 	},
 
@@ -968,8 +968,8 @@ KAJONA.admin.ajax = {
         	}
         };
 
-		if (this.statusConn == null || !YAHOO.util.Connect.isCallInProgress(this.statusConn)) {
-			this.statusConn = YAHOO.util.Connect.asyncRequest(
+		if (KAJONA.admin.ajax.statusConn == null || !YAHOO.util.Connect.isCallInProgress(KAJONA.admin.ajax.statusConn)) {
+			KAJONA.admin.ajax.statusConn = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
@@ -981,10 +981,10 @@ KAJONA.admin.ajax = {
 				+ '&file=' + strFile + '&intX=' + intX + '&intY=' + intY
 				+ '&intWidth=' + intWidth + '&intHeight=' + intHeight + '';
 
-		if (this.cropConn == null
+		if (KAJONA.admin.ajax.cropConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.cropConn)) {
-			this.cropConn = YAHOO.util.Connect.asyncRequest('POST',
+						.isCallInProgress(KAJONA.admin.ajax.cropConn)) {
+			KAJONA.admin.ajax.cropConn = YAHOO.util.Connect.asyncRequest('POST',
 					postTarget, objCallback, postBody);
 		}
 	},
@@ -995,18 +995,18 @@ KAJONA.admin.ajax = {
 		var postBody = 'systemid=' + strRepoId + '&folder=' + strFolder
 				+ '&file=' + strFile + '&angle=' + intAngle + '';
 
-		if (this.rotateConn == null
+		if (KAJONA.admin.ajax.rotateConn == null
 				|| !YAHOO.util.Connect
-						.isCallInProgress(this.rotateConn)) {
-			this.rotateConn = YAHOO.util.Connect.asyncRequest(
+						.isCallInProgress(KAJONA.admin.ajax.rotateConn)) {
+			KAJONA.admin.ajax.rotateConn = YAHOO.util.Connect.asyncRequest(
 					'POST', postTarget, objCallback, postBody);
 		}
 	},
 
     deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction) {
-        this.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
+        KAJONA.admin.ajax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
                 success : function(o) {
-                    this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                    KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
 							success : function(o) {
 								location.reload();
 							},
@@ -1023,14 +1023,14 @@ KAJONA.admin.ajax = {
     },
 
     deleteFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
-        this.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
+        KAJONA.admin.ajax.genericAjaxCall("filemanager", "deleteFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
                         KAJONA.admin.statusDisplay.displayXMLMessage(o.responseText);
                     }
                     else {
-                        this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                        KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                 success : function(o) {
                                     location.reload();
                                 },
@@ -1048,7 +1048,7 @@ KAJONA.admin.ajax = {
     },
 
     createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
-        this.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
+        KAJONA.admin.ajax.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
@@ -1056,7 +1056,7 @@ KAJONA.admin.ajax = {
                     }
                     else {
                         if(strSourceModule != "" && strSourceModuleAction != "") {
-                            this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                     success : function(o) {
                                         location.reload();
                                     },
@@ -1078,7 +1078,7 @@ KAJONA.admin.ajax = {
     },
 
     renameFile : function (strFmRepoId, strNewFilename, strOldFilename, strFolder, strSourceModule, strSourceModuleAction) {
-        this.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
+        KAJONA.admin.ajax.genericAjaxCall("filemanager", "renameFile", strFmRepoId+"&folder="+strFolder+"&oldFilename="+strOldFilename+"&newFilename="+strNewFilename  , {
                 success : function(o) {
                     //check if answer contains an error
                     if(o.responseText.indexOf("<error>") != -1) {
@@ -1086,7 +1086,7 @@ KAJONA.admin.ajax = {
                     }
                     else {
                         if(strSourceModule != "" && strSourceModuleAction != "") {
-                            this.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
                                     success : function(o) {
                                         location.reload();
                                     },
