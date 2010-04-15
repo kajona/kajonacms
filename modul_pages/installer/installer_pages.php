@@ -535,11 +535,16 @@ class class_installer_pages extends class_installer_base implements interface_in
 
             $this->objDB->_query($strQuery);
 
-            $strReturn .= "Setting new classes to existing element...\n";
-            $objElement = class_modul_pages_element::getElement("paragraph");
-            $objElement->setStrClassAdmin("class_element_paragraph.php");
-            $objElement->setStrClassPortal("class_element_paragraph.php");
-            $objElement->updateObjectToDb();
+            $strReturn .= "Setting new classes to existing elements...\n";
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                               SET ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_paragraph.php'
+                               WHERE ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_absatz.php'";
+            $this->objDB->_query($strQuery);
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                               SET ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_paragraph.php'
+                               WHERE ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_absatz.php'";
+            $this->objDB->_query($strQuery);
+            var_dump($strQuery);
         }
 
         $strReturn .= "Updating module-versions...\n";
@@ -575,19 +580,27 @@ class class_installer_pages extends class_installer_base implements interface_in
 
             $this->objDB->_query($strQuery);
 
-            $strReturn .= "Setting new classes to existing element image...\n";
-            $objElement = class_modul_pages_element::getElement("image");
-            $objElement->setStrClassAdmin("class_element_image.php");
-            $objElement->setStrClassPortal("class_element_image.php");
-            $objElement->updateObjectToDb();
+            $strReturn .= "Setting new classes to existing image elements...\n";
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                               SET ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_image.php'
+                               WHERE ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_bild.php'";
+            $this->objDB->_query($strQuery);
+            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                               SET ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_image.php'
+                               WHERE ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_bild.php'";
+            $this->objDB->_query($strQuery);
         }
 
 
-        $strReturn .= "Setting new classes to existing element row...\n";
-        $objElement = class_modul_pages_element::getElement("row");
-        $objElement->setStrClassAdmin("class_element_row.php");
-        $objElement->setStrClassPortal("class_element_row.php");
-        $objElement->updateObjectToDb();
+        $strReturn .= "Setting new classes to existing row elements...\n";
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                           SET ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_row.php'
+                           WHERE ".$this->objDB->encloseColumnName("element_class_admin")." = 'class_element_zeile.php'";
+        $this->objDB->_query($strQuery);
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element")."
+                           SET ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_row.php'
+                           WHERE ".$this->objDB->encloseColumnName("element_class_portal")." = 'class_element_zeile.php'";
+        $this->objDB->_query($strQuery);
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.2.93");

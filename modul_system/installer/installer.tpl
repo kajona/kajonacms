@@ -61,9 +61,13 @@
 </installer_progress_entry_done>
 
 <installer_log>
-<div class="preText">
+<div class="preText" id="systemlog">
 	<pre><b>%%systemlog%%</b><br />%%log_content%%</pre>
 </div>
+<script type="text/javascript">
+var systemlogDiv = document.getElementById("systemlog");
+systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
+</script>
 </installer_log>
 
 <configwizard_form>
