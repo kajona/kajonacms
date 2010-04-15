@@ -752,6 +752,8 @@ class class_db {
 	 */
 	public function dbsafeString($strString, $bitHtmlSpecialChars = true) {
 
+        $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
+
         //escape special chars
         if($bitHtmlSpecialChars)
             $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8");
