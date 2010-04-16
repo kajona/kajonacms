@@ -1700,7 +1700,8 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 	var calendar = new YAHOO.widget.Calendar(strCalendarContainerId);
 	calendar.cfg.setProperty("WEEKDAYS_SHORT", KAJONA.admin.lang.toolsetCalendarWeekday);
 	calendar.cfg.setProperty("MONTHS_LONG", KAJONA.admin.lang.toolsetCalendarMonth);
-
+	calendar.cfg.setProperty("START_WEEKDAY", 1);
+	
 	var handleSelect = function(type, args, obj) {
 		var dates = args[0];
 		var date = dates[0];
