@@ -127,9 +127,11 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
 		$arrGraphData = array();
 		$arrPlots = array();
+		$arrLabels = array();
 		$intCount = 1;
 		foreach ($arrPages as $strName => $arrOnePage) {
 		    $arrGraphData[$intCount] = $arrOnePage["anzahl"];
+		    $arrLabels[] = $intCount;
 		    if($intCount <= 6)
 		      $arrPlots[$arrOnePage["name"]] = array();
 
@@ -143,6 +145,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
+    	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
     	    $objGraph->saveGraph($strFilename);
     		$arrReturn[] =  _webpath_.$strFilename;
