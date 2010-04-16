@@ -1,8 +1,10 @@
-/*
+/*!
 	Author: Joe Nicora
 	www.seemecreate.com
 	-------------------
-	Attribution-Share Alike 3.0 United States
+	License: Attribution-Share Alike 3.0 United States
+*/
+/*
 	You are free:
 		* to Share � to copy, distribute, display, and perform the work
 		* to Remix � to make derivative works
@@ -1165,7 +1167,7 @@ YAHOO.photoViewer.flickCommon = {
 YAHOO.photoViewer.loading = function(){
 	var loadingScreen = null;
 	var applyTo = null;
-	var public = {
+	var pub = {
 		on: function(config){
 			/* config.applyTo = element to render loading over. */
 			if (!config){ config = {}; }
@@ -1208,14 +1210,14 @@ YAHOO.photoViewer.loading = function(){
 		}
 	}; // end position
 	// 
-	return public;
+	return pub;
 }();
 /* controller class
  * Used to controll all viewer instances
  */
 YAHOO.photoViewer.controller = function(){
 	var viewers = {};
-	var public = {
+	var pub = {
 		init: function(){
 			for (var a in YAHOO.photoViewer.config.viewers){
 				viewers[a] = new YAHOO.photoViewer.base();
@@ -1235,7 +1237,7 @@ YAHOO.photoViewer.controller = function(){
 	};
 	// private
 	//
-	return public;
+	return pub;
 }();
 /* photoViewer level public properties
  */
