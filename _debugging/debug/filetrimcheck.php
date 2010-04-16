@@ -38,7 +38,7 @@ function walkFolderRecursive($strStartFolder) {
 	 	//include the filecontent
 	 	$strContent = file_get_contents($strStartFolder."/".$strFilename);
 	 	if(uniSubstr($strContent, 0, 5) != "<?php")
-	        echo "Whitespace at the beginning of file >> ".$strStartFolder."/".$strFilename." << \n";
+	        echo "Whitespace at the beginning of file >> ".$strStartFolder."/".$strFilename." is:>".uniSubstr($strContent, 0, 1)."< << \n";
 	        
         if(uniSubstr($strContent, -2) != "?>")
             echo "Whitespace at the end of file >> ".$strStartFolder."/".$strFilename." << \n";    
