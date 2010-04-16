@@ -127,7 +127,8 @@ class class_installer {
 	                                "/system/dbdumps",
 	                                "/system/debug",
 	                                "/portal/pics/cache",
-	                                "/portal/pics/upload");
+	                                "/portal/pics/upload",
+	                                "/portal/downloads");
 
 	    $arrModules = array("mbstring",
 	                        "gd",
