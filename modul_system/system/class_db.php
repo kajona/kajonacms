@@ -752,11 +752,11 @@ class class_db {
 	 */
 	public function dbsafeString($strString, $bitHtmlSpecialChars = true) {
 
-        $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
-
         //escape special chars
-        if($bitHtmlSpecialChars)
+        if($bitHtmlSpecialChars) {
+	    $strString = html_entity_decode($strString, ENT_COMPAT, "UTF-8");
             $strString = htmlspecialchars($strString, ENT_COMPAT, "UTF-8");
+         }
 
 	    //already escaped by php?
 	    if(get_magic_quotes_gpc() == 1) {
