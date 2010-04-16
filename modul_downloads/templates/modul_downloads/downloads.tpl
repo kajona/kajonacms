@@ -72,7 +72,7 @@
 
 
 
-<!-- available placeholders: file_name, file_description, file_link, file_href, file_hits, file_size, 
+<!-- available placeholders: pathnavigation, file_name, file_description, file_link, file_href, file_hits, file_size, 
                              file_preview (only for *.jpg, *.png, *.gif), file_rating (if module rating installed),
                              file_owner, file_lmtime
  -->
@@ -101,5 +101,5 @@
 
 <!-- available placeholders: img_filename, img_title -->
 <img_preview>
-    <img src="_webpath_/image.php?image=%%img_filename%%&amp;maxWidth=150&amp;maxHeight=100" alt="%%img_title%%"/>
+    <img src="_webpath_/image.php?image=%%img_filename%%&amp;maxWidth=150&amp;maxHeight=100" alt="%%img_title%%" />
 </img_preview>
