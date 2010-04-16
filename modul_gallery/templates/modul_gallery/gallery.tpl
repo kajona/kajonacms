@@ -55,7 +55,7 @@
     systemid, pic_name, pic_description, pic_subtitle, pic_filename, pic_size, pic_hits, pic_small, pic_rating (if module rating installed)
  -->
 <picdetail>
-    %%pathnavigation%%
+    <p>%%pathnavigation%%</p>
     <table width="85%" border="0" style="text-align: center;">
         <tr>
             <td width="20%">&nbsp;</td>
