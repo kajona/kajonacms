@@ -155,7 +155,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 		$intCount = 1;
 		foreach ($arrPages as $strName => $intHits) {
 		    $arrGraphData[$intCount] = $intHits;
-            $arrLabels[] = $intCount+1;
+            $arrLabels[] = $intCount;
 		    if($intCount++ >= 8)
 		      break;
 		}
