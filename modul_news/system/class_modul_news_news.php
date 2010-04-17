@@ -268,12 +268,6 @@ class class_modul_news_news extends class_model implements interface_model  {
 			}
 	    }
 
-        //delete language-set memberships
-        $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
-        if($objLanguageset != null) {
-            $objLanguageset->removeSystemidFromLanguageeset($this->getSystemid());
-        }
-
 	    return false;
 	}
 

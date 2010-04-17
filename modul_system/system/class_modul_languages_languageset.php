@@ -15,14 +15,10 @@
  *
  * Please note: Since a languageset only tighs existing records together, it isn't in the regular
  * class_model hierarchy. This also means, that a languageset is not included within the regular
- * object lifecycle!
+ * object lifecycle and has no representation in the system-table!
  *
  * In most cases creating a new instance via the constructor is useless. Instead use one of the
  * factory methods.
- *
- * TODO:
- *  - deleting a systemrecord
- *  - deleting a language
  *
  * @package modul_languages
  */
@@ -210,6 +206,26 @@ class class_modul_languages_languageset extends class_model implements interface
 
 
         return new $objLanguageset;
+    }
+
+    /**
+     * Searches for languagesets containing the current systemid. either as a language or a referenced record.
+     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
+     *
+     * @param string $strSystemid
+     * @return bool
+     *
+     */
+    public function doAdditionalCleanupsOnDeletion($strSystemid) {
+        $bitReturn = true;
+
+        //fire a plain query on the database, much faster then searching for matching records
+        $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
+                      WHERE languageset_language = '".dbsafeString($strSystemid)."'
+                         OR languageset_systemid = '".dbsafeString($strSystemid)."'";
+
+        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        
     }
    
     /**
