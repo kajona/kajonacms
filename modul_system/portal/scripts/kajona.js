@@ -231,11 +231,14 @@ KAJONA.portal.loadCaptcha = function (strCaptchaId, intWidth) {
     if(strCaptchaId != null) {
         containerName += "_"+strCaptchaId;
         imgID += "_"+strCaptchaId;
+    } else {
+    	//fallback for old templates (old function call)
+    	imgID = "kajonaCaptcha";
     }
 	if (!intWidth) {
 		var intWidth = 180;
 	}
-    
+
 	var timeCode = new Date().getTime();
 	if (document.getElementById(imgID) == undefined) {
 		var objImg=document.createElement("img");
