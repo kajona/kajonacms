@@ -85,7 +85,7 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
-                    	postacomment_date		= '".(int)$this->getIntDate()."',
+                    	postacomment_date		= '".dbsafeString($this->getIntDate())."',
                     	postacomment_page		= '".dbsafeString($this->getStrAssignedPage())."',
 						postacomment_language	= '".dbsafeString($this->getStrAssignedLanguage())."',
                     	postacomment_systemid	= '".dbsafeString($this->getStrAssignedSystemid())."',

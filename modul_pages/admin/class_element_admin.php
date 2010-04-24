@@ -72,13 +72,13 @@ class class_element_admin extends class_admin {
         $bitShow = false;
 
         $objStartDate = null;
-        if(isset($arrElementData["system_date_start"]) && (int)$arrElementData["system_date_start"] > 0) {
+        if(isset($arrElementData["system_date_start"]) && $arrElementData["system_date_start"] > 0) {
             $objStartDate = new class_date($arrElementData["system_date_start"]);
             $bitShow = true;
         }
 
         $objEndDate = null;
-        if(isset($arrElementData["system_date_end"]) && (int)$arrElementData["system_date_end"] > 0) {
+        if(isset($arrElementData["system_date_end"]) && $arrElementData["system_date_end"] > 0) {
             $objEndDate = new class_date($arrElementData["system_date_end"]);
             $bitShow = true;
         }

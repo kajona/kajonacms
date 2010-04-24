@@ -96,10 +96,10 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
             $this->setIntCachetime($arrRow["element_cachetime"]);
             $this->setIntRepeat($arrRow["element_repeat"]);
 
-            if((int)$arrRow["system_date_start"] > 0)
+            if($arrRow["system_date_start"] > 0)
                 $this->intStartDate = $arrRow["system_date_start"];
 
-           if((int)$arrRow["system_date_end"] > 0)
+           if($arrRow["system_date_end"] > 0)
                 $this->intEndDate = $arrRow["system_date_end"];
 
 		}

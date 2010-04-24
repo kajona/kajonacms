@@ -191,9 +191,9 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
 							  AND system_status = 1
-							  AND (system_date_special IS NULL OR (system_date_special > ".(int)$intNow." OR system_date_special = 0))
-							  AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
-							  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+							  AND (system_date_special IS NULL OR (system_date_special > ".$intNow." OR system_date_special = 0))
+							  AND (system_date_start IS NULL or(system_date_start < ".$intNow." OR system_date_start = 0))
+							  AND (system_date_end IS NULL or (system_date_end > ".$intNow." OR system_date_end = 0))
 							  AND newsmem_category = '".dbsafeString($strFilter)."'
 							ORDER BY system_date_start DESC";
 		}
@@ -205,9 +205,9 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							WHERE system_id = news_id
 							  AND system_id = system_date_id
 							  AND system_status = 1
-							  AND (system_date_special IS NULL OR (system_date_special > ".(int)$intNow." OR system_date_special = 0))
-							  AND (system_date_start IS NULL or(system_date_start < ".(int)$intNow." OR system_date_start = 0))
-							  AND (system_date_end IS NULL or (system_date_end > ".(int)$intNow." OR system_date_end = 0))
+							  AND (system_date_special IS NULL OR (system_date_special > ".$intNow." OR system_date_special = 0))
+							  AND (system_date_start IS NULL or(system_date_start < ".$intNow." OR system_date_start = 0))
+							  AND (system_date_end IS NULL or (system_date_end > ".$intNow." OR system_date_end = 0))
 							ORDER BY system_date_start DESC";
 		}
 
