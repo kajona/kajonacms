@@ -98,7 +98,7 @@ class class_remoteloader {
 		}
 				
 		//second try: file_get_content
-		if($strReturn === false) 
+		if($strReturn === false)
 		    $strReturn = $this->connectByFileGetContents();
 		    
 		//third: fsockopen
@@ -109,7 +109,7 @@ class class_remoteloader {
 		if($strReturn === false)
 		    $strReturn = $this->connectViaCurl();
 
-        //fifth try: sockets
+        //fifth try: sockets 
 		if($strReturn === false)
 		    $strReturn = $this->connectViaSocket();
 
@@ -261,14 +261,24 @@ class class_remoteloader {
 	               $strProtocolAdd = "tcp://";
 	           if($this->strProtocolHeader == "https://")
 	               $strProtocolAdd = "tls://";
+
+
+               $arrUrl=parse_url($this->strProtocolHeader.$this->strHost);
+               $objRemoteResource = @fsockopen($strProtocolAdd.$arrUrl['host'],($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
+
+    		   if(is_resource($objRemoteResource)){
+    		      fwrite($objRemoteResource,"GET ".$arrUrl['path'].$this->strQueryParams." HTTP/1.0\r\n");
+    		      fwrite($objRemoteResource,"Host: ".$arrUrl['host']."\r\n");
+    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");
+
 	               
     		   
-    		   $objRemoteResource = @fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
+    		   /*$objRemoteResource = @fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
     		   
     		   if(is_resource($objRemoteResource)){
     		      fwrite($objRemoteResource,"GET ".$this->strProtocolHeader.$this->strHost.$this->strQueryParams." HTTP/1.0\r\n");
     		      fwrite($objRemoteResource,"Host: ".$this->strHost."\r\n");
-    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");
+    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");*/
     		
     		      
     		      while(!feof($objRemoteResource)){
@@ -303,6 +313,10 @@ class class_remoteloader {
 			//protocol not supported via fsockopen
 		    $strReturn = false;
 		}
+
+        //no valid response found
+        if (strlen($strReturn)==0)
+            $strReturn = false;
       
 		
 		return $strReturn;
@@ -332,6 +346,10 @@ class class_remoteloader {
         curl_setopt($objHandle, CURLOPT_HEADER, false);
         //return as string
         curl_setopt($objHandle, CURLOPT_RETURNTRANSFER, true);
+        //allow to follow redirects
+        curl_setopt($objHandle, CURLOPT_FOLLOWLOCATION, true);
+        //max number of redirects
+        curl_setopt($objHandle, CURLOPT_MAXREDIRS, 2);
  
         //and execute...
         $strReturn = curl_exec($objHandle);
