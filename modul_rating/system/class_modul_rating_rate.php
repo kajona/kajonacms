@@ -276,7 +276,7 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     	return $this->strRatingChecksum;
     }
 
-    public function getFloatRating() {
+    public function getFloatRating($bitRound = true) {
     	if($this->floatRating == "")
     	   return 0.0;
 

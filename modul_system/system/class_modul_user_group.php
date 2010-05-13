@@ -74,7 +74,7 @@ class class_modul_user_group extends class_model implements interface_model  {
      *
      * @return bool
      */
-    public function updateObjectToDb() {
+    public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
             class_logger::getInstance()->addLogRow("saved new group ".$this->getStrName(), class_logger::$levelInfo);

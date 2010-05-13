@@ -84,7 +84,7 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return bool
      * @overwrite class_model::updateObjectToDb() due to performance issues
      */
-    public function updateObjectToDb() {
+    public function updateObjectToDb($strPrevId = false) {
 
 
         if($this->getSystemid() == "") {

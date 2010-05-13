@@ -113,7 +113,7 @@ class class_array_section_iterator extends class_array_iterator {
      *
      * @return array
      */
-    public function getElementsOnPage() {
+    public function getElementsOnPage($intPageNumber) {
         $arrReturn = array();
         //calc elements to return
         $intStart = ($this->intPageNumber * $this->intElementsPerPage)-$this->intElementsPerPage;

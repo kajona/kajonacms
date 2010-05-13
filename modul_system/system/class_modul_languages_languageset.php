@@ -70,7 +70,7 @@ class class_modul_languages_languageset extends class_model implements interface
      *
      * @return bool
      */
-    public function updateObjectToDb() {
+    public function updateObjectToDb($strPrevId = false) {
         //new one or existing one?
         if($this->getSystemid() == "") {
             $strSystemid = generateSystemid();
