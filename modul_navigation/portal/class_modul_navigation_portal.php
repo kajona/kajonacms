@@ -408,8 +408,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	            $intCurCounter++;
 	        }
 	        if($objTemp->getSystemid() == $strNavigationId) {
-	            if($intCurCounter >= $intCounter)
+	            if($intCurCounter >= $intCounter) {
 	                $objPoint = $objOnePoint;
+                    $intCounter = $intCurCounter;
+                }
 	        }
 	    }
 	    return $objPoint;
