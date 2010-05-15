@@ -47,7 +47,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         $this->objDateStart->setTimeInOldStyle($intDateStart);
         
 		//End: Current Day of month
-		$intDateEnd = time()+86400;
+		$intDateEnd = time();
         $this->objDateEnd = new class_date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
@@ -135,8 +135,8 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
                 if($objPlugin->getReportCommand() == $strPlugin && $objPlugin instanceof interface_admin_statsreports) {
                     //get date-params as ints
-                    $intStartDate = mktime($this->objDateStart->getIntHour(), $this->objDateStart->getIntMin(), $this->objDateStart->getIntSec(), $this->objDateStart->getIntMonth() , $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
-                    $intEndDate = mktime($this->objDateEnd->getIntHour(), $this->objDateEnd->getIntMin(), $this->objDateEnd->getIntSec(), $this->objDateEnd->getIntMonth() , $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
+                    $intStartDate = mktime(0, 0, 0, $this->objDateStart->getIntMonth() , $this->objDateStart->getIntDay(), $this->objDateStart->getIntYear());
+                    $intEndDate = mktime(0, 0, 0, $this->objDateEnd->getIntMonth() , $this->objDateEnd->getIntDay(), $this->objDateEnd->getIntYear());
                     $objPlugin->setEndDate($intEndDate);
                     $objPlugin->setStartDate($intStartDate);
                     $objPlugin->setInterval($this->intInterval);

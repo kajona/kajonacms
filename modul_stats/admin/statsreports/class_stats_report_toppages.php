@@ -147,6 +147,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
     	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
+            $objGraph->setBitRenderLegend(false);
     	    $objGraph->saveGraph($strFilename);
     		$arrReturn[] =  _webpath_.$strFilename;
 

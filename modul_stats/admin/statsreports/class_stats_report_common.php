@@ -254,7 +254,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
         $arrHitsTotal = $this->getHitsForOnePeriod($intDBStart, $intDBEnd);
         $arrUserTotal = $this->getVisitorsForOnePeriod($intDBStart, $intDBEnd);
-		while($intStart < $this->intDateEnd) {
+		while($intStart <= $this->intDateEnd) {
 
 			$arrTickLabels[$intCount] = date("d.m.", $intStart);
 			$arrHits[$intCount] = 0;
@@ -300,6 +300,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
             $objChart2->addLinePlot($arrHits, "Hits");
+            $objChart2->setBitRenderLegend(false);
             //$objChart2->addLinePlot($arrUser, "Visitors/Day");
             $objChart2->setArrXAxisTickLabels($arrTickLabels);
             $strImagePath1 = "/portal/pics/cache/stats_common_1.png";
@@ -314,6 +315,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             //$objChart3->addLinePlot($arrHits, "Hits");
             $objChart3->addLinePlot($arrUser, "Visitors/Day");
             $objChart3->setArrXAxisTickLabels($arrTickLabels);
+            $objChart3->setBitRenderLegend(false);
             $strImagePath2 = "/portal/pics/cache/stats_common_2.png";
     		$objChart3->saveGraph($strImagePath2);
 

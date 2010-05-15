@@ -258,7 +258,10 @@ class class_graph_pchart {
         }
 
         //the graph area - x and or y-axis label present?
-        $intRightMargin = 10;
+        if($this->bitRenderLegend)
+            $intRightMargin = 10;
+        else
+            $intRightMargin = 20;
         $intTopMargin = 15;
         $intBottomMargin = 30;
         $intLeftMargin = 40;
