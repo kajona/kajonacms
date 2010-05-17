@@ -43,6 +43,8 @@ class class_graph_pchart {
 
     private $intLegendBreakCount = 15;
     private $intLegendAdditionalMargin = 0;
+
+    private $intXAxisAngle = 0;
     
 
 
@@ -227,6 +229,8 @@ class class_graph_pchart {
     /**
      * Creates the object and prepares it for rendering.
      * Does all the calculation like borders, margins, paddings ....
+     *
+     * @return void
      */
     private function preGraphCreation() {
 
@@ -316,11 +320,11 @@ class class_graph_pchart {
  
         //the x- and y axis, in- / exclusive margins
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
-            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_START0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, 0,1, true);
+            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_START0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
-            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_ADDALLSTART0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, 0,1, true);    
+            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_ADDALLSTART0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE)
-            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_NORMAL, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, 0,1, false);
+            $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_NORMAL, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, false);
         
         //the background grid
         if($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
@@ -588,6 +592,16 @@ class class_graph_pchart {
     public function setIntLegendAdditionalMargin($intLegendAdditionalMargin) {
         $this->intLegendAdditionalMargin = $intLegendAdditionalMargin;
     }
+
+    /**
+     * Sets the angle to be used for rendering the x-axis lables
+     *
+     * @aram int $intXAxisAngle
+     */
+    public function setIntXAxisAngle($intXAxisAngle) {
+        $this->intXAxisAngle = $intXAxisAngle;
+    }
+
 
 
 

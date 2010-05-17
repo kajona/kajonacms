@@ -72,50 +72,115 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 	public function getReport() {
 	    $strReturn = "";
 
-        $arrLogsRaw = $this->getLogbookData();
-        $arrLogs = array();
+        //showing a list using the pageview
+        $objArraySectionIterator = new class_array_section_iterator($this->getTopQueriesCount());
+        $objArraySectionIterator->setIntElementsPerPage(_stats_nrofrecords_);
+        $objArraySectionIterator->setPageNumber((int)(getGet("pv") != "" ? getGet("pv") : 1));
+        $objArraySectionIterator->setArraySection($this->getTopQueries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+        $strParams  = "&start_day=".(getPost("start_day") != "" ? getPost("start_day") : getGet("start_day"));
+        $strParams .= "&start_month=".(getPost("start_month") != "" ? getPost("start_month") : getGet("start_month"));
+        $strParams .= "&start_year=".(getPost("start_year") != "" ? getPost("start_year") : getGet("start_year"));
+
+        $strParams .= "&end_day=".(getPost("end_day") != "" ? getPost("end_day") : getGet("end_day"));
+        $strParams .= "&end_month=".(getPost("end_month") != "" ? getPost("end_month") : getGet("end_month"));
+        $strParams .= "&end_year=".(getPost("end_year") != "" ? getPost("end_year") : getGet("end_year"));
+
+
+        $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "stats", $this->getReportCommand(), $strParams."&filter=true");
+        
+        $arrLogsRaw = $arrPageViews["elements"];
+
         $intI = 0;
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
             if($intI++ >= _stats_nrofrecords_)
 				break;
 
 			$arrLogs[$intKey][0] = $intI;
-            $arrLogs[$intKey][1] = timeToString($arrOneLog["search_log_date"]);
-            $arrLogs[$intKey][2] = $arrOneLog["search_log_query"];
-            $arrLogs[$intKey][3] = $arrOneLog["search_log_language"];
+            $arrLogs[$intKey][1] = $arrOneLog["search_log_query"];
+            $arrLogs[$intKey][2] = $arrOneLog["number"];
         }
+
     	//Create a data-table
     	$arrHeader = array();
         $arrHeader[0] = "#";
-        $arrHeader[1] = $this->objTexts->getText("header_date", "search", "admin");
-        $arrHeader[2] = $this->objTexts->getText("header_query", "search", "admin");
-        $arrHeader[3] = $this->objTexts->getText("header_language", "search", "admin");
+        $arrHeader[1] = $this->objTexts->getText("header_query", "search", "admin");
+        $arrHeader[2] = $this->objTexts->getText("header_amount", "search", "admin");
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrLogs);
+
+        $strReturn .= $arrPageViews["pageview"];
 
 		return $strReturn;
 	}
 
-	/**
-	 * Loads the records of the search-logbook
-	 *
-	 * @return mixed
-	 */
-	private function getLogbookData() {
-		$strQuery = "SELECT search_log_date, search_log_query, search_log_language
+
+    public function getReportGraph() {
+	    $arrReturn = array();
+        //collect data
+        $arrQueries = $this->getTopQueries();
+
+		$arrGraphData = array();
+		$arrPlots = array();
+		$arrLabels = array();
+        
+		$intCount = 1;
+		foreach ($arrQueries as  $arrOneQuery) {
+		    $arrGraphData[$intCount] = $arrOneQuery["number"];
+            $arrLabels[$intCount] = $arrOneQuery["search_log_query"];
+
+		    if($intCount++ >= 9)
+		      break;
+		}
+
+        if(count($arrGraphData) > 1) {
+    	    //generate a bar-chart
+    	    $objGraph = new class_graph_pchart();
+    	    $objGraph->addBarChartSet($arrGraphData, "");
+    	    $objGraph->setStrXAxisTitle($this->objTexts->getText("header_query", "search", "admin"));
+    	    $objGraph->setStrYAxisTitle($this->objTexts->getText("header_amount", "search", "admin"));
+    	    $objGraph->setArrXAxisTickLabels($arrLabels);
+    	    $strFilename = "/portal/pics/cache/stats_toppages.png";
+            $objGraph->setBitRenderLegend(false);
+            $objGraph->setIntXAxisAngle(20);
+    	    $objGraph->saveGraph($strFilename);
+    		$arrReturn[] =  _webpath_.$strFilename;
+
+
+    		return $arrReturn;
+        }
+        else
+            return "";
+	}
+
+
+
+    private function getTopQueries($intStart = false, $intEnd = false) {
+        $strQuery = "SELECT search_log_query, COUNT(*) as number
 					  FROM ".$this->arrModule["table"]."
 					  WHERE search_log_date >= ".(int)$this->intDateStart."
 					    AND search_log_date <= ".(int)$this->intDateEnd."
-				   GROUP BY search_log_date
-				   ORDER BY search_log_date DESC";
+				   GROUP BY search_log_query
+				   ORDER BY number DESC, search_log_date DESC";
 
-		$arrReturn = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_-1);
+        if($intStart !== false && $intEnd !== false)
+            $arrReturn = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
+        else
+            $arrReturn = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_-1);
 
 		return $arrReturn;
-	}
+    }
 
-	public function getReportGraph() {
-		return "";
-	}
+    private function getTopQueriesCount() {
+        $strQuery = "SELECT COUNT(DISTINCT(search_log_query)) as total
+					  FROM ".$this->arrModule["table"]."
+					  WHERE search_log_date >= ".(int)$this->intDateStart."
+					    AND search_log_date <= ".(int)$this->intDateEnd."";
+
+        $arrReturn = $this->objDB->getRow($strQuery);
+		return $arrReturn["total"];
+    }
+
+	
 
 }
 ?>
