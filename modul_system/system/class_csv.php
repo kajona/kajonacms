@@ -128,21 +128,28 @@ class class_csv {
 
 
 	/**
-	 * Writes the current array of data to the given csv-file.
+	 * Writes the current array of data to the given csv-file or directly to the browser.
 	 * Make sure to have set all needed values before, otherwise
 	 * an exception is thrown
 	 *
 	 * @return bool
+     * @param bool $bitStreamToBrowser
 	 * @throws class_exception
 	 */
-	public function writeArrayToFile() {
+	public function writeArrayToFile($bitStreamToBrowser = false) {
 	    //all needed values set before?
 	    if($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
 	        //create file-content. use a file-pointer to avoid max-mem-errors
 
 	        $objFilesystem = new class_filesystem();
 	        //open file
-	        $objFilesystem->openFilePointer($this->strFilename);
+            if($bitStreamToBrowser) {
+                header("Content-type: text/csv");
+                header("Content-Disposition: attachment; filename=".saveUrlEncode(trim(basename($this->strFilename))));
+            }
+            else
+                $objFilesystem->openFilePointer($this->strFilename);
+            
 	        //the first row should contain the row-names
 	        $strRow = "";
 	        foreach ($this->arrMapping as $strSourceCol => $strTagetCol) {
@@ -157,7 +164,10 @@ class class_csv {
 	        //add a linebreak
 	        $strRow .= "\n";
 	        //write header to file
-	        $objFilesystem->writeToFile($strRow);
+            if($bitStreamToBrowser)
+                echo($strRow);
+            else
+                $objFilesystem->writeToFile($strRow);
 	        //iterate over the data array to write it to the file
 	        foreach ($this->arrData as $arrOneRow) {
 	            $strRow = "";
@@ -181,10 +191,19 @@ class class_csv {
 	            //add linebreak
 	            $strRow .= "\n";
 	            //and write to file
-	            $objFilesystem->writeToFile($strRow);
+                if($bitStreamToBrowser)
+                    echo($strRow);
+                else
+                    $objFilesystem->writeToFile($strRow);
 	        }
 	        //and close the filepointer...
-	        $objFilesystem->closeFilePointer();
+            if(!$bitStreamToBrowser)
+                $objFilesystem->closeFilePointer();
+
+            if($bitStreamToBrowser) {
+                flush();
+                die();
+            }
 	        return true;
 	    }
 	    else {
@@ -192,6 +211,9 @@ class class_csv {
 	    }
 	    return false;
 	}
+
+
+    
 
 	/**
 	 * Set the type of delimiter of the source or target file
