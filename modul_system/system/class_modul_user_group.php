@@ -134,24 +134,40 @@ class class_modul_user_group extends class_model implements interface_model  {
      * @param int $intEnd
 	 * @return mixed array of user-objects
 	 * @static
+     * @deprecated will be replaces by class_modul_user_group::getAllMembers()
+     * @see class_modul_user_group::getAllMembers()
 	 */
 	public static function getGroupMembers($strGroupId, $intStart = false, $intEnd = false) {
-		$strQuery = "SELECT user_id FROM "._dbprefix_."user,
+		$objGroup = new class_modul_user_group($strGroupId);
+		return $objGroup->getAllMembers($intStart, $intEnd);
+	}
+
+    /**
+     * Loads all members of the current group.
+     *
+     * @param int $intStart
+     * @param int $intEnd
+	 * @return mixed array of user-objects
+     * @see class_modul_user_group::getGroupMembers
+     */
+    public function getAllMembers($intStart = false, $intEnd = false) {
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user,
 									"._dbprefix_."user_group_members
-								WHERE group_member_group_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strGroupId)."'
-									AND user_id = group_member_user_id";
+								WHERE group_member_group_id='".dbsafeString($this->getSystemid())."'
+									AND user_id = group_member_user_id
+                                  ORDER BY user_name ASC  ";
 
         if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = $this->objDB->getArray($strQuery);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
 
 		return $arrReturn;
-	}
+    }
 
     /**
 	 * Gets the number of members of a group
