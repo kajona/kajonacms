@@ -278,7 +278,10 @@ class class_element_portallogin extends class_element_portal implements interfac
 	    }
 
 	    if($bitForm) {
-    	    $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform");
+            if($this->arrElementData["portallogin_editmode"] == 1)
+                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_complete");
+            else
+                $strTemplateID = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "portallogin_userdataform_minimal");
             $arrTemplate = array();
 
             
@@ -288,6 +291,21 @@ class class_element_portallogin extends class_element_portal implements interfac
             $arrTemplate["email"] = $objUser->getStrEmail();
             $arrTemplate["forename"] = $objUser->getStrForename();
             $arrTemplate["name"] = $objUser->getStrName();
+
+            $arrTemplate["street"] = $objUser->getStrStreet();
+            $arrTemplate["postal"] = $objUser->getStrPostal();
+            $arrTemplate["city"] = $objUser->getStrCity();
+            $arrTemplate["phone"] = $objUser->getStrTel();
+            $arrTemplate["mobile"] = $objUser->getStrMobile();
+
+            $objDate = new class_date($objUser->getLongDate());
+
+            $arrTemplate["date_day"] = $objDate->getIntDay();
+            $arrTemplate["date_month"] = $objDate->getIntMonth();
+            $arrTemplate["date_year"] = $objDate->getIntYear();
+
+
+
             $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
 
             $arrTemplate["formErrors"] = "";
@@ -307,6 +325,21 @@ class class_element_portallogin extends class_element_portal implements interfac
             $objUser->setStrForename($this->getParam("forename"));
             $objUser->setStrName($this->getParam("name"));
             $objUser->setStrPass($this->getParam("password"));
+
+            if($this->arrElementData["portallogin_editmode"] == 1) {
+                $objUser->setStrStreet($this->getParam("street"));
+                $objUser->setStrPostal($this->getParam("postal"));
+                $objUser->setStrCity($this->getParam("city"));
+                $objUser->setStrTel($this->getParam("phone"));
+                $objUser->setStrMobile($this->getParam("mobile"));
+
+                $objDate = new class_date();
+                $objDate->setIntDay($this->getParam("date_day"));
+                $objDate->setIntMonth($this->getParam("date_month"));
+                $objDate->setIntYear($this->getParam("date_year"));
+
+                $objUser->setLongDate($objDate->getLongTimestamp());
+            }
 
             $objUser->updateObjectToDb();
             $this->portalReload(getLinkPortalHref($this->getPagename()));

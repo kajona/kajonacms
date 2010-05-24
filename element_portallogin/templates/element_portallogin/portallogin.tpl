@@ -14,7 +14,7 @@
 </portallogin_status>
 
 
-<portallogin_userdataform>
+<portallogin_userdataform_minimal>
 <form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8">
     %%formErrors%%
     <div><label for="username">%%lang_usernameTitle%%</label><input type="text" name="username" id="username" value="%%username%%" class="inputText" disabled="disabled" /></div><br />
@@ -26,7 +26,31 @@
     <div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_userDataSubmit%%" class="button" /></div><br />
     <input type="hidden" name="submitUserForm" value="1" /> 
 </form>
-</portallogin_userdataform>
+</portallogin_userdataform_minimal>
+
+<portallogin_userdataform_complete>
+<form name="formUserdata" method="post" action="%%formaction%%" accept-charset="UTF-8">
+    %%formErrors%%
+    <div><label for="username">%%lang_usernameTitle%%</label><input type="text" name="username" id="username" value="%%username%%" class="inputText" disabled="disabled" /></div><br />
+    <div><label for="password">%%lang_passwordTitle%%</label><input type="password" name="password" id="password" value="%%password%%" class="inputText" /></div><br />
+    <div><label for="password2">%%lang_passwordTitle2%%</label><input type="password" name="password2" id="password2" value="%%password2%%" class="inputText" /></div><br />
+    <div><label for="email">%%lang_emailTitle%%</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div><br />
+    <div><label for="forename">%%lang_forenameTitle%%</label><input type="text" name="forename" id="forename" value="%%forename%%" class="inputText" /></div><br />
+    <div><label for="name">%%lang_nameTitle%%</label><input type="text" name="name" id="name" value="%%name%%" class="inputText" /></div><br />
+    <div><label for="street">%%lang_streetTitle%%</label><input type="text" name="street" id="street" value="%%street%%" class="inputText" /></div><br />
+    <div><label for="postal">%%lang_postalTitle%%</label><input type="text" name="postal" id="postal" value="%%postal%%" class="inputText" /></div><br />
+    <div><label for="city">%%lang_cityTitle%%</label><input type="text" name="city" id="city" value="%%city%%" class="inputText" /></div><br />
+    <div><label for="phone">%%lang_phoneTitle%%</label><input type="text" name="phone" id="phone" value="%%phone%%" class="inputText" /></div><br />
+    <div><label for="mobile">%%lang_mobileTitle%%</label><input type="text" name="mobile" id="mobile" value="%%mobile%%" class="inputText" /></div><br />
+    <div><label for="date_day">%%lang_dateTitle%%</label>
+        <input type="text" name="date_day" id="date_day" value="%%date_day%%" class="inputText" style="width: 34px;" maxlength="2" />&nbsp;
+        <input type="text" name="date_month" id="date_month" value="%%date_month%%" class="inputText" style="width: 34px;" maxlength="2" />&nbsp;
+        <input type="text" name="date_year" id="date_year" value="%%date_year%%" class="inputText" style="width: 60px;" maxlength="4" />
+    </div><br />
+    <div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_userDataSubmit%%" class="button" /></div><br />
+    <input type="hidden" name="submitUserForm" value="1" />
+</form>
+</portallogin_userdataform_complete>
 
 
 <errorRow>

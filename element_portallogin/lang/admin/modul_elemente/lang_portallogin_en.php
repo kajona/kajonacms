@@ -7,9 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 217
+//Kajona Language Editor Core Build 243
 
 //editable entries
+$lang["portallogin_editmode"]            = "Edit-mode:";
+$lang["portallogin_editmode_0"]          = "Minimal profile";
+$lang["portallogin_editmode_1"]          = "Complete profile";
 $lang["portallogin_error"]               = "Page in case of an error (optional):";
 $lang["portallogin_logout_success"]      = "Page after logging out (optional):";
 $lang["portallogin_profile"]             = "Page to edit the profile (optional):";
