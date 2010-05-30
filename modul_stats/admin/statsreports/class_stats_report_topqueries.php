@@ -85,7 +85,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 				break;
             $arrValues[$intI] = array();
 			$arrValues[$intI][] = $intI+1;
-			$arrValues[$intI][] = urldecode($strKey);
+			$arrValues[$intI][] = $strKey;
 			$arrValues[$intI][] = $intHits;
 			$arrValues[$intI][] = $this->objToolkit->percentBeam($intHits / $intSum*100);
 			$intI++;
@@ -132,6 +132,7 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 		        if(uniStrpos($arrOneRecord["stats_referer"], $strOnePattern) !== false) {
 		            $strQueryterm = uniSubstr($arrOneRecord["stats_referer"], (uniStrpos($arrOneRecord["stats_referer"], $strOnePattern)+uniStrlen($strOnePattern)));
     		        $strQueryterm = uniSubstr($strQueryterm, 0, uniStrpos($strQueryterm, "&"));
+                    $strQueryterm = uniStrtolower(trim(urldecode($strQueryterm)));
     		        if($strQueryterm != "") {
     		            if(isset($arrHits[$strQueryterm]))
     		                $arrHits[$strQueryterm]++;
