@@ -532,6 +532,10 @@ abstract class class_portal  {
     		else {
     			$strReturn = _pages_indexpage_;
     		}
+
+            //disallow rendering of master-page
+            if($strReturn == "master" )
+                $strReturn = _pages_errorpage_;
 		}
 		$strReturn = htmlspecialchars($strReturn);
 		return $strReturn;
