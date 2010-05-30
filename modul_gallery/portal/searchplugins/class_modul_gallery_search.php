@@ -82,7 +82,7 @@ class class_modul_gallery_search extends class_portal implements interface_searc
     					$this->arrHits[$arrOnePic["system_id"]]["hits"] = 1;
     					$this->arrHits[$arrOnePic["system_id"]]["pagelink"] = getLinkPortal(_gallery_search_resultpage_, "", "_self", $arrOnePic["pic_name"], "detailImage", "&highlight=".$this->strSearchtermRaw, $arrOnePic["system_id"], "", "", $arrOnePic["pic_name"]);
     					$this->arrHits[$arrOnePic["system_id"]]["pagename"] = _gallery_search_resultpage_;
-    					$this->arrHits[$arrOnePic["system_id"]]["description"] = $arrOnePic["pic_description"];
+    					$this->arrHits[$arrOnePic["system_id"]]["description"] = uniStrTrim($arrOnePic["pic_description"], 150);
 					}
 				}
 			}

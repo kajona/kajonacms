@@ -69,7 +69,7 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 
 			$arrDownloads = $this->objDB->getArray($strQuery);
 
-			//Register found news
+			//Register found downloads
 			if(count($arrDownloads) > 0) {
 				foreach($arrDownloads as $arrOneDownload) {
 
@@ -82,7 +82,7 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 				    	$this->arrHits[$arrOneDownload["system_id"]]["hits"] = 1;
 					    $this->arrHits[$arrOneDownload["system_id"]]["pagelink"] = getLinkPortal(_downloads_suche_seite_, "", "_self", $arrOneDownload["downloads_name"], "", "&highlight=".$this->strSearchtermRaw , $arrOneDownload["system_prev_id"]);
 					    $this->arrHits[$arrOneDownload["system_id"]]["pagename"] = _downloads_suche_seite_;
-					    $this->arrHits[$arrOneDownload["system_id"]]["description"] = $arrOneDownload["downloads_description"];
+					    $this->arrHits[$arrOneDownload["system_id"]]["description"] = uniStrTrim($arrOneDownload["downloads_description"], 150);
 					}
 				}
 			}
