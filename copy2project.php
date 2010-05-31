@@ -196,6 +196,21 @@ class class_copy2project {
                     $strFilename = basename($arrSingleFile[0]);
                     if(!in_array($strFilename, $this->arrFileExclusionsP2M)) {
                         $this->strCopyLog .= " copy ".$arrSingleFile[0]. " --> ".$arrSingleFile[1]."\n";
+                        //check if folder exists
+                        $arrFolders = explode("/", dirname($arrSingleFile[1]) );
+
+                        $strAttachedFolders = "/";
+                        foreach($arrFolders as $strSingleFolder) {
+                            $strAttachedFolders .= $strSingleFolder."/";
+
+                            if(!is_dir($strAttachedFolders)) {
+                                mkdir($strAttachedFolders, 0777);
+                            }
+
+
+                        }
+
+
                         copy($arrSingleFile[0], $arrSingleFile[1]);
                     }
                     else {
