@@ -250,10 +250,11 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	 *
 	 * @param string $strPrevId, id to append new records to
 	 * @param string $strPath, path to scan for folders and files
+     * @param bool $bitRecursive
 	 * @static
 	 * @return mixed
 	 */
-	public static function syncRecursive($strPrevId, $strPath) {
+	public static function syncRecursive($strPrevId, $strPath, $bitRecursive = true) {
 	    $objDB = class_carrier::getInstance()->getObjDB();
         $arrReturn = array();
         $arrReturn["insert"] = 0;
@@ -366,14 +367,17 @@ class class_modul_downloads_file extends class_model implements interface_model,
 			$objDlFile->updateObjectToDB($strPrevId);
             $arrReturn["insert"]++;
 		}
+
 		//And call all subfolders
-		$arrFolders = class_modul_downloads_file::getFolderLevel($strPrevId);
-		foreach($arrFolders as $objOneFolderDatabase) {
-			$arrTemp = class_modul_downloads_file::syncRecursive($objOneFolderDatabase->getSystemid(), $objOneFolderDatabase->getFilename());
-			$arrReturn["insert"] += $arrTemp["insert"];
-			$arrReturn["update"] += $arrTemp["update"];
-			$arrReturn["delete"] += $arrTemp["delete"];
-		}
+        if($bitRecursive) {
+            $arrFolders = class_modul_downloads_file::getFolderLevel($strPrevId);
+            foreach($arrFolders as $objOneFolderDatabase) {
+                $arrTemp = class_modul_downloads_file::syncRecursive($objOneFolderDatabase->getSystemid(), $objOneFolderDatabase->getFilename());
+                $arrReturn["insert"] += $arrTemp["insert"];
+                $arrReturn["update"] += $arrTemp["update"];
+                $arrReturn["delete"] += $arrTemp["delete"];
+            }
+        }
 
 		return $arrReturn;
 	}

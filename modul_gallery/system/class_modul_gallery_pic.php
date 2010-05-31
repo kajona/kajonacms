@@ -221,9 +221,10 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 	 *
 	 * @param string $strPrevID
 	 * @param stirng $strPath
+     * @param bool $bitRecursive
 	 * @return mixed
 	 */
-	public static function syncRecursive($strPrevID, $strPath) {
+	public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true) {
 	    $arrReturn["insert"] = 0;
 	    $arrReturn["delete"] = 0;
 	    $arrReturn["update"] = 0;
@@ -343,14 +344,16 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		}
 
 		//Load subfolders
-		$objFolders = class_modul_gallery_pic::loadFoldersDB($strPrevID);
-		foreach($objFolders as $objOneFolderDB) {
+        if($bitRecursive) {
+            $objFolders = class_modul_gallery_pic::loadFoldersDB($strPrevID);
+            foreach($objFolders as $objOneFolderDB) {
 
-		    $arrTemp = class_modul_gallery_pic::syncRecursive($objOneFolderDB->getSystemid(), $objOneFolderDB->getStrFilename());
-			$arrReturn["insert"] += $arrTemp["insert"];
-			$arrReturn["update"] += $arrTemp["update"];
-			$arrReturn["delete"] += $arrTemp["delete"];
-		}
+                $arrTemp = class_modul_gallery_pic::syncRecursive($objOneFolderDB->getSystemid(), $objOneFolderDB->getStrFilename());
+                $arrReturn["insert"] += $arrTemp["insert"];
+                $arrReturn["update"] += $arrTemp["update"];
+                $arrReturn["delete"] += $arrTemp["delete"];
+            }
+        }
 
 		return $arrReturn;
 	}

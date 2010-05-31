@@ -43,6 +43,8 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
             $strReturn .= $this->actionSyncGallery();
         else if($strAction == "massSyncGallery")
             $strReturn .= $this->actionMassSyncGallery();
+        else if($strAction == "partialSyncGallery")
+            $strReturn .= $this->actionPartialSyncGallery();
 
 
         return $strReturn;
@@ -103,6 +105,31 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 
         class_logger::getInstance()->addLogRow("mass synced galleries: ".$strResult, class_logger::$levelInfo);
         return $strReturn;
+    }
+
+    /**
+     * Syncs the gallery partially, so only a single level, and creates a small report
+     *
+     * @return string
+     */
+    private function actionPartialSyncGallery() {
+        $strReturn = "";
+		$strResult = "";
+
+		$objPic = new class_modul_gallery_pic($this->getSystemid());
+        if($objPic->rightRight1()) {
+            $arrSyncs = class_modul_gallery_pic::syncRecursive($objPic->getSystemid(), $objPic->getStrFilename(), false);
+            $strResult .= $this->getText("syncro_ende")."<br />";
+            $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
+
+            $strReturn .= "<gallery>".$strResult."</gallery>";
+        }
+        else
+            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
+        class_logger::getInstance()->addLogRow("synced gallery partially >".$objPic->getStrFilename()."< ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
+
+		return $strReturn;
     }
 
 

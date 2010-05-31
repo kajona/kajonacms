@@ -43,6 +43,8 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
             $strReturn .= $this->actionSyncArchive();
         else if($strAction == "massSyncArchive")
             $strReturn .= $this->actionMassSyncArchive();
+        else if($strAction == "partialSyncArchive")
+            $strReturn .= $this->actionPartialSyncArchive();
 
 
         return $strReturn;
@@ -104,6 +106,32 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
         class_logger::getInstance()->addLogRow("mass synced archives: ".$strResult, class_logger::$levelInfo);
         return $strReturn;
     }
+
+
+    /**
+	 * Syncs the archive partially, so only a single level, and creates a small report
+	 *
+	 * @return string
+	 */
+	private function actionPartialSyncArchive() {
+		$strReturn = "";
+		$strResult = "";
+
+		$objFile = new class_modul_downloads_file($this->getSystemid());
+        if($objFile->rightRight1()) {
+            $arrSyncs = class_modul_downloads_file::syncRecursive($objFile->getSystemid(), $objFile->getFilename(), false);
+            $strResult .= $this->getText("syncro_ende")."<br />";
+            $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
+
+            $strReturn .= "<archive>".$strResult."</archive>";
+        }
+        else
+            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+
+        class_logger::getInstance()->addLogRow("synced archive partially >".$objFile->getFilename()."< ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
+
+		return $strReturn;
+	}
 
 
 }

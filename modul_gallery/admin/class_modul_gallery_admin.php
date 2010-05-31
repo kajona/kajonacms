@@ -477,7 +477,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                           '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
-                                                          'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'gallery\', \'massSyncGallery\' ); jsDialog_1.hide();');
+                                                          'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'gallery\', \'partialSyncGallery\', \'".$this->getSystemid()."\' ); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
 
@@ -492,7 +492,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 				$strReturn .= "<script type=\"text/javascript\">
 					function kajonaUploaderCallback() {
-						KAJONA.admin.ajax.genericAjaxCall('gallery', 'massSyncGallery', '', {
+						/* KAJONA.admin.ajax.genericAjaxCall('gallery', 'massSyncGallery', '', { */
+						KAJONA.admin.ajax.genericAjaxCall('gallery', 'partialSyncGallery', '".$this->getSystemid()."', {
 							success : function(o) {
 								location.reload();
 							},
@@ -574,7 +575,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getIntType() == 0)
-                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getStrFilename())."\', \'gallery\', \'partialSyncGallery\', \'".$this->getSystemid()."\')");
                         else
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                     }

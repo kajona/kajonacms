@@ -1003,10 +1003,10 @@ KAJONA.admin.ajax = {
 		}
 	},
 
-    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction) {
+    deleteFile : function (strFmRepoId, strFolder, strFile, strSourceModule, strSourceModuleAction, strSourceSystemId) {
         KAJONA.admin.ajax.genericAjaxCall("filemanager", "deleteFile", strFmRepoId+"&folder="+strFolder+"&file="+strFile, {
                 success : function(o) {
-                    KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                    KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, strSourceSystemId, {
 							success : function(o) {
 								location.reload();
 							},
@@ -1047,7 +1047,7 @@ KAJONA.admin.ajax = {
             });
     },
 
-    createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction) {
+    createFolder : function (strFmRepoId, strFolder, strSourceModule, strSourceModuleAction, strSourceSystemId) {
         KAJONA.admin.ajax.genericAjaxCall("filemanager", "createFolder", strFmRepoId+"&folder="+strFolder, {
                 success : function(o) {
                     //check if answer contains an error
@@ -1056,7 +1056,7 @@ KAJONA.admin.ajax = {
                     }
                     else {
                         if(strSourceModule != "" && strSourceModuleAction != "") {
-                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, '', {
+                            KAJONA.admin.ajax.genericAjaxCall(strSourceModule, strSourceModuleAction, strSourceSystemId, {
                                     success : function(o) {
                                         location.reload();
                                     },
@@ -1249,10 +1249,10 @@ KAJONA.admin.ajax = {
 
 // --- FILEMANAGER ----------------------------------------------------------------------
 KAJONA.admin.filemanager = {
-	createFolder : function(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction) {
+	createFolder : function(strInputId, strRepoId, strRepoFolder, strSourceModule, strSourceAction, strSourceSystemid) {
 	    var strNewFoldername = document.getElementById(strInputId).value;
 	    if(strNewFoldername != "") {
-	        KAJONA.admin.ajax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction);
+	        KAJONA.admin.ajax.createFolder(strRepoId, strRepoFolder+"/"+strNewFoldername, strSourceModule, strSourceAction, strSourceSystemid);
 	    }
 	},
 	

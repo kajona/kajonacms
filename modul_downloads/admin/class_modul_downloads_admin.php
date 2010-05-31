@@ -259,7 +259,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
                                                           '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
-                                                          'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'massSyncArchive\' ); jsDialog_1.hide();');
+                                                          'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'partialSyncArchive\', \'".$this->getSystemid()."\'); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
 
@@ -274,7 +274,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 				$strReturn .= "<script type=\"text/javascript\">
 					function kajonaUploaderCallback() {
-						KAJONA.admin.ajax.genericAjaxCall('downloads', 'massSyncArchive', '', {
+						KAJONA.admin.ajax.genericAjaxCall('downloads', 'partialSyncArchive', '".$this->getSystemid()."', {
 							success : function(o) {
 								location.reload();
 							},
@@ -346,7 +346,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getType() == 0)
-                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
+                            $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFile(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'".basename($objOneFile->getFilename())."\', \'downloads\', \'partialSyncArchive\', \'".$this->getSystemid()."\')");
                         else
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
                     }
