@@ -206,11 +206,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strActions = "";
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "edit", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
+                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
                                    getLinkAdminHref($this->arrModule["modul"], "deletefinal", "&userid=".$objOneUser->getSystemid()));
-                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
                 //new 2.1: the status icon
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
                     if($objOneUser->getIntActive() == 1)
@@ -587,14 +587,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
                                   getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                 }
                 else {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
-                    $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                     $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+                    $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                 }
 
                 //get the number of users per group

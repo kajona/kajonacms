@@ -276,7 +276,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                         if($this->objRights->rightDelete($objOneNews->getSystemid()))
                             $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_tonLocked.gif"));
 
-
                     }
                     else {
                         if($this->objRights->rightEdit($objOneNews->getSystemid()))
@@ -287,16 +286,17 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                             $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
                     }
 
+
+    		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
+    				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
+
                     if($this->objRights->rightEdit($objOneNews->getSystemid())) {
                         //more than one language available?
                         if(class_modul_languages_language::getNumberOfLanguagesAvailable() > 1) {
                             $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editLanguageset", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_languageset"), "icon_language.gif"));
                         }
                     }
-
-
-    		   		if($this->objRights->rightEdit($objOneNews->getSystemid()))
-    				    $strAction .= $this->objToolkit->listStatusButton($objOneNews->getSystemid());
+                    
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), getRightsImageAdminName($objOneNews->getSystemid())));
     		   		$strNews .= $this->objToolkit->listRow3($objOneNews->getStrTitle()." (".$objOneNews->getIntHits()." Hits)", $strCenter, $strAction,getImageAdmin("icon_news.gif"), $intI++);

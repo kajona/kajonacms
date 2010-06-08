@@ -571,7 +571,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                         }
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
-				   		$strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getIntType() == 0)
@@ -579,6 +578,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                         else
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                     }
+
+                    if($this->objRights->rightEdit($objOneFile->getSystemid()))
+                        $strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
