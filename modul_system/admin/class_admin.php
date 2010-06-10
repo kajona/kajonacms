@@ -786,7 +786,7 @@ abstract class class_admin {
 	 *
 	 */
 	protected function getOutputModuleTitle() {
-	    if($this->getText("modul_titel") != "!modul_titel")
+	    if($this->getText("modul_titel") != "!modul_titel!")
 	       return $this->getText("modul_titel");
 	    else
 	       return $this->arrModule["name"];
