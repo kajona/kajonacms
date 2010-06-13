@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 247
+//Kajona Language Editor Core Build 249
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -180,6 +180,7 @@ $lang["systeminfo_webserver_modules"]    = "Загруженных модуле�
 $lang["systeminfo_webserver_version"]    = "Вебсервер";
 $lang["systeminfo_yes"]                  = "Да";
 $lang["systemlog"]                       = "Логфайл системы";
+$lang["systemtask_cacheSource_source"]   = "";
 $lang["systemtask_cancel_execution"]     = "";
 $lang["systemtask_close_dialog"]         = "";
 $lang["systemtask_compresspicuploads_done"] = "Изменения размера и сжатие успешно осуществлено";
@@ -207,6 +208,10 @@ $lang["systemtask_dbimport_name"]        = "Импортировать резе�
 $lang["systemtask_dbimport_success"]     = "Резервная копия успешно установлена";
 $lang["systemtask_dialog_title"]         = "";
 $lang["systemtask_dialog_title_done"]    = "";
+$lang["systemtask_flushcache_all"]       = "";
+$lang["systemtask_flushcache_error"]     = "";
+$lang["systemtask_flushcache_name"]      = "";
+$lang["systemtask_flushcache_success"]   = "";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Количество удаленных файлов:";
 $lang["systemtask_flushpiccache_done"]   = "Очистка завершена.";
 $lang["systemtask_flushpiccache_name"]   = "Очистить кеш рисунков";

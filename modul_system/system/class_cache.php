@@ -182,14 +182,29 @@ class class_cache  {
     }
 
     /**
-     * Deletes all cached entries
+     * Deletes all cached entries, either for a single source or for all sources.
      *
+     * @param string $strSource
      * @return bool
      * @static
      */
-    public static function flushCache() {
-        $strQuery = "DELETE FROM "._dbprefix_." cache";
+    public static function flushCache($strSource = "") {
+        $strQuery = "DELETE FROM "._dbprefix_."cache ";
+        if($strSource != "")
+            $strQuery .= " WHERE cache_source = '".dbsafeString($strSource)."' ";
+        
         return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+    }
+
+    public static function getCacheSources() {
+        $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";
+
+        $arrReturn = array();
+        $arrSourceRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        foreach($arrSourceRows as $arrSingleRow)
+            $arrReturn[] = $arrSingleRow["cache_source"];
+
+        return $arrReturn;
     }
 
     /**

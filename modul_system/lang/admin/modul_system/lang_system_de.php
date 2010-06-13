@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 247
+//Kajona Language Editor Core Build 249
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -185,6 +185,7 @@ $lang["systeminfo_webserver_modules"]    = "Geladene Module";
 $lang["systeminfo_webserver_version"]    = "Webserver";
 $lang["systeminfo_yes"]                  = "Ja";
 $lang["systemlog"]                       = "System-Log";
+$lang["systemtask_cacheSource_source"]   = "Cache-Arten:";
 $lang["systemtask_cancel_execution"]     = "Ausführung beenden";
 $lang["systemtask_close_dialog"]         = "OK";
 $lang["systemtask_compresspicuploads_done"] = "Die Bildverkleinerung und -komprimierung wurde abgeschlossen.";
@@ -212,6 +213,10 @@ $lang["systemtask_dbimport_name"]        = "Datenbank importieren";
 $lang["systemtask_dbimport_success"]     = "Sicherung erfolgreich eingespielt";
 $lang["systemtask_dialog_title"]         = "Systemtask wird ausgeführt";
 $lang["systemtask_dialog_title_done"]    = "Systemtask abgeschlossen";
+$lang["systemtask_flushcache_all"]       = "Alle Einträge";
+$lang["systemtask_flushcache_error"]     = "Ein Fehler ist aufgetreten.";
+$lang["systemtask_flushcache_name"]      = "Globalen Cache leeren";
+$lang["systemtask_flushcache_success"]   = "Leeren abgeschlossen.";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Anzahl gelöschter Bilder: ";
 $lang["systemtask_flushpiccache_done"]   = "Leeren abgeschlossen.";
 $lang["systemtask_flushpiccache_name"]   = "Bildercache leeren";
