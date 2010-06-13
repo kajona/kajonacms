@@ -64,6 +64,15 @@
     session_loginprovider   = provider acting as the sessions' source -> used in later releases
     session_lasturl         = last url the owner visited
 
+//--_cache-----------------------------------------------------------------------------------------------
+    cache_id                = table primary key
+    cache_source            = string-based identifier of the source-module
+    cache_hash1             = cache identifier 1
+    cache_hash2             = cache identifier 2
+    cache_langauge          = language of the cached entrie
+    cache_content           = the content to cache
+    cache_leasetime         = timestamp the entry gets invalid
+
 //--_system_config---------------------------------------------------------------------------------------
     system_config_id        = table primary key
     system_config_name      = name of the constant

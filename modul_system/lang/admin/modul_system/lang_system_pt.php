@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 239
+//Kajona Language Editor Core Build 247
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -211,8 +211,6 @@ $lang["systemtask_flushpiccache_deleted"] = "<br />Número de ficheiros eliminad
 $lang["systemtask_flushpiccache_done"]   = "Descarregamento completo.";
 $lang["systemtask_flushpiccache_name"]   = "Descarregar memória temporária das imagens";
 $lang["systemtask_flushpiccache_skipped"] = "<br />Número de ficheiros omitidos: ";
-$lang["systemtask_flushremoteloadercache_done"] = "Descarregamento completo.";
-$lang["systemtask_flushremoteloadercache_name"] = "Descarregar(flush) a memória remota de saida";
 $lang["systemtask_group_cache"]          = "";
 $lang["systemtask_group_database"]       = "";
 $lang["systemtask_group_default"]        = "";

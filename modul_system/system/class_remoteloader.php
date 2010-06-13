@@ -121,9 +121,6 @@ class class_remoteloader {
 			$this->intMaxCachetime = (int)($this->intMaxCachetime/3);
 		}    
 
-		//and clean up the cache
-        $this->doCacheCleanup();	
-			
 		//and save to the cache
 		if($strReturn !== false) {
 		    $this->saveResponseToCache($strReturn);
@@ -145,7 +142,7 @@ class class_remoteloader {
 	 *
 	 * @return string
 	 */
-	private function builtCacheChecksum() {
+	private function buildCacheChecksum() {
 		return md5($this->strProtocolHeader.$this->strHost.$this->intPort.$this->strQueryParams);
 	}
 	
@@ -155,19 +152,13 @@ class class_remoteloader {
 	 * @return string or false in case of no matching entry
 	 */
 	private function loadByCache() {
-		$strReturn = "";
-		
-		$strQuery = "SELECT remoteloader_cache_response
-		               FROM ".$this->strCacheTable."
-		              WHERE remoteloader_cache_releasetime > ".(int)time()."
-		                AND remoteloader_cache_checksum = '".dbsafeString($this->builtCacheChecksum())."'";
-		
-		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
-        if(isset($arrRow["remoteloader_cache_response"]))
-           	$strReturn = $arrRow["remoteloader_cache_response"];
-        else
-            $strReturn = false;
-            
+		$strReturn = false;
+
+        //try to find an entry in the cache
+        $objCachedEntry = class_cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum());
+        if($objCachedEntry != null)
+            $strReturn = $objCachedEntry->getStrContent();
+
 		return $strReturn;
 	}
 	
@@ -271,16 +262,6 @@ class class_remoteloader {
     		      fwrite($objRemoteResource,"Host: ".$arrUrl['host']."\r\n");
     		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");
 
-	               
-    		   
-    		   /*$objRemoteResource = @fsockopen($strProtocolAdd.$this->strHost,($this->intPort > 0 ? $this->intPort : 80),$intErrorNumber,$strErrorString,10);
-    		   
-    		   if(is_resource($objRemoteResource)){
-    		      fwrite($objRemoteResource,"GET ".$this->strProtocolHeader.$this->strHost.$this->strQueryParams." HTTP/1.0\r\n");
-    		      fwrite($objRemoteResource,"Host: ".$this->strHost."\r\n");
-    		      fwrite($objRemoteResource,"Connection: close\r\n\r\n");*/
-    		
-    		      
     		      while(!feof($objRemoteResource)){
     		         $strReturn .= fgets($objRemoteResource,1024);
     		      }
@@ -367,30 +348,13 @@ class class_remoteloader {
 	 * @return bool
 	 */
 	private function saveResponseToCache($strResponse) {
-		//calculate new releasetime & checksum
-		$intReleasetime = time()+(int)$this->intMaxCachetime;
-		$strChecksum = dbsafeString($this->builtCacheChecksum());
+        //create a cache-instance
+        $objCache = class_cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum(), "", "", true);
+        $objCache->setStrContent($strResponse);
+        $objCache->setIntLeasetime(time()+(int)$this->intMaxCachetime);
+        
+        return $objCache->updateObjectToDb();
 		
-		//delete old cache data
-		class_carrier::getInstance()->getObjDB()->_query("DELETE FROM ".$this->strCacheTable." WHERE remoteloader_cache_checksum = '".$strChecksum."'");
-		
-		$strQuery = "INSERT INTO ".$this->strCacheTable."
-		                 (remoteloader_cache_checksum, remoteloader_cache_releasetime, remoteloader_cache_response) VALUES
-		                 ('".$strChecksum."', ".(int)$intReleasetime." , '".dbsafeString($strResponse, false)."')";
-
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
-	}
-	
-	/**
-	 * Removes invalid entries from the cache
-	 *
-	 * @return bool
-	 */
-	private function doCacheCleanup() {
-		$strQuery = "DELETE FROM ".$this->strCacheTable." 
-		                   WHERE remoteloader_cache_releasetime <= ".(int)time()."";
-		
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
 	}
 	
     /**

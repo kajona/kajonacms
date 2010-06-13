@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.0";
+		$arrModul["version"] 			= "3.3.0.1";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -248,6 +248,21 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("session", $arrFields, array("session_id"), array("session_phpid")))
 			$strReturn .= "An error occured! ...\n";
 
+        // caching --------------------------------------------------------------------------------------
+        $strReturn .= "Installing table cache...\n";
+
+		$arrFields = array();
+		$arrFields["cache_id"]                = array("char20", false);
+		$arrFields["cache_source"]	          = array("char254", true);
+		$arrFields["cache_hash1"]	          = array("char254", true);
+		$arrFields["cache_hash2"]	          = array("char254", true);
+		$arrFields["cache_language"]	      = array("char20", true);
+		$arrFields["cache_content"]           = array("text", true);
+		$arrFields["cache_leasetime"]         = array("int", true);
+
+		if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
+			$strReturn .= "An error occured! ...\n";
+
 		//Filemanager -----------------------------------------------------------------------------------
 		$strReturn .= "Installing table filemanager...\n";
 
@@ -283,17 +298,6 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("adminwidget", $arrFields, array("adminwidget_id")))
 			$strReturn .= "An error occured! ...\n";
-
-		//remoteloader-cache ----------------------------------------------------------------------------
-		$strReturn .= "Installing table remoteloader_cache...\n";
-
-		$arrFields = array();
-		$arrFields["remoteloader_cache_checksum"]     = array("char40", false);
-		$arrFields["remoteloader_cache_releasetime"]  = array("int", false);
-		$arrFields["remoteloader_cache_response"]     = array("text", false);
-
-		if(!$this->objDB->createTable("remoteloader_cache", $arrFields, array("remoteloader_cache_checksum")))
-            $strReturn .= "An error occured! ...\n";
 
         //languages -------------------------------------------------------------------------------------
         $strReturn .= "Installing table languages...\n";
@@ -549,6 +553,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.96") {
             $strReturn .= $this->update_3296_330();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0") {
+            $strReturn .= $this->update_330_3301();
         }
 
         return $strReturn."\n\n";
@@ -1106,6 +1115,35 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.3.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.0");
+        return $strReturn;
+    }
+
+    private function update_330_3301() {
+        $strReturn = "Updating 3.3.0 to 3.3.0.1...\n";
+
+        $strReturn .= "Installing table cache...\n";
+
+		$arrFields = array();
+		$arrFields["cache_id"]                = array("char20", false);
+		$arrFields["cache_source"]	          = array("char254", true);
+		$arrFields["cache_hash1"]	          = array("char254", true);
+		$arrFields["cache_hash2"]	          = array("char254", true);
+		$arrFields["cache_language"]	      = array("char20", true);
+		$arrFields["cache_content"]           = array("text", true);
+		$arrFields["cache_leasetime"]         = array("int", true);
+
+		if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Dropping table remoteloader-cache...\n";
+        $strQuery = "DROP TABLE "._dbprefix_."remoteloader_cache";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.0.1");
         return $strReturn;
     }
 }
