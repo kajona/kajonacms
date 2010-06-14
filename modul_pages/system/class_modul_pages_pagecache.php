@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * This class provides the mechanism, to save and load already generated pages from / to the database.
+ * This class provides the mechanism to save and load already generated pages from / to the database.
  * This results in a better performance when loading pages in the portal
  *
  * @package modul_pages
@@ -30,6 +30,8 @@ class class_modul_pages_pagecache {
 		$objCarrier = class_carrier::getInstance();
 
 		$this->objDB = $objCarrier->getObjDB();
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
 	}
 
 
@@ -41,6 +43,12 @@ class class_modul_pages_pagecache {
 	 * @return string
 	 */
 	public function loadPageFromCache($strPagename, $strUserid) {
+
+        return "";
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
+
+
 	    $strQuery = "SELECT page_cache_content as page
 	                 FROM "._dbprefix_."page_cache
 	                 WHERE page_cache_name='".$this->objDB->dbsafeString($strPagename)."'
@@ -67,6 +75,8 @@ class class_modul_pages_pagecache {
 	 * @return bool
 	 */
 	public function savePageToCache($strPagename, $intCachetime, $strUserid, $strPage) {
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
 
         //only save to cache if valid more than one second
         if($intCachetime > 0) {
@@ -107,6 +117,10 @@ class class_modul_pages_pagecache {
 	 *
 	 */
 	public function cacheCleanup() {
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
+
+        
         $strQuery = "DELETE FROM "._dbprefix_."page_cache
                      WHERE page_cache_releasetime < ".(int)time()."";
         $this->objDB->_query($strQuery);
@@ -118,6 +132,10 @@ class class_modul_pages_pagecache {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
+
+        
         $strQuery = "DELETE FROM "._dbprefix_."page_cache";
         return $this->objDB->_query($strQuery);
 	}
@@ -129,6 +147,10 @@ class class_modul_pages_pagecache {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
+
+        
         $strQuery = "DELETE FROM "._dbprefix_."page_cache
                      WHERE page_cache_name = '".$this->objDB->dbsafeString($strPagename)."'";
         return $this->objDB->_query($strQuery);
@@ -142,6 +164,10 @@ class class_modul_pages_pagecache {
 	 * @return bool
 	 */
 	public function flushPageWithChecksumFromPagesCache($strPagename) {
+
+        throw new class_exception("not implemented", class_exception::$level_FATALERROR);
+
+        
         $strQuery = "DELETE FROM "._dbprefix_."page_cache
                      WHERE page_cache_name = '".$this->objDB->dbsafeString($strPagename)."'
                        AND page_cache_checksum = '".$this->objDB->dbsafeString($this->generateCacheChecksum())."'";

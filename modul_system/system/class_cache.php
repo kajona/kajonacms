@@ -151,6 +151,10 @@ class class_cache  {
         if($this->strSourceName == "" && $this->strHash1 == "")
             throw new class_exception("not all required params given", class_exception::$level_ERROR);
 
+        //check if the new entry will be valid at least a second, otherwise quit saving
+        if(time() > $this->intLeasetime)
+            return false;
+
         $strQuery = "";
         if($this->strCacheId == null) {
             $this->strCacheId = generateSystemid();
@@ -182,16 +186,29 @@ class class_cache  {
     }
 
     /**
-     * Deletes all cached entries, either for a single source or for all sources.
+     * Deletes all cached entries, either for a single source or for all sources,
+     * more filters like parametrized
      *
      * @param string $strSource
      * @return bool
      * @static
      */
-    public static function flushCache($strSource = "") {
+    public static function flushCache($strSource = "", $strHash1 = "", $strHash2 = "") {
         $strQuery = "DELETE FROM "._dbprefix_."cache ";
+
+        $arrWhere = array();
+
         if($strSource != "")
-            $strQuery .= " WHERE cache_source = '".dbsafeString($strSource)."' ";
+            $arrWhere[] = " cache_source = '".dbsafeString($strSource)."' ";
+
+        if($strHash1 != "")
+            $arrWhere[] = " cache_hash1 = '".dbsafeString($strHash1)."' ";
+
+        if($strHash2 != "")
+            $arrWhere[] = " cache_hash2 = '".dbsafeString($strHash2)."' ";
+
+        if(count($arrWhere) > 0)
+            $strQuery .= "WHERE ".implode(" AND ", $arrWhere);
         
         return class_carrier::getInstance()->getObjDB()->_query($strQuery);
     }

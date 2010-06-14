@@ -15,10 +15,7 @@
  */
 class class_modul_pages_portal extends class_portal {
 
-    private $objPagecache;
-
     private static $strAdditionalTitle = "";
-    private static $bitPageCacheDisabledForGenerationRun = false;
 
 	public function __construct() {
         $arrModul = array();
@@ -29,8 +26,6 @@ class class_modul_pages_portal extends class_portal {
 
 		parent::__construct($arrModul);
 
-		//in nearly every case, we'll need a pagecache-object
-		$this->objPagecache = new class_modul_pages_pagecache();
 	}
 
 	/**
@@ -40,11 +35,6 @@ class class_modul_pages_portal extends class_portal {
 	public function generatePage() {
 		//Determin the pagename
 		$strPagename = $this->getPagename();
-
-		//At first: look up the pagecache or check, if its a preview
-		$strPageFromCache = "";
-		if(_pages_cacheenabled_ == "true")
-		    $strPageFromCache = $this->objPagecache->loadPageFromCache($strPagename, $this->objSession->getUserID());
 
 		//if using the pe, the cache shouldn't be used, otherwise strange things might happen.
 		//the system could frighten your cat or eat up all your cheese with marshmellows...
@@ -56,16 +46,6 @@ class class_modul_pages_portal extends class_portal {
 		        $bitPeRequested = true;
 		    }
 		}
-
-		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && uniStrlen($strPageFromCache) != 0 && $bitPeRequested === false) {
-		   $this->strOutput = $strPageFromCache;
-		   return;
-		}
-
-		//If we reached up till here, no cached page was found, so generate it from scratch.
-		//Keep the max cachetime to save the Page to cache.
-		$intMaxCachetime = _pages_maxcachetime_;
-
 
 		//Load the data of the page
 		$objPageData = class_modul_pages_page::getPageByName($strPagename);
@@ -189,18 +169,7 @@ class class_modul_pages_portal extends class_portal {
                                                   "repeatable" => $objOneElementOnPage->getIntRepeat()
                                               );
             }
-		    //Check if the max-cachetime is lower than the current one set
-		    //include the "please hide the element" time
-		    if($objOneElementOnPage->getIntCachetime() != 0) {
-		        $intMaxCachetimeToCompare = (int)$objOneElementOnPage->getIntCachetime();
-
-		        //check the max display time
-                if((int)($objOneElementOnPage->getEndDate() - time() ) > 0 && ($objOneElementOnPage->getEndDate()-time()) < $intMaxCachetimeToCompare )
-                    $intMaxCachetimeToCompare = ($objOneElementOnPage->getEndDate()-time());
-
-		        if((int)$intMaxCachetime > (int)$intMaxCachetimeToCompare)
-		           $intMaxCachetime = $intMaxCachetimeToCompare;
-		    }
+		    
 			//Include the portal-class of the element
 			include_once(_portalpath_."/elemente/".$objOneElementOnPage->getStrClassPortal());
 			//Build the class-name for the object
@@ -210,7 +179,31 @@ class class_modul_pages_portal extends class_portal {
 			if(!isset($arrTemplate[$objOneElementOnPage->getStrPlaceholder()]))
 				$arrTemplate[$objOneElementOnPage->getStrPlaceholder()] = "";
 
-			$strElementOutput = $objElement->getElementOutput();
+
+            //cache-handling. load element from cache.
+            //if the element is re-generated, save it back to cache.
+            //take caching-blockers into account
+            if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage) {
+                
+                //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
+                if($bitPeRequested) {
+                    //pe is enabled --> regenerate the funky contents
+                    $strElementOutput = $objElement->getElementOutput();
+                }
+                else {
+                    //pe not to be taken into account --> full support of caching
+                    $strElementOutput = $objElement->getElementOutputFromCache();
+                    
+                    if($strElementOutput === false) {
+                        $strElementOutput = $objElement->getElementOutput();
+                        $objElement->saveElementToCache($strElementOutput);
+                    }
+                }
+
+            }
+            else 
+     			$strElementOutput = $objElement->getElementOutput();
+                
 
 			//any string to highlight?
     		if($this->getParam("highlight") != "") {
@@ -218,7 +211,7 @@ class class_modul_pages_portal extends class_portal {
     		    //search for matches, but exclude tags
     		    $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\"><a name=\"$1\">$1</a></span>", $strElementOutput);
     		}
-
+                
 			$arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
 		}
 
@@ -388,20 +381,7 @@ class class_modul_pages_portal extends class_portal {
             $strPageContent = $strHeader.$strPageContent;
         }
 
-		//save the generated Page to the cache
-		if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage && !self::$bitPageCacheDisabledForGenerationRun) {
-		   $this->objPagecache->savePageToCache($strPagename, $intMaxCachetime, $this->objSession->getUserID(), $strPageContent);
-        }
-        elseif(self::$bitPageCacheDisabledForGenerationRun) {
-            $this->objPagecache->flushPageWithChecksumFromPagesCache($strPagename);
-        }
-
 		$this->strOutput = $strPageContent;
-	}
-
-
-	public function cacheCleanup() {
-	    $this->objPagecache->cacheCleanup();
 	}
 
 	/**
@@ -414,13 +394,7 @@ class class_modul_pages_portal extends class_portal {
 		self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
 	}
 
-    /**
-     * Disables caching for the current generation
-     * @return void
-     */
-    public static function disablePageCacheForGeneration() {
-        self::$bitPageCacheDisabledForGenerationRun = true;
-    }
+
 
 }
 ?>

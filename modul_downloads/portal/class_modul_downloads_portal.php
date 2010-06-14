@@ -359,8 +359,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 				$strIcons .= $this->fillTemplate($arrTemplate, $strTemplateIconId);
 			}
 		} else {
-            //disable caching
-            class_modul_pages_portal::disablePageCacheForGeneration();
 		    if(!$bitRatingAllowed)
 			    $strRatingBarTitle = $this->getText("download_rating_voted");
 			else

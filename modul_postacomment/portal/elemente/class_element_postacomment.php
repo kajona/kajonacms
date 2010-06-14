@@ -28,6 +28,9 @@ class class_element_postacomment extends class_element_portal implements interfa
 		$arrModule["table"]	    	= _dbprefix_."element_universal";
 
         parent::__construct($arrModule, $objElementData);
+
+        //we support ratings, so add cache-busters
+        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
 	}
 
 

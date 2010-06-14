@@ -26,6 +26,9 @@ class class_element_downloads extends class_element_portal implements interface_
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]		    = _dbprefix_."element_downloads";
 		parent::__construct($arrModule, $objElementData);
+
+        //we support ratings, so add cache-busters
+        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
 	}
 
 

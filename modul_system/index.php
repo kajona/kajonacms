@@ -192,9 +192,6 @@ class class_index  {
 		if($objPagesModule != null && $objPagesModule->getStrNamePortal() != "") {
 			$strClassname = uniStrReplace(".php", "", $objPagesModule->getStrNamePortal());
 			$objPages = new $strClassname();
-			//Clean up the cache
-			if(_pages_cacheenabled_ == "true")
-			    $objPages->cacheCleanup();
 			//Load the Elements & generate the page
 			$objPages->generatePage();
 			//Load the templates

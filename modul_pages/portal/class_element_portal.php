@@ -15,11 +15,19 @@
 class class_element_portal extends class_portal {
 	protected $arrElementData;
 
+    private $strCacheAddon = "";
+
+    /**
+     *
+     * @var class_modul_pages_pageelement
+     */
+    private $objElementData;
+
 	/**
 	 * Constructor
 	 *
 	 * @param mixed $arrModule
-	 * @param mixed $arrElementData
+	 * @param class_modul_pages_pageelement $objElementData
 	 */
 	public function __construct($arrModule, $objElementData) {
         $arrModule["modul"]             = "elemente";
@@ -38,6 +46,8 @@ class class_element_portal extends class_portal {
 		$this->arrElementData["page_element_placeholder_name"] = $objElementData->getStrName();
 		$this->arrElementData["page_element_placeholder_element"] = $objElementData->getStrElement();
 		$this->arrElementData["page_element_placeholder_title"] = $objElementData->getStrTitle(false);
+
+        $this->objElementData = $objElementData;
 	}
 
 
@@ -94,6 +104,69 @@ class class_element_portal extends class_portal {
 
 		return $strReturn;
 	}
+
+    /**
+     * Tries to load the content of the element from cache.
+     * If a valid entry was found, the cached content is returns.
+     * Of no valid entry was found, false is returned instead.
+     * In this case, use getElementOutput to load the content.
+     *
+     * @return string false in case of no matching entry
+     * @see class_element_portal::getElementOutput()
+     */
+    public function getElementOutputFromCache() {
+        $strReturn = false;
+
+        //load the matching cache-entry
+        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getPortalLanguage());
+        if($objCacheEntry != null)
+            $strReturn = $objCacheEntry->getStrContent();
+
+        return $strReturn;
+    }
+
+
+    /**
+     * Saves the current element to the cache.
+     * If passed, the value of the param $strElementOutput is used as content, otherwise
+     * content-generation is triggered again.
+     *
+     * @param string $strElementOutput
+     * @since 3.3.1
+     */
+    public function saveElementToCache($strElementOutput = "") {
+
+        //if no content was passed, rebuild the content
+        if($strElementOutput == "")
+            $strElementOutput = $this->getElementOutput();
+
+        //load the matching cache-entry
+        $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getPortalLanguage(), true);
+        $objCacheEntry->setStrContent($strElementOutput);
+        $objCacheEntry->setIntLeasetime(time()+$this->objElementData->getIntCachetime());
+
+        $objCacheEntry->updateObjectToDb();
+    }
+
+    /**
+     * Generates the hash2 sum of the cached entry
+     *
+     * @return string
+     * @since 3.3.1
+     */
+    private function getCacheHash2() {
+        return md5("".$this->objSession->getUserID().$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
+    }
+
+    /**
+     * Generates the hash1 sum of the cached entry
+     *
+     * @return string
+     * @since 3.3.1
+     */
+    private function getCacheHash1() {
+        return $this->getPagename();
+    }
 
 
 	/**
@@ -305,6 +378,17 @@ class class_element_portal extends class_portal {
 	protected function getAnchorTag() {
 		return "<a name=\"".$this->getSystemid()."\" class=\"hiddenAnchor\"></a>";
 	}
+
+    /**
+     * Use this method to set additional cache-key-addons.
+     * E.g. if you want to cache depending on your own params like a rating history,
+     * this is the place to go.
+     */
+    public function setStrCacheAddon($strCacheAddon) {
+        $this->strCacheAddon = $strCacheAddon;
+    }
+
+
 }
 
 ?>

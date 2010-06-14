@@ -180,7 +180,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
                 throw new class_exception("Error saving entry", class_exception::$level_ERROR);
 
 			//Flush the page from cache
-			$this->flushPageFromPagesCache($this->getPagename());
+            class_cache::flushCache("class_element_portal", $this->getPagename());
 
 		}
 		else

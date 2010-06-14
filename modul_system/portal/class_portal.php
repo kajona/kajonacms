@@ -492,8 +492,7 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushCompletePagesCache() {
-	    $objPagecache = new class_modul_pages_pagecache();
-        return $objPagecache->flushCompletePagesCache();
+        return class_cache::flushCache("class_element_portal");
 	}
 
 	/**
@@ -503,8 +502,7 @@ abstract class class_portal  {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    $objPagecache = new class_modul_pages_pagecache();
-	    return $objPagecache->flushPageFromPagesCache($strPagename);
+	    return class_cache::flushCache("class_element_portal", $strPagename);
 	}
 
 	/**

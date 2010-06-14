@@ -28,6 +28,9 @@ class class_element_faqs extends class_element_portal implements interface_porta
 		$arrModule["table"]	    	= _dbprefix_."element_faqs";
 
         parent::__construct($arrModule, $objElementData);
+
+        //we support ratings, so add cache-busters
+        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
 	}
 
 

@@ -27,6 +27,9 @@ class class_element_gallery extends class_element_portal implements interface_po
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]  		= _dbprefix_."element_gallery";
 		parent::__construct($arrModule, $objElementData);
+
+        //we support ratings, so add cache-busters
+        $this->setStrCacheAddon(getCookie("kj_ratingHistory"));
 	}
 
 

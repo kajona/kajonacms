@@ -568,7 +568,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		//Loading the data of the corresp site
         $this->objDB->flushQueryCache();
 		$objPage = new class_modul_pages_page($this->getPrevId());
-		$this->flushPageFromPagesCache($objPage->getStrName());
+        class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
 		return $strReturn;
 	}
@@ -612,7 +612,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 		//Loading the data of the corresp site
 		$objPage = new class_modul_pages_page($objRoot->getPrevId());
-		$objRoot->flushPageFromPagesCache($objPage->getStrName());
+        class_cache::flushCache("class_element_portal", $objPage->getStrName());
 
 		return true;
 	}
