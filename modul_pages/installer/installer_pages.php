@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -119,21 +119,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id")))
 			$strReturn .= "An error occured! ...\n";
 
-
-		//page_cache_table-------------------------------------------------------------------------------
-		$strReturn .= "Installing table page_cache...\n";
-
-		$arrFields = array();
-		$arrFields["page_cache_id"] 		= array("char20", false);
-		$arrFields["page_cache_name"]		= array("char254", true);
-		$arrFields["page_cache_checksum"] 	= array("char254", true);
-		$arrFields["page_cache_createtime"]	= array("int", true);
-		$arrFields["page_cache_releasetime"]= array("int", true);
-		$arrFields["page_cache_userid"] 	= array("char20", true);
-		$arrFields["page_cache_content"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("page_cache", $arrFields, array("page_cache_id")))
-			$strReturn .= "An error occured! ...\n";
 
 		//Now we have to register module by module
 
@@ -350,6 +335,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.93") {
             $strReturn .= $this->update_3293_330();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0") {
+            $strReturn .= $this->update_330_3301();
         }
 
         return $strReturn."\n\n";
@@ -621,6 +611,24 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.3.0");
         $this->updateElementVersion("paragraph", "3.3.0");
         $this->updateElementVersion("image", "3.3.0");
+        return $strReturn;
+    }
+
+    private function update_330_3301() {
+        $strReturn = "Updating 3.3.0 to 3.3.0.1...\n";
+
+        $strReturn .= "Dropping table page_cache...\n";
+        $strQuery = "DROP TABLE "._dbprefix_."page_cache";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.0.1");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.0.1");
+        $this->updateElementVersion("paragraph", "3.3.0.1");
+        $this->updateElementVersion("image", "3.3.0.1");
         return $strReturn;
     }
 
