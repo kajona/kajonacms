@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 227
+//Kajona Language Editor Core Build 249
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -153,8 +153,6 @@ $lang["seite_rechte"]                    = "Rechte bearbeiten";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["submit"]                          = "Speichern";
 $lang["submit_change"]                   = "Ändern";
-$lang["systemtask_flushpagescache_done"] = "Leeren abgeschlossen.";
-$lang["systemtask_flushpagescache_name"] = "Seitencache leeren";
 $lang["template"]                        = "Template:";
 $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt oder es konnte nicht geladen werden!";
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";

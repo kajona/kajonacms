@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 227
+//Kajona Language Editor Core Build 249
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -150,8 +150,6 @@ $lang["seite_rechte"]                    = "Редактирай права";
 $lang["seostring"]                       = "SEO-URL-ключови думи:";
 $lang["submit"]                          = "Запази";
 $lang["submit_change"]                   = "";
-$lang["systemtask_flushpagescache_done"] = "Изчистването завършено.";
-$lang["systemtask_flushpagescache_name"] = "Изчисти кеширани страници";
 $lang["template"]                        = "Шаблон:";
 $lang["templateNotLoaded"]               = "ВНИМАНИЕ: Не беше избран шаблон за страницата или не може да бъде зареден!";
 $lang["templateNotSelectedBefore"]       = "ВНИМАНИЕ: Няма избран шаблон за тази страница!";
