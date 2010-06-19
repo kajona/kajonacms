@@ -155,7 +155,13 @@ class class_element_portal extends class_portal {
      * @since 3.3.1
      */
     private function getCacheHash2() {
-        return md5("".$this->objSession->getUserID().$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
+
+        $strGuestId = "";
+        //when browsing the site as a guest, drop the userid
+        if($this->objSession->isLoggedin())
+            $strGuestId = $this->objSession->getUserID();
+
+        return md5("".$strGuestId.$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
     }
 
     /**
