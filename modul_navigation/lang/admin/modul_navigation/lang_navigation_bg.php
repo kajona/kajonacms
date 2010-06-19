@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["browser"]                         = "Отвори browser";
@@ -32,7 +32,6 @@ $lang["navigation_rechte"]               = "Промяна права";
 $lang["navigation_tagetblank"]           = "_blank (отваря се в нов прозорец)";
 $lang["navigation_tagetself"]            = "_self (отваря се в същия прозорец)";
 $lang["navigation_target"]               = "Цел:";
-$lang["_navigation_use_cache_"]          = "";
 $lang["navigationp_anzeigen"]            = "Покажи връзките в навигацията";
 $lang["navigationp_bearbeiten"]          = "Промени връзка";
 $lang["navigationp_hoch"]                = "Премести връзката нагоре";
@@ -46,8 +45,6 @@ $lang["quickhelp_newNavi"]               = "За да създадете нов�
 $lang["quickhelp_newNaviPoint"]          = "Чрез създаване и редактиране на навигационна връзка можете да промените свойствата му. Свойствата включват име и съответната препратка. За външни сайтове можете да използвате полето 'Външни Сайтове'. Ако искате вместо име да се показва изображение, избирате полето 'изображение'. Можете да изберете целта на препратката чрез падащото меню.";
 $lang["required_navigation_name"]        = "Име";
 $lang["speichern"]                       = "Запази";
-$lang["systemtask_flushnavigationcache_done"] = "";
-$lang["systemtask_flushnavigationcache_name"] = "";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Грешка, външна и вътрешна цел зададени";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Грешка, няма зададена цел!";
 $lang["systemtask_navigationcheck_invalidInternal"] = "Грешка, вътрешната страница не съществува! (Цел: ";

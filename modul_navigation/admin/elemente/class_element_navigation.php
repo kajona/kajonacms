@@ -77,15 +77,6 @@ class class_element_navigation extends class_element_admin implements interface_
         return $strReturn;
 	}
 
-    /**
-     * @overwrite class_element_admin::doAfterSaveToDb()
-     * @see class_element_admin::doAfterSaveToDb()
-     */
-    public function doAfterSaveToDb() {
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
-    }
-
 
 }
 ?>

@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.1";
+		$arrModule["version"] 		= "3.3.0.2";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -182,7 +182,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("paragraph");
 		    $objElement->setStrClassAdmin("class_element_paragraph.php");
 		    $objElement->setStrClassPortal("class_element_paragraph.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -205,7 +205,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("row");
 		    $objElement->setStrClassAdmin("class_element_row.php");
 		    $objElement->setStrClassPortal("class_element_row.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -244,7 +244,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("image");
 		    $objElement->setStrClassAdmin("class_element_image.php");
 		    $objElement->setStrClassPortal("class_element_image.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -340,6 +340,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0") {
             $strReturn .= $this->update_330_3301();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0.1") {
+            $strReturn .= $this->update_3301_3302();
         }
 
         return $strReturn."\n\n";
@@ -629,6 +634,28 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.3.0.1");
         $this->updateElementVersion("paragraph", "3.3.0.1");
         $this->updateElementVersion("image", "3.3.0.1");
+        return $strReturn;
+    }
+
+    private function update_3301_3302() {
+        $strReturn = "Updating 3.3.0.1 to 3.3.0.2...\n";
+
+        $strReturn .= "Setting cache-timeouts for paragraphs, rows and images...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_paragraph.php'
+                         OR element_class_admin = 'class_element_row.php'
+                         OR element_class_admin = 'class_element_image.php'";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.0.2");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.0.2");
+        $this->updateElementVersion("paragraph", "3.3.0.2");
+        $this->updateElementVersion("image", "3.3.0.2");
         return $strReturn;
     }
 

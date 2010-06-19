@@ -72,10 +72,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 $objElement = new class_modul_pages_pageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($this->getSystemid(), $intNewPos);
             }
-            else if($objCommon->getRecordModuleNr() == _navigation_modul_id_ && $intNewPos != "") {
-                $this->setAbsolutePosition($this->getSystemid(), $intNewPos);
-                class_modul_navigation_cache::flushCache();
-            }
             else {
 
                 if($intNewPos != "")
@@ -104,12 +100,6 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
     	    if(parent::setStatus()) {
     	        $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setStatusOk")."</message>";
     	        $this->flushCompletePagesCache();
-
-                //try to flush the navigations-cache
-                $objNavi = class_modul_system_module::getModuleByName("navigation");
-                if($objNavi != null) {
-                    class_modul_navigation_cache::flushCache();
-                }
     	    }
     	    else
                 $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";

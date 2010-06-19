@@ -45,19 +45,11 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	public function action() {
 		$strReturn = "";
 
-        //navigation loadable via cache?
-        $strCachedNavi = $this->loadNavigationFromCache();
-        if($strCachedNavi != null)
-            return $strCachedNavi;
-
 		//Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
 			$strReturn = $this->loadNavigationTree();
 		if($this->arrElementData["navigation_mode"] == "sitemap")
 			$strReturn = $this->loadNavigationSitemap();
-
-        //and save back to the cache
-        $this->saveNavigationToCache($strReturn);
 
         //Add pe code
         $arrPeConfig = array(
@@ -73,31 +65,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		return $strReturn;
 	}
-
-
-// --- Caching ------------------------------------------------------------------------------------------
-    /**
-     * Wrapper to class_modul_navigation_cache::loadNavigationFromCache()
-     * Tries to fetch a generated navi from the database
-     *
-     * @return string or null
-     */
-    private function loadNavigationFromCache() {
-        $objCache = new class_modul_navigation_cache();
-        return $objCache->loadNavigationFromCache($this->arrElementData["navigation_id"], $this->arrElementData["content_id"], $this->getPagename());
-    }
-
-    /**
-     * Wrapper to class_modul_navigation_cache::saveNavigationToCache()
-     * Tries to save a generated navi to the database
-     *
-     * @param string $strGeneratedNavi
-     * @return bool
-     */
-    private function saveNavigationToCache($strGeneratedNavi) {
-        $objCache = new class_modul_navigation_cache();
-        return $objCache->saveNavigationToCache($this->arrElementData["navigation_id"], $this->arrElementData["content_id"], $this->getPagename(), $strGeneratedNavi);
-    }
+  
 
 // --- Tree-Functions -----------------------------------------------------------------------------------
 

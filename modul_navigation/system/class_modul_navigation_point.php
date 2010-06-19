@@ -83,9 +83,6 @@ class class_modul_navigation_point extends class_model implements interface_mode
      * @return bool
      */
     protected function updateStateToDb() {
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
-
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
                         SET 	navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
     							navigation_page_i='".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
@@ -143,9 +140,6 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	 */
 	public function deleteNaviPoint() {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
-
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
 
 	    $objRoot = new class_modul_system_common();
 	    //Check rights for the current point

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["browser"]                         = "Открыть браузер";
@@ -32,7 +32,6 @@ $lang["navigation_rechte"]               = "Изменить настройки"
 $lang["navigation_tagetblank"]           = "_бланк (в новом окне браузера)";
 $lang["navigation_tagetself"]            = "_self (в том же окне браузера)";
 $lang["navigation_target"]               = "Цель:";
-$lang["_navigation_use_cache_"]          = "";
 $lang["navigationp_anzeigen"]            = "Показать пункты навигации";
 $lang["navigationp_bearbeiten"]          = "Изменить пункт навигации";
 $lang["navigationp_hoch"]                = "Поднять пункт вверх";
@@ -46,8 +45,6 @@ $lang["quickhelp_newNavi"]               = "Чтобы создать новое
 $lang["quickhelp_newNaviPoint"]          = "При создании и изменении пункта навигации вы также можете изменить его настройки. Настройки включают в себя название пункта и соответствующую ссылку. Для внешних веб-сайтов вы можете использовать поле \"Внешняя ссылка\". Если вы хотите, чтобы вместо названия пункта показывалась картинка, вы можете использовать поле \"Картинка\". Вы также можете выбрать цель ссылки с соответствующим drop down.";
 $lang["required_navigation_name"]        = "Имя";
 $lang["speichern"]                       = "Сохранить";
-$lang["systemtask_flushnavigationcache_done"] = "";
-$lang["systemtask_flushnavigationcache_name"] = "";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Ошибка, внутренняя и внешняя установка цели!";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Ошибка, цель незадана!";
 $lang["systemtask_navigationcheck_invalidInternal"] = "Ошибка, внутренняя страница не существует! (Цель:";

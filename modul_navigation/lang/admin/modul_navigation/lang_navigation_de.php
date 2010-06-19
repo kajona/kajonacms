@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 194
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["browser"]                         = "Browser öffnen";
@@ -32,7 +32,6 @@ $lang["navigation_rechte"]               = "Rechte bearbeiten";
 $lang["navigation_tagetblank"]           = "_blank (Neues Browserfenster)";
 $lang["navigation_tagetself"]            = "_self (Selbes Browserfenster)";
 $lang["navigation_target"]               = "Ziel:";
-$lang["_navigation_use_cache_"]          = "Cache aktiviert:";
 $lang["navigationp_anzeigen"]            = "Unterpunkte anzeigen";
 $lang["navigationp_bearbeiten"]          = "Navigationspunkt bearbeiten";
 $lang["navigationp_hoch"]                = "Punkt nach oben verschieben";
@@ -46,8 +45,6 @@ $lang["quickhelp_newNavi"]               = "Für eine neue Navigation muss ledig
 $lang["quickhelp_newNaviPoint"]          = "Beim Anlegen oder Bearbeiten eines Navigationspunktes können dessen Eigenschaften verändert werden. Hierzu gehören der Name der Punktes, sowie die Seite, auf welche der Punkt zeigen soll. Für externe Seiten kann das Feld 'externer Verweis' verwendet werden. Soll statt des Namens ein Bild geladen werden, so kann dies unter 'Bild' angegeben werden. Das Ziel gibt das spätere Link-Target an.";
 $lang["required_navigation_name"]        = "Name";
 $lang["speichern"]                       = "Speichern";
-$lang["systemtask_flushnavigationcache_done"] = "Leeren erfolgreich abgeschlossen";
-$lang["systemtask_flushnavigationcache_name"] = "Navigationencache leeren";
 $lang["systemtask_navigationcheck_invalidBoth"] = "Fehler, internes und externes Ziel gesetzt!";
 $lang["systemtask_navigationcheck_invalidEmpty"] = "Fehler, kein Ziel gesetzt!";
 $lang["systemtask_navigationcheck_invalidInternal"] = "Fehler, interne Seite existiert nicht! (Ziel:";

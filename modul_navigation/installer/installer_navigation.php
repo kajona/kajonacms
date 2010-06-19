@@ -16,7 +16,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["name_lang"] 	= "Module Navigation";
 		$arrModule["moduleId"] 		= _navigation_modul_id_;
@@ -70,23 +70,9 @@ class class_installer_navigation extends class_installer_base implements interfa
 		if(!$this->objDB->createTable("navigation", $arrFields, array("navigation_id")))
 			$strReturn .= "An error occured! ...\n";
 
-        $strReturn .= "Installing table navigation_cache...\n";
-
-		$arrFields = array();
-		$arrFields["navigation_cache_id"] 		= array("char20", false);
-		$arrFields["navigation_cache_page"] 	= array("char254", true);
-		$arrFields["navigation_cache_userid"] 	= array("char20", true);
-		$arrFields["navigation_cache_checksum"] = array("char254", true);
-		$arrFields["navigation_cache_content"] 	= array("text", true);
-
-		if(!$this->objDB->createTable("navigation_cache", $arrFields, array("navigation_cache_id")))
-			$strReturn .= "An error occured! ...\n";
 
 		//register the module
 		$strSystemID = $this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal.php", "class_modul_navigation_admin.php", $this->arrModule["version"] , true, "", "class_modul_navigation_admin_xml.php");
-
-        //constants
-        $this->registerConstant("_navigation_use_cache_", "false", class_modul_system_setting::$int_TYPE_BOOL, _navigation_modul_id_);
 
 		return $strReturn;
 
@@ -120,7 +106,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 		    $objElement->setStrName("navigation");
 		    $objElement->setStrClassAdmin("class_element_navigation.php");
 		    $objElement->setStrClassPortal("class_element_navigation.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -184,6 +170,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.92") {
             $strReturn .= $this->update_3292_330();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0") {
+            $strReturn .= $this->update_330_3301();
         }
 
         return $strReturn."\n\n";
@@ -319,6 +310,35 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.3.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("navigation", "3.3.0");
+        return $strReturn;
+    }
+
+
+    private function update_330_3301() {
+        $strReturn = "Updating 3.3.0 to 3.3.0.1..\n";
+
+        $strReturn .= "Setting cache-timeouts for navigations...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_navigation.php'";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Dropping navigations cache...\n";
+        $strQuery = "DROP TABLE "._dbprefix_."navigation_cache";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Deleting navigation cache setting...\r";
+        $strQuery = "DELETE FROM "._dbprefix_."system_config
+                           WHERE system_config_name = '_navigation_use_cache_'";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.3.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("navigation", "3.3.0.1");
         return $strReturn;
     }
 }

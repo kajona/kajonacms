@@ -74,8 +74,6 @@ class class_modul_navigation_tree extends class_model implements interface_model
      * @return bool
      */
     protected function updateStateToDb() {
-        //flush the cache
-        class_modul_navigation_cache::flushCache();
 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                      SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."'
