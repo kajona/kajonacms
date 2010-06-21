@@ -471,6 +471,9 @@ class class_db {
 		$arrReturn = array();
 		if($this->objDbDriver != null) {
 
+            //increase global counter
+            $this->intNumber++;
+
             $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
             $strQueryMd5 = md5($strFakeQuery);
             
