@@ -20,7 +20,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "element_imagelightbox";
 		$arrModule["name_lang"] 	= "Element imagelightbox";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -90,7 +90,7 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
 		    $objElement->setStrName("imagelightbox");
 		    $objElement->setStrClassAdmin("class_element_imagelightbox.php");
 		    $objElement->setStrClassPortal("class_element_imagelightbox.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -118,6 +118,11 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("imagelightbox")->getStrVersion() == "3.3.0") {
+            $strReturn .= $this->postUpdate_330_3301();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -130,6 +135,18 @@ class class_installer_element_imagelightbox extends class_installer_base impleme
     public function postUpdate_321_330() {
         $strReturn = "Updating element imagelightbox to 3.3.0...\n";
         $this->updateElementVersion("imagelightbox", "3.3.0");
+        return $strReturn;
+    }
+
+    public function postUpdate_330_3301() {
+        $strReturn = "Updating element imagelightbox to 3.3.0.1...\n";
+        $strReturn .= "Setting cache-timeouts for imagelightbox-element...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_imagelightbox.php'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        $this->updateElementVersion("imagelightbox", "3.3.0.1");
         return $strReturn;
     }
 }

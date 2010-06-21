@@ -209,6 +209,8 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
 
 		    $objPost->updateObjectToDb();
+
+            $this->flushPageFromPagesCache($this->getPagename());
 	    }
 	}
 

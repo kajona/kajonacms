@@ -69,7 +69,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		    $objElement->setStrName("languageswitch");
 		    $objElement->setStrClassAdmin("class_element_languageswitch.php");
 		    $objElement->setStrClassPortal("class_element_languageswitch.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -1137,6 +1137,13 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Dropping table remoteloader-cache...\n";
         $strQuery = "DROP TABLE "._dbprefix_."remoteloader_cache";
+        if(!$this->objDB->_query($strQuery))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Setting cache-timeouts for languageswitch-element...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_languageswitch.php'";
         if(!$this->objDB->_query($strQuery))
 			$strReturn .= "An error occured! ...\n";
 

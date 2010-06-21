@@ -20,7 +20,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["name_lang"] 	= "Element rssfeed";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -90,7 +90,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
 		    $objElement->setStrName("rssfeed");
 		    $objElement->setStrClassAdmin("class_element_rssfeed.php");
 		    $objElement->setStrClassPortal("class_element_rssfeed.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -118,6 +118,11 @@ class class_installer_element_rssfeed extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("rssfeed")->getStrVersion() == "3.3.0") {
+            $strReturn .= $this->postUpdate_330_3301();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -130,6 +135,18 @@ class class_installer_element_rssfeed extends class_installer_base implements in
     public function postUpdate_321_330() {
         $strReturn = "Updating element rssfeed to 3.3.0...\n";
         $this->updateElementVersion("rssfeed", "3.3.0");
+        return $strReturn;
+    }
+
+    public function postUpdate_330_3301() {
+        $strReturn = "Updating element rssfeed to 3.3.0...\n";
+        $strReturn .= "Setting cache-timeouts for rssfeed-element...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_rssfeed.php'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        $this->updateElementVersion("rssfeed", "3.3.0.1");
         return $strReturn;
     }
 }

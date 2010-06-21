@@ -16,7 +16,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
@@ -130,7 +130,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		    $objElement->setStrName("gallery");
 		    $objElement->setStrClassAdmin("class_element_gallery.php");
 		    $objElement->setStrClassPortal("class_element_gallery.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -219,6 +219,11 @@ class class_installer_gallery extends class_installer_base implements interface_
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.92") {
             $strReturn .= $this->update_3292_330();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0") {
+            $strReturn .= $this->update_330_3301();
         }
 
         return $strReturn."\n\n";
@@ -361,6 +366,24 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.3.0");
         $this->updateElementVersion("galleryRandom", "3.3.0");
+        return $strReturn;
+    }
+
+    private function update_330_3301() {
+        $strReturn = "Updating 3.3.0 to 3.3.0.1...\n";
+
+        $strReturn .= "Setting cache-timeouts for gallery-element...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_name = 'gallery'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.3.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.3.0.1");
+        $this->updateElementVersion("galleryRandom", "3.3.0.1");
         return $strReturn;
     }
 

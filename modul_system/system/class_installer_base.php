@@ -528,6 +528,7 @@ abstract class class_installer_base extends class_root {
 	 * @return bool
 	 */
 	protected function updateModuleVersion($strModuleName, $strVersion) {
+        $this->objDB->flushQueryCache();
 	    $strQuery = "UPDATE "._dbprefix_."system_module
 	                 SET module_version= '".$this->objDB->dbsafeString($strVersion)."',
 	                     module_date=".(int)time()."
@@ -547,6 +548,7 @@ abstract class class_installer_base extends class_root {
      * @param string $strVersion
      */
     protected function updateElementVersion($strElementName, $strVersion) {
+        $this->objDB->flushQueryCache();
         $objElement = class_modul_pages_element::getElement($strElementName);
         if($objElement != null) {
             $objElement->setStrVersion($strVersion);

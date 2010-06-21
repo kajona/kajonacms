@@ -103,6 +103,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
         	    $objPost->setStrAssignedLanguage($this->getPortalLanguage());
 
         	    $objPost->updateObjectToDb();
+                $this->flushPageFromPagesCache($this->getPagename());
         	    //reinit post -> encoded entities
         	    $objPost->loadDataFromDb();
 

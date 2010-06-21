@@ -861,10 +861,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 if($strElementName != $objOneElement->getStrName())
                     $strElementName .= " (".$objOneElement->getStrName().")";
 
+                $strCachetime = $objOneElement->getIntCachetime() == "-1" ? "<b>".$objOneElement->getIntCachetime()."</b>" : $objOneElement->getIntCachetime();
+
 	    		$strActions = $this->objToolkit->listButton(getLinkAdmin("pages", "editElement", "&elementid=".$objOneElement->getSystemid(), $this->getText("element_bearbeiten"), $this->getText("element_bearbeiten"), "icon_pencil.gif"));
 
 	    		$strActions .= $this->objToolkit->listDeleteButton($objOneElement->getStrName(), $this->getText("element_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteElement", "&elementid=".$objOneElement->getSystemid()));
-                $strReturn .= $this->objToolkit->listRow3($strElementName, " V ".$objOneElement->getStrVersion()." (".$objOneElement->getIntCachetime().")", $strActions, getImageAdmin("icon_dot.gif", $strDescription), $intI++);
+                $strReturn .= $this->objToolkit->listRow3($strElementName, " V ".$objOneElement->getStrVersion()." (".$strCachetime.")", $strActions, getImageAdmin("icon_dot.gif", $strDescription), $intI++);
 			}
 			if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), $this->getText("modul_element_neu"), "icon_blank.gif"), "", $intI++);
