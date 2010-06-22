@@ -20,7 +20,7 @@ class class_installer_search extends class_installer_base implements interface_i
 	 */
     public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.1";
 		$arrModule["name"] 			= "search";
 		$arrModule["name_lang"] 	= "Module Search";
 		$arrModule["moduleId"] 		= _suche_modul_id_;
@@ -103,7 +103,7 @@ class class_installer_search extends class_installer_base implements interface_i
 		    $objElement->setStrName("search");
 		    $objElement->setStrClassAdmin("class_element_search.php");
 		    $objElement->setStrClassPortal("class_element_search.php");
-		    $objElement->setIntCachetime(-1);
+		    $objElement->setIntCachetime(3600);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -160,6 +160,11 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_321_330();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0") {
+            $strReturn .= $this->update_330_3301();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -167,7 +172,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 3.1.0 to 3.1.1...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.1.1");
-
         return $strReturn;
     }
 
@@ -175,7 +179,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 3.1.1 to 3.1.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.1.9");
-
         return $strReturn;
     }
 
@@ -183,7 +186,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 3.1.9 to 3.1.95...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.1.95");
-
         return $strReturn;
     }
 
@@ -191,7 +193,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.2.0");
-
         return $strReturn;
     }
 
@@ -199,7 +200,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("search", "3.2.0.9");
-
         return $strReturn;
     }
 
@@ -209,7 +209,6 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateModuleVersion("search", "3.2.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("search", "3.2.1");
-
         return $strReturn;
     }
 
@@ -219,6 +218,23 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateModuleVersion("search", "3.3.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("search", "3.3.0");
+        return $strReturn;
+    }
+
+    private function update_330_3301() {
+        $strReturn = "Updating 3.3.0 to 3.3.0.1...\n";
+
+        $strReturn .= "Setting cache-timeouts for search-element...\n";
+        $strQuery = "UPDATE "._dbprefix_."element
+                        SET element_cachetime=3600
+                      WHERE element_class_admin = 'class_element_search.php'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "3.3.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("search", "3.3.0.1");
 
         return $strReturn;
     }

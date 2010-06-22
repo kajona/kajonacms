@@ -36,19 +36,9 @@ class class_modul_pages_portal extends class_portal {
 		//Determin the pagename
 		$strPagename = $this->getPagename();
 
-		//if using the pe, the cache shouldn't be used, otherwise strange things might happen.
-		//the system could frighten your cat or eat up all your cheese with marshmellows...
-		$bitPeRequested = false;
-		if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin()) {
-		    //Load the data of the page
-		    $objPageData = class_modul_pages_page::getPageByName($strPagename);
-		    if($objPageData->rightEdit()) {
-		        $bitPeRequested = true;
-		    }
-		}
-
 		//Load the data of the page
-		$objPageData = class_modul_pages_page::getPageByName($strPagename);
+        $objPageData = class_modul_pages_page::getPageByName($strPagename);
+		
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
         if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
@@ -57,6 +47,16 @@ class class_modul_pages_portal extends class_portal {
 		//but: if count != 0 && preview && rights:
 		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
 			$bitErrorpage = false;
+
+        //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
+		//the system could frighten your cat or eat up all your cheese with marshmellows...
+		$bitPeRequested = false;
+        if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin()) {
+		    //Load the data of the page
+		    if($objPageData->rightEdit()) {
+		        $bitPeRequested = true;
+		    }
+		}
 
 		//check, if the template could be loaded
 		try {

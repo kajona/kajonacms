@@ -231,13 +231,11 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	 * @return class_modul_pages_page
 	 */
 	public static function getPageByName($strName) {
-        $strQuery = "SELECT system_id
-						FROM "._dbprefix_."page,
-							 "._dbprefix_."system
-						WHERE page_name='".dbsafeString($strName)."'
-							AND page_id = system_id";
+        $strQuery = "SELECT page_id
+						FROM "._dbprefix_."page
+						WHERE page_name='".dbsafeString($strName)."'";
 		$arrId = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
-		return new class_modul_pages_page((isset($arrId["system_id"]) ? $arrId["system_id"] : ""));
+		return new class_modul_pages_page((isset($arrId["page_id"]) ? $arrId["page_id"] : ""));
 	}
 
 	/**

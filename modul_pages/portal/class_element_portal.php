@@ -391,7 +391,7 @@ class class_element_portal extends class_portal {
      * this is the place to go.
      */
     public function setStrCacheAddon($strCacheAddon) {
-        $this->strCacheAddon = $strCacheAddon;
+        $this->strCacheAddon .= $strCacheAddon;
     }
 
 

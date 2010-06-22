@@ -225,7 +225,7 @@ class class_index  {
 			$strDebug .= "<pre>Kajona Debug: ";
 
     		//Maybe we need the time used to generate this page
-    		if(_timedebug_) {
+    		if(_timedebug_ === true) {
     			$arrTimestampEnde = gettimeofday();
     			$intTimeUsed = (($arrTimestampEnde['sec'] * 1000000 + $arrTimestampEnde['usec'])
     							-($this->arrTimestampStart['sec'] * 1000000 + $this->arrTimestampStart['usec']))/1000000;
@@ -234,18 +234,23 @@ class class_index  {
     		}
 
     		//Hows about the queries?
-    		if(_dbnumber_) {
+    		if(_dbnumber_ === true) {
     			$strDebug .= "<b>Queries db/cachesize/cached/fired:</b> ".$this->objDB->getNumber()."/".$this->objDB->getCacheSize()."/".$this->objDB->getNumberCache()."/".($this->objDB->getNumber()-$this->objDB->getNumberCache())." ";
     		}
 
     		//anything to say about the templates?
-    		if(_templatenr_) {
+    		if(_templatenr_ === true) {
     			$strDebug .= "<b>Templates cached:</b> ".$this->objTemplate->getNumberCacheSize()." ";
     		}
 
     		//memory
-    		if(_memory_) {
+    		if(_memory_ === true) {
     		    $strDebug .= "<b>Memory:</b> ".bytesToString(memory_get_usage())." ";
+    		}
+
+            //and check the cache-stats
+            if(_cache_ === true) {
+    		    $strDebug .= "<b>Cache requests/hits/saves:</b> ".class_cache::getIntRequests()."/".class_cache::getIntHits()."/".class_cache::getIntSaves()." ";
     		}
 
 			$strDebug .= "</pre>\n";

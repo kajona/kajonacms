@@ -52,6 +52,7 @@ class class_config {
 		define("_dbnumber_", 		$this->getDebug("dbnumber"));
 		define("_templatenr_", 		$this->getDebug("templatenr"));
 		define("_memory_",          $this->getDebug("memory"));
+		define("_cache_",           $this->getDebug("cache"));
 
         
         if($this->getConfig("images_cachepath") != "")

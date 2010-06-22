@@ -140,7 +140,7 @@ class class_modul_system_module extends class_model implements interface_model  
         if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
             return null;
             
-		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ".($bitIgnoreStatus ? "" : " AND system_status=1 " )."ORDER BY module_nr";
+		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
 		$arrModules = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
@@ -148,8 +148,18 @@ class class_modul_system_module extends class_model implements interface_model  
 		       $arrRow = $arrOneModule;
 		}
 
-		if(count($arrRow) >= 1)
-		    return new class_modul_system_module($arrRow["module_id"]);
+		if(count($arrRow) >= 1) {
+            //check the status right here - better performance due to cached queries
+            if(!$bitIgnoreStatus) {
+                if($arrRow["system_status"] == "1")
+                    return new class_modul_system_module($arrRow["module_id"]);
+                else
+                    return null;
+
+            }
+            else
+                return new class_modul_system_module($arrRow["module_id"]);
+        }
 		else
 		    return null;
 	}

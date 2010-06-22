@@ -47,6 +47,10 @@ class class_cache  {
 
     private static $bitCleanupDone = false;
 
+    private static $intHits = 0;
+    private static $intRequests = 0;
+    private static $intSaves = 0;
+
 
     /**
      * Contructor, being private. Please note that
@@ -83,6 +87,8 @@ class class_cache  {
      * @return class_cache or null
      */
     public static function getCachedEntry($strSourceName, $strHash1, $strHash2 = null, $strLanguage = null, $bitCreateInstanceOnNotFound = false) {
+        
+        self::$intRequests++;
         //search in the database to find a matching entry
         $strQuery = "SELECT *
                        FROM "._dbprefix_."cache
@@ -103,7 +109,8 @@ class class_cache  {
                     $arrRow["cache_leasetime"],
                     $arrRow["cache_id"]
                 );
-
+            
+            self::$intHits++;
             return $objCacheEntry;
         }
         else {
@@ -143,6 +150,7 @@ class class_cache  {
      * @return bool
      */
     public function updateObjectToDb() {
+        self::$intSaves++;
 
         //run a cleanup
         class_cache::cleanCache();
@@ -292,6 +300,18 @@ class class_cache  {
 
    public function setIntLeasetime($intLeasetime) {
        $this->intLeasetime = $intLeasetime;
+   }
+
+   public static function getIntHits() {
+       return self::$intHits;
+   }
+
+   public static function getIntRequests() {
+       return self::$intRequests;
+   }
+
+   public static function getIntSaves() {
+       return self::$intSaves;
    }
 
 } 

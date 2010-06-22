@@ -117,8 +117,8 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 		    $objElement->setStrName("faqs");
 		    $objElement->setStrClassAdmin("class_element_faqs.php");
 		    $objElement->setStrClassPortal("class_element_faqs.php");
-		    $objElement->setIntCachetime(-1);
-		    $objElement->setIntRepeat(3600);
+		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
 			$strReturn .= "Element registered...\n";
