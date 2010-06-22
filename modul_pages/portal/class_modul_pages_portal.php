@@ -146,6 +146,11 @@ class class_modul_pages_portal extends class_portal {
         foreach ($arrRawPlaceholders as $arrOneRawPlaceholder)
             $arrPlaceholders[] = $arrOneRawPlaceholder["placeholder"];
 
+
+        //Initialize the caches internal cache :)
+        class_cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getPortalLanguage());
+
+
         //copy for the portaleditor
         $arrPlaceholdersFilled = array();
 
@@ -182,7 +187,6 @@ class class_modul_pages_portal extends class_portal {
 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
-            //take caching-blockers into account
             if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage) {
                 
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)

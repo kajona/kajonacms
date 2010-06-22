@@ -250,7 +250,7 @@ class class_index  {
 
             //and check the cache-stats
             if(_cache_ === true) {
-    		    $strDebug .= "<b>Cache requests/hits/saves:</b> ".class_cache::getIntRequests()."/".class_cache::getIntHits()."/".class_cache::getIntSaves()." ";
+    		    $strDebug .= "<b>Cache requests/hits/saves/cachesize:</b> ".class_cache::getIntRequests()."/".class_cache::getIntHits()."/".class_cache::getIntSaves()."/".class_cache::getIntCachesize()." ";
     		}
 
 			$strDebug .= "</pre>\n";

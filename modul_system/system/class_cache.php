@@ -44,12 +44,19 @@ class class_cache  {
      */
     private $objDB;
 
-
+    /**
+     * Internal counter of cleanups.
+     * If set to true, a cleanup was done and won't be fired again.
+     * 
+     * @var bool
+     */
     private static $bitCleanupDone = false;
 
     private static $intHits = 0;
     private static $intRequests = 0;
     private static $intSaves = 0;
+
+    private static $arrInternalCache = array();
 
 
     /**
@@ -89,6 +96,28 @@ class class_cache  {
     public static function getCachedEntry($strSourceName, $strHash1, $strHash2 = null, $strLanguage = null, $bitCreateInstanceOnNotFound = false) {
         
         self::$intRequests++;
+
+        //first run - search the internal cache
+        foreach(self::$arrInternalCache as $arrSingleCacheEntry) {
+            if(   $arrSingleCacheEntry["cache_source"] == $strSourceName &&
+                  $arrSingleCacheEntry["cache_hash1"] == $strHash1 &&
+                  ($strHash2 == null || $arrSingleCacheEntry["cache_hash2"] == $strHash2) &&
+                  ($strLanguage == null || $arrSingleCacheEntry["cache_language"] == $strLanguage)  ) {
+
+                $objCacheEntry = new class_cache(
+                    $arrSingleCacheEntry["cache_source"],
+                    $arrSingleCacheEntry["cache_hash1"],
+                    $arrSingleCacheEntry["cache_hash2"],
+                    $arrSingleCacheEntry["cache_language"],
+                    $arrSingleCacheEntry["cache_content"],
+                    $arrSingleCacheEntry["cache_leasetime"],
+                    $arrSingleCacheEntry["cache_id"]
+                );
+                self::$intHits++;
+                return $objCacheEntry;
+            }
+        }
+        
         //search in the database to find a matching entry
         $strQuery = "SELECT *
                        FROM "._dbprefix_."cache
@@ -249,6 +278,34 @@ class class_cache  {
         return true;
     }
 
+    /**
+     * This static method can be used to pre-load entries into the internal cache.
+     * When loading a list of cached-entries differing in only a single param, this method
+     * could be way faster:
+     * Preload all elements without taking the param being different into account to load the list within
+     * a single query. Later on the regular getCachedEntry() can be used to access entries available in
+     * the cache, the loading from the internal cache or the database is done by the class internally and
+     * transparent to the using objects.
+     *
+     * @param string $strSourceName
+     * @param string $strHash1
+     * @param string $strHash2
+     * @param string $strLanguage
+     */
+    public static function fillInternalCache($strSourceName, $strHash1, $strHash2 = null, $strLanguage = null) {
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."cache
+                      WHERE cache_source = '".dbsafeString($strSourceName)."'
+                        AND cache_hash1 = '".dbsafeString($strHash1)."'
+                        ".($strHash2 != null ? " AND cache_hash2 = '".dbsafeString($strHash2)."' " : "" )."
+                        ".($strLanguage != null ? " AND cache_language = '".dbsafeString($strLanguage)."' " : "" )."
+                        AND cache_leasetime > ".time()." ";
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        foreach($arrRow as $arrSingleRow) {
+            self::$arrInternalCache[$arrSingleRow["cache_id"]] = $arrSingleRow;
+        }
+    }
 	
 
    public function getStrSourceName() {
@@ -312,6 +369,10 @@ class class_cache  {
 
    public static function getIntSaves() {
        return self::$intSaves;
+   }
+
+   public static function getIntCachesize() {
+       return count(self::$arrInternalCache);
    }
 
 } 

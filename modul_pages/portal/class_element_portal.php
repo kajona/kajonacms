@@ -11,8 +11,9 @@
  * Base Class for all portal-elements
  *
  * @package modul_pages
+ * @abstract
  */
-class class_element_portal extends class_portal {
+abstract class class_element_portal extends class_portal {
 	protected $arrElementData;
 
     private $strCacheAddon = "";
@@ -161,7 +162,7 @@ class class_element_portal extends class_portal {
         if($this->objSession->isLoggedin())
             $strGuestId = $this->objSession->getUserID();
 
-        return md5("".$strGuestId.$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
+        return sha1("".$strGuestId.$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
     }
 
     /**

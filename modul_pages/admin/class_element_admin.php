@@ -12,8 +12,9 @@
  * The base class for all page-elements
  *
  * @package modul_pages
+ * @abstract
  */
-class class_element_admin extends class_admin {
+abstract class class_element_admin extends class_admin {
 
     private $bitDoValidation = false;
 
