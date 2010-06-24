@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -200,6 +200,10 @@ $lang["systemtask_dbconsistency_name"]   = "Verificar consistência da Base de D
 $lang["systemtask_dbconsistency_right_error"] = "Os seguintes direitos de registo estão incorrectos (registos de sistema em falta):";
 $lang["systemtask_dbconsistency_right_ok"] = "Todos os direitos de registo correspondem com os direitos do sistema";
 $lang["systemtask_dbexport_error"]       = "Erro a exportar a Base de Dados";
+$lang["systemtask_dbexport_exclude"]     = "";
+$lang["systemtask_dbexport_exclude_intro"] = "";
+$lang["systemtask_dbexport_excludetitle"] = "";
+$lang["systemtask_dbexport_include"]     = "";
 $lang["systemtask_dbexport_name"]        = "Cópia de Segurança da Base de Dados";
 $lang["systemtask_dbexport_success"]     = "Cópia de segurança criada com sucesso";
 $lang["systemtask_dbimport_error"]       = "Erro no restauro da cópia de segurança";

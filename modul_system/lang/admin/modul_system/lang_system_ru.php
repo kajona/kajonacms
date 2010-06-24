@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -200,6 +200,10 @@ $lang["systemtask_dbconsistency_name"]   = "Проверить консисте�
 $lang["systemtask_dbconsistency_right_error"] = "Следующие правовые записи недействительны (отсутствует системная запись):";
 $lang["systemtask_dbconsistency_right_ok"] = "Все правовые записи имееют соответствующие системные записи";
 $lang["systemtask_dbexport_error"]       = "Ошибка при создании резервной копии датабазы";
+$lang["systemtask_dbexport_exclude"]     = "";
+$lang["systemtask_dbexport_exclude_intro"] = "";
+$lang["systemtask_dbexport_excludetitle"] = "";
+$lang["systemtask_dbexport_include"]     = "";
 $lang["systemtask_dbexport_name"]        = "Сделать резервную копию датабазы";
 $lang["systemtask_dbexport_success"]     = "Резервная копия успешно создана";
 $lang["systemtask_dbimport_error"]       = "Ошибка при создании резервной копии";

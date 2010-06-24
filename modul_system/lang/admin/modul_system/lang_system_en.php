@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 251
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -205,6 +205,10 @@ $lang["systemtask_dbconsistency_name"]   = "Check database consistency";
 $lang["systemtask_dbconsistency_right_error"] = "The following right-records are erroneous (missing system-record):";
 $lang["systemtask_dbconsistency_right_ok"] = "All right-records have a corresponding system-record";
 $lang["systemtask_dbexport_error"]       = "Error dumping the database";
+$lang["systemtask_dbexport_exclude"]     = "Yes";
+$lang["systemtask_dbexport_exclude_intro"] = "If activated both tables, the stats and the cache will be excluded from the dump.";
+$lang["systemtask_dbexport_excludetitle"] = "Exclude tables:";
+$lang["systemtask_dbexport_include"]     = "No";
 $lang["systemtask_dbexport_name"]        = "Backup database";
 $lang["systemtask_dbexport_success"]     = "Backup created succesfully";
 $lang["systemtask_dbimport_error"]       = "Error restoring the backup";

@@ -602,9 +602,10 @@ class class_db {
 	 * Dumps the current db
 	 * Takes care of holding just the defined number of dumps in the filesystem, defined by _system_dbdump_amount_
 	 *
+     * @param array $arrTablesToExlude specify a set of tables not to be included in the dump
 	 * @return bool
 	 */
-	public function dumpDb() {
+	public function dumpDb($arrTablesToExclude = array()) {
         if(!$this->bitConnected)
             $this->dbconnect();
         
@@ -622,7 +623,20 @@ class class_db {
 	    }
 
         $strTargetFilename = "/system/dbdumps/dbdump_".time().".sql";
-	    $bitDump = $this->objDbDriver->dbExport($strTargetFilename, $this->getTables());
+
+        $arrTables = $this->getTables();
+        $arrTablesFinal = array();
+
+        if(count($arrTablesToExclude) > 0) {
+            foreach($arrTables as $strOneTable) {
+                if(!in_array(uniStrReplace(_dbprefix_, "", $strOneTable), $arrTablesToExclude))
+                    $arrTablesFinal[] = $strOneTable;
+            }
+        }
+        else
+            $arrTablesFinal = $arrTables;
+
+	    $bitDump = $this->objDbDriver->dbExport($strTargetFilename, $arrTablesFinal);
 	    if($bitDump == true) {
 	        $objGzip = new class_gzip();
 	        try {

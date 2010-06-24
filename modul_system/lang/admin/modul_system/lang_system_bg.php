@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 251
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -200,6 +200,10 @@ $lang["systemtask_dbconsistency_name"]   = "Провери съвместимо�
 $lang["systemtask_dbconsistency_right_error"] = "Следните right-records са грешни (липсва системен запис)";
 $lang["systemtask_dbconsistency_right_ok"] = "Всички right-records кореспондират със системните записи";
 $lang["systemtask_dbexport_error"]       = "Грешка при разтоварване на база данни";
+$lang["systemtask_dbexport_exclude"]     = "";
+$lang["systemtask_dbexport_exclude_intro"] = "";
+$lang["systemtask_dbexport_excludetitle"] = "";
+$lang["systemtask_dbexport_include"]     = "";
 $lang["systemtask_dbexport_name"]        = "Back-up база данни";
 $lang["systemtask_dbexport_success"]     = "Back-up'а създаден успешно";
 $lang["systemtask_dbimport_error"]       = "Грешка при възстановяване на back-up";

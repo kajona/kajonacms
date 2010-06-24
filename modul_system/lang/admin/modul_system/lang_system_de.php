@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 251
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -205,6 +205,10 @@ $lang["systemtask_dbconsistency_name"]   = "Datenbankkonsistenz überprüfen";
 $lang["systemtask_dbconsistency_right_error"] = "Folgende Rechte-Records sind fehlerhaft (fehlender System-Record):";
 $lang["systemtask_dbconsistency_right_ok"] = "Alle Rechte-Records haben einen zugehörigen System-Record";
 $lang["systemtask_dbexport_error"]       = "Fehler beim Sichern der Datenbank";
+$lang["systemtask_dbexport_exclude"]     = "Ja";
+$lang["systemtask_dbexport_exclude_intro"] = "Wenn aktiviert werden aus der Sicherung sowohl die Tabelle der Statistiken als auch die Tabelle des Caches ausgenommen.";
+$lang["systemtask_dbexport_excludetitle"] = "Tabellen ausschließen:";
+$lang["systemtask_dbexport_include"]     = "Nein";
 $lang["systemtask_dbexport_name"]        = "Datenbank sichern";
 $lang["systemtask_dbexport_success"]     = "Sicherung erfolgreich angelegt";
 $lang["systemtask_dbimport_error"]       = "Fehler beim Einspielen der Sicherung";
