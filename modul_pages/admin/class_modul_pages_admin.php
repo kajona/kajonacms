@@ -356,7 +356,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
 	    		if($this->objRights->rightRight($objPage->getSystemid()	))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("rights", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
+	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
 
 	  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
 			}
