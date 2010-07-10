@@ -76,6 +76,9 @@ default:
 
     $config['adminlangs']           = "de,en,pt,ru,bg";                        //Available languages for the administration
 
+    $config['admintoolkit']         = "class_toolkit_admin";                   //The admin-toolkit class to use. If you created your own implementation, 
+                                                                               //e.g. by extending the Kajona-class, set the name of the class here.
+
 
 
 //--system settings--------------------------------------------------------------------------------------

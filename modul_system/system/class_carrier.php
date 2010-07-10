@@ -182,8 +182,13 @@ class class_carrier {
 		if($strArea == "admin") {
 			//Get the object
 			if($this->objToolkitAdmin == null) {
-				require_once(_adminpath_."/class_toolkit_admin.php");
-				$this->objToolkitAdmin = new class_toolkit_admin();
+                //decide which class to load
+                $strAdminToolkitClass = $this->getObjConfig()->getConfig("admintoolkit");
+                if($strAdminToolkitClass == "")
+                    $strAdminToolkitClass = "class_toolkit_admin";
+
+				require_once(_adminpath_."/".$strAdminToolkitClass.".php");
+				$this->objToolkitAdmin = new $strAdminToolkitClass();
 			}
 			return $this->objToolkitAdmin;
 		}
