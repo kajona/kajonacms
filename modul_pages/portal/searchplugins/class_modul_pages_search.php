@@ -67,6 +67,10 @@ class class_modul_pages_search extends class_portal implements interface_search_
 	private function searchPagesElements() {
 
 		foreach($this->arrTableConfig["pages_elements"] as $strTable => $arrColumnConfig) {
+
+            if(!in_array($strTable, $this->objDB->getTables()))
+                continue;
+
 			$arrWhere = array();
 			//Build an or-statemement out of the columns
 			foreach($arrColumnConfig as $strColumn) {
@@ -106,7 +110,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 					else {
 						$this->arrHits[$arrOnePage["page_name"]]["hits"] = 1;
 						$strText = $arrOnePage["pageproperties_browsername"] != "" ? $arrOnePage["pageproperties_browsername"] : $arrOnePage["page_name"];
-						$this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".$this->strSearchtermRaw);
+						$this->arrHits[$arrOnePage["page_name"]]["pagelink"] = getLinkPortal($arrOnePage["page_name"], "", "_self", $strText, "", "&highlight=".html_entity_decode($this->strSearchtermRaw, ENT_QUOTES, "UTF-8"));
 						$this->arrHits[$arrOnePage["page_name"]]["pagename"] = $arrOnePage["page_name"];
 						$this->arrHits[$arrOnePage["page_name"]]["description"] = $arrOnePage["pageproperties_description"];
 					}

@@ -78,7 +78,7 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 						$this->arrHits[$arrOneFaq["system_id"]]["hits"]++;
 					else {
     					$this->arrHits[$arrOneFaq["system_id"]]["hits"] = 1;
-    					$this->arrHits[$arrOneFaq["system_id"]]["pagelink"] = getLinkPortal(_faqs_search_resultpage_, "", "_self", _faqs_search_resultpage_, "", "&highlight=".$this->strSearchtermRaw);
+    					$this->arrHits[$arrOneFaq["system_id"]]["pagelink"] = getLinkPortal(_faqs_search_resultpage_, "", "_self", _faqs_search_resultpage_, "", "&highlight=".html_entity_decode($this->strSearchtermRaw, ENT_QUOTES, "UTF-8"));
     					$this->arrHits[$arrOneFaq["system_id"]]["pagename"] = _faqs_search_resultpage_;
     					$this->arrHits[$arrOneFaq["system_id"]]["description"] = $arrOneFaq["faqs_question"];
 					}

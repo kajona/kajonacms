@@ -80,7 +80,7 @@ class class_modul_downloads_search extends class_portal implements interface_sea
 						$this->arrHits[$arrOneDownload["system_id"]]["hits"]++;
 					else {
 				    	$this->arrHits[$arrOneDownload["system_id"]]["hits"] = 1;
-					    $this->arrHits[$arrOneDownload["system_id"]]["pagelink"] = getLinkPortal(_downloads_suche_seite_, "", "_self", $arrOneDownload["downloads_name"], "", "&highlight=".$this->strSearchtermRaw , $arrOneDownload["system_prev_id"]);
+					    $this->arrHits[$arrOneDownload["system_id"]]["pagelink"] = getLinkPortal(_downloads_suche_seite_, "", "_self", $arrOneDownload["downloads_name"], "", "&highlight=".html_entity_decode($this->strSearchtermRaw, ENT_QUOTES, "UTF-8") , $arrOneDownload["system_prev_id"]);
 					    $this->arrHits[$arrOneDownload["system_id"]]["pagename"] = _downloads_suche_seite_;
 					    $this->arrHits[$arrOneDownload["system_id"]]["description"] = uniStrTrim($arrOneDownload["downloads_description"], 150);
 					}

@@ -80,7 +80,7 @@ class class_modul_news_search extends class_portal implements interface_search_p
 						$this->arrHits[$arrOneNews["system_id"]]["hits"]++;
 					else {
     					$this->arrHits[$arrOneNews["system_id"]]["hits"] = 1;
-    					$this->arrHits[$arrOneNews["system_id"]]["pagelink"] = getLinkPortal(_news_search_resultpage_, "", "_self", $arrOneNews["news_title"], "newsDetail", "&highlight=".$this->strSearchtermRaw, $arrOneNews["system_id"], "", "", $arrOneNews["news_title"]);
+    					$this->arrHits[$arrOneNews["system_id"]]["pagelink"] = getLinkPortal(_news_search_resultpage_, "", "_self", $arrOneNews["news_title"], "newsDetail", "&highlight=".html_entity_decode($this->strSearchtermRaw, ENT_QUOTES, "UTF-8"), $arrOneNews["system_id"], "", "", $arrOneNews["news_title"]);
     					$this->arrHits[$arrOneNews["system_id"]]["pagename"] = _news_search_resultpage_;
     					$this->arrHits[$arrOneNews["system_id"]]["description"] = $arrOneNews["news_intro"];
 					}
