@@ -385,11 +385,13 @@ function getNoticeAdminWithoutAhref($strText, $strImage) {
  * @param string $strImage
  * @param string $strAlt
  * @param bool $bitNoAlt
+ * @param string $strId
+ * @param string $strStyle
  * @return string
  * @todo move to toolkit
  */
-function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="") {
-	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )." />";
+function getImageAdmin($strImage, $strAlt="", $bitNoAlt = false, $strId="", $strStyle="") {
+	return "<img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".($bitNoAlt ? "" : $strAlt)."\" title=\"".($bitNoAlt ? "" : $strAlt)."\" onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."', false);\" ".($strId == "" ? "" : "id=\"".$strId."\"" )."  ".($strStyle == "" ? "" : "style=\"".$strStyle."\"" )."  />";
 }
 
 /**
