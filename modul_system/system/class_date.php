@@ -173,7 +173,7 @@ class class_date {
      * @param int $intYear
      */
     public function setIntHour($intHour, $bitForce = false) {
-        if(!$bitForce && ($intHour < 1 || $intHour > 24))
+        if(!$bitForce && ($intHour < 0 || $intHour > 24))
             return;
 
         $strHour = sprintf("%02s", $intHour);
@@ -186,7 +186,7 @@ class class_date {
      * @param int $intYear
      */
     public function setIntMin($intMin, $bitForce = false) {
-        if(!$bitForce && ($intMin < 1 || $intMin > 59))
+        if(!$bitForce && ($intMin < 0 || $intMin > 59))
             return;
 
         $strMin = sprintf("%02s", $intMin);
@@ -199,7 +199,7 @@ class class_date {
      * @param int $intYear
      */
     public function setIntSec($intSec, $bitForce = false) {
-        if(!$bitForce && ($intSec < 1 || $intSec > 59))
+        if(!$bitForce && ($intSec < 0 || $intSec > 59))
             return;
 
         $strSec = sprintf("%02s", $intSec);
