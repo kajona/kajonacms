@@ -45,7 +45,7 @@ class class_adminwidget_note extends class_adminwidget implements interface_admi
      */
     public function getWidgetOutput() {
         $strReturn = "";
-        return $this->widgetText($this->getFieldValue("content"));
+        return $this->widgetText(nl2br($this->getFieldValue("content")));
     }
     
     
