@@ -827,6 +827,10 @@ abstract class class_admin {
                 if(!checkText($this->getParam($strFieldname), 2))
                     $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
             }
+            else if($strType == "character") {
+                if(!checkText($this->getParam($strFieldname), 1))
+                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+            }
             elseif($strType == "number") {
                 if(!checkNumber($this->getParam($strFieldname)))
                     $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
