@@ -388,6 +388,22 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	public function actionNew() {
 		$strReturn = "";
 
+
+        //Load all the Templates available
+        $objFilesystem = new class_filesystem();
+        $arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
+
+        $arrTemplatesDD = array();
+        if(count($arrTemplates) > 0)
+            foreach($arrTemplates as $strTemplate)
+                $arrTemplatesDD[$strTemplate] = $strTemplate;
+
+        //remove template of master-page when editing a regular page
+        $objMasterPage = class_modul_pages_page::getPageByName("master");
+        if($this->getSystemid() == "" || ($objMasterPage->getSystemid() != $this->getSystemid() ) ) {
+            unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
+        }
+
 		if($this->getParam("systemid") != "" || $this->getParam("pageid") != "") {
 		    if($this->getParam("systemid") == "" && $this->getParam("pageid") != "")
 		        $this->setSystemid($this->getParam("pageid"));
@@ -397,6 +413,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             if($this->getParam("pe") != 1) {
                 $strReturn = $this->getPathNavigation().$strReturn;
             }
+
 
 			if($this->objRights->rightEdit($this->getSystemid())) {
                 //Load data of the page
@@ -434,21 +451,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), "", "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
 				}
 				//Load the available templates
-				$objFilesystem = new class_filesystem();
-				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				//If set on, the dropdown could be disabled
 				$bitEnabled = true;
 				if(_pages_templatechange_ == "false") {
 					if($objPage->getNumberOfElementsOnPage() != 0)
 						$bitEnabled = false;
 				}
-				$arrTemplatesDD = array();
-				if(count($arrTemplates) > 0) {
-					foreach($arrTemplates as $strTemplate) {
-						$arrTemplatesDD[$strTemplate] = $strTemplate;
-					}
-				}
-
 				//if no template was selected before, show a warning. can occur when having created new languages
 				if($objPage->getStrTemplate() == "")
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
@@ -490,16 +498,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				}
 
 				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-
-				//Load all the Templates available
-				$objFilesystem = new class_filesystem();
-
-				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
-
-				$arrTemplatesDD = array();
-				if(count($arrTemplates) > 0)
-					foreach($arrTemplates as $strTemplate)
-						$arrTemplatesDD[$strTemplate] = $strTemplate;
 
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
