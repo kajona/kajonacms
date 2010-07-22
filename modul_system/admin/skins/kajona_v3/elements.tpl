@@ -225,7 +225,7 @@ Regular Text-Field
 
 Textarea
 <input_textarea>
-	<div><label for="%%name%%">%%title%% </label><textarea name="%%name%%" id="%%name%%" class="%%class%%">%%value%%</textarea></div><br />
+	<div><label for="%%name%%">%%title%% </label><textarea name="%%name%%" id="%%name%%" class="%%class%%"  %%readonly%%>%%value%%</textarea></div><br />
 </input_textarea>
 
 Regular Password-Field

@@ -245,7 +245,7 @@ Textarea
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent" align="right">%%title%%</td>
-		<td><textarea name="%%name%%" id="%%name%%" class="%%class%%">%%value%%</textarea></td>
+		<td><textarea name="%%name%%" id="%%name%%" class="%%class%%"  %%readonly%%>%%value%%</textarea></td>
 	</tr>
 </table>
 </input_textarea>

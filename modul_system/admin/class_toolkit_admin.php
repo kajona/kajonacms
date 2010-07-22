@@ -349,13 +349,14 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @return string
      */
-    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "inputTextarea") {
+    public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "inputTextarea", $bitReadonly = false) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_textarea");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = $strValue;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["readonly"] = ($bitReadonly ? "readonly=\"readonly\"" : "");
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
