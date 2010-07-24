@@ -645,6 +645,7 @@ class class_installer_pages extends class_installer_base implements interface_in
                         SET element_cachetime=3600
                       WHERE element_class_admin = 'class_element_paragraph.php'
                          OR element_class_admin = 'class_element_row.php'
+                         OR element_class_admin = 'class_element_imagelightbox.php'
                          OR element_class_admin = 'class_element_image.php'";
         if(!$this->objDB->_query($strQuery))
 			$strReturn .= "An error occured! ...\n";
