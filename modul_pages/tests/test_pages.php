@@ -78,6 +78,8 @@ class class_test_pages implements interface_testable {
         echo "\ttesting to copy a page...\n";
         $objOriginalPage = class_modul_pages_page::getPageByName("index");
         class_assertions::assertTrue($objOriginalPage->copyPage(), __FILE__." checkCopyPageCopy");
+
+        $objDB->flushQueryCache();
         $objCopy = class_modul_pages_page::getPageByName("index_1");
         class_assertions::assertTrue($objCopy->getSystemid() != "", __FILE__." checkCopyPageHasSysid");
         class_assertions::assertEqual($objOriginalPage->getNumberOfElementsOnPage(), $objCopy->getNumberOfElementsOnPage(), __FILE__." checkCopyPageNrOfElements");
