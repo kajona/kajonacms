@@ -26,7 +26,7 @@ class class_element_formular extends class_element_admin implements interface_ad
 		$arrModule["table"] 	    = _dbprefix_."element_formular";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "formular_class|char,formular_email|char,formular_success|char,formular_error|char";
+		$arrModule["tableColumns"]   = "formular_class|char,formular_email|char,formular_success|char,formular_error|char,formular_template|char";
 
 		parent::__construct($arrModule);
 	}
@@ -55,10 +55,31 @@ class class_element_formular extends class_element_admin implements interface_ad
 		}
 		$strReturn .= $this->objToolkit->formInputDropdown("formular_class", $arrClassesDD, $this->getText("formular_class"), (isset($arrElementData["formular_class"]) ? $arrElementData["formular_class"] : "" ));
 
+
+
+        //Load the available templates
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_form", ".tpl");
+		$arrTemplatesDD = array();
+		if(count($arrTemplates) > 0) {
+			foreach($arrTemplates as $strTemplate) {
+				$arrTemplatesDD[$strTemplate] = $strTemplate;
+			}
+		}
+
+        if(count($arrTemplatesDD) == 1)
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("formular_template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("formular_template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" ));
+
+
 		$strReturn .= $this->objToolkit->setBrowserFocus("formular_email");
 
 		return $strReturn;
 	}
+
+    protected function getRequiredFields() {
+        return array("formular_email" => "email", "formular_template" => "string");
+    }
 
 
 }

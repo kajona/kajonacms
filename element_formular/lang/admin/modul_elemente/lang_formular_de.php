@@ -7,11 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 101
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["formular_class"]                  = "Portal-Klasse:";
 $lang["formular_email"]                  = "Ziel-E-Mail-Adresse:";
 $lang["formular_error"]                  = "Fehlermeldung:";
 $lang["formular_success"]                = "Erfolgsmeldung:";
+$lang["formular_template"]               = "Template:";
+$lang["required_formular_email"]         = "E-Mail Adresse";
 ?>

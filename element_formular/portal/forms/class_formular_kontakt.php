@@ -25,7 +25,14 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "elemente";
-		$arrModule["template"]			= "/element_form/contact.tpl";
+
+        /**
+         * @deprecated fallback only, now set via the elements' properties
+         */
+		$arrModule["template"]			= "/contact.tpl";
+
+        if(!isset($arrElementData["formular_template"]) || $arrElementData["formular_template"] == "")
+            $arrElementData["formular_template"] = $arrModule["template"];
 
 		//base class
 		parent::__construct($arrModule, $arrElementData);
@@ -70,16 +77,16 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		if(count($this->arrError) > 0) {
 			$strError = "";
 			//Collect errors
-			$strTemplateErrorID = $this->objTemplate->readTemplate($this->arrModule["template"], "errorrow");
+			$strTemplateErrorID = $this->objTemplate->readTemplate("/element_form/".$this->arrElementData["formular_template"], "errorrow");
 			foreach($this->arrError as $strOneError) {
 				$strError .= $this->fillTemplate(array("error" => $strOneError), $strTemplateErrorID);
 			}
 			//and the complete form
-			$strTemplateErrorFormid = $this->objTemplate->readTemplate($this->arrModule["template"], "errors");
+			$strTemplateErrorFormid = $this->objTemplate->readTemplate("/element_form/".$this->arrElementData["formular_template"], "errors");
 			$this->setParam("formular_fehler", $this->fillTemplate(array("liste_fehler" => $strError), $strTemplateErrorFormid));
 		}
 		//and the form itself
-		$strTemplateformId = $this->objTemplate->readTemplate($this->arrModule["template"], "contactform");
+		$strTemplateformId = $this->objTemplate->readTemplate("/element_form/".$this->arrElementData["formular_template"], "contactform");
 		//get actions
 		$this->setParam("formaction", getLinkPortalHref($this->getParam("page"), "", "sendForm"));
 		$strReturn .= $this->fillTemplate($this->getAllParams(), $strTemplateformId);
@@ -130,7 +137,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		$objEmail = new class_mail();
 
 		//Template
-		$strMailTemplateID = $this->objTemplate->readTemplate($this->arrModule["template"], "email");
+		$strMailTemplateID = $this->objTemplate->readTemplate("/element_form/".$this->arrElementData["formular_template"], "email");
 		$this->objTemplate->setTemplate($this->fillTemplate($this->getAllParams(), $strMailTemplateID));
 		$this->objTemplate->deletePlaceholder();
 

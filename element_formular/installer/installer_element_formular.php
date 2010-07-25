@@ -20,7 +20,7 @@ class class_installer_element_formular extends class_installer_base implements i
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0";
+		$arrModule["version"] 		= "3.3.0.9";
 		$arrModule["name"] 			= "element_formular";
 		$arrModule["name_lang"] 	= "Element Form";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -82,6 +82,7 @@ class class_installer_element_formular extends class_installer_base implements i
 		$arrFields["content_id"] 		= array("char20", false);
 		$arrFields["formular_class"] 	= array("char254", true);
 		$arrFields["formular_email"] 	= array("char254", true);
+		$arrFields["formular_template"] = array("char254", true);
 		$arrFields["formular_success"] 	= array("text", true);
 		$arrFields["formular_error"] 	= array("text", true);
 
@@ -130,6 +131,11 @@ class class_installer_element_formular extends class_installer_base implements i
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("form")->getStrVersion() == "3.3.0") {
+            $strReturn .= $this->postUpdate_330_3309();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -142,6 +148,23 @@ class class_installer_element_formular extends class_installer_base implements i
     public function postUpdate_321_330() {
         $strReturn = "Updating element form to 3.3.0...\n";
         $this->updateElementVersion("form", "3.3.0");
+        return $strReturn;
+    }
+
+
+    public function postUpdate_330_3309() {
+        $strReturn = "Updating element form to 3.3.0.9...\n";
+
+        $strReturn .= "Adding tempalte row to element table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_formular")."
+                       ADD ".$this->objDB->encloseColumnName("formular_template")." ".$this->objDB->getDatatype("char254")." NULL ";
+
+        if($this->objDB->_query($strQuery))
+                $strReturn .= " ...ok\n";
+            else
+                $strReturn .= " ...failed!!!\n";
+
+        $this->updateElementVersion("form", "3.3.0.9");
         return $strReturn;
     }
 }
