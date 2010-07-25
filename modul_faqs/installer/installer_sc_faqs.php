@@ -42,7 +42,7 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         }
         else {
         	$objFaq1->setStrQuestion("What is Kajona?");
-            $objFaq1->setStrAnswer("Kajona is an open source content management system based on PHP and a database. Due to it\'s modular design, it can be extended and adopted very easily.");
+            $objFaq1->setStrAnswer("Kajona is an open source content management system based on PHP and a database. Due to it's modular design, it can be extended and adopted very easily.");
 
             $objFaq2->setStrQuestion("Who develops Kajona, where can I find more infos?");
             $objFaq2->setStrAnswer("Kajona is being developed by an open source community. Since Kajona is still being developed, we are searching for contributors. Further information can be found at <a href=\"http://www.kajona.de\">www.kajona.de</a>.");
