@@ -9,12 +9,16 @@
 
 
 /**
- * Installer of the form samplecontent
+ * Installer of the rssfeed samplecontent
  *
  * @package modul_pages
  */
-class class_installer_sc_formular implements interface_sc_installer  {
+class class_installer_sc_rssfeed implements interface_sc_installer  {
 
+    /**
+     *
+     * @var class_db
+     */
     private $objDB;
     private $strContentLanguage;
 
@@ -25,11 +29,11 @@ class class_installer_sc_formular implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
-        $strReturn .= "Creating new page contact...\n";
+        $strReturn .= "Creating new page rssfeed...\n";
 
         $objPage = new class_modul_pages_page();
-        $objPage->setStrName("contact");
-        $objPage->setStrBrowsername("Contact");
+        $objPage->setStrName("rssfeed");
+        $objPage->setStrBrowsername("Rssfeed");
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
@@ -40,36 +44,32 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $strReturn .= "Adding pagelement to new page\n";
 
         $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("formular_form|tellafriend");
-        $objPagelement->setStrName("formular");
-        $objPagelement->setStrElement("form");
+        $objPagelement->setStrPlaceholder("mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker");
+        $objPagelement->setStrName("mixed");
+        $objPagelement->setStrElement("rssfeed");
         $objPagelement->updateObjectToDb($strPageId);
         $strElementId = $objPagelement->getSystemid();
 
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_formular
-                        SET formular_class = 'class_formular_kontakt.php',
-                            formular_email = 'info@kajona.de',
-                            formular_template = 'contact.tpl',
-                            formular_error = 'Es ist ein Fehler aufgetreten.',
-                            formular_success = 'Vielen Dank für die Nachricht!'
+            $strQuery = "UPDATE "._dbprefix_."element_universal
+                        SET char1 = 'rssfeed.tpl',
+                            ".$this->objDB->encloseColumnName("int1")." = 10,
+                            char2 = 'http://www.kajona.de/kajona_news.rss'
                         WHERE content_id = '".dbsafeString($strElementId)."'";
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_formular
-                        SET formular_class = 'class_formular_kontakt.php',
-                            formular_email = 'info@kajona.de',
-                            formular_template = 'contact.tpl',
-                            formular_error = 'An error occured.',
-                            formular_success = 'Thank you for your message.'
+            $strQuery = "UPDATE "._dbprefix_."element_universal
+                        SET char1 = 'rssfeed.tpl',
+                            ".$this->objDB->encloseColumnName("int1")." = 10,
+                            char2 = 'http://www.kajona.de/kajona_news_en.rss'
                         WHERE content_id = '".dbsafeString($strElementId)."'";
         }
 
         
         if($this->objDB->_query($strQuery))
-            $strReturn .= "Contact element created.\n";
+            $strReturn .= "Rssfeed element created.\n";
         else
-            $strReturn .= "Error creating Contact element.\n";
+            $strReturn .= "Error creating Rssfeed element.\n";
 
 
 
@@ -81,7 +81,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Contact'
+                            SET paragraph_title = 'Rssfeed'
                             WHERE content_id = '".dbsafeString($strElementId)."'";
         if($this->objDB->_query($strQuery))
             $strReturn .= "Headline element created.\n";
@@ -103,8 +103,8 @@ class class_installer_sc_formular implements interface_sc_installer  {
 	        $strTreeId = $objNavi->getSystemid();
 
 	        $objNaviPoint = new class_modul_navigation_point();
-	        $objNaviPoint->setStrName("Contact");
-	        $objNaviPoint->setStrPageI("contact");
+	        $objNaviPoint->setStrName("Rssfeed");
+	        $objNaviPoint->setStrPageI("rssfeed");
 	        $objNaviPoint->updateObjectToDb($strTreeId);
 	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
         }
