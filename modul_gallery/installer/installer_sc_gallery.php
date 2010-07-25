@@ -63,14 +63,14 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $strQuery = "UPDATE "._dbprefix_."element_gallery
                         SET gallery_id = '".dbsafeString($strGalleryID)."',
                             gallery_mode = 0,
-                            gallery_template = 'gallery.tpl',
+                            gallery_template = 'gallery_imagelightbox.tpl',
                             gallery_maxh_p = 110,
                             gallery_maxh_d = 600,
                             gallery_maxw_p = 150,
                             gallery_maxw_d = 600,
                             gallery_maxh_m = 45,
                             gallery_maxw_m = 70,
-                            gallery_imagesperpage = 6,
+                            gallery_imagesperpage = 0,
                             gallery_text = '(c) kajona.de',
                             gallery_text_x = 5,
                             gallery_text_y = 15
