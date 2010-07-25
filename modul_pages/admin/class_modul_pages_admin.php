@@ -1166,6 +1166,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$objFilesystem = new class_filesystem();
 				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
 				$arrTemplatesDD = array();
+                $arrTemplatesDD[-1] = $this->getText("plUpdateAll");
 				if(count($arrTemplates) > 0) {
 					foreach($arrTemplates as $strTemplate) {
 						$arrTemplatesDD[$strTemplate] = $strTemplate;

@@ -125,6 +125,7 @@ $lang["pe_status_time"]                  = "Last modification:";
 $lang["plNew"]                           = "New placeholder:";
 $lang["plRename"]                        = "Update";
 $lang["plToUpdate"]                      = "Old placeholder:";
+$lang["plUpdateAll"]                     = "All templates";
 $lang["plUpdateFalse"]                   = "An error occured while updating placeholders.";
 $lang["plUpdateHelp"]                    = "Here you are able to update placeholders saved in the database.<br />This can be necessary if a placeholder was extended by another possible page element. In this case the new element will appear in the admin, but remains invisible in the portal. To change this, placeholders saved in the database have to be updated to the new placeholders.<br />To do so, you need the name of the changed template, the title of the old placeholder (name_element) and the name of the new placeholder (e.g. name_element|element2). The placeholder should be provided without percent signs.";
 $lang["plUpdateTrue"]                    = "Update was successfull.";

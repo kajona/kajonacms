@@ -657,7 +657,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	    //Fetch all pages
         $arrObjPages = class_modul_pages_page::getAllPages();
         foreach($arrObjPages as $objOnePage) {
-            if($objOnePage->getStrTemplate() == $strTemplate) {
+            if($objOnePage->getStrTemplate() == $strTemplate || $strTemplate == "-1") {
                 //Search for matching elements
                 $strQuery = "SELECT system_id
 						 FROM "._dbprefix_."page_element,

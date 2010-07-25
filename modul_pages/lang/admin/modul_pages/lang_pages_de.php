@@ -125,6 +125,7 @@ $lang["pe_status_time"]                  = "Letzte Änderung:";
 $lang["plNew"]                           = "Neuer Platzhalter:";
 $lang["plRename"]                        = "Anpassen";
 $lang["plToUpdate"]                      = "Alter Platzhalter:";
+$lang["plUpdateAll"]                     = "Alle Templates";
 $lang["plUpdateFalse"]                   = "Beim Umbenennen ist ein Fehler aufgetreten.";
 $lang["plUpdateHelp"]                    = "Hier können die in der Datenbank gespeicherten Platzhalter aktualisiert werden.<br />Dies kann dann nötig werden, wenn ein Platzhalter um ein weiteres mögliches Seitenelement erweitert wurde. In diesem Fall erscheinen die Seitenelement zwar beim Bearbeiten der Seite, nicht aber im Portal. Um dies zu ändern müssen die in der Datenbank hinterlegten Platzhalter an die neuen Platzhalter angepasst werden.<br /> Hierfür ist es notwendig, den Namen des veränderten Templates, den Titel des alten Platzhalters (name_element), sowie des neuen Platzhalters (name_element|element2) anzugeben. Platzhalter sind ohne Prozentzeichen anzugeben.";
 $lang["plUpdateTrue"]                    = "Das Umbenennen war erfolgreich.";
