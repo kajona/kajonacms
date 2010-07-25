@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 251
+//Kajona Language Editor Core Build 278
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -23,6 +23,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Cachedauer externer Quellen:";
 $lang["_remoteloader_max_cachetime_hint"] = "Cachedauer in Sekunden für extern nachgeladene Inhalte (z.B. RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Admin E-Mail:";
 $lang["_system_admin_email_hint"]        = "Falls ausgefüllt, wird im Fall eines schweren Fehlers eine E-Mail an diese Adresse gesendet.";
+$lang["_system_cache_stats_"]            = "Cache-Statistiken:";
+$lang["_system_cache_stats_hint"]        = "Zählt die Anzahl an Zugriffen auf einen einzelnen Eintrag im Cache. Sollte aus Performancegründen nur zu Testzwecken aktiviert werden.";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
 $lang["_system_lock_maxtime_"]           = "Maximale Sperrdauer:";
@@ -47,6 +49,13 @@ $lang["about_part4"]                     = "<h2>Spenden</h2><p>Wenn Ihnen Kajona
 $lang["anzahltabellen"]                  = "Anzahl Tabellen";
 $lang["backlink"]                        = "Zurück";
 $lang["browser"]                         = "Seitenbrowser";
+$lang["cache_entry_size"]                = "Größe";
+$lang["cache_hash1"]                     = "Hash 1";
+$lang["cache_hash2"]                     = "Hash 2";
+$lang["cache_hits"]                      = "Treffer";
+$lang["cache_language"]                  = "Sprache";
+$lang["cache_leasetime"]                 = "Gültig bis";
+$lang["cache_source"]                    = "Quelle";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";
 $lang["datenbankclient"]                 = "Datenbankclient";
@@ -174,6 +183,7 @@ $lang["status_active"]                   = "Status ändern (ist aktiv)";
 $lang["status_inactive"]                 = "Status ändern (ist inaktiv)";
 $lang["submit"]                          = "Speichern";
 $lang["systemTasks"]                     = "System-Tasks";
+$lang["system_cache"]                    = "Cache";
 $lang["system_info"]                     = "Systeminformationen";
 $lang["system_sessions"]                 = "Sessions";
 $lang["system_settings"]                 = "Systemeinstellungen";

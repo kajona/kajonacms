@@ -88,6 +88,9 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		if($strAction == "about")
 		    $strReturn = $this->actionAboutKajona();
 
+        if($strAction == "systemCache")
+            $strReturn = $this->actionSystemCache();
+
 		$this->strTemp = $strReturn;
 	}
 
@@ -106,6 +109,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getText("system_sessions"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemCache", "", $this->getText("system_cache"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("", getLinkAdmin($this->arrModule["modul"], "about", "", $this->getText("about"), "", "", true, "adminnavi"));
@@ -670,6 +674,63 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$strReturn = $this->getText("fehler_recht");
         return $strReturn;
     }
+
+
+
+    private function actionSystemCache() {
+        $strReturn = "";
+        //Check for needed rights
+        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            //showing a list using the pageview
+            $objArraySectionIterator = new class_array_section_iterator(class_cache::getAllCacheEntriesCount());
+		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+		    $objArraySectionIterator->setArraySection(class_cache::getAllCacheEntries($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "system", "systemCache");
+            $arrCacheEntries = $arrPageViews["elements"];
+
+
+            //$arrSessions = class_modul_system_session::getAllActiveSessions();
+            $arrData = array();
+            $arrHeader = array();
+            $arrHeader[] = $this->getText("cache_leasetime");
+            $arrHeader[] = $this->getText("cache_source");
+            $arrHeader[] = $this->getText("cache_language");
+            $arrHeader[] = $this->getText("cache_hash1");
+            $arrHeader[] = $this->getText("cache_hash2");
+            $arrHeader[] = $this->getText("cache_hits");
+            $arrHeader[] = $this->getText("cache_entry_size");
+            
+            foreach ($arrCacheEntries as $objOneEntry) {
+                $arrRowData = array();
+                
+                $arrRowData[] = timeToString($objOneEntry->getIntLeasetime());
+                $arrRowData[] = $objOneEntry->getStrSourceName();
+                $arrRowData[] = $objOneEntry->getStrLanguage();
+                $arrRowData[] = uniStrTrim($objOneEntry->getStrHash1(), 17);
+                $arrRowData[] = uniStrTrim($objOneEntry->getStrHash2(), 17);
+                if(_system_cache_stats_ == "true")
+                    $arrRowData[] = $objOneEntry->getIntEntryHits();
+                else
+                    $arrRowData[] = "n.a.";
+                $arrRowData[] = uniStrlen($objOneEntry->getStrContent());
+                
+                $arrData[] = $arrRowData;
+            }
+            $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+
+            if(count($arrCacheEntries) > 0)
+			    $strReturn .= $arrPageViews["pageview"];
+
+        }
+        else
+			$strReturn = $this->getText("fehler_recht");
+        return $strReturn;
+        
+    }
+
 
 // -- Helferfunktionen ----------------------------------------------------------------------------------
 

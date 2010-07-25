@@ -182,7 +182,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("paragraph");
 		    $objElement->setStrClassAdmin("class_element_paragraph.php");
 		    $objElement->setStrClassPortal("class_element_paragraph.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -205,7 +205,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("row");
 		    $objElement->setStrClassAdmin("class_element_row.php");
 		    $objElement->setStrClassPortal("class_element_row.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -244,7 +244,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		    $objElement->setStrName("image");
 		    $objElement->setStrClassAdmin("class_element_image.php");
 		    $objElement->setStrClassPortal("class_element_image.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(1);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -642,7 +642,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Setting cache-timeouts for paragraphs, rows and images...\n";
         $strQuery = "UPDATE "._dbprefix_."element
-                        SET element_cachetime=3600
+                        SET element_cachetime=".(3600*24*30)."
                       WHERE element_class_admin = 'class_element_paragraph.php'
                          OR element_class_admin = 'class_element_row.php'
                          OR element_class_admin = 'class_element_imagelightbox.php'

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 251
+//Kajona Language Editor Core Build 278
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -23,6 +23,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Cache time of external sources:";
 $lang["_remoteloader_max_cachetime_hint"] = "Time in seconds to cache externally loaded contents (e.g. RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Admin Email:";
 $lang["_system_admin_email_hint"]        = "If an address is given, an email is sent to in case of critical errors.";
+$lang["_system_cache_stats_"]            = "Cache-stats:";
+$lang["_system_cache_stats_hint"]        = "Counts the number of hits for a single cache-entry. Should be enabled for debugging only since it has a negative impact on performance.";
 $lang["_system_dbdump_amount_"]          = "Number of DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Defines how many DB-dumps should be kept.";
 $lang["_system_lock_maxtime_"]           = "Maximum locktime:";
@@ -47,6 +49,13 @@ $lang["about_part4"]                     = "<h2>Donate</h2><p>If you like to wor
 $lang["anzahltabellen"]                  = "Number of tables";
 $lang["backlink"]                        = "Back";
 $lang["browser"]                         = "Pages browser";
+$lang["cache_entry_size"]                = "Size";
+$lang["cache_hash1"]                     = "Hash 1";
+$lang["cache_hash2"]                     = "Hash 2";
+$lang["cache_hits"]                      = "Hits";
+$lang["cache_language"]                  = "Language";
+$lang["cache_leasetime"]                 = "Valid until";
+$lang["cache_source"]                    = "Source";
 $lang["dateStyleLong"]                   = "m/d/Y H:i:s";
 $lang["dateStyleShort"]                  = "m/d/Y";
 $lang["datenbankclient"]                 = "Database client";
@@ -174,6 +183,7 @@ $lang["status_active"]                   = "Change status (is active)";
 $lang["status_inactive"]                 = "Change status (is inactive)";
 $lang["submit"]                          = "Save";
 $lang["systemTasks"]                     = "System tasks";
+$lang["system_cache"]                    = "Cache";
 $lang["system_info"]                     = "System information";
 $lang["system_sessions"]                 = "Sessions";
 $lang["system_settings"]                 = "System settings";

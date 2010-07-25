@@ -91,7 +91,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 		    $objElement->setStrName("tagto");
 		    $objElement->setStrClassAdmin("class_element_tagto.php");
 		    $objElement->setStrClassPortal("class_element_tagto.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -143,7 +143,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
         $strReturn = "Updating element tagto to 3.3.0.1...\n";
         $strReturn .= "Setting cache-timeouts for tagto-element...\n";
         $strQuery = "UPDATE "._dbprefix_."element
-                        SET element_cachetime=3600
+                        SET element_cachetime=".(3600*24*30)."
                       WHERE element_class_admin = 'class_element_tagto.php'";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";

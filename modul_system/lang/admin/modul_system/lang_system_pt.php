@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 251
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Memória temporária de fontes exter
 $lang["_remoteloader_max_cachetime_hint"] = "Tempo em segundos para carregar conteúdos do exterior (ex: RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Correio Electrónico Administrador:";
 $lang["_system_admin_email_hint"]        = "Se um endereço é introduzido, uma mensagem de correio electrónico é enviada no caso de surgirem erros críticos.";
+$lang["_system_cache_stats_"]            = "";
+$lang["_system_cache_stats_hint"]        = "";
 $lang["_system_dbdump_amount_"]          = "Número de DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Define o número de DB-dumps que devem ser mantidos.";
 $lang["_system_lock_maxtime_"]           = "Máximo Tempo de Bloqueio:";
@@ -42,6 +44,13 @@ $lang["about_part4"]                     = "<h2>Doação</h2><p>Se você gosta d
 $lang["anzahltabellen"]                  = "Número de Tabelas";
 $lang["backlink"]                        = "Retroceder";
 $lang["browser"]                         = "Páginas Explorador";
+$lang["cache_entry_size"]                = "";
+$lang["cache_hash1"]                     = "";
+$lang["cache_hash2"]                     = "";
+$lang["cache_hits"]                      = "";
+$lang["cache_language"]                  = "";
+$lang["cache_leasetime"]                 = "";
+$lang["cache_source"]                    = "";
 $lang["dateStyleLong"]                   = "d/m/Y H:i:s";
 $lang["dateStyleShort"]                  = "d/m/Y";
 $lang["datenbankclient"]                 = "Base de Dados Cliente";
@@ -169,6 +178,7 @@ $lang["status_active"]                   = "Alterar estado (está activo)";
 $lang["status_inactive"]                 = "Alterar estado (está inactivo)";
 $lang["submit"]                          = "Guardar";
 $lang["systemTasks"]                     = "Tarefas Sistema";
+$lang["system_cache"]                    = "";
 $lang["system_info"]                     = "Informação Sistema";
 $lang["system_sessions"]                 = "Sessões";
 $lang["system_settings"]                 = "Propriedades do sistema";

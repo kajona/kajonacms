@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 251
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Время в кеше внешни�
 $lang["_remoteloader_max_cachetime_hint"] = "Время в секундах кеша внешне загруженного содержания (например RSS-ленты).";
 $lang["_system_admin_email_"]            = "Email админа:";
 $lang["_system_admin_email_hint"]        = "При указании адреса в случае серьезных ошибок будет отправлено электронное письмо";
+$lang["_system_cache_stats_"]            = "";
+$lang["_system_cache_stats_hint"]        = "";
 $lang["_system_dbdump_amount_"]          = "Количество DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Определяет, сколько DB-dumps следует сохранить.";
 $lang["_system_lock_maxtime_"]           = "Максимальное locktime:";
@@ -42,6 +44,13 @@ $lang["about_part4"]                     = "<h2>Донации</h2><p>Если �
 $lang["anzahltabellen"]                  = "Количество таблиц";
 $lang["backlink"]                        = "Назад";
 $lang["browser"]                         = "Страницы браузера";
+$lang["cache_entry_size"]                = "";
+$lang["cache_hash1"]                     = "";
+$lang["cache_hash2"]                     = "";
+$lang["cache_hits"]                      = "";
+$lang["cache_language"]                  = "";
+$lang["cache_leasetime"]                 = "";
+$lang["cache_source"]                    = "";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";
 $lang["datenbankclient"]                 = "Клиент датабазы";
@@ -169,6 +178,7 @@ $lang["status_active"]                   = "Изменить статус (се�
 $lang["status_inactive"]                 = "Изменить статус (сейчас неактивный)";
 $lang["submit"]                          = "Сохранить";
 $lang["systemTasks"]                     = "Системные задачи";
+$lang["system_cache"]                    = "";
 $lang["system_info"]                     = "Системная информация";
 $lang["system_sessions"]                 = "Сессии";
 $lang["system_settings"]                 = "Настройки системы";

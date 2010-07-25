@@ -72,6 +72,7 @@
     cache_langauge          = language of the cached entrie
     cache_content           = the content to cache
     cache_leasetime         = timestamp the entry gets invalid
+    cache_hits              = number of hits, only increased if set in the system-settings
 
 //--_system_config---------------------------------------------------------------------------------------
     system_config_id        = table primary key
@@ -362,6 +363,7 @@
 	formular_email			= recipient address
 	formular_success		= text shown in case of success
 	formular_error			= text shown in case of an error
+	formular_template		= template to render the form
 
 //--_element_search--------------------------------------------------------------------------------------
 	content_id				= table primary key

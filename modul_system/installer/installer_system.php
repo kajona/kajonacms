@@ -69,7 +69,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		    $objElement->setStrName("languageswitch");
 		    $objElement->setStrClassAdmin("class_element_languageswitch.php");
 		    $objElement->setStrClassPortal("class_element_languageswitch.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(3600*24*30);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -259,6 +259,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["cache_language"]	      = array("char20", true);
 		$arrFields["cache_content"]           = array("text", true);
 		$arrFields["cache_leasetime"]         = array("int", true);
+		$arrFields["cache_hits"]              = array("int", true);
 
 		if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
 			$strReturn .= "An error occured! ...\n";
@@ -387,6 +388,9 @@ class class_installer_system extends class_installer_base implements interface_i
         //3.3: filemanager repo-ids for an image- and a file-browser - values set lateron via the filemanager samplecontent installer
         $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
         $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
+
+        //3.3.1: global cache debug
+        $this->registerConstant("_system_cache_stats_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
@@ -1131,6 +1135,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["cache_language"]	      = array("char20", true);
 		$arrFields["cache_content"]           = array("text", true);
 		$arrFields["cache_leasetime"]         = array("int", true);
+		$arrFields["cache_hits"]              = array("int", true);
 
 		if(!$this->objDB->createTable("cache", $arrFields, array("cache_id"), array("cache_source", "cache_hash1", "cache_leasetime", "cache_language")))
 			$strReturn .= "An error occured! ...\n";
@@ -1140,9 +1145,12 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strQuery))
 			$strReturn .= "An error occured! ...\n";
 
+        $strReturn .= "Registering new system-setting for cache-debugging...\n";
+        $this->registerConstant("_system_cache_stats_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
         $strReturn .= "Setting cache-timeouts for languageswitch-element...\n";
         $strQuery = "UPDATE "._dbprefix_."element
-                        SET element_cachetime=3600
+                        SET element_cachetime=".(3600*24*30)."
                       WHERE element_class_admin = 'class_element_languageswitch.php'";
         if(!$this->objDB->_query($strQuery))
 			$strReturn .= "An error occured! ...\n";

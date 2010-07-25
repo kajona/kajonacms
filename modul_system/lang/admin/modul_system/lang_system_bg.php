@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 251
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Кеш време на външни 
 $lang["_remoteloader_max_cachetime_hint"] = "Време в секунди за кеширане на външно заредена информация (примерно RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Административна електронна поща:";
 $lang["_system_admin_email_hint"]        = "Ако е подаден електроннен пощенски адрес, писмо ще бъде изпратено в случай на големи грешки в системата.";
+$lang["_system_cache_stats_"]            = "";
+$lang["_system_cache_stats_hint"]        = "";
 $lang["_system_dbdump_amount_"]          = "Брой на DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Определя колко DB-dumps трябва да бъдат пазени.";
 $lang["_system_lock_maxtime_"]           = "Максимално заключено време";
@@ -42,6 +44,13 @@ $lang["about_part4"]                     = "<h2>Дарете</h2><p> Ако ха
 $lang["anzahltabellen"]                  = "Брой на таблиците";
 $lang["backlink"]                        = "Върни се";
 $lang["browser"]                         = "Прегледай страници";
+$lang["cache_entry_size"]                = "";
+$lang["cache_hash1"]                     = "";
+$lang["cache_hash2"]                     = "";
+$lang["cache_hits"]                      = "";
+$lang["cache_language"]                  = "";
+$lang["cache_leasetime"]                 = "";
+$lang["cache_source"]                    = "";
 $lang["dateStyleLong"]                   = "d/m/Y H:i:s";
 $lang["dateStyleShort"]                  = "d/m/Y";
 $lang["datenbankclient"]                 = "Тип база данни";
@@ -169,6 +178,7 @@ $lang["status_active"]                   = "Смени статус (актив�
 $lang["status_inactive"]                 = "Смени статус (неактивен)";
 $lang["submit"]                          = "Запази";
 $lang["systemTasks"]                     = "Системни задачи";
+$lang["system_cache"]                    = "";
 $lang["system_info"]                     = "Системна информация";
 $lang["system_sessions"]                 = "Сесии";
 $lang["system_settings"]                 = "Системни настройки";

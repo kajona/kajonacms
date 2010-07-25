@@ -35,6 +35,7 @@ class class_cache  {
     private $strContent = "";
 
     private $intLeasetime = 0;
+    private $intEntryHits = 0;
 
     private $strCacheId = "";
 
@@ -114,6 +115,9 @@ class class_cache  {
                     $arrSingleCacheEntry["cache_id"]
                 );
                 self::$intHits++;
+                if(_system_cache_stats_ == "true")
+                    $objCacheEntry->increaseCacheEntryHits();
+
                 return $objCacheEntry;
             }
         }
@@ -140,6 +144,9 @@ class class_cache  {
                 );
             
             self::$intHits++;
+            if(_system_cache_stats_ == "true")
+                $objCacheEntry->increaseCacheEntryHits();
+            
             return $objCacheEntry;
         }
         else {
@@ -306,6 +313,67 @@ class class_cache  {
             self::$arrInternalCache[$arrSingleRow["cache_id"]] = $arrSingleRow;
         }
     }
+
+    /**
+     * Returns all cached entries.
+     *
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     */
+    public static function getAllCacheEntries($intStart = null, $intEnd = null) {
+        //search in the database to find a matching entry
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."cache
+                       ORDER BY cache_leasetime DESC";
+
+        if($intStart != null && $intEnd != null)
+            $arrCaches = class_carrier::getInstance()->getObjDB()->getArraySection ($strQuery, $intStart, $intEnd);
+        else
+            $arrCaches = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+
+
+        $arrReturn = array();
+        foreach($arrCaches as $arrRow) {
+            if(isset($arrRow["cache_id"])) {
+                $objCacheEntry = new class_cache(
+                        $arrRow["cache_source"],
+                        $arrRow["cache_hash1"],
+                        $arrRow["cache_hash2"],
+                        $arrRow["cache_language"],
+                        $arrRow["cache_content"],
+                        $arrRow["cache_leasetime"],
+                        $arrRow["cache_id"]
+                    );
+
+                $objCacheEntry->setIntEntryHits($arrRow["cache_hits"]);
+
+                $arrReturn[] = $objCacheEntry;
+            }
+        }
+
+        return $arrReturn;
+    }
+
+    /**
+     * Returns the number of entries currently in the cache.
+     *
+     * @return int
+     */
+    public static function getAllCacheEntriesCount() {
+        //search in the database to find a matching entry
+        $strQuery = "SELECT COUNT(*)
+                       FROM "._dbprefix_."cache
+                       ";
+
+        $arrCaches = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        return $arrCaches["COUNT(*)"];
+    }
+
+    private function increaseCacheEntryHits() {
+        $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id='".$this->strCacheId."' ";
+        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+    }
 	
 
    public function getStrSourceName() {
@@ -374,6 +442,17 @@ class class_cache  {
    public static function getIntCachesize() {
        return count(self::$arrInternalCache);
    }
+
+   public function getIntEntryHits() {
+       return $this->intEntryHits;
+   }
+
+   public function setIntEntryHits($intEntryHits) {
+       $this->intEntryHits = $intEntryHits;
+   }
+
+
+   
 
 } 
 
