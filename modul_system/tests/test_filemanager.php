@@ -27,9 +27,11 @@ class class_test_filemanager implements interface_testable {
 
         echo "\tdeleting repos created...\n";
         foreach ($arrRepoIDs as $strOneRepo) {
+            echo "\t  deleting repo with id ".$strOneRepo."...\n";
             $objRepo = new class_modul_filemanager_repo($strOneRepo);
             $objRepo->deleteRepo();
             $objDB->flushQueryCache();
+
         }
         class_assertions::assertEqual(count(class_modul_filemanager_repo::getAllRepos()), $intNrOfRepos, __FILE__." checkNrOfReposDeleted");
     }
