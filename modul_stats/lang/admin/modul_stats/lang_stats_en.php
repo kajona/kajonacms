@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 278
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -54,6 +54,7 @@ $lang["quickhelp_list"]                  = "The stats are providing an insight i
 $lang["quickhelp_statsCommon"]           = "The stats are providing an insight into the systems different logfiles. In those reports, all logfiles are analyzed and processed to grant different views to the data.";
 $lang["referer_direkt"]                  = "Direct access";
 $lang["start"]                           = "Start:";
+$lang["stats_hint_task"]                 = "Note: This report needs a preparation of the data collected. The is possible via a system-task using the module 'system'.";
 $lang["submit_export"]                   = "Export";
 $lang["submit_import"]                   = "Import";
 $lang["systemtask_hostnamelookup_name"]  = "Resolve IP-addresses (IP -> Hostname)";

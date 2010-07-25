@@ -92,6 +92,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $arrLogsRaw = $arrPageViews["elements"];
 
         $intI = 0;
+        $arrLogs = array();
         foreach($arrLogsRaw as $intKey => $arrOneLog) {
             if($intI++ >= _stats_nrofrecords_)
 				break;

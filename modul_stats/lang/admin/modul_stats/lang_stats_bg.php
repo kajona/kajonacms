@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Секунди";
@@ -51,6 +51,7 @@ $lang["quickhelp_list"]                  = "Статистиката осигу�
 $lang["quickhelp_statsCommon"]           = "Статистиката осигурява преглед на различни системни дневници. В тези доклади, всички записи са обработени и анализирани да предоставят различни сведения и данни.";
 $lang["referer_direkt"]                  = "Директен достъп";
 $lang["start"]                           = "От Дата";
+$lang["stats_hint_task"]                 = "";
 $lang["submit_export"]                   = "Прехвърляне";
 $lang["submit_import"]                   = "Вмъкване";
 $lang["systemtask_hostnamelookup_name"]  = "Анализирай IP-адреси (IP -> Hostname)";

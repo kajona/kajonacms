@@ -104,6 +104,8 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
+        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getText("stats_hint_task", "stats", "admin"));
+        
 		return $strReturn;
 	}
 

@@ -910,8 +910,8 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Returns a single TextRow
      *
-     * @param unknown_type $strText
-     * @return unknown
+     * @param string $strText
+     * @return string
      */
     public function getTextRow($strText, $strClass = "text") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "text_row");

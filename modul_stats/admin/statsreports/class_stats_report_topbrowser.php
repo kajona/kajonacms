@@ -124,7 +124,10 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 		$arrHeader[] = $this->objTexts->getText("top_browser_gewicht", "stats", "admin");
 		$arrHeader[] = $this->objTexts->getText("anteil", "stats", "admin");
 
+
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
+
+        $strReturn .= $this->objToolkit->getTextRow($this->objTexts->getText("stats_hint_task", "stats", "admin"));
 
 		return $strReturn;
 	}

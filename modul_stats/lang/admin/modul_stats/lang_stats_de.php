@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 278
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -54,6 +54,7 @@ $lang["quickhelp_list"]                  = "Die Statistiken geben einen Einblick
 $lang["quickhelp_statsCommon"]           = "Die Statistiken geben einen Einblick in die verschiedenen Logfiles des Systems. In diesen Reports werden alle Zugriffe auf das Portal in verschiedenen Darstellungen ausgewertet. Hierzu gehört eine Analyse der Benutzerzahlen, eine Auswertung der auf diese Seite verweisenden Links oder auch eine Auswertung der Browser.";
 $lang["referer_direkt"]                  = "Direktzugriff";
 $lang["start"]                           = "Start:";
+$lang["stats_hint_task"]                 = "Hinweis: Diese Auswertung benötigt eine Aufbereitung der gesammelten Daten. Dies ist über einen System-Task im Modul 'System' möglich.";
 $lang["submit_export"]                   = "Exportieren";
 $lang["submit_import"]                   = "Importieren";
 $lang["systemtask_hostnamelookup_name"]  = "IP-Adressen auflösen (IP -> Hostname)";
