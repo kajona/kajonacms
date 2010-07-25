@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 278
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -115,6 +115,7 @@ $lang["pe_enable"]                       = "Set portaleditor active";
 $lang["pe_icon_edit"]                    = "Open page in administration";
 $lang["pe_icon_page"]                    = "Edit page details in administration";
 $lang["pe_new"]                          = "New element at placeholder:";
+$lang["pe_new_old"]                      = "Create";
 $lang["pe_shiftDown"]                    = "Shift down";
 $lang["pe_shiftUp"]                      = "Shift up";
 $lang["pe_status_autor"]                 = "Last author:";

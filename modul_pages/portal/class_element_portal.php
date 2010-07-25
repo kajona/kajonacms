@@ -212,6 +212,20 @@ abstract class class_element_portal extends class_portal {
                 }
                 //---------------------------------------------------
 
+
+
+                //---------------------------------------------------
+                //Link to create a new entry - only for modules, so not the page-content directly!
+                $strNewLink = "";
+                if($strModule != "pages_content") {
+                    //Use Module-config to generate link
+                    if(isset($arrConfig["pe_action_new"]) && $arrConfig["pe_action_new"] != "") {
+                        $strNewUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_new"], $arrConfig["pe_action_new_params"].$strAdminLangParam."&pe=1");
+                        $strNewLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strNewUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_new_old", "pages", "admin")."</a>";
+                    }
+                }
+
+
                 //---------------------------------------------------
                 //Link to edit current element
                 $strEditLink = "";
@@ -302,7 +316,7 @@ abstract class class_element_portal extends class_portal {
                 //---------------------------------------------------
                 // layout generation
 
-                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strEditLink, $strCopyLink, $strDeleteLink, $strShiftUpLink, $strShiftDownLink), $strContent);
+                $strReturn .= class_carrier::getInstance()->getObjToolkit("portal")->getPeActionToolbar($strSystemid, array($strNewLink, $strEditLink, $strCopyLink, $strDeleteLink, $strShiftUpLink, $strShiftDownLink), $strContent);
 
                 //reset the portal texts language
                 class_carrier::getInstance()->getObjText()->setStrTextLanguage($strPortalLanguage);

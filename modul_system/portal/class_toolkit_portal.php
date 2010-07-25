@@ -228,15 +228,17 @@ class class_toolkit_portal extends class_toolkit {
         $arrTemplate = array();
         $arrTemplate["actionlinks"] = "";
         foreach ($arrLinks as $strOneLink) {
-            $arrRowTemplate = array();
-            $arrRowTemplate["link_complete"] = $strOneLink;
-            //use regex to get href and name
-            $arrTemp = splitUpLink($strOneLink);
-            $arrRowTemplate["name"] = $arrTemp["name"];
-            $arrRowTemplate["href"] = $arrTemp["href"];
-            $arrTemplate["actionlinks"] .= $this->objTemplate->fillTemplate($arrRowTemplate, $strTemplateRowID);
+            if($strOneLink != "") {
+                $arrRowTemplate = array();
+                $arrRowTemplate["link_complete"] = $strOneLink;
+                //use regex to get href and name
+                $arrTemp = splitUpLink($strOneLink);
+                $arrRowTemplate["name"] = $arrTemp["name"];
+                $arrRowTemplate["href"] = $arrTemp["href"];
+                $arrTemplate["actionlinks"] .= $this->objTemplate->fillTemplate($arrRowTemplate, $strTemplateRowID);
+            }
         }
-        //FIXME: added random string to systemid, since e.g. one navigation tree can exist multiple times an a page. Maybe there's a better way to fix this.
+        
         $arrTemplate["systemid"] = $strSystemid."_".generateSystemid();
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);

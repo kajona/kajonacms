@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 249
+//Kajona Language Editor Core Build 278
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -112,6 +112,7 @@ $lang["pe_enable"]                       = "Активирай портал ре
 $lang["pe_icon_edit"]                    = "Отвори страницата в администрацията";
 $lang["pe_icon_page"]                    = "Редактирай страницата с детайли в администрацията";
 $lang["pe_new"]                          = "Нов елемент в контейнера:";
+$lang["pe_new_old"]                      = "";
 $lang["pe_shiftDown"]                    = "Премести надолу";
 $lang["pe_shiftUp"]                      = "Премести нагоре";
 $lang["pe_status_autor"]                 = "Последен автор:";
