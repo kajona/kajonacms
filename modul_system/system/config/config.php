@@ -29,7 +29,7 @@ case "vserver":
     $config['dbusername']           = "kajona";                                //Username
     $config['dbpassword']           = "kajona";                                //Password
     $config['dbname']               = "kajona";                                //Database name
-    $config['dbdriver']             = "mysqli";                                //DB-Driver, one of: mysql, mysqli, postgres, sqlite
+    $config['dbdriver']             = "mysqli";                                //DB-Driver, one of: mysql, mysqli, postgres, sqlite, sqlite3
     $config['dbprefix']             = "kajona_";                               //table-prefix
     $config['dbport']               = "";                                      //Database port, default: ""
 
@@ -45,7 +45,7 @@ default:
     $config['dbusername']           = "%%defaultusername%%";                   //Username
     $config['dbpassword']           = "%%defaultpassword%%";                   //Password
     $config['dbname']               = "%%defaultdbname%%";                     //Database name
-    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysql, mysqli, postgres, sqlite
+    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysql, mysqli, postgres, sqlite, sqlite3
     $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
     $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
 

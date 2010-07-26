@@ -876,21 +876,14 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 
-		case "sqlite":
+		default:
 			foreach($arrTables as $arrTable) {
 				$intNumber++;
-				//$intSizeData += $arrTable["Data_length"];
-				//$intSizeIndex += $arrTable["Index_length"];
 			}
 			$arrInfo = $this->objDB->getDbInfo();
 			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
 			$arrReturn[$this->getText("datenbankserver")] = $arrInfo["dbserver"];
-			//$arrReturn[$this->getText("datenbankclient")] = $arrInfo["dbclient"];
-			//$arrReturn[$this->getText("datenbankverbindung")] = $arrInfo["dbconnection"];
 			$arrReturn[$this->getText("anzahltabellen")] = $intNumber;
-			//$arrReturn[$this->getText("groessegesamt")] = bytesToString($intSizeData + $intSizeIndex);
-			//$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
-			//$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
 			break;
 		}
 

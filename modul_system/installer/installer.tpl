@@ -84,6 +84,7 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
                 <option value="mysql" selected="selected">mysql</option>
                 <option value="mysqli">mysqli</option>
                 <option value="postgres">postgres</option>
+                <option value="sqlite3">sqlite 3</option>
                 <option value="sqlite">sqlite 2</option>
              </select></div><br />
 <div><label for="port">%%config_port%%</label><input type="text" name="port" id="port" class="inputText" /></div><br />

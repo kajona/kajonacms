@@ -12,6 +12,7 @@
  * Based on the sqlite2 driver by phwolfer
  *
  * @since 3.3.0.1
+ * @author sidler@mulchprod.de
  * @package modul_system
  */
 class class_db_sqlite3 implements interface_db_driver {
@@ -271,12 +272,12 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @return mixed
      */
-    public function getDbInfo()//TODO
+    public function getDbInfo()
     {
-        $arrDB = $this->linkDB->version();
+        $arrDB = SQLite3::version();
         $arrReturn = array();
         $arrReturn["dbdriver"] = "sqlite3-extension";
-        $arrReturn["dbserver"] = "SQLite3 ".$arrDB[0]." ".$arrDB[1];
+        $arrReturn["dbserver"] = "SQLite3 ".$arrDB["versionString"]." ".$arrDB["versionNumber"];
         $arrReturn["dbclient"] = "";
         $arrReturn["dbconnection"] = "";
         return $arrReturn;
@@ -388,7 +389,9 @@ class class_db_sqlite3 implements interface_db_driver {
      */
     private function fixQuoting($strSql)
     {
-        return $strSql;//str_replace("\\'", "''", $strSql);
+        $strSql =  str_replace("\\'", "''", $strSql);
+        $strSql =  str_replace("\\\"", "\"", $strSql);
+        return $strSql;
     }
 }
 
