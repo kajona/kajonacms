@@ -113,7 +113,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			//Load the rights header-row
 			if($arrSystemRecord["system_module_nr"] == 0)
 			    $strModule = "system";
-            else if($arrSystemRecord["system_module_nr"] == _pages_folder_id_)
+            else if(defined("_pages_folder_id_") && $arrSystemRecord["system_module_nr"] == _pages_folder_id_)
                 $strModule = "pages";
 			else {
 			    $strTempId = class_modul_system_module::getModuleIdByNr($arrSystemRecord["system_module_nr"]);
