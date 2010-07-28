@@ -12,11 +12,16 @@
  *
  */
 
+ 
 //---The Path on the filesystem------------------------------------------------------------------------------
 	//Determing the current path on the filesystem. Use the dirname of the current file, cut "/system"
 	define("_realpath_",  substr(dirname(__FILE__), 0, -7));
 
 //---Include Section 1-----------------------------------------------------------------------------------
+
+    //Setting up the default timezone, determined by the server / environment
+	@date_default_timezone_set(date_default_timezone_get());
+	
 	//Functions to have fun & check for mb-string
 	if(!@include_once(_realpath_."/system/functions.php"))
 		rawIncludeError("./system/functions.php");
