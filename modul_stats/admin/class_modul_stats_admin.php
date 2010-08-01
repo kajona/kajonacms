@@ -47,7 +47,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         $this->objDateStart->setTimeInOldStyle($intDateStart);
         
 		//End: Current Day of month
-		$intDateEnd = time() + 3600*12;
+		$intDateEnd = time() + 3600*24;
         $this->objDateEnd = new class_date();
         $this->objDateEnd->setTimeInOldStyle($intDateEnd);
 
