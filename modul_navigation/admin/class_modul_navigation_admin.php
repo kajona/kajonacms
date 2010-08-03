@@ -360,6 +360,11 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	private function actionSaveNaviPoint() {
 		$strReturn = "";
+
+        $strExternalLink = $this->getParam("navigation_page_e");
+        $strExternalLink = uniStrReplace(_indexpath_, "_indexpath_", $strExternalLink);
+        $strExternalLink = uniStrReplace(_webpath_, "_webpath_", $strExternalLink);
+
 		//Insert or update?
 		if($this->getParam("mode") == "new") {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -367,7 +372,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				//and the navigation-table
 				$objPoint->setStrImage($this->getParam("navigation_image"));
 				$objPoint->setStrName($this->getParam("navigation_name"));
-				$objPoint->setStrPageE($this->getParam("navigation_page_e"));
+				$objPoint->setStrPageE($strExternalLink);
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
 				if(!$objPoint->updateObjectToDb($this->getSystemid()))
@@ -384,7 +389,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				//and the navigation-table
 				$objPoint->setStrImage($this->getParam("navigation_image"));
 				$objPoint->setStrName($this->getParam("navigation_name"));
-				$objPoint->setStrPageE($this->getParam("navigation_page_e"));
+				$objPoint->setStrPageE($strExternalLink);
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
 				if(!$objPoint->updateObjectToDb())
