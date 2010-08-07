@@ -314,6 +314,20 @@ final class class_session {
 	}
 
 
+    /**
+     * Tries to log a user into the system.
+     * In normal cases, you'd rather user the method class_session::login($strName, $strPass).
+     * This method is only useful if you have a concrete user object and want to make this user the
+     * currently active one.
+     *
+     * @param class_modul_user_user $objUser
+     * @see class_session::login($strName, $strPass)
+     * @return bool
+     */
+    public function loginUser($objUser) {
+        return $this->internalLoginHelper($objUser);
+    }
+
 
 	/**
 	 * Logs a user into the system if the credentials are correct
@@ -331,41 +345,9 @@ final class class_session {
 		if(count($arrUsers) != 0) {
 			foreach ($arrUsers as $objOneUser)  {
                 //Revalidate username
-
 				if($objOneUser->getStrUsername() == $strName) {
 					if($this->checkPassword($strPass, $objOneUser->getStrPass())) {
-						//Hit! User found, BUT: active?
-						if($objOneUser->getIntActive() == 1) {
-							$objOneUser->setIntLogins($objOneUser->getIntLogins()+1);
-							$objOneUser->setIntLastLogin(time());
-							//Set pass = "" to avoid update conflicts
-							$objOneUser->setStrPass("");
-							//No htmlentitiesencoding here !!!
-							$objOneUser->updateObjectToDb(false);
-							
-							$this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
-							$this->getObjInternalSession()->setStrUserid($objOneUser->getSystemid());
-	                        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objOneUser->getSystemid()));
-	                        $this->getObjInternalSession()->setStrGroupids($strGroups);
-	                        $this->getObjInternalSession()->updateObjectToDb();
-	                        $this->objUser = $objOneUser;
-	                        
-	                        //Drop a line to the logger
-							class_logger::getInstance()->addLogRow("User: ".$strName." successfully logged in", class_logger::$levelInfo);
-							class_modul_user_log::generateLog();
-
-	                        //right now we have the time to do a few cleanups...
-	                        class_modul_system_session::deleteInvalidSessions();
-	                        
-    						//Login successfull, quit
-    						$bitReturn = true;
-						    break;
-						}
-						else {
-							//User is inactive
-							$bitReturn = false;
-							break;
-						}
+                        $bitReturn = $this->internalLoginHelper($objOneUser);
 					}
 				}
 			}
@@ -383,6 +365,49 @@ final class class_session {
 
 		return $bitReturn;
 	}
+
+    /**
+     * Does all the internal login-handling
+     *
+     * @param class_modul_user_user $objUser
+     * @return bool
+     */
+    private function internalLoginHelper($objUser) {
+
+        $bitReturn = false;
+
+        if($objUser->getIntActive() == 1) {
+            $objUser->setIntLogins($objUser->getIntLogins()+1);
+            $objUser->setIntLastLogin(time());
+            //Set pass = "" to avoid update conflicts
+            $objUser->setStrPass("");
+            //No htmlentitiesencoding here !!!
+            $objUser->updateObjectToDb(false);
+
+            $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
+            $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
+            $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objUser->getSystemid()));
+            $this->getObjInternalSession()->setStrGroupids($strGroups);
+            $this->getObjInternalSession()->updateObjectToDb();
+            $this->objUser = $objUser;
+
+            //Drop a line to the logger
+            class_logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in", class_logger::$levelInfo);
+            class_modul_user_log::generateLog();
+
+            //right now we have the time to do a few cleanups...
+            class_modul_system_session::deleteInvalidSessions();
+
+            //Login successfull, quit
+            $bitReturn = true;
+        }
+        else {
+            //User is inactive
+            $bitReturn = false;
+        }
+
+        return $bitReturn;
+    }
 
 	/**
 	 * Logs a user off from the system
