@@ -48,5 +48,22 @@ class class_element_news extends class_element_portal implements interface_porta
 		return $strReturn;
 	}
 
+
+
+    /**
+     * Overwrite this method if you'd like to perform special actions if as soon as content
+     * was loaded from the cache.
+     * Make sure to return a proper boolean value, otherwise the cached entry may get invalid.
+     *
+     * @return boolean
+     */
+    public function onLoadFromCache() {
+        //update the news shown, if in details mode
+        if($this->getParam("action") == "newsDetail") {
+            $objNews = new class_modul_news_news($this->getParam("systemid"));
+            $objNews->increaseHits();
+        }
+    }
+
 }
 ?>

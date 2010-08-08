@@ -120,10 +120,22 @@ abstract class class_element_portal extends class_portal {
 
         //load the matching cache-entry
         $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getCacheHash1(), $this->getCacheHash2(), $this->getPortalLanguage());
-        if($objCacheEntry != null)
+        if($objCacheEntry != null && $this->onLoadFromCache())
             $strReturn = $objCacheEntry->getStrContent();
 
         return $strReturn;
+    }
+
+    /**
+     * Overwrite this method if you'd like to perform special actions if as soon as content
+     * was loaded from the cache.
+     * Make sure to return a proper boolean value, otherwise the cached entry may get invalid.
+     *
+     * @return boolean
+     * @since 3.3.1
+     */
+    public function onLoadFromCache() {
+        return true;
     }
 
 
