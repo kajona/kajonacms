@@ -40,7 +40,7 @@ class class_test_database implements interface_testable {
         echo "\tgetRow test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getRow($strQuery);
-        class_assertions::assertEqual(count($arrRow) , 18, "testDataBase getRow count");
+        class_assertions::assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
         class_assertions::assertEqual($arrRow["temp_char10"] , "1", "testDataBase getRow content");
         
         echo "\tgetArray test\n";
