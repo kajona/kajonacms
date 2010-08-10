@@ -223,7 +223,12 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
 	if($strImage == "" && $strText != "") 	{
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+
+        
+        if($strAlt != $strText)
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." onmouseover=\"KAJONA.admin.tooltip.add(this);\">".$strText."</a>";
+        else
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
 	}
 
 	return $strLink;
