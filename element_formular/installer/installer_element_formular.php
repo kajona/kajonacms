@@ -20,7 +20,7 @@ class class_installer_element_formular extends class_installer_base implements i
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.9";
+		$arrModule["version"] 		= "3.3.1";
 		$arrModule["name"] 			= "element_formular";
 		$arrModule["name_lang"] 	= "Element Form";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -136,6 +136,11 @@ class class_installer_element_formular extends class_installer_base implements i
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("form")->getStrVersion() == "3.3.0.9") {
+            $strReturn .= $this->postUpdate_3309_331();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -151,7 +156,6 @@ class class_installer_element_formular extends class_installer_base implements i
         return $strReturn;
     }
 
-
     public function postUpdate_330_3309() {
         $strReturn = "Updating element form to 3.3.0.9...\n";
 
@@ -165,6 +169,12 @@ class class_installer_element_formular extends class_installer_base implements i
                 $strReturn .= " ...failed!!!\n";
 
         $this->updateElementVersion("form", "3.3.0.9");
+        return $strReturn;
+    }
+
+    public function postUpdate_3309_331() {
+        $strReturn = "Updating element form to 3.3.1...\n";
+        $this->updateElementVersion("form", "3.3.1");
         return $strReturn;
     }
 }

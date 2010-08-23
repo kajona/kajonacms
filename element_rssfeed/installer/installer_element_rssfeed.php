@@ -20,7 +20,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.1";
+		$arrModule["version"] 		= "3.3.1";
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["name_lang"] 	= "Element rssfeed";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -123,6 +123,11 @@ class class_installer_element_rssfeed extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("rssfeed")->getStrVersion() == "3.3.0.1") {
+            $strReturn .= $this->postUpdate_3301_331();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -147,6 +152,12 @@ class class_installer_element_rssfeed extends class_installer_base implements in
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
         $this->updateElementVersion("rssfeed", "3.3.0.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_3301_331() {
+        $strReturn = "Updating element rssfeed to 3.3.1...\n";
+        $this->updateElementVersion("rssfeed", "3.3.1");
         return $strReturn;
     }
 }

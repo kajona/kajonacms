@@ -16,7 +16,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.3.0.1";
+		$arrModule["version"] 		  = "3.3.1";
 		$arrModule["name"] 			  = "news";
 		$arrModule["name_lang"] 	  = "Module News";
 		$arrModule["moduleId"] 		  = _news_modul_id_;
@@ -213,6 +213,11 @@ class class_installer_news extends class_installer_base implements interface_ins
             $strReturn .= $this->update_330_3301();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0.1") {
+            $strReturn .= $this->update_3301_331();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -379,6 +384,17 @@ class class_installer_news extends class_installer_base implements interface_ins
         $this->updateModuleVersion("news", "3.3.0.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("news", "3.3.0.1");
+        return $strReturn;
+    }
+
+
+    private function update_3301_331() {
+        $strReturn = "Updating 3.3.0.1 to 3.3.1...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("news", "3.3.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("news", "3.3.1");
         return $strReturn;
     }
 }

@@ -20,7 +20,7 @@ class class_installer_element_portalregistration extends class_installer_base im
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.1";
+		$arrModule["version"] 		= "3.3.1";
 		$arrModule["name"] 			= "element_portalregistration";
 		$arrModule["name_lang"] 	= "Element portalregistration";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -136,6 +136,11 @@ class class_installer_element_portalregistration extends class_installer_base im
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("portalregistration")->getStrVersion() == "3.3.0.1") {
+            $strReturn .= $this->postUpdate_3301_331();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -154,6 +159,12 @@ class class_installer_element_portalregistration extends class_installer_base im
     public function postUpdate_330_3301() {
         $strReturn = "Updating element portalregistration to 3.3.0.1...\n";
         $this->updateElementVersion("portalregistration", "3.3.0.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_3301_331() {
+        $strReturn = "Updating element portalregistration to 3.3.1...\n";
+        $this->updateElementVersion("portalregistration", "3.3.1");
         return $strReturn;
     }
 }

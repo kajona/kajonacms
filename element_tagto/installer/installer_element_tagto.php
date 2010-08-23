@@ -20,7 +20,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.1";
+		$arrModule["version"] 		= "3.3.1";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -124,6 +124,11 @@ class class_installer_element_tagto extends class_installer_base implements inte
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("tagto")->getStrVersion() == "3.3.0.1") {
+            $strReturn .= $this->postUpdate_3301_331();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -148,6 +153,12 @@ class class_installer_element_tagto extends class_installer_base implements inte
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
         $this->updateElementVersion("tagto", "3.3.0.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_3301_331() {
+        $strReturn = "Updating element tagto to 3.3.1...\n";
+        $this->updateElementVersion("tagto", "3.3.1");
         return $strReturn;
     }
 }

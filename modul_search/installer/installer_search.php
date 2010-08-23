@@ -20,7 +20,7 @@ class class_installer_search extends class_installer_base implements interface_i
 	 */
     public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.0.1";
+		$arrModule["version"] 		= "3.3.1";
 		$arrModule["name"] 			= "search";
 		$arrModule["name_lang"] 	= "Module Search";
 		$arrModule["moduleId"] 		= _suche_modul_id_;
@@ -165,6 +165,11 @@ class class_installer_search extends class_installer_base implements interface_i
             $strReturn .= $this->update_330_3301();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.0.1") {
+            $strReturn .= $this->update_3301_331();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -235,6 +240,17 @@ class class_installer_search extends class_installer_base implements interface_i
         $this->updateModuleVersion("search", "3.3.0.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("search", "3.3.0.1");
+
+        return $strReturn;
+    }
+
+    private function update_3301_331() {
+        $strReturn = "Updating 3.3.0.1 to 3.3.1...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("search", "3.3.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("search", "3.3.1");
 
         return $strReturn;
     }
