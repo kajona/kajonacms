@@ -127,6 +127,15 @@ class class_date {
     }
 
     /**
+     * Converts the current long-timestamp to an old-fashioned int-timestamp (seconds since 1970)
+     *
+     * @return int
+     */
+    public function getTimeInOldStyle() {
+        return mktime($this->getIntHour(), $this->getIntMin(), $this->getIntSec(), $this->getIntMonth(), $this->getIntDay(), $this->getIntYear());
+    }
+
+    /**
      * Swap the year part
      *
      * @param int $intYear
