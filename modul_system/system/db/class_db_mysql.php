@@ -257,9 +257,12 @@ class class_db_mysql implements interface_db_driver {
     	//primary keys
     	$strQuery .= " PRIMARY KEY ( `".implode("` , `", $arrKeys)."` ) \n";
     	
-    	if(count($arrIndices) > 0)
-    		$strQuery .= ", INDEX ( `".implode("` , `", $arrIndices)."` ) \n ";
-    	
+    	if(count($arrIndices) > 0) {
+            foreach($arrIndices as $strOneIndex) {
+                $strQuery .= ", INDEX ( `".$strOneIndex."` ) \n ";
+            }
+        }
+    		
     	
     	$strQuery .= ") ";
     	

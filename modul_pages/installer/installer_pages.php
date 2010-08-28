@@ -668,6 +668,10 @@ class class_installer_pages extends class_installer_base implements interface_in
     private function update_3302_331() {
         $strReturn = "Updating 3.3.0.2 to 3.3.1...\n";
 
+        $strReturn .= "Deleting old systemtasks...\n";
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->fileDelete(_adminpath_."/systemtasks/class_systemtask_flushpagescache.php");
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.3.1");
 

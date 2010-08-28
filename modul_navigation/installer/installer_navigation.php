@@ -349,6 +349,10 @@ class class_installer_navigation extends class_installer_base implements interfa
     private function update_3301_331() {
         $strReturn = "Updating 3.3.0.1 to 3.3.1..\n";
 
+        $strReturn .= "Deleting old systemtasks...\n";
+        $objFilesystem = new class_filesystem();
+        $objFilesystem->fileDelete(_adminpath_."/systemtasks/class_systemtask_flushnavigationcache.php");
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("navigation", "3.3.1");
         $strReturn .= "Updating element-versions...\n";
