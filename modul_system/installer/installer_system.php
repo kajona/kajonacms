@@ -1172,7 +1172,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Deleting old systemtasks...\n";
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete(_adminpath_."/systemtasks/class_systemtask_flushremoteloadercache.php");
+        $objFilesystem->fileDelete("/admin/systemtasks/class_systemtask_flushremoteloadercache.php");
 
 
         $strReturn .= "Updating module-versions...\n";

@@ -670,7 +670,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Deleting old systemtasks...\n";
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete(_adminpath_."/systemtasks/class_systemtask_flushpagescache.php");
+        $objFilesystem->fileDelete("/admin/systemtasks/class_systemtask_flushpagescache.php");
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("3.3.1");

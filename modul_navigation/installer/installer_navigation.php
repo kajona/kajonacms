@@ -351,7 +351,8 @@ class class_installer_navigation extends class_installer_base implements interfa
 
         $strReturn .= "Deleting old systemtasks...\n";
         $objFilesystem = new class_filesystem();
-        $objFilesystem->fileDelete(_adminpath_."/systemtasks/class_systemtask_flushnavigationcache.php");
+        if(!$objFilesystem->fileDelete("/admin/systemtasks/class_systemtask_flushnavigationcache.php"))
+            $strReturn .= "Deletion failed\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("navigation", "3.3.1");
