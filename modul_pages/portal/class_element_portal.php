@@ -174,7 +174,7 @@ abstract class class_element_portal extends class_portal {
         if($this->objSession->isLoggedin())
             $strGuestId = $this->objSession->getUserID();
 
-        return sha1("".$strGuestId.$this->getAction().$this->strCacheAddon.getGet("pv").$this->getSystemid().getGet("highlight"));
+        return sha1("".$strGuestId.$this->getAction().$this->strCacheAddon.$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight"));
     }
 
     /**
