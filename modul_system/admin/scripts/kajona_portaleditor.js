@@ -382,7 +382,8 @@ KAJONA.admin.portaleditor = {
 
 			for (var i=0; i<arrElements.length; i++) {
 				var e = arrElements[i];
-				menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
+                if(typeof e != 'undefined')
+                    menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
 			}
 			menu.setItemGroupTitle(arrPlaceholder.placeholderName, 0);
 			
