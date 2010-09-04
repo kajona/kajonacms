@@ -1603,5 +1603,28 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
+
+    /**
+     * Renderes the quickhelp-button and the quickhelp-text passed
+     *
+     * @param string $strText
+     * @return string
+     */
+    public function getQuickhelp($strText) {
+        $strReturn = "";
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
+        $arrTemplate = array();
+        $arrTemplate["title"] = class_carrier::getInstance()->getObjText()->getText("quickhelp_title", "system", "admin");
+        $arrTemplate["text"] = $strText;
+        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+
+        //and the button
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp_button");
+        $arrTemplate = array();
+        $arrTemplate["text"] = class_carrier::getInstance()->getObjText()->getText("quickhelp_title", "system", "admin");
+        $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+
+        return $strReturn;
+    }
 }
 ?>

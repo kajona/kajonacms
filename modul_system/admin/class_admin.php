@@ -649,17 +649,7 @@ abstract class class_admin {
 
         if($strText != "!".$strTextname."!") {
             //Text found, embed the quickhelp into the current skin
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp");
-            $arrTemplate = array();
-            $arrTemplate["title"] = $this->getText("quickhelp_title", "system");
-            $arrTemplate["text"] = $strText;
-            $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-
-            //and the button
-            $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "quickhelp_button");
-            $arrTemplate = array();
-            $arrTemplate["text"] = $this->getText("quickhelp_title", "system");
-            $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+            $strReturn .= $this->objToolkit->getQuickhelp($strText);
         }
 
         return $strReturn;
