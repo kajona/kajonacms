@@ -63,6 +63,8 @@ class class_element_news extends class_element_portal implements interface_porta
             $objNews = new class_modul_news_news($this->getParam("systemid"));
             $objNews->increaseHits();
         }
+
+        return true;
     }
 
 }
