@@ -124,12 +124,13 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 		$objRoot = new class_modul_system_common();
 
 		//Load the current level
-		$arrFolder = class_modul_downloads_file::getFolderLevel($this->getPrevId());
+		$arrFolder = class_modul_downloads_file::getFolderLevel($this->getSystemid());
 
 		//Call us foreach folder
 		if(count($arrFolder) > 0) {
 			foreach($arrFolder as $objOneFolder) {
-				if(!$objOneFolder->deleteArchiveRecursive() ) {
+                $objArchive = new class_modul_downloads_archive($objOneFolder->getSystemid());
+				if(!$objArchive->deleteArchiveRecursive() ) {
 					$bitReturn = false;
 					break;
 				}

@@ -118,8 +118,16 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 		$strResult = "";
 
 		$objFile = new class_modul_downloads_file($this->getSystemid());
+        $strFilename = $objFile->getFilename();
+
+        if($strFilename == "") {
+            $objFile = new class_modul_downloads_archive ($this->getSystemid ());
+            $strFilename = $objFile->getPath();
+        }
+
         if($objFile->rightRight1()) {
-            $arrSyncs = class_modul_downloads_file::syncRecursive($objFile->getSystemid(), $objFile->getFilename(), false);
+            $arrSyncs = class_modul_downloads_file::syncRecursive($objFile->getSystemid(), $strFilename, false);
+
             $strResult .= $this->getText("syncro_ende")."<br />";
             $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
 

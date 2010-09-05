@@ -117,8 +117,16 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 		$strResult = "";
 
 		$objPic = new class_modul_gallery_pic($this->getSystemid());
+        $strFilename = $objPic->getStrFilename();
+
+        if($strFilename == "") {
+            $objPic = new class_modul_gallery_gallery($this->getSystemid());
+            $strFilename = $objPic->getStrPath();
+        }
+
+
         if($objPic->rightRight1()) {
-            $arrSyncs = class_modul_gallery_pic::syncRecursive($objPic->getSystemid(), $objPic->getStrFilename(), false);
+            $arrSyncs = class_modul_gallery_pic::syncRecursive($objPic->getSystemid(), $strFilename, false);
             $strResult .= $this->getText("syncro_ende")."<br />";
             $strResult .= $this->getText("sync_add").$arrSyncs["insert"]."<br />".$this->getText("sync_del").$arrSyncs["delete"]."<br />".$this->getText("sync_upd").$arrSyncs["update"];
 
