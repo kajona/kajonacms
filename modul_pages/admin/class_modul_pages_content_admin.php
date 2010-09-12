@@ -441,13 +441,14 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$objPageElement->setStrName($strPlaceholderName);
 			$objPageElement->setStrPlaceholder($strPlaceholder);
 			$objPageElement->setStrElement($strPlaceholderElement);
+            $objPageElement->setStrLanguage($this->getParam("page_element_placeholder_language"));
 			if(!$objPageElement->updateObjectToDb($this->getSystemid()))
 			    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
 			$strElementSystemId = $objPageElement->getSystemid();
 
             //shift to last position? first is default.
-            if($this->getParam("element_pos") == "last")
-                $objPageElement->shiftToLastPosition();
+            if($this->getParam("element_pos") == "first")
+                $objPageElement->setAbsolutePosition($objPageElement->getSystemid(), 1);
 
             $objLockmanager = new class_lockmanager($strElementSystemId);
             $objLockmanager->lockRecord();

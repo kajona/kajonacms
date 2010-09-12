@@ -129,27 +129,19 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		}
 
         //shift it to the first position by default
-        //As a special feature, we set the element as 2 in the array. so we can shift it one position up an have it on top of list
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 1 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+        //As a special feature, we set the element as the last
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ".count($this->getSortedElementsAtPlaceholder())." WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $this->objDB->_query($strQuery);
         //And shift this element one pos up to get correct order on systemtables
-        $this->setPosition(null, "up");
 
+        $this->objDB->flushQueryCache();
+
+        
 
         return true;
     }
 
-    /**
-     * Shifts the current element to the last position of the current level
-     */
-    public function shiftToLastPosition() {
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $this->objDB->_query($strQuery);
-        //And shift this element one pos up
-        $this->setPosition(null, "up");
-        $this->setPosition(null, "down");
-    }
-
+  
     /**
      * Updates the current object to the database
      * currently just updateing the internal title and the language
@@ -466,7 +458,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		if($bitSortUp) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".((int)$intPosition+1)."
+								SET system_sort=".((int)$intPosition)."
 								WHERE system_id='".dbsafeString($this->getSystemid())."'";
 			$this->objDB->_query($strQuery);
 
@@ -486,7 +478,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		if($bitSortDown) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".((int)$intPosition+1)."
+								SET system_sort=".((int)$intPosition)."
 								WHERE system_id='".dbsafeString($this->getSystemid())."'";
 			$this->objDB->_query($strQuery);
 
@@ -559,7 +551,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			foreach($arrElementsOnPlaceholder as $intKey => $arrOneElementOnPlaceholder) {
 				//$intKey+1 forces new elements to be at the top of lists
 				$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".(((int)$intKey)+1)."
+								SET system_sort=".(((int)$intKey))."
 								WHERE system_id='".$this->objDB->dbsafeString($arrOneElementOnPlaceholder["system_id"])."'";
 				$this->objDB->_query($strQuery);
 			}

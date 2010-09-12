@@ -334,7 +334,23 @@ abstract class class_admin {
 	 * @return void
 	 */
 	public function setPosition($strIdToShift, $strDirection = "upwards") {
-	    return $this->objSystemCommon->setPosition($strIdToShift, $strDirection);
+	    $this->objSystemCommon->setPosition($strIdToShift, $strDirection);
+        $this->flushCompletePagesCache();
+	}
+
+    /**
+	 * Sets the Position of a SystemRecord in the currect level one position upwards or downwards
+     * and reloads the page viewed before
+	 *
+	 * @param string $strIdToShift
+	 * @param string $strDirection upwards || downwards
+     * @since 3.4.0
+	 * @return void
+	 */
+	public function setPositionAndReload($strIdToShift, $strDirection = "upwards") {
+	    $this->objSystemCommon->setPosition($strIdToShift, $strDirection);
+        $this->flushCompletePagesCache();
+        $this->adminReload(_indexpath_."?".$this->getHistory(1));
 	}
 
 	/**
@@ -344,7 +360,8 @@ abstract class class_admin {
 	 * @param int $intPosition
 	 */
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
-		return $this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
+		$this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
+        $this->flushCompletePagesCache();
 	}
 
 

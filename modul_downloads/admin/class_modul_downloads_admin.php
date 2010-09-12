@@ -99,13 +99,11 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     		}
 
     		if($strAction == "sortUp") {
-    			$strReturn = $this->actionSort("up");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
+                $this->setPositionAndReload($this->getSystemid(), "upwards");
     		}
 
     		if($strAction == "sortDown") {
-    			$strReturn = $this->actionSort("down");
-    		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
+                $this->setPositionAndReload($this->getSystemid(), "downwards");
     		}
 
         }
@@ -648,20 +646,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		return $strReturn;
 	}
 
-
-// --- Sortierung ---------------------------------------------------------------------------------------
-
-	/**
-	 * Sorts a record
-	 *
-	 * @param string $strDirection up || down
-	 */
-	private function actionSort($strDirection = "up") {
-	    if($strDirection == "up")
-	       $this->setPosition($this->getSystemid(), "upwards");
-	    else
-	       $this->setPosition($this->getSystemid(), "downwards");
-	}
 
 	/**
 	 * Generates a pathnavigation

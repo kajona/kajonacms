@@ -48,13 +48,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$strReturn = $this->actionModuleList();
 
 		if($strAction == "moduleSortUp") {
-		    $this->actionSortModule("upwards");
-		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+            $this->setPositionAndReload($this->getSystemid(), "upwards");
 		}
 
 		if($strAction == "moduleSortDown") {
-		    $this->actionSortModule("downwards");
-		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+            $this->setPositionAndReload($this->getSystemid(), "downwards");
 		}
 
 		if($strAction == "moduleStatus") {
@@ -176,15 +174,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		return $strReturn;
 	}
 
-
-	/**
-	 * Shifts modules ins the sort-ordner
-	 *
-	 * @param string $strDirection
-	 */
-	private function actionSortModule($strDirection) {
-	    $this->setPosition($this->getSystemid(), $strDirection);
-	}
 
 // -- Systeminfos ---------------------------------------------------------------------------------------
 

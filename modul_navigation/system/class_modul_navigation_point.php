@@ -93,22 +93,6 @@ class class_modul_navigation_point extends class_model implements interface_mode
         return $this->objDB->_query($strQuery);
     }
 
-    /**
-     * saves the current object as a new object to the database
-     *
-     * @return bool
-     */
-    protected function onInsertToDb() {
-
-        //set the element as last, shift it up once an down again to get a correct order on systemtables
-        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = 999999 WHERE system_id = '".dbsafeString($this->getSystemid())."'";
-        $this->objDB->_query($strQuery);
-
-
-        $this->setPosition($this->getSystemid(), "upwards");
-        $this->setPosition($this->getSystemid(), "downwards");
-        return true;
-    }
 
     /**
 	 * Loads all navigations points one layer under the given systemid

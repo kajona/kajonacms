@@ -140,10 +140,15 @@ abstract class class_root {
 		if($strPrevId == "")
 			$strPrevId = 0;
 
+        //determin the correct new sort-id - append by default
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = '".dbsafeString($strPrevId)."'";
+        $arrRow = $this->objDB->getRow($strQuery, 0, false);
+        $intSiblings = $arrRow["COUNT(*)"];
+
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
-					 ( system_id, system_prev_id, system_module_nr, system_owner, system_lm_user, system_lm_time, system_status, system_comment) VALUES
+					 ( system_id, system_prev_id, system_module_nr, system_owner, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
 					 ('".$this->objDB->dbsafeString($strSystemId)."', 
                       '".$this->objDB->dbsafeString($strPrevId)."',
                        ".(int)$intModulNr." ,
@@ -151,7 +156,8 @@ abstract class class_root {
                       '".$this->objDB->dbsafeString($this->objSession->getUserID())."' ,
                        ".time()." ,
                        ".(int)$intStatus.",
-                      '".$this->objDB->dbsafeString($strComment)."')";
+                      '".$this->objDB->dbsafeString($strComment)."',
+                      ".(int)($intSiblings+1).")";
         
 		//Send the query to the db
 		$this->objDB->_query($strQuery);
@@ -621,9 +627,10 @@ abstract class class_root {
 	 * Fetches the number of siblings belonging to the passed systemid
 	 *
 	 * @param string $strSystemid
+     * @param bool $bitUseCache
 	 * @return int
 	 */
-	public function getNumberOfSiblings($strSystemid = "") {
+	public function getNumberOfSiblings($strSystemid = "", $bitUseCache = true) {
 	    if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 
@@ -632,7 +639,7 @@ abstract class class_root {
 					      "._dbprefix_."system as sys2
 					 WHERE sys1.system_id='".$this->objDB->dbsafeString($strSystemid)."'
 					 AND sys2.system_prev_id = sys1.system_prev_id";
-	    $arrRow = $this->objDB->getRow($strQuery);
+	    $arrRow = $this->objDB->getRow($strQuery, 0, $bitUseCache);
 	    return $arrRow["COUNT(*)"];
 
 	}

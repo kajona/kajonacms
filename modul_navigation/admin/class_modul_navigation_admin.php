@@ -92,12 +92,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     		}
     		if($strAction == "naviPointMoveUp") {
-    			$strReturn = $this->actionMovePoint("upwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().$this->strPeAddon));
+                $this->setPositionAndReload($this->getSystemid(), "upwards");
     		}
     		if($strAction == "naviPointMoveDown") {
-    			$strReturn = $this->actionMovePoint("downwards");
-    			$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().$this->strPeAddon));
+                $this->setPositionAndReload($this->getSystemid(), "downwards");
     		}
 
 		}
@@ -427,21 +425,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			$strReturn = $this->getText("fehler_recht");
 		return $strReturn;
 	}
-
-
-	/**
-	 * Shifts a point one position up or downwards
-	 *
-	 * @param string $strMode upwards || downwards
-	 * @return void
-	 */
-	private function actionMovePoint($strMode = "upwards") {
-	    if($this->objRights->rightEdit($this->getSystemid())) {
-	        $this->setPosition($this->getSystemid(), $strMode);
-	        $this->flushCompletePagesCache();
-	    }
-	}
-
 
 	/**
 	 * Helper to generate a small path-navigation
