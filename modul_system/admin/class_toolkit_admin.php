@@ -272,6 +272,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strName
      * @param string $strTitle
      * @param string $strValue
+     * @param string $strClass
      * @param string $strOpener
      * @param bool $bitReadonly
      * @return string
