@@ -44,7 +44,6 @@ class class_element_paragraph extends class_element_portal implements  interface
         if($strTemplate == "")
             $strTemplate = "paragraph.tpl";
 
-
         //choose template section
         $strTemplateSection = "paragraph";
         if ($this->arrElementData["paragraph_image"] != "" && $this->arrElementData["paragraph_link"] != "") {
@@ -70,6 +69,11 @@ class class_element_paragraph extends class_element_portal implements  interface
 			    $this->arrElementData["paragraph_link"] = getLinkPortalHref($this->arrElementData["paragraph_link"]);
 			else
 			    $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
+		}
+		
+		if($this->arrElementData["paragraph_title"] != "") {
+			$strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
+			$this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);
 		}
 
         $strReturn .= $this->fillTemplate($this->arrElementData, $strTemplateID);
