@@ -186,7 +186,7 @@ class class_cache  {
      * @return bool
      */
     public function updateObjectToDb() {
-        self::$intSaves++;
+        
 
         //run a cleanup
         class_cache::cleanCache();
@@ -225,6 +225,7 @@ class class_cache  {
                           WHERE cache_id = '".dbsafeString($this->strCacheId)."'";
         }
 
+        self::$intSaves++;
         return $this->objDB->_query($strQuery);
 
     }
