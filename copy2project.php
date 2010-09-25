@@ -199,7 +199,7 @@ class class_copy2project {
                         //check if folder exists
                         $arrFolders = explode("/", dirname($arrSingleFile[1]) );
 
-                        $strAttachedFolders = "/";
+                        $strAttachedFolders = "";
                         foreach($arrFolders as $strSingleFolder) {
                             $strAttachedFolders .= $strSingleFolder."/";
 
