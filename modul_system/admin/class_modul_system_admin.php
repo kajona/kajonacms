@@ -700,7 +700,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $arrRowData[] = $objOneEntry->getStrLanguage();
                 $arrRowData[] = uniStrTrim($objOneEntry->getStrHash1(), 17);
                 $arrRowData[] = uniStrTrim($objOneEntry->getStrHash2(), 17);
-                if(_system_cache_stats_ == "true")
+                if(_cache_ === true)
                     $arrRowData[] = $objOneEntry->getIntEntryHits();
                 else
                     $arrRowData[] = "n.a.";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 278
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -18,8 +18,6 @@ $lang["_remoteloader_max_cachetime_"]    = "Время в кеше внешни�
 $lang["_remoteloader_max_cachetime_hint"] = "Время в секундах кеша внешне загруженного содержания (например RSS-ленты).";
 $lang["_system_admin_email_"]            = "Email админа:";
 $lang["_system_admin_email_hint"]        = "При указании адреса в случае серьезных ошибок будет отправлено электронное письмо";
-$lang["_system_cache_stats_"]            = "";
-$lang["_system_cache_stats_hint"]        = "";
 $lang["_system_dbdump_amount_"]          = "Количество DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Определяет, сколько DB-dumps следует сохранить.";
 $lang["_system_lock_maxtime_"]           = "Максимальное locktime:";

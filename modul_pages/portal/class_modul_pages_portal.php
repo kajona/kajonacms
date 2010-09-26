@@ -151,6 +151,16 @@ class class_modul_pages_portal extends class_portal {
         class_cache::fillInternalCache("class_element_portal", $this->getPagename(), null, $this->getPortalLanguage());
 
 
+        //try to load the additional title from cache
+        $strAdditionalTitleFromCache = "";
+        $intMaxCacheDuration = 0;
+        $objCachedTitle = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getPortalLanguage());
+        if($objCachedTitle != null) {
+            $strAdditionalTitleFromCache = $objCachedTitle->getStrContent();
+            self::$strAdditionalTitle = $strAdditionalTitleFromCache;
+        }
+
+
         //copy for the portaleditor
         $arrPlaceholdersFilled = array();
 
@@ -197,6 +207,9 @@ class class_modul_pages_portal extends class_portal {
                 else {
                     //pe not to be taken into account --> full support of caching
                     $strElementOutput = $objElement->getElementOutputFromCache();
+
+                    if($objOneElementOnPage->getIntCachetime() > $intMaxCacheDuration)
+                        $intMaxCacheDuration = $objOneElementOnPage->getIntCachetime();
                     
                     if($strElementOutput === false) {
                         $strElementOutput = $objElement->getElementOutput();
@@ -290,6 +303,15 @@ class class_modul_pages_portal extends class_portal {
             }
         }
 
+
+        //check if the additional title has to be saved to the cache
+        if(self::$strAdditionalTitle != "" && self::$strAdditionalTitle != $strAdditionalTitleFromCache) {
+            $objCacheEntry = class_cache::getCachedEntry(__CLASS__, $this->getPagename(), $this->generateHash2Sum(), $this->getPortalLanguage(), true);
+            $objCacheEntry->setStrContent(self::$strAdditionalTitle );
+            $objCacheEntry->setIntLeasetime(time()+$intMaxCacheDuration );
+
+            $objCacheEntry->updateObjectToDb();
+        }
 
 
 		$arrTemplate["description"] = $objPageData->getStrDesc();
@@ -397,6 +419,16 @@ class class_modul_pages_portal extends class_portal {
 	public static function registerAdditionalTitle($strTitle) {
 		self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
 	}
+
+
+    private function generateHash2Sum() {
+        $strGuestId = "";
+        //when browsing the site as a guest, drop the userid
+        if($this->objSession->isLoggedin())
+            $strGuestId = $this->objSession->getUserID();
+
+        return sha1("".$strGuestId.$this->getAction().$this->getParam("pv").$this->getSystemid().$this->getParam("systemid").$this->getParam("highlight") );
+    }
 
 
 

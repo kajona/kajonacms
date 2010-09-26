@@ -115,7 +115,7 @@ class class_cache  {
                     $arrSingleCacheEntry["cache_id"]
                 );
                 self::$intHits++;
-                if(_system_cache_stats_ == "true")
+                if(_cache_ === true)
                     $objCacheEntry->increaseCacheEntryHits();
 
                 return $objCacheEntry;
@@ -144,7 +144,7 @@ class class_cache  {
                 );
             
             self::$intHits++;
-            if(_system_cache_stats_ == "true")
+            if(_cache_ === true)
                 $objCacheEntry->increaseCacheEntryHits();
             
             return $objCacheEntry;
@@ -204,14 +204,15 @@ class class_cache  {
             $this->strCacheId = generateSystemid();
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."cache
-                       (cache_id, cache_source, cache_hash1, cache_hash2, cache_language, cache_content, cache_leasetime) VALUES
+                       (cache_id, cache_source, cache_hash1, cache_hash2, cache_language, cache_content, cache_leasetime, cache_hits) VALUES
                        (   '".dbsafeString($this->strCacheId)."',
                            '".dbsafeString($this->getStrSourceName())."',
                            '".dbsafeString($this->getStrHash1())."',
                            '".dbsafeString($this->getStrHash2())."',
                            '".dbsafeString($this->getStrLanguage())."',
                            '".dbsafeString($this->getStrContent(), false)."',
-                           ".(int)dbsafeString($this->getIntLeasetime()).") ";
+                           ".(int)dbsafeString($this->getIntLeasetime()).",
+                           ". 1 .") ";
         }
         else {
             //update

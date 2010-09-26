@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.3.1.1";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -135,7 +135,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$this->registerConstant("_pages_errorpage_", "error", class_modul_system_setting::$int_TYPE_PAGE, _pages_modul_id_);
 		$this->registerConstant("_pages_defaulttemplate_", "", class_modul_system_setting::$int_TYPE_STRING, _pages_modul_id_);
 		//2.1.1: overall cachetime
-		$this->registerConstant("_pages_maxcachetime_", 4*60*60, class_modul_system_setting::$int_TYPE_INT, _pages_modul_id_);
 		$this->registerConstant("_pages_cacheenabled_", "true", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
 		//2.1.1: possibility, to create new pages disabled
 		$this->registerConstant("_pages_newdisabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
@@ -350,6 +349,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0.2") {
             $strReturn .= $this->update_3302_331();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3311();
         }
 
         return $strReturn."\n\n";
@@ -679,6 +683,26 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.3.1");
         $this->updateElementVersion("paragraph", "3.3.1");
         $this->updateElementVersion("image", "3.3.1");
+        return $strReturn;
+    }
+
+    private function update_331_3311() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.1...\n";
+
+        $strReturn .= "Removing unused constant _pages_maxcachetime_...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_pages_maxcachetime_");
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id='".$objConstant->getSystemid()."'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.1.1");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.1.1");
+        $this->updateElementVersion("paragraph", "3.3.1.1");
+        $this->updateElementVersion("image", "3.3.1.1");
         return $strReturn;
     }
 

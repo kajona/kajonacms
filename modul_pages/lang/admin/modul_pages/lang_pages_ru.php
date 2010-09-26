@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 278
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кэш страницы включен:";
@@ -15,8 +15,6 @@ $lang["_pages_cacheenabled_hint"]        = "Чтобы иметь надлежа
 $lang["_pages_defaulttemplate_"]         = "Шаблон по умолчанию:";
 $lang["_pages_errorpage_"]               = "Ошибка страницы:";
 $lang["_pages_indexpage_"]               = "Главная страница:";
-$lang["_pages_maxcachetime_"]            = "Максимальное время продолжительности кэша:";
-$lang["_pages_maxcachetime_hint"]        = "Определяет сколько секунд страница остается действительной в кэш.";
 $lang["_pages_newdisabled_"]             = "Новые страницы неактивны:";
 $lang["_pages_newdisabled_hint"]         = "Если установлено \"Да\", то новые страницы остаются неактивными";
 $lang["_pages_portaleditor_"]            = "Редактор портала активен:";

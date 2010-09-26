@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 278
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -18,8 +18,6 @@ $lang["_remoteloader_max_cachetime_"]    = "Memória temporária de fontes exter
 $lang["_remoteloader_max_cachetime_hint"] = "Tempo em segundos para carregar conteúdos do exterior (ex: RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Correio Electrónico Administrador:";
 $lang["_system_admin_email_hint"]        = "Se um endereço é introduzido, uma mensagem de correio electrónico é enviada no caso de surgirem erros críticos.";
-$lang["_system_cache_stats_"]            = "";
-$lang["_system_cache_stats_hint"]        = "";
 $lang["_system_dbdump_amount_"]          = "Número de DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Define o número de DB-dumps que devem ser mantidos.";
 $lang["_system_lock_maxtime_"]           = "Máximo Tempo de Bloqueio:";

@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1";
+		$arrModul["version"] 			= "3.3.1.1";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -389,9 +389,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
         $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
 
-        //3.3.1: global cache debug
-        $this->registerConstant("_system_cache_stats_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
-
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
 		//BUT: We have to modify the right-record of the system
@@ -567,6 +564,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3311();
         }
 
         return $strReturn."\n\n";
@@ -1179,6 +1181,24 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("3.3.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1");
+        return $strReturn;
+    }
+
+    private function update_331_3311() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.1...\n";
+
+        $strReturn .= "Removing unused constant _system_cache_stats_...\n";
+        $objConstant = class_modul_system_setting::getConfigByName("_system_cache_stats_");
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_id='".$objConstant->getSystemid()."'";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("3.3.1.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.1");
         return $strReturn;
     }
 }

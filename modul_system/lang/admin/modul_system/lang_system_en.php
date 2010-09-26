@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 278
+//Kajona Language Editor Core Build 293
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -23,8 +23,6 @@ $lang["_remoteloader_max_cachetime_"]    = "Cache time of external sources:";
 $lang["_remoteloader_max_cachetime_hint"] = "Time in seconds to cache externally loaded contents (e.g. RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Admin Email:";
 $lang["_system_admin_email_hint"]        = "If an address is given, an email is sent to in case of critical errors.";
-$lang["_system_cache_stats_"]            = "Cache-stats:";
-$lang["_system_cache_stats_hint"]        = "Counts the number of hits for a single cache-entry. Should be enabled for debugging only since it has a negative impact on performance.";
 $lang["_system_dbdump_amount_"]          = "Number of DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Defines how many DB-dumps should be kept.";
 $lang["_system_lock_maxtime_"]           = "Maximum locktime:";
