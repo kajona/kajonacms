@@ -369,11 +369,52 @@ abstract class class_root {
 		$strQuery = "UPDATE "._dbprefix_."system
 					SET system_status = ".(int)$intNewStatus."
 					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		if($this->objDB->_query($strQuery))
+		if($this->objDB->_query($strQuery)) {
+            $this->objDB->flushQueryCache();
+            $this->additionalCallsOnStatuschange($strSystemid);
 			return true;
+        }
 		else
 			return false;
 	}
+
+
+    /**
+	 * Calls other model-classes to be able to do additional cleanups, if a systemrecords' state is changed
+	 * by invoking class_root::setStatus before.
+	 * To be called, a model-class has to overwrite class_model::doAdditionalActionsOnStatuschange
+	 *
+	 * @param string $strSystemid
+	 * @return bool
+	 * @see class_root::setStatus, class_model::doAdditionalActionsOnStatuschange
+	 */
+	protected final function additionalCallsOnStatuschange($strSystemid) {
+	    $bitReturn = true;
+
+	    //Look up classes extending class_model
+	    $objFilesystem = new class_filesystem();
+	    $arrFiles = $objFilesystem->getFilelist(_systempath_, array(".php"));
+
+	    foreach ($arrFiles as $strOneFile) {
+	        //just match classes starting with "class_modul"
+	        if(strpos($strOneFile, "class_modul") !== false) {
+
+	            $strClassname = uniStrReplace(".php", "", $strOneFile);
+	            //create instance
+	            $objModel = new $strClassname;
+	            if ($objModel instanceof class_model) {
+	                if(method_exists($objModel, "doAdditionalActionsOnStatuschange")) {
+	                    class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional actions on statuschange", class_logger::$levelInfo);
+	                    $bitReturn &= $objModel->doAdditionalActionsOnStatuschange($strSystemid);
+	                }
+	            }
+	        }
+	    }
+
+	    return $bitReturn;
+	}
+
+    
 
 	/**
 	 * Gets the status of a systemRecord
@@ -969,6 +1010,9 @@ abstract class class_root {
 
 	    return $bitReturn;
 	}
+
+
+    
 
 
 	/**

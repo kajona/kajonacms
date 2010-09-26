@@ -320,6 +320,15 @@ class class_model extends class_root {
         return true;
 	}
 
+
+    /**
+	 * Overwrite this method, if an object should be notified in case of changing the status of a systemrecord.
+	 * This can be useful to trigger workflows or other events.
+	 */
+    public function doAdditionalActionsOnStatuschange($strSystemid) {
+        return true;
+	}
+
 // --- RATING -------------------------------------------------------------------------------------------
 
     /**

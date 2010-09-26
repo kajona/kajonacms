@@ -115,6 +115,12 @@
                 return;
         }
 
+        //workflows
+        if(preg_match("/class_workflow_(.*)/", $strClassName)) {
+            if(require(_systempath_."/workflows/".$strClassName.".php"))
+                return;
+        }
+
         //system-classes
         if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
             if(require(_systempath_."/".$strClassName.".php"))
