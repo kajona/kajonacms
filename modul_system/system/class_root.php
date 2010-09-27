@@ -382,11 +382,11 @@ abstract class class_root {
     /**
 	 * Calls other model-classes to be able to do additional cleanups, if a systemrecords' state is changed
 	 * by invoking class_root::setStatus before.
-	 * To be called, a model-class has to overwrite class_model::doAdditionalActionsOnStatuschange
+	 * To be called, a model-class has to overwrite class_model::doAdditionalActionsOnStatusChange
 	 *
 	 * @param string $strSystemid
 	 * @return bool
-	 * @see class_root::setStatus, class_model::doAdditionalActionsOnStatuschange
+	 * @see class_root::setStatus, class_model::doAdditionalActionsOnStatusChange
 	 */
 	protected final function additionalCallsOnStatuschange($strSystemid) {
 	    $bitReturn = true;
@@ -403,9 +403,9 @@ abstract class class_root {
 	            //create instance
 	            $objModel = new $strClassname;
 	            if ($objModel instanceof class_model) {
-	                if(method_exists($objModel, "doAdditionalActionsOnStatuschange")) {
+	                if(method_exists($objModel, "doAdditionalActionsOnStatusChange")) {
 	                    class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional actions on statuschange", class_logger::$levelInfo);
-	                    $bitReturn &= $objModel->doAdditionalActionsOnStatuschange($strSystemid);
+	                    $bitReturn &= $objModel->doAdditionalActionsOnStatusChange($strSystemid);
 	                }
 	            }
 	        }
