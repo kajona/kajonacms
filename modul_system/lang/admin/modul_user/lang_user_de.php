@@ -126,4 +126,7 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["username"]                        = "Benutzername:";
 $lang["vorname"]                         = "Vorname:";
+$lang["user_browser_show"]               = "Benutzer anzeigen";
+$lang["user_list_parent"]                = "Gruppen anzeigen";
+$lang["user_accept"]                     = "Benutzer auswählen";
 ?>

@@ -128,6 +128,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             if($strAction == "loginlog")
                 $strReturn = $this->actionLoginLog();
+            if($strAction == "userBrowser")
+                $strReturn = $this->actionUserBrowser();
 
         }
         catch (class_exception $objException) {
@@ -894,6 +896,50 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
+
+    /**
+     * Creates a browser-like view of the users available
+     * @return string
+     */
+    private function actionUserBrowser() {
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            if($this->getSystemid() == "") {
+                //show groups
+                $arrUsers = class_modul_user_group::getAllGroups();
+                $strReturn .= $this->objToolkit->listHeader();
+                $intI = 0;
+                foreach($arrUsers as $objSingleUser) {
+                    $strAction = "";
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleUser->getSystemid(), $this->getText("user_browser_show"), $this->getText("user_browser_show"), "icon_folderActionOpen.gif"));
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrName(), $strAction, $intI++);
+                    
+                }
+            }
+            else {
+                //show members of group
+                $arrUsers = class_modul_user_group::getGroupMembers($this->getSystemid());
+                $strFormElement = $this->getParam("form_element");
+                $strReturn .= $this->objToolkit->listHeader();
+                $intI = 0;
+
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
+                foreach($arrUsers as $objSingleUser) {
+                    $strAction = "";
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("user_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strFormElement."').value='".addslashes($objSingleUser->getStrUsername())."';window.opener.document.getElementById('".$strFormElement."_id').value='".$objSingleUser->getSystemid()."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrUsername(). "(".$objSingleUser->getStrForename()." ".$objSingleUser->getStrName().")", $strAction, $intI++);
+
+                }
+            }
+
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+
+        return $strReturn;
+
+    }
 
 //--- helpers--------------------------------------------------------------------------------------------
 
