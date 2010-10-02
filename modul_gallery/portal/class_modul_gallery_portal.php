@@ -114,8 +114,8 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $intNrOfPicsPerRow = $this->getImagesPerRow($this->arrElementData["gallery_template"]);
 
 			foreach ($arrImages as $objOneImage) {
-				//Check rights
-				if($this->objRights->rightView($objOneImage->getSystemid())) {
+				//Check rights and the existance of placeholders
+				if($intNrOfPicsPerRow > 0 && $this->objRights->rightView($objOneImage->getSystemid())) {
 					//Folder or image?
 					if($objOneImage->getIntType() == 0) {
                         $arrTemplateImage = array();
