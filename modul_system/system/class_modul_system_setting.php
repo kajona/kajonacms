@@ -92,7 +92,7 @@ class class_modul_system_setting extends class_model implements interface_model 
      *
      * @return bool
      */
-    public function updateObjectToDb() {
+    public function updateObjectToDb($strPrevId = false) {
 
         if(!class_modul_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
