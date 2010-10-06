@@ -85,7 +85,7 @@ class class_modul_pages_element extends class_model implements interface_model  
      * Updates the current object to the database
      * @overwrites class_model::updateObjectToDb()
      */
-    public function updateObjectToDb() {
+    public function updateObjectToDb($strPrevId = false) {
         if($this->getSystemid() == "") {
 
             $strElementid = generateSystemid();
