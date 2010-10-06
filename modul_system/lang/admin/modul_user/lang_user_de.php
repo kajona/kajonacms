@@ -107,6 +107,7 @@ $lang["user"]                            = "Benutzer: ";
 $lang["user_active"]                     = "Status ändern (ist aktiv)";
 $lang["user_anlegen"]                    = "Neuer Benutzer";
 $lang["user_bearbeiten"]                 = "Benutzer bearbeiten";
+$lang["user_browser"]                    = "Benutzer suchen";
 $lang["user_erfolg"]                     = "Benutzer erfolgreich gespeichert";
 $lang["user_fehler"]                     = "Fehler beim Speichern des Benutzers";
 $lang["user_fehler_mail"]                = "E-Mail Adresse angeben <a href=\"javascript:history.back(-1)\">zurück</a>";
