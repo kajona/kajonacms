@@ -272,10 +272,10 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
 
-	protected function updateModuleVersion($strNewVersion) {
-		parent::updateModuleVersion("pages", $strNewVersion);
-        parent::updateModuleVersion("pages_content", $strNewVersion);
-        parent::updateModuleVersion("folderview", $strNewVersion);
+	protected function updateModuleVersion($strModuleName, $strVersion) {
+		parent::updateModuleVersion("pages", $strVersion);
+        parent::updateModuleVersion("pages_content", $strVersion);
+        parent::updateModuleVersion("folderview", $strVersion);
 	}
 
 
@@ -365,7 +365,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.1.1");
+        $this->updateModuleVersion("", "3.1.1");
 
         return $strReturn;
     }
@@ -397,7 +397,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.1.9");
+        $this->updateModuleVersion("", "3.1.9");
 
         return $strReturn;
     }
@@ -418,7 +418,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.1.95");
+        $this->updateModuleVersion("", "3.1.95");
 
         return $strReturn;
     }
@@ -426,7 +426,7 @@ class class_installer_pages extends class_installer_base implements interface_in
     private function update_3195_320() {
         $strReturn = "Updating 3.1.95 to 3.2.0...\n";
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.2.0");
+        $this->updateModuleVersion("", "3.2.0");
         return $strReturn;
     }
 
@@ -434,7 +434,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.2.0.9");
+        $this->updateModuleVersion("", "3.2.0.9");
         return $strReturn;
     }
 
@@ -442,7 +442,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.2.0.9 to 3.2.1...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.2.1");
+        $this->updateModuleVersion("", "3.2.1");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.2.1");
@@ -507,7 +507,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.2.91");
+        $this->updateModuleVersion("", "3.2.91");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.2.91");
@@ -606,7 +606,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->objDB->_query($strQuery);
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.2.93");
+        $this->updateModuleVersion("", "3.2.93");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.2.93");
@@ -619,7 +619,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $strReturn = "Updating 3.2.93 to 3.3.0...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.3.0");
+        $this->updateModuleVersion("", "3.3.0");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.3.0");
@@ -637,7 +637,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.3.0.1");
+        $this->updateModuleVersion("", "3.3.0.1");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.3.0.1");
@@ -660,7 +660,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.3.0.2");
+        $this->updateModuleVersion("", "3.3.0.2");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.3.0.2");
@@ -677,7 +677,7 @@ class class_installer_pages extends class_installer_base implements interface_in
         $objFilesystem->fileDelete("/admin/systemtasks/class_systemtask_flushpagescache.php");
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.3.1");
+        $this->updateModuleVersion("", "3.3.1");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.3.1");
@@ -697,7 +697,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("3.3.1.1");
+        $this->updateModuleVersion("", "3.3.1.1");
 
         $strReturn .= "Updating element-version...\n";
         $this->updateElementVersion("row", "3.3.1.1");
