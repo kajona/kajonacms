@@ -336,9 +336,10 @@ function getLinkAdminRaw($strParams, $strText = "", $strAlt="", $strImage="", $s
  * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
+ * @param string $strOnClickAddon
  * @return string
  */
-function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $intWidth = "500", $intHeight = "500", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClickAddon = "") {
     $strLink = "";
 	//if($strParams != "")
 	//	$strParams = str_replace("&", "&amp;", $strParams);
@@ -358,15 +359,15 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 			$strAlt = $strAction;
 
 		if(!$bitTooltip)
-			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."');".$strOnClickAddon." return false;\" title=\"".$strAlt."\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
 		else
-			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\" title=\"".$strAlt."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
+			$strLink = "<a href=\"#\" onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."');".$strOnClickAddon." return false;\" title=\"".$strAlt."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\"><img src=\""._skinwebpath_."/pics/".$strImage."\" alt=\"".$strAlt."\" align=\"absbottom\" /></a>";
 	}
 
 	if($strImage == "" && $strText != "") {
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."');\" " : "" )." onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
+		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."');\" " : "" )." onclick=\"javascript:window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."');".$strOnClickAddon." return false;\">".$strText."</a>";
 	}
 	return $strLink;
 }
