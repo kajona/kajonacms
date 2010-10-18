@@ -7,10 +7,8 @@
 *	$Id$                                     *
 ********************************************************************************************************/
 
-
-
+header("Content-Type: text/html; charset=utf-8");
 require_once("../system/includes.php");
-
 
 
 echo "<pre>\n";

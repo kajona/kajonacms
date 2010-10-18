@@ -7,6 +7,7 @@
 *   $Id: gdinfo.php 3081 2010-01-03 10:14:41Z sidler $                                     *
 ********************************************************************************************************/
 
+header("Content-Type: text/html; charset=utf-8");
 require_once("../system/includes.php");
 
 
