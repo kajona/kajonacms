@@ -306,8 +306,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				 	    $strActions .= $this->objToolkit->listDeleteButton($objPost->getGuestbookPostName() . " - ".timeToString($objPost->getGuestbookPostDate()), $this->getText("post_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePost", "&systemid=".$objPost->getSystemid()));
 					if($this->objRights->rightEdit($this->getSystemid()))
 					    $strActions .= $this->objToolkit->listStatusButton($objPost->getSystemid());
-					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), $objPost->getGuestbookPostName()." - ".$objPost->getGuestbookPostEmail()." - ".$objPost->getGuestbookPostPage(), $strActions, " ", $intI);
-					$strReturn .= $this->objToolkit->listRow3("", uniStrReplace("&lt;br /&gt;", "<br />" , $objPost->getGuestbookPostText()), "", "", $intI);
+					$strReturn .= $this->objToolkit->listRow3(timeToString($objPost->getGuestbookPostDate()), uniStrTrim($objPost->getGuestbookPostName(), 20)." - ".uniStrTrim($objPost->getGuestbookPostEmail(), 20)." - ".uniStrTrim($objPost->getGuestbookPostPage(), 20), $strActions, " ", $intI);
+					$strReturn .= $this->objToolkit->listRow3("", uniStrReplace("&lt;br /&gt;", "<br />" , uniStrTrim($objPost->getGuestbookPostText(), 70)), "", "", $intI);
 					$intI++;
 				}
 				$strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
