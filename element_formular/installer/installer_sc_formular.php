@@ -89,6 +89,41 @@ class class_installer_sc_formular implements interface_sc_installer  {
             $strReturn .= "Error creating headline element.\n";
 
 
+
+
+        $strReturn .= "Adding paragraph-element to new page\n";
+        $objPagelement = new class_modul_pages_pageelement();
+        $objPagelement->setStrPlaceholder("text_paragraph");
+        $objPagelement->setStrName("text");
+        $objPagelement->setStrElement("paragraph");
+        $objPagelement->updateObjectToDb($strPageId);
+        $strElementId = $objPagelement->getSystemid();
+
+        if($this->strContentLanguage == "de") {
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = '',
+                                paragraph_content ='Hinweis: Das Formular sendet per default die Anfragen an info @ kajona.de.<br />
+                                                    Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />',
+                                paragraph_image = ''
+                            WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = '',
+                                    paragraph_content ='Note: By default, the form sends the messages to info @ kajona.de.<br />
+                                                              To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />',
+                                    paragraph_image = ''
+                                WHERE content_id = '".dbsafeString($strElementId)."'";
+        }
+
+
+        if($this->objDB->_query($strQuery))
+            $strReturn .= "Paragraph element created.\n";
+        else
+            $strReturn .= "Error creating paragraph element.\n";
+
+
+
         $strReturn .= "Creating Navigation-Entry...\n";
         //navigations installed?
         try {
