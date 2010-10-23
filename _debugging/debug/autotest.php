@@ -146,12 +146,18 @@ class class_assertions {
         }
     }
 
+    public static function getStatistics() {
+        $strReturn  = "\n\n-------------------------------------------------------\n\n";
+        $strReturn .= "test-statistics:\n";
+        $strReturn .= "nr of tests failed: ".class_assertions::$nrOfFailures."\n";
+        $strReturn .= "nr of tests succeeded: ".class_assertions::$nrOfSuccesses."\n";
+        $strReturn .= "\n\n-------------------------------------------------------\n";
+
+        return $strReturn;
+    }
+
     public static function printStatistics() {
-        echo "\n\n-------------------------------------------------------\n\n";
-        echo "test-statistics:\n";
-        echo "nr of tests failed: ".class_assertions::$nrOfFailures."\n";
-        echo "nr of tests succeeded: ".class_assertions::$nrOfSuccesses."\n";
-        echo "\n\n-------------------------------------------------------\n";
+        echo self::getStatistics();
     }
 
 
