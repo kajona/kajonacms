@@ -71,7 +71,7 @@ class class_db_postgres implements interface_db_driver {
      */
     public function _query($strQuery) {
 		$bitReturn = @pg_query($this->linkDB, $strQuery);
-        return $bitReturn;
+        return $bitReturn !== false;
     }
 
     /**
