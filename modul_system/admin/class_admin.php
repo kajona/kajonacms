@@ -633,7 +633,7 @@ abstract class class_admin {
 	 *
 	 * @return string
 	 */
-	private function getQuickHelp() {
+	protected function getQuickHelp() {
         $strReturn = "";
         $strText = "";
         $strTextname = "";
