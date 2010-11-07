@@ -688,12 +688,8 @@ class class_image {
 
         $this->strCacheAdd .= $intCropWidth.$intCropHeight;
 
-        //check, if resizing or cropping is needed
-        if($intMaxSizeHeight == 0 && $intMaxSizeWidth == 0 && ($intCropHeight == 0 || $intCropWidth == 0)) {
-            $this->setBitNeedToSave(false);
-            $bitResize = false;
-		}
-        else if($intCropWidth > 0 && $intCropHeight > 0) {
+        //check, if cropping is needed
+        if($intCropWidth > 0 && $intCropHeight > 0 && ($this->intWidth != $intCropWidth || $this->intHeight != $intCropHeight)) {
             $bitResize = true;
 
             //TODO: Also it would be nice to enable the use of only one "fixed"-param.
@@ -716,7 +712,8 @@ class class_image {
                 $intHeightNew = (int) ($intCropWidth / $floatRelation);
             }
         }
-        else if($this->intWidth > $intMaxSizeWidth || $this->intHeight > $intMaxSizeHeight) {
+        //check, if resizing is needed
+        else if($intMaxSizeWidth > 0 || $intMaxSizeHeight > 0 && ($this->intWidth > $intMaxSizeWidth || $this->intHeight > $intMaxSizeHeight)) {
             $bitResize = true;
             $floatRelation = $this->intWidth / $this->intHeight; //0 = width, 1 = height
 
@@ -752,6 +749,9 @@ class class_image {
                 $intHeightNew = 1;
             if($intWidthNew < 1)
                 $intWidthNew = 1;
+        }
+        else {
+            $this->setBitNeedToSave(false);
         }
 
         class_logger::getInstance()->addLogRow("resize to(".$bitResize."): width: ".$intWidthNew." height: ".$intHeightNew.
