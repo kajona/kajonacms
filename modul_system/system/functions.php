@@ -1207,7 +1207,7 @@ function uniStrReplace($mixedSearch, $mixedReplace, $strSubject, $bitUnicodesafe
  * @param string $strAdd string to add after wrapped string
  * @return string
  */
-function uniStrTrim($strString, $intLength, $strAdd = "...") {
+function uniStrTrim($strString, $intLength, $strAdd = "…") {
     if($intLength > 0 && uniStrlen($strString) > $intLength) {
 		return trim(uniSubstr($strString, 0, $intLength)).$strAdd;
     }
