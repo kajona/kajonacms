@@ -401,7 +401,8 @@ class class_modul_pages_portal extends class_portal {
 
         $intBodyPos = uniStripos($strPageContent, "</head>");
         if($intBodyPos !== false) {
-            $strPageContent = uniSubstr($strPageContent, 0, uniStripos($strPageContent, "</head")).$strHeader.uniSubstr($strPageContent, uniStripos($strPageContent, "</head"));
+            $intBodyPos += 0;
+            $strPageContent = uniSubstr($strPageContent, 0, $intBodyPos).$strHeader.uniSubstr($strPageContent, $intBodyPos);
         }
         else {
             $strPageContent = $strHeader.$strPageContent;
