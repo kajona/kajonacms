@@ -482,6 +482,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    return $strReturn;
 			}
 
+            //pass the data to the element, maybe the element wants to update some data
+            $objElement->setArrParamData($this->getAllParams());
+            $objElement->doBeforeSaveToDb();
+
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
 			$strElementTableColumns = $objElement->getArrModule("tableColumns");
@@ -490,19 +494,29 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    //open new tx
 			    $this->objDB->transactionBegin();
 
+                $arrElementParams = $objElement->getArrParamData();
+
                 $arrTableRows = explode(",", $strElementTableColumns);
                 if(count($arrTableRows) > 0) {
                     $arrInserts = array();
                     foreach($arrTableRows as $strOneTableColumnConf) {
+
+
                         //explode to get tableColumnName and tableColumnDatatype
                         //currently, datatypes are 'number' and 'char' -> casts!
                         $arrTemp = explode("|", $strOneTableColumnConf);
                         $strTableColumnName = $arrTemp[0];
                         $strTableColumnDatatype = $arrTemp[1];
+
+                        $strColumnValue = "";
+                        if(isset($arrElementParams[$strTableColumnName]))
+                            $strColumnValue = $arrElementParams[$strTableColumnName];
+
+
                         if ($strTableColumnDatatype == "number")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($this->getParam($strTableColumnName))." ";
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
                         elseif ($strTableColumnDatatype == "char")
-                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($this->getParam($strTableColumnName))."' ";
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
                     }
 
                     $strRowUpdates = implode(", ", $arrInserts);

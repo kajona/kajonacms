@@ -23,7 +23,7 @@ class class_element_image extends class_element_admin implements interface_admin
 		$arrModule["table"]	 		= _dbprefix_."element_image";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "";
+		$arrModule["tableColumns"]   = "image_title|char,image_link|char,image_image|char,image_x|number,image_y|number,image_template|char";
 
 		parent::__construct($arrModule);
 	}
@@ -82,33 +82,16 @@ class class_element_image extends class_element_admin implements interface_admin
         return uniStrTrim(htmlStripTags($arrData["image_image"]), 60);
 	}
 
-	/**
-	 * saves the submitted data to the database
-	 * It IS wanted to not let the system save the element here!
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function actionSave($strSystemid) {
-		$strImage = $this->getParam("image_image");
-		//We have to replace the webpath to remain flexible
-		$strImage = str_replace(_webpath_, "", $strImage);
-		//Secure the text
-		//And to the database
-		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
-				image_title = '".dbsafeString($this->getParam("image_title"))."',
-				image_link = '".dbsafeString($this->getParam("image_link"))."',
-				image_image = '".dbsafeString($strImage)."',
-				image_x = ".(int)dbsafeString($this->getParam("image_x")).",
-				image_y = ".(int)dbsafeString($this->getParam("image_y")).",
-				image_template = '".dbsafeString($this->getParam("image_template"))."'
-				WHERE content_id='".dbsafeString($strSystemid)."'";
 
-		if($this->objDB->_query($strQuery))
-			return true;
-		else
-			return false;
-	}
+    /**
+     * Modifies the passed params in order to have a proper data record in the database.
+     * Called right before saving the element to the database.
+     *
+     * @return void
+     */
+    public function doBeforeSaveToDb() {
+        $this->arrParamData["image_image"] = str_replace(_webpath_, "", $this->arrParamData["image_image"]);
+    }
 
 
 }
