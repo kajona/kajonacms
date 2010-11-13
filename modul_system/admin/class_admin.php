@@ -393,11 +393,14 @@ abstract class class_admin {
 	 * Returns the SystemID of a installed module
 	 *
 	 * @param string $strModule
-	 * @return string
+	 * @return string "" in case of an error
 	 */
 	public function getModuleSystemid($strModule) {
         $objModule = class_modul_system_module::getModuleByName($strModule);
-        return $objModule->getSystemid();
+        if($objModule != null)
+            return $objModule->getSystemid();
+        else
+            return "";
 	}
 
 	/**
