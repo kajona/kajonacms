@@ -867,11 +867,9 @@ The language switch surrounds the buttons
             </div>
             <div class="bd">
                 <div class="c">
-                    <div class="spacer"></div>
-                    <p>
-                        %%widget_content%%
-                    </p>
-                    <div class="spacer"></div>
+                    <div id="p_widget_%%widget_id%%" >
+                        <div class="loadingContainer">%%widget_content%%</div>
+                    </div>
                 </div>
             </div>
             <div class="ft">

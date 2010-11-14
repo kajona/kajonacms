@@ -904,12 +904,8 @@ KAJONA.admin.ajax = {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module='+module+'&action='+action;
 		var postBody = 'systemid=' + systemid;
 	
-		if (KAJONA.admin.ajax.genericCall == null
-				|| !YAHOO.util.Connect
-						.isCallInProgress(KAJONA.admin.ajax.genericCall)) {
-			KAJONA.admin.ajax.genericCall = YAHOO.util.Connect.asyncRequest(
-					'POST', postTarget, objCallback, postBody);
-		}
+        KAJONA.admin.ajax.genericCall = YAHOO.util.Connect.asyncRequest(
+                'POST', postTarget, objCallback, postBody);
 	},
 
 	setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList) {

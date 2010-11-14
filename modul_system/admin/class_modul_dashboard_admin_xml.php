@@ -23,6 +23,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_dashboard";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _dashboard_modul_id_;
@@ -42,6 +43,8 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         $strReturn = "";
         if($strAction == "setDashboardPosition")
             $strReturn .= $this->actionSetDashboardPosition();
+        else if($strAction == "getWidgetContent")
+            $strReturn .= $this->actionGetWidgetContent();
 
         return $strReturn;
 	}
@@ -77,6 +80,21 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         return $strReturn;
 	}
 
+
+    private function actionGetWidgetContent() {
+        $strReturn = "";
+        if($this->objRights->rightView($this->getSystemid())) {
+            $strReturn = "<content>";
+            $objWidgetModel = new class_modul_system_adminwidget($this->getSystemid());
+            $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
+            $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
+            $strReturn .= "</content>";
+        }
+        else
+		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+        return $strReturn;
+    }
 
 }
 ?>

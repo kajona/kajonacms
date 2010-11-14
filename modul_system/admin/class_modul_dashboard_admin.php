@@ -118,10 +118,24 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 */
 	private function layoutAdminWidget($objDashboardWidget) {
 	    $strWidgetContent = "";
-
 	    $objConcreteWidget = $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 
-        $strGeneratedContent = $objConcreteWidget->generateWidgetOutput();
+        $strGeneratedContent = "<script type=\"text/javascript\">
+                            KAJONA.admin.loader.loadAjaxBase(function() {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"getWidgetContent\", \"%%widget_id%%\", {
+                                    success : function(o) {
+                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+                                        document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=o.responseText.substr(
+                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                        );
+                                    },
+                                    failure : function(o) {
+                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    }
+                                  })
+                            });
+                          </script>";
+
         $strWidgetId = $objConcreteWidget->getSystemid();
         $strWidgetName = $objConcreteWidget->getWidgetName();
 

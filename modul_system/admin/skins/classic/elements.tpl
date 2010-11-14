@@ -987,7 +987,11 @@ The language switch sourrounds the buttons
 		<div class="adminwidgetHeaderActions">%%widget_edit%% %%widget_delete%%</div>
 		<div style="clear: both;"></div>
 	</div>
-	<div class="adminwidgetContent">%%widget_content%%</div>
+	<div class="adminwidgetContent">
+        <div id="p_widget_%%widget_id%%" >
+            <div class="loadingContainer">%%widget_content%%</div>
+        </div>
+    </div>
 </div>
 </adminwidget_widget>
 
