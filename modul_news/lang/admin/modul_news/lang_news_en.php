@@ -7,10 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 293
 
 //non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Edit news", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Result page:";
@@ -61,9 +61,8 @@ $lang["modul_titel2"]                    = "News management - category ";
 $lang["news_basicdata"]                  = "News basic data";
 $lang["news_cat_title"]                  = "Category title:";
 $lang["news_categories"]                 = "Categories";
-$lang["news_grunddaten"]                 = "Edit news basic data";
 $lang["news_image"]                      = "Image:";
-$lang["news_inhalt"]                     = "Edit news";
+$lang["news_edit"]                     = "Edit news";
 $lang["news_intro"]                      = "Teaser:";
 $lang["news_languageset"]                = "Edit language assignments";
 $lang["news_locked"]                     = "Newsrecord is locked";

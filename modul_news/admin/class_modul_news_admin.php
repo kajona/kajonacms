@@ -101,14 +101,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
-    		if($strAction == "editNewscontent")
-    			$strReturn = $this->actionEditNewscontent();
-    		if($strAction == "saveNewscontent") {
-    			$strReturn = $this->actionSaveNewscontent();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
     		if($strAction == "newsFeed")
     		    $strReturn = $this->actionListNewsFeed();
 
@@ -270,8 +262,6 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                         }
 
                         if($this->objRights->rightEdit($objOneNews->getSystemid()))
-                            $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_pageLocked.gif"));
-                        if($this->objRights->rightRight1($objOneNews->getSystemid()))
                             $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_pencilLocked.gif"));
                         if($this->objRights->rightDelete($objOneNews->getSystemid()))
                             $strAction .= $this->objToolkit->listButton(getNoticeAdminWithoutAhref($this->getText("news_locked"), "icon_tonLocked.gif"));
@@ -279,9 +269,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     }
                     else {
                         if($this->objRights->rightEdit($objOneNews->getSystemid()))
-                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_grunddaten"), "icon_page.gif"));
-                        if($this->objRights->rightRight1($objOneNews->getSystemid()))
-                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNewscontent", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_inhalt"), "icon_pencil.gif"));
+                            $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editNews", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_edit"), "icon_pencil.gif"));
                         if($this->objRights->rightDelete($objOneNews->getSystemid()))
                             $strAction .= $this->objToolkit->listDeleteButton($objOneNews->getStrTitle(), $this->getText("news_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteNews", "&systemid=".$objOneNews->getSystemid()."&news_loeschen_final=1"));
                     }
@@ -568,6 +556,11 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), null);
                 $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), null);
 
+                $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), "");
+                $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), "");
+                $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), "", "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+
+
                 //and the cats
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
@@ -594,21 +587,19 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->getLockManager()->lockRecord();
 
 			    $arrToolbarEntries = array();
-	            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
-	            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
 	            
                 //search the languages maintained
                 $objLanguageManager = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
                 if($objLanguageManager != null) {
-                    $arrToolbarEntries[2] = "<div class=\"languageSwitch\">";
+                    $arrToolbarEntries[0] = "<div class=\"languageSwitch\">";
                     $arrMaintained = $objLanguageManager->getArrLanguageSet();
                     $arrDD = array();
                     foreach($arrMaintained as $strLanguageId => $strSystemid) {
                         $objLanguage = new class_modul_languages_language($strLanguageId);
                         $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
                     }
-                    $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNews").(_system_mod_rewrite_ == "true" ? "?" : "&")."systemid='+this.value+'&pe=".$this->getParam("pe")."';\"");
-                    $arrToolbarEntries[2] .= "</div>";
+                    $arrToolbarEntries[0] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNews").(_system_mod_rewrite_ == "true" ? "?" : "&")."systemid='+this.value+'&pe=".$this->getParam("pe")."';\"");
+                    $arrToolbarEntries[0] .= "</div>";
                 }
 	            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0);
 
@@ -622,6 +613,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), $objNews->getIntDateStart() != 0 ? new class_date($objNews->getIntDateStart()) : null);
                 $strReturn .= $this->objToolkit->formDateSingle("end",  $this->getText("end"), $objNews->getIntDateEnd() != 0 ? new class_date($objNews->getIntDateEnd()) : null);
                 $strReturn .= $this->objToolkit->formDateSingle("archive",  $this->getText("archive"), $objNews->getIntDateSpecial() != 0 ? new class_date($objNews->getIntDateSpecial()) : null);
+
+                $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
+                $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
+                $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+            
+
                 //and the cats
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
                 $arrCats = class_modul_news_category::getCategories();
@@ -676,6 +673,9 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->setIntDateStart($objStartDate->getLongTimestamp());
                 $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
                 $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
+                $objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
+                $objNews->setStrIntro($this->getParam("news_intro"));
+                $objNews->setStrNewstext(processWysiwygHtmlContent($this->getParam("news_text")));
 
                 $arrParams = $this->getAllParams();
                 $arrCats = array();
@@ -710,6 +710,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->setIntDateStart($objStartDate->getLongTimestamp());
                 $objNews->setIntDateEnd($objEndDate->getLongTimestamp());
                 $objNews->setIntDateSpecial($objArchiveDate->getLongTimestamp());
+                $objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
+                $objNews->setStrIntro($this->getParam("news_intro"));
+                $objNews->setStrNewstext(processWysiwygHtmlContent($this->getParam("news_text")));
+
 
 
                 $arrParams = $this->getAllParams();
@@ -761,89 +765,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
-
-
-
-// --- Newsinhalte --------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the form to edit news CONTENT
-	 *
-	 * @return string
-	 */
-	public function actionEditNewscontent() {
-		$strReturn = "";
-
-		//check rights
-		// !!! NOTE !!! right1 used here!
-		if($this->objRights->rightRight1($this->getSystemid())) {
-			//Load content
-			$objNews = new class_modul_news_news($this->getSystemid());
-
-            $objNews->getLockManager()->lockRecord();
-
-            $arrToolbarEntries = array();
-            $arrToolbarEntries[0] = "<a href=\"".getLinkAdminHref("news", "editNews", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_page.gif);\">".$this->getText("contentToolbar_properties")."</a>";
-            $arrToolbarEntries[1] = "<a href=\"".getLinkAdminHref("news", "editNewscontent", "&systemid=".$this->getSystemid()."&pe=".$this->getParam("pe"))."\" style=\"background-image:url("._skinwebpath_."/pics/icon_pencil.gif);\">".$this->getText("contentToolbar_content")."</a>";
-            
-            
-            //search the languages maintained
-            $objLanguageManager = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
-            if($objLanguageManager != null) {
-                $arrToolbarEntries[2] = "<div class=\"languageSwitch\">";
-                $arrMaintained = $objLanguageManager->getArrLanguageSet();
-                $arrDD = array();
-                foreach($arrMaintained as $strLanguageId => $strSystemid) {
-                    $objLanguage = new class_modul_languages_language($strLanguageId);
-                    $arrDD[$strSystemid] = $this->getText("lang_".$objLanguage->getStrName() , "languages");
-                }
-                $arrToolbarEntries[2] .= $this->objToolkit->formInputDropdown("news_languageswitch", $arrDD, "", $this->getSystemid(), "inputDropdown", true, "onchange=\"window.location='".getLinkAdminHref("news", "editNewscontent").(_system_mod_rewrite_ == "true" ? "?" : "&")."systemid='+this.value+'&pe=".$this->getParam("pe")."';\"");
-                $arrToolbarEntries[2] .= "</div>";
-            }
-            
-            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1)."<br />";
-
-            //Build the form
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNewscontent"));
-            $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
-		    $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
-		    $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
-            $strReturn .= $this->objToolkit->formClose();
-
-            $strReturn .= $this->objToolkit->setBrowserFocus("news_intro");
-		}
-		else
-			$strReturn .= $this->getText("fehler_recht");
-
-
-		return $strReturn;
-	}
-
-	/**
-	 * Saves the news content
-	 *
-	 * @return string "" in case of success
-	 */
-	public function actionSaveNewscontent() {
-		$strReturn = "";
-		//Rights
-		if($this->objRights->rightRight1($this->getSystemid())) {
-			$objNews = new class_modul_news_news($this->getSystemid());
-			$objNews->setStrImage(uniStrReplace(_webpath_, "", $this->getParam("news_image")));
-			$objNews->setStrIntro($this->getParam("news_intro"));
-			$objNews->setStrNewstext(processWysiwygHtmlContent($this->getParam("news_text")));
-			if(!$objNews->updateObjectToDb())
-				throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-
-            $objNews->getLockManager()->unlockRecord();
-		}
-		else
-			$strReturn = $this->getText("fehler_recht");
-		return $strReturn;
-	}
+	
 
 // --- News Feeds ---------------------------------------------------------------------------------------
 

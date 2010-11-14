@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 198
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страницата с резултати";
@@ -58,9 +58,8 @@ $lang["modul_titel2"]                    = "News management - category ";
 $lang["news_basicdata"]                  = "Основни новини";
 $lang["news_cat_title"]                  = "Име на категория:";
 $lang["news_categories"]                 = "Категории";
-$lang["news_grunddaten"]                 = "Редактирай основни новини";
 $lang["news_image"]                      = "Изображение:";
-$lang["news_inhalt"]                     = "Редактирай новини";
+$lang["news_edit"]                     = "Редактирай новини";
 $lang["news_intro"]                      = "Заглавие:";
 $lang["news_languageset"]                = "";
 $lang["news_locked"]                     = "";
