@@ -520,7 +520,8 @@ KAJONA.admin.folderview = {
 	    	if (arrTargetsValues[i][0] == "ckeditor") {
 	    		CKEDITOR.tools.callFunction(this.selectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
 	    	} else {
-	    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
+                if(YAHOO.util.Dom.get(arrTargetsValues[i][0]) != null)
+                    YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
 	    	}
 		}
 	},
