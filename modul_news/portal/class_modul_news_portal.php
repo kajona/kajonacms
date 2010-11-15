@@ -120,7 +120,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 					//Add pe code
 				    $arrPeConfig = array(
 				                              "pe_module" => "news",
-				                              "pe_action_edit" => "editNewscontent",
+				                              "pe_action_edit" => "editNews",
 				                              "pe_action_edit_params" => "&systemid=".$objOneNews->getSystemid(),
 				                              "pe_action_new" => "newNews",
 				                              "pe_action_new_params" => "",
