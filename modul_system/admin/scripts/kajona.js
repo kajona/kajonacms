@@ -354,12 +354,13 @@ KAJONA.admin.loader.loadImagecropperBase = function(objCallback, arrAdditionalFi
 
 KAJONA.admin.loader.loadDialogBase = function(objCallback, arrAdditionalFiles) {
 	var arrCustomFiles = [
-	    KAJONA_WEBPATH + "/admin/scripts/yui/container/container-min.js"
+	    KAJONA_WEBPATH + "/admin/scripts/yui/container/container-min.js",
+	    KAJONA_WEBPATH+"/admin/scripts/yui/resize/resize-min.js"
 	];
 	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
 		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
 	}
-	this.load(null, arrCustomFiles, objCallback);
+	this.load([ "container", "element", "dragdrop" ], arrCustomFiles, objCallback);
 };
 
 KAJONA.admin.loader.loadTreeviewBase = function(objCallback, arrAdditionalFiles) {
@@ -484,23 +485,61 @@ KAJONA.admin.tooltip = (function() {
 }());
 
 /**
- * holds CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderviewSelectCallback()
- * so we don't have to pass through the param with all requests
+ * Folderview functions
  */
-KAJONA.admin.folderviewSelectCallbackCKEditorFuncNum = 0;
+KAJONA.admin.folderview = {
+	/**
+	 * holds a reference to the ModalDialog
+	 */
+	dialog: undefined,
+	
+	/**
+	 * holds CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.fillFormFields()
+	 * so we don't have to pass through the param with all requests
+	 */
+	selectCallbackCKEditorFuncNum: 0,
 
-/**
- * called when the user selects an page/folder/file out of a folderview popup
- */
-KAJONA.admin.folderviewSelectCallback = function(arrTargetsValues) {
-	for (var i in arrTargetsValues) {
-    	if (arrTargetsValues[i][0] == "ckeditor") {
-    		CKEDITOR.tools.callFunction(this.folderviewSelectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
-    	} else {
-    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
-    	}
+	/**
+	 * To be called when the user selects an page/folder/file out of a folderview dialog/popup
+	 * Detects if the folderview is embedded in a dialog or popup to find the right context
+	 */
+	selectCallback: function (arrTargetsValues) {
+		if (window.opener) {
+			window.opener.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
+		} else if (parent) {
+			parent.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
+		}
+		this.close();
+	},
+	
+	/**
+	 * fills the form fields with the selected values
+	 */
+	fillFormFields: function (arrTargetsValues) {	
+		for (var i in arrTargetsValues) {
+	    	if (arrTargetsValues[i][0] == "ckeditor") {
+	    		CKEDITOR.tools.callFunction(this.selectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
+	    	} else {
+	    		YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
+	    	}
+		}
+	},
+	
+	/**
+	 * fills the form fields with the selected values
+	 */
+	close: function () {	
+		if (window.opener) {
+			window.close();
+		} else if (parent) {
+			var context = parent.KAJONA.admin.folderview;
+			context.dialog.hide();
+			context.dialog.setContentRaw("");
+		}
 	}
 };
+
+
 
 /**
  * switches the edited language in admin
@@ -711,6 +750,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			modal: true,
 			visible: true
 		});
+		
+		document.getElementById(this.containerId).style.display = "block";
 
 		this.dialog.render(document.body);
 		this.dialog.show();

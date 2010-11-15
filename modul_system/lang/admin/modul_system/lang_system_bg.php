@@ -68,6 +68,7 @@ $lang["errorlevel"]                      = "Ниво грешка";
 $lang["executiontimeout"]                = "Време за изпълнение";
 $lang["fehler_recht"]                    = "Нямата достатъчно права";
 $lang["fehler_setzen"]                   = "Грешка пи запазването на правата";
+$lang["filebrowser"]                     = "Изберете файла";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Заредени разширения";
 $lang["gifread"]                         = "GIF поддръжка за четене";

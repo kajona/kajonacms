@@ -284,7 +284,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                             $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editLanguageset", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_languageset"), "icon_language.gif"));
                         }
                     }
-                    
+
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), getRightsImageAdminName($objOneNews->getSystemid())));
     		   		$strNews .= $this->objToolkit->listRow3($objOneNews->getStrTitle()." (".$objOneNews->getIntHits()." Hits)", $strCenter, $strAction,getImageAdmin("icon_news.gif"), $intI++);
@@ -330,7 +330,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $arrDropdown = array();
                 foreach($arrLanguages as $objOneLanguage)
                     $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
-                
+
                 $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -342,17 +342,17 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_addtolanguage"));
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("languageset_currentlanguage"));
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("lang_".$objLanguage->getStrName() , "languages"));
-                
+
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_maintainlanguages"));
-                
+
                 $arrLanguages = class_modul_languages_language::getAllLanguages();
-                
+
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 $intNrOfUnassigned = 0;
                 $arrMaintainedLanguages = array();
                 foreach($arrLanguages as $objOneLanguage) {
-                    
+
                     $strNewsid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
                     $strActions = "";
                     if($strNewsid != null) {
@@ -366,12 +366,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                         $intNrOfUnassigned++;
                         //$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "addToLanguageset", "&systemid=".$objNews->getSystemid()."&languageid=".$objOneLanguage->getSystemid(), "", $this->getText("languageset_assign"), "icon_pencil.gif"));
                         $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName() , "languages").": ".$this->getText("languageset_news_na"), $strActions, $intI++);
-                    }    
-                    
+                    }
+
                 }
-                
+
                 $strReturn .= $this->objToolkit->listFooter();
-                
+
                 //provide a form to add further news-items
                 if($intNrOfUnassigned > 0) {
                     $strReturn .= $this->objToolkit->formHeadline($this->getText("languageset_addnewstolanguage"));
@@ -382,21 +382,21 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     foreach($arrLanguages as $objOneLanguage)
                         if(!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages))
                             $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
-                    
+
                     $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
-                    
-                    
+
+
                     $arrNews = class_modul_news_news::getNewsList();
                     $arrDropdown = array();
                     foreach($arrNews as $objOneNews)
                         if(class_modul_languages_languageset::getLanguagesetForSystemid($objOneNews->getSystemid()) == null)
                             $arrDropdown[$objOneNews->getSystemid()] = $objOneNews->getStrTitle();
-                    
+
                     $strReturn .= $this->objToolkit->formInputDropdown("languageset_news", $arrDropdown, $this->getText("languageset_news"));
-                    
+
                     $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
     				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
-    				$strReturn .= $this->objToolkit->formClose();    
+    				$strReturn .= $this->objToolkit->formClose();
                 }
             }
         }
@@ -405,7 +405,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
         return $strReturn;
     }
-    
+
     private function actionAddNewsToLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             //load the languageset for the current systemid
@@ -416,7 +416,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             }
         }
     }
-    
+
     private function actionAssignToLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
@@ -427,7 +427,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             }
         }
     }
-    
+
     private function actionRemoveFromLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
@@ -558,7 +558,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), "");
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), "");
-                $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), "", "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputFileSelector("news_image", $this->getText("news_image"), "", _filemanager_default_imagesrepoid_);
 
 
                 //and the cats
@@ -587,7 +587,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews->getLockManager()->lockRecord();
 
 			    $arrToolbarEntries = array();
-	            
+
                 //search the languages maintained
                 $objLanguageManager = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
                 if($objLanguageManager != null) {
@@ -616,8 +616,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
-                $strReturn .= $this->objToolkit->formInputText("news_image", $this->getText("news_image"), $objNews->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=news_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-            
+                $strReturn .= $this->objToolkit->formInputFileSelector("news_image", $this->getText("news_image"), $objNews->getStrImage(), _filemanager_default_imagesrepoid_);
+
 
                 //and the cats
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
@@ -765,7 +765,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
-	
+
 
 // --- News Feeds ---------------------------------------------------------------------------------------
 

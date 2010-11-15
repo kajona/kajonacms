@@ -208,7 +208,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				    $strReturn .= $this->objToolkit->getValidationErrors($this);
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -261,7 +261,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $objRepo->getStrPath(), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -569,7 +569,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                         } else {
                             $strValue = _webpath_.$strFolder."/".$arrOneFile["filename"];
                         }
-        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['".$strTargetfield."', '".$strValue."']]); self.close();\">".getImageAdmin("icon_accept.gif"));
+        	   			$strActions .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("useFile")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strTargetfield."', '".$strValue."']]);\">".getImageAdmin("icon_accept.gif"));
 
 			   			// if an image, attach a thumbnail-tooltip
 			   			if ($bitImage) {

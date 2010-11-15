@@ -39,7 +39,7 @@ class class_element_image extends class_element_admin implements interface_admin
 		$strReturn = "";
 		$strReturn .= $this->objToolkit->formInputText("image_title", $this->getText("image_title"), (isset($arrElementData["image_title"]) ? $arrElementData["image_title"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("image_link", $this->getText("image_link"), (isset($arrElementData["image_link"]) ? $arrElementData["image_link"] : "" ));
-		$strReturn .= $this->objToolkit->formInputText("image_image", $this->getText("image_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : "" ), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=image_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputFileSelector("image_image", $this->getText("image_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : "" ), _filemanager_default_imagesrepoid_);
 
 		$strXY = $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
 		$strXY .= $this->objToolkit->formInputText("image_x", $this->getText("image_x"), (isset($arrElementData["image_x"]) ? $arrElementData["image_x"] : "" ));

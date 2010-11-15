@@ -68,6 +68,7 @@ $lang["errorlevel"]                      = "Erro de nível";
 $lang["executiontimeout"]                = "Tempo de execução terminado";
 $lang["fehler_recht"]                    = "Não tem permissões suficientes para executar esta acção";
 $lang["fehler_setzen"]                   = "Erro a guardar permissões";
+$lang["filebrowser"]                     = "Escolha o arquivo";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Extensões carregadas";
 $lang["gifread"]                         = "Suporte de Leitura GIF";

@@ -340,7 +340,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFile", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("datei_bearbeiten"), "icon_pencil.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
 				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
-				   		
+
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getType() == 0)
@@ -407,7 +407,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
                 $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $this->getParam("archive_title"));
-                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $this->getParam("archive_path"), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $this->getParam("archive_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -426,7 +426,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->getValidationErrors($this);
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
                 $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $objArchive->getTitle());
-                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $objArchive->getPath(), "inputText", getLinkAdminPopup("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("archive_path"), $objArchive->getPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));

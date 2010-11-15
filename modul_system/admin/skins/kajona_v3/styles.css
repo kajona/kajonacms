@@ -95,7 +95,8 @@ body.login {
 }
 
 body.folderView {
-	margin: 15px;
+	margin: 8px;
+	background-image: none;
 }
 
 body.portalEditor {
@@ -742,12 +743,11 @@ h3 {
 
 .adminListRow1 .image, .adminListRow2 .image {
 	padding-left: 2px;
-	padding-right: 3px;
 }
 
 .adminListRow1 .title, .adminListRow2 .title {
 	width: 100%;
-    padding-left: 2px;
+    padding-left: 5px;
 	padding-right: 5px;
     line-height: 22px;
     vertical-align: top;
@@ -1534,4 +1534,76 @@ div.percentBeam {
 
 a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
     text-decoration: none;
+}
+
+
+/* FOLDERVIEW DIALOG */
+.folderviewDialog {
+    display: none;
+    position: absolute;
+    width: 510px;
+    outline: none;
+    -webkit-box-shadow: 0 0 60px -10px #000000;
+    -moz-box-shadow: 0 0 60px -10px #000000;
+    box-shadow: 0 0 60px -10px #000000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    /* background: url(loading.gif) center center no-repeat #ffffff; */ /* Disabled due to heavy CPU consumption in FF */
+    text-align: left;
+    border: 1px solid #d0d0d0 !important;
+}
+
+.folderviewDialog .hd {
+    background-color: #C4F3C4;
+    height: 17px;
+    -webkit-border-radius: 5px 5px 0 0;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 11px;
+    padding-top: 3px;
+}
+
+.folderviewDialog .hd .close {
+    right: 0;
+    top: 0;
+    position: absolute;
+    font-weight: bold;
+}
+
+.folderviewDialog .hd .close a {
+    display: block;
+    padding: 3px 6px 3px 6px;
+}
+
+.folderviewDialog .bd {
+    padding: 5px 10px 10px 10px;
+    height: 460px;
+}
+
+.folderviewDialog .bd iframe {
+    border: none;
+}
+
+.folderviewDialog .yui-resize-handle-br {
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    background-image: url(../../scripts/yui/resize/assets/skins/sam/layout_sprite.png);
+    background-repeat: no-repeat;
+    background-position: -22px -62px;
+    cursor: se-resize;
+}
+
+#folderviewDialog_c.hide-scrollbars .yui-resize .bd {
+    overflow: hidden;
+}
+
+#folderviewDialog_c.show-scrollbars .yui-resize .bd {
+    overflow: auto;
 }

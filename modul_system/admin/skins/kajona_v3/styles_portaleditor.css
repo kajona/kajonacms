@@ -182,8 +182,7 @@
 
 /* DIALOG */
 .peDialog {
-    display: block;
-    visibility: hidden;
+    display: none;
     position: absolute;
     width: 690px;
     outline: none;
@@ -193,7 +192,8 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background: url(loading.gif) center center no-repeat #ffffff;
+    background-color: #ffffff;
+    /* background: url(loading.gif) center center no-repeat #ffffff; */ /* Disabled due to heavy CPU consumption in FF */
     text-align: left;
     border: 1px solid #d0d0d0 !important;
 }

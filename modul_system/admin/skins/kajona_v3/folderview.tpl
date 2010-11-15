@@ -13,11 +13,13 @@
 	<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
 	<script type="text/javascript">
         KAJONA.admin.loader.loadAjaxBase();
-	</script>
+        YAHOO.util.Event.onDOMReady(function() {
+            new YAHOO.util.KeyListener(document, { keys:27 }, KAJONA.admin.folderview.close).enable();
+        });
+    </script>
 </head>
 <body class="folderView">
 
-<h1>%%moduletitle%%</h1>
 %%content%%
 
 </body>

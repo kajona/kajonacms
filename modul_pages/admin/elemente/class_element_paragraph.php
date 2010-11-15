@@ -46,7 +46,7 @@ class class_element_paragraph extends class_element_admin implements interface_a
 
 		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("paragraph_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 		$strReturn .= $this->objToolkit->formWysiwygEditor("paragraph_content", $this->getText("paragraph_content"), (isset($arrElementData["paragraph_content"]) ? $arrElementData["paragraph_content"] : ""));
-		$strReturn .= $this->objToolkit->formInputText("paragraph_image", $this->getText("paragraph_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=paragraph_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+		$strReturn .= $this->objToolkit->formInputFileSelector("paragraph_image", $this->getText("paragraph_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""), _filemanager_default_imagesrepoid_);
 		$strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getText("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
 
         //load templates

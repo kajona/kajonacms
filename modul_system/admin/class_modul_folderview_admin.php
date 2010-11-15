@@ -100,10 +100,10 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         if($strAction == "browserChooser")
             $strReturn = $this->browserChooser();
 
-        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderviewSelectCallback()
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
 	    if ($this->getParam("CKEditorFuncNum") != "") {
-            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderviewSelectCallbackCKEditorFuncNum = ".$this->getParam("CKEditorFuncNum")."</script>";
+            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
 
 		$this->strOutput = $strReturn;
@@ -167,7 +167,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 			$bitHit = true;
 			foreach($arrContent["folders"] as $strFolderCur) {
 				$strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "folderList", "&folder=".$strFolder."/".$strFolderCur."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFiles."&form_element=".$strFormElement, $this->getText("ordner_oeffnen"), $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
-				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onClick=\"window.opener.document.getElementById('".$strFormElement."').value='".$strFolder."/".$strFolderCur."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
 				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif", "Ordner"), $strFolderCur, $strAction, $intCounter++);
 			}
 		}
@@ -206,7 +206,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		if(!$bitPages || $strLevelUp != "") {
 			$strAction = $this->objToolkit->listButton(($strFolder != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$strLevelUp.($bitPages ? "&pages=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getText("ordner_hoch"), $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif") :  "" );
 			if($strFolder == $this->getModuleSystemid("pages") && !$bitPages)
-				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['ordnerid', '".$this->getModuleSystemid("pages")."'], ['".$strElement."', '']]); self.close();\">".getImageAdmin("icon_accept.gif"));
+				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['ordnerid', '".$this->getModuleSystemid("pages")."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
 
 			$strReturn .= $this->objToolkit->listRow2("..", $strAction, $intCounter++);
 		}
@@ -215,12 +215,12 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 			foreach($arrFolder as $objSingleFolder) {
 				if($bitPages) {
 					$strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$objSingleFolder->getSystemid()."&pages=1&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : "")."", $this->getText("ordner_oeffnen"), $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
-					$strReturn .= $this->objToolkit->listRow2($objSingleFolder->getStrName(), $strAction, $intCounter++);
+					$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strAction, $intCounter++);
 				}
 				else {
 				    $strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$objSingleFolder->getSystemid()."&form_element=".$strElement, $this->getText("ordner_oeffnen"), $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
-					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['ordnerid', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); self.close(); \">".getImageAdmin("icon_accept.gif"));
-					$strReturn .= $this->objToolkit->listRow2($objSingleFolder->getStrName(), $strAction, $intCounter++);
+					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['ordnerid', '".$objSingleFolder->getSystemid()."'], ['".$strElement."', '".$objSingleFolder->getStrName()."']]); \">".getImageAdmin("icon_accept.gif"));
+					$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strAction, $intCounter++);
 				}
 			}
 
@@ -241,8 +241,8 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 						$arrSinglePage["name2"] = $objSinglePage->getStrName();
 
 					$strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$strFolder."&form_element=".$strElement."&pageid=".$objSinglePage->getSystemid().($this->getParam("bit_link")  != "" ? "&bit_link=1" : "").($bitPages ? "&pages=1" : ""), $this->getText("seite_oeffnen"), $this->getText("seite_oeffnen"), "icon_folderActionOpen.gif"));
-					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]); self.close();\">".getImageAdmin("icon_accept.gif")."</a>");
-					$strReturn .= $this->objToolkit->listRow2($objSinglePage->getStrName(), $strAction, $intCounter++);
+					$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+					$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objSinglePage->getStrName(), $strAction, $intCounter++);
 				}
 				$strReturn .= $this->objToolkit->listFooter();
 			}
@@ -263,7 +263,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 					else
 						$arrSinglePage["name2"] = $objPage->getStrName()."#".$objOnePageelement->getSystemid();
 
-					$strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"window.opener.KAJONA.admin.folderviewSelectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]); self.close();\">".getImageAdmin("icon_accept.gif")."</a>");
+					$strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("seite_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."', '".$arrSinglePage["name2"]."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
 					$strReturn .= $this->objToolkit->listRow2($objOnePageelement->getStrTitle()." (".$objOnePageelement->getStrName().")", $strAction, $intCounter++);
                 }
                 $strReturn .= $this->objToolkit->listFooter();
@@ -286,7 +286,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 
 		$strReturn .= $this->objToolkit->listHeader();
 		foreach($arrNavis as $objOnenavigation) {
-		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onClick=\"window.opener.document.getElementById('navigation_name').value='".$objOnenavigation->getStrName()."'; window.opener.document.getElementById('navigation_id').value='".$objOnenavigation->getSystemid()."'; self.close(); \">".getImageAdmin("icon_accept.gif"));
+		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['navigation_name', '".$objOnenavigation->getStrName()."'], ['navigation_id', '".$objOnenavigation->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
 			$strReturn .= $this->objToolkit->listRow2($objOnenavigation->getStrName(), $strAction, $intCounter++);
 		}
         $strReturn .= $this->objToolkit->listFooter();

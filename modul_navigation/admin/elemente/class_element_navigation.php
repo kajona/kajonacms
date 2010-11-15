@@ -51,7 +51,7 @@ class class_element_navigation extends class_element_admin implements interface_
 		  $strNaviName = "";
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $strNaviName, "inputText", getLinkAdminPopup("folderview", "navigationBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);
+		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $strNaviName, "inputText", getLinkAdminDialog("folderview", "navigationBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
@@ -67,7 +67,7 @@ class class_element_navigation extends class_element_admin implements interface_
             $this->addOptionalFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
         else
             $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
-        
+
         //and finally offer the different modes
         $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));
         $strReturn .= $this->objToolkit->formInputDropdown("navigation_mode", $arrModes, $this->getText("navigation_mode"), (isset($arrElementData["navigation_mode"]) ? $arrElementData["navigation_mode"] : "" ));

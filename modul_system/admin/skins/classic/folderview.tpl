@@ -10,6 +10,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">
     KAJONA.admin.loader.loadAjaxBase();
+    YAHOO.util.Event.onDOMReady(function() {
+        new YAHOO.util.KeyListener(document, { keys:27 }, KAJONA.admin.folderview.close).enable();
+    });
 </script>
 </head>
 

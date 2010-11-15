@@ -444,11 +444,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 				    $objFolder = new class_modul_pages_folder($objPage->getPrevId());
 					$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder->getSystemid());
-					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);
+					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
 				}
 				else {
 					$strReturn .= $this->objToolkit->formInputHidden("ordnerid", "");
-					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), "", "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 				}
 				//Load the available templates
 				//If set on, the dropdown could be disabled
@@ -497,7 +497,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				    $strFolder = $objFolder->getStrName();
 				}
 
-				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
@@ -716,11 +716,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if($objFolder->getPrevId() != $this->getModuleSystemid("pages")) {
 			    $objFolder2 = new class_modul_pages_folder($objFolder->getPrevId());
 				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder2->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"), true);
+				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
 			}
 			else {
 				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", "");
-				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminPopup("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			}
 
 

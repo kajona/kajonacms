@@ -448,6 +448,8 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			visible: true
 		});
 
+		document.getElementById(this.containerId).style.display = "block";
+		
 		this.dialog.render(document.body);
 		this.dialog.show();
 		this.dialog.focusLast();

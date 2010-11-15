@@ -68,6 +68,7 @@ $lang["errorlevel"]                      = "Ошибка уровня";
 $lang["executiontimeout"]                = "Истечение срока совершения действия";
 $lang["fehler_recht"]                    = "Недостаточно прав для совершения этого действия";
 $lang["fehler_setzen"]                   = "Ошибка при сохранении прав";
+$lang["filebrowser"]                     = "Выбрать файл";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Расширения загружены";
 $lang["gifread"]                         = "Поддержка чтения GIF";

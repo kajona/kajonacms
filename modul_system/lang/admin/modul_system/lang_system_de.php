@@ -73,6 +73,7 @@ $lang["errorlevel"]                      = "Error Level";
 $lang["executiontimeout"]                = "Execution Timeout";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["fehler_setzen"]                   = "Fehler beim Speichern der Rechte";
+$lang["filebrowser"]                     = "Datei auswählen";
 $lang["gd"]                              = "GD-Lib";
 $lang["geladeneerweiterungen"]           = "Geladene Erweiterungen";
 $lang["gifread"]                         = "GIF Read Support";

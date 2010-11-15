@@ -306,16 +306,13 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = $strValue;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminPopup("folderview",
+        $arrTemplate["opener"] = getLinkAdminDialog("folderview",
                                                    "pagesFolderBrowser",
                                                    "&pages=1&form_element=".$strName,
-                                                   class_carrier::getInstance()->getObjText()->getText("browser", "system", "admin"),
-                                                   class_carrier::getInstance()->getObjText()->getText("browser", "system", "admin"),
+                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
+                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
                                                    "icon_externalBrowser.gif",
-                                                   500,
-                                                   500,
-                                                   "ordneransicht");
-
+                                                   class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"));
 
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
@@ -340,6 +337,30 @@ class class_toolkit_admin extends class_toolkit {
         ";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
+
+   /**
+     * Returns a regular text-input field with a file browser button.
+     * Use $strRepositoryId to set a specific filemanager repository id
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strValue
+     * @param string $strRepositoryId
+     * @param string $strClass
+     * @return string
+     * @since 3.3.4
+     */
+    public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "inputText") {
+        $strOpener = getLinkAdminDialog("folderview",
+										"list",
+										"&form_element=".$strName."&systemid=".$strRepositoryId,
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										"icon_externalBrowser.gif",
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"));
+
+        return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
 
     /**

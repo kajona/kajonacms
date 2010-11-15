@@ -313,8 +313,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"));
-                $strReturn .= $this->objToolkit->formInputText("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"), "inputText", getLinkAdminPopup("folderview", "list", "&bit_link=1&form_element=navigation_page_e&systemid="._filemanager_default_filesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-                $strReturn .= $this->objToolkit->formInputText("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=navigation_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"), _filemanager_default_filesrepoid_);
+                $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), _filemanager_default_imagesrepoid_);
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $this->getParam("navigation_target"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -336,8 +336,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $objPoint->getStrName());
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $objPoint->getStrPageI() );
-                $strReturn .= $this->objToolkit->formInputText("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE(), "inputText", getLinkAdminPopup("folderview", "list", "&bit_link=1&form_element=navigation_page_e&systemid="._filemanager_default_filesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
-                $strReturn .= $this->objToolkit->formInputText("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage(), "inputText", getLinkAdminPopup("folderview", "list", "&form_element=navigation_image&systemid="._filemanager_default_imagesrepoid_, $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", 500, 500, "ordneransicht"));
+                $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE(), _filemanager_default_filesrepoid_);
+                $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage(), _filemanager_default_imagesrepoid_);
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $objPoint->getStrTarget());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
