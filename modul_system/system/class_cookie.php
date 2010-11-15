@@ -38,7 +38,10 @@ class class_cookie {
 	    //cookie is 30 days valid
 	    if($intTime == 0)
 	       $intTime = time()+60*60*24*30;
-	    return setcookie($strName, $strValue, $intTime);
+
+        $strPath = _webpath_;
+
+	    return setcookie($strName, $strValue, $intTime, $strPath);
 	}
 
 	/**
