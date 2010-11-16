@@ -172,6 +172,13 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $objSystemWidget4->setStrClass("class_adminwidget_systemcheck");
         $objSystemWidget4->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
 
+        $objSystemWidget5 = null;
+        if(class_exists("class_adminwidget_lastmodifiedpages")) {
+            $objSystemWidget5 = new class_modul_system_adminwidget();
+            $objSystemWidget5->setStrClass("class_adminwidget_lastmodifiedpages");
+            $objSystemWidget5->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"4\";}");
+        }
+
         //and save the widget itself
         if($objSystemWidget1->updateObjectToDb()) {
             $strWidgetId = $objSystemWidget1->getSystemid();
@@ -214,6 +221,18 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             //and save the dashboard-entry
             $objDashboard = new class_modul_dashboard_widget();
             $objDashboard->setStrColumn("column3");
+            $objDashboard->setStrUser($strUserid);
+            $objDashboard->setStrWidgetId($strWidgetId);
+            if(!$objDashboard->updateObjectToDb())
+                $bitReturn = false;
+        }
+
+        //and save the widget itself
+        if($objSystemWidget5 != null && $objSystemWidget5->updateObjectToDb()) {
+            $strWidgetId = $objSystemWidget5->getSystemid();
+            //and save the dashboard-entry
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
             if(!$objDashboard->updateObjectToDb())
