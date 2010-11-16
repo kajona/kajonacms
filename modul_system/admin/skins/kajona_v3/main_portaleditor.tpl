@@ -25,5 +25,18 @@
     <img src="_skinwebpath_/loading.gif" alt="" title="" />
 </div>
 
+<div class="folderviewDialog" id="folderviewDialog">
+    <div class="hd"><span id="folderviewDialog_title">BROWSER</span><div class="close"><a href="#" onclick="KAJONA.admin.folderview.dialog.hide(); KAJONA.admin.folderview.dialog.setContentRaw(''); return false;">X</a></div></div>
+    <div class="bd" id="folderviewDialog_content">
+        <!-- filled by js -->
+    </div>
+</div>
+
+<script type="text/javascript">
+    KAJONA.admin.loader.loadDialogBase(function() {
+        KAJONA.admin.folderview.dialog = new KAJONA.admin.ModalDialog('folderviewDialog', 0, true, true);
+    });
+</script>
+
 </body>
 </html>
