@@ -68,7 +68,6 @@ class class_db {
 		$strDriver = $this->objConfig->getConfig("dbdriver");
 		if($strDriver != "%%defaultdriver%%") {
     		//build a class-name & include the driver
-    		$strFilename = "class_db_".$strDriver.".php";
     		$strClassname = "class_db_".$strDriver;
     		$this->objDbDriver = new $strClassname();
 
@@ -226,8 +225,8 @@ class class_db {
 		    }
 		}
 
+        $strQueryMd5 = md5($strQuery);
 		if($bitCache) {
-			$strQueryMd5 = md5($strQuery);
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
 				//Increasing Cache counter
 				$this->intNumberCache++;
@@ -235,7 +234,6 @@ class class_db {
 			}
 		}
 
-		$intCounter = 0;
 		$arrReturn = array();
 
 		if(_dblog_)
@@ -277,8 +275,7 @@ class class_db {
             $intEnd = 0;
         //process query
         $strQuery = $this->processQuery($strQuery);
-        //generate a hash-value
-        $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd);
+        
         //Increasing global counter
 		$this->intNumber++;
 
@@ -288,6 +285,8 @@ class class_db {
 		    }
 		}
 
+        //generate a hash-value
+        $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd);
 		if($bitCache) {
 			if(isset($this->arrQueryCache[$strQueryMd5])) {
 				//Increasing Cache counter
@@ -481,6 +480,7 @@ class class_db {
             if(defined("_system_use_dbcache_") && _system_use_dbcache_ == "false")
                 $bitCache = false;
 
+            $arrTemp = array();
             if($bitCache) {
                 if(isset($this->arrQueryCache[$strQueryMd5])) {
                     //Increasing Cache counter
@@ -701,7 +701,8 @@ class class_db {
 	 * @return string
 	 */
 	private function processQuery($strQuery) {
-		$strQuery = trim($strQuery);
+
+        $strQuery = trim($strQuery);
     	$arrSearch = array(		    "\r\n",
     								"\n",
     								"\r",
@@ -709,7 +710,7 @@ class class_db {
     								"    ",
     								"   ",
     								"  ");
-		$arrReplace = array(		""	,
+		$arrReplace = array(		"",
 									"",
 									"",
 									" ",
