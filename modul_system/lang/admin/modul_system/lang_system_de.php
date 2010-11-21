@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 316
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -99,6 +99,7 @@ $lang["installer_given"]                 = "vorhanden";
 $lang["installer_install"]               = "Installieren";
 $lang["installer_installpe"]             = "Seitenelemente installieren";
 $lang["installer_loaded"]                = "geladen";
+$lang["installer_login_email"]           = "E-Mail:";
 $lang["installer_login_installed"]       = "<br />Das System wurde bereits mit einem Admin-Benutzer installiert.<br />";
 $lang["installer_login_intro"]           = "<b>Admin-Benutzer einrichten</b><br /><br />Bitte geben Sie hier einen Benutzernamen und ein Passwort an.<br />Diese Daten werden später als Zugang zur Administration verwendet.<br />Aus Sicherheitsgründen sollten Sie Benutzernamen wie \"admin\" oder \"administrator\" vermeiden.<br /><br />";
 $lang["installer_login_password"]        = "Passwort:";

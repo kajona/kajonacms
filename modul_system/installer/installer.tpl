@@ -81,8 +81,8 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 <div><label for="dbname">%%config_dbname%%</label><input type="text" name="dbname" id="dbname" class="inputText" /></div><br />
 <div><label for="dbprefix">%%config_prefix%%</label><input type="text" name="dbprefix" id="dbprefix" value="kajona_" class="inputText" /></div><br />
 <div><label for="driver">%%config_driver%%</label><select name="driver" id="driver" class="inputDropdown">
-                <option value="mysql" selected="selected">mysql</option>
-                <option value="mysqli">mysqli</option>
+                <option value="mysql">mysql</option>
+                <option value="mysqli" selected="selected">mysqli</option>
                 <option value="postgres">postgres</option>
                 <option value="sqlite3">sqlite 3</option>
                 <option value="sqlite">sqlite 2</option>
@@ -100,6 +100,7 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 <input type="hidden" name="write" value="true" />
 <div><label for="username">%%login_username%%</label><input type="text" name="username" id="username" class="inputText" /></div><br />
 <div><label for="password">%%login_password%%</label><input type="password" name="password" id="password" class="inputText" /></div><br />
+<div><label for="email">%%login_email%%</label><input type="text" name="email" id="email" class="inputText" /></div><br />
 <div><label for="submit"></label><input type="submit" value="%%login_save%%" class="inputSubmit" /></div><br />
 </form>
 </loginwizard_form>

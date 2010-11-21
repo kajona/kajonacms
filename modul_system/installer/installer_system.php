@@ -365,7 +365,7 @@ class class_installer_system extends class_installer_base implements interface_i
         //Filemanger settings
         $this->registerConstant("_filemanager_foldersize_", "true", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         //Email to send error-reports
-	    $this->registerConstant("_system_admin_email_", "", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+	    $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
 	    //3.0.1: gzip-compression
 	    $this->registerConstant("_system_output_gzip_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
@@ -432,10 +432,12 @@ class class_installer_system extends class_installer_base implements interface_i
 		   {
             $strUsername = dbsafeString($this->objSession->getSession("install_username"));
             $strPassword = dbsafeString($this->objSession->getSession("install_password"));
+            $strEmail = dbsafeString($this->objSession->getSession("install_email"));
 		}
 		else {
             $strUsername = "admin";
             $strPassword = "kajona";
+            $strEmail = "";
 		}
 
 		//the admin-language
@@ -443,8 +445,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		$strUserID = generateSystemid();
 		$strQuery = "INSERT INTO "._dbprefix_."user
-						(user_id, user_username, user_pass, user_admin, user_active, user_admin_language) VALUES
-						('".$strUserID."', '".$strUsername."', '".$this->objSession->encryptPassword($strPassword)."', 1, 1, '".dbsafeString($strAdminLanguage)."')";
+						(user_id, user_username, user_pass, user_email, user_admin, user_active, user_admin_language) VALUES
+						('".$strUserID."', '".$strUsername."', '".$this->objSession->encryptPassword($strPassword)."', '".$strEmail."', 1, 1, '".dbsafeString($strAdminLanguage)."')";
 		$this->objDB->_query($strQuery);
 		$strReturn .= "Created User Admin: <strong>Username: ".$strUsername.", Password: ***********</strong> ...\n";
 		//The Admin should belong to the admin-Group

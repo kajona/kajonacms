@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 316
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -94,6 +94,7 @@ $lang["installer_given"]                 = "дадени";
 $lang["installer_install"]               = "Инсталирай";
 $lang["installer_installpe"]             = "Инсталирай елементи към страниците";
 $lang["installer_loaded"]                = "Заредени";
+$lang["installer_login_email"]           = "Електорнна поща:";
 $lang["installer_login_installed"]       = "<br />Системата вече е инсталирана и админ акаунт съществува .<br />";
 $lang["installer_login_intro"]           = "<b>Създай админ-потребителя</b><br /><br />Моля посочете потребителско име и парола.<br />Избраните потребителско име и парола ще бъдат ползвани за вписване в системата.<br />От съображение за сигурност, потребителски имена като \"admin\" или \"administrator\" трябва да бъдат избягвани.<br /><br />";
 $lang["installer_login_password"]        = "Парола:";

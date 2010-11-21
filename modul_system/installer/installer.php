@@ -259,11 +259,13 @@ class class_installer {
 	    if(isset($_POST["write"]) && $_POST["write"] == "true") {
             $strUsername = $_POST["username"];
             $strPassword = $_POST["password"];
+            $strEmail = $_POST["email"];
             //save to session
-            if($strUsername != "" && $strPassword != "") {
+            if($strUsername != "" && $strPassword != "" && checkEmailaddress($strEmail)) {
                 $bitShowForm = false;
                 $this->objSession->setSession("install_username", $strUsername);
                 $this->objSession->setSession("install_password", $strPassword);
+                $this->objSession->setSession("install_email", $strEmail);
                 header("Location: "._webpath_."/installer/installer.php?step=install");
             }
 	    }
@@ -272,6 +274,7 @@ class class_installer {
 	        $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "loginwizard_form", true);
 	        $this->strOutput .= $this->objTemplates->fillTemplate(array("login_username" => $this->getText("installer_login_username"),
 	                                                                    "login_password" => $this->getText("installer_login_password"),
+	                                                                    "login_email" => $this->getText("installer_login_email"),
 	                                                                    "login_save" => $this->getText("installer_login_save")
 	                                                              ), $strTemplateID);
 	    }

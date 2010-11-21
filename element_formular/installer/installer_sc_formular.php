@@ -49,7 +49,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_formular
                         SET formular_class = 'class_formular_kontakt.php',
-                            formular_email = 'info@kajona.de',
+                            formular_email = '"._system_admin_email_."',
                             formular_template = 'contact.tpl',
                             formular_error = 'Es ist ein Fehler aufgetreten.',
                             formular_success = 'Vielen Dank für die Nachricht!'
@@ -58,7 +58,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         else {
             $strQuery = "UPDATE "._dbprefix_."element_formular
                         SET formular_class = 'class_formular_kontakt.php',
-                            formular_email = 'info@kajona.de',
+                            formular_email = '"._system_admin_email_."',
                             formular_template = 'contact.tpl',
                             formular_error = 'An error occured.',
                             formular_success = 'Thank you for your message.'
@@ -102,7 +102,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         if($this->strContentLanguage == "de") {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                             SET paragraph_title = '',
-                                paragraph_content ='Hinweis: Das Formular sendet per default die Anfragen an info @ kajona.de.<br />
+                                paragraph_content ='Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
                                                     Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />',
                                 paragraph_image = ''
                             WHERE content_id = '".dbsafeString($strElementId)."'";
@@ -110,7 +110,7 @@ class class_installer_sc_formular implements interface_sc_installer  {
         else {
             $strQuery = "UPDATE "._dbprefix_."element_paragraph
                                 SET paragraph_title = '',
-                                    paragraph_content ='Note: By default, the form sends the messages to info @ kajona.de.<br />
+                                    paragraph_content ='Note: By default, the form sends the messages to the administators email-address.<br />
                                                               To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />',
                                     paragraph_image = ''
                                 WHERE content_id = '".dbsafeString($strElementId)."'";
