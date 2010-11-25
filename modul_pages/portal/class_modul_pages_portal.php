@@ -33,6 +33,7 @@ class class_modul_pages_portal extends class_portal {
 	 *
 	 */
 	public function generatePage() {
+
 		//Determin the pagename
 		$strPagename = $this->getPagename();
 
@@ -48,15 +49,7 @@ class class_modul_pages_portal extends class_portal {
 		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
 			$bitErrorpage = false;
 
-        //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
-		//the system could frighten your cat or eat up all your cheese with marshmellows...
-		$bitPeRequested = false;
-        if(_pages_portaleditor_ == "true" && $this->objSession->isAdmin()) {
-		    //Load the data of the page
-		    if($objPageData->rightEdit()) {
-		        $bitPeRequested = true;
-		    }
-		}
+       
 
 		//check, if the template could be loaded
 		try {
@@ -119,6 +112,14 @@ class class_modul_pages_portal extends class_portal {
         if($this->getParam("pe") == "true") {
             $this->objSession->setSession("pe_disable", "false");
         }
+
+        //if using the pe, the cache shouldn't be used, otherwise strange things might happen.
+		//the system could frighten your cat or eat up all your cheese with marshmellows...
+        //get the current state of the portal editor
+		$bitPeRequested = false;
+        if(_pages_portaleditor_ == "true" && $this->objSession->getSession("pe_disable") != "true" && $this->objSession->isAdmin() && $objPageData->rightEdit()) {
+            $bitPeRequested = true;
+		}
 
 		//If we reached up till here, we can begin loading the elements to fill
 		$arrElementsOnPage = array();
@@ -233,7 +234,7 @@ class class_modul_pages_portal extends class_portal {
 		}
 
         //pe-code to add new elements on unfilled placeholders --> only if pe is visible?
-        if(_pages_portaleditor_ == "true" && $this->objSession->getSession("pe_disable") != "true" && $objPageData->rightEdit() && $this->objSession->isAdmin() ) {
+        if( $bitPeRequested ) {
             //loop placeholders on template in order to remove already filled ones not being repeatable
             $arrRawPlaceholdersForPe = $arrRawPlaceholders;
             foreach($arrPlaceholdersFilled as $arrOnePlaceholder) {
