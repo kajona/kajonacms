@@ -128,6 +128,12 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                         document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=o.responseText.substr(
                                           intStart, o.responseText.indexOf(\"]]\")-intStart
                                         );
+                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
+                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
+                                            document.getElementById(\"p_widget_%%widget_id%%\").innerHTML=o.responseText.substr(
+                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                            );
+                                        }
                                     },
                                     failure : function(o) {
                                         KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
