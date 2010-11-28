@@ -772,6 +772,9 @@ abstract class class_root {
 				$this->objDB->_query($strQuery);
 			}
 		}
+
+        //flush the cache
+        $this->flushCompletePagesCache();
 	}
 
 	/**
@@ -869,6 +872,9 @@ abstract class class_root {
 				}
 			}
 		}
+
+        //flush the cache
+        $this->flushCompletePagesCache();
 	}
 
 
@@ -971,6 +977,8 @@ abstract class class_root {
 		    class_logger::getInstance()->addLogRow("deletion of system-record with id ".$strSystemid." failed", class_logger::$levelWarning);
 		}
 
+        //flush the cache
+        $this->flushCompletePagesCache();
 
 		return $bitResult;
 	}
