@@ -232,7 +232,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	            }
 	            else {
 	            	//no dbsafestring here, otherwise contents may be double-encoded...
-	                $strQuery .= "'".$arrContentRow[$arrOneColumn["columnName"]]."',";
+	                $strQuery .= "'".dbsafeString($arrContentRow[$arrOneColumn["columnName"]], false)."',";
 	            }
 	        }
 	        $strQuery = uniSubstr($strQuery, 0, -1);
