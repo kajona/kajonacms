@@ -543,14 +543,14 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
-            $arrTemplate = array();
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
-            if($strKey == $strKeySelected)
+            if((string)$strKey == (string)$strKeySelected)
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionSelectedID);
             else
                 $strOptions .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateOptionID);
         }
+
         $arrTemplate = array();
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown");
         $arrTemplate["name"] = $strName;
