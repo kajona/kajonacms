@@ -29,12 +29,13 @@ class class_copy2project {
     private $strCopyLog = "";
     private $strCopyWarnings = "";
 
+    private $bitDebug = "true";
+
 
 
     public function  __construct() {
         $this->strBasePath = dirname(__FILE__);
-
-        
+        $this->bitDebug = isset($_GET["debug"]) ? $_GET["debug"] : "true";
     }
 
 
@@ -45,14 +46,19 @@ class class_copy2project {
             echo "      If a module overwrites a file already copied by a previous folder, \n";
             echo "      only the last one will be copied back.\n\n";
             echo "init params: \n";
-            echo "  base folder:          ".$this->strBasePath."\n";
-            echo "  system folder:        ".$this->strBasePath."/".$this->strSystemFolderName."\n";
-            echo "  excluded files P2M:   ".implode(", ", $this->arrFileExclusionsP2M)."\n";
-            echo "  excluded folders M2P: ".implode(", ", $this->arrFolderExclusionsM2P)."\n";
-            echo "  logfile:              ".$this->strLogName."\n";
+            echo "  base folder:            ".$this->strBasePath."\n";
+            echo "  system folder:          ".$this->strBasePath."/".$this->strSystemFolderName."\n";
+            echo "  excluded files P2M:     ".implode(", ", $this->arrFileExclusionsP2M)."\n";
+            echo "  excluded folders M2P:   ".implode(", ", $this->arrFolderExclusionsM2P)."\n";
+            echo "  logfile:                ".$this->strLogName."\n";
+            echo "  debug-params enabled:   <b>".($this->bitDebug == "true" ? "Yes" : "No")."</b> ";
+            if($this->bitDebug == "true")
+                echo "<a href=\"copy2project.php?debug=false\">[disable]</a> \n";
+            else
+                echo "<a href=\"copy2project.php?debug=true\">[enable]</a> \n";
 
             echo "<h3>Copy modules 2 project (Down to ./".$this->strSystemFolderName.")</h3>";
-            echo "<a href=\"copy2project.php?action=modules2project\">Copies all files to the subfolder \n".$this->strBasePath." --> ".$this->strBasePath."/".$this->strSystemFolderName."</a>\n";
+            echo "<a href=\"copy2project.php?action=modules2project&debug=".$this->bitDebug."\">Copies all files to the subfolder \n".$this->strBasePath." --> ".$this->strBasePath."/".$this->strSystemFolderName."</a>\n";
             echo "\n<h3>Copy project 2 modules (Up from ./".$this->strSystemFolderName.")</h3>";
             echo "<a href=\"copy2project.php?action=project2modules\">Copies all files from the subfolder into the module-structure \n".$this->strBasePath."/".$this->strSystemFolderName." --> ".$this->strBasePath."</a>\n";
             echo "\n<h3>Check consistency of system-folder (".$this->strSystemFolderName.")</h3>";
@@ -327,16 +333,19 @@ class class_copy2project {
     }
 
     private function updateConfigFile($strConfigFile) {
-        $strContent = file_get_contents($strConfigFile);
-	    $strSearch = "/\[\'debuglevel\'\]\s* = 0/";
-	    $strReplace = "['debuglevel'] = 1";
-	    $strContent = preg_replace($strSearch, $strReplace, $strContent);
 
-	    $strSearch = "/\[\'debuglogging\'\]\s* = 1/";
-	    $strReplace = "['debuglogging'] = 2";
-	    $strContent = preg_replace($strSearch, $strReplace, $strContent);
+        if($this->bitDebug == "true") {
+            $strContent = file_get_contents($strConfigFile);
+            $strSearch = "/\[\'debuglevel\'\]\s* = 0/";
+            $strReplace = "['debuglevel'] = 1";
+            $strContent = preg_replace($strSearch, $strReplace, $strContent);
 
-	    file_put_contents($strConfigFile, $strContent);
+            $strSearch = "/\[\'debuglogging\'\]\s* = 1/";
+            $strReplace = "['debuglogging'] = 2";
+            $strContent = preg_replace($strSearch, $strReplace, $strContent);
+
+            file_put_contents($strConfigFile, $strContent);
+        }
     }
 
 
