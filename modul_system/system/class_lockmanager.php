@@ -55,6 +55,15 @@ class class_lockmanager  {
     }
 
     /**
+     * Checks if the current record is locked, ignoring the locking user-id.
+     *
+     * @return bool
+     */
+    public function isLocked() {
+        return $this->getLockId() != "0";
+    }
+
+    /**
 	 * Unlocks a dataRecord as long as the record is locked by the current one
 	 *
      * @param bool $bitForceUnlock unlocks the record, even if the user is not the owner of the lock. must be an admin therefore!
