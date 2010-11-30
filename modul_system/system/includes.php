@@ -38,7 +38,7 @@
 
 
 //---The Path on web-------------------------------------------------------------------------------------
-	if(strpos($_SERVER['SCRIPT_FILENAME'], "installer.php") || strpos($_SERVER['SCRIPT_FILENAME'], "autotest.php")) {
+	if(strpos($_SERVER['SCRIPT_FILENAME'], "installer.php") || strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
 		//Determing the current path on the web
 		$strWeb = dirname((isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")  ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
