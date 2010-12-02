@@ -1059,6 +1059,19 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
     }
 
+    /**
+     * Renders the login-status and corresponding links
+     * @param array $arrElements
+     * @return string
+     * @since 3.4.0
+     */
+    public function getLoginStatus($arrElements) {
+        //Loading a small login-form
+		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
+		$strReturn = $this->objTemplate->fillTemplate($arrElements, $strTemplateID);
+		return $strReturn;
+    }
+
 /*"*****************************************************************************************************/
 // --- Navigation-Elements ------------------------------------------------------------------------------
 

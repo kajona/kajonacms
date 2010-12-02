@@ -87,10 +87,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 	}
 
 	public function getLoginStatus() {
-		$strReturn = "";
 
-		//Loading a small login-form
-		$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "logout_form");
 		$arrTemplate = array();
 		$arrTemplate["name"] = $this->objSession->getUsername();
 		$arrTemplate["profile"] = getLinkAdminHref("user", "edit", "userid=".$this->objSession->getUserID());
@@ -101,9 +98,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate["logoutTitle"] = $this->getText("login_logoutTitle", "user");
 		$arrTemplate["dashboardTitle"] = $this->getText("login_dashboard", "user");
 
-		$strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
-
-		return $strReturn;
+		return $this->objToolkit->getLoginStatus($arrTemplate);
 	}
 
 	public function actionAdminLogin() {
