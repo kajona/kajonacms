@@ -221,6 +221,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 		//check own JS/CSS files, if they are already loaded or requested
 		if (YAHOO.lang.isArray(arrFiles)) {
 			for (var i = 0; i < arrFiles.length; i++) {
+
 				if (!(arrFiles[i] in arrLoadedModules)) {
 					arrFilesToWaitFor.push(arrFiles[i]);
 					if (!(arrFiles[i] in arrRequestedModules)) {
@@ -253,12 +254,14 @@ KAJONA.util.Loader = function (strScriptBase) {
 					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
 				}
 				for (var i = 0; i < arrFilesToLoad.length; i++) {
-					yuiLoader.addModule( {
+                    
+					yuiLoader.addModule( { 
 						name : arrFilesToLoad[i],
 						type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
 						skinnable : false,
 						fullpath : arrFilesToLoad[i]
 					});
+
 
 					yuiLoader.require(arrFilesToLoad[i]);
 					arrRequestedModules[arrFilesToLoad[i]] = true;
@@ -336,11 +339,13 @@ KAJONA.admin.loader.loadAutocompleteBase = function(objCallback, arrAdditionalFi
 KAJONA.admin.loader.loadCalendarBase = function(objCallback, arrAdditionalFiles) {
 	var arrCustomFiles = [
 	    KAJONA_WEBPATH + "/admin/scripts/yui/calendar/calendar-min.js",
-        KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css",
+        KAJONA_WEBPATH + "/admin/scripts/yui/calendar/assets/calendar.css"
 	];
+    
 	if (!YAHOO.lang.isUndefined(arrAdditionalFiles)) {
 		arrCustomFiles.push(this.convertAdditionalFiles(arrAdditionalFiles));
 	}
+    
 	this.load(null, arrCustomFiles, objCallback);
 };
 
@@ -1727,6 +1732,7 @@ KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContaine
 
 		//show nice loading animation while loading the calendar files
 		YAHOO.util.Dom.addClass(strCalendarContainerId, "loadingContainer");
+       
 		KAJONA.admin.loader.loadCalendarBase(function() {
 	    	KAJONA.admin.calendar.initCalendar(strCalendarId, strCalendarContainerId);
 	    	YAHOO.util.Dom.removeClass(strCalendarContainerId, "loadingContainer");
@@ -1734,7 +1740,7 @@ KAJONA.admin.calendar.showCalendar = function(strCalendarId, strCalendarContaine
 	});
 };
 
-KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContainerId) {	
+KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContainerId) {
 	var calendar = new YAHOO.widget.Calendar(strCalendarContainerId);
 	calendar.cfg.setProperty("WEEKDAYS_SHORT", KAJONA.admin.lang.toolsetCalendarWeekday);
 	calendar.cfg.setProperty("MONTHS_LONG", KAJONA.admin.lang.toolsetCalendarMonth);
@@ -1750,7 +1756,7 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 		document.getElementById(strCalendarId+"_year").value = year;
 		
 		KAJONA.util.fold(strCalendarContainerId);
-		calendar.destroy();
+		calendar.destroy(); 
 	};
 	calendar.selectEvent.unsubscribe(handleSelect, calendar);
 	
