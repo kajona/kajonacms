@@ -27,6 +27,10 @@ echo "+-------------------------------------------------------------------------
 
 if(issetPost("doquery")) {
 	$strQuery = getPost("dbquery");
+
+    if(get_magic_quotes_gpc() == 1)
+        $strQuery = stripslashes($strQuery);
+
 	$objDb = $objCarrier->getObjDB();
 	echo "query to run ".$strQuery."\n";
 
