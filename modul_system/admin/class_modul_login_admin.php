@@ -17,6 +17,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 	private $strTemp;
 
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 			= "modul_user";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _user_modul_id_;
@@ -102,11 +103,6 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 	}
 
 	public function actionAdminLogin() {
-        if($this->objSession->sessionIsset("status"))
-			$this->objSession->setSession("status", "loggedout");
-
-		$this->objSession->sessionUnset("username");
-		$this->objSession->sessionUnset("userid");
 
 		if($this->objSession->login($this->getParam("name"), $this->getParam("passwort"))) {
 		    //user allowed to access admin?

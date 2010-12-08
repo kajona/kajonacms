@@ -185,7 +185,6 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	private function actionSystemInfo() {
 		$strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-    		$arrTemplate = array("php" => "", "webserver" => "", "datenbank" => "", "gd" => "");
 
     		//Phpinfos abhandeln
     		$arrPHP = $this->loadPhpInfos();
