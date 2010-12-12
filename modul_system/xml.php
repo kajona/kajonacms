@@ -112,6 +112,10 @@ class class_xml {
                     }
                 }
             }
+            if($strModule == "login" && _admin_) {
+                $objLogin = new class_modul_login_admin_xml();
+                $strContent = $objLogin->action($strAction);
+            }
 		}
 
 		$strCompleteXML = $this->createXmlOutput($strContent);
