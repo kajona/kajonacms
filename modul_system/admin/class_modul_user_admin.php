@@ -220,10 +220,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     else
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
                 }
-
-                $strCenter = "";
-                if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strCenter .= $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
+                $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
                 $strReturn .= $this->objToolkit->listRow3($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strCenter, $strActions, getImageAdmin("icon_user.gif"), $intI++);
             }
             //And one row to create a new one

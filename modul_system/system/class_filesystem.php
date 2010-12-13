@@ -155,11 +155,8 @@ class class_filesystem {
 		$arrReturn = array();
 		if(is_file($strFile)) {
 			//Filename
-			$intTemp = uniStrrpos($strFile, "/");
-			if($intTemp !== false)
-				$arrReturn["filename"] = uniSubstr($strFile, $intTemp+1);
-			else
-				$arrReturn["filename"] = $strFile;
+		    $arrReturn["filename"] = basename($strFile);
+		
 			//Type
 			$intTemp = uniStrrpos($strFile, ".");
 			if($intTemp !== false)
@@ -381,6 +378,16 @@ class class_filesystem {
 
 	    $this->objFilePointer = null;
 	}
+
+    /**
+     * Sets the current filepointer to a given offset
+     * 
+     * @param int $intOffset
+     */
+    public function setFilePointerOffset($intOffset) {
+        if($this->objFilePointer != null)
+	       @fseek($this->objFilePointer, $intOffset);
+    }
 
 	/**
 	 * Tries to write the content passed to the file opened before

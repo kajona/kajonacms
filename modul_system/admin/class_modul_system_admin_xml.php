@@ -47,6 +47,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $strReturn .= $this->actionSetStatus();
         if($strAction == "executeSystemTask")
             $strReturn .= $this->actionExecuteSystemTask();
+        if($strAction == "systemLog")
+            $strReturn .= $this->actionSystemlogEntries();
 
         return $strReturn;
 	}
@@ -171,6 +173,87 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
 
 	    return $strReturn;
+    }
+
+    /**
+     * Creates the lastest entries from the current systemlog
+     * The structure is returned like:
+     * <entries>
+     *   <entry>
+     *
+     *   </entry>
+     * </entries>
+     * 
+     * @return string
+     */
+    private function actionSystemlogEntries() {
+        $strReturn = "";
+        
+        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+
+            //read the last few lines
+            $objFile = new class_filesystem();
+            $arrDetails = $objFile->getFileDetails(_systempath_."/debug/systemlog.log");
+            
+            $intOffset = 0;
+            $bitSkip = false;
+            if($arrDetails["filesize"] > 10000) {
+                $intOffset = $arrDetails["filesize"] - 10000;
+                $bitSkip = true;
+            }
+
+            $objFile->openFilePointer("/system/debug/systemlog.log", "r");
+
+            //forward to the new offset, skip entry
+            if($intOffset > 0)
+                $objFile->setFilePointerOffset($intOffset);
+
+            $arrRows = array();
+
+            $strRow = $objFile->readLineFromFile();
+            while($strRow !== false) {
+                if(!$bitSkip && trim($strRow) > 0)
+                    $arrRows[] = $strRow;
+
+                $bitSkip = false;
+                $strRow = $objFile->readLineFromFile();
+            }
+
+            $objFile->closeFilePointer();
+
+            $strReturn .= "<entries>\n";
+            $arrRows = array_reverse($arrRows);
+            foreach($arrRows as $strSingleRow) {
+
+                //parse entry
+                $strDate = uniSubstr($strSingleRow, 0, 16);
+
+                $strSingleRow = uniSubstr($strSingleRow, 17);
+
+                $intTempPos = uniStrpos($strSingleRow, " ");
+                $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
+
+
+                $strLogEntry = uniSubstr($strSingleRow, $intTempPos+1);
+
+
+                $strReturn .= "\t<entry>\n";
+                $strReturn .= "\t\t<level>".$strLevel."</level>\n";
+                $strReturn .= "\t\t<date>".$strDate."</date>\n";
+                $strReturn .= "\t\t<content>".  xmlSafeString(strip_tags($strLogEntry))."</content>\n";
+
+                $strReturn .= "\t</entry>\n";
+            }
+
+            $strReturn .= "</entries>";
+
+
+        }
+	    else
+	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+        return $strReturn;
     }
 
 

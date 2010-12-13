@@ -114,6 +114,8 @@ final class class_logger {
             $strSessid .= " (".class_carrier::getInstance()->getObjSession()->getUsername().")";
         }
 
+        $strMessage = uniStrReplace(array("\r", "\n"), array(" ", " "), $strMessage);
+
         $strText = $strDate." ".$strLevel." ".$strSessid." ".$strMessage."\r\n";
 
 		$handle = fopen(_systempath_."/debug/".$this->strFilename, "a");
