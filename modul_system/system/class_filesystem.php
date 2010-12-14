@@ -153,6 +153,10 @@ class class_filesystem {
 	 */
 	public function getFileDetails($strFile) {
 		$arrReturn = array();
+
+        if(strpos($strFile, _realpath_) === false)
+            $strFile = _realpath_.$strFile;
+
 		if(is_file($strFile)) {
 			//Filename
 		    $arrReturn["filename"] = basename($strFile);

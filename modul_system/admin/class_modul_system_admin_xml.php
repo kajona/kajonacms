@@ -180,7 +180,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      * The structure is returned like:
      * <entries>
      *   <entry>
-     *
+     *      <level></level>
+     *      <date></date>
+     *      <session></session>
+     *      <content></content>
      *   </entry>
      * </entries>
      * 
@@ -194,7 +197,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
             //read the last few lines
             $objFile = new class_filesystem();
-            $arrDetails = $objFile->getFileDetails(_systempath_."/debug/systemlog.log");
+            $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
             
             $intOffset = 0;
             $bitSkip = false;
@@ -228,19 +231,21 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
                 //parse entry
                 $strDate = uniSubstr($strSingleRow, 0, 16);
-
                 $strSingleRow = uniSubstr($strSingleRow, 17);
 
                 $intTempPos = uniStrpos($strSingleRow, " ");
                 $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
+                $strSingleRow = uniSubstr($strSingleRow, $intTempPos+1);
 
+                $intTempPos = uniStrpos($strSingleRow, ")")+1;
+                $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
 
                 $strLogEntry = uniSubstr($strSingleRow, $intTempPos+1);
-
 
                 $strReturn .= "\t<entry>\n";
                 $strReturn .= "\t\t<level>".$strLevel."</level>\n";
                 $strReturn .= "\t\t<date>".$strDate."</date>\n";
+                $strReturn .= "\t\t<session>".$strSession."</session>\n";
                 $strReturn .= "\t\t<content>".  xmlSafeString(strip_tags($strLogEntry))."</content>\n";
 
                 $strReturn .= "\t</entry>\n";
