@@ -912,7 +912,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $intI = 0;
                 foreach($arrUsers as $objSingleUser) {
                     $strAction = "";
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleUser->getSystemid(), $this->getText("user_browser_show"), $this->getText("user_browser_show"), "icon_folderActionOpen.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleUser->getSystemid()."&filter=".$this->getParam("filter"), $this->getText("user_browser_show"), $this->getText("user_browser_show"), "icon_folderActionOpen.gif"));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrName(), $strAction, $intI++);
 
                 }
@@ -924,10 +924,16 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
 
-                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
                 foreach($arrUsers as $objSingleUser) {
+
+                    
+
                     $strAction = "";
-                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("user_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+                    if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())
+                        $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_acceptDisabled.gif"));
+                    else
+                        $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("user_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleUser->getStrUsername())."'], ['".$strFormElement."_id', '".$objSingleUser->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrUsername(). "(".$objSingleUser->getStrForename()." ".$objSingleUser->getStrName().")", $strAction, $intI++);
 
                 }
