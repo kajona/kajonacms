@@ -611,7 +611,8 @@ h3 {
 
 .adminwidget .bd .c {
 	overflow: hidden;
-	width: 225px;
+	width: 205px;
+	padding: 5px 10px 2px 10px;
 }
 
 .adminwidgetColumn {
@@ -629,7 +630,7 @@ h3 {
 }
 
 .adminwidget .hd .title {
-    text-indent: 5px;
+    text-indent: 10px;
 }
 
 #quickHelp .hd .c, .adminwidget .hd .c {
@@ -706,9 +707,14 @@ h3 {
 	margin-right: -7px;
 }
 
-#quickHelp p, .adminwidget p, .adminwidget .bd .c div {
+#quickHelp p {
 	margin: 0;
 	padding: 0 10px 0px 10px;
+}
+
+.adminwidget p {
+    margin: 0;
+    padding: 0;
 }
 
 
