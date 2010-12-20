@@ -1755,10 +1755,10 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 		document.getElementById(strCalendarId+"_month").value = month;
 		document.getElementById(strCalendarId+"_year").value = year;
 		
+		//disabled because of JS error: this.config is null
+		//calendar.destroy();
 		KAJONA.util.fold(strCalendarContainerId);
-		calendar.destroy(); 
 	};
-	calendar.selectEvent.unsubscribe(handleSelect, calendar);
 	
 	//check for values in date form
 	var formDate = [document.getElementById(strCalendarId+"_day").value, document.getElementById(strCalendarId+"_month").value, document.getElementById(strCalendarId+"_year").value];
