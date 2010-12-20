@@ -39,7 +39,7 @@ class class_modul_pages_portal extends class_portal {
 
 		//Load the data of the page
         $objPageData = class_modul_pages_page::getPageByName($strPagename);
-		
+
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
         if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
@@ -49,7 +49,7 @@ class class_modul_pages_portal extends class_portal {
 		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
 			$bitErrorpage = false;
 
-       
+
 
 		//check, if the template could be loaded
 		try {
@@ -185,7 +185,7 @@ class class_modul_pages_portal extends class_portal {
                                                   "repeatable" => $objOneElementOnPage->getIntRepeat()
                                               );
             }
-		    
+
 			//Include the portal-class of the element
 			include_once(_portalpath_."/elemente/".$objOneElementOnPage->getStrClassPortal());
 			//Build the class-name for the object
@@ -199,7 +199,7 @@ class class_modul_pages_portal extends class_portal {
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
             if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage) {
-                
+
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
                 if($bitPeRequested) {
                     //pe is enabled --> regenerate the funky contents
@@ -211,7 +211,7 @@ class class_modul_pages_portal extends class_portal {
 
                     if($objOneElementOnPage->getIntCachetime() > $intMaxCacheDuration)
                         $intMaxCacheDuration = $objOneElementOnPage->getIntCachetime();
-                    
+
                     if($strElementOutput === false) {
                         $strElementOutput = $objElement->getElementOutput();
                         $objElement->saveElementToCache($strElementOutput);
@@ -219,9 +219,9 @@ class class_modul_pages_portal extends class_portal {
                 }
 
             }
-            else 
+            else
      			$strElementOutput = $objElement->getElementOutput();
-                
+
 
 			//any string to highlight?
     		if($this->getParam("highlight") != "") {
@@ -229,7 +229,7 @@ class class_modul_pages_portal extends class_portal {
     		    //search for matches, but exclude tags
     		    $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\"><a name=\"$1\">$1</a></span>", $strElementOutput);
     		}
-                
+
 			$arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
 		}
 
@@ -358,8 +358,8 @@ class class_modul_pages_portal extends class_portal {
     		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
-    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>";
-    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
+    		    $strPeToolbar .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
                 $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.loadPortaleditorBase();</script>";
                 $strPeToolbar .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";
@@ -377,8 +377,8 @@ class class_modul_pages_portal extends class_portal {
                 //Button to enable the toolbar & pe
                 $strEnableButton = "<div id=\"peEnableButton\"><a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(true); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_enable", "pages", "admin"), "icon_disabled.gif")."</a></div>";
     		    //Load YUI and portaleditor javascript
-    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js\"></script>";
-    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js\"></script>";
+    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?"._system_browser_cachebuster_."\"></script>";
+    		    $strEnableButton .= "\n<script type=\"text/javascript\" src=\""._webpath_."/admin/scripts/kajona_portaleditor.js?"._system_browser_cachebuster_."\"></script>";
                 //Load portaleditor styles
                 $strEnableButton .= "\n<script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor.css\"]);</script>";
                 $strEnableButton .= "\n<!--[if lt IE 8]><script type=\"text/javascript\">KAJONA.admin.loader.load(null, [\""._skinwebpath_."/styles_portaleditor_ie.css\"]);</script><![endif]-->";

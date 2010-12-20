@@ -416,7 +416,7 @@ abstract class class_admin {
 			$strSystemid = $this->getSystemid();
         if($strStopSystemid == "")
             $strStopSystemid = $this->getModuleSystemid($this->arrModule["modul"]);
-            
+
 		return $this->objSystemCommon->getPathArray($strSystemid, $strStopSystemid);
 	}
 
@@ -447,7 +447,7 @@ abstract class class_admin {
     /**
      * Creates a text-based decription of the current module.
      * Therefore the text-entry module_description should be available.
-     * 
+     *
      * @return string
      * @since 3.2.1
      */
@@ -599,7 +599,7 @@ abstract class class_admin {
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
-		$this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."';</script>";
+		$this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";
 		//Loading the wanted Template
 		//if requested the pe, load different template
         $strTemplateID = "";

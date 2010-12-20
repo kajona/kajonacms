@@ -220,10 +220,12 @@ class class_template {
 	public function fillConstants() {
 		$arrConstants 	= array(  	0 => "_indexpath_",
 							 		1 => "_webpath_",
-							 		2 => "_gentime_");
+							 		2 => "_system_browser_cachebuster_",
+							 		3 => "_gentime_");
 		$arrValues		= array(  	0 => _indexpath_,
 		                      		1 => _webpath_,
-		                      		2 => date("d.m.y H:i" , time()));
+		                      		2 => _system_browser_cachebuster_,
+		                      		3 => date("d.m.y H:i" , time()));
 		if(defined("_skinwebpath_")) {
 			$arrConstants[] = "_skinwebpath_";
 			$arrValues[] = _skinwebpath_;

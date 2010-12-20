@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 293
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -23,6 +23,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Cachedauer externer Quellen:";
 $lang["_remoteloader_max_cachetime_hint"] = "Cachedauer in Sekunden für extern nachgeladene Inhalte (z.B. RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Admin E-Mail:";
 $lang["_system_admin_email_hint"]        = "Falls ausgefüllt, wird im Fall eines schweren Fehlers eine E-Mail an diese Adresse gesendet.";
+$lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
+$lang["_system_browser_cachebuster_hint"] = "Dieser Wert wird als GET-Parameter allen Verweisen auf JS/CSS-Dateien angehängt. Durch hochzählen des Wertes kann der Browser dazu gezwungen werden die entsprechenden Dateien erneut vom Server herunter zu laden, unabhängig von den Caching-Einstellungen des Browsers und den vom Server gesendeten HTTP-Headern. Der Wert kann auch über einen Systemtask automatisch hochgezählt werden.";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
 $lang["_system_lock_maxtime_"]           = "Maximale Sperrdauer:";
@@ -132,6 +134,9 @@ $lang["installer_versioninstalled"]      = "Installierte Version: ";
 $lang["jpg"]                             = "JPG Support";
 $lang["keinegd"]                         = "Keine GD-Lib installiert";
 $lang["log_empty"]                       = "Keine Einträge im System-Logfile vorhanden";
+$lang["login_xml_error"]                 = "Login fehlgeschlagen";
+$lang["login_xml_succeess"]              = "Login erfolgreich";
+$lang["logout_xml"]                      = "Logout erfolgreich";
 $lang["memorylimit"]                     = "Memory Limit";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_rechte_root"]               = "Root-Rechte";
@@ -227,6 +232,8 @@ $lang["systemtask_dbimport_name"]        = "Datenbank importieren";
 $lang["systemtask_dbimport_success"]     = "Sicherung erfolgreich eingespielt";
 $lang["systemtask_dialog_title"]         = "Systemtask wird ausgeführt";
 $lang["systemtask_dialog_title_done"]    = "Systemtask abgeschlossen";
+$lang["systemtask_flushbrowsercache_name"] = "Browsercache leeren (JS/CSS-Dateien)";
+$lang["systemtask_flushbrowsercache_success"] = "Die Konstante system_browser_cachebuster wurde auf den Wert '_system_browser_cachebuster_' hochgezählt. Beim nächsten Seitenaufruf wird der Browser gezwungen die JS/CSS-Dateien erneut vom Server zu laden.";
 $lang["systemtask_flushcache_all"]       = "Alle Einträge";
 $lang["systemtask_flushcache_error"]     = "Ein Fehler ist aufgetreten.";
 $lang["systemtask_flushcache_name"]      = "Globalen Cache leeren";
@@ -260,7 +267,4 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
-$lang["login_xml_succeess"]              = "Login erfolgreich";
-$lang["login_xml_error"]                 = "Login fehlgeschlagen";
-$lang["logout_xml"]                      = "Logout erfolgreich";
 ?>

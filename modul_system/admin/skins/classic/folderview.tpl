@@ -2,10 +2,10 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" href="_skinwebpath_/styles.css" type="text/css" />
-<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js"></script>
+<link rel="stylesheet" href="_skinwebpath_/styles.css?_system_browser_cachebuster_" type="text/css" />
+<script type="text/javascript" src="_webpath_/admin/scripts/yui/yuiloader-dom-event/yuiloader-dom-event.js?_system_browser_cachebuster_"></script>
 %%head%%
-<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js"></script>
+<script type="text/javascript" src="_webpath_/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script type="text/javascript">

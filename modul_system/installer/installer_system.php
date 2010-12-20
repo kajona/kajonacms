@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.1";
+		$arrModul["version"] 			= "3.3.1.2";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -389,6 +389,10 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_filemanager_default_imagesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
         $this->registerConstant("_filemanager_default_filesrepoid_", "", class_modul_system_setting::$int_TYPE_STRING, _filemanager_modul_id_);
 
+        //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
+        $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+
+
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
 		//BUT: We have to modify the right-record of the system
@@ -571,6 +575,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3311();
+        }
+
+	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.1") {
+            $strReturn .= $this->update_3311_3312();
         }
 
         return $strReturn."\n\n";
@@ -1201,6 +1210,19 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.1");
+        return $strReturn;
+    }
+
+    private function update_3311_3312() {
+        $strReturn = "Updating 3.3.1.1 to 3.3.1.2...\n";
+
+        $strReturn .= "Adding constant _system_browser_cachebuster_ to be able to flush the browsers cache (JS and CSS files)...\n";
+        $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.2");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.2");
         return $strReturn;
     }
 }

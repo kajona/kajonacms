@@ -43,7 +43,7 @@ abstract class class_installer_base extends class_root {
 	public function getModuleName() {
         return $this->arrModule["name_lang"];
 	}
-	
+
 	/**
 	 * Returns the value of $arrModule["name"], the name of the module
 	 *
@@ -52,10 +52,10 @@ abstract class class_installer_base extends class_root {
 	public function getModuleNameShort() {
         return $this->arrModule["name"];
 	}
-    
+
     /**
      * Creates a text-based info. Update-Links are placed within those infos.
-     * 
+     *
      * @since 3.2
      * @return string info or an empty string in case of now errors
      */
@@ -79,7 +79,7 @@ abstract class class_installer_base extends class_root {
         if($strNeeded != "") {
             return $this->getText("installer_modules_needed", "system", "admin").substr($strNeeded, 0, -2);
         }
-        
+
         //check, if a min version of the system is needed
         if($this->getMinSystemVersion() != "") {
             //the systems version to compare to
@@ -110,20 +110,20 @@ abstract class class_installer_base extends class_root {
             }
             elseif(version_compare($objModule->getStrVersion(), $this->arrModule["version"], "=="))
                 return $this->getText("installer_versioninstalled", "system", "admin").$objModule->getStrVersion();
-            
+
         }
         return "";
     }
-    
+
     /**
      * checks if the module can be installed
-     * 
+     *
      * @since 3.2
      * @return boolean
      */
     public function isModuleInstallable() {
     	$bitReturn = false;
-    	
+
     	if($this->getModuleInstallInfo() == "") {
     		//check if module not yet installed
             try {
@@ -137,7 +137,7 @@ abstract class class_installer_base extends class_root {
                 $bitReturn = true;
             }
     	}
-    	
+
     	return $bitReturn;
     }
 
@@ -171,7 +171,7 @@ abstract class class_installer_base extends class_root {
 		    $strReturn .= $this->getText("installer_modules_needed", "system", "admin").substr($strNeeded, 0, -2);
 		    return $strReturn."<br />";
 		}
-		
+
 		//check, if a min version of the system is needed
 		if($this->getMinSystemVersion() != "") {
 		    //the systems version to compare to
@@ -210,7 +210,7 @@ abstract class class_installer_base extends class_root {
 
     /**
      * checks if module post-installs are available and can be installed
-     * 
+     *
      * @since 3.2
      * @return boolean
      */
@@ -223,10 +223,10 @@ abstract class class_installer_base extends class_root {
                 $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"], true);
             }
             catch (class_exception $objE) { }
-    
+
             if(strpos($this->arrModule["name"], "element") !== false)
                 $objModule = true;
-                
+
             if($objModule != null && $this->hasPostInstalls()) {
             	$bitReturn = true;
             }
@@ -253,16 +253,16 @@ abstract class class_installer_base extends class_root {
                     $bitReturn = false;
                 }
             }
-        
+
         }
 
         return $bitReturn;
     }
-    
+
     /**
      * Creates text-based infos regarding the current installation.
      * If a post-install is possible, an empty string is returned.
-     * 
+     *
      * @return string or ""
      */
     public final function getModulePostInstallInfo() {
@@ -399,6 +399,10 @@ abstract class class_installer_base extends class_root {
         }
         $this->objDB->flushQueryCache();
 
+        //increase the cachebuster, so browsers are forced to reload JS and CSS files
+        $objSystemtask = new class_systemtask_flushbrowsercache();
+        $objSystemtask->executeTask();
+
         return "\n\n".$strReturn;
 	}
 
@@ -495,9 +499,9 @@ abstract class class_installer_base extends class_root {
 
 		$strSystemid = $this->createSystemRecord($strPrevId, "Module ".$strName." System node", true, $intModuleNr);
 
-		$strQuery = "INSERT INTO "._dbprefix_."system_module 
-						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin, 
-						module_xmlfilenameadmin, module_version ,module_date, module_navigation) 
+		$strQuery = "INSERT INTO "._dbprefix_."system_module
+						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin,
+						module_xmlfilenameadmin, module_version ,module_date, module_navigation)
 					VALUES (
 						'".$this->objDB->dbsafeString($strSystemid)."',
 						'".$this->objDB->dbsafeString($strName)."',
@@ -513,7 +517,7 @@ abstract class class_installer_base extends class_root {
 		$this->objDB->_query($strQuery);
 
 		class_logger::getInstance()->addLogRow("New module registered: ".$strSystemid. "(".$strName.")", class_logger::$levelInfo);
-		
+
 		//flush db-cache afterwards
 		$this->objDB->flushQueryCache();
 
@@ -568,11 +572,11 @@ abstract class class_installer_base extends class_root {
 	 * @param int $intModule
 	 */
 	public function registerConstant($strName, $strValue, $intType, $intModule) {
-		
+
 		//register to current runtime env?
 		if(!defined($strName))
 			define($strName, $strValue);
-		
+
 	    if(!class_modul_system_setting::checkConfigExisting($strName)) {
     	    $objConstant = new class_modul_system_setting("");
     	    $objConstant->setStrName($strName);
@@ -585,7 +589,7 @@ abstract class class_installer_base extends class_root {
 	       return false;
 	}
 
-    
+
 
 }
 

@@ -81,12 +81,11 @@ KAJONA.util.Loader = function (strScriptBase) {
 			base : yuiBase,
 	
 			//filter: "DEBUG", //use debug versions
-			/* TODO: add cache buster
+			//add the cachebuster
 			filter: { 
-				'searchExp': "\\.js", 
-				'replaceStr': ".js?123"
-				},
-			*/
+				'searchExp': "\\.js$", 
+				'replaceStr': ".js?"+KAJONA_BROWSER_CACHEBUSTER
+			},
 			
 			onFailure : function(o) {
 				alert("File loading failed: " + YAHOO.lang.dump(o));
@@ -174,11 +173,19 @@ KAJONA.util.Loader = function (strScriptBase) {
 					arrRequestedModules[arrYuiComponentsToLoad[i]] = true;
 				}
 				for (var i = 0; i < arrFilesToLoad.length; i++) {
-					yuiLoader.addModule( {
+                    var fileType = arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css';
+                    
+                    var filter = { 
+        				'searchExp': "\\."+fileType, 
+        				'replaceStr': "."+fileType+"?"+KAJONA_BROWSER_CACHEBUSTER
+        			};
+                    var url = arrFilesToLoad[i].replace(new RegExp(filter.searchExp, 'g'), filter.replaceStr);
+
+					yuiLoader.addModule( { 
 						name : arrFilesToLoad[i],
-						type : arrFilesToLoad[i].substr(arrFilesToLoad[i].length-2, 2) == 'js' ? 'js' : 'css',
+						type : fileType,
 						skinnable : false,
-						fullpath : arrFilesToLoad[i]
+						fullpath : url,
 					});
 
 					yuiLoader.require(arrFilesToLoad[i]);

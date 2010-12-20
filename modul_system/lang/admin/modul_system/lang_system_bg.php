@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Брой записи за страница:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Кеш време на външни 
 $lang["_remoteloader_max_cachetime_hint"] = "Време в секунди за кеширане на външно заредена информация (примерно RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Административна електронна поща:";
 $lang["_system_admin_email_hint"]        = "Ако е подаден електроннен пощенски адрес, писмо ще бъде изпратено в случай на големи грешки в системата.";
+$lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
+$lang["_system_browser_cachebuster_hint"] = "Тази стойност е приложена като GET параметър за всички позовавания на JS и CSS файлове. С увеличаването на тази стойност на браузъра ще бъде принуден отново да заредите файл от сървъра, независимо от браузърите за кеширане настройки и изпратил заглавките HTTP. Стойността може да се увеличава автоматично от системата задача.";
 $lang["_system_dbdump_amount_"]          = "Брой на DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Определя колко DB-dumps трябва да бъдат пазени.";
 $lang["_system_lock_maxtime_"]           = "Максимално заключено време";
@@ -222,6 +224,8 @@ $lang["systemtask_dbimport_name"]        = "Вмъкни back-up на база �
 $lang["systemtask_dbimport_success"]     = "Back-up'а успешно възстановен";
 $lang["systemtask_dialog_title"]         = "";
 $lang["systemtask_dialog_title_done"]    = "";
+$lang["systemtask_flushbrowsercache_name"] = "Изчисти кеша на браузъра (JS/CSS)";
+$lang["systemtask_flushbrowsercache_success"] = "Постоянното system_browser_cachebuster се увеличава. Със следващата браузъри искане са принудени да се презареди JS/CSS файлове.";
 $lang["systemtask_flushcache_all"]       = "";
 $lang["systemtask_flushcache_error"]     = "";
 $lang["systemtask_flushcache_name"]      = "";

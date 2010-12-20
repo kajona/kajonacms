@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Memória temporária de fontes exter
 $lang["_remoteloader_max_cachetime_hint"] = "Tempo em segundos para carregar conteúdos do exterior (ex: RSS-Feeds).";
 $lang["_system_admin_email_"]            = "Correio Electrónico Administrador:";
 $lang["_system_admin_email_hint"]        = "Se um endereço é introduzido, uma mensagem de correio electrónico é enviada no caso de surgirem erros críticos.";
+$lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
+$lang["_system_browser_cachebuster_hint"] = "Esse valor é acrescentado como GET parâmetro para todas as referências a JS / CSS. Ao incrementar esse valor o navegador será obrigado a recarregar os arquivos do servidor, independentemente das configurações de cache dos navegadores e os cabeçalhos HTTP enviados. O valor pode ser aumentado automaticamente por uma tarefa do sistema.";
 $lang["_system_dbdump_amount_"]          = "Número de DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Define o número de DB-dumps que devem ser mantidos.";
 $lang["_system_lock_maxtime_"]           = "Máximo Tempo de Bloqueio:";
@@ -222,6 +224,8 @@ $lang["systemtask_dbimport_name"]        = "Importar cópia de segurança da Bas
 $lang["systemtask_dbimport_success"]     = "Restauro da cópia de segurança realizado com sucesso";
 $lang["systemtask_dialog_title"]         = "";
 $lang["systemtask_dialog_title_done"]    = "";
+$lang["systemtask_flushbrowsercache_name"] = "Cache do navegador flush (JS/CSS)";
+$lang["systemtask_flushbrowsercache_success"] = "O system_browser_cachebuster constante foi aumentada. Com os navegadores próxima solicitação são agora obrigados a recarregar JS/CSS.";
 $lang["systemtask_flushcache_all"]       = "";
 $lang["systemtask_flushcache_error"]     = "";
 $lang["systemtask_flushcache_name"]      = "";

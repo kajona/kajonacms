@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -18,6 +18,8 @@ $lang["_remoteloader_max_cachetime_"]    = "Время в кеше внешни�
 $lang["_remoteloader_max_cachetime_hint"] = "Время в секундах кеша внешне загруженного содержания (например RSS-ленты).";
 $lang["_system_admin_email_"]            = "Email админа:";
 $lang["_system_admin_email_hint"]        = "При указании адреса в случае серьезных ошибок будет отправлено электронное письмо";
+$lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
+$lang["_system_browser_cachebuster_hint"] = "Это значение добавляется в качестве GET параметра все ссылки на JS / CSS файлы. Путем увеличения этого значения браузера будет вынужден перезагрузить файлы с сервера, независимо от браузеров кэширования настройки и отправлен HTTP заголовков. значение может быть увеличено автоматически системная задача.";
 $lang["_system_dbdump_amount_"]          = "Количество DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Определяет, сколько DB-dumps следует сохранить.";
 $lang["_system_lock_maxtime_"]           = "Максимальное locktime:";
@@ -222,6 +224,8 @@ $lang["systemtask_dbimport_name"]        = "Импортировать резе�
 $lang["systemtask_dbimport_success"]     = "Резервная копия успешно установлена";
 $lang["systemtask_dialog_title"]         = "";
 $lang["systemtask_dialog_title_done"]    = "";
+$lang["systemtask_flushbrowsercache_name"] = "Очистки кэша браузера (JS/CSS)";
+$lang["systemtask_flushbrowsercache_success"] = "постоянная system_browser_cachebuster был увеличен. При следующем запросе браузеров в настоящее время вынуждены перезагружать JS/CSS файлы.";
 $lang["systemtask_flushcache_all"]       = "";
 $lang["systemtask_flushcache_error"]     = "";
 $lang["systemtask_flushcache_name"]      = "";
