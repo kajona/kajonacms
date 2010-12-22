@@ -313,7 +313,7 @@ Regular Submit-Button
 <table width="90%" cellpadding="2" cellspacing="0">
 	<tr>
 		<td width="30%" class="listecontent"></td>
-		<td><input type="submit" name="%%name%%" value="%%value%%" class="inputSubmit" %%eventhandler%% /></td>
+		<td><input type="submit" name="%%name%%" value="%%value%%" class="inputSubmit" %%disabled%% %%eventhandler%% /></td>
 	</tr>
 </table>
 </input_submit>

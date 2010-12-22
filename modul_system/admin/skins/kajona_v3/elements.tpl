@@ -278,7 +278,7 @@ Upload-Field for multiple files with progress bar
 
 Regular Submit-Button
 <input_submit>
-	<div><label for="%%name%%">&nbsp;</label><input type="submit" name="%%name%%" value="%%value%%" class="%%class%%" %%eventhandler%% /></div><br />
+	<div><label for="%%name%%">&nbsp;</label><input type="submit" name="%%name%%" value="%%value%%" class="%%class%%" %%disabled%% %%eventhandler%% /></div><br />
 </input_submit>
 
 An easy date-selector

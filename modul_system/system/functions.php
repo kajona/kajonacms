@@ -380,7 +380,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @param string $strText
  * @param string $strAlt
  * @param string $strImage
- * @param string $strTitles
+ * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
  * @return string

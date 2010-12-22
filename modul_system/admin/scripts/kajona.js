@@ -530,8 +530,22 @@ KAJONA.admin.folderview = {
 	    	if (arrTargetsValues[i][0] == "ckeditor") {
 	    		CKEDITOR.tools.callFunction(this.selectCallbackCKEditorFuncNum, arrTargetsValues[i][1]);
 	    	} else {
-                if(YAHOO.util.Dom.get(arrTargetsValues[i][0]) != null)
-                    YAHOO.util.Dom.get(arrTargetsValues[i][0]).value = arrTargetsValues[i][1];
+	    		var formField = YAHOO.util.Dom.get(arrTargetsValues[i][0]);
+	    		
+                if (formField != null) {
+                	formField.value = arrTargetsValues[i][1];
+            	
+                	//fire the onchange event on the form field
+                    if (document.createEvent) { //Firefox
+                        var evt = document.createEvent("Events");
+                        evt.initEvent('change', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                        formField.dispatchEvent(evt);
+                    } else if (document.createEventObject) { //IE
+                        var evt = document.createEventObject();
+                        formField.fireEvent('onchange', evt);
+                    }
+                	
+                }
 	    	}
 		}
 	},

@@ -678,62 +678,50 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
         if($this->objRights->rightEdit($this->getSystemid())) {
 
-            $objLang = class_modul_languages_language::getLanguageByName($this->getLanguageToWorkOn());
-            $objPage = new class_modul_pages_page($this->getPrevId());
-
-            if($this->getParam("copyElement_page_input") != "")
-                $this->setParam("copyElement_page", $this->getParam("copyElement_page_input"));
-
-            if($this->getParam("copyElement_language_input") != "")
-                $this->setParam("copyElement_language", $this->getParam("copyElement_language_input"));
-
-            $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
-
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement()." (".$objSourceElement->getStrTitle().")");
-            //step one: language selection
-            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_language_header"));
-            if($this->getParam("copyElement_language") != "")
+            $objLang = null;
+            if($this->getParam("copyElement_language") != "") {
                 $objLang = new class_modul_languages_language($this->getParam("copyElement_language"));
+            } else {
+                $objLang = class_modul_languages_language::getLanguageByName($this->getLanguageToWorkOn());
+            }
 
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_language")." ".$objLang->getStrName());
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
-
-            $arrLanguages = class_modul_languages_language::getAllLanguages(true);
-            $arrLanguageDD = array();
-            foreach($arrLanguages as $objSingleLanguage)
-                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $objSingleLanguage->getStrName();
-
-            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language_input", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
-            $strReturn .= $this->objToolkit->formClose();
-
-
-            //step two: page selection
-            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_page_header"));
+            $objPage = null;
             if($this->getParam("copyElement_page") != "") {
                 $objPage = class_modul_pages_page::getPageByName($this->getParam("copyElement_page"));
                 $objPage->setStrLanguage($objLang->getStrName());
                 $objPage->initObject();
+            } else {
+                $objPage = new class_modul_pages_page($this->getPrevId());
             }
 
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_page")." ".$objPage->getStrName());
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
-            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page_input", $this->getText("copyElement_page"));
-            $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
+            $objSourceElement = new class_modul_pages_pageelement($this->getSystemid());
+
+
+            //form header
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"), "formCopyElement");
+            $strReturn .= $this->objToolkit->formInputHidden("copyElement_doCopy", 1);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit_change"));
-            $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_element")." ".$objSourceElement->getStrName()."_".$objSourceElement->getStrElement()." (".$objSourceElement->getStrTitle().")");
+
+
+            //step one: language selection
+            $arrLanguages = class_modul_languages_language::getAllLanguages(true);
+            $arrLanguageDD = array();
+            foreach($arrLanguages as $objSingleLanguage)
+                $arrLanguageDD[$objSingleLanguage->getSystemid()] = $this->getText("lang_".$objSingleLanguage->getStrName(), "languages", "admin");
+
+            $strReturn .= $this->objToolkit->formInputDropdown("copyElement_language", $arrLanguageDD, $this->getText("copyElement_language"), $objLang->getSystemid());
+
+
+            //step two: page selection
+            $strReturn .= $this->objToolkit->formInputPageSelector("copyElement_page", $this->getText("copyElement_page"), $objPage->getStrName());
 
 
             //step three: placeholder-selection
-            $strReturn .= $this->objToolkit->formHeadline($this->getText("copyElement_placeholder_header"));
-
-
             //here comes the tricky part. load the template, analyze the placeholders and validate all those against things like repeatable and more...
             $strTemplate = $objPage->getStrTemplate();
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_template")." ".$strTemplate);
+
             //load the placeholders
             $strTemplateId = $this->objTemplate->readTemplate("/templates/modul_pages/".$strTemplate, "", true);
             $arrPlaceholders = $this->objTemplate->getElements($strTemplateId);
@@ -754,7 +742,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                             $bitAdd = true;
                             //var_dump($arrElementsOnPage);
                             foreach($arrElementsOnPage as $objSingleElementOnPage) {
-
                                 if($objSingleElementOnPage->getStrElement() == $objSourceElement->getStrElement())
                                     $bitAdd = false;
                             }
@@ -767,23 +754,46 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             }
 
 
-
+            $bitCopyingAllowed = true;
             if(count($arrPlaceholdersDD) == 0) {
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_err_placeholder"));
+                $bitCopyingAllowed = false;
             }
             else {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("pages_content", "copyElement"));
                 $strReturn .= $this->objToolkit->formInputDropdown("copyElement_placeholder", $arrPlaceholdersDD, $this->getText("copyElement_placeholder"));
-                $strReturn .= $this->objToolkit->formInputHidden("copyElement_page", $objPage->getStrName());
-                $strReturn .= $this->objToolkit->formInputHidden("copyElement_language", $objLang->getSystemid());
-                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
-                $strReturn .= $this->objToolkit->formClose();
             }
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("copyElement_template")." ".$strTemplate);
 
+            $strReturn .= $this->objToolkit->divider();
+
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("copyElement_submit"), "Submit", "", "inputSubmit", $bitCopyingAllowed);
+            $strReturn .= $this->objToolkit->formClose();
+
+
+            $strReturn .= "
+                <script type=\"text/javascript\">
+                    KAJONA.admin.loader.loadAutocompleteBase(function () {
+	                    function reloadForm() {
+	                        //ugly part: add a delay to be sure the field is filled by the autocomplete
+							YAHOO.lang.later(100, this, function() {
+								document.getElementById('copyElement_doCopy').value = 0;
+								var formElement = document.getElementById('formCopyElement');
+								formElement.submit();
+                            });
+	                    }
+
+	                    KAJONA.admin.copyElement_page.itemSelectEvent.subscribe(reloadForm);
+
+	                    var languageField = document.getElementById('copyElement_language');
+	                    languageField.onchange = reloadForm;
+
+                        var pageField = document.getElementById('copyElement_page');
+	                    pageField.onchange = reloadForm;
+                    });
+                </script>";
 
             //any actions to take?
-            if($this->getParam("copyElement_placeholder") != "") {
+            if($this->getParam("copyElement_doCopy") == 1) {
                 $objNewElement = $objSourceElement->copyElementToPage($objPage->getSystemid());
                 $objNewElement->setStrLanguage( $objLang->getStrName() );
                 $objNewElement->setStrPlaceholder($this->getParam("copyElement_placeholder"));
@@ -795,6 +805,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);
 
             }
+
 
         }
         else

@@ -925,6 +925,16 @@ a.inputSubmit, a.inputSubmitShort {
     padding-left: 17px;
 }
 
+.inputSubmit[disabled="disabled"] {
+    color: grey;
+    cursor: not-allowed;
+    background-image: url(forms_button_disabled_back.png);
+}
+
+.inputSubmit[disabled="disabled"]:hover {
+    color: grey;
+}
+
 .inputSubmitShort {
 	width: 126px;
 }

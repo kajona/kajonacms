@@ -502,6 +502,16 @@ a.inputSubmit {
     text-decoration: none;
 }
 
+.inputSubmit[disabled="disabled"] {
+    color: grey;
+    cursor: not-allowed;
+    border: 1px solid grey;
+}
+
+.inputSubmit[disabled="disabled"]:hover {
+    color: grey;
+}
+
 .status_filemanager {
 	width: 100%;
 	font-family: Arial, Helvetica, sans-serif;

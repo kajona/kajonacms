@@ -332,6 +332,10 @@ class class_toolkit_admin extends class_toolkit {
 	                pageautocomplete.generateRequest = function(sQuery) {
 	                    return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
 	                };
+
+
+	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
+	                KAJONA.admin.".$strName." = pageautocomplete;
 	            });
 	        </script>
         ";
@@ -406,15 +410,18 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strValue
      * @param string $strName
      * @param string $strEventhandler
+     * @param string $strClass
+     * @param bool $bitEnabled
      * @return string
      */
-    public function formInputSubmit($strValue = "Submit", $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit") {
+    public function formInputSubmit($strValue = "Submit", $strName = "Submit", $strEventhandler = "", $strClass = "inputSubmit", $bitEnabled = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_submit");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
         $arrTemplate["value"] = $strValue;
         $arrTemplate["eventhandler"] = $strEventhandler;
         $arrTemplate["class"] = $strClass;
+        $arrTemplate["disabled"] = $bitEnabled ? "" : "disabled=\"disabled\"";
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 
