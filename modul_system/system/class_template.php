@@ -218,6 +218,10 @@ class class_template {
 	 *
 	 */
 	public function fillConstants() {
+
+        if(!defined("_system_browser_cachebuster_"))
+            define("_system_browser_cachebuster_", 0);
+
 		$arrConstants 	= array(  	0 => "_indexpath_",
 							 		1 => "_webpath_",
 							 		2 => "_system_browser_cachebuster_",
