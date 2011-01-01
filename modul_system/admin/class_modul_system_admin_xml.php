@@ -240,7 +240,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 $intTempPos = uniStrpos($strSingleRow, ")")+1;
                 $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
 
-                $strLogEntry = uniSubstr($strSingleRow, $intTempPos+1);
+                $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
 
                 $strReturn .= "\t<entry>\n";
                 $strReturn .= "\t\t<level>".$strLevel."</level>\n";
