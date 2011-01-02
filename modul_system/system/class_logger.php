@@ -98,8 +98,8 @@ final class class_logger {
             return;
 
         //a log row has the following scheme:
-        // YYYY-MM-DD HH:MM LEVEL USERID (USERNAME) MESSAGE
-        $strDate = strftime("%Y-%m-%d %H:%M", time());
+        // YYYY-MM-DD HH:MM:SS LEVEL USERID (USERNAME) MESSAGE
+        $strDate = strftime("%Y-%m-%d %H:%M:%S", time());
         $strLevel = "";
         if($intLevel == self::$levelError)
             $strLevel = "ERROR";

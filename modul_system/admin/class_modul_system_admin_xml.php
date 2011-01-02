@@ -176,7 +176,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
     }
 
     /**
-     * Creates the lastest entries from the current systemlog
+     * Creates the lastest entries from the current systemlog.
+     * The entries can be limited by the optional param latestEntry.
+     * If given, only entries created after the passed date will be returned.
+     * The format of latestEntry is similar to the date returned, so YYYY-MM-DD HH:MM:SS
      * The structure is returned like:
      * <entries>
      *   <entry>
@@ -195,14 +198,18 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 
 
+            $intStartDate = false;
+            if($this->getParam("latestEntry") != "")
+                $intStartDate = strtotime($this->getParam("latestEntry"));
+
             //read the last few lines
             $objFile = new class_filesystem();
             $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
             
             $intOffset = 0;
             $bitSkip = false;
-            if($arrDetails["filesize"] > 10000) {
-                $intOffset = $arrDetails["filesize"] - 10000;
+            if($arrDetails["filesize"] > 20000) {
+                $intOffset = $arrDetails["filesize"] - 20000;
                 $bitSkip = true;
             }
 
@@ -230,8 +237,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             foreach($arrRows as $strSingleRow) {
 
                 //parse entry
-                $strDate = uniSubstr($strSingleRow, 0, 16);
-                $strSingleRow = uniSubstr($strSingleRow, 17);
+                $strDate = uniSubstr($strSingleRow, 0, 19);
+                $strSingleRow = uniSubstr($strSingleRow, 20);
 
                 $intTempPos = uniStrpos($strSingleRow, " ");
                 $strLevel = uniSubstr($strSingleRow, 0, $intTempPos);
@@ -241,6 +248,12 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 $strSession = uniSubstr($strSingleRow, 0, $intTempPos);
 
                 $strLogEntry = uniSubstr($strSingleRow, $intTempPos);
+
+                if($intStartDate !== false) {
+                    $intCurDate = strtotime($strDate);
+                    if($intStartDate > $intCurDate)
+                        continue;
+                }
 
                 $strReturn .= "\t<entry>\n";
                 $strReturn .= "\t\t<level>".$strLevel."</level>\n";
