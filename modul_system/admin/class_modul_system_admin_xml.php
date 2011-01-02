@@ -251,7 +251,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
                 if($intStartDate !== false) {
                     $intCurDate = strtotime($strDate);
-                    if($intStartDate > $intCurDate)
+                    if($intStartDate >= $intCurDate)
                         continue;
                 }
 
