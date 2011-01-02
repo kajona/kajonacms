@@ -297,7 +297,7 @@ class class_modul_system_common extends class_model implements interface_model  
             $arrReturn["systeminfo_webserver_modules"] = implode(", ", @apache_get_modules());
         }
 	    if (@disk_total_space(_realpath_)) {
-            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
+            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free", "system", "admin");
         }
 		return $arrReturn;
 	}

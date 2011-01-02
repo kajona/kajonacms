@@ -279,6 +279,17 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
     /**
      * Generates a xml-based set of information about the current system and evironment
+     *
+     * Returned structure:
+     * <info>
+     *    <infoset name="xx">
+     *      <entry>
+     *        <key></key>
+     *        <value></value>
+     *      </entry>
+     *    </infoset>
+     * </info>
+     * 
      * @return string
      */
     private function actionSystemInfo() {
