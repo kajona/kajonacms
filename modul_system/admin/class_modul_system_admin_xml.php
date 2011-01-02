@@ -49,6 +49,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $strReturn .= $this->actionExecuteSystemTask();
         if($strAction == "systemLog")
             $strReturn .= $this->actionSystemlogEntries();
+        if($strAction == "systemInfo")
+			$strReturn = $this->actionSystemInfo();
 
         return $strReturn;
 	}
@@ -275,5 +277,65 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
     }
 
 
+    /**
+     * Generates a xml-based set of information about the current system and evironment
+     * @return string
+     */
+    private function actionSystemInfo() {
+        $strReturn = "";
+        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $objCommon = new class_modul_system_common();
+
+            $strReturn .= "<info>";
+
+            $arrInfos = $objCommon->getPHPInfo();
+            $strReturn .= "<infoset name=\"PHP\">";
+            foreach($arrInfos as $strKey => $strValue) {
+                $strReturn .= "<entry>";
+                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+                $strReturn .= "</entry>";
+            }
+            $strReturn .= "</infoset>";
+
+            $arrInfos = $objCommon->getWebserverInfos();
+            $strReturn .= "<infoset name=\"Webserver\">";
+            foreach($arrInfos as $strKey => $strValue) {
+                $strReturn .= "<entry>";
+                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+                $strReturn .= "</entry>";
+            }
+            $strReturn .= "</infoset>";
+
+            $arrInfos = $objCommon->getDatabaseInfos();
+            $strReturn .= "<infoset name=\"Database\">";
+            foreach($arrInfos as $strKey => $strValue) {
+                $strReturn .= "<entry>";
+                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+                $strReturn .= "</entry>";
+            }
+            $strReturn .= "</infoset>";
+
+            $arrInfos = $objCommon->getGDInfos();
+            $strReturn .= "<infoset name=\"GD Lib\">";
+            foreach($arrInfos as $strKey => $strValue) {
+                $strReturn .= "<entry>";
+                $strReturn .= "<key>".  xmlSafeString($strKey)."</key>";
+                $strReturn .= "<value>".  xmlSafeString($strValue)."</value>";
+                $strReturn .= "</entry>";
+            }
+            $strReturn .= "</infoset>";
+
+            $strReturn .= "</info>";
+
+        }
+	    else
+	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+        return $strReturn;
+    }
 }
 ?>

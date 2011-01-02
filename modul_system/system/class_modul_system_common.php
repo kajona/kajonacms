@@ -259,5 +259,148 @@ class class_modul_system_common extends class_model implements interface_model  
 
         return $arrReturn;
     }
+
+    /**
+	 * Creates infos about the current php version
+	 *
+	 * @return mixed
+	 *
+	 */
+    public function getPHPInfo() {
+        $arrReturn = array();
+        $arrReturn["version"] = phpversion();
+		$arrReturn["geladeneerweiterungen"] = implode(", ", get_loaded_extensions());
+		$arrReturn["executiontimeout" ] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_execution_time") ."s";
+		$arrReturn["inputtimeout" ] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_input_time") ."s";
+		$arrReturn["memorylimit" ] = bytesToString(ini_get("memory_limit"), true);
+		$arrReturn["errorlevel" ] = class_carrier::getInstance()->getObjConfig()->getPhpIni("error_reporting");
+        $arrReturn["systeminfo_php_safemode"] = (ini_get("safe_mode") ? $this->getText("systeminfo_yes", "system", "admin")  : $this->getText("systeminfo_no", "system", "admin") );
+        $arrReturn["systeminfo_php_urlfopen"] = (ini_get("allow_url_fopen") ? $this->getText("systeminfo_yes", "system", "admin")  : $this->getText("systeminfo_no", "system", "admin") );
+        $arrReturn["systeminfo_php_regglobal"] = (ini_get("register_globals") ? $this->getText("systeminfo_yes", "system", "admin")  : $this->getText("systeminfo_no", "system", "admin") );
+		$arrReturn["postmaxsize"] = bytesToString(ini_get("post_max_size"), true);
+		$arrReturn["uploadmaxsize"] = bytesToString(ini_get("upload_max_filesize"), true);
+		$arrReturn["uploads"] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getText("systeminfo_yes" , "system", "admin") : $this->getText("systeminfo_no", "system", "admin") );
+
+        return $arrReturn;
+    }
+
+    	/**
+	 * Creates information about the webserver
+	 *
+	 * @return mixed
+	 */
+	public function getWebserverInfos() {
+		$arrReturn = array();
+		$arrReturn["operatingsystem"] = php_uname();
+        $arrReturn["systeminfo_webserver_version"] = $_SERVER["SERVER_SOFTWARE"];
+        if (function_exists("apache_get_modules")) {
+            $arrReturn["systeminfo_webserver_modules"] = implode(", ", @apache_get_modules());
+        }
+	    if (@disk_total_space(_realpath_)) {
+            $arrReturn["speicherplatz"] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
+        }
+		return $arrReturn;
+	}
+
+
+    /**
+	 * Creates Infos about the GDLib
+	 *
+	 * @return unknown
+	 */
+	public function getGDInfos() {
+		$arrReturn = array();
+		if(function_exists("gd_info")) 	{
+			$arrGd = gd_info();
+			$arrReturn["version"] = $arrGd["GD Version"];
+			$arrReturn["gifread"] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes", "system", "admin") : $this->getText("systeminfo_no", "system", "admin"));
+			$arrReturn["gifwrite"] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes", "system", "admin") : $this->getText("systeminfo_no", "system", "admin"));
+			$arrReturn["jpg"] = (( (isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"]) ) ? $this->getText("systeminfo_yes", "system", "admin") : $this->getText("systeminfo_no", "system", "admin"));
+			$arrReturn["png"] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getText("systeminfo_yes", "system", "admin") : $this->getText("systeminfo_no", "system", "admin"));
+		}
+		else
+			$arrReturn[""] = $this->getText("keinegd");
+		return $arrReturn;
+	}
+
+	/**
+	 * Creates Infos about the database
+	 *
+	 * @return mixed
+	 */
+	public function getDatabaseInfos() {
+		$arrReturn = array();
+		//Momentan werden nur mysql / mysqli unterstuetzt
+		$arrTables = $this->objDB->getTables(true);
+		$intNumber = 0;
+		$intSizeData = 0;
+		$intSizeIndex = 0;
+		//Bestimmen der Datenbankgroesse
+		switch($this->objConfig->getConfig("dbdriver")) {
+		case "mysql":
+			foreach($arrTables as $arrTable) {
+				$intNumber++;
+				$intSizeData += $arrTable["Data_length"];
+				$intSizeIndex += $arrTable["Index_length"];
+			}
+			$arrInfo = $this->objDB->getDbInfo();
+			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
+			$arrReturn["datenbankserver"] = $arrInfo["dbserver"];
+			$arrReturn["datenbankclient"] = $arrInfo["dbclient"];
+			$arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
+			$arrReturn["anzahltabellen"] = $intNumber;
+			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
+			$arrReturn["groessedaten"] = bytesToString($intSizeData);
+			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			break;
+
+		case "mysqli":
+			foreach($arrTables as $arrTable) {
+				$intNumber++;
+				$intSizeData += $arrTable["Data_length"];
+				$intSizeIndex += $arrTable["Index_length"];
+			}
+			$arrInfo = $this->objDB->getDbInfo();
+			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
+			$arrReturn["datenbankserver"] = $arrInfo["dbserver"];
+			$arrReturn["datenbankclient"] = $arrInfo["dbclient"];
+			$arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
+			$arrReturn["anzahltabellen"] = $intNumber;
+			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
+			$arrReturn["groessedaten"] = bytesToString($intSizeData);
+			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			break;
+
+		case "postgres":
+			foreach($arrTables as $arrTable) {
+				$intNumber++;
+				//$intSizeData += $arrTable["Data_length"];
+				//$intSizeIndex += $arrTable["Index_length"];
+			}
+			$arrInfo = $this->objDB->getDbInfo();
+			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
+			$arrReturn["datenbankserver"] = $arrInfo["dbserver"];
+			$arrReturn["datenbankclient"] = $arrInfo["dbclient"];
+			$arrReturn["datenbankverbindung"] = $arrInfo["dbconnection"];
+			$arrReturn["anzahltabellen"] = $intNumber;
+			$arrReturn["groessegesamt"] = bytesToString($intSizeData + $intSizeIndex);
+			$arrReturn["groessedaten"] = bytesToString($intSizeData);
+			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
+			break;
+
+		default:
+			foreach($arrTables as $arrTable) {
+				$intNumber++;
+			}
+			$arrInfo = $this->objDB->getDbInfo();
+			$arrReturn["datenbanktreiber"] = $arrInfo["dbdriver"];
+			$arrReturn["datenbankserver"] = $arrInfo["dbserver"];
+			$arrReturn["anzahltabellen"] = $intNumber;
+			break;
+		}
+
+
+		return $arrReturn;
+	}
 }
 ?>

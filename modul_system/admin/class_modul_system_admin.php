@@ -185,46 +185,48 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	private function actionSystemInfo() {
 		$strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objCommon = new class_modul_system_common();
 
     		//Phpinfos abhandeln
-    		$arrPHP = $this->loadPhpInfos();
+
+    		$arrPHP = $objCommon->getPHPInfo();
     		$intI = 0;
     		$strPHP = $this->objToolkit->listHeader();
     		foreach($arrPHP as $strKey => $strValue) {
-    			$strPHP .= $this->objToolkit->listRow2($strKey, $strValue, $intI++, "_b");
+    			$strPHP .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
     		}
     		$strPHP .= $this->objToolkit->listFooter();
     		//And put it into a fieldset
             $strPHP = $this->objToolkit->getFieldset($this->getText("php"), $strPHP);
 
     		//Webserverinfos
-    		$arrWebserver = $this->loadWebserverInfos();
+    		$arrWebserver = $objCommon->getWebserverInfos();
     		$intI = 0;
     		$strServer = $this->objToolkit->listHeader();
     		foreach($arrWebserver as $strKey => $strValue) {
-    			$strServer .= $this->objToolkit->listRow2($strKey, $strValue, $intI++, "_b");
+    			$strServer .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
     		}
     		$strServer .= $this->objToolkit->listFooter();
             //And put it into a fieldset
             $strServer = $this->objToolkit->getFieldset($this->getText("server"), $strServer);
 
     		//Datenbankinfos
-    		$arrDatabase = $this->loadDatabaseInfos();
+    		$arrDatabase = $objCommon->getDatabaseInfos();
     		$intI = 0;
     		$strDB = $this->objToolkit->listHeader();
     		foreach($arrDatabase as $strKey => $strValue) {
-    			$strDB .= $this->objToolkit->listRow2($strKey, $strValue, $intI++, "_b");
+    			$strDB .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
     		}
     		$strDB .= $this->objToolkit->listFooter();
             //And put it into a fieldset
             $strDB = $this->objToolkit->getFieldset($this->getText("db"), $strDB);
 
     		//GD-Lib infos
-    		$arrGd = $this->loadGDInfos();
+    		$arrGd = $objCommon->getGDInfos();
     		$intI = 0;
     		$strGD = $this->objToolkit->listHeader();
     		foreach($arrGd as $strKey => $strValue) {
-    			$strGD .= $this->objToolkit->listRow2($strKey, $strValue, $intI++, "_b");
+    			$strGD .= $this->objToolkit->listRow2($this->getText($strKey), $strValue, $intI++, "_b");
     		}
     		$strGD .= $this->objToolkit->listFooter();
             //And put it into a fieldset
@@ -737,147 +739,9 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-	/**
-	 * Creates infos about the current php version
-	 *
-	 * @return mixed
-	 *
-	 */
-	private function loadPhpInfos() {
-		$arrReturn = array();
-		$arrReturn[$this->getText("version")] = phpversion();
-		$arrReturn[$this->getText("geladeneerweiterungen")] = implode(", ", get_loaded_extensions());
-		$arrReturn[$this->getText("executiontimeout")] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_execution_time") ."s";
-		$arrReturn[$this->getText("inputtimeout")] = class_carrier::getInstance()->getObjConfig()->getPhpIni("max_input_time") ."s";
-		$arrReturn[$this->getText("memorylimit")] = bytesToString(ini_get("memory_limit"), true);
-		$arrReturn[$this->getText("errorlevel")] = class_carrier::getInstance()->getObjConfig()->getPhpIni("error_reporting");
-        $arrReturn[$this->getText("systeminfo_php_safemode")] = (ini_get("safe_mode") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-        $arrReturn[$this->getText("systeminfo_php_urlfopen")] = (ini_get("allow_url_fopen") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-        $arrReturn[$this->getText("systeminfo_php_regglobal")] = (ini_get("register_globals") ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-		$arrReturn[$this->getText("postmaxsize")] = bytesToString(ini_get("post_max_size"), true);
-		$arrReturn[$this->getText("uploadmaxsize")] = bytesToString(ini_get("upload_max_filesize"), true);
-		$arrReturn[$this->getText("uploads")] = (class_carrier::getInstance()->getObjConfig()->getPhpIni("file_uploads") == 1 ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-
-		return $arrReturn;
-	}
-
-	/**
-	 * Creates information about the webserver
-	 *
-	 * @return mixed
-	 */
-	private function loadWebserverInfos() {
-		$arrReturn = array();
-		$arrReturn[$this->getText("operatingsystem")] = php_uname();
-        $arrReturn[$this->getText("systeminfo_webserver_version")] = $_SERVER["SERVER_SOFTWARE"];
-        if (function_exists("apache_get_modules")) {
-            $arrReturn[$this->getText("systeminfo_webserver_modules")] = implode(", ", @apache_get_modules());
-        }
-	    if (@disk_total_space(_realpath_)) {
-            $arrReturn[$this->getText("speicherplatz")] = bytesToString(@disk_free_space(_realpath_)) ."/". bytesToString(@disk_total_space(_realpath_)) . $this->getText("diskspace_free");
-        }
-		return $arrReturn;
-	}
-
-	/**
-	 * Creates Infos about the GDLib
-	 *
-	 * @return unknown
-	 */
-	private function loadGDInfos() {
-		$arrReturn = array();
-		if(function_exists("gd_info")) 	{
-			$arrGd = gd_info();
-			$arrReturn[$this->getText("version")] = $arrGd["GD Version"];
-			$arrReturn[$this->getText("gifread")] = (isset($arrGd["GIF Read Support"]) && $arrGd["GIF Read Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("gifwrite")] = (isset($arrGd["GIF Create Support"]) && $arrGd["GIF Create Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("jpg")] = (( (isset($arrGd["JPG Support"]) && $arrGd["JPG Support"]) || (isset($arrGd["JPEG Support"]) && $arrGd["JPEG Support"]) ) ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-			$arrReturn[$this->getText("png")] = (isset($arrGd["PNG Support"]) && $arrGd["PNG Support"] ? $this->getText("systeminfo_yes") : $this->getText("systeminfo_no"));
-		}
-		else
-			$arrReturn[""] = $this->getText("keinegd");
-		return $arrReturn;
-	}
-
-	/**
-	 * Creates Infos about the database
-	 *
-	 * @return mixed
-	 */
-	private function loadDatabaseInfos() {
-		$arrReturn = array();
-		//Momentan werden nur mysql / mysqli unterstuetzt
-		$arrTables = $this->objDB->getTables(true);
-		$intNumber = 0;
-		$intSizeData = 0;
-		$intSizeIndex = 0;
-		//Bestimmen der Datenbankgroesse
-		switch($this->objConfig->getConfig("dbdriver")) {
-		case "mysql":
-			foreach($arrTables as $arrTable) {
-				$intNumber++;
-				$intSizeData += $arrTable["Data_length"];
-				$intSizeIndex += $arrTable["Index_length"];
-			}
-			$arrInfo = $this->objDB->getDbInfo();
-			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
-			$arrReturn[$this->getText("datenbankserver")] = $arrInfo["dbserver"];
-			$arrReturn[$this->getText("datenbankclient")] = $arrInfo["dbclient"];
-			$arrReturn[$this->getText("datenbankverbindung")] = $arrInfo["dbconnection"];
-			$arrReturn[$this->getText("anzahltabellen")] = $intNumber;
-			$arrReturn[$this->getText("groessegesamt")] = bytesToString($intSizeData + $intSizeIndex);
-			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
-			break;
-
-		case "mysqli":
-			foreach($arrTables as $arrTable) {
-				$intNumber++;
-				$intSizeData += $arrTable["Data_length"];
-				$intSizeIndex += $arrTable["Index_length"];
-			}
-			$arrInfo = $this->objDB->getDbInfo();
-			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
-			$arrReturn[$this->getText("datenbankserver")] = $arrInfo["dbserver"];
-			$arrReturn[$this->getText("datenbankclient")] = $arrInfo["dbclient"];
-			$arrReturn[$this->getText("datenbankverbindung")] = $arrInfo["dbconnection"];
-			$arrReturn[$this->getText("anzahltabellen")] = $intNumber;
-			$arrReturn[$this->getText("groessegesamt")] = bytesToString($intSizeData + $intSizeIndex);
-			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
-			break;
-
-		case "postgres":
-			foreach($arrTables as $arrTable) {
-				$intNumber++;
-				//$intSizeData += $arrTable["Data_length"];
-				//$intSizeIndex += $arrTable["Index_length"];
-			}
-			$arrInfo = $this->objDB->getDbInfo();
-			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
-			$arrReturn[$this->getText("datenbankserver")] = $arrInfo["dbserver"];
-			$arrReturn[$this->getText("datenbankclient")] = $arrInfo["dbclient"];
-			$arrReturn[$this->getText("datenbankverbindung")] = $arrInfo["dbconnection"];
-			$arrReturn[$this->getText("anzahltabellen")] = $intNumber;
-			$arrReturn[$this->getText("groessegesamt")] = bytesToString($intSizeData + $intSizeIndex);
-			$arrReturn[$this->getText("groessedaten")] = bytesToString($intSizeData);
-			#$arrReturn["Groesse Indizes"] = bytes_to_string($int_groesse_index);
-			break;
-
-		default:
-			foreach($arrTables as $arrTable) {
-				$intNumber++;
-			}
-			$arrInfo = $this->objDB->getDbInfo();
-			$arrReturn[$this->getText("datenbanktreiber")] = $arrInfo["dbdriver"];
-			$arrReturn[$this->getText("datenbankserver")] = $arrInfo["dbserver"];
-			$arrReturn[$this->getText("anzahltabellen")] = $intNumber;
-			break;
-		}
 
 
-		return $arrReturn;
-	}
+	
 
 //---Helpers---------------------------------------------------------------------------------------------
 
