@@ -51,6 +51,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $strReturn .= $this->actionSystemlogEntries();
         if($strAction == "systemInfo")
 			$strReturn = $this->actionSystemInfo();
+        if($strAction == "moduleList")
+			$strReturn = $this->actionModuleList();
 
         return $strReturn;
 	}
@@ -347,6 +349,41 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
 
         return $strReturn;
+    }
+
+    /**
+     * Generates the list of modules installed.
+     * Returned structure:
+     * <modules>
+     *    <module>
+     *      <name></name>
+     *      <version></version>
+     *    <module>
+     * </modules>
+     * 
+     * @return string
+     */
+    private function actionModuleList() {
+        $strReturn = "";
+		
+		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $strReturn .= "<modules>";
+			//Loading the modules
+			$arrModules = class_modul_system_module::getAllModules();
+			foreach($arrModules as $objSingleModule) {
+                $strReturn .= "<module>";
+                $strReturn .= "<name>".  xmlSafeString($objSingleModule->getStrName())."</name>";
+                $strReturn .= "<version>".  xmlSafeString($objSingleModule->getStrVersion())."</version>";
+                $strReturn .= "</module>";
+			}
+
+			$strReturn .= "</modules>";
+		}
+		else
+			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+		return $strReturn;
     }
 }
 ?>
