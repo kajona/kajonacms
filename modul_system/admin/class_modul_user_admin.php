@@ -16,7 +16,7 @@
 class class_modul_user_admin extends class_admin implements interface_admin {
 
     //languages, the admin area could display (texts)
-    private $arrLanguages = array();
+    protected $arrLanguages = array();
 
     /**
 	 * Constructor
@@ -264,7 +264,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    private function actionNew($strAction) {
+    protected function actionNew($strAction) {
         $strReturn = "";
         $bitSelf = false;
         //Right: Right Edit or edit your own profile
@@ -377,7 +377,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    private function actionSave() {
+    protected function actionSave() {
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))	{
             if($this->getParam("username") != "" && $this->getParam("username") != " ") {
                 if($this->checkUsernameNotExisting($this->getParam("username")) ) {
@@ -452,7 +452,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" if successfull
 	 */
-    private function actionEdit() {
+    protected function actionEdit() {
         //Rights: Own profile or have the needed rights
         $bitRight = false;
         $bitSelfedit = false;
@@ -956,7 +956,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      * @param string $strPass2
      * @return bool
      */
-    private function checkPasswords($strPass1, $strPass2) {
+    protected function checkPasswords($strPass1, $strPass2) {
         return ($strPass1 == $strPass2 && uniStrlen($strPass1) > 2);
     }
 
@@ -966,12 +966,12 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      * @param string $strName
      * @return bool
      */
-    private function checkUsernameNotExisting($strName) {
+    protected function checkUsernameNotExisting($strName) {
         $arrUsers = class_modul_user_user::getAllUsersByName($strName);
         return (count($arrUsers) == 0);
     }
 
-    private function checkAdditionalNewData() {
+    protected function checkAdditionalNewData() {
         $bitPass = $this->checkPasswords($this->getParam("passwort"), $this->getParam("passwort2"));
         if(!$bitPass)
             $this->addValidationError("passwort", $this->getText("required_password_equal"));
@@ -982,7 +982,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $bitPass && $bitUsername;
     }
 
-    private function checkAdditionalEditData() {
+    protected function checkAdditionalEditData() {
         $bitPass = ($this->getParam("passwort") == $this->getParam("passwort2"));
         if(!$bitPass)
             $this->addValidationError("passwort", $this->getText("required_password_equal"));
