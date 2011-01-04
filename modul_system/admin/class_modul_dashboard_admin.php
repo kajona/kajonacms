@@ -14,7 +14,7 @@
  */
 class class_modul_dashboard_admin extends class_admin implements interface_admin {
 
-    private $arrColumnsOnDashboard = array("column1", "column2", "column3");
+    protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
 	/**
 	 * Constructor
@@ -81,7 +81,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 	    $strReturn = "";
 	    //check needed permissions
 	    if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -116,7 +116,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 * @param class_modul_dashboard_widget $objDashboardWidget
 	 * @return string
 	 */
-	private function layoutAdminWidget($objDashboardWidget) {
+	protected function layoutAdminWidget($objDashboardWidget) {
 	    $strWidgetContent = "";
 	    $objConcreteWidget = $objDashboardWidget->getWidgetmodelForCurrentEntry()->getConcreteAdminwidget();
 

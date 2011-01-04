@@ -81,7 +81,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 	}
 
 
-    private function actionGetWidgetContent() {
+    protected function actionGetWidgetContent() {
         $strReturn = "";
         if($this->objRights->rightView($this->getSystemid())) {
             $strReturn = "<content>";
