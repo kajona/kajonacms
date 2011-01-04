@@ -53,6 +53,8 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 			$strReturn = $this->actionSystemInfo();
         if($strAction == "moduleList")
 			$strReturn = $this->actionModuleList();
+        if($strAction == "systemSessions")
+            $strReturn = $this->actionSessions();
 
         return $strReturn;
 	}
@@ -384,6 +386,96 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
 
 		return $strReturn;
+    }
+
+
+
+    /**
+     * Creates a table filled with the sessions currently registered.
+     * Returned structure:
+     * <sessions>
+     *    <session>
+     *        <username></username>
+     *        <loginstatus></loginstatus>
+     *        <releasetime></releasetime>
+     *        <activity></activity>
+     *    </session>
+     * </sessions>
+     *
+     * @return string
+     */
+    private function actionSessions() {
+        $strReturn = "";
+        //check needed rights
+        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $arrSessions = class_modul_system_session::getAllActiveSessions();
+
+            $strReturn .= "<sessions>";
+
+            foreach ($arrSessions as $objOneSession) {
+
+                $strReturn .= "<session>";
+
+                $strUsername = "";
+                if($objOneSession->getStrUserid() != "") {
+                    $objUser = new class_modul_user_user($objOneSession->getStrUserid());
+                    $strUsername = $objUser->getStrUsername();
+                }
+
+                $strLoginStatus = "";
+                if($objOneSession->getStrLoginstatus() == class_modul_system_session::$LOGINSTATUS_LOGGEDIN)
+                    $strLoginStatus = $this->getText("session_loggedin");
+                else
+                    $strLoginStatus = $this->getText("session_loggedout");
+
+                 //find out what the user is doing...
+                $strLastUrl = $objOneSession->getStrLasturl();
+                if(uniStrpos($strLastUrl, "?") !== false)
+                    $strLastUrl = uniSubstr($strLastUrl, uniStrpos($strLastUrl, "?"));
+                $strActivity = "";
+
+                if(uniStrpos($strLastUrl, "admin=1") !== false) {
+                    $strActivity .= $this->getText("session_admin");
+                    foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                        $arrUrlParam = explode("=", $strOneParam);
+                        if($arrUrlParam[0] == "module")
+                            $strActivity .= $arrUrlParam[1];
+                    }
+                }
+                else {
+                    $strActivity .= $this->getText("session_portal");
+                    if($strLastUrl == "")
+                        $strActivity .= _pages_indexpage_;
+                    else {
+                        foreach (explode("&amp;", $strLastUrl) as $strOneParam) {
+                            $arrUrlParam = explode("=", $strOneParam);
+                            if($arrUrlParam[0] == "page")
+                                $strActivity .= $arrUrlParam[1];
+                        }
+
+                        if($strActivity == $this->getText("session_portal") && uniSubstr($strLastUrl, 0, 5) == "image") {
+                            $strActivity .= $this->getText("session_portal_imagegeneration");
+                        }
+                    }
+                }
+
+                $strReturn .= "<username>".  xmlSafeString($strUsername)."</username>";
+                $strReturn .= "<loginstatus>".  xmlSafeString($strLoginStatus)."</loginstatus>";
+                $strReturn .= "<releasetime>".  xmlSafeString(timeToString($objOneSession->getIntReleasetime()))."</releasetime>";
+                $strReturn .= "<activity>".  xmlSafeString($strActivity)."</activity>";
+
+                $strReturn .= "</session>";
+            }
+
+            $strReturn .= "</sessions>";
+            
+
+        }
+        else
+			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+        
+        return $strReturn;
     }
 }
 ?>
