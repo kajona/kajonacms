@@ -708,7 +708,7 @@ KAJONA.admin.statusDisplay = {
 	},
 	
 	fadeIn : function () {
-		this.animObject = new YAHOO.util.Anim(this.idOfMessageBox, { opacity: { to: 0.8 } }, 1, YAHOO.util.Easing.easeOut);
+		this.animObject = new YAHOO.util.Anim(this.idOfMessageBox, {opacity: {to: 0.8}}, 1, YAHOO.util.Easing.easeOut);
 		this.animObject.onComplete.subscribe(function() {window.setTimeout("KAJONA.admin.statusDisplay.startFadeOut()", this.timeToFadeOut);});
 		this.animObject.animate();
 	},
@@ -718,7 +718,7 @@ KAJONA.admin.statusDisplay = {
 		
 		//get the current pos
 		var attributes = {
-	        points: { by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5] }
+	        points: {by: [0, (YAHOO.util.Dom.getY(statusBox)+statusBox.offsetHeight)*-1-5]}
 	    };
 	    this.animObject = new YAHOO.util.Motion(statusBox, attributes, 0.5);
 	    this.animObject.onComplete.subscribe(function() {YAHOO.util.Dom.setStyle(this.idOfMessageBox, "display", "none");});
@@ -1202,7 +1202,7 @@ KAJONA.admin.ajax = {
                         intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                         var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
-                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
+                        var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-foldernode";
                         tempNode.isLeaf = strLeaf == "true";
@@ -1227,7 +1227,7 @@ KAJONA.admin.ajax = {
                         intTemp = strSinglePage.indexOf("<link>")+6;
                         strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
 
-                        tempNode = new YAHOO.widget.TextNode({ label:strName, href:strLink}, node);
+                        tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
                         tempNode.systemid = strSystemid;
                         tempNode.isLeaf = true;
                         tempNode.labelStyle = "treeView-pagenode";
@@ -1283,7 +1283,7 @@ KAJONA.admin.ajax = {
                         intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                         var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
-                        var tempNode = new YAHOO.widget.TextNode( { label:strName, href:strLink }, node);
+                        var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
                         tempNode.systemid = strSystemid;
                         tempNode.labelStyle = "treeView-navigationnode";
                         tempNode.isLeaf = strLeaf == "true";
@@ -1794,3 +1794,33 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
 	calendar.selectEvent.subscribe(handleSelect, calendar, true);
 	calendar.render();
 };
+
+/**
+ * Tags-handling
+ */
+KAJONA.admin.tags = {};
+KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute, strTargetDivId) {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, {
+        success : function(o) {
+            KAJONA.admin.tags.reloadTagList(strTargetDivId, strSystemid, strAttribute);
+            document.getElementById('tagname').value='';
+        },
+        failure : function(o) {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+    });
+};
+
+KAJONA.admin.tags.reloadTagList = function(strTargetDivId, strSystemid, strAttribute) {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, {
+        success : function(o) {
+            var intStart = o.responseText.indexOf("<tags>")+6;
+            var strContent = o.responseText.substr(intStart, o.responseText.indexOf("</tags>")-intStart);
+            document.getElementById(strTargetDivId).innerHTML = strContent;
+        },
+        failure : function(o) {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+    });
+};
+

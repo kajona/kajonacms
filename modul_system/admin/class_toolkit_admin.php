@@ -550,6 +550,7 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateOptionSelectedID = $this->objTemplate->readTemplate("/elements.tpl", "input_dropdown_row_selected");
         //Iterating over the array to create the options
         foreach ($arrKeyValues as $strKey => $strValue) {
+            $arrTemplate = array();
             $arrTemplate["key"] = $strKey;
             $arrTemplate["value"] = $strValue;
             if((string)$strKey == (string)$strKeySelected)
@@ -1667,6 +1668,36 @@ class class_toolkit_admin extends class_toolkit {
         $strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 
         return $strReturn;
+    }
+
+    /**
+     * Generates the wrapper required to render the list of tags.
+     *
+     * @param string $strWrapperid
+     * @param string $strTargetsystemid
+     * @param string $strAttribute
+     * @return string
+     */
+    public function getTaglistWrapper($strWrapperid, $strTargetsystemid, $strAttribute) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_wrapper");
+        $arrTemplate = array();
+        $arrTemplate["wrapperId"] = $strWrapperid;
+        $arrTemplate["targetSystemid"] = $strTargetsystemid;
+        $arrTemplate["attribute"] = $strAttribute;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+    /**
+     * Renders a single tag (including the options to remove the tag again)
+     *
+     * @param string $strTagname
+     * @return string
+     */
+    public function getTagEntry($strTagname) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
+        $arrTemplate = array();
+        $arrTemplate["tagname"] = $strTagname;
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 }
 ?>

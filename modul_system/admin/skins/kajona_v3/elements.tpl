@@ -987,3 +987,18 @@ The language switch surrounds the buttons
     })();
     </script>
 </treeview>
+
+
+<tags_wrapper>
+    <div id="tagsWrapper_%%wrapperId%%">
+    </div>
+    <script type="text/javascript">
+        KAJONA.admin.loader.loadAjaxBase(function() {
+            KAJONA.admin.tags.reloadTagList('tagsWrapper_%%wrapperId%%', '%%targetSystemid%%', '%%attribute%%');
+        });
+    </script>
+</tags_wrapper>
+
+<tags_tag>
+    <div>%%tagname%%</div>
+</tags_tag>

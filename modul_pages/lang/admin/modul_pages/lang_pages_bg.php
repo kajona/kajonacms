@@ -1,13 +1,13 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 316
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -21,6 +21,7 @@ $lang["_pages_portaleditor_"]            = "Редактора на портал
 $lang["_pages_templatechange_"]          = "Позволи смяна на шаблони:";
 $lang["_pages_templatechange_hint"]      = "Определя дали шаблона на страници със съдържание, може да се променя или не. Ако е указано 'да' може да има неочаквани странични ефекти!";
 $lang["beschreibung"]                    = "Описание:";
+$lang["browser"]                         = "";
 $lang["browsername"]                     = "Име в HTML тага [title]:";
 $lang["contentToolbar_content"]          = "Редактирай съдържание";
 $lang["contentToolbar_pageproperties"]   = "Редактирай настройки";

@@ -1,13 +1,13 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 316
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -24,6 +24,7 @@ $lang["_pages_portaleditor_"]            = "Portaleditor enabled:";
 $lang["_pages_templatechange_"]          = "Allow change of templates:";
 $lang["_pages_templatechange_hint"]      = "Defines, whether the template of pages with contents is allowed to be changed or not. If set to yes, this may come with unexpected sideeffects!";
 $lang["beschreibung"]                    = "Description:";
+$lang["browser"]                         = "Folder-browser";
 $lang["browsername"]                     = "Browser title:";
 $lang["contentToolbar_content"]          = "Edit content";
 $lang["contentToolbar_pageproperties"]   = "Edit properties";
