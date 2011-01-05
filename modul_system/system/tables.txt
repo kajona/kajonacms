@@ -324,6 +324,15 @@
     rating_history_rating   = id of the corresponding rating
     rating_history_user     = user id of the user
 
+//--_tags_tag--------------------------------------------------------------------------------------------
+    tags_tag_id             = table primary key
+    tags_tag_name           = name of the tag, the tag itself
+
+//--_tags_member-------------------------------------------------------------------------------------
+    tags_systemid           = ID of the referencing systemid (assigned record)
+    tags_tagid              = ID of the referenced tag (assigned tag)
+    tags_attribute          = An attribute used to diffentiate tags, e.g. by language
+
 
 !!!!!!!!!!!!!!!!!!!!!!!!!! ALL ELEMENT TABLES NEED THE COLUMN content_id AS primary key !!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!! ALL COLUMNS HAVE TO PERMIT NULL-VALUES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
