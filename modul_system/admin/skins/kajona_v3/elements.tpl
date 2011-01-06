@@ -992,7 +992,7 @@ The tag-wrapper is the section used to surround the list of tag.
 Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,
 otherwise the JavaScript will fail!
 <tags_wrapper>
-    <div id="tagsWrapper_%%targetSystemid%%">
+    <div id="tagsWrapper_%%targetSystemid%%" class="loadingContainer">
     </div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadAjaxBase(function() {

@@ -54,7 +54,7 @@
                 %%comments_postacomment%%
                 %%mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker%%
                 %%mixed2_portalupload%%
-                %%mixed3_flash|mediaplayer%%
+                %%mixed3_flash|mediaplayer|tags%%
             </div>
             <div class="clearer"></div>
         </div>

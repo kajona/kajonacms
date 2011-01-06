@@ -1812,14 +1812,19 @@ KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
 };
 
 KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
+
+    YAHOO.util.Dom.addClass("tagsWrapper_"+strSystemid, "loadingContainer");
+
     KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, {
         success : function(o) {
             var intStart = o.responseText.indexOf("<tags>")+6;
             var strContent = o.responseText.substr(intStart, o.responseText.indexOf("</tags>")-intStart);
+            YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
             document.getElementById("tagsWrapper_"+strSystemid).innerHTML = strContent;
         },
         failure : function(o) {
             KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+            YAHOO.util.Dom.removeClass("tagsWrapper_"+strSystemid, "loadingContainer");
         }
     });
 };
