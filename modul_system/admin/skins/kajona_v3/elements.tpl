@@ -188,7 +188,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 -- FORM ELEMENTS ----------------------------------------------------------------------------------------
 
 <form_start>
-<form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" accept-charset="UTF-8">
+<form name="%%name%%" id="%%name%%" method="post" action="%%action%%" enctype="%%enctype%%" accept-charset="UTF-8" onsubmit="%%onsubmit%%">
 </form_start>
 
 <form_close>

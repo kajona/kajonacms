@@ -575,14 +575,17 @@ class class_toolkit_admin extends class_toolkit {
      *
      * @param string $strAction
      * @param string $strName
+     * @param string $strEncoding
+     * @param string $strOnSubmit
      * @return string
      */
-    public function formHeader($strAction, $strName = "", $strEncoding = "") {
+    public function formHeader($strAction, $strName = "", $strEncoding = "", $strOnSubmit = "") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "form_start");
         $arrTemplate = array();
         $arrTemplate["name"] = ($strName != "" ? $strName : "form".generateSystemid());
         $arrTemplate["action"] = $strAction;
         $arrTemplate["enctype"] = $strEncoding;
+        $arrTemplate["onsubmit"] = $strOnSubmit;
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

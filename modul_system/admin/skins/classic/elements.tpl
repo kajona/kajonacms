@@ -190,7 +190,7 @@ To avoid side-effects, no line-break in this case -> not needed by default, but 
 -- FORM ELEMENTS ----------------------------------------------------------------------------------------
 
 <form_start>
-<form name="%%name%%" id="%%name%%" method="POST" action="%%action%%" enctype="%%enctype%%">
+    <form name="%%name%%" id="%%name%%" method="POST" action="%%action%%" enctype="%%enctype%%" onsubmit="%%onsubmit%%">
 </form_start>
 
 <form_close>
