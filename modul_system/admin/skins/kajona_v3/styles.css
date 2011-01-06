@@ -1623,3 +1623,20 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
 #folderviewDialog_c.show-scrollbars .yui-resize .bd {
     overflow: auto;
 }
+
+/** TAGS **/
+.tag {
+    display: inline;
+    padding: 4px 1px 4px 4px;
+    margin: 2px;
+    border: 1px solid #CCCCCC;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    line-height: 25px;
+}
+
+.tag img {
+    position: relative;
+    top: 5px;
+}

@@ -1691,13 +1691,65 @@ class class_toolkit_admin extends class_toolkit {
      * Renders a single tag (including the options to remove the tag again)
      *
      * @param string $strTagname
+     * @param string $strTagId
+     * @param string $strTargetid
+     * @param string $strAttribute
      * @return string
      */
-    public function getTagEntry($strTagname) {
+    public function getTagEntry($strTagname, $strTagId, $strTargetid, $strAttribute) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tags_tag");
         $arrTemplate = array();
         $arrTemplate["tagname"] = $strTagname;
+        $arrTemplate["strTagId"] = $strTagId;
+        $arrTemplate["strTargetSystemid"] = $strTargetid;
+        $arrTemplate["strAttribute"] = $strAttribute;
+        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjText()->getText("tag_delete", "tags", "admin"));
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
+
+
+    /**
+     * Returns a regular text-input field
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strClass
+     * @return string
+     */
+    public function formInputTagSelector($strName, $strTitle = "", $strClass = "inputText") {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_tagselector");
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["class"] = $strClass;
+        
+        $arrTemplate["ajaxScript"] = "
+	        <script type=\"text/javascript\">
+	            KAJONA.admin.loader.loadAutocompleteBase(function () {
+	                var pageDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
+	                pageDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
+	                pageDataSource.responseSchema = {
+	                    resultNode : \"tag\",
+	                    fields : [\"name\"]
+	                };
+
+	                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
+	                    queryMatchCase: false,
+	                    allowBrowserAutocomplete: false,
+	                    useShadow: false
+	                });
+	                pageautocomplete.generateRequest = function(sQuery) {
+	                    return \"?admin=1&module=tags&action=getTagsByFilter&filter=\" + sQuery ;
+	                };
+
+
+	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
+	                KAJONA.admin.".$strName." = pageautocomplete;
+	            });
+	        </script>
+        ";
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
 }
 ?>

@@ -988,17 +988,36 @@ The language switch surrounds the buttons
     </script>
 </treeview>
 
-
+The tag-wrapper is the section used to surround the list of tag.
+Please make sure that the containers' id is named tagsWrapper_%%targetSystemid%%,
+otherwise the JavaScript will fail!
 <tags_wrapper>
-    <div id="tagsWrapper_%%wrapperId%%">
+    <div id="tagsWrapper_%%targetSystemid%%">
     </div>
     <script type="text/javascript">
         KAJONA.admin.loader.loadAjaxBase(function() {
-            KAJONA.admin.tags.reloadTagList('tagsWrapper_%%wrapperId%%', '%%targetSystemid%%', '%%attribute%%');
+            KAJONA.admin.tags.reloadTagList('%%targetSystemid%%', '%%attribute%%');
         });
     </script>
 </tags_wrapper>
 
 <tags_tag>
-    <div>%%tagname%%</div>
+    <div class="tag">%%tagname%%
+        <a href="javascript:KAJONA.admin.tags.removeTag('%%strTagId%%', '%%strTargetSystemid%%', '%%strAttribute%%');">
+            %%deleteIcon%%
+        </a>
+    </div>
 </tags_tag>
+
+A tag-selector.
+If you want to use ajax to load a list of proposals on entering a char,
+place ajaxScript before the closing input_tagselector-tag and make sure, that you
+have a surrounding div with class "ac_container" and a div with id "%%name%%_container" and class
+"ac_results" inside the "ac_container", to generate a resultlist
+<input_tagselector>
+  <div class="ac_container">
+     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" /> %%opener%%</div>
+     <div id="%%name%%_container" class="ac_results"></div>
+  </div><br />
+%%ajaxScript%%
+</input_tagselector>

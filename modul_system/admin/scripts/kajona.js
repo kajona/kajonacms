@@ -1799,10 +1799,10 @@ KAJONA.admin.calendar.initCalendar = function(strCalendarId, strCalendarContaine
  * Tags-handling
  */
 KAJONA.admin.tags = {};
-KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute, strTargetDivId) {
+KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute) {
     KAJONA.admin.ajax.genericAjaxCall("tags", "saveTag", strSystemid+"&tagname="+strTagname+"&attribute="+strAttribute, {
         success : function(o) {
-            KAJONA.admin.tags.reloadTagList(strTargetDivId, strSystemid, strAttribute);
+            KAJONA.admin.tags.reloadTagList(strSystemid, strAttribute);
             document.getElementById('tagname').value='';
         },
         failure : function(o) {
@@ -1811,12 +1811,24 @@ KAJONA.admin.tags.saveTag = function(strTagname, strSystemid, strAttribute, strT
     });
 };
 
-KAJONA.admin.tags.reloadTagList = function(strTargetDivId, strSystemid, strAttribute) {
+KAJONA.admin.tags.reloadTagList = function(strSystemid, strAttribute) {
     KAJONA.admin.ajax.genericAjaxCall("tags", "tagList", strSystemid+"&attribute="+strAttribute, {
         success : function(o) {
             var intStart = o.responseText.indexOf("<tags>")+6;
             var strContent = o.responseText.substr(intStart, o.responseText.indexOf("</tags>")-intStart);
-            document.getElementById(strTargetDivId).innerHTML = strContent;
+            document.getElementById("tagsWrapper_"+strSystemid).innerHTML = strContent;
+        },
+        failure : function(o) {
+            KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
+        }
+    });
+};
+
+KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute) {
+    KAJONA.admin.ajax.genericAjaxCall("tags", "removeTag", strTagId+"&targetid="+strTargetSystemid+"&attribute="+strAttribute, {
+        success : function(o) {
+            KAJONA.admin.tags.reloadTagList(strTargetSystemid, strAttribute);
+            document.getElementById('tagname').value='';
         },
         failure : function(o) {
             KAJONA.admin.statusDisplay.messageError("<b>Request failed!</b><br />" + o.responseText);
