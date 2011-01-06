@@ -1,7 +1,7 @@
 <?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
-*   (c) 2007-2010 by Kajona, www.kajona.de                                                              *
+*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
 *   $Id: class_systemtask_flushcache.php 3387 2010-08-27 19:32:51Z sidler $                                        *
