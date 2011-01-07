@@ -314,6 +314,10 @@ class class_toolkit_admin extends class_toolkit {
                                                    "icon_externalBrowser.gif",
                                                    class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"));
 
+        //FIXME: workaround for # 603 JS-replacing only temporary
+        //   if fixed, please fix formInputTagSelector(), too
+        $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
+
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
 	            KAJONA.admin.loader.loadAutocompleteBase(function () {
@@ -335,7 +339,8 @@ class class_toolkit_admin extends class_toolkit {
 
 
 	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
-	                KAJONA.admin.".$strName." = pageautocomplete;
+
+	                KAJONA.admin.".$strJsVarName." = pageautocomplete;
 	            });
 	        </script>
         ";

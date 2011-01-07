@@ -51,6 +51,7 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
     private function getChildNodes() {
         $strReturn = " ";
 
+        $strReturn .= "<subnodes>";
         $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
 
         if(count($arrNavigations) > 0) {
@@ -66,6 +67,7 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
             }
         }
 
+        $strReturn .= "</subnodes>";
         return $strReturn;
     }
 

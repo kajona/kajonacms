@@ -85,6 +85,8 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 
         $arrFolder = class_modul_pages_folder::getFolderList($this->getSystemid());
 
+        $strReturn .= "<subnodes>";
+
         $strReturn .= "<folders>";
         if(count($arrFolder) > 0) {
             foreach ($arrFolder as $objSingleFolder) {
@@ -114,6 +116,8 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
             }
         }
         $strReturn .= "</pages>";
+
+        $strReturn .= "</subnodes>";
 
         return $strReturn;
     }
