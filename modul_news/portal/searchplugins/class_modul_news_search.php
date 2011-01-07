@@ -37,8 +37,10 @@ class class_modul_news_search extends class_portal implements interface_search_p
 
 
     public function doSearch() {
-        if(class_modul_system_module::getModuleByName("news"))
+        if(class_modul_system_module::getModuleByName("news") != null) {
             $this->searchNews();
+            $this->searchNewsTags();
+        }
         return $this->arrHits;
     }
 
@@ -89,6 +91,54 @@ class class_modul_news_search extends class_portal implements interface_search_p
 		}
 	}
 
+    private function searchNewsTags() {
+        if(class_modul_system_module::getModuleByName("tags") != null) {
+
+            $arrWhere = array();
+		    //Build an or-statemement out of the columns
+            foreach ($this->arrSearchterm as $strOneSeachterm)
+                $arrWhere[] = "tags_tag_name ".$strOneSeachterm;
+
+		    $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
+
+            $strQuery = "SELECT *
+                          FROM "._dbprefix_."system,
+                               "._dbprefix_."tags_member,
+                               "._dbprefix_."tags_tag,
+                               "._dbprefix_."news
+                         WHERE system_module_nr = "._news_modul_id_."
+						   AND system_id = news_id
+                           AND system_id = tags_systemid
+                           AND tags_tagid = tags_tag_id
+                           AND system_status = 1
+                           AND ".$strWhere."
+                             ";
+
+
+            $arrNews = $this->objDB->getArray($strQuery);
+
+           //Register found news
+			if(count($arrNews) > 0) {
+				foreach($arrNews as $arrOneNews) {
+
+                    if(!$this->checkLanguage($arrOneNews) || !$this->objRights->rightView($arrOneNews["system_id"]))
+                        continue;
+
+					//generate links
+					if(isset($this->arrHits[$arrOneNews["system_id"]]["hits"]))
+						$this->arrHits[$arrOneNews["system_id"]]["hits"]++;
+					else {
+    					$this->arrHits[$arrOneNews["system_id"]]["hits"] = 1;
+    					$this->arrHits[$arrOneNews["system_id"]]["pagelink"] = getLinkPortal(_news_search_resultpage_, "", "_self", $arrOneNews["news_title"], "newsDetail", "&highlight=".html_entity_decode($this->strSearchtermRaw, ENT_QUOTES, "UTF-8"), $arrOneNews["system_id"], "", "", $arrOneNews["news_title"]);
+    					$this->arrHits[$arrOneNews["system_id"]]["pagename"] = _news_search_resultpage_;
+    					$this->arrHits[$arrOneNews["system_id"]]["description"] = $arrOneNews["news_intro"];
+					}
+				}
+			}
+
+       }
+    }
+
 	/**
 	 * Checks, if the hit is available on page using the current language
 	 *
@@ -118,6 +168,7 @@ class class_modul_news_search extends class_portal implements interface_search_p
 
         return false;
 	}
+
 
 }
 ?>

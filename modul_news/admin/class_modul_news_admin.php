@@ -639,6 +639,11 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 
+                //Add tags, if installed
+                if(class_modul_system_module::getModuleByName("tags") != null) {
+                    $strReturn .= class_modul_system_module::getModuleByName("tags")->getAdminInstanceOfConcreteModule()->getTagForm($this->getSystemid());
+                }
+
 				$strReturn .= $this->objToolkit->setBrowserFocus("news_title");
 			}
 			else
