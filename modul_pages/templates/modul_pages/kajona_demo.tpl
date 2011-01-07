@@ -39,6 +39,9 @@
                 %%mastermainnavi_navigation%%
             </div>
             <div id="contentContainer">
+                <!-- Please note that the following list is only for demo-purposes.
+                     When using the template for "real" installations, the list of
+                     placeholders should be stripped down to a minimum. -->
                 %%headline_row%%
                 %%text_paragraph%%
                 %%picture1_image%%
