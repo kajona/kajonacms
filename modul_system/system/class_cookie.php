@@ -41,6 +41,7 @@ class class_cookie {
 
         $strPath = _webpath_;
 
+	    return setcookie($strName, $strValue, $intTime);
 	    return setcookie($strName, $strValue, $intTime, $strPath);
 	}
 
