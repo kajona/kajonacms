@@ -86,11 +86,25 @@ class class_xml {
 	            $objLanguage->setStrPortalLanguage(getGet("language"));
     	    }
 
-            //Requested module installed?
 
+            //if admin & https, redirect?
+            if(_admin_) {
+                //Redirect to https?
+                if(_admin_only_https_ == "true") {
+                    if(!issetServer("HTTPS")) {
+                        //reload to https
+                        header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
+                        die("Reloading using https...");
+                    }
+                }
+            }
+
+            //Requested module installed?
             $objModule = class_modul_system_module::getModuleByName($strModule);
             if($objModule != null) {
                 if(_admin_) {
+
+
                     if($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
                         //Load the admin-part
                         if($objModule->getStrXmlNameAdmin() != "") {
