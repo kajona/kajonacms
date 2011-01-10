@@ -228,7 +228,7 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
         if($strAlt != $strText)
             $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "")." onmouseover=\"KAJONA.admin.tooltip.add(this);\">".$strText."</a>";
         else
-            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" title=\"".$strAlt."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
+            $strLink = "<a href=\"".getLinkAdminHref($strModule, $strAction, $strParams)."\" ".($strCss!= "" ? " class=\"".$strCss."\"" : "").">".$strText."</a>";
 	}
 
 	return $strLink;
