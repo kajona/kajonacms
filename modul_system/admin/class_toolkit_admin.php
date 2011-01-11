@@ -1744,7 +1744,8 @@ class class_toolkit_admin extends class_toolkit {
 	                var pageautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", pageDataSource, {
 	                    queryMatchCase: false,
 	                    allowBrowserAutocomplete: false,
-	                    useShadow: false
+	                    useShadow: false,
+                        delimChar: [\",\"]
 	                });
 	                pageautocomplete.generateRequest = function(sQuery) {
 	                    return \"?admin=1&module=tags&action=getTagsByFilter&filter=\" + sQuery ;
