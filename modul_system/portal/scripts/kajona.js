@@ -185,7 +185,7 @@ KAJONA.util.Loader = function (strScriptBase) {
 						name : arrFilesToLoad[i],
 						type : fileType,
 						skinnable : false,
-						fullpath : url,
+						fullpath : url
 					});
 
 					yuiLoader.require(arrFilesToLoad[i]);
