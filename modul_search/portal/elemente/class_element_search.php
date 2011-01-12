@@ -27,7 +27,7 @@ class class_element_search extends class_element_portal implements interface_por
 		$arrModule["table"]		    = _dbprefix_."element_search";
         parent::__construct($arrModule, $objElementData);
 
-        $this->setStrCacheAddon(getPost("searchterm"));
+        $this->setStrCacheAddon(getPost("searchterm").getGet("searchterm"));
 	}
 
  /**
