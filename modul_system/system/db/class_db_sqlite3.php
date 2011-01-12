@@ -186,7 +186,8 @@ class class_db_sqlite3 implements interface_db_driver {
      * 		char100
      * 		char254
      *      char500
-     * 		text 
+     * 		text
+     *      longtext
      *
      * @param string $strName
      * @param array $arrFields array of fields / columns
@@ -346,7 +347,8 @@ class class_db_sqlite3 implements interface_db_driver {
      *      char100
      *      char254
      *      char500
-     *      text 
+     *      text
+     *      longtext
      * 
      * @param string $strType
      * @return string
@@ -372,6 +374,8 @@ class class_db_sqlite3 implements interface_db_driver {
         elseif($strType == "char500")
             $strReturn .= " TEXT ";
         elseif($strType == "text")
+            $strReturn .= " TEXT ";
+        elseif($strType == "longtext")
             $strReturn .= " TEXT ";
         else
             $strReturn .= " TEXT ";

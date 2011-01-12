@@ -172,7 +172,8 @@ class class_db_mysql implements interface_db_driver {
      *      char100
      *      char254
      *      char500
-     *      text 
+     *      text
+     *      longtext
      * 
      * @param string $strType
      * @return string
@@ -198,6 +199,8 @@ class class_db_mysql implements interface_db_driver {
             $strReturn .= " VARCHAR( 500 ) ";
         elseif($strType == "text")
             $strReturn .= " TEXT ";
+        elseif($strType == "longtext")
+            $strReturn .= " LONGTEXT ";
         else
             $strReturn .= " VARCHAR( 254 ) ";
             
@@ -220,6 +223,7 @@ class class_db_mysql implements interface_db_driver {
      * 		char254
      *      char500
      * 		text
+     *      longtext
      *
      * @param string $strName
      * @param array $arrFields array of fields / columns

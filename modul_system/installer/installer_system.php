@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.2";
+		$arrModul["version"] 			= "3.3.1.3";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -257,7 +257,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["cache_hash1"]	          = array("char254", true);
 		$arrFields["cache_hash2"]	          = array("char254", true);
 		$arrFields["cache_language"]	      = array("char20", true);
-		$arrFields["cache_content"]           = array("text", true);
+		$arrFields["cache_content"]           = array("longtext", true);
 		$arrFields["cache_leasetime"]         = array("int", true);
 		$arrFields["cache_hits"]              = array("int", true);
 
@@ -580,6 +580,11 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.1") {
             $strReturn .= $this->update_3311_3312();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.2") {
+            $strReturn .= $this->update_3312_3313();
         }
 
         return $strReturn."\n\n";
@@ -1223,6 +1228,23 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.2");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.2");
+        return $strReturn;
+    }
+
+    private function update_3312_3313() {
+        $strReturn = "Updating 3.3.1.2 to 3.3.1.3...\n";
+
+        $strReturn .= "Altering cache-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."cache")."
+                    CHANGE ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->getDatatype("longtext")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.3");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.3");
+        return $strReturn;
         return $strReturn;
     }
 }

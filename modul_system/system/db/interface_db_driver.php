@@ -103,7 +103,8 @@ interface interface_db_driver {
      * 		char100
      * 		char254
      *      char500
-     * 		text 
+     * 		text
+     *      longtext
      *
      * @param string $strName
      * @param array $arrFields array of fields / columns

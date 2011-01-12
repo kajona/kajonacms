@@ -555,6 +555,7 @@ class class_db {
      *      char254
      *      char500
      *      text
+     *      longtext
      *
      * @param string $strType
      * @return string
@@ -579,6 +580,7 @@ class class_db {
      * 		char254
      *      char500
      * 		text
+     *      longtext
      *
      * @param string $strName
      * @param array $arrFields array of fields / columns
