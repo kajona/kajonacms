@@ -831,9 +831,7 @@ abstract class class_admin {
             $this->strAction = $strAction;
 
         //search for the matching method - build method name
-        $strMethodName = "action".$strAction;
-
-        $this->strOutput = $this->actionListCategories();
+        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
         
         if(method_exists($this, $strMethodName)) {
             $this->strOutput = $this->$strMethodName();
