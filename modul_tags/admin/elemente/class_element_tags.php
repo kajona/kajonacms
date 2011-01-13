@@ -1,0 +1,69 @@
+<?php
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id: class_element_tagcloud.php 3217 2010-03-26 21:46:37Z sidler $                                  *
+********************************************************************************************************/
+
+
+/**
+ * Class to handle the admin-stuff of the tags-element
+ *
+ * @package modul_tags
+ *
+ */
+class class_element_tags extends class_element_admin implements interface_admin_element {
+
+	/**
+	 * Constructor
+	 *
+	 */
+	public function __construct() {
+        $arrModule = array();
+		$arrModule["name"] 			= "element_tags";
+		$arrModule["author"] 		= "sidler@mulchprod.de";
+		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
+		$arrModule["table"] 		= _dbprefix_."element_universal";
+		$arrModule["modul"]			= "elemente";
+		//char1 => template
+		$arrModule["tableColumns"]  = "char1|char";
+
+		parent::__construct($arrModule);
+	}
+
+   /**
+	 * Returns a form to edit the element-data
+	 *
+	 * @param mixed $arrElementData
+	 * @return string
+	 */
+	public function getEditForm($arrElementData) {
+		$strReturn = "";
+
+		//Load the available templates
+		$objFilesystem = new class_filesystem();
+		$arrTemplates = $objFilesystem->getFilelist("/templates/element_tags/", ".tpl");
+		$arrTemplatesDD = array();
+		if(count($arrTemplates) > 0) {
+			foreach($arrTemplates as $strTemplate) {
+				$arrTemplatesDD[$strTemplate] = $strTemplate;
+			}
+		}
+
+        $strReturn .= $this->objToolkit->warningBox($this->getText("tags_hint"));
+
+		if(count($arrTemplates) == 1)
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tags_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+        else
+            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tags_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+
+		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
+
+		return $strReturn;
+	}
+
+
+}
+?>
