@@ -321,6 +321,16 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
 			$strReturn .= "An error occured! ...\n";
 
+         //languages -------------------------------------------------------------------------------------
+        $strReturn .= "Installing table aspects...\n";
+
+		$arrFields = array();
+		$arrFields["aspect_id"] 		= array("char20", false);
+		$arrFields["aspect_name"]       = array("char254", true);
+		$arrFields["aspect_default"]    = array("int", true);
+
+		if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
+			$strReturn .= "An error occured! ...\n";
 
 
 		//Now we have to register module by module
@@ -1235,10 +1245,22 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn = "Updating 3.3.1.2 to 3.3.1.3...\n";
 
         $strReturn .= "Altering cache-table...\n";
+        class_cache::flushCache();
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."cache")."
                     CHANGE ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->getDatatype("longtext")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
+        
+
+        $strReturn .= "Installing table aspects...\n";
+
+		$arrFields = array();
+		$arrFields["aspect_id"] 		= array("char20", false);
+		$arrFields["aspect_name"]       = array("char254", true);
+		$arrFields["aspect_default"]    = array("int", true);
+
+		if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
+			$strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.3");

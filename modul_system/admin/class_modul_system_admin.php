@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                       *
+*	$Id$                                *
 ********************************************************************************************************/
 
 
@@ -34,7 +34,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	}
 
 	/**
-	 * Method to decide, what to do
+	 * Controller, delegates further processing
 	 *
 	 * @param stirng $strAction
 	 */
@@ -44,18 +44,13 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 		$strReturn = "";
 
-		if($strAction == "moduleList")
-			$strReturn = $this->actionModuleList();
-
 		if($strAction == "moduleSortUp") {
             $this->setPositionAndReload($this->getSystemid(), "upwards");
 		}
-
-		if($strAction == "moduleSortDown") {
+		else if($strAction == "moduleSortDown") {
             $this->setPositionAndReload($this->getSystemid(), "downwards");
 		}
-
-		if($strAction == "moduleStatus") {
+		else if($strAction == "moduleStatus") {
             //status: for setting the status of modules, you have to be member of the admin-group
             $objUser = new class_modul_user_user($this->objSession->getUserID());
             $objAdminGroup = new class_modul_user_group(_admins_group_id_);
@@ -64,36 +59,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
    		    }
 		}
+        else 
+            $strReturn = parent::action($strAction);
+        
 
-		if($strAction == "systemInfo")
-			$strReturn = $this->actionSystemInfo();
-
-		if($strAction == "systemSettings")
-			$strReturn = $this->actionSystemSettings();
-
-		if($strAction == "systemSessions")
-			$strReturn = $this->actionSessions();
-
-		if($strAction == "systemTasks")
-		    $strReturn = $this->actionSystemtasks();
-
-		if($strAction == "systemlog")
-		    $strReturn = $this->actionSystemlog();
-
-		if($strAction == "updateCheck")
-		    $strReturn = $this->actionCheckUpdates();
-
-		if($strAction == "about")
-		    $strReturn = $this->actionAboutKajona();
-
-        if($strAction == "systemCache")
-            $strReturn = $this->actionSystemCache();
-
-		$this->strTemp = $strReturn;
-	}
-
-	public function getOutputContent() {
-		return $this->strTemp;
+		$this->strOutput = $strReturn;
 	}
 
 	public function getOutputModuleNavi() {
@@ -106,6 +76,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getText("aspects"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getText("system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemCache", "", $this->getText("system_cache"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right4", getLinkAdmin($this->arrModule["modul"], "updateCheck", "", $this->getText("updatecheck"), "", "", true, "adminnavi"));
@@ -122,7 +93,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-	private function actionModuleList() {
+	protected function actionModuleList() {
 		$strReturn = "";
 		$strListId = generateSystemid();
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -182,7 +153,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-	private function actionSystemInfo() {
+	protected function actionSystemInfo() {
 		$strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             $objCommon = new class_modul_system_common();
@@ -246,7 +217,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
      *
      * @return string "" in case of success
      */
-    private function actionSystemSettings() {
+    protected function actionSystemSettings() {
         $strReturn = "";
         //Check for needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -326,7 +297,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 // --- Systemtasks --------------------------------------------------------------------------------------
 
-    private function actionSystemtasks() {
+    protected function actionSystemTasks() {
         $strReturn = "";
         $strTaskOutput = "";
 
@@ -449,7 +420,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
      *
      * @return string
      */
-    private function actionSessions() {
+    protected function actionSystemSessions() {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -556,7 +527,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
      *
      * @return string
      */
-    private function actionSystemlog() {
+    protected function actionSystemlog() {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -596,7 +567,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
      *
      * @return string
      */
-    private function actionCheckUpdates() {
+    protected function actionUpdateCheck() {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -666,8 +637,11 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     }
 
 
-
-    private function actionSystemCache() {
+    /**
+     * Generates a table-based view of the current cache-entries
+     * @return string
+     */
+    protected function actionSystemCache() {
         $strReturn = "";
         //Check for needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -721,15 +695,159 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         
     }
 
+//---Aspects---------------------------------------------------------------------------------------------
 
-// -- Helferfunktionen ----------------------------------------------------------------------------------
+    /**
+     * Renders the list of aspects available
+     * @return string
+     */
+    protected function actionAspects() {
+
+		$strReturn = "";
+		$intI = 0;
+		//rights
+		if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+		   $arrObjAspects = class_modul_system_aspect::getAllAspects();
+
+            foreach ($arrObjAspects as $objOneAspect) {
+                //Correct Rights?
+				if($this->objRights->rightView($objOneAspect->getSystemid())) {
+					$strAction = "";
+					if($this->objRights->rightEdit($objOneAspect->getSystemid()))
+		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editAspect", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("aspect_edit"), "icon_pencil.gif"));
+		    		if($this->objRights->rightDelete($objOneAspect->getSystemid()))
+		    		    $strAction .= $this->objToolkit->listDeleteButton($objOneAspect->getStrName(), $this->getText("aspect_delete_question"), getLinkAdminHref($this->arrModule["modul"], "deleteAspect", "&systemid=".$objOneAspect->getSystemid()));
+		    		if($this->objRights->rightEdit($objOneAspect->getSystemid()))
+		    		    $strAction .= $this->objToolkit->listStatusButton($objOneAspect->getSystemid());
+		    		if($this->objRights->rightRight($objOneAspect->getSystemid()))
+		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("aspect_permissions"), getRightsImageAdminName($objOneAspect->getSystemid())));
+
+		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_aspect.gif"), $objOneAspect->getStrName().($objOneAspect->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault").")" : ""), $strAction, $intI++);
+				}
+            }
+            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_blank.gif"), $intI++);
+
+            if(uniStrlen($strReturn) != 0)
+                $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
+
+		   if(count($arrObjAspects) == 0)
+		       $strReturn .= $this->getText("aspect_list_empty");
+
+		}
+		else
+			$strReturn = $this->getText("fehler_recht");
+
+		return $strReturn;
+	}
+
+    /**
+     * Delegate to actionNewAspect
+     * @return string
+     * @see actionNewAspect
+     */
+    protected function actionEditAspect() {
+        return $this->actionNewAspect("edit");
+    }
+
+    /**
+	 * Creates the form to edit an existing aspect or to create a new one
+	 *
+	 * @param string $strMode
+	 * @return string
+	 */
+	protected function actionNewAspect($strMode = "new") {
+	    $strReturn = "";
+	    $arrDefault = array(0 => $this->getText("aspect_nodefault"), 1 => $this->getText("aspect_isdefault"));
+
+        if($strMode == "new") {
+            if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
+                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("aspect_name"), $this->getParam("aspect_name"));
+                $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $this->getParam("aspect_default"));
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formClose();
+
+                $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
+            }
+            else
+			    $strReturn = $this->getText("fehler_recht");
+        }
+        elseif ($strMode == "edit") {
+            $objAspect = new class_modul_system_aspect($this->getSystemid());
+            if($objAspect->rightEdit()) {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
+                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("aspect_name"), $objAspect->getStrName());
+                $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $objAspect->getBitDefault());
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formClose();
+
+                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
+            }
+            else
+			    $strReturn = $this->getText("fehler_recht");
+
+        }
+        return $strReturn;
+	}
+
+    /**
+	 * saves the submitted form-data as a new aspect or updates an existing one
+	 *
+	 * @return string, "" in case of success
+	 */
+	protected function actionSaveAspect() {
+	    if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objAspect = null;
+
+            if($this->getParam("mode") == "new")
+                $objAspect = new class_modul_system_aspect();
+            else if($this->getParam("mode") == "edit")
+                $objAspect = new class_modul_system_aspect($this->getSystemid());
+
+            if($objAspect != null) {
+	            //reset the default aspect?
+	            if($this->getParam("aspect_default") == "1")
+	                class_modul_system_aspect::resetDefaultAspect();
+
+                $objAspect->setStrName($this->getParam("aspect_name"));
+               	$objAspect->setBitDefault($this->getParam("aspect_default"));
+                if(!$objAspect->updateObjectToDb() )
+                    throw new class_exception("Error creating new aspect", class_exception::$level_ERROR);
+            }
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
+        }
+        else
+            return $this->getText("fehler_recht");
+	}
+
+	/**
+	 * Deletes an aspect
+	 *
+	 * @return string
+	 */
+	protected function actionDeleteAspect() {
+        if($this->objRights->rightDelete($this->getSystemid()) && $this->objRights->rightRight5($this->getSystemid())) {
+            $objAspect = new class_modul_system_aspect($this->getSystemid());
+            if(!$objAspect->deleteObject())
+                throw new class_exception("Error deleting aspect", class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
+        }
+        else
+		    return $this->getText("fehler_recht");
+	}
+
 
     /**
      * About kajona, credits and co
      *
      * @return string
      */
-    private function actionAboutKajona() {
+    protected function actionAbout() {
         $strReturn = "";
         $strReturn .= $this->objToolkit->getTextRow($this->getText("about"));
         $strReturn .= $this->objToolkit->getTextRow($this->getText("about_part1"));

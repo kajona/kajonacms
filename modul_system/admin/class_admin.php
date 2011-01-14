@@ -820,7 +820,7 @@ abstract class class_admin {
      * 
      *
      * @param string $strAction
-     * @return void
+     * @return string
      * @since 3.4
      */
     public function action($strAction = "") {
@@ -841,7 +841,7 @@ abstract class class_admin {
             throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
         }
 
-
+        return $this->strOutput;
     }
 
     

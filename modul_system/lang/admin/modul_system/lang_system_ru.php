@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 316
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -42,6 +42,17 @@ $lang["about_part2"]                     = "<h2> Главные разработ
 $lang["about_part3"]                     = "<h2>Credits</h2><ul><li>Icons:<br />Everaldo Coelho (Crystal Clear, Crystal SVG), <a href=\"http://everaldo.com/\" target=\"_blank\">http://everaldo.com/</a><br />Steven Robson (Krystaline), <a href=\"http://www.kde-look.org/content/show.php?content=17509\" target=\"_blank\">http://www.kde-look.org/content/show.php?content=17509</a><br />David Patrizi, <a href=\"mailto:david@patrizi.de\">david@patrizi.de</a></li><li>browscap.ini:<br />Gary Keith, <a href=\"http://browsers.garykeith.com/downloads.asp\" target=\"_blank\">http://browsers.garykeith.com/downloads.asp</a></li><li>CKEditor:<br />Frederico Caldeira Knabben, <a href=\"http://www.ckeditor.com/\" target=\"_blank\">http://www.ckeditor.com/</a></li><li>pChart:<br /><a href=\"http://pchart.sourceforge.net\" target=\"_blank\">http://pchart.sourceforge.net</a></li><li>DejaVu Fonts:<br />DejaVu Team, <a href=\"http://dejavu.sourceforge.net\" target=\"_blank\">http://dejavu.sourceforge.net</a></li><li>Yahoo! User Interface Library:<br />Yahoo!, <a href=\"http://developer.yahoo.com/yui/\" target=\"_blank\">http://developer.yahoo.com/yui/</a></li></ul>";
 $lang["about_part4"]                     = "<h2>Донации</h2><p>Если вам нравится работать с Kajona и вы хотите поддержать проект, вы можете сделать донацию: </p> <form method=\"post\" action=\"https://www.paypal.com/cgi-bin/webscr\" target=\"_blank\"><input type=\"hidden\" value=\"_donations\" name=\"cmd\" /> <input type=\"hidden\" value=\"donate@kajona.de\" name=\"business\" /> <input type=\"hidden\" value=\"Kajona Development\" name=\"item_name\" /> <input type=\"hidden\" value=\"0\" name=\"no_shipping\" /> <input type=\"hidden\" value=\"1\" name=\"no_note\" /> <input type=\"hidden\" value=\"EUR\" name=\"currency_code\" /> <input type=\"hidden\" value=\"0\" name=\"tax\" /> <input type=\"hidden\" value=\"PP-DonationsBF\" name=\"bn\" /> <input type=\"submit\" name=\"submit\" value=\"Пожертвовать через PayPal\" class=\"inputSubmit\" /></form>";
 $lang["anzahltabellen"]                  = "Количество таблиц";
+$lang["aspect_create"]                   = "";
+$lang["aspect_default"]                  = "";
+$lang["aspect_delete_question"]          = "";
+$lang["aspect_edit"]                     = "";
+$lang["aspect_isDefault"]                = "";
+$lang["aspect_isdefault"]                = "";
+$lang["aspect_list_empty"]               = "";
+$lang["aspect_name"]                     = "";
+$lang["aspect_nodefault"]                = "";
+$lang["aspect_permissions"]              = "";
+$lang["aspects"]                         = "";
 $lang["backlink"]                        = "Назад";
 $lang["browser"]                         = "Страницы браузера";
 $lang["cache_entry_size"]                = "";
