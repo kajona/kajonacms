@@ -149,6 +149,7 @@ $lang["login_xml_error"]                 = "Login fehlgeschlagen";
 $lang["login_xml_succeess"]              = "Login erfolgreich";
 $lang["logout_xml"]                      = "Logout erfolgreich";
 $lang["memorylimit"]                     = "Memory Limit";
+$lang["modul_aspectedit"]                = "Aspekte beabeiten";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_rechte_root"]               = "Root-Rechte";
 $lang["modul_sortdown"]                  = "Nach unten verschieben";

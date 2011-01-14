@@ -138,6 +138,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["module_version"] 			= array("char254", true);
 		$arrFields["module_date"] 				= array("int", true);
 		$arrFields["module_navigation"] 		= array("int", true);
+		$arrFields["module_aspect"] 		    = array("char254", true);
 
 		if(!$this->objDB->createTable("system_module", $arrFields, array("module_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -1261,6 +1262,14 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
 			$strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Altering module-table...\n";
+        class_cache::flushCache();
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."module")."
+                     ADD ".$this->objDB->encloseColumnName("module_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.3");

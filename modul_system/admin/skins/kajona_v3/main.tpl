@@ -25,6 +25,7 @@
 				<div>
 					%%mainnavi%%
 					<a href="javascript:showMenu();" onmouseover="javascript:showMenu();" id="showMenuLink"><img id="modulNaviMoreIcon" src="_skinwebpath_/modulenavi_more.png" /></a>
+                    %%aspectChooser%%
 				</div> 
 				<div id="moduleNaviHidden">
 					<ul id="naviCollectorUl"></ul>

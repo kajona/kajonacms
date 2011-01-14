@@ -141,6 +141,7 @@ $lang["jpg"]                             = "Suporte JPG";
 $lang["keinegd"]                         = "GD-Lib não instalada";
 $lang["log_empty"]                       = "Não existem registo de entradas do ficheiro de acessos.";
 $lang["memorylimit"]                     = "Limite de memória";
+$lang["modul_aspectedit"]                = "";
 $lang["modul_rechte"]                    = "Permissões do Módulo";
 $lang["modul_rechte_root"]               = "Direitos do registo na raiz";
 $lang["modul_sortdown"]                  = "Para baixo";

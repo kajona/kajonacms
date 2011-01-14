@@ -24,6 +24,7 @@ class class_modul_system_module extends class_model implements interface_model  
     private $intDate = "";
     private $intNavigation = "";
     private $intNr = "";
+    private $strAspect = "";
 
 
     /**
@@ -87,6 +88,7 @@ class class_modul_system_module extends class_model implements interface_model  
         $this->setIntDate($arrRow["module_date"]);
         $this->setIntNavigation($arrRow["module_navigation"]);
         $this->setIntNr($arrRow["module_nr"]);
+        $this->setStrAspect($arrRow["module_aspect"]);
     }
 
     /**
@@ -102,7 +104,8 @@ class class_modul_system_module extends class_model implements interface_model  
 					  module_xmlfilenameadmin ='".dbsafeString($this->getStrXmlNameAdmin())."',
 					  module_version ='".dbsafeString($this->getStrVersion())."',
 					  module_date ='".dbsafeString($this->getIntDate())."',
-					  module_navigation ='".dbsafeString($this->getIntNavigation())."'
+					  module_navigation ='".dbsafeString($this->getIntNavigation())."',
+					  module_aspect='".dbsafeString($this->getStrAspect())."'
 					WHERE module_id = '".dbsafeString($this->getSystemid())."'				
 					";
         return$this->objDB->_query($strQuery);
@@ -189,10 +192,16 @@ class class_modul_system_module extends class_model implements interface_model  
 	 * Looks up all modules being active and allowed to appear in the admin-navigation
 	 * Creates a simple array, NO OBJECTS
 	 *
+     * @param string $strAspectFilter
 	 * @return array
 	 * @static
 	 */
-	public static function getModulesInNaviAsArray() {
+	public static function getModulesInNaviAsArray($strAspectFilter = "") {
+
+        if($strAspectFilter != "") {
+            $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE '%".dbsafeString($strAspectFilter)."%')";
+        }
+
 	    //Loading all Modules
 		$strQuery = "SELECT module_id, module_name
 		               FROM "._dbprefix_."system_module,
@@ -200,6 +209,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		              WHERE module_navigation = 1
 		                AND system_status = 1
 		                AND module_id = system_id
+                            ".$strAspectFilter."
 		              ORDER BY system_sort ASC, system_comment ASC";
 		return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 	}
@@ -278,5 +288,14 @@ class class_modul_system_module extends class_model implements interface_model  
     public function setIntNr($intNr) {
         $this->intNr = $intNr;
     }
+    public function getStrAspect() {
+        return $this->strAspect;
+    }
+
+    public function setStrAspect($strAspect) {
+        $this->strAspect = $strAspect;
+    }
+
+
 }
 ?>

@@ -595,6 +595,8 @@ abstract class class_admin {
 		$this->arrOutput["mainnavi"] = $this->getOutputMainNavi();
 		$this->arrOutput["modulenavi"] = $this->getOutputModuleActionsNavi();
 		$this->arrOutput["moduletitle"] = $this->getOutputModuleTitle();
+        if(class_modul_system_aspect::getNumberOfAspectsAvailable(true) > 1)
+            $this->arrOutput["aspectChooser"] = $this->objToolkit->getAspectChooser($this->arrModule["modul"], $this->getAction(), $this->getSystemid());
 		$this->arrOutput["login"] = $this->getOutputLogin();
 		$this->arrOutput["quickhelp"] = $this->getQuickHelp();
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
@@ -687,7 +689,8 @@ abstract class class_admin {
 	protected function getOutputMainNavi() {
 		if($this->objSession->isLoggedin()) {
 			//Loading all Modules
-			$arrModules = class_modul_system_module::getModulesInNaviAsArray();
+			$arrModules = class_modul_system_module::getModulesInNaviAsArray(
+                    class_modul_system_aspect::getCurrentAspect() != null ? class_modul_system_aspect::getCurrentAspect()->getSystemid() : "");
 			$intI = 0;
 			$arrModuleRows = array();
 			foreach ($arrModules as $arrModule) {

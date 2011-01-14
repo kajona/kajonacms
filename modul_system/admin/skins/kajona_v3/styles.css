@@ -1640,3 +1640,12 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
     position: relative;
     top: 5px;
 }
+
+/** Aspects **/
+#aspectChooser {
+    position: relative;
+    display: inline;
+    float: right;
+    top: 0px;
+    
+}

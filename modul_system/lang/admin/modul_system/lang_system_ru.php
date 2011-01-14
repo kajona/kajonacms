@@ -141,6 +141,7 @@ $lang["jpg"]                             = "Поддержка JPG";
 $lang["keinegd"]                         = "GD-Lib не установлен";
 $lang["log_empty"]                       = "Нет входов в логфайл системы";
 $lang["memorylimit"]                     = "Предел памяти";
+$lang["modul_aspectedit"]                = "";
 $lang["modul_rechte"]                    = "Разрешения модуля";
 $lang["modul_rechte_root"]               = "Права для root-record";
 $lang["modul_sortdown"]                  = "Вниз";

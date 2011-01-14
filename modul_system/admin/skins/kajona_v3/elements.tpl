@@ -1021,3 +1021,13 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
   </div><br />
 %%ajaxScript%%
 </input_tagselector>
+
+The aspect chooser is shown in cases more than one aspect is defined in the system-module.
+It containes a list of aspects and provides the possibility to switch the different aspects.
+<aspect_chooser>
+    <div id="aspectChooser"><select onchange="location.href=this.value;" >%%options%%</select></div>
+</aspect_chooser>
+
+<aspect_chooser_entry>
+    <option value="%%value%%" %%selected%%>%%name%%</option>
+</aspect_chooser_entry>

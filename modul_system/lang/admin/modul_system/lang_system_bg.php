@@ -141,6 +141,7 @@ $lang["jpg"]                             = "JPG поддръжка";
 $lang["keinegd"]                         = "G-LIB не е инсталиран";
 $lang["log_empty"]                       = "Няма записи в системния дневник";
 $lang["memorylimit"]                     = "Лимит на паметта";
+$lang["modul_aspectedit"]                = "";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_rechte_root"]               = "Системни права";
 $lang["modul_sortdown"]                  = "Премести надолу";

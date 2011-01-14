@@ -115,6 +115,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strDescription .= $objSingleModule->getStrName()." <br /> ".$objSingleModule->getStrVersion();
 
 		   		if($intModuleSystemID != "") {
+                    if($this->objRights->rightRight5($intModuleSystemID))
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$intModuleSystemID, "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
 		   		    //sort-icons
                     if($this->objRights->rightEdit($intModuleSystemID)) {
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleSortUp", "&systemid=".$intModuleSystemID, "", $this->getText("modul_sortup"), "icon_arrowUp.gif"));
@@ -144,6 +146,51 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
+
+    /**
+     * Creates the form to manipulate the aspects of a single module
+     * @return string
+     */
+    protected function actionModuleAspect() {
+        $strReturn = "";
+        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objModule = new class_modul_system_module($this->getSystemid());
+            $strReturn .= $this->objToolkit->formHeadline($objModule->getStrName());
+            $arrAspectsSet = explode(",", $objModule->getStrAspect());
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveModuleAspect"));
+            $arrAspects = class_modul_system_aspect::getAllAspects();
+            foreach($arrAspects as $objOneAspect)
+                $strReturn .= $this->objToolkit->formInputCheckbox("aspect_".$objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
+
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        else
+            $strReturn = $this->getText("fehler_recht");
+
+        return $strReturn;
+    }
+
+    protected function actionSaveModuleAspect() {
+        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $arrParams = array();
+            foreach($this->getAllParams() as $strName => $intValue)
+                if(uniStrpos($strName, "aspect_") !== false)
+                    $arrParams[] = uniSubstr($strName, 7);
+
+            $objModule = new class_modul_system_module($this->getSystemid());
+            $objModule->setStrAspect(implode(",", $arrParams));
+
+            $objModule->updateObjectToDb();
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "moduleList"));
+            
+        }
+        else
+            return $this->getText("fehler_recht");
+
+    }
 
 
 // -- Systeminfos ---------------------------------------------------------------------------------------

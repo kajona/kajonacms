@@ -22,6 +22,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     private $strName = "";
     private $bitDefault = false;
 
+    private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
 
     /**
      * Constructor to create a valid object
@@ -195,7 +196,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     /**
      * Returns the default aspect, defined in the admin.
      *
-     * @return class_modul_system_aspect
+     * @return class_modul_system_aspect null if no aspect is set up
      */
     public static function getDefaultAspect() {
         //try to load the default language
@@ -220,6 +221,30 @@ class class_modul_system_aspect extends class_model implements interface_model  
     }
 
   
+    /**
+     * Returns the aspect currently selected by the user.
+     * If no aspect was selected before, the default aspect is returned instead.
+     * In addition, the current params are processed in order to react on changes made
+     * by the user / external sources.
+     *
+     * @return class_modul_system_aspect null if no aspect is set up
+     */
+    public static function getCurrentAspect() {
+
+        //process params maybe existing
+        if(_admin_ && getGet("aspect") != "" && validateSystemid(getGet("aspect"))) {
+            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, getGet("aspect"));
+        }
+
+        //aspect registered in session?
+        if(validateSystemid(class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY))) {
+            return new class_modul_system_aspect(class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY));
+        }
+        else {
+            return class_modul_system_aspect::getDefaultAspect();
+        }
+    }
+
 
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
