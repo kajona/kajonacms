@@ -689,8 +689,7 @@ abstract class class_admin {
 	protected function getOutputMainNavi() {
 		if($this->objSession->isLoggedin()) {
 			//Loading all Modules
-			$arrModules = class_modul_system_module::getModulesInNaviAsArray(
-                    class_modul_system_aspect::getCurrentAspect() != null ? class_modul_system_aspect::getCurrentAspect()->getSystemid() : "");
+			$arrModules = class_modul_system_module::getModulesInNaviAsArray(class_modul_system_aspect::getCurrentAspectId());
 			$intI = 0;
 			$arrModuleRows = array();
 			foreach ($arrModules as $arrModule) {

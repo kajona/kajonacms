@@ -93,7 +93,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	        foreach($this->arrColumnsOnDashboard as $strColumnName) {
 	            $strColumnContent = $this->objToolkit->getDashboardColumnHeader($strColumnName);
     	        $strWidgetContent = "";
-	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName) as $objOneSystemmodel) {
+	            foreach($objDashboardmodel->getWidgetsForColumn($strColumnName, class_modul_system_aspect::getCurrentAspectId()) as $objOneSystemmodel) {
     	            $strWidgetContent .= $this->layoutAdminWidget($objOneSystemmodel);
     	        }
 
@@ -237,6 +237,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                     $objDashboard->setStrColumn($this->getParam("column"));
                     $objDashboard->setStrUser($this->objSession->getUserID());
                     $objDashboard->setStrWidgetId($strWidgetId);
+                    $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
                     if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
                         return "";
                     }

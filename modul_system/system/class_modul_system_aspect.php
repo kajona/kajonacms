@@ -245,6 +245,20 @@ class class_modul_system_aspect extends class_model implements interface_model  
         }
     }
 
+    /**
+     * Wrapper to getCurrentAspect(), returning the ID of the aspect currently selected.
+     * If no aspect is selected, an empty string is returned.
+     *
+     * @return string
+     */
+    public static function getCurrentAspectId() {
+        $objAspect = class_modul_system_aspect::getCurrentAspect();
+        if($objAspect != null)
+            return $objAspect->getSystemid();
+        else
+            return "";
+    }
+
 
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------

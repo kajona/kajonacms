@@ -287,6 +287,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["dashboard_column"]		= array("char254", true);
 		$arrFields["dashboard_user"] 		= array("char20", true);
 		$arrFields["dashboard_widgetid"] 	= array("char20", true);
+		$arrFields["dashboard_aspect"] 	    = array("char254", true);
 
 		if(!$this->objDB->createTable("dashboard", $arrFields, array("dashboard_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -470,6 +471,13 @@ class class_installer_system extends class_installer_base implements interface_i
 					('".$strAdminID."','".$strUserID."')";
 		$this->objDB->_query($strQuery);
 		$strReturn .= "Registered Admin in Admin-Group...\n";
+
+        //creating a new default-aspect
+        $strReturn .= "Registering new default aspect...\n";
+        $objAspect = new class_modul_system_aspect();
+        $objAspect->setStrName("default");
+        $objAspect->setBitDefault(true);
+        $objAspect->updateObjectToDb();
 
 		//try to create a default-dashboard for the admin
         $objDashboard = new class_modul_dashboard_widget();
@@ -1263,6 +1271,13 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
 			$strReturn .= "An error occured! ...\n";
 
+        //creating a new default-aspect
+        $objAspect = new class_modul_system_aspect();
+        $objAspect->setStrName("default");
+        $objAspect->setBitDefault(true);
+        $objAspect->updateObjectToDb();
+        
+        $strDefaultAspectId = $objAspect->getSystemid();
 
         $strReturn .= "Altering module-table...\n";
         class_cache::flushCache();
@@ -1270,6 +1285,21 @@ class class_installer_system extends class_installer_base implements interface_i
                      ADD ".$this->objDB->encloseColumnName("module_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Altering dashboard-table...\n";
+        class_cache::flushCache();
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
+                     ADD ".$this->objDB->encloseColumnName("dashboard_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Moving existing widgets to default aspect...\n";
+        $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
+                        SET ".$this->objDB->encloseColumnName("dashboard_aspect")." = '".dbsafeString($strDefaultAspectId)."'";
+
+        $this->objDB->_query($strQuery);
+
+
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.3");

@@ -654,6 +654,10 @@ class class_installer {
 }
 
 
+
+//set admin to false
+define("_admin_", false);
+
 //Creating the Installer-Object
 $objInstaller = new class_installer();
 $objInstaller->action();

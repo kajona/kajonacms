@@ -1770,14 +1770,14 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["options"] = "";
 
         //process rows
-        $objCurrent = class_modul_system_aspect::getCurrentAspect();
+        $strCurrentId = class_modul_system_aspect::getCurrentAspectId();
         $arrAspects = class_modul_system_aspect::getAllAspects(true);
         foreach($arrAspects as $objSingleAspect) {
             if($objSingleAspect->rightView()) {
                 $arrSubtemplate = array();
                 $arrSubtemplate["value"] = getLinkAdminHref($strLastModule, $strLastAction, "&systemid=".$strLastSystemid."&aspect=".$objSingleAspect->getSystemid());
                 $arrSubtemplate["name"] = $objSingleAspect->getStrName();
-                $arrSubtemplate["selected"] = $objCurrent != null && $objCurrent->getSystemid() == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
+                $arrSubtemplate["selected"] = $strCurrentId == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
 
                 $arrTemplate["options"] .= $this->objTemplate->fillTemplate($arrSubtemplate, $strTemplateRowID);
             }

@@ -17,6 +17,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     private $strColumn = "";
     private $strUser = "";
     private $strWidgetId = "";
+    private $strAspect = "";
 
 
 	/**
@@ -68,6 +69,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $this->setStrUser($arrRow["dashboard_user"]);
             $this->setStrColumn($arrRow["dashboard_column"]);
             $this->setStrWidgetId($arrRow["dashboard_widgetid"]);
+            $this->setStrAspect($arrRow["dashboard_aspect"]);
         }
 
     }
@@ -80,7 +82,8 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                    SET dashboard_user = '".dbsafeString($this->getStrUser())."',
                        dashboard_column = '".dbsafeString($this->getStrColumn())."',
-                       dashboard_widgetid = '".dbsafeString($this->getStrWidgetId())."'
+                       dashboard_widgetid = '".dbsafeString($this->getStrWidgetId())."',
+                       dashboard_aspect = '".dbsafeString($this->getStrAspect())."'
                  WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -113,13 +116,19 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      * @param string $strColumn
      * @return array of class_modul_system_adminwidget
      */
-    public function getWidgetsForColumn($strColumn) {
+    public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
+
+        if($strAspectFilter != "") {
+            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE '%".dbsafeString($strAspectFilter)."%')";
+        }
+
         $strQuery = "SELECT system_id
         			  FROM ".$this->arrModule["table"].",
         			  	   "._dbprefix_."system
         			 WHERE dashboard_user = '".dbsafeString($this->objSession->getUserID())."'
         			   AND dashboard_column = '".dbsafeString($strColumn)."'
         			   AND dashboard_id = system_id
+                       ".$strAspectFilter."
         	     ORDER BY system_sort ASC ";
         $arrRows = $this->objDB->getArray($strQuery);
         $arrReturn = array();
@@ -187,6 +196,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column1");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
+            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
             if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
@@ -199,6 +209,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
+            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
             if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
@@ -211,6 +222,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
+            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
             if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
@@ -223,6 +235,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column3");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
+            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
             if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
@@ -235,6 +248,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             $objDashboard->setStrColumn("column2");
             $objDashboard->setStrUser($strUserid);
             $objDashboard->setStrWidgetId($strWidgetId);
+            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
             if(!$objDashboard->updateObjectToDb())
                 $bitReturn = false;
         }
@@ -264,6 +278,16 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function getStrWidgetId() {
         return $this->strWidgetId;
     }
+
+    public function getStrAspect() {
+        return $this->strAspect;
+    }
+
+    public function setStrAspect($strAspect) {
+        $this->strAspect = $strAspect;
+    }
+
+
 
 }
 
