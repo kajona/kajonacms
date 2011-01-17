@@ -1025,7 +1025,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 The aspect chooser is shown in cases more than one aspect is defined in the system-module.
 It containes a list of aspects and provides the possibility to switch the different aspects.
 <aspect_chooser>
-    <div id="aspectChooser"><select onchange="location.href=this.value;" >%%options%%</select></div>
+    <div id="aspectChooser"><select onchange="window.location.replace(this.value);" >%%options%%</select></div>
 </aspect_chooser>
 
 <aspect_chooser_entry>
