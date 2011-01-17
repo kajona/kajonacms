@@ -1281,7 +1281,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
         $strReturn .= "Altering module-table...\n";
         class_cache::flushCache();
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."module")."
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")."
                      ADD ".$this->objDB->encloseColumnName("module_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
