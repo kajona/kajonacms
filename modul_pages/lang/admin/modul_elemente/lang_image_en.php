@@ -14,7 +14,6 @@ $lang["browser"]                         = "Open browser";
 $lang["element_image_name"]              = "Image";
 $lang["image_image"]                     = "Image:";
 $lang["image_link"]                      = "Link:";
-$lang["image_template"]                  = "Template:";
 $lang["image_title"]                     = "Title:";
 $lang["image_x"]                         = "Maximum width:";
 $lang["image_xy_hint"]                   = "Using 0, the image won't be scaled. It'll be returned using its' original dimensions.";

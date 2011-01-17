@@ -13,5 +13,4 @@
 $lang["portalupload_download"]           = "Download-Archiv:";
 $lang["portalupload_filemanager"]        = "Filemanager-Repository:";
 $lang["portalupload_matchwarning"]       = "Es wurden keine Download-Archive und Filemanager-Repositories gefunden welche den selben Pfad im Dateisystem verwenden.";
-$lang["portalupload_template"]           = "Template:";
 ?>

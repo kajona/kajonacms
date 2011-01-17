@@ -12,5 +12,4 @@
 //editable entries
 $lang["all_cats"]                        = "Всички категории";
 $lang["faqs_category"]                   = "Категория:";
-$lang["faqs_template"]                   = "Шаблон:";
 ?>

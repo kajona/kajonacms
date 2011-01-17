@@ -67,9 +67,9 @@ class class_element_formular extends class_element_admin implements interface_ad
 		}
 
         if(count($arrTemplatesDD) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("formular_template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("formular_template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("formular_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["formular_template"]) ? $arrElementData["formular_template"] : "" ));
 
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("formular_email");

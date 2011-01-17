@@ -13,5 +13,4 @@
 $lang["element_guestbook_name"]          = "";
 $lang["guestbook_amount"]                = "Количество постов на странице:";
 $lang["guestbook_id"]                    = "Гостевая книга:";
-$lang["guestbook_template"]              = "Шаблон:";
 ?>

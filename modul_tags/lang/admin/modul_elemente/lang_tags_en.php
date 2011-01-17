@@ -10,6 +10,5 @@
 //Kajona Language Editor Core Build 101
 
 //editable entries
-$lang["tags_template"]               = "Template:";
 $lang["tags_hint"]                   = "Currently only the pages and news support the full portal-functionality of the tags-module.";
 ?>

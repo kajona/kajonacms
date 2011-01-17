@@ -12,7 +12,6 @@
 $lang["browser"]				= "Open browser";
 $lang["search_amount"]          = "Number of hits per page:";
 $lang["search_page"]            = "Result page:";
-$lang["search_template"]        = "Template:";
 
 
 ?>

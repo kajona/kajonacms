@@ -54,9 +54,9 @@ class class_element_postacomment extends class_element_admin implements interfac
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("postacomment_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("postacomment_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
         $strReturn .= $this->objToolkit->formTextRow($this->getText("postacomment_actionfilter_hint"));
         $strReturn .= $this->objToolkit->formInputText("char2", $this->getText("postacomment_actionfilter"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));

@@ -13,5 +13,4 @@
 $lang["portalregistration_group"]        = "Assigned group:";
 $lang["portalregistration_hint"]         = "Users created via this element are inactive by default.<br />Users can activate themself using the automatically sent mail.<br />A hint about this should be placed on the page.";
 $lang["portalregistration_success"]      = "Page in case of success (optional):";
-$lang["portalregistration_template"]     = "Template:";
 ?>

@@ -55,9 +55,9 @@ class class_element_portalregistration extends class_element_admin implements in
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("portalregistration_template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("portalregistration_template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("portalregistration_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["portalregistration_template"]) ? $arrElementData["portalregistration_template"] : "" ));
 
 		//Load groups available
 		$arrGroups = class_modul_user_group::getAllGroups();

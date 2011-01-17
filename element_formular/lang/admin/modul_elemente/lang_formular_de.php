@@ -14,6 +14,5 @@ $lang["formular_class"]                  = "Portal-Klasse:";
 $lang["formular_email"]                  = "Ziel-E-Mail-Adresse:";
 $lang["formular_error"]                  = "Fehlermeldung:";
 $lang["formular_success"]                = "Erfolgsmeldung:";
-$lang["formular_template"]               = "Template:";
 $lang["required_formular_email"]         = "E-Mail Adresse";
 ?>

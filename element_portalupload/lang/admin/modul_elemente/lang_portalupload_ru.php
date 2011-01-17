@@ -13,5 +13,4 @@
 $lang["portalupload_download"]           = "Архив скачиваний:";
 $lang["portalupload_filemanager"]        = "Хранилище файл-менеджера:";
 $lang["portalupload_matchwarning"]       = "Нет архивов скачиваний и хранилищ файл-менеджеров, использующих один и тот же path в системе файлов.";
-$lang["portalupload_template"]           = "Шаблон:";
 ?>

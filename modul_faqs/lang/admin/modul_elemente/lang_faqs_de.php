@@ -10,8 +10,6 @@
 // --- Module texts -------------------------------------------------------------------------------------
 
 $lang["faqs_category"]          = "Kategorie:";
-$lang["faqs_template"]          = "Template:";
-
 $lang["all_cats"]               = "Alle Kategorien";
 
 ?>

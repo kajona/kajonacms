@@ -13,5 +13,4 @@
 $lang["element_guestbook_name"]          = "Guestbook";
 $lang["guestbook_amount"]                = "Number of posts per page:";
 $lang["guestbook_id"]                    = "Guestbook:";
-$lang["guestbook_template"]              = "Template:";
 ?>

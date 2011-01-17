@@ -12,7 +12,5 @@
 $lang["browser"]				= "Browser öffnen";
 $lang["search_amount"]          = "Anzahl Treffer pro Seite:";
 $lang["search_page"]            = "Ergebnisseite:";
-$lang["search_template"]        = "Template:";
-
 
 ?>

@@ -13,5 +13,4 @@
 $lang["postacomment_actionfilter"]       = "";
 $lang["postacomment_actionfilter_hint"]  = "";
 $lang["postacomment_numberofposts"]      = "";
-$lang["postacomment_template"]           = "Шаблон:";
 ?>

@@ -14,6 +14,5 @@ $lang["formular_class"]                  = "Portal-class:";
 $lang["formular_email"]                  = "Към електорнна поща:";
 $lang["formular_error"]                  = "Съобщение за грешка:";
 $lang["formular_success"]                = "Съобщение за успех:";
-$lang["formular_template"]               = "";
 $lang["required_formular_email"]         = "";
 ?>

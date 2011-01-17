@@ -12,5 +12,4 @@
 //editable entries
 $lang["dl_toplist_amount"]               = "Брой попълнения:";
 $lang["dl_toplist_archive"]              = "Архив";
-$lang["dl_toplist_template"]             = "Шаблон:";
 ?>

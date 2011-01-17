@@ -13,5 +13,4 @@
 $lang["browser"]                         = "Открыть браузер";
 $lang["search_amount"]                   = "Количество хитов на странице:";
 $lang["search_page"]                     = "Страница результата:";
-$lang["search_template"]                 = "Шаблон:";
 ?>

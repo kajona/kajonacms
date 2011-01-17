@@ -25,7 +25,6 @@ $lang["news_mode_normal"]                = "Режим стандартен";
 $lang["news_order"]                      = "Ред";
 $lang["news_order_asc"]                  = "Възходящ";
 $lang["news_order_desc"]                 = "Низходящ";
-$lang["news_template"]                   = "Шаблон:";
 $lang["news_view"]                       = "Режим преглед:";
 $lang["news_view_detail"]                = "Детайлен преглед";
 $lang["news_view_list"]                  = "Списък";

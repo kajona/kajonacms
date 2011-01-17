@@ -21,7 +21,6 @@ $lang["gallery_maxw_m"]                  = "Max width:";
 $lang["gallery_maxw_p"]                  = "Max height:";
 $lang["gallery_mode"]                    = "Element-mode";
 $lang["gallery_mode_hint"]               = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery. The values defined in the detail-view section are applied.";
-$lang["gallery_template"]                = "Template:";
 $lang["gallery_text"]                    = "Inscription:";
 $lang["gallery_text_x"]                  = "X-axis:";
 $lang["gallery_text_y"]                  = "Y-axis:";

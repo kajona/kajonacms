@@ -11,6 +11,5 @@
 
 //editable entries
 $lang["rssfeed_numberofposts"]           = "Брой съобщения за показване:";
-$lang["rssfeed_template"]                = "Шаблон:";
 $lang["rssfeed_url"]                     = "RSS-Feed-URL:";
 ?>

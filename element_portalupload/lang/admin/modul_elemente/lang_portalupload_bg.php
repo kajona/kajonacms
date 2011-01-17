@@ -13,5 +13,4 @@
 $lang["portalupload_download"]           = "Download-Архиви:";
 $lang["portalupload_filemanager"]        = "Файлов Manager";
 $lang["portalupload_matchwarning"]       = "Няма download-архиви и файловия manager ползва съшия път към файловата система.";
-$lang["portalupload_template"]           = "Шаблон:";
 ?>

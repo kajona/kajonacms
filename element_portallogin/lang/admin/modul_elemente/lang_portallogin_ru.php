@@ -19,5 +19,4 @@ $lang["portallogin_profile"]             = "Страница для измене
 $lang["portallogin_profile_hint"]        = "Для изменения профиля на заданной странице должен быть расположен элемент для входа на портал.";
 $lang["portallogin_pwdforgot"]           = "";
 $lang["portallogin_success"]             = "Страница в случае успеха (факультативно):";
-$lang["portallogin_template"]            = "Шаблон:";
 ?>

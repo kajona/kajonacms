@@ -25,7 +25,6 @@ $lang["news_mode_normal"]                = "Стандартный режим";
 $lang["news_order"]                      = "Порядок:";
 $lang["news_order_asc"]                  = "по возрастанию";
 $lang["news_order_desc"]                 = "по убыванию";
-$lang["news_template"]                   = "Шаблон:";
 $lang["news_view"]                       = "Режим просмотра:";
 $lang["news_view_detail"]                = "Детальный просмотр";
 $lang["news_view_list"]                  = "Просмотр списком";

@@ -13,5 +13,4 @@
 $lang["portalregistration_group"]        = "Zugehörige Gruppe:";
 $lang["portalregistration_hint"]         = "Über das Element angelegte Benutzer sind deaktivert,<br />die Aktivierung erfolgt mittels einer automatisch verschickten Mail an den User.<br /> Ein entsprechender Hinweis hierzu sollte auf der Seite gegeben werden.";
 $lang["portalregistration_success"]      = "Seite im Erfolgsfall (optional):";
-$lang["portalregistration_template"]     = "Template:";
 ?>

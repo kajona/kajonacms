@@ -63,9 +63,9 @@ class class_element_image extends class_element_admin implements interface_admin
 		}
 
         if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getText("image_template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getText("image_template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("image_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["image_template"]) ? $arrElementData["image_template"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("image_title");
 

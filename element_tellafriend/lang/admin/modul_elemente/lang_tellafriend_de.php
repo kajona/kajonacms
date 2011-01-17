@@ -12,5 +12,4 @@
 //editable entries
 $lang["tellafriend_error"]               = "Fehlerseite:";
 $lang["tellafriend_success"]             = "Erfolgsseite:";
-$lang["tellafriend_template"]            = "Template:";
 ?>

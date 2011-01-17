@@ -11,6 +11,5 @@
 
 //editable entries
 $lang["rssfeed_numberofposts"]           = "Number of messages to show:";
-$lang["rssfeed_template"]                = "Template:";
 $lang["rssfeed_url"]                     = "RSS-Feed-URL:";
 ?>

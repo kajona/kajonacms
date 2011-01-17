@@ -60,9 +60,9 @@ class class_element_downloads extends class_element_admin implements interface_a
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("download_template", $arrTemplatesDD, $this->getText("download_template"), (isset($arrElementData["download_template"]) ? $arrElementData["download_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("download_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["download_template"]) ? $arrElementData["download_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("download_template", $arrTemplatesDD, $this->getText("download_template"), (isset($arrElementData["download_template"]) ? $arrElementData["download_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("download_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["download_template"]) ? $arrElementData["download_template"] : "" ));
 
         $strReturn .= $this->objToolkit->formInputText("download_amount", $this->getText("download_amount"), (isset($arrElementData["download_amount"]) ? $arrElementData["download_amount"] : ""));
 

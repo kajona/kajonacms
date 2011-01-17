@@ -14,7 +14,6 @@ $lang["browser"]                         = "Отвори browser";
 $lang["element_image_name"]              = "";
 $lang["image_image"]                     = "Изображение:";
 $lang["image_link"]                      = "Линк:";
-$lang["image_template"]                  = "Шаблон:";
 $lang["image_title"]                     = "Име";
 $lang["image_x"]                         = "Максимална ширина:";
 $lang["image_xy_hint"]                   = "Ползвайки 0, изображението ще е в оригиналния си размер.";

@@ -28,7 +28,6 @@ $lang["news_mode_normal"]       = "Standard-Modus";
 $lang["news_order"]             = "Reihenfolge:";
 $lang["news_order_desc"]      	= "absteigend";
 $lang["news_order_asc"]       	= "aufsteigend";
-$lang["news_template"]          = "Template:";
 $lang["news_amount"]            = "Anzahl News pro Seite:";
 $lang["required_news_amount"]   = "Anzahl News pro Seite";
 ?>

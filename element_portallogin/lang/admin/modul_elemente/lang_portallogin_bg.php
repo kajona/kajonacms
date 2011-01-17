@@ -19,5 +19,4 @@ $lang["portallogin_profile"]             = "Страница за редакти
 $lang["portallogin_profile_hint"]        = "За да редактирате профилът е нужно да съществува друг portallogin-елемент за съответната страница.";
 $lang["portallogin_pwdforgot"]           = "";
 $lang["portallogin_success"]             = "Страница в случай на успех (не е задължително):";
-$lang["portallogin_template"]            = "Шаблон:";
 ?>

@@ -54,9 +54,9 @@ class class_element_portallogin extends class_element_admin implements interface
 		}
 		
         if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getText("portallogin_template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getText("portallogin_template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("portallogin_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["portallogin_template"]) ? $arrElementData["portallogin_template"] : "" ));
         
 		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_error", $this->getText("portallogin_error"), (isset($arrElementData["portallogin_error"]) ? $arrElementData["portallogin_error"] : ""));
 		$strReturn .= $this->objToolkit->formInputPageSelector("portallogin_success", $this->getText("portallogin_success"), (isset($arrElementData["portallogin_success"]) ? $arrElementData["portallogin_success"] : ""));

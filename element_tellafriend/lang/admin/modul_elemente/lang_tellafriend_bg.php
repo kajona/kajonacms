@@ -12,5 +12,4 @@
 //editable entries
 $lang["tellafriend_error"]               = "Страница в случай на грешка:";
 $lang["tellafriend_success"]             = "Страница в случай на успех:";
-$lang["tellafriend_template"]            = "Шаблон:";
 ?>

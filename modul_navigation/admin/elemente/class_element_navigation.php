@@ -64,9 +64,9 @@ class class_element_navigation extends class_element_admin implements interface_
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("navigation_template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("navigation_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["navigation_template"]) ? $arrElementData["navigation_template"] : "" ));
 
         //and finally offer the different modes
         $arrModes = array("tree" => $this->getText("modus_baum"), "sitemap" => $this->getText("modus_sitemap"));

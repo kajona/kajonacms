@@ -13,5 +13,4 @@
 $lang["portalupload_download"]           = "Downloads-Archive:";
 $lang["portalupload_filemanager"]        = "Filemanager-Repository:";
 $lang["portalupload_matchwarning"]       = "There are no download-archives and filemanager-repositories sharing exactly the same path in the filesystem.";
-$lang["portalupload_template"]           = "Template:";
 ?>

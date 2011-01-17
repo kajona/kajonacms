@@ -25,7 +25,6 @@ $lang["news_mode_normal"]                = "Standard mode";
 $lang["news_order"]                      = "Order:";
 $lang["news_order_asc"]                  = "ascending";
 $lang["news_order_desc"]                 = "descending";
-$lang["news_template"]                   = "Template:";
 $lang["news_view"]                       = "View mode:";
 $lang["news_view_detail"]                = "Detailed view";
 $lang["news_view_list"]                  = "List view";

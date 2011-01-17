@@ -12,5 +12,4 @@
 //editable entries
 $lang["dl_toplist_amount"]               = "Anzahl Einträge:";
 $lang["dl_toplist_archive"]              = "Archiv:";
-$lang["dl_toplist_template"]             = "Template:";
 ?>

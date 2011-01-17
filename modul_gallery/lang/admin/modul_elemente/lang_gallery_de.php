@@ -21,7 +21,6 @@ $lang["gallery_maxw_m"]                  = "Maximale Breite:";
 $lang["gallery_maxw_p"]                  = "Maximale Breite:";
 $lang["gallery_mode"]                    = "Element-Modus";
 $lang["gallery_mode_hint"]               = "Definiert den Modus des Elements: Normaler Listen-/Detailmodus, oder ein Zufallsbild aus der gewählten Galerie. Es gelten die in der Detail-Ansicht definierten Werte.";
-$lang["gallery_template"]                = "Template:";
 $lang["gallery_text"]                    = "Inschrift:";
 $lang["gallery_text_x"]                  = "X-Achse:";
 $lang["gallery_text_y"]                  = "Y-Achse:";

@@ -11,5 +11,4 @@
 
 //editable entries
 $lang["download_id"]                     = "Архив:";
-$lang["download_template"]               = "Шаблон:";
 ?>

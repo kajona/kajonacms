@@ -16,7 +16,6 @@ $lang["page_element_placeholder_title"]  = "Interner Titel:";
 $lang["paragraph_content"]               = "Text:";
 $lang["paragraph_image"]                 = "Bild:";
 $lang["paragraph_link"]                  = "Link:";
-$lang["paragraph_template"]              = "Template:";
 $lang["paragraph_title"]                 = "Titel:";
 $lang["quickhelp_element_paragraph"]     = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 $lang["required_paragraph_title"]        = "Titel";

@@ -55,9 +55,9 @@ class class_element_tags extends class_element_admin implements interface_admin_
         $strReturn .= $this->objToolkit->warningBox($this->getText("tags_hint"));
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tags_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("tags_template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
