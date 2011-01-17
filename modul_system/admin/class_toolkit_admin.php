@@ -1775,7 +1775,8 @@ class class_toolkit_admin extends class_toolkit {
         foreach($arrAspects as $objSingleAspect) {
             if($objSingleAspect->rightView()) {
                 $arrSubtemplate = array();
-                $arrSubtemplate["value"] = getLinkAdminHref($strLastModule, $strLastAction, "&systemid=".$strLastSystemid."&aspect=".$objSingleAspect->getSystemid());
+                //start on dashboard since the current module may not be visible in another aspect
+                $arrSubtemplate["value"] = getLinkAdminHref("dashboard", "", "&aspect=".$objSingleAspect->getSystemid());
                 $arrSubtemplate["name"] = $objSingleAspect->getStrName();
                 $arrSubtemplate["selected"] = $strCurrentId == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
 
