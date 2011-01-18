@@ -181,6 +181,18 @@ abstract class class_adminwidget {
     public final function getSystemid() {
         return $this->strSytemid;   
     }
+
+    /**
+     * This method controls the elements-section used by the toolkit to render
+     * the outer parts of the widget.
+     * Overwrite this method in cases you need some special layouting - in most cases this shouldn't be 
+     * necessary.
+     *
+     * @return string
+     */
+    public function getLayoutSection() {
+        return "adminwidget_widget";
+    }
     
 //--- Layout/Content functions --------------------------------------------------------------------------
 
