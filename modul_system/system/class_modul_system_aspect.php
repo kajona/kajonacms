@@ -232,7 +232,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public static function getCurrentAspect() {
 
         //process params maybe existing
-        if(_admin_ && getGet("aspect") != "" && validateSystemid(getGet("aspect"))) {
+        if(defined("_admin_") && _admin_ && getGet("aspect") != "" && validateSystemid(getGet("aspect"))) {
             class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, getGet("aspect"));
         }
 
