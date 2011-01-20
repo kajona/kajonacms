@@ -272,7 +272,7 @@ abstract class class_admin {
 	 * @return int
 	 */
 	public function getStatus($strSystemid = "") {
-		if($strSystemid == "0")
+		if($strSystemid == "0" || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		return $this->objSystemCommon->getStatus($strSystemid);
 	}
@@ -284,7 +284,7 @@ abstract class class_admin {
 	 * @return string
 	 */
 	public function getLastEditUser($strSystemid = "") {
-		if($strSystemid == 0)
+		if($strSystemid == 0 || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		return $this->objSystemCommon->getLastEditUser($strSystemid);
 	}
@@ -296,7 +296,7 @@ abstract class class_admin {
 	 * @return int
 	 */
 	public function getEditDate($strSystemid = "") 	{
-		if($strSystemid == 0)
+		if($strSystemid == 0  || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		return $this->objSystemCommon->getEditDate($strSystemid);
 	}
