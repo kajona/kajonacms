@@ -1254,6 +1254,12 @@ class class_installer_system extends class_installer_base implements interface_i
     private function update_3312_3313() {
         $strReturn = "Updating 3.3.1.2 to 3.3.1.3...\n";
 
+        $strReturn .= "Altering system-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                     ADD ".$this->objDB->encloseColumnName("system_create_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
         $strReturn .= "Altering cache-table...\n";
         class_cache::flushCache();
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."cache")."
@@ -1299,11 +1305,7 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
 
-        $strReturn .= "Altering system-table...\n";
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
-                     ADD ".$this->objDB->encloseColumnName("system_create_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL ";
-        if(!$this->objDB->_query($strQuery))
-             $strReturn .= "An error occured! ...\n";
+        
 
 
 
