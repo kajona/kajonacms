@@ -90,17 +90,18 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strReturn .= "Installing table system...\n";
 
 		$arrFields = array();
-		$arrFields["system_id"] 		= array("char20", false);
-		$arrFields["system_prev_id"] 	= array("char20", false);
-		$arrFields["system_module_nr"] 	= array("int", false);
-		$arrFields["system_sort"] 		= array("int", true);
-		$arrFields["system_owner"]      = array("char20", true);
-		$arrFields["system_lm_user"] 	= array("char20", true);
-		$arrFields["system_lm_time"] 	= array("int", true);
-		$arrFields["system_lock_id"] 	= array("char20", true);
-		$arrFields["system_lock_time"] 	= array("int", true);
-		$arrFields["system_status"] 	= array("int", true);
-		$arrFields["system_comment"]	= array("char254", true);
+		$arrFields["system_id"]             = array("char20", false);
+		$arrFields["system_prev_id"]        = array("char20", false);
+		$arrFields["system_module_nr"]      = array("int", false);
+		$arrFields["system_sort"]           = array("int", true);
+		$arrFields["system_owner"]          = array("char20", true);
+		$arrFields["system_create_date"]    = array("long", true);
+		$arrFields["system_lm_user"]        = array("char20", true);
+		$arrFields["system_lm_time"]        = array("int", true);
+		$arrFields["system_lock_id"]        = array("char20", true);
+		$arrFields["system_lock_time"]  	= array("int", true);
+		$arrFields["system_status"]         = array("int", true);
+		$arrFields["system_comment"]        = array("char254", true);
 
 		if(!$this->objDB->createTable("system", $arrFields, array("system_id"), array("system_prev_id", "system_module_nr")))
 			$strReturn .= "An error occured! ...\n";
@@ -1280,14 +1281,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $strDefaultAspectId = $objAspect->getSystemid();
 
         $strReturn .= "Altering module-table...\n";
-        class_cache::flushCache();
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_module")."
                      ADD ".$this->objDB->encloseColumnName("module_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
         
         $strReturn .= "Altering dashboard-table...\n";
-        class_cache::flushCache();
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
                      ADD ".$this->objDB->encloseColumnName("dashboard_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
@@ -1297,7 +1296,14 @@ class class_installer_system extends class_installer_base implements interface_i
         $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
                         SET ".$this->objDB->encloseColumnName("dashboard_aspect")." = '".dbsafeString($strDefaultAspectId)."'";
 
-        $this->objDB->_query($strQuery);
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Altering system-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system")."
+                     ADD ".$this->objDB->encloseColumnName("system_create_date")." ".$this->objDB->getDatatype("long")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
 
 
 

@@ -148,11 +148,12 @@ abstract class class_root {
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
-					 ( system_id, system_prev_id, system_module_nr, system_owner, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
+					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
 					 ('".$this->objDB->dbsafeString($strSystemId)."', 
                       '".$this->objDB->dbsafeString($strPrevId)."',
                        ".(int)$intModulNr." ,
                       '".$this->objDB->dbsafeString($this->objSession->getUserID())."',
+                      '".$this->objDB->dbsafeString(class_date::getCurrentTimestamp())."',
                       '".$this->objDB->dbsafeString($this->objSession->getUserID())."' ,
                        ".time()." ,
                        ".(int)$intStatus.",
