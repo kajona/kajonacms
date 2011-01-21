@@ -240,9 +240,10 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  * @param string $strModule
  * @param string $strAction
  * @param string $strParams
+ * @param bool $bitEncodedAmpersand
  * @return string
  */
-function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
+function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
     $strLink = "";
     //systemid in params?
     $strSystemid = "";
@@ -285,6 +286,9 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "") {
        if(count($arrParams) > 0)
            $strLink .= "&amp;".(implode("&amp;", $arrParams));
     }
+
+    if(!$bitEncodedAmpersand)
+        $strLink = uniStrReplace("&amp;", "&", $strLink);
 
 	return $strLink;
 }
