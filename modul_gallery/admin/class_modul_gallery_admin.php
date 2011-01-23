@@ -537,19 +537,13 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	$strCenter = ($objOneFile->getIntType() == 0 ? bytesToString($objOneFile->getIntSize()) ." - ": "") ;
 				 	$strCenter .= ($objOneFile->getIntType() == 0 ? $objOneFile->getIntHits()." Hits": "");
 
-				 	//ratings available?
-				 	try {
-				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
-				        if($objMdlRating != null && $objOneFile->getIntType() != 1) {
-				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
-				 	        if($objRating != null)
-				 	            $strCenter .= " - ".$objRating->getFloatRating();
-				 	        else
-				 	            $strCenter .= " - 0.0";
-				        }
-
-				 	}
-				 	catch (class_exception $objException) { }
+				    //ratings available?
+                    if($objOneFile->getType() != 1) {
+                        $floatRating = $objOneFile->getFloatRating();
+                        if ($floatRating !== null) {
+                            $strCenter .= " - ".$floatRating;
+                        }
+                    }
 
 			   		//If folder, a link to open
 			   		$strAction = "";

@@ -156,21 +156,11 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    			 	$strCenter = ($objOnePost->getStrAssignedLanguage() != "" ? " (". $objOnePost->getStrAssignedLanguage() .")" : ""). " | ". timeToString($objOnePost->getIntDate());
 	                    $strAction = "";
 
-
 				        //ratings available?
-                        try {
-                            $objMdlRating = class_modul_system_module::getModuleByName("rating");
-                            if($objMdlRating != null) {
-                                $objRating = class_modul_rating_rate::getRating($objOnePost->getSystemid());
-                                if($objRating != null)
-                                    $strCenter .= " - ".$objOnePost->getFloatRating();
-                                else
-                                    $strCenter .= " - 0.0";
-                            }
-
+                        $floatRating = $objOnePost->getFloatRating();
+                        if ($floatRating !== null) {
+                            $strCenter .= " - ".$floatRating;
                         }
-                        catch (class_exception $objException) { }
-
 
 	                    if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editPost", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_edit"), "icon_pencil.gif"));

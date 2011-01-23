@@ -34,7 +34,7 @@ class class_model extends class_root {
      * Saves the current object to the database. Determins, whether the current object has to be inserted
      * or updated to the database.
      * In case of an update, the objects' updateStateToDb() method is being called (as required by class_model).
-     * In the case of a new object, a blank record is being created. Thererfore, all tables returned by the 
+     * In the case of a new object, a blank record is being created. Thererfore, all tables returned by the
      * objects' getObjectTables() method will be filled with a new record (using the same new systemid as the
      * primary key). The newly created systemid is being set as the current objects' one and can be used in the afterwards
      * called updateStateToDb() method to reference the correct rows.
@@ -133,7 +133,7 @@ class class_model extends class_root {
     /**
      * Overwrite this method if you want to trigger additional commands during the insert
      * of an object, e.g. to create additional objects / relations
-     * 
+     *
      * @return bool
      */
     protected function onInsertToDb() {
@@ -343,14 +343,14 @@ class class_model extends class_root {
         $objModule = class_modul_system_module::getModuleByName("rating");
         if($objModule != null) {
             $objRating = class_modul_rating_rate::getRating($this->getSystemid());
-            if($objRating != null)
+            if($objRating != null) {
                $floatRating = $objRating->getFloatRating();
-            else
+               if($bitRound) {
+                   $floatRating = round($floatRating, 2);
+               }
+            } else
                $floatRating = 0.0;
         }
-
-        if($bitRound && !$floatRating == null)
-            $floatRating = round($floatRating, 2);
 
         return $floatRating;
     }

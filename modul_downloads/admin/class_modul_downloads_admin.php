@@ -318,18 +318,12 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				 	$strCenter .= ($objOneFile->getType() == 0 ? $objOneFile->getHits()." Hits": "");
 
 				 	//ratings available?
-				 	try {
-				        $objMdlRating = class_modul_system_module::getModuleByName("rating");
-				        if($objMdlRating != null && $objOneFile->getType() != 1) {
-				 	        $objRating = class_modul_rating_rate::getRating($objOneFile->getSystemid());
-				 	        if($objRating != null)
-				 	            $strCenter .= " - ".$objRating->getFloatRating();
-				 	        else
-				 	            $strCenter .= " - 0.0";
-				        }
-
+				 	if($objOneFile->getType() != 1) {
+				 	    $floatRating = $objOneFile->getFloatRating();
+				 	    if ($floatRating !== null) {
+                            $strCenter .= " - ".$floatRating;
+				 	    }
 				 	}
-				 	catch (class_exception $objException) { }
 
 			   		//If folder, a link to open
 			   		$strAction = "";

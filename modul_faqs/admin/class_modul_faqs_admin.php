@@ -194,19 +194,10 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
 			        //ratings available?
 			        $strRating = "";
-                    try {
-                        $objMdlRating = class_modul_system_module::getModuleByName("rating");
-                        if($objMdlRating != null ) {
-                            $objRating = class_modul_rating_rate::getRating($objOneFaq->getSystemid());
-                            if($objRating != null)
-                                $strRating .= " - ".$objRating->getFloatRating();
-                            else
-                                $strRating .= " - 0.0";
-                        }
-
+                    $floatRating = $objOneFaq->getFloatRating();
+                    if ($floatRating !== null) {
+                        $strRating = " - ".$floatRating;
                     }
-                    catch (class_exception $objException) { }
-
 
                     $strAction = "";
                     if($this->objRights->rightEdit($objOneFaq->getSystemid()))
