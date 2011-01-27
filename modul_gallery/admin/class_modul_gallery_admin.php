@@ -126,7 +126,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
     }
 
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "saveGallery") {
@@ -239,7 +239,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			//right
 			if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build a form
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $this->getParam("gallery_title"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
@@ -258,7 +258,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    //Load the gallery
 			    $objGallery = new class_modul_gallery_gallery($this->getSystemid());
 			    //Build a form
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $objGallery->getStrTitle());
                 $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $objGallery->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
@@ -403,7 +403,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 				//Build the form
 				if(!$bitValidated)
-				    $strReturn .= $this->objToolkit->getValidationErrors($this);
+				    $strReturn .= $this->objToolkit->getValidationErrors($this, "editImage");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editImage"));
                 $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("pic_name"), $objImage->getStrName());
                 $strReturn .= $this->objToolkit->formInputTextArea("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());

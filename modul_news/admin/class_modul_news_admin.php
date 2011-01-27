@@ -165,7 +165,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	}
 
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "saveCat") {
@@ -449,7 +449,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		if($strMode == "new") {
 			//New Category
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $this->getParam("news_cat_title"));
@@ -466,7 +466,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getSystemid())) {
 				//Load cat data
 				$objCat = new class_modul_news_category($this->getSystemid());
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -545,7 +545,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		if($strMode == "new") {
 			//Form to create new news
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNews");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
@@ -603,7 +603,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 }
 	            $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0);
 
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNews");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
                 $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
@@ -828,7 +828,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             if($this->getParam("save") != "1") {
                 //Form
                 if(!$bitValidate)
-                    $strReturn .= $this->objToolkit->getValidationErrors($this);
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "newNewsFeed");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $this->getParam("feed_title"));
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $this->getParam("feed_urltitle"));
@@ -887,7 +887,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objFeed = new class_modul_news_feed($this->getSystemid());
                 //Form
                 if(!$bitValidate)
-                    $strReturn .= $this->objToolkit->getValidationErrors($this);
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "editNewsFeed");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $objFeed->getStrTitle());
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $objFeed->getStrUrlTitle());

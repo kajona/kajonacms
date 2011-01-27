@@ -109,7 +109,7 @@ class class_element_portalupload extends class_element_admin implements interfac
 	    return $bitReturn;
 	}
 
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         return array("char1" => "string", "char2" => "string", "char3" => "string");
     }
 }

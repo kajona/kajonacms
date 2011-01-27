@@ -160,7 +160,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 		if($this->objRights->rightEdit($this->getSystemid()) ) {
             $objTag = new class_modul_tags_tag($this->getSystemid());
 
-			$strReturn .= $this->objToolkit->getValidationErrors($this);
+			$strReturn .= $this->objToolkit->getValidationErrors($this, "saveTag");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
 			$strReturn .= $this->objToolkit->formInputText("tag_name", $this->getText("tag_name"), ($this->getParam("tag_name") != "" ? $this->getParam("tag_name") : $objTag->getStrName()) );
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $objTag->getSystemid());

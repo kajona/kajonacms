@@ -84,7 +84,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 		return $arrReturn;
 	}
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "savePost") {
@@ -250,7 +250,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $objPost->getStrUsername() );
             }
             else {
-                $strReturn .= $this->objToolkit->getValidationErrors($this);
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "savePost");
                 $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $this->getParam("postacomment_username") );
                 $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $this->getParam("postacomment_title") );
                 $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $this->getParam("postacomment_comment"));

@@ -77,7 +77,7 @@ class class_element_formular extends class_element_admin implements interface_ad
 		return $strReturn;
 	}
 
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         return array("formular_email" => "email", "formular_template" => "string");
     }
 

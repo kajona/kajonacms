@@ -124,7 +124,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	}
 
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "saveNavi") {
@@ -248,7 +248,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $objNavi = new class_modul_navigation_tree("");
 
 		    //Build the form
-		    $strReturn .= $this->objToolkit->getValidationErrors($this);
+		    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNavi");
 		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
             $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
             $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
@@ -307,7 +307,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		if($strMode == "new") {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    //Build the form
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNaviPoint");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
@@ -330,7 +330,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    //Load Point data
 			    $objPoint = new class_modul_navigation_point($this->getSystemid());
 			    //Build the form
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNaviPoint");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");

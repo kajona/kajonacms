@@ -65,8 +65,11 @@ abstract class class_element_admin extends class_admin {
 		$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["p_module"], "saveElement"), "elEditForm");
 
 		//validation errors?
-		if($this->bitDoValidation && !$this->validateForm())
-		    $strReturn .= $this->objToolkit->getValidationErrors($this);
+        if($this->bitDoValidation)
+            $this->validateForm();
+        
+        $strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
+
 
 		//add a folder containing optional system-fields
         $strSystemFields = "";

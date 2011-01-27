@@ -962,6 +962,10 @@ form .formText .text {
     width: 70%;
 }
 
+form .mandatoryFormElement {
+    border-right: 3px solid #BF5F5F;
+}
+
 
 /* F I E L D S E T */
 .fieldset {

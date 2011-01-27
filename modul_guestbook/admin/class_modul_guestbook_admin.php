@@ -108,7 +108,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	}
 
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "saveGuestbook") {
@@ -186,7 +186,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			//Chek rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 				//Create form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveGuestbook");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
                 $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $this->getParam("guestbook_title"));
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $this->getParam("guestbook_moderated"));
@@ -205,7 +205,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				//Load Guestbook
 				$objGuestbook = new class_modul_guestbook_guestbook($this->getSystemid());
 				//Create form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveGuestbook");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
                 $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $objGuestbook->getGuestbookTitle());
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $objGuestbook->getGuestbookModerated());

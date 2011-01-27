@@ -159,7 +159,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     }
 
 
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "save") {
@@ -293,16 +293,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             foreach ($this->arrLanguages as $strLanguage)
                 $arrLang[$strLanguage] = $this->getText("lang_".$strLanguage);
             //Start the form
-            if($strAction == "new")
+            if($strAction == "new") {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "save"));
-            else
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "save");
+            }
+            else {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveedit"));
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveedit");
+            }
 
             if($this->getParam("userid") != "") {
                 $objUser = new class_modul_user_user($this->getParam("userid"));
 
                 //Form filled with the data
-                $strReturn .= $this->objToolkit->getValidationErrors($this);
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 if(!$bitSelf)
                     $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), ($this->getParam("username") != "" ? $this->getParam("username") : $objUser->getStrUsername()) );
@@ -337,7 +340,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             else {
                 //Blank form
-                $strReturn .= $this->objToolkit->getValidationErrors($this);
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), $this->getParam("username"));
                 $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
@@ -625,14 +627,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             if($this->getParam("groupid") != "" || $this->getParam("gruppeid") != "") {
                 if($this->getParam("groupid") == "" && $this->getParam("gruppeid") != "")
                 $this->setParam("groupid", $this->getParam("gruppeid"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this);
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupsaveedit");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsaveedit"));
                 $objGroup = new class_modul_user_group($this->getParam("groupid"));
                 $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), $objGroup->getStrName());
                 $strReturn .= $this->objToolkit->formInputHidden("gruppeid", $objGroup->getSystemid());
             }
             else {
-                $strReturn .= $this->objToolkit->getValidationErrors($this);
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupsave");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsave"));
                 $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), "");
                 $strReturn .= $this->objToolkit->formInputHidden("gruppeid");

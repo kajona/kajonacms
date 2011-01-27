@@ -99,7 +99,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		return $arrReturn;
 	}
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "newRepo") {
@@ -205,7 +205,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			if($this->getParam("repoSaveNew") == ""){
 				//create the form
 				if(!$bitValidated)
-				    $strReturn .= $this->objToolkit->getValidationErrors($this);
+				    $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
@@ -257,7 +257,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 
 		        if(!$bitValidated)
-		            $strReturn .= $this->objToolkit->getValidationErrors($this);
+		            $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());

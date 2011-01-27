@@ -118,7 +118,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	}
 
 
-	protected function getRequiredFields() {
+	public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "saveCat") {
@@ -247,7 +247,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		if($strMode == "new") {
 			//New Category
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("faqs_cat_title"), $this->getParam("faqs_cat_title"));
@@ -264,7 +264,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			if($this->objRights->rightEdit($this->getSystemid())) {
 				//Load cat data
 				$objCat = new class_modul_faqs_category($this->getSystemid());
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -341,7 +341,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		if($strMode == "new") {
 			//Form to create new faq
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveFaq");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveFaq"));
                 $strReturn .= $this->objToolkit->formInputTextArea("faqs_question", $this->getText("faqs_question"), $this->getParam("faqs_question"));
                 $strReturn .= $this->objToolkit->formWysiwygEditor("faqs_answer", $this->getText("faqs_answer"), $this->getParam("faqs_answer"), "minimal");
@@ -371,7 +371,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			//Rights
 			if($this->objRights->rightEdit($this->getSystemid())) {
 			    $objFaq = new class_modul_faqs_faq($this->getSystemid());
-			    $strReturn .= $this->objToolkit->getValidationErrors($this);
+			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveFaq");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveFaq"));
                 $strReturn .= $this->objToolkit->formInputTextArea("faqs_question", $this->getText("faqs_question"), $objFaq->getStrQuestion());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("faqs_answer", $this->getText("faqs_answer"), $objFaq->getStrAnswer(), "minimal");

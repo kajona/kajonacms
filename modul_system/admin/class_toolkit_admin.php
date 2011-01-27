@@ -1226,12 +1226,13 @@ class class_toolkit_admin extends class_toolkit {
      * @return string
      */
     public function getValidationErrors($objCalling, $strTargetAction = null) {
-        $strRendercode = "dd";
+        $strRendercode = "";
         //render mandatory fields?
         if($strTargetAction != null && is_callable(array($objCalling, "getRequiredFields")) ) {
             $strTempAction = $objCalling->getAction();
             $objCalling->setAction($strTargetAction);
             $arrFields = $objCalling->getRequiredFields();
+            
             $objCalling->setAction($strTempAction);
 
             if(count($arrFields) > 0 ) {
@@ -1245,7 +1246,6 @@ class class_toolkit_admin extends class_toolkit {
             }
         }
 
-        $strRendercode .= "sd";
         $arrErrors = $objCalling->getValidationErrors();
         if(count($arrErrors) == 0)
             return $strRendercode;

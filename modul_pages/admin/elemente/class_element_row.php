@@ -55,9 +55,9 @@ class class_element_row extends class_element_admin implements interface_admin_e
 		}
 
 		if(count($arrTemplates) == 1)
-            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
+            $this->addOptionalFormElement($this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" )));
         else
-            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("paragraph_template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
+            $strReturn .= $this->objToolkit->formInputDropdown("paragraph_template", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["paragraph_template"]) ? $arrElementData["paragraph_template"] : "" ));
 
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("paragraph_title");
@@ -80,7 +80,7 @@ class class_element_row extends class_element_admin implements interface_admin_e
      *
      * @return mixed
      */
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         return array("paragraph_title" => "string");
     }
 

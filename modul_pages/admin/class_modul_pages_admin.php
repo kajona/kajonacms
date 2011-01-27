@@ -191,7 +191,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	}
 
 
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
         if($strAction == "folderNewSave" || $strAction == "folderEditSave") {
@@ -431,7 +431,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//Start form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "changePage");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
 
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $objPage->getStrName());
@@ -491,7 +491,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//start form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "savePage");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $this->getParam("name"));
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
@@ -691,7 +691,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strPrevid = $this->strFolderlevel;
 			//Build the form
 			//create an errorlist
-			$strReturn .= $this->objToolkit->getValidationErrors($this);
+			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderNewSave");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $this->getParam("ordner_name"));
 			$strReturn .= $this->objToolkit->formInputHidden("prev_id", $strPrevid);
@@ -719,7 +719,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strPrevid = $this->strFolderlevel;
 			//Build the form
 			//create an errorlist
-			$strReturn .= $this->objToolkit->getValidationErrors($this);
+			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderEditSave");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderEditSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName());
 
@@ -980,7 +980,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			//Which Mode?
 			if($strMode == "new") {
 				//Build the form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $this->getParam("element_name"));
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $this->getParam("element_cachetime"));
@@ -1018,7 +1018,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$objData = new class_modul_pages_element($this->getParam("elementid"));
 
 				//Build the form
-				$strReturn .= $this->objToolkit->getValidationErrors($this);
+				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
 				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $objData->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $objData->getIntCachetime());
