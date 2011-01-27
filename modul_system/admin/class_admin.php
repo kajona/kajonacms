@@ -871,32 +871,51 @@ abstract class class_admin {
 
         foreach($arrFieldsToCheck as $strFieldname => $strType) {
 
+            $bitAdd = false;
+
             if($strType == "string") {
                 if(!checkText($this->getParam($strFieldname), 2))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
             }
             else if($strType == "character") {
                 if(!checkText($this->getParam($strFieldname), 1))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
             }
             elseif($strType == "number") {
                 if(!checkNumber($this->getParam($strFieldname)))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
             }
             elseif($strType == "email") {
                 if(!checkEmailaddress($this->getParam($strFieldname)))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
             }
             elseif($strType == "folder") {
                 if(!checkFolder($this->getParam($strFieldname)))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
             }
             elseif($strType == "systemid") {
                 if(!validateSystemid($this->getParam($strFieldname)))
-                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                    $bitAdd = true;
+            }
+            elseif($strType == "date") {
+                if(!checkNumber($this->getParam($strFieldname))) {
+                    $objDate = new class_date("0");
+                    $objDate->generateDateFromParams($strFieldname, $this->getAllParams());
+                    if((int)$objDate->getLongTimestamp() == 0)
+                        $bitAdd = true;
+                }
             }
             else {
                $arrReturn[$strFieldname] = "No or unknown validation-type for ".$strFieldname." given";
+            }
+
+            if($bitAdd) {
+                if( $this->getText("required_".$strFieldname) != "!required_".$strFieldname."!")
+                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
+                else if($this->getText($strFieldname) != "!".$strFieldname."!")
+                    $arrReturn[$strFieldname] = $this->getText($strFieldname);
+                else
+                    $arrReturn[$strFieldname] = $this->getText("required_".$strFieldname);
             }
 
         }
