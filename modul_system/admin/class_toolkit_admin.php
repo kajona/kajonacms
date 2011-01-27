@@ -1221,13 +1221,35 @@ class class_toolkit_admin extends class_toolkit {
     /**
      * Generates a list of errors found by the form-validation
      *
-     * @param mixed $arrErrors
+     * @param class_admin $objCalling
+     * @param string $strTargetAction
      * @return string
      */
-    public function getValidationErrors($objCalling) {
+    public function getValidationErrors($objCalling, $strTargetAction = null) {
+        $strRendercode = "dd";
+        //render mandatory fields?
+        if($strTargetAction != null && is_callable(array($objCalling, "getRequiredFields")) ) {
+            $strTempAction = $objCalling->getAction();
+            $objCalling->setAction($strTargetAction);
+            $arrFields = $objCalling->getRequiredFields();
+            $objCalling->setAction($strTempAction);
+
+            if(count($arrFields) > 0 ) {
+
+                $strRendercode .= "<script type=\"text/javascript\">YAHOO.util.Event.onDOMReady(function () {
+                        KAJONA.admin.forms.renderMandatoryFields([";
+                foreach($arrFields as $strName => $strType) {
+                    $strRendercode .= "[ '".$strName."', '".$strType."' ], ";
+                }
+                $strRendercode .= " [] ]); });</script>";
+            }
+        }
+
+        $strRendercode .= "sd";
         $arrErrors = $objCalling->getValidationErrors();
         if(count($arrErrors) == 0)
-            return "";
+            return $strRendercode;
+        
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
@@ -1239,9 +1261,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["errorintro"] = $objCalling->getText("errorintro");
         if($arrTemplate["errorintro"] == "!errorintro!")
             $arrTemplate["errorintro"] = $objCalling->getText("errorintro", "system");
-        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID).$strRendercode;
     }
-
 
 
 /*"*****************************************************************************************************/

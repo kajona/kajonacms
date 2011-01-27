@@ -191,6 +191,14 @@ abstract class class_admin {
 	    return (string)$this->strAction;
 	}
 
+    /**
+     * Overwrites the current action
+     * @param string $strAction
+     */
+    public final function setAction($strAction) {
+	    $this->strAction = $strAction;
+	}
+
 
 // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
@@ -928,7 +936,7 @@ abstract class class_admin {
      *
      * @return mixed
      */
-    protected function getRequiredFields() {
+    public function getRequiredFields() {
         return array();
     }
 

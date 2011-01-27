@@ -1841,3 +1841,22 @@ KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute
     });
 };
 
+/**
+ * Form manangemenr
+ */
+KAJONA.admin.forms = {};
+KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
+    
+    for(var i=0; i<arrFields.length; i++) {
+        var arrElement = arrFields[i];
+        if(arrElement.length == 2) {
+            if(arrElement[1] == 'date') {
+                YAHOO.util.Dom.addClass(arrElement[0]+"_day", "mandatoryFormElement");
+                YAHOO.util.Dom.addClass(arrElement[0]+"_month", "mandatoryFormElement");
+                YAHOO.util.Dom.addClass(arrElement[0]+"_year", "mandatoryFormElement");
+            }
+            else 
+                YAHOO.util.Dom.addClass(arrElement[0], "mandatoryFormElement");
+        }
+    }
+};
