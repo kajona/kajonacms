@@ -472,6 +472,11 @@ class class_modul_navigation_portal extends class_portal implements interface_po
             $arrTemp["image_src"] = $objPointData->getStrImage();
         }
 
+        if($objPointData->getStrPageI() != "") {
+            $objPage = class_modul_pages_page::getPageByName($objPointData->getStrPageI());
+            $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getEditDate());
+        }
+
 		//Load the correct template
 		$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
 		$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
