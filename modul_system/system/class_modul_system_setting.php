@@ -95,7 +95,7 @@ class class_modul_system_setting extends class_model implements interface_model 
     public function updateObjectToDb($strPrevId = false) {
 
         if(!class_modul_system_setting::checkConfigExisting($this->getStrName())) {
-            class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelWarning);
 
             $strQuery = "INSERT INTO "._dbprefix_."system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
@@ -105,7 +105,7 @@ class class_modul_system_setting extends class_model implements interface_model 
         }
         else {
 
-            class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelWarning);
             $strQuery = "UPDATE "._dbprefix_."system_config
                         SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."'
                       WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
