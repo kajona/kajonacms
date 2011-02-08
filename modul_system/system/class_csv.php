@@ -22,6 +22,7 @@ class class_csv {
     private $strDelimiter = null;
     private $strTextEncloser = null;
     private $objFileHandle = null;
+    private $intImportRowOffset = 0;
 
 
     /**
@@ -83,6 +84,11 @@ class class_csv {
             if($strRow === false)
                 return false;
 
+            if($this->intImportRowOffset > 0) {
+                for($intI = 0; $intI < $this->intImportRowOffset; $intI++)
+                    $strRow = $objFilesystem->readLineFromFile();
+            }
+
 	        //first row are the headers
             $arrHeader = explode($this->strDelimiter, $strRow);
 
@@ -94,19 +100,17 @@ class class_csv {
                     foreach($arrHeader as $intKey => $strHeader) {
                         $strHeader = trim($strHeader);
                         //include the mapping specified
-                        if($strHeader != "") {
-                            //add an encloser?
-                            if($this->strTextEncloser != null) {
-                                $strHeader = uniStrReplace($this->strTextEncloser, "", trim($strHeader));
-                            }
-                            $strRowKey = $this->arrMapping[$strHeader];
-                            $strValue = $arrOneRow[$intKey];
-                            //remove an encloser?
-                            if($this->strTextEncloser != null) {
-                                $strValue = uniStrReplace($this->strTextEncloser, "", trim($strValue));
-                            }
-                            $arrCSVRow[$strRowKey] = $strValue;
+                        //add an encloser?
+                        if($this->strTextEncloser != null) {
+                            $strHeader = uniStrReplace($this->strTextEncloser, "", trim($strHeader));
                         }
+                        $strRowKey = $this->arrMapping[$strHeader];
+                        $strValue = $arrOneRow[$intKey];
+                        //remove an encloser?
+                        if($this->strTextEncloser != null) {
+                            $strValue = uniStrReplace($this->strTextEncloser, "", trim($strValue));
+                        }
+                        $arrCSVRow[$strRowKey] = $strValue;
                     }
                     //add to final array
                     $arrFinalArray[] = $arrCSVRow;
@@ -122,7 +126,7 @@ class class_csv {
 	        return true;
 	    }
 	    else {
-	        throw new class_exception("cant proceed, needed values missing", class_exception::$level_ERROR);
+	        throw new class_exception("cant proceed, needed values (mapping or filename) missing", class_exception::$level_ERROR);
 	    }
 	}
 
@@ -287,6 +291,17 @@ class class_csv {
 
 	    $this->strTextEncloser = $strEncloser;
 	}
+
+    /**
+     * Sets the nr of rows from top to be skipped during import.
+     * Use this setting if there are additional headers in the import-file
+     * 
+     * @param int $intImportRowOffset 
+     */
+    public function setIntImportRowOffset($intImportRowOffset) {
+        $this->intImportRowOffset = $intImportRowOffset;
+    }
+
 
 }
 
