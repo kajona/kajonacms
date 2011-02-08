@@ -220,6 +220,27 @@ class class_modul_system_aspect extends class_model implements interface_model  
         }
     }
 
+    /**
+     * Returns an aspect by name, ignoring the status
+     *
+     * @param string $strName
+     * @return class_modul_system_aspect or null if not found
+     */
+    public static function getAspectByName($strName) {
+        $strQuery = "SELECT system_id
+                 FROM "._dbprefix_."aspects, "._dbprefix_."system
+	             WHERE system_id = aspect_id
+	             AND aspect_name = '".  dbsafeString($strName)."'
+	             ORDER BY system_sort ASC, system_comment ASC";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        if(count($arrRow) > 0) {
+            return new class_modul_system_aspect($arrRow["system_id"]);
+        }
+        else {
+            return null;
+        }
+    }
+
   
     /**
      * Returns the aspect currently selected by the user.
