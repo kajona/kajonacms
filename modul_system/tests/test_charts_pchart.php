@@ -57,6 +57,23 @@ class class_test_charts_pchart implements interface_testable {
         $objGraph->saveGraph(_images_cachepath_."/graph2.png");
         echo "\t <img src=\""._webpath_."/portal/pics/cache/graph2.png\" />\n";
 
+
+        echo "\tbar chart with values...\n";
+        $objGraph = new class_graph_pchart();
+        $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);
+        $objGraph->setBitRoundedCorners(true);
+        $objGraph->setStrXAxisTitle("x-axis");
+        $objGraph->setStrYAxisTitle("y-axis");
+        $objGraph->setStrGraphTitle("Test Bar Chart");
+
+        $objGraph->addBarChartSet(array(8,5,7,8,4,12), "serie 1", true);
+        $objGraph->addBarChartSet(array(3,4,-6,2,5,2 ), "serie 2", true);
+
+        $objGraph->setArrXAxisTickLabels(array("v1", "v2", "v3", "v4", "v5", "v6"));
+
+        $objGraph->saveGraph(_images_cachepath_."/graph2_v.png");
+        echo "\t <img src=\""._webpath_."/portal/pics/cache/graph2_v.png\" />\n";
+
         echo "\tbar chart variation...\n";
         $objGraph = new class_graph_pchart();
         $objGraph->setArrColorPalette(class_graph_colorpalettes::$arrBlueColorPalette);

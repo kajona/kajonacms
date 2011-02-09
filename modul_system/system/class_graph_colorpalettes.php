@@ -27,7 +27,7 @@ class class_graph_colorpalettes {
 
     public static $arrBlue2ColorPalette             = array("#0000ff", "#0000b2", "#8833ff", "#4411b2", "#33a3ff", "#114cb2", "#697ebf");
 
-    public static $arrgreenColorPalette             = array("#006837", "#00b45f", "#175a74", "#12a5b4", "#247417", "#12b414", "#507158");
+    public static $arrGreenColorPalette             = array("#006837", "#00b45f", "#175a74", "#12a5b4", "#247417", "#12b414", "#507158");
 
     public static $arrPentagramCyanColorPalette     = array("#00ffff", "#6619ff", "#e5223e", "#ffad26", "#98e516");
 

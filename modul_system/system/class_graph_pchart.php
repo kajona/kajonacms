@@ -45,6 +45,8 @@ class class_graph_pchart {
     private $intLegendAdditionalMargin = 0;
 
     private $intXAxisAngle = 0;
+
+    private $arrValueSeriesToRender = array();
     
 
 
@@ -102,8 +104,9 @@ class class_graph_pchart {
 	 *
 	 * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
+     * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
 	 */
-	public function addBarChartSet($arrValues, $strLegend) {
+	public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
         if(!$this->intCurrentGraphMode < 0) {
             //only allow this method to be called again if in bar-mode
             if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
@@ -111,12 +114,14 @@ class class_graph_pchart {
         }
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
-        $strSerieName = generateSystemid();
+        $strInternalSerieName = generateSystemid();
         
-        $this->objDataset->AddPoint($arrValues, $strSerieName);
-        $this->objDataset->AddSerie($strSerieName);
+        $this->objDataset->AddPoint($arrValues, $strInternalSerieName);
+        $this->objDataset->AddSerie($strInternalSerieName);
+        if($bitWriteValues)
+            $this->arrValueSeriesToRender[] = $strInternalSerieName;
         
-        $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
+        $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strInternalSerieName);
 	}
 
 
@@ -357,6 +362,10 @@ class class_graph_pchart {
             $this->objChart->drawPieGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), ceil($this->intWidth/2)-20, ceil($this->intHeight/2) , ceil($intHeight/2)+20, PIE_PERCENTAGE, TRUE,50,20,5);
         }
 
+        //render values?
+        if(count($this->arrValueSeriesToRender) > 0) {
+            $this->objChart->writeValues($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), $this->arrValueSeriesToRender);
+        }
         
         
         
