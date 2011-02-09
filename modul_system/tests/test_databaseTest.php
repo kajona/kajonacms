@@ -1,6 +1,8 @@
 <?php
 
-class class_test_database implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_database extends class_testbase  {
 
 
     public function test() {
@@ -23,7 +25,7 @@ class class_test_database implements interface_testable {
 		$arrFields["temp_char500"]          = array("char500", true);
 		$arrFields["temp_text"]             = array("text", true);
 
-        class_assertions::assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
+        $this->assertTrue($objDB->createTable("temp_autotest", $arrFields, array("temp_id")), "testDataBase createTable");
 
         echo "\tcreating 50 records...\n";
 
@@ -33,39 +35,39 @@ class class_test_database implements interface_testable {
                 VALUES
                 ('".generateSystemid()."', 123456".$intI.", 23.45".$intI.", '".$intI."', 'char20".$intI."', 'char100".$intI."', 'char254".$intI."', 'char500".$intI."', 'text".$intI."')";
 
-            class_assertions::assertTrue($objDB->_query($strQuery), "testDataBase insert");
+            $this->assertTrue($objDB->_query($strQuery), "testDataBase insert");
         }
 
 
         echo "\tgetRow test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getRow($strQuery);
-        class_assertions::assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
-        class_assertions::assertEqual($arrRow["temp_char10"] , "1", "testDataBase getRow content");
+        $this->assertTrue(count($arrRow) == 18 || count($arrRow) == 9, "testDataBase getRow count");
+        $this->assertEquals($arrRow["temp_char10"] , "1", "testDataBase getRow content");
         
         echo "\tgetArray test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getArray($strQuery);
-        class_assertions::assertEqual(count($arrRow) , 50, "testDataBase getArray count");
+        $this->assertEquals(count($arrRow) , 50, "testDataBase getArray count");
 
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
-            class_assertions::assertEqual($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArray content");
+            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArray content");
         
         echo "\tgetArraySection test\n";
         $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest ORDER BY temp_long ASC";
         $arrRow = $objDB->getArraySection($strQuery, 0, 9);
-        class_assertions::assertEqual(count($arrRow) , 10, "testDataBase getArraySection count");
+        $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection count");
 
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
-            class_assertions::assertEqual($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection content");
+            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection content");
 
 
         echo "\tdeleting table\n";
 
         $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
-        class_assertions::assertTrue($objDB->_query($strQuery), "testDataBase dropTable");
+        $this->assertTrue($objDB->_query($strQuery), "testDataBase dropTable");
 		
 
     }

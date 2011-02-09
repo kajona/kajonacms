@@ -1,6 +1,8 @@
 <?php
 
-class class_test_mail implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_mail extends class_testbase  {
 
     public function test() {
 
@@ -23,7 +25,7 @@ class class_test_mail implements interface_testable {
             $intSentMails++;
         }
         
-        class_assertions::assertEqual($intSentMails, 1, __FILE__." checkNrOfMails");
+        $this->assertEquals($intSentMails, 1, __FILE__." checkNrOfMails");
     }
 
 }

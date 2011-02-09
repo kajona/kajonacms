@@ -1,6 +1,8 @@
 <?php
 
-class class_test_filemanager implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_filemanager extends class_testbase  {
 
     public function test() {
         
@@ -20,10 +22,10 @@ class class_test_filemanager implements interface_testable {
             $strRepoID = $objRepo->getSystemid();
             $arrRepoIDs[] = $strRepoID;
             $objRepo = new class_modul_filemanager_repo($strRepoID);
-            class_assertions::assertEqual($objRepo->getStrName(), $strName, __FILE__." checkCreateRepo");
+            $this->assertEquals($objRepo->getStrName(), $strName, __FILE__." checkCreateRepo");
             $objDB->flushQueryCache();
         }
-        class_assertions::assertEqual(count(class_modul_filemanager_repo::getAllRepos()), $intNrOfRepos+$intI, __FILE__." checkNrOfReposCreated");
+        $this->assertEquals(count(class_modul_filemanager_repo::getAllRepos()), $intNrOfRepos+$intI, __FILE__." checkNrOfReposCreated");
 
         echo "\tdeleting repos created...\n";
         foreach ($arrRepoIDs as $strOneRepo) {
@@ -33,7 +35,7 @@ class class_test_filemanager implements interface_testable {
             $objDB->flushQueryCache();
 
         }
-        class_assertions::assertEqual(count(class_modul_filemanager_repo::getAllRepos()), $intNrOfRepos, __FILE__." checkNrOfReposDeleted");
+        $this->assertEquals(count(class_modul_filemanager_repo::getAllRepos()), $intNrOfRepos, __FILE__." checkNrOfReposDeleted");
     }
 
 }

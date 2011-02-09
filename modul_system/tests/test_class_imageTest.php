@@ -1,6 +1,8 @@
 <?php
 
-class class_test_class_image implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_class_image extends class_testbase  {
 
 
 
@@ -27,7 +29,7 @@ class class_test_class_image implements interface_testable {
         $objImage->saveImage("", true);
         $strResizeCacheName1 = $objImage->getCachename();
 
-        class_assertions::assertNotEqual($strResizeCacheName1 , "", __FILE__." getCachenameAfterResize");
+        $this->assertNotEquals($strResizeCacheName1 , "", __FILE__." getCachenameAfterResize");
 
         echo "\tcachename: ".$strResizeCacheName1."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName1."\"/>";
@@ -44,7 +46,7 @@ class class_test_class_image implements interface_testable {
         $objImage->saveImage("", true);
         $strResizeCacheName2 = $objImage->getCachename();
 
-        class_assertions::assertEqual($strResizeCacheName2, $strResizeCacheName2, __FILE__." getCachenameAfterResize");
+        $this->assertEquals($strResizeCacheName2, $strResizeCacheName2, __FILE__." getCachenameAfterResize");
 
         echo "\tcachename: ".$strResizeCacheName2."\n";
         //echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName2."\"/>";
@@ -63,7 +65,7 @@ class class_test_class_image implements interface_testable {
         $objImage->saveImage("", true);
         $strResizeCacheName3 = $objImage->getCachename();
 
-        class_assertions::assertTrue($strResizeCacheName3 != "", __FILE__." getCachenameAfterResize&Text");
+        $this->assertTrue($strResizeCacheName3 != "", __FILE__." getCachenameAfterResize&Text");
 
         echo "\tcachename: ".$strResizeCacheName3."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName3."\"/>";
@@ -80,7 +82,7 @@ class class_test_class_image implements interface_testable {
         $objImage->saveImage("", true);
         $strResizeCacheName4 = $objImage->getCachename();
 
-        class_assertions::assertNotEqual($strResizeCacheName3, $strResizeCacheName4, __FILE__." getCachenameAfterResize&Text");
+        $this->assertNotEquals($strResizeCacheName3, $strResizeCacheName4, __FILE__." getCachenameAfterResize&Text");
 
         echo "\tcachename: ".$strResizeCacheName3."\n";
         echo "<img src=\""._webpath_._images_cachepath_.$strResizeCacheName4."\"/>";

@@ -1,6 +1,8 @@
 <?php
 
-class class_test_pages implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_pages extends class_testbase  {
 
 
 
@@ -30,12 +32,12 @@ class class_test_pages implements interface_testable {
             $strFolderID = $objFolder->getSystemid();
             $arrFoldersCreated[] = $strFolderID;
             $objFolder = new class_modul_pages_folder($strFolderID);
-            class_assertions::assertEqual($objFolder->getStrName(), "testfolder_".$intI, __FILE__." checkNameOfFolderCreated");
-            class_assertions::assertEqual($objFolder->getPrevId(), $strTestFolderID, __FILE__." checkPrevIDOfFolderCreated");
+            $this->assertEquals($objFolder->getStrName(), "testfolder_".$intI, __FILE__." checkNameOfFolderCreated");
+            $this->assertEquals($objFolder->getPrevId(), $strTestFolderID, __FILE__." checkPrevIDOfFolderCreated");
         }
 
         $arrFoldersAtLevel = class_modul_pages_folder::getFolderList($strTestFolderID);
-        class_assertions::assertEqual(count($arrFoldersAtLevel), 100, __FILE__." checkNrOfFoldersCreatedByModel");
+        $this->assertEquals(count($arrFoldersAtLevel), 100, __FILE__." checkNrOfFoldersCreatedByModel");
 
 
         echo "\tcreate 100 pages on root level using the model...\n";
@@ -48,12 +50,12 @@ class class_test_pages implements interface_testable {
             $strPageID = $objPages->getSystemid();
             $arrPagesCreated[] = $strPageID;
             $objPage = new class_modul_pages_page($strPageID);
-            class_assertions::assertEqual($objPage->getStrName(), "autotest_".$intI, __FILE__." checkNameOfPageCreated");
-            class_assertions::assertEqual($objPage->getStrTemplate(), "kajona_demo.tpl", __FILE__." checkTemplateOfPageCreated");
+            $this->assertEquals($objPage->getStrName(), "autotest_".$intI, __FILE__." checkNameOfPageCreated");
+            $this->assertEquals($objPage->getStrTemplate(), "kajona_demo.tpl", __FILE__." checkTemplateOfPageCreated");
         }
 
         $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
-        class_assertions::assertEqual(count($arrPagesAtLevel), 100+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
+        $this->assertEquals(count($arrPagesAtLevel), 100+$intPagesAtStartup, __FILE__." checkNrOfPagesCreatedByModel");
 
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
@@ -62,7 +64,7 @@ class class_test_pages implements interface_testable {
         }
         echo "\tcheck number of pages installed...\n";
         $arrPagesAtLevel = class_modul_pages_folder::getPagesInFolder(class_modul_system_module::getModuleByName("pages")->getSystemid());
-        class_assertions::assertEqual(count($arrPagesAtLevel), $intPagesAtStartup, __FILE__." checkNrOfPagesAtLevel");
+        $this->assertEquals(count($arrPagesAtLevel), $intPagesAtStartup, __FILE__." checkNrOfPagesAtLevel");
 
         echo "\tdeleting folders created...\n";
         foreach($arrFoldersCreated as $strOneFolderID) {
@@ -72,23 +74,23 @@ class class_test_pages implements interface_testable {
         }
         echo "\tcheck number of folders installed...\n";
         $arrFoldersAtLevel = class_modul_pages_folder::getFolderList($strTestFolderID);
-        class_assertions::assertEqual(count($arrFoldersAtLevel), 0, __FILE__." checkNrOfFoldersAtLevel");
+        $this->assertEquals(count($arrFoldersAtLevel), 0, __FILE__." checkNrOfFoldersAtLevel");
 
 
         echo "\ttesting to copy a page...\n";
         $objOriginalPage = class_modul_pages_page::getPageByName("index");
-        class_assertions::assertTrue($objOriginalPage->copyPage(), __FILE__." checkCopyPageCopy");
+        $this->assertTrue($objOriginalPage->copyPage(), __FILE__." checkCopyPageCopy");
 
         $objDB->flushQueryCache();
         $objCopy = class_modul_pages_page::getPageByName("index_1");
-        class_assertions::assertTrue($objCopy->getSystemid() != "", __FILE__." checkCopyPageHasSysid");
-        class_assertions::assertEqual($objOriginalPage->getNumberOfElementsOnPage(), $objCopy->getNumberOfElementsOnPage(), __FILE__." checkCopyPageNrOfElements");
+        $this->assertTrue($objCopy->getSystemid() != "", __FILE__." checkCopyPageHasSysid");
+        $this->assertEquals($objOriginalPage->getNumberOfElementsOnPage(), $objCopy->getNumberOfElementsOnPage(), __FILE__." checkCopyPageNrOfElements");
 
         $arrOrigElements = class_modul_pages_pageelement::getAllElementsOnPage($objOriginalPage->getSystemid());
         $arrCopyElements = class_modul_pages_pageelement::getAllElementsOnPage($objCopy->getSystemid());
 
         foreach ($arrOrigElements as $intKey => $objElement) {
-            class_assertions::assertEqual($arrOrigElements[$intKey]->getStrName(),$arrCopyElements[$intKey]->getStrName(),__FILE__." checkCopyPageElementName");
+            $this->assertEquals($arrOrigElements[$intKey]->getStrName(),$arrCopyElements[$intKey]->getStrName(),__FILE__." checkCopyPageElementName");
         }
 
 

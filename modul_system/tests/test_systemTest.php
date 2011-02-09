@@ -1,13 +1,11 @@
 <?php
 
-class class_test_system implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_system extends class_testbase  {
 
 
-    public function test() {
-        $this->testKernel();
-    }
-
-    private function testKernel() {
+    public function testKernel() {
         $objDB = class_carrier::getInstance()->getObjDB();
 
         //--- system kernel -------------------------------------------------------------------------------------
@@ -26,9 +24,9 @@ class class_test_system implements interface_testable {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest", false);
             $arrSysRecords[] = $intSysId;
             $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
-            class_assertions::assertEqual($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithoutRights");
+            $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithoutRights");
             $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
-            class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkCreateSysRecordsWithoutRights");
+            $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkCreateSysRecordsWithoutRights");
         }
 
 
@@ -37,9 +35,9 @@ class class_test_system implements interface_testable {
             $objSystemCommon->deleteSystemRecord($strOneId);
         }
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithoutRights");
 
 
         echo "\tcreating 100 system-records with right-records...\n";
@@ -54,9 +52,9 @@ class class_test_system implements interface_testable {
             $intSysId = $objSystemCommon->createSystemRecord(0, "autotest");
             $arrSysRecords[] = $intSysId;
             $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
-            class_assertions::assertEqual($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithRights");
+            $this->assertEquals($arrRow["COUNT(*)"], $intI+$intNrSystemRecords+1, __FILE__." checkCreateSysRecordsWithRights");
             $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
-            class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrRightsRecords+$intI+1, __FILE__." checkCreateSysRecordsWithRights");
+            $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords+$intI+1, __FILE__." checkCreateSysRecordsWithRights");
         }
 
 
@@ -65,9 +63,9 @@ class class_test_system implements interface_testable {
             $objSystemCommon->deleteSystemRecord($strOneId);
         }
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithRights");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteSysRecordsWithRights");
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithRights");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteSysRecordsWithRights");
 
 
         echo "\ttesting tree-behaviour...\n";
@@ -94,23 +92,23 @@ class class_test_system implements interface_testable {
         }
         //check nr of records
         $intCount = $objSystemCommon->getNumberOfSiblings($intSecOneId);
-        class_assertions::assertEqual($intCount, 22, __FILE__." checkNrOfSiblingsInTree");
+        $this->assertEquals($intCount, 22, __FILE__." checkNrOfSiblingsInTree");
         //check nr of childs
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = '".$intBaseId."'");
-        class_assertions::assertEqual($arrRow["COUNT(*)"], 22, __FILE__." checkNrOfChildsInTree1");
+        $this->assertEquals($arrRow["COUNT(*)"], 22, __FILE__." checkNrOfChildsInTree1");
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = '".$intSecOneId."'");
-        class_assertions::assertEqual($arrRow["COUNT(*)"], 20, __FILE__." checkNrOfChildsInTree2");
+        $this->assertEquals($arrRow["COUNT(*)"], 20, __FILE__." checkNrOfChildsInTree2");
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = '".$intSecTwoId."'");
-        class_assertions::assertEqual($arrRow["COUNT(*)"], 20, __FILE__." checkNrOfChildsInTree3");
+        $this->assertEquals($arrRow["COUNT(*)"], 20, __FILE__." checkNrOfChildsInTree3");
         //deleting all records
         echo "\tdeleting nodes...\n";
         foreach($arrSysRecords as $strOneId) {
             $objSystemCommon->deleteSystemRecord($strOneId);
         }
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteTreeRecords");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrSystemRecords, __FILE__." checkDeleteTreeRecords");
         $arrRow = $objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_right", 0, false);
-        class_assertions::assertEqual($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteTreeRecords");
+        $this->assertEquals($arrRow["COUNT(*)"], $intNrRightsRecords, __FILE__." checkDeleteTreeRecords");
 
 
         //test the setToPos
@@ -137,9 +135,9 @@ class class_test_system implements interface_testable {
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '".$strBaseNodeId."' ORDER BY system_sort ASC");
 
-        class_assertions::assertEqual($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
-        class_assertions::assertEqual($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
-        class_assertions::assertEqual($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByRelativeShift");
 
         //moving by set pos
         echo "\tabsolute shifting..\n";
@@ -148,17 +146,17 @@ class class_test_system implements interface_testable {
         $objDB->flushQueryCache();
         $objSystemCommon->setAbsolutePosition($arrNodes[2]["system_id"], 1);
         $arrNodesAfter = $objDB->getArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '".$strBaseNodeId."' ORDER BY system_sort ASC");
-        class_assertions::assertEqual($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        class_assertions::assertEqual($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        class_assertions::assertEqual($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
         //and back...
         $objDB->flushQueryCache();
         $objSystemCommon->setAbsolutePosition($arrNodes[2]["system_id"], 3);
         $objDB->flushQueryCache();
         $arrNodesAfter = $objDB->getArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '".$strBaseNodeId."' ORDER BY system_sort ASC");
-        class_assertions::assertEqual($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        class_assertions::assertEqual($arrNodesAfter[1]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
-        class_assertions::assertEqual($arrNodesAfter[2]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[0]["system_id"], $arrNodes[0]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[1]["system_id"], $arrNodes[1]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
+        $this->assertEquals($arrNodesAfter[2]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkPositionShitftingByAbsoluteShift");
 
         //deleting all records created
         foreach ($arrNodes as $arrOneNode)
@@ -177,9 +175,9 @@ class class_test_system implements interface_testable {
         }
         $arrNodes = $objDB->getArray("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '".$strBaseNodeId."' ORDER BY system_sort ASC");
         $arrNodesSection = $objDB->getArraySection("SELECT system_id FROM "._dbprefix_."system WHERE system_prev_id = '".$strBaseNodeId."' ORDER BY system_sort ASC", 2, 4, false);
-        class_assertions::assertEqual($arrNodesSection[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkSectionLoading");
-        class_assertions::assertEqual($arrNodesSection[1]["system_id"], $arrNodes[3]["system_id"], __FILE__." checkSectionLoading");
-        class_assertions::assertEqual($arrNodesSection[2]["system_id"], $arrNodes[4]["system_id"], __FILE__." checkSectionLoading");
+        $this->assertEquals($arrNodesSection[0]["system_id"], $arrNodes[2]["system_id"], __FILE__." checkSectionLoading");
+        $this->assertEquals($arrNodesSection[1]["system_id"], $arrNodes[3]["system_id"], __FILE__." checkSectionLoading");
+        $this->assertEquals($arrNodesSection[2]["system_id"], $arrNodes[4]["system_id"], __FILE__." checkSectionLoading");
 
         //deleting all records created
         foreach ($arrNodes as $arrOneNode)

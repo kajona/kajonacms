@@ -1,6 +1,8 @@
 <?php
 
-class class_test_csv implements interface_testable {
+require_once ("../system/class_testbase.php");
+
+class class_test_csv extends class_testbase  {
 
 
 
@@ -25,14 +27,14 @@ class class_test_csv implements interface_testable {
         $objCsv->setArrMapping(array(0 => "c1", 1 => "c2", 2 => "c3"));
         //write to file
         $objCsv->setStrFilename($strFile);
-        class_assertions::assertTrue($objCsv->writeArrayToFile(), __FILE__." checkCsvWriteArrayToFile");
+        $this->assertTrue($objCsv->writeArrayToFile(), __FILE__." checkCsvWriteArrayToFile");
         //read from file
         $objCsv = new class_csv();
         $objCsv->setArrMapping(array("c1" => 0, "c2" => 1,  "c3" => 2));
         $objCsv->setStrFilename($strFile);
-        class_assertions::assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvCreateArrayFromFileReader");
+        $this->assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvCreateArrayFromFileReader");
         $arrValuesFromCsv = $objCsv->getArrData();
-        class_assertions::assertEqual(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvCreateArrayFromFile");
 
         //test with set encloser
         $objCsv = new class_csv();
@@ -41,15 +43,15 @@ class class_test_csv implements interface_testable {
         $objCsv->setArrMapping(array(0 => "c1", 1 => "c2", 2 => "c3"));
         //write to file
         $objCsv->setStrFilename($strFile);
-        class_assertions::assertTrue($objCsv->writeArrayToFile(), __FILE__." checkCsvEncloserWriteArrayToFile");
+        $this->assertTrue($objCsv->writeArrayToFile(), __FILE__." checkCsvEncloserWriteArrayToFile");
         //read from file
         $objCsv = new class_csv();
         $objCsv->setArrMapping(array("c1" => 0, "c2" => 1,  "c3" => 2));
         $objCsv->setTextEncloser("'");
         $objCsv->setStrFilename($strFile);
-        class_assertions::assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvEncloserCreateArrayFromFileReader");
+        $this->assertTrue($objCsv->createArrayFromFile(), __FILE__." checkCsvEncloserCreateArrayFromFileReader");
         $arrValuesFromCsv = $objCsv->getArrData();
-        class_assertions::assertEqual(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
+        $this->assertEquals(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
 
         echo "\tsaved generated CSV file to <a href=\""._webpath_.$strFile.">"._webpath_.$strFile."</a>\n";
 
