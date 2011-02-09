@@ -127,13 +127,10 @@
                 return;
         }
 
-        
-
-        
-
-        
-        
     }
+
+    if(function_exists("spl_autoload_register"))
+        spl_autoload_register("__autoload");
 
 
 ?>
