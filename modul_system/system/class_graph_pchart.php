@@ -37,6 +37,8 @@ class class_graph_pchart {
 
     private $bitRoundedCorners = true;
     private $bitRenderLegend = true;
+    private $bitAdditionalDatasetAdded = false;
+    private $bitScaleFromAdditionalDataset = false;
 
     private $strFont = "/fonts/dejavusans.ttf"; 
     private $arrDefaultColorPalette = array();
@@ -54,10 +56,10 @@ class class_graph_pchart {
 	//   The following values are used to seperate the graph-modes, because not all
 	//   methods are allowed with every chart-type
 
-	private $GRAPH_TYPE_BAR = 0;
+	private $GRAPH_TYPE_BAR = 1;
     private $GRAPH_TYPE_STACKEDBAR = 4;
-	private $GRAPH_TYPE_LINE = 1;
-	private $GRAPH_TYPE_PIE = 2;
+	private $GRAPH_TYPE_LINE = 2;
+	private $GRAPH_TYPE_PIE = 3;
 
     private $intCurrentGraphMode = -1;
 
@@ -75,6 +77,12 @@ class class_graph_pchart {
      */
     private $objDataset = null;
 
+    /**
+     *
+     * @var pData
+     */
+    private $objAdditionalDataset = null;
+
 
 	/**
 	 * Contructor
@@ -86,6 +94,7 @@ class class_graph_pchart {
 		$this->arrModul["moduleId"]		= _system_modul_id_;
 
         $this->objDataset = new pData();
+        $this->objAdditionalDataset = new pData();
         $this->arrDefaultColorPalette = class_graph_colorpalettes::$arrDefaultColorPalette;
 	}
 
@@ -107,9 +116,9 @@ class class_graph_pchart {
      * @param bool $bitWriteValues Enables the rendering of values on top of the graphs
 	 */
 	public function addBarChartSet($arrValues, $strLegend, $bitWriteValues = false) {
-        if(!$this->intCurrentGraphMode < 0) {
+        if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in bar-mode
-            if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR)
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
@@ -141,9 +150,9 @@ class class_graph_pchart {
      * @param string $strLegend
 	 */
     public function addStackedBarChartSet($arrValues, $strLegend) {
-        if(!$this->intCurrentGraphMode < 0) {
+        if($this->intCurrentGraphMode > 0) {
             //only allow this method to be called again if in stackedbar-mode
-            if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
@@ -159,7 +168,12 @@ class class_graph_pchart {
     
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
-     * Add a set tof linePlot to a graph to get more then one line.
+     * Add a set of linePlot to a graph to get more then one line.
+     *
+     * If you created a bar-chart before, it it is possible to add line-plots on top of
+     * the bars. Nevertheless, the scale is calculated out of the bars, so make
+     * sure to remain inside the visible range!
+     *
      * A sample-code could be:
      *
      *  $objGraph = new class_graph();
@@ -172,10 +186,26 @@ class class_graph_pchart {
      * @param string $strLegend the name of the single plot
      */
     public function addLinePlot($arrValues, $strLegend) {
-        if(!$this->intCurrentGraphMode < 0) {
+        if($this->intCurrentGraphMode > 0) {
+
+            //in bar mode, its ok. just place on top
+            if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR) {
+                $this->bitAdditionalDatasetAdded = true;
+                $strSerieName = generateSystemid();
+
+                $this->objAdditionalDataset->AddPoint($arrValues, $strSerieName);
+                $this->objAdditionalDataset->AddSerie($strSerieName);
+
+                $this->objAdditionalDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
+
+                //jump out since only additional
+                return;
+            }
             //only allow this method to be called again if in line-mode
-            if(!$this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE)
+            else if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE)
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
+
+
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
@@ -206,7 +236,7 @@ class class_graph_pchart {
      * @param array $arrLegends
      */
     public function createPieChart($arrValues, $arrLegends) {
-        if(!$this->intCurrentGraphMode < 0) {
+        if($this->intCurrentGraphMode > 0) {
             throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
@@ -239,8 +269,6 @@ class class_graph_pchart {
      */
     private function preGraphCreation() {
 
-        
-
         // Initialize the graph
         $this->objChart = new pChart($this->intWidth, $this->intHeight);
         
@@ -255,11 +283,8 @@ class class_graph_pchart {
         //the outer bounding and pane - rounded and with sharp corners
         $arrBackgroundColor = hex2rgb($this->strBackgroundColor);
         if($this->bitRoundedCorners) {
-
             $this->objChart->drawFilledRoundedRectangle(2,2,$this->intWidth-3 ,$this->intHeight-3, 5, $arrBackgroundColor[0], $arrBackgroundColor[1], $arrBackgroundColor[2]);
-
             $arrOuterBack = hex2rgb($this->strOuterFrameColor);
-
             $this->objChart->drawRoundedRectangle(0,0,$this->intWidth-1,$this->intHeight-1,5, $arrOuterBack[0], $arrOuterBack[1], $arrOuterBack[2]);
         }
         else {
@@ -324,7 +349,9 @@ class class_graph_pchart {
 
  
         //the x- and y axis, in- / exclusive margins
-        if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
+        if($this->bitAdditionalDatasetAdded && $this->bitScaleFromAdditionalDataset)
+            $this->objChart->drawScale($this->objAdditionalDataset->GetData(), $this->objAdditionalDataset->GetDataDescription(), SCALE_START0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
+        else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR)
             $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_START0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
             $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_ADDALLSTART0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
@@ -339,26 +366,37 @@ class class_graph_pchart {
 
 
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
+
             // Draw the line graph
             $this->objChart->drawLineGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription());
             //dots in line
             $this->objChart->drawPlotGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 3,2 , 255, 255, 255);
-        
         }
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR) {
+
             //the zero-line
             $this->objChart->setFontProperties(_systempath_.$this->strFont, 6);
-            
             $this->objChart->drawBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), TRUE);
-            $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);  
+            $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
+
+            //if given, render the line-plots on top
+            if($this->bitAdditionalDatasetAdded) {
+                //the line itself
+                $this->objChart->drawLineGraph($this->objAdditionalDataset->GetData(),$this->objAdditionalDataset->GetDataDescription());
+                //the dots
+                $this->objChart->drawPlotGraph($this->objAdditionalDataset->GetData(),$this->objAdditionalDataset->GetDataDescription(), 3,2 , 255, 255, 255);
+            }
+
         }
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR) {
+
             //the zero-line
             $this->objChart->setFontProperties(_systempath_.$this->strFont, 6);
             $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE); 
             $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);  
         }
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
+            
             $this->objChart->drawPieGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), ceil($this->intWidth/2)-20, ceil($this->intHeight/2) , ceil($intHeight/2)+20, PIE_PERCENTAGE, TRUE,50,20,5);
         }
 
@@ -376,9 +414,17 @@ class class_graph_pchart {
         if($this->bitRenderLegend) {
             if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) 
                 $this->objChart->drawPieLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
-            
-            else
-                $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $this->objDataset->GetDataDescription(),255,255,255);
+            else {
+                $arrLegend = $this->objDataset->GetDataDescription();
+                //merge legends
+                if($this->bitAdditionalDatasetAdded) {
+                    $arrAdditionalLegend = $this->objAdditionalDataset->GetDataDescription();
+                    foreach($arrAdditionalLegend["Description"] as $strKey => $strName) {
+                        $arrLegend["Description"][$strKey] = $strName;
+                    }
+                }
+                $this->objChart->drawLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $arrLegend,255,255,255);
+            }
         }
 
         //draw the title
@@ -537,6 +583,11 @@ class class_graph_pchart {
         
         $this->objDataset->AddPoint($arrMadeUpLabels, $strSerieName);
         $this->objDataset->SetAbsciseLabelSerie($strSerieName);
+
+        if($this->bitAdditionalDatasetAdded) {
+            $this->objAdditionalDataset->AddPoint($arrMadeUpLabels, $strSerieName);
+            $this->objAdditionalDataset->SetAbsciseLabelSerie($strSerieName);
+        }
     }
 
     /**
@@ -611,6 +662,15 @@ class class_graph_pchart {
         $this->intXAxisAngle = $intXAxisAngle;
     }
 
+    /**
+     * If set to true, the scale is calculated from the additional dataset
+     * instead of from the regular set.
+     *
+     * @param bool $bitScaleFromAdditionalDataset
+     */
+    public function setBitScaleFromAdditionalDataset($bitScaleFromAdditionalDataset) {
+        $this->bitScaleFromAdditionalDataset = $bitScaleFromAdditionalDataset;
+    }
 
 
 
