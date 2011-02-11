@@ -23,6 +23,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_postacomment";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _postacomment_modul_id_;
@@ -38,7 +39,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "savepost")
             $strReturn .= $this->actionSavePost();

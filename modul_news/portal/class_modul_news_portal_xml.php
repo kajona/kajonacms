@@ -34,27 +34,13 @@ class class_modul_news_portal_xml extends class_portal implements interface_xml_
 	}
 
 
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param unknown_type $strAction
-	 * @return unknown
-	 */
-	public function action($strAction) {
-        $strReturn = "";
-        if($strAction == "newsFeed")
-            $strReturn .= $this->createNewsfeed();
-
-        return $strReturn;
-	}
-
-
+	
 	/**
 	 * This method loads all data to needed for a newsfeed
 	 *
 	 * @return srtring
 	 */
-	private function createNewsfeed() {
+	protected function actionNewsFeed() {
 	    $strReturn = "";
 
         //if no sysid was given, try to load from feedname

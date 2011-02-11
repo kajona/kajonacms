@@ -42,7 +42,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      *
      * @return string
      */
-	public function action() {
+	public function action($strAction = "") {
 		$strReturn = "";
 
 		//Which kind of navigation do we want to load?

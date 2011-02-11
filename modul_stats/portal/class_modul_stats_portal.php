@@ -18,6 +18,7 @@ class class_modul_stats_portal extends class_portal {
 	 *
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_stats";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."stats_data";
@@ -30,6 +31,7 @@ class class_modul_stats_portal extends class_portal {
 	}
 
 	public function insertStat() {
+        //FIXME: move code to index.php directly and remove this class
 		//Collect Data
 		$strIp = getServer("REMOTE_ADDR");
 		$intDate = time();

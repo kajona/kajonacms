@@ -39,7 +39,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 *
 	 * @return string
 	 */
-	public function action() {
+	public function action($strAction = "") {
 		$strReturn = "";
 		$strAction = "";
 

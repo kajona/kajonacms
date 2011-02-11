@@ -36,7 +36,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 *
 	 * @return string
 	 */
-	public function action() {
+	public function action($strAction = "") {
 	    $strReturn = "";
 		$strAction = "";
 

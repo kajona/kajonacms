@@ -22,6 +22,7 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
      * @param mixed $arrElementData
      */
     public function __construct() {
+        $arrModule = array();
         $arrModule["name"]              = "modul_rating";
         $arrModule["author"]            = "sidler@mulchprod.de";
         $arrModule["moduleId"]          = _rating_modul_id_;
@@ -31,27 +32,13 @@ class class_modul_rating_portal_xml extends class_portal implements interface_xm
     }
 
 
-    /**
-     * Actionblock. Controls the further behaviour.
-     *
-     * @param string $strAction
-     * @return string
-     */
-    public function action($strAction) {
-        $strReturn = "";
-        if($strAction == "saveRating")
-            $strReturn .= $this->actionSaveRating();
-
-        return $strReturn;
-    }
-
-
+   
     /**
      * Saves a rating to a passed rating-file
      *
      * @return string the new rating for the passed file
      */
-    private function actionSaveRating() {
+    protected function actionSaveRating() {
     	$strReturn = "<rating>";
 
     	//rating already existing?

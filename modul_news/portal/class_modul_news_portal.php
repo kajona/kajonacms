@@ -36,7 +36,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function action() {
+	public function action($strAction = "") {
 		$strReturn = "";
 		$strAction = "";
 

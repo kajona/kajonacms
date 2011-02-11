@@ -36,7 +36,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function action() {
+	public function action($strAction = "") {
 		$strReturn = "";
 
 		$strReturn = $this->actionList();

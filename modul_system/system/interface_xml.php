@@ -9,18 +9,17 @@
 
 /**
  * Interface for all xml-classes (modules)
- * Ensures, that all needed methods are being implemented
+ * Ensures, that all needed methods are being implemented.
+ *
+ * Since Kajona 3.4 this interface no longer defines action() since the controller
+ * part moved to the base-classes
  *
  * @package modul_system
  */
 interface interface_xml {
 
+	
 
-	/**
-	 * This method is being called from the element and controls all other actions
-	 * If given, the action passed in the GET-Array is being passed by param
-	 */
-	public function action($strAction);
 
 }
 ?>

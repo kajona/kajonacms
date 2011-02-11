@@ -20,6 +20,7 @@ class class_modul_search_portal_xml extends class_portal implements interface_xm
 	 * @param mixed $arrElementData
 	 */
 	public function __construct() {
+        $arrModule = array();
 		$arrModule["name"] 				= "modul_search";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _suche_modul_id_;
@@ -30,26 +31,11 @@ class class_modul_search_portal_xml extends class_portal implements interface_xm
 
 
 	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction) {
-        $strReturn = "";
-        if($strAction == "doSearch")
-            $strReturn .= $this->createSearchResult();
-
-        return $strReturn;
-	}
-
-
-	/**
 	 * Searches for a passed string
 	 *
 	 * @return string
 	 */
-	private function createSearchResult() {
+	protected function actionDoSearch() {
 	    $strReturn = "";
 
 	    $strSearchterm = "";

@@ -140,6 +140,41 @@ abstract class class_portal  {
 	}
 
 
+
+    /**
+     * This method triggers the internal processing.
+     * It may be overridden if required, e.g. to implement your own action-handling.
+     * By default, the method to be called is set up out of the action-param passed.
+     * Example: The action requested is names "newPage". Therefore, the framework tries to
+     * call actionNewPage(). If now method matching the schema is found, an exception is being thrown.
+     *
+     *
+     * @param string $strAction
+     * @return string
+     * @since 3.4
+     */
+    public function action($strAction = "") {
+
+        if($strAction == "")
+            $strAction = $this->strAction;
+        else
+            $this->strAction = $strAction;
+
+        //search for the matching method - build method name
+        $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
+
+        if(method_exists($this, $strMethodName)) {
+            $this->strOutput = $this->$strMethodName();
+        }
+        else {
+            $objReflection = new ReflectionClass($this);
+            throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
+        }
+
+        return $this->strOutput;
+    }
+
+
     /**
 	 * Writes a value to the params-array
 	 *
