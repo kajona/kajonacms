@@ -39,7 +39,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "setDashboardPosition")
             $strReturn .= $this->actionSetDashboardPosition();

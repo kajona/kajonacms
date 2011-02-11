@@ -32,7 +32,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
      * @param string $strAction
      * @return string
      */
-	public function action($strAction) {
+	public function action($strAction = "") {
 		if($strAction == "")
 			$strAction = "login";
 		$strReturn = "";

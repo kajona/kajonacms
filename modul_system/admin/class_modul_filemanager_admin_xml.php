@@ -38,7 +38,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "fileUpload")
             $strReturn .= $this->actionFileupload();
