@@ -40,7 +40,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "saveTag")
             $strReturn = $this->actionSaveTag();
