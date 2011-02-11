@@ -9,7 +9,6 @@
 
 
 
-
 class class_copy2project {
 
     private $strBasePath = "";
