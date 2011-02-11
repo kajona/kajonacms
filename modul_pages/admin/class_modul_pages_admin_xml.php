@@ -21,6 +21,7 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 			= "modul_pages";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_modul_id_;
@@ -36,7 +37,7 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "getPagesByFilter")
             $strReturn .= $this->actionGetPagesByFilter();
