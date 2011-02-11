@@ -1,6 +1,6 @@
 <?php
 
-require_once ("../system/class_testbase.php");
+require_once (dirname(__FILE__)."/../system/class_testbase.php");
 
 class class_test_mail extends class_testbase  {
 

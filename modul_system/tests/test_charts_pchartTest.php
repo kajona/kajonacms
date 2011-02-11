@@ -1,5 +1,5 @@
 <?php
-require_once ("../system/class_testbase.php");
+require_once (dirname(__FILE__)."/../system/class_testbase.php");
 
 class class_test_charts_pchart extends class_testbase  {
 
