@@ -34,6 +34,7 @@ if(isset($_GET["aktion"]))
 }
 else
 {
+      echo "<h1>This script is deprecated. Use copy2project.php instead!</h1>";
     echo "<h2>Classic: upwards (Zend, ...)</h2>";
 	echo "<a href=\"copy.php?aktion=copy_out\">Copy-Out upwards (destination folder: ../)</a>\n\n";
 	echo "<a href=\"copy.php?aktion=copy_in\">Copy-In (from upwards(../))</a>\n\n";
