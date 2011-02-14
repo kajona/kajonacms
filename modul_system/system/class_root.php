@@ -244,6 +244,20 @@ abstract class class_root {
 	    return $this->objDB->_query($strQuery);
 	}
 
+    /**
+     * Returns the creation-date of the current record
+     *
+     * @param string $strSystemid
+     * @return class_date
+     */
+    public function getObjCreateDate($strSystemid = "") {
+        if($strSystemid == "")
+            $strSystemid = $this->getSystemid();
+
+        $arrSystemrecord = $this->getSystemRecord($strSystemid);
+        return new class_date($arrSystemrecord["system_create_date"]);
+    }
+
 
 	/**
 	 * Writes a value to the params-array

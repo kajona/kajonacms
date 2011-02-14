@@ -79,6 +79,31 @@ class class_modul_system_common extends class_model implements interface_model  
         return $this->objDB->_query($strQuery);
     }
 
+     /**
+     * Sets the special date of the current systemid
+     *
+     * @param class_date $objSpecialDate
+     * @return bool
+     */
+    public function setSpecialDate($objSpecialDate) {
+        //check, if an insert or an update is needed
+        $strQuery = "";
+
+        $intSpecialDate = $objSpecialDate->getLongTimestamp();
+        $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
+        if((int)$arrRow["COUNT(*)"] == 0) {
+            $strQuery = "INSERT INTO "._dbprefix_."system_date
+            				(system_date_special, system_date_id) VALUES
+            				(".dbsafeString($intSpecialDate).", '".dbsafeString($this->getSystemid())."')";
+        }
+        else {
+            $strQuery = "UPDATE "._dbprefix_."system_date
+                            SET system_date_special = ".dbsafeString($intSpecialDate)."
+                          WHERE system_date_id = '".dbsafeString($this->getSystemid())."'";
+        }
+        return $this->objDB->_query($strQuery);
+    }
+    
     /**
      * Sets the start date of the current systemid
      *
@@ -118,7 +143,7 @@ class class_modul_system_common extends class_model implements interface_model  
         $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
-            				(system_date_end, system_date_id) VALUES                 
+            				(system_date_end, system_date_id) VALUES
             				(".dbsafeString($intEndDate).", '".dbsafeString($this->getSystemid())."' )";
         }
         else {
@@ -130,28 +155,16 @@ class class_modul_system_common extends class_model implements interface_model  
     }
 
     /**
-     * Sets the special date of the current systemid
+     * Returns the end-date as defined in the date-table
      *
-     * @param class_date $objSpecialDate
-     * @return bool
+     * @return class_date
      */
-    public function setSpecialDate($objSpecialDate) {
-        //check, if an insert or an update is needed
-        $strQuery = "";
-
-        $intSpecialDate = $objSpecialDate->getLongTimestamp();
-        $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
-        if((int)$arrRow["COUNT(*)"] == 0) {
-            $strQuery = "INSERT INTO "._dbprefix_."system_date
-            				(system_date_special, system_date_id) VALUES 
-            				(".dbsafeString($intSpecialDate).", '".dbsafeString($this->getSystemid())."')";
-        }
-        else {
-            $strQuery = "UPDATE "._dbprefix_."system_date
-                            SET system_date_special = ".dbsafeString($intSpecialDate)."
-                          WHERE system_date_id = '".dbsafeString($this->getSystemid())."'";
-        }
-        return $this->objDB->_query($strQuery);
+    public function getEndDate() {
+        $arrRecord = $this->getSystemRecord();
+        if($arrRecord["system_date_end"] > 0)
+            return new class_date($arrRecord["system_date_end"]);
+        else
+            return null;
     }
     
     /**
