@@ -15,7 +15,6 @@
 $obj_copy = new class_copy();
 echo "<pre>";
 
-
 if(isset($_GET["aktion"]))
 {
 	if($_GET["aktion"] == "copy_out")
