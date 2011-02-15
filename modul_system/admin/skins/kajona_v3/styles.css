@@ -1637,5 +1637,8 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
     display: inline;
     float: right;
     top: 0px;
-    
+}
+
+#aspectChooser select {
+    font-size: 11px;
 }
