@@ -12,6 +12,7 @@
  * not in the filesystem
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_folder extends class_model implements interface_model  {
 
@@ -23,8 +24,8 @@ class class_modul_pages_folder extends class_model implements interface_model  {
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_pages";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _pages_folder_id_;
 		$arrModul["modul"]				= "pages";
 
@@ -169,6 +170,35 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 
 		return $arrReturn;
 	}
+
+    /**
+     * Returns the list of pages and folders, so containing both object types, being located
+     * under a given systemid.
+     *
+     * @param string $strFolderid
+     * @return class_modul_pages_page | class_modul_pages_folder
+     */
+    public static function getPagesAndFolderList($strFolderid = "") {
+        if(!validateSystemid($strFolderid))
+			$strFolderid = class_modul_system_module::getModuleByName("pages")->getSystemid();
+
+		$strQuery = "SELECT system_id, system_module_nr
+						FROM "._dbprefix_."system
+						WHERE system_prev_id='".dbsafeString($strFolderid)."'
+							AND (system_module_nr = "._pages_modul_id_." OR system_module_nr = "._pages_folder_id_." )
+							ORDER BY system_sort ASC";
+
+		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrReturn = array();
+		foreach($arrIds as $arrOneRecord) {
+            if($arrOneRecord["system_module_nr"] == _pages_modul_id_)
+                $arrReturn[] = new class_modul_pages_page($arrOneRecord["system_id"]);
+            else if($arrOneRecord["system_module_nr"] == _pages_folder_id_)
+                $arrReturn[] = new class_modul_pages_folder($arrOneRecord["system_id"]);
+        }
+
+		return $arrReturn;
+    }
 
 	/**
 	 * Looks up all folders with the given name

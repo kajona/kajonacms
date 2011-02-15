@@ -642,7 +642,7 @@ abstract class class_admin {
     private function validateAndUpdateCurrentAspect() {
         $arrModule = $this->getModuleData($this->arrModule["modul"]);
         $strCurrentAspect = class_modul_system_aspect::getCurrentAspectId();
-        if($arrModule["module_aspect"] != "") {
+        if(isset($arrModule["module_aspect"]) && $arrModule["module_aspect"] != "") {
             $arrAspects = explode(",", $arrModule["module_aspect"]);
             if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
                 class_modul_system_aspect::setCurrentAspectId($arrAspects[0]);

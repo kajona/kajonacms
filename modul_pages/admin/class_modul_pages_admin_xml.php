@@ -13,6 +13,7 @@
  * Serves xml-requests, e.g. a list of available pages
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -23,7 +24,6 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_pages";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_modul_id_;
 		$arrModul["modul"]			= "pages";
 
@@ -31,33 +31,14 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 		parent::__construct($arrModul);
 	}
 
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "getPagesByFilter")
-            $strReturn .= $this->actionGetPagesByFilter();
-
-        if($strAction == "getChildnodes")
-            $strReturn .= $this->getChildNodes();
-
-
-        return $strReturn;
-	}
-
-
-
 
 	/**
-	 * Creates a list of sites in the current folder
+	 * Creates a list of sites reduced to match the filter passed.
+     * Used e.g. by the page-selector.
 	 *
 	 * @return string
 	 */
-	private function actionGetPagesByFilter() {
+	protected function actionGetPagesByFilter() {
 		$strReturn = "";
         $strFilter = $this->getParam("filter");
         $arrPages = class_modul_pages_page::getAllPages(0, 0, $strFilter);
@@ -75,50 +56,39 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
 	}
 
     /**
-     * Fetches all child-nodes (so folders an pages) of the passed node.
+     * Fetches all child-nodes (folders and pages) of the passed node.
      * Used by the tree-view in module-pages.
      *
      * @return string
      * @since 3.3.0
      */
-    private function getChildNodes() {
+    protected function actionGetchildNodes() {
         $strReturn = "";
 
-        $arrFolder = class_modul_pages_folder::getFolderList($this->getSystemid());
-
-        $strReturn .= "<subnodes>";
-
-        $strReturn .= "<folders>";
-        if(count($arrFolder) > 0) {
-            foreach ($arrFolder as $objSingleFolder) {
-                if($objSingleFolder->rightView()) {
-                    $strReturn .= "<folder>";
-                    $strReturn .= "<name>".xmlSafeString($objSingleFolder->getStrName())."</name>";
-                    $strReturn .= "<systemid>".$objSingleFolder->getSystemid()."</systemid>";
-                    $strReturn .= "<link>".getLinkAdminHref("pages", "list", "folderid=".$objSingleFolder->getSystemid())."</link>";
-                    $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
-                    $strReturn .= "</folder>";
+        $strReturn .= "<entries>";
+        $arrEntries = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
+        if(count($arrEntries) > 0) {
+            foreach ($arrEntries as $objSingleEntry) {
+                if($objSingleEntry->rightView()) {
+                    if($objSingleEntry instanceof class_modul_pages_page) {
+                        $strReturn .= "<page>";
+                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
+                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
+                        $strReturn .= "<link>".getLinkAdminHref("pages_content", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
+                        $strReturn .= "</page>";
+                    }
+                    else if($objSingleEntry instanceof class_modul_pages_folder) {
+                        $strReturn .= "<folder>";
+                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
+                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
+                        $strReturn .= "<link>".getLinkAdminHref("pages", "list", "folderid=".$objSingleEntry->getSystemid())."</link>";
+                        $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
+                        $strReturn .= "</folder>";
+                    }
                 }
             }
         }
-        $strReturn .= "</folders>";
-
-        $strReturn .= "<pages>";
-        $arrPages = class_modul_pages_folder::getPagesInFolder($this->getSystemid());
-        if(count($arrPages) > 0) {
-            foreach ($arrPages as $objSinglePage) {
-                if($objSinglePage->rightView()) {
-                    $strReturn .= "<page>";
-                    $strReturn .= "<name>".xmlSafeString($objSinglePage->getStrName())."</name>";
-                    $strReturn .= "<systemid>".$objSinglePage->getSystemid()."</systemid>";
-                    $strReturn .= "<link>".getLinkAdminHref("pages_content", "list", "&systemid=".$objSinglePage->getSystemid())."</link>";
-                    $strReturn .= "</page>";
-                }
-            }
-        }
-        $strReturn .= "</pages>";
-
-        $strReturn .= "</subnodes>";
+        $strReturn .= "</entries>";
 
         return $strReturn;
     }

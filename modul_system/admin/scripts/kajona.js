@@ -1182,57 +1182,58 @@ KAJONA.admin.ajax = {
                     //success, start transforming the childs to tree-view nodes
                     //TODO: use xml parser instead of string-parsing
                     //process nodes
-                    var intStart = o.responseText.indexOf("<folders>")+9;
-                    var strFolders = o.responseText.substr(intStart, o.responseText.indexOf("</folders>")-intStart);
+                    var intStart = o.responseText.indexOf("<entries>")+9;
+                    var strEntries = o.responseText.substr(intStart, o.responseText.indexOf("</entries>")-intStart);
 
-                    while(strFolders.indexOf("<folder>") != -1 ) {
-                        var intFolderStart = strFolders.indexOf("<folder>")+8;
-                        var intFolderEnd = strFolders.indexOf("</folder>")-intFolderStart;
-                        var strSingleFolder = strFolders.substr(intFolderStart, intFolderEnd);
+                    while(strEntries.indexOf("<folder>") != -1 || strEntries.indexOf("<page>") != -1 ) {
 
-                        var intTemp = strSingleFolder.indexOf("<name>")+6;
-                        var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
+                        if(strEntries.substr(0, 8) == "<folder>") {
+                            var intFolderStart = strEntries.indexOf("<folder>")+8;
+                            var intFolderEnd = strEntries.indexOf("</folder>")-intFolderStart;
+                            var strSingleFolder = strEntries.substr(intFolderStart, intFolderEnd);
 
-                        intTemp = strSingleFolder.indexOf("<systemid>")+10;
-                        var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
+                            var intTemp = strSingleFolder.indexOf("<name>")+6;
+                            var strName = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</name>")-intTemp);
 
-                        intTemp = strSingleFolder.indexOf("<link>")+6;
-                        var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
-                        
-                        intTemp = strSingleFolder.indexOf("<isleaf>")+8;
-                        var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
+                            intTemp = strSingleFolder.indexOf("<systemid>")+10;
+                            var strSystemid = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</systemid>")-intTemp);
 
-                        var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
-                        tempNode.systemid = strSystemid;
-                        tempNode.labelStyle = "treeView-foldernode";
-                        tempNode.isLeaf = strLeaf == "true";
+                            intTemp = strSingleFolder.indexOf("<link>")+6;
+                            var strLink = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</link>")-intTemp);
 
-                        strFolders = strFolders.substr(strFolders.indexOf("</folder>")+9);
-                    }
+                            intTemp = strSingleFolder.indexOf("<isleaf>")+8;
+                            var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
 
-                    intStart = o.responseText.indexOf("<pages>")+7;
-                    var strPages = o.responseText.substr(intStart, o.responseText.indexOf("</pages>")-intStart);
+                            var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
+                            tempNode.systemid = strSystemid;
+                            tempNode.labelStyle = "treeView-foldernode";
+                            tempNode.isLeaf = strLeaf == "true";
 
-                    while(strPages.indexOf("<page>") != -1 ) {
-                        var intPageStart = strPages.indexOf("<page>")+6;
-                        var intPageEnd = strPages.indexOf("</page>")-intPageStart;
-                        var strSinglePage = strPages.substr(intPageStart, intPageEnd);
+                            strEntries = strEntries.substr(strEntries.indexOf("</folder>")+9);
+                        }
+                        else if(strEntries.substr(0, 6) == "<page>") {
+                            var intPageStart = strEntries.indexOf("<page>")+6;
+                            var intPageEnd = strEntries.indexOf("</page>")-intPageStart;
+                            var strSinglePage = strEntries.substr(intPageStart, intPageEnd);
 
-                        intTemp = strSinglePage.indexOf("<name>")+6;
-                        strName = strSinglePage.substr(intTemp, strSinglePage.indexOf("</name>")-intTemp);
+                            intTemp = strSinglePage.indexOf("<name>")+6;
+                            strName = strSinglePage.substr(intTemp, strSinglePage.indexOf("</name>")-intTemp);
 
-                        intTemp = strSinglePage.indexOf("<systemid>")+10;
-                        strSystemid = strSinglePage.substr(intTemp, strSinglePage.indexOf("</systemid>")-intTemp);
+                            intTemp = strSinglePage.indexOf("<systemid>")+10;
+                            strSystemid = strSinglePage.substr(intTemp, strSinglePage.indexOf("</systemid>")-intTemp);
 
-                        intTemp = strSinglePage.indexOf("<link>")+6;
-                        strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
+                            intTemp = strSinglePage.indexOf("<link>")+6;
+                            strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
 
-                        tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
-                        tempNode.systemid = strSystemid;
-                        tempNode.isLeaf = true;
-                        tempNode.labelStyle = "treeView-pagenode";
+                            tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
+                            tempNode.systemid = strSystemid;
+                            tempNode.isLeaf = true;
+                            tempNode.labelStyle = "treeView-pagenode";
 
-                        strPages = strPages.substr(strPages.indexOf("</page>")+7);
+                            strEntries = strEntries.substr(strEntries.indexOf("</page>")+7);
+
+                        }
+
                     }
 
                     o.argument.fnLoadComplete();

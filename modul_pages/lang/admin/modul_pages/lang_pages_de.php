@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 319
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -113,7 +113,9 @@ $lang["pe_icon_page"]                    = "Grunddaten der Seite in der Administ
 $lang["pe_new"]                          = "Neues Element an Platzhalter:";
 $lang["pe_new_old"]                      = "Anlegen";
 $lang["pe_shiftDown"]                    = "Nach unten";
+$lang["entry_down"]                      = "Nach unten";
 $lang["pe_shiftUp"]                      = "Nach oben";
+$lang["entry_up"]                        = "Nach oben";
 $lang["pe_status_autor"]                 = "Letzter Autor:";
 $lang["pe_status_page"]                  = "Seite:";
 $lang["pe_status_status"]                = "Status:";

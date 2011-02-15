@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 319
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -21,18 +21,10 @@ $lang["_pages_portaleditor_"]            = "Редактора на портал
 $lang["_pages_templatechange_"]          = "Позволи смяна на шаблони:";
 $lang["_pages_templatechange_hint"]      = "Определя дали шаблона на страници със съдържание, може да се променя или не. Ако е указано 'да' може да има неочаквани странични ефекти!";
 $lang["beschreibung"]                    = "Описание:";
-$lang["browser"]                         = "";
 $lang["browsername"]                     = "Име в HTML тага [title]:";
 $lang["contentToolbar_content"]          = "Редактирай съдържание";
 $lang["contentToolbar_pageproperties"]   = "Редактирай настройки";
 $lang["contentToolbar_preview"]          = "Преглед на страниата (Портален редактор)";
-$lang["copyElement_element"]             = "";
-$lang["copyElement_err_placeholder"]     = "";
-$lang["copyElement_language"]            = "";
-$lang["copyElement_page"]                = "";
-$lang["copyElement_placeholder"]         = "";
-$lang["copyElement_submit"]              = "";
-$lang["copyElement_template"]            = "";
 $lang["ds_entsperren"]                   = "Отключи запис";
 $lang["ds_gesperrt"]                     = "Записа е заключен";
 $lang["ds_seite_gesperrt"]               = "Страницата не може да бъде изтрита, съдържа заключени записи";
@@ -43,7 +35,6 @@ $lang["element_bearbeiten"]              = "Редактирай елемент"
 $lang["element_bearbeiten_fehler"]       = "Възникна грешка при запазването на елемента";
 $lang["element_cachetime"]               = "Максимално време за кеширане:";
 $lang["element_cachetime_hint"]          = "в секунди (-1 = без кеширане)";
-$lang["element_copy"]                    = "";
 $lang["element_first"]                   = "В началото";
 $lang["element_hoch"]                    = "Премести елемент нагоре";
 $lang["element_install"]                 = "Инсталирай елемент";
@@ -99,7 +90,6 @@ $lang["pages_ordner_edit"]               = "Редактирай папка";
 $lang["pages_ordner_loeschen_frage"]     = "Наистина ли искате да премахнете папката &quot;<b>%%element_name%%</b>&quot;?";
 $lang["pages_ordner_oeffnen"]            = "Отвори папка";
 $lang["pages_ordner_rechte"]             = "Редактирай права";
-$lang["pe_copy"]                         = "";
 $lang["pe_delete"]                       = "Изтрий";
 $lang["pe_dialog_close_warning"]         = "Искате ли да затворите редактор и изхвърлете евентуалните промени?";
 $lang["pe_disable"]                      = "Деактивирай портал редактора";
@@ -108,9 +98,10 @@ $lang["pe_enable"]                       = "Активирай портал ре
 $lang["pe_icon_edit"]                    = "Отвори страницата в администрацията";
 $lang["pe_icon_page"]                    = "Редактирай страницата с детайли в администрацията";
 $lang["pe_new"]                          = "Нов елемент в контейнера:";
-$lang["pe_new_old"]                      = "";
 $lang["pe_shiftDown"]                    = "Премести надолу";
+$lang["entry_down"]                      = "Премести надолу";
 $lang["pe_shiftUp"]                      = "Премести нагоре";
+$lang["entry_up"]                        = "Премести нагоре";
 $lang["pe_status_autor"]                 = "Последен автор:";
 $lang["pe_status_page"]                  = "Страница:";
 $lang["pe_status_status"]                = "Статус:";
@@ -118,12 +109,10 @@ $lang["pe_status_time"]                  = "Последна редакция:";
 $lang["plNew"]                           = "Нов контейнер:";
 $lang["plRename"]                        = "Обнови";
 $lang["plToUpdate"]                      = "Стар контейнер:";
-$lang["plUpdateAll"]                     = "";
 $lang["plUpdateFalse"]                   = "Възникна грешка при обновяването на контейнера.";
 $lang["plUpdateHelp"]                    = "На тази страница можете да обновите контейнерите запазени в база данни.<br/> Това може да бъде задължително, ако контейнера е бил удължен от друг елемент към страница. В такъв случай, новият елемент ще е видим в администрацията, но няма да бъде видим в портала. За да промените това, контейнерите запазени в база данни трябва да бъдат обновени с новите.<br /> За целта е нужно името на променения шаблон, името на стария контейнер, (name_element) и името на новия контейнер (пример: name_element|element2). Името не трябва да съдържа процентен знак.";
 $lang["plUpdateTrue"]                    = "Обновяването успешно.";
 $lang["placeholder"]                     = "Контейнер:";
-$lang["quickhelp_copyElement"]           = "";
 $lang["quickhelp_editElement"]           = "Тази форма се използва за създаване или промяна на основните данни на елементите на страницата. От тук можете да установите следните области: <br /><ul><li>Име: Име на елемента</li><li>Максимално време за кеширане: Времетраене в секунди елемента е валиден в кеша.<br />След това време, страницата ще бъде регенерирана чрез следваща заявка.</li><li>Admin-class: клас съдържащ администраторските форми.</li><li>Portal-class: клас отговаряш за работата на портала.</li><li> Повтарящ: определя дали елемента е в състояние да бъде повече от един път в контейнера или не.</li></ul>";
 $lang["quickhelp_editFolder"]            = "За създаване или преименуване на папка, името на папката може да бъде зададено тук.";
 $lang["quickhelp_flushCache"]            = "Поздравления - кеша бе изчистен преди секунди ;-)";
@@ -148,7 +137,6 @@ $lang["seite_rechte"]                    = "Редактирай права";
 $lang["select_page"]                     = "Изберете страница";
 $lang["seostring"]                       = "SEO-URL-ключови думи:";
 $lang["submit"]                          = "Запази";
-$lang["submit_change"]                   = "";
 $lang["template"]                        = "Шаблон:";
 $lang["templateNotLoaded"]               = "ВНИМАНИЕ: Не беше избран шаблон за страницата или не може да бъде зареден!";
 $lang["templateNotSelectedBefore"]       = "ВНИМАНИЕ: Няма избран шаблон за тази страница!";

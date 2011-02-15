@@ -62,13 +62,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		try {
     		// -- Pages ------------------------------
 
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-    		if($strAction == "listAll")
-    			$strReturn = $this->actionListAll();
+    		
     		if($strAction == "newPage")
     			$strReturn = $this->actionNew();
-    		if($strAction == "savePage") {
+    		else if($strAction == "savePage") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionSavePage();
     			    if($strReturn == "")
@@ -77,7 +74,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    else
     		        $strReturn = $this->actionNew();
     		}
-    		if($strAction == "changePage") {
+    		else if($strAction == "changePage") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionChangePage();
     			    if($strReturn == "")
@@ -86,21 +83,21 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		    else
     		        $strReturn = $this->actionNew();
     		}
-    		if($strAction == "deletePageFinal") {
+    		else if($strAction == "deletePageFinal") {
     			$strReturn = $this->actionDeletePageFinal();
     			if($strReturn == "")
     				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		}
-    		if($strAction == "copyPage") {
+    		else if($strAction == "copyPage") {
     		    $strReturn = $this->actionCopyPage();
     			if($strReturn == "")
     			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
     		}
 
     		// -- Folders ------------------------------
-    		if($strAction == "newFolder")
+    		else if($strAction == "newFolder")
     			$strReturn = $this->actionFolderNew();
-    		if($strAction == "folderNewSave") {
+    		else if($strAction == "folderNewSave") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionFolderNewSave();
     			    if($strReturn == "")
@@ -110,9 +107,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		        $strReturn = $this->actionFolderNew();
     		}
 
-    		if($strAction == "editFolder")
+    		else if($strAction == "editFolder")
     			$strReturn = $this->actionFolderEdit();
-    		if($strAction == "folderEditSave") {
+    		else if($strAction == "folderEditSave") {
     		    if($this->validateForm()) {
     			    $strReturn = $this->actionFolderEditSave();
     			    if($strReturn == "")
@@ -122,25 +119,25 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		        $strReturn = $this->actionFolderNew();
     		}
 
-    		if($strAction == "deleteFolderFinal") {
+    		else if($strAction == "deleteFolderFinal") {
     			$strReturn = $this->actionDeleteFolderFinal();
     			if($strReturn == "")
     				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
     		}
 
     		// -- Misc ----------------------------------
-    		if($strAction == "listElements")
+    		else if($strAction == "listElements")
     			$strReturn = $this->actionElementsList();
-    		if($strAction == "newElement")
+    		else if($strAction == "newElement")
     			$strReturn = $this->actionElementNew();
-    		if($strAction == "editElement")
+    		else if($strAction == "editElement")
     			$strReturn = $this->actionElementNew("edit");
-    		if($strAction == "installElement") {
+    		else if($strAction == "installElement") {
     		    $strReturn = $this->actionInstallElement();
     		    if($strReturn == "")
     				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
     		}
-    		if($strAction == "saveElement") {
+    		else if($strAction == "saveElement") {
     		    if($this->validateForm() & !$this->checkElementExisting()) {
         			$strReturn = $this->actionSaveElement();
         			if($strReturn == "")
@@ -153,13 +150,16 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		            $strReturn = $this->actionElementNew();
     		    }
     		}
-    		if($strAction == "deleteElement") {
+    		else if($strAction == "deleteElement") {
     			$strReturn = $this->actionDeleteElement();
     			if($strReturn == "")
     				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
     		}
-    		if($strAction == "updatePlaceholder")
+    		else if($strAction == "updatePlaceholder")
                 $strReturn = $this->actionUpdatePlaceholder();
+            else {
+                $strReturn = parent::action($strAction);
+            }
 		}
 		catch (class_exception $objException) {
 		    $objException->processException();
@@ -214,105 +214,101 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 //--Pages-Management-------------------------------------------------------------------------------------
 
 
+    protected function actionSortUp() {
+        $this->setPositionAndReload($this->getSystemid(), "upwards");
+    }
+
+    protected function actionSortDown() {
+        $this->setPositionAndReload($this->getSystemid(), "downwards");
+    }
+
+
 	/**
 	 * Creates a list of sites in the current folder
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-			//GetFolders
-			//if theres a folder-level, load it
-			$arrFolder = class_modul_pages_folder::getFolderList($this->strFolderlevel);
-			$intI = 0;
 
-            $strFolder = "";
-			//Folder-Table
-			//A Folder, to get one level up
-			if($this->strFolderlevel != $this->getModuleSystemid($this->arrModule["modul"]) && validateSystemid($this->strFolderlevel)) {
-				//Get data of folder one level above
-				$objPrevFolder = new class_modul_pages_folder($this->strFolderlevel);
-				//Output Row
-		  		$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getText("pages_hoch"), $this->getText("pages_hoch"), "icon_folderActionLevelup.gif")), $intI++);
-			}
-
-			//So, lets loop through the folders
-			if(count($arrFolder) > 0) {
-				foreach($arrFolder as $objSingleFolder) {
-					//Correct Rights?
-					if($this->objRights->rightView($objSingleFolder->getSystemid())) {
-						$strActions = "";
-			    		//Splitting up rights so decide which Buttons to display
-			    		if($this->objRights->rightView($objSingleFolder->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
-			    		if($this->objRights->rightEdit($objSingleFolder->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objSingleFolder->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-			    		if($this->objRights->rightDelete($objSingleFolder->getSystemid())) {
-			    		    if(count(class_modul_pages_folder::getFolderList($objSingleFolder->getSystemid())) != 0 || count(class_modul_pages_folder::getPagesInFolder($objSingleFolder->getSystemid())) != 0)
- 			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
-                            else
-                            	$strActions .= $this->objToolkit->listDeleteButton($objSingleFolder->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objSingleFolder->getSystemid()));
-			    		}
-			    		if($this->objRights->rightRight($objSingleFolder->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objSingleFolder->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objSingleFolder->getSystemid())));
-			  			$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objSingleFolder->getStrName(), $strActions, $intI++);
-					}
-				}
-			}
-
-			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
-
-			if(uniStrlen($strFolder) != 0)
-	  		    $strFolder = $this->objToolkit->listHeader().$strFolder.$this->objToolkit->listFooter();
-
-	  		$strFolder .= $this->objToolkit->divider();
-
-
-			$strFolder = $this->objToolkit->getLayoutFolderPic($strFolder, $this->getText("klapper"));
-
-
-			//Collect the pages belonging to the current folder to display
-			$arrPages = class_modul_pages_folder::getPagesInFolder($this->strFolderlevel);
+			//Collect the pages and folders belonging to the current folder to display
+			$arrPages = class_modul_pages_folder::getPagesAndFolderList($this->strFolderlevel);
 			$intI = 0;
 			$strPages = "";
 
-			foreach($arrPages as $objOneRow) {
+			foreach($arrPages as $objOneEntry) {
 				$strActions = "";
-			 	$strSystemid = $objOneRow->getSystemid();
+			 	$strSystemid = $objOneEntry->getSystemid();
 			 	//As usual: Just display, if the needed rights are given
 			 	if($this->objRights->rightView($strSystemid)) {
-				 	//Split up rights
-		    		if($this->objRights->rightEdit($strSystemid))
-    				    $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-		    		if($this->objRights->rightEdit($strSystemid))
-	    				$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-	    			if($this->objRights->rightEdit($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneRow->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));
-		    		if($this->objRights->rightDelete($strSystemid))
-		    			$strActions .= $this->objToolkit->listDeleteButton($objOneRow->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneRow->getSystemid()));
-		    		if($this->objRights->rightEdit($strSystemid))
-		    			$strActions .= $this->objToolkit->listStatusButton($objOneRow->getSystemid());
-		    		if($this->objRights->rightRight($strSystemid))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneRow->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneRow->getSystemid())));
 
-		  			$strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneRow->getStrName(), $strActions, $intI++);
+                    if($objOneEntry instanceof class_modul_pages_page) {
+
+                        //Split up rights
+                        if($this->objRights->rightEdit($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                        if($this->objRights->rightEdit($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
+                        if($this->objRights->rightEdit($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));
+                        if($this->objRights->rightDelete($strSystemid))
+                            $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
+
+                        if($this->objRights->rightEdit($strSystemid)) {
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
+
+                            $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                        }
+                        if($this->objRights->rightRight($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+
+                        $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
+                    }
+                    
+                    else if($objOneEntry instanceof class_modul_pages_folder) {
+                        
+			    		//Splitting up rights so decide which Buttons to display
+			    		if($this->objRights->rightView($objOneEntry->getSystemid()))
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
+			    		if($this->objRights->rightEdit($objOneEntry->getSystemid()))
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
+			    		if($this->objRights->rightDelete($objOneEntry->getSystemid())) {
+			    		    if(count(class_modul_pages_folder::getPagesAndFolderList($objOneEntry->getSystemid())) != 0)
+ 			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
+                            else
+                            	$strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
+			    		}
+                        if($this->objRights->rightEdit($strSystemid)) {
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
+
+                            $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                        }
+			    		if($this->objRights->rightRight($objOneEntry->getSystemid()))
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+                        
+			  			$strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
+                    }
 			 	}
 			}
+            if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
+			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
 
+            $strListId = generateSystemid();
 			if(uniStrlen($strPages) != 0)
-			$strPages = $this->objToolkit->listHeader().$strPages.$this->objToolkit->listFooter();
+    			$strPages = $this->objToolkit->dragableListHeader($strListId, true).$strPages.$this->objToolkit->dragableListFooter($strListId);
 
 			if(count($arrPages) == 0)
 				$strPages .= $this->getText("liste_seiten_leer");
 
             $strPathNavi = $this->generateFolderNavigation();
-			$strReturn .= $strPathNavi."<br /><br />".$this->generateTreeView($strFolder.$strPages);
+			$strReturn .= $strPathNavi."<br /><br />".$this->generateTreeView($strPages);
 
 		}
 		else
@@ -327,7 +323,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	 *
 	 * @return string The complete List
 	 */
-	public function actionListAll() {
+	protected function actionListAll() {
 		$strReturn = "";
 		//Check the rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
