@@ -640,7 +640,8 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Returns the tags to close an open form
+     * Returns the tags to close an open form.
+     * Includes the hidden fields for a passed pe param and a passed pv param by default.
      *
      * @return string
      */
@@ -651,6 +652,8 @@ class class_toolkit_admin extends class_toolkit {
             $arrParams = getAllPassedParams();
             if(array_key_exists("pe", $arrParams))
                 $strPeFields .= $this->formInputHidden("pe", $arrParams["pe"]);
+            if(array_key_exists("pv", $arrParams))
+                $strPeFields .= $this->formInputHidden("pv", $arrParams["pv"]);
         }
         return $strPeFields.$this->objTemplate->fillTemplate(array(), $strTemplateID);
     }
