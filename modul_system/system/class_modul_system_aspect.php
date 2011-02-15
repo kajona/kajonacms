@@ -254,7 +254,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 
         //process params maybe existing
         if(defined("_admin_") && _admin_ && getGet("aspect") != "" && validateSystemid(getGet("aspect"))) {
-            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, getGet("aspect"));
+            self::setCurrentAspectId(getGet("aspect"));
         }
 
         //aspect registered in session?
@@ -278,6 +278,16 @@ class class_modul_system_aspect extends class_model implements interface_model  
             return $objAspect->getSystemid();
         else
             return "";
+    }
+
+    /**
+     * Saves an aspect id as the current active one.
+     *
+     * @param string $strAspectId
+     */
+    public static function setCurrentAspectId($strAspectId) {
+        if(validateSystemid($strAspectId))
+            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
     }
 
 

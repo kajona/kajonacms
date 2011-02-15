@@ -395,6 +395,7 @@ abstract class class_admin {
 	 */
 	public function getModuleData($strName, $bitCache = true) {
 	    return $this->objSystemCommon->getModuleData($strName, $bitCache);
+
 	}
 
 	/**
@@ -591,13 +592,16 @@ abstract class class_admin {
 // --- OutputMethods ------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the complete Template.
-	 * Collects all outputs and invokes the navi generation, ...
+	 * Basic controller method invoking all further methods in order to generate an admin view.
+     * Takes care of generating the navigation, title, common JS variables, loading quickhelp texts,...
 	 *
 	 * @return string
 	 * @final
 	 */
 	public final function getModuleOutput() {
+
+        $this->validateAndUpdateCurrentAspect();
+
 		//Calling the contentsetter
 		$this->arrOutput["content"] = $this->getOutputContent();
 		$this->arrOutput["mainnavi"] = $this->getOutputMainNavi();
@@ -610,7 +614,7 @@ abstract class class_admin {
 		$this->arrOutput["module_id"] = $this->arrModule["moduleId"];
 		$this->arrOutput["webpathTitle"] = urldecode(str_replace(array("http://", "https://"), array("", ""), _webpath_));
 		$this->arrOutput["head"] = "<script type=\"text/javascript\">KAJONA_DEBUG = ".$this->objConfig->getDebug("debuglevel")."; KAJONA_WEBPATH = '"._webpath_."'; KAJONA_BROWSER_CACHEBUSTER = "._system_browser_cachebuster_.";</script>";
-		//Loading the wanted Template
+		//Loading the desired Template
 		//if requested the pe, load different template
         $strTemplateID = "";
 		if($this->getParam("peClose") == 1 || $this->getParam("pe") == 1) {
@@ -628,6 +632,24 @@ abstract class class_admin {
 		    $strTemplateID = $this->objTemplate->readTemplate($this->arrModule["template"]);
 		return $this->objTemplate->fillTemplate($this->arrOutput, $strTemplateID);
 	}
+
+    /**
+     * Validates if the requested module is valid for the current aspect.
+     * If necessary, the current aspect is updated,
+     *
+     * @return void
+     */
+    private function validateAndUpdateCurrentAspect() {
+        $arrModule = $this->getModuleData($this->arrModule["modul"]);
+        $strCurrentAspect = class_modul_system_aspect::getCurrentAspectId();
+        if($arrModule["module_aspect"] != "") {
+            $arrAspects = explode(",", $arrModule["module_aspect"]);
+            if(count($arrAspects) == 1 && $arrAspects[0] != $strCurrentAspect) {
+                class_modul_system_aspect::setCurrentAspectId($arrAspects[0]);
+            }
+
+        }
+    }
 
 
 	/**
