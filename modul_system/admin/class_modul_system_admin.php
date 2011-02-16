@@ -34,7 +34,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	}
 
 	/**
-	 * Controller, delegates further processing
+	 * Overwrites the defaul fallback action
 	 *
 	 * @param stirng $strAction
 	 */
@@ -42,28 +42,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		if($strAction == "")
 			$strAction = "moduleList";
 
-		$strReturn = "";
-
-		if($strAction == "moduleSortUp") {
-            $this->setPositionAndReload($this->getSystemid(), "upwards");
-		}
-		else if($strAction == "moduleSortDown") {
-            $this->setPositionAndReload($this->getSystemid(), "downwards");
-		}
-		else if($strAction == "moduleStatus") {
-            //status: for setting the status of modules, you have to be member of the admin-group
-            $objUser = new class_modul_user_user($this->objSession->getUserID());
-            $objAdminGroup = new class_modul_user_group(_admins_group_id_);
-   		    if($this->objRights->rightEdit($this->getSystemid()) && $objAdminGroup->isUserMemberInGroup($objUser)) {
-    		    $this->setStatus();
-    		    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-   		    }
-		}
-        else 
-            $strReturn = parent::action($strAction);
-        
-
-		$this->strOutput = $strReturn;
+        parent::action($strAction);
 	}
 
 	public function getOutputModuleNavi() {
@@ -87,6 +66,34 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 
 // -- Module --------------------------------------------------------------------------------------------
+
+    /**
+     * Sorts a module upwards.
+     */
+    protected function actionModuleSortUp() {
+        $this->setPositionAndReload($this->getSystemid(), "upwards");
+    }
+
+    /**
+     * Sorts a module downwards.
+     */
+    protected function actionModuleSortDown() {
+        $this->setPositionAndReload($this->getSystemid(), "downwards");
+    }
+
+    /**
+     * Sets the status of a module.
+     * Therefore you have to be member of the admin-group.
+     */
+    protected function actionModuleStatus() {
+        //status: for setting the status of modules, you have to be member of the admin-group
+        $objUser = new class_modul_user_user($this->objSession->getUserID());
+        $objAdminGroup = new class_modul_user_group(_admins_group_id_);
+        if($this->objRights->rightEdit($this->getSystemid()) && $objAdminGroup->isUserMemberInGroup($objUser)) {
+            $this->setStatus();
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        }
+    }
 
 	/**
 	 * Creates a list of all installed modules

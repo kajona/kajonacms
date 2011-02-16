@@ -34,39 +34,12 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
 
 	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "setAbsolutePosition")
-            $strReturn .= $this->actionSetAbsolutePosition();
-        if($strAction == "setStatus")
-            $strReturn .= $this->actionSetStatus();
-        if($strAction == "executeSystemTask")
-            $strReturn .= $this->actionExecuteSystemTask();
-        if($strAction == "systemLog")
-            $strReturn .= $this->actionSystemlogEntries();
-        if($strAction == "systemInfo")
-			$strReturn = $this->actionSystemInfo();
-        if($strAction == "moduleList")
-			$strReturn = $this->actionModuleList();
-        if($strAction == "systemSessions")
-            $strReturn = $this->actionSessions();
-
-        return $strReturn;
-	}
-
-
-	/**
 	 * saves a post in the database an returns the post as html.
 	 * In case of missing fields, the form is returned again
 	 *
 	 * @return string
 	 */
-	private function actionSetAbsolutePosition() {
+	protected function actionSetAbsolutePosition() {
 	    $strReturn = "";
 
 		//check permissions
@@ -102,7 +75,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 *
 	 * @return string
 	 */
-	private function actionSetStatus() {
+	protected function actionSetStatus() {
 	    $strReturn = "";
 	    if($this->objRights->rightEdit($this->getSystemid())) {
     	    if(parent::setStatus()) {
@@ -126,7 +99,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      *
      * @return string
      */
-    private function actionExecuteSystemTask() {
+    protected function actionExecuteSystemTask() {
         $strReturn = "";
         $strTaskOutput = "";
         if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -198,7 +171,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      * 
      * @return string
      */
-    private function actionSystemlogEntries() {
+    protected function actionSystemLog() {
         $strReturn = "";
         
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -296,7 +269,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      * 
      * @return string
      */
-    private function actionSystemInfo() {
+    protected function actionSystemInfo() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -365,7 +338,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      * 
      * @return string
      */
-    private function actionModuleList() {
+    protected function actionModuleList() {
         $strReturn = "";
 		
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -404,7 +377,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      *
      * @return string
      */
-    private function actionSessions() {
+    protected function actionSystemSessions() {
         $strReturn = "";
         //check needed rights
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {

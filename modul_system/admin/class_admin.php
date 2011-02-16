@@ -849,6 +849,8 @@ abstract class class_admin {
      * By default, the method to be called is set up out of the action-param passed.
      * Example: The action requested is names "newPage". Therefore, the framework tries to
      * call actionNewPage(). If now method matching the schema is found, an exception is being thrown.
+     * The actions' output is saved back to self::strOutput and, in is returned in addition.
+     * Returning the content is only implemented to remain backwards compatible with older implementations.
      * 
      *
      * @param string $strAction
