@@ -734,6 +734,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 	this.dialog;
 	this.containerId = strDialogId;
 	this.iframeId;
+    this.iframeURL;
 
 	this.setTitle = function(strTitle) {
 		document.getElementById(this.containerId + "_title").innerHTML = strTitle;
@@ -760,7 +761,9 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 	
 	this.setContentIFrame = function(strUrl) {
 		this.iframeId = this.containerId+"_iframe";
-		document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
+        this.iframeURL = strUrl;
+        //commented, now called below
+		//document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
 	}
 
 	this.init = function() {
@@ -775,13 +778,20 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			modal: true,
 			visible: true
 		});
+
 		
 		document.getElementById(this.containerId).style.display = "block";
 
 		this.dialog.render(document.body);
 		this.dialog.show();
 		this.dialog.focusLast();
-		
+
+        //FIXME: jsr / js-dev please review: moved from setContentIFrame right to here. otherwise the iframe is loaded twice
+        if(this.iframeURL != null) {
+            document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+this.iframeURL+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
+            this.iframeURL = null;
+        }
+        
 		//TODO: dynamically loading of dragdrop/resize files
 		if (bitDragging) {
 			this.enableDragging();
