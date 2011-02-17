@@ -12,7 +12,11 @@
  *
  * @package modul_pages
  */
-class class_modul_pages_page extends class_model implements interface_model  {
+class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
+
+    private $strActionEdit = "editPageProperties";
+
+
 	private $strName = "";
 	private $strKeywords = "";
 	private $strDescription = "";
@@ -155,14 +159,7 @@ class class_modul_pages_page extends class_model implements interface_model  {
 
         //create change-logs
         $objChanges = new class_modul_system_changelog();
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "browsername", $this->strOldBrowsername, $this->getStrBrowsername());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "description", $this->strOldDescription, $this->getStrDesc());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "keywords", $this->strOldKeywords, $this->getStrKeywords());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "name", $this->strOldName, $this->getStrName());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "template", $this->strOldTemplate, $this->getStrTemplate());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "seostring", $this->strOldSeostring, $this->getStrSeostring());
-        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "language", $this->strOldLanguage, $this->getStrLanguage());
-
+        $objChanges->createLogEntry($this, $this->strActionEdit);
 
 
 		//Update the baserecord
@@ -515,6 +512,42 @@ class class_modul_pages_page extends class_model implements interface_model  {
 		}
 		return $strName;
 	}
+
+
+    public function getActionName($strAction) {
+        return $strAction;
+    }
+
+    public function getChangedFields($strAction) {
+        if($strAction == $this->strActionEdit) {
+            return array(
+                array("property" => "browsername", "oldvalue" => $this->strOldBrowsername, "newvalue" => $this->getStrBrowsername()),
+                array("property" => "description", "oldvalue" => $this->strOldDescription, "newvalue" => $this->getStrDesc()),
+                array("property" => "keywords",    "oldvalue" => $this->strOldKeywords,    "newvalue" => $this->getStrKeywords()),
+                array("property" => "name",        "oldvalue" => $this->strOldName,        "newvalue" => $this->getStrName()),
+                array("property" => "template",    "oldvalue" => $this->strOldTemplate,    "newvalue" => $this->getStrTemplate()),
+                array("property" => "seostring",   "oldvalue" => $this->strOldSeostring,   "newvalue" => $this->getStrSeostring()),
+                array("property" => "language",    "oldvalue" => $this->strOldLanguage,    "newvalue" => $this->getStrLanguage())
+            );
+        }
+    }
+
+    public function getClassname() {
+        return __CLASS__;
+    }
+
+    public function getModuleName() {
+        return $this->arrModule["modul"];
+    }
+
+    public function getPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    public function getRecordName() {
+        return class_carrier::getInstance()->getObjText()->getText("change_object_page", "pages", "admin");
+    }
+
 
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
