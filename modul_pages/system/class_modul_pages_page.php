@@ -21,6 +21,14 @@ class class_modul_pages_page extends class_model implements interface_model  {
 	private $strSeostring = "";
 	private $strLanguage = "";
 
+    private $strOldName;
+    private $strOldKeywords;
+    private $strOldDescription;
+    private $strOldTemplate;
+    private $strOldBrowsername;
+    private $strOldSeostring;
+    private $strOldLanguage;
+
     /**
      * Constructor to create a valid object
      *
@@ -105,6 +113,15 @@ class class_modul_pages_page extends class_model implements interface_model  {
     		$this->setStrTemplate($arrRow["pageproperties_template"]);
     		$this->setStrSeostring($arrRow["pageproperties_seostring"]);
     		$this->setStrLanguage($arrRow["pageproperties_language"]);
+
+
+            $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
+    		$this->strOldDescription = $arrRow["pageproperties_description"];
+    		$this->strOldKeywords = $arrRow["pageproperties_keywords"];
+    		$this->strOldName = $arrRow["page_name"];
+    		$this->strOldTemplate = $arrRow["pageproperties_template"];
+    		$this->strOldSeostring = $arrRow["pageproperties_seostring"];
+    		$this->strOldLanguage = $arrRow["pageproperties_language"];
 		}
     }
 
@@ -135,6 +152,16 @@ class class_modul_pages_page extends class_model implements interface_model  {
         //Make texts db-safe
         $strName = $this->generateNonexistingPagename($this->getStrName());
         $this->setStrName($strName);
+
+        //create change-logs
+        $objChanges = new class_modul_system_changelog();
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "browsername", $this->strOldBrowsername, $this->getStrBrowsername());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "description", $this->strOldDescription, $this->getStrDesc());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "keywords", $this->strOldKeywords, $this->getStrKeywords());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "name", $this->strOldName, $this->getStrName());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "template", $this->strOldTemplate, $this->getStrTemplate());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "seostring", $this->strOldSeostring, $this->getStrSeostring());
+        $objChanges->createLogEntry($this->arrModule["modul"], "savePage", $this->getSystemid(), "language", $this->strOldLanguage, $this->getStrLanguage());
 
 
 
