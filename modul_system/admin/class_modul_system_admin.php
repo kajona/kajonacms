@@ -312,13 +312,13 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                         $arrDD = array();
                         $arrDD["true"] = $this->getText("settings_true");
                         $arrDD["false"] = $this->getText("settings_false");
-                        $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getStrName()."]", $arrDD, $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                        $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                     elseif ($objOneSetting->getIntType() == 3) {
-                        $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getStrName()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                        $strRows .= $this->objToolkit->formInputPageSelector("set[".$objOneSetting->getSystemid()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                     else {
-                        $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getStrName()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
+                        $strRows .= $this->objToolkit->formInputText("set[".$objOneSetting->getSystemid()."]", $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                 }
                 //Build a form to return -> include the last module
@@ -335,7 +335,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 //Seems we have to update a few records
                 $arrSettings = $this->getAllParams();
                 foreach($arrSettings["set"] as $strKey => $strValue) {
-                    $objSetting = class_modul_system_setting::getConfigByName($strKey);
+                    $objSetting = new class_modul_system_setting($strKey);
                     $objSetting->setStrValue($strValue);
                     $objSetting->updateObjectToDb();
                 }
