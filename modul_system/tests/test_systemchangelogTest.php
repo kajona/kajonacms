@@ -52,6 +52,10 @@ class dummyObject implements interface_versionable {
         $this->strSystemid = $strSystemid;
     }
 
+    public function renderValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
 
     public function getActionName($strAction) {
         return "dummy";

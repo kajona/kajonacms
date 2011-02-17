@@ -196,6 +196,10 @@ class class_modul_system_setting extends class_model implements interface_model,
         }
     }
 
+    public function renderValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
     public function getClassname() {
         return __CLASS__;
     }

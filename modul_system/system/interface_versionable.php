@@ -3,6 +3,7 @@
 /**
  * The interface_versionable lists all methods an object has to implement in 
  * order to comply with the internal changelog-system.
+ * The mechanism follows parts of the memento-pattern (@see Gang Of Four, Gamma et. al)
  * 
  * For future releases it is planned to extend the capabilities to a full
  * versioning system.
@@ -62,5 +63,15 @@ interface interface_versionable {
      * @return string
      */
     public function getModuleName();
+
+    /**
+     * Renders a stored value. Allows the class to modify the value to display, e.g. to
+     * replace a timestamp by a readable string.
+     *
+     * @param string $strProperty
+     * @param string $strValue
+     * @return string
+     */
+    public function renderValue($strProperty, $strValue);
 }
 ?>

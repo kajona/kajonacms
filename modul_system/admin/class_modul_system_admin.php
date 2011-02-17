@@ -637,16 +637,17 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
 		    $objArraySectionIterator->setArraySection(class_modul_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction);
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction, "&systemid=".$strSystemid);
             $arrLogs = $arrPageViews["elements"];
 
             $arrData = array();
             $arrHeader = array();
-
             $arrHeader[] = $this->getText("change_date");
             $arrHeader[] = $this->getText("change_user");
-            $arrHeader[] = $this->getText("change_module");
-            $arrHeader[] = $this->getText("change_record");
+            if($strSystemid == "")
+                $arrHeader[] = $this->getText("change_module");
+            if($strSystemid == "")
+                $arrHeader[] = $this->getText("change_record");
             $arrHeader[] = $this->getText("change_action");
             $arrHeader[] = $this->getText("change_property");
             $arrHeader[] = $this->getText("change_oldvalue");
@@ -655,17 +656,26 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             foreach ($arrLogs as /** @var $objOneEntry class_changelog_container */ $objOneEntry) {
                 $arrRowData = array();
 
-
                 /** @var interface_versionable $objTarget */$objTarget = $objOneEntry->getObjTarget();
 
+                $strOldValue = $objOneEntry->getStrOldValue();
+                $strNewValue = $objOneEntry->getStrNewValue();
+
+                if($objTarget != null) {
+                    $strOldValue = $objTarget->renderValue($objOneEntry->getStrProperty(), $strOldValue);
+                    $strNewValue = $objTarget->renderValue($objOneEntry->getStrProperty(), $strNewValue);
+                }
+
                 $arrRowData[] = dateToString($objOneEntry->getObjDate());
-                $arrRowData[] = $objOneEntry->getStrUsername();
-                $arrRowData[] = $objTarget->getArrModule("modul");
-                $arrRowData[] = $objTarget->getRecordName();
-                $arrRowData[] = $objTarget->getActionName($objOneEntry->getStrAction());
-                $arrRowData[] = $objTarget->getPropertyName($objOneEntry->getStrProperty());
-                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrOldValue(), 20), $objOneEntry->getStrOldValue());
-                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrNewValue(), 20), $objOneEntry->getStrNewValue());
+                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrUsername(), 15), $objOneEntry->getStrUsername());
+                if($strSystemid == "")
+                    $arrRowData[] = $objTarget != null ? $objTarget->getModuleName() : "";
+                if($strSystemid == "")
+                    $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getRecordName(), 20), $objTarget->getRecordName()) : "";
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getActionName($objOneEntry->getStrAction()), 15), $objTarget->getActionName($objOneEntry->getStrAction())) : "";
+                $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getPropertyName($objOneEntry->getStrProperty()) ) : "";
+                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
+                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
                 
                 $arrData[] = $arrRowData;
             }

@@ -13,6 +13,7 @@
  * But: entries added to the changelog are copied to the systemlog leveled as information, too.
  * Changes are stored as a flat list in the database only and have no representation within the
  * system-table. This means there are no common system-id relations.
+ * Have a look at the memento pattern by Gamma et al. to get a glance at the conecptional behaviour.
  *
  * @package modul_system
  * @author sidler@mulchprod.de
@@ -193,7 +194,10 @@ final class class_changelog_container {
      * @return interface_versionable
      */
     public function getObjTarget() {
-        return new $this->strClass($this->strSystemid);
+        if(class_exists($this->strClass))
+            return new $this->strClass($this->strSystemid);
+        else
+            return null;
     }
 
     public function getObjDate() {
