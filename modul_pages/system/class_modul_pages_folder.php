@@ -14,10 +14,13 @@
  * @package modul_pages
  * @author sidler@mulchprod.de
  */
-class class_modul_pages_folder extends class_model implements interface_model  {
+class class_modul_pages_folder extends class_model implements interface_model, interface_versionable  {
+
+    private $strActionEdit = "editFolder";
 
     private $strName = "";
 
+    private $strOldName = "";
     /**
      * Constructor to create a valid object
      *
@@ -61,8 +64,10 @@ class class_modul_pages_folder extends class_model implements interface_model  {
     public function initObject() {
         $strQuery = "SELECT * FROM "._dbprefix_."system WHERE system_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
-        if(count($arrRow) > 0)
+        if(count($arrRow) > 0) {
             $this->setStrName($arrRow["system_comment"]);
+            $this->strOldName = $this->getStrName();
+        }
     }
 
     /**
@@ -71,6 +76,10 @@ class class_modul_pages_folder extends class_model implements interface_model  {
      * @return bool
      */
     protected function updateStateToDb() {
+        //create change-logs
+        $objChanges = new class_modul_system_changelog();
+        $objChanges->createLogEntry($this, $this->strActionEdit);
+        
         class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
         return true;
     }
@@ -234,6 +243,44 @@ class class_modul_pages_folder extends class_model implements interface_model  {
 	    else
 	        return false;
 	}
+
+
+
+
+    public function getActionName($strAction) {
+        if($strAction == $this->strActionEdit)
+            return $this->getText("pages_ordner_edit", "pages", "admin");
+
+        return $strAction;
+    }
+
+    public function getChangedFields($strAction) {
+        if($strAction == $this->strActionEdit) {
+            return array(
+                array("property" => "foldername",  "oldvalue" => $this->strOldName, "newvalue" => $this->getStrName())
+            );
+        }
+    }
+
+    public function renderValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
+    public function getClassname() {
+        return __CLASS__;
+    }
+
+    public function getModuleName() {
+        return $this->arrModule["modul"];
+    }
+
+    public function getPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    public function getRecordName() {
+        return class_carrier::getInstance()->getObjText()->getText("change_object_folder", "pages", "admin");
+    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {

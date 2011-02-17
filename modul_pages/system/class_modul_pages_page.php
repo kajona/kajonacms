@@ -515,6 +515,9 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 
     public function getActionName($strAction) {
+        if($strAction == $this->strActionEdit)
+            return $this->getText("seite_bearbeiten", "pages", "admin");
+        
         return $strAction;
     }
 

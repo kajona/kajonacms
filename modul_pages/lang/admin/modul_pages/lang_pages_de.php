@@ -160,4 +160,6 @@ $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
 $lang["change_object_page"]              = "Seite";
+$lang["change_object_folder"]              = "Ordner";
+$lang["show_history"]                    = "Änderungshistorie anzeigen";
 ?>

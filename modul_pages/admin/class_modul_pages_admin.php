@@ -222,6 +222,17 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         $this->setPositionAndReload($this->getSystemid(), "downwards");
     }
 
+    protected function actionShowHistory() {
+        $strReturn = "";
+        if($this->objRights->rightEdit($this->getSystemid())) {
+            $objSystemAdmin = class_modul_system_module::getModuleByName("system")->getAdminInstanceOfConcreteModule();
+            $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
+        }
+        else
+            $strReturn = $this->getText("error_permissions");
+
+        return $strReturn;
+    }
 
 	/**
 	 * Creates a list of sites in the current folder
@@ -254,6 +265,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                         if($this->objRights->rightEdit($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));
+                        if($this->objRights->rightEdit($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                         if($this->objRights->rightDelete($strSystemid))
                             $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
 
@@ -276,6 +289,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
 			    		if($this->objRights->rightEdit($objOneEntry->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
+                        if($this->objRights->rightEdit($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
 			    		if($this->objRights->rightDelete($objOneEntry->getSystemid())) {
 			    		    if(count(class_modul_pages_folder::getPagesAndFolderList($objOneEntry->getSystemid())) != 0)
  			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
