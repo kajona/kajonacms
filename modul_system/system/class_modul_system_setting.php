@@ -51,6 +51,8 @@ class class_modul_system_setting extends class_model implements interface_model 
     private $intType = 0;
     private $intModule = 0;
 
+    private $strOldValue = "";
+
     /**
      * Constructor to create a valid object
      *
@@ -84,6 +86,8 @@ class class_modul_system_setting extends class_model implements interface_model 
         $this->setStrValue($arrRow["system_config_value"]);
         $this->setIntType($arrRow["system_config_type"]);
         $this->setIntModule($arrRow["system_config_module"]);
+
+        $this->strOldValue = $this->strValue;
     }
 
     /**
@@ -97,6 +101,7 @@ class class_modul_system_setting extends class_model implements interface_model 
         if(!class_modul_system_setting::checkConfigExisting($this->getStrName())) {
             class_logger::getInstance()->addLogRow("new constant ".$this->getStrName() ." with value ".$this->getStrValue(), class_logger::$levelWarning);
 
+
             $strQuery = "INSERT INTO "._dbprefix_."system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
                         ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
@@ -106,6 +111,10 @@ class class_modul_system_setting extends class_model implements interface_model 
         else {
 
             class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelWarning);
+
+            $objChangelog = new class_modul_system_changelog();
+            $objChangelog->createLogEntry("system", "change setting", $this->getSystemid(), $this->getStrName(), $this->strOldValue, $this->strValue);
+
             $strQuery = "UPDATE "._dbprefix_."system_config
                         SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."'
                       WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";

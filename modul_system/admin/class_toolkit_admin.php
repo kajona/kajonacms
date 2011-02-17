@@ -1813,5 +1813,22 @@ class class_toolkit_admin extends class_toolkit {
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
+
+    /**
+     * Creates a tooltip shown on hovering the passed text.
+     * If both are the same, text and tooltip, only the plain text is returned.
+     *
+     * @param string $strText
+     * @param string $strTooltip
+     * @return string
+     * @since 3.4.0
+     */
+    public function getTooltipText($strText, $strTooltip) {
+        if($strText == $strTooltip)
+            return $strText;
+        
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tooltip_text");
+        return $this->objTemplate->fillTemplate(array("text" => $strText, "tooltip" => $strTooltip), $strTemplateID);
+    }
 }
 ?>

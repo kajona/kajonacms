@@ -12,7 +12,7 @@ require_once(dirname(__FILE__)."/includes.php");
 
 /**
  * The class_testbase is the common baseclass for all testcases.
- * Triggers the methods required to run proper PHPUnit tests
+ * Triggers the methods required to run proper PHPUnit tests such as starting the system-kernel
  *
  * @package modul_system
  * @since 3.4
@@ -21,15 +21,11 @@ require_once(dirname(__FILE__)."/includes.php");
 class class_testbase extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
-
-
         $objCarrier = class_carrier::getInstance();
-   
-        
     }
 
     /**
-     * For the saje of phpunit
+     * For the sake of phpunit
      */
     public function testTest() {
         

@@ -1147,3 +1147,7 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 </table>
 %%ajaxScript%%
 </input_tagselector>
+
+<tooltip_text>
+    <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
+</tooltip_text>

@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                    *
+*	$Id$                                        *
 ********************************************************************************************************/
 
 
@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.3";
+		$arrModul["version"] 			= "3.3.1.4";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -324,7 +324,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("languages_languageset", $arrFields, array("languageset_id", "languageset_systemid")))
 			$strReturn .= "An error occured! ...\n";
 
-         //languages -------------------------------------------------------------------------------------
+         //aspects --------------------------------------------------------------------------------------
         $strReturn .= "Installing table aspects...\n";
 
 		$arrFields = array();
@@ -333,6 +333,23 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["aspect_default"]    = array("int", true);
 
 		if(!$this->objDB->createTable("aspects", $arrFields, array("aspect_id")))
+			$strReturn .= "An error occured! ...\n";
+
+        //changelog -------------------------------------------------------------------------------------
+        $strReturn .= "Installing table changelog...\n";
+
+		$arrFields = array();
+		$arrFields["change_id"] 		= array("char20", false);
+		$arrFields["change_date"]       = array("long", true);
+		$arrFields["change_user"]       = array("char20", true);
+		$arrFields["change_systemid"]   = array("char20", true);
+		$arrFields["change_module"]     = array("char254", true);
+		$arrFields["change_action"]     = array("char254", true);
+		$arrFields["change_property"]   = array("char254", true);
+		$arrFields["change_oldvalue"]   = array("text", true);
+		$arrFields["change_newvalue"]   = array("text", true);
+
+		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -605,6 +622,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.2") {
             $strReturn .= $this->update_3312_3313();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.3") {
+            $strReturn .= $this->update_3313_3314();
         }
 
         return $strReturn."\n\n";
@@ -1314,6 +1336,33 @@ class class_installer_system extends class_installer_base implements interface_i
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.3");
         return $strReturn;
+    }
+
+
+    private function update_3313_3314() {
+        $strReturn = "Updating 3.3.1.3 to 3.3.1.4...\n";
+
+        $strReturn .= "Installing table changelog...\n";
+
+		$arrFields = array();
+		$arrFields["change_id"] 		= array("char20", false);
+		$arrFields["change_date"]       = array("long", true);
+		$arrFields["change_user"]       = array("char20", true);
+		$arrFields["change_module"]     = array("char254", true);
+		$arrFields["change_action"]     = array("char254", true);
+		$arrFields["change_property"]   = array("char254", true);
+		$arrFields["change_oldvalue"]   = array("text", true);
+		$arrFields["change_newvalue"]   = array("text", true);
+        $arrFields["change_systemid"]   = array("char20", true);
+
+		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id")))
+			$strReturn .= "An error occured! ...\n";
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.4");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.4");
         return $strReturn;
     }
 }

@@ -55,6 +55,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSettings", "", $this->getText("system_settings"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "systemTasks", "", $this->getText("systemTasks"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "systemlog", "", $this->getText("systemlog"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right3", getLinkAdmin($this->arrModule["modul"], "genericChangelog", "", $this->getText("changelog"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right5", getLinkAdmin($this->arrModule["modul"], "aspects", "", $this->getText("aspects"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemSessions", "", $this->getText("system_sessions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "systemCache", "", $this->getText("system_cache"), "", "", true, "adminnavi"));
@@ -607,6 +608,66 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $arrLogEntries = array_reverse($arrLogEntries);
                 $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 100);
             }
+
+        }
+        else
+			$strReturn = $this->getText("fehler_recht");
+        return $strReturn;
+    }
+
+    /**
+     * Renders the list of changes for the passed systemrecord.
+     * May be called from other modules in order to get the rendered list for a single record.
+     *
+     * @param string $strSystemid sytemid to filter
+     * @param string $strSourceModule source-module, required for a working pageview
+     * @param string $strSourceAction source-action, required for a working pageview
+     * @return string
+     *
+     * @since 3.4.0
+     */
+    public function actionGenericChangelog($strSystemid = "", $strSourceModule = "system", $strSourceAction = "genericChangelog") {
+        $strReturn = "";
+        //check needed rights
+        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            //showing a list using the pageview
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_system_changelog::getLogEntriesCount($strSystemid));
+		    $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
+		    $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
+		    $objArraySectionIterator->setArraySection(class_modul_system_changelog::getLogEntries($strSystemid, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $strSourceModule, $strSourceAction);
+            $arrLogs = $arrPageViews["elements"];
+
+            $arrData = array();
+            $arrHeader = array();
+
+            $arrHeader[] = $this->getText("change_date");
+            $arrHeader[] = $this->getText("change_user");
+            $arrHeader[] = $this->getText("change_module");
+            $arrHeader[] = $this->getText("change_action");
+            $arrHeader[] = $this->getText("change_property");
+            $arrHeader[] = $this->getText("change_oldvalue");
+            $arrHeader[] = $this->getText("change_newvalue");
+
+            foreach ($arrLogs as /* @var $objOneEntry class_changelog_container */ $objOneEntry) {
+                $arrRowData = array();
+
+                $arrRowData[] = dateToString($objOneEntry->getObjDate());
+                $arrRowData[] = $objOneEntry->getStrUsername();
+                $arrRowData[] = $objOneEntry->getStrModule();
+                $arrRowData[] = $objOneEntry->getStrAction();
+                $arrRowData[] = $objOneEntry->getStrProperty();
+                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrOldValue(), 20), $objOneEntry->getStrOldValue());
+                $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrNewValue(), 20), $objOneEntry->getStrNewValue());
+                
+                $arrData[] = $arrRowData;
+            }
+            $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
+
+            if(count($arrLogs) > 0)
+			    $strReturn .= $arrPageViews["pageview"];
 
         }
         else

@@ -1031,3 +1031,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 <aspect_chooser_entry>
     <option value="%%value%%" %%selected%%>%%name%%</option>
 </aspect_chooser_entry>
+
+<tooltip_text>
+    <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
+</tooltip_text>
