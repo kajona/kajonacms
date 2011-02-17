@@ -532,6 +532,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
         }
     }
 
+    public function renderValue($strProperty, $strValue) {
+        return $strValue;
+    }
+
     public function getClassname() {
         return __CLASS__;
     }
