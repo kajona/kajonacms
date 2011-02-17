@@ -343,7 +343,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["change_date"]       = array("long", true);
 		$arrFields["change_user"]       = array("char20", true);
 		$arrFields["change_systemid"]   = array("char20", true);
-		$arrFields["change_module"]     = array("char254", true);
+		$arrFields["change_class"]      = array("char254", true);
 		$arrFields["change_action"]     = array("char254", true);
 		$arrFields["change_property"]   = array("char254", true);
 		$arrFields["change_oldvalue"]   = array("text", true);
@@ -1348,7 +1348,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["change_id"] 		= array("char20", false);
 		$arrFields["change_date"]       = array("long", true);
 		$arrFields["change_user"]       = array("char20", true);
-		$arrFields["change_module"]     = array("char254", true);
+		$arrFields["change_class"]      = array("char254", true);
 		$arrFields["change_action"]     = array("char254", true);
 		$arrFields["change_property"]   = array("char254", true);
 		$arrFields["change_oldvalue"]   = array("text", true);

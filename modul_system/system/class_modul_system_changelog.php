@@ -66,44 +66,54 @@ class class_modul_system_changelog extends class_model implements interface_mode
      * Generates a new entry in the modification log storing all relevant information.
      * Creates an entry in the systemlog leveled as information, too.
      * By default entries with same old- and new-values are dropped.
+     * The passed object has to implement interface_versionable.
      *
-     * @param string $strModule
+     *
+     * @param interface_versionable $objSourceModel
      * @param string $strAction
-     * @param string $strSystemid
-     * @param string $strProperty
-     * @param string $strOldvalue
-     * @param string $strNewvalue
      * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
      * @return bool
      */
-    public function createLogEntry($strModule, $strAction, $strSystemid, $strProperty, $strOldvalue, $strNewvalue, $bitForceEntry = false) {
+    public function createLogEntry($objSourceModel, $strAction, $bitForceEntry = false) {
+        $bitReturn = true;
 
-        if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
-            return true;
+        $arrChanges = $objSourceModel->getChangedFields($strAction);
+        if(is_array($arrChanges)) {
+            foreach($arrChanges as $arrChangeSet) {
+                $strOldvalue = $arrChangeSet["oldvalue"];
+                $strNewvalue = $arrChangeSet["newvalue"];
+                $strProperty= $arrChangeSet["property"];
 
-        class_logger::getInstance()->addLogRow("change in module ".$strModule."@".$strAction." systemid: ".$strSystemid." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
+                if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
+                    continue;
 
-        $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+                class_logger::getInstance()->addLogRow("change in class ".$objSourceModel->getClassname()."@".$strAction." systemid: ".$objSourceModel->getSystemid()." property: ".$strProperty." old value: ".uniStrTrim($strOldvalue, 60)." new value: ".uniStrTrim($strNewvalue, 60), class_logger::$levelInfo);
+
+                $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                      (change_id,
                       change_date,
                       change_systemid,
                       change_user,
-                      change_module,
+                      change_class,
                       change_action,
                       change_property,
                       change_oldvalue,
                       change_newvalue) VALUES
                      ('".dbsafeString(generateSystemid())."',
                        ".dbsafeString(class_date::getCurrentTimestamp()).",
-                      '".dbsafeString($strSystemid)."',
+                      '".dbsafeString($objSourceModel->getSystemid())."',
                       '".dbsafeString($this->objSession->getUserID())."',
-                      '".dbsafeString($strModule)."',
+                      '".dbsafeString($objSourceModel->getClassname())."',
                       '".dbsafeString($strAction)."',
                       '".dbsafeString($strProperty)."',
                       '".dbsafeString($strOldvalue)."',
                       '".dbsafeString($strNewvalue)."')";
 
-        return $this->objDB->_query($strQuery);
+                $bitReturn = $bitReturn && $this->objDB->_query($strQuery);
+            }
+        }
+
+        return $bitReturn;
     }
 
     /**
@@ -129,7 +139,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
         $arrReturn = array();
         foreach($arrRows as $arrRow)
             $arrReturn[] = new class_changelog_container($arrRow["change_date"], $arrRow["change_systemid"], $arrRow["change_user"],
-                           $arrRow["change_module"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
+                           $arrRow["change_class"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
 
         return $arrReturn;
     }
@@ -152,6 +162,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
    
 }
 
+
 /**
  * Simple data-container for logentries.
  * Has no regular use.
@@ -160,37 +171,37 @@ final class class_changelog_container {
     private $objDate;
     private $strSystemid;
     private $strUserId;
-    private $strModule;
+    private $strClass;
     private $strAction;
     private $strProperty;
     private $strOldValue;
     private $strNewValue;
 
-    function __construct($intDate, $strSystemid, $strUserId, $strModule, $strAction, $strProperty, $strOldValue, $strNewValue) {
+    function __construct($intDate, $strSystemid, $strUserId, $strClass, $strAction, $strProperty, $strOldValue, $strNewValue) {
         $this->objDate = new class_date($intDate);
         $this->strSystemid = $strSystemid;
         $this->strUserId = $strUserId;
-        $this->strModule = $strModule;
+        $this->strClass = $strClass;
         $this->strAction = $strAction;
         $this->strProperty = $strProperty;
         $this->strOldValue = $strOldValue;
         $this->strNewValue = $strNewValue;
     }
 
+    /**
+     *
+     * @return interface_versionable
+     */
+    public function getObjTarget() {
+        return new $this->strClass($this->strSystemid);
+    }
+
     public function getObjDate() {
         return $this->objDate;
     }
 
-    public function setObjDate($objDate) {
-        $this->objDate = $objDate;
-    }
-
     public function getStrSystemid() {
         return $this->strSystemid;
-    }
-
-    public function setStrSystemid($strSystemid) {
-        $this->strSystemid = $strSystemid;
     }
 
     public function getStrUserId() {
@@ -202,53 +213,25 @@ final class class_changelog_container {
         return $objUser->getStrUsername();
     }
 
-    public function setStrUserId($strUserId) {
-        $this->strUserId = $strUserId;
-    }
-
-    public function getStrModule() {
-        return $this->strModule;
-    }
-
-    public function setStrModule($strModule) {
-        $this->strModule = $strModule;
+    public function getStrClass() {
+        return $this->strClass;
     }
 
     public function getStrAction() {
         return $this->strAction;
     }
 
-    public function setStrAction($strAction) {
-        $this->strAction = $strAction;
-    }
-
     public function getStrOldValue() {
         return $this->strOldValue;
-    }
-
-    public function setStrOldValue($strOldValue) {
-        $this->strOldValue = $strOldValue;
     }
 
     public function getStrNewValue() {
         return $this->strNewValue;
     }
 
-    public function setStrNewValue($strNewValue) {
-        $this->strNewValue = $strNewValue;
-    }
-
     public function getStrProperty() {
         return $this->strProperty;
     }
-
-    public function setStrProperty($strProperty) {
-        $this->strProperty = $strProperty;
-    }
-
-
-
-
 
 
 }

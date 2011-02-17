@@ -646,19 +646,24 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $arrHeader[] = $this->getText("change_date");
             $arrHeader[] = $this->getText("change_user");
             $arrHeader[] = $this->getText("change_module");
+            $arrHeader[] = $this->getText("change_record");
             $arrHeader[] = $this->getText("change_action");
             $arrHeader[] = $this->getText("change_property");
             $arrHeader[] = $this->getText("change_oldvalue");
             $arrHeader[] = $this->getText("change_newvalue");
 
-            foreach ($arrLogs as /* @var $objOneEntry class_changelog_container */ $objOneEntry) {
+            foreach ($arrLogs as /** @var $objOneEntry class_changelog_container */ $objOneEntry) {
                 $arrRowData = array();
+
+
+                /** @var interface_versionable $objTarget */$objTarget = $objOneEntry->getObjTarget();
 
                 $arrRowData[] = dateToString($objOneEntry->getObjDate());
                 $arrRowData[] = $objOneEntry->getStrUsername();
-                $arrRowData[] = $objOneEntry->getStrModule();
-                $arrRowData[] = $objOneEntry->getStrAction();
-                $arrRowData[] = $objOneEntry->getStrProperty();
+                $arrRowData[] = $objTarget->getArrModule("modul");
+                $arrRowData[] = $objTarget->getRecordName();
+                $arrRowData[] = $objTarget->getActionName($objOneEntry->getStrAction());
+                $arrRowData[] = $objTarget->getPropertyName($objOneEntry->getStrProperty());
                 $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrOldValue(), 20), $objOneEntry->getStrOldValue());
                 $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($objOneEntry->getStrNewValue(), 20), $objOneEntry->getStrNewValue());
                 

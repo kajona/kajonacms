@@ -13,7 +13,10 @@
  *
  * @package modul_system
  */
-class class_modul_system_setting extends class_model implements interface_model  {
+class class_modul_system_setting extends class_model implements interface_model, interface_versionable  {
+
+
+    private $strActionChange = "changeSetting";
 
     //0 = bool, 1 = int, 2 = string, 3 = page
     //use ONLY the following static vars to assign a type to your constant.
@@ -113,7 +116,9 @@ class class_modul_system_setting extends class_model implements interface_model 
             class_logger::getInstance()->addLogRow("updated constant ".$this->getStrName() ." to value ".$this->getStrValue(), class_logger::$levelWarning);
 
             $objChangelog = new class_modul_system_changelog();
-            $objChangelog->createLogEntry("system", "change setting", $this->getSystemid(), $this->getStrName(), $this->strOldValue, $this->strValue);
+//            $objChangelog->createLogEntry("system", "change setting", $this->getSystemid(), $this->getStrName(), $this->strOldValue, $this->strValue);
+
+            $objChangelog->createLogEntry($this, $this->strActionChange);
 
             $strQuery = "UPDATE "._dbprefix_."system_config
                         SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."'
@@ -178,6 +183,36 @@ class class_modul_system_setting extends class_model implements interface_model 
         $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
 		return $arrRow["COUNT(*)"] == 1;
 	}
+
+    public function getActionName($strAction) {
+        return $strAction;
+    }
+
+    public function getChangedFields($strAction) {
+        if($strAction == $this->strActionChange) {
+            return array( 
+                array("property" => $this->getStrName(), "oldvalue" => $this->strOldValue, "newvalue" => $this->getStrValue())
+            );
+        }
+    }
+
+    public function getClassname() {
+        return __CLASS__;
+    }
+
+    public function getPropertyName($strProperty) {
+        return $strProperty;
+    }
+
+    public function getRecordName() {
+        return class_carrier::getInstance()->getObjText()->getText("change_type_setting", "system", "admin");
+    }
+
+    public function getModuleName() {
+        return $this->arrModule["modul"];
+    }
+
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
