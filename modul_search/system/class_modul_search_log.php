@@ -91,7 +91,7 @@ class class_modul_search_log extends class_model implements interface_model  {
     /**
      * Loads a list of logbook-entries
      *
-     * @return unknown
+     * @return array
      */
     public function getLogBookEntries() {
         return $this->objDB->getArray("SELECT search_log_date, search_log_query 
