@@ -4,14 +4,13 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                          *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 334
 
-// --- Module texts -------------------------------------------------------------------------------------
-
-$lang["browser"]				= "Open browser";
-$lang["search_amount"]          = "Number of hits per page:";
-$lang["search_page"]            = "Result page:";
-
-
+//editable entries
+$lang["browser"]                         = "Open browser";
+$lang["search_amount"]                   = "Number of hits per page:";
+$lang["search_page"]                     = "Result page:";
 ?>

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -104,10 +104,12 @@ $lang["strasse"]                         = "Street:";
 $lang["submit"]                          = "Save";
 $lang["tel"]                             = "Phone:";
 $lang["user"]                            = "User: ";
+$lang["user_accept"]                     = "Select user";
 $lang["user_active"]                     = "Change status (is active)";
 $lang["user_anlegen"]                    = "Create user";
 $lang["user_bearbeiten"]                 = "Edit user";
 $lang["user_browser"]                    = "Search user";
+$lang["user_browser_show"]               = "Show users";
 $lang["user_erfolg"]                     = "User was saved successfully";
 $lang["user_fehler"]                     = "An error occured while saving the user";
 $lang["user_fehler_mail"]                = "Pleae enter a valid mail-address <a href=\"javascript:history.back(-1)\">back</a>";
@@ -116,6 +118,7 @@ $lang["user_fehler_namedoppelt"]         = "The username already exits, please c
 $lang["user_fehler_pass"]                = "Passwords provided are different <a href=\"javascript:history.back(-1)\">back</a>";
 $lang["user_inactive"]                   = "Change statis (is inactive)";
 $lang["user_lastlogin"]                  = "Last login:";
+$lang["user_list_parent"]                = "Show groups";
 $lang["user_liste"]                      = "All users";
 $lang["user_loeschen_erfolg"]            = "User was deleted sucessfully";
 $lang["user_loeschen_fehler"]            = "An error occured while deleting user";
@@ -127,7 +130,4 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["username"]                        = "Username:";
 $lang["vorname"]                         = "Forename:";
-$lang["user_browser_show"]               = "Show users";
-$lang["user_list_parent"]                = "Show groups";
-$lang["user_accept"]                     = "Select user";
 ?>

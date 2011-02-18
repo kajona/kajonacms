@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 178
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -104,10 +104,12 @@ $lang["strasse"]                         = "Straße:";
 $lang["submit"]                          = "Speichern";
 $lang["tel"]                             = "Telefon:";
 $lang["user"]                            = "Benutzer: ";
+$lang["user_accept"]                     = "Benutzer auswählen";
 $lang["user_active"]                     = "Status ändern (ist aktiv)";
 $lang["user_anlegen"]                    = "Neuer Benutzer";
 $lang["user_bearbeiten"]                 = "Benutzer bearbeiten";
 $lang["user_browser"]                    = "Benutzer suchen";
+$lang["user_browser_show"]               = "Benutzer anzeigen";
 $lang["user_erfolg"]                     = "Benutzer erfolgreich gespeichert";
 $lang["user_fehler"]                     = "Fehler beim Speichern des Benutzers";
 $lang["user_fehler_mail"]                = "E-Mail Adresse angeben <a href=\"javascript:history.back(-1)\">zurück</a>";
@@ -116,6 +118,7 @@ $lang["user_fehler_namedoppelt"]         = "Benutzername schon vorhanden, bitte 
 $lang["user_fehler_pass"]                = "Passwörter sind unterschiedlich <a href=\"javascript:history.back(-1)\">zurück</a>";
 $lang["user_inactive"]                   = "Status ändern (ist inaktiv)";
 $lang["user_lastlogin"]                  = "Letzer Login:";
+$lang["user_list_parent"]                = "Gruppen anzeigen";
 $lang["user_liste"]                      = "Alle Benutzer";
 $lang["user_loeschen_erfolg"]            = "Benutzer erfolgreich gelöscht";
 $lang["user_loeschen_fehler"]            = "Fehler beim Löschen des Benutzers";
@@ -127,7 +130,4 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["username"]                        = "Benutzername:";
 $lang["vorname"]                         = "Vorname:";
-$lang["user_browser_show"]               = "Benutzer anzeigen";
-$lang["user_list_parent"]                = "Gruppen anzeigen";
-$lang["user_accept"]                     = "Benutzer auswählen";
 ?>

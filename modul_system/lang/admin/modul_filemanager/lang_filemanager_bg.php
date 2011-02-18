@@ -7,16 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 241
+//Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["_filemanager_default_filesrepoid_"] = "";
-$lang["_filemanager_default_imagesrepoid_"] = "";
 $lang["_filemanager_foldersize_"]        = "Изчисли размер:";
 $lang["_filemanager_foldersize_hint"]    = "Активира или деактивира изчисляването на размера на папка във файловеия manager. Дълъг път до папката може да доведе до проблеми.";
 $lang["_filemanager_show_foreign_"]      = "Покажи скрити складове:";
 $lang["anlegen"]                         = "Създай папка";
-$lang["backToGallery"]                   = "";
 $lang["bild_groesse"]                    = "Размер на изображение:";
 $lang["bild_vorschau"]                   = "Преглед:";
 $lang["browser"]                         = "Отвори папка";
@@ -112,8 +109,6 @@ $lang["upload_multiple_uploadFiles"]     = "Качи файл(ове)";
 $lang["upload_multiple_warningNotComplete"] = "Качването не е завършено!\\nНаистина ли искате да прекратите?";
 $lang["upload_submit"]                   = "Качи";
 $lang["useFile"]                         = "Приложи";
-$lang["wysiwygFilesBrowser"]             = "";
-$lang["wysiwygPagesBrowser"]             = "";
 $lang["xml_cropping_success"]            = "Успешно изрязване";
 $lang["xml_error_permissions"]           = "Нмята достатъчно права";
 $lang["xml_rotate_success"]              = "Завъртането е успешно";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 182
+//Kajona Language Editor Core Build 334
 
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Страница результатов:";

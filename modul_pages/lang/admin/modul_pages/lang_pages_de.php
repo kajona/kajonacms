@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 319
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
@@ -26,6 +26,8 @@ $lang["_pages_templatechange_hint"]      = "Definiert, ob das Template einer Sei
 $lang["beschreibung"]                    = "Beschreibung:";
 $lang["browser"]                         = "Ordner-Browser";
 $lang["browsername"]                     = "Browsertitel:";
+$lang["change_object_folder"]            = "Ordner";
+$lang["change_object_page"]              = "Seite";
 $lang["contentToolbar_content"]          = "Inhalte bearbeiten";
 $lang["contentToolbar_pageproperties"]   = "Grunddaten bearbeiten";
 $lang["contentToolbar_preview"]          = "Seitenvorschau (Portaleditor)";
@@ -64,6 +66,8 @@ $lang["element_runter"]                  = "Element nach unten verschieben";
 $lang["element_status_aktiv"]            = "Status ändern (ist aktiv)";
 $lang["element_status_inaktiv"]          = "Status ändern (ist inaktiv)";
 $lang["elemente_liste_leer"]             = "Keine Elemente installiert";
+$lang["entry_down"]                      = "Nach unten";
+$lang["entry_up"]                        = "Nach oben";
 $lang["fehler_name"]                     = "Kein Seitenname angegeben";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["inhalte_element"]                 = "Seitenelemente verwalten";
@@ -113,9 +117,7 @@ $lang["pe_icon_page"]                    = "Grunddaten der Seite in der Administ
 $lang["pe_new"]                          = "Neues Element an Platzhalter:";
 $lang["pe_new_old"]                      = "Anlegen";
 $lang["pe_shiftDown"]                    = "Nach unten";
-$lang["entry_down"]                      = "Nach unten";
 $lang["pe_shiftUp"]                      = "Nach oben";
-$lang["entry_up"]                        = "Nach oben";
 $lang["pe_status_autor"]                 = "Letzter Autor:";
 $lang["pe_status_page"]                  = "Seite:";
 $lang["pe_status_status"]                = "Status:";
@@ -152,6 +154,7 @@ $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%el
 $lang["seite_rechte"]                    = "Rechte bearbeiten";
 $lang["select_page"]                     = "Seite auswählen";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
+$lang["show_history"]                    = "Änderungshistorie anzeigen";
 $lang["submit"]                          = "Speichern";
 $lang["submit_change"]                   = "Ändern";
 $lang["template"]                        = "Template:";
@@ -159,7 +162,4 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
-$lang["change_object_page"]              = "Seite";
-$lang["change_object_folder"]              = "Ordner";
-$lang["show_history"]                    = "Änderungshistorie anzeigen";
 ?>

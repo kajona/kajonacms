@@ -7,11 +7,10 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 237
+//Kajona Language Editor Core Build 334
 
 //editable entries
 $lang["browser"]                         = "Открыть браузер";
-$lang["element_image_name"]              = "";
 $lang["image_image"]                     = "Изображение:";
 $lang["image_link"]                      = "Ссылка:";
 $lang["image_title"]                     = "Имя:";

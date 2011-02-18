@@ -7,10 +7,9 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 241
+//Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["header_amount"]                   = "";
 $lang["header_date"]                     = "Дата";
 $lang["header_language"]                 = "Език";
 $lang["header_query"]                    = "Ключова дума";

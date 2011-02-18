@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 319
+//Kajona Language Editor Core Build 334
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -52,6 +52,8 @@ $lang["element_runter"]                  = "Премести елемент на
 $lang["element_status_aktiv"]            = "Смени статус (активен)";
 $lang["element_status_inaktiv"]          = "Смени статус (не активен)";
 $lang["elemente_liste_leer"]             = "Няма инсталирани елементи";
+$lang["entry_down"]                      = "Премести надолу";
+$lang["entry_up"]                        = "Премести нагоре";
 $lang["fehler_name"]                     = "Няма установено име на страницата";
 $lang["fehler_recht"]                    = "Нямата достатъчно права";
 $lang["inhalte_element"]                 = "Управление на елементи на страницата";
@@ -99,9 +101,7 @@ $lang["pe_icon_edit"]                    = "Отвори страницата в
 $lang["pe_icon_page"]                    = "Редактирай страницата с детайли в администрацията";
 $lang["pe_new"]                          = "Нов елемент в контейнера:";
 $lang["pe_shiftDown"]                    = "Премести надолу";
-$lang["entry_down"]                      = "Премести надолу";
 $lang["pe_shiftUp"]                      = "Премести нагоре";
-$lang["entry_up"]                        = "Премести нагоре";
 $lang["pe_status_autor"]                 = "Последен автор:";
 $lang["pe_status_page"]                  = "Страница:";
 $lang["pe_status_status"]                = "Статус:";

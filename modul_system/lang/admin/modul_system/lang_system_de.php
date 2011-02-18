@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 316
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -67,15 +67,15 @@ $lang["cache_hits"]                      = "Treffer";
 $lang["cache_language"]                  = "Sprache";
 $lang["cache_leasetime"]                 = "Gültig bis";
 $lang["cache_source"]                    = "Quelle";
-$lang["change_date"]                     = "Datum";
-$lang["change_user"]                     = "Benutzer";
-$lang["change_module"]                   = "Modul";
 $lang["change_action"]                   = "Aktion";
-$lang["change_record"]                   = "Objekt";
-$lang["change_property"]                 = "Eigenschaft";
-$lang["change_oldvalue"]                 = "Alter Wert";
+$lang["change_date"]                     = "Datum";
+$lang["change_module"]                   = "Modul";
 $lang["change_newvalue"]                 = "Neuer Wert";
-$lang["change_type_setting"]              = "Einstellung";
+$lang["change_oldvalue"]                 = "Alter Wert";
+$lang["change_property"]                 = "Eigenschaft";
+$lang["change_record"]                   = "Objekt";
+$lang["change_type_setting"]             = "Einstellung";
+$lang["change_user"]                     = "Benutzer";
 $lang["changelog"]                       = "Änderungshistorie";
 $lang["dateStyleLong"]                   = "d.m.Y H:i:s";
 $lang["dateStyleShort"]                  = "d.m.Y";

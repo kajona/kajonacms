@@ -4,16 +4,15 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                      *
+*	$Id$					    *
 ********************************************************************************************************/
+//Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
+//Kajona Language Editor Core Build 334
 
-// --- Module texts -------------------------------------------------------------------------------------
-
-$lang["browser"]				= "Browser öffnen";
-
-$lang["modus_baum"]				= "Baum";
-$lang["modus_sitemap"]			= "Sitemap";
-
-$lang["navigation_name"]        = "Navigation:";
-$lang["navigation_mode"]        = "Modus:";
+//editable entries
+$lang["browser"]                         = "Browser öffnen";
+$lang["modus_baum"]                      = "Baum";
+$lang["modus_sitemap"]                   = "Sitemap";
+$lang["navigation_mode"]                 = "Modus:";
+$lang["navigation_name"]                 = "Navigation:";
 ?>

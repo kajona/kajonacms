@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 319
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
@@ -26,6 +26,8 @@ $lang["_pages_templatechange_hint"]      = "Defines, whether the template of pag
 $lang["beschreibung"]                    = "Description:";
 $lang["browser"]                         = "Folder-browser";
 $lang["browsername"]                     = "Browser title:";
+$lang["change_object_folder"]            = "Folder";
+$lang["change_object_page"]              = "Page";
 $lang["contentToolbar_content"]          = "Edit content";
 $lang["contentToolbar_pageproperties"]   = "Edit properties";
 $lang["contentToolbar_preview"]          = "Page preview (Portaleditor)";
@@ -64,6 +66,8 @@ $lang["element_runter"]                  = "Shift element down";
 $lang["element_status_aktiv"]            = "Change status (is active)";
 $lang["element_status_inaktiv"]          = "Change status (is inactive)";
 $lang["elemente_liste_leer"]             = "No page elements installed";
+$lang["entry_down"]                      = "Shift down";
+$lang["entry_up"]                        = "Shift up";
 $lang["fehler_name"]                     = "No page name provided";
 $lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["inhalte_element"]                 = "Manage page elements";
@@ -113,9 +117,7 @@ $lang["pe_icon_page"]                    = "Edit page details in administration"
 $lang["pe_new"]                          = "New element at placeholder:";
 $lang["pe_new_old"]                      = "Create";
 $lang["pe_shiftDown"]                    = "Shift down";
-$lang["entry_down"]                      = "Shift down";
 $lang["pe_shiftUp"]                      = "Shift up";
-$lang["entry_up"]                        = "Shift up";
 $lang["pe_status_autor"]                 = "Last author:";
 $lang["pe_status_page"]                  = "Page:";
 $lang["pe_status_status"]                = "Status:";
@@ -152,6 +154,7 @@ $lang["seite_loeschen_frage"]            = "Do you really want to delete the pag
 $lang["seite_rechte"]                    = "Edit permissions";
 $lang["select_page"]                     = "Select a page";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
+$lang["show_history"]                    = "Show Changehistory";
 $lang["submit"]                          = "Save";
 $lang["submit_change"]                   = "Change";
 $lang["template"]                        = "Template:";
@@ -159,7 +162,4 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
-$lang["change_object_page"]              = "Page";
-$lang["change_object_folder"]              = "Folder";
-$lang["show_history"]                    = "Show Changehistory";
 ?>

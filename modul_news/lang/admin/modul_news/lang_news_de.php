@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
@@ -61,8 +61,8 @@ $lang["modul_titel2"]                    = "Newsverwaltung - Kategorie ";
 $lang["news_basicdata"]                  = "News-Grunddaten";
 $lang["news_cat_title"]                  = "Kategorie-Titel:";
 $lang["news_categories"]                 = "Kategorien";
+$lang["news_edit"]                       = "News bearbeiten";
 $lang["news_image"]                      = "Bild:";
-$lang["news_edit"]                     = "News bearbeiten";
 $lang["news_intro"]                      = "Aufmacher:";
 $lang["news_languageset"]                = "Sprachzuordnung bearbeiten";
 $lang["news_locked"]                     = "Newsdatensatz ist gesperrt";
