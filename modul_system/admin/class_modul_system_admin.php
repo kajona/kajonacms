@@ -34,7 +34,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	}
 
 	/**
-	 * Overwrites the defaul fallback action
+	 * Overwrites the default fallback action
 	 *
 	 * @param stirng $strAction
 	 */
