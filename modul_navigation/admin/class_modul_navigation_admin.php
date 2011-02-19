@@ -12,9 +12,9 @@
  * Admin-class to manage all navigations
  *
  * @package modul_navigation
+ * @author sidler@mulchprod.de
  */
 class class_modul_navigation_admin extends class_admin implements interface_admin {
-    private $strAction;
 
     private $strPeAddon = "";
 
@@ -25,93 +25,16 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 				= "modul_navigation";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;
 		$arrModul["table"]     			= _dbprefix_."navigation";
 		$arrModul["modul"]				= "navigation";
 		parent::__construct($arrModul);
-	}
-
-	/**
-	 * Action block to decide which action to perform
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
-
-		if($strAction == "")
-			$strAction ="list";
-
-		$this->strAction = $strAction;
-
-		try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-    		if($strAction == "newNavi")
-    			$strReturn = $this->actionNewNavi("new");
-    		if($strAction == "editNavi")
-    			$strReturn = $this->actionNewNavi("edit");
-    		if($strAction == "saveNavi") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveNavi();
-    			    if($strReturn == "")
-    	               $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewNavi("new");
-    		        else
-    		            $strReturn = $this->actionNewNavi("edit");
-    		    }
-    		}
-    		if($strAction == "newNaviPoint")
-    			$strReturn = $this->actionNewNaviPoint("new");
-    		if($strAction == "editNaviPoint")
-    			$strReturn = $this->actionNewNaviPoint("edit");
-    		if($strAction == "saveNaviPoint") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveNaviPoint();
-    			    if($strReturn == "")
-    			       $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    		    }
-    		    else {
-                    if($this->getParam("mode") == "new")
-                        $strReturn = $this->actionNewNaviPoint("new");
-                    else
-                        $strReturn = $this->actionNewNaviPoint("edit");
-    		    }
-    		}
-    		if($strAction == "deleteNaviFinal") {
-    			$strReturn = $this->actionDeleteNaviFinal();
-    			if($strReturn == "")
-    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    		}
-    		if($strAction == "naviPointMoveUp") {
-                $this->setPositionAndReload($this->getSystemid(), "upwards");
-    		}
-    		if($strAction == "naviPointMoveDown") {
-                $this->setPositionAndReload($this->getSystemid(), "downwards");
-    		}
-
-		}
-		catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
 	}
 
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
-
+	
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
@@ -119,7 +42,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-	    $arrReturn[] = array("edit", ($this->getSystemid() != "" && ($this->strAction == "list" || $this->strAction== "saveNaviPoint") ? getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), "", "", true, "adminnavi")  : "" ));
+	    $arrReturn[] = array("edit", ($this->getSystemid() != "" && ($this->getAction() == "list" || $this->getAction()== "saveNaviPoint") ? getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid()."", $this->getText("modul_anlegenpunkt"), "", "", true, "adminnavi")  : "" ));
 		return $arrReturn;
 	}
 
@@ -139,12 +62,20 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 // --- List-Functions -----------------------------------------------------------------------------------
 
+    protected function actionNaviPointMoveUp() {
+        $this->setPositionAndReload($this->getSystemid(), "upwards");
+    }
+
+    protected function actionNaviPointMoveDown() {
+        $this->setPositionAndReload($this->getSystemid(), "downwards");
+    }
+
 	/**
 	 * Returns a list of the current level
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 
 		//rights
@@ -231,17 +162,20 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
-	/**
+	protected function actionEditNavi() {
+        return $this->actionNewNavi("edit");
+    }
+
+    /**
 	 * Creates the form to edit / create a navi
 	 *
 	 * @param string $strMode
 	 * @return string
 	 */
-	private function actionNewNavi($strMode = "new") {
+	protected function actionNewNavi($strMode = "new") {
 		$strReturn = "";
 		//check Rights & mode
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $arrPoint = array();
             if($strMode == "edit")
                 $objNavi = new class_modul_navigation_tree($this->getSystemid());
             else
@@ -269,8 +203,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 *
 	 * @return string, "" in case of success
 	 */
-	private function actionSaveNavi() {
+	protected function actionSaveNavi() {
 		$strReturn = "";
+
+        if(!$this->validateForm())
+            return $this->actionNewNavi($this->getParam("mode"));
+        
 		//Check rights
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			// new navi or edit exising?
@@ -289,6 +227,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 			}
 
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -296,13 +236,17 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
+
+    protected function actionEditNaviPoint() {
+        return $this->actionNewNaviPoint("edit");
+    }
 	/**
 	 * Creates the form to edit / create a new navi-point
 	 *
 	 * @param string $strMode new || edit
 	 * @return string
 	 */
-	private function actionNewNaviPoint($strMode = "new") {
+	protected function actionNewNaviPoint($strMode = "new") {
 		$strReturn = "";
 		if($strMode == "new") {
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -356,8 +300,11 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveNaviPoint() {
+	protected function actionSaveNaviPoint() {
 		$strReturn = "";
+
+        if(!$this->validateForm())
+            return $this->actionNewNaviPoint($this->getParam("mode"));
 
         $strExternalLink = $this->getParam("navigation_page_e");
         $strExternalLink = uniStrReplace(_indexpath_, "_indexpath_", $strExternalLink);
@@ -395,9 +342,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 		}
 		//Flush pages cache
 		$this->flushCompletePagesCache();
+        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 		return $strReturn;
 	}
 
@@ -407,7 +357,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteNaviFinal() {
+	protected function actionDeleteNaviFinal() {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -419,6 +369,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		    if(!$objNavi->deleteNaviPoint())
 		        throw new class_exception("Error deleting object from db. Needed rights given?", class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
 		}
 		else
@@ -441,7 +393,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		}
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
-
 
     /**
      * Generates the code needed to render the nodes as a tree-view element.
