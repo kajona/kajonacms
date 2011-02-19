@@ -11,6 +11,7 @@
  * Model for a page
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
 
@@ -41,7 +42,6 @@ class class_modul_pages_page extends class_model implements interface_model, int
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_pages";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _pages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."page";
 		$arrModul["table2"]       		= _dbprefix_."page_properties";

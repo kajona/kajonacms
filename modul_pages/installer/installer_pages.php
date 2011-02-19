@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.1";
+		$arrModule["version"] 		= "3.3.1.2";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -75,7 +75,18 @@ class class_installer_pages extends class_installer_base implements interface_in
 			$strReturn .= "An error occured! ...\n";
 
 		//Pages_properties ------------------------------------------------------------------------------
-		$strReturn .= "Installing table pages_properties...\n";
+		$strReturn .= "Installing table page_folderproperties...\n";
+
+		$arrFields = array();
+		$arrFields["folderproperties_id"]           = array("char20", false);
+		$arrFields["folderproperties_name"]         = array("char254", true);
+		$arrFields["folderproperties_language"]     = array("char20", true);
+
+		if(!$this->objDB->createTable("page_folderproperties", $arrFields, array("folderproperties_id", "folderproperties_language")))
+			$strReturn .= "An error occured! ...\n";
+
+        //folder_properties
+        $strReturn .= "Installing table page_properties...\n";
 
 		$arrFields = array();
 		$arrFields["pageproperties_id"] 		= array("char20", false);
@@ -354,6 +365,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3311();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.1") {
+            $strReturn .= $this->update_3311_3312();
         }
 
         return $strReturn."\n\n";
@@ -706,5 +722,49 @@ class class_installer_pages extends class_installer_base implements interface_in
         return $strReturn;
     }
 
+
+     private function update_3311_3312() {
+        $strReturn = "Updating 3.3.1.1 to 3.3.1.2...\n";
+
+        $strReturn .= "Installing table page_folderproperties...\n";
+
+		$arrFields = array();
+		$arrFields["folderproperties_id"]           = array("char20", false);
+		$arrFields["folderproperties_name"]         = array("char254", true);
+		$arrFields["folderproperties_language"]     = array("char20", true);
+
+		if(!$this->objDB->createTable("page_folderproperties", $arrFields, array("folderproperties_id", "folderproperties_language")))
+			$strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Migrating existing foldernames to new schema...\n";
+        $strQuery = "SELECT system_id, system_comment
+                       FROM "._dbprefix_."system
+                      WHERE system_module_nr = "._pages_folder_id_."";
+        $arrEntries = $this->objDB->getArray($strQuery);
+        $strDefaultLang = "";
+        $objDefaultLanguage = class_modul_languages_language::getDefaultLanguage();
+        if($objDefaultLanguage != null)
+            $strDefaultLang = $objDefaultLanguage->getStrName();
+
+        foreach($arrEntries as $arrOneEntry) {
+            $strQuery = "INSERT INTO  "._dbprefix_."page_folderproperties
+                         (folderproperties_id, folderproperties_name, folderproperties_language) VALUES
+                         ('".dbsafeString($arrOneEntry["system_id"])."', '".dbsafeString($arrOneEntry["system_comment"])."', '".dbsafeString($strDefaultLang)."')";
+
+            $strReturn .= "  updating folder >".$arrOneEntry["system_comment"]."<\n";
+
+            $this->objDB->_query($strQuery);
+        }
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.2");
+
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.1.2");
+        $this->updateElementVersion("paragraph", "3.3.1.2");
+        $this->updateElementVersion("image", "3.3.1.2");
+        return $strReturn;
+    }
 }
 ?>

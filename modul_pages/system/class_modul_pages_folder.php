@@ -19,8 +19,10 @@ class class_modul_pages_folder extends class_model implements interface_model, i
     private $strActionEdit = "editFolder";
 
     private $strName = "";
+    private $strLanguage = "";
 
     private $strOldName = "";
+    
     /**
      * Constructor to create a valid object
      *
@@ -31,9 +33,16 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         $arrModul["name"] 				= "modul_pages";
 		$arrModul["moduleId"] 			= _pages_folder_id_;
 		$arrModul["modul"]				= "pages";
+        $arrModul["table"]       		= _dbprefix_."page_folderproperties";
 
 		//base class
 		parent::__construct($arrModul, $strSystemid);
+
+        //init the object with the language currently selected - admin or portal
+		if(defined("_admin_") && _admin_ === true)
+		    $this->setStrLanguage($this->getStrAdminLanguageToWorkOn());
+		else
+		    $this->setStrLanguage($this->getStrPortalLanguage());
 
 		//init current object
 		if($strSystemid != "")
@@ -54,7 +63,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
      * @return string
      */
     protected function getObjectDescription() {
-        return $this->getStrName();
+        return "folder ".$this->getStrName();
     }
 
     /**
@@ -62,12 +71,20 @@ class class_modul_pages_folder extends class_model implements interface_model, i
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM "._dbprefix_."system WHERE system_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
-        if(count($arrRow) > 0) {
-            $this->setStrName($arrRow["system_comment"]);
-            $this->strOldName = $this->getStrName();
+        //load content language-dependant
+        $strQuery = "SELECT *
+                    FROM ".$this->arrModule["table"]."
+                    WHERE folderproperties_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
+                      AND folderproperties_language = '".dbsafeString($this->getStrLanguage())."'";
+        $arrPropRow = $this->objDB->getRow($strQuery);
+        if(count($arrPropRow) == 0) {
+            $arrPropRow["folderproperties_name"] = "";
+            $arrPropRow["folderproperties_language"] = "";
         }
+
+        $this->setStrName($arrPropRow["folderproperties_name"]);
+        $this->strOldName = $arrPropRow["folderproperties_name"];
+        $this->setStrLanguage($arrPropRow["folderproperties_language"]);
     }
 
     /**
@@ -79,9 +96,34 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         //create change-logs
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
-        
+
         class_logger::getInstance()->addLogRow("updated folder ".$this->getStrName(), class_logger::$levelInfo);
-        return true;
+
+        //and the properties record
+		//properties for this language already existing?
+		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table"]."
+		                 WHERE folderproperties_id='".dbsafeString($this->getSystemid())."'
+		                   AND folderproperties_language='".dbsafeString($this->getStrLanguage())."'";
+		$arrCountRow = $this->objDB->getRow($strCountQuery);
+
+
+		if((int)$arrCountRow["COUNT(*)"] >= 1) {
+		    //Already existing, updating properties
+    		$strQuery = "UPDATE  ".$this->arrModule["table"]."
+    					    SET folderproperties_name='".dbsafeString($this->getStrName())."'
+    				      WHERE folderproperties_id='".dbsafeString($this->getSystemid())."'
+    			      	    AND folderproperties_language='".dbsafeString($this->getStrLanguage())."'";
+		}
+		else {
+		    //Not existing, create one
+		    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
+						(folderproperties_id, folderproperties_name, folderproperties_language) VALUES
+						('".dbsafeString($this->getSystemid())."', '".dbsafeString($this->getStrName())."',
+						 '".dbsafeString($this->getStrLanguage())."')";
+		}
+
+        return $this->objDB->_query($strQuery) ;
+        
     }
 
     /**
@@ -209,26 +251,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		return $arrReturn;
     }
 
-	/**
-	 * Looks up all folders with the given name
-	 *
-	 * @param string $strName
-	 * @return array
-	 */
-	private function getFoldersByName($strName) {
-		//Get all folders
-		$strQuery = "SELECT system_id FROM "._dbprefix_."system
-		              WHERE system_module_nr="._pages_folder_id_."
-		                AND system_comment ='".dbsafeString($strName)."'
-		             ORDER BY system_comment ASC";
-
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_pages_folder($arrOneId["system_id"]);
-
-		return $arrReturn;
-	}
+	
 
 	/**
 	 * Deletes a folder from the systems,
@@ -238,8 +261,12 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	 */
 	public function deleteFolder() {
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
-	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0)
-	        return $this->deleteSystemRecord($this->getSystemid());
+	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0) {
+            //delete the folder-properties
+            $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = '".dbsafeString($this->getSystemid())."'";
+
+	        return $this->objDB->_query($strQuery) && $this->deleteSystemRecord($this->getSystemid());
+        }
 	    else
 	        return false;
 	}
@@ -287,47 +314,19 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         return $this->strName;
     }
 
-    public function setStrName($strName, $bitSecure = false) {
-        //check, if theres already a folder with the same name at the same level
-        if($bitSecure)
-            $strName = $this->checkFolderName($strName);
+    public function setStrName($strName) {
+
         $this->strName = $strName;
     }
 
-    /**
-     * Checks, if a foldername already exits ob the current level.
-     * Tries to find a valid foldername
-     *
-     * @param string $strName
-     * @param int $intCounter
-     * @return string
-     */
-    private function checkFolderName($strName, $intCounter = 0) {
-
-        if($intCounter != 0)
-            $strNameNew = $strName."_".$intCounter;
-        else
-            $strNameNew = $strName;
-
-        $arrFolders = $this->getFoldersByName($strNameNew);
-        if(count($arrFolders) != 0) {
-            foreach ($arrFolders as $intKey => $objOneFolder) {
-                //not the same folder as the current?
-                if(($objOneFolder->getSystemid() != $this->getSystemid()) || $this->getSystemid() == "") {
-                    //used on a different level?
-                    if($objOneFolder->getPrevId() != $this->strPrevId) {
-                        unset($arrFolders[$intKey]);
-                    }
-                }
-                else
-                    unset($arrFolders[$intKey]);
-            }
-
-            if(count($arrFolders) != 0)
-                $strNameNew = $this->checkFolderName($strName, ++$intCounter);
-        }
-        return $strNameNew;
+    public function getStrLanguage() {
+        return $this->strLanguage;
     }
+
+    public function setStrLanguage($strLanguage) {
+        $this->strLanguage = $strLanguage;
+    }
+
 
 }
 ?>
