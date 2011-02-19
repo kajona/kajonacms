@@ -327,12 +327,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 				    $objFolder = new class_modul_pages_folder($objPage->getPrevId());
-					$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder->getSystemid());
-					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
+					$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder->getSystemid());
+					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
 				}
 				else {
-					$strReturn .= $this->objToolkit->formInputHidden("ordnerid", "");
-					$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+					$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
+					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 				}
 				//Load the available templates
 				//If set on, the dropdown could be disabled
@@ -383,7 +383,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputTextarea("beschreibung", $this->getText("beschreibung"), $this->getParam("beschreibung"));
 				$strReturn .= $this->objToolkit->formInputHidden("pageid", "");
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
-				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $this->getParam("folderid"));
+				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $this->getParam("folderid"));
 				$strReturn .= $this->objToolkit->formInputHidden("folderid", $this->getParam("folderid"));
 				$strFolder = "";
 				if($this->getParam("folderid") != "") {
@@ -428,7 +428,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage->setStrKeywords($this->getParam("keywords"));
 			    $objPage->setStrSeostring($this->getParam("seostring"));
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
-				$strFolderid = ($this->getParam("ordnerid") != "" ? $this->getParam("ordnerid") : "" );
+				$strFolderid = ($this->getParam("folder_id") != "" ? $this->getParam("folder_id") : "" );
 				//To load the correct list afterwards, save the folder as current folder
 				$this->strFolderlevel = $strFolderid;
 
@@ -484,7 +484,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    if($strTemplate !== false)
 			        $objPage->setStrTemplate($strTemplate);
 
-				$strFolderid = ($this->getParam("ordnerid") != "" ? $this->getParam("ordnerid") : "" );
+				$strFolderid = ($this->getParam("folder_id") != "" ? $this->getParam("folder_id") : "" );
 				//To load the correct list afterwards, save the folder as current folder
 				$this->strFolderlevel = $strFolderid;
 
@@ -621,12 +621,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			if($objFolder->getPrevId() != $this->getModuleSystemid("pages")) {
 			    $objFolder2 = new class_modul_pages_folder($objFolder->getPrevId());
-				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", $objFolder2->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
+				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder2->getSystemid());
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
 			}
 			else {
-				$strReturn .= $this->objToolkit->formInputHidden("ordnerid", "");
-				$strReturn .= $this->objToolkit->formInputText("ordner_parent_name", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=ordner_parent_name", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+				$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			}
 
 
@@ -683,7 +683,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$objFolder = new class_modul_pages_folder($this->getSystemid());
 			$objFolder->setStrName($this->getParam("ordner_name"));
             $objFolder->setStrLanguage($this->getLanguageToWorkOn());
-            $objFolder->updateObjectToDb($this->getParam("ordnerid"));
+            $objFolder->updateObjectToDb($this->getParam("folder_id"));
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->getPrevId()));
 		}

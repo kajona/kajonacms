@@ -17,6 +17,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
     private $strName = "";
     private $strPageE = "";
     private $strPageI = "";
+    private $strFolderI = "";
     private $strTarget = "";
     private $strImage = "";
 
@@ -65,13 +66,14 @@ class class_modul_navigation_point extends class_model implements interface_mode
          $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
 		             WHERE system_id = navigation_id
 		             AND system_module_nr = "._navigation_modul_id_."
-		             AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
+		             AND system_id = '".dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
         if(count($arrRow)> 0) {
             $this->setStrName($arrRow["navigation_name"]);
             $this->setStrImage($arrRow["navigation_image"]);
             $this->setStrPageE($arrRow["navigation_page_e"]);
             $this->setStrPageI($arrRow["navigation_page_i"]);
+            $this->setStrFolderI($arrRow["navigation_folder_i"]);
             $this->setStrTarget($arrRow["navigation_target"]);
             $this->setStrImage($arrRow["navigation_image"]);
         }
@@ -84,12 +86,13 @@ class class_modul_navigation_point extends class_model implements interface_mode
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
-                        SET 	navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
-    							navigation_page_i='".$this->objDB->dbsafeString(uniStrtolower($this->getStrPageI()))."',
-    							navigation_page_e='".$this->objDB->dbsafeString($this->getStrPageE())."',
-    							navigation_target='".$this->objDB->dbsafeString($this->getStrTarget())."',
-    							navigation_image='".$this->objDB->dbsafeString($this->getStrImage())."'
-    					WHERE navigation_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+                        SET 	navigation_name='".dbsafeString($this->getStrName())."',
+    							navigation_page_i='".dbsafeString(uniStrtolower($this->getStrPageI()))."',
+    							navigation_folder_i='".dbsafeString($this->getStrFolderI())."',
+    							navigation_page_e='".dbsafeString($this->getStrPageE())."',
+    							navigation_target='".dbsafeString($this->getStrTarget())."',
+    							navigation_image='".dbsafeString($this->getStrImage())."'
+    					WHERE navigation_id='".dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
 
@@ -217,6 +220,14 @@ class class_modul_navigation_point extends class_model implements interface_mode
         $strImage = uniStrReplace(_webpath_, "", $strImage);
         $this->strImage = $strImage;
     }
+    public function getStrFolderI() {
+        return $this->strFolderI;
+    }
+    public function setStrFolderI($strFolderI) {
+        $this->strFolderI = $strFolderI;
+    }
+
+
 
 }
 ?>

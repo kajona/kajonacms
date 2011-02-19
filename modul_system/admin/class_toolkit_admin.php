@@ -297,6 +297,7 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param string $strValue
      * @param string $strClass
+     * @param bool $bitAllowFolders
      * @return string
      */
     public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {

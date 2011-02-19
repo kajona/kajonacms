@@ -11,6 +11,7 @@
 
 //editable entries
 $lang["browser"]                         = "Open browser";
+$lang["error_folder_and_page"]           = "Only a page or a folder can be selected, not both.";
 $lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["liste_leer"]                      = "No navigations available";
 $lang["modul_anlegen"]                   = "Create navigation";
@@ -23,6 +24,7 @@ $lang["navigation_bearbeiten"]           = "Edit navigation";
 $lang["navigation_ebene"]                = "One level up";
 $lang["navigation_erf_loeschen"]         = "Navigation was deleted succesfully";
 $lang["navigation_erfolg"]               = "Navigation was created succesfully";
+$lang["navigation_folder_i"]             = "Folder:";
 $lang["navigation_image"]                = "Image:";
 $lang["navigation_loeschen_frage"]       = "Do you really want to delete the navigation &quot;<b>%%element_name%%</b>&quot; with all items?";
 $lang["navigation_name"]                 = "Name:";

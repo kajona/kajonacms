@@ -16,7 +16,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.3.1.1";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["name_lang"] 	= "Module Navigation";
 		$arrModule["moduleId"] 		= _navigation_modul_id_;
@@ -64,6 +64,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 		$arrFields["navigation_name"] 		= array("char254", true);
 		$arrFields["navigation_page_e"] 	= array("char254", true);
 		$arrFields["navigation_page_i"] 	= array("char254", true);
+		$arrFields["navigation_folder_i"] 	= array("char20", true);
 		$arrFields["navigation_target"] 	= array("char254", true);
 		$arrFields["navigation_image"] 		= array("char254", true);
 
@@ -180,6 +181,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3311();
         }
 
         return $strReturn."\n\n";
@@ -358,6 +364,23 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.3.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("navigation", "3.3.1");
+        return $strReturn;
+    }
+
+
+    private function update_331_3311() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.1.\n";
+
+        $strReturn .= "Altering navigations table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."navigation")."
+                     ADD ".$this->objDB->encloseColumnName("navigation_folder_i")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.3.1.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("navigation", "3.3.1.1");
         return $strReturn;
     }
 }

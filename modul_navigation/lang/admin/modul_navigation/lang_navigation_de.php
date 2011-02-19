@@ -11,6 +11,7 @@
 
 //editable entries
 $lang["browser"]                         = "Browser öffnen";
+$lang["error_folder_and_page"]           = "Es kann entweder eine Seite oder ein Ordner ausgewählt werden, nicht beides.";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["liste_leer"]                      = "Keine Navigation angelegt";
 $lang["modul_anlegen"]                   = "Neue Navigation";
@@ -23,6 +24,7 @@ $lang["navigation_bearbeiten"]           = "Navigation bearbeiten";
 $lang["navigation_ebene"]                = "Eine Ebene nach oben";
 $lang["navigation_erf_loeschen"]         = "Navigation erfolgreich gelöscht";
 $lang["navigation_erfolg"]               = "Navigation erfolgreich angelegt";
+$lang["navigation_folder_i"]             = "Ordner:";
 $lang["navigation_image"]                = "Bild:";
 $lang["navigation_loeschen_frage"]       = "Möchten Sie die Navigation &quot;<b>%%element_name%%</b>&quot; mit allen Unterpunkten wirklich löschen?";
 $lang["navigation_name"]                 = "Name:";
