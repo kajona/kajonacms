@@ -250,6 +250,9 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 $objPoint = new class_modul_navigation_point();
                 $objPoint->setStrName($objOneEntry->getStrName());
                 $objPoint->setSystemid($objOneEntry->getSystemid());
+
+                //FIXME: load matching page in order to generate a valid link
+                
                 $arrReturn[] = $objPoint;
             }
             else if($objOneEntry instanceof class_modul_pages_page) {
