@@ -127,6 +127,45 @@ class class_modul_navigation_tree extends class_model implements interface_model
 
     }
 
+    /**
+     * Loads al nodes of a navigation, skipping inactive and non-viewable ones.
+     * Includes transformed page-nodes!
+     *
+     * @return array
+     */
+    public function getCompleteNaviStructure() {
+        $arrReturn = array();
+
+        $arrReturn["node"] = null;
+        $arrReturn["subnodes"] = $this->loadSingleLevel($this->getSystemid());
+
+        return $arrReturn;
+    }
+
+    /**
+     * Loads a singe level of nodes, internal recursion helper
+     *
+     * @param string $strParentNode
+     * @return array
+     */
+    private function loadSingleLevel($strParentNode) {
+        $arrReturn = array();
+        
+        $arrCurLevel = class_modul_navigation_point::getDynamicNaviLayer($strParentNode);
+
+        foreach($arrCurLevel as $objOneNode) {
+            if($objOneNode->getStatus() == 1 && $objOneNode->rightView()) {
+                $arrTemp = array();
+                $arrTemp["node"] = $objOneNode;
+                $arrTemp["subnodes"] = $this->loadSingleLevel($objOneNode->getSystemid());
+
+                $arrReturn[] = $arrTemp;
+            }
+        }
+
+        return $arrReturn;
+    }
+
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
     public function getStrName() {

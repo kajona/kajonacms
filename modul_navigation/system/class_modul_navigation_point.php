@@ -120,6 +120,46 @@ class class_modul_navigation_point extends class_model implements interface_mode
         return $arrReturn;
 	}
 
+    /**
+     * Generates a navigation layer for the portal.
+     * Either based on the "real" navigation as maintained in module navigation
+     * or generated out of the linked pages-folders.
+     * If theres a link to a folder, the first page/folder within the folder is
+     * linked to the current point.
+     *
+     * @param string $strSystemid
+     * @return class_modul_navigation_point
+     */
+    public static function getDynamicNaviLayer($strSystemid) {
+
+        $arrReturn = array();
+
+        //split modes  - regular navigation or generated out of the pages / folders
+        $objCommon = new class_modul_system_common($strSystemid);
+        $arrSystemrecord = $objCommon->getSystemRecord($strSystemid);
+
+        //current node is a navigation-node
+        if($arrSystemrecord["system_module_nr"] == _navigation_modul_id_) {
+            
+            //check where the point links to - navigation-point or pages-entry
+            $objNavigationPoint = new class_modul_navigation_point($strSystemid);
+            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
+                $arrReturn = self::loadPageLevelToNavigationNodes($objNavigationPoint->getStrFolderI());
+            }
+            else
+                $arrReturn = self::getNaviLayer($strSystemid, true);
+        }
+        //current node belongs to pages
+        else if($arrSystemrecord["system_module_nr"] == _pages_folder_id_ || $arrSystemrecord["system_module_nr"] == _pages_modul_id_) {
+            //load the page-level below
+            $arrReturn = self::loadPageLevelToNavigationNodes($strSystemid);
+        }
+
+         
+
+        return $arrReturn;
+    }
+
 	/**
 	 * Deletes a navigation / a point and all childs
 	 *
@@ -185,6 +225,45 @@ class class_modul_navigation_point extends class_model implements interface_mode
         return $arrReturn;
 	}
 
+
+    /**
+     * Loads the level of pages and/or folders stored under a single systemid.
+     * Transforms a page- or a folder-node into a navigation-node.
+     * This node is used for portal-actions only, so there's no way to edit the node.
+     *
+     * @param string $strSourceId
+     * @return class_modul_navigation_point
+     */
+    private static function loadPageLevelToNavigationNodes($strSourceId) {
+
+        $arrPages = class_modul_pages_folder::getPagesAndFolderList($strSourceId);
+        $arrReturn = array();
+        
+        //transform the sublevel
+        foreach($arrPages as $objOneEntry) {
+            //validate status
+            if($objOneEntry->getStatus() == 0)
+                continue;
+
+            //validate the type
+            if($objOneEntry instanceof class_modul_pages_folder) {
+                $objPoint = new class_modul_navigation_point();
+                $objPoint->setStrName($objOneEntry->getStrName());
+                $objPoint->setSystemid($objOneEntry->getSystemid());
+                $arrReturn[] = $objPoint;
+            }
+            else if($objOneEntry instanceof class_modul_pages_page) {
+                $objPoint = new class_modul_navigation_point();
+                $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
+                $objPoint->setStrPageI($objOneEntry->getStrName());
+                $objPoint->setSystemid($objOneEntry->getSystemid());
+
+                $arrReturn[] = $objPoint;
+            }
+        }
+
+        return $arrReturn;
+    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

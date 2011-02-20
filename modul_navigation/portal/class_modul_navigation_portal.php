@@ -12,11 +12,25 @@
  * Portal-part of the navigation. Creates the different navigation-views as sitemap or tree
  *
  * @package modul_navigation
+ * @author sidler@mulchprod.de
  */
 class class_modul_navigation_portal extends class_portal implements interface_portal {
 	private $strCurrentSite = "";
 	private $arrTree = array();
 	private $intLevelMax = 0;
+
+    /**
+     * Internal structure for all nodes within a single navigation, permissions are evaluated.
+     * The structure is a multi-dim array:
+     * [navigation-id] = array("node" => $objNode, "subnodes" => array(
+     *                                 array("node", "subnodes" => array(...) ),
+     *                                 array("node", "subnodes" => array(...) ),
+     *                                  ... )
+     *                   );
+     * 
+     * @var array
+     */
+    private $arrTempNodes = array();
 
 	/**
 	 * Constructor
@@ -27,7 +41,6 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         $arrModul = array();
         $arrModul["modul"]          = "navigation";
 		$arrModul["name"] 			= "modul_navigation";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _navigation_modul_id_;
 		$arrModul["table"]		    = _dbprefix_."navigation";
 
@@ -35,6 +48,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		//Determin the current site to load
 		$this->strCurrentSite = $this->getPagename();
+
+        
 	}
 
     /**
@@ -44,6 +59,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      */
 	public function action($strAction = "") {
 		$strReturn = "";
+
+        //init with the current navigation, required in all cases
+        $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
+        $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
 
 		//Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
@@ -153,13 +172,13 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 			if(!isset($this->arrTree[$intLevel]))
 				$this->arrTree[$intLevel] = "";
 
-			$this->arrTree[$intLevel] .= $this->createNavigationPoint($strSystemid, true, $intLevel, $bitFirst, $bitLast);
+			$this->arrTree[$intLevel] .= $this->createNavigationPoint(new class_modul_navigation_point($strSystemid), true, $intLevel, $bitFirst, $bitLast);
 		}
 		else {
 			if(!isset($this->arrTree[$intLevel]))
 				$this->arrTree[$intLevel] = "";
 
-			$this->arrTree[$intLevel] .= $this->createNavigationPoint($strSystemid, false, $intLevel, $bitFirst, $bitLast);
+			$this->arrTree[$intLevel] .= $this->createNavigationPoint(new class_modul_navigation_point($strSystemid), false, $intLevel, $bitFirst, $bitLast);
 		}
 
 		//Let the childs present themselfes
@@ -194,10 +213,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		//check rights on the navigation
 		if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) {
             //create a stack to highlight the points being active
-            $strStack = $this->getActiveIdStack($this->getActivePagePointData());
+            $strStack = $this->getActiveIdStack($this->getActivePagePointData()); //FIXME
 
             //build the navigation
-            $strReturn = $this->sitemapRecursive(1, $this->arrElementData["navigation_id"], $strStack);
+            $strReturn = $this->sitemapRecursive(1, $this->arrTempNodes[$this->arrElementData["navigation_id"]], $strStack);
 		}
 		return $strReturn;
 	}
@@ -210,9 +229,9 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param string $strSystemid
 	 * @return string
 	 */
-	private function sitemapRecursive($intLevel, $strSystemid, $strStack) {
+	private function sitemapRecursive($intLevel, $objStartEntry, $strStack) {
 		$strReturn = "";
-		$arrChilds = $this->getNaviLayer($strSystemid);
+		$arrChilds = $objStartEntry["subnodes"];
 
         $intNrOfChilds = count($arrChilds);
 		//Anything to do right here?
@@ -221,25 +240,24 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		//Iterate over every child
 		for($intI = 0; $intI < $intNrOfChilds; $intI++) {
-		    $objOneChild = $arrChilds[$intI];
+		    $arrOneChild = $arrChilds[$intI];
 			//Check the rights
-			if($objOneChild->rightView()) {
-
+			if($arrOneChild["node"]->rightView()) {
                 //current point active?
                 $bitActive = false;
-                if(uniStripos($strStack, $objOneChild->getSystemid()) !== false)
+                if(uniStripos($strStack, $arrOneChild["node"]->getSystemid()) !== false)
                     $bitActive = true;
 
 			    //Create the navigation point
 			    if($intI == 0)
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel, true);
+				    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, true);
 				elseif ($intI == $intNrOfChilds-1)
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel, false, true);
+				    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel, false, true);
 				else
-				    $strCurrentPoint = $this->createNavigationPoint($objOneChild->getSystemid(), $bitActive, $intLevel);
+				    $strCurrentPoint = $this->createNavigationPoint($arrOneChild["node"], $bitActive, $intLevel);
 
 				//And load all points below
-				$strChilds = $this->sitemapRecursive($intLevel+1, $objOneChild->getSystemid(), $strStack);
+				$strChilds = $this->sitemapRecursive($intLevel+1, $arrOneChild, $strStack);
 
 				//Put the childs below into the current template
 				$this->objTemplate->setTemplate($strCurrentPoint);
@@ -336,13 +354,13 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 
 	/**
-	 * Loads all navigations points one layer under the given systemid and Checks the right view!
+	 * Loads all navigations points one layer under the given systemid and verifies the permisson to view the node
 	 *
 	 * @param string $strSystemid
 	 * @return mixed Array of objects
 	 */
 	private function getNaviLayer($strSystemid) {
-	    $arrObjects = class_modul_navigation_point::getNaviLayer($strSystemid, true);
+	    $arrObjects = class_modul_navigation_point::getDynamicNaviLayer($strSystemid);
         $arrReturn = array();
         foreach($arrObjects as $arrOneObject)
             if($arrOneObject->rightView())
@@ -449,16 +467,14 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	/**
 	 * Creates the html-code for one single navigationpoint. The check if the user has the needed rights should have been made before!
 	 *
-	 * @param string $strSystemid
+	 * @param class_modul_navigation_point $objPointData
 	 * @param bool $bitActive
 	 * @param int $intLevel
 	 * @param bool $bitFirst
 	 * @param bool $bitLast
 	 * @return string
 	 */
-	private function createNavigationPoint($strSystemid, $bitActive, $intLevel, $bitFirst= false, $bitLast = false) {
-        //Load data for this point
-        $objPointData = new class_modul_navigation_point($strSystemid);
+	private function createNavigationPoint($objPointData, $bitActive, $intLevel, $bitFirst= false, $bitLast = false) {
 		//and start to create a link and all needed stuff
         $arrTemp = array();
 		$arrTemp["page_intern"] = $objPointData->getStrPageI();
