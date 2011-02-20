@@ -21,6 +21,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	 * @param mixed $arrEelementData
 	 */
 	public function __construct($arrElementData) {
+        $arrModule = array();
 		$arrModule["name"] 				= "formular_kontakt";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
@@ -43,7 +44,7 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function action() {
+	public function action($strAction = "") {
 		$strReturn = "";
 		$strAction = "";
 
