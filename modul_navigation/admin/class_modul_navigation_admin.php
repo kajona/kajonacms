@@ -274,10 +274,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strFolderBrowser = getLinkAdminDialog("folderview",
                                                "pagesFolderBrowser",
                                                "&form_element=navigation_folder_i",
-                                               class_carrier::getInstance()->getObjText()->getText("select_folder", "pages", "admin"),
-                                               class_carrier::getInstance()->getObjText()->getText("select_folder", "pages", "admin"),
+                                               $this->getText("browser"),
+                                               $this->getText("browser"),
                                                "icon_externalBrowser.gif",
-                                               class_carrier::getInstance()->getObjText()->getText("select_folder", "pages", "admin"));
+                                               $this->getText("browser"));
         $strFoldername = "";
         if(validateSystemid($this->getParam("navigation_folder_i_id"))) {
             $objFolder = new class_modul_pages_folder($this->getParam("navigation_folder_i_id"));

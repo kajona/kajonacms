@@ -114,8 +114,17 @@ class class_modul_navigation_point extends class_model implements interface_mode
     			             ORDER BY system_sort ASC, system_comment ASC";
 	    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrReturn = array();
-        foreach($arrIds as $arrOneId)
-            $arrReturn[] = new class_modul_navigation_point($arrOneId["system_id"]);
+        foreach($arrIds as $arrOneId) {
+            $objNavigationPoint = new class_modul_navigation_point($arrOneId["system_id"]);
+            //check where the layer links to
+            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
+                $objFirstLevelPage = self::getNextValidPage($objNavigationPoint->getStrFolderI());
+                if($objFirstLevelPage != null)
+                    $objNavigationPoint->setStrPageI($objFirstLevelPage->getStrName());
+            }
+
+            $arrReturn[] = $objNavigationPoint;
+        }
 
         return $arrReturn;
 	}
@@ -251,9 +260,12 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 $objPoint->setStrName($objOneEntry->getStrName());
                 $objPoint->setSystemid($objOneEntry->getSystemid());
 
-                //FIXME: load matching page in order to generate a valid link
-                
-                $arrReturn[] = $objPoint;
+                //search for the first next page
+                $objPage = self::getNextValidPage($objOneEntry->getSystemid());
+                if($objPage != null) {
+                    $objPoint->setStrPageI($objPage->getStrName());
+                    $arrReturn[] = $objPoint;
+                }
             }
             else if($objOneEntry instanceof class_modul_pages_page) {
                 $objPoint = new class_modul_navigation_point();
@@ -266,6 +278,31 @@ class class_modul_navigation_point extends class_model implements interface_mode
         }
 
         return $arrReturn;
+    }
+
+    /**
+     * Searches for the firt subleveled page in order to be linked to the node passed.
+     * Internal helper.
+     *
+     * @param string $strFolderid
+     * @return class_modul_pages_page
+     */
+    private static function getNextValidPage($strFolderid) {
+        $arrPages = class_modul_pages_folder::getPagesInFolder($strFolderid);
+        foreach($arrPages as $objOnePage) {
+            if($objOnePage->getStatus() == 1 && $objOnePage->rightView())
+                return $objOnePage;
+        }
+
+        //traverse downwards
+        $arrFolder = class_modul_pages_folder::getFolderList($strFolderid);
+        foreach($arrFolder as $objOneFolder) {
+            $objTemp = self::getNextValidPage($objOneFolder->getSystemid());
+            if($objTemp != null)
+                return $objTemp;
+        }
+
+        return null;
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------

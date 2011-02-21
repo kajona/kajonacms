@@ -69,6 +69,11 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
         $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
 
+//        foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $objOneNode)
+//                $this->printTreeLevel(1, $objOneNode);
+
+
+
 		//Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
 			$strReturn = $this->loadNavigationTree();
@@ -102,6 +107,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		$strReturn = "";
         $objPagePointData = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
         $strStack = $this->getActiveIdStack($objPagePointData);
+        //var_dump($this->strCurrentSite."-->".$strStack);
 
 		//path created, build the tree using recursion
         if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1)
@@ -160,7 +166,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param bool $bitLast
 	 */
 	private function createTree($strStack, $intLevel, $arrNodes, $bitFirst = false, $bitLast = false) {
-
+        
 		//build an array out of the stack
 		$arrStack = explode(",", $strStack);
 
@@ -303,7 +309,6 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      * @return string
      */
     private function getActiveIdStack($objActivePoint) {
-
         //Loading the points above
         $objTemp = $objActivePoint;
 
@@ -346,9 +351,11 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 
         foreach($arrNodes["subnodes"] as $arrOneSubnode) {
-            $strReturn = $this->createActiveIdStackHelper($objNodeToSearch, $arrOneSubnode);
-            if($strReturn != null)
-                $strReturn .= ",".$arrNodes["node"]->getSystemid();
+            $strReturnTemp = $this->createActiveIdStackHelper($objNodeToSearch, $arrOneSubnode);
+            if($strReturnTemp != null) {
+                $strReturn = $strReturnTemp.",".$arrNodes["node"]->getSystemid();
+                return $strReturn;
+            }
         }
 
         return $strReturn;
@@ -398,7 +405,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                 //use the fallback page
 			    if($strFallbackPage !== false) {
                     $this->arrNodeTempHelper = array();
-                    $this->searchPageInNavigationTree($strFallbackPage, $this->arrElementData["navigation_id"]);
+                    foreach($this->arrTempNodes[$strNavigationId]["subnodes"] as $arrOneNode)
+                        $this->searchPageInNavigationTreeHelper(1, $strFallbackPage, $arrOneNode);
 
                     $intMaxLevel = 0;
                     $objEntry = null;
@@ -435,7 +443,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
             $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
 
         foreach($arrNodes["subnodes"] as $arrOneSubnode) {
-            $this->searchPageInNavigationTreeHelper($intLevel++, $strPage, $arrOneSubnode);
+            $this->searchPageInNavigationTreeHelper($intLevel+1, $strPage, $arrOneSubnode);
         }
     }
 
@@ -485,12 +493,17 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                                   //navigation found. trigger loading of nodes if not yet happend
                                   if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
                                       $objNavigation = new class_modul_navigation_tree($arrContent["navigation_id"]);
-                                      $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
+
+                                      if($objNavigation->getStatus() == 0) 
+                                          $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
+                                      else
+                                          $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
                                   }
 
                                   //search navigation tree
                                   $this->arrNodeTempHelper = array();
-                                  $this->searchPageInNavigationTree($this->strCurrentSite, $arrContent["navigation_id"]);
+                                  foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
+                                       $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
 
                                   $intMaxLevel = 0;
                                   $objEntry = null;
@@ -568,6 +581,21 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		return $strReturn;
 	}
 
+    /**
+     * INTERNAL DEBUG
+     * @deprecated
+     * @param <type> $intLevel
+     * @param <type> $arrNodes
+     */
+    private function printTreeLevel($intLevel, $arrNodes) {
+        for($intI=0; $intI<$intLevel; $intI++) {
+            echo "  ";
+        }
+        echo $arrNodes["node"]->getStrName()."/".$arrNodes["node"]->getSystemid()."/".$arrNodes["node"]->getStrPageI()."<br />\n";
+
+        foreach($arrNodes["subnodes"] as $arrOneNode)
+            $this->printTreeLevel($intLevel+1, $arrOneNode);
+    }
 }
 
 ?>

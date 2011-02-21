@@ -141,7 +141,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
 		              WHERE system_module_nr="._pages_folder_id_."
 		                AND system_prev_id='".dbsafeString($strSystemid)."'
-		             ORDER BY system_comment ASC";
+		             ORDER BY system_sort ASC";
 
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
@@ -212,7 +212,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 						WHERE system.system_prev_id='".dbsafeString($strFolderid)."'
 							AND system.system_module_nr="._pages_modul_id_."
 							AND system.system_id = page.page_id
-							ORDER BY page_name";
+							ORDER BY system_sort ASC";
 
 		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
 		$arrReturn = array();
