@@ -46,12 +46,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strAction = "list";
 
         $strReturn = "";
-
         try {
-            if($strAction == "list")
-                $strReturn = $this->actionList();
-            if($strAction == "new" || $strAction == "edit")
-                $strReturn = $this->actionNew($strAction);
             if($strAction == "save") {
                 if($this->validateForm() & $this->checkAdditionalNewData()) {
                     $strReturn = $this->actionSave();
@@ -62,9 +57,9 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strReturn = $this->actionNew("new");
                 }
             }
-            if($strAction == "saveedit") {
+            else if($strAction == "saveedit") {
                 if($this->validateForm() & $this->checkAdditionalEditData()) {
-                    $strReturn = $this->actionEdit();
+                    $strReturn = $this->actionSaveEdit();
                     if($strReturn == "")
                         $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
                 }
@@ -72,64 +67,13 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strReturn = $this->actionNew("edit");
                 }
             }
-            if($strAction == "status") {
-                $strReturn = $this->actionStatus();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-            }
-            if($strAction == "deletefinal") {
-                if($this->actionDeleteFinal())
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-                else
-                    $strReturn = $this->getText("user_loeschen_fehler");
-            }
-            if($strAction == "grouplist")
-                $strReturn = $this->actionGroupList();
-            if($strAction == "groupnew" || $strAction == "groupedit")
-                $strReturn = $this->actionGroupNew();
-            if($strAction == "groupsave") {
-                if($this->validateForm()) {
-                    $strReturn = $this->actionGroupSave();
-                    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
-                }
-                else {
-                    $strReturn = $this->actionGroupNew();
-                }
-            }
-            if($strAction == "groupsaveedit") {
-                if($this->validateForm()) {
-                    $strReturn = $this->actionGroupSaveEdit();
-                    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
-                }
-                else {
-                    $strReturn = $this->actionGroupNew();
-                }
-            }
-            if($strAction == "groupmember")
-                $strReturn = $this->actionGroupMember();
-            if($strAction == "groupmemberdeletefinal") {
-                $strReturn = $this->actionGroupMemberDeleteFinal();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupmember", "groupid=".$this->getParam("groupid")));
-            }
-            if($strAction == "groupdeletefinal") {
-                $strReturn = $this->actionGroupDeleteFinal();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "grouplist"));
-            }
-            if($strAction == "membership")
-                $strReturn = $this->actionMembership();
-            if($strAction == "membershipsave") {
+            else if($strAction == "membershipsave") {
                 $strReturn = $this->actionSaveMembership();
                 if($strReturn == "")
                     $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
             }
-            if($strAction == "loginlog")
-                $strReturn = $this->actionLoginLog();
-            if($strAction == "userBrowser")
-                $strReturn = $this->actionUserBrowser();
+            else
+                $strReturn = parent::action($strAction);
 
         }
         catch (class_exception $objException) {
@@ -137,24 +81,20 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= "An internal error occured: ".$objException->getMessage();
         }
 
-        $this->strTemp = $strReturn;
+        $this->strOutput = $strReturn;
     }
 
-    public function getOutputContent() {
-        return $this->strTemp;
-    }
-
-    public function getOutputModuleNavi() {
+    protected function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("user_liste"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "grouplist", "", $this->getText("gruppen_liste"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupList", "", $this->getText("gruppen_liste"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "loginlog", "", $this->getText("loginlog"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "loginLog", "", $this->getText("loginlog"), "", "", true, "adminnavi"));
         return $arrReturn;
     }
 
@@ -188,7 +128,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    private function actionList() {
+    protected function actionList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -212,7 +152,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
-                                   getLinkAdminHref($this->arrModule["modul"], "deletefinal", "&userid=".$objOneUser->getSystemid()));
+                                   getLinkAdminHref($this->arrModule["modul"], "deleteFinal", "&userid=".$objOneUser->getSystemid()));
                 //new 2.1: the status icon
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
                     if($objOneUser->getIntActive() == 1)
@@ -239,7 +179,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      *
      * @return string "" in case of success
      */
-    private function actionStatus() {
+    protected function actionStatus() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             $objUser = new class_modul_user_user($this->getParam("userid"));
@@ -249,9 +189,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $objUser->setIntActive(1);
             $objUser->setStrPass("");
             if($objUser->updateObjectToDb())
-                return "";
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
             else
                 throw new class_exception("Error updating user ".$this->getParam("userid"), class_exception::$level_ERROR);
+
+            
         }
         else
             $strReturn .= $this->getText("fehler_recht");
@@ -259,12 +201,15 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
+    protected function actionEdit() {
+        return $this->actionNew("edit");
+    }
     /**
 	 * Creates a new user or edits a already existing one
 	 *
 	 * @return string
 	 */
-    protected function actionNew($strAction) {
+    protected function actionNew($strAction = "new") {
         $strReturn = "";
         $bitSelf = false;
         //Right: Right Edit or edit your own profile
@@ -454,7 +399,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" if successfull
 	 */
-    protected function actionEdit() {
+    protected function actionSaveEdit() {
         //Rights: Own profile or have the needed rights
         $bitRight = false;
         $bitSelfedit = false;
@@ -551,17 +496,17 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     /**
 	 * Deltes a user from the database
 	 *
-	 * @return bool
+	 * @return string
 	 */
-    private function actionDeleteFinal() {
+    protected function actionDeleteFinal() {
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strUserid = $this->getParam("userid");
             //The user itself
             $objUser = new class_modul_user_user($strUserid);
             $objUser->deleteUser();
-            return true;
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
-        return false;
+        return $this->getText("user_loeschen_fehler");
     }
 
 //*"*****************************************************************************************************
@@ -572,7 +517,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    private function actionGroupList() {
+    protected function actionGroupList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -581,7 +526,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
             $objArraySectionIterator->setArraySection(class_modul_user_group::getAllGroups($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "grouplist");
+    		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupList");
             $arrGroups = $arrPageViews["elements"];
 
             $strReturn = $this->objToolkit->listHeader();
@@ -590,14 +535,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupedit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
                                   getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));
                 }
                 else {
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupmember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                 }
 
@@ -606,7 +551,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName()." (".$intNrOfUsers.")", $strAction, $intI++);
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupnew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_blank.gif"), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_blank.gif"), $intI++);
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
@@ -615,12 +560,17 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
+
+    protected function actionGroupEdit() {
+        return $this->actionGroupNew();
+    }
+
     /**
 	 * Edits or creates a group (displays formular)
 	 *
 	 * @return string
 	 */
-    private function actionGroupNew() {
+    protected function actionGroupNew() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -655,7 +605,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    private function actionGroupSave() {
+    protected function actionGroupSave() {
+        if(!$this->validateForm())
+            return $this->actionGroupNew();
+            
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($this->getParam("gruppename") != "" && $this->getParam("gruppename") != " ") {
@@ -663,7 +616,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $objGroup = new class_modul_user_group("");
                 $objGroup->setStrName($strName);
                 if($objGroup->updateObjectToDb())
-                    $strReturn .= "";
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
                 else
                     throw new class_exception($this->getText("gruppe_anlegen_fehler"), class_exception::$level_ERROR);
             }
@@ -678,14 +631,17 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    private function actionGroupSaveEdit() {
+    protected function actionGroupSaveEdit() {
+        if(!$this->validateForm())
+            return $this->actionGroupNew();
+        
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($this->getParam("gruppename") != "" && $this->getParam("gruppename") != " ") {
                 $objGroup = new class_modul_user_group($this->getParam("gruppeid"));
                 $objGroup->setStrName($this->getParam("gruppename"));
                 if($objGroup->updateObjectToDb()) {
-                    return "";
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
                 }
                 else {
                     throw new class_exception($this->getText("gruppe_anlegen_fehler"), class_exception::$level_ERROR);
@@ -705,7 +661,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    private function actionGroupMember() {
+    protected function actionGroupMember() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($this->getParam("groupid") != "") {
@@ -719,7 +675,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
                 $objArraySectionIterator->setArraySection(class_modul_user_group::getGroupMembers($this->getParam("groupid"), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-                $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupmember", "groupid=".$this->getParam("groupid"));
+                $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "groupid=".$this->getParam("groupid"));
                 $arrMembers = $arrPageViews["elements"];
 
                 $strReturn .= $this->objToolkit->listHeader();
@@ -744,12 +700,12 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    private function actionGroupMemberDeleteFinal() {
+    protected function actionGroupMemberDeleteFinal() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))	{
             $objGroup = new class_modul_user_group($this->getParam("groupid"));
             if($objGroup->deleteUserFromCurrentGroup(new class_modul_user_user($this->getParam("userid"))))
-                return "";
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupMember", "groupid=".$this->getParam("groupid")));
             else
                 throw new class_exception($this->getText("mitglied_loeschen_fehler"), class_exception::$level_ERROR);
         }
@@ -765,7 +721,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    private function actionGroupDeleteFinal() {
+    protected function actionGroupDeleteFinal() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
             //Delete memberships
@@ -773,7 +729,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             if($objGroup->deleteAllUsersFromCurrentGroup()) {
                 //delete group
                 if($objGroup->deleteGroup()) {
-                    return "";
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
                 }
                 else
                     throw new class_exception($this->getText("gruppe_loeschen_fehler"), class_exception::$level_ERROR);
@@ -791,7 +747,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return unknown
 	 */
-    private function actionMembership() {
+    protected function actionMembership() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             //open the form
@@ -858,7 +814,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      *
      * @return string
      */
-    private function actionLoginLog() {
+    protected function actionLoginLog() {
         $strReturn = "";
         if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
             //fetch log-rows
@@ -903,33 +859,35 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      * Creates a browser-like view of the users available
      * @return string
      */
-    private function actionUserBrowser() {
+    protected function actionUserBrowser() {
         $this->setArrModuleEntry("template", "/folderview.tpl");
         $strReturn = "";
+        $strFormElement = $this->getParam("form_element");
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($this->getSystemid() == "") {
                 //show groups
                 $arrUsers = class_modul_user_group::getAllGroups();
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
-                foreach($arrUsers as $objSingleUser) {
+                foreach($arrUsers as $objSingleGroup) {
                     $strAction = "";
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleUser->getSystemid()."&filter=".$this->getParam("filter"), $this->getText("user_browser_show"), $this->getText("user_browser_show"), "icon_folderActionOpen.gif"));
-                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleUser->getStrName(), $strAction, $intI++);
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "userBrowser", "&form_element=".$this->getParam("form_element")."&systemid=".$objSingleGroup->getSystemid()."&filter=".$this->getParam("filter"), $this->getText("user_browser_show"), $this->getText("user_browser_show"), "icon_folderActionOpen.gif"));
+
+                    if($this->getParam("allowGroup") == "1")
+                        $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("group_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".addslashes($objSingleGroup->getStrName())."'], ['".$strFormElement."_id', '".$objSingleGroup->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+                    
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName(), $strAction, $intI++);
 
                 }
             }
             else {
                 //show members of group
                 $arrUsers = class_modul_user_group::getGroupMembers($this->getSystemid());
-                $strFormElement = $this->getParam("form_element");
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
 
-                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
                 foreach($arrUsers as $objSingleUser) {
-
-                    
 
                     $strAction = "";
                     if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())

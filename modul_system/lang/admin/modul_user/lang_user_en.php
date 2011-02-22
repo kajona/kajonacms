@@ -26,6 +26,7 @@ $lang["email"]                           = "Email:";
 $lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["fehler_speichern"]                = "An error occured while saving profile!";
 $lang["gebdatum"]                        = "Date of birth:";
+$lang["group_accept"]                    = "Select group ";
 $lang["group_memberlist"]                = "Members of group ";
 $lang["gruppe"]                          = "Group title:";
 $lang["gruppe_anlegen_erfolg"]           = "Group was saved successfully";

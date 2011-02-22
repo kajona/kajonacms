@@ -26,6 +26,7 @@ $lang["email"]                           = "E-Mail:";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["fehler_speichern"]                = "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
 $lang["gebdatum"]                        = "Geburtsdatum:";
+$lang["group_accept"]                    = "Gruppe übernehmen";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";
 $lang["gruppe"]                          = "Gruppen-Name:";
 $lang["gruppe_anlegen_erfolg"]           = "Gruppe erfolgreich gespeichert";
