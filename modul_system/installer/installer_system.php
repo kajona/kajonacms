@@ -349,7 +349,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["change_oldvalue"]   = array("text", true);
 		$arrFields["change_newvalue"]   = array("text", true);
 
-		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id")))
+		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id"), array(), false))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -1355,7 +1355,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["change_newvalue"]   = array("text", true);
         $arrFields["change_systemid"]   = array("char20", true);
 
-		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id")))
+		if(!$this->objDB->createTable("changelog", $arrFields, array("change_id"), array(), false))
 			$strReturn .= "An error occured! ...\n";
 
 
