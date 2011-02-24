@@ -217,8 +217,6 @@ final class class_session {
 	 * @return string
 	 */
 	public function getAdminSkin($bitUseCookie = true) {
-		$strReturn = "";
-
 		//Maybe we can load the skin from the cookie
 	    $objCookie = new class_cookie();
 	    $strSkin = $objCookie->getCookie("adminskin");
@@ -245,8 +243,6 @@ final class class_session {
 	 * @return string
 	 */
 	public function getAdminLanguage($bitUseCookie = true) {
-		$strReturn = "";
-
 		//Maybe we can load the language from the cookie
 	    $objCookie = new class_cookie();
 	    $strLanguage = $objCookie->getCookie("adminlanguage");
@@ -440,6 +436,7 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUsername() {
+        $strUsername = "";
 		if($this->isLoggedin() && $this->getObjInternalSession() != null) {
 			$strUsername = $this->getUser()->getStrUsername();
 		}
@@ -455,6 +452,7 @@ final class class_session {
 	 * @return string
 	 */
 	public function getUserID() {
+        $strUserid = "";
 		if($this->getObjInternalSession() != null && $this->isLoggedin()) {
 			$strUserid = $this->getObjInternalSession()->getStrUserid();
 		}
@@ -496,6 +494,7 @@ final class class_session {
 	 * @return string
 	 */
 	public function getGroupIdsAsString() {
+        $strGroupids = "";
 	    if($this->getObjInternalSession() != null ) {
 			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
@@ -511,6 +510,7 @@ final class class_session {
 	 * @return array
 	 */
 	public function getGroupIdsAsArray() {
+        $strGroupids = "";
 	    if($this->getObjInternalSession() != null ) {
 			$strGroupids = $this->getObjInternalSession()->getStrGroupids();
 		}
