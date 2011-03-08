@@ -1035,3 +1035,32 @@ It containes a list of aspects and provides the possibility to switch the differ
 <tooltip_text>
     <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
 </tooltip_text>
+
+---------------------------------------------------------------------------------------------------------
+-- CALENDAR ---------------------------------------------------------------------------------------------
+
+<calendar_wrapper>
+    <table class="calendar" cellpadding="0" cellspacing="0" >%%content%%</table>
+</calendar_wrapper>
+
+
+<calendar_header_row>
+    <tr >%%entries%%</tr>
+</calendar_header_row>
+
+<calendar_header_entry>
+    <td width="14%">%%name%%</td>
+</calendar_header_entry>
+
+<calendar_row>
+    <tr>%%entries%%</tr>
+</calendar_row>
+
+<calendar_entry>
+    <td class="%%class%%">
+        <div class="calendarHeader">%%date%%</div>
+        <div>
+            %%content%%
+        </div>
+    </td>
+</calendar_entry>

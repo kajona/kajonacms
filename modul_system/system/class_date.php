@@ -154,6 +154,26 @@ class class_date {
     }
 
     /**
+     * Sets the current day to the previous day.
+     * Includes the handling of month / year shifts.
+     *
+     * @since 3.4
+     */
+    public function setPreviousDay() {
+        $this->setTimeInOldStyle($this->getTimeInOldStyle()-24*3600);
+    }
+
+    /**
+     * Sets the current day to the next day.
+     * Includes the handling of month / year shifts.
+     *
+     * @since 3.4
+     */
+    public function setNextDay() {
+        $this->setTimeInOldStyle($this->getTimeInOldStyle()+24*3600);
+    }
+
+    /**
      * Swap the year part
      *
      * @param int $intYear

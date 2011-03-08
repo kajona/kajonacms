@@ -27,4 +27,6 @@ $lang["quickhelp_list"]                  = "The dashboard is the place to pin ev
 $lang["setDashboardPosition"]            = "New position saved successful";
 $lang["widget"]                          = "Widget:";
 $lang["widgetDeleteQuestion"]            = "Do you really want to remove the widget &quot;<b>%%element_name%%</b>&quot;?";
+$lang["module_calendar"]                 = "Calendar";
+$lang["calendar_weekday"]                = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
 ?>

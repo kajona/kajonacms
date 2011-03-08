@@ -1831,5 +1831,62 @@ class class_toolkit_admin extends class_toolkit {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tooltip_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText, "tooltip" => $strTooltip), $strTemplateID);
     }
+
+// --- Calendar Fields ----------------------------------------------------------------------------------
+
+    /**
+     * Creates the wrapper to embedd the calendar.
+     *
+     * @param string $strContent
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarWrapper($strContent) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_wrapper");
+        return $this->objTemplate->fillTemplate(array("content" => $strContent), $strTemplateID);
+    }
+
+    /**
+     * Renders the header-row of the calendar. In general those are the days.
+     *
+     * @param array $arrHeader
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarHeaderRow($arrHeader) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_row");
+        $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_header_entry");
+
+        $strEntries = "";
+        foreach($arrHeader as $strOneHeader)
+            $strEntries .= $this->objTemplate->fillTemplate(array("name" => $strOneHeader), $strTemplateEntryID);
+        
+        return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
+    }
+
+    /**
+     * Renders a complete row of days.
+     *
+     * @param string $strContent
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarRow($strContent) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_row");
+        return $this->objTemplate->fillTemplate(array("entries" => $strContent), $strTemplateID);
+    }
+
+    /**
+     * Renders a single entry within the calendar. In most cases this is a single day.
+     *
+     * @param string $strContent
+     * @param string $strDate
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarEntry($strContent, $strDate, $strClass = "calendarEntry") {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_entry");
+        return $this->objTemplate->fillTemplate(array("content" => $strContent, "date" => $strDate, "class" => $strClass), $strTemplateID);
+    }
 }
 ?>

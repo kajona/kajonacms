@@ -27,4 +27,6 @@ $lang["quickhelp_list"]                  = "Das Dashboard dient als Ablage für 
 $lang["setDashboardPosition"]            = "Speichern der Position erfolgreich";
 $lang["widget"]                          = "Widget:";
 $lang["widgetDeleteQuestion"]            = "Möchten Sie das Widget &quot;<b>%%element_name%%</b>&quot; wirklich entfernen?";
+$lang["module_calendar"]                 = "Kalender";
+$lang["calendar_weekday"]                = "Montag,Dienstag,Mittwoch,Donnerstag,Freitag,Samstag,Sonntag";
 ?>

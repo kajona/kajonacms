@@ -1642,3 +1642,30 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
 #aspectChooser select {
     font-size: 11px;
 }
+
+/** Calendar **/
+table.calendar {
+    border: 1px solid #efefef;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.calendar td {
+    border: 1px solid #cdcdcd;
+    padding: 2px;
+}
+
+td.calendarEntry div.calendarHeader {
+    background-color: #efefef;
+    text-align: right;
+}
+
+td.calendarEntryOutOfRange div.calendarHeader {
+    color: #cccccc;
+    text-align: right;
+}
+
+td.calendarEntryBlocked div.calendarHeader {
+    background-color: #cccccc;
+    text-align: right;
+}

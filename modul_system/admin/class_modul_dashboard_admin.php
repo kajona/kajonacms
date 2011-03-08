@@ -32,48 +32,16 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
 	}
 
-	public function action($strAction = "") {
-	    if($strAction == "")
-	        $strAction = "list";
-
-	    if($strAction == "list") {
-	        $this->strOutput = $this->actionList();
-	    }
-	    else if($strAction == "addWidgetToDashboard") {
-	        $strResponse = $this->actionAddWidgetToDashboard();
-	        if($strResponse == "")
-	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	        else
-	            $this->strOutput = $strResponse;
-	    }
-	    else if($strAction == "deleteWidget") {
-	        $strResponse = $this->actionDeleteWidget();
-	        if($strResponse == "")
-	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	        else
-	            $this->strOutput = $strResponse;
-	    }
-	    else if($strAction == "editWidget") {
-	        $strResponse = $this->actionEditWidget();
-	        if($strResponse == "")
-	            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-	        else
-	            $this->strOutput = $strResponse;
-	    }
-	}
-
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("moduleRights"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "addWidgetToDashboard", "", $this->getText("addWidget"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "calendar", "", $this->getText("module_calendar"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
-	public function getOutputContent() {
-	    return $this->strOutput;
-	}
 
 	/**
 	 * Generates the dashboard itself.
@@ -165,12 +133,81 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         return $strWidgetContent;
 	}
 
+    /**
+     * Creates a calendar-based view of the current month.
+     * Single objects may register themself to be rendered within the calendar.
+     * The calendar-view consists of a view single elements:
+     * +-------------------------+
+     * | control-elements        |
+     * +-------------------------+
+     * | wrapper                 |
+     * +-------------------------+
+     * | the column headers      |
+     * +-------------------------+
+     * | a row for each week (4x)|
+     * +-------------------------+
+     * | wrapper                 |
+     * +-------------------------+
+     *
+     * @return string
+     * @since 3.4
+     */
+    protected function actionCalendar() {
+        $strReturn = "";
+
+        //the header row
+        $arrWeekdays = explode(",", $this->getText("calendar_weekday"));
+        foreach($arrWeekdays as $intKey => $strValue)
+            $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
+        
+        $strContent = $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
+
+        //render the single rows. calculate the first day of the row
+        $objDate = new class_date();
+        $objDate->setIntDay(1);
+
+        $intCurMonth = $objDate->getIntMonth();
+        while($objDate->getIntDayOfWeek() != 1)
+            $objDate->setPreviousDay();
+
+        $strEntries = "";
+        while($objDate->getIntMonth() <= $intCurMonth || ( $objDate->getIntMonth() == $intCurMonth+1 && $objDate->getIntDayOfWeek() != 1) ) {
+
+            $strDate = $objDate->getIntDay().".".$objDate->getIntMonth().".";
+
+            $bitBlocked = false;
+            if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6 )
+                $bitBlocked = true;
+
+            if($objDate->getIntMonth() != $intCurMonth)
+                $strEntries .= $this->objToolkit->getCalendarEntry("", $strDate, "calendarEntryOutOfRange");
+            else if($bitBlocked)
+                $strEntries .= $this->objToolkit->getCalendarEntry("tbd", $strDate, "calendarEntryBlocked");
+            else
+                $strEntries .= $this->objToolkit->getCalendarEntry("tbd", $strDate);
+
+            if($objDate->getIntDayOfWeek() == 0) {
+                $strContent .= $this->objToolkit->getCalendarRow($strEntries);
+                $strEntries = "";
+            }
+
+            $objDate->setNextDay();
+        }
+
+        if($strEntries != "") {
+            $strContent .= $this->objToolkit->getCalendarRow($strEntries);
+        }
+
+        $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
+        return $strReturn;
+    }
+
 	/**
 	 * Generates the forms to add a widget to the dashboard
 	 *
 	 * @return string, "" in case of success
 	 */
-	private function actionAddWidgetToDashboard() {
+	protected function actionAddWidgetToDashboard() {
 	    $strReturn = "";
 	    //check permissions
 	    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -240,7 +277,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                     $objDashboard->setStrWidgetId($strWidgetId);
                     $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
                     if($objDashboard->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])) ) {
-                        return "";
+                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
                     }
                     else
                         return $this->getText("errorSavingWidget");
@@ -261,13 +298,15 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteWidget() {
+	protected function actionDeleteWidget() {
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
 		    $objDashboardwidget = new class_modul_dashboard_widget($this->getSystemid());
 		    if(!$objDashboardwidget->deleteObjectFromDb())
 		        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -280,7 +319,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionEditWidget() {
+	protected function actionEditWidget() {
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -309,6 +348,8 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $objSystemWidget->setStrContent($objConcreteWidget->getFieldsAsString());
 	            if(!$objSystemWidget->updateObjectToDb())
 	                throw new class_exception("Error updating widget to db!", class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
