@@ -220,7 +220,7 @@ class class_date {
      * @param int $intYear
      */
     public function setIntHour($intHour, $bitForce = false) {
-        if(!$bitForce && ($intHour < 0 || $intHour > 24))
+        if(!$bitForce && ($intHour < 0 || $intHour > 23))
             return;
 
         $strHour = sprintf("%02s", $intHour);
