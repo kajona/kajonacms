@@ -208,7 +208,7 @@ class class_toolkit_admin extends class_toolkit {
     public function percentBeam($floatPercent, $intLength = "300")  {
         //Calc width
         $intWidth = $intLength - 50;
-        $intBeamLength = (int)($intWidth * $floatPercent / 100);
+        $intBeamLength = ceil($intWidth * $floatPercent / 100);
         if($intBeamLength == 0)
             $intBeamLength = 1;
 
@@ -218,7 +218,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["percent"] = number_format($floatPercent, 2);
         $arrTemplate["width"] = $intWidth;
         if($arrTemplate["percent"] == "100.00")
-            $arrTemplate["beamwidth"] = $intBeamLength-2;
+            $arrTemplate["beamwidth"] = $intBeamLength;
         else
             $arrTemplate["beamwidth"] = $intBeamLength-1;
         if(($intWidth - $intBeamLength) <= 0 || $arrTemplate["percent"] == "100.00")
