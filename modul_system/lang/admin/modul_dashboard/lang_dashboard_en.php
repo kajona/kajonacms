@@ -29,4 +29,6 @@ $lang["widget"]                          = "Widget:";
 $lang["widgetDeleteQuestion"]            = "Do you really want to remove the widget &quot;<b>%%element_name%%</b>&quot;?";
 $lang["module_calendar"]                 = "Calendar";
 $lang["calendar_weekday"]                = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";
+$lang["calendar_prev"]                   = "&lt;&lt; previous month";
+$lang["calendar_next"]                   = "next month &gt;&gt;";
 ?>

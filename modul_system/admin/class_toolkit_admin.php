@@ -1835,6 +1835,37 @@ class class_toolkit_admin extends class_toolkit {
 // --- Calendar Fields ----------------------------------------------------------------------------------
 
     /**
+     * Renders a legend below the current calendar in order to illustrate the different event-types.
+     * 
+     * @param array $arrEntries
+     * @return string
+     */
+    public function getCalendarLegend($arrEntries) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend");
+        $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_legend_entry");
+
+        $strEntries = "";
+        foreach($arrEntries as $strName => $strClass)
+            $strEntries .= $this->objTemplate->fillTemplate(array("name" => $strName, "class" => $strClass), $strTemplateEntryID);
+
+        return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
+    }
+
+    /**
+     * Creates a pager for the calendar, used to switch the current month.
+     *
+     * @param string $strBackwards
+     * @param string $strCenter
+     * @param string $strForwards
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarPager($strBackwards, $strCenter, $strForwards) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_pager");
+        return $this->objTemplate->fillTemplate(array("backwards" => $strBackwards, "forwards" => $strForwards, "center" => $strCenter), $strTemplateID);
+    }
+
+    /**
      * Creates the wrapper to embedd the calendar.
      *
      * @param string $strContent
@@ -1887,6 +1918,11 @@ class class_toolkit_admin extends class_toolkit {
     public function getCalendarEntry($strContent, $strDate, $strClass = "calendarEntry") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_entry");
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "date" => $strDate, "class" => $strClass), $strTemplateID);
+    }
+
+    public function getCalendarEvent($strContent, $strClass = "calendarEvent") {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_event");
+        return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass), $strTemplateID);
     }
 }
 ?>

@@ -16,6 +16,9 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
     protected $arrColumnsOnDashboard = array("column1", "column2", "column3");
 
+    private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
+    private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
+
 	/**
 	 * Constructor
 	 *
@@ -137,23 +140,43 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
      * Creates a calendar-based view of the current month.
      * Single objects may register themself to be rendered within the calendar.
      * The calendar-view consists of a view single elements:
-     * +-------------------------+
-     * | control-elements        |
-     * +-------------------------+
-     * | wrapper                 |
-     * +-------------------------+
-     * | the column headers      |
-     * +-------------------------+
-     * | a row for each week (4x)|
-     * +-------------------------+
-     * | wrapper                 |
-     * +-------------------------+
+     * +---------------------------+
+     * | control-elements (pager)  |
+     * +---------------------------+
+     * | wrapper                   |
+     * +---------------------------+
+     * | the column headers        |
+     * +---------------------------+
+     * | a row for each week (4x)  |
+     * +---------------------------+
+     * | wrapper                   |
+     * +---------------------------+
+     * | legend                    |
+     * +---------------------------+
      *
      * @return string
      * @since 3.4
      */
     protected function actionCalendar() {
         $strReturn = "";
+
+        $arrRelevantModules = array();
+
+        //save dates to session
+        if($this->getParam("month") != "")
+            $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
+        if($this->getParam("year") != "")
+            $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
+        
+
+
+        //fetch modules relevant for processing
+        $arrModules = class_modul_system_module::getAllModules();
+        foreach($arrModules as $objSingleModule) {
+            if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
+                $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
+        }
+        
 
         //the header row
         $arrWeekdays = explode(",", $this->getText("calendar_weekday"));
@@ -166,27 +189,79 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         $objDate = new class_date();
         $objDate->setIntDay(1);
 
+        if($this->objSession->getSession($this->strStartMonthKey) != "")
+            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
+
+        if($this->objSession->getSession($this->strStartYearKey) != "")
+            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
+
         $intCurMonth = $objDate->getIntMonth();
+
+        //pager-setup
+        $objEndDate = clone $objDate;
+        while($objEndDate->getIntMonth() == $intCurMonth)
+            $objEndDate->setNextDay();
+        $objEndDate->setPreviousDay();
+
+        $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
+
+        $objEndDate->setNextDay();
+        $objPrevDate = clone $objDate;
+        $objPrevDate->setPreviousDay();
+
+        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
+        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
+
+        //start by monday
         while($objDate->getIntDayOfWeek() != 1)
             $objDate->setPreviousDay();
 
         $strEntries = "";
-        while($objDate->getIntMonth() <= $intCurMonth || ( $objDate->getIntMonth() == $intCurMonth+1 && $objDate->getIntDayOfWeek() != 1) ) {
+        $intRowEntryCount = 0;
+        $arrLegendEntries = array();
+        while($objDate->getIntMonth() <= $intCurMonth || $intRowEntryCount % 7 != 0 ) {
 
-            $strDate = $objDate->getIntDay().".".$objDate->getIntMonth().".";
+            $intRowEntryCount++;
+
+            $strDate = $objDate->getIntDay();
+
+            $arrEvents = array();
+            if($objDate->getIntMonth() == $intCurMonth) {
+                //Query modules for dates
+                $objStartDate = clone $objDate;
+                $objStartDate->setIntHour(0);$objStartDate->setIntMin(0);$objStartDate->setIntSec(0);
+                $objEndDate = clone $objDate;
+                $objEndDate->setIntHour(23);$objEndDate->setIntMin(59);$objEndDate->setIntSec(59);
+                foreach($arrRelevantModules as $objOneModule) {
+                    $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
+                    $arrLegendEntries = array_merge($arrLegendEntries, $objOneModule->getArrLegendEntries());
+                }
+            }
+
+            while(count($arrEvents) <= 3) {
+                $objDummy = new class_calendarentry();
+                $objDummy->setStrClass("spacer");
+                $objDummy->setStrName("&nbsp;");
+                $arrEvents[] = $objDummy;
+            }
+
+            $strEvents = "";
+            foreach($arrEvents as $objOneEvent) {
+                $strEvents .= $this->objToolkit->getCalendarEvent($objOneEvent->getStrName(), $objOneEvent->getStrClass());
+            }
 
             $bitBlocked = false;
             if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6 )
                 $bitBlocked = true;
 
             if($objDate->getIntMonth() != $intCurMonth)
-                $strEntries .= $this->objToolkit->getCalendarEntry("", $strDate, "calendarEntryOutOfRange");
+                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryOutOfRange");
             else if($bitBlocked)
-                $strEntries .= $this->objToolkit->getCalendarEntry("tbd", $strDate, "calendarEntryBlocked");
+                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryBlocked");
             else
-                $strEntries .= $this->objToolkit->getCalendarEntry("tbd", $strDate);
+                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate);
 
-            if($objDate->getIntDayOfWeek() == 0) {
+            if($intRowEntryCount % 7 == 0) {
                 $strContent .= $this->objToolkit->getCalendarRow($strEntries);
                 $strEntries = "";
             }
@@ -198,7 +273,11 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             $strContent .= $this->objToolkit->getCalendarRow($strEntries);
         }
 
+        $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
         $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
+        $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
+
+
         return $strReturn;
     }
 

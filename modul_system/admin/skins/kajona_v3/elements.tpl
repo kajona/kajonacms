@@ -1036,8 +1036,27 @@ It containes a list of aspects and provides the possibility to switch the differ
     <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
 </tooltip_text>
 
+
 ---------------------------------------------------------------------------------------------------------
 -- CALENDAR ---------------------------------------------------------------------------------------------
+
+<calendar_legend>
+    <div class="calendarLegend">%%entries%%</div>
+</calendar_legend>
+
+<calendar_legend_entry>
+    <div class="%%class%% calendarLegendEntry">%%name%%</div>
+</calendar_legend_entry>
+
+<calendar_pager>
+    <table class="calendarPager" cellpadding="0" cellspacing="0" >
+        <tr>
+            <td width="20%" style="text-align: left;">%%backwards%%</td>
+            <td width="60%" style="text-align: center; font-weight: bold;">%%center%%</td>
+            <td width="20%" style="text-align: right;">%%forwards%%</td>
+        </tr>
+    </table>
+</calendar_pager>
 
 <calendar_wrapper>
     <table class="calendar" cellpadding="0" cellspacing="0" >%%content%%</table>
@@ -1064,3 +1083,9 @@ It containes a list of aspects and provides the possibility to switch the differ
         </div>
     </td>
 </calendar_entry>
+
+<calendar_event>
+    <div class="%%class%%">
+        %%content%%
+    </div>
+</calendar_event>
