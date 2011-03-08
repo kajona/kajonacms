@@ -1050,3 +1050,72 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
     position: relative;
     top: 5px;
 }
+
+/** Aspects **/
+#aspectChooser {
+    position: relative;
+    display: inline;
+    float: right;
+    top: 0px;
+}
+
+#aspectChooser select {
+    font-size: 11px;
+}
+
+/** Calendar **/
+table.calendar {
+    border: 1px solid #efefef;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.calendarPager {
+    border-collapse: collapse;
+    width: 100%;
+
+    margin-bottom: 5px;
+}
+
+table.calendar td {
+    border: 1px solid #cdcdcd;
+    padding: 2px;
+}
+
+td.calendarEntry div.calendarHeader {
+    background-color: #efefef;
+    text-align: right;
+    padding: 0px 2px;
+}
+
+td.calendarEntryOutOfRange div.calendarHeader {
+    color: #cccccc;
+    text-align: right;
+    padding: 0px 2px;
+}
+
+td.calendarEntryBlocked div.calendarHeader {
+    background-color: #cccccc;
+    text-align: right;
+    padding: 0px 2px;
+}
+
+table.calendar div.spacer {
+
+}
+
+div.calendarLegend {
+    margin: 10px 0 0 0 ;
+}
+
+div.calendarLegendEntry {
+    padding: 1px 3px !important;
+    display: inline;
+}
+
+ div.calendarEvent {
+    background-color: #FFFFDF;
+    border: 1px solid #DEDF45;
+    padding: 0px 2px;
+    margin: 2px 0px;
+}

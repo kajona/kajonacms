@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,10 +8,8 @@
 <script type="text/javascript" src="_webpath_/admin/scripts/kajona.js?_system_browser_cachebuster_"></script>
 <title>Kajona Admin, www.kajona.de</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<script type="text/javascript">
-	KAJONA.admin.loader.loadAjaxBase();
-	KAJONA.admin.loader.loadAnimationBase();
-</script>
+<link rel="shortcut icon" href="_webpath_/favicon.ico" type="image/x-icon" />
+
 </head>
 
 <body>
@@ -32,7 +30,7 @@
     <td align="center" valign="top" class="text1"><img src="_skinwebpath_/trans.gif" width="400" height="10"><br />
         <table width="95%"  border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
-    <td class="modulhead" align="left">%%moduletitle%%</td>
+    <td class="modulhead" align="left">%%moduletitle%%%%aspectChooser%%</td>
   </tr>
     <tr>
        <td class="modullinie"></td>

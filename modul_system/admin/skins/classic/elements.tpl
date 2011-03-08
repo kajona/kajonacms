@@ -1148,6 +1148,70 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 %%ajaxScript%%
 </input_tagselector>
 
+The aspect chooser is shown in cases more than one aspect is defined in the system-module.
+It containes a list of aspects and provides the possibility to switch the different aspects.
+<aspect_chooser>
+    <div id="aspectChooser"><select onchange="window.location.replace(this.value);" >%%options%%</select></div>
+</aspect_chooser>
+
+<aspect_chooser_entry>
+    <option value="%%value%%" %%selected%%>%%name%%</option>
+</aspect_chooser_entry>
+
 <tooltip_text>
     <span title="%%tooltip%%" onmouseover="KAJONA.admin.tooltip.add(this);">%%text%%</span>
 </tooltip_text>
+
+
+---------------------------------------------------------------------------------------------------------
+-- CALENDAR ---------------------------------------------------------------------------------------------
+
+<calendar_legend>
+    <div class="calendarLegend">%%entries%%</div>
+</calendar_legend>
+
+<calendar_legend_entry>
+    <div class="%%class%% calendarLegendEntry">%%name%%</div>
+</calendar_legend_entry>
+
+<calendar_pager>
+    <table class="calendarPager" cellpadding="0" cellspacing="0" >
+        <tr>
+            <td width="20%" style="text-align: left;">%%backwards%%</td>
+            <td width="60%" style="text-align: center; font-weight: bold;">%%center%%</td>
+            <td width="20%" style="text-align: right;">%%forwards%%</td>
+        </tr>
+    </table>
+</calendar_pager>
+
+<calendar_wrapper>
+    <table class="calendar" cellpadding="0" cellspacing="0" >%%content%%</table>
+</calendar_wrapper>
+
+
+<calendar_header_row>
+    <tr >%%entries%%</tr>
+</calendar_header_row>
+
+<calendar_header_entry>
+    <td width="14%">%%name%%</td>
+</calendar_header_entry>
+
+<calendar_row>
+    <tr>%%entries%%</tr>
+</calendar_row>
+
+<calendar_entry>
+    <td class="%%class%%">
+        <div class="calendarHeader">%%date%%</div>
+        <div>
+            %%content%%
+        </div>
+    </td>
+</calendar_entry>
+
+<calendar_event>
+    <div class="%%class%%">
+        %%content%%
+    </div>
+</calendar_event>
