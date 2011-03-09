@@ -1677,6 +1677,10 @@ table.calendar td {
     padding: 2px;
 }
 
+td.calendarDateToday {
+    background-color: #EFFBFF;
+}
+
 td.calendarEntry div.calendarHeader {
     background-color: #efefef;
     text-align: right;

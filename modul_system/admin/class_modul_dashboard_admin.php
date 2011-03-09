@@ -154,130 +154,95 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
      * | legend                    |
      * +---------------------------+
      *
+     * The calendar internally is loaded via ajax since fetching all events
+     * may take some time.
+     *
      * @return string
      * @since 3.4
      */
     protected function actionCalendar() {
         $strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-        $arrRelevantModules = array();
+            //save dates to session
+            if($this->getParam("month") != "")
+                $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
+            if($this->getParam("year") != "")
+                $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
 
-        //save dates to session
-        if($this->getParam("month") != "")
-            $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
-        if($this->getParam("year") != "")
-            $this->objSession->setSession($this->strStartYearKey, $this->getParam("year"));
-        
+            $strContainerId = generateSystemid();
+
+            $strContent = "<script type=\"text/javascript\">
+                            KAJONA.admin.loader.loadAjaxBase(function() {
+                                  KAJONA.admin.ajax.genericAjaxCall(\"dashboard\", \"renderCalendar\", \"".$strContainerId."\", {
+                                    success : function(o) {
+                                        var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
+                                        var objNode = document.getElementById(\"".$strContainerId."\");
+                                        objNode.innerHTML=o.responseText.substr(
+                                          intStart, o.responseText.indexOf(\"]]\")-intStart
+                                        );
+                                        if(o.responseText.indexOf(\"[CDATA[\") < 0) {
+                                            var intStart = o.responseText.indexOf(\"<error>\")+7;
+                                            var objNode = document.getElementById(\"".$strContainerId."\");
+                                            objNode.innerHTML=o.responseText.substr(
+                                              intStart, o.responseText.indexOf(\"</error>\")-intStart
+                                            );
+                                        }
+                                    },
+                                    failure : function(o) {
+                                        KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);
+                                    }
+                                  })
+                            });
+                          </script>";
 
 
-        //fetch modules relevant for processing
-        $arrModules = class_modul_system_module::getAllModules();
-        foreach($arrModules as $objSingleModule) {
-            if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
-                $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
-        }
-        
+            //fetch modules relevant for processing
+            $arrLegendEntries = array();
+            $arrModules = class_modul_system_module::getAllModules();
+            foreach($arrModules as $objSingleModule) {
+                if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
+                    $arrLegendEntries = array_merge($arrLegendEntries, $objSingleModule->getAdminInstanceOfConcreteModule()->getArrLegendEntries());
+            }
 
-        //the header row
-        $arrWeekdays = explode(",", $this->getText("calendar_weekday"));
-        foreach($arrWeekdays as $intKey => $strValue)
-            $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
-        
-        $strContent = $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
+            //render the single rows. calculate the first day of the row
+            $objDate = new class_date();
+            $objDate->setIntDay(1);
 
-        //render the single rows. calculate the first day of the row
-        $objDate = new class_date();
-        $objDate->setIntDay(1);
+            if($this->objSession->getSession($this->strStartMonthKey) != "")
+                $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
 
-        if($this->objSession->getSession($this->strStartMonthKey) != "")
-            $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
+            if($this->objSession->getSession($this->strStartYearKey) != "")
+                $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
 
-        if($this->objSession->getSession($this->strStartYearKey) != "")
-            $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
+            $intCurMonth = $objDate->getIntMonth();
 
-        $intCurMonth = $objDate->getIntMonth();
+            //pager-setup
+            $objEndDate = clone $objDate;
+            while($objEndDate->getIntMonth() == $intCurMonth)
+                $objEndDate->setNextDay();
+            $objEndDate->setPreviousDay();
 
-        //pager-setup
-        $objEndDate = clone $objDate;
-        while($objEndDate->getIntMonth() == $intCurMonth)
+            $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
+
             $objEndDate->setNextDay();
-        $objEndDate->setPreviousDay();
+            $objPrevDate = clone $objDate;
+            $objPrevDate->setPreviousDay();
 
-        $strCenter = dateToString($objDate, false)." - ".  dateToString($objEndDate, false);
+            $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
+            $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
 
-        $objEndDate->setNextDay();
-        $objPrevDate = clone $objDate;
-        $objPrevDate->setPreviousDay();
+            
 
-        $strPrev = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objPrevDate->getIntMonth()."&year=".$objPrevDate->getIntYear(), $this->getText("calendar_prev"));
-        $strNext = getLinkAdmin($this->arrModule["modul"], "calendar", "&month=".$objEndDate->getIntMonth()."&year=".$objEndDate->getIntYear(), $this->getText("calendar_next"));
+            $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
+            $strReturn .= $this->objToolkit->getCalendarWrapper($strContent, $strContainerId);
+            $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
 
-        //start by monday
-        while($objDate->getIntDayOfWeek() != 1)
-            $objDate->setPreviousDay();
 
-        $strEntries = "";
-        $intRowEntryCount = 0;
-        $arrLegendEntries = array();
-        while($objDate->getIntMonth() <= $intCurMonth || $intRowEntryCount % 7 != 0 ) {
-
-            $intRowEntryCount++;
-
-            $strDate = $objDate->getIntDay();
-
-            $arrEvents = array();
-            if($objDate->getIntMonth() == $intCurMonth) {
-                //Query modules for dates
-                $objStartDate = clone $objDate;
-                $objStartDate->setIntHour(0);$objStartDate->setIntMin(0);$objStartDate->setIntSec(0);
-                $objEndDate = clone $objDate;
-                $objEndDate->setIntHour(23);$objEndDate->setIntMin(59);$objEndDate->setIntSec(59);
-                foreach($arrRelevantModules as $objOneModule) {
-                    $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
-                    $arrLegendEntries = array_merge($arrLegendEntries, $objOneModule->getArrLegendEntries());
-                }
-            }
-
-            while(count($arrEvents) <= 3) {
-                $objDummy = new class_calendarentry();
-                $objDummy->setStrClass("spacer");
-                $objDummy->setStrName("&nbsp;");
-                $arrEvents[] = $objDummy;
-            }
-
-            $strEvents = "";
-            foreach($arrEvents as $objOneEvent) {
-                $strEvents .= $this->objToolkit->getCalendarEvent($objOneEvent->getStrName(), $objOneEvent->getStrClass());
-            }
-
-            $bitBlocked = false;
-            if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6 )
-                $bitBlocked = true;
-
-            if($objDate->getIntMonth() != $intCurMonth)
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryOutOfRange");
-            else if($bitBlocked)
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryBlocked");
-            else
-                $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate);
-
-            if($intRowEntryCount % 7 == 0) {
-                $strContent .= $this->objToolkit->getCalendarRow($strEntries);
-                $strEntries = "";
-            }
-
-            $objDate->setNextDay();
         }
-
-        if($strEntries != "") {
-            $strContent .= $this->objToolkit->getCalendarRow($strEntries);
-        }
-
-        $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
-        $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
-        $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
-
-
+	    else
+	        $strReturn = $this->getText("fehler_recht");
+        
         return $strReturn;
     }
 

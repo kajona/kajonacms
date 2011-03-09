@@ -70,11 +70,13 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
 						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
 
-        $this->setStrName($arrRow["filemanager_name"]);
-        $this->setStrPath($arrRow["filemanager_path"]);
-        $this->setStrUploadFilter($arrRow["filemanager_upload_filter"]);
-        $this->setStrViewFilter($arrRow["filemanager_view_filter"]);
-        $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
+        if(isset($arrRow["filemanager_name"])) {
+            $this->setStrName($arrRow["filemanager_name"]);
+            $this->setStrPath($arrRow["filemanager_path"]);
+            $this->setStrUploadFilter($arrRow["filemanager_upload_filter"]);
+            $this->setStrViewFilter($arrRow["filemanager_view_filter"]);
+            $this->setStrForeignId($arrRow["filemanager_foreign_id"]);
+        }
     }
 
     protected function updateStateToDb() {

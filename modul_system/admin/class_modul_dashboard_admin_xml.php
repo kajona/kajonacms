@@ -15,7 +15,9 @@
  * @package modul_dashboard
  */
 class class_modul_dashboard_admin_xml extends class_admin implements interface_xml_admin {
-    
+
+    private $strStartMonthKey = "DASHBOARD_CALENDAR_START_MONTH";
+    private $strStartYearKey = "DASHBOARD_CALENDAR_START_YEAR";
     
 	/**
 	 * Constructor
@@ -34,29 +36,12 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
 
 	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "setDashboardPosition")
-            $strReturn .= $this->actionSetDashboardPosition();
-        else if($strAction == "getWidgetContent")
-            $strReturn .= $this->actionGetWidgetContent();
-
-        return $strReturn;
-	}
-
-
-	/**
 	 * saves the new position of a widget on the dashboard.
 	 * updates the sorting AND the assigned colum
 	 *
 	 * @return string
 	 */
-	private function actionSetDashboardPosition() {
+	protected function actionSetDashboardPosition() {
 	    $strReturn = "";
 
 		//check permissions
@@ -71,7 +56,6 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 		    $objWidget->updateObjectToDb();
 		        
 		    $this->setEditDate($this->getSystemid());    
-		        
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";    
 		}
 		else
@@ -80,7 +64,11 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         return $strReturn;
 	}
 
-
+    /**
+     * Renderes the content of a single widget.
+     *
+     * @return string
+     */
     protected function actionGetWidgetContent() {
         $strReturn = "";
         if($this->objRights->rightView($this->getSystemid())) {
@@ -89,6 +77,120 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             $objConcreteWidget = $objWidgetModel->getConcreteAdminwidget();
             $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
             $strReturn .= "</content>";
+        }
+        else
+		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+
+        return $strReturn;
+    }
+
+    /**
+     * 
+     *
+     * @return string
+     */
+    protected function actionRenderCalendar() {
+        $strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $strReturn .= "<content><![CDATA[";
+
+            $arrRelevantModules = array();
+
+            //fetch modules relevant for processing
+            $arrModules = class_modul_system_module::getAllModules();
+            foreach($arrModules as $objSingleModule) {
+                if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
+                    $arrRelevantModules[] = $objSingleModule->getAdminInstanceOfConcreteModule();
+            }
+
+            //the header row
+            $arrWeekdays = explode(",", $this->getText("calendar_weekday"));
+            foreach($arrWeekdays as $intKey => $strValue)
+                $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
+
+            $strReturn .= $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
+
+            //render the single rows. calculate the first day of the row
+            $objDate = new class_date();
+            $objDate->setIntDay(1);
+
+            //set to interval stored in session
+            if($this->objSession->getSession($this->strStartMonthKey) != "")
+                $objDate->setIntMonth($this->objSession->getSession($this->strStartMonthKey));
+
+            if($this->objSession->getSession($this->strStartYearKey) != "")
+                $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
+
+            $intCurMonth = $objDate->getIntMonth();
+            $objToday = new class_date();
+
+            //start by monday
+            while($objDate->getIntDayOfWeek() != 1)
+                $objDate->setPreviousDay();
+
+            $strEntries = "";
+            $intRowEntryCount = 0;
+            while($objDate->getIntMonth() <= $intCurMonth || $intRowEntryCount % 7 != 0 ) {
+
+                $intRowEntryCount++;
+
+                $strDate = $objDate->getIntDay();
+
+                $arrEvents = array();
+                if($objDate->getIntMonth() == $intCurMonth) {
+                    //Query modules for dates
+                    $objStartDate = clone $objDate;
+                    $objStartDate->setIntHour(0);$objStartDate->setIntMin(0);$objStartDate->setIntSec(0);
+                    $objEndDate = clone $objDate;
+                    $objEndDate->setIntHour(23);$objEndDate->setIntMin(59);$objEndDate->setIntSec(59);
+                    foreach($arrRelevantModules as $objOneModule) {
+                        $arrEvents = array_merge($objOneModule->getArrCalendarEntries($objStartDate, $objEndDate), $arrEvents);
+                    }
+                }
+
+                while(count($arrEvents) <= 3) {
+                    $objDummy = new class_calendarentry();
+                    $objDummy->setStrClass("spacer");
+                    $objDummy->setStrName("&nbsp;");
+                    $arrEvents[] = $objDummy;
+                }
+
+                $strEvents = "";
+                foreach($arrEvents as $objOneEvent) {
+                    $strEvents .= $this->objToolkit->getCalendarEvent($objOneEvent->getStrName(), $objOneEvent->getStrClass());
+                }
+
+                $bitBlocked = false;
+                if($objDate->getIntDayOfWeek() == 0 || $objDate->getIntDayOfWeek() == 6 )
+                    $bitBlocked = true;
+
+                $strToday = "";
+                if($objToday->getIntYear() == $objDate->getIntYear() &&
+                   $objToday->getIntMonth() == $objDate->getIntMonth() &&
+                   $objToday->getIntDay() == $objDate->getIntDay())
+                        $strToday = " calendarDateToday";
+                
+
+                if($objDate->getIntMonth() != $intCurMonth)
+                    $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryOutOfRange".$strToday);
+                else if($bitBlocked)
+                    $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntryBlocked".$strToday);
+                else
+                    $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntry".$strToday);
+
+                if($intRowEntryCount % 7 == 0) {
+                    $strReturn .= $this->objToolkit->getCalendarRow($strEntries);
+                    $strEntries = "";
+                }
+
+                $objDate->setNextDay();
+            }
+
+            if($strEntries != "") {
+                $strReturn .= $this->objToolkit->getCalendarRow($strEntries);
+            }
+
+            $strReturn .= "]]></content>";
         }
         else
 		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";

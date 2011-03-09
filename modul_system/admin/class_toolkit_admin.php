@@ -1869,12 +1869,13 @@ class class_toolkit_admin extends class_toolkit {
      * Creates the wrapper to embedd the calendar.
      *
      * @param string $strContent
+     * @param string $strContainerId
      * @return string
      * @since 3.4
      */
-    public function getCalendarWrapper($strContent) {
+    public function getCalendarWrapper($strContent, $strContainerId) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_wrapper");
-        return $this->objTemplate->fillTemplate(array("content" => $strContent), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array("content" => $strContent, "containerid" => $strContainerId), $strTemplateID);
     }
 
     /**
