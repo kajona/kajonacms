@@ -209,6 +209,7 @@ $lang["speicherplatz"]                   = "Disk space";
 $lang["status_active"]                   = "Change status (is active)";
 $lang["status_inactive"]                 = "Change status (is inactive)";
 $lang["submit"]                          = "Save";
+$lang["send"]                          = "Send";
 $lang["systemTasks"]                     = "System tasks";
 $lang["system_cache"]                    = "Cache";
 $lang["system_info"]                     = "System information";
@@ -289,4 +290,9 @@ $lang["uploadmaxsize"]                   = "Upload max size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
+$lang["mail_recipient"]                  = "Recipient:";
+$lang["mail_subject"]                    = "Subject:";
+$lang["mail_body"]                       = "Content:";
+$lang["mail_send_success"]               = "Email sent successfully.";
+$lang["mail_send_error"]                 = "Error sending the email. Please retry the last action.";
 ?>

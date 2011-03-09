@@ -20,7 +20,7 @@
 </head>
 <body class="folderView">
 
-%%content%%
+<div id="contentMain">%%content%%</div>
 
 </body>
 </html>

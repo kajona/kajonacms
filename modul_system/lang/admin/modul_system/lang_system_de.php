@@ -209,6 +209,7 @@ $lang["speicherplatz"]                   = "Speicherplatz";
 $lang["status_active"]                   = "Status ändern (ist aktiv)";
 $lang["status_inactive"]                 = "Status ändern (ist inaktiv)";
 $lang["submit"]                          = "Speichern";
+$lang["send"]                          = "Versenden";
 $lang["systemTasks"]                     = "System-Tasks";
 $lang["system_cache"]                    = "Cache";
 $lang["system_info"]                     = "Systeminformationen";
@@ -289,4 +290,9 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
+$lang["mail_recipient"]                  = "Empfänger:";
+$lang["mail_subject"]                    = "Betreff:";
+$lang["mail_body"]                       = "Inhalt:";
+$lang["mail_send_success"]               = "E-Mail erfolgreich verschickt.";
+$lang["mail_send_error"]                 = "Fehler beim Versenden der E-Mail. Bitte versuchen Sie die letzte Aktion erneut.";
 ?>

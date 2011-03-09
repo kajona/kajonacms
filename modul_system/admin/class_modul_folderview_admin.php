@@ -48,7 +48,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 			$strReturn = $this->getListFilemanager($strElement);
 		}
 
-		if($strAction == "folderList") 	{
+		else if($strAction == "folderList") 	{
             $strFolder = "/portal/pics";
 			if($this->getParam("folder") != "")
 				$strFolder = $this->getParam("folder");
@@ -80,7 +80,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 			$strReturn = $this->getFolderlist($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, $bitFile, $strElement, $this->getParam("detail"));
 		}
 
-		if($strAction == "pagesFolderBrowser") {
+		else if($strAction == "pagesFolderBrowser") {
 			$bitPages = ($this->getParam("pages") != "" ? true : false);
 			$strFolderid = ($this->getParam("folderid") != "" ? $this->getParam("folderid") : $this->getModuleSystemid("pages") );
 			$strElement = ($this->getParam("form_element") != "" ? $this->getParam("form_element") : "ordner_name");
@@ -88,11 +88,9 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 			$strReturn = $this->pagesFolderBrowser($strFolderid, $bitPages, $strElement, $strPageid);
 		}
 
-		if($strAction == "navigationBrowser")
-			$strReturn = $this->navigationBrowser();
 
-        if($strAction == "browserChooser")
-            $strReturn = $this->browserChooser();
+        else
+            $strReturn = parent::action($strAction);
 
         //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
         //so we don't have to pass through the param with all requests
@@ -103,9 +101,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$this->strOutput = $strReturn;
 	}
 
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
+
 
     protected function getOutputModuleTitle() {
         return $this->getText("moduleFolderviewTitle");
@@ -273,7 +269,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 	 * Returns a list of available navigations
 	 *
 	 */
-	private function navigationBrowser() {
+	protected function actionNavigationBrowser() {
 		$strReturn = "";
 		$intCounter = 1;
 		//Load all navis
@@ -289,7 +285,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		return $strReturn;
 	}
 
-    private function browserChooser() {
+    protected function actionBrowserChooser() {
         $strReturn = "";
 
 		$intCounter = 1;
@@ -304,5 +300,6 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         $strReturn .= $this->objToolkit->listFooter();
 		return $strReturn;
     }
+
 }
 ?>

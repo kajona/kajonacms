@@ -849,6 +849,21 @@ form br {
 	color: #575757;
 }
 
+.inputTextareaLarge {
+	background-image: url(forms_input_back.png);
+	background-repeat: repeat-x;
+	padding: 1px 0 0 4px;
+	margin: 0 3px 4px 0;
+	display: block;
+	float: left;
+	width: 280px;
+	height: 250px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+}
+
 .inputWysiwyg {
 	float: left;
 }

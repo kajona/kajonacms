@@ -66,6 +66,17 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	}
 
 
+    public function getRequiredFields() {
+        $strAction = $this->getAction();
+        if($strAction == "sendMail") {
+            return array(
+              "mail_recipient" => "string",
+              "mail_subject" => "string",
+              "mail_body" => "string"
+            );
+        }
+    }
+
 // -- Module --------------------------------------------------------------------------------------------
 
     /**
@@ -988,7 +999,61 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     }
 
 
+    /**
+     * Generates a form in order to send an email.
+     * This form is generic, so it may be called from several places.
+     *
+     * @return string
+     * @since 3.4
+     */
+    protected function actionMailForm() {
+        $strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $this->setArrModuleEntry("template", "/folderview.tpl");
 
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
+            $strReturn .= $this->objToolkit->getValidationErrors($this, "sendMail");
+            $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getText("mail_recipient"), $this->getParam("mail_recipient"));
+            $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getText("mail_subject"), $this->getParam("mail_subject"));
+            $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getText("mail_body"), $this->getParam("mail_body"), "inputTextareaLarge");
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("send"));
+            $strReturn .= $this->objToolkit->formClose();
+
+            $strReturn .= $this->objToolkit->setBrowserFocus("mail_body");
+
+        }
+        else
+		    return $this->getText("fehler_recht");
+
+        return $strReturn;
+    }
+
+    /**
+     * Sends an email. In most cases this mail was generated using the form
+     * provided by actionMailForm
+     *
+     * @return string
+     * @since 3.4
+     */
+    protected function actionSendMail() {
+        if(!$this->validateForm())
+            return $this->actionMailForm();
+
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $objUser = new class_modul_user_user($this->objSession->getUserID());
+
+        $objEmail = new class_mail();
+
+        $objEmail->setSender($objUser->getStrEmail());
+        $objEmail->addTo($this->getParam("mail_recipient"));
+        $objEmail->setSubject($this->getParam("mail_subject"));
+        $objEmail->setText($this->getParam("mail_body"));
+
+        if($objEmail->sendMail())
+            return $this->getText("mail_send_success");
+        else
+            return $this->getText("mail_send_success");
+    }
 	
 
 //---Helpers---------------------------------------------------------------------------------------------
