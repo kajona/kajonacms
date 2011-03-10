@@ -178,7 +178,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                     success : function(o) {
                                         var intStart = o.responseText.indexOf(\"[CDATA[\")+7;
                                         var objNode = document.getElementById(\"".$strContainerId."\");
-                                        objNode.innerHTML=o.responseText.substr(
+                                        document.getElementById(\"".$strContainerId."\").innerHTML=o.responseText.substr(
                                           intStart, o.responseText.indexOf(\"]]\")-intStart
                                         );
                                         if(o.responseText.indexOf(\"[CDATA[\") < 0) {
@@ -235,7 +235,8 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             
 
             $strReturn .= $this->objToolkit->getCalendarPager($strPrev, $strCenter, $strNext);
-            $strReturn .= $this->objToolkit->getCalendarWrapper($strContent, $strContainerId);
+            $strReturn .= $strContent;
+            $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
             $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
 
 

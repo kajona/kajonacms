@@ -91,6 +91,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
      */
     protected function actionRenderCalendar() {
         $strReturn = "";
+        $strContent = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strReturn .= "<content><![CDATA[";
 
@@ -108,7 +109,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             foreach($arrWeekdays as $intKey => $strValue)
                 $arrWeekdays[$intKey] = trim(uniStrReplace("\"", "", $strValue));
 
-            $strReturn .= $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
+            $strContent .= $this->objToolkit->getCalendarHeaderRow($arrWeekdays);
 
             //render the single rows. calculate the first day of the row
             $objDate = new class_date();
@@ -179,7 +180,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
                     $strEntries .= $this->objToolkit->getCalendarEntry($strEvents, $strDate, "calendarEntry".$strToday);
 
                 if($intRowEntryCount % 7 == 0) {
-                    $strReturn .= $this->objToolkit->getCalendarRow($strEntries);
+                    $strContent .= $this->objToolkit->getCalendarRow($strEntries);
                     $strEntries = "";
                 }
 
@@ -187,8 +188,10 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             }
 
             if($strEntries != "") {
-                $strReturn .= $this->objToolkit->getCalendarRow($strEntries);
+                $strContent .= $this->objToolkit->getCalendarRow($strEntries);
             }
+
+            $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
 
             $strReturn .= "]]></content>";
         }

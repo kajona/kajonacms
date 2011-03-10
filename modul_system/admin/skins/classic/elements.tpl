@@ -1185,9 +1185,12 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_pager>
 
 <calendar_wrapper>
-    %%content%%
-    <table class="calendar" cellpadding="0" cellspacing="0" id="%%containerid%%" ><tr><td><div class="loadingContainer"></div></td></tr></table>
+    <table class="calendar" cellpadding="0" cellspacing="0" >%%content%%</table>
 </calendar_wrapper>
+
+<calendar_container>
+<div id="%%containerid%%"><div class="loadingContainer"></div></div>
+</calendar_container>
 
 <calendar_header_row>
     <tr >%%entries%%</tr>

@@ -1866,16 +1866,27 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
-     * Creates the wrapper to embedd the calendar.
+     * Renders a container used to place the calender via ajax into.
      *
-     * @param string $strContent
      * @param string $strContainerId
      * @return string
      * @since 3.4
      */
-    public function getCalendarWrapper($strContent, $strContainerId) {
+    public function getCalendarContainer($strContainerId) {
+       $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_container");
+        return $this->objTemplate->fillTemplate(array("containerid" => $strContainerId), $strTemplateID);
+    }
+
+    /**
+     * Creates the wrapper to embedd the calendar.
+     *
+     * @param string $strContent
+     * @return string
+     * @since 3.4
+     */
+    public function getCalendarWrapper($strContent) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_wrapper");
-        return $this->objTemplate->fillTemplate(array("content" => $strContent, "containerid" => $strContainerId), $strTemplateID);
+        return $this->objTemplate->fillTemplate(array("content" => $strContent), $strTemplateID);
     }
 
     /**
