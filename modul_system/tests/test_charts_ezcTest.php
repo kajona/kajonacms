@@ -1,7 +1,7 @@
 <?php
 require_once (dirname(__FILE__)."/../system/class_testbase.php");
 
-class class_test_charts_pchart extends class_testbase  {
+class class_test_charts_ezcTest extends class_testbase  {
 
     public function test() {
 
