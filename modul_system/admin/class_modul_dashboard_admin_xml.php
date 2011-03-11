@@ -123,6 +123,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
                 $objDate->setIntYear($this->objSession->getSession($this->strStartYearKey));
 
             $intCurMonth = $objDate->getIntMonth();
+            $intCurYear = $objDate->getIntYear();
             $objToday = new class_date();
 
             //start by monday
@@ -131,8 +132,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
             $strEntries = "";
             $intRowEntryCount = 0;
-            while($objDate->getIntMonth() <= $intCurMonth || $intRowEntryCount % 7 != 0 ) {
-
+            while( ($objDate->getIntMonth() <= $intCurMonth && $objDate->getIntYear() <= $intCurYear) || ($objDate->getIntMonth() == 12 && $objDate->getIntYear() < $intCurYear) || $intRowEntryCount % 7 != 0 ) {
                 $intRowEntryCount++;
 
                 $strDate = $objDate->getIntDay();
