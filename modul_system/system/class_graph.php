@@ -32,7 +32,9 @@ class class_graph {
     private $intHeight = 200;
 
     private $strBackgroundColor = "#FAFAFA";
+    private $strTitleBackgroundColor = "#CCCCCC";
     private $strFontColor = "#6F6F6F";
+    private $strTitleFontColor = "#000000";
 
     private $bitRenderLegend = true;
     private $strFont = "/fonts/dejavusans.ttf"; 
@@ -315,7 +317,12 @@ class class_graph {
         
 
         //$this->objGraph->options->font->minFontSize = 5;
+        $this->objGraph->title->padding = 2;
         $this->objGraph->title->font->maxFontSize = 12;
+        $this->objGraph->title->font->color = $this->strTitleFontColor;
+        $this->objGraph->title->background = $this->strTitleBackgroundColor;
+//        $this->objGraph->title->border = $this->strTitleFontColor;
+//        $this->objGraph->title->borderWidth = 0.5;
 
         //colors
         $this->objGraph->background = $this->strBackgroundColor;
@@ -510,6 +517,24 @@ class class_graph {
      */
     public function setBit3d($bit3d) {
         $this->bit3d = $bit3d;
+    }
+
+    /**
+     * Sets the background-color of the title in html-notation
+     *
+     * @param string $strTitleBackgroundColor
+     */
+    public function setStrTitleBackgroundColor($strTitleBackgroundColor) {
+        $this->strTitleBackgroundColor = $strTitleBackgroundColor;
+    }
+
+    /**
+     * Sets the font-color of the title in html-notation
+     *
+     * @param string $strTitleFontColor
+     */
+    public function setStrTitleFontColor($strTitleFontColor) {
+        $this->strTitleFontColor = $strTitleFontColor;
     }
 
 
