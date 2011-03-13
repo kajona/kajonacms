@@ -131,7 +131,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 		$intCount = 1;
 		foreach ($arrPages as $strName => $arrOnePage) {
 		    $arrGraphData[] = $arrOnePage["anzahl"];
-            $arrLabels[] = $arrOnePage["name"];
+            $arrLabels[] = $intCount;
 		    if($intCount <= 6) {
 		      $arrPlots[$arrOnePage["name"]] = array();
             }

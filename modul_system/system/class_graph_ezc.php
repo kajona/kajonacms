@@ -221,7 +221,10 @@ class class_graph_ezc implements interface_graph {
         foreach($arrValues as $intKey => $strValue)
             $arrEntries[$arrLegends[$intKey]] = $strValue;
 
-        $this->arrDataSets[generateSystemid().""] = array("data" => new ezcGraphArrayDataSet($arrEntries));
+        $objData = new ezcGraphArrayDataSet($arrEntries);
+        $objData->highlight = true;
+
+        $this->arrDataSets[generateSystemid().""] = array("data" => $objData);
     }
 
 
@@ -293,13 +296,16 @@ class class_graph_ezc implements interface_graph {
         }
 
         //data sets
+
         foreach($this->arrDataSets as $strName => $arrSet) {
+            
             $this->objGraph->data[$strName] = $arrSet["data"];
             if(isset($arrSet["symbol"]))
                 $this->objGraph->data[$strName]->symbol = $arrSet["symbol"];
 
             if(isset($arrSet["displayType"]))
                 $this->objGraph->data[$strName]->displayType = $arrSet["displayType"];
+
         }
 
 
