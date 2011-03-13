@@ -149,12 +149,12 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
     		}
     		//create graph
     		if($intCount > 1) {
-        		$objGraph = new class_graph_pchart();
+        		$objGraph = class_graph_factory::getGraphInstance();
+                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
-                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		$strFilename = "/portal/pics/cache/stats_topdownloads_plot.png";
                 $objGraph->saveGraph($strFilename);
         		$arrReturn[] = _webpath_.$strFilename;

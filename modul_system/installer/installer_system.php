@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.4";
+		$arrModul["version"] 			= "3.3.1.5";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -421,6 +421,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
         $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
+        //3.4Adding constant _system_graph_type_ indicating the chart-engine to use
+        $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
 
 
         //Create an root-record for the tree
@@ -627,6 +629,11 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.3") {
             $strReturn .= $this->update_3313_3314();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.4") {
+            $strReturn .= $this->update_3314_3315();
         }
 
         return $strReturn."\n\n";
@@ -1327,10 +1334,6 @@ class class_installer_system extends class_installer_base implements interface_i
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
 
-        
-
-
-
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.3");
         $strReturn .= "Updating element-versions...\n";
@@ -1363,6 +1366,20 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.4");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.4");
+        return $strReturn;
+    }
+
+    private function update_3314_3315() {
+        $strReturn = "Updating 3.3.1.4 to 3.3.1.5...\n";
+
+        $strReturn .= "Adding constant _system_graph_type_ indicating the chart-engine to use...\n";
+        $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.5");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.5");
         return $strReturn;
     }
 }

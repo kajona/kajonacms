@@ -251,7 +251,7 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
             $arrValues[] =  100-$floatPercentageSum;
         }
         if(count($arrKeyValues) > 0) {
-            $objGraph = new class_graph_pchart();
+            $objGraph = class_graph_factory::getGraphInstance();
             $objGraph->createPieChart($arrValues, $arrLabels);
             $strFilename = "/portal/pics/cache/stats_topbrowser.png";
             $objGraph->saveGraph($strFilename);
@@ -291,11 +291,11 @@ class class_stats_report_topbrowser implements interface_admin_statsreports {
 		}
 		//create graph
 		if(count($arrTickLabels) > 1 && count($arrPlots) > 0) {
-    		$objGraph = new class_graph_pchart();
+    		$objGraph = class_graph_factory::getGraphInstance();
+            $objGraph->setArrXAxisTickLabels($arrTickLabels);
     		foreach($arrPlots as $arrPlotName => $arrPlotData) {
     		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
     		}
-            $objGraph->setArrXAxisTickLabels($arrTickLabels);
     		$strFilename = "/portal/pics/cache/stats_topbrowser_plot.png";
             $objGraph->saveGraph($strFilename);
     		$arrReturn[] = _webpath_.$strFilename;

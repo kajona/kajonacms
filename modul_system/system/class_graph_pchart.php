@@ -19,7 +19,7 @@ require_once(_systempath_."/pChart/pData.class");
  * @since 3.3.0
  * @author sidler
  */
-class class_graph_pchart {
+class class_graph_pchart implements interface_chart {
 
 
 	private $strXAxisTitle = "";

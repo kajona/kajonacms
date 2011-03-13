@@ -135,11 +135,11 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 
         if(count($arrGraphData) > 1) {
     	    //generate a bar-chart
-    	    $objGraph = new class_graph_pchart();
+    	    $objGraph = class_graph_factory::getGraphInstance();
+    	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $objGraph->addBarChartSet($arrGraphData, "");
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("header_query", "search", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("header_amount", "search", "admin"));
-    	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
             $objGraph->setBitRenderLegend(false);
             $objGraph->setIntXAxisAngle(20);

@@ -242,7 +242,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 		//load datasets, reloading after 30 days to limit memory consumption
 		$arrHits = array();
 		$arrUser = array();
-		$arrLabels = array();
+		$arrTickLabels = array();
 		
 		$intDaysPerLoad = 10;
 		
@@ -293,36 +293,34 @@ class class_stats_report_common implements interface_admin_statsreports {
 		//create a graph ->line-graph
 		if($intCount > 1) {
 
-            $objChart2 = new class_graph_pchart();
+            $objChart2 = class_graph_factory::getGraphInstance();
             $objChart2->setStrGraphTitle("Number of hits");
             $objChart2->setStrXAxisTitle("Date");
             $objChart2->setStrYAxisTitle("Hits");
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
+            $objChart2->setArrXAxisTickLabels($arrTickLabels);
             $objChart2->addLinePlot($arrHits, "Hits");
             $objChart2->setBitRenderLegend(false);
-            //$objChart2->addLinePlot($arrUser, "Visitors/Day");
-            $objChart2->setArrXAxisTickLabels($arrTickLabels);
-            $strImagePath1 = "/portal/pics/cache/stats_common_1.png";
+            $strImagePath1 = _images_cachepath_."stats_common_1.png";
     		$objChart2->saveGraph($strImagePath1);
 
-            $objChart3 = new class_graph_pchart();
+            $objChart3 = class_graph_factory::getGraphInstance();
             $objChart3->setStrGraphTitle("Number of visits");
             $objChart3->setStrXAxisTitle("Date");
             $objChart3->setStrYAxisTitle("Visits");
             $objChart3->setIntWidth(715);
             $objChart3->setIntHeight(200);
-            //$objChart3->addLinePlot($arrHits, "Hits");
-            $objChart3->addLinePlot($arrUser, "Visitors/Day");
             $objChart3->setArrXAxisTickLabels($arrTickLabels);
+            $objChart3->addLinePlot($arrUser, "Visitors/Day");
             $objChart3->setBitRenderLegend(false);
-            $strImagePath2 = "/portal/pics/cache/stats_common_2.png";
+            $strImagePath2 = _images_cachepath_."stats_common_2.png";
     		$objChart3->saveGraph($strImagePath2);
 
-
             $this->objDB->flushQueryCache();
-          
-            return array(_webpath_.$strImagePath1, _webpath_.$strImagePath2);
+
+            return array((_webpath_.$strImagePath1), (_webpath_.$strImagePath2));
+		
 		}
 		else
 		  return "";

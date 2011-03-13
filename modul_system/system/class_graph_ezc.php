@@ -21,7 +21,7 @@ spl_autoload_register( array( 'ezcBase', 'autoload' ) );
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class class_graph {
+class class_graph_ezc implements interface_chart {
 
 
 	private $strXAxisTitle = "";
@@ -31,7 +31,7 @@ class class_graph {
     private $intWidth = 720;
     private $intHeight = 200;
 
-    private $strBackgroundColor = "#FAFAFA";
+    private $strBackgroundColor = "#efefef";
     private $strTitleBackgroundColor = "#CCCCCC";
     private $strFontColor = "#6F6F6F";
     private $strTitleFontColor = "#000000";
@@ -111,11 +111,11 @@ class class_graph {
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
 
         $arrEntries = array();
+        $intCounter = 0;
         foreach($arrValues as $intKey => $strValue) {
-            if(isset($this->arrXAxisLabels[$intKey]))
-                $arrEntries[$this->arrXAxisLabels[$intKey]] = $strValue;
-            else
-                $arrEntries[] = $strValue;
+            $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+
+            $intCounter++;
         }
 
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries));
@@ -183,11 +183,11 @@ class class_graph {
             $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
         
         $arrEntries = array();
-        foreach($arrValues as $intKey => $strValue) {
-            if(isset($this->arrXAxisLabels[$intKey]))
-                $arrEntries[$this->arrXAxisLabels[$intKey]] = $strValue;
-            else
-                $arrEntries[] = $strValue;
+        $intCounter = 0;
+        foreach($arrValues as $strValue) {
+            $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+
+            $intCounter++;
         }
 
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries), "symbol" => ezcGraph::BULLET, "displayType" => ezcGraph::LINE);
@@ -275,7 +275,7 @@ class class_graph {
             //layouting
             if($this->bit3d === null || $this->bit3d === true) {
                 $this->objGraph->renderer->options->barChartGleam = .5;
-                $this->objGraph->renderer->options->depth = .02;
+                $this->objGraph->renderer->options->depth = .05;
             }
         }
 
@@ -289,6 +289,7 @@ class class_graph {
             $this->objGraph->palette = new ezcGraphPaletteTango();
 
             $this->objGraph->options->fillLines = 240;
+            $this->objGraph->options->highlightLines = true;
         }
 
         //data sets
@@ -312,17 +313,16 @@ class class_graph {
         //set the font properties
         $this->objGraph->options->font = _systempath_.$this->strFont;
         $this->objGraph->options->font->color = $this->strFontColor;
-        $this->objGraph->options->font->maxFontSize = 12;
-
-        
+        $this->objGraph->options->font->maxFontSize = 10;
 
         //$this->objGraph->options->font->minFontSize = 5;
-        $this->objGraph->title->padding = 2;
-        $this->objGraph->title->font->maxFontSize = 12;
-        $this->objGraph->title->font->color = $this->strTitleFontColor;
-        $this->objGraph->title->background = $this->strTitleBackgroundColor;
-//        $this->objGraph->title->border = $this->strTitleFontColor;
-//        $this->objGraph->title->borderWidth = 0.5;
+        if($this->strGraphTitle != "") {
+            $this->objGraph->title->padding = 1;
+            $this->objGraph->title->margin = 2;
+            $this->objGraph->title->font->maxFontSize = 12;
+            $this->objGraph->title->font->color = $this->strTitleFontColor;
+            $this->objGraph->title->background = $this->strTitleBackgroundColor;
+        }
 
         //colors
         $this->objGraph->background = $this->strBackgroundColor;
@@ -331,6 +331,7 @@ class class_graph {
         if($this->bitRenderLegend === true) {
             //place the legend at the bottom by default
             $this->objGraph->legend->position = ezcGraph::BOTTOM;
+            $this->objGraph->legend->margin = 1;
 
             //legend rendering
             $this->objGraph->renderer->options->legendSymbolGleam = .5;
@@ -339,7 +340,6 @@ class class_graph {
         }
         else
             $this->objGraph->legend = false;
-
 
         //x-axis lables?
         if($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
@@ -351,11 +351,18 @@ class class_graph {
 
             $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
+            
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
-
-            
         }
-            
+
+
+        //choose the renderer based on the extensions available
+        if(extension_loaded("cairo"))
+            $this->objGraph->driver = new ezcGraphCairoOODriver();
+        else
+            $this->objGraph->driver = new ezcGraphGdDriver();
+
+       // $this->objGraph->palette = new ezcGraphPaletteTango();
 
     }
 
@@ -381,8 +388,8 @@ class class_graph {
 		if(strpos($strFilename, _realpath_) === false)
 			$strFilename = _realpath_.$strFilename;
 
-        if(strtolower(substr($strFilename, -3) != "png"))
-            throw new class_exception("Filename must be a png-file", class_exception::$level_ERROR);
+//        if(strtolower(substr($strFilename, -3) != "svg"))
+//            throw new class_exception("Filename must be a svg-file", class_exception::$level_ERROR);
 
         $this->objGraph->render($this->intWidth, $this->intHeight, $strFilename);
 	}
@@ -472,6 +479,22 @@ class class_graph {
         $this->intMaxLabelCount = $intNrOfWrittenLabels;
 
         
+    }
+
+    /**
+     * Returns the entry on the x-axis to be rendered
+     * @param int $intPos
+     * @return string
+     */
+    private function getArrXAxisEntry($intPos) {
+        $intCount = 0;
+        foreach($this->arrXAxisLabels as $strOneLabel) {
+            if($intCount == $intPos)
+                return $strOneLabel;
+
+            $intCount++;
+        }
+        return "";
     }
 
     /**

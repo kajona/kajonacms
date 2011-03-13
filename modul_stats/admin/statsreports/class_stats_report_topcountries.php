@@ -191,7 +191,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
             $arrLabels[] = "others";
             $arrValues[] =  100-$floatPercentageSum;
         }
-        $objGraph = new class_graph_pchart();
+        $objGraph = class_graph_factory::getGraphInstance();
         $objGraph->createPieChart($arrValues, $arrLabels);
         $strFilename = "/portal/pics/cache/stats_topcountries.png";
         $objGraph->saveGraph($strFilename);

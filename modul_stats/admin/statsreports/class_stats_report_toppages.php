@@ -130,10 +130,11 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 		$arrLabels = array();
 		$intCount = 1;
 		foreach ($arrPages as $strName => $arrOnePage) {
-		    $arrGraphData[$intCount] = $arrOnePage["anzahl"];
-		    $arrLabels[] = $intCount;
-		    if($intCount <= 6)
+		    $arrGraphData[] = $arrOnePage["anzahl"];
+            $arrLabels[] = $arrOnePage["name"];
+		    if($intCount <= 6) {
 		      $arrPlots[$arrOnePage["name"]] = array();
+            }
 
 		    if($intCount++ >= 9)
 		      break;
@@ -141,11 +142,11 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 
         if(count($arrGraphData) > 1) {
     	    //generate a bar-chart
-    	    $objGraph = new class_graph_pchart();
+    	    $objGraph = class_graph_factory::getGraphInstance();
+    	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
-    	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
             $objGraph->setBitRenderLegend(false);
     	    $objGraph->saveGraph($strFilename);
@@ -165,7 +166,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     		while($this->intDateStart <= $intGlobalEnd) {
     		    $arrPagesData = $this->getTopPages();
     		    //init plot array for this period
-    		    $arrTickLabels[$intCount] = date("d.m.", $this->intDateStart);
+    		    $arrTickLabels[] = date("d.m.", $this->intDateStart);
     		    foreach($arrPlots as $strPage => &$arrOnePlot) {
     		        $arrOnePlot[$intCount] = 0;
     		        foreach ($arrPagesData as $intKey => $arrOnePage) {
@@ -181,12 +182,12 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     		}
     		//create graph
     		if($intCount > 1) {
-        		$objGraph = new class_graph_pchart();
+        		$objGraph = class_graph_factory::getGraphInstance();
+                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		
         		foreach($arrPlots as $arrPlotName => $arrPlotData) {
         		    $objGraph->addLinePlot($arrPlotData, $arrPlotName);
         		}
-                $objGraph->setArrXAxisTickLabels($arrTickLabels);
         		$strFilename = "/portal/pics/cache/stats_toppages_plot.png";
                 $objGraph->saveGraph($strFilename);
         		$arrReturn[] = _webpath_.$strFilename;
