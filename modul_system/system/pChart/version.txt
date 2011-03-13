@@ -1,2 +1,0 @@
-pChart 1.27d 
-http://pchart.sourceforge.net/ 
