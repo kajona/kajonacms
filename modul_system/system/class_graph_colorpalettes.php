@@ -11,6 +11,7 @@
 /**
  * Wrapper class to a few color-palettes.
  * Those palettes can be used within charts and include a list of hex-colors.
+ * Only to be used with pChart
  * 
  * @package modul_system
  * @since 3.3.0

@@ -18,7 +18,7 @@
  * @see class_graph_factory
  * @package modul_system
  */
-interface interface_chart {
+interface interface_graph {
 
     /**
 	 * Used to create a bar-chart.

@@ -21,7 +21,7 @@ spl_autoload_register( array( 'ezcBase', 'autoload' ) );
  * @since 3.4
  * @author sidler@mulchprod.de
  */
-class class_graph_ezc implements interface_chart {
+class class_graph_ezc implements interface_graph {
 
 
 	private $strXAxisTitle = "";
