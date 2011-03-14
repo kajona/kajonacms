@@ -1661,14 +1661,16 @@ class class_toolkit_admin extends class_toolkit {
      * @param array $arrNodesToExpand
      * @param string $strSideContent
      * @param string $strRootNodeTitle
+     * @param string $strRootNodeLink
      * @return string
      */
-    public function getTreeview($strLoadNodeDataFunction, $strRootNodeSystemid, $arrNodesToExpand = array(), $strSideContent = "", $strRootNodeTitle = " ") {
+    public function getTreeview($strLoadNodeDataFunction, $strRootNodeSystemid, $arrNodesToExpand = array(), $strSideContent = "", $strRootNodeTitle = " ", $strRootNodeLink = "") {
         $arrTemplate = array();
         $arrTemplate["rootNodeSystemid"] = $strRootNodeSystemid;
         $arrTemplate["loadNodeDataFunction"] = $strLoadNodeDataFunction;
         $arrTemplate["sideContent"] = $strSideContent;
         $arrTemplate["rootNodeTitle"] = $strRootNodeTitle;
+        $arrTemplate["rootNodeLink"] = $strRootNodeLink;
         $arrTemplate["treeviewExpanders"] = "";
         for($intI = 0; $intI < count($arrNodesToExpand); $intI++) {
             $arrTemplate["treeviewExpanders"] .= "\"".$arrNodesToExpand[$intI]."\"";

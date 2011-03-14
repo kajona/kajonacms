@@ -975,7 +975,7 @@ The language switch surrounds the buttons
             tree.setDynamicLoad(%%loadNodeDataFunction%%);
 
             var root = tree.getRoot();
-            var tempNode = new YAHOO.widget.TextNode('%%rootNodeTitle%%', root, false);
+            var tempNode = new YAHOO.widget.TextNode({label:'%%rootNodeTitle%%', href:'%%rootNodeLink%%'}, root, false);
             tempNode.systemid = '%%rootNodeSystemid%%';
             //The tree is not created in the DOM until this method is called:
             tree.draw();
