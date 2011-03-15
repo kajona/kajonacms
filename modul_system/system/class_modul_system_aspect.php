@@ -194,6 +194,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 
     /**
      * Returns the default aspect, defined in the admin.
+     * This takes permissions into account!
      *
      * @return class_modul_system_aspect null if no aspect is set up
      */
@@ -206,13 +207,15 @@ class class_modul_system_aspect extends class_model implements interface_model  
 	             AND system_status = 1
 	             ORDER BY system_sort ASC, system_comment ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
-        if(count($arrRow) > 0) {
+        if(count($arrRow) > 0 && class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"])) {
             return new class_modul_system_aspect($arrRow["system_id"]);
         }
         else {
             if(count(class_modul_system_aspect::getAllAspects(true)) > 0) {
                 $arrAspects = class_modul_system_aspect::getAllAspects(true);
-                return $arrAspects[0];
+                foreach($arrAspects as $objOneAspect)
+                    if($objOneAspect->rightView())
+                        return $objOneAspect;
             }
 
             return null;
