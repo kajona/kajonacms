@@ -1934,6 +1934,13 @@ class class_toolkit_admin extends class_toolkit {
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "date" => $strDate, "class" => $strClass), $strTemplateID);
     }
 
+    /**
+     * Renders a single calendar-event
+     *
+     * @param string $strContent
+     * @param string $strClass
+     * @return string
+     */
     public function getCalendarEvent($strContent, $strClass = "calendarEvent") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_event");
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass), $strTemplateID);

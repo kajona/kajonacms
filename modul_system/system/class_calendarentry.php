@@ -18,6 +18,7 @@
 class class_calendarentry {
 
     private $strName;
+    private $strSecondLine;
     private $strClass = "calendarEvent";
 
     /**
@@ -49,6 +50,15 @@ class class_calendarentry {
     public function setStrClass($strClass) {
         $this->strClass = $strClass;
     }
+
+    public function getStrSecondLine() {
+        return $this->strSecondLine;
+    }
+
+    public function setStrSecondLine($strSecondLine) {
+        $this->strSecondLine = $strSecondLine;
+    }
+
 
 
 }

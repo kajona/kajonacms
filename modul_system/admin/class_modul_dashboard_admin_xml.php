@@ -158,7 +158,14 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
                 $strEvents = "";
                 foreach($arrEvents as $objOneEvent) {
-                    $strEvents .= $this->objToolkit->getCalendarEvent($objOneEvent->getStrName(), $objOneEvent->getStrClass());
+
+                    $strName = $objOneEvent->getStrName();
+                    $strSecondLine = $objOneEvent->getStrSecondLine();
+
+                    if($strSecondLine != "")
+                        $strSecondLine = "<br />".$strSecondLine;
+
+                    $strEvents .= $this->objToolkit->getCalendarEvent($strName.$strSecondLine, $objOneEvent->getStrClass());
                 }
 
                 $bitBlocked = false;
