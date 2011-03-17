@@ -44,6 +44,8 @@ class class_graph_ezc implements interface_graph {
     private $intMaxLabelCount = 12;
 
     private $bit3d = null;
+
+    private $intMaxValue = 0;
     
 
 
@@ -114,6 +116,9 @@ class class_graph_ezc implements interface_graph {
         $intCounter = 0;
         foreach($arrValues as $intKey => $strValue) {
             $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+
+            if($strValue > $this->intMaxValue)
+                $this->intMaxValue = $strValue;
 
             $intCounter++;
         }
@@ -186,6 +191,9 @@ class class_graph_ezc implements interface_graph {
         $intCounter = 0;
         foreach($arrValues as $strValue) {
             $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+
+            if($strValue > $this->intMaxValue)
+                $this->intMaxValue = $strValue;
 
             $intCounter++;
         }
@@ -277,7 +285,7 @@ class class_graph_ezc implements interface_graph {
 
             //layouting
             if($this->bit3d === null || $this->bit3d === true) {
-                $this->objGraph->renderer->options->barChartGleam = .5;
+                $this->objGraph->renderer->options->barChartGleam = .7;
                 $this->objGraph->renderer->options->depth = .05;
             }
         }
@@ -291,7 +299,7 @@ class class_graph_ezc implements interface_graph {
             
             $this->objGraph->palette = new ezcGraphPaletteTango();
 
-            $this->objGraph->options->fillLines = 240;
+            $this->objGraph->options->fillLines = 245;
             $this->objGraph->options->highlightLines = true;
         }
 
@@ -357,8 +365,21 @@ class class_graph_ezc implements interface_graph {
 
             $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
-            
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
+
+
+            $intMaxValue = $this->intMaxValue;
+            if($intMaxValue < 0)
+                $intMaxValue *= -1;
+
+            if($intMaxValue < 10) {
+                $this->objGraph->yAxis->majorStep = 10;
+            }
+            if($intMaxValue < 5) {
+                $this->objGraph->yAxis->majorStep = 5;
+            }
+            else
+                $this->objGraph->yAxis->majorStep = ceil($intMaxValue / 10);
         }
 
 
