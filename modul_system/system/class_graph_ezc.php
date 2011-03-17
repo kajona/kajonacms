@@ -225,9 +225,9 @@ class class_graph_ezc implements interface_graph {
         }
 
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries), "symbol" => ezcGraph::BULLET, "displayType" => ezcGraph::LINE);
- 
 
-
+        //enables the rendering of values
+        //$this->arrDataSets[$strLegend]["data"]->highlight = true;
     }
 
     /**
@@ -405,15 +405,15 @@ class class_graph_ezc implements interface_graph {
                 $intTotal = $intMaxValue - $intMinValue;
 
 
-            if($intTotal > 10) {
+            //if($intTotal > 10) {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
                 $this->objGraph->yAxis->minorStep = ceil($intTotal / 5)*0.5;
-            }
+            //}
 
-            if($intTotal > 10 && $intMinValue < 0) {
-                $this->objGraph->yAxis->majorStep = ceil($intTotal / 2);
-                $this->objGraph->yAxis->minorStep = ceil($intTotal / 2)*0.5;
-            }
+            //if($intTotal > 10 && $intMinValue < 0) {
+            //    $this->objGraph->yAxis->majorStep = ceil($intTotal / 2);
+            //    $this->objGraph->yAxis->minorStep = ceil($intTotal / 2)*0.5;
+            //}
 
             
         }
