@@ -109,6 +109,7 @@ return array(
     'ezcGraphPaletteEzGreen'                        => 'Graph/palette/ez_green.php',
     'ezcGraphPaletteEzRed'                          => 'Graph/palette/ez_red.php',
     'ezcGraphPaletteTango'                          => 'Graph/palette/tango.php',
+    
     'ezcGraphPieChart'                              => 'Graph/charts/pie.php',
     'ezcGraphPieChartOptions'                       => 'Graph/options/pie_chart.php',
     'ezcGraphPolynom'                               => 'Graph/math/polynom.php',
@@ -126,5 +127,9 @@ return array(
     'ezcGraphTranslation'                           => 'Graph/math/translation.php',
     'ezcGraphVector'                                => 'Graph/math/vector.php',
     'ezcGraphVerboseDriver'                         => 'Graph/driver/verbose.php',
+
+
+
+    'ezcGraphPaletteKajona'                          => 'Graph/palette/kajona.php'
 );
 ?>

@@ -31,7 +31,7 @@ class class_graph_ezc implements interface_graph {
     private $intWidth = 720;
     private $intHeight = 200;
 
-    private $strBackgroundColor = "#efefef";
+    private $strBackgroundColor = "#FFFFFF";
     private $strTitleBackgroundColor = "#CCCCCC";
     private $strFontColor = "#6F6F6F";
     private $strTitleFontColor = "#000000";
@@ -128,6 +128,8 @@ class class_graph_ezc implements interface_graph {
         }
 
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries));
+        if($bitWriteValues)
+            $this->arrDataSets[$strLegend]["data"]->highlight = true;
         
 	}
 
@@ -269,6 +271,7 @@ class class_graph_ezc implements interface_graph {
      */
     private function preGraphCreation() {
 
+        $objPalette = new ezcGraphPaletteKajona();
 
         //Initialize the graph-object depending on the type
         if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
@@ -279,7 +282,7 @@ class class_graph_ezc implements interface_graph {
             else
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
 
-            $this->objGraph->palette = new ezcGraphPaletteTango();
+            $this->objGraph->palette = $objPalette;
 
             //layouting
             if($this->bit3d === null || $this->bit3d === true) {
@@ -302,14 +305,14 @@ class class_graph_ezc implements interface_graph {
             else
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
 
-            $this->objGraph->palette = new ezcGraphPaletteTango();
+            $this->objGraph->palette = $objPalette;
 
             if($this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR)
                 $this->objGraph->options->stackBars = true;
 
             //layouting
             if($this->bit3d === null || $this->bit3d === true) {
-                $this->objGraph->renderer->options->barChartGleam = .7;
+                $this->objGraph->renderer->options->barChartGleam = .5;
                 $this->objGraph->renderer->options->depth = .05;
             }
         }
@@ -321,7 +324,7 @@ class class_graph_ezc implements interface_graph {
             else
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
             
-            $this->objGraph->palette = new ezcGraphPaletteTango();
+            $this->objGraph->palette = $objPalette;
 
             $this->objGraph->options->fillLines = 245;
             $this->objGraph->options->highlightLines = true;
@@ -370,6 +373,8 @@ class class_graph_ezc implements interface_graph {
             //place the legend at the bottom by default
             $this->objGraph->legend->position = ezcGraph::BOTTOM;
             $this->objGraph->legend->margin = 1;
+//            $this->objGraph->legend->border = $this->strTitleBackgroundColor;
+//            $this->objGraph->legend->borderWidth = 1;
 
             //legend rendering
             $this->objGraph->renderer->options->legendSymbolGleam = .5;
@@ -399,8 +404,18 @@ class class_graph_ezc implements interface_graph {
             if($intMinValue < 0)
                 $intTotal = $intMaxValue - $intMinValue;
 
-            if($intTotal > 10)
+
+            if($intTotal > 10) {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
+                $this->objGraph->yAxis->minorStep = ceil($intTotal / 5)*0.5;
+            }
+
+            if($intTotal > 10 && $intMinValue < 0) {
+                $this->objGraph->yAxis->majorStep = ceil($intTotal / 2);
+                $this->objGraph->yAxis->minorStep = ceil($intTotal / 2)*0.5;
+            }
+
+            
         }
 
 
@@ -410,7 +425,7 @@ class class_graph_ezc implements interface_graph {
         else
             $this->objGraph->driver = new ezcGraphGdDriver();
 
-       // $this->objGraph->palette = new ezcGraphPaletteTango();
+        
 
     }
 
