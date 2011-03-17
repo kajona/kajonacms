@@ -40,12 +40,13 @@ class class_graph_ezc implements interface_graph {
     private $strFont = "/fonts/dejavusans.ttf"; 
 
     private $intXAxisAngle = 0;
-    private $arrXAxisLabels = null;
+    private $arrXAxisLabels = array();
     private $intMaxLabelCount = 12;
 
     private $bit3d = null;
 
     private $intMaxValue = 0;
+    private $intMinValue = 0;
     
 
 
@@ -117,8 +118,11 @@ class class_graph_ezc implements interface_graph {
         foreach($arrValues as $intKey => $strValue) {
             $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
 
-            if($strValue > $this->intMaxValue)
+            if($strValue > $this->intMaxValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
                 $this->intMaxValue = $strValue;
+
+            if($strValue < $this->intMinValue && $this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
+                $this->intMinValue = $strValue;
 
             $intCounter++;
         }
@@ -149,6 +153,20 @@ class class_graph_ezc implements interface_graph {
             if($this->intCurrentGraphMode != $this->GRAPH_TYPE_STACKEDBAR)
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
+
+        //add max value from each set to max value
+        $intMax = 0;
+        $intMin = 0;
+        foreach($arrValues as $intKey => $strValue) {
+            if($strValue > $intMax)
+                $intMax = $strValue;
+
+            if($strValue < $intMin)
+                $intMin = $strValue;
+        }
+
+        $this->intMaxValue += $intMax;
+        $this->intMinValue -= $intMin;
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
         $this->addBarChartSet($arrValues, $strLegend);
@@ -192,8 +210,14 @@ class class_graph_ezc implements interface_graph {
         foreach($arrValues as $strValue) {
             $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
 
+            if($strValue < 0)
+                $strValue *= -2;
+            
             if($strValue > $this->intMaxValue)
                 $this->intMaxValue = $strValue;
+
+            if($strValue < $this->intMinValue)
+                $this->intMinValue = $strValue;
 
             $intCounter++;
         }
@@ -369,17 +393,14 @@ class class_graph_ezc implements interface_graph {
 
 
             $intMaxValue = $this->intMaxValue;
-            if($intMaxValue < 0)
-                $intMaxValue *= -1;
+            $intMinValue = $this->intMinValue;
 
-            if($intMaxValue < 10) {
-                $this->objGraph->yAxis->majorStep = 10;
-            }
-            if($intMaxValue < 5) {
-                $this->objGraph->yAxis->majorStep = 5;
-            }
-            else
-                $this->objGraph->yAxis->majorStep = ceil($intMaxValue / 10);
+            $intTotal = $intMaxValue;
+            if($intMinValue < 0)
+                $intTotal = $intMaxValue - $intMinValue;
+
+            if($intTotal > 10)
+                $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
         }
 
 
