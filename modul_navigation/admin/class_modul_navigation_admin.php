@@ -278,10 +278,25 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                                                $this->getText("browser"),
                                                "icon_externalBrowser.gif",
                                                $this->getText("browser"));
+
+        $strNodeBrowser = getLinkAdminDialog(  $this->arrModule["modul"],
+                                               "navigationPointBrowser",
+                                               "&form_element=navigation_parent&systemid=".$this->getPrevId(),
+                                               $this->getText("browser"),
+                                               $this->getText("browser"),
+                                               "icon_externalBrowser.gif",
+                                               $this->getText("browser"));
+
         $strFoldername = "";
         if(validateSystemid($this->getParam("navigation_folder_i_id"))) {
             $objFolder = new class_modul_pages_folder($this->getParam("navigation_folder_i_id"));
             $strFoldername = $objFolder->getStrName();
+        }
+
+        $strParentname = "";
+        if(validateSystemid($this->getParam("navigation_parent_id"))) {
+            $objParentPoint = new class_modul_navigation_point($this->getParam("navigation_parent_id"));
+            $strParentname = $objParentPoint->getStrName();
         }
 
 		if($strMode == "new") {
@@ -316,6 +331,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                     $objFolder = new class_modul_pages_folder($objPoint->getStrFolderI());
                     $strFoldername = $objFolder->getStrName();
                 }
+
+                if($strParentname == "" && validateSystemid($objPoint->getPrevId())) {
+                    $objParentPoint = new class_modul_navigation_point($objPoint->getPrevId());
+                    $strParentname = $objParentPoint->getStrName();
+                }
+
 			    //Build the form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNaviPoint");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
@@ -327,6 +348,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $objPoint->getStrFolderI());
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE(), _filemanager_default_filesrepoid_);
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage(), _filemanager_default_imagesrepoid_);
+
+                $strReturn .= $this->objToolkit->formInputText("navigation_parent", $this->getText("navigation_parent"), $strParentname, "inputText", $strNodeBrowser, true);
+                $strReturn .= $this->objToolkit->formInputHidden("navigation_parent_id", $objParentPoint->getSystemid());
+
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $objPoint->getStrTarget());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -384,7 +409,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
                 $objPoint->setStrFolderI($this->getParam("navigation_folder_i_id"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
-				if(!$objPoint->updateObjectToDb())
+
+                $strPrevid = $objPoint->getPrevId();
+                if(validateSystemid($this->getParam("navigation_parent_id")) && $this->getParam("navigation_parent_id") != $this->getSystemid())
+                    $strPrevid = $this->getParam("navigation_parent_id");
+
+				if(!$objPoint->updateObjectToDb($strPrevid))
 					throw new class_exception("Error updating point-object to db", class_exception::$level_ERROR);
 			}
 			else
@@ -425,6 +455,45 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		return $strReturn;
 	}
 
+    /**
+	 * Returns a list of available navigations
+	 *
+	 */
+	protected function actionNavigationPointBrowser() {
+		$strReturn = "";
+        $this->setArrModuleEntry("template", "/folderview.tpl"); 
+		$intCounter = 1;
+		//Load all navis
+
+        $arrPoints = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+        $strReturn .= $this->objToolkit->listHeader();
+
+        //Link one level up
+        $strPrevID = $this->getPrevId();
+        if($strPrevID != $this->getModuleSystemid($this->arrModule["modul"])){
+            $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intCounter++);
+        }
+        else {
+            $strAction  = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', ''],['".$this->getParam("form_element")."_id', '".$this->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+            $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), ".", $strAction, $intCounter++);
+        }
+        if(count($arrPoints) > 0) {
+            foreach($arrPoints as $objSinglePoint) {
+                if($objSinglePoint->rightView()) {
+                    $strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$objSinglePoint->getSystemid()."&form_element=".$this->getParam("form_element"), $this->getText("navigationp_anzeigen"), $this->getText("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
+                    $strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$this->getParam("form_element")."', '".$objSinglePoint->getStrName()."'],['".$this->getParam("form_element")."_id', '".$objSinglePoint->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif")."</a>");
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeLeaf.gif"), $objSinglePoint->getStrName(), $strAction, $intCounter++);
+                }
+            }
+		}
+
+        $strReturn .= $this->objToolkit->listFooter();
+		return $strReturn;
+	}
+
+
+
 	/**
 	 * Helper to generate a small path-navigation
 	 *
@@ -458,6 +527,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadNavigationTreeViewNodes", $arrNodes[0], $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"], "list", "&systemid=".$arrNodes[0]));
         return $strReturn;
     }
+
+
+
+
 
 
 }
