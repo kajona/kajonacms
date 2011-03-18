@@ -38,8 +38,7 @@ class class_element_navigation extends class_element_portal implements interface
 
         $objNaviModule = class_modul_system_module::getModuleByName("navigation");
 		if($objNaviModule != null) {
-    		$strClassName = uniStrReplace(".php", "", $objNaviModule->getStrNamePortal());
-    		$objNavigation = new $strClassName($this->arrElementData);
+            $objNavigation = $objNaviModule->getPortalInstanceOfConcreteModule($this->arrElementData);
             $strReturn = $objNavigation->action();
 		}
 

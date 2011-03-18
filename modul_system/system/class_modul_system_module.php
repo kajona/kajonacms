@@ -217,20 +217,48 @@ class class_modul_system_module extends class_model implements interface_model  
     /**
      * Factory method, creates an instance of the admin-module referenced by the current
      * module-object.
-     * The object returned is not being initialized with a systemid.
+     * The object returned is being initialized with a systemid optionally.
      *
-     * @return object
+     * @param string $strSystemid
+     * @return interface_admin
      */
-    public function getAdminInstanceOfConcreteModule() {
+    public function getAdminInstanceOfConcreteModule($strSystemid = "") {
         if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNameAdmin(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNameAdmin());
-            $objModule = new $strClassname();
+            if(validateSystemid($strSystemid))
+                $objModule = new $strClassname($strSystemid);
+            else
+                $objModule = new $strClassname();
             return $objModule;
         }
         else
             return null;
     }
+
+    /**
+     * Factory method, creates an instance of the portal-module referenced by the current
+     * module-object.
+     * The object returned is being initialized with the config-array optionally.
+     *
+     * @param string $arrElementData
+     * @return interface_portal
+     */
+    public function getPortalInstanceOfConcreteModule($arrElementData = null) {
+        if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
+            //creating an instance of the wanted module
+            $strClassname = uniStrReplace(".php", "", $this->getStrNamePortal());
+            if(is_array($arrElementData))
+                $objModule = new $strClassname($arrElementData);
+            else
+                $objModule = new $strClassname();
+            return $objModule;
+        }
+        else
+            return null;
+    }
+
+    
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {
