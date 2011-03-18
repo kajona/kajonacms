@@ -179,7 +179,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 
 	    $objRoot = new class_modul_system_common();
 	    //Check rights for the current point
-	    if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
+	    //if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
 	        //Are there any childs?
 	       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
 	        if(count($arrChild) > 0) {
@@ -205,9 +205,9 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	           return false;
 
 
-	    }
-	    else
-	       return false;
+//	    }
+//	    else
+//	       return false;
 	}
 
 

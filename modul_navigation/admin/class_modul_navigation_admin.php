@@ -96,7 +96,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 		    $intI = 0;
     		//Decide, whether to return the list of navigations or the layer of a navigation
-    		if($this->getSystemid() == "") {
+    		if($this->getSystemid() == "" || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"]))  {
     			//Return a list of available navigations
     			$arrNavigations = class_modul_navigation_tree::getAllNavis();
 				//Print all navigations
