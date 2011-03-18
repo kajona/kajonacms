@@ -524,7 +524,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 //To load the correct list afterwards, save the folder as current folder
                 $this->strFolderlevel = $this->getPrevId();
 
-			    if(!class_modul_pages_page::deletePage($this->getSystemid()))
+			    if(!$objPage->deletePage())
 			         throw new class_exception("Error deleting page from db", class_exception::$level_ERROR);
 
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));

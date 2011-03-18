@@ -303,20 +303,16 @@ class class_modul_pages_page extends class_model implements interface_model, int
     /**
      * Deletes the given page and all related elements from the system
      *
-     * @param string $strSystemid
      * @return bool
-     * @static
      */
-	public static function deletePage($strSystemid) {
-	    class_logger::getInstance()->addLogRow("deleted page ".$strSystemid, class_logger::$levelInfo);
+	public function deletePage() {
+	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
 
-	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $objRoot = new class_modul_system_common($strSystemid);
 	    //Get all Elements belonging to this page
-		$arrElements = class_modul_pages_pageelement::getAllElementsOnPage($strSystemid);
+		$arrElements = class_modul_pages_pageelement::getAllElementsOnPage($this->getSystemid());
 
 		//Start the transaction
-		$objDB->transactionBegin();
+		$this->objDB->transactionBegin();
 		$bitCommit = true;
 		$bitElements = true;
 		//Loop over the elements
@@ -331,10 +327,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		if($bitElements) {
 			//Delete the page and the properties out of the tables
-			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = '".dbsafeString($strSystemid)."'";
-			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = '".dbsafeString($strSystemid)."'";
-			if($objDB->_query($strQuery) && $objDB->_query($strQuery2)) {
-				$objRoot->deleteSystemRecord($strSystemid);
+			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = '".dbsafeString($this->getSystemid())."'";
+			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = '".dbsafeString($this->getSystemid())."'";
+			if($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2)) {
+				$this->deleteSystemRecord($this->getSystemid());
 			}
 			else {
 				$bitCommit = false;
@@ -346,11 +342,11 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		//End TX
 		if($bitCommit) {
-			$objDB->transactionCommit();
+			$this->objDB->transactionCommit();
 			return true;
 		}
 		else {
-			$objDB->transactionRollback();
+			$this->objDB->transactionRollback();
 			return false;
 		}
 	}

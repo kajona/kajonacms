@@ -59,7 +59,8 @@ class class_test_pages extends class_testbase  {
 
         echo "\tdeleting pages created...\n";
         foreach($arrPagesCreated as $strOnePageID) {
-            class_modul_pages_page::deletePage($strOnePageID);
+            $objDelPage = new class_modul_pages_page($strOnePageID);
+            $objDelPage->deletePage();
             $objDB->flushQueryCache();
         }
         echo "\tcheck number of pages installed...\n";
