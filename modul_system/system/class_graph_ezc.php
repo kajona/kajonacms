@@ -377,7 +377,7 @@ class class_graph_ezc implements interface_graph {
 //            $this->objGraph->legend->borderWidth = 1;
 
             //legend rendering
-            $this->objGraph->renderer->options->legendSymbolGleam = .5;
+            $this->objGraph->renderer->options->legendSymbolGleam = .1;
             $this->objGraph->renderer->options->legendSymbolGleamSize = .9;
             $this->objGraph->renderer->options->legendSymbolGleamColor = '#FFFFFF';
         }
