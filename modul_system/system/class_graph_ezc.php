@@ -392,7 +392,8 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;
             }
 
-            $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+            if($this->intMaxLabelCount > 1)
+                $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
             
 
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
