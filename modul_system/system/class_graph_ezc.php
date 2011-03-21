@@ -393,6 +393,8 @@ class class_graph_ezc implements interface_graph {
             }
 
             $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+            
+
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
@@ -405,16 +407,10 @@ class class_graph_ezc implements interface_graph {
                 $intTotal = $intMaxValue - $intMinValue;
 
 
-            //if($intTotal > 10) {
+            if($intTotal != 0) {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
                 $this->objGraph->yAxis->minorStep = ceil($intTotal / 5)*0.5;
-            //}
-
-            //if($intTotal > 10 && $intMinValue < 0) {
-            //    $this->objGraph->yAxis->majorStep = ceil($intTotal / 2);
-            //    $this->objGraph->yAxis->minorStep = ceil($intTotal / 2)*0.5;
-            //}
-
+            }
             
         }
 
@@ -521,7 +517,7 @@ class class_graph_ezc implements interface_graph {
      * @param int $intNrOfWrittenLabels the amount of x-axis labels to be printed
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
-        
+
         if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
             //not more than 12 labels
             $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
