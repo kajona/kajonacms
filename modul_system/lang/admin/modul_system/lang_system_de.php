@@ -297,4 +297,6 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
+$lang["numberStyleDecimal"]              = ",";
+$lang["numberStyleThousands"]            = ".";
 ?>

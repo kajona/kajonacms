@@ -565,6 +565,21 @@ function dateToString($objDate, $bitLong = true) {
 }
 
 /**
+ * Formats a number according to the localized separators.
+ * Those are defined in the lang-files, different entries for
+ * decimal- and thousands separator.
+ *
+ * @param float $floatNumber
+ * @param int $intNrOfDecimals the number of decimals
+ * @return string
+ */
+function numberFormat($floatNumber, $intNrOfDecimals = 2) {
+    $strDecChar = class_carrier::getInstance()->getObjText()->getText("numberStyleDecimal", "system", "admin");
+    $strThousandsChar = class_carrier::getInstance()->getObjText()->getText("numberStyleThousands", "system", "admin");
+    return number_format($floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
+}
+
+/**
  * Converts a hex-string to its rgb-values
  *
  * @see http://www.jonasjohn.de/snippets/php/hex2rgb.htm
