@@ -37,7 +37,7 @@ class class_graph_ezc implements interface_graph {
     private $strTitleFontColor = "#000000";
 
     private $bitRenderLegend = true;
-    private $bitLegendPositionRight = false;
+    private $bitLegendPositionBottom = false;
     private $strFont = "/fonts/dejavusans.ttf"; 
 
     private $intXAxisAngle = 0;
@@ -372,10 +372,10 @@ class class_graph_ezc implements interface_graph {
 
         if($this->bitRenderLegend === true) {
             //place the legend at the bottom by default
-            if($this->bitLegendPositionRight)
-                $this->objGraph->legend->position = ezcGraph::RIGHT;
-            else
+            if($this->bitLegendPositionBottom)
                 $this->objGraph->legend->position = ezcGraph::BOTTOM;
+            else
+                $this->objGraph->legend->position = ezcGraph::RIGHT;
 
 
             $this->objGraph->legend->margin = 1;
@@ -641,13 +641,13 @@ class class_graph_ezc implements interface_graph {
     }
 
     /**
-     * By default, the legend is rendered at the bottom of the chart.
-     * Using this setter, the legend may be shifted to the right.
+     * By default, the legend is rendered at the right side of the chart.
+     * Using this setter, the legend may be shifted to the bottom.
      * 
-     * @param bool $bitLegendPositionRight
+     * @param bool $bitLegendPositionBottom
      */
-    public function setBitLegendPositionRight($bitLegendPositionRight) {
-        $this->bitLegendPositionRight = $bitLegendPositionRight;
+    public function setBitLegendPositionBottom($bitLegendPositionBottom) {
+        $this->bitLegendPositionBottom = $bitLegendPositionBottom;
     }
 
 
