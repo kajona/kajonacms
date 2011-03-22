@@ -40,7 +40,7 @@ class ezcGraphPaletteKajona extends ezcGraphPalette
     protected $dataSetSymbol = array(
         ezcGraph::NO_SYMBOL,
     );
-
+   
     /**
      * Name of font to use
      *
@@ -75,9 +75,6 @@ class ezcGraphPaletteKajona extends ezcGraphPalette
      * @var integer
      */
     protected $margin = 0;
-
-   
-
 
     /**
      * Color of grid lines

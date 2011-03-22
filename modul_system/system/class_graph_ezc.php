@@ -37,6 +37,7 @@ class class_graph_ezc implements interface_graph {
     private $strTitleFontColor = "#000000";
 
     private $bitRenderLegend = true;
+    private $bitLegendPositionRight = false;
     private $strFont = "/fonts/dejavusans.ttf"; 
 
     private $intXAxisAngle = 0;
@@ -371,8 +372,14 @@ class class_graph_ezc implements interface_graph {
 
         if($this->bitRenderLegend === true) {
             //place the legend at the bottom by default
-            $this->objGraph->legend->position = ezcGraph::BOTTOM;
+            if($this->bitLegendPositionRight)
+                $this->objGraph->legend->position = ezcGraph::RIGHT;
+            else
+                $this->objGraph->legend->position = ezcGraph::BOTTOM;
+
+
             $this->objGraph->legend->margin = 1;
+            $this->objGraph->legend->padding = 1;
 //            $this->objGraph->legend->border = $this->strTitleBackgroundColor;
 //            $this->objGraph->legend->borderWidth = 1;
 
@@ -407,6 +414,7 @@ class class_graph_ezc implements interface_graph {
             if($intMinValue < 0)
                 $intTotal = $intMaxValue - $intMinValue;
 
+            $intTotal = $this->getNextMaxPowValue($intTotal);
 
             if($intTotal != 0) {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
@@ -415,6 +423,8 @@ class class_graph_ezc implements interface_graph {
             
         }
 
+        
+
 
         //choose the renderer based on the extensions available
         if(extension_loaded("cairo"))
@@ -422,7 +432,7 @@ class class_graph_ezc implements interface_graph {
         else
             $this->objGraph->driver = new ezcGraphGdDriver();
 
-        
+        $this->objGraph->renderer->options->axisEndStyle = ezcGraph::NO_SYMBOL;
 
     }
 
@@ -453,6 +463,16 @@ class class_graph_ezc implements interface_graph {
 
         $this->objGraph->render($this->intWidth, $this->intHeight, $strFilename);
 	}
+
+    /**
+     * Calculates the next power to base 10 relative to the passed value
+     *
+     * @param float $floatSource
+     * @return int
+     */
+    private function getNextMaxPowValue($floatSource) {
+        return pow(10, strlen(ceil($floatSource)));
+    }
 
 	/**
 	 * Set the title of the x-axis
@@ -619,6 +639,17 @@ class class_graph_ezc implements interface_graph {
     public function setStrTitleFontColor($strTitleFontColor) {
         $this->strTitleFontColor = $strTitleFontColor;
     }
+
+    /**
+     * By default, the legend is rendered at the bottom of the chart.
+     * Using this setter, the legend may be shifted to the right.
+     * 
+     * @param bool $bitLegendPositionRight
+     */
+    public function setBitLegendPositionRight($bitLegendPositionRight) {
+        $this->bitLegendPositionRight = $bitLegendPositionRight;
+    }
+
 
 
 
