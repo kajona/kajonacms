@@ -1174,6 +1174,19 @@ It containes a list of aspects and provides the possibility to switch the differ
     <div class="%%class%% calendarLegendEntry">%%name%%</div>
 </calendar_legend_entry>
 
+<calendar_filter>
+    <div id="calendarFilter">
+        <form action="%%action%%" method="post">
+            <input type="hidden" name="doCalendarFilter" value="set" />
+        %%entries%%
+        </form>
+    </div>
+</calendar_filter>
+
+<calendar_filter_entry>
+    <div><input type="checkbox" id="%%filterid%%" name="%%filterid%%" onchange="this.form.submit();" %%checked%% /><label for="%%filterid%%">%%filtername%%</label></div>
+</calendar_filter_entry>
+
 <calendar_pager>
     <table class="calendarPager" cellpadding="0" cellspacing="0" >
         <tr>

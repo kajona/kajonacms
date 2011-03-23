@@ -164,6 +164,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
+
             //save dates to session
             if($this->getParam("month") != "")
                 $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
@@ -199,10 +200,25 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
             //fetch modules relevant for processing
             $arrLegendEntries = array();
+            $arrFilterEntries = array();
             $arrModules = class_modul_system_module::getAllModules();
             foreach($arrModules as $objSingleModule) {
-                if($objSingleModule->getStatus() == 1 && $objSingleModule->getAdminInstanceOfConcreteModule() instanceof interface_calendarsource_admin)
-                    $arrLegendEntries = array_merge($arrLegendEntries, $objSingleModule->getAdminInstanceOfConcreteModule()->getArrLegendEntries());
+                $objAdminInstance = $objSingleModule->getAdminInstanceOfConcreteModule();
+                if($objSingleModule->getStatus() == 1 && $objAdminInstance instanceof interface_calendarsource_admin) {
+                    $arrLegendEntries = array_merge($arrLegendEntries, $objAdminInstance->getArrLegendEntries());
+                    $arrFilterEntries = array_merge($arrFilterEntries, $objAdminInstance->getArrFilterEntries());
+                }
+            }
+
+            $arrTemp = $this->getAllParams();
+            if($this->getParam("doCalendarFilter") != "") {
+                //update filter-criteria
+                foreach($arrFilterEntries as $strOneId => $strName) {
+                    if($this->getParam($strOneId) != "")
+                        $this->objSession->sessionUnset($strOneId);
+                    else
+                        $this->objSession->setSession($strOneId, "disabled");
+                }
             }
 
             //render the single rows. calculate the first day of the row
@@ -238,6 +254,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             $strReturn .= $strContent;
             $strReturn .= $this->objToolkit->getCalendarContainer($strContainerId);
             $strReturn .= $this->objToolkit->getCalendarLegend($arrLegendEntries);
+            $strReturn .= $this->objToolkit->getCalendarFilter($arrFilterEntries);
 
 
         }

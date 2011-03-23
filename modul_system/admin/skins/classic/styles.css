@@ -1118,6 +1118,22 @@ div.calendarLegendEntry {
     margin: 3px !important;
 }
 
+#calendarFilter {
+    margin: 10px 0 4px 0 ;
+}
+
+#calendarFilter label {
+    float: none !important;
+    display: inline !important;
+}
+
+#calendarFilter div {
+    padding: 2px 3px !important;
+    display: inline;
+    margin: 3px !important;
+    white-space: nowrap;
+}
+
  div.calendarEvent {
     background-color: #FFFFDF;
     border: 1px solid #DEDF45;

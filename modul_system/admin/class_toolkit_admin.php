@@ -1854,6 +1854,25 @@ class class_toolkit_admin extends class_toolkit {
     }
 
     /**
+     * Renders a legend below the current calendar in order to illustrate the different event-types.
+     *
+     * @param array $arrEntries
+     * @return string
+     */
+    public function getCalendarFilter($arrEntries) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter");
+        $strTemplateEntryID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_filter_entry");
+
+        $strEntries = "";
+        foreach($arrEntries as $strId => $strName) {
+            $strChecked = class_carrier::getInstance()->getObjSession()->getSession($strId) == "disabled" ? "" : "checked";
+            $strEntries .= $this->objTemplate->fillTemplate(array("filterid" => $strId, "filtername" => $strName, "checked" => $strChecked), $strTemplateEntryID);
+        }
+
+        return $this->objTemplate->fillTemplate(array("entries" => $strEntries, "action" => getLinkAdminHref("dashboard", "calendar")), $strTemplateID);
+    }
+
+    /**
      * Creates a pager for the calendar, used to switch the current month.
      *
      * @param string $strBackwards

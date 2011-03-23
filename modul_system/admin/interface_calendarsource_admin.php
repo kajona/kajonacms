@@ -30,8 +30,22 @@ interface interface_calendarsource_admin {
      * Returns an array of entries to be added to the legend.
      * The array should be structured like
      * array("name" => "cssLegendClass")
+     *
+     * @return array
      */
     public function getArrLegendEntries();
+
+    /**
+     * Returns an array of entries to be added to the filter-bar.
+     * The calendar stores the filter-criteria to the session.
+     * So each criteria returns an two-dim array structured like:
+     * array("sessionKey" => "criteria name")
+     * If a value was de-selected (!), the session-entry is set to "disabled".
+     * All other values represent a checked checkbox.
+     *
+     * @return array
+     */
+    public function getArrFilterEntries();
 
 }
 ?>
