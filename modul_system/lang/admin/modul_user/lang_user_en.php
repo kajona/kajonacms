@@ -131,4 +131,13 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["username"]                        = "Username:";
 $lang["vorname"]                         = "Forename:";
+$lang["user_password_resend"]            = "Sent a new password";
+$lang["user_resend_password_hint"]            = "By sending the user a new password, an email is sent to the adress saved with the users profile containing a new password and a link to change the password.<br />The user must be aware of his username in order to finish the process.<br />";
+$lang["user_password_resend_subj"]       = "Confirming the account-activation";
+$lang["user_password_resend_body"]       = "Für Ihren Account wurde ein neues Passwort beantrag. Bitte verwenden Sie den untenstehenden Link um den Zugang freizuschalten.\n\n\n";
+
+$lang["login_password_form_intro"]       = "Please choose a new password along with providing your username.<br />";
+$lang["login_changeButton"]       = "Change password";
+$lang["login_change_success"] = "Password changed successfully. You can now proceed to <a href=\"_webpath_/admin\">login</a>.";
+$lang["login_change_error"] = "Error processing your request.";
 ?>

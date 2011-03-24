@@ -156,6 +156,7 @@ class class_index  {
 		elseif ($strModule == "login") {
 			$objModule = new class_modul_login_admin();
 			$objModule->action($strAction);
+            $this->strOutput = $objModule->getModuleOutput();
 		}
 	}
 

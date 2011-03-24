@@ -150,6 +150,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "edit", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
+
+                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && checkEmailaddress($objOneUser->getStrEmail()))
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
+
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
                                    getLinkAdminHref($this->arrModule["modul"], "deleteFinal", "&userid=".$objOneUser->getSystemid()));
@@ -160,7 +164,11 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     else
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
                 }
-                $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
+                if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
+                    $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
+                else
+                    $strCenter = "";
+                
                 $strReturn .= $this->objToolkit->listRow3($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strCenter, $strActions, getImageAdmin("icon_user.gif"), $intI++);
             }
             //And one row to create a new one
@@ -169,10 +177,62 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
-        $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("fehler_recht");
         return $strReturn;
     }
 
+    /**
+     * Shows a form in order to start the process of resetting a users password.
+     * The step wil be completed by an email, containing a temporary password and a confirmation link.
+     * 
+     * @return string
+     */
+    protected function actionSendPassword() {
+        $strReturn = "";
+        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $objUser = new class_modul_user_user($this->getParam("userid"));
+
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendPasswordFinal"));
+            $strReturn .= $this->objToolkit->getTextRow($this->getText("user_resend_password_hint"));
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("username")." ".$objUser->getStrUsername());
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("email")." ".$objUser->getStrEmail());
+            $strReturn .= $this->objToolkit->formInputHidden("userid", $this->getParam("userid"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formClose();
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+        return $strReturn;
+    }
+
+    protected function actionSendPasswordFinal() {
+        $strReturn = "";
+        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $objUser = new class_modul_user_user($this->getParam("userid"));
+
+            //add a one-time token and reset the password
+            $strToken = generateSystemid();
+
+            $objUser->setStrPass("");
+            $objUser->setStrAuthcode($strToken);
+            $objUser->updateObjectToDb();
+
+            $strActivationLink = getLinkAdminHref("login", "pwdReset", "&systemid=".$objUser->getSystemid()."&authcode=".$strToken, false);
+
+            $objMail = new class_mail();
+            $objMail->addTo($objUser->getStrEmail());
+            $objMail->setSubject($this->getText("user_password_resend_subj"));
+            $objMail->setText($this->getText("user_password_resend_body").$strActivationLink);
+
+            $objMail->sendMail();
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
+        }
+        else
+            $strReturn .= $this->getText("fehler_recht");
+        return $strReturn;
+    }
 
     /**
      * Negates the status of an existing user

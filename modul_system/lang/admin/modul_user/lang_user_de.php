@@ -59,6 +59,7 @@ $lang["login_loginCookiesInfo"]          = "Bitte aktivieren Sie Cookies in Ihre
 $lang["login_loginError"]                = "Leider waren Ihre Anmeldedaten nicht korrekt. Bitte prüfen Sie Ihren Benutzernamen und Ihr Passwort auf Korrektheit.<br /><br />Sollte dies keine Abhilfe schaffen, wenden Sie sich bitte an Ihren Systemadministrator.";
 $lang["login_loginJsInfo"]               = "Bitte aktivieren Sie JavaScript in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";
 $lang["login_loginPass"]                 = "Passwort";
+$lang["login_loginPass2"]                = "Passwort";
 $lang["login_loginTitle"]                = "Anmelden";
 $lang["login_loginUser"]                 = "Benutzer";
 $lang["login_logoutTitle"]               = "Abmelden";
@@ -131,4 +132,13 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["username"]                        = "Benutzername:";
 $lang["vorname"]                         = "Vorname:";
+$lang["user_password_resend"]            = "Neues Passwort zusenden";
+$lang["user_resend_password_hint"]       = "Mit dem Zusenden eines neuen Passwortes erhält der Benutzer an die hinterlegte E-Mailadresse eine E-Mail mit einem neuen Passwort sowie einem Link zum Ändern des Passwortes. <br />Hierfür muss der Benutzer seinen Benutzernamen kennen.<br />";
+$lang["user_password_resend_subj"]       = "Bestätigung der Account-Aktivierung";
+$lang["user_password_resend_body"]       = "Für Ihren Account wurde ein neues Passwort beantragt. Bitte verwenden Sie den untenstehenden Link um den Zugang freizuschalten.\n\n\n";
+
+$lang["login_password_form_intro"]       = "Bitte vergeben Sie ein neues Passwort unter Angabe des zugehörigen Benutzernamens.<br />";
+$lang["login_changeButton"]       = "Passwort ändern";
+$lang["login_change_success"] = "Passwort erfolgreich geändert. Sie können sich nun am System <a href=\"_webpath_/admin\">anmelden</a>.";
+$lang["login_change_error"] = "Fehler beim Verarbeiten der Anfrage.";
 ?>
