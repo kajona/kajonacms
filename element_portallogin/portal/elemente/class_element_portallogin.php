@@ -106,7 +106,7 @@ class class_element_portallogin extends class_element_portal implements interfac
             if($objUser->getStrAuthcode() != "" && $objUser->getStrAuthcode() == $this->getParam("authcode") && $objUser->getStrUsername() != "") {
                 //check the submitted passwords.
                 $strPass1 = trim($this->getParam("portallogin_password1"));
-                $strPass2 = trim($this->getParam("portallogin_password1"));
+                $strPass2 = trim($this->getParam("portallogin_password2"));
 
                 if($strPass1 == $strPass2 && checkText($strPass1, 3, 200)) {
 
