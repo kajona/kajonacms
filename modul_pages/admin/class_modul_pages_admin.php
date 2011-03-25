@@ -17,8 +17,7 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_admin extends class_admin implements interface_admin  {
-	private $strFolderlevel = null;				//The current level in the folderhierachy
-
+    
 	/**
 	 * Constructor
 	 *
@@ -28,15 +27,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$arrModule["name"] 			= "modul_pages";
 		$arrModule["moduleId"] 		= _pages_modul_id_;
 		$arrModule["modul"]			= "pages";
-		$arrModule["table"]			= _dbprefix_."page";
-		$arrModule["table2"]		= _dbprefix_."page_elemente";
-		$arrModule["table3"]		= _dbprefix_."elemente";
 
 		//base class
 		parent::__construct($arrModule);
-
-		//To generate a correct list-view, set a view params
-		$this->strFolderlevel= ($this->getParam("folderid") != "" ? $this->getParam("folderid") : $this->getModuleSystemid($this->arrModule["modul"]));
 
         if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
@@ -53,8 +46,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getText("modul_elemente"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), "", "", true, "adminnavi"));
@@ -119,7 +112,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
 			//Collect the pages and folders belonging to the current folder to display
-			$arrPages = class_modul_pages_folder::getPagesAndFolderList($this->strFolderlevel);
+			$arrPages = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
 			$intI = 0;
 			$strPages = "";
 
@@ -133,11 +126,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                         //Split up rights
                         if($this->objRights->rightEdit($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
                         if($this->objRights->rightEdit($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                         if($this->objRights->rightEdit($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid()."&folderid=".$this->strFolderlevel, "", $this->getText("seite_copy"), "icon_copy.gif"));
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
+//                        if($this->objRights->rightView($strSystemid))
+//                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_sublist"), "icon_treeBranchOpen.gif"));
                         if($this->objRights->rightEdit($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                         if($this->objRights->rightDelete($strSystemid))
@@ -159,7 +154,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                         
 			    		//Splitting up rights so decide which Buttons to display
 			    		if($this->objRights->rightView($objOneEntry->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
 			    		if($this->objRights->rightEdit($objOneEntry->getSystemid()))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
                         if($this->objRights->rightEdit($strSystemid))
@@ -184,9 +179,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			 	}
 			}
             if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
+			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
+			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
 
             $strListId = generateSystemid();
 			if(uniStrlen($strPages) != 0)
@@ -230,7 +225,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strActions = "";
 
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "newPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
 	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
 	    		if($this->objRights->rightEdit($objPage->getSystemid()))
@@ -245,7 +240,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
 			}
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", ($this->getParam("folderid") != "" ? "&folderid=".$this->getParam("folderid") : "" ), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
+			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
 
 			if(uniStrlen($strReturn) != 0)
 			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
@@ -264,12 +259,16 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	}
 
 
+    protected function actionEditPage() {
+        return $this->actionNewPage("edit");
+    }
+
 	/**
 	 * Shows the form to create a new Site
 	 *
 	 * @return string The form
 	 */
-	protected function actionNewPage() {
+	protected function actionNewPage($strMode = "new") {
 		$strReturn = "";
 
 
@@ -288,16 +287,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
-		if($this->getParam("systemid") != "" || $this->getParam("pageid") != "") {
-		    if($this->getParam("systemid") == "" && $this->getParam("pageid") != "")
-		        $this->setSystemid($this->getParam("pageid"));
-		    //edit a page
-
+        //edit mode
+		if($strMode == "edit") {
 		    //add a pathnavigation when not in pe mode
             if($this->getParam("pe") != 1) {
                 $strReturn = $this->getPathNavigation().$strReturn;
             }
-
 
 			if($this->objRights->rightEdit($this->getSystemid())) {
                 //Load data of the page
@@ -321,8 +316,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $objPage->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $objPage->getStrBrowsername());
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $objPage->getStrSeostring());
-				$strReturn .= $this->objToolkit->formInputTextarea("beschreibung", $this->getText("beschreibung"), $objPage->getStrDesc());
-				$strReturn .= $this->objToolkit->formInputHidden("pageid", $this->getSystemid());
+				$strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $objPage->getStrDesc());
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
 
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
@@ -345,7 +339,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getStrTemplate() == "")
 				    $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
+
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
@@ -380,21 +377,33 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $this->getParam("name"));
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
-				$strReturn .= $this->objToolkit->formInputTextarea("beschreibung", $this->getText("beschreibung"), $this->getParam("beschreibung"));
-				$strReturn .= $this->objToolkit->formInputHidden("pageid", "");
+				$strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
+				
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
-				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $this->getParam("folderid"));
-				$strReturn .= $this->objToolkit->formInputHidden("folderid", $this->getParam("folderid"));
-				$strFolder = "";
-				if($this->getParam("folderid") != "") {
-				    $objFolder = new class_modul_pages_folder($this->getParam("folderid"));
+
+                $strFolderid = "";
+                $strFolder = "";
+                //initial prev-id
+                if($this->getSystemid() != "") {
+				    $objFolder = new class_modul_pages_folder($this->getSystemid());
 				    $strFolder = $objFolder->getStrName();
+                    $strFolderid = $objFolder->getSystemid();
+				}
+                //maybe overriden manually
+				if($this->getParam("folder_id") != "") {
+				    $objFolder = new class_modul_pages_folder($this->getParam("folder_id"));
+				    $strFolder = $objFolder->getStrName();
+                    $strFolderid = $objFolder->getSystemid();
 				}
 
-				$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+
+                $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
@@ -422,22 +431,21 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if($strName != "" && $strName != " ") {
 			    $objPage = new class_modul_pages_page("");
 			    $objPage->setStrBrowsername($this->getParam("browsername"));
-			    $objPage->setStrDesc($this->getParam("beschreibung"));
+			    $objPage->setStrDesc($this->getParam("description"));
 			    $objPage->setStrName(uniStrtolower($strName));
 			    $objPage->setStrTemplate($this->getParam("template"));
 			    $objPage->setStrKeywords($this->getParam("keywords"));
 			    $objPage->setStrSeostring($this->getParam("seostring"));
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
-				$strFolderid = ($this->getParam("folder_id") != "" ? $this->getParam("folder_id") : "" );
-				//To load the correct list afterwards, save the folder as current folder
-				$this->strFolderlevel = $strFolderid;
+				$strPrevid = $this->getParam("folder_id");
 
-                if(!validateSystemid($strFolderid))
-                    $strFolderid = "";
-				if(!$objPage->updateObjectToDb($strFolderid))
+                if(!validateSystemid($strPrevid))
+                    $strPrevid = "";
+                
+				if(!$objPage->updateObjectToDb($strPrevid))
 				    throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
 
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
 
 			}
 			else
@@ -470,12 +478,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		$strKeywords = $this->getParam("keywords");
 
-		if($this->objRights->rightEdit($this->getParam("pageid"))) {
+		if($this->objRights->rightEdit($this->getSystemid())) {
 			if($strName != "" && $strName != " ") {
 
-			    $objPage = new class_modul_pages_page($this->getParam("pageid"));
+			    $objPage = new class_modul_pages_page($this->getSystemid());
 			    $objPage->setStrBrowsername($this->getParam("browsername"));
-			    $objPage->setStrDesc($this->getParam("beschreibung"));
+			    $objPage->setStrDesc($this->getParam("description"));
 			    $objPage->setStrName(uniStrtolower($strName));
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($this->getParam("seostring"));
@@ -484,19 +492,18 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    if($strTemplate !== false)
 			        $objPage->setStrTemplate($strTemplate);
 
-				$strFolderid = ($this->getParam("folder_id") != "" ? $this->getParam("folder_id") : "" );
-				//To load the correct list afterwards, save the folder as current folder
-				$this->strFolderlevel = $strFolderid;
+				$strPrevId = $this->getParam("folder_id");
 
-                if(!validateSystemid($strFolderid))
-                    $strFolderid = "";
-				if(!$objPage->updateObjectToDb($strFolderid))
+                if(!validateSystemid($strPrevId) && $strPrevId != $this->getSystemid())
+                    $strPrevId = "";
+                
+				if(!$objPage->updateObjectToDb($strPrevId))
 					throw new class_exception("Error updating page to db", class_exception::$level_ERROR);
 
 				//Flush the cache
 				$this->flushPageFromPagesCache($strName);
 
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevId));
 			}
 			else
 				$strReturn = $this->getText("fehler_name");
@@ -522,12 +529,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if($objPage->getNumberOfLockedElementsOnPage() == 0) {
 
                 //To load the correct list afterwards, save the folder as current folder
-                $this->strFolderlevel = $this->getPrevId();
+                $strPrevid = $this->getPrevId();
 
 			    if(!$objPage->deletePage())
 			         throw new class_exception("Error deleting page from db", class_exception::$level_ERROR);
 
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
 
 			}
 			else {
@@ -555,7 +562,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if(!$objPage->copyPage())
                 throw new class_exception("Error while copying the page!", class_exception::$level_ERROR);
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPage->getPrevId()));
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -576,13 +583,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	protected function actionNewFolder() {
 		$strReturn = "";
 		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
-			$strPrevid = $this->strFolderlevel;
 			//Build the form
 			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderNewSave");
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $this->getParam("ordner_name"));
-			$strReturn .= $this->objToolkit->formInputHidden("prev_id", $strPrevid);
+			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 			$strReturn .= $this->objToolkit->formClose();
 
@@ -658,9 +664,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$objFolder = new class_modul_pages_folder("");
 			$objFolder->setStrName($this->getParam("ordner_name"));
             $objFolder->setStrLanguage($this->getLanguageToWorkOn());
-			$objFolder->updateObjectToDb($this->getParam("prev_id"));
-			$this->strFolderlevel = $this->getParam("prev_id");
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->strFolderlevel));
+			$objFolder->updateObjectToDb($this->getSystemid());
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objFolder->getPrevId()));
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -685,7 +690,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $objFolder->setStrLanguage($this->getLanguageToWorkOn());
             $objFolder->updateObjectToDb($this->getParam("folder_id"));
 
-            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "folderid=".$this->getPrevId()));
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId()));
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
@@ -706,7 +711,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $objFolder = new class_modul_pages_folder($this->getSystemid());
             $strPrevID = $objFolder->getPrevId();
 			if($objFolder->deleteFolder())
-				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&folderid=".$strPrevID));
+				$this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&systemid=".$strPrevID));
 			else
 				throw new class_exception($this->getText("ordner_loeschen_fehler"), class_exception::$level_ERROR);
 		}
@@ -722,13 +727,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	 */
 	private function generateFolderNavigation() {
 		//Provide a small path-navigation to know where we are...
-		$arrPath = $this->getPathArray($this->strFolderlevel);
+		$arrPath = $this->getPathArray($this->getSystemid());
 		$arrPathLinks = array();
 		//Link to root-folder
         $arrPathLinks[] = getLinkAdmin("pages", "list", "", "&nbsp;/&nbsp;");
 		foreach($arrPath as $strOneFolderID) {
 			$objFolder = new class_modul_pages_folder($strOneFolderID);
-			$arrPathLinks[] = getLinkAdmin("pages", "list", "&folderid=".$strOneFolderID, $objFolder->getStrName());
+			$arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID, $objFolder->getStrName());
 		}
 
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
@@ -746,9 +751,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         $strReturn = "";
 
         //generate the array of ids to expand initially
-        $arrNodes = $this->getPathArray($this->strFolderlevel);
+        $arrNodes = $this->getPathArray($this->getSystemid());
         array_unshift($arrNodes, $this->getModuleSystemid($this->arrModule["modul"]));
-        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle());
+        $strReturn .= $this->objToolkit->getTreeview("KAJONA.admin.ajax.loadPagesTreeViewNodes", $this->getModuleSystemid($this->arrModule["modul"]), $arrNodes, $strSideContent, $this->getOutputModuleTitle(), getLinkAdminHref($this->arrModule["modul"]));
         return $strReturn;
     }
 
@@ -833,12 +838,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             $bitRequired = true;
                             $arrModulesNeeded = $objInstaller->getNeededModules();
                             foreach($arrModulesNeeded as $strOneModule) {
+                                $objTestModule = null;
                                 try {
                                     $objTestModule = class_modul_system_module::getModuleByName($strOneModule, true);
                                 }
-                                catch (class_exception $objException) {
-                                    $objTestModule = null;
-                                }
+                                catch (class_exception $objException) { }
                                 if($objTestModule == null) {
                                     $bitRequired = false;
                                 }
@@ -984,7 +988,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     		//load installers available
     		$arrInstallers = $objFilesystem->getFilelist("/installer");
 
-    		foreach($arrInstallers as $intKey => $strFile) {
+    		foreach($arrInstallers as $strFile) {
     			if(uniStrReplace(".php", "", $strFile) == $strElementToInstall) {
                     include_once(_realpath_."/installer/".$strFile);
         			//Creating an object....
@@ -1155,7 +1159,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         $arrPath = $this->getPathArray();
 
         $arrPathLinks = array();
-        $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=0", "&nbsp;/&nbsp;", " / ");
+        $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
 
         foreach($arrPath as $strOneSystemid) {
             $arrFolder = $this->getSystemRecord($strOneSystemid);
@@ -1166,7 +1170,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             if($arrFolder["system_module_nr"] == _pages_modul_id_)
                 $arrPathLinks[] = getLinkAdmin("pages", "newPage", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
             else
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
         }
         return $this->objToolkit->getPathNavigation($arrPathLinks);
     }
