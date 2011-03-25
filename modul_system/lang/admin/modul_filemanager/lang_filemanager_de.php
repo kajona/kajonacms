@@ -124,4 +124,5 @@ $lang["xmlupload_error_copyUpload"]      = "Fehler beim Kopieren der Datei auf d
 $lang["xmlupload_error_filter"]          = "Dateityp im Filter nicht erlaubt";
 $lang["xmlupload_error_notWritable"]     = "Zielordner nicht beschreibbar";
 $lang["xmlupload_success"]               = "Upload erfolgreich";
+$lang["page_sublist"]                    = "Untergeordnete Seiten anzeigen";
 ?>

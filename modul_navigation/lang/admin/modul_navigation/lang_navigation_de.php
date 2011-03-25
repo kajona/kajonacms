@@ -55,4 +55,5 @@ $lang["systemtask_navigationcheck_treescan"] = "Untersuche Navigation";
 $lang["systemtask_navigationcheck_valid"] = "gültig (Ziel:";
 $lang["navigation_parent"]                = "Übergeordneter Knoten:";
 $lang["navigation_point_accept"]                = "Navigationspunkt übernehmen";
+$lang["navigation_show_disabled"]       = "Navigationspunkte können nicht angezeigt werden, da diese automatisch generiert werden.";
 ?>

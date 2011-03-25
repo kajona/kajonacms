@@ -15,6 +15,7 @@
 class class_modul_navigation_tree extends class_model implements interface_model  {
 
     private $strName = "";
+    private $strFolderId = "";
 
     /**
      * Constructor to create a valid object
@@ -66,6 +67,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
 		             AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
         $arrRow = $this->objDB->getRow($strQuery);
         $this->setStrName($arrRow["navigation_name"]);
+        $this->setStrFolderId($arrRow["navigation_folder_i"]);
     }
 
     /**
@@ -76,7 +78,8 @@ class class_modul_navigation_tree extends class_model implements interface_model
     protected function updateStateToDb() {
 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                     SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."'
+                     SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
+                         navigation_folder_i='".dbsafeString($this->getStrFolderId())."'
                      WHERE navigation_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
         return $this->objDB->_query($strQuery);
     }
@@ -175,6 +178,16 @@ class class_modul_navigation_tree extends class_model implements interface_model
     public function setStrName($strName) {
         $this->strName = $strName;
     }
+
+    public function getStrFolderId() {
+        return $this->strFolderId;
+    }
+
+    public function setStrFolderId($strFolderId) {
+        $this->strFolderId = $strFolderId;
+    }
+
+
 
 }
 ?>

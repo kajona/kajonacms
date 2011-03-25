@@ -55,4 +55,5 @@ $lang["systemtask_navigationcheck_treescan"] = "Investigate navigation";
 $lang["systemtask_navigationcheck_valid"] = "valid (Target:";
 $lang["navigation_parent"]                = "Parent node:";
 $lang["navigation_point_accept"]                = "Accept navigation item";
+$lang["navigation_show_disabled"]       = "Navigation items can't be shown since they are generated automatically.";
 ?>

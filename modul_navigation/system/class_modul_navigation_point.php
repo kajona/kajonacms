@@ -117,11 +117,12 @@ class class_modul_navigation_point extends class_model implements interface_mode
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_modul_navigation_point($arrOneId["system_id"]);
             //check where the layer links to
-            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
-                $objFirstLevelPage = self::getNextValidPage($objNavigationPoint->getStrFolderI());
-                if($objFirstLevelPage != null)
-                    $objNavigationPoint->setStrPageI($objFirstLevelPage->getStrName());
-            }
+            //TODO removal, no longer required
+//            if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
+//                $objFirstLevelPage = self::getNextValidPage($objNavigationPoint->getStrFolderI());
+//                if($objFirstLevelPage != null)
+//                    $objNavigationPoint->setStrPageI($objFirstLevelPage->getStrName());
+//            }
 
             $arrReturn[] = $objNavigationPoint;
         }
@@ -177,7 +178,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	public function deleteNaviPoint() {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
-	    $objRoot = new class_modul_system_common();
+	    //TODO remove? $objRoot = new class_modul_system_common();
 	    //Check rights for the current point
 	    //if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
 	        //Are there any childs?
@@ -242,6 +243,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
      *
      * @param string $strSourceId
      * @return class_modul_navigation_point
+     * @since 3.4
      */
     private static function loadPageLevelToNavigationNodes($strSourceId) {
 
@@ -254,20 +256,23 @@ class class_modul_navigation_point extends class_model implements interface_mode
             if($objOneEntry->getStatus() == 0)
                 continue;
 
-            //validate the type
-            if($objOneEntry instanceof class_modul_pages_folder) {
-                $objPoint = new class_modul_navigation_point();
-                $objPoint->setStrName($objOneEntry->getStrName());
-                $objPoint->setSystemid($objOneEntry->getSystemid());
+            //TODO: remove
 
-                //search for the first next page
-                $objPage = self::getNextValidPage($objOneEntry->getSystemid());
-                if($objPage != null) {
-                    $objPoint->setStrPageI($objPage->getStrName());
-                    $arrReturn[] = $objPoint;
-                }
-            }
-            else if($objOneEntry instanceof class_modul_pages_page) {
+            //validate the type
+//            if($objOneEntry instanceof class_modul_pages_folder) {
+//                $objPoint = new class_modul_navigation_point();
+//                $objPoint->setStrName($objOneEntry->getStrName());
+//                $objPoint->setSystemid($objOneEntry->getSystemid());
+//
+//                //search for the first next page
+//                $objPage = self::getNextValidPage($objOneEntry->getSystemid());
+//                if($objPage != null) {
+//                    $objPoint->setStrPageI($objPage->getStrName());
+//                    $arrReturn[] = $objPoint;
+//                }
+//            }
+//            else
+            if($objOneEntry instanceof class_modul_pages_page) {
                 $objPoint = new class_modul_navigation_point();
                 $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
                 $objPoint->setStrPageI($objOneEntry->getStrName());
@@ -286,24 +291,26 @@ class class_modul_navigation_point extends class_model implements interface_mode
      *
      * @param string $strFolderid
      * @return class_modul_pages_page
+     * @deprecated
+     * @todo remove
      */
-    private static function getNextValidPage($strFolderid) {
-        $arrPages = class_modul_pages_folder::getPagesInFolder($strFolderid);
-        foreach($arrPages as $objOnePage) {
-            if($objOnePage->getStatus() == 1 && $objOnePage->rightView())
-                return $objOnePage;
-        }
-
-        //traverse downwards
-        $arrFolder = class_modul_pages_folder::getFolderList($strFolderid);
-        foreach($arrFolder as $objOneFolder) {
-            $objTemp = self::getNextValidPage($objOneFolder->getSystemid());
-            if($objTemp != null)
-                return $objTemp;
-        }
-
-        return null;
-    }
+//    private static function getNextValidPage($strFolderid) {
+//        $arrPages = class_modul_pages_folder::getPagesInFolder($strFolderid);
+//        foreach($arrPages as $objOnePage) {
+//            if($objOnePage->getStatus() == 1 && $objOnePage->rightView())
+//                return $objOnePage;
+//        }
+//
+//        //traverse downwards
+//        $arrFolder = class_modul_pages_folder::getFolderList($strFolderid);
+//        foreach($arrFolder as $objOneFolder) {
+//            $objTemp = self::getNextValidPage($objOneFolder->getSystemid());
+//            if($objTemp != null)
+//                return $objTemp;
+//        }
+//
+//        return null;
+//    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

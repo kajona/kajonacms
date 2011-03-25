@@ -106,8 +106,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 						$strAction = "";
 						if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_bearbeiten"), "icon_pencil.gif"));
-			    		if($this->objRights->rightView($objOneNavigation->getSystemid()))
-			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
+			    		if($this->objRights->rightView($objOneNavigation->getSystemid())) {
+                            if(validateSystemid($objOneNavigation->getStrFolderId()))
+                                $strAction .= getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getText("navigation_show_disabled"));
+                            else
+                                $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
+                        }
 			    		if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
 			    		    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid()));
 			    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
@@ -196,6 +200,15 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	protected function actionNewNavi($strMode = "new") {
 		$strReturn = "";
+
+        $strFolderBrowser = getLinkAdminDialog("folderview",
+                                               "pagesFolderBrowser",
+                                               "&form_element=navigation_folder_i&folder=1",
+                                               $this->getText("browser"),
+                                               $this->getText("browser"),
+                                               "icon_externalBrowser.gif",
+                                               $this->getText("browser"));
+                                               
 		//check Rights & mode
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($strMode == "edit")
@@ -203,10 +216,20 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
             else
                 $objNavi = new class_modul_navigation_tree("");
 
+            $strFoldername = "";
+            $strFolderid = "";
+            if(validateSystemid($objNavi->getStrFolderId())) {
+                $objFolder = new class_modul_pages_folder($objNavi->getStrFolderId());
+                $strFoldername = $objFolder->getStrName();
+                $strFolderid = $objFolder->getSystemid();
+            }
+
 		    //Build the form
 		    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNavi");
 		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
             $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
+            $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
+            $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $strFolderid);
             $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
@@ -237,6 +260,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			if($this->getParam("mode") == "new") {
 				$objNavi = new class_modul_navigation_tree("");
 				$objNavi->setStrName($this->getParam("navigation_name"));
+                $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
 				if(!$objNavi->updateObjectToDb())
 				    throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 
@@ -245,6 +269,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				//Just update the record
 				$objNavi = new class_modul_navigation_tree($this->getSystemid());
 				$objNavi->setStrName($this->getParam("navigation_name"));
+                $objNavi->setStrFolderId($this->getParam("navigation_folder_i_id"));
 				if(!$objNavi->updateObjectToDb())
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 			}
@@ -310,7 +335,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"));
 //                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
-//                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $this->getParam("navigation_page_i"));
+//                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $this->getParam("navigation_folder_i_id"));
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"), _filemanager_default_filesrepoid_);
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), _filemanager_default_imagesrepoid_);
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));

@@ -124,4 +124,5 @@ $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the 
 $lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
+$lang["page_sublist"]                    = "Show ancillary pages";
 ?>
