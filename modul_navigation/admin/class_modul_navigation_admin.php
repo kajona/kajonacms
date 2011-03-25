@@ -271,13 +271,13 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	protected function actionNewNaviPoint($strMode = "new") {
 		$strReturn = "";
 
-        $strFolderBrowser = getLinkAdminDialog("folderview",
-                                               "pagesFolderBrowser",
-                                               "&form_element=navigation_folder_i",
-                                               $this->getText("browser"),
-                                               $this->getText("browser"),
-                                               "icon_externalBrowser.gif",
-                                               $this->getText("browser"));
+//        $strFolderBrowser = getLinkAdminDialog("folderview",
+//                                               "pagesFolderBrowser",
+//                                               "&form_element=navigation_folder_i",
+//                                               $this->getText("browser"),
+//                                               $this->getText("browser"),
+//                                               "icon_externalBrowser.gif",
+//                                               $this->getText("browser"));
 
         $strNodeBrowser = getLinkAdminDialog(  $this->arrModule["modul"],
                                                "navigationPointBrowser",
@@ -294,6 +294,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         }
 
         $strParentname = "";
+        $objParentPoint = null;
         if(validateSystemid($this->getParam("navigation_parent_id"))) {
             $objParentPoint = new class_modul_navigation_point($this->getParam("navigation_parent_id"));
             $strParentname = $objParentPoint->getStrName();
@@ -308,8 +309,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"));
-                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
-                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $this->getParam("navigation_page_i"));
+//                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
+//                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $this->getParam("navigation_page_i"));
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"), _filemanager_default_filesrepoid_);
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"), _filemanager_default_imagesrepoid_);
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
@@ -344,8 +345,8 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $objPoint->getStrName());
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $objPoint->getStrPageI());
-                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
-                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $objPoint->getStrFolderI());
+//                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
+//                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $objPoint->getStrFolderI());
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE(), _filemanager_default_filesrepoid_);
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage(), _filemanager_default_imagesrepoid_);
 
@@ -389,7 +390,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				$objPoint->setStrName($this->getParam("navigation_name"));
 				$objPoint->setStrPageE($strExternalLink);
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
-				$objPoint->setStrFolderI($this->getParam("navigation_folder_i_id"));
+//				$objPoint->setStrFolderI($this->getParam("navigation_folder_i_id"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
 				if(!$objPoint->updateObjectToDb($this->getSystemid()))
 				    throw new class_exception("Error saving point-object to db", class_exception::$level_ERROR);
@@ -407,7 +408,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				$objPoint->setStrName($this->getParam("navigation_name"));
 				$objPoint->setStrPageE($strExternalLink);
 				$objPoint->setStrPageI($this->getParam("navigation_page_i"));
-                $objPoint->setStrFolderI($this->getParam("navigation_folder_i_id"));
+//                $objPoint->setStrFolderI($this->getParam("navigation_folder_i_id"));
 				$objPoint->setStrTarget($this->getParam("navigation_target"));
 
                 $strPrevid = $objPoint->getPrevId();
