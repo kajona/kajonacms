@@ -823,18 +823,23 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$arrPath = $this->getPathArray();
 
 		$arrPathLinks = array();
-		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=0", "&nbsp;/&nbsp;", " / ");
+		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
 
 		foreach($arrPath as $strOneSystemid) {
-			$arrFolder = $this->getSystemRecord($strOneSystemid);
+			$arrRecord = $this->getSystemRecord($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigations
-			if($arrFolder["system_module_nr"] == _pages_content_modul_id_)
+			if($arrRecord["system_module_nr"] == _pages_content_modul_id_)
 				continue;
 
-			if($arrFolder["system_module_nr"] == _pages_modul_id_)
-			    $arrPathLinks[] = getLinkAdmin("pages_content", "list", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
-			else
-			    $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&folderid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
+            if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                $objFolder = new class_modul_pages_folder($strOneSystemid);
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
+            }
+            if($arrRecord["system_module_nr"] == _pages_modul_id_) {
+                $objPage = new class_modul_pages_page($strOneSystemid);
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objPage->getStrName());
+            }
+            
 		}
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}

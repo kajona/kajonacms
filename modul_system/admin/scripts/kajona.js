@@ -1235,9 +1235,12 @@ KAJONA.admin.ajax = {
                             intTemp = strSinglePage.indexOf("<link>")+6;
                             strLink = strSinglePage.substr(intTemp, strSinglePage.indexOf("</link>")-intTemp);
 
+                            intTemp = strSinglePage.indexOf("<isleaf>")+8;
+                            var strLeaf = strSinglePage.substr(intTemp, strSinglePage.indexOf("</isleaf>")-intTemp);
+
                             tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
                             tempNode.systemid = strSystemid;
-                            tempNode.isLeaf = true;
+                            tempNode.isLeaf = strLeaf == "true";
                             tempNode.labelStyle = "treeView-pagenode";
 
                             strEntries = strEntries.substr(strEntries.indexOf("</page>")+7);

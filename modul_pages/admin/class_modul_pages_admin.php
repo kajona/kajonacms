@@ -131,8 +131,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                         if($this->objRights->rightEdit($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-//                        if($this->objRights->rightView($strSystemid))
-//                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_sublist"), "icon_treeBranchOpen.gif"));
+                        if($this->objRights->rightView($strSystemid))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
                         if($this->objRights->rightEdit($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                         if($this->objRights->rightDelete($strSystemid))
@@ -287,12 +287,16 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
+        $strPagesBrowser = getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser"));
+
+        //add a pathnavigation when not in pe mode
+        if($this->getParam("pe") != 1) {
+            $strReturn = $this->generateFolderNavigation().$strReturn;
+        }
+
         //edit mode
 		if($strMode == "edit") {
-		    //add a pathnavigation when not in pe mode
-            if($this->getParam("pe") != 1) {
-                $strReturn = $this->getPathNavigation().$strReturn;
-            }
+		    
 
 			if($this->objRights->rightEdit($this->getSystemid())) {
                 //Load data of the page
@@ -322,11 +326,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 				    $objFolder = new class_modul_pages_folder($objPage->getPrevId());
 					$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder->getSystemid());
-					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), $objFolder->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
+					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), $objFolder->getStrName(), "inputText", $strPagesBrowser, true);
 				}
 				else {
 					$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
-					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), "", "inputText", $strPagesBrowser, true);
 				}
 				//Load the available templates
 				//If set on, the dropdown could be disabled
@@ -397,7 +401,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				}
 
 				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name"), $strFolder, "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), $strFolder, "inputText", $strPagesBrowser, true);
 
 				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
@@ -583,6 +587,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	protected function actionNewFolder() {
 		$strReturn = "";
 		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
+
+            $strReturn = $this->generateFolderNavigation().$strReturn;
+
 			//Build the form
 			//create an errorlist
 			$strReturn .= $this->objToolkit->getValidationErrors($this, "folderNewSave");
@@ -608,6 +615,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	protected function actionEditFolder() {
 		$strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
+
+            $strReturn = $this->generateFolderNavigation().$strReturn;
+
 			//Load folder-data
             $objFolder = new class_modul_pages_folder($this->getSystemid());
 
@@ -732,8 +742,15 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		//Link to root-folder
         $arrPathLinks[] = getLinkAdmin("pages", "list", "", "&nbsp;/&nbsp;");
 		foreach($arrPath as $strOneFolderID) {
-			$objFolder = new class_modul_pages_folder($strOneFolderID);
-			$arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID, $objFolder->getStrName());
+            $arrRecord = $this->getSystemRecord($strOneFolderID);
+            if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                $objFolder = new class_modul_pages_folder($strOneFolderID);
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
+            }
+            if($arrRecord["system_module_nr"] == _pages_modul_id_) {
+                $objPage = new class_modul_pages_page($strOneFolderID);
+                $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objPage->getStrName());
+            }
 		}
 
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
@@ -1150,30 +1167,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             return false;
     }
 
-    /**
-     * Helper to generate a small path-navigation
-     *
-     * @return string
-     */
-    private function getPathNavigation() {
-        $arrPath = $this->getPathArray();
-
-        $arrPathLinks = array();
-        $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
-
-        foreach($arrPath as $strOneSystemid) {
-            $arrFolder = $this->getSystemRecord($strOneSystemid);
-            //Skip Elements: No sense to show in path-navigations
-            if($arrFolder["system_module_nr"] == _pages_content_modul_id_)
-                continue;
-
-            if($arrFolder["system_module_nr"] == _pages_modul_id_)
-                $arrPathLinks[] = getLinkAdmin("pages", "newPage", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
-            else
-                $arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid()."&systemid=".$strOneSystemid, $arrFolder["system_comment"], $arrFolder["system_comment"]);
-        }
-        return $this->objToolkit->getPathNavigation($arrPathLinks);
-    }
+    
 }
 
 ?>
