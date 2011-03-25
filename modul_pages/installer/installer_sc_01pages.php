@@ -38,6 +38,22 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objConstant->setStrValue("kajona_demo.tpl");
         $objConstant->updateObjectToDb();
 
+
+        $strReturn .= "Creating system folder...\n";
+        $objFolder = new class_modul_pages_folder();
+        $objFolder->setStrName("_system");
+        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $strSystemFolderID = $objFolder->getSystemid();
+        $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
+
+
+        $strReturn .= "Creating mainnavigation folder...\n";
+        $objFolder = new class_modul_pages_folder();
+        $objFolder->setStrName("mainnavigation");
+        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
+        $strMainnavigationFolderID = $objFolder->getSystemid();
+        $strReturn .= "ID of new folder: ".$strSystemFolderID."\n";
+
         $strReturn .= "Creating index-site...\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("index");
@@ -111,19 +127,14 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $strReturn .= "Error creating paragraph element.\n";
 
 
-        $strReturn .= "Creating system folder...\n";
-        $objFolder = new class_modul_pages_folder();
-        $objFolder->setStrName("_system");
-        $objFolder->updateObjectToDb(class_modul_system_module::getModuleByName("pages")->getSystemid());
-        $strFolderID = $objFolder->getSystemid();
-        $strReturn .= "ID of new folder: ".$strFolderID."\n";
+        
         $strReturn .= "Creating master-page\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("master");
         $objPage->setStrTemplate("master.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strSystemFolderID);
         $this->strMasterID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strMasterID."\n";
 
@@ -141,7 +152,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strSystemFolderID);
         $strErrorPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
 
@@ -212,7 +223,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb($strFolderID);
+        $objPage->updateObjectToDb($strSystemFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
@@ -294,7 +305,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb();
+        $objPage->updateObjectToDb($strMainnavigationFolderID);
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
@@ -366,7 +377,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb();
+        $objPage->updateObjectToDb($strSamplePageId);
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";

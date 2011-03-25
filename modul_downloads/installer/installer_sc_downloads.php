@@ -24,6 +24,14 @@ class class_installer_sc_downloads implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_modul_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
+
 
         $strReturn .= "Creating new downloads...\n";
         $objDownloads = new class_modul_downloads_archive();
@@ -48,7 +56,7 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb();
+        $objPage->updateObjectToDb($strNaviFolderId);
 
         $strDownloadsPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strDownloadsPageId."\n";
@@ -88,24 +96,24 @@ class class_installer_sc_downloads implements interface_sc_installer  {
 
 
 
-        $strReturn .= "Creating Navigation-Entry...\n";
-        //navigations installed?
-        try {
-            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-        }
-        catch (class_exception $objException) {
-            $objModule = null;
-        }
-        if($objModule != null) {
-	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-	        $strTreeId = $objNavi->getSystemid();
-
-	        $objNaviPoint = new class_modul_navigation_point();
-	        $objNaviPoint->setStrName("Downloads");
-	        $objNaviPoint->setStrPageI("downloads");
-	        $objNaviPoint->updateObjectToDb($strTreeId);
-	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        }
+//        $strReturn .= "Creating Navigation-Entry...\n";
+//        //navigations installed?
+//        try {
+//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+//        }
+//        catch (class_exception $objException) {
+//            $objModule = null;
+//        }
+//        if($objModule != null) {
+//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+//	        $strTreeId = $objNavi->getSystemid();
+//
+//	        $objNaviPoint = new class_modul_navigation_point();
+//	        $objNaviPoint->setStrName("Downloads");
+//	        $objNaviPoint->setStrPageI("downloads");
+//	        $objNaviPoint->updateObjectToDb($strTreeId);
+//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+//        }
         return $strReturn;
     }
 

@@ -27,6 +27,13 @@ class class_installer_sc_tags implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_modul_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
         //search the master page
         $objMaster = class_modul_pages_page::getPageByName("master");
         if($objMaster != null)
@@ -44,7 +51,7 @@ class class_installer_sc_tags implements interface_sc_installer  {
             //set language to "" - being update by the languages sc installer later
             $objPage->setStrLanguage("");
             $objPage->setStrTemplate("kajona_demo.tpl");
-            $objPage->updateObjectToDb();
+            $objPage->updateObjectToDb($strNaviFolderId);
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding tags-element to new page\n";
@@ -88,31 +95,31 @@ class class_installer_sc_tags implements interface_sc_installer  {
 
             $strReturn .= "Creating navigation point.\n";
 
-            //navigations installed?
-	        try {
-	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-	        }
-	        catch (class_exception $objException) {
-	            $objModule = null;
-	        }
-	        if($objModule != null) {
-
-		        $arrNavis = class_modul_navigation_tree::getAllNavis();
-		        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-		        $strTreeId = $objNavi->getSystemid();
-
-		        $objNaviPoint = new class_modul_navigation_point();
-		        if($this->strContentLanguage == "de") {
-		            $objNaviPoint->setStrName("Tags");
-		        }
-		        else {
-		        	$objNaviPoint->setStrName("Tags");
-		        }
-
-		        $objNaviPoint->setStrPageI("tags");
-		        $objNaviPoint->updateObjectToDb($strTreeId);
-		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-            }
+//            //navigations installed?
+//	        try {
+//	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+//	        }
+//	        catch (class_exception $objException) {
+//	            $objModule = null;
+//	        }
+//	        if($objModule != null) {
+//
+//		        $arrNavis = class_modul_navigation_tree::getAllNavis();
+//		        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+//		        $strTreeId = $objNavi->getSystemid();
+//
+//		        $objNaviPoint = new class_modul_navigation_point();
+//		        if($this->strContentLanguage == "de") {
+//		            $objNaviPoint->setStrName("Tags");
+//		        }
+//		        else {
+//		        	$objNaviPoint->setStrName("Tags");
+//		        }
+//
+//		        $objNaviPoint->setStrPageI("tags");
+//		        $objNaviPoint->updateObjectToDb($strTreeId);
+//		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+//            }
 
         return $strReturn;
     }

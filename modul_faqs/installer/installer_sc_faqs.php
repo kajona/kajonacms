@@ -22,7 +22,14 @@ class class_installer_sc_faqs implements interface_sc_installer  {
 
     public function install() {
         $strReturn = "";
-        $strfaqsdetailsId = "";
+
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_modul_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
 
         //search the index page
         $objIndex = class_modul_pages_page::getPageByName("index");
@@ -60,7 +67,7 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb();
+        $objPage->updateObjectToDb($strNaviFolderId);
 
         $strFaqsPageId = $objPage->getSystemid();
 
@@ -96,27 +103,27 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         else
             $strReturn .= "Error creating headline element.\n";
 
-        $strReturn .= "Creating navigation entries...\n";
-        //navigations installed?
-        try {
-            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-        }
-        catch (class_exception $objException) {
-            $objModule = null;
-        }
-        if($objModule != null) {
-
-	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-	        $strTreeId = $objNavi->getSystemid();
-
-
-	        $objNaviPoint = new class_modul_navigation_point();
-	        $objNaviPoint->setStrName("FAQs");
-	        $objNaviPoint->setStrPageI("faqs");
-	        $objNaviPoint->updateObjectToDb($strTreeId);
-	        $strfaqsPointID = $objNaviPoint->getSystemid();
-	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        }
+//        $strReturn .= "Creating navigation entries...\n";
+//        //navigations installed?
+//        try {
+//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+//        }
+//        catch (class_exception $objException) {
+//            $objModule = null;
+//        }
+//        if($objModule != null) {
+//
+//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+//	        $strTreeId = $objNavi->getSystemid();
+//
+//
+//	        $objNaviPoint = new class_modul_navigation_point();
+//	        $objNaviPoint->setStrName("FAQs");
+//	        $objNaviPoint->setStrPageI("faqs");
+//	        $objNaviPoint->updateObjectToDb($strTreeId);
+//	        $strfaqsPointID = $objNaviPoint->getSystemid();
+//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+//        }
         return $strReturn;
     }
 

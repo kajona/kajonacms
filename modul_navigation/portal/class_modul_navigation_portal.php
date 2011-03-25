@@ -502,13 +502,14 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
                                   //search navigation tree
                                   $this->arrNodeTempHelper = array();
-                                  foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
-                                       $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
+                                  foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan) 
+                                      $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
+                                  
 
                                   $intMaxLevel = 0;
                                   $objEntry = null;
                                   foreach($this->arrNodeTempHelper as $intLevel => $arrNodes) {
-                                      if(count($arrNodes)> 0 && $intLevel > $intMaxLevel) {
+                                      if(count($arrNodes)> 0 && $intLevel >= $intMaxLevel) {
                                           $intMaxLevel = $intLevel;
                                           $objEntry = $arrNodes[0];
                                       }

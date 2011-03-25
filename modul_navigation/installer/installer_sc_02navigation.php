@@ -30,25 +30,33 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         if($objMaster != null)
             $this->strMasterID = $objMaster->getSystemid();
 
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_modul_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
 
         $strReturn = "";
         $strReturn .= "Creating new mainnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
         $objNaviTree->setStrName("mainnavigation");
+        $objNaviTree->setStrFolderId($strNaviFolderId);
         $objNaviTree->updateObjectToDb();
         $strTreeId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
 
-        $strReturn .= "Creating navigation points\n";
-        $objNaviPoint = new class_modul_navigation_point();
-        $objNaviPoint->setStrName("Page 1");
-        $objNaviPoint->setStrPageI("page_1");
-        $objNaviPoint->updateObjectToDb($strTreeId);
-        $strNaviPointID = $objNaviPoint->getSystemid();
-        $objNaviPoint = new class_modul_navigation_point();
-        $objNaviPoint->setStrName("Subpage 1");
-        $objNaviPoint->setStrPageI("subpage_1");
-        $objNaviPoint->updateObjectToDb($strNaviPointID);
+//        $strReturn .= "Creating navigation points\n";
+//        $objNaviPoint = new class_modul_navigation_point();
+//        $objNaviPoint->setStrName("Page 1");
+//        $objNaviPoint->setStrPageI("page_1");
+//        $objNaviPoint->updateObjectToDb($strTreeId);
+//        $strNaviPointID = $objNaviPoint->getSystemid();
+//        $objNaviPoint = new class_modul_navigation_point();
+//        $objNaviPoint->setStrName("Subpage 1");
+//        $objNaviPoint->setStrPageI("subpage_1");
+//        $objNaviPoint->updateObjectToDb($strNaviPointID);
 
         $strReturn .= "Creating new portalnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();

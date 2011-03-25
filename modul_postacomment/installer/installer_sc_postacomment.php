@@ -24,6 +24,13 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
     public function install() {
         $strReturn = "";
 
+        //fetch navifolder-id
+        $strNaviFolderId = "";
+        $arrFolder = class_modul_pages_folder::getFolderList();
+        foreach($arrFolder as $objOneFolder)
+            if($objOneFolder->getStrName() == "mainnavigation")
+                $strNaviFolderId = $objOneFolder->getSystemid();
+
 
         $strReturn .= "Creating new postacomment page...\n";
 
@@ -33,7 +40,7 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPage->setStrTemplate("kajona_demo.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
-        $objPage->updateObjectToDb();
+        $objPage->updateObjectToDb($strNaviFolderId);
 
         $strPostacommentPageID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strPostacommentPageID."\n";
@@ -99,25 +106,25 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
 
         $strReturn .= "Creating Navigation-Entry...\n";
 
-        //navigations installed?
-        try {
-            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-        }
-        catch (class_exception $objException) {
-            $objModule = null;
-        }
-        if($objModule != null) {
-
-	        $arrNavis = class_modul_navigation_tree::getAllNavis();
-	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-	        $strTreeId = $objNavi->getSystemid();
-
-	        $objNaviPoint = new class_modul_navigation_point();
-	        $objNaviPoint->setStrName("Postacomment");
-	        $objNaviPoint->setStrPageI("postacomment");
-	        $objNaviPoint->updateObjectToDb($strTreeId);
-	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-        }
+//        //navigations installed?
+//        try {
+//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+//        }
+//        catch (class_exception $objException) {
+//            $objModule = null;
+//        }
+//        if($objModule != null) {
+//
+//	        $arrNavis = class_modul_navigation_tree::getAllNavis();
+//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
+//	        $strTreeId = $objNavi->getSystemid();
+//
+//	        $objNaviPoint = new class_modul_navigation_point();
+//	        $objNaviPoint->setStrName("Postacomment");
+//	        $objNaviPoint->setStrPageI("postacomment");
+//	        $objNaviPoint->updateObjectToDb($strTreeId);
+//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+//        }
         return $strReturn;
     }
 
