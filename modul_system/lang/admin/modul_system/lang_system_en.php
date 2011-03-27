@@ -106,6 +106,7 @@ $lang["gifwrite"]                        = "GIF write-support";
 $lang["groessedaten"]                    = "Size of data";
 $lang["groessegesamt"]                   = "Size in total";
 $lang["inputtimeout"]                    = "Input timeout";
+$lang["installer_config_dbdriverinfo"]       = "Modules found on system:&nbsp;";
 $lang["installer_config_dbdriver"]       = "Database driver:";
 $lang["installer_config_dbhostname"]     = "Database server:";
 $lang["installer_config_dbname"]         = "Database name:";

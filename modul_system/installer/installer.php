@@ -175,7 +175,17 @@ class class_installer {
         if($this->checkDefaultValues())
             header("Location: "._webpath_."/installer/installer.php?step=loginData");
 
+
         if(!isset($_POST["write"])) {
+
+            //check for available modules
+            $arrDrivers = array();
+            if(in_array("mysqli", get_loaded_extensions()))
+                $arrDrivers[] = "mysqli";
+            if(in_array("postgres", get_loaded_extensions()))
+                $arrDrivers[] = "postgres";
+            if(in_array("sqlite3", get_loaded_extensions()))
+                $arrDrivers[] = "sqlite3";
 
             //configwizard_form
             $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "configwizard_form", true);
@@ -188,7 +198,8 @@ class class_installer {
                                                                   "config_driver"  => $this->getText("installer_config_dbdriver"),
                                                                   "config_dbname"  => $this->getText("installer_config_dbname"),
                                                                   "config_prefix"  => $this->getText("installer_config_dbprefix"),
-                                                                  "config_save"  => $this->getText("installer_config_write")
+                                                                  "config_save"  => $this->getText("installer_config_write"),
+                                                                  "config_driverinfo" => $this->getText("installer_config_dbdriverinfo").implode(", ", $arrDrivers)
 	        ), $strTemplateID);
 	        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php");
 

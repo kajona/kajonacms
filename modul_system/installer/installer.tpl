@@ -81,12 +81,11 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 <div><label for="dbname">%%config_dbname%%</label><input type="text" name="dbname" id="dbname" class="inputText" /></div><br />
 <div><label for="dbprefix">%%config_prefix%%</label><input type="text" name="dbprefix" id="dbprefix" value="kajona_" class="inputText" /></div><br />
 <div><label for="driver">%%config_driver%%</label><select name="driver" id="driver" class="inputDropdown">
-                <option value="mysql">mysql</option>
                 <option value="mysqli" selected="selected">mysqli</option>
                 <option value="postgres">postgres</option>
                 <option value="sqlite3">sqlite 3</option>
-                <option value="sqlite">sqlite 2</option>
              </select></div><br />
+<div><label for="driver"></label>%%config_driverinfo%%</div><br />
 <div><label for="port">%%config_port%%</label><input type="text" name="port" id="port" class="inputText" /></div><br />
 <div><label for="port"></label>%%config_portinfo%%</div><br />
 <div><label for="submit"></label><input type="submit" value="%%config_save%%" class="inputSubmit" /></div><br />
