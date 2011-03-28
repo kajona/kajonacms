@@ -34,9 +34,10 @@ table td {
 
 a.hiddenAnchor {
     margin: 0px !important;
-	padding: 0px !important;
-	border: none !important;
-	display: inline !important; 
+    padding: 0px !important;
+    border: none !important;
+    display: inline !important;
+    position: absolute !important;
 }
 
 a, a:link, a:visited {
