@@ -4,12 +4,12 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$                                      *
+*	$Id$                                     *
 ********************************************************************************************************/
 
 /**
  * Interface to specify the layout of db-drivers.
- * Implement this interface, if you want to provide a db-layer for Kajona
+ * Implement this interface, if you want to provide a db-layer for Kajona.
  *
  * @package modul_system
  */
@@ -41,12 +41,35 @@ interface interface_db_driver {
     public function _query($strQuery);
 
     /**
+     * Sends a prepared statement to the database. All params must be represented by the ? char.
+     * The params themself are stored using the second params using the matching order.
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @return bool
+     * @since 3.4
+     */
+    public function _pQuery($strQuery, $arrParams);
+
+    /**
      * This method is used to retrieve an array of resultsets from the database
      *
      * @param string $strQuery
      * @return array
      */
     public function getArray($strQuery);
+
+
+    /**
+     * This method is used to retrieve an array of resultsets from the database using
+     * a prepared statement
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @since 3.4
+     * @return array
+     */
+    public function getPArray($strQuery, $arrParams);
 
     /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
@@ -60,6 +83,21 @@ interface interface_db_driver {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd);
+
+    /**
+     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * defined by the params. Makes use of prepared statements.
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
+     * the n-th row is the (n-1)th key!!!
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     * @since 3.4
+     */
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
 
     /**
      * Returns the last error reported by the database.

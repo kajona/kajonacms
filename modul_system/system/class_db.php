@@ -10,8 +10,15 @@
 /**
  * This class handles all traffic from and to the database and takes care of a correct tx-handling
  * CHANGE WITH CARE!
+ * Since version 3.4, prepared statments are supported. As a parameter-escaping, only the ? char is allowed,
+ * named params are not supported at the moment.
+ * Old plain queries are still allows, but will be discontinued around kajona 3.5 / 4.0. Up from kajona > 3.4.0 
+ * a warning will be generated when using the old apis.
+ * When using prepared statements, all escaping is done by the database layer.
+ * When using the old, plain queries, you have to escape all embedded arguments yourself by using dbsafeString()
  *
  * @package modul_system
+ *
  */
 class class_db {
     private $arrModule;
@@ -186,6 +193,36 @@ class class_db {
 		return $bitReturn;
 	}
 
+    /**
+	 * Sending a prepared statement to the database
+	 *
+	 * @param string $strQuery
+     * @param $arrParams
+	 * @return bool
+     * @since 3.4
+	 */
+	public function _pQuery($strQuery, $arrParams) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+
+		$bitReturn = false;
+
+		if(_dblog_)
+			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+
+		//Increasing the counter
+		$this->intNumber++;
+
+		if($this->objDbDriver != null) {
+		  $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams));
+		}
+
+		if(!$bitReturn)
+		    $this->getError($strQuery);
+
+		return $bitReturn;
+	}
+
 
 	/**
 	 * Returns one row from a resultset
@@ -196,11 +233,30 @@ class class_db {
 	 * @return array
 	 */
 	public function getRow($strQuery, $intNr = 0, $bitCache = true) {
-			$arrTemp = $this->getArray($strQuery, $bitCache);
-			if(count($arrTemp) > 0)
-				return $arrTemp[$intNr];
-			else
-				return array();
+        $arrTemp = $this->getArray($strQuery, $bitCache);
+        if(count($arrTemp) > 0)
+            return $arrTemp[$intNr];
+        else
+            return array();
+	}
+
+
+    /**
+	 * Returns one row from a resultset.
+     * Makes use of preprared statements.
+	 *
+	 * @param string $strQuery
+     * @param array $arrParams
+	 * @param int $intNr
+	 * @param bool $bitCache
+	 * @return array
+	 */
+	public function getPRow($strQuery, $arrParams, $intNr = 0, $bitCache = true) {
+        $arrTemp = $this->getPArray($strQuery, $arrParams, $bitCache);
+        if(count($arrTemp) > 0)
+            return $arrTemp[$intNr];
+        else
+            return array();
 	}
 
 
@@ -243,6 +299,58 @@ class class_db {
     		$arrReturn = $this->objDbDriver->getArray($strQuery);
     		if($arrReturn === false) {
     		    $this->getError($strQuery);
+    		    return array();
+    		}
+    		if($bitCache)
+    			$this->arrQueryCache[$strQueryMd5] = $arrReturn;
+		}
+		return $arrReturn;
+	}
+
+
+    /**
+	 * Method to get an array of rows for a given query from the database.
+     * Makes use of prepared statements.
+	 *
+	 * @param string $strQuery
+     * @param array $arrParams
+	 * @param bool $bitCache
+	 * @return array
+     * @since 3.4
+	 */
+	public function getPArray($strQuery, $arrParams, $bitCache = true) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+
+		$strQuery = $this->processQuery($strQuery);
+		//Increasing global counter
+		$this->intNumber++;
+
+		if(defined("_system_use_dbcache_")) {
+		    if(_system_use_dbcache_ == "false") {
+		        $bitCache = false;
+		    }
+		}
+
+        $strQueryMd5 = null;
+		if($bitCache) {
+            $strQueryMd5 = md5($strQuery.implode(",",$arrParams));
+			if(isset($this->arrQueryCache[$strQueryMd5])) {
+				//Increasing Cache counter
+				$this->intNumberCache++;
+				return $this->arrQueryCache[$strQueryMd5];
+			}
+		}
+
+		$arrReturn = array();
+
+		if(_dblog_)
+			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+
+		if($this->objDbDriver != null) {
+    		$arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
+    		if($arrReturn === false) {
+    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
     		    return array();
     		}
     		if($bitCache)
@@ -300,6 +408,69 @@ class class_db {
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getArraySection($strQuery, $intStart, $intEnd);
+    		if($arrReturn === false) {
+    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
+    		    return array();
+    		}
+    		if($bitCache)
+    			$this->arrQueryCache[$strQueryMd5] = $arrReturn;
+		}
+
+		return $arrReturn;
+    }
+
+
+    /**
+     * Returns just a part of a recordset, defined by the start- and the end-rows,
+     * defined by the params. Makes use of preprared statements
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
+     * the n-th row is the (n-1)th key!!!
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     */
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd, $bitCache = true) {
+        if(!$this->bitConnected)
+            $this->dbconnect();
+
+        $arrReturn = array();
+        //param validation
+        if((int)$intStart < 0)
+            $intStart = 0;
+
+        if((int)$intEnd < 0)
+            $intEnd = 0;
+        //process query
+        $strQuery = $this->processQuery($strQuery);
+
+        //Increasing global counter
+		$this->intNumber++;
+
+        if(defined("_system_use_dbcache_")) {
+		    if(_system_use_dbcache_ == "false") {
+		        $bitCache = false;
+		    }
+		}
+
+        //generate a hash-value
+        $strQueryMd5 = null;
+		if($bitCache) {
+            $strQueryMd5 = md5($strQuery.$intStart."-".$intEnd.implode(",", $arrParams));
+			if(isset($this->arrQueryCache[$strQueryMd5])) {
+				//Increasing Cache counter
+				$this->intNumberCache++;
+				return $this->arrQueryCache[$strQueryMd5];
+			}
+		}
+
+		if(_dblog_)
+			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+
+		if($this->objDbDriver != null) {
+    		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
     		if($arrReturn === false) {
     		    $this->getError($strQuery);
     		    return array();
@@ -763,14 +934,31 @@ class class_db {
     	return count($this->arrQueryCache);
     }
 
+    /**
+     * Internal wrapper to dbsafeString, used to process a complete array of parameters
+     * as used by prepared statements.
+     *
+     * @param array $arrParams
+     * @return array
+     * @since 3.4
+     * @see class_db::dbsafeString($strString, $bitHtmlSpecialChars = true)
+     */
+    private function dbsafeParams($arrParams) {
+        foreach($arrParams as &$strParam) {
+            $strParam = dbsafeString($strParam, true, false);
+        }
+        return $arrParams;
+    }
+
 	/**
 	 * Makes a string db-safe
 	 *
 	 * @param string $strString
 	 * @param bool $bitHtmlSpecialChars
+     * @param bool $bitAddSlashes
 	 * @return string
 	 */
-	public function dbsafeString($strString, $bitHtmlSpecialChars = true) {
+	public function dbsafeString($strString, $bitHtmlSpecialChars = true, $bitAddSlashes = true) {
 
         //escape special chars
         if($bitHtmlSpecialChars) {
@@ -782,7 +970,9 @@ class class_db {
 	    if(get_magic_quotes_gpc() == 1) {
 	       $strString = stripslashes($strString);
 	    }
-	    $strString = addslashes($strString);
+
+        if($bitAddSlashes)
+            $strString = addslashes($strString);
 
 	    return $strString;
 	}

@@ -11,6 +11,7 @@
  * db-driver for postgres using the php-postgres-interface
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_db_postgres implements interface_db_driver {
 
@@ -22,6 +23,8 @@ class class_db_postgres implements interface_db_driver {
     private $intPort = "";
     private $strDumpBin = "pg_dump";              //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "psql";          //Binary to restore db (if not in path, add the path here)
+
+    private $arrStatementsCache = array();
 
    /**
      * This method makes sure to connect to the database properly
@@ -75,6 +78,24 @@ class class_db_postgres implements interface_db_driver {
     }
 
     /**
+     * Sends a prepared statement to the database. All params must be represented by the ? char.
+     * The params themself are stored using the second params using the matching order.
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @return bool
+     * @since 3.4
+     */
+    public function _pQuery($strQuery, $arrParams) {
+        $strQuery = $this->processQuery($strQuery);
+        $strName = $this->getPreparedStatementName($strQuery);
+        if($strName === false)
+            return false;
+
+        return @pg_execute($this->linkDB, $strName, $arrParams) !== false ;
+    }
+
+    /**
      * This method is used to retrieve an array of resultsets from the database
      *
      * @param string $strQuery
@@ -92,6 +113,37 @@ class class_db_postgres implements interface_db_driver {
 			if(isset($arrRow["count"]))
 				$arrRow["COUNT(*)"] = $arrRow["count"];
 				
+			$arrReturn[$intCounter++] = $arrRow;
+		}
+		return $arrReturn;
+    }
+
+    /**
+     * This method is used to retrieve an array of resultsets from the database using
+     * a prepared statement
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @since 3.4
+     * @return array
+     */
+    public function getPArray($strQuery, $arrParams) {
+        $arrReturn = array();
+        $intCounter = 0;
+        
+        $strQuery = $this->processQuery($strQuery);
+        $strName = $this->getPreparedStatementName($strQuery);
+        if($strName === false)
+            return false;
+
+        $resultSet = @pg_execute($this->linkDB, $strName, $arrParams);
+        
+        while($arrRow = @pg_fetch_array($resultSet)) {
+			//conversions to remain compatible:
+			//   count --> COUNT(*)
+			if(isset($arrRow["count"]))
+				$arrRow["COUNT(*)"] = $arrRow["count"];
+
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -116,6 +168,28 @@ class class_db_postgres implements interface_db_driver {
     }
 
     /**
+     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * defined by the params. Makes use of prepared statements.
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
+     * the n-th row is the (n-1)th key!!!
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     * @since 3.4
+     */
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
+        //calculate the end-value:
+        $intEnd = $intEnd - $intStart +1;
+        //add the limits to the query
+        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
+        //and load the array
+        return $this->getPArray($strQuery, $arrParams);
+    }
+
+    /**
      * Returns the last error reported by the database.
      * Is being called after unsuccessful queries
      *
@@ -135,7 +209,14 @@ class class_db_postgres implements interface_db_driver {
 		$arrTemp = $this->getArray(
 				"SELECT *, table_name as name 
 				   FROM information_schema.tables 
-				   WHERE table_schema = 'public'");
+				   ");
+
+        $arrReturn = array();
+        foreach($arrTemp as $arrOneRow) {
+            if(uniStrpos($arrOneRow["name"], _dbprefix_) !== false)
+                $arrReturn[] = $arrOneRow;
+        }
+
 		return $arrTemp;
     }
     
@@ -152,8 +233,7 @@ class class_db_postgres implements interface_db_driver {
         $arrTemp = $this->getArray("
 			        	SELECT *  
 						FROM information_schema.columns 
-						WHERE table_schema = 'public'
-						AND table_name = '".dbsafeString($strTableName)."'"
+						WHERE table_name = '".dbsafeString($strTableName)."'"
         );
         
         foreach ($arrTemp as $arrOneColumn) {
@@ -398,8 +478,42 @@ class class_db_postgres implements interface_db_driver {
         class_logger::getInstance()->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
     }
-    
-    
+
+    /**
+     * Transforms the query into a valid postgres-syntax
+     *
+     * @param string $strQuery
+     * @return string
+     */
+    private function processQuery($strQuery) {
+        $intCount = 1;
+        while(uniStrpos($strQuery, "?") !== false) {
+            $intPos = uniStrpos($strQuery, "?");
+            $strQuery = substr($strQuery, 0, $intPos)."$".$intCount++.substr($strQuery, $intPos+1);
+        }
+        return $strQuery;
+    }
+
+    /**
+     * Does as cache-lookup for prepared statements.
+     * Reduces the number of recompiles at the db-side.
+     *
+     * @param string $strQuery
+     * @return ressource
+     * @since 3.4
+     */
+    private function getPreparedStatementName($strQuery) {
+        $strSum = md5($strQuery);
+        if(in_array($strSum, $this->arrStatementsCache))
+            return $strSum;
+
+        if(@pg_prepare($this->linkDB, $strSum, $strQuery))
+            $this->arrStatementsCache[] = $strSum;
+        else
+            return false;
+
+        return $strSum;
+    }
 
 }
 

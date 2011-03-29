@@ -22,6 +22,7 @@ class class_db_mysqli implements interface_db_driver {
     private $intPort = "";
     private $strDumpBin = "mysqldump";              //Binary to dump db (if not in path, add the path here)
     private $strRestoreBin = "mysql";               //Binary to dump db (if not in path, add the path here)
+    private $arrStatementsCache = array();
 
    /**
      * This method makes sure to connect to the database properly
@@ -66,7 +67,7 @@ class class_db_mysqli implements interface_db_driver {
 		}
     }
     
-    /*
+    /**
      * Closes the connection to the database
      */
     public function dbclose() {
@@ -81,6 +82,42 @@ class class_db_mysqli implements interface_db_driver {
      */
     public function _query($strQuery) {
 		$bitReturn = @mysqli_query($this->linkDB, $strQuery);
+        return $bitReturn;
+    }
+
+    /**
+     * Sends a prepared statement to the database. All params must be represented by the ? char.
+     * The params themself are stored using the second params using the matching order.
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @return bool
+     * @since 3.4
+     */
+    public function _pQuery($strQuery, $arrParams) { 
+        $objStatement = $this->getPreparedStatement($strQuery);
+        $bitReturn = false;
+        if($objStatement !== false) {
+            $strTypes = "";
+            foreach($arrParams as $strOneParam) {
+                $strType = "s";
+                if(is_numeric($strOneParam))
+                    $strType = "i";
+                if(is_float($strOneParam))
+                    $strType = "d";
+
+                $strTypes .= $strType;
+            }
+            
+            if(count($arrParams) > 0) {
+                $arrParams = array_merge(array($strTypes), $arrParams);
+                call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
+            }
+
+            $bitReturn = mysqli_stmt_execute($objStatement);
+            //mysqli_stmt_close($objStatement);
+        }
+        
         return $bitReturn;
     }
 
@@ -103,6 +140,63 @@ class class_db_mysqli implements interface_db_driver {
     }
 
     /**
+     * This method is used to retrieve an array of resultsets from the database using
+     * a prepared statement.
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @since 3.4
+     * @return array
+     */
+    public function getPArray($strQuery, $arrParams) {
+        $objStatement = $this->getPreparedStatement($strQuery);
+        $arrReturn = array();
+        if($objStatement !== false) {
+            $strTypes = "";
+            foreach($arrParams as $strOneParam) {
+                $strType = "s";
+                if(is_numeric($strOneParam))
+                    $strType = "i";
+                if(is_float($strOneParam))
+                    $strType = "d";
+
+                $strTypes .= $strType;
+            }
+            
+            if(count($arrParams) > 0) {
+                $arrParams = array_merge(array($strTypes), $arrParams);
+                call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
+            }
+
+            if(!mysqli_stmt_execute($objStatement))
+                return false;
+
+            $objMetadata = mysqli_stmt_result_metadata($objStatement);
+            $arrParams = array();
+            $arrRow = array();
+            while ($objField = $objMetadata->fetch_field()) {
+                $arrParams[] = &$arrRow[$objField->name];
+            }
+
+            call_user_func_array(array($objStatement, 'bind_result'), $arrParams);
+
+            while ($objStatement->fetch()) {
+                $arrSingleRow = array();
+                foreach($arrRow as $key => $val)  {
+                    $arrSingleRow[$key] = $val;
+                }
+                $arrReturn[] = $arrSingleRow;
+            }
+
+            //mysqli_stmt_close($objStatement);
+        }
+        else
+            return false;
+
+        return $arrReturn;
+    }
+
+    /**
      * Returns just a part of a recodset, defined by the start- and the end-rows,
      * defined by the params
      *
@@ -118,6 +212,28 @@ class class_db_mysqli implements interface_db_driver {
         $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
         //and load the array
         return $this->getArray($strQuery);
+    }
+
+    /**
+     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * defined by the params. Makes use of prepared statements.
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
+     * the n-th row is the (n-1)th key!!!
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     * @since 3.4
+     */
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
+        //calculate the end-value: mysql limit: start, nr of records, so:
+        $intEnd = $intEnd - $intStart +1;
+        //add the limits to the query
+        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
+        //and load the array
+        return $this->getPArray($strQuery, $arrParams);
     }
 
     /**
@@ -390,6 +506,43 @@ class class_db_mysqli implements interface_db_driver {
         $strResult = system($strCommand, $intTemp);
         class_logger::getInstance()->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
+    }
+
+    /**
+     * Converts a simple array into a an array of references.
+     * Required fpr PHP > 5.3
+     * @param array $arrValues
+     * @return array
+     */
+    private function refValues($arrValues){
+        if (strnatcmp(phpversion(),'5.3') >= 0) { //Reference is required for PHP 5.3+
+            $refs = array();
+            foreach($arrValues as $key => $value)
+                $refs[$key] = &$arrValues[$key];
+            return $refs;
+        }
+        return $arrValues;
+    }
+
+    /**
+     * Prepares a statement or uses an instance from the cache
+     *
+     * @param string $strQuery
+     * @return mysqli_stmt
+     */
+    private function getPreparedStatement($strQuery) {
+
+        $strName = md5($strQuery);
+
+        if(isset($this->arrStatementsCache[$strName]))
+            return $this->arrStatementsCache[$strName];
+
+        $objStatement = mysqli_stmt_init($this->linkDB);
+        mysqli_stmt_prepare($objStatement , $strQuery);
+
+        $this->arrStatementsCache[$strName] = $objStatement;
+
+        return $objStatement;
     }
 
 }

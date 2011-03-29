@@ -24,6 +24,8 @@ class class_db_sqlite3 implements interface_db_driver {
     private $linkDB;
     private $strDbFile;
 
+    private $arrStatementsCache = array();
+
     /**
      * This method makes sure to connect to the database properly
      *
@@ -34,8 +36,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param int $intPort
      * @return bool
      */
-    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort)
-    {
+    public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
         $this->strDbFile = '/system/db/'.$strDbName.'.db3';
 
         try {
@@ -51,8 +52,7 @@ class class_db_sqlite3 implements interface_db_driver {
     /**
      * Closes the connection to the database 
      */
-    public function dbclose()
-    {
+    public function dbclose() {
         $this->linkDB->close();
     }
 
@@ -62,11 +62,44 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strQuery
      * @return bool
      */
-    public function _query($strQuery)
-    {
+    public function _query($strQuery) {
         $strQuery = $this->fixQuoting($strQuery);
         if ($this->linkDB->query($strQuery) === false)
             return false;
+        return true;
+    }
+
+    /**
+     * Sends a prepared statement to the database. All params must be represented by the ? char.
+     * The params themself are stored using the second params using the matching order.
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @return bool
+     * @since 3.4
+     */
+    public function _pQuery($strQuery, $arrParams) {
+        $strQuery = $this->fixQuoting($strQuery);
+        $strQuery = $this->processQuery($strQuery);
+
+        $objStmt = $this->getPreparedStatement($strQuery);
+        if($objStmt === false)
+            return false;
+        $intCount = 1;
+        foreach($arrParams as $strOneParam) {
+            if($strOneParam == null)
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_NULL);
+            else if(is_double($strOneParam))
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+            else if(is_numeric($strOneParam))
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+            else
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
+        }
+
+        if ($objStmt->execute() === false)
+            return false;
+        
         return true;
     }
 
@@ -76,8 +109,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strQuery
      * @return array
      */
-    public function getArray($strQuery)
-    {
+    public function getArray($strQuery) {
         $strQuery = $this->fixQuoting($strQuery);
         $arrReturn = array();
         $resultSet = $this->linkDB->query($strQuery);
@@ -86,6 +118,47 @@ class class_db_sqlite3 implements interface_db_driver {
 		while ($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
 			$arrReturn[] = $arrRow;
         return $arrReturn;
+    }
+
+
+    /**
+     * This method is used to retrieve an array of resultsets from the database using
+     * a prepared statement
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @since 3.4
+     * @return array
+     */
+    public function getPArray($strQuery, $arrParams) {
+        $strQuery = $this->fixQuoting($strQuery);
+        $strQuery = $this->processQuery($strQuery);
+
+        $objStmt = $this->getPreparedStatement($strQuery);
+        if($objStmt === false)
+            return false;
+        
+        $intCount = 1;
+        foreach($arrParams as $strOneParam) {
+            if(is_double($strOneParam))
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+            else if(is_numeric($strOneParam))
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+            else
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
+        }
+
+        $arrResult = array();
+        $objResult = $objStmt->execute();
+
+        if($objResult === false)
+            return false;
+
+        while($arrTemp = $objResult->fetchArray()) {
+            $arrResult[] = $arrTemp;
+        }
+
+        return $arrResult;
     }
 
     /**
@@ -99,8 +172,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param int $intEnd
      * @return array
      */
-    public function getArraySection($strQuery, $intStart, $intEnd)
-    {
+    public function getArraySection($strQuery, $intStart, $intEnd) {
         //calculate the end-value: mysql limit: start, nr of records, so:
         $intEnd = $intEnd - $intStart + 1;
         //add the limits to the query
@@ -110,13 +182,35 @@ class class_db_sqlite3 implements interface_db_driver {
     }
 
     /**
+     * Returns just a part of a recodset, defined by the start- and the end-rows,
+     * defined by the params. Makes use of prepared statements.
+     * <b>Note:</b> Use array-like counters, so the first row is startRow 0 whereas
+     * the n-th row is the (n-1)th key!!!
+     *
+     * @param string $strQuery
+     * @param array $arrParams
+     * @param int $intStart
+     * @param int $intEnd
+     * @return array
+     * @since 3.4
+     */
+    public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
+        //calculate the end-value: mysql limit: start, nr of records, so:
+        $intEnd = $intEnd - $intStart + 1;
+        //add the limits to the query
+        $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
+        //and load the array
+        return $this->getArray($strQuery, $arrParams);
+    }
+    
+
+    /**
      * Returns the last error reported by the database.
      * Is being called after unsuccessful queries
      *
      * @return string
      */
-    public function getError()
-    {
+    public function getError() {
         return $this->linkDB->lastErrorMsg();
     }
 
@@ -127,8 +221,7 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @return array
      */
-    public function getTables()
-    {
+    public function getTables()  {
         $arrReturn = array();
         $resultSet = $this->linkDB->query("SELECT name FROM sqlite_master WHERE type='table'");
 		while ($arrRow = $resultSet->fetchArray(SQLITE3_ASSOC))
@@ -144,8 +237,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strTableName
      * @return array
      */
-    public function getColumnsOfTable($strTableName)
-    {
+    public function getColumnsOfTable($strTableName)  {
         $arrColumns = array();
         $arrTableInfo = $this->getArray("SELECT sql FROM sqlite_master".
             " WHERE type='table' and name='".$strTableName."'");
@@ -196,8 +288,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param bool $bitTxSafe Should the table support transactions?
      * @return bool
      */
-    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)
-    {
+    public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true)  {
         $arrTables = $this->getTables();
         foreach ($arrTables as $arrTable)
             if ($arrTable["name"] == $strName)
@@ -241,8 +332,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * Starts a transaction
      *
      */
-    public function transactionBegin()
-    {
+    public function transactionBegin() {
         $this->_query("BEGIN TRANSACTION");
     }
 
@@ -250,8 +340,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * Ends a successfull operation by Commiting the transaction
      *
      */
-    public function transactionCommit()
-    {
+    public function transactionCommit() {
         $this->_query("COMMIT TRANSACTION");
     }
 
@@ -273,8 +362,7 @@ class class_db_sqlite3 implements interface_db_driver {
      *
      * @return mixed
      */
-    public function getDbInfo()
-    {
+    public function getDbInfo() {
         $arrDB = SQLite3::version();
         $arrReturn = array();
         $arrReturn["dbdriver"] = "sqlite3-extension";
@@ -293,8 +381,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @return bool Indicates, if the dump worked or not
      *
      */
-    public function dbExport($strFilename, $arrTables)
-    {
+    public function dbExport($strFilename, $arrTables) {
         // FIXME: Only export relevant tables.
         $objFilesystem = new class_filesystem();
         return $objFilesystem->fileCopy($this->strDbFile, $strFilename);
@@ -306,8 +393,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strFilename
      * @return bool
      */
-    public function dbImport($strFilename)
-    {
+    public function dbImport($strFilename) {
         $objFilesystem = new class_filesystem();
         return $objFilesystem->fileCopy($strFilename, $this->strDbFile, true);
     }
@@ -319,8 +405,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strColum
      * @return string
      */
-    public function encloseColumnName($strColumn)
-    {
+    public function encloseColumnName($strColumn) {
         return $strColumn;
     }
     
@@ -331,8 +416,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strTable
      * @return string
      */
-    public function encloseTableName($strTable)
-    {
+    public function encloseTableName($strTable) {
         return $strTable;
     }
     
@@ -353,8 +437,7 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param string $strType
      * @return string
      */
-    public function getDatatype($strType)
-    {
+    public function getDatatype($strType) {
         $strReturn = "";
     	
         if($strType == "int")
@@ -391,11 +474,44 @@ class class_db_sqlite3 implements interface_db_driver {
      * @param srtin $strSql
      * @return string
      */
-    private function fixQuoting($strSql)
-    {
+    private function fixQuoting($strSql) {
         $strSql =  str_replace("\\'", "''", $strSql);
         $strSql =  str_replace("\\\"", "\"", $strSql);
         return $strSql;
+    }
+
+    /**
+     * Transforms the query into a valid sqlite-syntax
+     *
+     * @param string $strQuery
+     * @return string
+     */
+    private function processQuery($strQuery) {
+        $intCount = 1;
+        while(uniStrpos($strQuery, "?") !== false) {
+            $intPos = uniStrpos($strQuery, "?");
+            $strQuery = substr($strQuery, 0, $intPos).":param".$intCount++.substr($strQuery, $intPos+1);
+        }
+        return $strQuery;
+    }
+
+    /**
+     * Prepares a statement or uses an instance from the cache
+     *
+     * @param string $strQuery
+     * @return SQLite3Stmt
+     */
+    private function getPreparedStatement($strQuery) {
+
+        $strName = md5($strQuery);
+        
+        if(isset($this->arrStatementsCache[$strName]))
+            return $this->arrStatementsCache[$strName];
+
+        $objStmt = $this->linkDB->prepare($strQuery);
+        $this->arrStatementsCache[$strName] = $objStmt;
+        
+        return $objStmt;
     }
 }
 
