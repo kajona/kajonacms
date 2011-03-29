@@ -182,7 +182,7 @@ class class_installer {
             $arrDrivers = array();
             if(in_array("mysqli", get_loaded_extensions()))
                 $arrDrivers[] = "mysqli";
-            if(in_array("postgres", get_loaded_extensions()))
+            if(in_array("pgsql", get_loaded_extensions()))
                 $arrDrivers[] = "postgres";
             if(in_array("sqlite3", get_loaded_extensions()))
                 $arrDrivers[] = "sqlite3";
