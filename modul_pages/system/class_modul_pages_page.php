@@ -89,16 +89,16 @@ class class_modul_pages_page extends class_model implements interface_model, int
 					FROM "._dbprefix_."system,
 					     ".$this->arrModule["table"]."
 					WHERE system_id = page_id
-					  AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-		$arrRow = $this->objDB->getRow($strQuery);
+					  AND system_id = ?";
+		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()) );
 
 		//language dependant fields
 		if(count($arrRow) > 0) {
     		$strQuery = "SELECT *
     					FROM ".$this->arrModule["table2"]."
-    					WHERE pageproperties_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
-    					  AND pageproperties_language = '".dbsafeString($this->getStrLanguage())."'";
-    		$arrPropRow = $this->objDB->getRow($strQuery);
+    					WHERE pageproperties_id = ?
+    					  AND pageproperties_language = ? ";
+    		$arrPropRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->getStrLanguage() ));
     		if(count($arrPropRow) == 0) {
     		    $arrPropRow["pageproperties_browsername"] = "";
         		$arrPropRow["pageproperties_description"] = "";
@@ -164,41 +164,58 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		//Update the baserecord
 		$strQuery = "UPDATE  "._dbprefix_."page
-					SET page_name='".$this->objDB->dbsafeString($strName)."'
-				       WHERE page_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+					SET page_name= ?
+				       WHERE page_id= ?";
 
 
 		//and the properties record
 		//properties for this language already existing?
 		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table2"]."
-		                 WHERE pageproperties_id='".$this->objDB->dbsafeString($this->getSystemid())."'
-		                   AND pageproperties_language='".$this->objDB->dbsafeString($this->getStrLanguage())."'";
-		$arrCountRow = $this->objDB->getRow($strCountQuery);
+		                 WHERE pageproperties_id= ?
+		                   AND pageproperties_language= ?";
+		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()) );
 
 
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
     		$strQuery2 = "UPDATE  "._dbprefix_."page_properties
-    					SET pageproperties_description='".$this->objDB->dbsafeString($this->getStrDesc())."',
-    						pageproperties_template='".$this->objDB->dbsafeString($this->getStrTemplate())."',
-    						pageproperties_keywords='".$this->objDB->dbsafeString($this->getStrKeywords())."',
-    						pageproperties_browsername='".$this->objDB->dbsafeString($this->getStrBrowsername())."',
-    						pageproperties_seostring='".$this->objDB->dbsafeString($this->getStrSeostring())."'
-    						WHERE pageproperties_id='".$this->objDB->dbsafeString($this->getSystemid())."'
-    						  AND pageproperties_language='".$this->objDB->dbsafeString($this->getStrLanguage())."'";
+    					SET pageproperties_description=?,
+    						pageproperties_template=?,
+    						pageproperties_keywords=?,
+    						pageproperties_browsername=?,
+    						pageproperties_seostring=?
+    						WHERE pageproperties_id=?
+    						  AND pageproperties_language=?";
+
+            $arrParams = array(
+                $this->getStrDesc(),
+    			$this->getStrTemplate(),
+    			$this->getStrKeywords(),
+    			$this->getStrBrowsername(),
+    			$this->getStrSeostring(),
+    			$this->getSystemid(),
+    			$this->getStrLanguage()
+            );
 		}
 		else {
 		    //Not existing, create one
 		    $strQuery2 = "INSERT INTO ".$this->arrModule["table2"]."
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
 						 pageproperties_seostring, pageproperties_language) VALUES
-						('".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($this->getStrKeywords())."',
-						 '".$this->objDB->dbsafeString($this->getStrDesc())."', '".$this->objDB->dbsafeString($this->getStrTemplate())."',
-						 '".$this->objDB->dbsafeString($this->getStrBrowsername())."', '".$this->objDB->dbsafeString($this->getStrSeostring())."',
-						 '".$this->objDB->dbsafeString($this->getStrLanguage())."')";
+						(?, ?, ?, ?, ?, ?, ?)";
+
+            $arrParams = array(
+                $this->getSystemid(),
+                $this->getStrKeywords(),
+                $this->getStrDesc(),
+                $this->getStrTemplate(),
+                $this->getStrBrowsername(),
+                $this->getStrSeostring(),
+                $this->getStrLanguage()
+            );
 		}
 
-        return ($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2)) ;
+        return ($this->objDB->_pQuery($strQuery, array( $strName, $this->getSystemid() ) ) && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
 
 		
     }
@@ -215,17 +232,21 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	 * @static
 	 */
 	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "") {
+        $arrParams = array();
+        if($strFilter != "")
+            $arrParams[] = $strFilter;
+        
 		$strQuery = "SELECT system_id
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
 					WHERE system_id = page_id
-					".($strFilter != "" ? " AND page_name like '".dbsafeString($strFilter)."%'" : "" )."
+					".($strFilter != "" ? " AND page_name like ? " : "" )."
 					ORDER BY page_name ASC";
 
 		if($intStart == 0 && $intEnd == 0)
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 		else
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -244,7 +265,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
 					WHERE system_id = page_id";
-		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 		return $arrRow["COUNT(*)"];
 	}
 
@@ -257,8 +278,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	public static function getPageByName($strName) {
         $strQuery = "SELECT page_id
 						FROM "._dbprefix_."page
-						WHERE page_name='".dbsafeString($strName)."'";
-		$arrId = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+						WHERE page_name= ?";
+		$arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 		return new class_modul_pages_page((isset($arrId["page_id"]) ? $arrId["page_id"] : ""));
 	}
 
@@ -274,12 +295,12 @@ class class_modul_pages_page extends class_model implements interface_model, int
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
-						 WHERE system_prev_id='".dbsafeString($this->getSystemid())."'
+						 WHERE system_prev_id=? 
 						   AND page_element_placeholder_element = element_name
 						   AND system_id = page_element_id
 						   ".( $bitJustActive ? "AND system_status = 1 " : "")."
-						   AND page_element_placeholder_language = '".dbsafeString($this->getStrLanguage())."'";
-		$arrRow = $this->objDB->getRow($strQuery);
+						   AND page_element_placeholder_language = ?";
+		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage() ));
 		return $arrRow["COUNT(*)"];
 	}
 
@@ -293,10 +314,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    //Check, if there are any Elements on this page
 		$strQuery = "SELECT COUNT(*)
 						 FROM "._dbprefix_."system as system
-						  WHERE system_prev_id='".$this->objDB->dbsafeString($this->getSystemid())."'
+						  WHERE system_prev_id=?
 							AND system_lock_id != 0
-							AND system_lock_id != '".dbsafeString($this->objSession->getUserID())."'";
-		$arrRow = $this->objDB->getRow($strQuery);
+							AND system_lock_id != ? ";
+		$arrRow = $this->objDB->getPRow($strQuery, array( $this->getSystemid(), $this->objSession->getUserID()  ));
 		return $arrRow["COUNT(*)"];
 	}
 
@@ -327,9 +348,9 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		if($bitElements) {
 			//Delete the page and the properties out of the tables
-			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = '".dbsafeString($this->getSystemid())."'";
-			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = '".dbsafeString($this->getSystemid())."'";
-			if($this->objDB->_query($strQuery) && $this->objDB->_query($strQuery2)) {
+			$strQuery = "DELETE FROM "._dbprefix_."page WHERE page_id = ? ";
+			$strQuery2 = "DELETE FROM "._dbprefix_."page_properties WHERE pageproperties_id = ?";
+			if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()) )) {
 				$this->deleteSystemRecord($this->getSystemid());
 			}
 			else {
@@ -367,17 +388,17 @@ class class_modul_pages_page extends class_model implements interface_model, int
             $strId = $arrOneId["pageproperties_id"];
             $strCountQuery = "SELECT COUNT(*)
                                 FROM "._dbprefix_."page_properties
-                               WHERE pageproperties_language = '".dbsafeString($strTargetLanguage)."'
-                                 AND pageproperties_id = '".dbsafeString($strId)."'";
-            $arrCount = class_carrier::getInstance()->getObjDB()->getRow($strCountQuery);
+                               WHERE pageproperties_language = ?
+                                 AND pageproperties_id = ? ";
+            $arrCount = class_carrier::getInstance()->getObjDB()->getPRow($strCountQuery, array( $strTargetLanguage, $strId ) );
 
             if((int)$arrCount["COUNT(*)"] == 0) {
                 $strUpdate = "UPDATE "._dbprefix_."page_properties
-                              SET pageproperties_language = '".dbsafeString($strTargetLanguage)."'
+                              SET pageproperties_language = ?
                               WHERE ( pageproperties_language = '' OR pageproperties_language IS NULL )
-                                 AND pageproperties_id = '".dbsafeString($strId)."'";
+                                 AND pageproperties_id = ? ";
 
-                if(!class_carrier::getInstance()->getObjDB()->_query($strUpdate))
+                if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array( $strTargetLanguage, $strId  ) ))
                     return false;
             }
         }
@@ -398,10 +419,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    $strSourcePage = $this->getSystemid();
 
 	    //load basic page properties
-	    $arrBasicSourcePage = $this->objDB->getRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_id = '".dbsafeString($strSourcePage)."'");
+	    $arrBasicSourcePage = $this->objDB->getPRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_id = ?", array( $strSourcePage ));
 
 	    //and load an array of corresponding pageproperties
-	    $arrBasicSourceProperties = $this->objDB->getArray("SELECT * FROM ".$this->arrModule["table2"]." WHERE pageproperties_id = '".dbsafeString($strSourcePage)."'");
+	    $arrBasicSourceProperties = $this->objDB->getPArray("SELECT * FROM ".$this->arrModule["table2"]." WHERE pageproperties_id = ?", array( $strSourcePage ));
 
 	    //create the new systemid
 	    $strIdOfNewPage = generateSystemid();
@@ -422,8 +443,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    //create the foregin record in our table
 	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
 	    			(page_id, page_name) VALUES
-	    			('".dbsafeString($strIdOfNewPage)."', '".dbsafeString($strNewPagename)."')";
-	    if(!$this->objDB->_query($strQuery)) {
+	    			(?, ?)";
+	    if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPage, $strNewPagename ) )) {
 	        $this->objDB->transactionRollback();
             class_logger::getInstance()->addLogRow("error while creating record in table ".$this->arrModule["table"], class_logger::$levelError);
 	        return false;
@@ -431,24 +452,28 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
         //update the comment in system-table
         $strQuery = "UPDATE "._dbprefix_."system
-                        SET system_comment='PAGE: ".$this->objDB->dbsafeString($strNewPagename)."'
-                      WHERE system_id = '".$this->objDB->dbsafeString($strIdOfNewPage)."'";
+                        SET system_comment= ?
+                      WHERE system_id= ?";
 
-        $this->objDB->_query($strQuery);
+        $this->objDB->_pQuery($strQuery, array($strNewPagename, $strIdOfNewPage ));
 
 	    //insert all pageprops in all languages
 	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
 	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
 	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES
-	        ('".dbsafeString($strIdOfNewPage)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_browsername"], false)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_keywords"], false)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_description"], false)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_template"], false)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_seostring"], false)."',
-	        '".dbsafeString($arrOneProperty["pageproperties_language"], false)."')";
+	        (?, ?, ?, ?, ?, ?, ?)";
 
-	        if(!$this->objDB->_query($strQuery)) {
+            $arrValues = array(
+                $strIdOfNewPage,
+                $arrOneProperty["pageproperties_browsername"],
+                $arrOneProperty["pageproperties_keywords"],
+                $arrOneProperty["pageproperties_description"],
+                $arrOneProperty["pageproperties_template"],
+                $arrOneProperty["pageproperties_seostring"],
+                $arrOneProperty["pageproperties_language"]
+            );
+
+	        if(!$this->objDB->_pQuery($strQuery, $arrValues)) {
 	            $this->objDB->transactionRollback();
                 class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
 	            return false;
@@ -488,8 +513,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 		//Pagename already existing?
 		$strQuery = "SELECT page_id
 					FROM ".$this->arrModule["table"]."
-					WHERE page_name='".$this->objDB->dbsafeString($strName)."'";
-		$arrTemp = $this->objDB->getRow($strQuery);
+					WHERE page_name=? ";
+		$arrTemp = $this->objDB->getPRow($strQuery, array($strName));
 
 		$intNumbers = count($arrTemp);
 		if($intNumbers != 0 && !($bitAvoidSelfchek && $arrTemp["page_id"] == $this->getSystemid()) ) {
@@ -499,8 +524,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 				$strTemp = $strName."_".$intCount;
 				$strQuery = "SELECT page_id
 							FROM ".$this->arrModule["table"] ."
-							WHERE page_name='".$this->objDB->dbsafeString($strTemp)."'";
-				$arrTemp = $this->objDB->getRow($strQuery);
+							WHERE page_name=? ";
+				$arrTemp = $this->objDB->getPRow($strQuery, array($strTemp));
 				$intNumbers = count($arrTemp);
 				$intCount++;
 			}

@@ -74,9 +74,9 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         //load content language-dependant
         $strQuery = "SELECT *
                     FROM ".$this->arrModule["table"]."
-                    WHERE folderproperties_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
-                      AND folderproperties_language = '".dbsafeString($this->getStrLanguage())."'";
-        $arrPropRow = $this->objDB->getRow($strQuery);
+                    WHERE folderproperties_id = ?
+                      AND folderproperties_language = ?";
+        $arrPropRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage() ));
         if(count($arrPropRow) == 0) {
             $arrPropRow["folderproperties_name"] = "";
             $arrPropRow["folderproperties_language"] = "";
@@ -102,27 +102,30 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         //and the properties record
 		//properties for this language already existing?
 		$strCountQuery = "SELECT COUNT(*) FROM ".$this->arrModule["table"]."
-		                 WHERE folderproperties_id='".dbsafeString($this->getSystemid())."'
-		                   AND folderproperties_language='".dbsafeString($this->getStrLanguage())."'";
-		$arrCountRow = $this->objDB->getRow($strCountQuery);
+		                 WHERE folderproperties_id=?
+		                   AND folderproperties_language=?";
+		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage() ));
 
 
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
     		$strQuery = "UPDATE  ".$this->arrModule["table"]."
-    					    SET folderproperties_name='".dbsafeString($this->getStrName())."'
-    				      WHERE folderproperties_id='".dbsafeString($this->getSystemid())."'
-    			      	    AND folderproperties_language='".dbsafeString($this->getStrLanguage())."'";
+    					    SET folderproperties_name=?
+    				      WHERE folderproperties_id=?
+    			      	    AND folderproperties_language=?";
+
+            $arrParams = array($this->getStrName(), $this->getSystemid(), $this->getStrLanguage());
 		}
 		else {
 		    //Not existing, create one
 		    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
 						(folderproperties_id, folderproperties_name, folderproperties_language) VALUES
-						('".dbsafeString($this->getSystemid())."', '".dbsafeString($this->getStrName())."',
-						 '".dbsafeString($this->getStrLanguage())."')";
+						(?,?,?)";
+
+            $arrParams = array($this->getSystemid(), $this->getStrName(), $this->getStrLanguage());
 		}
 
-        return $this->objDB->_query($strQuery) ;
+        return $this->objDB->_pQuery($strQuery, $arrParams) ;
         
     }
 
@@ -139,11 +142,11 @@ class class_modul_pages_folder extends class_model implements interface_model, i
             
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
-		              WHERE system_module_nr="._pages_folder_id_."
-		                AND system_prev_id='".dbsafeString($strSystemid)."'
+		              WHERE system_module_nr=?
+		                AND system_prev_id=?
 		             ORDER BY system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(_pages_folder_id_, $strSystemid));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_pages_folder($arrOneId["system_id"]);
@@ -166,10 +169,10 @@ class class_modul_pages_folder extends class_model implements interface_model, i
             $strNewPrevID = class_modul_system_module::getModuleByName("pages")->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
-		              SET  system_prev_id='".dbsafeString($strNewPrevID)."'
-		              WHERE system_id='".dbsafeString($strFolderID)."'
-		                AND system_module_nr="._pages_folder_id_;
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+		              SET  system_prev_id=?
+		              WHERE system_id=?
+		                AND system_module_nr=?";
+		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strFolderID, _pages_folder_id_));
 	}
 
 
@@ -188,10 +191,10 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 
 
 		$strQuery = "UPDATE "._dbprefix_."system
-		              SET system_prev_id='".dbsafeString($strNewPrevID)."'
-		              WHERE system_id='".dbsafeString($strSiteID)."'
-		              AND system_module_nr="._pages_modul_id_;
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+		              SET system_prev_id=?
+		              WHERE system_id=?
+		              AND system_module_nr=?";
+		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strNewPrevID, $strSiteID, _pages_modul_id_));
 	}
 
 
@@ -209,12 +212,12 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		$strQuery = "SELECT system_id
 						FROM "._dbprefix_."page as page,
 							 "._dbprefix_."system as system
-						WHERE system.system_prev_id='".dbsafeString($strFolderid)."'
-							AND system.system_module_nr="._pages_modul_id_."
+						WHERE system.system_prev_id=?
+							AND system.system_module_nr=?
 							AND system.system_id = page.page_id
 							ORDER BY system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $strFolderid, _pages_modul_id_ ) );
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_pages_page($arrOneId["system_id"]);
@@ -235,11 +238,11 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 
 		$strQuery = "SELECT system_id, system_module_nr
 						FROM "._dbprefix_."system
-						WHERE system_prev_id='".dbsafeString($strFolderid)."'
-							AND (system_module_nr = "._pages_modul_id_." OR system_module_nr = "._pages_folder_id_." )
+						WHERE system_prev_id=?
+							AND (system_module_nr = ? OR system_module_nr = ? )
 							ORDER BY system_sort ASC";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFolderid, _pages_modul_id_, _pages_folder_id_));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneRecord) {
             if($arrOneRecord["system_module_nr"] == _pages_modul_id_)
@@ -263,9 +266,9 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
 	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0) {
             //delete the folder-properties
-            $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = '".dbsafeString($this->getSystemid())."'";
+            $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
 
-	        return $this->objDB->_query($strQuery) && $this->deleteSystemRecord($this->getSystemid());
+	        return $this->objDB->_pQuery($strQuery, array($this->getSystemid())) && $this->deleteSystemRecord($this->getSystemid());
         }
 	    else
 	        return false;

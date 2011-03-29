@@ -67,8 +67,8 @@ class class_modul_pages_element extends class_model implements interface_model  
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+        $strQuery = "SELECT * FROM "._dbprefix_."element WHERE element_id=?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrName($arrRow["element_name"]);
         $this->setStrClassAdmin($arrRow["element_class_admin"]);
@@ -93,22 +93,20 @@ class class_modul_pages_element extends class_model implements interface_model  
 
             $strQuery = "INSERT INTO "._dbprefix_."element
 					(element_id, element_name, element_class_portal, element_class_admin, element_repeat, element_cachetime, element_version) VALUES
-					('".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
-					 '".$this->objDB->dbsafeString($this->getStrClassPortal())."', '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
-                      ".(int)$this->getIntRepeat().", ".(int)$this->getIntCachetime().", '".dbsafeString($this->getStrVersion())."')";
+					(?, ?, ?, ?, ?, ?, ?)";
 
-            return $this->objDB->_query($strQuery);
+            return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), (int)$this->getIntRepeat(), (int)$this->getIntCachetime(), $this->getStrVersion() ));
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."element SET
-                            element_name = '".$this->objDB->dbsafeString($this->getStrName())."',
-                            element_class_portal = '".$this->objDB->dbsafeString($this->getStrClassPortal())."',
-                            element_class_admin = '".$this->objDB->dbsafeString($this->getStrClassAdmin())."',
-                            element_cachetime = '".$this->objDB->dbsafeString($this->getIntCachetime())."',
-                            element_repeat = ".$this->objDB->dbsafeString($this->getIntRepeat()).",
-                            element_version = '".$this->objDB->dbsafeString($this->getStrVersion())."'
-                            WHERE element_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-            return $this->objDB->_query($strQuery);
+                            element_name = ?,
+                            element_class_portal = ?,
+                            element_class_admin = ?,
+                            element_cachetime = ?,
+                            element_repeat = ?,
+                            element_version = ?
+                            WHERE element_id= ?";
+            return $this->objDB->_pQuery($strQuery, array( $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), $this->getIntCachetime(), $this->getIntRepeat(), $this->getStrVersion(), $this->getSystemid()));
         }
     }
 
@@ -121,7 +119,7 @@ class class_modul_pages_element extends class_model implements interface_model  
 	public static function getAllElements() {
 		$strQuery = "SELECT element_id FROM "._dbprefix_."element ORDER BY element_name";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_pages_element($arrOneId["element_id"]);
@@ -136,8 +134,8 @@ class class_modul_pages_element extends class_model implements interface_model  
 	 * @return class_modul_pages_element
 	 */
 	public static function getElement($strName) {
-		$strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name='".dbsafeString($strName)."'";
-		$arrId = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+		$strQuery = "SELECT element_id FROM "._dbprefix_."element WHERE element_name=?";
+		$arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 		if(isset($arrId["element_id"]))
             return new class_modul_pages_element($arrId["element_id"]);
         else
@@ -150,8 +148,8 @@ class class_modul_pages_element extends class_model implements interface_model  
 	 * @return bool
 	 */
 	public function deleteElement() {
-	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id='".dbsafeString($this->getSystemid())."'";
-	    return $this->objDB->_query($strQuery);
+	    $strQuery = "DELETE FROM "._dbprefix_."element WHERE element_id=?";
+	    return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
     /**
