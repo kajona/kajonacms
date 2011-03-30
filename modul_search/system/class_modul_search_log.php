@@ -83,9 +83,9 @@ class class_modul_search_log extends class_model implements interface_model  {
     	
         $strQuery = "INSERT INTO "._dbprefix_."search_log 
                     (search_log_id, search_log_date, search_log_query, search_log_language) VALUES
-                    ('".dbsafeString(generateSystemid())."', ".(int)time().", '".dbsafeString($strSeachterm)."', '".dbsafeString($strLanguage)."'  )";
+                    (?, ?, ?, ? )";
         
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(generateSystemid(), (int)time(), $strSeachterm, $strLanguage ));
     }
     
     /**
@@ -94,10 +94,10 @@ class class_modul_search_log extends class_model implements interface_model  {
      * @return array
      */
     public function getLogBookEntries() {
-        return $this->objDB->getArray("SELECT search_log_date, search_log_query 
+        return $this->objDB->getPArray("SELECT search_log_date, search_log_query
                                          FROM ".$this->arrModule["table"]."
                                      GROUP BY search_log_date 
-                                     ORDER BY search_log_date DESC");
+                                     ORDER BY search_log_date DESC", array());
     }
 
 }

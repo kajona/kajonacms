@@ -80,9 +80,9 @@ class class_modul_search_commons extends class_model implements interface_model 
      */
     private function isPageValid($strPagename) {
         $strQuery = "SELECT * FROM "._dbprefix_."page, "._dbprefix_."system
-		                  WHERE page_name = '".$this->objDB->dbsafeString($strPagename)."'
+		                  WHERE page_name = ?
 		                  AND system_id = page_id";
-		$arrPage = $this->objDB->getRow($strQuery);
+		$arrPage = $this->objDB->getPRow($strQuery, array($strPagename) );
 		return (count($arrPage) < 1 || $arrPage["system_status"] != 1 || !$this->objRights->rightView($arrPage["system_id"]));
     }
 
