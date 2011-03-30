@@ -67,8 +67,8 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
                                    "._dbprefix_."system
 						WHERE system_id = filemanager_id
-						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+						AND system_id = ? ";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(isset($arrRow["filemanager_name"])) {
             $this->setStrName($arrRow["filemanager_name"]);
@@ -82,13 +82,15 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
     protected function updateStateToDb() {
 
         $strQuery = "UPDATE "._dbprefix_."filemanager
-                     SET filemanager_name = '".$this->objDB->dbsafeString($this->getStrName())."',
-                         filemanager_path = '".$this->objDB->dbsafeString($this->getStrPath())."',
-                         filemanager_upload_filter = '".$this->objDB->dbsafeString($this->getStrUploadFilter())."',
-                         filemanager_view_filter = '".$this->objDB->dbsafeString($this->getStrViewFilter())."',
-                         filemanager_foreign_id = '".$this->objDB->dbsafeString($this->getStrForeignId())."'
-                     WHERE filemanager_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                     SET filemanager_name = ?,
+                         filemanager_path = ?,
+                         filemanager_upload_filter = ?,
+                         filemanager_view_filter = ?,
+                         filemanager_foreign_id = ?
+                     WHERE filemanager_id = ?";
+        return $this->objDB->_pQuery($strQuery, array(
+            $this->getStrName(), $this->getStrPath(), $this->getStrUploadFilter(), $this->getStrViewFilter(), $this->getStrForeignId(), $this->getSystemid()
+        ));
 
     }
 
@@ -108,7 +110,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $strQuery = "SELECT system_id FROM "._dbprefix_."filemanager AS file, "._dbprefix_."system AS system
 						WHERE system_id = filemanager_id
                     ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")."";
-        $arrIds = $objDB->getArray($strQuery);
+        $arrIds = $objDB->getPArray($strQuery, array());
 
         foreach ($arrIds as $arrOneID)
             $arrReturn[] = new class_modul_filemanager_repo($arrOneID["system_id"]);
@@ -123,12 +125,11 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
      * @static
      */
     public static function getRepoForForeignId($strForeignId) {
-        $arrReturn = array();
         $objDB = class_carrier::getInstance()->getObjDB();
 
         $strQuery = "SELECT filemanager_id FROM "._dbprefix_."filemanager
-                        WHERE filemanager_foreign_id = '".dbsafeString($strForeignId)."'";
-        $arrId = $objDB->getRow($strQuery);
+                        WHERE filemanager_foreign_id = ? ";
+        $arrId = $objDB->getPRow($strQuery, array($strForeignId));
 
         if(isset($arrId["filemanager_id"]))
             return new class_modul_filemanager_repo($arrId["filemanager_id"]);
@@ -152,8 +153,8 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         //Delete from the system-table
 
         //And the repo itself
-        $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id='".dbsafeString($this->getSystemid())."'";
-        if(!$this->objDB->_query($strQuery))
+        $strQuery = "DELETE FROM "._dbprefix_."filemanager WHERE filemanager_id=?";
+        if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
             $bitCommit = false;
 
         if(!$this->deleteSystemRecord($this->getSystemid()))
