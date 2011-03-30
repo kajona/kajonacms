@@ -53,8 +53,8 @@ class class_modul_languages_languageset extends class_model implements interface
      * Inits the current object and loads the language-mappings
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE languageset_id = '".dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getArray($strQuery);
+        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE languageset_id = ?";
+        $arrRow = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
             $this->arrLanguageSet = array();
@@ -78,8 +78,8 @@ class class_modul_languages_languageset extends class_model implements interface
         }
         else {
             //remove old records
-            $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE languageset_id = '".dbsafeString($this->getSystemid())."'";
-            $this->objDB->_query($strQuery);
+            $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE languageset_id = ?";
+            $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
         }
 
 
@@ -89,9 +89,9 @@ class class_modul_languages_languageset extends class_model implements interface
         foreach($this->arrLanguageSet as $strLanguage => $strSystemid) {
             $strQuery = "INSERT INTO ".$this->arrModule["table"]."
                            (languageset_id, languageset_language, languageset_systemid) VALUES
-                           ('".dbsafeString($this->getSystemid())."', '".dbsafeString($strLanguage)."', '".dbsafeString($strSystemid)."')";
+                           (?, ?, ?)";
 
-            $bitReturn &= $this->objDB->_query($strQuery);
+            $bitReturn &= $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $strLanguage, $strSystemid));
         }
 
         return $bitReturn;
@@ -167,9 +167,9 @@ class class_modul_languages_languageset extends class_model implements interface
     public static function getLanguagesetForSystemid($strSystemid) {
         $strQuery = "SELECT languageset_id
                        FROM "._dbprefix_."languages_languageset
-                      WHERE languageset_systemid = '".dbsafeString($strSystemid)."'";
+                      WHERE languageset_systemid = ?";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strSystemid) );
 
         if(isset($arrRow["languageset_id"])) {
             $objReturn = new class_modul_languages_languageset($arrRow["languageset_id"]);
@@ -217,14 +217,13 @@ class class_modul_languages_languageset extends class_model implements interface
      *
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
-        $bitReturn = true;
 
         //fire a plain query on the database, much faster then searching for matching records
         $strQuery = "DELETE FROM "._dbprefix_."languages_languageset
-                      WHERE languageset_language = '".dbsafeString($strSystemid)."'
-                         OR languageset_systemid = '".dbsafeString($strSystemid)."'";
+                      WHERE languageset_language = ?
+                         OR languageset_systemid = ?";
 
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid, $strSystemid));
         
     }
    

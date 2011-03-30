@@ -64,8 +64,8 @@ class class_modul_languages_language extends class_model implements interface_mo
     public function initObject() {
         $strQuery = "SELECT * FROM "._dbprefix_."system, ".$this->arrModule["table"]."
                      WHERE system_id = language_id
-                     AND system_id = '".dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+                     AND system_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 1) {
             $this->setBitDefault($arrRow["language_default"]);
@@ -87,10 +87,10 @@ class class_modul_languages_language extends class_model implements interface_mo
         }
         
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                     SET language_name = '".dbsafeString($this->getStrName())."',
-                         language_default = '".dbsafeString($this->getBitDefault())."'
-                     WHERE language_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                     SET language_name = ?,
+                         language_default = ?
+                     WHERE language_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getBitDefault(), $this->getSystemid() ));
     }
 
     /**
@@ -106,7 +106,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		             WHERE system_id = language_id
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_languages_language($arrOneId["system_id"]);
@@ -125,7 +125,7 @@ class class_modul_languages_language extends class_model implements interface_mo
                      FROM "._dbprefix_."languages, "._dbprefix_."system
                      WHERE system_id = language_id
                      ".($bitJustActive ? "AND system_status != 0 ": "")."";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return (int)$arrRow["COUNT(*)"];
     	
@@ -143,9 +143,9 @@ class class_modul_languages_language extends class_model implements interface_mo
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."languages, "._dbprefix_."system
 		             WHERE system_id = language_id
-		             AND language_name = '".dbsafeString($strName)."'
+		             AND language_name = ?
 		             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(count($arrRow)>0)
             return new class_modul_languages_language($arrRow["system_id"]);
         else
@@ -162,7 +162,7 @@ class class_modul_languages_language extends class_model implements interface_mo
     public static function resetAllDefaultLanguages() {
         $strQuery = "UPDATE "._dbprefix_."languages
                      SET language_default = 0";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
     }
 
 
@@ -177,8 +177,8 @@ class class_modul_languages_language extends class_model implements interface_mo
 		$bitCommit = true;
         class_logger::getInstance()->addLogRow("deleted language ".$this->getSystemid(), class_logger::$levelInfo);
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE language_id = '".dbsafeString($this->getSystemid())."'";
-		if(!$this->objDB->_query($strQuery))
+        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE language_id = ?";
+		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())))
 		    $bitCommit = false;
 
 		//rights an systemrecords
@@ -216,14 +216,14 @@ class class_modul_languages_language extends class_model implements interface_mo
         $this->objDB->transactionBegin();
         
         $strQuery1 = "UPDATE "._dbprefix_."page_properties 
-                        SET pageproperties_language = '".dbsafeString($this->getStrName())."'
-                        WHERE pageproperties_language = '".dbsafeString($strSourceLanguage)."'";
+                        SET pageproperties_language = ?
+                        WHERE pageproperties_language = ?";
         
         $strQuery2 = "UPDATE "._dbprefix_."page_element
-                        SET page_element_placeholder_language = '".dbsafeString($this->getStrName())."'
-                        WHERE page_element_placeholder_language = '".dbsafeString($strSourceLanguage)."'";
+                        SET page_element_placeholder_language = ?
+                        WHERE page_element_placeholder_language = ?";
         
-        $bitCommit = ($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2));
+        $bitCommit = ($this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage)) && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage)));
         
         if($bitCommit) {
             $this->objDB->transactionCommit();
@@ -265,9 +265,9 @@ class class_modul_languages_language extends class_model implements interface_mo
                                  FROM "._dbprefix_."languages, "._dbprefix_."system
             		             WHERE system_id = language_id
             		             AND system_status = 1
-            		             AND language_name='".dbsafeString($strOneLanguage)."'
+            		             AND language_name= ?
             		             ORDER BY system_sort ASC, system_comment ASC";
-                        $arrRow = $this->objDB->getRow($strQuery);
+                        $arrRow = $this->objDB->getPRow($strQuery, array($strOneLanguage));
                         if(count($arrRow) > 0) {
                             //save to session
                             $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
@@ -283,7 +283,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		             AND language_default = 1
 		             AND system_status = 1
 		             ORDER BY system_sort ASC, system_comment ASC";
-            $arrRow = $this->objDB->getRow($strQuery);
+            $arrRow = $this->objDB->getPRow($strQuery, array());
             if(count($arrRow) > 0) {
                 //save to session
                 $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
@@ -296,7 +296,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		             WHERE system_id = language_id
 		             AND system_status = 1
 		             ORDER BY system_sort ASC, system_comment ASC";
-                $arrRow = $this->objDB->getRow($strQuery);
+                $arrRow = $this->objDB->getPRow($strQuery, array());
                 if(count($arrRow) > 0) {
                     //save to session
                     $this->objSession->setSession("portalLanguage", $arrRow["language_name"]);
@@ -329,7 +329,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 		             WHERE system_id = language_id
 		             AND language_default = 1
 		             ORDER BY system_sort ASC, system_comment ASC";
-            $arrRow = $this->objDB->getRow($strQuery);
+            $arrRow = $this->objDB->getPRow($strQuery, array());
             if(count($arrRow) > 0) {
                 //save to session
                 $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
@@ -341,7 +341,7 @@ class class_modul_languages_language extends class_model implements interface_mo
                      FROM "._dbprefix_."languages, "._dbprefix_."system
 		             WHERE system_id = language_id
 		             ORDER BY system_sort ASC, system_comment ASC";
-                $arrRow = $this->objDB->getRow($strQuery);
+                $arrRow = $this->objDB->getPRow($strQuery, array());
                 if(count($arrRow) > 0) {
                     //save to session
                     $this->objSession->setSession("adminLanguage", $arrRow["language_name"]);
@@ -367,7 +367,7 @@ class class_modul_languages_language extends class_model implements interface_mo
 	             AND language_default = 1
 	             AND system_status = 1
 	             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0) {
             return new class_modul_languages_language($arrRow["system_id"]);
         }
