@@ -15,6 +15,8 @@
  * This means aspects are rather some kind of view-filter then business-logic filters.
  *
  * @package modul_system
+ * @since 3.4
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_aspect extends class_model implements interface_model  {
 
@@ -31,7 +33,6 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."aspects";
 		$arrModul["modul"]				= "system";
@@ -70,8 +71,8 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public function initObject() {
         $strQuery = "SELECT * FROM "._dbprefix_."system, ".$this->arrModule["table"]."
                      WHERE system_id = aspect_id
-                     AND system_id = '".dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+                     AND system_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 1) {
             $this->setBitDefault($arrRow["aspect_default"]);
@@ -94,10 +95,10 @@ class class_modul_system_aspect extends class_model implements interface_model  
         }
         
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET aspect_name = '".dbsafeString($this->getStrName())."',
-                            aspect_default = '".dbsafeString($this->getBitDefault())."'
-                      WHERE aspect_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                        SET aspect_name = ?,
+                            aspect_default = ?
+                      WHERE aspect_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getBitDefault(), $this->getSystemid()));
     }
 
 
@@ -114,7 +115,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 		             WHERE system_id = aspect_id
 		             ".($bitJustActive ? "AND system_status != 0 ": "")."
 		             ORDER BY system_sort ASC, aspect_name ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_system_aspect($arrOneId["system_id"]);
@@ -134,7 +135,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
                      FROM "._dbprefix_."aspects, "._dbprefix_."system
                      WHERE system_id = aspect_id
                      ".($bitJustActive ? "AND system_status != 0 ": "")."";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return (int)$arrRow["COUNT(*)"];
     	
@@ -150,7 +151,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public static function resetDefaultAspect() {
         $strQuery = "UPDATE "._dbprefix_."aspects
                      SET aspect_default = 0";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery);
     }
 
 
@@ -165,10 +166,10 @@ class class_modul_system_aspect extends class_model implements interface_model  
 		$bitCommit = true;
         class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE aspect_id = '".dbsafeString($this->getSystemid())."'";
+        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE aspect_id = ?";
 
 		//rights an systemrecords
-		if(!$this->objDB->_query($strQuery) || !$this->deleteSystemRecord($this->getSystemid()))
+		if(!$this->objDB->_pQuery($strQuery, array($this->getSystemid())) || !$this->deleteSystemRecord($this->getSystemid()))
 		    $bitCommit = false;
 
 		//if we have just one aspect remaining, set this one as default
@@ -206,7 +207,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 	             AND aspect_default = 1
 	             AND system_status = 1
 	             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         if(count($arrRow) > 0 && class_carrier::getInstance()->getObjRights()->rightView($arrRow["system_id"])) {
             return new class_modul_system_aspect($arrRow["system_id"]);
         }
@@ -232,9 +233,9 @@ class class_modul_system_aspect extends class_model implements interface_model  
         $strQuery = "SELECT system_id
                  FROM "._dbprefix_."aspects, "._dbprefix_."system
 	             WHERE system_id = aspect_id
-	             AND aspect_name = '".  dbsafeString($strName)."'
+	             AND aspect_name = ?
 	             ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(count($arrRow) > 0) {
             return new class_modul_system_aspect($arrRow["system_id"]);
         }

@@ -100,17 +100,19 @@ class class_modul_system_changelog extends class_model implements interface_mode
                       change_property,
                       change_oldvalue,
                       change_newvalue) VALUES
-                     ('".dbsafeString(generateSystemid())."',
-                       ".dbsafeString(class_date::getCurrentTimestamp()).",
-                      '".dbsafeString($objSourceModel->getSystemid())."',
-                      '".dbsafeString($this->objSession->getUserID())."',
-                      '".dbsafeString($objSourceModel->getClassname())."',
-                      '".dbsafeString($strAction)."',
-                      '".dbsafeString($strProperty)."',
-                      '".dbsafeString($strOldvalue)."',
-                      '".dbsafeString($strNewvalue)."')";
+                     (?,?,?,?,?,?,?,?,?)";
 
-                $bitReturn = $bitReturn && $this->objDB->_query($strQuery);
+                $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array(
+                    generateSystemid(),
+                    class_date::getCurrentTimestamp(),
+                    $objSourceModel->getSystemid(),
+                    $this->objSession->getUserID(),
+                    $objSourceModel->getClassname(),
+                    $strAction,
+                    $strProperty,
+                    $strOldvalue,
+                    $strNewvalue
+                ));
             }
         }
 
@@ -129,13 +131,17 @@ class class_modul_system_changelog extends class_model implements interface_mode
     public static function getLogEntries($strSystemidFilter = "", $intStart = null, $intEnd = null) {
         $strQuery = "SELECT *
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = '".  dbsafeString($strSystemidFilter)."' ": "")."
+                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."
                    ORDER BY change_date DESC";
 
+        $arrParams = array();
+        if($strSystemidFilter != "")
+            $arrParams[] = $strSystemidFilter;
+
         if($intStart != null && $intEnd != null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
         else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         $arrReturn = array();
         foreach($arrRows as $arrRow)
@@ -154,10 +160,14 @@ class class_modul_system_changelog extends class_model implements interface_mode
     public static function getLogEntriesCount($strSystemidFilter = "") {
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter != "" ? " WHERE change_systemid = '".  dbsafeString($strSystemidFilter)."' ": "")."
+                      ".($strSystemidFilter != "" ? " WHERE change_systemid = ? ": "")."
                    ORDER BY change_date DESC";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrParams = array();
+        if($strSystemidFilter != "")
+            $arrParams[] = $strSystemidFilter;
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
    
