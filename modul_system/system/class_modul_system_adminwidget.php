@@ -24,6 +24,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -62,9 +63,9 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
         						   "._dbprefix_."system 
         				WHERE system_id = adminwidget_id
-        				  AND system_id = '".dbsafeString($this->getSystemid())."'";
+        				  AND system_id = ? ";
         
-        $arrRow = $this->objDB->getRow($strQuery);
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrRow) > 0) {
             $this->setStrClass($arrRow["adminwidget_class"]);
             $this->setStrContent($arrRow["adminwidget_content"]);
@@ -73,14 +74,14 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     
     /**
      * Updates the values of the current widget to the db
-     *
+     * @todo: was dbsafeString($this->getStrContent(), false) / false still required?
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                   SET adminwidget_class = '".dbsafeString($this->getStrClass())."',
-                       adminwidget_content = '".dbsafeString($this->getStrContent(), false)."'
-                 WHERE adminwidget_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                   SET adminwidget_class = ?,
+                       adminwidget_content = ?
+                 WHERE adminwidget_id = ? ";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()));
     }
     
     /**
@@ -92,8 +93,8 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         class_logger::getInstance()->addLogRow("deleted adminwidget ".$this->getSystemid(), class_logger::$levelInfo);
 	    $objRoot = new class_modul_system_common();
 	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
-                             WHERE adminwidget_id = '".dbsafeString($this->getSystemid())."'";
-        if($this->objDB->_query($strQuery)) {
+                             WHERE adminwidget_id = ?";
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($objRoot->deleteSystemRecord($this->getSystemid()))
                 return true;
         }
