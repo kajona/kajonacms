@@ -214,6 +214,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			//build the new insert
 			$strQuery = "INSERT INTO ".$strElementTable." ( ";
             $arrValues = array();
+            $arrEscapes = array();
 			foreach ($arrColumns as $arrOneColumn)
 	            $strQuery .= " ".$this->objDB->encloseColumnName($arrOneColumn["columnName"]).",";
 
@@ -224,6 +225,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	            if($arrOneColumn["columnName"] == "content_id") {
 	                $strQuery .= " ?,";
                     $arrValues[] = $strIdOfNewPageelement;
+                    $arrEscapes[] = true;
 	            }
 	            else if(strpos($arrOneColumn["columnType"], "int") !== false) {
 	                $intValue = $arrContentRow[$arrOneColumn["columnName"]];
@@ -231,17 +233,19 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	                    $intValue = "NULL";
 	                $strQuery .= " ?,";
                     $arrValues[] = $intValue;
+                    $arrEscapes[] = true;
 	            }
 	            else {
 	            	//no dbsafestring here, otherwise contents may be double-encoded...
 	                $strQuery .= " ?,";
                     $arrValues[] = $arrContentRow[$arrOneColumn["columnName"]];
+                    $arrEscapes[] = false;
 	            }
 	        }
 	        $strQuery = uniSubstr($strQuery, 0, -1);
 	        $strQuery .= ")";
 
-	        if(!$this->objDB->_pQuery($strQuery, $arrValues)) {
+	        if(!$this->objDB->_pQuery($strQuery, $arrValues, $arrEscapes)) {
 	            $this->objDB->transactionRollback();
 	            return null;
 	        }

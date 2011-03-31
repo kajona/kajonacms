@@ -473,7 +473,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 $arrOneProperty["pageproperties_language"]
             );
 
-	        if(!$this->objDB->_pQuery($strQuery, $arrValues)) {
+	        if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false))) {
 	            $this->objDB->transactionRollback();
                 class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
 	            return false;
