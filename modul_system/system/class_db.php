@@ -197,11 +197,13 @@ class class_db {
 	 * Sending a prepared statement to the database
 	 *
 	 * @param string $strQuery
-     * @param $arrParams
+     * @param array $arrParams
+     * @param array $arrEscapes An array of booleans for each param, used to block the escaping of html-special chars.
+     *                          If not passed, all params will be cleaned.
 	 * @return bool
      * @since 3.4
 	 */
-	public function _pQuery($strQuery, $arrParams) {
+	public function _pQuery($strQuery, $arrParams, $arrEscapes = array()) {
         if(!$this->bitConnected)
             $this->dbconnect();
 
@@ -214,7 +216,7 @@ class class_db {
 		$this->intNumber++;
 
 		if($this->objDbDriver != null) {
-		  $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams));
+		  $bitReturn = $this->objDbDriver->_pQuery($strQuery, $this->dbsafeParams($arrParams, $arrEscapes));
 		}
 
 		if(!$bitReturn)
@@ -939,13 +941,18 @@ class class_db {
      * as used by prepared statements.
      *
      * @param array $arrParams
+     * @param array $arrEscapes An array of booleans for each param, used to block the escaping of html-special chars.
+     *                          If not passed, all params will be cleaned.
      * @return array
      * @since 3.4
      * @see class_db::dbsafeString($strString, $bitHtmlSpecialChars = true)
      */
-    private function dbsafeParams($arrParams) {
-        foreach($arrParams as &$strParam) {
-            $strParam = dbsafeString($strParam, true, false);
+    private function dbsafeParams($arrParams, $arrEscapes = array()) {
+        foreach($arrParams as $intKey => &$strParam) {
+            if(isset($arrEscapes[$intKey]))
+                $strParam = dbsafeString($strParam, $arrEscapes[$intKey], false);
+            else
+                $strParam = dbsafeString($strParam, true, false);
         }
         return $arrParams;
     }
