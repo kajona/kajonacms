@@ -65,9 +65,9 @@ class class_modul_navigation_point extends class_model implements interface_mode
     public function initObject() {
          $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
 		             WHERE system_id = navigation_id
-		             AND system_module_nr = "._navigation_modul_id_."
-		             AND system_id = '".dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+		             AND system_module_nr = ?
+		             AND system_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array(_navigation_modul_id_, $this->getSystemid()));
         if(count($arrRow)> 0) {
             $this->setStrName($arrRow["navigation_name"]);
             $this->setStrImage($arrRow["navigation_image"]);
@@ -86,14 +86,22 @@ class class_modul_navigation_point extends class_model implements interface_mode
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE  ".$this->arrModule["table"]."
-                        SET 	navigation_name='".dbsafeString($this->getStrName())."',
-    							navigation_page_i='".dbsafeString(uniStrtolower($this->getStrPageI()))."',
-    							navigation_folder_i='".dbsafeString($this->getStrFolderI())."',
-    							navigation_page_e='".dbsafeString($this->getStrPageE())."',
-    							navigation_target='".dbsafeString($this->getStrTarget())."',
-    							navigation_image='".dbsafeString($this->getStrImage())."'
-    					WHERE navigation_id='".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                        SET 	navigation_name= ?,
+    							navigation_page_i= ?,
+    							navigation_folder_i= ?,
+    							navigation_page_e= ?,
+    							navigation_target= ?,
+    							navigation_image= ?
+    					WHERE navigation_id= ?";
+        return $this->objDB->_pQuery($strQuery, array(
+            $this->getStrName(),
+    		uniStrtolower($this->getStrPageI()),
+    		$this->getStrFolderI(),
+    		$this->getStrPageE(),
+    		$this->getStrTarget(),
+    		$this->getStrImage(),
+    		$this->getSystemid()
+        ));
     }
 
 
@@ -108,11 +116,11 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	public static function getNaviLayer($strSystemid, $bitJustActive = false) {
 	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
-    			             AND system_prev_id = '".dbsafeString($strSystemid)."'
-    			             AND system_module_nr = "._navigation_modul_id_."
+    			             AND system_prev_id = ?
+    			             AND system_module_nr = ?
     			             ".($bitJustActive ? " AND system_status = 1 ": "")."
     			             ORDER BY system_sort ASC, system_comment ASC";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid, _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $objNavigationPoint = new class_modul_navigation_point($arrOneId["system_id"]);
@@ -178,7 +186,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	public function deleteNaviPoint() {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
-	    //TODO remove? $objRoot = new class_modul_system_common();
+	    //TODO: remove? $objRoot = new class_modul_system_common();
 	    //Check rights for the current point
 	    //if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
 	        //Are there any childs?
@@ -195,8 +203,8 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	        //Now delete the current point
 	        //start in the navigation-table
 
-	        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id='".dbsafeString($this->getSystemid())."'";
-	        if($this->objDB->_query($strQuery)) {
+	        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
+	        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 		        if($this->deleteSystemRecord($this->getSystemid())) {
 		            return true;
 		        }
@@ -224,10 +232,10 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	    $arrReturn = array();
 	    $strQuery = "SELECT system_id FROM "._dbprefix_."navigation, "._dbprefix_."system
     			             WHERE system_id = navigation_id
-    			             AND system_module_nr = "._navigation_modul_id_."
-    			             AND navigation_page_i = '".dbsafeString($strPagename)."'
+    			             AND system_module_nr = ?
+    			             AND navigation_page_i = ?
     			             AND system_status = 1";
-	    $arrIds = $objDB->getArray($strQuery);
+	    $arrIds = $objDB->getPArray($strQuery, array(_navigation_modul_id_, $strPagename));
 
 	    foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_navigation_point($arrOneId["system_id"]);

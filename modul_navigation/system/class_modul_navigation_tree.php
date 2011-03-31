@@ -63,9 +63,9 @@ class class_modul_navigation_tree extends class_model implements interface_model
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system
 		             WHERE system_id = navigation_id
-		             AND system_module_nr = "._navigation_modul_id_."
-		             AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+		             AND system_module_nr = ?
+		             AND system_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array(_navigation_modul_id_, $this->getSystemid()));
         $this->setStrName($arrRow["navigation_name"]);
         $this->setStrFolderId($arrRow["navigation_folder_i"]);
     }
@@ -78,10 +78,10 @@ class class_modul_navigation_tree extends class_model implements interface_model
     protected function updateStateToDb() {
 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                     SET navigation_name='".$this->objDB->dbsafeString($this->getStrName())."',
-                         navigation_folder_i='".dbsafeString($this->getStrFolderId())."'
-                     WHERE navigation_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                     SET navigation_name= ?,
+                         navigation_folder_i=?
+                     WHERE navigation_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrFolderId(), $this->getSystemid()));
     }
 
 
@@ -93,12 +93,12 @@ class class_modul_navigation_tree extends class_model implements interface_model
      */
     public static function getAllNavis() {
         $strQuery = "SELECT system_id
-                     FROM "._dbprefix_."navigation, "._dbprefix_."system
+                       FROM "._dbprefix_."navigation, "._dbprefix_."system
 		             WHERE system_id = navigation_id
-		             AND system_prev_id = '".dbsafeString(class_modul_system_module::getModuleByName("navigation")->getSystemid())."'
-		             AND system_module_nr = "._navigation_modul_id_."
-		             ORDER BY system_sort ASC, system_comment ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		               AND system_prev_id = ?
+		               AND system_module_nr = ?
+		          ORDER BY system_sort ASC, system_comment ASC";
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_navigation_tree($arrOneId["system_id"]);
@@ -118,11 +118,11 @@ class class_modul_navigation_tree extends class_model implements interface_model
         $strQuery = "SELECT system_id
                      FROM "._dbprefix_."navigation, "._dbprefix_."system
                      WHERE system_id = navigation_id
-                     AND system_prev_id = '".dbsafeString(class_modul_system_module::getModuleByName("navigation")->getSystemid())."'
-                     AND navigation_name = '".dbsafeString($strName)."'
-                     AND system_module_nr = "._navigation_modul_id_."
+                     AND system_prev_id = ?
+                     AND navigation_name = ?
+                     AND system_module_nr = ?
                      ORDER BY system_sort ASC, system_comment ASC";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), $strName, _navigation_modul_id_));
         if(isset($arrRow["system_id"]))
             return new class_modul_navigation_tree($arrRow["system_id"]);
         else
