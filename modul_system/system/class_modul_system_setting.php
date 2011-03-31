@@ -82,8 +82,8 @@ class class_modul_system_setting extends class_model implements interface_model,
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE system_config_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+        $strQuery = "SELECT * FROM ".$this->arrModule["table"]." WHERE system_config_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrName($arrRow["system_config_name"]);
         $this->setStrValue($arrRow["system_config_value"]);
@@ -107,9 +107,8 @@ class class_modul_system_setting extends class_model implements interface_model,
 
             $strQuery = "INSERT INTO "._dbprefix_."system_config
                         (system_config_id, system_config_name, system_config_value, system_config_type, system_config_module) VALUES
-                        ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getStrName())."',
-                         '".$this->objDB->dbsafeString($this->getStrValue())."', '".(int)$this->getIntType()."', '".(int)$this->getIntModule()."')";
-            return $this->objDB->_query($strQuery);
+                        (?, ?, ?, ?, ?)";
+            return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getStrName(), $this->getStrValue(), (int)$this->getIntType(), (int)$this->getIntModule()));
         }
         else {
 
@@ -121,9 +120,9 @@ class class_modul_system_setting extends class_model implements interface_model,
             $objChangelog->createLogEntry($this, $this->strActionChange);
 
             $strQuery = "UPDATE "._dbprefix_."system_config
-                        SET system_config_value = '".$this->objDB->dbsafeString($this->getStrValue())."'
-                      WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
-            return $this->objDB->_query($strQuery);
+                        SET system_config_value = ?
+                      WHERE system_config_name = ?";
+            return $this->objDB->_pQuery($strQuery, array($this->getStrValue(), $this->getStrName()));
         }
     }
     
@@ -138,10 +137,11 @@ class class_modul_system_setting extends class_model implements interface_model,
         
     	
         $strQuery = "UPDATE "._dbprefix_."system_config
-                    SET system_config_name = '".$this->objDB->dbsafeString($strNewName)."' WHERE system_config_name = '".$this->objDB->dbsafeString($this->getStrName())."'";
+                    SET system_config_name = ? WHERE system_config_name = ?";
         
+        $bitReturn =  $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
         $this->strName = $strNewName;
-        return $this->objDB->_query($strQuery);
+        return $bitReturn;
     }
 
     /**
@@ -152,7 +152,7 @@ class class_modul_system_setting extends class_model implements interface_model,
 	 */
 	public static function getAllConfigValues() {
 	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config ORDER BY system_config_module ASC";
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_system_setting($arrOneId["system_config_id"]);
@@ -167,8 +167,8 @@ class class_modul_system_setting extends class_model implements interface_model,
 	 * @static
 	 */
 	public static function getConfigByName($strName) {
-	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = '".dbsafeString($strName)."'";
-        $arrId = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+	    $strQuery = "SELECT system_config_id FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+        $arrId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 		return new class_modul_system_setting($arrId["system_config_id"]);
 	}
 
@@ -179,8 +179,8 @@ class class_modul_system_setting extends class_model implements interface_model,
 	 * @return boolean
 	 */
 	public static function checkConfigExisting($strName) {
-	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_config WHERE system_config_name = '".dbsafeString($strName)."'";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+	    $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
 		return $arrRow["COUNT(*)"] == 1;
 	}
 
