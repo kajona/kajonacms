@@ -15,6 +15,8 @@
  *
  *
  * @package modul_tags
+ * @author sidler@mulchprod.de
+ * @since 3.4
  */
 class class_modul_tags_tag extends class_model implements interface_model, interface_sortable_rating  {
 
@@ -28,7 +30,6 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_tags";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _tags_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."tags_tag";
 		$arrModul["modul"]				= "tags";
@@ -64,8 +65,8 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public function initObject() {
         $strQuery = "SELECT * 
 		   			 FROM ".$this->arrModule["table"]."
-					 WHERE tags_tag_id = '".$this->getSystemid()."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+					 WHERE tags_tag_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         $this->setStrName($arrRow["tags_tag_name"]);
     }
 
@@ -77,9 +78,9 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
-                    	    tags_tag_name = '".dbsafeString($this->getStrName())."'
-					  WHERE tags_tag_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                    	    tags_tag_name = ?
+					  WHERE tags_tag_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
     }
 
     
@@ -97,11 +98,11 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
 		$bitCommit = false;
 
         //delete memberships
-        $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid='".dbsafeString($this->getSystemid())."'";
+        $strQuery1 = "DELETE FROM "._dbprefix_."tags_member WHERE tags_tagid=?";
 
         //delete the record itself
-        $strQuery2 = "DELETE FROM "._dbprefix_."tags_tag WHERE tags_tag_id='".dbsafeString($this->getSystemid())."'";
-	    if($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2))    {
+        $strQuery2 = "DELETE FROM "._dbprefix_."tags_tag WHERE tags_tag_id=?";
+	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, $this->getSystemid()))    {
 	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }
@@ -132,9 +133,9 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                    ORDER BY tags_tag_name ASC";
 
         if($intStart != null && $intEnd != null)
-            $arrRows = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
-            $arrRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tag_id"]);
@@ -154,7 +155,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                        FROM "._dbprefix_."tags_tag
                    ORDER BY tags_tag_name ASC";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }
 
@@ -168,19 +169,23 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      */
     public static function getTagsForSystemid($strSystemid, $strAttribute = null) {
 
+        $arrParams = array($strSystemid);
+
         $strWhere = "";
-        if($strAttribute != null)
-            $strWhere = "AND tags_attribute = '".  dbsafeString($strAttribute)."'";
+        if($strAttribute != null) {
+            $strWhere = "AND tags_attribute = ?";
+            $arrParams[] = $strAttribute;
+        }
         
         $strQuery = "SELECT DISTINCT(tags_tagid)
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag
-                      WHERE tags_systemid = '".  dbsafeString($strSystemid)."'
+                      WHERE tags_systemid = ?
                         AND tags_tag_id = tags_tagid
                           ".$strWhere."
                    ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tagid"]);
@@ -198,8 +203,8 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public static function getTagByName($strName) {
         $strQuery = "SELECT tags_tag_id
                        FROM "._dbprefix_."tags_tag
-                      WHERE tags_tag_name LIKE '".  dbsafeString(trim($strName))."'";
-        $arrCols = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+                      WHERE tags_tag_name LIKE ?";
+        $arrCols = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         if(isset($arrCols["tags_tag_id"]) && validateSystemid($arrCols["tags_tag_id"]))
             return new class_modul_tags_tag($arrCols["tags_tag_id"]);
         else
@@ -215,10 +220,10 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public static function getTagsByFilter($strFilter) {
         $strQuery = "SELECT tags_tag_id
                        FROM "._dbprefix_."tags_tag
-                      WHERE tags_tag_name LIKE '".  dbsafeString($strFilter)."%'
+                      WHERE tags_tag_name LIKE ?
                    ORDER BY tags_tag_name ASC";
 
-        $arrRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strFilter."%"));
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tag_id"]);
@@ -242,7 +247,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                         AND system_status = 1
                    ORDER BY tags_tag_name ASC";
         
-        $arrRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
             $arrReturn[] = new class_modul_tags_tag($arrSingleRow["tags_tagid"]);
@@ -261,11 +266,11 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $strQuery = "SELECT member.*
                        FROM "._dbprefix_."tags_member as member,
                             "._dbprefix_."system as system
-                      WHERE tags_tagid = '".  dbsafeString($this->getSystemid())."'
+                      WHERE tags_tagid = ?
                         AND system.system_id = member.tags_systemid
                         AND system.system_status = 1";
 
-        return $this->objDB->getArray($strQuery);
+        return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
     }
 
     /**
@@ -283,18 +288,18 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         //check of not already set
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."tags_member
-                      WHERE tags_systemid= '".  dbsafeString($strTargetSystemid)."'
-                        AND tags_tagid = '".  dbsafeString($this->getSystemid())."'
-                        AND tags_attribute = '".  dbsafeString($strAttribute)."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+                      WHERE tags_systemid= ?
+                        AND tags_tagid = ?
+                        AND tags_attribute = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute));
         if($arrRow["COUNT(*)"] != 0)
             return true;
 
         $strQuery = "INSERT INTO "._dbprefix_."tags_member
                       (tags_systemid, tags_tagid, tags_attribute) VALUES
-                      ('".dbsafeString($strTargetSystemid)."', '".dbsafeString($this->getSystemid())."', '".dbsafeString($strAttribute)."')";
+                      (?, ?, ?)";
 
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute));
     }
 
     /**
@@ -307,11 +312,11 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public function removeFromSystemrecord($strTargetSystemid, $strAttribute = null) {
 
         $strQuery = "DELETE FROM "._dbprefix_."tags_member
-                           WHERE tags_systemid = '".  dbsafeString($strTargetSystemid)."'
-                             AND tags_attribute = '".  dbsafeString($strAttribute)."'
-                             AND tags_tagid = '".  dbsafeString($this->getSystemid())."'";
+                           WHERE tags_systemid = ?
+                             AND tags_attribute = ?
+                             AND tags_tagid = ?";
 
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($strTargetSystemid, $strAttribute, $this->getSystemid()));
     }
 
     /**
@@ -334,8 +339,8 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
             return true;
             
         //delete memberships. Fire a plain query, faster then searching.
-        $strQuery = "DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid='".dbsafeString($strSystemid)."'";
-        $bitReturn = $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid=?";
+        $bitReturn = $this->objDB->_pQuery($strQuery, array($strSystemid));
 
         return $bitReturn;
     }
