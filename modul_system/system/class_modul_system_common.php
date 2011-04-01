@@ -11,6 +11,7 @@
  * Class to provide methods used by the system for general issues
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_common extends class_model implements interface_model  {
 
@@ -24,7 +25,6 @@ class class_modul_system_common extends class_model implements interface_model  
     public function __construct($strSystemid = "") {
         $arrModule = array();
         $arrModule["name"] 				= "modul_system";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _system_modul_id_;
 		$arrModule["table"]       		= "";
 		$arrModule["modul"]				= "system";
@@ -75,8 +75,8 @@ class class_modul_system_common extends class_model implements interface_model  
      * @return bool
      */
     public function deleteDateRecord() {
-        $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id='".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id= ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
      /**
@@ -90,18 +90,18 @@ class class_modul_system_common extends class_model implements interface_model  
         $strQuery = "";
 
         $intSpecialDate = $objSpecialDate->getLongTimestamp();
-        $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()), 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
             				(system_date_special, system_date_id) VALUES
-            				(".dbsafeString($intSpecialDate).", '".dbsafeString($this->getSystemid())."')";
+            				(?, ?)";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
-                            SET system_date_special = ".dbsafeString($intSpecialDate)."
-                          WHERE system_date_id = '".dbsafeString($this->getSystemid())."'";
+                            SET system_date_special = ?
+                          WHERE system_date_id = ?";
         }
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($intSpecialDate, $this->getSystemid()));
     }
     
     /**
@@ -115,18 +115,18 @@ class class_modul_system_common extends class_model implements interface_model  
         $strQuery = "";
 
         $intStartDate = $objStartDate->getLongTimestamp();
-        $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()), 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
             				(system_date_start, system_date_id) VALUES 
-            				(".dbsafeString($intStartDate).", '".dbsafeString($this->getSystemid())."')";
+            				(?, ?)";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
-                            SET system_date_start = ".dbsafeString($intStartDate)."
-                          WHERE system_date_id = '".dbsafeString($this->getSystemid())."'";
+                            SET system_date_start = ?
+                          WHERE system_date_id = ?";
         }
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($intStartDate, $this->getSystemid()));
     }
 
     /**
@@ -140,18 +140,18 @@ class class_modul_system_common extends class_model implements interface_model  
         $strQuery = "";
 
         $intEndDate = $objEndDate->getLongTimestamp();
-        $arrRow = $this->objDB->getRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = '".dbsafeString($this->getSystemid())."'", 0, false);
+        $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()), 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
             				(system_date_end, system_date_id) VALUES
-            				(".dbsafeString($intEndDate).", '".dbsafeString($this->getSystemid())."' )";
+            				(?, ? )";
         }
         else {
             $strQuery = "UPDATE "._dbprefix_."system_date
-                            SET system_date_end = ".dbsafeString($intEndDate)."
-                          WHERE system_date_id = '".dbsafeString($this->getSystemid())."'";
+                            SET system_date_end = ?
+                          WHERE system_date_id = ?";
         }
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($intEndDate, $this->getSystemid()));
     }
 
     /**
@@ -178,9 +178,9 @@ class class_modul_system_common extends class_model implements interface_model  
     public function copyCurrentSystemrecord($strNewSystemid, $strNewSystemPrevId = "") {
         class_logger::getInstance()->addLogRow("copy systemrecord ".$this->getSystemid(), class_logger::$levelInfo);
         //copy table by table
-        $arrSystemRow = $this->objDB->getRow("SELECT * FROM "._dbprefix_."system WHERE system_id='".dbsafeString($this->getSystemid())."'");
-        $arrRightsRow = $this->objDB->getRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id='".dbsafeString($this->getSystemid())."'");
-        $arrDateRow = $this->objDB->getRow("SELECT * FROM "._dbprefix_."system_date WHERE system_date_id='".dbsafeString($this->getSystemid())."'");
+        $arrSystemRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id= ?", array($this->getSystemid()));
+        $arrRightsRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id= ?", array($this->getSystemid()));
+        $arrDateRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_date WHERE system_date_id= ?", array($this->getSystemid()));
         
         if($strNewSystemPrevId == "") {
             $strNewSystemPrevId = $arrSystemRow["system_prev_id"]; 
@@ -189,36 +189,42 @@ class class_modul_system_common extends class_model implements interface_model  
         $this->objDB->transactionBegin();
         //start by inserting the new systemrecords
         $strQuerySystem = "INSERT INTO "._dbprefix_."system
-        (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES
-        	('".dbsafeString($strNewSystemid)."', 
-        	'".dbsafeString($strNewSystemPrevId)."', 
-        	".dbsafeString($arrSystemRow["system_module_nr"]).",
-        	".(dbsafeString($arrSystemRow["system_sort"]) != "" ? dbsafeString($arrSystemRow["system_sort"]) : 0 ).",
-        	'".dbsafeString($arrSystemRow["system_owner"])."',
-        	'".dbsafeString($arrSystemRow["system_lm_user"])."',
-        	".dbsafeString($arrSystemRow["system_lm_time"]).",
-        	'".dbsafeString($arrSystemRow["system_lock_id"])."',
-        	".(dbsafeString($arrSystemRow["system_lock_time"]) != "" ? dbsafeString($arrSystemRow["system_lock_time"]) : 0).",
-        	".dbsafeString($arrSystemRow["system_status"]).",
-        	'".dbsafeString($arrSystemRow["system_comment"])."')"; 
+        (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_create_date, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES
+        	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
-        if($this->objDB->_query($strQuerySystem)) {
+        if($this->objDB->_pQuery($strQuerySystem, array(
+                $strNewSystemid,
+                $strNewSystemPrevId,
+                $arrSystemRow["system_module_nr"],
+               ($arrSystemRow["system_sort"] != "" ? $arrSystemRow["system_sort"] : 0),
+                $arrSystemRow["system_owner"],
+                $arrSystemRow["system_create_date"],
+                $arrSystemRow["system_lm_user"],
+                $arrSystemRow["system_lm_time"],
+                $arrSystemRow["system_lock_id"],
+               ($arrSystemRow["system_lock_time"] != "" ? $arrSystemRow["system_lock_time"] : 0),
+                $arrSystemRow["system_status"],
+                $arrSystemRow["system_comment"]
+            ))) {
+            
             if(count($arrRightsRow) > 0) {
                 $strQueryRights = "INSERT INTO "._dbprefix_."system_right 
                 (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES 
-                ('".dbsafeString($strNewSystemid)."' ,
-                '".dbsafeString($arrRightsRow["right_inherit"])."', 
-                '".dbsafeString($arrRightsRow["right_view"])."',
-                '".dbsafeString($arrRightsRow["right_edit"])."', 
-                '".dbsafeString($arrRightsRow["right_delete"])."',
-                '".dbsafeString($arrRightsRow["right_right"])."',
-                '".dbsafeString($arrRightsRow["right_right1"])."',
-                '".dbsafeString($arrRightsRow["right_right2"])."',
-                '".dbsafeString($arrRightsRow["right_right3"])."',
-                '".dbsafeString($arrRightsRow["right_right4"])."',
-                '".dbsafeString($arrRightsRow["right_right5"])."')";
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
-                if(!$this->objDB->_query($strQueryRights)) {
+                if(!$this->objDB->_pQuery($strQueryRights, array(
+                    $strNewSystemid,
+                    $arrRightsRow["right_inherit"],
+                    $arrRightsRow["right_view"],
+                    $arrRightsRow["right_edit"],
+                    $arrRightsRow["right_delete"],
+                    $arrRightsRow["right_right"],
+                    $arrRightsRow["right_right1"],
+                    $arrRightsRow["right_right2"],
+                    $arrRightsRow["right_right3"],
+                    $arrRightsRow["right_right4"],
+                    $arrRightsRow["right_right5"]
+                ))) {
                     $this->objDB->transactionRollback();
                     return false;            
                 }
@@ -227,12 +233,9 @@ class class_modul_system_common extends class_model implements interface_model  
             if(count($arrDateRow) > 0) {
                 $strQueryDate = "INSERT INTO "._dbprefix_."system_date
                 (system_date_id, system_date_start, system_date_end, system_date_special ) VALUES 
-                ('".dbsafeString($strNewSystemid)."' ,
-                '".dbsafeString($arrDateRow["system_date_start"])."', 
-                '".dbsafeString($arrDateRow["system_date_end"])."', 
-                '".dbsafeString($arrDateRow["system_date_special"])."')";
+                (?, ?, ?, ?)";
                 
-                if(!$this->objDB->_query($strQueryDate)) {
+                if(!$this->objDB->_pQuery($strQueryDate, array($strNewSystemid, $arrDateRow["system_date_start"], $arrDateRow["system_date_end"], $arrDateRow["system_date_special"]) )) {
                     $this->objDB->transactionRollback();
                     return false;            
                 }
@@ -265,7 +268,11 @@ class class_modul_system_common extends class_model implements interface_model  
                    ".($intModuleFilter !== false ? "WHERE system_module_nr = ".(int)$intModuleFilter."" : "")."
                    ORDER BY system_lm_time DESC";
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, 0, $intMaxNrOfRecords-1);
+        $arrParams = array();
+        if($intModuleFilter !== false)
+            $arrParams[] = (int)$intModuleFilter;
+
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, 0, $intMaxNrOfRecords-1);
         foreach($arrIds as $arrSingleRow) {
             $arrReturn[] = new class_modul_system_common($arrSingleRow["system_id"]);
         }
