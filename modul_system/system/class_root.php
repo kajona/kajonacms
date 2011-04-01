@@ -363,28 +363,33 @@ abstract class class_root {
 	}
 
 	/**
-	 * Negates the status of a systemRecord
+     * If a defined status is passed, it will be set. Ohterwise, it
+	 * negates the status of a systemRecord.
+     *
 	 *
 	 * @param string $strSystemid
 	 * @return bool
 	 */
-	public function setStatus($strSystemid = "") {
+	public function setStatus($strSystemid = "", $intStatus = false) {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 
-		$intStatus = $this->getStatus($strSystemid);
-		if($intStatus == 0)
-			$intNewStatus = 1;
-		else
-			$intNewStatus = 0;
+        $intNewStatus = $intStatus;
+        if($intStatus === false) {
+            $intStatus = $this->getStatus($strSystemid);
+            if($intStatus == 0)
+                $intNewStatus = 1;
+            else
+                $intNewStatus = 0;
+        }
 			
 		$this->setEditDate($strSystemid);	
 
 		//Upate the record
 		$strQuery = "UPDATE "._dbprefix_."system
-					SET system_status = ".(int)$intNewStatus."
-					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		if($this->objDB->_query($strQuery)) {
+					SET system_status = ?
+					WHERE system_id = ?";
+		if($this->objDB->_pQuery($strQuery, array((int)$intNewStatus, $strSystemid))) {
             $this->objDB->flushQueryCache();
             $this->additionalCallsOnStatuschange($strSystemid);
 			return true;

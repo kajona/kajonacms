@@ -4,15 +4,17 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id$                                        *
+*   $Id: class_systemtask_dbimport.php 3530 2011-01-06 12:30:26Z sidler $                                        *
 ********************************************************************************************************/
 
 /**
- * Restores the database from the filesystem using the current db-driver
+ * A systemtask to set the status of a given record
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
+ * @since 3.4
  */
-class class_systemtask_dbimport extends class_systemtask_base implements interface_admin_systemtask {
+class class_systemtask_systemstatus extends class_systemtask_base implements interface_admin_systemtask {
 
 
     /**
@@ -35,7 +37,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrInternalTaskName() {
-        return "dbimport";
+        return "systemstatus";
     }
     
     /**
@@ -43,7 +45,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function getStrTaskName() {
-        return $this->getText("systemtask_dbimport_name");
+        return $this->getText("systemtask_systemstatus_name");
     }
     
     /**
@@ -51,10 +53,15 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string
      */
     public function executeTask() {
-        if(class_carrier::getInstance()->getObjDB()->importDb($this->getParam("dbImportFile")))
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbimport_success"));
-        else
-            return $this->objToolkit->getTextRow($this->getText("systemtask_dbimport_error"));
+        //try to load and update the systemrecord
+        if(validateSystemid($this->getParam("systemstatus_systemid"))) {
+            $objRecord = new class_modul_system_common($this->getParam("systemstatus_systemid"));
+            $objRecord->setStatus($this->getParam("systemstatus_systemid"), $this->getParam("systemstatus_status"));
+
+            return $this->objToolkit->getTextRow($this->getText("systemtask_status_success"));
+        }
+        
+        return $this->objToolkit->getTextRow($this->getText("systemtask_status_error"));
     }
 
     /**
@@ -63,14 +70,14 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      */
     public function getAdminForm() {
     	$strReturn = "";
-        //show dropdown to select db-dump
-        $objFilesystem = new class_filesystem();
-        $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
-        $arrOptions = array();
-        foreach($arrFiles as $strOneFile)
-            $arrOptions[$strOneFile] = $strOneFile;
 
-        $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getText("systemtask_dbimport_file"));
+        $arrDropdown = array(
+            1 => $this->getText("systemtask_systemstatus_active"),
+            0 => $this->getText("systemtask_systemstatus_inactive")
+        );
+
+        $strReturn .= $this->objToolkit->formInputText("systemstatus_systemid", $this->getText("systemtask_systemstatus_systemid"));
+        $strReturn .= $this->objToolkit->formInputDropdown("systemstatus_status", $arrDropdown, $this->getText("systemtask_systemstatus_status"));
          
         return $strReturn;
     }
@@ -80,7 +87,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
      * @return string 
      */
     public function getSubmitParams() {
-        return "&dbImportFile=".$this->getParam("dbImportFile");
+        return "&systemstatus_systemid=".$this->getParam("systemstatus_systemid")."&systemstatus_status=".$this->getParam("systemstatus_status");
     }
 }
 ?>

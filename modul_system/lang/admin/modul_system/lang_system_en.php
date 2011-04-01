@@ -280,6 +280,15 @@ $lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_progress"]             = "Progress:";
 $lang["systemtask_run"]                  = "Execute";
 $lang["systemtask_runningtask"]          = "Task:";
+
+$lang["systemtask_systemstatus_name"]    = "Update the state of a system-record";
+$lang["systemtask_systemstatus_active"]  = "active";
+$lang["systemtask_systemstatus_inactive"]= "inactive";
+$lang["systemtask_systemstatus_systemid"]= "Systemid:";
+$lang["systemtask_systemstatus_status"]  = "Status:";
+$lang["systemtask_status_success"]       = "The status was updated successfully.";
+$lang["systemtask_status_error"]         = "Error while setting the status.";
+
 $lang["titel_erben"]                     = "Inherit rights:";
 $lang["titel_leer"]                      = "<em>No title defined</em>";
 $lang["titel_root"]                      = "Rights root-record";

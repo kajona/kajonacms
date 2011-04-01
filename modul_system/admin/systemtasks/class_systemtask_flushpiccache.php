@@ -24,7 +24,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
 
     /**
-     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string
      */
     public function getGroupIdentifier() {
@@ -32,7 +32,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
     
     /**
-     * @see interface_admin_systemtast::getStrInternalTaskName()
+     * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
      */
     public function getStrInternalTaskName() {
@@ -40,7 +40,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
     
     /**
-     * @see interface_admin_systemtast::getStrTaskName()
+     * @see interface_admin_systemtask::getStrTaskName()
      * @return string
      */
     public function getStrTaskName() {
@@ -48,7 +48,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
     
     /**
-     * @see interface_admin_systemtast::executeTask()
+     * @see interface_admin_systemtask::executeTask()
      * @return string
      */
     public function executeTask() {
@@ -71,7 +71,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     }
 
     /**
-     * @see interface_admin_systemtast::getAdminForm()
+     * @see interface_admin_systemtask::getAdminForm()
      * @return string 
      */
     public function getAdminForm() {

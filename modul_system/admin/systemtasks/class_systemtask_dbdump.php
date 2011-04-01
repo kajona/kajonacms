@@ -27,7 +27,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
     
     /**
-     * @see interface_admin_systemtast::getGroupIdenitfier()
+     * @see interface_admin_systemtask::getGroupIdenitfier()
      * @return string 
      */
     public function getGroupIdentifier() {
@@ -35,7 +35,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
 
     /**
-     * @see interface_admin_systemtast::getStrInternalTaskName()
+     * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
      */
     public function getStrInternalTaskName() {
@@ -43,7 +43,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
     
     /**
-     * @see interface_admin_systemtast::getStrTaskName()
+     * @see interface_admin_systemtask::getStrTaskName()
      * @return string
      */
     public function getStrTaskName() {
@@ -51,7 +51,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
     
     /**
-     * @see interface_admin_systemtast::executeTask()
+     * @see interface_admin_systemtask::executeTask()
      * @return string
      */
     public function executeTask() {
@@ -78,7 +78,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     }
 
     /**
-     * @see interface_admin_systemtast::getSubmitParams()
+     * @see interface_admin_systemtask::getSubmitParams()
      * @return string
      */
     public function getSubmitParams() {

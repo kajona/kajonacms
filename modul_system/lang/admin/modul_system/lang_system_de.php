@@ -280,6 +280,15 @@ $lang["systemtask_group_stats"]          = "Statistiken";
 $lang["systemtask_progress"]             = "Fortschritt:";
 $lang["systemtask_run"]                  = "Ausführen";
 $lang["systemtask_runningtask"]          = "Task:";
+
+$lang["systemtask_systemstatus_name"]    = "Status eines Datensatzes setzen";
+$lang["systemtask_systemstatus_active"]  = "Aktiv";
+$lang["systemtask_systemstatus_inactive"]= "Inaktiv";
+$lang["systemtask_systemstatus_systemid"]= "Systemid:";
+$lang["systemtask_systemstatus_status"]  = "Status:";
+$lang["systemtask_status_success"]       = "Der Status wurde erfolgreich gesetzt.";
+$lang["systemtask_status_error"]         = "Fehler beim Setzen des Status.";
+
 $lang["titel_erben"]                     = "Rechte erben:";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
