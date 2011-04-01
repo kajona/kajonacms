@@ -10,7 +10,8 @@
 /**
  * Model for a user-login-log
  *
- * @package modul_system
+ * @package modul_user
+ * @author sidler@mulchprod.de
  */
 class class_modul_user_log extends class_model implements interface_model  {
 
@@ -22,7 +23,6 @@ class class_modul_user_log extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_user";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."user_log";
 		$arrModul["modul"]				= "user";
@@ -69,21 +69,27 @@ class class_modul_user_log extends class_model implements interface_model  {
      * @static
      */
     public static function generateLog($intStatus = 1, $strOtherUsername = "") {
+
+        $arrParams = array();
+
 		$strQuery = "INSERT INTO "._dbprefix_."user_log
 						(user_log_id, user_log_userid, user_log_date, user_log_status, user_log_ip) VALUES
-						('".dbsafeString(generateSystemid())."',";
+						(?, ?, ?, ?, ?)";
+
+        $arrParams[] = generateSystemid();
 
         if($strOtherUsername == "") {
-			$strQuery .= "'".(class_carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : dbsafeString(class_carrier::getInstance()->getObjSession()->getUserID()))."'";
+			$arrParams[] = (class_carrier::getInstance()->getObjSession()->getUserID() == "" ? "0" : class_carrier::getInstance()->getObjSession()->getUserID());
         }
 		else {
-		    $strQuery .= "'".dbsafeString($strOtherUsername)."'";
+		    $arrParams[] = $strOtherUsername;
 		}
 
-		$strQuery .= 	",".(int)time().",
-						".(int)$intStatus.",
-						'".dbsafeString(getServer("REMOTE_ADDR"))."' ) ";
-		return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        $arrParams[] = time();
+        $arrParams[] = (int)$intStatus;
+        $arrParams[] = getServer("REMOTE_ADDR");
+
+		return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
     }
 
     /**
@@ -94,11 +100,11 @@ class class_modul_user_log extends class_model implements interface_model  {
      */
     public static function getLoginLogs() {
         $strQuery = "SELECT *
-						FROM "._dbprefix_."user_log as log
-							LEFT JOIN "._dbprefix_."user as user
-								ON log.user_log_userid = user.user_id
-						ORDER BY log.user_log_date DESC";
-		return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+				       FROM "._dbprefix_."user_log as log
+			      LEFT JOIN "._dbprefix_."user as user
+						ON log.user_log_userid = user.user_id
+				   ORDER BY log.user_log_date DESC";
+		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
     }
     
     /**
@@ -109,7 +115,7 @@ class class_modul_user_log extends class_model implements interface_model  {
     public function getLoginLogsCount() {
         $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_log as log";
-		$arrRow = $this->objDB->getRow($strQuery);
+		$arrRow = $this->objDB->getPRow($strQuery, array());
 		
 		return $arrRow["COUNT(*)"];
     }
@@ -129,7 +135,7 @@ class class_modul_user_log extends class_model implements interface_model  {
 								ON log.user_log_userid = user.user_id
 						ORDER BY log.user_log_date DESC";
         
-		return $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
+		return $this->objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
     }
 }
 ?>

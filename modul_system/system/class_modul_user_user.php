@@ -11,7 +11,8 @@
  * Model for a user
  * Note: Users do not use the classical system-id relation, so no entry in the system-table
  *
- * @package modul_system
+ * @package modul_user
+ * @author sidler@mulchprod.de
  */
 class class_modul_user_user extends class_model implements interface_model  {
 
@@ -45,7 +46,6 @@ class class_modul_user_user extends class_model implements interface_model  {
     public function __construct($strSystemid = "", $bitLoadPassword = false) {
         $arrModul = array();
         $arrModul["name"] 				= "modul_user";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."user";
 		$arrModul["modul"]				= "user";
@@ -64,8 +64,8 @@ class class_modul_user_user extends class_model implements interface_model  {
      * @param bool $bitPassword Should the password be loaded, too?
      */
     public function initObject($bitPassword = false) {
-        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString($this->arrModule["table"])." WHERE user_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+        $strQuery = "SELECT * FROM ".$this->objDB->dbsafeString($this->arrModule["table"])." WHERE user_id=?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
             $this->setStrUsername($arrRow["user_username"]);
@@ -117,61 +117,73 @@ class class_modul_user_user extends class_model implements interface_model  {
                         user_admin_skin, user_admin_language,
                         user_logins, user_lastlogin, user_authcode
 
-                        ) VALUES (
-
-                        '".$this->objDB->dbsafeString($strUserid)."',
-                        '".$this->objDB->dbsafeString($this->getStrUsername())."',
-                        '".$this->objDB->dbsafeString($this->objSession->encryptPassword($this->getStrPass()))."',
-                        '".$this->objDB->dbsafeString($this->getStrEmail())."',
-                        '".$this->objDB->dbsafeString($this->getStrForename())."',
-                        '".$this->objDB->dbsafeString($this->getStrName())."',
-                        '".$this->objDB->dbsafeString($this->getStrStreet())."',
-                        '".$this->objDB->dbsafeString($this->getStrPostal())."',
-                        '".$this->objDB->dbsafeString($this->getStrCity())."',
-                        '".$this->objDB->dbsafeString($this->getStrTel())."',
-                        '".$this->objDB->dbsafeString($this->getStrMobile())."',
-                        ".dbsafeString($this->getLongDate()).",
-                        ".(int)$this->getIntActive().",
-                        ".(int)$this->getIntAdmin().",
-                        ".(int)$this->getIntPortal().",
-                        '".$this->objDB->dbsafeString($this->getStrAdminskin())."',
-                        '".$this->objDB->dbsafeString($this->getStrAdminlanguage())."',
-                        0,
-                        0,
-                        '".$this->objDB->dbsafeString($this->getStrAuthcode())."'
-                        )";
+                        ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             class_logger::getInstance()->addLogRow("new user: ".$this->getStrUsername(), class_logger::$levelInfo);
 
-            return $this->objDB->_query($strQuery);
+            return $this->objDB->_pQuery($strQuery, array(
+                $strUserid,
+                $this->getStrUsername(),
+                $this->objSession->encryptPassword($this->getStrPass()),
+                $this->getStrEmail(),
+                $this->getStrForename(),
+                $this->getStrName(),
+                $this->getStrStreet(),
+                $this->getStrPostal(),
+                $this->getStrCity(),
+                $this->getStrTel(),
+                $this->getStrMobile(),
+                $this->getLongDate(),
+                (int)$this->getIntActive(),
+                (int)$this->getIntAdmin(),
+                (int)$this->getIntPortal(),
+                $this->getStrAdminskin(),
+                $this->getStrAdminlanguage(),
+                0,
+                0,
+                $this->getStrAuthcode()
+            ));
         }
         else {
-            
-           $strQuery = "UPDATE "._dbprefix_."user SET
-					user_username='".$this->objDB->dbsafeString($this->getStrUsername(), $bitHtmlEntities)."',
-					".($this->getStrPass() != "" ? "user_pass='".$this->objSession->encryptPassword($this->getStrPass(), $bitHtmlEntities)."'," : "")."
-					user_email='".$this->objDB->dbsafeString($this->getStrEmail(), $bitHtmlEntities)."',
-					user_forename='".$this->objDB->dbsafeString($this->getStrForename(), $bitHtmlEntities)."',
-					user_name='".$this->objDB->dbsafeString($this->getStrName(), $bitHtmlEntities)."',
-					user_street='".$this->objDB->dbsafeString($this->getStrStreet(), $bitHtmlEntities)."',
-					user_postal='".$this->objDB->dbsafeString($this->getStrPostal(), $bitHtmlEntities)."',
-					user_city='".$this->objDB->dbsafeString($this->getStrCity(), $bitHtmlEntities)."',
-					user_tel='".$this->objDB->dbsafeString($this->getStrTel(), $bitHtmlEntities)."',
-					user_mobile='".$this->objDB->dbsafeString($this->getStrMobile(), $bitHtmlEntities)."',
-                    user_date=".$this->objDB->dbsafeString($this->getLongDate()).",
-					user_active=".(int)$this->getIntActive().",
-					user_admin=".(int)$this->getIntAdmin().",
-					user_portal=".(int)$this->getIntPortal().",
-					user_admin_skin='".$this->objDB->dbsafeString($this->getStrAdminskin(), $bitHtmlEntities)."',
-					user_admin_language='".$this->objDB->dbsafeString($this->getStrAdminlanguage(), $bitHtmlEntities)."',
-					user_logins = ".(int)$this->getIntLogins().",
-					user_lastlogin = ".(int)$this->getIntLastLogin().",
-                    user_authcode = '".dbsafeString($this->getStrAuthcode())."'
-					WHERE user_id = '".$this->objDB->dbsafeString($this->getSystemid(), $bitHtmlEntities)."'";
 
-           class_logger::getInstance()->addLogRow("updated user ".$this->getStrUsername(), class_logger::$levelInfo);
+            $strQuery = ""; $arrParams = array(); $arrEncode = array();
 
-           return $this->objDB->_query($strQuery);
+            if($this->getStrPass() != "") {
+                $strQuery = "UPDATE "._dbprefix_."user SET
+                        user_username=?, user_pass=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
+                        user_date=?, user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?
+                        WHERE user_id = ?";
+                   $arrParams = array(
+                        $this->getStrUsername(),
+                       ($this->getStrPass() != "" ? $this->objSession->encryptPassword($this->getStrPass()) : ""),
+                        $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
+                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), (int)$this->getIntActive(),
+                        (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
+                        (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(), $this->getSystemid()
+                   );
+                   $arrEncode = array($bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities,
+                          false, false, false, false, false, false, false, false, false, false);
+            }
+            else {
+                $strQuery = "UPDATE "._dbprefix_."user SET
+                        user_username=?, user_email=?, user_forename=?, user_name=?, user_street=?, user_postal=?, user_city=?, user_tel=?, user_mobile=?,
+                        user_date=?, user_active=?, user_admin=?, user_portal=?, user_admin_skin=?, user_admin_language=?, user_logins = ?, user_lastlogin = ?, user_authcode = ?
+                        WHERE user_id = ?";
+
+                $arrParams = array(
+                        $this->getStrUsername(),
+                        $this->getStrEmail(), $this->getStrForename(), $this->getStrName(), $this->getStrStreet(), $this->getStrPostal(),
+                        $this->getStrCity(), $this->getStrTel(), $this->getStrMobile(), $this->getLongDate(), (int)$this->getIntActive(),
+                        (int)$this->getIntAdmin(), (int)$this->getIntPortal(), $this->getStrAdminskin(), $this->getStrAdminlanguage(),
+                        (int)$this->getIntLogins(), (int)$this->getIntLastLogin(), $this->getStrAuthcode(), $this->getSystemid()
+                   );
+                   $arrEncode = array($bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities, $bitHtmlEntities,
+                          false, false, false, false, false, false, false, false, false, false);
+            }
+
+            class_logger::getInstance()->addLogRow("updated user ".$this->getStrUsername(), class_logger::$levelInfo);
+
+            return $this->objDB->_pQuery($strQuery, $arrParams, $arrEncode);
         }
     }
 
@@ -188,9 +200,9 @@ class class_modul_user_user extends class_model implements interface_model  {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user ORDER BY user_username ASC";
 
         if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -207,10 +219,10 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public static function getAllUsersByName($strName, $bitOnlyActive = true) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user
-                      WHERE user_username='".class_carrier::getInstance()->getObjDB()->dbsafeString($strName)."'
+                      WHERE user_username=?
 					    ".($bitOnlyActive ? " AND user_active = 1 " : "" );
 
-        $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strName));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"], true);
@@ -224,7 +236,7 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public static function getNumberOfUsers() {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user ";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 		return $arrRow["COUNT(*)"];
     }
 
@@ -237,10 +249,10 @@ class class_modul_user_user extends class_model implements interface_model  {
     public function deleteUser() {
         class_logger::getInstance()->addLogRow("deleted user with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUserMemberships();
-        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id='".dbsafeString($this->getSystemid())."'";
+        $strQuery = "DELETE FROM "._dbprefix_."user WHERE user_id=?";
         //call other models that may be interested
         $this->additionalCallsOnDeletion($this->getSystemid());
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
 
 
@@ -251,8 +263,8 @@ class class_modul_user_user extends class_model implements interface_model  {
 	 * @static
 	 */
 	public function deleteAllUserMemberships() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_user_id='".dbsafeString($this->getSystemid())."'";
-		return $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_user_id=?";
+		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------

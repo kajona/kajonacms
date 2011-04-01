@@ -11,7 +11,7 @@
 /**
  * This class provides the user and groupmanagement
  *
- * @package modul_system
+ * @package modul_user
  */
 class class_modul_user_admin extends class_admin implements interface_admin {
 

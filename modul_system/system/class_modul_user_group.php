@@ -11,7 +11,8 @@
  * Model for a user-group
  * Groups are not represented in the system-table
  *
- * @package modul_system
+ * @package modul_user
+ * @author sidler@mulchprod.de
  */
 class class_modul_user_group extends class_model implements interface_model  {
 
@@ -26,7 +27,6 @@ class class_modul_user_group extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_user";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _user_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."user_group";
 		$arrModul["table2"]       		= _dbprefix_."user_group_members";
@@ -61,8 +61,8 @@ class class_modul_user_group extends class_model implements interface_model  {
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+        $strQuery = "SELECT * FROM "._dbprefix_."user_group WHERE group_id=?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
             $this->setStrName($arrRow["group_name"]);
@@ -82,15 +82,15 @@ class class_modul_user_group extends class_model implements interface_model  {
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group
                           (group_id, group_name) VALUES
-                          ('".$this->objDB->dbsafeString($strGrId)."', '".$this->objDB->dbsafeString($this->getStrName())."')";
-            return $this->objDB->_query($strQuery);
+                          (?, ?)";
+            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrName()));
         }
         else {
             class_logger::getInstance()->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."user_group
-                            SET group_name='".$this->objDB->dbsafeString($this->getStrName())."'
-                            WHERE group_id='".$this->objDB->dbsafeString($this->getSystemid()). "'";
-            return $this->objDB->_query($strQuery);
+                            SET group_name=?
+                            WHERE group_id=?";
+            return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
         }
     }
 
@@ -106,9 +106,9 @@ class class_modul_user_group extends class_model implements interface_model  {
 		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group";
         
         if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_user_group($arrOneId["group_id"]);
@@ -122,7 +122,7 @@ class class_modul_user_group extends class_model implements interface_model  {
      */
     public static function getNumberOfGroups() {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user_group";
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }
 
@@ -147,20 +147,20 @@ class class_modul_user_group extends class_model implements interface_model  {
      *
      * @param int $intStart
      * @param int $intEnd
-	 * @return mixed array of user-objects
+	 * @return class_modul_user_user
      * @see class_modul_user_group::getGroupMembers
      */
     public function getAllMembers($intStart = false, $intEnd = false) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user,
 									"._dbprefix_."user_group_members
-								WHERE group_member_group_id='".dbsafeString($this->getSystemid())."'
+								WHERE group_member_group_id=?
 									AND user_id = group_member_user_id
                                   ORDER BY user_name ASC  ";
 
         if($intStart !== false && $intEnd !== false)
-            $arrIds = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
         else
-            $arrIds = $this->objDB->getArray($strQuery);
+            $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -173,15 +173,15 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 * Gets the number of members of a group
 	 *
 	 * @param string $strGroupId
-	 * @return mixed array of user-objects
+	 * @return int
 	 * @static
 	 */
 	public static function getGroupMembersCount($strGroupId) {
 		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user,
 									"._dbprefix_."user_group_members
-								WHERE group_member_group_id='".class_carrier::getInstance()->getObjDB()->dbsafeString($strGroupId)."'
+								WHERE group_member_group_id=?
 									AND user_id = group_member_user_id";
-		$arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strGroupId));
         return $arrRow["COUNT(*)"];
 	}
 
@@ -196,9 +196,9 @@ class class_modul_user_group extends class_model implements interface_model  {
 	       return false;
 	    $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".$this->objDB->dbsafeString($objUser->getSystemid())."'
-						AND group_member_group_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-	    $arrRow = $this->objDB->getRow($strQuery);
+						WHERE group_member_user_id=?
+						AND group_member_group_id=?";
+	    $arrRow = $this->objDB->getPRow($strQuery, array($objUser->getSystemid(), $this->getSystemid())   );
 	    return ($arrRow["COUNT(*)"] != 0);
 	}
 	
@@ -214,9 +214,9 @@ class class_modul_user_group extends class_model implements interface_model  {
 	       
 	    $strQuery = "SELECT group_member_group_id 
 						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id='".dbsafeString($strUserId)."'";
+						WHERE group_member_user_id=?";
 						
-	    $arrGroups = class_carrier::getInstance()->getObjDB()->getArray($strQuery);   
+	    $arrGroups = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserId));
 	    $arrReturn = array();
 	    foreach ($arrGroups as $arrOneGroup)
 	        $arrReturn[] = $arrOneGroup["group_member_group_id"];
@@ -241,8 +241,8 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 * @return bool
 	 */
     public function deleteAllUsersFromCurrentGroup() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_group_id='".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_group_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
 	/**
@@ -253,9 +253,9 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 */
 	public function deleteUserFromCurrentGroup($objUser) {
         $strQuery = "DELETE FROM "._dbprefix_."user_group_members
-						WHERE group_member_group_id='".$this->objDB->dbsafeString($this->getSystemid())."'
-						AND group_member_user_id='".$this->objDB->dbsafeString($objUser->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+						WHERE group_member_group_id=?
+						AND group_member_user_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
 	}
 
 	/**
@@ -266,8 +266,8 @@ class class_modul_user_group extends class_model implements interface_model  {
 	public function deleteGroup() {
 	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
         $this->deleteAllUsersFromCurrentGroup();
-        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id='".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
 	/**
@@ -280,8 +280,8 @@ class class_modul_user_group extends class_model implements interface_model  {
 	    foreach($arrWantedGroupIds as $strOneGroupId) {
     	    $strQuery = "INSERT INTO "._dbprefix_."user_group_members
 						   (group_member_group_id, group_member_user_id) VALUES
-							('".dbsafeString($strOneGroupId)."', '".dbsafeString($objUser->getSystemid())."')";
-    		class_carrier::getInstance()->getObjDB()->_query($strQuery);
+							(?, ?)";
+    		class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strOneGroupId, $objUser->getSystemid()));
 	    }
 	}
 
