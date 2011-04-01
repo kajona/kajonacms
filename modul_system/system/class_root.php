@@ -141,35 +141,28 @@ abstract class class_root {
 			$strPrevId = 0;
 
         //determin the correct new sort-id - append by default
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = '".dbsafeString($strPrevId)."'";
-        $arrRow = $this->objDB->getRow($strQuery, 0, false);
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
 
 
 		//So, lets generate the record
 		$strQuery = "INSERT INTO "._dbprefix_."system
 					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
-					 ('".$this->objDB->dbsafeString($strSystemId)."', 
-                      '".$this->objDB->dbsafeString($strPrevId)."',
-                       ".(int)$intModulNr." ,
-                      '".$this->objDB->dbsafeString($this->objSession->getUserID())."',
-                      '".$this->objDB->dbsafeString(class_date::getCurrentTimestamp())."',
-                      '".$this->objDB->dbsafeString($this->objSession->getUserID())."' ,
-                       ".time()." ,
-                       ".(int)$intStatus.",
-                      '".$this->objDB->dbsafeString($strComment)."',
-                      ".(int)($intSiblings+1).")";
+					 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
 		//Send the query to the db
-		$this->objDB->_query($strQuery);
+		$this->objDB->_pQuery($strQuery, array(
+            $strSystemId, $strPrevId, (int)$intModulNr, $this->objSession->getUserID(), class_date::getCurrentTimestamp(), $this->objSession->getUserID(), time(), (int)$intStatus, $strComment, (int)($intSiblings+1)
+        ));
 
 		//Do we need a Rights-Record?
 		if($bitRight) {
 			$strQuery = "INSERT INTO "._dbprefix_."system_right
 						 (right_id, right_inherit) VALUES
-						 ('".$this->objDB->dbsafeString($strSystemId)."', 1)";
+						 (?, 1)";
             
-			$this->objDB->_query($strQuery);
+			$this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
             $this->objRights->setInherited(true, $strSystemId);
 		}
@@ -191,7 +184,7 @@ abstract class class_root {
 	 * @param class_date $objSpecialDate
 	 * @return bool
 	 */
-	public function createDateRecord($strSystemid, $objStartDate = null, $objEndDate = null, $objSpecialDate = null) {
+	public function createDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
@@ -207,8 +200,8 @@ abstract class class_root {
         
 	    $strQuery = "INSERT INTO "._dbprefix_."system_date
 	                  (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
-	                  ('".$this->objDB->dbsafeString($strSystemid)."', ".$intStart.", ".$intEnd.", ".$intSpecial.")";
-	    return $this->objDB->_query($strQuery);
+	                  (?, ?, ?, ?)";
+	    return $this->objDB->_pQuery($strQuery, array($strSystemid, $intStart, $intEnd, $intSpecial));
 	}
 
     /**
@@ -222,7 +215,7 @@ abstract class class_root {
 	 * @param class_date $objSpecialDate
 	 * @return bool
 	 */
-	public function updateDateRecord($strSystemid, $objStartDate = null, $objEndDate = null, $objSpecialDate = null) {
+	public function updateDateRecord($strSystemid, class_date $objStartDate = null, class_date $objEndDate = null, class_date $objSpecialDate = null) {
         $intStart = 0;
         $intEnd = 0;
         $intSpecial = 0;
@@ -237,11 +230,11 @@ abstract class class_root {
             $intSpecial = $objSpecialDate->getLongTimestamp();
 
 	    $strQuery = "UPDATE "._dbprefix_."system_date
-	                  SET system_date_start = ".$intStart.",
-	                      system_date_end = ".$intEnd.",
-	                      system_date_special = ".$intSpecial."
-	                WHERE system_date_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-	    return $this->objDB->_query($strQuery);
+	                  SET system_date_start = ?,
+	                      system_date_end = ?,
+	                      system_date_special = ?
+	                WHERE system_date_id = ?";
+	    return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
 	}
 
     /**
@@ -509,9 +502,11 @@ abstract class class_root {
 	 */
 	public function setRecordComment($strNewComment) {
         $strQuery = "UPDATE "._dbprefix_."system
-                        SET system_comment = '".dbsafeString($strNewComment)."'
-                      WHERE system_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                        SET system_comment = ?
+                      WHERE system_id = ?";
+        
+        $this->setEditDate();
+        return $this->objDB->_pQuery($strQuery, array($strNewComment, $this->getSystemid()));
 	}
 
 	/**
@@ -524,11 +519,11 @@ abstract class class_root {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		$strQuery = "SELECT user_username
-					FROM "._dbprefix_."system ,
+					   FROM "._dbprefix_."system,
 					"._dbprefix_."user
 					WHERE user_id = system_lm_user
-						AND system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		$arrRow = $this->objDB->getRow($strQuery);
+						AND system_id = ?";
+		$arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
 		if(count($arrRow) != 0)
 		    return $arrRow["user_username"];
 		else
@@ -562,9 +557,9 @@ abstract class class_root {
             $strUserid = $this->objSession->getUserID();
                 
         $strQuery = "UPDATE "._dbprefix_."system 
-                        SET system_lm_user = '".dbsafeString($strUserid)."'
-                      WHERE system_id = '".dbsafeString($strSystemid)."'";
-        return $this->objDB->_query($strQuery);
+                        SET system_lm_user = ?
+                      WHERE system_id = ? ";
+        return $this->objDB->_pQuery($strQuery, array($strUserid, $strSystemid) );
         
     }
 
@@ -595,11 +590,11 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
-					SET system_lm_user = '".$this->objDB->dbsafeString($this->objSession->getUserID())."',
-						system_lm_time= ".(int)time()."
-					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
+					SET system_lm_user = ?,
+						system_lm_time= ?
+					WHERE system_id = ?";
 
-		if($this->objDB->_query($strQuery))
+		if($this->objDB->_pQuery($strQuery, array($this->objSession->getUserID(), (int)time(), $strSystemid   )))
 			return true;
 		else
 			return false;
@@ -631,11 +626,11 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$strQuery = "UPDATE "._dbprefix_."system
-					SET system_owner = '".$this->objDB->dbsafeString($strOwner)."',
-						system_lm_time= ".(int)time()."
-					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
+					SET system_owner = ?,
+						system_lm_time= ?
+				  WHERE system_id = ?";
 
-		if($this->objDB->_query($strQuery))
+		if($this->objDB->_pQuery($strQuery, array($strOwner, (int)time(), $strSystemid) ))
 			return true;
 		else
 			return false;
@@ -672,10 +667,10 @@ abstract class class_root {
         $this->objDB->flushQueryCache();
         $this->objRights->flushRightsCache();
         $strQuery = "UPDATE "._dbprefix_."system
-                        SET system_prev_id='".dbsafeString($strNewPrevId)."'
-                      WHERE system_id = '".dbsafeString($strSystemid)."' ";
+                        SET system_prev_id= ?
+                      WHERE system_id= ? ";
 
-        $bitReturn = $this->objDB->_query($strQuery);
+        $bitReturn = $this->objDB->_pQuery($strQuery, array($strNewPrevId, $strSystemid));
 
         if($bitReturn)
             $this->objRights->rebuildRightsStructure($strSystemid);
@@ -698,9 +693,9 @@ abstract class class_root {
 	    $strQuery = "SELECT COUNT(*)
 					 FROM "._dbprefix_."system as sys1,
 					      "._dbprefix_."system as sys2
-					 WHERE sys1.system_id='".$this->objDB->dbsafeString($strSystemid)."'
+					 WHERE sys1.system_id=?
 					 AND sys2.system_prev_id = sys1.system_prev_id";
-	    $arrRow = $this->objDB->getRow($strQuery, 0, $bitUseCache);
+	    $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid), 0, $bitUseCache);
 	    return $arrRow["COUNT(*)"];
 
 	}
@@ -719,11 +714,11 @@ abstract class class_root {
 
 	    $strQuery = "SELECT system_id
 					 FROM "._dbprefix_."system
-					 WHERE system_prev_id='".$this->objDB->dbsafeString($strSystemid)."'
+					 WHERE system_prev_id=?
                      ORDER BY system_sort ASC";
         
         $arrReturn = array();
-        $arrTemp =  $this->objDB->getArray($strQuery);
+        $arrTemp =  $this->objDB->getPArray($strQuery, array($strSystemid));
 
         if(count($arrTemp) > 0)
             foreach($arrTemp as $arrOneRow)
@@ -747,11 +742,11 @@ abstract class class_root {
 		$strPrevID = $this->getPrevId($strIdToShift);
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
-						 WHERE system_prev_id='".$this->objDB->dbsafeString($strPrevID)."'
+						 WHERE system_prev_id=?
 						 ORDER BY system_sort ASC, system_comment ASC";
 
 		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->objDB->getArray($strQuery, false);
+		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), false);
 
 		//Iterate to move the element
 		$bitSaveToDb = false;
@@ -787,9 +782,9 @@ abstract class class_root {
 			foreach($arrElements as $intKey => $arrOneElement) {
 				//$intKey+1 forces new elements to be at the top of lists
 				$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".(((int)$intKey)+1)."
-								WHERE system_id='".$this->objDB->dbsafeString($arrOneElement["system_id"])."'";
-				$this->objDB->_query($strQuery);
+								SET system_sort=?
+								WHERE system_id=?";
+				$this->objDB->_pQuery($strQuery, array( (((int)$intKey)+1), $arrOneElement["system_id"]));
 			}
 		}
 
@@ -805,7 +800,6 @@ abstract class class_root {
 	 */
 	public function setAbsolutePosition($strIdToSet, $intPosition) {
 	    class_logger::getInstance()->addLogRow("move ".$strIdToSet." to new pos ".$intPosition, class_logger::$levelInfo);
-		$strReturn = "";
 
 		//to have a better array-like handling, decrease pos by one.
 		//remind to add at the end when saving to db
@@ -815,11 +809,11 @@ abstract class class_root {
 		$strPrevID = $this->getPrevId($strIdToSet);
 		$strQuery = "SELECT *
 						 FROM "._dbprefix_."system
-						 WHERE system_prev_id='".$this->objDB->dbsafeString($strPrevID)."'
+						 WHERE system_prev_id=?
 						 ORDER BY system_sort ASC, system_comment ASC";
 
 		//No caching here to allow mutliple shiftings per request
-		$arrElements = $this->objDB->getArray($strQuery, false);
+		$arrElements = $this->objDB->getPArray($strQuery, array($strPrevID), false);
 
 		//more than one record to set?
 		if(count($arrElements) <= 1)
@@ -856,9 +850,9 @@ abstract class class_root {
 		if($bitSortUp) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".((int)$intPosition+1)."
-								WHERE system_id='".dbsafeString($strIdToSet)."'";
-			$this->objDB->_query($strQuery);
+								SET system_sort=?
+								WHERE system_id=?";
+			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $strIdToSet));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
@@ -867,8 +861,8 @@ abstract class class_root {
 				if($intI >= $intPosition && $intI < $intHitKey) {
 					$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=system_sort+1
-								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
-					$this->objDB->_query($strQuery);
+								WHERE system_id=?";
+					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
 				}
 			}
 		}
@@ -876,9 +870,9 @@ abstract class class_root {
 		if($bitSortDown) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort=".((int)$intPosition+1)."
-								WHERE system_id='".dbsafeString($strIdToSet)."'";
-			$this->objDB->_query($strQuery);
+								SET system_sort=?
+								WHERE system_id=?";
+			$this->objDB->_pQuery($strQuery, array(((int)$intPosition+1), $strIdToSet));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
@@ -887,8 +881,8 @@ abstract class class_root {
 				if($intI > $intHitKey && $intI <= $intPosition) {
 					$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort=system_sort-1
-								WHERE system_id='".dbsafeString($arrElements[$intI]["system_id"])."'";
-					$this->objDB->_query($strQuery);
+								WHERE system_id=?";
+					$this->objDB->_pQuery($strQuery, array($arrElements[$intI]["system_id"]));
 				}
 			}
 		}
@@ -908,12 +902,12 @@ abstract class class_root {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
 		$strQuery = "SELECT * FROM "._dbprefix_."system
-					LEFT JOIN "._dbprefix_."system_right
-						ON system_id = right_id
-					LEFT JOIN "._dbprefix_."system_date
-					   ON system_id = system_date_id
-					WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		return $this->objDB->getRow($strQuery);
+					     LEFT JOIN "._dbprefix_."system_right
+						      ON system_id = right_id
+					     LEFT JOIN "._dbprefix_."system_date
+					          ON system_id = system_date_id
+					         WHERE system_id = ?";
+		return $this->objDB->getPRow($strQuery, array($strSystemid));
 	}
 
 
@@ -926,7 +920,7 @@ abstract class class_root {
 	 */
 	public function getModuleData($strName, $bitCache = true) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module ORDER BY module_nr";
-		$arrModules = $this->objDB->getArray($strQuery, $bitCache);
+		$arrModules = $this->objDB->getPArray($strQuery, array(), $bitCache);
 
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_name"] == $strName)
@@ -972,17 +966,17 @@ abstract class class_root {
 		//Start a tx before deleting anything
 		$this->objDB->transactionBegin();
 
-		$strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		$bit1 = $this->objDB->_query($strQuery);
+		$strQuery = "DELETE FROM "._dbprefix_."system WHERE system_id = ?";
+		$bit1 = $this->objDB->_pQuery($strQuery, array($strSystemid));
 
 		if($bitRight) {
-			$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-			$bit2 = $this->objDB->_query($strQuery);
+			$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
+			$bit2 = $this->objDB->_pQuery($strQuery, array($strSystemid));
 		}
 
         if($bitDate) {
-			$strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-			$bit3 = $this->objDB->_query($strQuery);
+			$strQuery = "DELETE FROM "._dbprefix_."system_date WHERE system_date_id = ?";
+			$bit3 = $this->objDB->_pQuery($strQuery, array($strSystemid));
 		}
 
 		$bitResult = $bit1 && $bit2 && $bit3 && $bit4;
@@ -1050,8 +1044,8 @@ abstract class class_root {
 	 * @return bool
 	 */
 	public function deleteRight($strSystemid) {
-		$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = '".$this->objDB->dbsafeString($strSystemid)."'";
-		return $this->objDB->_query($strQuery);
+		$strQuery = "DELETE FROM "._dbprefix_."system_right WHERE right_id = ?";
+		return $this->objDB->_pQuery($strQuery, array($strSystemid));
 	}
 
 
