@@ -101,10 +101,10 @@ class class_db_mysqli implements interface_db_driver {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
                 $strType = "s";
-                if(is_numeric($strOneParam))
-                    $strType = "i";
-                if(is_float($strOneParam))
-                    $strType = "d";
+//                if(is_numeric($strOneParam))
+//                    $strType = "i";
+//                if(is_float($strOneParam) || is_long($strOneParam))
+//                    $strType = "d";
 
                 $strTypes .= $strType;
             }
@@ -155,10 +155,11 @@ class class_db_mysqli implements interface_db_driver {
             $strTypes = "";
             foreach($arrParams as $strOneParam) {
                 $strType = "s";
-                if(is_numeric($strOneParam))
-                    $strType = "i";
-                if(is_float($strOneParam))
-                    $strType = "d";
+//                if(is_numeric($strOneParam))
+//                    $strType = "i";
+//                if(is_float($strOneParam) || is_long($strOneParam))
+//                    $strType = "d";
+
 
                 $strTypes .= $strType;
             }
