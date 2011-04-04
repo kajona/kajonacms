@@ -256,7 +256,7 @@ class class_mail {
 
                 //text-version
                 $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
-                $strBody .= "Content-Type: text/plain; charset=\"utf-8\"".$this->strEndOfLine;
+                $strBody .= "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
                 $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
                 $strBody .= strip_tags(($this->strText == "" ? str_replace(array("<br />", "<br />"), array("\n", "\n"), $this->strHtml) : $this->strText));
                 $strBody .= $this->strEndOfLine.$this->strEndOfLine;
@@ -264,7 +264,7 @@ class class_mail {
                 //html-version
                 if($this->strHtml != "") {
                     $strBody .= "--".$strBoundaryAlt.$this->strEndOfLine;
-                    $strBody .= "Content-Type: text/html; charset=\"utf-8\"".$this->strEndOfLine;
+                    $strBody .= "Content-Type: text/html; charset=UTF-8".$this->strEndOfLine;
                     $strBody .= "Content-Transfer-Encoding: 8bit".$this->strEndOfLine.$this->strEndOfLine;
                     $strBody .= $this->strHtml;
                     $strBody .= $this->strEndOfLine.$this->strEndOfLine;
@@ -274,7 +274,7 @@ class class_mail {
                     $strBody .= "--".$strBoundaryAlt."--".$this->strEndOfLine.$this->strEndOfLine;
             }
             else {
-                $this->arrHeader[] = "Content-Type: text/plain; charset=\"utf-8\"".$this->strEndOfLine;
+                $this->arrHeader[] = "Content-Type: text/plain; charset=UTF-8".$this->strEndOfLine;
                 $strBody .= $this->strText;
             }
 
