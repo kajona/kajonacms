@@ -502,19 +502,21 @@ abstract class class_installer_base extends class_root {
 		$strQuery = "INSERT INTO "._dbprefix_."system_module
 						(module_id, module_name, module_nr, module_filenameportal, module_xmlfilenameportal, module_filenameadmin,
 						module_xmlfilenameadmin, module_version ,module_date, module_navigation)
-					VALUES (
-						'".$this->objDB->dbsafeString($strSystemid)."',
-						'".$this->objDB->dbsafeString($strName)."',
-						".(int)$intModuleNr.",
-						'".$this->objDB->dbsafeString($strFilePortal)."',
-						'".$this->objDB->dbsafeString($strXmlPortal)."',
-						'".$this->objDB->dbsafeString($strFileAdmin)."',
-						'".$this->objDB->dbsafeString($strXmlAdmin)."',
-						'".$this->objDB->dbsafeString($strVersion)."',
-						".(int)time().",
-						".( $bitNavi ? 1 : 0)."
-					 )";
-		$this->objDB->_query($strQuery);
+					VALUES (?,?,?,?,?,?,?,?,?,?)";
+
+        $arrParams = array();
+        $arrParams = $strSystemid;
+		$arrParams = $strName;
+		$arrParams = (int)$intModuleNr;
+		$arrParams = $strFilePortal;
+		$arrParams = $strXmlPortal;
+		$arrParams = $strFileAdmin;
+		$arrParams = $strXmlAdmin;
+		$arrParams = $strVersion;
+		$arrParams = (int)time();
+		$arrParams = ($bitNavi ? 1 : 0);
+
+		$this->objDB->_pQuery($strQuery, $arrParams);
 
 		class_logger::getInstance()->addLogRow("New module registered: ".$strSystemid. "(".$strName.")", class_logger::$levelInfo);
 
@@ -534,13 +536,13 @@ abstract class class_installer_base extends class_root {
 	protected function updateModuleVersion($strModuleName, $strVersion) {
         $this->objDB->flushQueryCache();
 	    $strQuery = "UPDATE "._dbprefix_."system_module
-	                 SET module_version= '".$this->objDB->dbsafeString($strVersion)."',
-	                     module_date=".(int)time()."
-	                 WHERE module_name='".$this->objDB->dbsafeString($strModuleName)."'";
+	                 SET module_version= ?,
+	                     module_date= ?
+	                 WHERE module_name= ?";
 
 	    class_logger::getInstance()->addLogRow("module ".$strModuleName." updated to ".$strVersion, class_logger::$levelInfo);
 
-	    $bitReturn = $this->objDB->_query($strQuery);
+	    $bitReturn = $this->objDB->_pQuery($strQuery, array($strVersion, time(), $strModuleName ));
         $this->objDB->flushQueryCache();
         return $bitReturn;
 	}

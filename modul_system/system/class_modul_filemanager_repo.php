@@ -12,6 +12,7 @@
  * Model for a filemanager repo
  *
  * @package modul_filemanager
+ * @author sidler@mulchprod.de
  */
 class class_modul_filemanager_repo extends class_model implements interface_model  {
 
@@ -29,7 +30,6 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_filemanager";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _filemanager_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."filemanager";
 		$arrModul["modul"]				= "filemanager";

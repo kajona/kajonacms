@@ -12,7 +12,7 @@
  * It provides the methods to check if a record is locked or not.
  *
  * @package modul_system
- * @author sidler
+ * @author sidler@mulchprod.de
  * @since 3.3.0
  */
 class class_lockmanager  {
@@ -42,11 +42,11 @@ class class_lockmanager  {
 	 */
     public function lockRecord() {
 		$strQuery = "UPDATE "._dbprefix_."system
-						SET system_lock_id='".dbsafeString(class_carrier::getInstance()->getObjSession()->getUserID())."',
-						    system_lock_time = '".dbsafeString(time())."'
-						WHERE system_id ='".dbsafeString($this->strSystemid)."'";
+						SET system_lock_id=?,
+						    system_lock_time = ?
+						WHERE system_id =?";
 
-		if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
+		if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid ))) {
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
             return true;
         }
@@ -76,8 +76,8 @@ class class_lockmanager  {
             
             $strQuery = "UPDATE "._dbprefix_."system
                             SET system_lock_id='0'
-                            WHERE system_id='".dbsafeString($this->strSystemid)."'";
-            if(class_carrier::getInstance()->getObjDB()->_query($strQuery)) {
+                            WHERE system_id=? ";
+            if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
                 class_carrier::getInstance()->getObjDB()->flushQueryCache();
                 return true;
             }
@@ -142,8 +142,8 @@ class class_lockmanager  {
 	    $intMinTime = time() - _system_lock_maxtime_;
 	    $strQuery = "UPDATE "._dbprefix_."system
 						SET system_lock_id='0'
-				      WHERE system_lock_time <='".dbsafeString($intMinTime)."'";
-	    return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+				      WHERE system_lock_time <= ?";
+	    return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($intMinTime));
 	}
 
     /**

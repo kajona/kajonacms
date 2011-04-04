@@ -17,7 +17,7 @@ require_once(_systempath_."/pChart/pData.class");
  * 
  * @package modul_system
  * @since 3.3.0
- * @author sidler
+ * @author sidler@mulchprod.de
  */
 class class_graph_pchart implements interface_graph {
 

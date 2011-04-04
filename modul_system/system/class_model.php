@@ -78,9 +78,9 @@ class class_model extends class_root {
                     foreach($arrTables as $strTable => $strColumn) {
                         $strQuery = "INSERT INTO ".$this->objDB->encloseTableName($strTable)."
                                                 (".$this->objDB->encloseColumnName($strColumn).") VALUES
-                                                ('".dbsafeString($strNewSystemid)."') ";
+                                                (?) ";
 
-                        if(!$this->objDB->_query($strQuery))
+                        if(!$this->objDB->_pQuery($strQuery, array($strNewSystemid) ))
                             $bitCommit = false;
 
                     }

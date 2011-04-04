@@ -15,7 +15,7 @@
  * 
  * @package modul_system
  * @since 3.3.0
- * @author sidler
+ * @author sidler@mulchprod.de
  */
 class class_graph_colorpalettes {
 
