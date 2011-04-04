@@ -23,7 +23,7 @@
  *  - leasetime (otherwise the entry will be invalid as soon as saved to the database)
  *
  * @package modul_system
- * @author sidler
+ * @author sidler@mulchprod.de
  * @since 3.3.1
  */
 class class_cache  {
@@ -125,13 +125,21 @@ class class_cache  {
         //search in the database to find a matching entry
         $strQuery = "SELECT *
                        FROM "._dbprefix_."cache
-                      WHERE cache_source = '".dbsafeString($strSourceName)."'
-                        AND cache_hash1 = '".dbsafeString($strHash1)."'
-                        ".($strHash2 != null ? " AND cache_hash2 = '".dbsafeString($strHash2)."' " : "" )."
-                        ".($strLanguage != null ? " AND cache_language = '".dbsafeString($strLanguage)."' " : "" )."
-                        AND cache_leasetime > ".time()." ";
+                      WHERE cache_source = ?
+                        AND cache_hash1 = ?
+                        ".($strHash2 != null ? " AND cache_hash2 = ? " : "" )."
+                        ".($strLanguage != null ? " AND cache_language = ? " : "" )."
+                        AND cache_leasetime > ? ";
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrParams = array($strSourceName, $strHash1);
+        if($strHash2 != null)
+            $arrParams[] = $strHash2;
+        if($strLanguage != null)
+            $arrParams[] = $strLanguage;
+
+        $arrParams[] = time();
+
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         if(isset($arrRow["cache_id"])) {
             $objCacheEntry = new class_cache(
                     $arrRow["cache_source"],
@@ -200,34 +208,49 @@ class class_cache  {
             return false;
 
         $strQuery = "";
+        $arrParams = array();
+        $arrEscape = array();
         if($this->strCacheId == null) {
             $this->strCacheId = generateSystemid();
             //insert
             $strQuery = "INSERT INTO "._dbprefix_."cache
                        (cache_id, cache_source, cache_hash1, cache_hash2, cache_language, cache_content, cache_leasetime, cache_hits) VALUES
-                       (   '".dbsafeString($this->strCacheId)."',
-                           '".dbsafeString($this->getStrSourceName())."',
-                           '".dbsafeString($this->getStrHash1())."',
-                           '".dbsafeString($this->getStrHash2())."',
-                           '".dbsafeString($this->getStrLanguage())."',
-                           '".dbsafeString($this->getStrContent(), false)."',
-                           ".(int)dbsafeString($this->getIntLeasetime()).",
-                           ". 1 .") ";
+                       (   ?, ?, ?, ?, ?, ?, ?, 1) ";
+            $arrParams = array(
+                $this->strCacheId,
+                $this->getStrSourceName(),
+                $this->getStrHash1(),
+                $this->getStrHash2(),
+                $this->getStrLanguage(),
+                $this->getStrContent(),
+                $this->getIntLeasetime()
+            );
+            $arrEscape = array(true, true, true, true, true, false, true);
         }
         else {
             //update
             $strQuery = "UPDATE "._dbprefix_."cache
-                            SET cache_source = '".dbsafeString($this->getStrSourceName())."',
-                                cache_hash1 = '".dbsafeString($this->getStrHash1())."',
-                                cache_hash2 = '".dbsafeString($this->getStrHash2())."',
-                                cache_language = '".dbsafeString($this->getStrLanguage())."',
-                                cache_content = '".dbsafeString($this->getStrContent(), false)."',
-                                cache_leasetime = ".dbsafeString($this->getIntLeasetime())."
-                          WHERE cache_id = '".dbsafeString($this->strCacheId)."'";
+                            SET cache_source = ?,
+                                cache_hash1 = ?,
+                                cache_hash2 = ?,
+                                cache_language = ?,
+                                cache_content = ?,
+                                cache_leasetime = ?
+                          WHERE cache_id = ?";
+            $arrParams = array(
+                $this->getStrSourceName(),
+                $this->getStrHash1(),
+                $this->getStrHash2(),
+                $this->getStrLanguage(),
+                $this->getStrContent(),
+                $this->getIntLeasetime(),
+                $this->strCacheId
+            );
+            $arrEscape = array(true, true, true, true, false, true, true);
         }
 
         self::$intSaves++;
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, $arrParams, $arrEscape);
 
     }
 
@@ -243,27 +266,34 @@ class class_cache  {
         $strQuery = "DELETE FROM "._dbprefix_."cache ";
 
         $arrWhere = array();
+        $arrParams = array();
 
-        if($strSource != "")
-            $arrWhere[] = " cache_source = '".dbsafeString($strSource)."' ";
+        if($strSource != "") {
+            $arrWhere[] = " cache_source = ? ";
+            $arrParams[] = $strSource;
+        }
 
-        if($strHash1 != "")
-            $arrWhere[] = " cache_hash1 = '".dbsafeString($strHash1)."' ";
+        if($strHash1 != "") {
+            $arrWhere[] = " cache_hash1 = ? ";
+            $arrParams[] = $strHash1;
+        }
 
-        if($strHash2 != "")
-            $arrWhere[] = " cache_hash2 = '".dbsafeString($strHash2)."' ";
+        if($strHash2 != "") {
+            $arrWhere[] = " cache_hash2 = ? ";
+            $arrParams[] = $strHash2;
+        }
 
         if(count($arrWhere) > 0)
             $strQuery .= "WHERE ".implode(" AND ", $arrWhere);
         
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
     }
 
     public static function getCacheSources() {
         $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";
 
         $arrReturn = array();
-        $arrSourceRows = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrSourceRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         foreach($arrSourceRows as $arrSingleRow)
             $arrReturn[] = $arrSingleRow["cache_source"];
 
@@ -280,9 +310,9 @@ class class_cache  {
      */
     public static function cleanCache() {
         if(class_cache::$bitCleanupDone === false) {
-            $strQuery = "DELETE FROM "._dbprefix_."cache WHERE cache_leasetime < ".time()."";
+            $strQuery = "DELETE FROM "._dbprefix_."cache WHERE cache_leasetime < ?";
             class_cache::$bitCleanupDone = true;
-            return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+            return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array( time() ));
         }
         return true;
     }
@@ -293,7 +323,7 @@ class class_cache  {
      * could be way faster:
      * Preload all elements without taking the param being different into account to load the list within
      * a single query. Later on the regular getCachedEntry() can be used to access entries available in
-     * the cache, the loading from the internal cache or the database is done by the class internally and
+     * the cache; the loading from the internal cache or the database is done by the class internally and
      * transparent to the using objects.
      *
      * @param string $strSourceName
@@ -304,13 +334,19 @@ class class_cache  {
     public static function fillInternalCache($strSourceName, $strHash1, $strHash2 = null, $strLanguage = null) {
         $strQuery = "SELECT *
                        FROM "._dbprefix_."cache
-                      WHERE cache_source = '".dbsafeString($strSourceName)."'
-                        AND cache_hash1 = '".dbsafeString($strHash1)."'
-                        ".($strHash2 != null ? " AND cache_hash2 = '".dbsafeString($strHash2)."' " : "" )."
-                        ".($strLanguage != null ? " AND cache_language = '".dbsafeString($strLanguage)."' " : "" )."
-                        AND cache_leasetime > ".time()." ";
+                      WHERE cache_source = ?
+                        AND cache_hash1 = ?
+                        ".($strHash2 != null ? " AND cache_hash2 = ? " : "" )."
+                        ".($strLanguage != null ? " AND cache_language = ? " : "" )."
+                        AND cache_leasetime > ? ";
+        $arrParams = array($strSourceName, $strHash1);
+        if($strHash2 != null)
+            $arrParams[] = $strHash2;
+        if($strLanguage != null)
+            $arrParams[] = $strLanguage;
+        $arrParams[] = time();
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         foreach($arrRow as $arrSingleRow) {
             self::$arrInternalCache[$arrSingleRow["cache_id"]] = $arrSingleRow;
         }
@@ -330,9 +366,9 @@ class class_cache  {
                        ORDER BY cache_leasetime DESC";
 
         if($intStart != null && $intEnd != null)
-            $arrCaches = class_carrier::getInstance()->getObjDB()->getArraySection ($strQuery, $intStart, $intEnd);
+            $arrCaches = class_carrier::getInstance()->getObjDB()->getPArraySection ($strQuery, array(), $intStart, $intEnd);
         else
-            $arrCaches = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrCaches = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
 
         $arrReturn = array();
@@ -364,17 +400,15 @@ class class_cache  {
      */
     public static function getAllCacheEntriesCount() {
         //search in the database to find a matching entry
-        $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."cache
-                       ";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."cache";
 
-        $arrCaches = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrCaches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrCaches["COUNT(*)"];
     }
 
     private function increaseCacheEntryHits() {
-        $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id='".$this->strCacheId."' ";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id=? ";
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strCacheId) );
     }
 	
 

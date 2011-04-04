@@ -11,6 +11,7 @@
  * Class to handle all the right-stuff concerning system-records
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_rights {
 	private $arrModule = null;				
@@ -38,7 +39,6 @@ class class_rights {
 	 */
 	private function __construct() 	{
 		$this->arrModule["name"] 		= "class_rights";
-		$this->arrModule["author"] 		= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"]    = _rechte_modul_id_;
 
 		$objCarrier = class_carrier::getInstance();
@@ -85,31 +85,33 @@ class class_rights {
      */
     private function writeSingleRecord($strSystemid, $arrRights) {
         //Splitting up the rights
-        $strView    = $arrRights["view"];
-        $strEdit    = $arrRights["edit"];
-        $strDelete  = $arrRights["delete"];
-        $strRights  = $arrRights["right"];
-        $strRight1  = $arrRights["right1"];
-        $strRight2  = $arrRights["right2"];
-        $strRight3  = $arrRights["right3"];
-        $strRight4  = $arrRights["right4"];
-        $strRight5  = $arrRights["right5"];
-        $intInherit = $arrRights["inherit"];
+        $arrParams   = array();
+        $arrParams[] = (int)$arrRights["inherit"];
+        $arrParams[] = $arrRights["view"];
+        $arrParams[] = $arrRights["edit"];
+        $arrParams[] = $arrRights["delete"];
+        $arrParams[] = $arrRights["right"];
+        $arrParams[] = $arrRights["right1"];
+        $arrParams[] = $arrRights["right2"];
+        $arrParams[] = $arrRights["right3"];
+        $arrParams[] = $arrRights["right4"];
+        $arrParams[] = $arrRights["right5"];
+        $arrParams[] = $strSystemid;
 
         $strQuery = "UPDATE "._dbprefix_."system_right
-                        SET right_inherit=".(int)$intInherit.",
-                            right_view='".dbsafeString($strView)."',
-                            right_edit='".dbsafeString($strEdit)."',
-                            right_delete='".dbsafeString($strDelete)."',
-                            right_right='".dbsafeString($strRights)."',
-                            right_right1='".dbsafeString($strRight1)."',
-                            right_right2='".dbsafeString($strRight2)."',
-                            right_right3='".dbsafeString($strRight3)."',
-                            right_right4='".dbsafeString($strRight4)."',
-                            right_right5='".dbsafeString($strRight5)."'
-                      WHERE right_id='".dbsafeString($strSystemid)."'";
+                        SET right_inherit=?,
+                            right_view=?,
+                            right_edit=?,
+                            right_delete=?,
+                            right_right=?,
+                            right_right1=?,
+                            right_right2=?,
+                            right_right3=?,
+                            right_right4=?,
+                            right_right5=?,
+                      WHERE right_id=?";
 
-        if($this->objDb->_query($strQuery)) {
+        if($this->objDb->_pQuery($strQuery, $arrParams) ) {
             //Flush the cache so later lookups will match the new rights
             $this->objDb->flushQueryCache();
             $this->arrRightsCache = array();
@@ -219,7 +221,6 @@ class class_rights {
      * @return bool
      */
 	public function setInherited($bitIsInherited, $strSystemid) {
-		$bitReturn = false;
         $arrRights = $this->getPlainRightRow($strSystemid);
         $arrRights["inherit"] = ($bitIsInherited ? 1 : 0);
         return $this->setRights($arrRights, $strSystemid);
@@ -237,12 +238,12 @@ class class_rights {
         $strQuery = "SELECT *
 						FROM "._dbprefix_."system,
 							 "._dbprefix_."system_right
-						WHERE system_id = '".dbsafeString($strSystemid)."'
+						WHERE system_id = ?
 							AND right_id = system_id ";
 
-        $arrRow = $this->objDb->getRow($strQuery);
-        $arrReturnArray = array();
-
+        $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
+        
+        $arrRights = array();
         $arrRights["view"]   = isset($arrRow["right_view"]) ? $arrRow["right_view"] : "";
         $arrRights["edit"]   = isset($arrRow["right_edit"]) ? $arrRow["right_edit"] : "";
         $arrRights["delete"] = isset($arrRow["right_delete"]) ? $arrRow["right_delete"] : "";

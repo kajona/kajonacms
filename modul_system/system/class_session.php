@@ -11,10 +11,10 @@
  * Manages all those session stuff as logins or logouts and access to session vars
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 final class class_session {
 
-	private $arrModul;
 	private $objDB;
 	private $strKey;
 	
@@ -36,26 +36,22 @@ final class class_session {
 
 
 	private function __construct() 	{
-		$this->arrModul["name"] 		= "class_session";
-		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
 		//Loading the needed Objects
 		$this->objDB = class_db::getInstance();
 
 		//Generating a session-key using a few characteristic values
 		$this->strKey = md5(_realpath_.getServer("REMOTE_ADDR"));
-
 		$this->sessionStart();
-		
 		$this->arrRequestArray = array();
 	}
 	
-	private function __desctruct() {
+	private function __destruct() {
 		$this->arrRequestArray = null;
 	}
 
 	/**
-	 * Returns one Instance of the Session-Object, using a singleton pattern
+	 * Returns one instance of the Session-Object, using a singleton pattern
 	 *
 	 * @return class_session The Session-Object
 	 */

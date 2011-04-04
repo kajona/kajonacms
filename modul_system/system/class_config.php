@@ -158,7 +158,7 @@ class class_config {
 	public function loadConfigsDatabase($objDB) {
 	    if(count($objDB->getTables()) > 0) {
             $strQuery = "SELECT * FROM "._dbprefix_."system_config ORDER BY system_config_module ASC";
-            $arrConfigs = $objDB->getArray($strQuery);
+            $arrConfigs = $objDB->getPArray($strQuery, array());
             foreach($arrConfigs as $arrOneConfig) {
                 if(!defined($arrOneConfig["system_config_name"]))
                     define($arrOneConfig["system_config_name"], $arrOneConfig["system_config_value"]);

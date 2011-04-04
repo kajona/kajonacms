@@ -12,6 +12,7 @@
  * to create instances directly.
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_session extends class_model implements interface_model  {
 
@@ -39,7 +40,6 @@ class class_modul_system_session extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."session";
 		$arrModul["modul"]				= "system";
@@ -61,9 +61,8 @@ class class_modul_system_session extends class_model implements interface_model 
     public function initObject() {
         
         class_logger::getInstance()->addLogRow("init session ".$this->getSystemid(), class_logger::$levelInfo);
-        $strQuery = "SELECT * FROM "._dbprefix_."session
-                     WHERE session_id = '".dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+        $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 1) {
             $this->setStrPHPSessionId($arrRow["session_phpid"]) ;
@@ -103,33 +102,43 @@ class class_modul_system_session extends class_model implements interface_model 
                           session_loginstatus,
                           session_loginprovider,
                           session_lasturl
-                          ) VALUES (
-                          '".dbsafeString($strInternalSessionId)."',
-                          '".dbsafeString($this->getStrPHPSessionId())."',
-                          '".dbsafeString($this->getStrUserid())."',
-                          '".dbsafeString($this->getStrGroupids())."',
-                          ".(int)dbsafeString($this->getIntReleasetime()).",
-                          '".dbsafeString($this->getStrLoginstatus())."',
-                          '".dbsafeString($this->getStrLoginprovider())."',
-                          '".dbsafeString($this->getStrLasturl())."')";
+                          ) VALUES ( ?,?,?,?,?,?,?,? )";
 
-            return $this->objDB->_query($strQuery);
+            return $this->objDB->_pQuery($strQuery, array(
+                $strInternalSessionId,
+                $this->getStrPHPSessionId(),
+                $this->getStrUserid(),
+                $this->getStrGroupids(),
+                (int)$this->getIntReleasetime(),
+                $this->getStrLoginstatus(),
+                $this->getStrLoginprovider(),
+                $this->getStrLasturl()
+            ) );
 
         }
         else {
 
             class_logger::getInstance()->addLogRow("updated session ".$this->getSystemid(), class_logger::$levelInfo);
             $strQuery = "UPDATE ".$this->arrModule["table"]." SET
-                          session_phpid =  '".dbsafeString($this->getStrPHPSessionId())."',
-                          session_userid = '".dbsafeString($this->getStrUserid())."',
-                          session_groupids =  '".dbsafeString($this->getStrGroupids())."',
-                          session_releasetime =  ".(int)dbsafeString($this->getIntReleasetime()).",
-                          session_loginstatus = '".dbsafeString($this->getStrLoginstatus())."',
-                          session_loginprovider = '".dbsafeString($this->getStrLoginprovider())."',
-                          session_lasturl =  '".dbsafeString($this->getStrLasturl())."'
-                        WHERE session_id = '".dbsafeString($this->getSystemid())."' ";
+                          session_phpid = ?,
+                          session_userid = ?,
+                          session_groupids = ?,
+                          session_releasetime = ?,
+                          session_loginstatus = ?,
+                          session_loginprovider = ?,
+                          session_lasturl = ?,
+                        WHERE session_id = ? ";
 
-            return $this->objDB->_query($strQuery);
+            return $this->objDB->_pQuery($strQuery, array(
+                $this->getStrPHPSessionId(),
+                $this->getStrUserid(),
+                $this->getStrGroupids(),
+                (int)$this->getIntReleasetime(),
+                $this->getStrLoginstatus(),
+                $this->getStrLoginprovider(),
+                $this->getStrLasturl(),
+                $this->getSystemid()
+            ));
         }
     }
 
@@ -142,8 +151,8 @@ class class_modul_system_session extends class_model implements interface_model 
     public function deleteObject() {
         class_logger::getInstance()->addLogRow("deleted session ".$this->getSystemid(), class_logger::$levelInfo);
         //start with the modul-table
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE session_id = '".dbsafeString($this->getSystemid())."'";
-		return $this->objDB->_query($strQuery);
+        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE session_id = ?";
+		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
     
     
@@ -171,12 +180,12 @@ class class_modul_system_session extends class_model implements interface_model 
      */
     public static function getAllActiveSessions($intStart = null, $intEnd = null) {
 
-        $strQuery = "SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()." ORDER BY session_releasetime DESC, session_id ASC";
+        $strQuery = "SELECT session_id FROM "._dbprefix_."session WHERE session_releasetime > ? ORDER BY session_releasetime DESC, session_id ASC";
 
         if($intStart != null && $intEnd != null)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(time()), $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(time()));
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
@@ -191,9 +200,9 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return int
      */
     public static function getNumberOfActiveSessions() {
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ".(int)time()."";
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."session WHERE session_releasetime > ?";
 
-        $arrRow =  class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow =  class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
         return $arrRow["COUNT(*)"];
     }
     
@@ -216,8 +225,8 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return bool
      */
     public static function deleteInvalidSessions() {
-        $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ".(int)time()."";
-        return class_carrier::getInstance()->getObjDB()->_query($strSql);
+        $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ";
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time() ));
     }
     
     public function isSessionValid() {
