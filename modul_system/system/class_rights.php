@@ -108,7 +108,7 @@ class class_rights {
                             right_right2=?,
                             right_right3=?,
                             right_right4=?,
-                            right_right5=?,
+                            right_right5=?
                       WHERE right_id=?";
 
         if($this->objDb->_pQuery($strQuery, $arrParams) ) {

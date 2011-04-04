@@ -286,7 +286,7 @@ class class_cache  {
         if(count($arrWhere) > 0)
             $strQuery .= "WHERE ".implode(" AND ", $arrWhere);
         
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
     }
 
     public static function getCacheSources() {
@@ -338,7 +338,8 @@ class class_cache  {
                         AND cache_hash1 = ?
                         ".($strHash2 != null ? " AND cache_hash2 = ? " : "" )."
                         ".($strLanguage != null ? " AND cache_language = ? " : "" )."
-                        AND cache_leasetime > ? ";
+                        AND cache_leasetime > ?  ";
+
         $arrParams = array($strSourceName, $strHash1);
         if($strHash2 != null)
             $arrParams[] = $strHash2;

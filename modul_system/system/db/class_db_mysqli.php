@@ -171,6 +171,9 @@ class class_db_mysqli implements interface_db_driver {
             if(!mysqli_stmt_execute($objStatement))
                 return false;
 
+            //should remain here due to the bug http://bugs.php.net/bug.php?id=47928
+            mysqli_stmt_store_result($objStatement);
+
             $objMetadata = mysqli_stmt_result_metadata($objStatement);
             $arrParams = array();
             $arrRow = array();
