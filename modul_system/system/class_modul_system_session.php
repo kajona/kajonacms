@@ -126,7 +126,7 @@ class class_modul_system_session extends class_model implements interface_model 
                           session_releasetime = ?,
                           session_loginstatus = ?,
                           session_loginprovider = ?,
-                          session_lasturl = ?,
+                          session_lasturl = ?
                         WHERE session_id = ? ";
 
             return $this->objDB->_pQuery($strQuery, array(
@@ -225,7 +225,7 @@ class class_modul_system_session extends class_model implements interface_model 
      * @return bool
      */
     public static function deleteInvalidSessions() {
-        $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ";
+        $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time() ));
     }
     

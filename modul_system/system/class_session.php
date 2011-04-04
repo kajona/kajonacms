@@ -46,10 +46,6 @@ final class class_session {
 		$this->arrRequestArray = array();
 	}
 	
-	private function __destruct() {
-		$this->arrRequestArray = null;
-	}
-
 	/**
 	 * Returns one instance of the Session-Object, using a singleton pattern
 	 *
