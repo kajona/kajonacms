@@ -21,7 +21,7 @@ class class_element_search extends class_element_admin implements interface_admi
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 			= "element_suche";
+		$arrModule["name"] 			= "element_search";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"] 		= _dbprefix_."element_search";

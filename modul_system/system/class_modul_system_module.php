@@ -106,7 +106,7 @@ class class_modul_system_module extends class_model implements interface_model  
 					  module_date ='".dbsafeString($this->getIntDate())."',
 					  module_navigation ='".dbsafeString($this->getIntNavigation())."',
 					  module_aspect='".dbsafeString($this->getStrAspect())."'
-					WHERE module_id = '".dbsafeString($this->getSystemid())."'				
+					WHERE module_id = '".dbsafeString($this->getSystemid())."'
 					";
         return$this->objDB->_query($strQuery);
     }
@@ -142,7 +142,7 @@ class class_modul_system_module extends class_model implements interface_model  
 	public static function getModuleByName($strName, $bitIgnoreStatus = false) {
         if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0)
             return null;
-            
+
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
 		$arrModules = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
         $arrRow = array();
@@ -245,7 +245,7 @@ class class_modul_system_module extends class_model implements interface_model  
      * @return interface_portal
      */
     public function getPortalInstanceOfConcreteModule($arrElementData = null) {
-        if($this->getStrNameAdmin() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
+        if($this->getStrNamePortal() != "" && uniStrpos($this->getStrNamePortal(), ".php") !== false) {
             //creating an instance of the wanted module
             $strClassname = uniStrReplace(".php", "", $this->getStrNamePortal());
             if(is_array($arrElementData))
@@ -258,7 +258,7 @@ class class_modul_system_module extends class_model implements interface_model  
             return null;
     }
 
-    
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function getStrName() {

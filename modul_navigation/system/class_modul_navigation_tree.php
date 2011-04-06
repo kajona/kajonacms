@@ -97,7 +97,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
 		             WHERE system_id = navigation_id
 		               AND system_prev_id = ?
 		               AND system_module_nr = ?
-		          ORDER BY system_sort ASC, system_comment ASC";
+		          ORDER BY system_comment ASC";
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array(class_modul_system_module::getModuleIdByNr(_navigation_modul_id_), _navigation_modul_id_));
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
@@ -153,7 +153,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
      */
     private function loadSingleLevel($strParentNode) {
         $arrReturn = array();
-        
+
         $arrCurLevel = class_modul_navigation_point::getDynamicNaviLayer($strParentNode);
 
         foreach($arrCurLevel as $objOneNode) {
