@@ -950,9 +950,9 @@ class class_db {
     private function dbsafeParams($arrParams, $arrEscapes = array()) {
         foreach($arrParams as $intKey => &$strParam) {
             if(isset($arrEscapes[$intKey]))
-                $strParam = dbsafeString($strParam, $arrEscapes[$intKey], false);
+                $strParam = $this->dbsafeString($strParam, $arrEscapes[$intKey], false);
             else
-                $strParam = dbsafeString($strParam, true, false);
+                $strParam = $this->dbsafeString($strParam, true, false);
         }
         return $arrParams;
     }
