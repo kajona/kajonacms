@@ -126,6 +126,7 @@
 	-webkit-border-radius: 3px 3px 0 0;
     -moz-border-radius: 3px 3px 0 0;
     border-radius: 3px 3px 0 0;
+    line-height: 14px !important;
 }
 
 .peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited,
@@ -146,6 +147,7 @@
     display: inline !important;
     width: auto !important;
     height: auto !important;
+    text-shadow: none !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {

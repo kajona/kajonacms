@@ -81,6 +81,7 @@
     text-align: left !important;
     padding: 1px 3px 2px 3px !important;
     text-transform: none !important;
+    line-height: 14px !important;
 }
 
 .peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited,
@@ -101,6 +102,7 @@
     display: inline !important;
     width: auto !important;
     height: auto !important;
+    text-shadow: none !important;
 }
 
 .peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
