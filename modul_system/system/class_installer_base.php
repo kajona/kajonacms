@@ -505,16 +505,16 @@ abstract class class_installer_base extends class_root {
 					VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         $arrParams = array();
-        $arrParams = $strSystemid;
-		$arrParams = $strName;
-		$arrParams = (int)$intModuleNr;
-		$arrParams = $strFilePortal;
-		$arrParams = $strXmlPortal;
-		$arrParams = $strFileAdmin;
-		$arrParams = $strXmlAdmin;
-		$arrParams = $strVersion;
-		$arrParams = (int)time();
-		$arrParams = ($bitNavi ? 1 : 0);
+        $arrParams[] = $strSystemid;
+		$arrParams[] = $strName;
+		$arrParams[] = (int)$intModuleNr;
+		$arrParams[] = $strFilePortal;
+		$arrParams[] = $strXmlPortal;
+		$arrParams[] = $strFileAdmin;
+		$arrParams[] = $strXmlAdmin;
+		$arrParams[] = $strVersion;
+		$arrParams[] = (int)time();
+		$arrParams[] = ($bitNavi ? 1 : 0);
 
 		$this->objDB->_pQuery($strQuery, $arrParams);
 
