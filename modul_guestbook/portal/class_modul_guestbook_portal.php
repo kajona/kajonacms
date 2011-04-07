@@ -11,6 +11,7 @@
  * Portal-class of the guestbook. Handles postings
  *
  * @package modul_guestbook
+ * @author sidler@mulchprod.de
  */
 class class_modul_guestbook_portal extends class_portal implements interface_portal {
 
@@ -24,7 +25,6 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_guestbook";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 	    	= _dbprefix_."guestbook_book";
 		$arrModule["table2"] 			= _dbprefix_."guestbook_post";
 		$arrModule["moduleId"] 			= _guestbook_modul_id_;
@@ -40,14 +40,14 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 */
 	public function action($strAction = "") {
 		$strReturn = "";
-		$strAction = "";
+		$strAction = "list";
 
 		if($this->getParam("action") != "")
 		    $strAction = $this->getParam("action");
 
 		if($strAction == "insertGuestbook")
 			$strReturn = $this->actionInsert();
-		elseif($strAction == "saveGuestbook") {
+		else if($strAction == "saveGuestbook") {
 			if($this->validateData()) {
 			    try {
 				    $strReturn = $this->actionSave();
@@ -65,7 +65,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 			}
 		}
 		else
-		    $strReturn = $this->actionList();
+		    $strReturn = parent::action($strAction);
 
 		return $strReturn;
 
@@ -78,7 +78,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		$arrTemplate = array();
 		$arrTemplate["liste_posts"] ="";
@@ -124,7 +124,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 * @param mixed $arrTemplate values to fill in
 	 * @return string
 	 */
-	public function actionInsert($arrTemplateOld = array()) {
+	protected function actionInsert($arrTemplateOld = array()) {
 		$strReturn = "";
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
@@ -154,26 +154,18 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 *
 	 * @return string "" in case of success
 	 */
-	public function actionSave() {
+	protected function actionSave() {
 		$strReturn = "";
 
 		//check rights
 		if($this->objRights->rightRight1($this->arrElementData["guestbook_id"])) {
 		    //create a post-object
             $objPost = new class_modul_guestbook_post("");
-            $objPost->setGuestbookID($this->arrElementData["guestbook_id"]);
             $objPost->setGuestbookPostName($this->getParam("gb_post_name"));
             $objPost->setGuestbookPostEmail($this->getParam("gb_post_email"));
             $objPost->setGuestbookPostPage($this->getParam("gb_post_page"));
             $objPost->setGuestbookPostText($this->getParam("gb_post_text"));
             $objPost->setGuestbookPostDate(time());
-
-			//Load guestbook data
-			$objGB = $this->getGuestbook($this->arrElementData["guestbook_id"]);
-			if($objGB->getGuestbookModerated() == 1)
-			    $objPost->setGuestbookPostStatus(1);
-			else
-			    $objPost->setGuestbookPostStatus(0);
 
             //save obj to db
             if(!$objPost->updateObjectToDb($this->arrElementData["guestbook_id"]))
@@ -197,7 +189,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 *
 	 * @return bool
 	 */
-	public function validateData() {
+	private function validateData() {
 		$bitReturn = true;
 
 		//Check captachcode
@@ -230,18 +222,6 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 		return $bitReturn;
 	}
 
-
-   /**
-	 * Loads one guestbook
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getGuestbook($strSystemid) {
-
-	    $objGuestbook = new class_modul_guestbook_guestbook($strSystemid);
-	    return $objGuestbook;
-	}
 
 }
 ?>

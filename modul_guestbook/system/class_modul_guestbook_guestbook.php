@@ -12,6 +12,7 @@
  * Class to represent a guestbook book
  *
  * @package modul_guestbook
+ * @author sidler@mulchprod.de
  */
 class class_modul_guestbook_guestbook extends class_model implements interface_model  {
 
@@ -27,7 +28,6 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_guestbook";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _guestbook_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."guestbook_book";
 		$arrModul["modul"]				= "guestbook";
@@ -65,9 +65,9 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
          $strQuery = "SELECT *
 						FROM ".$this->arrModule["table"].", "._dbprefix_."system
 						WHERE system_id = guestbook_id
-						  AND system_id='".$this->objDB->dbsafeString($this->getSystemid())."'
+						  AND system_id= ?
 						ORDER BY guestbook_title";
-        $arrData = $this->objDB->getRow($strQuery);
+        $arrData = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->strGuestbookTitle = $arrData["guestbook_title"];
         $this->intGuestbookModerated = $arrData["guestbook_moderated"];
@@ -90,10 +90,10 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-								SET guestbook_title = '".$this->objDB->dbsafeString($this->getGuestbookTitle())."',
-									guestbook_moderated = ".$this->objDB->dbsafeString($this->getGuestbookModerated())."
-									WHERE  guestbook_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+								SET guestbook_title = ?,
+									guestbook_moderated = ?
+							  WHERE guestbook_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getGuestbookTitle(), $this->getGuestbookModerated(), $this->getSystemid()));
     }
 
 
@@ -110,7 +110,7 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 						ORDER BY guestbook_title";
 
 		$objDB = class_carrier::getInstance()->getObjDB();
-		$arrIds =  $objDB->getArray($strQuery);
+		$arrIds =  $objDB->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		  $arrReturn[] = new class_modul_guestbook_guestbook($arrOneId["system_id"]);
@@ -140,10 +140,10 @@ class class_modul_guestbook_guestbook extends class_model implements interface_m
 		$bitCommit = false;
 
 		//and delete the book
-		$strQuery = "DELETE FROM "._dbprefix_."guestbook_book WHERE guestbook_id = '".dbsafeString($this->getSystemid())."'";
+		$strQuery = "DELETE FROM "._dbprefix_."guestbook_book WHERE guestbook_id = ?";
 
-	    if($bitPosts && $this->objDB->_query($strQuery)) {
-	        if($this->deleteSystemRecord($strSystemid))
+	    if($bitPosts && $this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
+	        if($this->deleteSystemRecord($this->getSystemid()))
 	            $bitCommit = true;
 	    }
 	    else

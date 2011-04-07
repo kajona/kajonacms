@@ -11,6 +11,7 @@
  * Class to represent a guestbook post
  *
  * @package modul_guestbook
+ * @author sidler@mulchprod.de
  */
 class class_modul_guestbook_post extends class_model implements interface_model  {
 
@@ -19,8 +20,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
     private $strGuestbookPostPage = "";
     private $strGuestbookPostText = "";
     private $intGuestbookPostDate = "";
-    private $strGuestbookID = "";
-    private $intGuestbookPostStatus = 1;
 
 
     /**
@@ -31,7 +30,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_guestbook";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _guestbook_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."guestbook_post";
 		$arrModul["modul"]				= "guestbook";
@@ -71,9 +69,9 @@ class class_modul_guestbook_post extends class_model implements interface_model 
         $strQuery = "SELECT *
 						FROM ".$this->arrModule["table"].", "._dbprefix_."system
 						WHERE system_id = guestbook_post_id
-						  AND system_id='".$this->objDB->dbsafeString($this->getSystemid())."'
+						  AND system_id= ?
 						ORDER BY guestbook_post_date DESC";
-        $arrData = $this->objDB->getRow($strQuery);
+        $arrData = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->strGuestbookPostName = $arrData["guestbook_post_name"];
         $this->strGuestbookPostEmail = $arrData["guestbook_post_email"];
@@ -91,14 +89,28 @@ class class_modul_guestbook_post extends class_model implements interface_model 
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->objDB->encloseTableName($this->arrModule["table"])." 
-                        SET guestbook_post_text = '".dbsafeString($this->getGuestbookPostText(), false)."',
-                            guestbook_post_name = '".dbsafeString($this->getGuestbookPostName())."',
-                            guestbook_post_email = '".dbsafeString($this->getGuestbookPostEmail())."',
-                            guestbook_post_page = '".dbsafeString($this->getGuestbookPostPage())."',
-                            guestbook_post_date = '".dbsafeString($this->getGuestbookPostDate())."'
-                      WHERE guestbook_post_id = '".dbsafeString($this->getSystemid())."'"; 
+                        SET guestbook_post_text = ?,
+                            guestbook_post_name = ?,
+                            guestbook_post_email = ?,
+                            guestbook_post_page = ?,
+                            guestbook_post_date = ?
+                      WHERE guestbook_post_id = ?";
         
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array($this->getGuestbookPostText(), $this->getGuestbookPostName(), $this->getGuestbookPostEmail(),
+                   $this->getGuestbookPostPage(), $this->getGuestbookPostDate(), $this->getSystemid() ));
+    }
+
+    /**
+     * Disables new posts if the guestbook itself is moderated.
+     *
+     * @return bool
+     */
+    protected function onInsertToDb() {
+        $objGuestbook = new class_modul_guestbook_guestbook($this->getPrevId());
+        if($objGuestbook->getGuestbookModerated() == "0")
+            $this->setStatus();
+
+        return true;
     }
 
 
@@ -114,8 +126,8 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 		$this->objDB->transactionBegin();
 		$bitCommit = false;
 
-        $strQuery = "DELETE FROM "._dbprefix_."guestbook_post WHERE guestbook_post_id='".dbsafeString($this->getSystemid())."'";
-	    if($this->objDB->_query($strQuery))    {
+        $strQuery = "DELETE FROM "._dbprefix_."guestbook_post WHERE guestbook_post_id= ?";
+	    if($this->objDB->_pQuery($strQuery, array($this->getSystemid()) ))    {
 	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }
@@ -143,12 +155,12 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	    $strQuery = "SELECT system_id
 						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
 						WHERE system_id = guestbook_post_id
-						  AND system_prev_id='".dbsafeString($strSystemid)."'
+						  AND system_prev_id=?
 						  ".($bitJustActive ? " AND system_status = 1" : "" )."
 						ORDER BY guestbook_post_date DESC";
 
 	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrPosts = $objDB->getArray($strQuery);
+	    $arrPosts = $objDB->getPArray($strQuery, array($strSystemid));
 
 	    $arrReturn = array();
 	    //load all posts as objects
@@ -169,11 +181,11 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	    $strQuery = "SELECT COUNT(*)
 						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
 						WHERE system_id = guestbook_post_id
-						  AND system_prev_id='".dbsafeString($strSystemid)."'
+						  AND system_prev_id=?
 						  ".($bitJustActive ? " AND system_status = 1" : "" )."";
 
 	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrRow = $objDB->getRow($strQuery);
+	    $arrRow = $objDB->getPRow($strQuery, array($strSystemid));
 	    return $arrRow["COUNT(*)"];
 
 	}
@@ -189,12 +201,12 @@ class class_modul_guestbook_post extends class_model implements interface_model 
 	    $strQuery = "SELECT system_id
 						FROM "._dbprefix_."guestbook_post, "._dbprefix_."system
 						WHERE system_id = guestbook_post_id
-						  AND system_prev_id='".dbsafeString($strSystemid)."'
+						  AND system_prev_id=?
 						  ".($bitJustActive ? " AND system_status = 1" : "" )."
 						ORDER BY guestbook_post_date DESC";
 
 	    $objDB = class_carrier::getInstance()->getObjDB();
-	    $arrPosts = $objDB->getArraySection($strQuery, $intStart, $intEnd);
+	    $arrPosts = $objDB->getPArraySection($strQuery, array($strSystemid), $intStart, $intEnd);
 
 	    $arrReturn = array();
 	    //load all posts as objects
@@ -221,12 +233,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
     public function getGuestbookPostDate() {
         return $this->intGuestbookPostDate;
     }
-    public function getGuestbookPostStatus() {
-        return $this->intGuestbookPostStatus;
-    }
-    public function getGuestbookID() {
-        return $this->strGuestbookID;
-    }
 
     public function setGuestbookPostName($strGuestbookPostName) {
         $this->strGuestbookPostName = $strGuestbookPostName;
@@ -245,12 +251,6 @@ class class_modul_guestbook_post extends class_model implements interface_model 
     }
     public function setGuestbookPostDate($strGuestbookPostDate) {
         $this->intGuestbookPostDate = $strGuestbookPostDate;
-    }
-    public function setGuestbookID($strGuestbookID) {
-        $this->strGuestbookID = $strGuestbookID;
-    }
-    public function setGuestbookPostStatus($intGuestbookPostStatus) {
-        $this->intGuestbookPostStatus = $intGuestbookPostStatus;
     }
 
 }

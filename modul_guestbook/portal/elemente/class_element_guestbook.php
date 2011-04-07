@@ -26,6 +26,9 @@ class class_element_guestbook extends class_element_portal implements interface_
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]		    = _dbprefix_."element_guestbook";
 		parent::__construct($arrModule, $objElementData);
+
+        if($this->getParam("action") == "saveGuestbook")
+            $this->setStrCacheAddon(generateSystemid());
 	}
 
     /**
