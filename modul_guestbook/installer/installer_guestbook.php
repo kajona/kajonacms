@@ -66,7 +66,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 		$arrFields["guestbook_post_id"]   = array("char20", false);
 		$arrFields["guestbook_post_name"] = array("char254", true);
 		$arrFields["guestbook_post_email"]= array("char254", true);
-		$arrFields["guestbook_post_page"] = array("char254", false);
+		$arrFields["guestbook_post_page"] = array("char254", true);
 		$arrFields["guestbook_post_text"] = array("text", true);
 		$arrFields["guestbook_post_date"] = array("int", true);
 
