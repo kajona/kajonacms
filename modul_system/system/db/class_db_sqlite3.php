@@ -89,10 +89,10 @@ class class_db_sqlite3 implements interface_db_driver {
         foreach($arrParams as $strOneParam) {
             if($strOneParam == null)
                 $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_NULL);
-            else if(is_double($strOneParam))
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
-            else if(is_numeric($strOneParam))
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+//            else if(is_double($strOneParam))
+//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+//            else if(is_numeric($strOneParam))
+//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
                 $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
         }
@@ -140,10 +140,12 @@ class class_db_sqlite3 implements interface_db_driver {
         
         $intCount = 1;
         foreach($arrParams as $strOneParam) {
-            if(is_double($strOneParam))
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
-            else if(is_numeric($strOneParam))
-                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
+            if($strOneParam == null)
+                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_NULL);
+//            else if(is_double($strOneParam))
+//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_FLOAT);
+//            else if(is_numeric($strOneParam))
+//                $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_INTEGER);
             else
                 $objStmt->bindValue(':param'.$intCount++ , $strOneParam, SQLITE3_TEXT);
         }
