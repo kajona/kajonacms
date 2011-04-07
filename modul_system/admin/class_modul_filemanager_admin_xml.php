@@ -303,6 +303,10 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
             $strTarget = $strFolder."/".createFilename($arrSource["name"]);
             $objFilesystem = new class_filesystem();
+
+            if(!file_exists(_realpath_."/".$strFolder))
+                $objFilesystem->folderCreate($strFolder, true);
+
             if($objFilesystem->isWritable($strFolder)) {
 
                 //Check file for correct filters
@@ -311,7 +315,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 if($objRepo->getStrUploadFilter() == "" || in_array($strSuffix, $arrAllowed)) {
                     if($objFilesystem->copyUpload($strTarget, $arrSource["tmp_name"])) {
                         $strReturn .= "<message>".$this->getText("xmlupload_success")."</message>";
-                        $bitSuccess = true;
                         class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
                     }
                     else
