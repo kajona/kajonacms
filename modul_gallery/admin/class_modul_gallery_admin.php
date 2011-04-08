@@ -11,8 +11,11 @@
  * Admin class of the gallery-module. Used to sync the galleries with the filesystem and to define picture-properties
  *
  * @package modul_gallery
+ * @author sidler@mulchprod.de
  */
 class class_modul_gallery_admin extends class_admin implements interface_admin  {
+
+    private $strPeAddon = "";
 
 	/**
 	 * Construcut
@@ -28,6 +31,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 		$arrModule["modul"]				= "gallery";
 		//Base class
 		parent::__construct($arrModule);
+
+        if($this->getParam("pe") == "1")
+            $this->strPeAddon = "&pe=1";
 	}
 
 	/**
@@ -37,84 +43,20 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 */
 	public function action($strAction = "") {
 		$strReturn = "";
-
-
+        
         //sync?
         if($this->getParam("resync") == "true") {
             $this->actionSyncInternal();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "&systemid=".$this->getSystemid()));
         }
 
-        if($strAction == "")
-            $strAction = "list";
+        $strReturn = parent::action($strAction);
 
-        try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-
-    		//Galeriefunktionen--------------------------------
-    		if($strAction == "newGallery")
-    			$strReturn .= $this->actionNewGallery();
-
-    		if($strAction == "editGallery")
-    			$strReturn .= $this->actionNewGallery("edit");
-
-    		if($strAction == "saveGallery") {
-    		    if($this->validateForm()) {
-        			$strReturn .= $this->actionSaveGallery();
-        			if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-        		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn .= $this->actionNewGallery();
-    		        else
-    		            $strReturn .= $this->actionNewGallery("edit");
-    		    }
-    		}
-
-    		if($strAction == "massSync")
-    			$strReturn .= $this->actionMassSync();
-
-    		if($strAction == "deleteGallery") {
-    			$strReturn .= $this->actionDeleteGallery();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-    		//Bildfunktionen-----------------------------------
-    		if($strAction == "showGallery")
-    			$strReturn .= $this->actionShowGallery();
-
-    		if($strAction == "editImage") {
-    			$strReturn .= $this->actionEditImage();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "systemid=".$this->getPrevId()));
-    		}
-
-    		if($strAction == "sortUp") {
-                $this->setPositionAndReload($this->getSystemid(), "upwards");
-    		}
-
-    		if($strAction == "sortDown") {
-                $this->setPositionAndReload($this->getSystemid(), "downwards");
-    		}
-
-        }
-        catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
 
 		$this->strOutput = $strReturn;
 	}
 
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
-
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -140,6 +82,15 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
         return $arrReturn;
     }
 
+
+    protected function actionSortUp() {
+        $this->setPositionAndReload($this->getSystemid(), "upwards");
+    }
+
+    protected function actionSortDown() {
+        $this->setPositionAndReload($this->getSystemid(), "downwards");
+    }
+
 // --- ListenFunktionen ---------------------------------------------------------------------------------
 
 
@@ -148,7 +99,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
         $strJsSyncCode = "";
 		//Pruefen der Modul-Rechte
@@ -227,13 +178,17 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 // --- Galeriefunktionen --------------------------------------------------------------------------------
 
+    protected function actionEditGallery() {
+        return $this->actionNewGallery("edit");
+    }
+
 	/**
 	 * Creates a form to edit / create a gallery
 	 *
 	 * @param string $strMode
 	 * @return string
 	 */
-	private function actionNewGallery($strMode = "new") {
+	protected function actionNewGallery($strMode = "new") {
 		$strReturn = "";
 		if($strMode == "new") {
 			//right
@@ -280,8 +235,12 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveGallery() {
+	protected function actionSaveGallery() {
 		$strReturn = "";
+
+        if(!$this->validateForm())
+            return $this->actionNewGallery($this->getParam("mode"));
+
 		//Modus checken
 		if($this->getParam("mode") == "new") {
 			//Rechte checken
@@ -292,6 +251,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 			    if(!$objGallery->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 			}
 			else
@@ -306,6 +267,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 				if(!$objGallery->updateObjectToDb())
 					throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -318,7 +281,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteGallery() {
+	protected function actionDeleteGallery() {
 		$strReturn = "";
 		//Rechte-Check
 		if($this->objRights->rightRight3($this->getSystemid())) {
@@ -330,6 +293,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			}
 			else
 				throw new class_exception($this->getText("galerie_loeschen_fehler"), class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn .= $this->getText("fehler_recht");
@@ -345,7 +310,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string
 	 */
-	private function actionMassSync() {
+	protected function actionMassSync() {
         $strReturn = "";
 		//rights
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -382,13 +347,11 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionEditImage() {
+	protected function actionEditImage() {
 		$strReturn = "";
 		//Rights?
 		if($this->objRights->rightEdit($this->getSystemid())) {
-		    $bitValidated = true;
 		    if($this->getParam("save") != "" && !$this->validateForm()) {
-		        $bitValidated = false;
 		        $this->setParam("save", "");
 		    }
 
@@ -398,12 +361,12 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				$objImage = new class_modul_gallery_pic($this->getSystemid());
 
 				//path-navigation
-				$strReturn .= $this->generatePathNavi().basename($objImage->getStrFilename());
+                if($this->strPeAddon == "")
+                    $strReturn .= $this->generatePathNavi().basename($objImage->getStrFilename());
                 $strReturn .= $this->objToolkit->divider();
 
 				//Build the form
-				if(!$bitValidated)
-				    $strReturn .= $this->objToolkit->getValidationErrors($this, "editImage");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "editImage");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editImage"));
                 $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("pic_name"), $objImage->getStrName());
                 $strReturn .= $this->objToolkit->formInputTextArea("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());
@@ -440,6 +403,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 				//flush cache
 				$this->flushCompletePagesCache();
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "systemid=".$this->getPrevId() .($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")) ));
 			}
 		}
 		else
@@ -453,12 +418,13 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 *
 	 * @return string
 	 */
-	private function actionShowGallery() {
+	protected function actionShowGallery() {
 		$strReturn = "";
 		//rights
 		if($this->objRights->rightView($this->getSystemid())) {
 		    //path navi
-		    $strReturn .= $this->generatePathnavi();
+            if($this->strPeAddon == "")
+                $strReturn .= $this->generatePathnavi();
 
             //Since we can crossreference the filemanager, provide an upload-form
             $arrPath = $this->getPathArray();
@@ -515,8 +481,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			//maybe, a link one level up is neede
 			$strTemp = $this->getPrevId($this->getSystemid());
 			$intI = 0;
-			if($strTemp != "0") {
-				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$strTemp, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
+			if($strTemp != "0" && $strTemp != $this->getModuleSystemid($this->arrModule["modul"])) {
+				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$strTemp.$this->strPeAddon, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
 			}
 
 			if(count($arrFiles) > 0) {
@@ -538,7 +504,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				 	$strCenter .= ($objOneFile->getIntType() == 0 ? $objOneFile->getIntHits()." Hits": "");
 
 				    //ratings available?
-                    if($objOneFile->getType() != 1) {
+                    if($objOneFile->getIntType() != 1) {
                         $floatRating = $objOneFile->getFloatRating();
                         if ($floatRating !== null) {
                             $strCenter .= " - ".$floatRating;
@@ -548,21 +514,21 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getIntType() == 1 && $objOneFile->rightView())
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
 
 			   		if($this->objRights->rightEdit($objOneFile->getSystemid())) {
 			   		    if($objOneFile->getIntType() == 1) {
-			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("ordner_bearbeiten"), "icon_pencil.gif"));
+			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("ordner_bearbeiten"), "icon_pencil.gif"));
                         }
 			   			else {
                             //the filemanager edit action
-                            if($objFmRepo != null) {
+                            if($objFmRepo != null && $this->strPeAddon == "") {
                                 $strAction .= $this->objToolkit->listButton(getLinkAdmin("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."&galleryId=".$this->getSystemid(), "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
                             }
-			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("image_properties"), "icon_pencil.gif"));
+			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("image_properties"), "icon_pencil.gif"));
                         }
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
+				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
+				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getIntType() == 0)
@@ -571,10 +537,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getStrFilename())."\', \'gallery\', \'massSyncGallery\')");
                     }
 
-                    if($this->objRights->rightEdit($objOneFile->getSystemid()))
+                    if($this->objRights->rightEdit($objOneFile->getSystemid()) && $this->strPeAddon == "")
                         $strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 
-			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
+			   		if($this->objRights->rightRight($objOneFile->getSystemid()) && $this->strPeAddon == "")
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 
                     // if no folder, attach a thumbnail-tooltip

@@ -13,8 +13,11 @@
  * Admin class of the downloads-module. Used to sync the archives with the filesystem and to define file-properties
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_admin extends class_admin implements interface_admin {
+
+    private $strPeAddon = "";
 
 	/**
 	 * Construcut
@@ -23,7 +26,6 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_downloads";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _downloads_modul_id_;
 		$arrModule["table"] 			= _dbprefix_."downloads_archive";
 		$arrModule["table2"] 			= _dbprefix_."downloads_file";
@@ -32,95 +34,13 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 		//Base class
 		parent::__construct($arrModule);
+
+        if($this->getParam("pe") == "1")
+            $this->strPeAddon = "&pe=1";
 	}
 
-	/**
-	 * Action-block. Controlles the further behaviour of the class
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-
-        if($strAction == "")
-            $strAction = "list";
-
-        try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-
-    		if($strAction == "newArchive")
-    			$strReturn = $this->actionNewArchive("new");
-
-    		if($strAction == "editArchive")
-    			$strReturn = $this->actionNewArchive("edit");
-
-    		if($strAction == "saveArchive") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveArchive();
-    			    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn .= $this->actionNewArchive("new");
-    		        else
-    		            $strReturn .= $this->actionNewArchive("edit");
-
-    		    }
-    		}
-
-    		if($strAction == "massSync")
-    			$strReturn .= $this->actionMassSync();
-
-    		if($strAction == "showArchive")
-    			$strReturn = $this->actionShowArchive();
-
-    		if($strAction == "deleteArchive") {
-    			$strReturn = $this->actionDeleteArchive();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-    		if($strAction == "editFile") {
-    			$strReturn = $this->actionEditDetails();
-    			if($strReturn == "")
-    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId()));
-    		}
-
-    		if($strAction == "logbook")
-    			$strReturn = $this->actionViewLogbook();
-
-    		if($strAction == "deleteLogbook") {
-    			$strReturn = $this->actionDeleteLogbook();
-    			if($strReturn == "")
-    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "logbook"));
-    		}
-
-    		if($strAction == "sortUp") {
-                $this->setPositionAndReload($this->getSystemid(), "upwards");
-    		}
-
-    		if($strAction == "sortDown") {
-                $this->setPositionAndReload($this->getSystemid(), "downwards");
-    		}
-
-        }
-        catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
-
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
-
-	public function getOutputModuleNavi() {
+	
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -150,6 +70,13 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
     }
 
 
+    protected function actionSortUp() {
+        $this->setPositionAndReload($this->getSystemid(), "upwards");
+    }
+
+    protected function actionSortDown() {
+        $this->setPositionAndReload($this->getSystemid(), "downwards");
+    }
 
 // --- ListenFunktionen ---------------------------------------------------------------------------------
 
@@ -159,7 +86,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
         $strJsSyncCode = "";
 		//Check rights
@@ -234,13 +161,15 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionShowArchive() {
+	protected function actionShowArchive() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightView($this->getSystemid())) {
 		    $strListId = generateSystemid();
 		    //path navi
-		    $strReturn .= $this->generatePathnavi();
+
+            if($this->strPeAddon == "")
+                $strReturn .= $this->generatePathnavi();
 
             //Since we can crossreference the filemanager, provide an upload-form
             $arrPath = $this->getPathArray();
@@ -295,7 +224,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			//linkto jump one level up
 			$intI = 0;
 			if($this->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"])) {
-				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$this->getPrevId(), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
+				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$this->getPrevId().$this->strPeAddon, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
 			}
 
 			if(count($arrFiles) > 0) {
@@ -328,12 +257,12 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		//If folder, a link to open
 			   		$strAction = "";
 			   		if($objOneFile->getType() == 1 && $this->objRights->rightView($objOneFile->getSystemid()))
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showArchive", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
 
 			   		if($this->objRights->rightEdit($objOneFile->getSystemid())) {
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFile", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("datei_bearbeiten"), "icon_pencil.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFile", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("datei_bearbeiten"), "icon_pencil.gif"));
+				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
+				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
@@ -343,17 +272,17 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                             $strAction .= $this->objToolkit->listDeleteButton($strName, $this->getText("datei_loeschen_frage"), "javascript:KAJONA.admin.ajax.deleteFolder(\'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."/".basename($objOneFile->getFilename())."\', \'downloads\', \'massSyncArchive\')");
                     }
 
-                    if($this->objRights->rightEdit($objOneFile->getSystemid()))
+                    if($this->objRights->rightEdit($objOneFile->getSystemid()) && $this->strPeAddon == "")
                         $strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 
-			   		if($this->objRights->rightRight($objOneFile->getSystemid()))
+			   		if($this->objRights->rightRight($objOneFile->getSystemid()) && $this->strPeAddon == "")
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
 
 					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strImage, $strText), $intI++, $objOneFile->getSystemid());
 				}
 			}
 			else
-			    $strReturn .= $this->objToolkit->listRow2($this->getText("liste_leer_dl"), "", $intI++);
+			    $strReturn .= $this->objToolkit->listRow3($this->getText("liste_leer_dl"), "", "", "", $intI++);
 
 			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}
@@ -369,7 +298,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteArchive() {
+	protected function actionDeleteArchive() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -378,6 +307,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				if(!$objArchive->deleteArchive()) {
 				    throw new class_exception($this->getText("archiv_loeschen_fehler"), class_exception::$level_ERROR);
 				}
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		    }
 		}
 		else
@@ -386,13 +317,18 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		return $strReturn;
 	}
 
+
+    protected function actionEditArchive() {
+        return $this->actionNewArchive("edit");
+    }
+
 	/**
 	 * Creates a form to edit or create a archive
 	 *
 	 * @param unknown_type $strMode
 	 * @return unknown
 	 */
-	private function actionNewArchive($strMode = "new") {
+	protected function actionNewArchive($strMode = "new") {
 	    $strReturn = "";
 		if($strMode == "new") {
 			//right
@@ -440,7 +376,11 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveArchive() {
+	protected function actionSaveArchive() {
+
+        if(!$this->validateForm())
+            return $this->actionNewArchive($this->getParam("mode"));
+
 		$strReturn = "";
 		//Modus checken
 		if($this->getParam("mode") == "new") {
@@ -451,6 +391,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $objArchive->setTitle($this->getParam("archive_title"));
 			    if(!$objArchive->updateObjectToDB())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -465,6 +407,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 				if(!$objArchive->updateObjectToDB())
 					throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn = $this->getText("fehler_recht");
@@ -480,7 +424,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionMassSync() {
+	protected function actionMassSync() {
         $strReturn = "";
 		//rights
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -516,27 +460,25 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionEditDetails() {
+	protected function actionEditFile() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
 			//form or update
 			//validate the form
-			$bitErrors = false;
 			if($this->getParam("save") == "1" && !$this->validateForm()) {
 			     $this->setParam("save", "");
-			     $bitErrors = true;
 			}
 
 			//mode? Show form or save file
 			if($this->getParam("save") == "") {
 			    $objFile = new class_modul_downloads_file($this->getSystemid());
 
-				$strReturn .= $this->generatePathNavi().basename($objFile->getFilename());
+                if($this->strPeAddon == "")
+                    $strReturn .= $this->generatePathNavi().basename($objFile->getFilename());
 				$strReturn .= $this->objToolkit->divider();
 
-				if($bitErrors)
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "editFile");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "editFile");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "editFile"));
                 $strReturn .= $this->objToolkit->formInputText("downloads_name", $this->getText("downloads_name"), $objFile->getName());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("downloads_description", $this->getText("downloads_description"), $objFile->getDescription(), "minimal");
@@ -560,6 +502,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 				if(!$objFile->updateObjectToDB())
 				    throw new class_exception($this->getText("datei_speichern_fehler"), class_exception::$level_ERROR);
+
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showArchive", "systemid=".$this->getPrevId() .($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")) ));
 			}
 		}
 		else
@@ -575,7 +519,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionViewLogbook() {
+	protected function actionLogbook() {
 		$strReturn = "";
 		if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -621,7 +565,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteLogbook() {
+	protected function actionDeleteLogbook() {
 		$strReturn = "";
 		if($this->getParam("loeschen") == "") {
 		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "deleteLogbook", "loeschen=1"));
@@ -636,6 +580,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 			if(!class_modul_downloads_logbook::deleteFromLogs($intDate))
 			    throw new class_exception("Error deleting log-rows", class_exception::$level_ERROR);
+
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "logbook"));
 		}
 		return $strReturn;
 	}

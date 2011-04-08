@@ -48,6 +48,23 @@ class class_modul_downloads_portal extends class_portal implements interface_por
         else
             $strReturn = $this->actionList();
 
+
+        $arrPeConfig = array(
+                              "pe_module" => "downloads",
+                              "pe_action_edit" => "showArchive",
+                              "pe_action_edit_params" => "&systemid=".$this->arrElementData["download_id"],
+                              "pe_action_new" => "",
+                              "pe_action_new_params" => "",
+                              "pe_action_delete" => "",
+                              "pe_action_delete_params" => ""
+                            );
+
+        //open a subfolder?
+        if($strAction == "openDlFolder" && validateSystemid($this->getSystemid()))
+            $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
+
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["download_id"], $arrPeConfig);
+
 		return $strReturn;
 
 	}

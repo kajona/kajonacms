@@ -11,6 +11,7 @@
  * Gallery Portal. Loads the thumbnails or detail-views
  *
  * @package modul_gallery
+ * @author sidler@mulchprod.de
  */
 class class_modul_gallery_portal extends class_portal implements interface_portal {
 	/**
@@ -21,7 +22,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	public function __construct($arrElementData) {
         $arrModul = array();
 		$arrModul["name"] 				= "modul_gallery";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["table"]  			= _dbprefix_."gallery_gallery";
 		$arrModul["table2"] 			= _dbprefix_."gallery_pic";
 		$arrModul["moduleId"] 			= _gallery_modul_id_;
@@ -55,6 +55,23 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		    $strReturn .= $this->actionRandom();
 		else
 		    $strReturn .= $this->actionList();
+
+
+        $arrPeConfig = array(
+                              "pe_module" => "gallery",
+                              "pe_action_edit" => "showGallery",
+                              "pe_action_edit_params" => "&systemid=".$this->arrElementData["gallery_id"],
+                              "pe_action_new" => "",
+                              "pe_action_new_params" => "",
+                              "pe_action_delete" => "",
+                              "pe_action_delete_params" => ""
+                            );
+
+        //open a subfolder?
+        if($strAction == "imageFolder" && validateSystemid($this->getSystemid()))
+            $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
+
+        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["gallery_id"], $arrPeConfig);
 
 		return $strReturn;
 

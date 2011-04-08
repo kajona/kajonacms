@@ -11,6 +11,7 @@
  * Portal-part of the downloads-element
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_element_downloads extends class_element_portal implements interface_portal_element {
 
@@ -22,7 +23,6 @@ class class_element_downloads extends class_element_portal implements interface_
 	public function __construct($objElementData) {
         $arrModule = array();
 		$arrModule["name"] 			= "element_downloads";
-		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
 		$arrModule["table"]		    = _dbprefix_."element_downloads";
 		parent::__construct($arrModule, $objElementData);
