@@ -2,4 +2,4 @@ This scripts are take from the Yahoo User Interface Library available at
 
 http://developer.yahoo.com/yui/
 
-Version: 2.8.0r4
+Version: 2.8.2r1
