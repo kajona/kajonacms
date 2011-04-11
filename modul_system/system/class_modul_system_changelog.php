@@ -85,6 +85,12 @@ class class_modul_system_changelog extends class_model implements interface_mode
                 $strNewvalue = $arrChangeSet["newvalue"];
                 $strProperty= $arrChangeSet["property"];
 
+                if($strOldvalue instanceof class_date)
+                    $strOldvalue = $strOldvalue->getLongTimestamp();
+
+                if($strNewvalue instanceof class_date)
+                    $strNewvalue= $strNewvalue->getLongTimestamp();
+
                 if(!$bitForceEntry && ($strOldvalue == $strNewvalue) )
                     continue;
 
