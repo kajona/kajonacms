@@ -103,13 +103,18 @@ class class_index  {
             if($strHeaderName == "")
                 $strHeaderName = "HTTPS";
 
-		    if(!issetServer($strHeaderName)) {
-                if($strHeaderValue == "" || $strHeaderValue != getServer($strHeaderName)) {
-                    //reload to https
-                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                    die("Reloading using https...");
-                }
+            //header itself given?
+		    if(!issetServer($strHeaderName) ) {
+                //reload to https
+                header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                die("Reloading using https...");
 		    }
+            //value of header correct?
+            else if($strHeaderValue != "" && $strHeaderValue != getServer($strHeaderName)) {
+                //reload to https
+                header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                die("Reloading using https...");
+            }
 		}
 
 		if($strModule != "login") {
