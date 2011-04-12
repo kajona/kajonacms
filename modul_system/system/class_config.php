@@ -31,7 +31,7 @@ class class_config {
 		$debug = array();
 
 		//Include the config-File
-		if(!@include_once(_realpath_."/system/config/config.php"))
+		if(!@include(_realpath_."/system/config/config.php"))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;
@@ -61,6 +61,28 @@ class class_config {
             define("_images_cachepath_", "/portal/pics/cache/");
 
 	}
+
+
+    /**
+     * Static function to read a value from the config.phps' config-array.
+     * <b>Attention:</b> Use this method only, of you know what you do!
+     * This method allows access to those values even before the kernel started.
+     * In nearly all cases the access via the instance-object is sufficient!
+     * 
+     * @param string $strEntryName
+     * @return string
+     * @since 3.4.0
+     */
+    public static function readPlainConfigsFromFilesystem($strEntryName) {
+
+        $config = array();
+        //Include the config-File
+		if(!@include(dirname(__FILE__)."/config/config.php"))
+			die("Error reading config-file!");
+
+        return isset($config[$strEntryName]) ? $config[$strEntryName] : "";
+
+    }
 
 	/**
 	 * Using a singleton to get an instance

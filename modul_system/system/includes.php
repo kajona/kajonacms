@@ -38,15 +38,23 @@
 
 
 //---The Path on web-------------------------------------------------------------------------------------
+
+    include_once (dirname(__FILE__)."/class_config.php");
+    $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
+    $strHeaderValue = class_config::readPlainConfigsFromFilesystem("https_header_value");
+
+    if($strHeaderName == "")
+        $strHeaderName = "HTTPS";
+
 	if(strpos($_SERVER['SCRIPT_FILENAME'], "installer.php") || strpos($_SERVER['SCRIPT_FILENAME'], "/debug/")) {
 		//Determing the current path on the web
-		$strWeb = dirname((isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")  ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && ($_SERVER[$strHeaderName] == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = substr_replace($strWeb, "", strrpos($strWeb, "/"));
 		define("_webpath_", saveUrlEncode($strWeb));
 	}
 	else {
 		//Determing the current path on the web
-		$strWeb = dirname((isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1") ? "https://" : "http://").$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+		$strWeb = dirname ((isset($_SERVER[$strHeaderName]) && ($_SERVER[$strHeaderName] == $strHeaderValue) ? "https://" : "http://") .$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 		$strWeb = saveUrlEncode($strWeb);
 		define("_webpath_", $strWeb);
 	}
