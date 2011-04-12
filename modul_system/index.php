@@ -96,10 +96,19 @@ class class_index  {
 
 		//Redirect to https?
 		if(_admin_only_https_ == "true") {
-		    if(!issetServer("HTTPS")) {
-                //reload to https
-                header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                die("Reloading using https...");
+            //check which headers to compare
+            $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
+            $strHeaderValue = class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value");
+
+            if($strHeaderName == "")
+                $strHeaderName = "HTTPS";
+
+		    if(!issetServer($strHeaderName)) {
+                if($strHeaderValue == "" || $strHeaderValue != getServer($strHeaderName)) {
+                    //reload to https
+                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                    die("Reloading using https...");
+                }
 		    }
 		}
 

@@ -79,6 +79,11 @@ default:
     $config['admintoolkit']         = "class_toolkit_admin";                   //The admin-toolkit class to use. If you created your own implementation, 
                                                                                //e.g. by extending the Kajona-class, set the name of the class here.
 
+    $config['https_header']         = "HTTPS";                                 //Http-header used to validate if the current connection is encrypted by https.
+                                                                               //If your application server uses another value, set it here
+
+    $config['https_header_value']   = "";                                      //If the presence of the header is not enough to validate the https status,
+                                                                               //set the required value to compare against here
 
 
 //--system settings--------------------------------------------------------------------------------------
