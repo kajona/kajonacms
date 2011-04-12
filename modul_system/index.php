@@ -98,7 +98,7 @@ class class_index  {
 		if(_admin_only_https_ == "true") {
             //check which headers to compare
             $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
-            $strHeaderValue = class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value");
+            $strHeaderValue = strtolower(class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
 
             if($strHeaderName == "")
                 $strHeaderName = "HTTPS";
@@ -110,7 +110,7 @@ class class_index  {
                 die("Reloading using https...");
 		    }
             //value of header correct?
-            else if($strHeaderValue != "" && $strHeaderValue != getServer($strHeaderName)) {
+            else if($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
                 //reload to https
                 header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
                 die("Reloading using https...");
