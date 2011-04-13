@@ -127,6 +127,9 @@ abstract class class_portal  {
 
 		//And keep the action
 		$this->strAction = $this->getParam("action");
+        //in most cases, the list is the default action if no other action was passed
+		if($this->strAction == "")
+		    $this->strAction = "list";
 
 		//set the pagename
 		if($this->getParam("page") == "")

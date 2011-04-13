@@ -46,7 +46,17 @@ CKEDITOR.editorConfig = function(config) {
         [
             ['Source','Save','-'],
             ['Undo','Redo','-','RemoveFormat'],
-            ['Link','Unlink','Anchor'],
+            ['Link','Unlink'],
+            ['Bold','Italic','Underline'],
+            ['NumberedList','BulletedList','-','Outdent','Indent']
+        ];
+
+    //limited toolbar but with support for images
+    config.toolbar_minimalimage =
+        [
+            ['Source','Save','-'],
+            ['Undo','Redo','-','RemoveFormat'],
+            ['Link','Unlink', 'Image'],
             ['Bold','Italic','Underline'],
             ['NumberedList','BulletedList','-','Outdent','Indent']
         ];
