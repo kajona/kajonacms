@@ -1,18 +1,10 @@
 <?php
 /**
- * File containing the ezcGraphPaletteTango class
+ * Default color palette, parametrized for kajona @ ez components.
  *
- * @package Graph
- * @version 1.5
- * @copyright Copyright (C) 2005-2009 eZ Systems AS. All rights reserved.
- * @license http://ez.no/licenses/new_bsd New BSD License
- */
-/**
- * Light color pallet for ezcGraph based on Tango style guidelines at
- * http://tango-project.org/Generic_Icon_Theme_Guidelines
- *
- * @version 1.5
- * @package Graph
+ * @package modul_system
+ * @author sidler@mulchprod.de
+ * @since 3.4
  */
 class ezcGraphPaletteKajona extends ezcGraphPalette
 {
@@ -29,7 +21,7 @@ class ezcGraphPaletteKajona extends ezcGraphPalette
      * @var array
      */
     protected $dataSetColor = array(
-        "#BCE02E", "#E0642E", "#E0D62E", "#2E97E0", "#B02EE0", "#E02E75", "#5CE02E", "#E0B02E", "#527C94", "#99993d", "#ff0000"
+        "#BCE02E", "#E0642E", "#2E97E0", "#E0D62E",  "#B02EE0", "#E02E75", "#5CE02E", "#E0B02E", "#527C94", "#99993d", "#ff0000"
     );
 
     /**
