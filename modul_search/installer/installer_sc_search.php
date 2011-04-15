@@ -64,7 +64,7 @@ class class_installer_sc_search implements interface_sc_installer  {
             $objPagelement->setStrPlaceholder("results_search");
             $objPagelement->setStrName("results");
             $objPagelement->setStrElement("search");
-            $objPagelement->updateObjectToDb();
+            $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
              $strQuery = "UPDATE "._dbprefix_."element_search
                                 SET search_template = 'search_results.tpl',
@@ -102,31 +102,31 @@ class class_installer_sc_search implements interface_sc_installer  {
 
             $strReturn .= "Creating navigation point.\n";
 
-//            //navigations installed?
-//	        try {
-//	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//	        }
-//	        catch (class_exception $objException) {
-//	            $objModule = null;
-//	        }
-//	        if($objModule != null) {
-//
-//		        $arrNavis = class_modul_navigation_tree::getAllNavis();
-//		        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
-//		        $strTreeId = $objNavi->getSystemid();
-//
-//		        $objNaviPoint = new class_modul_navigation_point();
-//		        if($this->strContentLanguage == "de") {
-//		            $objNaviPoint->setStrName("Suche");
-//		        }
-//		        else {
-//		        	$objNaviPoint->setStrName("Search");
-//		        }
-//
-//		        $objNaviPoint->setStrPageI("search");
-//		        $objNaviPoint->updateObjectToDb($strTreeId);
-//		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//            }
+            //navigations installed?
+            $objModule = null;
+	        try {
+	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
+	        }
+	        catch (class_exception $objException) {
+	            $objModule = null;
+	        }
+	        if($objModule != null) {
+
+		        $objNavi = class_modul_navigation_tree::getNavigationByName("portalnavigation");
+		        $strTreeId = $objNavi->getSystemid();
+
+		        $objNaviPoint = new class_modul_navigation_point();
+		        if($this->strContentLanguage == "de") {
+		            $objNaviPoint->setStrName("Suche");
+		        }
+		        else {
+		        	$objNaviPoint->setStrName("Search");
+		        }
+
+		        $objNaviPoint->setStrPageI("search");
+		        $objNaviPoint->updateObjectToDb($strTreeId);
+		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
+            }
 
         return $strReturn;
     }
