@@ -76,7 +76,10 @@ class class_db {
 		if($strDriver != "%%defaultdriver%%") {
     		//build a class-name & include the driver
     		$strClassname = "class_db_".$strDriver;
-    		$this->objDbDriver = new $strClassname();
+            if(class_exists($strClassname))
+                $this->objDbDriver = new $strClassname();
+            else
+                throw new class_exception("db-driver ".$strClassname." could not be loaded", class_exception::$level_FATALERROR);
 
 		}
 		else {
@@ -94,9 +97,12 @@ class class_db {
      */
     public function loadCacheFromSession() {
     	//load query cache from session
-        //$this->arrQueryCache = class_session::getInstance()->getSession("databaseQuerySessionCache");
-        //if($this->arrQueryCache === false)
-        //    $this->arrQueryCache = array();
+        if(class_config::getInstance()->getConfig("cache_db_extended") === true) {
+            $this->arrQueryCache = class_session::getInstance()->getSession("databaseQuerySessionCache");
+            if($this->arrQueryCache === false)
+                $this->arrQueryCache = array();
+
+        }
     }
 
 
@@ -118,20 +124,20 @@ class class_db {
         }
 
         //save cache to session
-        //reset cache after ~10 times to avoid mem-errors
-        /*
-        $intCacheTimes = class_session::getInstance()->getSession("databaseQueryCacheTimes");
-        if($intCacheTimes === false)
-            $intCacheTimes = 0;
-        if( $intCacheTimes < 10 ) {
-            class_session::getInstance()->setSession("databaseQuerySessionCache", $this->arrQueryCache);
-            class_session::getInstance()->setSession("databaseQueryCacheTimes", ++$intCacheTimes);
+        //reset cache after ~40 times to avoid mem-errors
+        if(class_config::getInstance()->getConfig("cache_db_extended") === true) {
+            $intCacheTimes = class_session::getInstance()->getSession("databaseQueryCacheTimes");
+            if($intCacheTimes === false)
+                $intCacheTimes = 0;
+            if( $intCacheTimes < 40 ) {
+                class_session::getInstance()->setSession("databaseQuerySessionCache", $this->arrQueryCache);
+                class_session::getInstance()->setSession("databaseQueryCacheTimes", ++$intCacheTimes);
+            }
+            else {
+                class_session::getInstance()->setSession("databaseQuerySessionCache", array());
+                class_session::getInstance()->setSession("databaseQueryCacheTimes", 0);
+            }
         }
-        else {
-        	class_session::getInstance()->setSession("databaseQuerySessionCache", array());
-            class_session::getInstance()->setSession("databaseQueryCacheTimes", 0);
-        }
-        */
 	}
 
 	/**

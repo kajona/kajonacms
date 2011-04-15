@@ -46,15 +46,24 @@ class class_texte {
 		$this->arrModul["t_nummer"]		= _system_modul_id_;
 
         //load texts from session
-        //TODO: reenable before release
-        //$this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
-        if($this->arrTexts === false)
-            $this->arrTexts = array();
+
+        if(class_config::getInstance()->getConfig("cache_texts") === true) {
+            $this->arrTexts = class_session::getInstance()->getSession("textSessionCache");
+            if($this->arrTexts === false)
+                $this->arrTexts = array();
+
+            $this->arrFallbackTextEntrys = class_session::getInstance()->getSession("textSessionFallbackCache");
+            if($this->arrFallbackTextEntrys === false)
+                $this->arrFallbackTextEntrys = array();
+        }
 	}
 
     public function __destruct() {
     	//save texts to session
-        class_session::getInstance()->setSession("textSessionCache", $this->arrTexts);
+        if(class_config::getInstance()->getConfig("cache_texts") === true) {
+            class_session::getInstance()->setSession("textSessionCache", $this->arrTexts);
+            class_session::getInstance()->setSession("textSessionFallbackCache", $this->arrFallbackTextEntrys);
+        }
     }
 
 	/**

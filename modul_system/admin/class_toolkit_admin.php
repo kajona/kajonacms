@@ -469,7 +469,7 @@ class class_toolkit_admin extends class_toolkit {
      */
     public function formInputUploadFlash($strName, $strTitle, $strAllowedFileTypes, $bitMultiple = false, $bitFallback = false) {
 
-        //upload works with session.use_only_cookies=disabled only. of set to enabled, use the fallback upload
+        //upload works with session.use_only_cookies=disabled only. if set to enabled, use the fallback upload
         if(class_carrier::getInstance()->getObjConfig()->getPhpIni("session.use_only_cookies") == "1") {
             $strReturn = $this->formInputUpload($strName, $strTitle);
             $strReturn .= $this->formInputSubmit(class_carrier::getInstance()->getObjText()->getText("upload_multiple_uploadFiles", "filemanager", "admin"));
