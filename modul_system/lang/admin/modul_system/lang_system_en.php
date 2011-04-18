@@ -163,6 +163,7 @@ $lang["login_xml_succeess"]              = "Login succeeded";
 $lang["logout_xml"]                      = "Logout succeeded";
 $lang["mail_body"]                       = "Content:";
 $lang["mail_recipient"]                  = "Recipient:";
+$lang["mail_cc"]                  = "Recipient in CC:";
 $lang["mail_send_error"]                 = "Error sending the email. Please retry the last action.";
 $lang["mail_send_success"]               = "Email sent successfully.";
 $lang["mail_subject"]                    = "Subject:";

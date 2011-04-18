@@ -1014,6 +1014,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendMail"));
             $strReturn .= $this->objToolkit->getValidationErrors($this, "sendMail");
             $strReturn .= $this->objToolkit->formInputText("mail_recipient", $this->getText("mail_recipient"), $this->getParam("mail_recipient"));
+            $strReturn .= $this->objToolkit->formInputText("mail_cc", $this->getText("mail_cc"), $this->getParam("mail_cc"));
             $strReturn .= $this->objToolkit->formInputText("mail_subject", $this->getText("mail_subject"), $this->getParam("mail_subject"));
             $strReturn .= $this->objToolkit->formInputTextArea("mail_body", $this->getText("mail_body"), $this->getParam("mail_body"), "inputTextareaLarge");
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("send"));
@@ -1045,7 +1046,18 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         $objEmail = new class_mail();
 
         $objEmail->setSender($objUser->getStrEmail());
-        $objEmail->addTo($this->getParam("mail_recipient"));
+        
+        $arrRecipients = explode(",", $this->getParam("mail_recipient"));
+        foreach($arrRecipients as $strOneRecipient)
+            if(checkEmailaddress($strOneRecipient))
+                $objEmail->addTo($strOneRecipient);
+
+        $arrRecipients = explode(",", $this->getParam("mail_cc"));
+        foreach($arrRecipients as $strOneRecipient)
+            if(checkEmailaddress($strOneRecipient))
+                $objEmail->addCc($strOneRecipient);
+
+
         $objEmail->setSubject($this->getParam("mail_subject"));
         $objEmail->setText($this->getParam("mail_body"));
 

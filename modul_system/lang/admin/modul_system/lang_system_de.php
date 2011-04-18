@@ -163,6 +163,7 @@ $lang["login_xml_succeess"]              = "Login erfolgreich";
 $lang["logout_xml"]                      = "Logout erfolgreich";
 $lang["mail_body"]                       = "Inhalt:";
 $lang["mail_recipient"]                  = "Empfänger:";
+$lang["mail_cc"]                  = "Empfänger in Kopie:";
 $lang["mail_send_error"]                 = "Fehler beim Versenden der E-Mail. Bitte versuchen Sie die letzte Aktion erneut.";
 $lang["mail_send_success"]               = "E-Mail erfolgreich verschickt.";
 $lang["mail_subject"]                    = "Betreff:";
