@@ -89,13 +89,24 @@ class class_xml {
 
             //if admin & https, redirect?
             if(_admin_) {
-                //Redirect to https?
-                if(_admin_only_https_ == "true") {
-                    if(!issetServer("HTTPS")) {
-                        //reload to https
-                        header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
-                        die("Reloading using https...");
-                    }
+                //check which headers to compare
+                $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
+                $strHeaderValue = strtolower(class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
+
+                if($strHeaderName == "")
+                    $strHeaderName = "HTTPS";
+
+                //header itself given?
+                if(!issetServer($strHeaderName) ) {
+                    //reload to https
+                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                    die("Reloading using https...");
+                }
+                //value of header correct?
+                else if($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
+                    //reload to https
+                    header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
+                    die("Reloading using https...");
                 }
             }
 
