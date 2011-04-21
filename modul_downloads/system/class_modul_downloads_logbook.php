@@ -11,6 +11,7 @@
  * Model for the downloads-logbook
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_logbook extends class_model implements interface_model  {
 
@@ -22,7 +23,6 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_downloads";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _downloads_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."downloads_log";
 		$arrModul["modul"]				= "downloads";
@@ -64,7 +64,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
     /**
 	 * Generates an entry in the logbook an increases the hits-counter
 	 *
-	 * @param mixed $arrFile
+	 * @param class_modul_downloads_file $arrFile
 	 * @static
 	 */
 	public static function generateDlLog($objFile) {
@@ -72,13 +72,13 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 	    $objDB = class_carrier::getInstance()->getObjDB();
 	    $strQuery = "INSERT INTO "._dbprefix_."downloads_log
 	                   (downloads_log_id, downloads_log_date, downloads_log_file, downloads_log_user, downloads_log_ip) VALUES
-	                   ('".dbsafeString($objRoot->generateSystemid())."','".(int)time()."','".dbsafeString(basename($objFile->getFilename()))."',
-	                    '".dbsafeString(class_carrier::getInstance()->getObjSession()->getUsername())."','".dbsafeString(getServer("REMOTE_ADDR"))."')";
+	                   (?, ?, ?, ?, ?)";
 
-		$objDB->_query($strQuery);
+		$objDB->_pQuery($strQuery, array($objRoot->generateSystemid(), (int)time(), basename($objFile->getFilename()),
+                      class_carrier::getInstance()->getObjSession()->getUsername(), getServer("REMOTE_ADDR")) );
 
-		$strQuery = "UPDATE "._dbprefix_."downloads_file SET downloads_hits = downloads_hits+1 WHERE downloads_id='".dbsafeString($objFile->getSystemid())."'";
-		$objDB->_query($strQuery);
+		$strQuery = "UPDATE "._dbprefix_."downloads_file SET downloads_hits = downloads_hits+1 WHERE downloads_id= ?";
+		$objDB->_pQuery($strQuery, array($objFile->getSystemid() ));
 	}
 
 	/**
@@ -91,7 +91,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 		$strQuery = "SELECT *
 					  FROM "._dbprefix_."downloads_log
 					  ORDER BY downloads_log_date DESC";
-        return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
 	}
 	
@@ -103,7 +103,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 	public function getLogbookDataCount() {
 		$strQuery = "SELECT COUNT(*)
 					  FROM "._dbprefix_."downloads_log";
-        $arrTemp = $this->objDB->getRow($strQuery);
+        $arrTemp = $this->objDB->getPRow($strQuery, array());
         return $arrTemp["COUNT(*)"];
 
 	}
@@ -118,7 +118,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 					   FROM "._dbprefix_."downloads_log
 			       ORDER BY downloads_log_date DESC";
 		
-        return $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
+        return $this->objDB->getPArraySection($strQuery, array(), $intStart, $intEnd);
 	}
 	
 
@@ -130,9 +130,9 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 	 */
 	public static function deleteFromLogs($intOlderDate) {
         $strSql = "DELETE FROM "._dbprefix_."downloads_log
-			           WHERE downloads_log_date < '".(int)$intOlderDate."'";
+			           WHERE downloads_log_date < ?";
 
-		return class_carrier::getInstance()->getObjDB()->_query($strSql);
+		return class_carrier::getInstance()->getObjDB()->_pQuery($strSql,  array((int)$intOlderDate) );
 	}
 }
 

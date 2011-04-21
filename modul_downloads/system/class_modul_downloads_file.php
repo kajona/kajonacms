@@ -11,6 +11,7 @@
  * Model for files & folders of the downloads
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_file extends class_model implements interface_model, interface_sortable_rating {
 
@@ -35,7 +36,6 @@ class class_modul_downloads_file extends class_model implements interface_model,
     public function __construct($strSystemid = "") {
         $arrModule = array();
         $arrModule["name"] 				= "modul_downloads";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _downloads_modul_id_;
 		$arrModule["table"]       		= _dbprefix_."downloads_file";
 		$arrModule["modul"]				= "downloads";
@@ -72,8 +72,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
         $strQuery = "SELECT * FROM "._dbprefix_."system,
 		            ".$this->arrModule["table"]."
 					WHERE system_id = downloads_id
-						AND system_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+						AND system_id= ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrRow) > 0) {
             $this->setDescription($arrRow["downloads_description"]);
             $this->setFilename($arrRow["downloads_filename"]);
@@ -97,20 +97,34 @@ class class_modul_downloads_file extends class_model implements interface_model,
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-					SET downloads_name='".$this->objDB->dbsafeString($this->getName())."',
-					    downloads_hits='".$this->objDB->dbsafeString($this->getHits())."',
-					    downloads_filename='".$this->objDB->dbsafeString($this->getFilename())."',
-					    downloads_description='".$this->objDB->dbsafeString($this->getDescription(), false)."',
-					    downloads_size=".(int)$this->objDB->dbsafeString($this->getSize()).",
-					    downloads_max_kb=".(int)$this->objDB->dbsafeString($this->getMaxKb()).",
-                        downloads_checksum='".$this->objDB->dbsafeString($this->getChecksum())."',
-                        downloads_screen_1='".$this->objDB->dbsafeString($this->getStrScreen1())."',
-                        downloads_screen_2='".$this->objDB->dbsafeString($this->getStrScreen2())."',
-                        downloads_screen_3='".$this->objDB->dbsafeString($this->getStrScreen3())."',
-                        downloads_cattype=".(int)$this->objDB->dbsafeString($this->getIntCatType()).",
-                        downloads_type=".$this->objDB->dbsafeString($this->getType())."
-				  WHERE downloads_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+					SET downloads_name=?,
+					    downloads_hits=?,
+					    downloads_filename=?,
+					    downloads_description=?,
+					    downloads_size=?,
+					    downloads_max_kb=?,
+                        downloads_checksum=?,
+                        downloads_screen_1=?,
+                        downloads_screen_2=?,
+                        downloads_screen_3=?,
+                        downloads_cattype=?,
+                        downloads_type=?
+				  WHERE downloads_id=?";
+        return $this->objDB->_pQuery($strQuery, array(
+            $this->getName(),
+			$this->getHits(),
+			$this->getFilename(),
+			$this->getDescription(),
+			(int)$this->getSize(),
+			(int)$this->getMaxKb(),
+            $this->getChecksum(),
+            $this->getStrScreen1(),
+            $this->getStrScreen2(),
+            $this->getStrScreen3(),
+            (int)$this->getIntCatType(),
+            $this->getType(),
+			$this->getSystemid()
+        ), array(true, true, true, false));
     }
 
 
@@ -125,9 +139,8 @@ class class_modul_downloads_file extends class_model implements interface_model,
         $bitReturn = false;
         $objDB = $this->objDB;
 		//Modul-Table
-		$strQuery = "DELETE FROM "._dbprefix_."downloads_file
-						WHERE downloads_id='".dbsafeString($this->getSystemid())."'";
-		if($objDB->_query($strQuery)) {
+		$strQuery = "DELETE FROM "._dbprefix_."downloads_file WHERE downloads_id= ?";
+		if($objDB->_pQuery($strQuery, array($this->getSystemid()))) {
     	    if($this->deleteSystemRecord($this->getSystemid()))
 			    $bitReturn = true;
 		}
@@ -147,13 +160,13 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system,
 		                           "._dbprefix_."downloads_file
 						WHERE system_id = downloads_id
-						AND system_prev_id='".dbsafeString($strPrevId)."'
+						AND system_prev_id= ?
 						AND downloads_type = 1
 						ORDER BY system_sort";
 
 		$objDB = class_carrier::getInstance()->getObjDB();
 
-		$arrIds =  $objDB->getArray($strQuery);
+		$arrIds =  $objDB->getPArray($strQuery, array($strPrevId));
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_downloads_file($arrOneId["system_id"]);
@@ -196,10 +209,11 @@ class class_modul_downloads_file extends class_model implements interface_model,
 	 * @static
 	 */
 	public static function getFilesDB($strPrevId, $bitFilesOnly = false, $bitJustActive = false, $intStartNr = false, $intEndNr = false) {
+
 		$strQuery = "SELECT * FROM "._dbprefix_."system,
 		                           "._dbprefix_."downloads_file
 						WHERE system_id = downloads_id
-						  AND system_prev_id='".dbsafeString($strPrevId)."'
+						  AND system_prev_id=?
 							".(!$bitFilesOnly ? "" : " AND downloads_type = 0 ")."
 							".(!$bitJustActive ? "" : " AND system_status = 1 ")."
 						ORDER BY system_sort ASC,
@@ -209,9 +223,9 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		$objDB = class_carrier::getInstance()->getObjDB();
 
         if($intStartNr !== false && $intEndNr !== false)
-            $arrIds =  $objDB->getArraySection($strQuery, $intStartNr, $intEndNr);
+            $arrIds =  $objDB->getPArraySection($strQuery, array($strPrevId), $intStartNr, $intEndNr);
         else
-            $arrIds =  $objDB->getArray($strQuery);
+            $arrIds =  $objDB->getPArray($strQuery, array($strPrevId));
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_downloads_file($arrOneId["system_id"]);
@@ -232,7 +246,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system,
 		                           "._dbprefix_."downloads_file
 						WHERE system_id = downloads_id
-						  AND system_prev_id='".dbsafeString($strPrevId)."'
+						  AND system_prev_id=?
 							".(!$bitFilesOnly ? "" : " AND downloads_type = 0 ")."
 							".(!$bitJustActive ? "" : " AND system_status = 1 ")."
 						ORDER BY system_sort ASC,
@@ -241,7 +255,7 @@ class class_modul_downloads_file extends class_model implements interface_model,
 
 		$objDB = class_carrier::getInstance()->getObjDB();
 
-		$arrRow =  $objDB->getRow($strQuery);
+		$arrRow =  $objDB->getPRow($strQuery, array($strPrevId));
 		return $arrRow["COUNT(*)"];
 	}
 

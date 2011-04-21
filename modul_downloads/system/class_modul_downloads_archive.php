@@ -11,6 +11,7 @@
  * Class to represent an archive, used to store download-files and folders
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_archive extends class_model implements interface_model  {
 
@@ -26,7 +27,6 @@ class class_modul_downloads_archive extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_downloads";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _downloads_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."downloads_archive";
 		$arrModul["modul"]				= "downloads";
@@ -42,9 +42,9 @@ class class_modul_downloads_archive extends class_model implements interface_mod
     public function initObject() {
         $strQuery= "SELECT * FROM "._dbprefix_."system,
 		                            ".$this->arrModule["table"]."
-						WHERE system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
+						WHERE system_id = ?
 						  AND system_id = archive_id";
-        $arrResult = $this->objDB->getRow($strQuery);
+        $arrResult = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrResult) > 0) {
             $this->setPath($arrResult["archive_path"]);
             $this->setTitle($arrResult["archive_title"]);
@@ -85,10 +85,10 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                     SET archive_title = '".$this->objDB->dbsafeString($this->getTitle())."',
-                         archive_path = '".$this->objDB->dbsafeString($this->getPath())."'
-                     WHERE archive_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                        SET archive_title = ?,
+                            archive_path = ?
+                      WHERE archive_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getTitle(), $this->getPath(), $this->getSystemid()));
     }
 
     /**
@@ -104,7 +104,7 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 						  ORDER BY archive_title ASC";
 		$objDB = class_carrier::getInstance()->getObjDB();
 
-		$arrIds =  $objDB->getArray($strQuery);
+		$arrIds =  $objDB->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_downloads_archive($arrOneId["system_id"]);
@@ -121,7 +121,6 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	 */
 	public function deleteArchiveRecursive($bitIgnoreRights = false) {
 		$bitReturn = true;
-		$objRoot = new class_modul_system_common();
 
 		//Load the current level
 		$arrFolder = class_modul_downloads_file::getFolderLevel($this->getSystemid());
@@ -164,9 +163,9 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	public function deleteArchive() {
 	    class_logger::getInstance()->addLogRow("deleted dl-archive ".$this->getSystemid(), class_logger::$levelInfo);
 	    $strQuery = "DELETE FROM "._dbprefix_."downloads_archive
-					WHERE archive_id='".dbsafeString($this->getSystemid())."'";
+					WHERE archive_id= ?";
 	    $objDB = $this->objDB;
-	    if($objDB->_query($strQuery)) {
+	    if($objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 	       if($this->deleteSystemRecord($this->getSystemid())) {
                //and delete the filemanager repo
                 $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
