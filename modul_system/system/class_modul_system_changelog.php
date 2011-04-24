@@ -79,7 +79,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
         $bitReturn = true;
 
         $arrChanges = $objSourceModel->getChangedFields($strAction);
-        if(is_array($arrChanges)) {
+        if(is_array($arrChanges) && in_array($this->arrModule["table"], $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
                 $strOldvalue = $arrChangeSet["oldvalue"];
                 $strNewvalue = $arrChangeSet["newvalue"];

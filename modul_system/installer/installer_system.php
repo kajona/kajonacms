@@ -619,21 +619,27 @@ class class_installer_system extends class_installer_base implements interface_i
 	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.1") {
             $strReturn .= $this->update_3311_3312();
+            $this->objDB->flushQueryCache();
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.2") {
             $strReturn .= $this->update_3312_3313();
+            $this->objDB->flushQueryCache();
+            $strReturn .= "<b>Please retrigger update-sequence to complete kernel-update...</b>\n\n";
+            return $strReturn;
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.3") {
             $strReturn .= $this->update_3313_3314();
+            $this->objDB->flushQueryCache();
         }
 
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.4") {
             $strReturn .= $this->update_3314_3315();
+            $this->objDB->flushQueryCache();
         }
 
         return $strReturn."\n\n";
@@ -1338,6 +1344,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.3");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.3");
+        $this->objDB->flushQueryCache();
         return $strReturn;
     }
 
