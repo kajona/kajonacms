@@ -16,7 +16,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.3.1.8";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
@@ -42,7 +42,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 	}
 
     public function getMinSystemVersion() {
-	    return "3.2.1";
+	    return "3.3.1.8";
 	}
 
     public function install() {
@@ -231,6 +231,11 @@ class class_installer_gallery extends class_installer_base implements interface_
             $strReturn .= $this->update_3301_331();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3318();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -400,6 +405,17 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.3.1");
         $this->updateElementVersion("galleryRandom", "3.3.1");
+        return $strReturn;
+    }
+
+    private function update_331_3318() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.3.1.8");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.3.1.8");
+        $this->updateElementVersion("galleryRandom", "3.3.1.8");
         return $strReturn;
     }
 

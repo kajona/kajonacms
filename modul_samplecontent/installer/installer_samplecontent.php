@@ -22,7 +22,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.3.1";
+		$arrModule["version"] 		  = "3.3.1.8";
 		$arrModule["name"] 			  = "samplecontent";
 		$arrModule["name_lang"] 	  = "Module Samplecontent";
 		$arrModule["moduleId"] 		  = _samplecontent_modul_id_;
@@ -37,7 +37,7 @@ class class_installer_samplecontent extends class_installer_base implements inte
 	}
 
     public function getMinSystemVersion() {
-	    return "3.2.1";
+	    return "3.3.1.8";
 	}
 
 	public function hasPostInstalls() {
@@ -47,14 +47,12 @@ class class_installer_samplecontent extends class_installer_base implements inte
 
    public function install() {
         $strReturn = "";
-        $strPageId = "";
 
 		$strReturn = "Installing ".$this->arrModule["name_lang"]."...\n";
 
 		//Register the module
         $strReturn .= "\nRegistering module\n";
-        $strSystemID = $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
-
+        $this->registerModule($this->arrModule["name"], _samplecontent_modul_id_, "", "", $this->arrModule["version"] , false);
 
 		//search for installers available
 		$objFilesystem = new class_filesystem();
@@ -150,6 +148,11 @@ class class_installer_samplecontent extends class_installer_base implements inte
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
         }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3318();
+        }
 
         return $strReturn;
 	}
@@ -214,6 +217,13 @@ class class_installer_samplecontent extends class_installer_base implements inte
         $strReturn = "Updating 3.3.0.1 to 3.3.1...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("samplecontent", "3.3.1");
+        return $strReturn;
+    }
+    
+    private function update_331_3318() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("samplecontent", "3.3.1.8");
         return $strReturn;
     }
 

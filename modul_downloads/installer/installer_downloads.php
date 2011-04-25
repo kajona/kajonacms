@@ -16,7 +16,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.3.1.8";
 		$arrModule["name"] 			= "downloads";
 		$arrModule["name_lang"] 	= "Module Downloads";
 		$arrModule["moduleId"] 		= _downloads_modul_id_;
@@ -28,7 +28,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 	}
 
     public function getMinSystemVersion() {
-	    return "3.2.1";
+	    return "3.3.1.8";
 	}
 
 	public function hasPostInstalls() {
@@ -91,7 +91,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true, "", "class_modul_downloads_admin_xml.php");
+		$this->registerModule("downloads", _downloads_modul_id_, "class_modul_downloads_portal.php", "class_modul_downloads_admin.php", $this->arrModule["version"] , true, "", "class_modul_downloads_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -213,6 +213,11 @@ class class_installer_downloads extends class_installer_base implements interfac
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1") {
+            $strReturn .= $this->update_331_3318();
         }
 
         return $strReturn."\n\n";
@@ -409,6 +414,15 @@ class class_installer_downloads extends class_installer_base implements interfac
         $this->updateModuleVersion("downloads", "3.3.1");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("downloads", "3.3.1");
+        return $strReturn;
+    }
+
+    private function update_331_3318() {
+        $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("downloads", "3.3.1.8");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("downloads", "3.3.1.8");
         return $strReturn;
     }
 

@@ -16,7 +16,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.3.1.1";
+		$arrModule["version"] 		  = "3.3.1.8";
 		$arrModule["name"] 			  = "tags";
 		$arrModule["name_lang"] 	  = "Module Tags";
 		$arrModule["moduleId"] 		  = _tags_modul_id_;
@@ -31,7 +31,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.3.1";
+	    return "3.3.1.8";
 	}
 
 	public function hasPostInstalls() {
@@ -129,11 +129,24 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
         
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.1") {
+            $strReturn .= $this->update_3311_3318();
+            $this->objDB->flushQueryCache();
+        }
 	   
         return $strReturn."\n\n";
 	}
 	
+    private function update_3311_3318() {
+        $strReturn = "Updating 3.3.1.1 to 3.3.1.8...\n";
 
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->arrModule["name"], "3.3.1.8");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.3.1.8");
+        return $strReturn;
+    }
 
 
 
