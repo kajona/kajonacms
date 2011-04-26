@@ -29,7 +29,7 @@ echo "|loading system kernel...                                                 
 echo "|loaded.                                                                        |\n";
 echo "+-------------------------------------------------------------------------------+\n";
 
-$strYUICompressorCommand = "java -jar \""._realpath_."/debug/compress_jscss/yuicompressor-2.4.2.jar\"";
+$strYUICompressorCommand = "java -jar \""._realpath_."/debug/compress_jscss/yuicompressor-2.4.6.jar\"";
 
 $strTargetPathFull = "/debug/compress_jscss/output_full";
 $strTargetPathCompressed = "/debug/compress_jscss/output_compressed";
