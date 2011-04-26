@@ -574,7 +574,7 @@ abstract class class_root {
 			$strSystemid = $this->getSystemid();
 
 		$arrRow = $this->getSystemRecord($strSystemid);
-		return $arrRow["system_lm_time"];
+		return (isset($arrRow["system_lm_time"]) ? $arrRow["system_lm_time"] : "");
 	}
 
 
