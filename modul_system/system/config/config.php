@@ -88,9 +88,6 @@ default:
     $config['cache_texts']          = false;                                   //caches read lang files with the users' session. Enable only on productive 
                                                                                //environments. Could consume up a lot of ram.
 
-    $config['cache_db_extended']    = false;                                   //Enables a session based query cache. Since queries may consume a lot of ram,
-                                                                               // this option shoule be enabled on high-performance environments only.
-
 //--system settings--------------------------------------------------------------------------------------
 
     $debug = array();

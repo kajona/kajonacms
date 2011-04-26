@@ -90,22 +90,6 @@ class class_db {
 
 	}
 
-    /**
-     * Loads the cache saved to session before into the current instance.
-     * This method is being called during the system-startup, so there's no
-     * need to call this method manually!
-     */
-    public function loadCacheFromSession() {
-    	//load query cache from session
-        if(class_config::getInstance()->getConfig("cache_db_extended") === true) {
-            $this->arrQueryCache = class_session::getInstance()->getSession("databaseQuerySessionCache");
-            if($this->arrQueryCache === false)
-                $this->arrQueryCache = array();
-
-        }
-    }
-
-
 	/**
 	 * Destructor.
 	 * Handles the closing of remaining tx and closes the db-connection
@@ -123,21 +107,6 @@ class class_db {
 	        $this->objDbDriver->dbclose();
         }
 
-        //save cache to session
-        //reset cache after ~40 times to avoid mem-errors
-        if(class_config::getInstance()->getConfig("cache_db_extended") === true) {
-            $intCacheTimes = class_session::getInstance()->getSession("databaseQueryCacheTimes");
-            if($intCacheTimes === false)
-                $intCacheTimes = 0;
-            if( $intCacheTimes < 40 ) {
-                class_session::getInstance()->setSession("databaseQuerySessionCache", $this->arrQueryCache);
-                class_session::getInstance()->setSession("databaseQueryCacheTimes", ++$intCacheTimes);
-            }
-            else {
-                class_session::getInstance()->setSession("databaseQuerySessionCache", array());
-                class_session::getInstance()->setSession("databaseQueryCacheTimes", 0);
-            }
-        }
 	}
 
 	/**

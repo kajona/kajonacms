@@ -59,7 +59,6 @@ class class_carrier {
             //The session-start is handled by class_session internally to avoid
             //senseless db-updates, e.g. when manipulating images
             //self::$objCarrier->getObjSession()->initInternalSession();
-            $objDB->loadCacheFromSession();
 		}
 
 		return self::$objCarrier;
