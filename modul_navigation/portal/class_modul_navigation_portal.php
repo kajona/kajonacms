@@ -562,7 +562,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
         if($objPointData->getStrPageI() != "") {
             $objPage = class_modul_pages_page::getPageByName($objPointData->getStrPageI());
-            $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getEditDate());
+            if($objPage->getEditDate() != "")
+                $arrTemp["lastmodified"] = strftime("%Y-%m-%dT%H:%M:%S", $objPage->getEditDate());
         }
 
 		//Load the correct template
