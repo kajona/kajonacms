@@ -13,6 +13,7 @@
  * This class can either be used to write to csv-files or to read from csv-files
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_csv {
 
@@ -21,7 +22,6 @@ class class_csv {
     private $strFilename = null;
     private $strDelimiter = null;
     private $strTextEncloser = null;
-    private $objFileHandle = null;
     private $intImportRowOffset = 0;
 
 
@@ -35,7 +35,7 @@ class class_csv {
     /**
      * Use a ',' as delimiter
      *
-     * @var stirng
+     * @var string
      */
     public static $str_delimiter_comma = ",";
 
@@ -126,7 +126,7 @@ class class_csv {
 	        return true;
 	    }
 	    else {
-	        throw new class_exception("cant proceed, needed values (mapping or filename) missing", class_exception::$level_ERROR);
+	        throw new class_exception("cannot proceed, needed values (mapping or filename) missing", class_exception::$level_ERROR);
 	    }
 	}
 

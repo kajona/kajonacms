@@ -115,6 +115,21 @@ class class_modul_user_group extends class_model implements interface_model  {
 
 		return $arrReturn;
 	}
+    
+    /**
+     * Loads a group by its name, returns null of not found
+     * @param string $strName
+     * @return class_modul_user_group 
+     */
+    public static function getGroupByName($strName) {
+		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_name = ?";
+        
+        $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
+		if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"]))
+            return new class_modul_user_group($arrIds["group_id"]);
+
+		return null;
+	}
 
     /**
      * Fetches the number of groups available
