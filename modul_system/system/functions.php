@@ -90,7 +90,6 @@ function getArrayPost() {
 	return $_POST;
 }
 
-
 /**
  * Looks, if a key is in POST-array or not
  *
@@ -102,6 +101,22 @@ function issetPost($strKey) {
 		return true;
 	else
 		return false;
+}
+
+/**
+ * Returns the complete http-post-body as raw-data.
+ * Please indicate wheter the source is encoded in "multipart/form-data", in this case
+ * the data is read another way internally.
+ * 
+ * @param bool $bitMultipart
+ * @return string
+ * @since 3.4.0 
+ */
+function getPostRawData($bitMultipart = false) {
+    if($bitMultipart)
+        return $HTTP_RAW_POST_DATA;
+    else
+        return file_get_contents("php://input");
 }
 
 /**

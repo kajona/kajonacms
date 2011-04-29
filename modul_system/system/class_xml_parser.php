@@ -99,19 +99,19 @@ class class_xml_parser {
 				case XML_TEXT_NODE:
 				//Here we have a text node, so get the value if it isn't empty
 				if(trim($domNode->nodeValue))
-				$arrPointer['value'] = trim($domNode->nodeValue);
-				break;
+                    $arrPointer['value'] = trim($domNode->nodeValue);
+                    break;
 				case XML_ELEMENT_NODE:
-				//Here we have another node, so resolve it
-				$arrPointer = &$arrXML[$domNode->nodeName][];
-				//Maybe there are some Attributes..
-				if($domNode->hasAttributes()) {
-					$arrAttributes = $domNode->attributes;
-					foreach($arrAttributes as $strIndex => $objAttribute) {
-						$arrPointer['attributes'][$objAttribute->name] = $objAttribute->value;
-					}
-				}
-				break;
+                    //Here we have another node, so resolve it
+                    $arrPointer = &$arrXML[$domNode->nodeName][];
+                    //Maybe there are some Attributes..
+                    if($domNode->hasAttributes()) {
+                        $arrAttributes = $domNode->attributes;
+                        foreach($arrAttributes as $strIndex => $objAttribute) {
+                            $arrPointer['attributes'][$objAttribute->name] = $objAttribute->value;
+                        }
+                    }
+                    break;
 			}
 			//If we have more childs, call them
 			if($domNode->hasChildNodes())
