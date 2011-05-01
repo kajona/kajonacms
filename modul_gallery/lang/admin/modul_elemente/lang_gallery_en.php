@@ -13,12 +13,12 @@
 $lang["gallery_id"]                      = "Gallery:";
 $lang["gallery_imagesperpage"]           = "Images per page:";
 $lang["gallery_imagesperpage_hint"]      = "Number of images per page in the listview (0 = unlimited)";
-$lang["gallery_maxh_d"]                  = "Max width:";
-$lang["gallery_maxh_m"]                  = "Max height:";
-$lang["gallery_maxh_p"]                  = "Max height:";
-$lang["gallery_maxw_d"]                  = "Max width:";
-$lang["gallery_maxw_m"]                  = "Max width:";
-$lang["gallery_maxw_p"]                  = "Max height:";
+$lang["gallery_maxh_d"]                  = "Maximal height:";
+$lang["gallery_maxh_m"]                  = "Maximal height:";
+$lang["gallery_maxh_p"]                  = "Maximal height:";
+$lang["gallery_maxw_d"]                  = "Maximal width:";
+$lang["gallery_maxw_m"]                  = "Maximal width:";
+$lang["gallery_maxw_p"]                  = "Maximal width:";
 $lang["gallery_mode"]                    = "Element-mode";
 $lang["gallery_mode_hint"]               = "Sets up the mode of the element: Regular list-/detailmode, or a random picture out of the current gallery. The values defined in the detail-view section are applied.";
 $lang["gallery_text"]                    = "Inscription:";
