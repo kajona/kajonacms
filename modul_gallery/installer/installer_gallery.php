@@ -152,7 +152,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("galleryRandom");
-		    $objElement->setStrClassAdmin("class_element_gallery.php");
+		    $objElement->setStrClassAdmin("class_element_galleryRandom.php");
 		    $objElement->setStrClassPortal("class_element_gallery.php");
 		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(1);
