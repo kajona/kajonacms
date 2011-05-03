@@ -164,94 +164,34 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function createInitialWidgetsForUser($strUserid) {
         $bitReturn = true;
 
-        //instantiate a model-widget
-        $objSystemWidget1 = new class_modul_system_adminwidget();
-        $objSystemWidget1->setStrClass("class_adminwidget_systeminfo");
-        $objSystemWidget1->setStrContent("a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
 
-        $objSystemWidget2 = new class_modul_system_adminwidget();
-        $objSystemWidget2->setStrClass("class_adminwidget_note");
-        $objSystemWidget2->setStrContent("a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.3\";}");
+        $arrWidgets = array();
+        $arrWidgets[] = array("class_adminwidget_systeminfo", "a:3:{s:3:\"php\";s:7:\"checked\";s:6:\"server\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}", "column1");
+        $arrWidgets[] = array("class_adminwidget_note", "a:1:{s:7:\"content\";s:22:\"Welcome to Kajona V3.4\";}", "column2");
+        $arrWidgets[] = array("class_adminwidget_systemlog", "a:1:{s:8:\"nrofrows\";s:1:\"5\";}", "column3");
+        $arrWidgets[] = array("class_adminwidget_systemcheck", "a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}", "column3");
 
-        $objSystemWidget3 = new class_modul_system_adminwidget();
-        $objSystemWidget3->setStrClass("class_adminwidget_systemlog");
-        $objSystemWidget3->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"5\";}");
+        if(class_exists("class_adminwidget_lastmodifiedpages"))
+            $arrWidgets[] = array("class_adminwidget_lastmodifiedpages", "a:1:{s:8:\"nrofrows\";s:1:\"4\";}", "column2");
 
-        $objSystemWidget4 = new class_modul_system_adminwidget();
-        $objSystemWidget4->setStrClass("class_adminwidget_systemcheck");
-        $objSystemWidget4->setStrContent("a:2:{s:3:\"php\";s:7:\"checked\";s:6:\"kajona\";s:7:\"checked\";}");
 
-        $objSystemWidget5 = null;
-        if(class_exists("class_adminwidget_lastmodifiedpages")) {
-            $objSystemWidget5 = new class_modul_system_adminwidget();
-            $objSystemWidget5->setStrClass("class_adminwidget_lastmodifiedpages");
-            $objSystemWidget5->setStrContent("a:1:{s:8:\"nrofrows\";s:1:\"4\";}");
+        foreach($arrWidgets as $arrOneWidget) {
+            $objSystemWidget = new class_modul_system_adminwidget();
+            $objSystemWidget->setStrClass($arrOneWidget[0]);
+            $objSystemWidget->setStrContent($arrOneWidget[1]);
+            
+            if($objSystemWidget->updateObjectToDb()) {
+                $strWidgetId = $objSystemWidget->getSystemid();
+                $objDashboard = new class_modul_dashboard_widget();
+                $objDashboard->setStrColumn($arrOneWidget[2]);
+                $objDashboard->setStrUser($strUserid);
+                $objDashboard->setStrWidgetId($strWidgetId);
+                $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
+                if(!$objDashboard->updateObjectToDb())
+                    $bitReturn = false;
+            }
         }
 
-        //and save the widget itself
-        if($objSystemWidget1->updateObjectToDb()) {
-            $strWidgetId = $objSystemWidget1->getSystemid();
-            //and save the dashboard-entry
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->setStrColumn("column1");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrWidgetId($strWidgetId);
-            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
-                $bitReturn = false;
-        }
-
-        //and save the widget itself
-        if($objSystemWidget2->updateObjectToDb()) {
-            $strWidgetId = $objSystemWidget2->getSystemid();
-            //and save the dashboard-entry
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->setStrColumn("column2");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrWidgetId($strWidgetId);
-            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
-                $bitReturn = false;
-        }
-
-        //and save the widget itself
-        if($objSystemWidget3->updateObjectToDb()) {
-            $strWidgetId = $objSystemWidget3->getSystemid();
-            //and save the dashboard-entry
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->setStrColumn("column3");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrWidgetId($strWidgetId);
-            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
-                $bitReturn = false;
-        }
-
-        //and save the widget itself
-        if($objSystemWidget4->updateObjectToDb()) {
-            $strWidgetId = $objSystemWidget4->getSystemid();
-            //and save the dashboard-entry
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->setStrColumn("column3");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrWidgetId($strWidgetId);
-            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
-                $bitReturn = false;
-        }
-
-        //and save the widget itself
-        if($objSystemWidget5 != null && $objSystemWidget5->updateObjectToDb()) {
-            $strWidgetId = $objSystemWidget5->getSystemid();
-            //and save the dashboard-entry
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->setStrColumn("column2");
-            $objDashboard->setStrUser($strUserid);
-            $objDashboard->setStrWidgetId($strWidgetId);
-            $objDashboard->setStrAspect(class_modul_system_aspect::getCurrentAspectId());
-            if(!$objDashboard->updateObjectToDb())
-                $bitReturn = false;
-        }
 
         return $bitReturn;
     }
