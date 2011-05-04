@@ -583,7 +583,9 @@ abstract class class_admin {
 	 * @return bool
 	 */
 	public function flushPageFromPagesCache($strPagename) {
-	    return class_cache::flushCache("class_element_portal", $strPagename);
+        //since the navigation may depend on page-internal characteristics, the complete cache is
+        //flushed instead only the current page
+	    return class_cache::flushCache("class_element_portal");
 	}
 
 
