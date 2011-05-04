@@ -281,12 +281,17 @@ class class_modul_navigation_point extends class_model implements interface_mode
 //            }
 //            else
             if($objOneEntry instanceof class_modul_pages_page) {
-                $objPoint = new class_modul_navigation_point();
-                $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
-                $objPoint->setStrPageI($objOneEntry->getStrName());
-                $objPoint->setSystemid($objOneEntry->getSystemid());
+                
+                //validate if the page to be links has a template assigned and at least a single element created
+                if($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0) {
+                
+                    $objPoint = new class_modul_navigation_point();
+                    $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
+                    $objPoint->setStrPageI($objOneEntry->getStrName());
+                    $objPoint->setSystemid($objOneEntry->getSystemid());
 
-                $arrReturn[] = $objPoint;
+                    $arrReturn[] = $objPoint;
+                }
             }
         }
 
