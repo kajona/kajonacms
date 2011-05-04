@@ -212,9 +212,10 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 * Prints a image as a detailed-view
 	 * and generates forward / backward links
 	 *
+     * @param bool $bitRegisterAdditionalTitle
 	 * @return string
 	 */
-	private function actionDetailImage() {
+	private function actionDetailImage($bitRegisterAdditionalTitle = true) {
 		$strReturn = "";
 		//Load record
 		$objImage = new class_modul_gallery_pic($this->getSystemid());
@@ -276,7 +277,8 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $objImage->getSystemid(), $arrPeConfig);
 
         //set the name of the current image to the page title via class_pages
-        class_modul_pages_portal::registerAdditionalTitle($objImage->getStrName());
+        if($bitRegisterAdditionalTitle)
+            class_modul_pages_portal::registerAdditionalTitle($objImage->getStrName());
 
 		//Update view counter
 		$objImage->setIntHits($objImage->getIntHits()+1);
@@ -305,7 +307,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         if(isset($arrRandom[$intRand]))
             $this->setSystemid($arrRandom[$intRand]);
         //and load all
-        return $this->actionDetailImage();
+        return $this->actionDetailImage(false);
     }
 
     /**
