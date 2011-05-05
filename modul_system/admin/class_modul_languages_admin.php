@@ -27,53 +27,8 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		$arrModul["table"]     			= _dbprefix_."languages";
 		$arrModul["modul"]				= "languages";
 		parent::__construct($arrModul);
-
 	}
 
-	/**
-	 * Action block to decide which action to perform
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-		if($strAction == "")
-			$strAction ="list";
-
-		$this->strAction = $strAction;
-
-		try {
-
-    		if($strAction == "list")
-    		    $strReturn .= $this->actionList();
-    		if($strAction == "newLanguage")
-    		    $strReturn .= $this->actionNewLanguage("new");
-    		if($strAction == "editLanguage")
-    		    $strReturn .= $this->actionNewLanguage("edit");
-    		if($strAction == "saveLanguage") {
-    		    $strReturn = $this->actionSaveLanguage();
-    		    if($strReturn == "")
-    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-    		if($strAction == "deleteLanguageFinal") {
-    		    $strReturn = $this->actionDeleteLanguageFinal();
-    		    if($strReturn == "")
-    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-		}
-		catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
-
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -94,7 +49,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 
 		$strReturn = "";
 		$intI = 0;
@@ -130,10 +85,14 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		}
 		else
 			$strReturn = $this->getText("fehler_recht");
-
+        
 		return $strReturn;
 	}
 
+    
+    protected function actionEditLanguage() {
+        return $this->actionNewLanguage("edit");
+    }
 
 	/**
 	 * Creates the form to edit an existing language, or to create a new language
@@ -141,7 +100,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	 * @param string $strMode
 	 * @return string
 	 */
-	private function actionNewLanguage($strMode = "new") {
+	protected function actionNewLanguage($strMode = "new") {
 	    $strReturn = "";
 	    $arrLanguages = array();
 	    $arrDefault = array(0 => $this->getText("nondefault"), 1 => $this->getText("default"));
@@ -191,7 +150,8 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	 *
 	 * @return string, "" in case of success
 	 */
-	private function actionSaveLanguage() {
+	protected function actionSaveLanguage() {
+        $strReturn = "";
 	    if($this->getParam("mode") == "new") {
 	        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -209,6 +169,8 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 
                 if(!$objLanguage->updateObjectToDb() )
                     throw new class_exception("Error creating new language", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        }
 	        else
 			    $strReturn = $this->getText("fehler_recht");
@@ -237,10 +199,14 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                     if(!$objLanguage->moveContentsToCurrentLanguage($strOldLanguage))
                         throw new class_exception("Error moving contents to new language", class_exception::$level_ERROR);
                 }
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             }
             else
 			    $strReturn = $this->getText("fehler_recht");
 	    }
+        
+        return $strReturn;
 	}
 
 	/**
@@ -248,12 +214,26 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionDeleteLanguageFinal() {
+	protected function actionDeleteLanguageFinal() {
 	    $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
             $objLang = new class_modul_languages_language($this->getSystemid());
+            
+            
+            
             if(!$objLang->deleteObject())
                 throw new class_exception("Error deleting language", class_exception::$level_ERROR);
+            
+            //check if the current active one was deleted. if, then reset. #kajona trace id 613
+            if($this->getLanguageToWorkOn() == $objLang->getStrName()) {
+                $this->objDB->flushQueryCache();
+                $arrLangs = class_modul_languages_language::getAllLanguages();
+                if(count($arrLangs) > 0 ) {
+                    $objLang->setStrAdminLanguageToWorkOn($arrLangs[0]->getStrName());
+                }
+            }
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
 		    $strReturn = $this->getText("fehler_recht");
