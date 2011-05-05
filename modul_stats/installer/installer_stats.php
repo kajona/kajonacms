@@ -21,7 +21,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.8";
+		$arrModule["version"] 		= "3.3.1.9";
 		$arrModule["name"] 			= "stats";
 		$arrModule["name_lang"] 	= "Module Stats";
 		$arrModule["moduleId"] 		= _stats_modul_id_;
@@ -80,7 +80,7 @@ class class_installer_stats extends class_installer_base implements interface_in
 
 
 		//register module
-		$this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal.php", "class_modul_stats_admin.php", $this->arrModule["version"], true);
+		$this->registerModule("stats", _stats_modul_id_, "class_modul_stats_portal.php", "class_modul_stats_admin.php", $this->arrModule["version"], true, "", "class_modul_stats_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
@@ -150,6 +150,11 @@ class class_installer_stats extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3318();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_3319();
         }
 
         return $strReturn."\n\n";
@@ -234,6 +239,17 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.3.1.8");
+        return $strReturn;
+    }
+    
+    private function update_3318_3319() {
+        $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
+        $strReturn .= "Registering admin xml handler...\n";
+        $objStats = class_modul_system_module::getModuleByName("stats", true);
+        $objStats->setStrXmlNameAdmin("class_modul_stats_admin_xml.php");
+        $objStats->updateObjectToDb();
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.3.1.9");
         return $strReturn;
     }
 
