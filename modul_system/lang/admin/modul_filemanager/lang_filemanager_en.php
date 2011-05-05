@@ -20,6 +20,7 @@ $lang["_filemanager_foldersize_hint"]    = "Activates or deactivates the recursi
 $lang["_filemanager_show_foreign_"]      = "Show hidden repositories:";
 $lang["anlegen"]                         = "Create folder";
 $lang["backToGallery"]                   = "Back to the gallery";
+$lang["backToOrigin"]                    = "Back to the previous page";
 $lang["bild_groesse"]                    = "Image size:";
 $lang["bild_vorschau"]                   = "Preview:";
 $lang["browser"]                         = "Open folder browser";

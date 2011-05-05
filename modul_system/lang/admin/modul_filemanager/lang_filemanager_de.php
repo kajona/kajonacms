@@ -20,6 +20,7 @@ $lang["_filemanager_foldersize_hint"]    = "Aktiviert oder deaktiviert das rekur
 $lang["_filemanager_show_foreign_"]      = "Versteckte Repositories anzeigen:";
 $lang["anlegen"]                         = "Ordner anlegen";
 $lang["backToGallery"]                   = "Zurück zur Bildergalerie";
+$lang["backToOrigin"]                    = "Zurück zur vorherigen Seite";
 $lang["bild_groesse"]                    = "Bildgröße:";
 $lang["bild_vorschau"]                   = "Vorschau:";
 $lang["browser"]                         = "Ordnerbrowser";

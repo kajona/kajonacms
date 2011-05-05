@@ -12,6 +12,7 @@
  * This class handles the adminside of right-management
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_right_admin extends class_admin implements interface_admin {
 
@@ -21,8 +22,8 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 			= "class_modul_right_admin";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _system_modul_id_;
 		$arrModul["modul"]			= "right";
 
@@ -37,6 +38,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	 * @param string $strAction
 	 */
 	public function action($strAction = "") {
+        $strReturn = "";
 		if($strAction == "")
 			$strAction = "change";
 
@@ -108,7 +110,6 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			else
 				$strTitle = $arrSystemRecord["system_comment"] . " ";
 			$strUrlHistory = $this->getHistory(0);
-			$strTemp = "";
 
 			//Load the rights header-row
 			if($arrSystemRecord["system_module_nr"] == 0)
@@ -237,6 +238,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 
 			//Build the inherit-box
 			$strTemplateInheritID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_inherit");
+            $arrTemplateInherit = array();
 			$arrTemplateInherit["title"] = $this->getText("titel_erben");
 			$arrTemplateInherit["name"] = "inherit";
 			if(isset($arrRights["inherit"]) && $arrRights["inherit"] == 1)
@@ -248,6 +250,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 
 			//Creating the output, starting with the header
 			$strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "rights_form_header");
+            $arrTemplate = array();
 			$arrTemplate["record"] = $strTitle;
 			//Backlink
 			$strUrlHistory = $this->getHistory(0);

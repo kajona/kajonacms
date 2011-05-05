@@ -47,36 +47,21 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
         try {
 
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-
     		if($strAction == "openFolder" || $strAction == "renameFile" || $strAction == "deleteFile"
     		   || $strAction == "deleteFolder" || $strAction == "uploadFile"
     		   || $strAction == "imageDetail" ) {
     			$strReturn = $this->actionFolderContent();
                }
 
-    		if($strAction == "newRepo") {
-    			$strReturn = $this->actionNewRepo();
-    			if($strReturn == "")
-    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
 
-    		if($strAction == "deleteRepo") {
+    		else if($strAction == "deleteRepo") {
     			$strReturn = $this->actionDeleteRepo();
     			if($strReturn == "")
     			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
     		}
 
-    		if($strAction == "editRepo") {
-    			$strReturn = $this->actionEditRepo();
-    			if($strReturn == "")
-    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-            if($strAction == "imageDetails") {
-            	$strReturn = $this->actionImageDetails();
-            }
+            else
+                $strReturn = parent::action();
         }
         catch (class_exception $objException) {
 		    $objException->processException();
@@ -123,7 +108,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -189,7 +174,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionNewRepo() {
+	protected function actionNewRepo() {
 		$strReturn = "";
 		if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"]))) {
 		    //validate Form, if passed
@@ -204,8 +189,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			//save or new?
 			if($this->getParam("repoSaveNew") == ""){
 				//create the form
-				if(!$bitValidated)
-				    $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
@@ -227,6 +211,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$objRepo->setStrViewFilter($this->getParam("filemanager_view_filter"));
                 if(!$objRepo->updateObjectToDb())
                     throw new class_exception($this->getText("fehler_repo"), class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
@@ -242,7 +228,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionEditRepo() {
+	protected function actionEditRepo() {
 		$strReturn = "";
 		if($this->objRights->rightRight2($this->getSystemid())) {
 		    $bitValidated = true;
@@ -256,8 +242,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			if($this->getParam("repoSaveEdit") == "") {
 				$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 
-		        if(!$bitValidated)
-		            $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());
@@ -285,6 +270,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					$strReturn = "";
 				else
 				    throw new class_exception($this->getText("repo_bearbeiten_fehler"), class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
@@ -748,12 +735,29 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 * @param string $strFile
 	 * @return string
 	 */
-	private function actionImageDetails() {
+	protected function actionImageDetails() {
 		$strReturn = "";
 
+        $strPlainImage = "";
+        
+        //see, if there was an image passed directly
+        $bitDirect = false;
+        $strFile = $this->getParam("imageFile");
+        if($strFile != "") {
+            $strPlainImage = $strFile;
+            $strFile = _realpath_.$strFile;
+            $bitDirect = true;
+        }
+        
+        
         $arrTemplate = array();
-        $arrTemplate["file_pathnavi"] = $this->generatePathNavi($this->strFolder);
-		$strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
+        if(!$bitDirect)
+            $arrTemplate["file_pathnavi"] = $this->generatePathNavi($this->strFolder);
+        
+        if($strFile == "") {
+            $strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
+            $strPlainImage =  (substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
+        }
 		if(is_file($strFile)) {
 
 			//Details der Datei sammeln
@@ -796,6 +800,11 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdmin("gallery", "showGallery", "systemid=".$this->getParam("galleryId")."&resync=true", $this->getText("backToGallery"), $this->getText("backToGallery"), "icon_folderActionLevelup.gif"));
                 $arrTemplate["file_actions"] .= "&nbsp;&nbsp;&nbsp;";
             }
+            if($bitDirect) {
+                $strUrlHistory = $this->getHistory(1);
+                $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminRaw(_indexpath_."?".$strUrlHistory, $this->getText("backToOrigin"), $this->getText("backToOrigin"), "icon_folderActionLevelup.gif"));
+                $arrTemplate["file_actions"] .= "&nbsp;&nbsp;&nbsp;";
+            }
 
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showRealSize(); return false;\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showPreview(); return false;\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
@@ -814,7 +823,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 var fm_image_scaledMaxHeight = $intHeight;
                 var fm_image_isScaled = true;
                 var fm_repo_id = '".$this->getSystemid()."';
-                var fm_file = '".$this->getParam("file")."' ;
+                var fm_file = '".$strPlainImage."' ;
                 var fm_folder = '".$this->getParam("folder")."';
                 var fm_warning_unsavedHint = '".$this->getText("cropWarningUnsavedHint")."';
 

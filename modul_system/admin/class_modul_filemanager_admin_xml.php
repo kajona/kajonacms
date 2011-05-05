@@ -12,6 +12,7 @@
  * Serves xml-requests, currently to handle uploads
  *
  * @package modul_filemanager
+ * @author sidler@mulchpro.de
  */
 class class_modul_filemanager_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -24,7 +25,6 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_filemanger";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _filemanager_modul_id_;
 		$arrModule["modul"]				= "filemanager";
 
@@ -32,38 +32,11 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	}
 
 
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "fileUpload")
-            $strReturn .= $this->actionFileupload();
-        elseif($strAction == "saveCropping")
-            $strReturn .= $this->actionSaveCropping();
-        elseif($strAction == "rotate")
-            $strReturn .= $this->actionRotateImage();
-        elseif($strAction == "deleteFile")
-            $strReturn .= $this->actionDeleteFile();
-        elseif($strAction == "renameFile")
-            $strReturn .= $this->actionRenameFile();
-        elseif($strAction == "deleteFolder")
-            $strReturn .= $this->actionDeleteFolder();
-        elseif($strAction == "createFolder")
-            $strReturn .= $this->actionCreateFolder();
-
-        return $strReturn;
-	}
-
-
     /**
      * Deletes the given file from the filesystem
      * @return string
      */
-    private function actionDeleteFile() {
+    protected function actionDeleteFile() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
             //create repo-instance
@@ -91,7 +64,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      * Create a new folder using the combi of folder & systemid passed
      * @return string
      */
-    private function actionRenameFile() {
+    protected function actionRenameFile() {
         $strReturn = "";
         if($this->objRights->rightRight1($this->getSystemid())) {
 
@@ -129,7 +102,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      * Create a new folder using the combi of folder & systemid passed
      * @return string
      */
-    private function actionCreateFolder() {
+    protected function actionCreateFolder() {
         $strReturn = "";
         if($this->objRights->rightRight1($this->getSystemid())) {
 
@@ -164,7 +137,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      * Deletes the given file from the filesystem
      * @return string
      */
-    private function actionDeleteFolder() {
+    protected function actionDeleteFolder() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getSystemid())) {
             //create repo-instance
@@ -204,13 +177,14 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      * systemid = the repo-id
      * angle
      */
-    private function actionRotateImage(){
+    protected function actionRotate(){
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid())) {
+        if($this->objRights->rightEdit($this->getSystemid()) || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
             //create repo instance
-            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
-            $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            //$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            $strFile = $this->getParam("file");
 
             //pass to the image-class
             $objImage = new class_image();
@@ -247,13 +221,14 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
      * intWidth
      * intHeight
      */
-    private function actionSaveCropping() {
+    protected function actionSaveCropping() {
     	$strReturn = "";
 
-        if($this->objRights->rightEdit($this->getSystemid())) {
+        if($this->objRights->rightEdit($this->getSystemid())  || ($this->getSystemid() == "" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) ) {
             //create repo instance
-            $objRepo = new class_modul_filemanager_repo($this->getSystemid());
-            $strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            //$objRepo = new class_modul_filemanager_repo($this->getSystemid());
+            //$strFile = $objRepo->getStrPath().$this->getParam("folder")."/".$this->getParam("file");
+            $strFile = $this->getParam("file");
 
             //pass to the image-class
             $objImage = new class_image();
@@ -289,7 +264,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 	 *
 	 * @return string
 	 */
-	private function actionFileupload() {
+	protected function actionFileupload() {
 	    $strReturn = "";
 
 	    if($this->objRights->rightRight1($this->getSystemid())) {
