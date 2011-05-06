@@ -499,7 +499,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 			$strQuery = "UPDATE "._dbprefix_."system
 								SET system_sort= ?
 								WHERE system_id= ?";
-			$this->objDB->_pQuery($strQuery, array((int)$intPosition), $this->getSystemid());
+			$this->objDB->_pQuery($strQuery, array((int)$intPosition, $this->getSystemid()));
 
 			//start at the pos to be reached and move all one down
 			for($intI = 0; $intI < count($arrElements); $intI++) {
