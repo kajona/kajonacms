@@ -148,6 +148,10 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
 	        $strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_form");
 	        $arrForm = array();
+            
+            if($this->getParam("comment_name") == "" && $this->objSession->isLoggedin())
+                $this->setParam("comment_name", $this->objSession->getUsername());
+            
 	        $arrForm["formaction"] = getLinkPortalHref($this->getPagename(), "", "postComment", "", $this->getSystemid());
 			$arrForm["comment_name"] = $this->getParam("comment_name");
 			$arrForm["comment_subject"] = $this->getParam("comment_subject");
