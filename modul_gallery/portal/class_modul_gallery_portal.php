@@ -142,7 +142,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $arrTemplateImage["pic_href"] = getLinkPortalHref($this->getPagename(), "", "detailImage", "", $objOneImage->getSystemid(), "", $objOneImage->getStrName());
                         $arrTemplateImage["name"] = $objOneImage->getStrName();
                         $arrTemplateImage["subtitle"] = $objOneImage->getStrSubtitle();
-                        $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+                        $arrTemplateImage["pic_detail"]  = $this->generateImage($objOneImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
                         $arrTemplateImage["pic_description"] = $objOneImage->getStrDescription();
 				        $arrTemplateImage["pic_size"] = $objOneImage->getIntSize();
 				        $arrTemplateImage["pic_hits"] = $objOneImage->getIntHits();
@@ -224,7 +224,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		//Load template
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "picdetail");
 		//Collect Data
-		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"]);
+		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
 
 		//previous 3 images
 		$arrImage["backlink"] = ($arrImage["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("backlink"), "detailImage", "", $arrImage["backward_1"] ) : "" );
@@ -348,9 +348,10 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 	 * @param int $intTextY
 	 * @param string $strFont
 	 * @param string $strFontColor
+     * @param string $strOverlayImage
 	 * @return string the complete html-img tag
 	 */
-	private function generateImage($strImage, $intHeight, $intWidth, $strText = "", $intTextSize = "20", $intTextX = 20, $intTextY= 20, $strFont = "dejavusans.ttf", $strFontColor= "255,255,255") {
+	private function generateImage($strImage, $intHeight, $intWidth, $strText = "", $intTextSize = "20", $intTextX = 20, $intTextY= 20, $strFont = "dejavusans.ttf", $strFontColor= "255,255,255", $strOverlayImage = "") {
 	    $strReturn = "No image defined!!";
 		$intWidthNew = 0;
 		$intHeightNew = 0;
@@ -406,7 +407,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                         $intWidthNew = 1;
     			}
 
-				$objImage = new class_image($strText);
+				$objImage = new class_image($strText.$strOverlayImage);
 				//Edit Picture
 				if($objImage->preLoadImage($strImage)) {
 					//resize the image
@@ -415,6 +416,10 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 					//Inlay text
 					if($strText != "")
 						$objImage->imageText($strText, $intTextX, $intTextY, $intTextSize, $strFontColor, $strFont, true);
+                    //overlay image
+                    if($strOverlayImage != "")
+                        $objImage->overlayImage($strOverlayImage, $intTextX, $intTextY, true);
+                    
 					$objImage->saveImage("", true);
 					$strImageName = $objImage->getCachename();
 					$strReturn = "_webpath_"._images_cachepath_.$strImageName;

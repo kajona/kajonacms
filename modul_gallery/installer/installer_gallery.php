@@ -16,7 +16,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.8";
+		$arrModule["version"] 		= "3.3.1.9";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
@@ -110,6 +110,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 		$arrFields["gallery_maxw_m"] 		= array("int", true);
 		$arrFields["gallery_imagesperpage"] = array("int", true);
 		$arrFields["gallery_text"] 			= array("char254", true);
+		$arrFields["gallery_overlay"]    	= array("char254", true);
 		$arrFields["gallery_text_x"] 		= array("int", true);
 		$arrFields["gallery_text_y"] 		= array("int", true);
 
@@ -234,6 +235,11 @@ class class_installer_gallery extends class_installer_base implements interface_
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3318();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_3319();
         }
 
         return $strReturn."\n\n";
@@ -416,6 +422,24 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.3.1.8");
         $this->updateElementVersion("galleryRandom", "3.3.1.8");
+        return $strReturn;
+    }
+    
+    private function update_3318_3319() {
+        $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
+        
+        $strReturn .= "Altering gallery-elements table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_gallery")."
+                     ADD ".$this->objDB->encloseColumnName("gallery_overlay")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
+        
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.3.1.9");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.3.1.9");
+        $this->updateElementVersion("galleryRandom", "3.3.1.9");
         return $strReturn;
     }
 

@@ -28,7 +28,7 @@ class class_element_gallery extends class_element_admin implements interface_adm
 
 		$arrModule["tableColumns"]  = "gallery_id|char,gallery_mode|number,gallery_template|char,gallery_maxh_p|number,gallery_maxh_d|number,gallery_maxh_m|number,";
 		$arrModule["tableColumns"] .= "gallery_maxw_p|number,gallery_maxw_d|number,gallery_maxw_m|number,gallery_text|char,gallery_text_x|number,";
-		$arrModule["tableColumns"] .= "gallery_text_y|number,gallery_imagesperpage|number";
+		$arrModule["tableColumns"] .= "gallery_text_y|number,gallery_imagesperpage|number,gallery_overlay|char";
 
 		parent::__construct($arrModule);
 	}
@@ -92,6 +92,8 @@ class class_element_gallery extends class_element_admin implements interface_adm
 		$strReturn .= $this->objToolkit->formHeadline($this->getText("headline_overlay"));
 		$strReturn .= $this->objToolkit->formTextRow($this->getText("hint_text"));
 		$strReturn .= $this->objToolkit->formInputText("gallery_text", $this->getText("gallery_text"), (isset($arrElementData["gallery_text"]) ? $arrElementData["gallery_text"] : ""));
+        $strReturn .= $this->objToolkit->formTextRow($this->getText("hint_overlay"));
+		$strReturn .= $this->objToolkit->formInputFileSelector("gallery_overlay", $this->getText("gallery_overlay"), (isset($arrElementData["gallery_overlay"]) ? $arrElementData["gallery_overlay"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_text_x", $this->getText("gallery_text_x"), (isset($arrElementData["gallery_text_x"]) ? $arrElementData["gallery_text_x"] : ""));
 		$strReturn .= $this->objToolkit->formInputText("gallery_text_y", $this->getText("gallery_text_y"), (isset($arrElementData["gallery_text_y"]) ? $arrElementData["gallery_text_y"] : ""));
 		$strReturn .= $this->objToolkit->formInputHidden("gallery_mode", "0");
@@ -100,6 +102,11 @@ class class_element_gallery extends class_element_admin implements interface_adm
 
 		return $strReturn;
 	}
+    
+    public function doBeforeSaveToDb() {
+        $this->arrParamData["gallery_overlay"] = str_replace(_webpath_, "", $this->arrParamData["gallery_overlay"]);
+    }
+
 
 
 }

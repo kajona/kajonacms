@@ -39,6 +39,8 @@
  * So make sure to pass the later operations as an additional cache param when creating an instance of class_image:
  * $objImage = new class_image($strInlayText.$intTextXPos.$intTextYPos).
  * This guarantees a valid cachename based on both operations, the resizing and the text-overlay.
+ * 
+ * A hint regarding overlays: Right now, only PNGs are supported for transparent overlays. GIFs are no longer supported.
  *
  * @package modul_system
  */
@@ -180,6 +182,8 @@ class class_image {
 					break;
 				case ".png":
 					$this->objImage = imagecreatefrompng(_realpath_.$strImage);
+                    imagealphablending($this->objImage, false);
+                    imagesavealpha($this->objImage, true);
 					break;
 				case ".gif":
 					$this->objImage = imagecreatefromgif(_realpath_.$strImage);
@@ -380,7 +384,7 @@ class class_image {
 				return true;
 			}
 		}
-
+        $this->bitNeedToSave = true;
 
 		//Hier bei Bedarf das Bild nachladen
 		if($this->objImage == null && $this->bitPreload)
@@ -438,7 +442,7 @@ class class_image {
 				return true;
 			}
 		}
-
+        $this->bitNeedToSave = true;
 
     	$bitReturn = false;
 
@@ -601,6 +605,7 @@ class class_image {
 				return true;
 			}
 		}
+        $this->bitNeedToSave = true;
 
 		//load image
 		if($this->objImage == null && $this->bitPreload)
@@ -628,7 +633,7 @@ class class_image {
 
 	/**
 	 * Places an image on top of another image
-	 * In case you want to overlay transparent images, use gifs instead of pngs
+	 * In case you want to overlay transparent images, use PNGs only
 	 *
 	 * @param string $strImage The image to place into the loaded image
 	 * @param int $intX
@@ -650,6 +655,7 @@ class class_image {
 				return true;
 			}
 		}
+        $this->bitNeedToSave = true;
 
 		//load image
 		if($this->objImage == null && $this->bitPreload)
@@ -658,8 +664,13 @@ class class_image {
 		//load the other image into the system using another instance
 		$objOverlayImage = new class_image();
 		if($objOverlayImage->loadImage($strImage)) {
+            
+            imagealphablending($this->objImage,true);
 		    //merge pics
-		    $bitReturn = imagecopymerge($this->objImage, $objOverlayImage->getImageResource(), $intX, $intY, 0, 0, $objOverlayImage->getIntWidth(), $objOverlayImage->getIntHeight(), 100);
+            $objOverlayResource = $objOverlayImage->getImageResource();
+            imagealphablending($objOverlayResource, true);
+		    $bitReturn = imagecopy($this->objImage, $objOverlayResource, $intX, $intY, 0, 0, $objOverlayImage->getIntWidth(), $objOverlayImage->getIntHeight());
+		    //$bitReturn = imagecopymerge($this->objImage, $objOverlayResource, $intX, $intY, 0, 0, $objOverlayImage->getIntWidth(), $objOverlayImage->getIntHeight(), 100);
 		}
 
 		return $bitReturn;
