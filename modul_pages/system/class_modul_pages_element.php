@@ -164,8 +164,13 @@ class class_modul_pages_element extends class_model implements interface_model  
         //Build the class-name
         $strElementClass = str_replace(".php", "", $this->getStrClassAdmin());
         //and finally create the object
-        $objElement = new $strElementClass();
-        return $objElement;
+        if(class_exists($strElementClass)) {
+            $objElement = new $strElementClass();
+            return $objElement;
+        }
+        else {
+            throw new class_exception("element class ".$strElementClass." not existing", class_exception::$level_FATALERROR);
+        }
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
