@@ -70,26 +70,25 @@ class class_modul_pages_portal extends class_portal {
 			//user is not allowed to view the page
 			if($objPageData->getStrName() != "" && !$this->objRights->rightView($objPageData->getSystemid()))
 			    header(class_http_statuscodes::$strSC_FORBIDDEN);
-
-			//and load the errorpage itself
-			$strFirstPagename = $strPagename;
-			$strPagename = _pages_errorpage_;
-
-            //check, if the errorpage can be loaded (template). If not possible, switch back to default-language
+            
+            
+            //check, if the page may be loaded using the default-language
+            $strPreviousLang = $this->getPortalLanguage();
+            $objDefaultLang = class_modul_languages_language::getDefaultLanguage();
+            if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
+                class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
+                $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
+                $objPageData = class_modul_pages_page::getPageByName($strPagename);
+            }
             try {
                 $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+                
             }
             catch (class_exception $objException) {
-                //check, if we can switch to the default language
-                $objDefaultLang = class_modul_languages_language::getDefaultLanguage();
-                if($this->getPortalLanguage() != $objDefaultLang->getStrName()) {
-                    class_logger::getInstance()->addLogRow("Requested page ".$strFirstPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
-                    $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
-                    $strPagename = $strFirstPagename;
-
-                }
+                $strPagename = _pages_errorpage_;
+                //revert to the old language - fallback didn't work
+                $objDefaultLang->setStrPortalLanguage($strPreviousLang);
             }
-
 
 
 			$objPageData = class_modul_pages_page::getPageByName($strPagename);
