@@ -96,7 +96,7 @@ class class_modul_pages_portal extends class_portal {
 			//check, if the page is enabled and if the rights are given, too
 			if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid()))) {
 				//Whoops. Nothing to output here
-				throw new class_exception("Requested Page ".$strFirstPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
+				throw new class_exception("Requested Page ".$strPagename." not existing, no errorpage created or set!", class_exception::$level_FATALERROR);
 				return;
 			}
 
