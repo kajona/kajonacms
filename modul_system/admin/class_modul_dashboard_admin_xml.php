@@ -93,6 +93,9 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
         $strReturn = "";
         $strContent = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            $arrJsHighlights = array();
+            
             $strReturn .= "<content><![CDATA[";
 
             $arrRelevantModules = array();
@@ -164,8 +167,16 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
                     if($strSecondLine != "")
                         $strSecondLine = "<br />".$strSecondLine;
+                    
+                    //register mouse-over highlight relations
+                    if($objOneEvent->getStrHighlightId() != "" && $objOneEvent->getStrSystemid() != "") {
+                        if(!isset($arrJsHighlights[$objOneEvent->getStrHighlightId()]))
+                            $arrJsHighlights[$objOneEvent->getStrHighlightId()] = array();
 
-                    $strEvents .= $this->objToolkit->getCalendarEvent($strName.$strSecondLine, $objOneEvent->getStrClass());
+                        $arrJsHighlights[$objOneEvent->getStrHighlightId()][] = $objOneEvent->getStrSystemid();
+                    }
+
+                    $strEvents .= $this->objToolkit->getCalendarEvent($strName.$strSecondLine, $objOneEvent->getStrSystemid(), $objOneEvent->getStrHighlightId(), $objOneEvent->getStrClass());
                 }
 
                 $bitBlocked = false;
@@ -199,6 +210,19 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             }
 
             $strReturn .= $this->objToolkit->getCalendarWrapper($strContent);
+            
+            //build js-arrays
+            $strJs = "<script type=\"text/javascript\">";
+                foreach($arrJsHighlights as $strCommonId => $arrEntries) {
+                    $strJs .= " var kj_cal_".$strCommonId." = new Array();";
+                    foreach($arrEntries as $strOneIdentifier) {
+                        $strJs .= "kj_cal_".$strCommonId.".push('".$strOneIdentifier."');";
+                    }
+                }
+            
+            $strJs .= "</script>";
+            
+            $strReturn .= $strJs;
 
             $strReturn .= "]]></content>";
         }

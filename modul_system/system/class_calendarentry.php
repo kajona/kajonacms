@@ -20,6 +20,8 @@ class class_calendarentry {
     private $strName;
     private $strSecondLine;
     private $strClass = "calendarEvent";
+    private $strSystemid = "";
+    private $strHighlightId = "";
 
     /**
      *
@@ -58,6 +60,24 @@ class class_calendarentry {
     public function setStrSecondLine($strSecondLine) {
         $this->strSecondLine = $strSecondLine;
     }
+
+    public function getStrSystemid() {
+        return $this->strSystemid;
+    }
+
+    public function setStrSystemid($strSystemid) {
+        $this->strSystemid = $strSystemid;
+    }
+
+    public function getStrHighlightId() {
+        return $this->strHighlightId;
+    }
+
+    public function setStrHighlightId($strHighlightId) {
+        $this->strHighlightId = $strHighlightId;
+    }
+
+
 
 
 

@@ -1957,12 +1957,17 @@ class class_toolkit_admin extends class_toolkit {
      * Renders a single calendar-event
      *
      * @param string $strContent
+     * @param string $strId
+     * @param string $strHighlightId
      * @param string $strClass
      * @return string
+     * @since 3.4
      */
-    public function getCalendarEvent($strContent, $strClass = "calendarEvent") {
+    public function getCalendarEvent($strContent, $strId = "", $strHighlightId = "", $strClass = "calendarEvent") {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "calendar_event");
-        return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass), $strTemplateID);
+        if($strId == "")
+            $strId = generateSystemid();
+        return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass, "systemid" => $strId, "highlightid" =>$strHighlightId), $strTemplateID);
     }
 }
 ?>

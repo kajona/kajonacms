@@ -22,6 +22,30 @@ if (typeof KAJONA == "undefined") {
  * -------------------------------------------------------------------------
  */
 
+/**
+ * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
+ * 
+ * @param {String] scripts
+ * @see http://wiki.ajax-community.de/know-how:nachladen-von-javascript
+ **/
+KAJONA.util.evalScript = function (scripts) {
+	try {	
+        if(scripts != '')	{	
+            var script = "";
+			scripts = scripts.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function() {
+                 if (scripts !== null) 
+                         script += arguments[1] + '\n';
+                return '';
+            });
+			if(script) 
+                (window.execScript) ? window.execScript(script) : window.setTimeout(script, 0);
+		}
+		return false;
+	}
+	catch(e) {	alert(e)
+	}
+}
+
 
 /**
  * Checks if the given array contains the given string
@@ -1874,3 +1898,36 @@ KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
         }
     }
 };
+
+/**
+ * Dashboard calendar functions
+ */
+KAJONA.admin.dashboardCalendar = {};
+KAJONA.admin.dashboardCalendar.eventMouseOver = function(strSourceId) {
+    if(strSourceId == "")
+        return;
+    
+    var sourceArray = eval("kj_cal_"+strSourceId);
+    if(typeof sourceArray != undefined) {
+        for(var i=0; i< sourceArray.length; i++) {
+            YAHOO.util.Dom.addClass("event_"+sourceArray[i], "mouseOver");
+        }
+    }
+}
+
+KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
+    if(strSourceId == "")
+        return;
+    
+    var sourceArray = eval("kj_cal_"+strSourceId);
+    if(typeof sourceArray != undefined) {
+        for(var i=0; i< sourceArray.length; i++) {
+            YAHOO.util.Dom.removeClass("event_"+sourceArray[i], "mouseOver");
+        }
+    }
+}
+
+
+
+
+

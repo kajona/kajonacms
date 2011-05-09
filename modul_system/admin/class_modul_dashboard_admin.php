@@ -164,7 +164,6 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-
             //save dates to session
             if($this->getParam("month") != "")
                 $this->objSession->setSession($this->strStartMonthKey, $this->getParam("month"));
@@ -189,6 +188,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
                                               intStart, o.responseText.indexOf(\"</error>\")-intStart
                                             );
                                         }
+                                        KAJONA.util.evalScript(o.responseText);
                                     },
                                     failure : function(o) {
                                         KAJONA.admin.statusDisplay.messageError(\"<b>Request failed!</b><br />\" + o.responseText);

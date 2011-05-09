@@ -1101,7 +1101,7 @@ It containes a list of aspects and provides the possibility to switch the differ
 </calendar_entry>
 
 <calendar_event>
-    <div class="%%class%%">
+    <div class="%%class%%" id="event_%%systemid%%" onmouseover="KAJONA.admin.dashboardCalendar.eventMouseOver('%%highlightid%%')" onmouseout="KAJONA.admin.dashboardCalendar.eventMouseOut('%%highlightid%%')">
         %%content%%
     </div>
 </calendar_event>
