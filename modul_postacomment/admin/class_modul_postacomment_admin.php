@@ -247,7 +247,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             if(count($this->getValidationErrors()) == 0) {
                 $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $objPost->getStrUsername() );
                 $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $objPost->getStrTitle() );
-                $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $objPost->getStrUsername() );
+                $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $objPost->getStrComment() );
             }
             else {
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "savePost");
