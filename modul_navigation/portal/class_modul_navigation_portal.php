@@ -90,7 +90,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                               "pe_action_delete" => "",
                               "pe_action_delete_params" => ""
                             );
-        $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
+        
+        //only add the code, if not auto-generated
+        if(!validateSystemid($objNavigation->getStrFolderId()))
+            $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
 
 		return $strReturn;
 	}
