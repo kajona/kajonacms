@@ -234,7 +234,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "") {
         $arrParams = array();
         if($strFilter != "")
-            $arrParams[] = $strFilter;
+            $arrParams[] = $strFilter."%";
         
 		$strQuery = "SELECT system_id
 					FROM "._dbprefix_."page,
