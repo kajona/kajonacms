@@ -303,7 +303,8 @@ class class_filesystem {
                 }
             }
         } else {
-            $bitReturn = mkdir(_realpath_.$strFolder, 0777);
+            if(!is_dir(_realpath_.$strFolder))
+                $bitReturn = mkdir(_realpath_.$strFolder, 0777);
         }
 
         return $bitReturn;
