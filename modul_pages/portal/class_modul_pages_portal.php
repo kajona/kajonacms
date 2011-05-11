@@ -226,7 +226,7 @@ class class_modul_pages_portal extends class_portal {
     		if($this->getParam("highlight") != "") {
     		    $strHighlight = uniStrtolower($this->getParam("highlight"));
     		    //search for matches, but exclude tags
-    		    $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\"><a name=\"$1\">$1</a></span>", $strElementOutput);
+    		    $strElementOutput = preg_replace("#(?!<.*)(?<!\w)(".$strHighlight.")(?!\w|[^<>]*>)#i", "<span class=\"searchHighlight\">$1</span>", $strElementOutput);
     		}
 
 			$arrTemplate[$objOneElementOnPage->getStrPlaceholder()] .= $strElementOutput;
