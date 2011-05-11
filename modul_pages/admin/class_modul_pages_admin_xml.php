@@ -88,13 +88,13 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
                 if($objSingleEntry->rightView()) {
                     if($objSingleEntry instanceof class_modul_pages_page) {
                         $strReturn .= "<page>";
-                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
+                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrBrowsername())."</name>";
                         $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
                         $strReturn .= "<link>".getLinkAdminHref("pages_content", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
                         $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                         $strReturn .= "</page>";
                     }
-                    
+
                 }
             }
         }

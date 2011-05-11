@@ -17,7 +17,7 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_admin extends class_admin implements interface_admin  {
-    
+
 	/**
 	 * Constructor
 	 *
@@ -65,6 +65,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         }
         if($strAction == "savePage" || $strAction == "changePage") {
             $arrReturn["name"] = "string";
+            $arrReturn["browsername"] = "string";
         }
         if($strAction == "saveElement") {
             $arrReturn["element_name"] = "string";
@@ -204,7 +205,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                         if($this->objRights->rightRight($strSystemid))
                             $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
-                        $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
+                        $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
                     }
 
 //sir: currently unused
@@ -354,7 +355,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
         //edit mode
 		if($strMode == "edit") {
-		    
+
 
 			if($this->objRights->rightEdit($this->getSystemid())) {
                 //Load data of the page
@@ -440,7 +441,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
 				$strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
-				
+
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
 
                 $strFolderid = "";
@@ -503,7 +504,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 if(!validateSystemid($strPrevid))
                     $strPrevid = "";
-                
+
 				if(!$objPage->updateObjectToDb($strPrevid))
 				    throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
 
@@ -558,7 +559,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 if(!validateSystemid($strPrevId) && $strPrevId != $this->getSystemid())
                     $strPrevId = "";
-                
+
 				if(!$objPage->updateObjectToDb($strPrevId))
 					throw new class_exception("Error updating page to db", class_exception::$level_ERROR);
 
@@ -727,7 +728,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
             if(!$this->validateForm())
                 return $this->actionNewFolder();
-            
+
 			//Collect data to save to db
 			$objFolder = new class_modul_pages_folder("");
 			$objFolder->setStrName($this->getParam("ordner_name"));
@@ -1225,7 +1226,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             return false;
     }
 
-    
+
 }
 
 ?>
