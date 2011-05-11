@@ -315,8 +315,6 @@ class class_toolkit_admin extends class_toolkit {
                                                    "icon_externalBrowser.gif",
                                                    class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"));
 
-        //FIXME: workaround for # 603 JS-replacing only temporary
-        //   if fixed, please fix formInputTagSelector(), too
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
 
         $arrTemplate["ajaxScript"] = "
@@ -338,9 +336,7 @@ class class_toolkit_admin extends class_toolkit {
 	                    return \"?admin=1&module=pages&action=getPagesByFilter&filter=\" + sQuery ;
 	                };
 
-
 	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
-
 	                KAJONA.admin.".$strJsVarName." = pageautocomplete;
 	            });
 	        </script>
@@ -1236,7 +1232,7 @@ class class_toolkit_admin extends class_toolkit {
             $strTempAction = $objCalling->getAction();
             $objCalling->setAction($strTargetAction);
             $arrFields = $objCalling->getRequiredFields();
-            
+
             $objCalling->setAction($strTempAction);
 
             if(count($arrFields) > 0 ) {
@@ -1253,7 +1249,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrErrors = $objCalling->getValidationErrors();
         if(count($arrErrors) == 0)
             return $strRendercode;
-        
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "error_container");
         $strTemplateRowID = $this->objTemplate->readTemplate("/elements.tpl", "error_row");
         $strRows = "";
@@ -1757,7 +1753,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["name"] = $strName;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        
+
         $arrTemplate["ajaxScript"] = "
 	        <script type=\"text/javascript\">
 	            KAJONA.admin.loader.loadAutocompleteBase(function () {
@@ -1777,10 +1773,6 @@ class class_toolkit_admin extends class_toolkit {
 	                pageautocomplete.generateRequest = function(sQuery) {
 	                    return \"?admin=1&module=tags&action=getTagsByFilter&filter=\" + sQuery ;
 	                };
-
-
-	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
-	                KAJONA.admin.".$strName." = pageautocomplete;
 	            });
 	        </script>
         ";
@@ -1829,7 +1821,7 @@ class class_toolkit_admin extends class_toolkit {
     public function getTooltipText($strText, $strTooltip) {
         if($strText == $strTooltip)
             return $strText;
-        
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "tooltip_text");
         return $this->objTemplate->fillTemplate(array("text" => $strText, "tooltip" => $strTooltip), $strTemplateID);
     }
@@ -1838,7 +1830,7 @@ class class_toolkit_admin extends class_toolkit {
 
     /**
      * Renders a legend below the current calendar in order to illustrate the different event-types.
-     * 
+     *
      * @param array $arrEntries
      * @return string
      */
@@ -1924,7 +1916,7 @@ class class_toolkit_admin extends class_toolkit {
         $strEntries = "";
         foreach($arrHeader as $strOneHeader)
             $strEntries .= $this->objTemplate->fillTemplate(array("name" => $strOneHeader), $strTemplateEntryID);
-        
+
         return $this->objTemplate->fillTemplate(array("entries" => $strEntries), $strTemplateID);
     }
 
