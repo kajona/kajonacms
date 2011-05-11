@@ -310,4 +310,8 @@ $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
 $lang["numberStyleDecimal"]              = ".";
 $lang["numberStyleThousands"]            = ",";
+
+$lang["systemtask_filedump_name"]        = "Create backup of filesystem";
+$lang["systemtask_filedump_success"]     = "The backup was created successfully. <br/>Out of security reasons, the backup should be removed from the server as soon as possible.<br />Name of the backup-file:&nbsp;";
+$lang["systemtask_filedump_error"]       = "An error occured during the backup process.";
 ?>

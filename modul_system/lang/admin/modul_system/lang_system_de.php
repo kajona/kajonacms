@@ -310,4 +310,8 @@ $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
 $lang["numberStyleDecimal"]              = ",";
 $lang["numberStyleThousands"]            = ".";
+
+$lang["systemtask_filedump_name"]        = "Sicherung des Dateisystems erstellen";
+$lang["systemtask_filedump_success"]     = "Die Sicherung wurde erfolgreich angelegt. <br/>Aus Sicherheitsgründen sollte die Sicherung schnellstmöglich vom Server entfernt werden. <br />Name der Sicherungsdatei:&nbsp;";
+$lang["systemtask_filedump_error"]       = "Während der Sicherung ist ien Fehler aufgetreten.";
 ?>

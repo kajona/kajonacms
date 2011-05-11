@@ -81,13 +81,13 @@ class class_zip {
         $bitReturn = true;
         if(is_dir(_realpath_.$strFolder)) {
             $objFilesystem = new class_filesystem();
-            $arrFiles = $objFilesystem->getCompleteList($strFolder, array(), array(".", ".."));
+            $arrFiles = $objFilesystem->getCompleteList($strFolder, array(), array(), array(".", ".."));
             foreach($arrFiles["files"] as $arrOneFile) {
                 $bitReturn = $bitReturn && $this->addFile($arrOneFile["filepath"]);
             }
             
             foreach($arrFiles["folders"] as $strOneFolder) {
-                $bitReturn = $bitReturn && $this->addFolder($strOneFolder);
+                $bitReturn = $bitReturn && $this->addFolder($strFolder."/".$strOneFolder);
             }
             
             return $bitReturn;
