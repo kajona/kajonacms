@@ -135,11 +135,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		   		if($intModuleSystemID != "") {
                     if($this->objRights->rightRight5($intModuleSystemID))
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleAspect", "&systemid=".$intModuleSystemID, "", $this->getText("modul_aspectedit"), "icon_aspect.gif"));
-		   		    //sort-icons
+		   		    /*//sort-icons
                     if($this->objRights->rightEdit($intModuleSystemID)) {
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleSortUp", "&systemid=".$intModuleSystemID, "", $this->getText("modul_sortup"), "icon_arrowUp.gif"));
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleSortDown", "&systemid=".$intModuleSystemID, "", $this->getText("modul_sortdown"), "icon_arrowDown.gif"));
                     }
+                    */
                     //status: for setting the status of modules, you have to be member of the admin-group
                     $objUser = new class_modul_user_user($this->objSession->getUserID());
                     $objAdminGroup = new class_modul_user_group(_admins_group_id_);

@@ -43,7 +43,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	 */
 	public function action($strAction = "") {
 		$strReturn = "";
-        
+
         //sync?
         if($this->getParam("resync") == "true") {
             $this->actionSyncInternal();
@@ -527,8 +527,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                             }
 			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("image_properties"), "icon_pencil.gif"));
                         }
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
+				   		//$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
+				   		//$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
                         if($objOneFile->getIntType() == 0)

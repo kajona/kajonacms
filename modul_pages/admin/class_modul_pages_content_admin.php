@@ -233,8 +233,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 							//The Icons to sort the list and to copy the element
     		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
-							$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortUp", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_hoch"), "icon_arrowUp.gif"));
-							$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortDown", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_runter"), "icon_arrowDown.gif"));
+							//$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortUp", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_hoch"), "icon_arrowUp.gif"));
+							//$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortDown", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_runter"), "icon_arrowDown.gif"));
 
 
 							//The status-icons
@@ -839,7 +839,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                 $objPage = new class_modul_pages_page($strOneSystemid);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objPage->getStrName());
             }
-            
+
 		}
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}

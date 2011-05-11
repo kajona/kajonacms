@@ -34,7 +34,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
             $this->strPeAddon = "&pe=1";
 	}
 
-	
+
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
@@ -64,7 +64,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $arrReturn = array();
 
         if($this->getAction() == "saveNaviPoint") {
-            if($this->getParam("navigation_folder_i_id") != "" && $this->getParam("navigation_page_i") != "") 
+            if($this->getParam("navigation_folder_i_id") != "" && $this->getParam("navigation_page_i") != "")
                 $this->arrValidationErrors["navigation_folder_i_id"] = $this->getText("error_folder_and_page");
         }
 
@@ -158,11 +158,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNaviPoint", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_bearbeiten"), "icon_pencil.gif"));
     		    		if($this->objRights->rightView($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_anzeigen"), "icon_treeBranchOpen.gif"));
-    		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
+    		    		/*if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveUp", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_hoch"), "icon_arrowUp.gif"));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()))
     					    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "naviPointMoveDown", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon, "", $this->getText("navigationp_runter"), "icon_arrowDown.gif"));
-    					if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
+    					*/
+    		    		if($this->objRights->rightDelete($objOneNavigation->getSystemid()))
     					    $strAction .= $this->objToolkit->listDeleteButton($objOneNavigation->getStrName(), $this->getText("navigation_loeschen_frage"), getLinkAdminHref("navigation", "deleteNaviFinal", "&systemid=".$objOneNavigation->getSystemid().$this->strPeAddon));
     		    		if($this->objRights->rightEdit($objOneNavigation->getSystemid()) && $this->strPeAddon == "")
     		    		    $strAction .= $this->objToolkit->listStatusButton($objOneNavigation->getSystemid());
@@ -208,7 +209,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                                                $this->getText("browser"),
                                                "icon_externalBrowser.gif",
                                                $this->getText("browser"));
-                                               
+
 		//check Rights & mode
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             if($strMode == "edit")
@@ -253,7 +254,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
         if(!$this->validateForm())
             return $this->actionNewNavi($this->getParam("mode"));
-        
+
 		//Check rights
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			// new navi or edit exising?
@@ -487,7 +488,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	protected function actionNavigationPointBrowser() {
 		$strReturn = "";
-        $this->setArrModuleEntry("template", "/folderview.tpl"); 
+        $this->setArrModuleEntry("template", "/folderview.tpl");
 		$intCounter = 1;
 		//Load all navis
 

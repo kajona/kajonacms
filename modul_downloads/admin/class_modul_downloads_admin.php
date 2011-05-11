@@ -39,7 +39,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
             $this->strPeAddon = "&pe=1";
 	}
 
-	
+
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
@@ -261,8 +261,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
 			   		if($this->objRights->rightEdit($objOneFile->getSystemid())) {
 			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editFile", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("datei_bearbeiten"), "icon_pencil.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
-				   		$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
+				   		//$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortUp", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_hoch"), "icon_arrowUp.gif"));
+				   		//$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "sortDown", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("sortierung_runter"), "icon_arrowDown.gif"));
 
 			   		}
                     if($this->objRights->rightDelete($objOneFile->getSystemid())) {
