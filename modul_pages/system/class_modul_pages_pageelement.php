@@ -176,7 +176,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         //start by making a copy of the sysrecords, attaching them to the new page
         $objCommon = new class_modul_system_common($this->getSystemid());
         $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
-
+        
+        
         //fetch data of the current element
         $arrCurrentElement = $this->objDB->getPRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_element_id = ?", array( $this->getSystemid() ));
 
@@ -256,6 +257,14 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
         //create an instance of the new element and return it
         $objNewElement = new class_modul_pages_pageelement($strIdOfNewPageelement);
+        
+        //adopt the new sort id, since page-elements have a special order at each placeholder
+        //As a special feature, we set the element as the last
+        $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
+        $this->objDB->flushQueryCache();
+        $this->objDB->_pQuery($strQuery, array(count($objNewElement->getSortedElementsAtPlaceholder())-1 , $strIdOfNewPageelement ));
+
+        
         return $objNewElement;
     }
 

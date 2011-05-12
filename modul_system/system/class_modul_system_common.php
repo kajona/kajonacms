@@ -186,6 +186,11 @@ class class_modul_system_common extends class_model implements interface_model  
             $strNewSystemPrevId = $arrSystemRow["system_prev_id"]; 
         }
         
+        //determin the correct new sort-id - append by default
+        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
+        $arrRow = $this->objDB->getPRow($strQuery, array($strNewSystemPrevId), 0, false);
+        $intSiblings = $arrRow["COUNT(*)"];
+        
         $this->objDB->transactionBegin();
         //start by inserting the new systemrecords
         $strQuerySystem = "INSERT INTO "._dbprefix_."system
@@ -196,7 +201,7 @@ class class_modul_system_common extends class_model implements interface_model  
                 $strNewSystemid,
                 $strNewSystemPrevId,
                 $arrSystemRow["system_module_nr"],
-               ($arrSystemRow["system_sort"] != "" ? $arrSystemRow["system_sort"] : 0),
+               ((int)$intSiblings+1),
                 $arrSystemRow["system_owner"],
                 $arrSystemRow["system_create_date"],
                 $arrSystemRow["system_lm_user"],
