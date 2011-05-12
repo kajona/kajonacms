@@ -52,7 +52,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    if($this->validateForm()) {
 			    $strReturn .= $this->actionPostComment();
 			    //load the page before
-			    $this->portalReload(_indexpath_."?".$this->getHistory(1));
+			    $this->portalReload(_indexpath_."?".$this->getHistory(0));
 		    }
 		}
 

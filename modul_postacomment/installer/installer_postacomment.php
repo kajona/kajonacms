@@ -102,7 +102,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 		    $objElement->setStrName("postacomment");
 		    $objElement->setStrClassAdmin("class_element_postacomment.php");
 		    $objElement->setStrClassPortal("class_element_postacomment.php");
-		    $objElement->setIntCachetime(3600);
+		    $objElement->setIntCachetime(-1);
 		    $objElement->setIntRepeat(0);
             $objElement->setStrVersion($this->getVersion());
 			$objElement->updateObjectToDb();
@@ -273,7 +273,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 
         $strReturn .= "Setting cache-timeouts for postacomment-element...\n";
         $strQuery = "UPDATE "._dbprefix_."element
-                        SET element_cachetime=3600
+                        SET element_cachetime=-1
                       WHERE element_class_admin = 'class_element_postacomment.php'";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
