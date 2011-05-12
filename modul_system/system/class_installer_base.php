@@ -399,8 +399,8 @@ abstract class class_installer_base extends class_root {
         }
         $this->objDB->flushQueryCache();
 
-        //increase the cachebuster, so browsers are forced to reload JS and CSS files
-        $objSystemtask = new class_systemtask_flushbrowsercache();
+        //flush global cache
+        $objSystemtask = new class_systemtask_flushcache();
         $objSystemtask->executeTask();
 
         return "\n\n".$strReturn;

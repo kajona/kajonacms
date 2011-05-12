@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 293
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -24,7 +24,7 @@ $lang["_remoteloader_max_cachetime_hint"] = "Cachedauer in Sekunden für extern 
 $lang["_system_admin_email_"]            = "Admin E-Mail:";
 $lang["_system_admin_email_hint"]        = "Falls ausgefüllt, wird im Fall eines schweren Fehlers eine E-Mail an diese Adresse gesendet.";
 $lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
-$lang["_system_browser_cachebuster_hint"] = "Dieser Wert wird als GET-Parameter allen Verweisen auf JS/CSS-Dateien angehängt. Durch hochzählen des Wertes kann der Browser dazu gezwungen werden die entsprechenden Dateien erneut vom Server herunter zu laden, unabhängig von den Caching-Einstellungen des Browsers und den vom Server gesendeten HTTP-Headern. Der Wert kann auch über einen Systemtask automatisch hochgezählt werden.";
+$lang["_system_browser_cachebuster_hint"] = "Dieser Wert wird als GET-Parameter allen Verweisen auf JS/CSS-Dateien angehängt. Durch hochzählen des Wertes kann der Browser dazu gezwungen werden die entsprechenden Dateien erneut vom Server herunter zu laden, unabhängig von den Caching-Einstellungen des Browsers und den vom Server gesendeten HTTP-Headern. Der Wert wird über den Systemtask 'Cache leeren' automatisch hochgezählt.";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
 $lang["_system_graph_type_"]             = "Verwendete Chart-Bibliothek:";
@@ -106,8 +106,8 @@ $lang["gifwrite"]                        = "GIF Write Support";
 $lang["groessedaten"]                    = "Größe Daten";
 $lang["groessegesamt"]                   = "Größe Gesamt";
 $lang["inputtimeout"]                    = "Input Timeout";
-$lang["installer_config_dbdriverinfo"]       = "Auf dem System verfügbare Module:&nbsp;";
 $lang["installer_config_dbdriver"]       = "Datenbanktreiber:";
+$lang["installer_config_dbdriverinfo"]   = "Auf dem System verfügbare Module:&nbsp;";
 $lang["installer_config_dbhostname"]     = "Datenbankserver:";
 $lang["installer_config_dbname"]         = "Datenbankname:";
 $lang["installer_config_dbpassword"]     = "Datenbankpasswort:";
@@ -162,8 +162,8 @@ $lang["login_xml_error"]                 = "Login fehlgeschlagen";
 $lang["login_xml_succeess"]              = "Login erfolgreich";
 $lang["logout_xml"]                      = "Logout erfolgreich";
 $lang["mail_body"]                       = "Inhalt:";
+$lang["mail_cc"]                         = "Empfänger in Kopie:";
 $lang["mail_recipient"]                  = "Empfänger:";
-$lang["mail_cc"]                  = "Empfänger in Kopie:";
 $lang["mail_send_error"]                 = "Fehler beim Versenden der E-Mail. Bitte versuchen Sie die letzte Aktion erneut.";
 $lang["mail_send_success"]               = "E-Mail erfolgreich verschickt.";
 $lang["mail_subject"]                    = "Betreff:";
@@ -179,6 +179,8 @@ $lang["modul_status_system"]             = "Hmmm. Den System-Kernel deaktivieren
 $lang["modul_titel"]                     = "System";
 $lang["moduleRightsTitle"]               = "Rechte";
 $lang["module_liste"]                    = "Installierte Module";
+$lang["numberStyleDecimal"]              = ",";
+$lang["numberStyleThousands"]            = ".";
 $lang["operatingsystem"]                 = "Betriebssystem";
 $lang["pageview_backward"]               = "Zurück";
 $lang["pageview_forward"]                = "Weiter";
@@ -264,12 +266,13 @@ $lang["systemtask_dbimport_name"]        = "Datenbank importieren";
 $lang["systemtask_dbimport_success"]     = "Sicherung erfolgreich eingespielt";
 $lang["systemtask_dialog_title"]         = "Systemtask wird ausgeführt";
 $lang["systemtask_dialog_title_done"]    = "Systemtask abgeschlossen";
-$lang["systemtask_flushbrowsercache_name"] = "Browsercache leeren (JS/CSS-Dateien)";
-$lang["systemtask_flushbrowsercache_success"] = "Die Konstante system_browser_cachebuster wurde auf den Wert '_system_browser_cachebuster_' hochgezählt. Beim nächsten Seitenaufruf wird der Browser gezwungen die JS/CSS-Dateien erneut vom Server zu laden.";
+$lang["systemtask_filedump_error"]       = "Während der Sicherung ist ien Fehler aufgetreten.";
+$lang["systemtask_filedump_name"]        = "Sicherung des Dateisystems erstellen";
+$lang["systemtask_filedump_success"]     = "Die Sicherung wurde erfolgreich angelegt. <br/>Aus Sicherheitsgründen sollte die Sicherung schnellstmöglich vom Server entfernt werden. <br />Name der Sicherungsdatei:&nbsp;";
 $lang["systemtask_flushcache_all"]       = "Alle Einträge";
 $lang["systemtask_flushcache_error"]     = "Ein Fehler ist aufgetreten.";
 $lang["systemtask_flushcache_name"]      = "Globalen Cache leeren";
-$lang["systemtask_flushcache_success"]   = "Leeren abgeschlossen.";
+$lang["systemtask_flushcache_success"]   = "Der Cache wurde geleert.";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Anzahl gelöschter Bilder: ";
 $lang["systemtask_flushpiccache_done"]   = "Leeren abgeschlossen.";
 $lang["systemtask_flushpiccache_name"]   = "Bildercache leeren";
@@ -281,15 +284,13 @@ $lang["systemtask_group_stats"]          = "Statistiken";
 $lang["systemtask_progress"]             = "Fortschritt:";
 $lang["systemtask_run"]                  = "Ausführen";
 $lang["systemtask_runningtask"]          = "Task:";
-
-$lang["systemtask_systemstatus_name"]    = "Status eines Datensatzes setzen";
-$lang["systemtask_systemstatus_active"]  = "Aktiv";
-$lang["systemtask_systemstatus_inactive"]= "Inaktiv";
-$lang["systemtask_systemstatus_systemid"]= "Systemid:";
-$lang["systemtask_systemstatus_status"]  = "Status:";
-$lang["systemtask_status_success"]       = "Der Status wurde erfolgreich gesetzt.";
 $lang["systemtask_status_error"]         = "Fehler beim Setzen des Status.";
-
+$lang["systemtask_status_success"]       = "Der Status wurde erfolgreich gesetzt.";
+$lang["systemtask_systemstatus_active"]  = "Aktiv";
+$lang["systemtask_systemstatus_inactive"] = "Inaktiv";
+$lang["systemtask_systemstatus_name"]    = "Status eines Datensatzes setzen";
+$lang["systemtask_systemstatus_status"]  = "Status:";
+$lang["systemtask_systemstatus_systemid"] = "Systemid:";
 $lang["titel_erben"]                     = "Rechte erben:";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
@@ -308,10 +309,4 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
-$lang["numberStyleDecimal"]              = ",";
-$lang["numberStyleThousands"]            = ".";
-
-$lang["systemtask_filedump_name"]        = "Sicherung des Dateisystems erstellen";
-$lang["systemtask_filedump_success"]     = "Die Sicherung wurde erfolgreich angelegt. <br/>Aus Sicherheitsgründen sollte die Sicherung schnellstmöglich vom Server entfernt werden. <br />Name der Sicherungsdatei:&nbsp;";
-$lang["systemtask_filedump_error"]       = "Während der Sicherung ist ien Fehler aufgetreten.";
 ?>

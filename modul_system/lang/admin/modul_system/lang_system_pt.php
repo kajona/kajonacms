@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Número de registos por página:";
@@ -196,8 +196,6 @@ $lang["systemtask_dbimport_error"]       = "Erro no restauro da cópia de segura
 $lang["systemtask_dbimport_file"]        = "Cópia de Segurança:";
 $lang["systemtask_dbimport_name"]        = "Importar cópia de segurança da Base de Dados";
 $lang["systemtask_dbimport_success"]     = "Restauro da cópia de segurança realizado com sucesso";
-$lang["systemtask_flushbrowsercache_name"] = "Cache do navegador flush (JS/CSS)";
-$lang["systemtask_flushbrowsercache_success"] = "O system_browser_cachebuster constante foi aumentada. Com os navegadores próxima solicitação são agora obrigados a recarregar JS/CSS.";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Número de ficheiros eliminados: ";
 $lang["systemtask_flushpiccache_done"]   = "Descarregamento completo.";
 $lang["systemtask_flushpiccache_name"]   = "Descarregar memória temporária das imagens";

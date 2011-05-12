@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 293
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -24,7 +24,7 @@ $lang["_remoteloader_max_cachetime_hint"] = "Time in seconds to cache externally
 $lang["_system_admin_email_"]            = "Admin Email:";
 $lang["_system_admin_email_hint"]        = "If an address is given, an email is sent to in case of critical errors.";
 $lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
-$lang["_system_browser_cachebuster_hint"] = "This value is appended as GET parameter to all references to JS/CSS files. By incrementing this value the browser will be forced to reload the files from the server, regardless of the browsers caching settings and the sent HTTP headers. The value can be incremented automatically by a system task.";
+$lang["_system_browser_cachebuster_hint"] = "This value is appended as GET parameter to all references to JS/CSS files. By incrementing this value the browser will be forced to reload the files from the server, regardless of the browsers caching settings and the sent HTTP headers. The value will be incremented automatically by the system task 'Flush cache'.";
 $lang["_system_dbdump_amount_"]          = "Number of DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Defines how many DB-dumps should be kept.";
 $lang["_system_graph_type_"]             = "Chart-library used:";
@@ -106,8 +106,8 @@ $lang["gifwrite"]                        = "GIF write-support";
 $lang["groessedaten"]                    = "Size of data";
 $lang["groessegesamt"]                   = "Size in total";
 $lang["inputtimeout"]                    = "Input timeout";
-$lang["installer_config_dbdriverinfo"]       = "Modules found on system:&nbsp;";
 $lang["installer_config_dbdriver"]       = "Database driver:";
+$lang["installer_config_dbdriverinfo"]   = "Modules found on system:&nbsp;";
 $lang["installer_config_dbhostname"]     = "Database server:";
 $lang["installer_config_dbname"]         = "Database name:";
 $lang["installer_config_dbpassword"]     = "Database password:";
@@ -162,8 +162,8 @@ $lang["login_xml_error"]                 = "Login failed";
 $lang["login_xml_succeess"]              = "Login succeeded";
 $lang["logout_xml"]                      = "Logout succeeded";
 $lang["mail_body"]                       = "Content:";
+$lang["mail_cc"]                         = "Recipient in CC:";
 $lang["mail_recipient"]                  = "Recipient:";
-$lang["mail_cc"]                  = "Recipient in CC:";
 $lang["mail_send_error"]                 = "Error sending the email. Please retry the last action.";
 $lang["mail_send_success"]               = "Email sent successfully.";
 $lang["mail_subject"]                    = "Subject:";
@@ -179,6 +179,8 @@ $lang["modul_status_system"]             = "Woops, you want to set the system-ke
 $lang["modul_titel"]                     = "System";
 $lang["moduleRightsTitle"]               = "Permissions";
 $lang["module_liste"]                    = "Installed modules";
+$lang["numberStyleDecimal"]              = ".";
+$lang["numberStyleThousands"]            = ",";
 $lang["operatingsystem"]                 = "Operating system";
 $lang["pageview_backward"]               = "Back";
 $lang["pageview_forward"]                = "Forward";
@@ -264,12 +266,13 @@ $lang["systemtask_dbimport_name"]        = "Import database backup";
 $lang["systemtask_dbimport_success"]     = "Backup restored successfully";
 $lang["systemtask_dialog_title"]         = "Systemtask running";
 $lang["systemtask_dialog_title_done"]    = "Systemtask completed";
-$lang["systemtask_flushbrowsercache_name"] = "Flush browser cache (JS/CSS files)";
-$lang["systemtask_flushbrowsercache_success"] = "The constant system_browser_cachebuster was increased to '_system_browser_cachebuster_'. With the next request browsers are now forced to reload JS/CSS files.";
+$lang["systemtask_filedump_error"]       = "An error occured during the backup process.";
+$lang["systemtask_filedump_name"]        = "Create backup of filesystem";
+$lang["systemtask_filedump_success"]     = "The backup was created successfully. <br/>Out of security reasons, the backup should be removed from the server as soon as possible.<br />Name of the backup-file:&nbsp;";
 $lang["systemtask_flushcache_all"]       = "All entries";
 $lang["systemtask_flushcache_error"]     = "An error occured.";
 $lang["systemtask_flushcache_name"]      = "Flush global cache";
-$lang["systemtask_flushcache_success"]   = "Finished flushing.";
+$lang["systemtask_flushcache_success"]   = "The cache was flushed.";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Number of files deleted: ";
 $lang["systemtask_flushpiccache_done"]   = "Flushing completed.";
 $lang["systemtask_flushpiccache_name"]   = "Flush images cache";
@@ -281,15 +284,13 @@ $lang["systemtask_group_stats"]          = "Stats";
 $lang["systemtask_progress"]             = "Progress:";
 $lang["systemtask_run"]                  = "Execute";
 $lang["systemtask_runningtask"]          = "Task:";
-
-$lang["systemtask_systemstatus_name"]    = "Update the state of a system-record";
-$lang["systemtask_systemstatus_active"]  = "active";
-$lang["systemtask_systemstatus_inactive"]= "inactive";
-$lang["systemtask_systemstatus_systemid"]= "Systemid:";
-$lang["systemtask_systemstatus_status"]  = "Status:";
-$lang["systemtask_status_success"]       = "The status was updated successfully.";
 $lang["systemtask_status_error"]         = "Error while setting the status.";
-
+$lang["systemtask_status_success"]       = "The status was updated successfully.";
+$lang["systemtask_systemstatus_active"]  = "active";
+$lang["systemtask_systemstatus_inactive"] = "inactive";
+$lang["systemtask_systemstatus_name"]    = "Update the state of a system-record";
+$lang["systemtask_systemstatus_status"]  = "Status:";
+$lang["systemtask_systemstatus_systemid"] = "Systemid:";
 $lang["titel_erben"]                     = "Inherit rights:";
 $lang["titel_leer"]                      = "<em>No title defined</em>";
 $lang["titel_root"]                      = "Rights root-record";
@@ -308,10 +309,4 @@ $lang["uploadmaxsize"]                   = "Upload max size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
-$lang["numberStyleDecimal"]              = ".";
-$lang["numberStyleThousands"]            = ",";
-
-$lang["systemtask_filedump_name"]        = "Create backup of filesystem";
-$lang["systemtask_filedump_success"]     = "The backup was created successfully. <br/>Out of security reasons, the backup should be removed from the server as soon as possible.<br />Name of the backup-file:&nbsp;";
-$lang["systemtask_filedump_error"]       = "An error occured during the backup process.";
 ?>

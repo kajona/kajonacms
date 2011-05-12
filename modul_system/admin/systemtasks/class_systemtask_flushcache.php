@@ -29,7 +29,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
     public function getGroupIdentifier() {
         return "cache";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
@@ -37,7 +37,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
     public function getStrInternalTaskName() {
         return "flushcache";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
@@ -45,12 +45,18 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
     public function getStrTaskName() {
         return $this->getText("systemtask_flushcache_name");
     }
-    
+
     /**
      * @see interface_admin_systemtask::executeTask()
      * @return string
      */
     public function executeTask() {
+
+        //increase the cachebuster, so browsers are forced to reload JS and CSS files
+        $objCachebuster = class_modul_system_setting::getConfigByName("_system_browser_cachebuster_");
+        $objCachebuster->setStrValue((int)$objCachebuster->getStrValue()+1);
+        $objCachebuster->updateObjectToDb();
+
         if(class_cache::flushCache($this->getParam("cacheSource")))
             return $this->objToolkit->getTextRow($this->getText("systemtask_flushcache_success"));
         else
@@ -59,7 +65,7 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
 
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
     	$strReturn = "";
@@ -71,13 +77,13 @@ class class_systemtask_flushcache extends class_systemtask_base implements inter
             $arrOptions[$strOneSource] = $strOneSource;
 
         $strReturn .= $this->objToolkit->formInputDropdown("cacheSource", $arrOptions, $this->getText("systemtask_cacheSource_source"));
-         
+
         return $strReturn;
     }
-    
+
     /**
      * @see interface_admin_systemtask::getSubmitParams()
-     * @return string 
+     * @return string
      */
     public function getSubmitParams() {
         return "&cacheSource=".$this->getParam("cacheSource");

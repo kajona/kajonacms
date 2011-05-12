@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 293
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Количество записей на странице:";
@@ -203,8 +203,6 @@ $lang["systemtask_dbimport_error"]       = "Ошибка при создании
 $lang["systemtask_dbimport_file"]        = "Резервная копия:";
 $lang["systemtask_dbimport_name"]        = "Импортировать резервную копию датабазы";
 $lang["systemtask_dbimport_success"]     = "Резервная копия успешно установлена";
-$lang["systemtask_flushbrowsercache_name"] = "Очистки кэша браузера (JS/CSS)";
-$lang["systemtask_flushbrowsercache_success"] = "постоянная system_browser_cachebuster был увеличен. При следующем запросе браузеров в настоящее время вынуждены перезагружать JS/CSS файлы.";
 $lang["systemtask_flushpiccache_deleted"] = "<br />Количество удаленных файлов:";
 $lang["systemtask_flushpiccache_done"]   = "Очистка завершена.";
 $lang["systemtask_flushpiccache_name"]   = "Очистить кеш рисунков";
