@@ -370,7 +370,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $objLanguages = new class_modul_languages_admin();
                 $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
-                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+                if($this->getParam("pe") != 1)
+                    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//Start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "changePage");
@@ -383,9 +384,24 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
 
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
-				    $objFolder = new class_modul_pages_folder($objPage->getPrevId());
-					$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder->getSystemid());
-					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), $objFolder->getStrName(), "inputText", $strPagesBrowser, true);
+                    
+                    //check if folder or page given as prev-id
+                    $arrRecord = $this->getSystemRecord();
+                    $strFoldername = "";
+                    $strFolderid = "";
+                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                        $objFolder = new class_modul_pages_folder($objPage->getPrevId());
+                        $strFoldername = $objFolder->getStrName();
+                        $strFolderid = $objFolder->getSystemid();
+                    }
+                    else {
+                        $objParentPage = new class_modul_pages_page($objPage->getPrevId());
+                        $strFoldername = $objParentPage->getStrName();
+                        $strFolderid = $objParentPage->getSystemid();
+                    }
+				    
+					$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
+					$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), $strFoldername, "inputText", $strPagesBrowser, true);
 				}
 				else {
 					$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
@@ -406,6 +422,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+                
+                if($this->getParam("pe") != "")
+                    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
+                
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
@@ -448,15 +468,34 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strFolder = "";
                 //initial prev-id
                 if($this->getSystemid() != "") {
-				    $objFolder = new class_modul_pages_folder($this->getSystemid());
-				    $strFolder = $objFolder->getStrName();
-                    $strFolderid = $objFolder->getSystemid();
+                    
+                    $arrRecord = $this->getSystemRecord();
+                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                        $objFolder = new class_modul_pages_folder($this->getSystemid());
+                        $strFolder = $objFolder->getStrName();
+                        $strFolderid = $objFolder->getSystemid();
+                    }
+                    else {
+                        $objParentPage = new class_modul_pages_page($this->getSystemid());
+                        $strFolder = $objParentPage->getStrName();
+                        $strFolderid = $objParentPage->getSystemid();
+                    }
+                    
 				}
-                //maybe overriden manually
+                //maybe overriden manually / by page-reload
 				if($this->getParam("folder_id") != "") {
-				    $objFolder = new class_modul_pages_folder($this->getParam("folder_id"));
-				    $strFolder = $objFolder->getStrName();
-                    $strFolderid = $objFolder->getSystemid();
+                    
+                    $arrRecord = $this->getSystemRecord($this->getParam("folder_id"));
+                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                        $objFolder = new class_modul_pages_folder($this->getParam("folder_id"));
+                        $strFolder = $objFolder->getStrName();
+                        $strFolderid = $objFolder->getSystemid();
+                    }
+                    else {
+                        $objParentPage = new class_modul_pages_page($this->getParam("folder_id"));
+                        $strFolder = $objParentPage->getStrName();
+                        $strFolderid = $objParentPage->getSystemid();
+                    }
 				}
 
 				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
@@ -467,6 +506,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+                if($this->getParam("pe") != "")
+                    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
@@ -507,8 +548,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				if(!$objPage->updateObjectToDb($strPrevid))
 				    throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
-
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
+                
+                if($this->getParam("pe") != "")
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
+                else
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
 
 			}
 			else
