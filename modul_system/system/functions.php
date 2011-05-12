@@ -385,7 +385,7 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
 	if($strImage == "" && $strText != "") {
 		if($strAlt == "")
 			$strAlt = $strText;
-		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."');\" " : "" )." onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."');".$strOnClickAddon." return false;\">".$strText."</a>";
+		$strLink = "<a href=\"#\" ".($bitPortalEditor ? "class=\"pe_link\"" : "")." ".($bitTooltip ? "onmouseover=\"KAJONA.admin.tooltip.add(this, '".$strAlt."');\" " : "" )." onclick=\"window.open('".getLinkAdminHref($strModule, $strAction, $strParams)."','".$strTitle."','scrollbars=yes,resizable=yes,width=".$intWidth.",height=".$intHeight."'); return false;\">".$strText."</a>";
 	}
 	return $strLink;
 }
@@ -402,16 +402,18 @@ function getLinkAdminPopup($strModule, $strAction, $strParams = "", $strText = "
  * @param string $strTitle
  * @param bool $bitTooltip
  * @param bool $bitPortalEditor
+ * @param bool $strOnClick
  * @return string
  */
-function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false) {
+function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = "", $strAlt="", $strImage="", $strTitle = "", $bitTooltip = true, $bitPortalEditor = false, $strOnClick = "") {
     $strLink = "";
 
     //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
-
-    $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
+    
+    if($strOnClick == "")
+        $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
 
     if($bitPortalEditor)
         $strParams .= "&pe=1";

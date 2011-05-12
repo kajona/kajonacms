@@ -49,5 +49,8 @@
     <td colspan="3"><div align="center" class="text1">&copy; www.kajona.de | _gentime_</div></td>
   </tr>
 </table>
+
+<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+
 </body>
 </html>

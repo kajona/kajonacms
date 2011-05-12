@@ -368,6 +368,47 @@ class class_toolkit_admin extends class_toolkit {
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
+    
+    
+    /**
+     * Returns a regular text-input field with a file browser button.
+     * The repository is set to the images-repo by default.
+     * In addition, a button to edit the image is added by default.
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strValue
+     * @param string $strClass
+     * @return string
+     * @since 3.4.0
+     */
+    public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
+        $strOpener = getLinkAdminDialog("folderview",
+										"list",
+										"&form_element=".$strName."&systemid="._filemanager_default_imagesrepoid_,
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
+										"icon_externalBrowser.gif",
+										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"));
+        
+        $strOpener .= " ".getLinkAdminDialog("filemanager", 
+                                         "imageDetails", 
+                                         "imageFile='+document.getElementById('".$strName."').value+'", 
+                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
+                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
+                                         "icon_crop.gif",
+                                         class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
+                                         true, false,
+                                         " (function() { 
+                                             if(document.getElementById('".$strName."').value != '') { 
+                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("filemanager", "imageDetails", "imageFile='+document.getElementById('".$strName."').value+'")."'); 
+                                                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); 
+                                                 KAJONA.admin.folderview.dialog.init(); 
+                                             } 
+                                             return false; })(); return false;");
+        
+        return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
+    }
 
     /**
      * Returns a text-input field as textarea

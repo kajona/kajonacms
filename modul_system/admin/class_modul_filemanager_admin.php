@@ -401,7 +401,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 					if(!$bitImage)
 		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminRaw(_webpath_.$this->strFolder."/".$arrOneFile["filename"], "",$this->getText("datei_oeffnen"), "icon_lens.gif", "_blank" ));
 		   			else
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_crop.gif"));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdminDialog($this->arrModule["modul"], "imageDetails", "&systemid=".$this->getSystemid().($this->strFolderOld != "" ? "&folder=".$this->strFolderOld : "" )."&file=".$arrOneFile["filename"], "", $this->getText("datei_oeffnen"), "icon_crop.gif"));
 
 		   			$strActions .= $this->objToolkit->listButton(getLinkAdminManual("href=\"javascript:init_fm_renameFile_dialog('".$arrOneFile["filename"]."');\"", $this->getText("datei_umbenennen"), $this->getText("datei_umbenennen"), "icon_pencil.gif"));
 		   			$strActions .= $this->objToolkit->listDeleteButton($arrOneFile["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."".($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrOneFile["filename"]));
@@ -740,19 +740,23 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
         $strPlainImage = "";
         
+        //overlay-mode
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        
         //see, if there was an image passed directly
-        $bitDirect = false;
         $strFile = $this->getParam("imageFile");
         if($strFile != "") {
+            $strFile = uniStrReplace(_webpath_, "", $strFile);
             $strPlainImage = $strFile;
             $strFile = _realpath_.$strFile;
-            $bitDirect = true;
+            
+            $this->setArrModuleEntry("template", "/folderview.tpl");
         }
         
         
+        
+        
         $arrTemplate = array();
-        if(!$bitDirect)
-            $arrTemplate["file_pathnavi"] = $this->generatePathNavi($this->strFolder);
         
         if($strFile == "") {
             $strFile = _realpath_.(substr($this->strFolder, 0, 1) == "/" ? "" : "/").$this->strFolder."/".$this->getParam("file");
@@ -796,23 +800,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
             $arrTemplate["file_actions"] = "";
 
-            if($this->getParam("galleryId") != "") {
-                $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdmin("gallery", "showGallery", "systemid=".$this->getParam("galleryId")."&resync=true", $this->getText("backToGallery"), $this->getText("backToGallery"), "icon_folderActionLevelup.gif"));
-                $arrTemplate["file_actions"] .= "&nbsp;&nbsp;&nbsp;";
-            }
-            if($bitDirect) {
-                $strUrlHistory = $this->getHistory(1);
-                $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminRaw(_indexpath_."?".$strUrlHistory, $this->getText("backToOrigin"), $this->getText("backToOrigin"), "icon_folderActionLevelup.gif"));
-                $arrTemplate["file_actions"] .= "&nbsp;&nbsp;&nbsp;";
-            }
-
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showRealSize(); return false;\"", "", $this->getText("showRealsize"), "icon_zoom_in.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showPreview(); return false;\"", "", $this->getText("showPreview"), "icon_zoom_out.gif"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(90); return false;\"", "", $this->getText("rotateImageLeft"), "icon_rotate_left.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.rotate(270); return false;\"", "", $this->getText("rotateImageRight"), "icon_rotate_right.gif"))." ";
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.showCropping(); return false;\"", "", $this->getText("cropImage"), "icon_crop.gif"));
             $arrTemplate["file_actions"] .= $this->objToolkit->listButton(getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.filemanager.imageEditor.saveCropping(); return false;\"", "", $this->getText("cropImageAccept"), "icon_crop_acceptDisabled.gif", "accept_icon"))." ";
-            $arrTemplate["file_actions"] .= $this->objToolkit->listDeleteButton($arrDetails["filename"], $this->getText("datei_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFile", "&systemid=".$this->getSystemid()."&galleryId=".$this->getParam("galleryId").($this->strFolderOld != "" ? "&folder=".$this->strFolderOld: "")."&file=".$arrDetails["filename"]));
+            
 
             $arrTemplate["filemanager_image_js"] = "<script type=\"text/javascript\">
                 KAJONA.admin.loader.loadImagecropperBase();

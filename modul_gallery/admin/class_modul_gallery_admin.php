@@ -523,7 +523,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   			else {
                             //the filemanager edit action
                             if($objFmRepo != null && $this->strPeAddon == "") {
-                                $strAction .= $this->objToolkit->listButton(getLinkAdmin("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."&galleryId=".$this->getSystemid(), "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
+                                $strAction .= $this->objToolkit->listButton(getLinkAdminDialog("filemanager", "imageDetails", "&systemid=".$objFmRepo->getSystemid()."&folder=".$strFmFolder."&file=".basename($objOneFile->getStrFilename())."&galleryId=".$this->getSystemid()."&direct=true", "", $this->getText("bild_bearbeiten"), "icon_crop.gif"));
                             }
 			   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editImage", "&systemid=".$objOneFile->getSystemid().$this->strPeAddon, "", $this->getText("image_properties"), "icon_pencil.gif"));
                         }

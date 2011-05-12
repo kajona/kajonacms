@@ -23,6 +23,12 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
         "/templates"
     );
 
+    
+    private $arrFilesToInclude = array(
+        "/portal/global_includes.php",
+        "/.htaccess"
+    );
+    
 	/**
 	 * contructor to call the base constructor
 	 */
@@ -67,6 +73,10 @@ class class_systemtask_filedump extends class_systemtask_base implements interfa
         foreach($this->arrFoldersToInclude as $strOneFolder) {
             $objZip->addFolder($strOneFolder);
         } 
+        
+        foreach($this->arrFilesToInclude as $strOneFile) {
+            $objZip->addFile($strOneFile);
+        }
         
         if($objZip->closeArchive())
             return $this->getText("systemtask_filedump_success").$strFilename;    

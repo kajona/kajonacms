@@ -20,7 +20,11 @@
 </head>
 <body class="folderView">
 
-<div id="contentMain">%%content%%</div>
+<div id="contentMain">
+    %%content%%
+</div>
 
+<div id="jsStatusBox" style="display: none; position: absolute;"><div class="jsStatusBoxHeader">Status-Info</div><div id="jsStatusBoxContent" class="jsStatusBoxContent"></div></div>
+    
 </body>
 </html>
