@@ -87,7 +87,8 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
                 //add the connection itself
                 if(!$objTag->assignToSystemrecord($strSystemid, $strAttribute))
                     $bitError = true;
-
+                
+                $this->objDB->flushQueryCache();
             }
             
             if(!$bitError)

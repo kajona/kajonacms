@@ -204,7 +204,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $strQuery = "SELECT tags_tag_id
                        FROM "._dbprefix_."tags_tag
                       WHERE tags_tag_name LIKE ?";
-        $arrCols = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
+        $arrCols = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(trim($strName)));
         if(isset($arrCols["tags_tag_id"]) && validateSystemid($arrCols["tags_tag_id"]))
             return new class_modul_tags_tag($arrCols["tags_tag_id"]);
         else
@@ -284,6 +284,8 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public function assignToSystemrecord($strTargetSystemid, $strAttribute = null) {
         if($strAttribute == null)
             $strAttribute = "";
+        
+        $this->objDB->flushQueryCache();
 
         //check of not already set
         $strQuery = "SELECT COUNT(*)
@@ -291,7 +293,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                       WHERE tags_systemid= ?
                         AND tags_tagid = ?
                         AND tags_attribute = ?";
-        $arrRow = $this->objDB->getPRow($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute));
+        $arrRow = $this->objDB->getPRow($strQuery, array($strTargetSystemid, $this->getSystemid(), $strAttribute), 0, false);
         if($arrRow["COUNT(*)"] != 0)
             return true;
 
