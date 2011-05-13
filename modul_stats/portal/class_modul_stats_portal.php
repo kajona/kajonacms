@@ -38,7 +38,7 @@ class class_modul_stats_portal extends class_portal {
 		$strPage = $this->getParam("page");
 		if($strPage == "")
 		  $strPage = $this->getParam("seite");
-		$strReferer = getServer("HTTP_REFERER");
+		$strReferer = rtrim(getServer("HTTP_REFERER"), "/");
 		$strBrowser = getServer("HTTP_USER_AGENT");
 		$strLanguage = $this->getPortalLanguage();
 
