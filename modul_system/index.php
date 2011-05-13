@@ -141,8 +141,12 @@ class class_index  {
 							    throw new class_exception("Module not implementing interface_admin", class_exception::$level_FATALERROR);
 							$objModule->action($strAction);
 							//React, if admin was opened by the portaleditor
-							if(getPost("peClose") == "1" || getGet("peClose") == "1")
-							    $this->strOutput = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
+							if(getPost("peClose") == "1" || getGet("peClose") == "1") {
+                                if(getGet("peRefreshPage") != "")
+                                    $this->strOutput = "<html><head></head><body onload=\"parent.location = '".getLinkPortalHref(getGet("peRefreshPage"))."';\"></body></html>";
+                                else
+                                    $this->strOutput = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
+                            }
 							else
 							    $this->strOutput = $objModule->getModuleOutput();
 						}

@@ -452,7 +452,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $objLanguages = new class_modul_languages_admin();
                 $arrToolbarEntries[0] = $objLanguages->getLanguageSwitch();
 
-                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
+                if($this->getParam("pe") != 1)
+                    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//start form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "savePage");
@@ -506,8 +507,6 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-                if($this->getParam("pe") != "")
-                    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
@@ -550,7 +549,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				    throw new class_exception("Error saving new page to db", class_exception::$level_ERROR);
                 
                 if($this->getParam("pe") != "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "&peClose=1&peRefreshPage=".$objPage->getStrName()));
                 else
                     $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$strPrevid));
 
