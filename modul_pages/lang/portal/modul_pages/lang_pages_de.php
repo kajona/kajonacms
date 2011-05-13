@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Code an";
+$lang["fehler_captcha"]                  = "Bitte geben Sie den korrekten Sicherheits-Code an";
 $lang["fehler_email"]                    = "Bitte geben Sie eine gültige E-Mail Adresse an";
 $lang["fehler_nachricht"]                = "Bitte geben Sie eine Nachricht an";
 $lang["fehler_name"]                     = "Bitte geben Sie einen Namen an";
