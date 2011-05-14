@@ -147,7 +147,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 			$arrTemplate["lastuserTitle"] = $this->getText("lastuserTitle");
 			$arrTemplate["lasteditTitle"] = $this->getText("lasteditTitle");
-			$arrTemplate["lastuser"] = $objPage->getLastEditUser()." (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
+			$arrTemplate["lastuser"] = $objPage->getLastEditUser();
+            
+            if(_system_changehistory_enabled_ != "false")
+                $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
+            
 			$arrTemplate["lastedit"] = timeToString($objPage->getEditDate());
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 

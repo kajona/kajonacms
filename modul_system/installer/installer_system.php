@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.8";
+		$arrModul["version"] 			= "3.3.1.9";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -421,8 +421,10 @@ class class_installer_system extends class_installer_base implements interface_i
 
         //3.4: cache buster to be able to flush the browsers cache (JS and CSS files)
         $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
-        //3.4Adding constant _system_graph_type_ indicating the chart-engine to use
+        //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
         $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
+        //3.4: Enabling or disabling the internal changehistory 
+        $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
         //Create an root-record for the tree
@@ -645,6 +647,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.5") {
             $strReturn .= $this->update_3315_3318();
+            $this->objDB->flushQueryCache();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_3319();
             $this->objDB->flushQueryCache();
         }
 
@@ -1403,6 +1411,18 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.8");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.8");
+        return $strReturn;
+    }
+    
+    private function update_3318_3319() {
+        $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
+        
+        $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.9");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.3.1.9");
         return $strReturn;
     }
 }

@@ -77,6 +77,9 @@ class class_modul_system_changelog extends class_model implements interface_mode
      */
     public function createLogEntry($objSourceModel, $strAction, $bitForceEntry = false) {
         $bitReturn = true;
+        
+        if(_system_changehistory_enabled_ == "false")
+            return true;
 
         $arrChanges = $objSourceModel->getChangedFields($strAction);
         if(is_array($arrChanges) && in_array($this->arrModule["table"], $this->objDB->getTables())) {

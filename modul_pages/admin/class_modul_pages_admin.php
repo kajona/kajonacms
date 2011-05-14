@@ -137,10 +137,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			    		if($this->objRights->rightEdit($strSystemid))
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-                        if($this->objRights->rightEdit($strSystemid))
-                        if($this->objRights->rightView($strSystemid))
+                        if($this->objRights->rightView($strSystemid)) {
 			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
+                            if(_system_changehistory_enabled_ != "false")
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
+                        }
 			    		if($this->objRights->rightDelete($strSystemid)) {
 			    		    if(count(class_modul_pages_folder::getPagesAndFolderList($strSystemid)) != 0)
  			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
