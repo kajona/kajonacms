@@ -12,6 +12,15 @@ require_once (dirname(__FILE__)."/../system/interface_versionable.php");
 class test_systemchangelogTest extends class_testbase {
 
     public function testChangelog() {
+        
+        $objSetting = class_modul_system_setting::getConfigByName("_system_changehistory_enabled_");
+        $strOldValue = $objSetting->getStrValue();
+        
+        $objSetting->setStrValue("true");
+        $objSetting->updateObjectToDb();
+        
+        class_carrier::getInstance()->getObjDB()->flushQueryCache();
+        
 
         $objSystemCommon = new class_modul_system_common();
 
@@ -33,6 +42,10 @@ class test_systemchangelogTest extends class_testbase {
         $this->assertEquals(2, class_modul_system_changelog::getLogEntriesCount($strSystemid));
 
         $objSystemCommon->deleteSystemRecord($strSystemid);
+        
+        
+        $objSetting->setStrValue($strOldValue);
+        $objSetting->updateObjectToDb();
 
     }
 }
