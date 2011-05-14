@@ -21,7 +21,20 @@ require_once(dirname(__FILE__)."/includes.php");
 class class_testbase extends PHPUnit_Framework_TestCase {
 
     protected function setUp() {
+        
+        if(!defined("_block_config_db_loading_")) {
+            define("_block_config_db_loading_", true);
+        }
+        
         $objCarrier = class_carrier::getInstance();
+        
+        $strSQL = "UPDATE "._dbprefix_."system_config SET system_config_value = 'true'
+                    WHERE system_config_name = '_system_changehistory_enabled_'";
+        
+        $objCarrier->getObjDB()->_query($strSQL);
+        $objCarrier->getObjDB()->flushQueryCache();
+        
+        class_config::getInstance()->loadConfigsDatabase(class_db::getInstance());
     }
 
     /**

@@ -13,11 +13,11 @@ class test_systemchangelogTest extends class_testbase {
 
     public function testChangelog() {
         
-        $objSetting = class_modul_system_setting::getConfigByName("_system_changehistory_enabled_");
-        $strOldValue = $objSetting->getStrValue();
-        
-        $objSetting->setStrValue("true");
-        $objSetting->updateObjectToDb();
+//        $objSetting = class_modul_system_setting::getConfigByName("_system_changehistory_enabled_");
+//        $strOldValue = $objSetting->getStrValue();
+//        
+//        $objSetting->setStrValue("true");
+//        $objSetting->updateObjectToDb();
         
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         
@@ -44,8 +44,8 @@ class test_systemchangelogTest extends class_testbase {
         $objSystemCommon->deleteSystemRecord($strSystemid);
         
         
-        $objSetting->setStrValue($strOldValue);
-        $objSetting->updateObjectToDb();
+//        $objSetting->setStrValue($strOldValue);
+//        $objSetting->updateObjectToDb();
 
     }
 }
