@@ -558,7 +558,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), "");
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), "");
-                $strReturn .= $this->objToolkit->formInputFileSelector("news_image", $this->getText("news_image"), "", _filemanager_default_imagesrepoid_);
+                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("news_image"), "");
 
 
                 //and the cats
@@ -616,7 +616,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
-                $strReturn .= $this->objToolkit->formInputFileSelector("news_image", $this->getText("news_image"), $objNews->getStrImage(), _filemanager_default_imagesrepoid_);
+                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("news_image"), $objNews->getStrImage());
 
 
                 //and the cats
