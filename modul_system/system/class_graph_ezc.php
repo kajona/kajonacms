@@ -211,7 +211,11 @@ class class_graph_ezc implements interface_graph {
         $arrEntries = array();
         $intCounter = 0;
         foreach($arrValues as $strValue) {
-            $arrEntries[$this->getArrXAxisEntry($intCounter)] = $strValue;
+            $strAxisLabel = $this->getArrXAxisEntry($intCounter);
+            if($strAxisLabel != "")
+                $arrEntries[$strAxisLabel] = $strValue;
+            else
+                $arrEntries[$intCounter+1] = $strValue;
 
             if($strValue < 0)
                 $strValue *= -2;
@@ -398,10 +402,10 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->xAxis->axisLabelRenderer = new ezcGraphAxisRotatedLabelRenderer();
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;
             }
-
-            if($this->intMaxLabelCount > 1)
-                $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
-            
+//FIXME: currently disabled
+//            if($this->intMaxLabelCount > 1)
+//                $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+// FIXME end            
 
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
@@ -539,19 +543,21 @@ class class_graph_ezc implements interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
 
-        if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
-            //not more than 12 labels
-            $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
-            $arrMadeUpLabels = array();
-            $intKeyCount = 0;
-            foreach($arrXAxisTickLabels as $strOneLabel) {
-                 if(++$intKeyCount % $intCounter == 1)
-                     $arrMadeUpLabels[] = $strOneLabel;
-                 else
-                     $arrMadeUpLabels[] = "";
-            }
-        }
-        else
+//FIXME: currently disabled        
+//        if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
+//            //not more than $intNrOfWrittenLabels labels
+//            $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
+//            $arrMadeUpLabels = array();
+//            $intKeyCount = 0;
+//            foreach($arrXAxisTickLabels as $strOneLabel) {
+//                 if(++$intKeyCount % $intCounter == 1)
+//                     $arrMadeUpLabels[] = $strOneLabel;
+//                 else
+//                     $arrMadeUpLabels[] = "";
+//            }
+//        }
+//        else
+// FIXME end        
             $arrMadeUpLabels = $arrXAxisTickLabels;
 
 
