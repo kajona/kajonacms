@@ -37,7 +37,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 	 * @param string $strAction
 	 * @return string
 	 */
-	public function action($strAction) {
+	public function action($strAction = "") {
         $strReturn = "";
         if($strAction == "syncGallery")
             $strReturn .= $this->actionSyncGallery();
