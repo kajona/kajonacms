@@ -116,6 +116,8 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueHour"] = $objDateToShow != null ? $objDateToShow->getIntHour() : "";
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
 
+        $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjText()->getText("titleTime", "system", "admin");
+        
         //set up the container div
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";

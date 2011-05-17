@@ -310,4 +310,5 @@ $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
 $lang["_system_changehistory_enabled_"]  = "Änderungshistorie aktiv:";
+$lang["titleTime"]                    = "Uhr";
 ?>
