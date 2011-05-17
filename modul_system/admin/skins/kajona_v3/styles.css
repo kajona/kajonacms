@@ -1674,7 +1674,7 @@ table.calendarPager {
 
 table.calendar td {
     border: 1px solid #cdcdcd;
-    padding: 2px;
+    vertical-align: top;
 }
 
 td.calendarDateToday {
@@ -1685,18 +1685,21 @@ td.calendarEntry div.calendarHeader {
     background-color: #efefef;
     text-align: right;
     padding: 0px 2px;
+    margin: 2px;
 }
 
 td.calendarEntryOutOfRange div.calendarHeader {
     color: #cccccc;
     text-align: right;
     padding: 0px 2px;
+    margin: 2px;
 }
 
 td.calendarEntryBlocked div.calendarHeader {
     background-color: #cccccc;
     text-align: right;
     padding: 0px 2px;
+    margin: 2px;
 }
 
 table.calendar div.spacer {
@@ -1733,11 +1736,15 @@ div.calendarLegendEntry {
     background-color: #FFFFDF;
     border: 1px solid #DEDF45;
     padding: 0px 2px;
-    margin: 2px 0px;
+    margin: 2px;
 }
 
 table.calendar .mouseOver {
-    border: 1px solid #000;
+    border: 1px solid #AF0A0A;
+    border-left: 2px solid #AF0A0A;
+    border-right: 2px solid #AF0A0A;
+    color: #000000;
+    margin: 2px 0px !important;
     -moz-box-shadow: 3px 3px 3px #888;
     -webkit-box-shadow: 3px 3px 3px #888;
     box-shadow: 3px 3px 3px #888;
