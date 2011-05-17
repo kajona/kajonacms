@@ -381,11 +381,8 @@ class class_graph_ezc implements interface_graph {
             else
                 $this->objGraph->legend->position = ezcGraph::RIGHT;
 
-
             $this->objGraph->legend->margin = 1;
             $this->objGraph->legend->padding = 1;
-//            $this->objGraph->legend->border = $this->strTitleBackgroundColor;
-//            $this->objGraph->legend->borderWidth = 1;
 
             //legend rendering
             $this->objGraph->renderer->options->legendSymbolGleam = .1;
@@ -403,16 +400,20 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;
             }
 //FIXME: currently disabled
-//            if($this->intMaxLabelCount > 1)
-//                $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intMaxLabelCount > 1)
+                $this->objGraph->xAxis->labelCount = $this->intMaxLabelCount;
 // FIXME end            
 
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
+            //$this->objGraph->yAxis->max = 0;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
 
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
+            
+            if($intMaxValue <= 0 && $intMinValue < 0)
+                $this->objGraph->yAxis->max = 0;
 
             $intTotal = $intMaxValue;
             if($intMinValue < 0)
@@ -543,22 +544,26 @@ class class_graph_ezc implements interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
 
-//FIXME: currently disabled        
-//        if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
-//            //not more than $intNrOfWrittenLabels labels
-//            $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
-//            $arrMadeUpLabels = array();
-//            $intKeyCount = 0;
-//            foreach($arrXAxisTickLabels as $strOneLabel) {
-//                 if(++$intKeyCount % $intCounter == 1)
-//                     $arrMadeUpLabels[] = $strOneLabel;
-//                 else
-//                     $arrMadeUpLabels[] = "";
-//            }
-//        }
-//        else
-// FIXME end        
-            $arrMadeUpLabels = $arrXAxisTickLabels;
+//FIXME: currently disabled 
+        if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE)   {
+            if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
+                //not more than $intNrOfWrittenLabels labels
+                $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
+                $arrMadeUpLabels = array();
+                $intKeyCount = 0;
+                foreach($arrXAxisTickLabels as $strOneLabel) {
+                     if(++$intKeyCount % $intCounter == 1)
+                         $arrMadeUpLabels[] = $strOneLabel;
+                     else
+                         $arrMadeUpLabels[] = "";
+                }
+            }
+            else
+    // FIXME end        
+                $arrMadeUpLabels = $arrXAxisTickLabels;
+         }
+         else
+             $arrMadeUpLabels = $arrXAxisTickLabels;
 
 
         $this->arrXAxisLabels = $arrMadeUpLabels;
