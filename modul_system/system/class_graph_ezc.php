@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: class_graph_pchart.php 3596 2011-02-11 11:24:09Z sidler $                                             *
+*	$Id$                                             *
 ********************************************************************************************************/
 
 require_once(_systempath_."/ezcomponents/Base/src/base.php");

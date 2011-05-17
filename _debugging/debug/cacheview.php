@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: phpinfo.php 3442 2010-10-18 21:25:24Z jschroeter $                                     *
+*   $Id$                                     *
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
