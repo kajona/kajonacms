@@ -75,17 +75,29 @@ class class_modul_system_changelog extends class_model implements interface_mode
      * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
      * @return bool
      */
-    public function createLogEntry($objSourceModel, $strAction, $bitForceEntry = false) {
+    public function createLogEntry(class_model $objSourceModel, $strAction, $bitForceEntry = false) {
         $bitReturn = true;
         
         if(_system_changehistory_enabled_ == "false")
             return true;
+        
+        //changes require at least kajona 3.3.1.10
+        $arrModul = $this->getModuleData("system", false);
+        if(version_compare($arrModul["module_version"], "3.3.1.10") < 0)
+            return;
 
         $arrChanges = $objSourceModel->getChangedFields($strAction);
         if(is_array($arrChanges) && in_array($this->arrModule["table"], $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
-                $strOldvalue = $arrChangeSet["oldvalue"];
-                $strNewvalue = $arrChangeSet["newvalue"];
+                
+                $strOldvalue = "";
+                if(isset($arrChangeSet["oldvalue"]))
+                    $strOldvalue = $arrChangeSet["oldvalue"];
+                
+                $strNewvalue = "";
+                if(isset($arrChangeSet["newvalue"]))
+                    $strNewvalue = $arrChangeSet["newvalue"];
+                
                 $strProperty= $arrChangeSet["property"];
 
                 if($strOldvalue instanceof class_date)
@@ -103,18 +115,20 @@ class class_modul_system_changelog extends class_model implements interface_mode
                      (change_id,
                       change_date,
                       change_systemid,
+                      change_system_previd,
                       change_user,
                       change_class,
                       change_action,
                       change_property,
                       change_oldvalue,
                       change_newvalue) VALUES
-                     (?,?,?,?,?,?,?,?,?)";
+                     (?,?,?,?,?,?,?,?,?,?)";
 
                 $bitReturn = $bitReturn && $this->objDB->_pQuery($strQuery, array(
                     generateSystemid(),
                     class_date::getCurrentTimestamp(),
                     $objSourceModel->getSystemid(),
+                    $objSourceModel->getPrevid(),
                     $this->objSession->getUserID(),
                     $objSourceModel->getClassname(),
                     $strAction,

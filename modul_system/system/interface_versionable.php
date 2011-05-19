@@ -13,7 +13,7 @@
  * @since 3.4.0
  */
 interface interface_versionable {
-
+    
     /**
      * Returns the classname of the logged record.
      * Used afterwards to instantiate the related object
