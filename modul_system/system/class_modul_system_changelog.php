@@ -75,7 +75,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
      * @param bool $bitForceEntry if set to true, an entry will be created even if the values didn't change
      * @return bool
      */
-    public function createLogEntry(class_model $objSourceModel, $strAction, $bitForceEntry = false) {
+    public function createLogEntry($objSourceModel, $strAction, $bitForceEntry = false) {
         $bitReturn = true;
         
         if(_system_changehistory_enabled_ == "false")

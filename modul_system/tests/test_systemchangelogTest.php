@@ -51,7 +51,7 @@ class test_systemchangelogTest extends class_testbase {
 }
 
 
-class dummyObject implements interface_versionable {
+class dummyObject extends class_model implements interface_versionable {
     private $strSystemid;
     function __construct($strSystemid) {
         $this->strSystemid = $strSystemid;
