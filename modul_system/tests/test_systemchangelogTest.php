@@ -60,6 +60,10 @@ class dummyObject implements interface_versionable {
     public function getSystemid() {
         return $this->strSystemid;
     }
+    
+    public function getPrevId() {
+        return "";
+    }
 
     public function setStrSystemid($strSystemid) {
         $this->strSystemid = $strSystemid;
