@@ -16,6 +16,7 @@
 class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
 
     private $strActionEdit = "editPageProperties";
+    private $strActionDelete = "deletePageProperties";
 
 
 	private $strName = "";
@@ -151,7 +152,6 @@ class class_modul_pages_page extends class_model implements interface_model, int
      * @return bool
      */
     protected function updateStateToDb() {
-        
 
         //Make texts db-safe
         $strName = $this->generateNonexistingPagename($this->getStrName());
@@ -161,12 +161,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionEdit);
 
-
 		//Update the baserecord
 		$strQuery = "UPDATE  "._dbprefix_."page
 					SET page_name= ?
 				       WHERE page_id= ?";
-
 
 		//and the properties record
 		//properties for this language already existing?
@@ -174,7 +172,6 @@ class class_modul_pages_page extends class_model implements interface_model, int
 		                 WHERE pageproperties_id= ?
 		                   AND pageproperties_language= ?";
 		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage()) );
-
 
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
@@ -217,7 +214,6 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
         return ($this->objDB->_pQuery($strQuery, array( $strName, $this->getSystemid() ) ) && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
 
-		
     }
 
 
@@ -327,6 +323,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
      * @return bool
      */
 	public function deletePage() {
+        
+        $objChanges = new class_modul_system_changelog();
+        $objChanges->createLogEntry($this, $this->strActionDelete);
+        
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
 
 	    //Get all Elements belonging to this page
@@ -538,6 +538,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
             return $this->getText("seite_bearbeiten", "pages", "admin");
+        else if($strAction == $this->strActionDelete)
+            return $this->getText("seite_loeschen", "pages", "admin");
         
         return $strAction;
     }
@@ -552,6 +554,17 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 array("property" => "template",    "oldvalue" => $this->strOldTemplate,    "newvalue" => $this->getStrTemplate()),
                 array("property" => "seostring",   "oldvalue" => $this->strOldSeostring,   "newvalue" => $this->getStrSeostring()),
                 array("property" => "language",    "oldvalue" => $this->strOldLanguage,    "newvalue" => $this->getStrLanguage())
+            );
+        }
+        else if($strAction == $this->strActionDelete) {
+            return array(
+                array("property" => "browsername", "oldvalue" => $this->strOldBrowsername),
+                array("property" => "description", "oldvalue" => $this->strOldDescription),
+                array("property" => "keywords",    "oldvalue" => $this->strOldKeywords),
+                array("property" => "name",        "oldvalue" => $this->strOldName),
+                array("property" => "template",    "oldvalue" => $this->strOldTemplate),
+                array("property" => "seostring",   "oldvalue" => $this->strOldSeostring),
+                array("property" => "language",    "oldvalue" => $this->strOldLanguage)
             );
         }
     }

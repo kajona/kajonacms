@@ -17,6 +17,7 @@
 class class_modul_pages_folder extends class_model implements interface_model, interface_versionable  {
 
     private $strActionEdit = "editFolder";
+    private $strActionDelete = "deleteFolder";
 
     private $strName = "";
     private $strLanguage = "";
@@ -263,6 +264,10 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	 * @return bool
 	 */
 	public function deleteFolder() {
+        
+        $objChanges = new class_modul_system_changelog();
+        $objChanges->createLogEntry($this, $this->strActionDelete);
+        
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
 	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0) {
             //delete the folder-properties
@@ -280,6 +285,8 @@ class class_modul_pages_folder extends class_model implements interface_model, i
     public function getActionName($strAction) {
         if($strAction == $this->strActionEdit)
             return $this->getText("pages_ordner_edit", "pages", "admin");
+        else if($strAction == $this->strActionDelete)
+            return $this->getText("pages_ordner_delete", "pages", "admin");
 
         return $strAction;
     }
@@ -288,6 +295,11 @@ class class_modul_pages_folder extends class_model implements interface_model, i
         if($strAction == $this->strActionEdit) {
             return array(
                 array("property" => "foldername",  "oldvalue" => $this->strOldName, "newvalue" => $this->getStrName())
+            );
+        }
+        else if($strAction == $this->strActionDelete) {
+            return array(
+                array("property" => "foldername",  "oldvalue" => $this->strOldName)
             );
         }
     }
