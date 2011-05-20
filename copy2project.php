@@ -433,7 +433,8 @@ class class_copy2project {
             return copy($strSourceFile, $strTargetFile);
         }
         else {
-            return false !== system('ln -f -s "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
+            return false !== system('ln -f  "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
+            //return symlink($strSourceFile, $strTargetFile);
         }
     }   
 
