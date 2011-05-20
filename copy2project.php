@@ -21,6 +21,7 @@ class class_copy2project {
                                           "dblog.log" );
 
     private $arrFolderExclusionsM2P = array(".svn");
+    private $arrLinkExclusionsM2P = array("config.php");
 
     private $arrLogContent = array();
 
@@ -28,12 +29,18 @@ class class_copy2project {
     private $strCopyWarnings = "";
 
     private $bitDebug = "true";
+    
+    private $bitSymlinks = true;
 
 
 
     public function  __construct() {
         $this->strBasePath = dirname(__FILE__);
         $this->bitDebug = isset($_GET["debug"]) ? $_GET["debug"] : "true";
+        
+        //try to detect the servers' os
+        $strOs = strtolower(PHP_OS);
+        $this->bitSymlinks = strpos($strOs, "win") === false;
     }
 
 
@@ -43,22 +50,32 @@ class class_copy2project {
             echo "Note: The order of folders and files is alphabetical. \n";
             echo "      If a module overwrites a file already copied by a previous folder, \n";
             echo "      only the last one will be copied back.\n\n";
+            echo "      On non-windows systems, symbolic links will be used instead of a real copy of the file. \n";
+            echo "      Change \$bitSymlinks manually, if the automatic detection fails.\n\n";
             echo "init params: \n";
-            echo "  base folder:            ".$this->strBasePath."\n";
-            echo "  system folder:          ".$this->strBasePath."/".$this->strSystemFolderName."\n";
-            echo "  excluded files P2M:     ".implode(", ", $this->arrFileExclusionsP2M)."\n";
-            echo "  excluded folders M2P:   ".implode(", ", $this->arrFolderExclusionsM2P)."\n";
-            echo "  logfile:                ".$this->strLogName."\n";
-            echo "  debug-params enabled:   <b>".($this->bitDebug == "true" ? "Yes" : "No")."</b> ";
+            echo "  base folder:                ".$this->strBasePath."\n";
+            echo "  system folder:              ".$this->strBasePath."/".$this->strSystemFolderName."\n";
+            if(!$this->bitSymlinks)
+                echo "  excluded files P2M:         ".implode(", ", $this->arrFileExclusionsP2M)."\n";
+            echo "  excluded folders M2P:       ".implode(", ", $this->arrFolderExclusionsM2P)."\n";
+            if($this->bitSymlinks)
+                echo "  excluded files M2P:         ".implode(", ", $this->arrLinkExclusionsM2P)." <b>in symlink mode only</b>\n";
+            echo "  logfile:                    ".$this->strLogName."\n";
+            echo "  debug-params enabled:       <b>".($this->bitDebug == "true" ? "Yes" : "No")."</b> ";
+            
             if($this->bitDebug == "true")
                 echo "<a href=\"copy2project.php?debug=false\">[disable]</a> \n";
             else
                 echo "<a href=\"copy2project.php?debug=true\">[enable]</a> \n";
+            
+            echo "  symlinks enabled:           <b>".($this->bitSymlinks ? "Yes" : "No")."</b> (".PHP_OS.")\n";
 
             echo "<h3>Copy modules 2 project (Down to ./".$this->strSystemFolderName.")</h3>";
             echo "<a href=\"copy2project.php?action=modules2project&debug=".$this->bitDebug."\">Copies all files to the subfolder \n".$this->strBasePath." --> ".$this->strBasePath."/".$this->strSystemFolderName."</a>\n";
-            echo "\n<h3>Copy project 2 modules (Up from ./".$this->strSystemFolderName.")</h3>";
-            echo "<a href=\"copy2project.php?action=project2modules\">Copies all files from the subfolder into the module-structure \n".$this->strBasePath."/".$this->strSystemFolderName." --> ".$this->strBasePath."</a>\n";
+            if(!$this->bitSymlinks) {
+                echo "\n<h3>Copy project 2 modules (Up from ./".$this->strSystemFolderName.")</h3>";
+                echo "<a href=\"copy2project.php?action=project2modules\">Copies all files from the subfolder into the module-structure \n".$this->strBasePath."/".$this->strSystemFolderName." --> ".$this->strBasePath."</a>\n";
+            }
             echo "\n<h3>Check consistency of system-folder (".$this->strSystemFolderName.")</h3>";
             echo "<a href=\"copy2project.php?action=checkProject\">Compares the logfile with the project folder.\nLists all files not exising anymore or existing but not being listed in the logfile.</a>";
         }
@@ -91,7 +108,13 @@ class class_copy2project {
 
 
     private function addFilesToLogfile() {
-        echo "Adding submitted files to logfile. \n<b>You still have to execute a copy-run afterwards.</b>\n";
+        
+        echo "Adding submitted files to logfile. \n";
+        if(!$this->bitSymlinks)
+            echo "<b>You still have to execute a copy-run afterwards.</b>\n";
+        else 
+            echo "<b>In unix mode, files to add are copied to module posted and are replaced by a symlink afterwards.</b>\n";
+        
         echo "Adding files to module ".$_POST["targetModule"]."...\n\n";
 
 
@@ -109,9 +132,19 @@ class class_copy2project {
             $strTarget = $this->strBasePath."/".$this->strSystemFolderName."".$strOneFile;
 
             echo $strOneFile."\n";
-            echo "\t".$strTarget." to ".$strSource;
+            echo "\t".$strTarget." to ".$strSource."\n";
 
             $strLogContent .= $strTarget."<to>".$strSource."<eol>\n";
+            
+            //on unix mode, add files and folder and create symlink instead
+            if($this->bitSymlinks) {
+                if(!is_dir(dirname($strSource))) {
+                    mkdir($strSource, 0777, true);
+                }
+                
+                $this->fileCopy($strTarget, $strSource, true);
+                $this->fileCopy($strSource, $strTarget);
+            }
         }
 
         file_put_contents($this->strBasePath."/".$this->strLogName, $strLogContent);
@@ -175,7 +208,10 @@ class class_copy2project {
         foreach($arrFolderContent["files"] as $strSingleFile) {
             if(!in_array($strStartPath."/".$strSingleFile, $arrLogArray)) {
                 $strFileId = "file_".$strStartPath.$strSingleFile;
-                echo "<input type=\"checkbox\" id=\"".$strFileId."\" name=\"files[".$strStartPath."/".$strSingleFile."]\" ><label for=\"".$strFileId."\"> ".$strStartPath."/".$strSingleFile."</label>\n";
+                if(substr($strSingleFile, -4) == ".php")
+                    echo "<input type=\"checkbox\" id=\"".$strFileId."\" name=\"files[".$strStartPath."/".$strSingleFile."]\" ><label for=\"".$strFileId."\"><b> ".$strStartPath."/".$strSingleFile."</b></label>\n";
+                else
+                    echo "<input type=\"checkbox\" id=\"".$strFileId."\" name=\"files[".$strStartPath."/".$strSingleFile."]\" ><label for=\"".$strFileId."\"> ".$strStartPath."/".$strSingleFile."</label>\n";
             }
         }
 
@@ -213,8 +249,7 @@ class class_copy2project {
 
 
                         }
-
-
+                        
                         copy($arrSingleFile[0], $arrSingleFile[1]);
                     }
                     else {
@@ -291,9 +326,17 @@ class class_copy2project {
             }
             $this->arrLogContent[$strTargetFolder."/".$strSingleFile] = $strStartFolder."/".$strSingleFile;
 
-            if(copy($strStartFolder."/".$strSingleFile, $strTargetFolder."/".$strSingleFile)) {
-                if(!chmod($strTargetFolder."/".$strSingleFile, 0777))
-                    $this->strCopyWarnings .= "chmod() on ".$strTargetFolder."/".$strSingleFile." failed\n";
+            
+            if($this->bitSymlinks && in_array($strSingleFile, $this->arrLinkExclusionsM2P))
+                $bitCopyOperation = $this->fileCopy($strStartFolder."/".$strSingleFile, $strTargetFolder."/".$strSingleFile, true);
+            else
+                $bitCopyOperation = $this->fileCopy($strStartFolder."/".$strSingleFile, $strTargetFolder."/".$strSingleFile);
+            
+            if($bitCopyOperation) {
+                if(!$this->bitSymlinks) {
+                    if(!chmod($strTargetFolder."/".$strSingleFile, 0777))
+                        $this->strCopyWarnings .= "chmod() on ".$strTargetFolder."/".$strSingleFile." failed\n";
+                }
             }
             else
                 $this->strCopyWarnings .= "Failed to copy ".$strStartFolder."/".$strSingleFile." to ".$strTargetFolder."/".$strSingleFile;
@@ -380,6 +423,19 @@ class class_copy2project {
         return array("files" => $arrFiles, "folders" => $arrFolders );
         
     }
+    
+    
+    private function fileCopy($strSourceFile, $strTargetFile, $bitForceCopy = false) {
+        
+        
+        
+        if(!$this->bitSymlinks || $bitForceCopy) {
+            return copy($strSourceFile, $strTargetFile);
+        }
+        else {
+            return false !== system('ln -f -s "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
+        }
+    }   
 
     
 }
