@@ -683,7 +683,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 if($strSystemid == "")
                     $arrRowData[] = $objTarget != null ? $objTarget->getModuleName() : "";
                 if($strSystemid == "")
-                    $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getRecordName(), 20), $objTarget->getRecordName()) : "";
+                    $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getRecordName(), 20), $objTarget->getRecordName()." ".$objOneEntry->getStrSystemid()) : "";
                 $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getActionName($objOneEntry->getStrAction()), 15), $objTarget->getActionName($objOneEntry->getStrAction())) : "";
                 $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getPropertyName($objOneEntry->getStrProperty()) ) : "";
                 $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
