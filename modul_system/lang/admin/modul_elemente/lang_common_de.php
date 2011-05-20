@@ -12,4 +12,5 @@
 //editable entries
 $lang["template"]                        = "Template:";
 $lang["image_edit"]                      = "Bild bearbeiten";
+$lang["directory"]                      = "Ordner:";
 ?>
