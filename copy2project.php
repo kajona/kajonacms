@@ -41,6 +41,7 @@ class class_copy2project {
         //try to detect the servers' os
         $strOs = strtolower(PHP_OS);
         $this->bitSymlinks = strpos($strOs, "win") === false;
+        $this->bitSymlinks = false;//strpos($strOs, "win") === false;
     }
 
 
