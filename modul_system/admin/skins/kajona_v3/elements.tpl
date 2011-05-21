@@ -698,7 +698,7 @@ pe_iconbar, pe_disable
 		});
 	</script>
 
-    <div id="peToolbar">
+    <div id="peToolbar" style="display: none;">
     	<div class="logo"></div>
 		<div class="info">
 			<table cellpadding="0" cellspacing="0">
@@ -726,7 +726,7 @@ pe_iconbar, pe_disable
 
 <pe_actionToolbar>
 <div id="container_%%systemid%%" class="peContainerOut" onmouseover="KAJONA.admin.portaleditor.showActions('%%systemid%%')" onmouseout="KAJONA.admin.portaleditor.hideActions('%%systemid%%')">
-    <div id="menu_%%systemid%%" class="menuOut">
+    <div id="menu_%%systemid%%" class="menuOut" style="display: none;">
         <div class="actions">
             %%actionlinks%%
         </div>
@@ -751,7 +751,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" style="display: none;" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
 	<script type="text/javascript">
 		KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [

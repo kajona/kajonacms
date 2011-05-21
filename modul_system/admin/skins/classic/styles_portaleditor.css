@@ -34,6 +34,7 @@
 /* P O R T A L E D I T O R   T O O L B A R */
 
 #pe_classicskin {
+	display: block !important;
     white-space: nowrap;
     position: fixed;
     top: 0px;
@@ -54,10 +55,6 @@
 	display: block !important;
 	outline: 1px solid #cccccc !important;
 	background-color: #EFEFEF !important;
-}
-
-.peContainerOut .menuOut {
-	display: none !important;
 }
 
 .peContainerHover .menuHover {

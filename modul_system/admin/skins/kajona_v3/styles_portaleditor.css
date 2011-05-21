@@ -43,6 +43,7 @@
     top: 0px;
     left: 0px;
     width: 100%;
+    display: block !important;
 }
 
 #peToolbar table {
@@ -97,10 +98,6 @@
 .peContainerHover {
 	display: block !important;
 	outline: 1px solid #00e800 !important;
-}
-
-.peContainerOut .menuOut {
-	display: none !important;
 }
 
 .peContainerHover .menuHover {
