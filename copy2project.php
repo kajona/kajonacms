@@ -39,9 +39,12 @@ class class_copy2project {
         $this->bitDebug = isset($_GET["debug"]) ? $_GET["debug"] : "true";
         
         //try to detect the servers' os
-        $strOs = strtolower(PHP_OS);
-        $this->bitSymlinks = strpos($strOs, "win") === false;
-        $this->bitSymlinks = false;//strpos($strOs, "win") === false;
+        if (stripos(PHP_OS, "win") !== false && PHP_WINDOWS_VERSION_MAJOR < 6) {
+            $this->bitSymlinks = false;
+        }
+        
+        //disabled since problems with _FILE_ resolving symlinks
+        $this->bitSymlinks = false;
     }
 
 
@@ -427,15 +430,21 @@ class class_copy2project {
     
     
     private function fileCopy($strSourceFile, $strTargetFile, $bitForceCopy = false) {
-        
-        
-        
+    
         if(!$this->bitSymlinks || $bitForceCopy) {
             return copy($strSourceFile, $strTargetFile);
         }
         else {
-            return false !== system('ln -f  "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
-            //return symlink($strSourceFile, $strTargetFile);
+            if (stripos(PHP_OS, "win") !== false && PHP_WINDOWS_VERSION_MAJOR >= 6) {
+                $strSourceFile = str_replace('/', '\\', $strSourceFile);
+                $strTargetFile = str_replace('/', '\\', $strTargetFile);
+                //return false !== system('mklink  "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
+                return symlink($strSourceFile, $strTargetFile);
+                //return link($strSourceFile, $strTargetFile);
+            } else {
+                return false !== system('ln -f  "'.$strSourceFile.'"  "'.$strTargetFile.'" ');
+                //return symlink($strSourceFile, $strTargetFile);
+            }
         }
     }   
 
@@ -448,14 +457,9 @@ echo "<pre>";
 
 echo "<h2><a href=\"copy2project.php\">Copy 2 Project [".dirname(__FILE__)."]</a></h2>";
 
-
-
 $objCopy = new class_copy2project();
 $objCopy->doWork();
 
 echo "</pre>";
-
-
-
 
 ?>
