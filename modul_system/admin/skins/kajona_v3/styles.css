@@ -1570,7 +1570,7 @@ a.treeView-pagenode, a.treeView-foldernode, a.treeView-navigationnode {
 .folderviewDialog {
     display: none;
     position: absolute;
-    width: 510px;
+    width: 520px;
     outline: none;
     -webkit-box-shadow: 0 0 60px -10px #000000;
     -moz-box-shadow: 0 0 60px -10px #000000;
