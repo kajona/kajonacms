@@ -79,6 +79,7 @@ $lang["ordner_loeschen_frage"]           = "Möchten Sie den Ordner &quot;<b>%%e
 $lang["ordner_name"]                     = "Ordnername:";
 $lang["ordner_oeffnen"]                  = "Ordner öffnen";
 $lang["ordner_uebernehmen"]              = "Ordner übernehmen";
+$lang["page_sublist"]                    = "Untergeordnete Seiten anzeigen";
 $lang["pfad"]                            = "Pfad: ";
 $lang["quickhelp_deleteFile"]            = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
 $lang["quickhelp_deleteFolder"]          = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
@@ -125,5 +126,4 @@ $lang["xmlupload_error_copyUpload"]      = "Fehler beim Kopieren der Datei auf d
 $lang["xmlupload_error_filter"]          = "Dateityp im Filter nicht erlaubt";
 $lang["xmlupload_error_notWritable"]     = "Zielordner nicht beschreibbar";
 $lang["xmlupload_success"]               = "Upload erfolgreich";
-$lang["page_sublist"]                    = "Untergeordnete Seiten anzeigen";
 ?>

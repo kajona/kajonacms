@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -25,6 +25,7 @@ $lang["_system_admin_email_"]            = "Admin Email:";
 $lang["_system_admin_email_hint"]        = "If an address is given, an email is sent to in case of critical errors.";
 $lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
 $lang["_system_browser_cachebuster_hint"] = "This value is appended as GET parameter to all references to JS/CSS files. By incrementing this value the browser will be forced to reload the files from the server, regardless of the browsers caching settings and the sent HTTP headers. The value will be incremented automatically by the system task 'Flush cache'.";
+$lang["_system_changehistory_enabled_"]  = "Änderungshistory enabled:";
 $lang["_system_dbdump_amount_"]          = "Number of DB-dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Defines how many DB-dumps should be kept.";
 $lang["_system_graph_type_"]             = "Chart-library used:";
@@ -294,6 +295,7 @@ $lang["systemtask_systemstatus_systemid"] = "Systemid:";
 $lang["titel_erben"]                     = "Inherit rights:";
 $lang["titel_leer"]                      = "<em>No title defined</em>";
 $lang["titel_root"]                      = "Rights root-record";
+$lang["titleTime"]                       = "Time of day";
 $lang["toolsetCalendarMonth"]            = "\"January\", \"February\", \"March\", \"April\", \"May\", \"June\", \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"";
 $lang["toolsetCalendarWeekday"]          = "\"Su\", \"Mu\", \"Tu\", \"We\", \"Th\", \"Fr\", \"Sa\"";
 $lang["update_available"]                = "Please update!";
@@ -309,6 +311,4 @@ $lang["uploadmaxsize"]                   = "Upload max size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ATTENTION !!<br />Using wrong values for the following settings could make the system become unusable!";
-$lang["_system_changehistory_enabled_"]  = "Änderungshistory enabled:";
-$lang["titleTime"]                    = "Time of day";
 ?>

@@ -10,36 +10,30 @@
 //Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["detailslink"] = "Show details";
-$lang["registerlink"] = "Register";
-$lang["error_permissions"] = "Not enough permissions to perform tis action";
-$lang["location"] = "Location:";
-$lang["dateTimeFrom"] = "From:";
-$lang["dateTimeUntil"] = "Until:";
-$lang["maximumParticipants"] = "Maximum number of participants:";
-$lang["currentParticipants"] = "Current number of participants:";
-
-$lang["forename"] = "Forename:*";
-$lang["lastname"] = "Lastname:*";
-$lang["email"] = "Email:*";
-$lang["phone"] = "Phone:";
-$lang["comment"] = "Comment:";
-$lang["captcha_label"] = "Security-Code:*";
-$lang["captcha_reload"] = "Code not readable?";
-$lang["registerSubmit"] = "Register";
-
-
-$lang["noForename"] = "Missin forename";
-$lang["noLastname"] = "Missing lastname";
-$lang["invalidEmailadress"] = "Invalid emailaddress provided";
-$lang["captcha"] = "Invalid security code provided";
-
-$lang["participantLimitReached"] = "The maximum number of participants was reached.";
-$lang["participantSuccessMail"] = "Thank your for your registration. You'll receive an email containing a confirmation-link within the next minutes.";
-
-$lang["registerMailSubject"] = "Please confirm your registration";
-$lang["registerMailBodyIntro"] = "Please confirm your registration for the following event. Therefore a link is attached at the end of the mail.<br /><br />";
-
-$lang["participantSuccessConfirmation"] = "Your registration was successfull. Thank you!";
-$lang["participantErrorConfirmation"] = "Invalid data. Your registration could not be confirmed.";
+$lang["captcha"]                         = "Invalid security code provided";
+$lang["captcha_label"]                   = "Security-Code:*";
+$lang["captcha_reload"]                  = "Code not readable?";
+$lang["comment"]                         = "Comment:";
+$lang["currentParticipants"]             = "Current number of participants:";
+$lang["dateTimeFrom"]                    = "From:";
+$lang["dateTimeUntil"]                   = "Until:";
+$lang["detailslink"]                     = "Show details";
+$lang["email"]                           = "Email:*";
+$lang["error_permissions"]               = "Not enough permissions to perform tis action";
+$lang["forename"]                        = "Forename:*";
+$lang["invalidEmailadress"]              = "Invalid emailaddress provided";
+$lang["lastname"]                        = "Lastname:*";
+$lang["location"]                        = "Location:";
+$lang["maximumParticipants"]             = "Maximum number of participants:";
+$lang["noForename"]                      = "Missin forename";
+$lang["noLastname"]                      = "Missing lastname";
+$lang["participantErrorConfirmation"]    = "Invalid data. Your registration could not be confirmed.";
+$lang["participantLimitReached"]         = "The maximum number of participants was reached.";
+$lang["participantSuccessConfirmation"]  = "Your registration was successfull. Thank you!";
+$lang["participantSuccessMail"]          = "Thank your for your registration. You'll receive an email containing a confirmation-link within the next minutes.";
+$lang["phone"]                           = "Phone:";
+$lang["registerMailBodyIntro"]           = "Please confirm your registration for the following event. Therefore a link is attached at the end of the mail.<br /><br />";
+$lang["registerMailSubject"]             = "Please confirm your registration";
+$lang["registerSubmit"]                  = "Register";
+$lang["registerlink"]                    = "Register";
 ?>

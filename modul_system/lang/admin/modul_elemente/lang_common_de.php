@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["template"]                        = "Template:";
+$lang["directory"]                       = "Ordner:";
 $lang["image_edit"]                      = "Bild bearbeiten";
-$lang["directory"]                      = "Ordner:";
+$lang["template"]                        = "Template:";
 ?>

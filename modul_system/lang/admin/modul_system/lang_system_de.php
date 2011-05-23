@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 334
 
 //non-editable entries
 $lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
@@ -25,6 +25,7 @@ $lang["_system_admin_email_"]            = "Admin E-Mail:";
 $lang["_system_admin_email_hint"]        = "Falls ausgefüllt, wird im Fall eines schweren Fehlers eine E-Mail an diese Adresse gesendet.";
 $lang["_system_browser_cachebuster_"]    = "Browser-Cachebuster";
 $lang["_system_browser_cachebuster_hint"] = "Dieser Wert wird als GET-Parameter allen Verweisen auf JS/CSS-Dateien angehängt. Durch hochzählen des Wertes kann der Browser dazu gezwungen werden die entsprechenden Dateien erneut vom Server herunter zu laden, unabhängig von den Caching-Einstellungen des Browsers und den vom Server gesendeten HTTP-Headern. Der Wert wird über den Systemtask 'Cache leeren' automatisch hochgezählt.";
+$lang["_system_changehistory_enabled_"]  = "Änderungshistorie aktiv:";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
 $lang["_system_graph_type_"]             = "Verwendete Chart-Bibliothek:";
@@ -294,6 +295,7 @@ $lang["systemtask_systemstatus_systemid"] = "Systemid:";
 $lang["titel_erben"]                     = "Rechte erben:";
 $lang["titel_leer"]                      = "<em>Kein Titel hinterlegt</em>";
 $lang["titel_root"]                      = "Rechte-Root-Satz";
+$lang["titleTime"]                       = "Uhr";
 $lang["toolsetCalendarMonth"]            = "\"Januar\", \"Februar\", \"M\\u00E4rz\", \"April\", \"Mai\", \"Juni\", \"Juli\", \"August\", \"September\", \"Oktober\", \"November\", \"Dezember\"";
 $lang["toolsetCalendarWeekday"]          = "\"So\", \"Mo\", \"Di\", \"Mi\", \"Do\", \"Fr\", \"Sa\"";
 $lang["update_available"]                = "Bitte updaten!";
@@ -309,6 +311,4 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
-$lang["_system_changehistory_enabled_"]  = "Änderungshistorie aktiv:";
-$lang["titleTime"]                    = "Uhr";
 ?>

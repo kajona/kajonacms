@@ -79,6 +79,7 @@ $lang["ordner_loeschen_frage"]           = "Do you really want to delete the fol
 $lang["ordner_name"]                     = "Folder name:";
 $lang["ordner_oeffnen"]                  = "Open folder";
 $lang["ordner_uebernehmen"]              = "Apply folder";
+$lang["page_sublist"]                    = "Show ancillary pages";
 $lang["pfad"]                            = "Path: ";
 $lang["quickhelp_deleteFile"]            = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
 $lang["quickhelp_deleteFolder"]          = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
@@ -125,5 +126,4 @@ $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the 
 $lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
-$lang["page_sublist"]                    = "Show ancillary pages";
 ?>

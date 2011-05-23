@@ -10,7 +10,7 @@
 //Kajona Language Editor Core Build 334
 
 //editable entries
-$lang["eventmanager_order"]                 = "Reihenfolge:";
-$lang["eventmanager_order_asc"]                     = "Aufsteigend";
-$lang["eventmanager_order_desc"]                     = "Absteigend";
+$lang["eventmanager_order"]              = "Reihenfolge:";
+$lang["eventmanager_order_asc"]          = "Aufsteigend";
+$lang["eventmanager_order_desc"]         = "Absteigend";
 ?>
