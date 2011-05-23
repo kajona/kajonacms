@@ -71,6 +71,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $arrReturn["element_name"] = "string";
             $arrReturn["element_cachetime"] = "number";
         }
+        if($strAction == "saveAlias" || $strAction == "changeAlias") {
+            $arrReturn["name"] = "string";
+            $arrReturn["browsername"] = "string";
+            $arrReturn["alias"] = "string";
+        }
 
         return $arrReturn;
     }
@@ -184,64 +189,64 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			 	if($this->objRights->rightView($strSystemid)) {
 
                     if($objOneEntry instanceof class_modul_pages_page) {
+                        
+                                                
+                        if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                            //Split up rights
+                            if($this->objRights->rightEdit($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                            if($this->objRights->rightView($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
+                            if($this->objRights->rightDelete($strSystemid))
+                                $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
 
-                        //Split up rights
-                        if($this->objRights->rightEdit($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-                        if($this->objRights->rightEdit($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-                        if($this->objRights->rightEdit($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-                        if($this->objRights->rightView($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
-                        if($this->objRights->rightDelete($strSystemid))
-                            $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
+                            if($this->objRights->rightEdit($strSystemid)) {
+                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
+                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
 
-                        if($this->objRights->rightEdit($strSystemid)) {
-                            //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
-                            //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
+                                $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                            }
+                            if($this->objRights->rightRight($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
-                            $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                            $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
                         }
-                        if($this->objRights->rightRight($strSystemid))
-                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+                        else {
 
-                        $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
+                            //Split up rights
+                            if($this->objRights->rightEdit($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                            if($this->objRights->rightEdit($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
+                            if($this->objRights->rightEdit($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
+                            if($this->objRights->rightView($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
+                            if($this->objRights->rightDelete($strSystemid))
+                                $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
+
+                            if($this->objRights->rightEdit($strSystemid)) {
+                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
+                                //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
+
+                                $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
+                            }
+                            if($this->objRights->rightRight($strSystemid))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+
+                            $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
+                        
+                        }
                     }
 
-//sir: currently unused
-//                    else if($objOneEntry instanceof class_modul_pages_folder) {
-//
-//			    		//Splitting up rights so decide which Buttons to display
-//			    		if($this->objRights->rightView($objOneEntry->getSystemid()))
-//			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_oeffnen"), $this->getText("pages_ordner_oeffnen"), "icon_folderActionOpen.gif"));
-//			    		if($this->objRights->rightEdit($objOneEntry->getSystemid()))
-//			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editFolder", "&systemid=".$objOneEntry->getSystemid(), $this->getText("pages_ordner_edit"), $this->getText("pages_ordner_edit"), "icon_pencil.gif"));
-//                        if($this->objRights->rightEdit($strSystemid))
-//                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
-//			    		if($this->objRights->rightDelete($objOneEntry->getSystemid())) {
-//			    		    if(count(class_modul_pages_folder::getPagesAndFolderList($objOneEntry->getSystemid())) != 0)
-// 			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
-//                            else
-//                            	$strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
-//			    		}
-//                        if($this->objRights->rightEdit($strSystemid)) {
-//                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
-//                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
-//
-//                            $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
-//                        }
-//			    		if($this->objRights->rightRight($objOneEntry->getSystemid()))
-//			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
-//
-//			  			$strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
-//                    }
+
 			 	}
 			}
-//            if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-//			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_blank.gif"), $intI++);
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+            
+			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
+			    $strPages .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAlias", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_blank.gif"), $intI++);
+            }
 
             $strListId = generateSystemid();
 			if(uniStrlen($strPages) != 0)
@@ -284,20 +289,34 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			foreach($arrPages as $objPage) {
 				$strActions = "";
 
-	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
-	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
-	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-	    		if($this->objRights->rightDelete($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
-	    		if($this->objRights->rightEdit($objPage->getSystemid()))
-	    			$strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
-	    		if($this->objRights->rightRight($objPage->getSystemid()	))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
+                if($objPage->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                    if($this->objRights->rightDelete($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
+                    if($this->objRights->rightRight($objPage->getSystemid()	))
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
 
-	  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objPage->getStrName(), $strActions, $intI++);
+                }
+                else {
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                            $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
+                    if($this->objRights->rightDelete($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
+                    if($this->objRights->rightEdit($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
+                    if($this->objRights->rightRight($objPage->getSystemid()	))
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
+
+                    $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
+                }
 			}
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
 			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
@@ -322,13 +341,21 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
     protected function actionEditPage() {
         return $this->actionNewPage("edit");
     }
+    
+    protected function actionNewAlias() {
+        return $this->actionNewPage("new", true);
+    }
+    
+    protected function actionEditAlias() {
+        return $this->actionNewPage("edit", true);
+    }
 
 	/**
 	 * Shows the form to create a new Site
 	 *
 	 * @return string The form
 	 */
-	protected function actionNewPage($strMode = "new") {
+	protected function actionNewPage($strMode = "new", $bitAlias = false) {
 		$strReturn = "";
 
 
@@ -371,18 +398,27 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $objLanguages = new class_modul_languages_admin();
                 $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
-                if($this->getParam("pe") != 1)
+                if($this->getParam("pe") != 1 && !$bitAlias)
                     $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//Start form
-				$strReturn .= $this->objToolkit->getValidationErrors($this, "changePage");
-				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
+                if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "changePage");
+                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changePage"));
+                }
+                else {
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "changeAlias");
+                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "changeAlias"));
+                }
 
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $objPage->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $objPage->getStrBrowsername());
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $objPage->getStrSeostring());
-				$strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $objPage->getStrDesc());
-				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
+                
+                if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $objPage->getStrDesc());
+                    $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
+                }
 
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
                     
@@ -415,10 +451,17 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 					if($objPage->getNumberOfElementsOnPage() != 0)
 						$bitEnabled = false;
 				}
+                
+                if(!$bitAlias) {
 				//if no template was selected before, show a warning. can occur when having created new languages
-				if($objPage->getStrTemplate() == "")
-				    $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
-				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
+                    if($objPage->getStrTemplate() == "")
+                        $strReturn .= $this->objToolkit->formTextRow($this->getText("templateNotSelectedBefore"));
+                    $strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), $objPage->getStrTemplate(), "inputDropdown", $bitEnabled);
+                }
+                else {
+                    $strReturn .= $this->objToolkit->formTextRow($this->getText("page_alias_hint"));
+                    $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getText("page_alias"), $objPage->getStrAlias());
+                }
 
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
@@ -457,14 +500,23 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 0)."<br />";
 
 				//start form
-				$strReturn .= $this->objToolkit->getValidationErrors($this, "savePage");
-				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
+                if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "savePage");
+                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePage"));
+                }
+                else {
+                    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveAlias");
+                    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAlias"));
+                }
+                
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $this->getParam("name"));
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
 				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
-				$strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
 
-				$strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
+                if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
+                    $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
+                }
 
                 $strFolderid = "";
                 $strFolder = "";
@@ -503,7 +555,14 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $strFolderid);
 				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("page_folder_name"), $strFolder, "inputText", $strPagesBrowser, true);
 
-				$strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
+                if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->formInputDropdown("template", $arrTemplatesDD, $this->getText("template"), _pages_defaulttemplate_);
+                }
+                else {
+                    $strReturn .= $this->objToolkit->formTextRow($this->getText("page_alias_hint"));
+                    $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getText("page_alias"), $this->getParam("alias"));
+                }
+                
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
 
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
@@ -518,16 +577,20 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		return $strReturn;
 	}
 
+    protected function actionSaveAlias() {
+        return $this->actionSavePage(true);
+    }
+    
 	/**
 	 * Saves a sumbitted page in the database (new Page!)
 	 *
 	 * @return String, "" if successful
 	 */
-	protected function actionSavePage() {
+	protected function actionSavePage($bitAlias = false) {
 		$strReturn = "";
 
         if(!$this->validateForm())
-            return $this->actionNewPage();
+            return $this->actionNewPage("new", $bitAlias);
 
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 			$strName = uniStrtolower($this->getParam("name"));
@@ -541,7 +604,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage->setStrKeywords($this->getParam("keywords"));
 			    $objPage->setStrSeostring($this->getParam("seostring"));
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
+			    $objPage->setStrAlias($this->getParam("alias"));
 				$strPrevid = $this->getParam("folder_id");
+                
+                if($bitAlias)
+                    $objPage->setIntType(class_modul_pages_page::$INT_TYPE_ALIAS);
 
                 if(!validateSystemid($strPrevid))
                     $strPrevid = "";
@@ -565,17 +632,20 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	} //actionSavePage
 
 
+    protected function actionChangeAlias() {
+        return $this->actionChangePage(true);
+    }
 
 	/**
 	 * Saves the edited, submitted page
 	 *
 	 * @return string, "" in case of success
 	 */
-	protected function actionChangePage() {
+	protected function actionChangePage($bitAlias = false) {
 		$strReturn = "";
 
         if(!$this->validateForm())
-            return $this->actionNewPage();
+            return $this->actionNewPage("edit", $bitAlias);
 
 		$strName = uniStrtolower($this->getParam("name"));
 		if($this->getParam("template")!= "")
@@ -595,6 +665,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			    $objPage->setStrKeywords($strKeywords);
 			    $objPage->setStrSeostring($this->getParam("seostring"));
 			    $objPage->setStrLanguage($this->getLanguageToWorkOn());
+			    $objPage->setStrAlias($this->getParam("alias"));
 
 			    if($strTemplate !== false)
 			        $objPage->setStrTemplate($strTemplate);

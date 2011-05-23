@@ -139,7 +139,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objLanguages = new class_modul_languages_admin();
             $arrToolbarEntries[3] = $objLanguages->getLanguageSwitch();
 
-		    $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
+            if($objPage->getIntType() != class_modul_pages_page::$INT_TYPE_ALIAS)
+                $strReturn .= $this->objToolkit->getContentToolbar($arrToolbarEntries, 1);
 
 			$arrTemplate = array();
 			$arrTemplate["pagetemplate"] = $objPage->getStrTemplate();

@@ -14,26 +14,33 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
+    
+    public static $INT_TYPE_PAGE = 0;
+    public static $INT_TYPE_ALIAS = 1;
 
     private $strActionEdit = "editPageProperties";
     private $strActionDelete = "deletePageProperties";
 
 
 	private $strName = "";
+	private $intType = 0;
 	private $strKeywords = "";
 	private $strDescription = "";
 	private $strTemplate = "";
 	private $strBrowsername = "";
 	private $strSeostring = "";
 	private $strLanguage = "";
+	private $strAlias = "";
 
     private $strOldName;
+    private $intOldType;
     private $strOldKeywords;
     private $strOldDescription;
     private $strOldTemplate;
     private $strOldBrowsername;
     private $strOldSeostring;
     private $strOldLanguage;
+    private $strOldAlias;
 
     /**
      * Constructor to create a valid object
@@ -107,6 +114,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
         		$arrPropRow["pageproperties_template"] = "";
         		$arrPropRow["pageproperties_seostring"] = "";
         		$arrPropRow["pageproperties_language"] = "";
+        		$arrPropRow["pageproperties_alias"] = "";
     		}
     		//merge both
 		    $arrRow = array_merge($arrRow, $arrPropRow);
@@ -115,18 +123,22 @@ class class_modul_pages_page extends class_model implements interface_model, int
     		$this->setStrDesc($arrRow["pageproperties_description"]);
     		$this->setStrKeywords($arrRow["pageproperties_keywords"]);
     		$this->setStrName($arrRow["page_name"]);
+    		$this->setIntType($arrRow["page_type"]);
     		$this->setStrTemplate($arrRow["pageproperties_template"]);
     		$this->setStrSeostring($arrRow["pageproperties_seostring"]);
     		$this->setStrLanguage($arrRow["pageproperties_language"]);
+    		$this->setStrAlias($arrRow["pageproperties_alias"]);
 
 
             $this->strOldBrowsername = $arrRow["pageproperties_browsername"];
     		$this->strOldDescription = $arrRow["pageproperties_description"];
     		$this->strOldKeywords = $arrRow["pageproperties_keywords"];
     		$this->strOldName = $arrRow["page_name"];
+    		$this->intOldType = $arrRow["page_type"];
     		$this->strOldTemplate = $arrRow["pageproperties_template"];
     		$this->strOldSeostring = $arrRow["pageproperties_seostring"];
     		$this->strOldLanguage = $arrRow["pageproperties_language"];
+    		$this->strOldAlias = $arrRow["pageproperties_alias"];
 		}
     }
 
@@ -163,7 +175,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 
 		//Update the baserecord
 		$strQuery = "UPDATE  "._dbprefix_."page
-					SET page_name= ?
+					SET page_name= ?,
+                        page_type= ?
 				       WHERE page_id= ?";
 
 		//and the properties record
@@ -180,7 +193,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
     						pageproperties_template=?,
     						pageproperties_keywords=?,
     						pageproperties_browsername=?,
-    						pageproperties_seostring=?
+    						pageproperties_seostring=?,
+    						pageproperties_alias=?
     						WHERE pageproperties_id=?
     						  AND pageproperties_language=?";
 
@@ -190,6 +204,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
     			$this->getStrKeywords(),
     			$this->getStrBrowsername(),
     			$this->getStrSeostring(),
+    			$this->getStrAlias(),
     			$this->getSystemid(),
     			$this->getStrLanguage()
             );
@@ -198,8 +213,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 		    //Not existing, create one
 		    $strQuery2 = "INSERT INTO ".$this->arrModule["table2"]."
 						(pageproperties_id, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_browsername,
-						 pageproperties_seostring, pageproperties_language) VALUES
-						(?, ?, ?, ?, ?, ?, ?)";
+						 pageproperties_seostring, pageproperties_alias, pageproperties_language) VALUES
+						(?, ?, ?, ?, ?, ?, ?, ?)";
 
             $arrParams = array(
                 $this->getSystemid(),
@@ -208,11 +223,12 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 $this->getStrTemplate(),
                 $this->getStrBrowsername(),
                 $this->getStrSeostring(),
+                $this->getStrAlias(),
                 $this->getStrLanguage()
             );
 		}
 
-        return ($this->objDB->_pQuery($strQuery, array( $strName, $this->getSystemid() ) ) && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
+        return ($this->objDB->_pQuery($strQuery, array( $strName, $this->getIntType(), $this->getSystemid() ) ) && $this->objDB->_pQuery($strQuery2, $arrParams)) ;
 
     }
 
@@ -224,11 +240,13 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	 * @param int $intStart
 	 * @param int $intEnd
 	 * @param string $intFilter
+     * @param bool $bitIncludeAlias
 	 * @return mixed class_modul_pages_page
 	 * @static
 	 */
-	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "") {
+	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "", $bitIncludeAlias = true) {
         $arrParams = array();
+        
         if($strFilter != "")
             $arrParams[] = $strFilter."%";
         
@@ -237,6 +255,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 					"._dbprefix_."system
 					WHERE system_id = page_id
 					".($strFilter != "" ? " AND page_name like ? " : "" )."
+                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")."    
 					ORDER BY page_name ASC";
 
 		if($intStart == 0 && $intEnd == 0)
@@ -254,13 +273,15 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	/**
 	 * Fetches the total number of pages available
 	 *
+     * @param bool $bitIncludeAlias
 	 * @return unknown
 	 */
-	public static function getNumberOfPagesAvailable() {
+	public static function getNumberOfPagesAvailable( $bitIncludeAlias = true) {
 	    $strQuery = "SELECT COUNT(*)
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
-					WHERE system_id = page_id";
+					WHERE system_id = page_id
+                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")." ";
 		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 		return $arrRow["COUNT(*)"];
 	}
@@ -442,9 +463,9 @@ class class_modul_pages_page extends class_model implements interface_model, int
         $strNewPagename = $this->generateNonexistingPagename($arrBasicSourcePage["page_name"], false);
 	    //create the foregin record in our table
 	    $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-	    			(page_id, page_name) VALUES
-	    			(?, ?)";
-	    if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPage, $strNewPagename ) )) {
+	    			(page_id, page_name, page_type) VALUES
+	    			(?, ?, ?)";
+	    if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPage, $strNewPagename, $arrBasicSourcePage["page_type"] ) )) {
 	        $this->objDB->transactionRollback();
             class_logger::getInstance()->addLogRow("error while creating record in table ".$this->arrModule["table"], class_logger::$levelError);
 	        return false;
@@ -460,8 +481,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	    //insert all pageprops in all languages
 	    foreach ($arrBasicSourceProperties as $arrOneProperty) {
 	        $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
-	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language) VALUES
-	        (?, ?, ?, ?, ?, ?, ?)";
+	        (pageproperties_id, pageproperties_browsername, pageproperties_keywords, pageproperties_description, pageproperties_template, pageproperties_seostring, pageproperties_language, pageproperties_alias) VALUES
+	        (?, ?, ?, ?, ?, ?, ?, ?)";
 
             $arrValues = array(
                 $strIdOfNewPage,
@@ -470,10 +491,11 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 $arrOneProperty["pageproperties_description"],
                 $arrOneProperty["pageproperties_template"],
                 $arrOneProperty["pageproperties_seostring"],
-                $arrOneProperty["pageproperties_language"]
+                $arrOneProperty["pageproperties_language"],
+                $arrOneProperty["pageproperties_alias"]
             );
 
-	        if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false))) {
+	        if(!$this->objDB->_pQuery($strQuery, $arrValues, array(false, false, false, false, false, false, false, false))) {
 	            $this->objDB->transactionRollback();
                 class_logger::getInstance()->addLogRow("error while copying page properties", class_logger::$levelError);
 	            return false;
@@ -553,6 +575,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 array("property" => "name",        "oldvalue" => $this->strOldName,        "newvalue" => $this->getStrName()),
                 array("property" => "template",    "oldvalue" => $this->strOldTemplate,    "newvalue" => $this->getStrTemplate()),
                 array("property" => "seostring",   "oldvalue" => $this->strOldSeostring,   "newvalue" => $this->getStrSeostring()),
+                array("property" => "alias",       "oldvalue" => $this->strOldAlias,       "newvalue" => $this->getStrAlias()),
+                array("property" => "type",        "oldvalue" => $this->intOldType,        "newvalue" => $this->getIntType()),
                 array("property" => "language",    "oldvalue" => $this->strOldLanguage,    "newvalue" => $this->getStrLanguage())
             );
         }
@@ -564,6 +588,8 @@ class class_modul_pages_page extends class_model implements interface_model, int
                 array("property" => "name",        "oldvalue" => $this->strOldName),
                 array("property" => "template",    "oldvalue" => $this->strOldTemplate),
                 array("property" => "seostring",   "oldvalue" => $this->strOldSeostring),
+                array("property" => "alias",       "oldvalue" => $this->strOldAlias),
+                array("property" => "type",        "oldvalue" => $this->intOldType),
                 array("property" => "language",    "oldvalue" => $this->strOldLanguage)
             );
         }
@@ -639,6 +665,24 @@ class class_modul_pages_page extends class_model implements interface_model, int
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
+    
+    public function getIntType() {
+        return $this->intType;
+    }
+
+    public function setIntType($intType) {
+        $this->intType = $intType;
+    }
+
+    public function getStrAlias() {
+        return $this->strAlias;
+    }
+
+    public function setStrAlias($strAlias) {
+        $this->strAlias = $strAlias;
+    }
+
+
 
 }
 ?>

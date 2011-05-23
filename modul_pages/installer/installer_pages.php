@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.8";
+		$arrModule["version"] 		= "3.3.1.9";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -30,7 +30,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 	}
 
     public function getMinSystemVersion() {
-	    return "3.3.1.8";
+	    return "3.3.1.9";
 	}
 
 	public function hasPostInstalls() {
@@ -70,6 +70,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields = array();
 		$arrFields["page_id"] 		= array("char20", false);
 		$arrFields["page_name"] 	= array("char254", true);
+		$arrFields["page_type"] 	= array("int", true, "0");
 
 		if(!$this->objDB->createTable("page", $arrFields, array("page_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -96,6 +97,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["pageproperties_template"] 	= array("char254", true);
 		$arrFields["pageproperties_seostring"] 	= array("char254", true);
 		$arrFields["pageproperties_language"] 	= array("char20", true);
+		$arrFields["pageproperties_alias"] 	    = array("char254", true);
 
 		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
@@ -375,6 +377,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.2") {
             $strReturn .= $this->update_3312_3318();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_3319();
         }
 
         return $strReturn."\n\n";
@@ -780,6 +787,31 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.3.1.8");
         $this->updateElementVersion("paragraph", "3.3.1.8");
         $this->updateElementVersion("image", "3.3.1.8");
+        return $strReturn;
+    }
+    
+    
+    private function update_3318_3319() {
+        $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
+        
+        $strReturn .= "Altering page-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page")."
+                     ADD ".$this->objDB->encloseColumnName("page_type")." ".$this->objDB->getDatatype("int")." NULL DEFAULT 0 ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Altering page_properties-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_properties")."
+                     ADD ".$this->objDB->encloseColumnName("pageproperties_alias")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
+        if(!$this->objDB->_query($strQuery))
+             $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.3.1.9");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.3.1.9");
+        $this->updateElementVersion("paragraph", "3.3.1.9");
+        $this->updateElementVersion("image", "3.3.1.9");
         return $strReturn;
     }
 }

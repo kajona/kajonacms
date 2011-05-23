@@ -264,30 +264,26 @@ class class_modul_navigation_point extends class_model implements interface_mode
             if($objOneEntry->getStatus() == 0)
                 continue;
 
-            //TODO: remove
-
-            //validate the type
-//            if($objOneEntry instanceof class_modul_pages_folder) {
-//                $objPoint = new class_modul_navigation_point();
-//                $objPoint->setStrName($objOneEntry->getStrName());
-//                $objPoint->setSystemid($objOneEntry->getSystemid());
-//
-//                //search for the first next page
-//                $objPage = self::getNextValidPage($objOneEntry->getSystemid());
-//                if($objPage != null) {
-//                    $objPoint->setStrPageI($objPage->getStrName());
-//                    $arrReturn[] = $objPoint;
-//                }
-//            }
-//            else
             if($objOneEntry instanceof class_modul_pages_page) {
                 
                 //validate if the page to be links has a template assigned and at least a single element created
-                if($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0) {
+                if( $objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
                 
                     $objPoint = new class_modul_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
-                    $objPoint->setStrPageI($objOneEntry->getStrName());
+                    
+                    //if in alias mode, then check what type of target is requested
+                    if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                        $strAlias = uniStrtolower($objOneEntry->getStrAlias());
+                        if(uniStrpos($strAlias, "http") !== false) {
+                            $objPoint->setStrPageE($objOneEntry->getStrAlias());
+                        }
+                        else
+                            $objPoint->setStrPageI($objOneEntry->getStrName());
+                    }
+                    else
+                        $objPoint->setStrPageI($objOneEntry->getStrName());
+                    
                     $objPoint->setSystemid($objOneEntry->getSystemid());
 
                     $arrReturn[] = $objPoint;
@@ -298,32 +294,6 @@ class class_modul_navigation_point extends class_model implements interface_mode
         return $arrReturn;
     }
 
-    /**
-     * Searches for the firt subleveled page in order to be linked to the node passed.
-     * Internal helper.
-     *
-     * @param string $strFolderid
-     * @return class_modul_pages_page
-     * @deprecated
-     * @todo remove
-     */
-//    private static function getNextValidPage($strFolderid) {
-//        $arrPages = class_modul_pages_folder::getPagesInFolder($strFolderid);
-//        foreach($arrPages as $objOnePage) {
-//            if($objOnePage->getStatus() == 1 && $objOnePage->rightView())
-//                return $objOnePage;
-//        }
-//
-//        //traverse downwards
-//        $arrFolder = class_modul_pages_folder::getFolderList($strFolderid);
-//        foreach($arrFolder as $objOneFolder) {
-//            $objTemp = self::getNextValidPage($objOneFolder->getSystemid());
-//            if($objTemp != null)
-//                return $objTemp;
-//        }
-//
-//        return null;
-//    }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 
