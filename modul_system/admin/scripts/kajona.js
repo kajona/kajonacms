@@ -1205,7 +1205,7 @@ KAJONA.admin.ajax = {
 
     loadPagesTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildnodes", nodeSystemid, {
+        KAJONA.admin.ajax.genericAjaxCall("pages", "getChildNodes", nodeSystemid, {
             success : function(o) {
                 //check if answer contains an error
                 if(o.responseText.indexOf("<error>") != -1) {
@@ -1261,11 +1261,14 @@ KAJONA.admin.ajax = {
 
                             intTemp = strSinglePage.indexOf("<isleaf>")+8;
                             var strLeaf = strSinglePage.substr(intTemp, strSinglePage.indexOf("</isleaf>")-intTemp);
+                            
+                            intTemp = strSinglePage.indexOf("<type>")+6;
+                            var intType = strSinglePage.substr(intTemp, strSinglePage.indexOf("</type>")-intTemp);
 
                             tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
                             tempNode.systemid = strSystemid;
                             tempNode.isLeaf = strLeaf == "true";
-                            tempNode.labelStyle = "treeView-pagenode";
+                            tempNode.labelStyle = intType == 0 ? "treeView-pagenode" : "treeView-pagealiasnode";
 
                             strEntries = strEntries.substr(strEntries.indexOf("</page>")+7);
 
@@ -1291,7 +1294,7 @@ KAJONA.admin.ajax = {
 
     loadNavigationTreeViewNodes : function (node, fnLoadComplete)  {
         var nodeSystemid = node.systemid;
-        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildnodes", nodeSystemid, {
+        KAJONA.admin.ajax.genericAjaxCall("navigation", "getChildNodes", nodeSystemid, {
             success : function(o) {
                 //check if answer contains an error
                 if(o.responseText.indexOf("<error>") != -1) {

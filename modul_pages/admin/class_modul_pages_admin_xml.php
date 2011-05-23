@@ -62,7 +62,7 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
      * @return string
      * @since 3.3.0
      */
-    protected function actionGetchildNodes() {
+    protected function actionGetChildNodes() {
         $strReturn = "";
 
         $strReturn .= "<entries>";
@@ -94,7 +94,8 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
                             $strReturn .= "<link></link>";
                         else
                             $strReturn .= "<link>".getLinkAdminHref("pages_content", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
-                            
+
+                        $strReturn .= "<type>".$objSingleEntry->getIntType()."</type>";
                         $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                         $strReturn .= "</page>";
                     }

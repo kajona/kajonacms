@@ -1536,6 +1536,14 @@ div.percentBeam {
     background-repeat: no-repeat;
 }
 
+.treeView-pagealiasnode {
+    display:block;
+    height: 22px;
+    padding-left: 23px;
+    background-image: url(./pics/icon_page_alias.gif);
+    background-repeat: no-repeat;
+}
+
 .treeView-navigationnode {
     display:block;
     height: 22px;

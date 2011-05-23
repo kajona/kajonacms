@@ -28,7 +28,7 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
 		parent::__construct($arrModul);
 	}
 
-	
+
     /**
      * Fetches all child-nodes of the passed node.
      * Used by the tree-view in module-navigation admin view.
@@ -36,7 +36,7 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
      * @return string
      * @since 3.3.0
      */
-    protected function actionGetChildnodes() {
+    protected function actionGetChildNodes() {
         $strReturn = " ";
 
         $strReturn .= "<subnodes>";
@@ -59,9 +59,9 @@ class class_modul_navigation_admin_xml extends class_admin implements interface_
         return $strReturn;
     }
 
-	
 
-	
+
+
 
 }
 ?>
