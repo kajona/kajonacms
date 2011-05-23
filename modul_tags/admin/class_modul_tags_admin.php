@@ -80,7 +80,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_list"), "", "", true, "adminnavi"));
-		
+
         return $arrReturn;
 	}
 
@@ -175,7 +175,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 		return $strReturn;
     }
 
-    
+
     /**
      * Saves the passed tag-data back to the database.
      * @return string "" in case of success
@@ -213,17 +213,14 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
             $strTagsWrapperId = generateSystemid();
 
             $strTagContent .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTags"), "", "", "KAJONA.admin.tags.saveTag(document.getElementById('tagname').value+'', '".$strTargetSystemid."', '".$strAttribute."');return false;");
-
             $strTagContent .= $this->objToolkit->formTextRow($this->getText("tag_name_hint"));
             $strTagContent .= $this->objToolkit->formInputTagSelector("tagname", $this->getText("tag_name"));
             $strTagContent .= $this->objToolkit->formInputSubmit($this->getText("button_add"), $this->getText("button_add"), "");
             $strTagContent .= $this->objToolkit->formClose();
 
-            
-
             $strTagContent .= $this->objToolkit->getTaglistWrapper($strTagsWrapperId, $strTargetSystemid, $strAttribute);
 
-
+            $strReturn .= $this->objToolkit->divider();
             $strReturn .= $this->objToolkit->getFieldset($this->getText("tagsection_header"), $strTagContent);
         }
         else

@@ -218,7 +218,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     			}
     		}
     		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_blank.gif"), $intI++);
+    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_new.gif"), $intI++);
 
     		if(uniStrlen($strCat) != 0)
     		     $strCat = $this->objToolkit->listHeader().$strCat.$this->objToolkit->listFooter();
@@ -292,7 +292,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 			}
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strNews .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newNews", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_blank.gif"), "", $intI++);
+			    $strNews .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newNews", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), "", $intI++);
 
 			if(uniStrlen($strNews) != 0) {
 			    $strNews = $this->objToolkit->listHeader().$strNews.$this->objToolkit->listFooter();
@@ -799,7 +799,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     $strReturn .= $this->objToolkit->listRow3($objOneFeed->getStrTitle() ." (".$objOneFeed->getIntHits()." Hits)", $strCenter, $strAction, getImageAdmin("icon_news.gif"), $intI++);
                 }
                 if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newNewsFeed", "", $this->getText("modul_new_feed"), $this->getText("modul_new_feed"), "icon_blank.gif"), "", $intI++);
+                    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newNewsFeed", "", $this->getText("modul_new_feed"), $this->getText("modul_new_feed"), "icon_new.gif"), "", $intI++);
                 $strReturn .= $this->objToolkit->listFooter();
             }
             else

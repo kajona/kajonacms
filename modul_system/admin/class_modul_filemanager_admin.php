@@ -133,7 +133,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				}
 			}
 			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newRepo", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_blank.gif"), $intI++);
+			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newRepo", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"), $intI++);
 
 
 			if(uniStrlen($strReturn) != 0)

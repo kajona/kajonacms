@@ -173,7 +173,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             //And one row to create a new one
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_blank.gif")), "", $intI++);
+                $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_new.gif")), "", $intI++);
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
@@ -611,7 +611,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName()." (".$intNrOfUsers.")", $strAction, $intI++);
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_blank.gif"), $intI++);
+            $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_new.gif"), $intI++);
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else

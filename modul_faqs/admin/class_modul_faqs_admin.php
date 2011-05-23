@@ -172,7 +172,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     			}
     		}
     		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_blank.gif"), $intI++);
+    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_new.gif"), $intI++);
 
     		if(uniStrlen($strCat) != 0)
     		     $strCat = $this->objToolkit->listHeader().$strCat.$this->objToolkit->listFooter();
@@ -217,7 +217,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
 			}
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strFaqs .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFaq", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_blank.gif"), $intI++);
+			    $strFaqs .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFaq", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
 
 			if(uniStrlen($strFaqs) != 0)
 			    $strFaqs = $this->objToolkit->listHeader().$strFaqs.$this->objToolkit->listFooter();

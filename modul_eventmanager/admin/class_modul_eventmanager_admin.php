@@ -120,7 +120,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 
 			}
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newEvent", "", $this->getText("module_create"), $this->getText("module_create"), "icon_blank.gif"), "", $intI++);
+			    $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newEvent", "", $this->getText("module_create"), $this->getText("module_create"), "icon_new.gif"), "", $intI++);
 
 			if(uniStrlen($strReturn) != 0)
 			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
@@ -366,7 +366,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 
 			}
 			if($this->objRights->rightEdit($this->getSystemid()))
-            $strParticipants .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newParticipant", "&systemid=".$objEvent->getSystemid(), $this->getText("participant_create"), $this->getText("participant_create"), "icon_blank.gif"), "", $intI++);
+            $strParticipants .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "newParticipant", "&systemid=".$objEvent->getSystemid(), $this->getText("participant_create"), $this->getText("participant_create"), "icon_new.gif"), "", $intI++);
 
 			if(uniStrlen($strParticipants) != 0)
 			    $strParticipants = $this->objToolkit->listHeader().$strParticipants.$this->objToolkit->listFooter();

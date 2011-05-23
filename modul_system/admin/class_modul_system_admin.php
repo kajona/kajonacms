@@ -810,7 +810,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 				}
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_blank.gif"), $intI++);
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newAspect", "", $this->getText("aspect_create"), $this->getText("aspect_create"), "icon_new.gif"), $intI++);
 
             if(uniStrlen($strReturn) != 0)
                 $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();

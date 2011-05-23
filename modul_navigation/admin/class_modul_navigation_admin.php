@@ -122,7 +122,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 					}
 				}
 				if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-				    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_blank.gif"), $intI++);
+				    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
 
                 if(uniStrlen($strReturn) != 0)
 	  			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
@@ -174,7 +174,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     				}
     	  		}
     	  		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    	  		    $strNaviReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_blank.gif"), $intI++);
+    	  		    $strNaviReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newNaviPoint", "&systemid=".$this->getSystemid().$this->strPeAddon."", $this->getText("modul_anlegenpunkt"), $this->getText("modul_anlegenpunkt"), "icon_new.gif"), $intI++);
     	  		$strNaviReturn .= $this->objToolkit->dragableListFooter($strListID);
 
                 if($this->strPeAddon != "")

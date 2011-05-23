@@ -266,7 +266,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
         						$objElement = $objOneElementInSystem;
         						if($objElement->getIntRepeat() == 1 || $bitHit === false)	{
             						//So, the Row for a new element: element is repeatable or not yet created
-            						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_blank.gif"));
+            						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
             						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$objOneElementInSystem->getStrReadableName() . ")", $strActions, $intI++);
             						$bitOutputAtPlaceholder = true;
             					}
@@ -280,7 +280,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             					    }
             					    if(!$bitOneInstalled) {
             					        //So, the Row for a new element
-                						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_blank.gif"));
+                						$strActions = $this->objToolkit->listButton(getLinkAdmin("pages_content", "newElement", "&placeholder=".$arrOneElementOnTemplate["placeholder"]."&element=".$arrSingleElementOnTemplateplaceholder["element"]."&systemid=".$this->getSystemid(), "", $this->getText("element_anlegen"), "icon_new.gif"));
                 						$strOutputAtPlaceholder .= $this->objToolkit->listRow2($arrSingleElementOnTemplateplaceholder["name"] . " (".$arrSingleElementOnTemplateplaceholder["element"] . ")", $strActions, $intI++);
                 						$bitOutputAtPlaceholder = true;
             					    }

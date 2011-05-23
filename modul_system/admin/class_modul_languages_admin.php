@@ -74,7 +74,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 				}
             }
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_blank.gif"), $intI++);
+                $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), $this->getText("modul_anlegen"), "icon_new.gif"), $intI++);
 
             if(uniStrlen($strReturn) != 0)
                 $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
