@@ -112,15 +112,15 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields = array();
 		$arrFields["right_id"] 		= array("char20", false);
 		$arrFields["right_inherit"] = array("int", true);
-		$arrFields["right_view"] 	= array("char254", true);
-		$arrFields["right_edit"] 	= array("char254", true);
-		$arrFields["right_delete"] 	= array("char254", true);
-		$arrFields["right_right"] 	= array("char254", true);
-		$arrFields["right_right1"] 	= array("char254", true);
-		$arrFields["right_right2"] 	= array("char254", true);
-		$arrFields["right_right3"] 	= array("char254", true);
-		$arrFields["right_right4"] 	= array("char254", true);
-		$arrFields["right_right5"] 	= array("char254", true);
+		$arrFields["right_view"] 	= array("text", true);
+		$arrFields["right_edit"] 	= array("text", true);
+		$arrFields["right_delete"] 	= array("text", true);
+		$arrFields["right_right"] 	= array("text", true);
+		$arrFields["right_right1"] 	= array("text", true);
+		$arrFields["right_right2"] 	= array("text", true);
+		$arrFields["right_right3"] 	= array("text", true);
+		$arrFields["right_right4"] 	= array("text", true);
+		$arrFields["right_right5"] 	= array("text", true);
 
 		if(!$this->objDB->createTable("system_right", $arrFields, array("right_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -1441,6 +1441,21 @@ class class_installer_system extends class_installer_base implements interface_i
                      ADD ".$this->objDB->encloseColumnName("change_system_previd")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
+        
+        
+        $strReturn .= "Altering rights-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
+                    CHANGE ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("right_edit")." ".$this->objDB->encloseColumnName("right_edit")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
+                    CHANGE ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("right_right1")." ".$this->objDB->encloseColumnName("right_right1")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
+                    CHANGE ".$this->objDB->encloseColumnName("right_right2")." ".$this->objDB->encloseColumnName("right_right2")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
+                    CHANGE ".$this->objDB->encloseColumnName("right_right3")." ".$this->objDB->encloseColumnName("right_right3")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
+                    CHANGE ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
+                    CHANGE ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL"; 
+        if(!$this->objDB->_query($strQuery))
+        
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.10");
