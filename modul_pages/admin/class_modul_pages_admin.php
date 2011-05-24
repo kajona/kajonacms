@@ -416,9 +416,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $objPage->getStrName());
 				$strReturn .= $this->objToolkit->divider();
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $objPage->getStrBrowsername());
-				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $objPage->getStrSeostring());
 
                 if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $objPage->getStrSeostring());
                     $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $objPage->getStrDesc());
                     $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
                 }
@@ -426,7 +426,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 
                     //check if folder or page given as prev-id
-                    $arrRecord = $this->getSystemRecord();
+                    $arrRecord = $this->getSystemRecord($objPage->getPrevId());
                     $strFoldername = "";
                     $strFolderid = "";
                     if($arrRecord["system_module_nr"] == _pages_folder_id_) {
@@ -515,9 +515,9 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->formInputText("name", $this->getText("name"), $this->getParam("name"));
 				$strReturn .= $this->objToolkit->divider();
 				$strReturn .= $this->objToolkit->formInputText("browsername", $this->getText("browsername"), $this->getParam("browsername"));
-				$strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
 
                 if(!$bitAlias) {
+                    $strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
                     $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
                     $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
                 }
