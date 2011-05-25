@@ -81,7 +81,7 @@ abstract class class_admin {
 	/**
 	 * Constructor
 	 *
-	 * @param string $arrModul
+	 * @param array $arrModul
 	 * @param string $strSystemid
 	 */
 	public function __construct($arrModul = array(), $strSystemid = "") {
@@ -91,7 +91,7 @@ abstract class class_admin {
 		$arrModul["p_nummer"] 			= _system_modul_id_;
 
 		//default-template: main.tpl
-		if(!key_exists("template", $arrModul))
+		if(!key_exists("template", $arrModul)) 
 		    $arrModul["template"] 		= "/main.tpl";
 
 		//Registering Area
@@ -145,14 +145,15 @@ abstract class class_admin {
 		$this->strTextBase = $this->arrModule["modul"];
 	}
 
-// --- Common Methods -----------------------------------------------------------------------------------
+    // --- Common Methods -----------------------------------------------------------------------------------
 
 
 	/**
 	 * Writes a value to the params-array
 	 *
-	 * @param string $strName Key
+	 * @param string $strKey Key
 	 * @param mixed $mixedValue Value
+     * @return void
 	 */
 	public function setParam($strKey, $mixedValue) {
 		$this->arrParams[$strKey] = $mixedValue;
@@ -165,10 +166,12 @@ abstract class class_admin {
 	 * @return string else ""
 	 */
 	public function getParam($strKey) {
-		if(isset($this->arrParams[$strKey]))
+		if(isset($this->arrParams[$strKey])) {
 			return $this->arrParams[$strKey];
-		else
+        }
+		else {
 			return "";
+        }
 	}
 
 	/**

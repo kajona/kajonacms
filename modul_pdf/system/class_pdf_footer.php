@@ -11,7 +11,7 @@
  * Sample implementation of a footer.
  *
  * @author sidler
- * @package modul_system
+ * @package modul_pdf
  * @since 3.3.0
  */
 class class_pdf_footer implements interface_pdf_footer {

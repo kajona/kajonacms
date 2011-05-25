@@ -19,12 +19,14 @@ interface interface_modul_rating_sortalgo {
      * Elements have to be an instance of interface_sortable_rating.
      *
      * @param array $arrElements
+     * @return void
      */
     public function setElementsArray($arrElements);
     
     /**
      * Does the sorting and returns the sorted array of elements.
      *
+     * @return array
      */
     public function doSorting();
 		

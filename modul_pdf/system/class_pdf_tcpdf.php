@@ -14,7 +14,7 @@ require_once(_systempath_."/tcpdf/tcpdf.php");
  * In most cases you won't need the class, so just ignore it.
  *
  * @author sidler
- * @package modul_system
+ * @package modul_pdf
  * @since 3.3.0
  */
 class class_pdf_tcpdf extends TCPDF {

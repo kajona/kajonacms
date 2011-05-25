@@ -12,7 +12,7 @@
  *
  * @author sidler
  * @since 3.3.0
- * @package modul_system
+ * @package modul_pdf
  */
 class class_pdf {
 

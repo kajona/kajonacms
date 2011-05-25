@@ -17,8 +17,8 @@ interface interface_modul_rating_algo {
 	/**
 	 * Calculates the new rating
 	 * 
-	 * @param class_modul_rating_rate $objSourceRate The rating-record to update
-	 * @param float $floatNewRating The rating fired by the user
+	 * @param class_modul_rating_rate $objSourceRate  The rating-record to update
+	 * @param float                   $floatNewRating The rating fired by the user
 	 * @return float the new rating
 	 */
 	public function doRating($objSourceRate, $floatNewRating);
