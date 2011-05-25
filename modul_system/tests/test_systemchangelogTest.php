@@ -30,7 +30,7 @@ class test_systemchangelogTest extends class_testbase {
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2");
         $this->assertEquals(1, class_modul_system_changelog::getLogEntriesCount($strSystemid));
-        $this->assertEquals(1, count(lass_modul_system_changelog::getLogEntries($strSystemid)));
+        $this->assertEquals(1, count(class_modul_system_changelog::getLogEntries($strSystemid)));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
