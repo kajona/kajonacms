@@ -13,11 +13,6 @@ class test_systemchangelogTest extends class_testbase {
 
     public function testChangelog() {
         
-//        $objSetting = class_modul_system_setting::getConfigByName("_system_changehistory_enabled_");
-//        $strOldValue = $objSetting->getStrValue();
-//        
-//        $objSetting->setStrValue("true");
-//        $objSetting->updateObjectToDb();
         
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
         
@@ -35,17 +30,18 @@ class test_systemchangelogTest extends class_testbase {
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2");
         $this->assertEquals(1, class_modul_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(1, count(lass_modul_system_changelog::getLogEntries($strSystemid)));
 
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
 
         $objChanges->createLogEntry(new dummyObject($strSystemid), "2", true);
         $this->assertEquals(2, class_modul_system_changelog::getLogEntriesCount($strSystemid));
+        $this->assertEquals(2, count(class_modul_system_changelog::getLogEntries($strSystemid)));
 
         $objSystemCommon->deleteSystemRecord($strSystemid);
         
         
-//        $objSetting->setStrValue($strOldValue);
-//        $objSetting->updateObjectToDb();
+
 
     }
 }
