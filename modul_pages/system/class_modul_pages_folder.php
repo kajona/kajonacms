@@ -259,24 +259,30 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 
 	/**
 	 * Deletes a folder from the systems,
-	 * currently just, if the folder is empty
+	 * All pages and folders under the current record are deleted, too.
 	 *
 	 * @return bool
 	 */
 	public function deleteFolder() {
         
+        //scan subfolders
+        $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
+        foreach($arrSubElements as $objOneElement) {
+            if($objOneElement instanceof class_modul_pages_page)
+                $objOneElement->deletePage();
+            
+            if($objOneElement instanceof class_modul_pages_folder)
+                $objOneElement->deleteFolder();
+        }
+        
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
         
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
-	    if(count(class_modul_pages_folder::getFolderList($this->getSystemid())) == 0 && count(class_modul_pages_folder::getPagesInFolder($this->getSystemid())) == 0) {
-            //delete the folder-properties
-            $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
+        //delete the folder-properties
+        $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";
 
-	        return $this->objDB->_pQuery($strQuery, array($this->getSystemid())) && $this->deleteSystemRecord($this->getSystemid());
-        }
-	    else
-	        return false;
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid())) && $this->deleteSystemRecord($this->getSystemid());
 	}
 
 

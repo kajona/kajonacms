@@ -147,12 +147,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             if(_system_changehistory_enabled_ != "false")
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "showHistory", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("show_history"), "icon_history.gif"));
                         }
-			    		if($this->objRights->rightDelete($strSystemid)) {
-			    		    if(count(class_modul_pages_folder::getPagesAndFolderList($strSystemid)) != 0)
- 			    		    	$strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("ordner_loschen_leer")));
-                            else
-                            	$strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
-			    		}
+			    		if($this->objRights->rightDelete($strSystemid)) 
+                            $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("pages_ordner_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteFolderFinal", "&systemid=".$objOneEntry->getSystemid()));
                         if($this->objRights->rightEdit($strSystemid)) {
                             $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
                         }
@@ -197,13 +193,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
                             if($this->objRights->rightView($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
-                            if($this->objRights->rightDelete($strSystemid)) {
-                                if(count(class_modul_pages_folder::getPagesAndFolderList($strSystemid)) != 0)
-                                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
-                                else
+                            if($this->objRights->rightDelete($strSystemid))
                                     $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
-                            }
-
                             if($this->objRights->rightEdit($strSystemid)) {
                                 //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortUp", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_up"), "icon_arrowUp.gif"));
                                 //$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "sortDown", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("entry_down"), "icon_arrowDown.gif"));
@@ -321,12 +312,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                     if($this->objRights->rightEdit($objPage->getSystemid()))
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
-                    if($this->objRights->rightDelete($objPage->getSystemid())) {
-                        if(count(class_modul_pages_folder::getPagesAndFolderList($objPage->getSystemid())) != 0)
-                            $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
-                        else
-                            $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
-                    }
+                    if($this->objRights->rightDelete($objPage->getSystemid()))
+                        $strActions.= $this->objToolkit->listDeleteButton($objPage->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objPage->getSystemid()));
                     if($this->objRights->rightEdit($objPage->getSystemid()))
                         $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
                     if($this->objRights->rightRight($objPage->getSystemid()	))

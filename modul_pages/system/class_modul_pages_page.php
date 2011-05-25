@@ -339,11 +339,23 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	}
 
     /**
-     * Deletes the given page and all related elements from the system
+     * Deletes the given page and all related elements from the system.
+     * Subelements, so pages and/or folders below are delete, too
      *
      * @return bool
      */
 	public function deletePage() {
+        
+        $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
+        foreach($arrSubElements as $objOneElement) {
+            if($objOneElement instanceof class_modul_pages_page)
+                $objOneElement->deletePage();
+            
+            if($objOneElement instanceof class_modul_pages_folder)
+                $objOneElement->deleteFolder();
+        }
+        
+        
         
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
