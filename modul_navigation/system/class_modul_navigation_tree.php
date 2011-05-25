@@ -168,6 +168,40 @@ class class_modul_navigation_tree extends class_model implements interface_model
 
         return $arrReturn;
     }
+    
+    
+    /**
+	 * Deletes a navigation / a point and all childs
+	 *
+	 * @return bool
+	 */
+	public function deleteNavigation() {
+	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
+
+       //Are there any childs?
+       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+        if(count($arrChild) > 0) {
+            //Call this method for each child
+            foreach($arrChild as $objOneChild) {
+                if(!$objOneChild->deleteNaviPoint()) {
+                    return false;
+                }
+            }
+        }
+
+        //Now delete the current point
+        //start in the navigation-table
+        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
+            if($this->deleteSystemRecord($this->getSystemid())) {
+                return true;
+            }
+        }
+
+        else
+           return false;
+
+	}
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

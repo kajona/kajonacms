@@ -186,37 +186,29 @@ class class_modul_navigation_point extends class_model implements interface_mode
 	public function deleteNaviPoint() {
 	    class_logger::getInstance()->addLogRow("deleted navi(point) ".$this->getSystemid(), class_logger::$levelInfo);
 
-	    //TODO: remove? $objRoot = new class_modul_system_common();
-	    //Check rights for the current point
-	    //if($objRoot->getObjRights()->rightDelete($this->getSystemid())) {
-	        //Are there any childs?
-	       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
-	        if(count($arrChild) > 0) {
-	            //Call this method for each child
-	            foreach($arrChild as $objOneChild) {
-	                if(!$objOneChild->deleteNaviPoint()) {
-	                    return false;
-	                }
-	            }
-	        }
+       //Are there any childs?
+       $arrChild = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+        if(count($arrChild) > 0) {
+            //Call this method for each child
+            foreach($arrChild as $objOneChild) {
+                if(!$objOneChild->deleteNaviPoint()) {
+                    return false;
+                }
+            }
+        }
 
-	        //Now delete the current point
-	        //start in the navigation-table
+        //Now delete the current point
+        //start in the navigation-table
+        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
+            if($this->deleteSystemRecord($this->getSystemid())) {
+                return true;
+            }
+        }
 
-	        $strQuery = "DELETE FROM "._dbprefix_."navigation WHERE navigation_id=?";
-	        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
-		        if($this->deleteSystemRecord($this->getSystemid())) {
-		            return true;
-		        }
-	        }
+        else
+           return false;
 
-	        else
-	           return false;
-
-
-//	    }
-//	    else
-//	       return false;
 	}
 
 
