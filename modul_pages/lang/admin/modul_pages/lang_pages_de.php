@@ -105,6 +105,7 @@ $lang["page_element_placeholder_title"]  = "Interner Titel:";
 $lang["page_element_start"]              = "Anzeigezeitraum Start:";
 $lang["page_element_system_folder"]      = "Optionale Felder";
 $lang["page_folder_name"]                = "Übergeordnete Seite / Ordner:";
+$lang["page_loschen_leer"]               = "Die Seite kann nicht gelöscht werden, da Sie Unterseiten beinhaltet.";
 $lang["page_sublist"]                    = "Untergeordnete Seiten anzeigen";
 $lang["pages_hoch"]                      = "Eine Ebene nach oben";
 $lang["pages_ordner_delete"]             = "Ordner löschen";

@@ -105,6 +105,7 @@ $lang["page_element_placeholder_title"]  = "Internal title:";
 $lang["page_element_start"]              = "Display period start:";
 $lang["page_element_system_folder"]      = "Optional fields";
 $lang["page_folder_name"]                = "Superior page / folder:";
+$lang["page_loschen_leer"]               = "The page can't be deleted, it containes subpages.";
 $lang["page_sublist"]                    = "Show ancillary pages";
 $lang["pages_hoch"]                      = "One level up";
 $lang["pages_ordner_delete"]             = "Delete folder";
