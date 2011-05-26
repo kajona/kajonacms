@@ -164,7 +164,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     else
                         $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
                 }
-                if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
+                if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
                     $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
                 else
                     $strCenter = "";

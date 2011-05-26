@@ -593,7 +593,7 @@ function dateToString($objDate, $bitLong = true) {
 function numberFormat($floatNumber, $intNrOfDecimals = 2) {
     $strDecChar = class_carrier::getInstance()->getObjText()->getText("numberStyleDecimal", "system", "admin");
     $strThousandsChar = class_carrier::getInstance()->getObjText()->getText("numberStyleThousands", "system", "admin");
-    return number_format($floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
+    return number_format((float)$floatNumber, $intNrOfDecimals, $strDecChar, $strThousandsChar);
 }
 
 /**
