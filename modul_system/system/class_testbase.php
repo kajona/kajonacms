@@ -44,6 +44,9 @@ class class_testbase extends PHPUnit_Framework_TestCase {
         
     }
 
+    protected function flushDBCache() {
+        return class_carrier::getInstance()->getObjDB()->flushQueryCache();
+    }
 
 }
 

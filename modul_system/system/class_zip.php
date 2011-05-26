@@ -94,7 +94,7 @@ class class_zip {
             
         }
         
-        return $bitReturn;
+        return false;
     }
     
     /**

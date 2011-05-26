@@ -289,6 +289,10 @@ class class_cache  {
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
     }
 
+    /**
+     * Returns the list of sources currently stored to the cache
+     * @return type 
+     */
     public static function getCacheSources() {
         $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";
 
