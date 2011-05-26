@@ -93,7 +93,7 @@ class class_modul_pages_admin_xml extends class_admin implements interface_xml_a
                         if($objSingleEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS)
                             $strReturn .= "<link></link>";
                         else
-                            $strReturn .= "<link>".getLinkAdminHref("pages_content", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
+                            $strReturn .= "<link>".getLinkAdminHref("pages", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
 
                         $strReturn .= "<type>".$objSingleEntry->getIntType()."</type>";
                         $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";

@@ -108,7 +108,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "editNavi", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_bearbeiten"), "icon_pencil.gif"));
 			    		if($this->objRights->rightView($objOneNavigation->getSystemid())) {
                             if(validateSystemid($objOneNavigation->getStrFolderId()))
-                                $strAction .= getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getText("navigation_show_disabled"));
+                                $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_treeBranchOpenDisabled.gif", $this->getText("navigation_show_disabled")));
                             else
                                 $strAction .= $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$objOneNavigation->getSystemid(), "", $this->getText("navigation_anzeigen"), "icon_treeBranchOpen.gif"));
                         }

@@ -47,7 +47,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), "", "", true, "adminnavi"));
+        //FIXME: sidler: removed $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getText("modul_elemente"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), "", "", true, "adminnavi"));
@@ -160,7 +160,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				}
 			}
 
-			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
+			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])) && (!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])))
 			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_new.gif"), $intI++);
 
 			if(uniStrlen($strFolder) != 0)
@@ -192,7 +192,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             if($this->objRights->rightEdit($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
                             if($this->objRights->rightView($strSystemid))
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
                             if($this->objRights->rightDelete($strSystemid))
                                     $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
                             if($this->objRights->rightEdit($strSystemid)) {
@@ -216,7 +216,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             if($this->objRights->rightEdit($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "copyPage", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_copy"), "icon_copy.gif"));
                             if($this->objRights->rightView($strSystemid))
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
                             if($this->objRights->rightDelete($strSystemid)) {
                                 if(count(class_modul_pages_folder::getPagesAndFolderList($strSystemid)) != 0)
                                     $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
@@ -243,8 +243,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			}
 
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-			    $strAddPageButtons  = getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif");
-			    $strAddPageButtons .= getLinkAdmin($this->arrModule["modul"], "newAlias", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif");
+			    $strAddPageButtons  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
+			    $strAddPageButtons .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
 			    $strPages .= $this->objToolkit->listRow2Image("", "", $strAddPageButtons, $intI++);
             }
 
@@ -322,8 +322,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrName(), $strActions, $intI++);
                 }
 			}
-			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-			    $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"), $intI++);
+			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+                $strAddPageButtons  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newPage", "", $this->getText("modul_neu"), $this->getText("modul_neu"), "icon_new.gif"));
+			    $strAddPageButtons .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newAlias", "", $this->getText("modul_neu_alias"), $this->getText("modul_neu_alias"), "icon_new_alias.gif"));
+			    $strReturn .= $this->objToolkit->listRow2Image("", "", $strAddPageButtons, $intI++);
+            }
 
 			if(uniStrlen($strReturn) != 0)
 			    $strReturn = $this->objToolkit->listHeader().$strReturn.$this->objToolkit->listFooter();
