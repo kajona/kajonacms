@@ -78,7 +78,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
     public function createLogEntry($objSourceModel, $strAction, $bitForceEntry = false) {
         $bitReturn = true;
         
-        if(_system_changehistory_enabled_ == "false")
+        if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
             return true;
         
         //changes require at least kajona 3.3.1.10

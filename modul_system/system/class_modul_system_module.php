@@ -88,7 +88,8 @@ class class_modul_system_module extends class_model implements interface_model  
         $this->setIntDate($arrRow["module_date"]);
         $this->setIntNavigation($arrRow["module_navigation"]);
         $this->setIntNr($arrRow["module_nr"]);
-        $this->setStrAspect($arrRow["module_aspect"]);
+        if(isset($arrRow["module_aspect"]))
+            $this->setStrAspect($arrRow["module_aspect"]);
     }
 
     /**
