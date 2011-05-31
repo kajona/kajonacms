@@ -218,10 +218,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             if($this->objRights->rightView($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_folderActionOpen.gif"));
                             if($this->objRights->rightDelete($strSystemid)) {
-                                if(count(class_modul_pages_folder::getPagesAndFolderList($strSystemid)) != 0)
-                                    $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
-                                else
-                                    $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
+                                $strActions .= $this->objToolkit->listDeleteButton($objOneEntry->getStrName(), $this->getText("seite_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deletePageFinal", "&systemid=".$objOneEntry->getSystemid()));
                             }
 
                             if($this->objRights->rightEdit($strSystemid)) {
