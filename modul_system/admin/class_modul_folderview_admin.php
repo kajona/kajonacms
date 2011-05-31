@@ -197,9 +197,9 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 
 		$strReturn .= $this->objToolkit->listHeader();
 		//Folder to jump one level up
-		if(!$bitPages || $strLevelUp != "") {
+		if(!$bitPages || $strLevelUp != "" || $bitFolder) {
 			$strAction = $this->objToolkit->listButton(($strFolder != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements? "&elements=false" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getText("ordner_hoch"), $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif") :  " " );
-			if($strFolder == $this->getModuleSystemid("pages") && !$bitPages)
+			if($strFolder == $this->getModuleSystemid("pages") && (!$bitPages || $bitFolder))
 				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getModuleSystemid("pages")."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
 
 			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $strAction, $intCounter++);
