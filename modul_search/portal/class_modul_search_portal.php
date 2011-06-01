@@ -63,7 +63,6 @@ class class_modul_search_portal extends class_portal implements interface_portal
 	 * @return string
 	 */
 	private function actionForm() {
-		$strReturn = "";
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_form");
 
