@@ -95,9 +95,11 @@
 #BrowserMatch \bMSIE\s[789] !gzip-only-text/html
 
 # only enable when you know what you're doing: set browser caching of static files to 1 week
-#<FilesMatch "\.(js|css|jpg|jpeg|png|gif|ico|swf)$">
+#<FilesMatch "\.(js|css|jpg|jpeg|png|gif|ico|swf|woff|eot|svg|ttf)$">
 #    <IfModule headers_module>
 #        Header set Cache-Control "max-age=604800, public"
+#        Header unset Last-Modified
+#        Header set Expires "Thu, 31 Dec 2020 20:00:00 GMT"
 #    </IfModule>
 #    <IfModule expires_module>
 #        ExpiresActive On
