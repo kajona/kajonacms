@@ -62,6 +62,8 @@ class class_zip {
         if($strTargetFile == "")
             $strTargetFile = $strSourceFile;
         
+        $strTargetFile = ltrim($strTargetFile, "/");
+        
         
         
         if(file_exists(_realpath_.$strSourceFile))
