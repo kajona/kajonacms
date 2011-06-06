@@ -542,7 +542,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
      */
 	public function generateNonexistingPagename($strName, $bitAvoidSelfchek = true) {
 	    //Filter blanks out of pagename
-		$strName = str_replace(" ", "_", $this->getStrName());
+		$strName = str_replace(" ", "_", $strName);
 
 		//Pagename already existing?
 		$strQuery = "SELECT page_id
