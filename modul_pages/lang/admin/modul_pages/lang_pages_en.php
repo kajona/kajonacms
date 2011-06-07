@@ -171,4 +171,15 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+$lang["systemtask_pageexport_name"]      = "Export page";
+$lang["systemtask_pageexport_success"]      = "Page exported successfully. The document was saved as following. Please remove the file as soon as possible.<br />";
+$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
+$lang["systemtask_pageexport_page"]      = "Page to export:";
+
+$lang["systemtask_pageimport_name"]      = "Import page";
+$lang["systemtask_pageimport_file"]      = "File to import:";
+$lang["systemtask_pageimport_errorupload"]      = "Error while uploading the file.";
+$lang["systemtask_pageimport_errortype"]      = "Uploaded file not a xml file.";
+$lang["systemtask_pageimport_success"]      = "Page imported successfully.";
+$lang["systemtask_pageimport_replace"]      = "Replace existing page:";
 ?>

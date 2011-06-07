@@ -279,6 +279,7 @@ $lang["systemtask_flushpiccache_done"]   = "Leeren abgeschlossen.";
 $lang["systemtask_flushpiccache_name"]   = "Bildercache leeren";
 $lang["systemtask_flushpiccache_skipped"] = "<br />Anzahl übersprungener Bilder: ";
 $lang["systemtask_group_cache"]          = "Cache";
+$lang["systemtask_group_pages"]          = "Seiten";
 $lang["systemtask_group_database"]       = "Datenbank";
 $lang["systemtask_group_default"]        = "Verschiedenes";
 $lang["systemtask_group_stats"]          = "Statistiken";

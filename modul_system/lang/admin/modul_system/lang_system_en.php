@@ -278,6 +278,7 @@ $lang["systemtask_flushpiccache_deleted"] = "<br />Number of files deleted: ";
 $lang["systemtask_flushpiccache_done"]   = "Flushing completed.";
 $lang["systemtask_flushpiccache_name"]   = "Flush images cache";
 $lang["systemtask_flushpiccache_skipped"] = "<br />Number of files skipped: ";
+$lang["systemtask_group_pages"]          = "Pages";
 $lang["systemtask_group_cache"]          = "Cache";
 $lang["systemtask_group_database"]       = "Database";
 $lang["systemtask_group_default"]        = "Miscellaneous";
