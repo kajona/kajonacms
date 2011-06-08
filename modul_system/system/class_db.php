@@ -761,15 +761,15 @@ class class_db {
         
 	    // Check, how many dumps to keep
 	    $objFilesystem = new class_filesystem();
-	    $arrFiles = $objFilesystem->getFilelist("/system/debug/", ".sql");
+	    $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
 
 	    while(count($arrFiles) >= _system_dbdump_amount_) {
-	        $strFile = current($arrFiles);
+	        $strFile = array_shift($arrFiles);
 	        if(!$objFilesystem->fileDelete("/system/dbdumps/".$strFile)) {
 	           class_logger::getInstance()->addLogRow("Error deleting old db-dumps", class_logger::$levelWarning);
 	           return false;
 	        }
-	        $arrFiles = $objFilesystem->getFilelist("/system/debug/", ".sql");
+	        $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
 	    }
 
         $strTargetFilename = "/system/dbdumps/dbdump_".time().".sql";
