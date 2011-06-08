@@ -20,7 +20,7 @@ class class_installer_element_rssfeed extends class_installer_base implements in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.4.0";
 		$arrModule["name"] 			= "element_rssfeed";
 		$arrModule["name_lang"] 	= "Element rssfeed";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -32,13 +32,13 @@ class class_installer_element_rssfeed extends class_installer_base implements in
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0.9";
+	    return "3.4.0";
 	}
 
 	public function hasPostInstalls() {
 	    //needed: pages
 	    try {
-		    $objModule = class_modul_system_module::getModuleByName("pages");
+		    class_modul_system_module::getModuleByName("pages");
 		}
 		catch (class_exception $objE) {
 		    return false;
@@ -128,6 +128,11 @@ class class_installer_element_rssfeed extends class_installer_base implements in
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("rssfeed")->getStrVersion() == "3.3.1") {
+            $strReturn .= $this->postUpdate_331_340();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -158,6 +163,12 @@ class class_installer_element_rssfeed extends class_installer_base implements in
     public function postUpdate_3301_331() {
         $strReturn = "Updating element rssfeed to 3.3.1...\n";
         $this->updateElementVersion("rssfeed", "3.3.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_331_340() {
+        $strReturn = "Updating element rssfeed to 3.4.0...\n";
+        $this->updateElementVersion("rssfeed", "3.4.0");
         return $strReturn;
     }
 }

@@ -16,7 +16,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.9";
+		$arrModule["version"] 		= "3.4.0";
 		$arrModule["name"] 			= "gallery";
 		$arrModule["name_lang"] 	= "Module Gallery";
 		$arrModule["moduleId"] 		= _gallery_modul_id_;
@@ -241,6 +241,11 @@ class class_installer_gallery extends class_installer_base implements interface_
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_3319();
         }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.9") {
+            $strReturn .= $this->update_3319_340();
+        }
 
         return $strReturn."\n\n";
 	}
@@ -440,6 +445,16 @@ class class_installer_gallery extends class_installer_base implements interface_
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("gallery", "3.3.1.9");
         $this->updateElementVersion("galleryRandom", "3.3.1.9");
+        return $strReturn;
+    }
+    
+    private function update_3319_340() {
+        $strReturn = "Updating 3.3.1.9 to 3.4.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("gallery", "3.4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("gallery", "3.4.0");
+        $this->updateElementVersion("galleryRandom", "3.4.0");
         return $strReturn;
     }
 

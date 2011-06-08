@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.9";
+		$arrModule["version"] 		= "3.4.0";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -382,6 +382,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_3319();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.9") {
+            $strReturn .= $this->update_3319_340();
         }
 
         return $strReturn."\n\n";
@@ -812,6 +817,17 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.3.1.9");
         $this->updateElementVersion("paragraph", "3.3.1.9");
         $this->updateElementVersion("image", "3.3.1.9");
+        return $strReturn;
+    }
+    
+    private function update_3319_340() {
+        $strReturn = "Updating 3.3.1.9 to 3.4.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.0");
+        $this->updateElementVersion("paragraph", "3.4.0");
+        $this->updateElementVersion("image", "3.4.0");
         return $strReturn;
     }
 }

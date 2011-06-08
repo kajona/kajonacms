@@ -16,7 +16,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1.8";
+		$arrModule["version"] 		= "3.4.0";
 		$arrModule["name"] 			= "navigation";
 		$arrModule["name_lang"] 	= "Module Navigation";
 		$arrModule["moduleId"] 		= _navigation_modul_id_;
@@ -191,6 +191,11 @@ class class_installer_navigation extends class_installer_base implements interfa
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.1") {
             $strReturn .= $this->update_3311_3318();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_340();
         }
 
         return $strReturn."\n\n";
@@ -395,6 +400,15 @@ class class_installer_navigation extends class_installer_base implements interfa
         $this->updateModuleVersion("navigation", "3.3.1.8");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("navigation", "3.3.1.8");
+        return $strReturn;
+    }
+    
+    private function update_3318_340() {
+        $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("navigation", "3.4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("navigation", "3.4.0");
         return $strReturn;
     }
 }

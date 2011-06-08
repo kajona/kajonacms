@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.3.1.10";
+		$arrModul["version"] 			= "3.4.0";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -660,6 +660,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.9") {
             $strReturn .= $this->update_3319_33110();
+            $this->objDB->flushQueryCache();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.10") {
+            $strReturn .= $this->update_33110_340();
             $this->objDB->flushQueryCache();
         }
         
@@ -1461,6 +1467,16 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.3.1.10");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.3.1.10");
+        return $strReturn;
+    }
+    
+    private function update_33110_340() {
+        $strReturn = "Updating 3.3.1.10 to 3.4.0...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.0");
         return $strReturn;
     }
 }

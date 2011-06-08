@@ -16,7 +16,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.3.1.8";
+		$arrModule["version"] 		  = "3.4.0";
 		$arrModule["name"] 			  = "tags";
 		$arrModule["name_lang"] 	  = "Module Tags";
 		$arrModule["moduleId"] 		  = _tags_modul_id_;
@@ -76,14 +76,14 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 
 		//register the module
-		$strSystemID = $this->registerModule("tags",
-		                                     _tags_modul_id_,
-		                                     "", 
-		                                     "class_modul_tags_admin.php",
-		                                     $this->arrModule["version"], 
-		                                     true,
-		                                     "",
-		                                     "class_modul_tags_admin_xml.php");
+		$this->registerModule("tags",
+                                 _tags_modul_id_,
+                                 "", 
+                                 "class_modul_tags_admin.php",
+                                 $this->arrModule["version"], 
+                                 true,
+                                 "",
+                                 "class_modul_tags_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 
@@ -134,6 +134,12 @@ class class_installer_tags extends class_installer_base implements interface_ins
             $strReturn .= $this->update_3311_3318();
             $this->objDB->flushQueryCache();
         }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.3.1.8") {
+            $strReturn .= $this->update_3318_340();
+            $this->objDB->flushQueryCache();
+        }
 	   
         return $strReturn."\n\n";
 	}
@@ -145,6 +151,16 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $this->updateModuleVersion($this->arrModule["name"], "3.3.1.8");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("tags", "3.3.1.8");
+        return $strReturn;
+    }
+	
+    private function update_3318_340() {
+        $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->arrModule["name"], "3.4.0");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.4.0");
         return $strReturn;
     }
 

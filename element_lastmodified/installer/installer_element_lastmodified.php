@@ -20,7 +20,7 @@ class class_installer_element_lastmodified extends class_installer_base implemen
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.3.1";
+		$arrModule["version"] 		= "3.4.0";
 		$arrModule["name"] 			= "element_lastmodified";
 		$arrModule["name_lang"] 	= "Element Lastmodified";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -32,13 +32,13 @@ class class_installer_element_lastmodified extends class_installer_base implemen
 	}
 	
     public function getMinSystemVersion() {
-	    return "3.2.0.9";
+	    return "3.4.0";
 	}
 
 	public function hasPostInstalls() {
 	    //needed: pages
 	    try {
-		    $objModule = class_modul_system_module::getModuleByName("pages");
+		    class_modul_system_module::getModuleByName("pages");
 		}
 		catch (class_exception $objE) {
 		    return false;
@@ -128,6 +128,11 @@ class class_installer_element_lastmodified extends class_installer_base implemen
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("lastmodified")->getStrVersion() == "3.3.1") {
+            $strReturn .= $this->postUpdate_331_340();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -157,6 +162,12 @@ class class_installer_element_lastmodified extends class_installer_base implemen
     public function postUpdate_3301_331() {
         $strReturn = "Updating element lastmodified to 3.3.1...\n";
         $this->updateElementVersion("lastmodified", "3.3.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_331_340() {
+        $strReturn = "Updating element lastmodified to 3.4.0...\n";
+        $this->updateElementVersion("lastmodified", "3.4.0");
         return $strReturn;
     }
 }
