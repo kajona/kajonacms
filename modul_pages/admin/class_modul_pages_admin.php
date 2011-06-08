@@ -316,6 +316,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     if($this->objRights->rightRight($objPage->getSystemid()	))
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
 
+
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrBrowsername()." (".$objPage->getStrName().")", $strActions, $intI++);
                 }
 			}
@@ -378,7 +379,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
-        $strPagesBrowser = getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false&folder=1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser"));
+        $strPagesBrowser = getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false&folder=1&pagealiases=1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser"));
 
         //add a pathnavigation when not in pe mode
         if($this->getParam("pe") != 1) {
