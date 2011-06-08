@@ -117,7 +117,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["valueMin"] = $objDateToShow != null ? $objDateToShow->getIntMin() : "";
 
         $arrTemplate["titleTime"] = class_carrier::getInstance()->getObjText()->getText("titleTime", "system", "admin");
-        
+
         //set up the container div
         $arrTemplate["calendarId"] = $strName;
         $strContainerId = $strName."_calendarContainer";
@@ -299,10 +299,10 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strTitle
      * @param string $strValue
      * @param string $strClass
-     * @param bool $bitAllowFolders
+     * @param bool $bitElements
      * @return string
      */
-    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
+    public function formInputPageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $bitElements = true) {
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_pageselector");
         $arrTemplate = array();
         $arrTemplate["name"] = $strName;
@@ -311,7 +311,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["class"] = $strClass;
         $arrTemplate["opener"] = getLinkAdminDialog("folderview",
                                                    "pagesFolderBrowser",
-                                                   "&pages=1&form_element=".$strName,
+                                                   "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
                                                    class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
                                                    class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
                                                    "icon_externalBrowser.gif",
@@ -370,8 +370,8 @@ class class_toolkit_admin extends class_toolkit {
 
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
-    
-    
+
+
     /**
      * Returns a regular text-input field with a file browser button.
      * The repository is set to the images-repo by default.
@@ -392,23 +392,23 @@ class class_toolkit_admin extends class_toolkit {
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
 										"icon_externalBrowser.gif",
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"));
-        
-        $strOpener .= " ".getLinkAdminDialog("filemanager", 
-                                         "imageDetails", 
-                                         "imageFile='+document.getElementById('".$strName."').value+'", 
+
+        $strOpener .= " ".getLinkAdminDialog("filemanager",
+                                         "imageDetails",
+                                         "imageFile='+document.getElementById('".$strName."').value+'",
                                          class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
                                          class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
                                          "icon_crop.gif",
                                          class_carrier::getInstance()->getObjText()->getText("cropImage", "filemanager", "admin"),
                                          true, false,
-                                         " (function() { 
-                                             if(document.getElementById('".$strName."').value != '') { 
-                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("filemanager", "imageDetails", "imageFile='+document.getElementById('".$strName."').value+'")."'); 
-                                                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); 
-                                                 KAJONA.admin.folderview.dialog.init(); 
-                                             } 
+                                         " (function() {
+                                             if(document.getElementById('".$strName."').value != '') {
+                                                 KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref("filemanager", "imageDetails", "imageFile='+document.getElementById('".$strName."').value+'")."');
+                                                 KAJONA.admin.folderview.dialog.setTitle('".$strTitle."');
+                                                 KAJONA.admin.folderview.dialog.init();
+                                             }
                                              return false; })(); return false;");
-        
+
         return $this->formInputText($strName, $strTitle, $strValue, $strClass, $strOpener);
     }
 

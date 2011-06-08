@@ -25,7 +25,7 @@ $lang["_pages_templatechange_"]          = "Templatewechsel erlaubt:";
 $lang["_pages_templatechange_hint"]      = "Definiert, ob das Template einer Seite geändert werden darf, wenn diese bereits Elemente enthält. Wird dies erlaubt, kann es zu unerwarteten Nebeneffekten führen!";
 $lang["beschreibung"]                    = "Beschreibung:";
 $lang["browser"]                         = "Ordner-Browser";
-$lang["browsername"]                     = "Browsertitel:";
+$lang["browsername"]                     = "Seitentitel:";
 $lang["change_object_folder"]            = "Ordner";
 $lang["change_object_page"]              = "Seite";
 $lang["contentToolbar_content"]          = "Inhalte bearbeiten";
@@ -171,15 +171,4 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
-$lang["systemtask_pageexport_name"]      = "Seite exportieren";
-$lang["systemtask_pageexport_success"]      = "Export der Seite war erfolgreich. Die Seite wurde unter dem folgenden Dateinamen abelegt. Bitte die Datei schnellstmöglich vom System entfernen.<br />";
-$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
-$lang["systemtask_pageexport_page"]      = "Zu exportierende Seite:";
-
-$lang["systemtask_pageimport_name"]      = "Seite importieren";
-$lang["systemtask_pageimport_file"]      = "Zu importierende Datei:";
-$lang["systemtask_pageimport_errorupload"]      = "Fehler beim Hochladen der Datei.";
-$lang["systemtask_pageimport_errortype"]      = "Hochgeladene Datei ist keine xml-Datei.";
-$lang["systemtask_pageimport_success"]      = "Seite erfolgreich importiert.";
-$lang["systemtask_pageimport_replace"]      = "Bestehende Seite ersetzen:";
 ?>

@@ -127,10 +127,11 @@ class class_installer_sc_01pages implements interface_sc_installer  {
             $strReturn .= "Error creating paragraph element.\n";
 
 
-        
+
         $strReturn .= "Creating master-page\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("master");
+        $objPage->setStrBrowsername("master");
         $objPage->setStrTemplate("master.tpl");
         //set language to "" - being update by the languages sc installer later
         $objPage->setStrLanguage("");
