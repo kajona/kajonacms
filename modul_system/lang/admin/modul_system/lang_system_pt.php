@@ -1,4 +1,4 @@
-<?php
+<br /><a href=\"http://www.kajona.de/update_32x_to_330.html\" target=\"_blank\">update instructions from 3.2.x to 3.3.0</a><?php
 /*"******************************************************************************************************
 *   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
@@ -102,7 +102,7 @@ $lang["installer_next"]                  = "Próximo passo >";
 $lang["installer_nloaded"]               = "a faltar";
 $lang["installer_phpcheck_folder"]       = "<br />Permissões de escrita em";
 $lang["installer_phpcheck_intro"]        = "<b>Bemvindo</b><br /><br />";
-$lang["installer_phpcheck_intro2"]       = "<br />A instalação do sistema é dividida em diferentes passos: <br />Verificação de permissões, configuração de Base de Dados, credênciais para aceder à administração, instalação de módulos, instalação de elementos e instalação de conteúdos de exemplo.<br /><br />Dependendo dos módulos escolhidos, o número de passos pode variar.<br /><br /> <b>Antes de correr o sistema de actualização, por favor leia as <br /><a href=\"http://www.kajona.de/update_311_to_320.html\" target=\"_blank\">instruções de actualização de  3.1.x para 3.2.0</a><br /><a href=\"http://www.kajona.de/update_32x_to_330.html\" target=\"_blank\">instruções de actualização de  3.2.x para 3.3.0</a>.</b><br /><br /><br />As permissões nos mesmos ficheiros e a disponibilidade <br />dos módulos-php necessários está sendo verificada:<br />";
+$lang["installer_phpcheck_intro2"]       = "<br />A instalação do sistema é dividida em diferentes passos: <br />Verificação de permissões, configuração de Base de Dados, credênciais para aceder à administração, instalação de módulos, instalação de elementos e instalação de conteúdos de exemplo.<br /><br />Dependendo dos módulos escolhidos, o número de passos pode variar.<br /><br /> <b>Antes de correr o sistema de actualização, por favor leia as <br /><a href=\"http://www.kajona.de/update_311_to_320.html\" target=\"_blank\">instruções de actualização de  3.1.x para 3.2.0</a><br /><a href=\"http://www.kajona.de/update_32x_to_330.html\" target=\"_blank\">instruções de actualização de  3.2.x para 3.3.0</a><br /><a href=\"http://www.kajona.de/update_33x_to_340.html\" target=\"_blank\">instruções de actualização de 3.3.x para 3.4.0</a>.</b><br /><br /><br />As permissões nos mesmos ficheiros e a disponibilidade <br />dos módulos-php necessários está sendo verificada:<br />";
 $lang["installer_phpcheck_lang"]         = "Para carregar o sistema de instalação usando uma língua diferente, use uma das seguintes ligações:<br /><br />";
 $lang["installer_phpcheck_module"]       = "<br />Módulo PHP";
 $lang["installer_prev"]                  = "< Passo Anterior";
