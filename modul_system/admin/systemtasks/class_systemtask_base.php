@@ -90,16 +90,18 @@ abstract class class_systemtask_base {
     /**
      * Method invoking the hook-methods to generate a form.
      *
+     * @param string $strTargetModule
+     * @param string $strTargetAction
      */
-    public final function generateAdminForm() {
+    public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
     	$strReturn = "";
     	$strFormContent = $this->getAdminForm();
     	
     	if($strFormContent != "") {
             if($this->bitMultipartform)
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
             else
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("system", "systemTasks", "task=".$this->getStrInternalTaskName()), "taskParamForm");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm");
     		$strReturn .= $strFormContent;
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"));
