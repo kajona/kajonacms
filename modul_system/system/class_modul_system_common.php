@@ -270,7 +270,7 @@ class class_modul_system_common extends class_model implements interface_model  
 
         $strQuery = "SELECT system_id
                        FROM "._dbprefix_."system
-                   ".($intModuleFilter !== false ? "WHERE system_module_nr = ".(int)$intModuleFilter."" : "")."
+                   ".($intModuleFilter !== false ? "WHERE system_module_nr = ? " : "")."
                    ORDER BY system_lm_time DESC";
 
         $arrParams = array();
