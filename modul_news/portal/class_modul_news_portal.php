@@ -175,7 +175,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				//Add pe code
 				$arrPeConfig = array(
 			                              "pe_module" => "news",
-			                              "pe_action_edit" => "editNewscontent",
+			                              "pe_action_edit" => "editNews",
 			                              "pe_action_edit_params" => "&systemid=".$this->getSystemid()
 				                    );
 				$strReturn = class_element_portal::addPortalEditorCode($strReturn, $objNews->getSystemid(), $arrPeConfig);
