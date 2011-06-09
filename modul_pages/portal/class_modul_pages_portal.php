@@ -91,17 +91,19 @@ class class_modul_pages_portal extends class_portal {
                 class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
                 $objPageData = class_modul_pages_page::getPageByName($strPagename);
-            }
-            try {
-                $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
                 
+                try {
+                    $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+                }
+                catch (class_exception $objException) {
+                    $strPagename = _pages_errorpage_;
+                    //revert to the old language - fallback didn't work
+                    $objDefaultLang->setStrPortalLanguage($strPreviousLang);
+                }
             }
-            catch (class_exception $objException) {
+            else
                 $strPagename = _pages_errorpage_;
-                //revert to the old language - fallback didn't work
-                $objDefaultLang->setStrPortalLanguage($strPreviousLang);
-            }
-
+            
 
 			$objPageData = class_modul_pages_page::getPageByName($strPagename);
 
