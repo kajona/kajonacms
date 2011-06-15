@@ -913,6 +913,8 @@ class class_toolkit_admin extends class_toolkit {
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
         //place it into a standard-js-dialog
         $strDialog = $this->jsDialog(1);
+        
+        $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
 
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
 
