@@ -4,15 +4,15 @@
 
 init() 
 { 
-  echo "deleting target folder temp...\n";
+  echo "deleting target folder temp...";
   if [ -d "$PWD/packages" ]
   then
     rm -rf "$PWD/packages"
   fi
   mkdir "$PWD/packages"
 
-  echo "creating exported folders...\n";
-  for i in `ls -a $PWD`
+  echo "creating exported folders...";
+  for i in `ls -a "$PWD"`
   do
     if [ -d $i ] && [ $i != ".svn" ] && [ $i != "packages" ] && [ $i != "kajona" ] && [ $i != "." ] && [ $i != ".." ]
     then
@@ -28,12 +28,12 @@ init()
 singleZips() 
 {
   cd "packages"
-  echo "single zips @ $PWD...\n";
+  echo "single zips @ $PWD...";
   for i in `ls "$PWD"`
   do
     if [ -d "$PWD/$i" ] 
     then
-	zip -r $i $i
+	zip -r "$i" "$i"
     fi
   done
   cd ".."
@@ -80,7 +80,7 @@ litePackage()
 
 copyRecursive()
 { #startDir = 1, targetDir = 2
-  for i in `ls -a $1`
+  for i in `ls -a "$1"`
   do
     if [ -d "$1/$i" ] && [ $i != ".svn" ] && [ $i != "." ] && [ $i != ".." ]
     then
