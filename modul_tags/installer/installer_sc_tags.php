@@ -56,7 +56,7 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding tags-element to new page\n";
             $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags");
+            $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");
             $objPagelement->setStrName("mixed3");
             $objPagelement->setStrElement("tags");
             $objPagelement->updateObjectToDb($strSearchresultsId);
