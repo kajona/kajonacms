@@ -18,6 +18,7 @@ else
 	define("_admin_", false);
 	
 	
+//mark the request as a xml-based request
 define("_xmlLoader_", true);	
 
 /**
@@ -27,178 +28,40 @@ define("_xmlLoader_", true);
  */
 class class_xml {
     
-    /**
-	 * class db
-	 *
-	 * @var class_db
-	 */
-	private $objDB;
-
-	/**
-	 * class template
-	 *
-	 * @var class_template
-	 */
-	private $objTemplate;
-
-	/**
-	 * class session
-	 *
-	 * @var class_session
-	 */
-	private $objSession;
-
     public function __construct() {
-        //init the system
-		$objCarrier = class_carrier::getInstance();
-		$this->objDB = $objCarrier->getObjDb();
-		$this->objTemplate = $objCarrier->getObjTemplate();
-		$this->objSession = $objCarrier->getObjSession();
+		class_carrier::getInstance();
     }
+    
+    public function processRequest() {
 
-    /**
-     * Tries to load the requested module and invokes the passed actions
-     *
-     */
-    public function process_request() {
-        $strContent = "";
-        //Loading the details for the wanted module
-		if(issetGet("module"))
-			$strModule = getGet("module");
-		else
-			$strModule = "";
+        $strModule = getGet("module");
+        if($strModule == "")
+            $strModule = getPost("module");
 
-		if(issetGet("action"))
-			$strAction = getGet("action");
-		else
-			$strAction = "";
+        $strAction = getGet("action");
+        if($strAction == "")
+            $strAction = getPost("action");
+        
+        $strLanguageParam = getGet("language");
+        if($strLanguageParam == "")
+            $strLanguageParam = getPost("language");
+        
 
-		$strModule = htmlspecialchars($strModule);
-		$strAction = htmlspecialchars($strAction);
-
-		if($strModule == "" || $strAction == "") {
-		    $strContent = "<error>An error occured, malformed request</error>";
-		}
-		else {
-		    //any reaction on language-commmands?
-    	    if(issetGet("language")) {
-	            $objLanguage = new class_modul_languages_language();
-	            $objLanguage->setStrPortalLanguage(getGet("language"));
-    	    }
-
-
-            //if admin & https, redirect?
-            if(_admin_ && _admin_only_https_ == "true") {
-                //check which headers to compare
-                $strHeaderName = class_carrier::getInstance()->getObjConfig()->getConfig("https_header");
-                $strHeaderValue = strtolower(class_carrier::getInstance()->getObjConfig()->getConfig("https_header_value"));
-
-                if($strHeaderName == "")
-                    $strHeaderName = "HTTPS";
-
-                //header itself given?
-                if(!issetServer($strHeaderName) ) {
-                    //reload to https
-                    header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
-                    die("Reloading using https...");
-                }
-                //value of header correct?
-                else if($strHeaderValue != "" && $strHeaderValue != strtolower(getServer($strHeaderName))) {
-                    //reload to https
-                    header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
-                    die("Reloading using https...");
-                }
-            }
-
-            //Requested module installed?
-            $objModule = class_modul_system_module::getModuleByName($strModule);
-            if($objModule != null) {
-                if(_admin_) {
-
-
-                    if($this->objSession->isLoggedin() && $this->objSession->isAdmin()) {
-                        //Load the admin-part
-                        if($objModule->getStrXmlNameAdmin() != "") {
-                            $strClassname = str_replace(".php", "", $objModule->getStrXmlNameAdmin());
-                            $objModuleRequested = new $strClassname();
-                            $strContent = $objModuleRequested->action($strAction);
-                        }
-                    }
-                    else {
-					    throw new class_exception("Sorry, but you don't have the needed permissions to access the admin-area", class_exception::$level_FATALERROR);
-					}
-                }
-                else {
-                    //Load the portal parts
-                    if($objModule->getStrXmlNamePortal() != "") {
-                        $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
-                        $objModuleRequested = new $strClassname();
-                        $strContent = $objModuleRequested->action($strAction);
-                    }
-                }
-            }
-            if($strModule == "login" && _admin_) {
-                $objLogin = new class_modul_login_admin_xml();
-                $strContent = $objLogin->action($strAction);
-            }
-		}
-
-		$strCompleteXML = $this->createXmlOutput($strContent);
-
-		//check for conditionalGet Headers
-		if(checkConditionalGetHeaders(sha1($strCompleteXML)))
-		    return;
-
-		//send conditinalGetHeaders
-		sendConditionalGetHeaders(sha1($strCompleteXML));
-
-		//send global headers
-		$this->sendHeader();
-
-		//compress output
-		$objGzip = new class_gzip();
-		//return $strCompleteXML;
-		echo $objGzip->compressOutput($strCompleteXML);
-    }
-
-
-    /**
-     * Creates the xml-body.
-     *
-     * @param string $strContent
-     * @return string
-     */
-    private function createXmlOutput($strContent) {
+        $objDispatcher = new class_request_dispatcher();
+        $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
+        
         if($strContent == "")
             $strContent = "<error>An error occured, malformed request</error>";
 
-        $strReturn = "";
-        $strReturn .=
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        $strReturn .= $strContent;
-
-        //fill kajona placeholder
-        $objTemplate = class_carrier::getInstance()->getObjTemplate();
-        $objTemplate->setTemplate($strReturn);
-        $objTemplate->fillConstants();
-        $objTemplate->deletePlaceholder();
-        $strReturn = $objTemplate->getTemplate();
-
-        return $strReturn;
-    }
-
-
-    /**
-     * Sends header for the requested content
-     *
-     */
-    private function sendHeader() {
-        header("Content-Type: text/xml; charset=utf-8");
+        $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
+        return $strContent;
     }
 
 }
 
+//pass control
 $objXML = new class_xml();
-$objXML->process_request();
+header("Content-Type: text/xml; charset=utf-8");
+echo $objXML->processRequest();
 
 ?>
