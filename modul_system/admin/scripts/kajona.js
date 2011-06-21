@@ -25,7 +25,7 @@ if (typeof KAJONA == "undefined") {
 /**
  * Function to evaluate the script-tags in a passed string, e.g. loaded by an ajax-request
  * 
- * @param {String] scripts
+ * @param {String} scripts
  * @see http://wiki.ajax-community.de/know-how:nachladen-von-javascript
  **/
 KAJONA.util.evalScript = function (scripts) {
@@ -1008,15 +1008,18 @@ KAJONA.admin.ajax = {
                 'POST', postTarget, objCallback, postBody);
 	},
 
-	setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList) {
+	setAbsolutePosition : function(systemIdToMove, intNewPos, strIdOfList, objCallback) {
 		var postTarget = KAJONA_WEBPATH + '/xml.php?admin=1&module=system&action=setAbsolutePosition';
 		var postBody = 'systemid=' + systemIdToMove + '&listPos=' + intNewPos;
+
+        if(typeof objCallback == 'undefined' || objCallback == null)
+            objCallback = KAJONA.admin.ajax.regularCallback;
 
 		if (KAJONA.admin.ajax.posConn == null
 				|| !YAHOO.util.Connect
 						.isCallInProgress(KAJONA.admin.ajax.posConn)) {
 			KAJONA.admin.ajax.posConn = YAHOO.util.Connect.asyncRequest('POST',
-					postTarget, KAJONA.admin.ajax.regularCallback, postBody);
+					postTarget, objCallback, postBody);
 		}
 	},
 
@@ -1883,7 +1886,7 @@ KAJONA.admin.tags.removeTag = function(strTagId, strTargetSystemid, strAttribute
 };
 
 /**
- * Form manangemenr
+ * Form manangement
  */
 KAJONA.admin.forms = {};
 KAJONA.admin.forms.renderMandatoryFields = function(arrFields) {
@@ -1930,7 +1933,50 @@ KAJONA.admin.dashboardCalendar.eventMouseOut = function(strSourceId) {
     }
 }
 
+/**
+ * Context menus
+ */
+KAJONA.admin.contextMenu = {
+    menus: {},
+    
+    addElements: function (strIdentifier, arrElements) {
+		this.menus[strIdentifier] = {
+			elements: arrElements
+		};
+	},
+	
+	showElementMenu: function (strIdentifier, objAttach) {
+        KAJONA.admin.tooltip.hide();
 
+		var arrEntry = this.menus[strIdentifier];
+		var arrElements = arrEntry["elements"];
+		var menu;
+		
+		if (YAHOO.lang.isUndefined(arrEntry["menu"])) {
+			arrEntry["menu"] = menu = new YAHOO.widget.Menu("menu_"+strIdentifier, {
+				shadow: false,
+				lazyLoad: true
+			});
+			
+			var handleClick = function (strType, arrArgs, objElement) {
+				eval(objElement.elementAction);
+			}
+
+			for (var i=0; i<arrElements.length; i++) {
+				var e = arrElements[i];
+                if(typeof e != 'undefined')
+                    menu.addItem({ text: e.elementName, onclick: {fn: handleClick, obj: e} });
+			}
+			menu.render("menuContainer_"+strIdentifier);
+		} else {
+			menu = arrEntry["menu"];
+		}
+		var buttonRegion = YAHOO.util.Region.getRegion(objAttach);
+		menu.cfg.setProperty("x", buttonRegion.left);
+		menu.cfg.setProperty("y", buttonRegion.top);
+		menu.show();
+	}
+};
 
 
 

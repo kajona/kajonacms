@@ -1162,3 +1162,32 @@ table.calendar .mouseOver {
     -webkit-box-shadow: 3px 3px 3px #888;
     box-shadow: 3px 3px 3px #888;
 }
+
+/* context menus */
+.yui-skin-sam .yuimenu .bd {
+    border: solid 1px #000099 !important;
+    -webkit-box-shadow: 2px 2px 5px -3px #000000;
+    -moz-box-shadow: 2px 2px 5px -3px #000000;
+    box-shadow: 2px 2px 5px -3px #000000;
+}
+
+.yui-skin-sam .yuimenu {
+    font-size: 11px !important;
+    padding: 2px 0 0 2px;
+    margin: 0px !important;
+}
+
+.yui-skin-sam .yuimenuitemlabel {
+    color: #000000 !important;
+    cursor: pointer !important;
+    outline: none !important;
+    padding: 3px 5px 3px 5px !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected {
+    background-color: #f0f0f0 !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected .yuimenuitemlabel{
+    color: #000000 !important;
+}

@@ -2006,5 +2006,32 @@ class class_toolkit_admin extends class_toolkit {
             $strId = generateSystemid();
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass, "systemid" => $strId, "highlightid" =>$strHighlightId), $strTemplateID);
     }
+    
+    //---contect menues ---------------------------------------------------------------------------------
+
+    /**
+     * Creates the markup to render a js-based contex-menu.
+     * Each entry is an array with the keys
+     *   array("name" => "xx", "onclick" => "xx");
+     * A menu may be shown by calling
+     * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this) 
+     * whereas this is the js-element the menu should be attached to.
+     * 
+     * @since 3.4.1
+     * @param string $strIdentifier 
+     * @param string $arrEntries
+     * @return string 
+     */
+    public function registerMenu($strIdentifier, $arrEntries) {
+        $strEntries = "";
+        foreach($arrEntries as $arrOneEntry)
+            $strEntries .= "{elementName:'".$arrOneEntry["name"]."', elementAction:'".uniStrReplace("'", "\'", $arrOneEntry["onclick"])."'},";
+        
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_wrapper");
+        $arrTemplate = array();
+        $arrTemplate["id"] = $strIdentifier;
+        $arrTemplate["entries"] = uniSubstr($strEntries, 0, -1);
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
+    }
 }
 ?>
