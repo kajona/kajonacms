@@ -167,6 +167,14 @@ abstract class class_portal  {
         $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
 
         if(method_exists($this, $strMethodName)) {
+            
+            if(_xmlLoader_ === true) {
+                //check it the method is allowed for xml-requests
+                $objAnnotations = new class_annotations(get_class($this));
+                if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml")  && substr(get_class($this), -3) != "xml")
+                    throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
+            }
+            
             $this->strOutput = $this->$strMethodName();
         }
         else {
