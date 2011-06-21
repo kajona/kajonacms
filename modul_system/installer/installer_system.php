@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.4.0";
+		$arrModul["version"] 			= "3.4.0.1";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -397,8 +397,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_filemanager_foldersize_", "true", class_modul_system_setting::$int_TYPE_BOOL, _filemanager_modul_id_);
         //Email to send error-reports
 	    $this->registerConstant("_system_admin_email_", $this->objSession->getSession("install_email"), class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
-	    //3.0.1: gzip-compression
-	    $this->registerConstant("_system_output_gzip_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 	    //3.0.2: user are allowed to change their settings?
 	    $this->registerConstant("_user_selfedit_", "true", class_modul_system_setting::$int_TYPE_BOOL, _user_modul_id_);
@@ -666,6 +664,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.10") {
             $strReturn .= $this->update_33110_340();
+            $this->objDB->flushQueryCache();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_3401();
             $this->objDB->flushQueryCache();
         }
         
@@ -1461,7 +1465,7 @@ class class_installer_system extends class_installer_base implements interface_i
                     CHANGE ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
                     CHANGE ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL"; 
         if(!$this->objDB->_query($strQuery))
-        
+            $strReturn .= "An error occured! ...\n";
 
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.3.1.10");
@@ -1477,6 +1481,21 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateModuleVersion("", "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.0");
+        return $strReturn;
+    }
+    
+     private function update_340_3401() {
+        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
+        
+        $strReturn .= "Deleting system_output_gzip constant... \n";
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+        if(!$this->objDB->_pQuery($strQuery, array("_system_output_gzip_")))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.0.1");
         return $strReturn;
     }
 }
