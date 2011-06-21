@@ -873,10 +873,24 @@ abstract class class_admin {
         $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
         
         if(method_exists($this, $strMethodName)) {
+            
+            //validate the loading channel - xml or regular
+            if(_xmlLoader_ === true) {
+                //check it the method is allowed for xml-requests
+                $objAnnotations = new class_annotations(get_class($this));
+                if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && substr(get_class($this), -3) != "xml")
+                    throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
+            }
+            
+            
             $this->strOutput = $this->$strMethodName();
         }
         else {
             $objReflection = new ReflectionClass($this);
+            //if the pe was requested and the current module is a login-module, there are unsufficient permsissions given
+            if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "")
+                throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
+            
             throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
         }
 
