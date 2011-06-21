@@ -13,11 +13,11 @@
  *
  * @package modul_pages
  */
-class class_modul_pages_portal extends class_portal {
+class class_modul_pages_portal extends class_portal implements interface_portal {
 
     private static $strAdditionalTitle = "";
 
-	public function __construct() {
+	public function __construct($arrElementData = array()) {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_pages";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
@@ -27,6 +27,11 @@ class class_modul_pages_portal extends class_portal {
 		parent::__construct($arrModul);
 
 	}
+    
+    public function action($strAction = "") {
+        $this->generatePage();
+        return $this->strOutput;
+    }
 
 	/**
 	 * Handles the loading of a page, more in a functional than in an oop style
