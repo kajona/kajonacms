@@ -123,8 +123,7 @@ class class_request_dispatcher {
                         else {
                             //xml-loader not defined, try to use the regular dispatcher
                             $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                            $objConcreteModule->action($strAction);
-                            $strReturn = $objConcreteModule->getModuleOutput();
+                            $strReturn = $objConcreteModule->action($strAction);
                         }
                     }
                     else {
