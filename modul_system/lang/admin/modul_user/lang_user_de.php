@@ -140,4 +140,5 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Gruppenzugehörigkeiten";
 $lang["username"]                        = "Benutzername:";
 $lang["vorname"]                         = "Vorname:";
+$lang["login_printview"]                 = "Druckansicht öffnen";
 ?>
