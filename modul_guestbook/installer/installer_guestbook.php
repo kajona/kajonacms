@@ -75,7 +75,7 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
 
 		//register the module
-		$strSystemID = $this->registerModule("guestbook", _guestbook_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
+		$this->registerModule("guestbook", _guestbook_modul_id_, "class_modul_guestbook_portal.php", "class_modul_guestbook_admin.php", $this->arrModule["version"] , true);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_guestbook_search_resultpage_", "guestbook", class_modul_system_setting::$int_TYPE_PAGE, _guestbook_modul_id_);
@@ -133,26 +133,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.0") {
-            $strReturn .= $this->update_310_311();
-        }
-
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.1") {
-            $strReturn .= $this->update_311_319();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.9") {
-            $strReturn .= $this->update_319_3195();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.95") {
-            $strReturn .= $this->update_3195_320();
-        }
-
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -195,39 +175,6 @@ class class_installer_guestbook extends class_installer_base implements interfac
 
         return $strReturn."\n\n";
 	}
-
-    private function update_310_311() {
-        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.1.1");
-        return $strReturn;
-    }
-
-    private function update_311_319() {
-        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
-        $strReturn .= "Updating system-constants...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_guestbook_suche_seite_");
-        $objConstant->renameConstant("_guestbook_search_resultpage_");
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.1.9");
-
-        return $strReturn;
-    }
-
-    private function update_319_3195() {
-        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.1.95");
-        return $strReturn;
-    }
-
-    private function update_3195_320() {
-        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("guestbook", "3.2.0");
-        return $strReturn;
-    }
 
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";

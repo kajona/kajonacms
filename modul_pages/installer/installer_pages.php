@@ -138,9 +138,9 @@ class class_installer_pages extends class_installer_base implements interface_in
 		//the pages
 		$strSystemID = $this->registerModule("pages", _pages_modul_id_, "class_modul_pages_portal.php", "class_modul_pages_admin.php", $this->arrModule["version"] , true, "", "class_modul_pages_admin_xml.php");
 		//The pages_content
-		$strRightID = $this->registerModule("pages_content", _pages_content_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
+		$this->registerModule("pages_content", _pages_content_modul_id_, "", "class_modul_pages_content_admin.php", $this->arrModule["version"], false);
 		//The folderview
-		$strUserID = $this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
+		$this->registerModule("folderview", _pages_folderview_modul_id_, "", "class_modul_folderview_admin.php", $this->arrModule["version"] , false);
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_pages_templatechange_", "false", class_modul_system_setting::$int_TYPE_BOOL, _pages_modul_id_);
@@ -299,26 +299,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.0") {
-            $strReturn .= $this->update_310_311();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.1") {
-            $strReturn .= $this->update_311_319();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.9") {
-            $strReturn .= $this->update_319_3195();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.95") {
-            $strReturn .= $this->update_3195_320();
-        }
-
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -391,77 +371,6 @@ class class_installer_pages extends class_installer_base implements interface_in
 
         return $strReturn."\n\n";
 	}
-
-    private function update_310_311() {
-        $strReturn = "";
-
-        $strReturn .= "Updating 3.1.0 to 3.1.1...\n";
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.1.1");
-
-        return $strReturn;
-    }
-
-    private function update_311_319() {
-        $strReturn = "";
-
-        $strReturn .= "Updating 3.1.1 to 3.1.9...\n";
-        $strReturn .= "Registering module settings...\n";
-        $objModule = class_modul_system_module::getModuleByName("pages", true);
-        $objModule->setStrNamePortal("class_modul_pages_portal.php");
-        if(!$objModule->updateObjectToDb())
-            $strReturn .= "An error occured!\n";
-
-        $objModule = class_modul_system_module::getModuleByName("folderview", true);
-        $objModule->setStrNameAdmin("class_modul_folderview_admin.php");
-        if(!$objModule->updateObjectToDb())
-            $strReturn .= "An error occured!\n";
-
-        $strReturn .= "Updating system-constants...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_pages_fehlerseite_");
-        $objConstant->renameConstant("_pages_errorpage_");
-
-        $objConstant = class_modul_system_setting::getConfigByName("_pages_startseite_");
-        $objConstant->renameConstant("_pages_indexpage_");
-
-        $objConstant = class_modul_system_setting::getConfigByName("_pages_templatewechsel_");
-        $objConstant->renameConstant("_pages_templatechange_");
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.1.9");
-
-        return $strReturn;
-    }
-
-    private function update_319_3195() {
-        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
-
-        $strReturn .= "Searching for portallogin-element to alter...\n";
-        $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."element WHERE element_name='portallogin'";
-        $arrRow = $this->objDB->getRow($strQuery);
-        if($arrRow["COUNT(*)"] != 0) {
-        	$strSql = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_portallogin")."
-        	                   ADD ".$this->objDB->encloseColumnName("portallogin_profile")." VARCHAR (254) NULL ";
-
-        	if(!$this->objDB->_query($strSql))
-        	   $strReturn .= "An error occured!\n";
-        }
-
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.1.95");
-
-        return $strReturn;
-    }
-
-    private function update_3195_320() {
-        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.2.0");
-        return $strReturn;
-    }
 
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";

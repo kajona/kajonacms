@@ -98,8 +98,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 
 
 		//register the module
-		$strSystemID = $this->registerModule("news", _news_modul_id_, "class_modul_news_portal.php", "class_modul_news_admin.php", $this->arrModule["version"] , true, "class_modul_news_portal_xml.php");
-
+		$this->registerModule("news", _news_modul_id_, "class_modul_news_portal.php", "class_modul_news_admin.php", $this->arrModule["version"] , true, "class_modul_news_portal_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 
@@ -163,26 +162,6 @@ class class_installer_news extends class_installer_base implements interface_ins
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.0") {
-            $strReturn .= $this->update_310_311();
-        }
-
-		$arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.1") {
-            $strReturn .= $this->update_311_319();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.9") {
-            $strReturn .= $this->update_319_3195();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.95") {
-            $strReturn .= $this->update_3195_320();
-        }
-
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -230,58 +209,6 @@ class class_installer_news extends class_installer_base implements interface_ins
 
         return $strReturn."\n\n";
 	}
-
-    private function update_310_311() {
-        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.1.1");
-        return $strReturn;
-    }
-
-    private function update_311_319() {
-        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
-        $strReturn .= "Scanning tables...\n";
-        $arrTables = $this->objDB->getTables();
-
-        if(in_array(_dbprefix_."element_news", $arrTables)) {
-            $strReturn .= "Altering news-element-table...\n";
-            $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
-                            ADD ".$this->objDB->encloseColumnName("news_order")." INT NULL,
-                            ADD ".$this->objDB->encloseColumnName("news_amount")." INT NULL;";
-            if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured!!!\n";
-
-            $strReturn .= "Updating news-element-table...\n";
-            $strQuery = "UPDATE ".$this->objDB->encloseTableName(_dbprefix_."element_news")."
-            				SET news_order = 0;";
-            if(!$this->objDB->_query($strQuery))
-                $strReturn .= "An error occured!!!\n";
-
-        }
-
-        $strReturn .= "Updating system-constants...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_news_suche_seite_");
-        $objConstant->renameConstant("_news_search_resultpage_");
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.1.9");
-
-        return $strReturn;
-    }
-
-    private function update_319_3195() {
-        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.1.95");
-        return $strReturn;
-    }
-
-    private function update_3195_320() {
-        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("news", "3.2.0");
-        return $strReturn;
-    }
 
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";

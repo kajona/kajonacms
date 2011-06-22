@@ -80,7 +80,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 
 
 		//register the module
-		$strSystemID = $this->registerModule("gallery", _gallery_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true, "", "class_modul_gallery_admin_xml.php");
+		$this->registerModule("gallery", _gallery_modul_id_, "class_modul_gallery_portal.php", "class_modul_gallery_admin.php", $this->arrModule["version"] , true, "", "class_modul_gallery_admin_xml.php");
 
 		$strReturn .= "Registering system-constants...\n";
 		$this->registerConstant("_gallery_imagetypes_", ".jpg,.gif,.png", class_modul_system_setting::$int_TYPE_STRING, _gallery_modul_id_);
@@ -177,26 +177,6 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
 
-	    $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.0") {
-            $strReturn .= $this->update_310_311();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.1") {
-            $strReturn .= $this->update_311_319();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.9") {
-            $strReturn .= $this->update_319_3195();
-        }
-
-        $arrModul = $this->getModuleData($this->arrModule["name"], false);
-        if($arrModul["module_version"] == "3.1.95") {
-            $strReturn .= $this->update_3195_320();
-        }
-
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -249,64 +229,6 @@ class class_installer_gallery extends class_installer_base implements interface_
 
         return $strReturn."\n\n";
 	}
-
-    private function update_310_311() {
-        $strReturn = "Updating 3.1.0 to 3.1.1...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.1.1");
-        return $strReturn;
-    }
-
-    private function update_311_319() {
-        $strReturn = "Updating 3.1.1 to 3.1.9...\n";
-
-        $strReturn .= "Creating filemanager-repos for existing galleries...\n";
-        $arrGalleries = class_modul_gallery_gallery::getGalleries();
-        foreach($arrGalleries as $objOneGallery) {
-            $strReturn .= "Investigating gallery ".$objOneGallery->getStrTitle()."\n";
-            $objRepo = new class_modul_filemanager_repo();
-            $objRepo->setStrPath($objOneGallery->getStrPath());
-            $objRepo->setStrForeignId($objOneGallery->getSystemid());
-            $objRepo->setStrName("Internal Repo for Gallery ".$objOneGallery->getSystemid());
-            $objRepo->setStrViewFilter(class_modul_gallery_gallery::$strFilemanagerViewFilter);
-            $objRepo->setStrUploadFilter(class_modul_gallery_gallery::$strFilemanagerUploadFilter);
-            $objRepo->updateObjectToDb();
-
-            $strReturn .= "Repo created with id ".$objRepo->getSystemid()."\n";
-        }
-
-        $strReturn .= "Registering xml-classes...\n";
-        $objModule = class_modul_system_module::getModuleByName("gallery", true);
-        $objModule->setStrXmlNameAdmin("class_modul_gallery_admin_xml.php");
-        if(!$objModule->updateObjectToDb())
-            $strReturn .= "An error occured!\n";
-
-        $strReturn .= "Updating system-constants...\n";
-        $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_bildtypen_");
-        $objConstant->renameConstant("_gallery_imagetypes_");
-
-        $objConstant = class_modul_system_setting::getConfigByName("_bildergalerie_suche_seite_");
-        $objConstant->renameConstant("_gallery_search_resultpage_");
-
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.1.9");
-
-        return $strReturn;
-    }
-
-    private function update_319_3195() {
-        $strReturn = "Updating 3.1.9 to 3.1.95...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.1.95");
-        return $strReturn;
-    }
-
-    private function update_3195_320() {
-        $strReturn = "Updating 3.1.95 to 3.2.0...\n";
-        $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("gallery", "3.2.0");
-        return $strReturn;
-    }
 
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9...\n";

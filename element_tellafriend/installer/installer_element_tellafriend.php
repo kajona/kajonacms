@@ -38,7 +38,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
 	public function hasPostInstalls() {
 	    //needed: pages
 	    try {
-		    $objModule = class_modul_system_module::getModuleByName("pages");
+		    class_modul_system_module::getModuleByName("pages");
 		}
 		catch (class_exception $objE) {
 		    return false;
