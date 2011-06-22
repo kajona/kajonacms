@@ -260,6 +260,11 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
     $strLink = "";
+    
+    //add print-view param?
+    if(getGet("printView") != "")
+        $strParams .= "&printView=1";
+    
     //systemid in params?
     $strSystemid = "";
     $arrParams = explode("&", $strParams);

@@ -790,7 +790,7 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 		//document.getElementById(this.containerId + "_content").innerHTML = "<iframe src=\""+strUrl+"\" width=\"100%\" height=\"100%\" frameborder=\"0\" name=\""+this.iframeId+"\" id=\""+this.iframeId+"\"></iframe>";
 	}
 
-	this.init = function() {
+	this.init = function(intWidth, intHeight) {
 		this.dialog = new YAHOO.widget.Panel(this.containerId, {
 			fixedcenter: true,
 			close: false,
@@ -800,7 +800,9 @@ KAJONA.admin.ModalDialog = function(strDialogId, intDialogType, bitDragging, bit
 			constraintoviewport: true,
 			zindex: 4000,
 			modal: true,
-			visible: true
+			visible: true,
+            width: intWidth,
+            height: intHeight
 		});
 
 		
@@ -1978,5 +1980,15 @@ KAJONA.admin.contextMenu = {
 	}
 };
 
+
+KAJONA.admin.openPrintView = function() {
+    var intWidth = YAHOO.util.Dom.getViewportWidth() * 0.8;
+    var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.8;
+    
+    
+    KAJONA.admin.folderview.dialog.setContentIFrame(location.href.replace(/#/g, '')+"&printView=1"); 
+    //KAJONA.admin.folderview.dialog.setTitle("TBD"); 
+    KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"80px"); return false;
+};
 
 
