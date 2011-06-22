@@ -130,7 +130,7 @@ abstract class class_admin {
 		$this->setTemplateArea("");
 
 		//Writing to the history
-        if(!defined("_xmlLoader_"))
+        if(!_xmlLoader_)
             $this->setHistory();
 
 		//And keep the action
@@ -143,6 +143,10 @@ abstract class class_admin {
 		$this->objText->setStrTextLanguage($this->objSession->getAdminLanguage(true));
 
 		$this->strTextBase = $this->arrModule["modul"];
+        
+        //define the print-view, if requested
+        if($this->getParam("printView") != "")
+             $this->arrModule["template"] = "/print.tpl";
 	}
 
     // --- Common Methods -----------------------------------------------------------------------------------

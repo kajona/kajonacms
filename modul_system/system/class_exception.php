@@ -102,7 +102,7 @@ class class_exception extends Exception {
             class_logger::getInstance()->addLogRow($strLogMessage, class_logger::$levelError);
 
             //fatal errors are displayed in every case
-            if(defined("_xmlLoader_") && _xmlLoader_ === true) {
+            if(_xmlLoader_ === true) {
                 $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                 $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
             }
@@ -129,7 +129,7 @@ class class_exception extends Exception {
 
             //check, if regular errors should be displayed:
             if($intConfigDebuglevel >= 1) {
-                if(defined("_xmlLoader_") && _xmlLoader_ === true) {
+                if(_xmlLoader_ === true) {
                     $strErrormessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
                     $strErrormessage .= "<error>".xmlSafeString($this->getMessage())."</error>";
                 }
