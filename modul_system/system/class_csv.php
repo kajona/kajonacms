@@ -138,9 +138,10 @@ class class_csv {
 	 *
 	 * @return bool
      * @param bool $bitStreamToBrowser
+     * @param bool $bitExcludeHeaders skip the header-row in the output, generated based on the mapping
 	 * @throws class_exception
 	 */
-	public function writeArrayToFile($bitStreamToBrowser = false) {
+	public function writeArrayToFile($bitStreamToBrowser = false, $bitExcludeHeaders = false) {
 	    //all needed values set before?
 	    if($this->arrData != null && $this->arrMapping != null && $this->strFilename != null) {
 	        //create file-content. use a file-pointer to avoid max-mem-errors
@@ -155,23 +156,26 @@ class class_csv {
                 $objFilesystem->openFilePointer($this->strFilename);
             
 	        //the first row should contain the row-names
-	        $strRow = "";
-	        foreach ($this->arrMapping as $strSourceCol => $strTagetCol) {
-	            //add enclosers?
-                if($this->strTextEncloser != null) {
-                    $strTagetCol = $this->strTextEncloser.$strTagetCol.$this->strTextEncloser;
+            if(!$bitExcludeHeaders) {
+                $strRow = "";
+                foreach ($this->arrMapping as $strSourceCol => $strTagetCol) {
+                    //add enclosers?
+                    if($this->strTextEncloser != null) {
+                        $strTagetCol = $this->strTextEncloser.$strTagetCol.$this->strTextEncloser;
+                    }
+                    $strRow .= $strTagetCol.$this->strDelimiter;
                 }
-	            $strRow .= $strTagetCol.$this->strDelimiter;
-	        }
-	        //remove last delimiter, eol
-	        $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter))*-1);
-	        //add a linebreak
-	        $strRow .= "\n";
-	        //write header to file
-            if($bitStreamToBrowser)
-                echo($strRow);
-            else
-                $objFilesystem->writeToFile($strRow);
+                //remove last delimiter, eol
+                $strRow = uniSubstr($strRow, 0, (uniStrlen($this->strDelimiter))*-1);
+                //add a linebreak
+                $strRow .= "\n";
+                //write header to file
+                if($bitStreamToBrowser)
+                    echo($strRow);
+                else
+                    $objFilesystem->writeToFile($strRow);
+            }
+            
 	        //iterate over the data array to write it to the file
 	        foreach ($this->arrData as $arrOneRow) {
 	            $strRow = "";
