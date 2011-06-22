@@ -149,6 +149,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		$arrTemplate["profileTitle"] = $this->getText("login_profileTitle", "user");
 		$arrTemplate["logoutTitle"] = $this->getText("login_logoutTitle", "user");
 		$arrTemplate["dashboardTitle"] = $this->getText("login_dashboard", "user");
+		$arrTemplate["printLink"] = getLinkAdminManual("href=\"#\" onclick=\"KAJONA.admin.openPrintView()\"", $this->getText("login_printview"));
 
 		return $this->objToolkit->getLoginStatus($arrTemplate);
 	}
