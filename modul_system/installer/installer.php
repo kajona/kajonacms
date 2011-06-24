@@ -9,6 +9,9 @@
 //includes...
 include_once("../system/includes.php");
 
+//disabling xml-parts
+define("_xmlLoader_", false);
+
 
 /**
  * Class representing a graphical installer.

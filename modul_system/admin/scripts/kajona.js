@@ -1983,12 +1983,11 @@ KAJONA.admin.contextMenu = {
 
 KAJONA.admin.openPrintView = function() {
     var intWidth = YAHOO.util.Dom.getViewportWidth() * 0.8;
-    var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.8;
-    
+    var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.9;
     
     KAJONA.admin.folderview.dialog.setContentIFrame(location.href.replace(/#/g, '')+"&printView=1"); 
     //KAJONA.admin.folderview.dialog.setTitle("TBD"); 
-    KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"80px"); return false;
+    KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
 };
 
 

@@ -151,7 +151,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public static function resetDefaultAspect() {
         $strQuery = "UPDATE "._dbprefix_."aspects
                      SET aspect_default = 0";
-        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery);
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
     }
 
 

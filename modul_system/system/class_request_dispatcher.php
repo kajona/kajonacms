@@ -186,8 +186,10 @@ class class_request_dispatcher {
         $strReturn = "";
         
         //process language-param
-        $objLanguage = new class_modul_languages_language();
-        $objLanguage->setStrPortalLanguage($strLanguageParam);
+        if(class_modul_system_module::getModuleByName("languages") != null) {
+            $objLanguage = new class_modul_languages_language();
+            $objLanguage->setStrPortalLanguage($strLanguageParam);
+        }
         
         //process stats request
         $objStats = class_modul_system_module::getModuleByName("stats");
