@@ -57,8 +57,20 @@ echo "  <th>BG</th>";
 echo "  <th>RU</th>";
 echo "</tr>";
 
+$strPrevHash = "";
 foreach($arrEntries as $objOneEntry) {
-    echo "<tr>";
+    
+    if($objOneEntry->strSoundex == "")
+        continue;
+    
+    $strStyle = "";
+    
+    if($objOneEntry->strHash == $strPrevHash)
+            $strStyle = "background-color: green;";
+    
+    $strPrevHash = $objOneEntry->strHash;
+    
+    echo "<tr style=\"".$strStyle."\">";
     echo "  <td>".$objOneEntry->strArea."</td>";
     echo "  <td>".$objOneEntry->strModul."</td>";
     echo "  <td>".$objOneEntry->strKey."</td>";
@@ -131,15 +143,21 @@ function debug_get_langhelper(&$arrEntries, $strModul, $strKey, $strArea) {
 
 function debug_get_soundex($arrEntries) {
     foreach($arrEntries as $objOneHelper) {
-        if(is_string($objOneHelper->strEn))
-            $objOneHelper->strSoundex = soundex($objOneHelper->strEn);
+        if(is_string($objOneHelper->strEn)) {
+            $objOneHelper->strSoundex = soundex(strtolower($objOneHelper->strEn));
+            $objOneHelper->strHash = md5(strtolower($objOneHelper->strEn));
+        }
     }
 }
 
 
-function debug_sort( $objA, $objB )
-{ 
-  if(  $objA->strSoundex ==  $objB->strSoundex ){ return 0 ; } 
+function debug_sort( $objA, $objB ) { 
+    if(  $objA->strSoundex ==  $objB->strSoundex ) { 
+        if(  $objA->strEn ==  $objB->strEn ) { 
+            return 0 ; 
+        } 
+        return ($objA->strEn < $objB->strEn) ? -1 : 1;
+    } 
     return ($objA->strSoundex < $objB->strSoundex) ? -1 : 1;
 } 
 
@@ -157,6 +175,7 @@ class debug_class_lang_helper {
     public $strRu;
     
     public $strSoundex;
+    public $strHash;
 }
 
 
