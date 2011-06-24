@@ -16,6 +16,10 @@
 //---The Path on the filesystem------------------------------------------------------------------------------
 	//Determing the current path on the filesystem. Use the dirname of the current file, cut "/system"
 	define("_realpath_",  substr(dirname(__FILE__), 0, -7));
+    
+//--- Loader preconfiguration
+    if(!defined("_xmlLoader_"))
+        define("_xmlLoader_", false);
 
 //---Include Section 1-----------------------------------------------------------------------------------
 

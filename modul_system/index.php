@@ -29,8 +29,6 @@ if(issetGet("admin") && getGet("admin") == 1)
 else
 	define("_admin_", false);
 
-//disabling xml-parts
-define("_xmlLoader_", false);
 
 
 // --- The Index Class ----------------------------------------------------------------------------------

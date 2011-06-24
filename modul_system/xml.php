@@ -7,6 +7,10 @@
 *	$Id$                                                      *
 ********************************************************************************************************/
 
+
+//mark the request as a xml-based request
+define("_xmlLoader_", true);	
+
 if(!require_once("./system/includes.php"))
 	die("Error including necessary files");
 
@@ -18,8 +22,6 @@ else
 	define("_admin_", false);
 	
 	
-//mark the request as a xml-based request
-define("_xmlLoader_", true);	
 
 /**
  * Class handling all requests to be served with xml
