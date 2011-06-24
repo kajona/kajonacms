@@ -252,7 +252,7 @@ class class_modul_system_module extends class_model implements interface_model  
             if(is_array($arrElementData))
                 $objModule = new $strClassname($arrElementData);
             else
-                $objModule = new $strClassname();
+                $objModule = new $strClassname(array());
             return $objModule;
         }
         else
