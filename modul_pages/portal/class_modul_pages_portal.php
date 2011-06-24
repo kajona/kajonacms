@@ -17,7 +17,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 
     private static $strAdditionalTitle = "";
 
-	public function __construct($arrElementData = array()) {
+	public function __construct($arrElementData) {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_pages";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
