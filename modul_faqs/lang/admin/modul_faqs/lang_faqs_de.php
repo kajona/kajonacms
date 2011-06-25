@@ -22,7 +22,6 @@ $lang["kat_ausblenden"]                  = "Kategorien ein-/ausblenden";
 $lang["kat_bearbeiten"]                  = "Kategorie bearbeiten";
 $lang["liste_leer"]                      = "Keine FAQs angelegt";
 $lang["modul_anlegen"]                   = "FAQ anlegen";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "FAQs";
 $lang["modul_titel2"]                    = "FAQ-Verwaltung - Kategorie ";
 $lang["quickhelp_editCat"]               = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";

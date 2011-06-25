@@ -34,7 +34,6 @@ $lang["gallery_title"]                   = "Title:";
 $lang["hideSyncDialog"]                  = "Close";
 $lang["image_properties"]                = "Edit basic properties";
 $lang["liste_bilder_leer"]               = "No pictures available";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Galleries";
 $lang["ordner_bearbeiten"]               = "Edit folder";
 $lang["ordner_oeffnen"]                  = "Show folder";

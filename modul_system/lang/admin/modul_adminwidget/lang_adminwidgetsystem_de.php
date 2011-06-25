@@ -35,9 +35,7 @@ $lang["systemcheck_kajona_debugper"]     = "Schreibrechte auf /system/debug: ";
 $lang["systemcheck_kajona_installer"]    = "/installer vorhanden: ";
 $lang["systemcheck_kajona_piccacheper"]  = "Schreibrechte auf "._images_cachepath_.": ";
 $lang["systemcheck_name"]                = "Systemcheck";
-$lang["systemcheck_no"]                  = "Nein";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
-$lang["systemcheck_yes"]                 = "Ja";
 ?>

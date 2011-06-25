@@ -47,7 +47,6 @@ $lang["liste_leer"]                      = "No news available";
 $lang["modul_anlegen"]                   = "Create news";
 $lang["modul_list_feed"]                 = "RSS-feeds";
 $lang["modul_new_feed"]                  = "New RSS-feed";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "News";
 $lang["modul_titel2"]                    = "News management - category ";
 $lang["news_basicdata"]                  = "News basic data";

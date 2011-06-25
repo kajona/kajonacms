@@ -57,32 +57,32 @@ class class_adminwidget_systemcheck extends class_adminwidget implements interfa
 
         //check wich infos to produce
         if($this->getFieldValue("php") == "checked") {
-            $strReturn .= $this->widgetText($this->getText("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getText("systemcheck_yes") : $this->getText("systemcheck_no") ));
-            $strReturn .= $this->widgetText($this->getText("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getText("systemcheck_yes") : $this->getText("systemcheck_no") ));
+            $strReturn .= $this->widgetText($this->getText("systemcheck_php_safemode").(ini_get("safe_mode") ? $this->getText("commons_yes") : $this->getText("commons_no") ));
+            $strReturn .= $this->widgetText($this->getText("systemcheck_php_urlfopen").(ini_get("allow_url_fopen") ? $this->getText("commons_yes") : $this->getText("commons_no") ));
             $strReturn .= $this->widgetText($this->getText("systemcheck_php_regglobal").(ini_get("register_globals") ?
-                         "<span class=\"nok\">".$this->getText("systemcheck_yes")."</span>" :
-                         "<span class=\"ok\">".$this->getText("systemcheck_no")."</span>" ));
+                         "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
+                         "<span class=\"ok\">".$this->getText("commons_no")."</span>" ));
             $strReturn .= $this->widgetSeparator();
         }
         if($this->getFieldValue("kajona") == "checked") {
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_installer").(is_dir(_realpath_."/installer") ?
-                        "<span class=\"nok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("systemcheck_no")."</span>"));
+                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_debug").(is_dir(_realpath_."/debug") ?
-                        "<span class=\"nok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("systemcheck_no")."</span>"));
+                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_configper").( is_writable(_systempath_."/config/config.php") ?
-                        "<span class=\"nok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"ok\">".$this->getText("systemcheck_no")."</span>"));
+                        "<span class=\"nok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"ok\">".$this->getText("commons_no")."</span>"));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_debugper").( is_writable(_systempath_."/debug/") ?
-                        "<span class=\"ok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("systemcheck_no")."</span>" ));
+                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getText("commons_no")."</span>" ));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_dbdumpsper").( is_writable(_systempath_."/dbdumps/") ?
-                        "<span class=\"ok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("systemcheck_no")."</span>"));
+                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getText("commons_no")."</span>"));
             $strReturn .= $this->widgetText($this->getText("systemcheck_kajona_piccacheper").( is_writable(_realpath_."/"._images_cachepath_) ?
-                        "<span class=\"ok\">".$this->getText("systemcheck_yes")."</span>" :
-                        "<span class=\"nok\">".$this->getText("systemcheck_no")."</span>"));
+                        "<span class=\"ok\">".$this->getText("commons_yes")."</span>" :
+                        "<span class=\"nok\">".$this->getText("commons_no")."</span>"));
 
         }
         return "<div class=\"adminwidget_systemcheck\">".$strReturn."</div>";

@@ -96,7 +96,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 		$arrHeader[] = "#";
 		$arrHeader[] = $this->objTexts->getText("top_seiten_titel", "stats", "admin");
 		$arrHeader[] = $this->objTexts->getText("top_seiten_language", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getText("top_seiten_gewicht", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getText("commons_hits_header", "stats", "admin");
 		$arrHeader[] = $this->objTexts->getText("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
@@ -146,7 +146,7 @@ class class_stats_report_toppages implements interface_admin_statsreports {
     	    $objGraph->setArrXAxisTickLabels($arrLabels);
     	    $objGraph->addBarChartSet($arrGraphData, $this->objTexts->getText("top_seiten_titel", "stats", "admin"));
     	    $objGraph->setStrXAxisTitle($this->objTexts->getText("top_seiten_titel", "stats", "admin"));
-    	    $objGraph->setStrYAxisTitle($this->objTexts->getText("top_seiten_gewicht", "stats", "admin"));
+    	    $objGraph->setStrYAxisTitle($this->objTexts->getText("commons_hits_header", "stats", "admin"));
     	    $strFilename = "/portal/pics/cache/stats_toppages.png";
             $objGraph->setBitRenderLegend(false);
     	    $objGraph->saveGraph($strFilename);

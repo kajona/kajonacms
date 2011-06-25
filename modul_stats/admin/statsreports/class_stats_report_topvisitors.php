@@ -96,7 +96,7 @@ class class_stats_report_topvisitors implements interface_admin_statsreports {
 		//HeaderRow
 		$arrHeader[] = "#";
 		$arrHeader[] = $this->objTexts->getText("top_visitor_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getText("top_visitor_gewicht", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getText("commons_hits_header", "stats", "admin");
 		$arrHeader[] = $this->objTexts->getText("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);

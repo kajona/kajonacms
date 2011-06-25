@@ -78,7 +78,6 @@ $lang["mitglied_loeschen_fehler"]        = "An error occured while deleting user
 $lang["mitglied_loeschen_frage"]         = "Do you really want to delete the user &quot;<b>%%element_name%%</b>&quot; from the group?";
 $lang["mitglied_speichern_erfolg"]       = "Assignments saved successfully";
 $lang["mitglied_speichern_fehler"]       = "An error occured while saving assignments";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Users";
 $lang["nachname"]                        = "Surname:";
 $lang["ort"]                             = "City:";

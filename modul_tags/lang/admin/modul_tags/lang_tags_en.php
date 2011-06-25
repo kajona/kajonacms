@@ -13,7 +13,6 @@
 $lang["button_add"]                      = "Add";
 $lang["error_permissions"]               = "Not enough permissions to perform this action.";
 $lang["list_tags_empty"]                 = "No tags available.";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Tags";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["tag_assignments"]                 = "Assignments";

@@ -23,7 +23,6 @@ $lang["guestbook_moderated"]             = "Режим контроля:";
 $lang["guestbook_title"]                 = "Имя:";
 $lang["loeschen_frage"]                  = "Вы действительно хотите удалить гостевую книгу &quot;<b>%%element_name%%</b>&quot; with all entries?";
 $lang["modul_anlegen"]                   = "Новая гостевая книга";
-$lang["modul_rechte"]                    = "Разрешения модуля";
 $lang["modul_titel"]                     = "Гостевые книги";
 $lang["post_liste_leer"]                 = "Нет постов в наличии";
 $lang["post_loeschen_frage"]             = "Вы действительно хотите удалить пост &quot;<b>%%element_name%%</b>&quot;?";

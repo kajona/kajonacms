@@ -73,7 +73,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     public function getAdminForm() {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formTextRow($this->getText("systemtask_dbexport_exclude_intro"));
-        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getText("systemtask_dbexport_include"), 1 => $this->getText("systemtask_dbexport_exclude")), $this->getText("systemtask_dbexport_excludetitle") );
+        $strReturn .= $this->objToolkit->formInputDropdown("dbExcludeTables", array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes")), $this->getText("systemtask_dbexport_excludetitle") );
     	return $strReturn;
     }
 

@@ -23,7 +23,6 @@ $lang["guestbook_moderated"]             = "Freischaltungsmodus:";
 $lang["guestbook_title"]                 = "Titel:";
 $lang["loeschen_frage"]                  = "Möchten Sie das Gästebuch &quot;<b>%%element_name%%</b>&quot; mit allen Einträgen wirklich löschen?";
 $lang["modul_anlegen"]                   = "Gästebuch anlegen";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Gästebücher";
 $lang["post_liste_leer"]                 = "Keine Einträge vorhanden";
 $lang["post_loeschen_frage"]             = "Möchten Sie den Eintrag &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";

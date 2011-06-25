@@ -37,7 +37,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNavi", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));

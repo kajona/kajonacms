@@ -15,7 +15,6 @@ $lang["fehler_recht"]                    = "Нямате достатъчно п
 $lang["liste_leer"]                      = "Няма налична навигация";
 $lang["modul_anlegen"]                   = "Създай навигация";
 $lang["modul_anlegenpunkt"]              = "Създай връзка в навигацията";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Навигации";
 $lang["navigation_anzeigen"]             = "Покажи връзките в навигацията";
 $lang["navigation_bearbeiten"]           = "Редактирай навигация";

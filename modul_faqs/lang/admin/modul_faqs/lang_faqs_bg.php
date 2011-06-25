@@ -22,7 +22,6 @@ $lang["kat_ausblenden"]                  = "Покажи/скрий катего
 $lang["kat_bearbeiten"]                  = "Редактирай категории";
 $lang["liste_leer"]                      = "Няма налични Често задавани въпроси";
 $lang["modul_anlegen"]                   = "Създай ЧЗВ";
-$lang["modul_rechte"]                    = "Права върху модул";
 $lang["modul_titel"]                     = "Често Задавани Въпроси";
 $lang["modul_titel2"]                    = "Управление - категории на често задавани въпроси";
 $lang["quickhelp_editCat"]               = "В момента може само да дадете име на категорията.";

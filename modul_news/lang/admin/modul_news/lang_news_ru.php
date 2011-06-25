@@ -35,7 +35,6 @@ $lang["liste_leer"]                      = "Нет новостей";
 $lang["modul_anlegen"]                   = "Создать новость";
 $lang["modul_list_feed"]                 = "RSS-лента";
 $lang["modul_new_feed"]                  = "Новая RSS-лента";
-$lang["modul_rechte"]                    = "Разрешения на модуль";
 $lang["modul_titel"]                     = "Новости";
 $lang["modul_titel2"]                    = "Управление новостями - категория";
 $lang["news_basicdata"]                  = "Исходная информация новостей";

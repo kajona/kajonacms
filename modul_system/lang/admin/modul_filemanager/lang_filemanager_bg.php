@@ -49,7 +49,6 @@ $lang["filemanager_view_filter_h"]       = "Списък на разрешени
 $lang["liste_leer"]                      = "Няма налични хранилища";
 $lang["max_size"]                        = "Максимален размер на файл:";
 $lang["modul_neu"]                       = "Създай хранилище";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Файлов Manager";
 $lang["moduleFolderviewTitle"]           = "Изглед на папки в системата";
 $lang["nrfilestitle"]                    = "Брой файлове:";

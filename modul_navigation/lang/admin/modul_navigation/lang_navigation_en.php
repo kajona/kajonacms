@@ -16,7 +16,6 @@ $lang["fehler_recht"]                    = "Not enough permissions to perform th
 $lang["liste_leer"]                      = "No navigations available";
 $lang["modul_anlegen"]                   = "Create navigation";
 $lang["modul_anlegenpunkt"]              = "Create navigation item";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Navigations";
 $lang["navigation_anzeigen"]             = "Show navigation items";
 $lang["navigation_bearbeiten"]           = "Edit navigation";

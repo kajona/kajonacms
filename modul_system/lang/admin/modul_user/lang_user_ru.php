@@ -72,7 +72,6 @@ $lang["mitglied_loeschen_fehler"]        = "Ошибка при удалении
 $lang["mitglied_loeschen_frage"]         = "Действительно удалить участника из группы &quot;<b>%%element_name%%</b>&quot;?";
 $lang["mitglied_speichern_erfolg"]       = "Участие успешно сохранено";
 $lang["mitglied_speichern_fehler"]       = "Ошибка при сохранении участия";
-$lang["modul_rechte"]                    = "Разрешения";
 $lang["modul_titel"]                     = "Пользователь";
 $lang["nachname"]                        = "Фамилия:";
 $lang["ort"]                             = "Город:";

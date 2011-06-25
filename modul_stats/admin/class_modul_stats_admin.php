@@ -110,7 +110,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         //Load all plugins available and create the navigation
         $objFilesystem = new class_filesystem();

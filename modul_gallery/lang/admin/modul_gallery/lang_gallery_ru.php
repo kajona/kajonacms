@@ -34,7 +34,6 @@ $lang["gallery_title"]                   = "Имя:";
 $lang["hideSyncDialog"]                  = "Закрыть";
 $lang["image_properties"]                = "Изменить стандартные настройки";
 $lang["liste_bilder_leer"]               = "Нет изображений в наличии";
-$lang["modul_rechte"]                    = "Разрешения модуля";
 $lang["modul_titel"]                     = "Галереи";
 $lang["ordner_bearbeiten"]               = "Изменить папку";
 $lang["ordner_oeffnen"]                  = "Показать папку";

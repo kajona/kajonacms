@@ -42,7 +42,6 @@ $lang["liste_leer_archive"]              = "Няма налични архиви
 $lang["liste_leer_dl"]                   = "Няма налични downloads";
 $lang["logbuch"]                         = "Дневник";
 $lang["logbuch_loeschen_link"]           = "Изчисти дневника";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_oeffnen"]                  = "Покажи папка";
 $lang["quickhelp_editArchive"]           = "Основните данни за създаване на архива са упоменати в тази форма.<br /> Това включва името и съответния път към файловата система";

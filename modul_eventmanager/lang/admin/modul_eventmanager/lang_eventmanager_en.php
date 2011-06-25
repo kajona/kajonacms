@@ -34,7 +34,6 @@ $lang["list_empty"]                      = "No events available";
 $lang["list_participants_empty"]         = "No participants available";
 $lang["modul_titel"]                     = "Events";
 $lang["module_create"]                   = "New event";
-$lang["module_permissions"]              = "Module permissions";
 $lang["participant_comment"]             = "Comment:";
 $lang["participant_create"]              = "New participant";
 $lang["participant_delete_question"]     = "Do you really want to delete the participant &quot;<b>%%element_name%%</b>&quot;?";

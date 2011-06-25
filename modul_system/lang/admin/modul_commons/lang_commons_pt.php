@@ -12,4 +12,7 @@
 //editable entries
 $lang["commons_back"]                    = "Anterior";
 $lang["commons_save"] = "Guardar";
+$lang["commons_module_permissions"] = "Permissões do Módulo";
+$lang["commons_no"] = "Não";
+$lang["commons_yes"] = "Sim";
 ?>

@@ -23,7 +23,6 @@ $lang["guestbook_moderated"]             = "Control-mode:";
 $lang["guestbook_title"]                 = "Title:";
 $lang["loeschen_frage"]                  = "Do you really want to delete the guestbook &quot;<b>%%element_name%%</b>&quot; with all entries?";
 $lang["modul_anlegen"]                   = "New guestbook";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Guestbooks";
 $lang["post_liste_leer"]                 = "No posts available";
 $lang["post_loeschen_frage"]             = "Do you really want to delete the post &quot;<b>%%element_name%%</b>&quot;?";

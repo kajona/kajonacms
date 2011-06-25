@@ -41,7 +41,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
-		$arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
@@ -1123,8 +1123,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				//Repeatable?
 				$arrRepeat = array();
-				$arrRepeat[1] = $this->getText("option_ja");
-				$arrRepeat[0] = $this->getText("option_nein");
+				$arrRepeat[1] = $this->getText("commons_yes");
+				$arrRepeat[0] = $this->getText("commons_no");
 				$strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getText("element_repeat"), $this->getParam("element_repeat"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
@@ -1161,8 +1161,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 				//Repeatable?
 				$arrRepeat = array();
-				$arrRepeat[1] = $this->getText("option_ja");
-				$arrRepeat[0] = $this->getText("option_nein");
+				$arrRepeat[1] = $this->getText("commons_yes");
+				$arrRepeat[0] = $this->getText("commons_no");
 				$strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getText("element_repeat"), $objData->getIntRepeat());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();

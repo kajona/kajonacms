@@ -53,7 +53,6 @@ $lang["filemanager_view_filter_h"]       = "A comma-separated list of file types
 $lang["liste_leer"]                      = "No repositories available";
 $lang["max_size"]                        = "Maximal file size: ";
 $lang["modul_neu"]                       = "Create repository";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Filemanager";
 $lang["moduleFolderviewTitle"]           = "Folderview";
 $lang["nrfilestitle"]                    = "Number of files: ";

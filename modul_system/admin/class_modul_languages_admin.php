@@ -32,7 +32,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
 		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
@@ -103,7 +103,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	protected function actionNewLanguage($strMode = "new") {
 	    $strReturn = "";
 	    $arrLanguages = array();
-	    $arrDefault = array(0 => $this->getText("nondefault"), 1 => $this->getText("default"));
+	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
 	    $objLang = new class_modul_languages_language();
 	    $arrLanguages = $objLang->getAllLanguagesAvailable();
 	    $arrLanguagesDD = array();

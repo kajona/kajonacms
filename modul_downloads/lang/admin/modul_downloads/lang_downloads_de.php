@@ -42,7 +42,6 @@ $lang["liste_leer_archive"]              = "Keine Archive angelegt";
 $lang["liste_leer_dl"]                   = "Keine Downloads vorhanden";
 $lang["logbuch"]                         = "Logbuch";
 $lang["logbuch_loeschen_link"]           = "Logbuch leeren";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_oeffnen"]                  = "Ordner anzeigen";
 $lang["quickhelp_editArchive"]           = "Die Grunddaten eines Archivs werden mit Hilfe dieses Formulars festgelegt.<br /> Hierzu gehören der Titel des Archivs, sowie der entsprechende Start-Pfad des Archivs im Dateisystem.";

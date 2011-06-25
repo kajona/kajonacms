@@ -34,7 +34,6 @@ $lang["list_empty"]                      = "Keine Veranstaltungen angelegt";
 $lang["list_participants_empty"]         = "Keine Teilnehmer angelegt";
 $lang["modul_titel"]                     = "Veranstaltungen";
 $lang["module_create"]                   = "Veranstaltung anlegen";
-$lang["module_permissions"]              = "Modul-Rechte";
 $lang["participant_comment"]             = "Kommentar:";
 $lang["participant_create"]              = "Neuen Teilnehmer anlegen";
 $lang["participant_delete_question"]     = "Möchten Sie den Teilnehmer &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";

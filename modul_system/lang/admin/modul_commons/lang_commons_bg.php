@@ -25,4 +25,8 @@ $lang["commons_one_level_up"] = "Едно ниво назад";
 $lang["commons_page_success"] = "  Страница в случай на успех (не е задължително):";
 $lang["commons_path"] = "Път:";
 $lang["commons_save"] = "Запази";
+$lang["commons_module_permissions"] = "Модул права";
+$lang["commons_hits_header"] = "Посещения";
+$lang["commons_no"] = "Не";
+$lang["commons_yes"] = "Да";
 ?>

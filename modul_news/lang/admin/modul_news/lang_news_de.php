@@ -47,7 +47,6 @@ $lang["liste_leer"]                      = "Keine News angelegt";
 $lang["modul_anlegen"]                   = "News anlegen";
 $lang["modul_list_feed"]                 = "RSS-Feeds";
 $lang["modul_new_feed"]                  = "Neuer RSS-Feed";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "News";
 $lang["modul_titel2"]                    = "Newsverwaltung - Kategorie ";
 $lang["news_basicdata"]                  = "News-Grunddaten";

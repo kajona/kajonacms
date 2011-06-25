@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["liste_leer"]                      = "No posts available";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Comments";
 $lang["postacomment_comment"]            = "Comment:";
 $lang["postacomment_delete_question"]    = "Do you really want to delete the comment &quot;<b>%%element_name%%</b>&quot;?";

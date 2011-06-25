@@ -24,4 +24,7 @@ $lang["commons_list"] = "Список";
 $lang["commons_one_level_up"] = "Один уровень наверх";
 $lang["commons_page_success"] = "Страница в случае успеха (факультативно):";
 $lang["commons_save"] = "Сохранить";
+$lang["commons_module_permissions"] = "Разрешения модуля";
+$lang["commons_no"] = "Нет";
+$lang["commons_yes"] = "Да";
 ?>

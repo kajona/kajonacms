@@ -25,4 +25,8 @@ $lang["commons_one_level_up"] = "One level up";
 $lang["commons_page_success"] = "Page in case of success (optional):";
 $lang["commons_path"] = "Path:";
 $lang["commons_save"] = "Save";
+$lang["commons_module_permissions"] = "Module permissions";
+$lang["commons_hits_header"] = "Hits";
+$lang["commons_no"] = "No";
+$lang["commons_yes"] = "Ja";
 ?>

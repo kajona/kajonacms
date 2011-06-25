@@ -99,7 +99,7 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 		//HeaderRow
 		$arrHeader[] = "#";
 		$arrHeader[] = $this->objTexts->getText("top_country_titel", "stats", "admin");
-		$arrHeader[] = $this->objTexts->getText("top_country_gewicht", "stats", "admin");
+		$arrHeader[] = $this->objTexts->getText("commons_hits_header", "stats", "admin");
 		$arrHeader[] = $this->objTexts->getText("anteil", "stats", "admin");
 
 		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);

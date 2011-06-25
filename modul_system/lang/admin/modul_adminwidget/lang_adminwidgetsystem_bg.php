@@ -35,9 +35,7 @@ $lang["systemcheck_kajona_debugper"]     = "Права върху /system/debug:
 $lang["systemcheck_kajona_installer"]    = "/installer присъствие: ";
 $lang["systemcheck_kajona_piccacheper"]  = "Права върху  "._images_cachepath_.":";
 $lang["systemcheck_name"]                = "Системна проверка ";
-$lang["systemcheck_no"]                  = "Не";
 $lang["systemcheck_php_regglobal"]       = "PHP Register globals: ";
 $lang["systemcheck_php_safemode"]        = "PHP Safe mode: ";
 $lang["systemcheck_php_urlfopen"]        = "PHP Allow url fopen: ";
-$lang["systemcheck_yes"]                 = "Да";
 ?>

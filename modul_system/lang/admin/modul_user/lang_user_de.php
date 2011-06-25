@@ -79,7 +79,6 @@ $lang["mitglied_loeschen_fehler"]        = "Fehler beim Entfernen";
 $lang["mitglied_loeschen_frage"]         = "Möchten Sie den Benutzer &quot;<b>%%element_name%%</b>&quot; wirklich aus der Gruppe entfernen?";
 $lang["mitglied_speichern_erfolg"]       = "Zugehörigkeit erfolgreich gespeichert";
 $lang["mitglied_speichern_fehler"]       = "Fehler beim Speichern der Zugehörigkeit";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Benutzer";
 $lang["nachname"]                        = "Nachname:";
 $lang["ort"]                             = "Ort:";

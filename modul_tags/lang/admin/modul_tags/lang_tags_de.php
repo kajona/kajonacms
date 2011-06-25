@@ -13,7 +13,6 @@
 $lang["button_add"]                      = "Hinzufügen";
 $lang["error_permissions"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["list_tags_empty"]                 = "Keine Tags angelegt.";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Tags";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["tag_assignments"]                 = "Zuweisungen";

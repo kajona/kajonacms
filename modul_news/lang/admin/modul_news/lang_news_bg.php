@@ -35,7 +35,6 @@ $lang["liste_leer"]                      = "Няма новини";
 $lang["modul_anlegen"]                   = "Създай новини";
 $lang["modul_list_feed"]                 = "RSS-Feeds";
 $lang["modul_new_feed"]                  = "Нова RSS-Feed";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Новини";
 $lang["modul_titel2"]                    = "News management - category ";
 $lang["news_basicdata"]                  = "Основни новини";

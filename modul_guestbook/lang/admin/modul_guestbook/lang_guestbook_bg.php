@@ -23,7 +23,6 @@ $lang["guestbook_moderated"]             = "Контрол на коментар
 $lang["guestbook_title"]                 = "Име:";
 $lang["loeschen_frage"]                  = "Наистина ли искате да премахнете книгата за гости &quot;<b>%%element_name%%</b>&quot; с всичките и записи?";
 $lang["modul_anlegen"]                   = "Нова книга за гости";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Книга за гости";
 $lang["post_liste_leer"]                 = "Няма налични постове";
 $lang["post_loeschen_frage"]             = "Наистина ли искате да премахнете постът &quot;<b>%%element_name%%</b>&quot;?";

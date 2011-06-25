@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["liste_leer"]                      = "Няма налични постове";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Коментари";
 $lang["postacomment_comment"]            = "Коментар:";
 $lang["postacomment_delete_question"]    = "Наистина ли искате да премахнете коментара &quot;<b>%%element_name%%</b>&quot;?";

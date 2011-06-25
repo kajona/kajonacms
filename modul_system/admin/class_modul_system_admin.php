@@ -47,7 +47,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 	public function getOutputModuleNavi() {
 	    $arrReturn = array();
-	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right", getLinkAdmin("right", "change", "&systemid=0",  $this->getText("modul_rechte_root"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
   	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "moduleList", "", $this->getText("module_liste"), "", "", true, "adminnavi"));
@@ -155,7 +155,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		   		    }
 		   		    //rights
 		   		    if($this->objRights->rightRight($intModuleSystemID))
-		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("modul_rechte"), getRightsImageAdminName($intModuleSystemID)));
+		   			    $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&changemodule=".$objSingleModule->getStrName(), "", $this->getText("commons_module_permissions"), getRightsImageAdminName($intModuleSystemID)));
 		   		}
 		   		$strReturn .= $this->objToolkit->listRow3($objSingleModule->getStrName(), $strCenter, $strActions, getImageAdmin("icon_module.gif", $strDescription), $intI++, $objSingleModule->getSystemid());
 			}
@@ -322,8 +322,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     //The input element itself
                     if($objOneSetting->getIntType() ==  0) {
                         $arrDD = array();
-                        $arrDD["true"] = $this->getText("settings_true");
-                        $arrDD["false"] = $this->getText("settings_false");
+                        $arrDD["true"] = $this->getText("commons_yes");
+                        $arrDD["false"] = $this->getText("commons_no");
                         $strRows .= $this->objToolkit->formInputDropdown("set[".$objOneSetting->getSystemid()."]", $arrDD, $this->getText($objOneSetting->getStrName(), $objCurrentModule->getStrName()), $objOneSetting->getStrValue());
                     }
                     elseif ($objOneSetting->getIntType() == 3) {
@@ -842,7 +842,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionNewAspect($strMode = "new") {
 	    $strReturn = "";
-	    $arrDefault = array(0 => $this->getText("aspect_nodefault"), 1 => $this->getText("aspect_isdefault"));
+	    $arrDefault = array(0 => $this->getText("commons_no"), 1 => $this->getText("commons_yes"));
 
         if($strMode == "new") {
             if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {

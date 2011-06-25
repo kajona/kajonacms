@@ -16,7 +16,6 @@ $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese 
 $lang["liste_leer"]                      = "Keine Navigation angelegt";
 $lang["modul_anlegen"]                   = "Neue Navigation";
 $lang["modul_anlegenpunkt"]              = "Neuer Unterpunkt";
-$lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Navigationen";
 $lang["navigation_anzeigen"]             = "Unterpunkte anzeigen";
 $lang["navigation_bearbeiten"]           = "Navigation bearbeiten";

@@ -42,7 +42,6 @@ $lang["liste_leer_archive"]              = "No archives available";
 $lang["liste_leer_dl"]                   = "No downloads available";
 $lang["logbuch"]                         = "Logfile";
 $lang["logbuch_loeschen_link"]           = "Flush logfile";
-$lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_oeffnen"]                  = "Show folder";
 $lang["quickhelp_editArchive"]           = "The basic data of a archive is captured by this form.<br />This includes the title and the corresponding start-path on the filesystem.";

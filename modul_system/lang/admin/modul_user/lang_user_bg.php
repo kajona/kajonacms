@@ -72,7 +72,6 @@ $lang["mitglied_loeschen_fehler"]        = "Възникна грешка при
 $lang["mitglied_loeschen_frage"]         = "Наистина ли искате да изтриете потребителят &quot;<b>%%element_name%%<br/> от групата";
 $lang["mitglied_speichern_erfolg"]       = "Задачите успешно запазени";
 $lang["mitglied_speichern_fehler"]       = "Грешка при запис на задачи";
-$lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Потребители";
 $lang["nachname"]                        = "Фамилия";
 $lang["ort"]                             = "Град:";
