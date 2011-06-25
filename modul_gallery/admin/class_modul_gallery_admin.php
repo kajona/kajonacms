@@ -197,10 +197,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $this->getParam("gallery_title"));
-                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
-			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
@@ -216,10 +216,10 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
                 $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $objGallery->getStrTitle());
-                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("gallery_path"), $objGallery->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $objGallery->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
@@ -373,7 +373,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                 $strReturn .= $this->objToolkit->formWysiwygEditor("pic_description", $this->getText("pic_description"), $objImage->getStrDescription(), "minimal");
 				$strReturn .= $this->objToolkit->formInputHidden("save", "1");
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 
 			    //additional infos and preview of the image
                 if(is_file(_realpath_.$objImage->getStrFilename())) {
@@ -482,7 +482,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			$strTemp = $this->getPrevId($this->getSystemid());
 			$intI = 0;
 			if($strTemp != "0" && $strTemp != $this->getModuleSystemid($this->arrModule["modul"])) {
-				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$strTemp.$this->strPeAddon, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
+				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$strTemp.$this->strPeAddon, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
 			}
 
 			if(count($arrFiles) > 0) {

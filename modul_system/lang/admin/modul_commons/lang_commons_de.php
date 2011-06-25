@@ -20,4 +20,8 @@ $lang["commons_edit_permissions"]        = "Rechte bearbeiten";
 $lang["commons_create_category"] = "Kategorie anlegen";
 $lang["commons_delete_category_question"] = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["commons_list"] = "Liste";
+$lang["commons_one_level_up"] = "Eine Ebene nach oben";
+$lang["commons_page_success"] = "Seite im Erfolgsfall (optional):";
+$lang["commons_path"] = "Pfad:";
+$lang["commons_save"] = "Speichern";
 ?>

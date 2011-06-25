@@ -98,7 +98,6 @@ $lang["required_user_existing"]          = "Пользователь с таки
 $lang["required_username"]               = "Имя пользователя";
 $lang["skin"]                            = "Админ скин:";
 $lang["strasse"]                         = "Улица:";
-$lang["submit"]                          = "Сохранить";
 $lang["tel"]                             = "Телефон:";
 $lang["user"]                            = "Пользователь: ";
 $lang["user_active"]                     = "Изменить статус (активный)";

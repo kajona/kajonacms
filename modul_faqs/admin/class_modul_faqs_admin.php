@@ -251,7 +251,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("commons_category_title"), $this->getParam("faqs_cat_title"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
@@ -269,7 +269,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("commons_category_title"), $objCat->getStrTitle());
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
@@ -359,7 +359,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", "");
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");
@@ -395,7 +395,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");

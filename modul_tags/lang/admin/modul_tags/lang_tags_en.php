@@ -16,7 +16,6 @@ $lang["list_tags_empty"]                 = "No tags available.";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Tags";
 $lang["required_tag_name"]               = "Tag-Name";
-$lang["submit"]                          = "Save";
 $lang["tag_assignments"]                 = "Assignments";
 $lang["tag_delete"]                      = "Delete";
 $lang["tag_delete_question"]             = "Do you really want to delete the tag &quot;<b>%%element_name%%</b>&quot;?";

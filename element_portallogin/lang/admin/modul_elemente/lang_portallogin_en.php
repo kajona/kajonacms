@@ -18,5 +18,4 @@ $lang["portallogin_logout_success"]      = "Page after logging out (optional):";
 $lang["portallogin_profile"]             = "Page to edit the profile (optional):";
 $lang["portallogin_profile_hint"]        = "Another portallogin-element has to be existing on the defined page in order to edit the profile.";
 $lang["portallogin_pwdforgot"]           = "Page for the password-forgotten form (optional):";
-$lang["portallogin_success"]             = "Page in case of success (optional):";
 ?>

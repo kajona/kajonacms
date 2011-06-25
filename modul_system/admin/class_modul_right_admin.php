@@ -290,7 +290,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
             }
 
 			//Close the form
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 			$strReturn .= "<script type=\"text/javascript\">KAJONA.admin.checkRightMatrix();</script>";
 		}

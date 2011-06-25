@@ -19,5 +19,4 @@ $lang["paragraph_link"]                  = "Link:";
 $lang["paragraph_title"]                 = "Titel:";
 $lang["quickhelp_element_paragraph"]     = "Hier können Sie den Inhalte eines Text-Absatzes eingeben. Hierfür steht ein umfangreicher Editor zur Verfügung";
 $lang["required_paragraph_title"]        = "Titel";
-$lang["submit"]                          = "Speichern";
 ?>

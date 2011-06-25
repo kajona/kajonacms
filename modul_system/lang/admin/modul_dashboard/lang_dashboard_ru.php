@@ -12,7 +12,6 @@
 //editable entries
 $lang["addWidget"]                       = "Добавить виджет";
 $lang["addWidgetNextStep"]               = "Вперед";
-$lang["addWidgetSave"]                   = "Сохранить";
 $lang["column"]                          = "Колонка:";
 $lang["column1"]                         = "Колонка 1";
 $lang["column2"]                         = "Колонка 2";

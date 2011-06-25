@@ -18,7 +18,6 @@ $lang["receiver_name"]                   = "Nome destinatários:";
 $lang["reload_captcha"]                  = "O código não é legível?";
 $lang["sender"]                          = "O seu correio electrónico:";
 $lang["sender_name"]                     = "O seu nome:";
-$lang["submit"]                          = "Enviar";
 $lang["tellafriend_receiver"]            = "Por favor introduza os correios electrónicos dos destinatários";
 $lang["tellafriend_receiver_name"]       = "Por favor introduza os nomes dos destinatários";
 $lang["tellafriend_sender"]              = "Por favor introduza o seu correio electrónico";

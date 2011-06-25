@@ -183,7 +183,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputCheckbox("aspect_".$objOneAspect->getSystemid(), $objOneAspect->getStrName(), in_array($objOneAspect->getSystemid(), $arrAspectsSet));
 
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         else
@@ -305,7 +305,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                                 $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
                                 $strFieldset .= $strRows;
                                 $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
-                                $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+                                $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                                 $strFieldset .= $this->objToolkit->formClose();
                                 $strReturn .= $this->objToolkit->getFieldset($this->getText("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
                             }
@@ -337,7 +337,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strFieldset = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "systemSettings"));
                 $strFieldset .= $strRows;
                 $strFieldset .= $this->objToolkit->formInputHidden("save", "true");
-                $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+                $strFieldset .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                 $strFieldset .= $this->objToolkit->formClose();
 
                 $strReturn .= $this->objToolkit->getFieldset($this->getText("modul_titel", $objCurrentModule->getStrName()), $strFieldset);
@@ -850,7 +850,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("aspect_name"), $this->getParam("aspect_name"));
                 $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $this->getParam("aspect_default"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
 
                 $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
@@ -866,7 +866,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $objAspect->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
 
                 $strReturn .= $this->objToolkit->setBrowserFocus("language_name");

@@ -164,7 +164,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveTag"));
 			$strReturn .= $this->objToolkit->formInputText("tag_name", $this->getText("tag_name"), ($this->getParam("tag_name") != "" ? $this->getParam("tag_name") : $objTag->getStrName()) );
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $objTag->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 
 			$strReturn .= $this->objToolkit->setBrowserFocus("tag_name");

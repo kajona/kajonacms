@@ -11,4 +11,5 @@
 
 //editable entries
 $lang["commons_back"]                    = "Anterior";
+$lang["commons_save"] = "Guardar";
 ?>

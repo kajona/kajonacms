@@ -20,4 +20,9 @@ $lang["commons_edit_permissions"]        = "Change permissions";
 $lang["commons_create_category"] = "Create category";
 $lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_list"] = "List";
+
+$lang["commons_one_level_up"] = "One level up";
+$lang["commons_page_success"] = "Page in case of success (optional):";
+$lang["commons_path"] = "Path:";
+$lang["commons_save"] = "Save";
 ?>

@@ -18,5 +18,4 @@ $lang["paragraph_link"]                  = "Линк";
 $lang["paragraph_title"]                 = "Име";
 $lang["quickhelp_element_paragraph"]     = "Тук можете да въведете съдържанието на параграфи с помощта на удобен редактор.";
 $lang["required_paragraph_title"]        = "Име";
-$lang["submit"]                          = "Запази";
 ?>

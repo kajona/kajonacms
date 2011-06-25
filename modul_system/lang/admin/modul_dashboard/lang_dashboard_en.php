@@ -12,7 +12,6 @@
 //editable entries
 $lang["addWidget"]                       = "Add widget";
 $lang["addWidgetNextStep"]               = "Next";
-$lang["addWidgetSave"]                   = "Save";
 $lang["calendar_next"]                   = "next month &gt;&gt;";
 $lang["calendar_prev"]                   = "&lt;&lt; previous month";
 $lang["calendar_weekday"]                = "Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday";

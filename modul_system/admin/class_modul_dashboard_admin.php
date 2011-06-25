@@ -312,7 +312,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strReturn .= $this->objToolkit->formInputHidden("step", "3");
 	            $strReturn .= $this->objToolkit->formInputHidden("widget", $strWidgetClass);
 	            $strReturn .= $this->objToolkit->formInputHidden("column", $this->getParam("column"));
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetSave"));
+	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 	            $strReturn .= $this->objToolkit->formClose();
 	        }
 	        //step 3: save all to the database
@@ -395,7 +395,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	            $strReturn .= $objWidget->getEditForm();
 	            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 	            $strReturn .= $this->objToolkit->formInputHidden("saveWidget", "1");
-	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("addWidgetSave"));
+	            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 	            $strReturn .= $this->objToolkit->formClose();
 			}
 			elseif($this->getParam("saveWidget") == "1") {

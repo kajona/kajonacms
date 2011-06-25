@@ -32,7 +32,6 @@ $lang["quickhelp_newCat"]                = "Für eine neue oder bereits vorhande
 $lang["quickhelp_newFaq"]                = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
 $lang["required_faqs_answer"]            = "Antwort";
 $lang["required_faqs_question"]          = "Frage";
-$lang["speichern"]                       = "Speichern";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Rating", 5 => "", 6 => "", 7 => "", 8 => "");

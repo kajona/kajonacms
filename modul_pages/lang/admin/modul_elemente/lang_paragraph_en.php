@@ -19,5 +19,4 @@ $lang["paragraph_link"]                  = "Link:";
 $lang["paragraph_title"]                 = "Title:";
 $lang["quickhelp_element_paragraph"]     = "Here you can enter the contents of a parapgraph using a comfortable and powerfull editor.";
 $lang["required_paragraph_title"]        = "Title";
-$lang["submit"]                          = "Save";
 ?>

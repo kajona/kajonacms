@@ -20,4 +20,9 @@ $lang["commons_edit_permissions"]        = "Промени права";
 $lang["commons_create_category"] = "Създай категория";
 $lang["commons_delete_category_question"] = "Наистина ли искате да изтрийте категорията &quot;<b>%%element_name%%</b>&quot;?";
 $lang["commons_list"] = "Списък";
+
+$lang["commons_one_level_up"] = "Едно ниво назад";
+$lang["commons_page_success"] = "  Страница в случай на успех (не е задължително):";
+$lang["commons_path"] = "Път:";
+$lang["commons_save"] = "Запази";
 ?>

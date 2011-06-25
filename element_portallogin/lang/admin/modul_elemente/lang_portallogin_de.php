@@ -18,5 +18,4 @@ $lang["portallogin_logout_success"]      = "Seite nach dem Logout (optional):";
 $lang["portallogin_profile"]             = "Seite zum Editieren des Profils (optional):";
 $lang["portallogin_profile_hint"]        = "Zum Editieren des Profiles muss auf der Zielseite ebenfalls ein Portallogin-Element angelegt sein.";
 $lang["portallogin_pwdforgot"]           = "Seite für das Passwort-Vergessen Formular (optional):";
-$lang["portallogin_success"]             = "Seite im Erfolgsfall (optional):";
 ?>

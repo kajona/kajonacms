@@ -74,7 +74,6 @@ $lang["required_feed_page"]              = "Detailseite";
 $lang["required_feed_title"]             = "Feedtitel";
 $lang["required_feed_urltitle"]          = "URL-Feedtitel";
 $lang["required_news_title"]             = "Newstitel";
-$lang["speichern"]                       = "Speichern";
 $lang["start"]                           = "Start-Datum:";
 
 //non-editable entries

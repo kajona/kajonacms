@@ -34,7 +34,6 @@ $lang["quickhelp_list"]                  = "Alle angelegten Gästebücher finde 
 $lang["quickhelp_newGuestbook"]          = "Beim Anlegen oder Bearbeiten eines Gästebuchs kann für dieses ein Titel vergeben werden. Ebenso kann der Freischaltmodus aktiviert oder deaktivert. Ist dieser aktiviert, werden neue Einträge per default deaktiviert abgespeischert. Damit diese im Portal erscheinen, müssen diese dann durch einen Admin oder Redakteur freigegeben werden.<br /><br />Hinweis: Sollen sich Gäste in das Gästebuch eintragen dürfen, so benötigen diese das Recht 'Eintragen'!";
 $lang["quickhelp_viewGuestbook"]         = "In dieser Liste werden alle Einträge eines Gästebuchs angezeigt. Diese können dann gelöscht, aktiviert oder deaktiviert werden.";
 $lang["required_guestbook_title"]        = "Titel";
-$lang["speichern"]                       = "Speichern";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");

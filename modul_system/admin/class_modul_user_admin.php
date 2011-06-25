@@ -198,7 +198,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formTextRow($this->getText("username")." ".$objUser->getStrUsername());
             $strReturn .= $this->objToolkit->formTextRow($this->getText("email")." ".$objUser->getStrEmail());
             $strReturn .= $this->objToolkit->formInputHidden("userid", $this->getParam("userid"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         else
@@ -368,7 +368,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             }
             //End the form
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("username");
@@ -649,7 +649,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), "");
                 $strReturn .= $this->objToolkit->formInputHidden("gruppeid");
             }
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("gruppename");
@@ -830,7 +830,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName());
                 }
             }
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
         else

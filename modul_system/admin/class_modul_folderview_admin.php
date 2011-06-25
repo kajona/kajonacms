@@ -139,7 +139,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$arrContent = $objFilesystem->getCompleteList($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, false);
 
 		$strReturn .= $this->objToolkit->listHeader();
-		$strReturn .= $this->objToolkit->listRow2($this->getText("pfad"), $strFolder, 1);
+		$strReturn .= $this->objToolkit->listRow2($this->getText("commons_path"), $strFolder, 1);
 		$strReturn .= $this->objToolkit->listRow2($this->getText("ordner_anz"), $arrContent["nrFolders"], 1);
 		$strReturn .= $this->objToolkit->listFooter();
 		$strReturn .= $this->objToolkit->divider();
@@ -151,7 +151,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$bitHit = false;
 		if(!in_array($strFolder, $arrFolderStart) && $bitHit == false) {
 			$strReturn .= $this->objToolkit->listHeader();
-			$strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "folderList", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFiles."&form_element=".$strFormElement, $this->getText("ordner_hoch"), $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif"));
+			$strAction = $this->objToolkit->listButton(getLinkAdmin("folderview", "folderList", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFiles."&form_element=".$strFormElement, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif"));
 			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $strAction, $intCounter++);
 			$bitHit = true;
 		}
@@ -201,7 +201,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 		$strReturn .= $this->objToolkit->listHeader();
 		//Folder to jump one level up
 		if(!$bitPages || $strLevelUp != "" || $bitFolder) {
-			$strAction = $this->objToolkit->listButton(($strFolder != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements ? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getText("ordner_hoch"), $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif") :  " " );
+			$strAction = $this->objToolkit->listButton(($strFolder != "0" && $strLevelUp!= "") || $strPageid != "0" ? getLinkAdmin("folderview", "pagesFolderBrowser", "&folderid=".$strLevelUp.($bitFolder ? "&folder=1" : "").($bitPages ? "&pages=1" : "").(!$bitPageelements ? "&elements=false" : "").($bitPageAliases ? "&pagealiases=1" : "")."&form_element=".$strElement.($this->getParam("bit_link")  != "" ? "&bit_link=1" : ""), $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif") :  " " );
 			if($strFolder == $this->getModuleSystemid("pages") && (!$bitPages || $bitFolder))
 				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strElement."_id', '".$this->getModuleSystemid("pages")."'], ['".$strElement."', '']]);\">".getImageAdmin("icon_accept.gif"));
 

@@ -165,7 +165,6 @@ $lang["speichern"]                       = "Guardar";
 $lang["speicherplatz"]                   = "Espaço em disco";
 $lang["status_active"]                   = "Alterar estado (está activo)";
 $lang["status_inactive"]                 = "Alterar estado (está inactivo)";
-$lang["submit"]                          = "Guardar";
 $lang["systemTasks"]                     = "Tarefas Sistema";
 $lang["system_info"]                     = "Informação Sistema";
 $lang["system_sessions"]                 = "Sessões";

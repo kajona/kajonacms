@@ -32,7 +32,6 @@ $lang["quickhelp_newCat"]                = "At the moment you just can define th
 $lang["quickhelp_newFaq"]                = "You can edit the basic data of a FAQ by creating or editing it. The basic data contains the question and the answer. Furthermore the belongings to the categories can be changed here.";
 $lang["required_faqs_answer"]            = "Answer";
 $lang["required_faqs_question"]          = "Question";
-$lang["speichern"]                       = "Save";
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Rating", 5 => "", 6 => "", 7 => "", 8 => "");

@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["button_save"]                     = "Save";
 $lang["calendar_filter_event"]           = "Events";
 $lang["calendar_type_event"]             = "Event";
 $lang["change_object_participant"]       = "Participant";

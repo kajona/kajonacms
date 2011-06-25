@@ -18,7 +18,6 @@ $lang["receiver_name"]                   = "Име на получателя:";
 $lang["reload_captcha"]                  = "Кодексът не се чете?";
 $lang["sender"]                          = "Вашата електронна поща:";
 $lang["sender_name"]                     = "Вашето име: ";
-$lang["submit"]                          = "Изпрати";
 $lang["tellafriend_receiver"]            = "Моля попълнете електронната поща на получателя";
 $lang["tellafriend_receiver_name"]       = "Моля попълнете името на получателя";
 $lang["tellafriend_sender"]              = "Моля попълнете Вашиата електронна поща";

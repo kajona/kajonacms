@@ -138,7 +138,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
     			$strPrevID = $this->getPrevId($this->getSystemid());
-    			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
+    			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_treeLevelUp.gif"));
     			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
                 //And loop through the regular points
     			foreach($arrNavigations as $objOneNavigation) {
@@ -233,7 +233,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
             $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $strFolderid);
             $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 		    $strReturn .= $this->objToolkit->formClose();
 
 		    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
@@ -341,7 +341,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"));
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $this->getParam("navigation_target"));
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
@@ -381,7 +381,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $objPoint->getStrTarget());
-                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			    $strReturn .= $this->objToolkit->formClose();
 
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
@@ -498,7 +498,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         //Link one level up
         $strPrevID = $this->getPrevId();
         if($strPrevID != $this->getModuleSystemid($this->arrModule["modul"])){
-            $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getText("navigation_ebene"), $this->getText("navigation_ebene"), "icon_treeLevelUp.gif"));
+            $strAction  = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "navigationPointBrowser", "&systemid=".$strPrevID."&form_element=".$this->getParam("form_element"), $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_treeLevelUp.gif"));
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intCounter++);
         }
         else {

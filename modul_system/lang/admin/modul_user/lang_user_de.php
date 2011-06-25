@@ -105,7 +105,6 @@ $lang["required_user_existing"]          = "Benutername bereits vergeben";
 $lang["required_username"]               = "Benutzername";
 $lang["skin"]                            = "Admin-Skin:";
 $lang["strasse"]                         = "Straße:";
-$lang["submit"]                          = "Speichern";
 $lang["tel"]                             = "Telefon:";
 $lang["user"]                            = "Benutzer: ";
 $lang["user_accept"]                     = "Benutzer auswählen";

@@ -174,7 +174,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", "");
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("button_save"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("event_title");
@@ -204,7 +204,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("button_save"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("eventmanager_title");
@@ -415,7 +415,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputHidden("eventid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("button_save"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("answer_title");
@@ -439,7 +439,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
                 $strReturn .= $this->objToolkit->formInputHidden("eventid", $this->getPrevId());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("button_save"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("eventmanager_title");

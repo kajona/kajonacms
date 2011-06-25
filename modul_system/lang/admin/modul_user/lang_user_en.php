@@ -104,7 +104,6 @@ $lang["required_user_existing"]          = "Username already exists";
 $lang["required_username"]               = "Username";
 $lang["skin"]                            = "Admin skin:";
 $lang["strasse"]                         = "Street:";
-$lang["submit"]                          = "Save";
 $lang["tel"]                             = "Phone:";
 $lang["user"]                            = "User: ";
 $lang["user_accept"]                     = "Select user";

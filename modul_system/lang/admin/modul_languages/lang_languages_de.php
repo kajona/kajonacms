@@ -38,7 +38,6 @@ $lang["lang_pl"]                         = "Polnisch";
 $lang["lang_pt"]                         = "Portugisisch";
 $lang["lang_ro"]                         = "Romänisch";
 $lang["lang_ru"]                         = "Russisch";
-$lang["lang_save"]                       = "Speichern";
 $lang["lang_sk"]                         = "Slowakisch";
 $lang["lang_sl"]                         = "Slovenisch";
 $lang["lang_sv"]                         = "Schwedisch";

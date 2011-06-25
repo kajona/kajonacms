@@ -192,12 +192,12 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getText("filemanager_view_filter"), $this->getParam("filemanager_view_filter"));
-    			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+    			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
@@ -246,13 +246,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("filemanager_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_view_filter", $this->getText("filemanager_view_filter"), $objRepo->getStrViewFilter());
     			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-    			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+    			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("filemanager_name");
@@ -338,7 +338,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
 		   	$arrInfobox["actions"] = $strActions;
 
-		   	$arrInfobox["foldertitle"] = $this->getText("foldertitle");
+		   	$arrInfobox["foldertitle"] = $this->getText("commons_path");
 		   	$arrInfobox["nrfilestitle"] = $this->getText("nrfilestitle");
 		   	$arrInfobox["nrfoldertitle"] = $this->getText("nrfoldertitle");
 		   	$strReturn .= $this->objToolkit->getFilemanagerInfoBox($arrInfobox);
@@ -351,11 +351,11 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	  		if($this->strFolderOld != "") {
 	  			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
 	  			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+                $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "openFolder", "&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
 	  		}
 	  		else {
 	  		    //Link back to the repos
-	  		    $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+	  		    $strReturn .= $this->objToolkit->listRow3( "..","", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "list", "", "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
 	  		}
 			if(count($arrFiles["folders"]) > 0) {
 				foreach($arrFiles["folders"] as $strFolder) {
@@ -496,7 +496,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		   	$arrInfobox["folders"] = $arrFiles["nrFolders"];
     		   	$arrInfobox["actions"] = $strActions;
 
-    		   	$arrInfobox["foldertitle"] = $this->getText("foldertitle");
+    		   	$arrInfobox["foldertitle"] = $this->getText("commons_path");
     		   	$arrInfobox["nrfilestitle"] = $this->getText("nrfilestitle");
     		   	$arrInfobox["nrfoldertitle"] = $this->getText("nrfoldertitle");
     		   	$strReturn .= $this->objToolkit->getFilemanagerInfoBox($arrInfobox);
@@ -511,11 +511,11 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
           		if($this->strFolderOld != "") {
           			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
           			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                        $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+                        $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
           		}
           		else {
           		    //Link up to repo list
-          		    $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield, "", $this->getText("ordner_hoch"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+          		    $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
           		}
         		if(count($arrFiles["folders"]) > 0) {
         			foreach($arrFiles["folders"] as $strFolder) {
@@ -770,7 +770,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
 			$arrTemplate["file_name"] = $arrDetails["filename"];
 			$arrTemplate["file_path"] = $arrDetails["filepath"];
-			$arrTemplate["file_path_title"] = $this->getText("datei_pfad");
+			$arrTemplate["file_path_title"] = $this->getText("commons_path");
 
 			$arrSize = getimagesize($strFile);
 			$arrTemplate["file_dimensions"] = $arrSize[0]." x ".$arrSize[1];

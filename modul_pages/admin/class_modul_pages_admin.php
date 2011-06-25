@@ -129,7 +129,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				//Get data of folder one level above
 				$objPrevFolder = new class_modul_pages_folder($this->getSystemid());
 				//Output Row
-		  		$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getText("pages_hoch"), $this->getText("pages_hoch"), "icon_folderActionLevelup.gif")), $intI++);
+		  		$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&folderid=".$objPrevFolder->getPrevId(), $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), $intI++);
 			}
 
 			//So, lets loop through the folders
@@ -471,7 +471,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getText("page_alias"), $objPage->getStrAlias());
                 }
 
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 
@@ -573,7 +573,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     $strReturn .= $this->objToolkit->formInputPageSelector("alias", $this->getText("page_alias"), $this->getParam("alias"));
                 }
 
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 
                 $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -780,7 +780,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "folderNewSave"));
 			$strReturn .= $this->objToolkit->formInputText("ordner_name", $this->getText("ordner_name"), $this->getParam("ordner_name"));
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 
 			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
@@ -831,7 +831,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+			$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 			$strReturn .= $this->objToolkit->formClose();
 
 			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
@@ -1126,7 +1126,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$arrRepeat[1] = $this->getText("option_ja");
 				$arrRepeat[0] = $this->getText("option_nein");
 				$strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getText("element_repeat"), $this->getParam("element_repeat"));
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
 			elseif ($strMode == "edit") {
@@ -1164,7 +1164,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$arrRepeat[1] = $this->getText("option_ja");
 				$arrRepeat[0] = $this->getText("option_nein");
 				$strReturn .= $this->objToolkit->formInputDropdown("element_repeat", $arrRepeat, $this->getText("element_repeat"), $objData->getIntRepeat());
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 			}
 		}

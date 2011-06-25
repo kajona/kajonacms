@@ -191,7 +191,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $this->getParam("guestbook_title"));
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $this->getParam("guestbook_moderated"));
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
@@ -211,7 +211,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $objGuestbook->getGuestbookModerated());
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $objGuestbook->getSystemid());
-				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
 
 				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
@@ -338,7 +338,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $strReturn .= $this->objToolkit->formWysiwygEditor("post_text", $this->getText("post_text"), $objPost->getGuestbookPostText());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputHidden("peClose", $this->getParam("pe"));
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
 
             $strReturn .= $this->objToolkit->setBrowserFocus("post_text");

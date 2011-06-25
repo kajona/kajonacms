@@ -129,7 +129,7 @@ abstract class class_element_admin extends class_admin {
 		if($this->getParam("pe") == 1) {
 		    $strReturn .= $this->objToolkit->formInputHidden("peClose", "1");
 		}
-		$strReturn .= $this->objToolkit->formInputSubmit($this->getText("submit"), "Submit", $strEventhandler);
+		$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"), "Submit", $strEventhandler);
 		$strReturn .= $this->objToolkit->formClose();
 		//and close the element
 
