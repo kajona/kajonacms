@@ -102,7 +102,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newGuestbook", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
@@ -147,7 +147,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightDelete($objOneGb->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGb->getGuestbookTitle(), $this->getText("loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteGuestbook", "&systemid=".$objOneGb->getSystemid()));
 			   		if($this->objRights->rightRight($objOneGb->getSystemid()))
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("gaestebuch_rechte"), getRightsImageAdminName($objOneGb->getSystemid())));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGb->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneGb->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_book.gif"), $objOneGb->getGuestbookTitle(), $strAction, $intI++);
 				}
 			}

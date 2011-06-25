@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_admin_skin_default_"]            = "Default admin skin:";
@@ -67,6 +64,7 @@ $lang["login_loginUser"]                 = "Username";
 $lang["login_logoutTitle"]               = "Log out";
 $lang["login_nr"]                        = "#";
 $lang["login_password_form_intro"]       = "Please choose a new password along with providing your username.<br />";
+$lang["login_printview"]                 = "Open print-view";
 $lang["login_profileTitle"]              = "Edit profile";
 $lang["login_status"]                    = "Status";
 $lang["login_statusTitle"]               = "Logged in as:";
@@ -139,5 +137,7 @@ $lang["user_system"]                     = "Systemeinstellungen";
 $lang["user_zugehoerigkeit"]             = "Group assignments";
 $lang["username"]                        = "Username:";
 $lang["vorname"]                         = "Forename:";
-$lang["login_printview"]                 = "Open print-view";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Logs", 5 => "", 6 => "", 7 => "", 8 => "");
 ?>

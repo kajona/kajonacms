@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["default"]                         = "Да";
@@ -51,11 +51,9 @@ $lang["language_default"]                = "Язык по умолчанию:";
 $lang["language_existing"]               = "Язык уже существует";
 $lang["language_isDefault"]              = "Язык по умолчанию";
 $lang["language_name"]                   = "Язык:";
-$lang["language_rechte"]                 = "Изменить разрешения";
 $lang["language_status"]                 = "Изменить статус (сейчас ";
 $lang["liste_leer"]                      = "Нет доступных языков";
 $lang["modul_anlegen"]                   = "Создать язык";
-$lang["modul_liste"]                     = "Список";
 $lang["modul_rechte"]                    = "Разрешения модуля";
 $lang["modul_titel"]                     = "Языки";
 $lang["nondefault"]                      = "Нет";

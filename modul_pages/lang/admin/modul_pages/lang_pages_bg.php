@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Кеширане на страници разрешено:";
@@ -67,7 +67,6 @@ $lang["lastuserTitle"]                   = "Последен автор:";
 $lang["liste_seiten_leer"]               = "Няма налични страници";
 $lang["modul_element_neu"]               = "Създай елемент за страница";
 $lang["modul_elemente"]                  = "Елементи на страница";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_liste_alle"]                = "Плосък списък";
 $lang["modul_neu"]                       = "Създай страница";
 $lang["modul_neu_ordner"]                = "Създай папка";
@@ -91,7 +90,6 @@ $lang["pages_hoch"]                      = "Едно ниво назад";
 $lang["pages_ordner_edit"]               = "Редактирай папка";
 $lang["pages_ordner_loeschen_frage"]     = "Наистина ли искате да премахнете папката &quot;<b>%%element_name%%</b>&quot;?";
 $lang["pages_ordner_oeffnen"]            = "Отвори папка";
-$lang["pages_ordner_rechte"]             = "Редактирай права";
 $lang["pe_delete"]                       = "Изтрий";
 $lang["pe_dialog_close_warning"]         = "Искате ли да затворите редактор и изхвърлете евентуалните промени?";
 $lang["pe_disable"]                      = "Деактивирай портал редактора";
@@ -133,7 +131,6 @@ $lang["seite_copy"]                      = "Копирай страницата"
 $lang["seite_inhalte"]                   = "Редактирай съдържанието на страницата";
 $lang["seite_loeschen_erfolg"]           = "Страницата бе изтрита успешно";
 $lang["seite_loeschen_frage"]            = "Наистина ли искате да премахнете страницата &quot;<b>%%element_name%%</b>&quot;?";
-$lang["seite_rechte"]                    = "Редактирай права";
 $lang["select_page"]                     = "Изберете страница";
 $lang["seostring"]                       = "SEO-URL-ключови думи:";
 $lang["submit"]                          = "Запази";

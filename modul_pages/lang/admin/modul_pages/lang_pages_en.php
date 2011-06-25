@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Page-cache enabled:";
@@ -81,7 +78,6 @@ $lang["lastuserTitle"]                   = "von";
 $lang["liste_seiten_leer"]               = "No pages available";
 $lang["modul_element_neu"]               = "Create page element";
 $lang["modul_elemente"]                  = "Page elements";
-$lang["modul_liste"]                     = "List";
 $lang["modul_liste_alle"]                = "Flat list";
 $lang["modul_neu"]                       = "Create page";
 $lang["modul_neu_alias"]                 = "Create link-page";
@@ -111,7 +107,6 @@ $lang["pages_ordner_delete"]             = "Delete folder";
 $lang["pages_ordner_edit"]               = "Edit folder";
 $lang["pages_ordner_loeschen_frage"]     = "Do you really want to delete the folder &quot;<b>%%element_name%%</b>&quot;? All pages and folders contained by the current folder are delete, too.";
 $lang["pages_ordner_oeffnen"]            = "Open folder";
-$lang["pages_ordner_rechte"]             = "Edit permissions";
 $lang["pe_copy"]                         = "Copy";
 $lang["pe_delete"]                       = "Delete";
 $lang["pe_dialog_close_warning"]         = "Do you want to close the editor and discard possible modifications?";
@@ -160,7 +155,6 @@ $lang["seite_inhalte"]                   = "Edit page content";
 $lang["seite_loeschen"]                  = "Delete page";
 $lang["seite_loeschen_erfolg"]           = "Page was delete successfully";
 $lang["seite_loeschen_frage"]            = "Do you really want to delete the page &quot;<b>%%element_name%%</b>&quot;? All pages and folders below the current page are delete, too.";
-$lang["seite_rechte"]                    = "Edit permissions";
 $lang["select_page"]                     = "Select a page";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Show Changehistory";
@@ -171,4 +165,7 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
 ?>

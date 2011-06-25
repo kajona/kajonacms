@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Result page:";
@@ -35,8 +32,6 @@ $lang["fehler_recht"]                    = "Not enough permissions to perform th
 $lang["kat_anzeigen"]                    = "Show category";
 $lang["kat_ausblenden"]                  = "Show/hide categories";
 $lang["kat_bearbeiten"]                  = "Edit category";
-$lang["kat_loeschen_frage"]              = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
-$lang["kat_rechte"]                      = "Change permissions";
 $lang["klapper"]                         = "Show/hide category";
 $lang["languageset_addnewstolanguage"]   = "Assign a news-item to a language";
 $lang["languageset_addtolanguage"]       = "Assign to a language";
@@ -50,9 +45,7 @@ $lang["languageset_notmaintained"]       = "At the moment the news-item is not a
 $lang["languageset_remove"]              = "Delete assignment";
 $lang["liste_leer"]                      = "No news available";
 $lang["modul_anlegen"]                   = "Create news";
-$lang["modul_kat_anlegen"]               = "Create category";
 $lang["modul_list_feed"]                 = "RSS-feeds";
-$lang["modul_liste"]                     = "List";
 $lang["modul_new_feed"]                  = "New RSS-feed";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "News";
@@ -64,7 +57,6 @@ $lang["news_intro"]                      = "Teaser:";
 $lang["news_languageset"]                = "Edit language assignments";
 $lang["news_locked"]                     = "Newsrecord is locked";
 $lang["news_loeschen_frage"]             = "Do you really want to delete the news &quot;<b>%%element_name%%</b>&quot;?";
-$lang["news_rechte"]                     = "Change permissions";
 $lang["news_text"]                       = "Long text:";
 $lang["news_title"]                      = "Title:";
 $lang["news_unlock"]                     = "Unlock newsrecord";
@@ -84,4 +76,7 @@ $lang["required_feed_urltitle"]          = "URL feed title";
 $lang["required_news_title"]             = "News title";
 $lang["speichern"]                       = "Save";
 $lang["start"]                           = "Start date:";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
 ?>

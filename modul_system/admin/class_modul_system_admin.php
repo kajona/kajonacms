@@ -804,7 +804,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 		    		if($this->objRights->rightEdit($objOneAspect->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneAspect->getSystemid());
 		    		if($this->objRights->rightRight($objOneAspect->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("aspect_permissions"), getRightsImageAdminName($objOneAspect->getSystemid())));
+		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneAspect->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneAspect->getSystemid())));
 
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_aspect.gif"), $objOneAspect->getStrName().($objOneAspect->getBitDefault() == 1 ? " (".$this->getText("aspect_isDefault").")" : ""), $strAction, $intI++);
 				}

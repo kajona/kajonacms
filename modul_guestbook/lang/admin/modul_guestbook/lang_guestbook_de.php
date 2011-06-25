@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_guestbook_search_resultpage_"]   = "Treffer-Seite:";
@@ -22,12 +19,10 @@ $lang["gaestebuch_bearbeiten"]           = "Gästebuch bearbeiten";
 $lang["gaestebuch_listeleer"]            = "Kein Gästebuch angelegt";
 $lang["gaestebuch_modus_0"]              = "Freischaltung erforderlich";
 $lang["gaestebuch_modus_1"]              = "Keine Freischaltung erforderlich";
-$lang["gaestebuch_rechte"]               = "Rechte bearbeiten";
 $lang["guestbook_moderated"]             = "Freischaltungsmodus:";
 $lang["guestbook_title"]                 = "Titel:";
 $lang["loeschen_frage"]                  = "Möchten Sie das Gästebuch &quot;<b>%%element_name%%</b>&quot; mit allen Einträgen wirklich löschen?";
 $lang["modul_anlegen"]                   = "Gästebuch anlegen";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Gästebücher";
 $lang["post_liste_leer"]                 = "Keine Einträge vorhanden";
@@ -40,4 +35,7 @@ $lang["quickhelp_newGuestbook"]          = "Beim Anlegen oder Bearbeiten eines G
 $lang["quickhelp_viewGuestbook"]         = "In dieser Liste werden alle Einträge eines Gästebuchs angezeigt. Diese können dann gelöscht, aktiviert oder deaktiviert werden.";
 $lang["required_guestbook_title"]        = "Titel";
 $lang["speichern"]                       = "Speichern";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Eintragen", 5 => "", 6 => "", 7 => "", 8 => "");
 ?>

@@ -49,7 +49,7 @@ class class_element_news extends class_element_admin implements interface_admin_
 		//Load all newscats available
 		$arrRawCats = class_modul_news_category::getCategories();
         $arrCats = array();
-		$arrCats[0] = $this->getText("commons_all_cats");
+		$arrCats[0] = $this->getText("commons_all_categories");
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
 

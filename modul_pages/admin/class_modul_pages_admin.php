@@ -43,7 +43,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    $arrReturn = array();
 		$arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), "", "", true, "adminnavi"));
@@ -153,7 +153,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                             $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
                         }
 			    		if($this->objRights->rightRight($objOneEntry->getSystemid()))
-			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("pages_ordner_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+			    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
 			  			$strFolder .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderClosed.gif"), $objOneEntry->getStrName(), $strActions, $intI++, "", $objOneEntry->getSystemid());
 					}
@@ -202,7 +202,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                                 $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
                             }
                             if($this->objRights->rightRight($strSystemid))
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
                             $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objOneEntry->getStrBrowsername()." (-> ".uniStrTrim($objOneEntry->getStrAlias(), 20).")", $strActions, $intI++, "", $objOneEntry->getSystemid());
                         }
@@ -228,7 +228,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                                 $strActions .= $this->objToolkit->listStatusButton($objOneEntry->getSystemid());
                             }
                             if($this->objRights->rightRight($strSystemid))
-                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objOneEntry->getSystemid())));
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEntry->getSystemid())));
 
                             $strPages .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objOneEntry->getStrBrowsername()." (".$objOneEntry->getStrName().")", $strActions, $intI++, "", $objOneEntry->getSystemid());
 
@@ -298,7 +298,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     if($this->objRights->rightEdit($objPage->getSystemid()))
                         $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
                     if($this->objRights->rightRight($objPage->getSystemid()	))
-                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
 
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page_alias.gif"), $objPage->getStrBrowsername()." (-> ".uniStrTrim($objPage->getStrAlias(), 20).")", $strActions, $intI++);
                 }
@@ -314,7 +314,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                     if($this->objRights->rightEdit($objPage->getSystemid()))
                         $strActions.= $this->objToolkit->listStatusButton($objPage->getSystemid());
                     if($this->objRights->rightRight($objPage->getSystemid()	))
-                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_rechte"), getRightsImageAdminName($objPage->getSystemid())));
+                        $strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objPage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objPage->getSystemid())));
 
 
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_page.gif"), $objPage->getStrBrowsername()." (".$objPage->getStrName().")", $strActions, $intI++);

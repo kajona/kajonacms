@@ -34,7 +34,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newLanguage", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		return $arrReturn;
@@ -68,7 +68,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 		    		if($this->objRights->rightEdit($objOneLanguage->getSystemid()))
 		    		    $strAction .= $this->objToolkit->listStatusButton($objOneLanguage->getSystemid());
 		    		if($this->objRights->rightRight($objOneLanguage->getSystemid()))
-		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("language_rechte"), getRightsImageAdminName($objOneLanguage->getSystemid())));
+		    		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneLanguage->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneLanguage->getSystemid())));
 
 		  			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_language.gif"), $this->getText("lang_".$objOneLanguage->getStrName()).($objOneLanguage->getBitDefault() == 1 ? " (".$this->getText("language_isDefault").")" : ""), $strAction, $intI++);
 				}

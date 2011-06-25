@@ -79,7 +79,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_list"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 
         return $arrReturn;
 	}
@@ -109,7 +109,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 	    		if($this->objRights->rightEdit($objTag->getSystemid()))
 	    			$strActions.= $this->objToolkit->listStatusButton($objTag->getSystemid());
 	    		if($this->objRights->rightRight($objTag->getSystemid()	))
-	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("tag_rechte"), getRightsImageAdminName($objTag->getSystemid())));
+	    			$strActions.= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objTag->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objTag->getSystemid())));
 
 	  			$strReturn .= $this->objToolkit->listRow3($objTag->getStrName(), count($objTag->getListOfAssignments())." ".$this->getText("tag_assignments"), $strActions, getImageAdmin("icon_dot.gif"), $intI++);
 			}

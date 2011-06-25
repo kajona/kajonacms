@@ -7,19 +7,17 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["liste_leer"]                      = "Няма налични постове";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Коментари";
-$lang["module_list"]                     = "Списък";
 $lang["postacomment_comment"]            = "Коментар:";
 $lang["postacomment_delete_question"]    = "Наистина ли искате да премахнете коментара &quot;<b>%%element_name%%</b>&quot;?";
 $lang["postacomment_dofilter"]           = "Филтрирай";
 $lang["postacomment_edit"]               = "Редактирай коментар";
 $lang["postacomment_filter"]             = "Филтър за страница";
-$lang["postacomment_rights"]             = "Промени права";
 $lang["postacomment_title"]              = "Тема:";
 $lang["postacomment_username"]           = "Име:";
 $lang["quickhelp_editPost"]              = "В този екран, можете да промените стойностите на коментара.";

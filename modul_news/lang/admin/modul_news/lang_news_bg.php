@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страницата с резултати";
@@ -30,14 +30,10 @@ $lang["fehler_recht"]                    = "Нямате достатъчно п
 $lang["kat_anzeigen"]                    = "Покажи категорията";
 $lang["kat_ausblenden"]                  = "Покажи/скрий категориите";
 $lang["kat_bearbeiten"]                  = "Редактирай категорията";
-$lang["kat_loeschen_frage"]              = "Наистина ли искате да премахнете категорията &quot;<b>%%element_name%%</b>&quot;?";
-$lang["kat_rechte"]                      = "Промени права";
 $lang["klapper"]                         = "Покажи/скрий категорията";
 $lang["liste_leer"]                      = "Няма новини";
 $lang["modul_anlegen"]                   = "Създай новини";
-$lang["modul_kat_anlegen"]               = "Създай категория";
 $lang["modul_list_feed"]                 = "RSS-Feeds";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_new_feed"]                  = "Нова RSS-Feed";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Новини";
@@ -47,7 +43,6 @@ $lang["news_edit"]                       = "Редактирай новини";
 $lang["news_image"]                      = "Изображение:";
 $lang["news_intro"]                      = "Заглавие:";
 $lang["news_loeschen_frage"]             = "Наистина ли искате да премахнете новините &quot;<b>%%element_name%%</b>&quot;?";
-$lang["news_rechte"]                     = "Промени права";
 $lang["news_text"]                       = "Дълъг текст:";
 $lang["news_title"]                      = "Име";
 $lang["quickhelp_editCat"]               = "Сега е момента да определите името на категорията.";

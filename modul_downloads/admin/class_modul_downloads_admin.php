@@ -44,7 +44,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newArchive", "", $this->getText("archiv_neu"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("", "");
      	$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getText("archive_masssync"), "", "", true, "adminnavi"));
@@ -137,7 +137,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			   		if($this->objRights->rightDelete($arrOneObjArchive->getSystemid()))
 			   		    $strAction .= $this->objToolkit->listDeleteButton($arrOneObjArchive->getTitle(), $this->getText("archiv_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteArchive", "&systemid=".$arrOneObjArchive->getSystemid()));
 			   		if($this->objRights->rightRight($arrOneObjArchive->getSystemid()))
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($arrOneObjArchive->getSystemid())));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$arrOneObjArchive->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($arrOneObjArchive->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_downloads.gif"), $arrOneObjArchive->getTitle(), $strAction, $intI++);
 				}
 			}
@@ -276,7 +276,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                         $strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()) && $this->strPeAddon == "")
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("archiv_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneFile->getSystemid())));
 
 					$strReturn .= $this->objToolkit->listRow3($strName, $strCenter, $strAction, getImageAdmin($strImage, $strText), $intI++, $objOneFile->getSystemid());
 				}

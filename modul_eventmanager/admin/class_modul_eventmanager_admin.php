@@ -40,7 +40,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_list"), "", "", true, "adminnavi"));
+    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
     	$arrReturn[] = array("", "");
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newEvent", "", $this->getText("module_create"), "", "", true, "adminnavi"));
 		return $arrReturn;
@@ -103,7 +103,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
     		   		if($this->objRights->rightEdit($objOneEvent->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneEvent->getSystemid());
     				if($this->objRights->rightRight($objOneEvent->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEvent->getSystemid(), "", $this->getText("event_permissions"), getRightsImageAdminName($objOneEvent->getSystemid())));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneEvent->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneEvent->getSystemid())));
 
                     $strCenter = "(".dateToString($objOneEvent->getObjStartDate(), true);
                     if($objOneEvent->getObjEndDate() != null)
@@ -359,7 +359,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
     		   		if($this->objRights->rightEdit($objOneParticipant->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneParticipant->getSystemid());
     				if($this->objRights->rightRight($objOneParticipant->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneParticipant->getSystemid(), "", $this->getText("participant_permissions"), getRightsImageAdminName($objOneParticipant->getSystemid())));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneParticipant->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneParticipant->getSystemid())));
 
     		   		$strParticipants .= $this->objToolkit->listRow3($objOneParticipant->getStrLastname().", ".$objOneParticipant->getStrForename(), $objOneParticipant->getStrEmail(), $strAction, getImageAdmin("icon_user.gif"), $intI++);
 			    }

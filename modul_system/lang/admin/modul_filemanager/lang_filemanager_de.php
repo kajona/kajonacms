@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_filemanager_default_filesrepoid_"] = "Standard Dateien-Repository:";
@@ -58,7 +55,6 @@ $lang["filemanager_view_filter_h"]       = "Eine kommaseparierte Liste an Dateie
 $lang["foldertitle"]                     = "Pfad: ";
 $lang["liste_leer"]                      = "Keine Repositories angelegt";
 $lang["max_size"]                        = "Maximale Dateigröße: ";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_neu"]                       = "Neues Repository";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Filemanager";
@@ -81,20 +77,19 @@ $lang["ordner_oeffnen"]                  = "Ordner öffnen";
 $lang["ordner_uebernehmen"]              = "Ordner übernehmen";
 $lang["page_sublist"]                    = "Untergeordnete Seiten anzeigen";
 $lang["pfad"]                            = "Pfad: ";
+$lang["quickhelp_openFolder"]            = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
 $lang["quickhelp_deleteFile"]            = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
 $lang["quickhelp_deleteFolder"]          = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
-$lang["quickhelp_editRepo"]              = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden. Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
 $lang["quickhelp_imageDetail"]           = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
-$lang["quickhelp_list"]                  = "Der Filemanager dient als Dateimananger. Mit Hilfe dessen können Dateien in das System hochgeladen werden, umbenannt oder gelöscht werden. In dieser Ansicht finden Sie eine Liste der angelegten Repositories. Jedes Respository kann nach speziellen Anforderungen konfiguriert werden.";
 $lang["quickhelp_newFolder"]             = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
+$lang["quickhelp_editRepo"]              = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden. Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
+$lang["quickhelp_list"]                  = "Der Filemanager dient als Dateimananger. Mit Hilfe dessen können Dateien in das System hochgeladen werden, umbenannt oder gelöscht werden. In dieser Ansicht finden Sie eine Liste der angelegten Repositories. Jedes Respository kann nach speziellen Anforderungen konfiguriert werden.";
 $lang["quickhelp_newRepo"]               = "Beim Anlegen oder Bearbeiten eines Repositories können verschiedene Eigenschaften definiert werden. Hierzu gehört der Name des Repositorys, der entsprechende Pfad im Dateisystem, ein Upload-Filter zum expliziten zulassen von für den Upload erlaubten Dateitypen sowie ein Ansichts-Filter zum Ausblenden von bestimmten Dateien.";
-$lang["quickhelp_openFolder"]            = "Alle sich in diesem Ordner befindlichen Dateien und Ordner werden in dieser Liste angezeigt (Die Liste kann auf Grund von Filtern eingeschränkt sein. In dieser Ansicht können außerdem Dateien hochgeladen, umbenannt oder gelöscht werden. Das Anlegen von neuen Ordnern oder das Löschen von leeren Ordnern ist ebenfalls möglich.";
 $lang["rename"]                          = "Umbenennen";
 $lang["repo_bearbeiten"]                 = "Eigenschaften festlegen";
 $lang["repo_bearbeiten_fehler"]          = "Beim Bearbeiten ist ein Fehler aufgetreten";
 $lang["repo_loeschen_frage"]             = "Möchten Sie das Repository &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["repo_oeffnen"]                    = "Ordner öffnen";
-$lang["repo_rechte"]                     = "Rechte bearbeiten";
 $lang["required_filemanager_name"]       = "Name";
 $lang["required_filemanager_path"]       = "Pfad";
 $lang["rotateImageLeft"]                 = "Um 90° nach links drehen";
@@ -126,4 +121,12 @@ $lang["xmlupload_error_copyUpload"]      = "Fehler beim Kopieren der Datei auf d
 $lang["xmlupload_error_filter"]          = "Dateityp im Filter nicht erlaubt";
 $lang["xmlupload_error_notWritable"]     = "Zielordner nicht beschreibbar";
 $lang["xmlupload_success"]               = "Upload erfolgreich";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Upload", 5 => "Verwalten", 6 => "", 7 => "", 8 => "");
+$lang["quickhelp_deleteFile"]            = $lang["quickhelp_openFolder"];
+$lang["quickhelp_deleteFolder"]          = $lang["quickhelp_openFolder"];
+$lang["quickhelp_imageDetail"]           = $lang["quickhelp_openFolder"];
+$lang["quickhelp_newFolder"]             = $lang["quickhelp_openFolder"];
+
 ?>

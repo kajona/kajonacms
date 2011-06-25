@@ -7,14 +7,13 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["aktuell"]                         = "Aktuelle News";
 $lang["archiv"]                          = "News-Archiv";
 $lang["browser"]                         = "Browser öffnen";
 $lang["detail"]                          = "Detail";
-$lang["liste"]                           = "Liste";
 $lang["news_amount"]                     = "Anzahl News pro Seite:";
 $lang["news_detailspage"]                = "Detail-Seite:";
 $lang["news_mode"]                       = "Kategorie-Modus:";

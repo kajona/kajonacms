@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "Gallery properties", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_gallery_imagetypes_"]            = "Picture-types:";
@@ -18,7 +15,6 @@ $lang["_gallery_imagetypes_hint"]        = "Comma-separated list of picture-type
 $lang["_gallery_search_resultpage_"]     = "Result page:";
 $lang["_gallery_search_resultpage_hint"] = "This page shows the list of pictures found by the search";
 $lang["bild_bearbeiten"]                 = "Edit picture";
-$lang["bild_rechte"]                     = "Edit permissions";
 $lang["bild_speichern_fehler"]           = "An error occured while saving picture";
 $lang["browser"]                         = "Browse folders";
 $lang["datei_loeschen_frage"]            = "Do you really want to delete the picture &quot;<b>%%element_name%%</b>&quot;?";
@@ -32,7 +28,6 @@ $lang["galerie_loeschen_erfolg"]         = "The gallery was deleted successfully
 $lang["galerie_loeschen_fehler"]         = "An error occured while deleting gallery";
 $lang["galerie_loeschen_frage"]          = "Do you really want to delete the gallery &quot;<b>%%element_name%%</b>&quot;?<br />All stored details will be deleted, too!";
 $lang["galerie_neu"]                     = "Create gallery";
-$lang["galerie_rechte"]                  = "Edit permissions";
 $lang["galerie_syncro"]                  = "Synchronize gallery";
 $lang["gallery_masssync"]                = "Synchronize all";
 $lang["gallery_path"]                    = "Path:";
@@ -40,7 +35,6 @@ $lang["gallery_title"]                   = "Title:";
 $lang["hideSyncDialog"]                  = "Close";
 $lang["image_properties"]                = "Edit basic properties";
 $lang["liste_bilder_leer"]               = "No pictures available";
-$lang["modul_liste"]                     = "List";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Galleries";
 $lang["ordner_bearbeiten"]               = "Edit folder";
@@ -69,4 +63,7 @@ $lang["sync_add"]                        = "Added: ";
 $lang["sync_del"]                        = " Deleted: ";
 $lang["sync_upd"]                        = " Updated: ";
 $lang["syncro_ende"]                     = "Synchronization finished successfully<br />";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "Gallery properties", 7 => "", 8 => "");
 ?>

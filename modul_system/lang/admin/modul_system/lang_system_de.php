@@ -7,12 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 336
-
-//non-editable entries
-$lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Einstellungen",  5 => "Systemtasks", 6 => "Systemlog", 7 => "Updates", 8 => "Aspekte");
-$lang["permissions_root_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Universal 1", 5 => "Universal 2", 6 => "Universal 3", 7 => "Universal 4", 8 => "Universal 5" );
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_admin_nr_of_rows_"]              = "Anzahl Datensätze pro Seite:";
@@ -28,7 +23,7 @@ $lang["_system_browser_cachebuster_hint"] = "Dieser Wert wird als GET-Parameter 
 $lang["_system_changehistory_enabled_"]  = "Änderungshistorie aktiv:";
 $lang["_system_dbdump_amount_"]          = "Anzahl DB-Dumps:";
 $lang["_system_dbdump_amount_hint"]      = "Definiert, wie viele Datenbank-Sicherungen vorgehalten werden sollen.";
-$lang["_system_graph_type_"]             = "Verwendete Chart-Bibliothek:";
+$lang["_system_graph_type_"]             = "Verwendete Chart-Bibliothek: ";
 $lang["_system_graph_type_hint"]         = "Gültige Werte: pchart, ezc. pChart muss gesondern heruntergeladen und installiert werden, ezc benötigt im Optimalfall das PHP-Modul 'cairo'.<br />Siehe hierzu auch <a href=\"http://www.kajona.de/nicecharts.html\" taget=\"_blank\">http://www.kajona.de/nicecharts.html</a>";
 $lang["_system_lock_maxtime_"]           = "Maximale Sperrdauer:";
 $lang["_system_lock_maxtime_hint"]       = "Nach der angegebenen Dauer in Sekunden werden gesperrte Datensätze automatisch wieder freigegeben.";
@@ -57,7 +52,6 @@ $lang["aspect_isdefault"]                = "Ja";
 $lang["aspect_list_empty"]               = "Keine Aspekete angelegt";
 $lang["aspect_name"]                     = "Name:";
 $lang["aspect_nodefault"]                = "Nein";
-$lang["aspect_permissions"]              = "Rechte bearbeiten";
 $lang["aspects"]                         = "Aspekte";
 $lang["browser"]                         = "Seitenbrowser";
 $lang["cache_entry_size"]                = "Größe";
@@ -308,4 +302,9 @@ $lang["uploadmaxsize"]                   = "Upload Max Size";
 $lang["uploads"]                         = "Uploads";
 $lang["version"]                         = "Version";
 $lang["warnung_settings"]                = "!! ACHTUNG !!<br />Bei folgenden Einstellungen können falsche Werte das System unbrauchbar machen!";
+
+//non-editable entries
+$lang["permissions_default_header"]      = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Einstellungen",  5 => "Systemtasks", 6 => "Systemlog", 7 => "Updates", 8 => "Aspekte");
+$lang["permissions_root_header"]         = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Universal 1", 5 => "Universal 2", 6 => "Universal 3", 7 => "Universal 4", 8 => "Universal 5" );
 ?>

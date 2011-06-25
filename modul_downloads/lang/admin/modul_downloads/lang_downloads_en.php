@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync", 5 => "Download", 6 => "Logs", 7 => "Rating", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_downloads_suche_seite_"]         = "Result page:";
@@ -21,7 +18,6 @@ $lang["archiv_loeschen_erfolg"]          = "The archive was delete successfully"
 $lang["archiv_loeschen_fehler"]          = "Because of missing permissions the archive couldn't be deleted";
 $lang["archiv_loeschen_frage"]           = "Do you really want to delete the archive &quot;<b>%%element_name%%</b>&quot;?<br />All stored details will be deleted, too!";
 $lang["archiv_neu"]                      = "Create archive";
-$lang["archiv_rechte"]                   = "Edit permissions";
 $lang["archiv_syncro"]                   = "Synchronize archive";
 $lang["archive_masssync"]                = "Synchronize all";
 $lang["archive_path"]                    = "Path:";
@@ -47,7 +43,6 @@ $lang["liste_leer_archive"]              = "No archives available";
 $lang["liste_leer_dl"]                   = "No downloads available";
 $lang["logbuch"]                         = "Logfile";
 $lang["logbuch_loeschen_link"]           = "Flush logfile";
-$lang["modul_liste"]                     = "List";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_hoch"]                     = "One level up";
@@ -71,4 +66,7 @@ $lang["sync_add"]                        = "Added: ";
 $lang["sync_del"]                        = " Deleted: ";
 $lang["sync_upd"]                        = " Updated: ";
 $lang["syncro_ende"]                     = "Synchronization finished successfully<br />";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync", 5 => "Download", 6 => "Logs", 7 => "Rating", 8 => "");
 ?>

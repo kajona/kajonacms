@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "Gallery Eigenschaften", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_gallery_imagetypes_"]            = "Bildtypen:";
@@ -18,7 +15,6 @@ $lang["_gallery_imagetypes_hint"]        = "Kommaseparierte Liste an Bildtypen, 
 $lang["_gallery_search_resultpage_"]     = "Treffer-Seite:";
 $lang["_gallery_search_resultpage_hint"] = "Auf dieser Seite erfolgt die Detailansicht der Bilder, die in der Suche gefunden wurden.";
 $lang["bild_bearbeiten"]                 = "Bild bearbeiten";
-$lang["bild_rechte"]                     = "Rechte bearbeiten";
 $lang["bild_speichern_fehler"]           = "Fehler beim Speichern des Bildes";
 $lang["browser"]                         = "Ordnerbrowser";
 $lang["datei_loeschen_frage"]            = "Möchten Sie das Bild &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
@@ -32,7 +28,6 @@ $lang["galerie_loeschen_erfolg"]         = "Löschen der Galerie erfolgreich";
 $lang["galerie_loeschen_fehler"]         = "Fehler beim Loeschen der Galerie";
 $lang["galerie_loeschen_frage"]          = "Möchten Sie die Galerie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?<br />Dabei werden alle hinterlegten Daten gelöscht!";
 $lang["galerie_neu"]                     = "Neue Galerie";
-$lang["galerie_rechte"]                  = "Rechte bearbeiten";
 $lang["galerie_syncro"]                  = "Galerie synchronisieren";
 $lang["gallery_masssync"]                = "Alle synchronisieren";
 $lang["gallery_path"]                    = "Pfad:";
@@ -40,7 +35,6 @@ $lang["gallery_title"]                   = "Titel:";
 $lang["hideSyncDialog"]                  = "Schließen";
 $lang["image_properties"]                = "Eigenschaften des Bildes bearbeiten";
 $lang["liste_bilder_leer"]               = "Keine Bilder vorhanden";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Bildergalerien";
 $lang["ordner_bearbeiten"]               = "Ordner bearbeiten";
@@ -69,4 +63,7 @@ $lang["sync_add"]                        = "Hinzugefügt: ";
 $lang["sync_del"]                        = " Gelöscht: ";
 $lang["sync_upd"]                        = " Aktualisiert: ";
 $lang["syncro_ende"]                     = "Synchronisierung erfolgreich abgeschlossen<br />";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro",  5 => "Rating", 6 => "Gallery Eigenschaften", 7 => "", 8 => "");
 ?>

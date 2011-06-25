@@ -44,7 +44,7 @@ class class_element_faqs extends class_element_admin implements interface_admin_
         $arrRawCats = class_modul_faqs_category::getCategories();
         $arrCats = array();
         //addd an "i want all" cat ;)
-        $arrCats["0"] = $this->getText("commons_all_cats");
+        $arrCats["0"] = $this->getText("commons_all_categories");
 
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();

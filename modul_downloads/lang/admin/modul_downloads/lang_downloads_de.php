@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro", 5 => "Download", 6 => "Logbuch", 7 => "Rating", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_downloads_suche_seite_"]         = "Treffer-Seite:";
@@ -21,7 +18,6 @@ $lang["archiv_loeschen_erfolg"]          = "Löschen erfolgreich";
 $lang["archiv_loeschen_fehler"]          = "Auf Grund nicht ausreichender Rechte konnte das Löschen nicht erfolgreich abgeschlossen werden";
 $lang["archiv_loeschen_frage"]           = "Möchten Sie das Archiv &quot;<b>%%element_name%%</b>&quot; wirklich löschen? <br /> Dabei werden alle hinterlegten Details gelöscht!";
 $lang["archiv_neu"]                      = "Neues Archiv";
-$lang["archiv_rechte"]                   = "Rechte bearbeiten";
 $lang["archiv_syncro"]                   = "Archiv synchronisieren";
 $lang["archive_masssync"]                = "Alle synchronisieren";
 $lang["archive_path"]                    = "Pfad:";
@@ -47,7 +43,6 @@ $lang["liste_leer_archive"]              = "Keine Archive angelegt";
 $lang["liste_leer_dl"]                   = "Keine Downloads vorhanden";
 $lang["logbuch"]                         = "Logbuch";
 $lang["logbuch_loeschen_link"]           = "Logbuch leeren";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_hoch"]                     = "Eine Ebene nach oben springen";
@@ -71,4 +66,7 @@ $lang["sync_add"]                        = "Hinzugefügt: ";
 $lang["sync_del"]                        = " Gelöscht: ";
 $lang["sync_upd"]                        = " Aktualisiert: ";
 $lang["syncro_ende"]                     = "Synchronisierung erfolgreich abgeschlossen<br />";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Syncro", 5 => "Download", 6 => "Logbuch", 7 => "Rating", 8 => "");
 ?>

@@ -155,9 +155,9 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNews", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
-	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("commons_create_category"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 	    $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "newsFeed", "", $this->getText("modul_list_feed"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "newNewsFeed", "", $this->getText("modul_new_feed"), "", "", true, "adminnavi"));
@@ -210,15 +210,15 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()));
+    		   		    $strAction .= $this->objToolkit->listDeleteButton($objOneCategory->getStrTitle(), $this->getText("commons_delete_category_question"), getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()));
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
+    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
 
     			}
     		}
     		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_new.gif"), $intI++);
+    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("commons_create_category"), $this->getText("commons_create_category"), "icon_new.gif"), $intI++);
 
     		if(uniStrlen($strCat) != 0)
     		     $strCat = $this->objToolkit->listHeader().$strCat.$this->objToolkit->listFooter();
@@ -286,7 +286,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     }
 
     				if($this->objRights->rightRight($objOneNews->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("news_rechte"), getRightsImageAdminName($objOneNews->getSystemid())));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneNews->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneNews->getSystemid())));
     		   		$strNews .= $this->objToolkit->listRow3($objOneNews->getStrTitle()." (".$objOneNews->getIntHits()." Hits)", $strCenter, $strAction,getImageAdmin("icon_news.gif"), $intI++);
 			    }
 
@@ -842,7 +842,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $arrCatsDD = array();
                 foreach ($arrNewsCats as $objOneCat)
                     $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
-                $arrCatsDD["0"] = $this->getText("commons_all_cats");
+                $arrCatsDD["0"] = $this->getText("commons_all_categories");
                 $strReturn .= $this->objToolkit->formInputDropdown("feed_cat", $arrCatsDD, $this->getText("feed_cat"), $this->getParam("feed_cat"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
                 $strReturn .= $this->objToolkit->formInputHidden("save", "1");
@@ -901,7 +901,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $arrCatsDD = array();
                 foreach ($arrNewsCats as $objOneCat)
                     $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
-                $arrCatsDD["0"] = $this->getText("commons_all_cats");
+                $arrCatsDD["0"] = $this->getText("commons_all_categories");
                 $strReturn .= $this->objToolkit->formInputDropdown("feed_cat", $arrCatsDD, $this->getText("feed_cat"), $objFeed->getStrCat());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
                 $strReturn .= $this->objToolkit->formInputHidden("save", "1");

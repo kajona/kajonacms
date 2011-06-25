@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_filemanager_default_filesrepoid_"] = "Default file-repository:";
@@ -58,7 +55,6 @@ $lang["filemanager_view_filter_h"]       = "A comma-separated list of file types
 $lang["foldertitle"]                     = "Path: ";
 $lang["liste_leer"]                      = "No repositories available";
 $lang["max_size"]                        = "Maximal file size: ";
-$lang["modul_liste"]                     = "List";
 $lang["modul_neu"]                       = "Create repository";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Filemanager";
@@ -81,20 +77,15 @@ $lang["ordner_oeffnen"]                  = "Open folder";
 $lang["ordner_uebernehmen"]              = "Apply folder";
 $lang["page_sublist"]                    = "Show ancillary pages";
 $lang["pfad"]                            = "Path: ";
-$lang["quickhelp_deleteFile"]            = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
-$lang["quickhelp_deleteFolder"]          = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
-$lang["quickhelp_editRepo"]              = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
-$lang["quickhelp_imageDetail"]           = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
-$lang["quickhelp_list"]                  = "The filemanager is, as the name says, the integrated filemanager of Kajona. You can use it to upload files to the system or to rename or delete exisiting files.<br />In this view, you find a list of created repositories. Every repository can be configured to meet different requirements.";
-$lang["quickhelp_newFolder"]             = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
-$lang["quickhelp_newRepo"]               = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
 $lang["quickhelp_openFolder"]            = "All files and folders contained by the current folder are listed in this view (the list can be limited due to filters set up for the current repository). Additionaly, files can be uploaded, edited or deleted. It is also possible to create folders.";
+$lang["quickhelp_editRepo"]              = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
+$lang["quickhelp_list"]                  = "The filemanager is, as the name says, the integrated filemanager of Kajona. You can use it to upload files to the system or to rename or delete exisiting files.<br />In this view, you find a list of created repositories. Every repository can be configured to meet different requirements.";
+$lang["quickhelp_newRepo"]               = "When creating or editing a repository, you can set up the different properties.<br />This includes the name, the path on the filesystem, an upload filter to provide a white-list of filetypes allowed for uploads and a view-filter to define a white-list of file types to be shown in the lists.";
 $lang["rename"]                          = "Rename";
 $lang["repo_bearbeiten"]                 = "Define properties";
 $lang["repo_bearbeiten_fehler"]          = "An error occured while saving the repository";
 $lang["repo_loeschen_frage"]             = "Do you really want to delete the repository &quot;<b>%%element_name%%</b>&quot;?";
 $lang["repo_oeffnen"]                    = "Show folder";
-$lang["repo_rechte"]                     = "Edit permissions";
 $lang["required_filemanager_name"]       = "Name";
 $lang["required_filemanager_path"]       = "Path";
 $lang["rotateImageLeft"]                 = "Rotate 90° to the right";
@@ -126,4 +117,11 @@ $lang["xmlupload_error_copyUpload"]      = "Error while copying the file on the 
 $lang["xmlupload_error_filter"]          = "Filetyp not allowed in current filter";
 $lang["xmlupload_error_notWritable"]     = "Folder not writable";
 $lang["xmlupload_success"]               = "Upload successfull";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Upload",  5 => "Manage",	6 => "", 7 => "", 8 => "" );
+$lang["quickhelp_deleteFile"]            = $lang["quickhelp_openFolder"];
+$lang["quickhelp_deleteFolder"]          = $lang["quickhelp_openFolder"];
+$lang["quickhelp_imageDetail"]           = $lang["quickhelp_openFolder"];
+$lang["quickhelp_newFolder"]             = $lang["quickhelp_openFolder"];
 ?>

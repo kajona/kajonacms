@@ -7,13 +7,12 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_faqs_search_resultpage_"]        = "Страница с резултати:";
 $lang["_faqs_search_resultpage_hint"]    = "Страницата показва 'Често задаваните въпроси' намерени посредством 'търсене'";
 $lang["faq_edit"]                        = "Редактирай Често задавани въпроси";
-$lang["faq_rechte"]                      = "Смени права";
 $lang["faqs_answer"]                     = "Отговор:";
 $lang["faqs_loeschen_frage"]             = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faqs_question"]                   = "Въпрос:";
@@ -21,12 +20,8 @@ $lang["fehler_recht"]                    = "Няма достатъчно пра
 $lang["kat_anzeigen"]                    = "Покажи категория";
 $lang["kat_ausblenden"]                  = "Покажи/скрий категориите";
 $lang["kat_bearbeiten"]                  = "Редактирай категории";
-$lang["kat_loeschen_frage"]              = "Наистина ли искате да изтрийте категорията &quot;<b>%%element_name%%</b>&quot;?";
-$lang["kat_rechte"]                      = "Промени права";
 $lang["liste_leer"]                      = "Няма налични Често задавани въпроси";
 $lang["modul_anlegen"]                   = "Създай ЧЗВ";
-$lang["modul_kat_anlegen"]               = "Създай категория";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_rechte"]                    = "Права върху модул";
 $lang["modul_titel"]                     = "Често Задавани Въпроси";
 $lang["modul_titel2"]                    = "Управление - категории на често задавани въпроси";

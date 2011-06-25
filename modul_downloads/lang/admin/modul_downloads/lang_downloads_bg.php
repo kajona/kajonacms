@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_downloads_suche_seite_"]         = "Страница с резултати:";
@@ -18,7 +18,6 @@ $lang["archiv_loeschen_erfolg"]          = "Архива бе успешно и�
 $lang["archiv_loeschen_fehler"]          = "Поради липса на права, архива не може да бъде изтрит";
 $lang["archiv_loeschen_frage"]           = "Наистина ли искате да премахнете архивът &quot;<b>%%element_name%%</b>&quot;?<br /> Всички запазени детайли ще бъдат изтрити също!";
 $lang["archiv_neu"]                      = "Създай архив";
-$lang["archiv_rechte"]                   = "Редактирай права";
 $lang["archiv_syncro"]                   = "Синхронизирай архив";
 $lang["archive_masssync"]                = "Синхронизирай всички";
 $lang["archive_path"]                    = "Път";
@@ -44,7 +43,6 @@ $lang["liste_leer_archive"]              = "Няма налични архиви
 $lang["liste_leer_dl"]                   = "Няма налични downloads";
 $lang["logbuch"]                         = "Дневник";
 $lang["logbuch_loeschen_link"]           = "Изчисти дневника";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Downloads";
 $lang["ordner_hoch"]                     = "Едно ниво назад";

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["browser"]                         = "Open browser";
@@ -16,7 +16,6 @@ $lang["fehler_recht"]                    = "Not enough permissions to perform th
 $lang["liste_leer"]                      = "No navigations available";
 $lang["modul_anlegen"]                   = "Create navigation";
 $lang["modul_anlegenpunkt"]              = "Create navigation item";
-$lang["modul_liste"]                     = "List";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Navigations";
 $lang["navigation_anzeigen"]             = "Show navigation items";
@@ -32,7 +31,6 @@ $lang["navigation_page_e"]               = "External link / file:";
 $lang["navigation_page_i"]               = "Page:";
 $lang["navigation_parent"]               = "Parent node:";
 $lang["navigation_point_accept"]         = "Accept navigation item";
-$lang["navigation_rechte"]               = "Change permissions";
 $lang["navigation_show_disabled"]        = "Navigation items can\'t be shown since they are generated automatically.";
 $lang["navigation_tagetblank"]           = "_blank (in a new browser window)";
 $lang["navigation_tagetself"]            = "_self (in the same browser window)";
@@ -40,7 +38,6 @@ $lang["navigation_target"]               = "Target:";
 $lang["navigationp_anzeigen"]            = "Show navigation items";
 $lang["navigationp_bearbeiten"]          = "Edit navigation item";
 $lang["navigationp_hoch"]                = "Move item up";
-$lang["navigationp_recht"]               = "Change permissions";
 $lang["navigationp_runter"]              = "Move item down";
 $lang["quickhelp_deleteNavi"]            = "By executing the 'delete' function the selected navigation tree or navigation tree item and all sub items will be deleted. This step is irreversible.";
 $lang["quickhelp_editNavi"]              = "You can edit the properties of the navigation tree here.";

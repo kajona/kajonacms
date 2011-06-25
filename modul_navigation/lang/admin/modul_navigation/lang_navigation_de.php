@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["browser"]                         = "Browser öffnen";
@@ -16,7 +16,6 @@ $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese 
 $lang["liste_leer"]                      = "Keine Navigation angelegt";
 $lang["modul_anlegen"]                   = "Neue Navigation";
 $lang["modul_anlegenpunkt"]              = "Neuer Unterpunkt";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Navigationen";
 $lang["navigation_anzeigen"]             = "Unterpunkte anzeigen";
@@ -32,7 +31,6 @@ $lang["navigation_page_e"]               = "Externer Verweis / Datei:";
 $lang["navigation_page_i"]               = "Interne Seite:";
 $lang["navigation_parent"]               = "Übergeordneter Knoten:";
 $lang["navigation_point_accept"]         = "Navigationspunkt übernehmen";
-$lang["navigation_rechte"]               = "Rechte bearbeiten";
 $lang["navigation_show_disabled"]        = "Navigationspunkte können nicht angezeigt werden, da diese automatisch generiert werden.";
 $lang["navigation_tagetblank"]           = "_blank (Neues Browserfenster)";
 $lang["navigation_tagetself"]            = "_self (Selbes Browserfenster)";
@@ -40,7 +38,6 @@ $lang["navigation_target"]               = "Ziel:";
 $lang["navigationp_anzeigen"]            = "Unterpunkte anzeigen";
 $lang["navigationp_bearbeiten"]          = "Navigationspunkt bearbeiten";
 $lang["navigationp_hoch"]                = "Punkt nach oben verschieben";
-$lang["navigationp_recht"]               = "Rechte bearbeiten";
 $lang["navigationp_runter"]              = "Punkt nach unten verschieben";
 $lang["quickhelp_deleteNavi"]            = "Mit dieser Aktion wird eine Navigation oder ein Navigationspunkt mit allen Unterpunkten aus dem System gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.";
 $lang["quickhelp_editNavi"]              = "Für eine neue Navigation muss lediglich der Titel des Navigationsbaumes vergeben werden. Über die Aktion 'bearbeiten' kann dieser später wieder verändert werden.";

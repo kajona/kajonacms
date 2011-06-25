@@ -80,7 +80,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("module_list"), "", "", true, "adminnavi"));
+    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -170,7 +170,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	    		   		if($this->objRights->rightEdit($objOnePost->getSystemid()))
 	    		   		    $strAction .= $this->objToolkit->listStatusButton($objOnePost->getSystemid());
 	    		   		if($this->objRights->rightRight($objOnePost->getSystemid()))
-	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("postacomment_rights"), getRightsImageAdminName($objOnePost->getSystemid())));
+	    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOnePost->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOnePost->getSystemid())));
 
 	    		   		$strPostRows .= $this->objToolkit->listRow3($objPage->getStrName(), $strCenter, $strAction, getImageAdmin("icon_comment.gif"), $intI);
 

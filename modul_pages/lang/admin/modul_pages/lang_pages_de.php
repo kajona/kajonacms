@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_pages_cacheenabled_"]            = "Seitencache aktiv:";
@@ -81,7 +78,6 @@ $lang["lastuserTitle"]                   = "von";
 $lang["liste_seiten_leer"]               = "Keine Seiten angelegt";
 $lang["modul_element_neu"]               = "Neues Element";
 $lang["modul_elemente"]                  = "Elemente";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_liste_alle"]                = "Flache Liste";
 $lang["modul_neu"]                       = "Neue Seite";
 $lang["modul_neu_alias"]                 = "Neue Verweis-Seite";
@@ -111,7 +107,6 @@ $lang["pages_ordner_delete"]             = "Ordner löschen";
 $lang["pages_ordner_edit"]               = "Ordner bearbeiten";
 $lang["pages_ordner_loeschen_frage"]     = "Möchten Sie den Ordner &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darin enthaltenen Seiten und Ordner werden dabei ebenfalls gelöscht!";
 $lang["pages_ordner_oeffnen"]            = "Ordner öffnen";
-$lang["pages_ordner_rechte"]             = "Rechte bearbeiten";
 $lang["pe_copy"]                         = "Kopieren";
 $lang["pe_delete"]                       = "Löschen";
 $lang["pe_dialog_close_warning"]         = "Wollen Sie den Editor schließen und mögliche Änderungen verwerfen?";
@@ -160,7 +155,6 @@ $lang["seite_inhalte"]                   = "Seiteninhalte bearbeiten";
 $lang["seite_loeschen"]                  = "Seite löschen";
 $lang["seite_loeschen_erfolg"]           = "Seite erfolgreich gelöscht";
 $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darunter angelegten Seiten werden ebenfalls gelöscht!";
-$lang["seite_rechte"]                    = "Rechte bearbeiten";
 $lang["select_page"]                     = "Seite auswählen";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Änderungshistorie anzeigen";
@@ -171,4 +165,7 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");
 ?>

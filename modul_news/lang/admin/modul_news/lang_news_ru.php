@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Страница результатов:";
@@ -30,14 +30,10 @@ $lang["fehler_recht"]                    = "Недостаточно прав д
 $lang["kat_anzeigen"]                    = "Показать категорию";
 $lang["kat_ausblenden"]                  = "Показать / Скрыть категории";
 $lang["kat_bearbeiten"]                  = "Изменить категорию";
-$lang["kat_loeschen_frage"]              = "Вы действительно хотите удалить категорию &quot;<b>%%element_name%%</b>&quot;?";
-$lang["kat_rechte"]                      = "Изменить разрешения";
 $lang["klapper"]                         = "Показать / Скрыть категорию";
 $lang["liste_leer"]                      = "Нет новостей";
 $lang["modul_anlegen"]                   = "Создать новость";
-$lang["modul_kat_anlegen"]               = "Создать категорию";
 $lang["modul_list_feed"]                 = "RSS-лента";
-$lang["modul_liste"]                     = "Список";
 $lang["modul_new_feed"]                  = "Новая RSS-лента";
 $lang["modul_rechte"]                    = "Разрешения на модуль";
 $lang["modul_titel"]                     = "Новости";
@@ -47,7 +43,6 @@ $lang["news_edit"]                       = "Изменить новости";
 $lang["news_image"]                      = "Изображение:";
 $lang["news_intro"]                      = "Пробник:";
 $lang["news_loeschen_frage"]             = "Вы действительно хотите удалить новости &quot;<b>%%element_name%%</b>&quot;?";
-$lang["news_rechte"]                     = "Изменить разрешения";
 $lang["news_text"]                       = "Длинный текст:";
 $lang["news_title"]                      = "Имя:";
 $lang["quickhelp_editCat"]               = "В настоящий момент Вы можете установить только имя категории.";

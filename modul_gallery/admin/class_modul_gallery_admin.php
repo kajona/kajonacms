@@ -60,7 +60,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
      	$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newGallery", "", $this->getText("galerie_neu"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
      	$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "massSync", "", $this->getText("gallery_masssync"), "", "", true, "adminnavi"));
@@ -153,7 +153,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			   		if($objOneGallery->rightRight3())
 			   		    $strAction .= $this->objToolkit->listDeleteButton($objOneGallery->getStrTitle(), $this->getText("galerie_loeschen_frage"), getLinkAdminHref($this->arrModule["modul"], "deleteGallery", "&systemid=".$objOneGallery->getSystemid()));
 			   		if($objOneGallery->rightRight3())
-		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("galerie_rechte"), getRightsImageAdminName($objOneGallery->getSystemid())));
+		   			    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneGallery->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneGallery->getSystemid())));
 			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_gallery.gif"), $objOneGallery->getStrTitle(), $strAction, $intI++);
 				}
 			}
@@ -541,7 +541,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                         $strAction .= $this->objToolkit->listStatusButton($objOneFile->getSystemid());
 
 			   		if($this->objRights->rightRight($objOneFile->getSystemid()) && $this->strPeAddon == "")
-			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("bild_rechte"), getRightsImageAdminName($objOneFile->getSystemid())));
+			   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFile->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneFile->getSystemid())));
 
                     // if no folder, attach a thumbnail-tooltip
                     if ($objOneFile->getIntType() == 1) {

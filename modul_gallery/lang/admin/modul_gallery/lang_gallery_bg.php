@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "Gallery properties", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_gallery_imagetypes_"]            = "Видове-снимки";
@@ -18,7 +15,6 @@ $lang["_gallery_imagetypes_hint"]        = "Списък на видове сн�
 $lang["_gallery_search_resultpage_"]     = "Страница с резултати:";
 $lang["_gallery_search_resultpage_hint"] = "Тази страница показва списък на снимки намерени чрез 'търсене'";
 $lang["bild_bearbeiten"]                 = "Редактирай снимка";
-$lang["bild_rechte"]                     = "Редактира права";
 $lang["bild_speichern_fehler"]           = "Възникна грешка при запазването на снимката";
 $lang["browser"]                         = "Прегледай папки";
 $lang["datei_loeschen_frage"]            = "Наистина ли искате да премахнете снимката &quot;<b>%%element_name%%</b>&quot;?";
@@ -32,7 +28,6 @@ $lang["galerie_loeschen_erfolg"]         = "Галерията беше успе
 $lang["galerie_loeschen_fehler"]         = "Възникна грешка при изтриването на галерията";
 $lang["galerie_loeschen_frage"]          = "Наистина ли искате да премахнете галерията &quot;<b>%%element_name%%</b>&quot;?<br /> Всички запазени детайли ще бъдат изтрити също!";
 $lang["galerie_neu"]                     = "Създай галерия";
-$lang["galerie_rechte"]                  = "Редактирай права";
 $lang["galerie_syncro"]                  = "Синхронизирай галерия";
 $lang["gallery_masssync"]                = "Синхронизирай всички";
 $lang["gallery_path"]                    = "Път:";
@@ -40,7 +35,6 @@ $lang["gallery_title"]                   = "Име";
 $lang["hideSyncDialog"]                  = "Затвори";
 $lang["image_properties"]                = "Редактирай общи свойства";
 $lang["liste_bilder_leer"]               = "Няма налични снимки";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Галерии";
 $lang["ordner_bearbeiten"]               = "Редактирай папка";
@@ -69,4 +63,7 @@ $lang["sync_add"]                        = "Добавени: ";
 $lang["sync_del"]                        = " Изтрити: ";
 $lang["sync_upd"]                        = " Обновени: ";
 $lang["syncro_ende"]                     = "Синхронизацията завърши успешно<br /><br />";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sync",  5 => "Rating", 6 => "Gallery properties", 7 => "", 8 => "");
 ?>

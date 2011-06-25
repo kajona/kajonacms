@@ -75,11 +75,11 @@ foreach($arrEntries as $objOneEntry) {
     echo "  <td>".$objOneEntry->strModul."</td>";
     echo "  <td>".$objOneEntry->strKey."</td>";
     echo "  <td>".$objOneEntry->strSoundex."</td>";
-    echo "  <td>".$objOneEntry->strEn."</td>";
-    echo "  <td>".$objOneEntry->strDe."</td>";
-    echo "  <td>".$objOneEntry->strPt."</td>";
-    echo "  <td>".$objOneEntry->strBg."</td>";
-    echo "  <td>".$objOneEntry->strRu."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strEn, ENT_COMPAT, "UTF-8")."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strDe, ENT_COMPAT, "UTF-8")."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strPt, ENT_COMPAT, "UTF-8")."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strBg, ENT_COMPAT, "UTF-8")."</td>";
+    echo "  <td>".htmlentities($objOneEntry->strRu, ENT_COMPAT, "UTF-8")."</td>";
     echo "</tr>";
 }
 echo "</table>";

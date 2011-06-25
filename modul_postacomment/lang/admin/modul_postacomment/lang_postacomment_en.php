@@ -7,22 +7,17 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Post", 5 => "Rating", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["liste_leer"]                      = "No posts available";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Comments";
-$lang["module_list"]                     = "List";
 $lang["postacomment_comment"]            = "Comment:";
 $lang["postacomment_delete_question"]    = "Do you really want to delete the comment &quot;<b>%%element_name%%</b>&quot;?";
 $lang["postacomment_dofilter"]           = "filter";
 $lang["postacomment_edit"]               = "Edit comment";
 $lang["postacomment_filter"]             = "Page-filter:";
-$lang["postacomment_rights"]             = "Change permissions";
 $lang["postacomment_title"]              = "Subject:";
 $lang["postacomment_username"]           = "Name:";
 $lang["quickhelp_editPost"]              = "In this view, you can change the values of a comment.";
@@ -30,4 +25,7 @@ $lang["quickhelp_list"]                  = "All comments provided by users using
 $lang["required_postacomment_comment"]   = "Comment";
 $lang["required_postacomment_username"]  = "Name";
 $lang["submit"]                          = "Save";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Post", 5 => "Rating", 6 => "", 7 => "", 8 => "");
 ?>

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["button_add"]                      = "Hinzufügen";
@@ -15,7 +15,6 @@ $lang["error_permissions"]               = "Keine ausreichenden Rechte um diese 
 $lang["list_tags_empty"]                 = "Keine Tags angelegt.";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "Tags";
-$lang["module_list"]                     = "Liste";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["submit"]                          = "Speichern";
 $lang["tag_assignments"]                 = "Zuweisungen";
@@ -24,6 +23,5 @@ $lang["tag_delete_question"]             = "Möchten Sie den Tag &quot;<b>%%elem
 $lang["tag_edit"]                        = "Bearbeiten";
 $lang["tag_name"]                        = "Tag-Name:";
 $lang["tag_name_hint"]                   = "Mehrere Tags können in Form einer kommaseparierten Liste eingegeben werden";
-$lang["tag_rechte"]                      = "Rechte bearbeiten";
 $lang["tagsection_header"]               = "Tags";
 ?>

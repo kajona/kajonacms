@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_guestbook_search_resultpage_"]   = "Страница с резултати:";
@@ -19,12 +19,10 @@ $lang["gaestebuch_bearbeiten"]           = "Редактирай книга за
 $lang["gaestebuch_listeleer"]            = "Няма налични книги за гости";
 $lang["gaestebuch_modus_0"]              = "Ограничения за нови коментари";
 $lang["gaestebuch_modus_1"]              = "Без ограничения за нови коментари";
-$lang["gaestebuch_rechte"]               = "Смяна права";
 $lang["guestbook_moderated"]             = "Контрол на коментарите";
 $lang["guestbook_title"]                 = "Име:";
 $lang["loeschen_frage"]                  = "Наистина ли искате да премахнете книгата за гости &quot;<b>%%element_name%%</b>&quot; с всичките и записи?";
 $lang["modul_anlegen"]                   = "Нова книга за гости";
-$lang["modul_liste"]                     = "Списък";
 $lang["modul_rechte"]                    = "Модул права";
 $lang["modul_titel"]                     = "Книга за гости";
 $lang["post_liste_leer"]                 = "Няма налични постове";

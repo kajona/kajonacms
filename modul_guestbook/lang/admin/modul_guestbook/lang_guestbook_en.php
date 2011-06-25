@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_guestbook_search_resultpage_"]   = "Result page:";
@@ -22,12 +19,10 @@ $lang["gaestebuch_bearbeiten"]           = "Edit guestbook";
 $lang["gaestebuch_listeleer"]            = "No guestbooks available";
 $lang["gaestebuch_modus_0"]              = "New posts are disabled";
 $lang["gaestebuch_modus_1"]              = "New posts are enabled";
-$lang["gaestebuch_rechte"]               = "Change permissions";
 $lang["guestbook_moderated"]             = "Control-mode:";
 $lang["guestbook_title"]                 = "Title:";
 $lang["loeschen_frage"]                  = "Do you really want to delete the guestbook &quot;<b>%%element_name%%</b>&quot; with all entries?";
 $lang["modul_anlegen"]                   = "New guestbook";
-$lang["modul_liste"]                     = "List";
 $lang["modul_rechte"]                    = "Module permissions";
 $lang["modul_titel"]                     = "Guestbooks";
 $lang["post_liste_leer"]                 = "No posts available";
@@ -40,4 +35,7 @@ $lang["quickhelp_newGuestbook"]          = "While creating or edtiting a guestbo
 $lang["quickhelp_viewGuestbook"]         = "In this list, all posts belonging to the current guestbook are listed. Posts can be deleted, activated or inactivated.";
 $lang["required_guestbook_title"]        = "Title";
 $lang["speichern"]                       = "Save";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Sign", 5 => "", 6 => "", 7 => "", 8 => "");
 ?>

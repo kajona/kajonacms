@@ -110,10 +110,10 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("modul_rechte"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
-    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("modul_liste"), "", "", true, "adminnavi"));
+    	$arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("commons_list"), "", "", true, "adminnavi"));
     	$arrReturn[] = array("", "");
 		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newFaq", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
-		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), "", "", true, "adminnavi"));
+		$arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("commons_create_category"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
 
@@ -160,19 +160,19 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editCat", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_bearbeiten"), "icon_pencil.gif"));
     		   		if($this->objRights->rightDelete($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
-    		   		           $objOneCategory->getStrTitle(), $this->getText("kat_loeschen_frage"),
+    		   		           $objOneCategory->getStrTitle(), $this->getText("commons_delete_category_question"),
 				               getLinkAdminHref($this->arrModule["modul"], "deleteCat", "&systemid=".$objOneCategory->getSystemid()."&peClose=".$this->getParam("pe"))
     		   		    );
     		   		if($this->objRights->rightEdit($objOneCategory->getSystemid()))
     		   		    $strAction .= $this->objToolkit->listStatusButton($objOneCategory->getSystemid());
     		   		if($this->objRights->rightRight($objOneCategory->getSystemid()))
-    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("kat_rechte"), getRightsImageAdminName($objOneCategory->getSystemid())));
+    				    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneCategory->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneCategory->getSystemid())));
     		   		$strCat .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneCategory->getStrTitle(), $strAction, $intI++);
 
     			}
     		}
     		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("modul_kat_anlegen"), $this->getText("modul_kat_anlegen"), "icon_new.gif"), $intI++);
+    		    $strCat .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("commons_create_category"), $this->getText("commons_create_category"), "icon_new.gif"), $intI++);
 
     		if(uniStrlen($strCat) != 0)
     		     $strCat = $this->objToolkit->listHeader().$strCat.$this->objToolkit->listFooter();
@@ -210,7 +210,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		   		if($this->objRights->rightEdit($objOneFaq->getSystemid()))
     				    $strAction .= $this->objToolkit->listStatusButton($objOneFaq->getSystemid());
     				if($this->objRights->rightRight($objOneFaq->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("faq_rechte"), getRightsImageAdminName($objOneFaq->getSystemid())));
+    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneFaq->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneFaq->getSystemid())));
 
     		   		$strFaqs .= $this->objToolkit->listRow2Image(getImageAdmin("icon_question.gif"), uniStrTrim($objOneFaq->getStrQuestion(), 80).$strRating, $strAction, $intI++);
 			    }

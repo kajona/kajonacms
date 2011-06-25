@@ -4,15 +4,20 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id: lang_user_en.php 3941 2011-06-22 14:29:03Z sidler $					    *
+*	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
+//editable entries
+$lang["commons_all_categories"]                = "All categories";
+$lang["commons_back"]                    = "Back";
+$lang["commons_categories"]              = "Categories";
+$lang["commons_category"]                = "Category:";
+$lang["commons_category_title"]          = "Category title:";
+$lang["commons_edit_permissions"]        = "Change permissions";
 
-$lang["commons_all_cats"] =   	"All categories";
-$lang["commons_back"] = "Back";
-$lang["commons_categories"] = "Categories";
-$lang["commons_category_title"] = "Category title:";
-$lang["commons_category"] = "Category:";
+$lang["commons_create_category"] = "Create category";
+$lang["commons_delete_category_question"] = "Do you really want to delete the category &quot;<b>%%element_name%%</b>&quot;?";
+$lang["commons_list"] = "List";
 ?>

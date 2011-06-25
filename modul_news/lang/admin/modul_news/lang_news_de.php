@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_news_search_resultpage_"]        = "Treffer-Seite:";
@@ -35,8 +32,6 @@ $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese 
 $lang["kat_anzeigen"]                    = "Kategorie anzeigen";
 $lang["kat_ausblenden"]                  = "Kategorien ein-/ausblenden";
 $lang["kat_bearbeiten"]                  = "Kategorie bearbeiten";
-$lang["kat_loeschen_frage"]              = "Möchten Sie die Kategorie &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["kat_rechte"]                      = "Rechte bearbeiten";
 $lang["klapper"]                         = "Kategorien ein-/ausblenden";
 $lang["languageset_addnewstolanguage"]   = "Newsbeitrag einer Sprache zuordnen";
 $lang["languageset_addtolanguage"]       = "Einer Sprache zuordnen";
@@ -50,9 +45,7 @@ $lang["languageset_notmaintained"]       = "Aktuell ist der Newsbeitrag keiner S
 $lang["languageset_remove"]              = "Zuordnung löschen";
 $lang["liste_leer"]                      = "Keine News angelegt";
 $lang["modul_anlegen"]                   = "News anlegen";
-$lang["modul_kat_anlegen"]               = "Kategorie anlegen";
 $lang["modul_list_feed"]                 = "RSS-Feeds";
-$lang["modul_liste"]                     = "Liste";
 $lang["modul_new_feed"]                  = "Neuer RSS-Feed";
 $lang["modul_rechte"]                    = "Modul-Rechte";
 $lang["modul_titel"]                     = "News";
@@ -64,7 +57,6 @@ $lang["news_intro"]                      = "Aufmacher:";
 $lang["news_languageset"]                = "Sprachzuordnung bearbeiten";
 $lang["news_locked"]                     = "Newsdatensatz ist gesperrt";
 $lang["news_loeschen_frage"]             = "Möchten Sie die News &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
-$lang["news_rechte"]                     = "Rechte bearbeiten";
 $lang["news_text"]                       = "Langtext:";
 $lang["news_title"]                      = "Titel:";
 $lang["news_unlock"]                     = "Newsdatensatz entsperren";
@@ -84,4 +76,7 @@ $lang["required_feed_urltitle"]          = "URL-Feedtitel";
 $lang["required_news_title"]             = "Newstitel";
 $lang["speichern"]                       = "Speichern";
 $lang["start"]                           = "Start-Datum:";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "Feeds", 6 => "", 7 => "", 8 => "");
 ?>

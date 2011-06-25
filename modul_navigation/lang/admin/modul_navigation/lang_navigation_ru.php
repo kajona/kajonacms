@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 334
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["browser"]                         = "Открыть браузер";
@@ -15,7 +15,6 @@ $lang["fehler_recht"]                    = "Недостаточно прав д
 $lang["liste_leer"]                      = "Нет доступной навигации";
 $lang["modul_anlegen"]                   = "Создать навигацию";
 $lang["modul_anlegenpunkt"]              = "Создать пункт";
-$lang["modul_liste"]                     = "Список";
 $lang["modul_rechte"]                    = "Разрешения модуля";
 $lang["modul_titel"]                     = "Навигация";
 $lang["navigation_anzeigen"]             = "Показать пункты навигации";
@@ -28,14 +27,12 @@ $lang["navigation_loeschen_frage"]       = "Вы действительно хо
 $lang["navigation_name"]                 = "Имя:";
 $lang["navigation_page_e"]               = "Внешняя ссылка / Файл:";
 $lang["navigation_page_i"]               = "Страница:";
-$lang["navigation_rechte"]               = "Изменить настройки";
 $lang["navigation_tagetblank"]           = "_бланк (в новом окне браузера)";
 $lang["navigation_tagetself"]            = "_self (в том же окне браузера)";
 $lang["navigation_target"]               = "Цель:";
 $lang["navigationp_anzeigen"]            = "Показать пункты навигации";
 $lang["navigationp_bearbeiten"]          = "Изменить пункт навигации";
 $lang["navigationp_hoch"]                = "Поднять пункт вверх";
-$lang["navigationp_recht"]               = "Изменить разрешения";
 $lang["navigationp_runter"]              = "Опустить пункт вниз";
 $lang["quickhelp_deleteNavi"]            = "При совершение действия \"удалить\" выбранное дерево навигации или его пункт и все под пункты будут удалены. Этот шаг необратим.";
 $lang["quickhelp_editNavi"]              = "Вы можете изменить настройки дерева навигации здесь.";
