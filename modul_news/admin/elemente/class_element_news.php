@@ -49,12 +49,12 @@ class class_element_news extends class_element_admin implements interface_admin_
 		//Load all newscats available
 		$arrRawCats = class_modul_news_category::getCategories();
         $arrCats = array();
-		$arrCats[0] = $this->getText("news_category_all");
+		$arrCats[0] = $this->getText("commons_all_cats");
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputDropdown("news_category", $arrCats, $this->getText("news_category"), (isset($arrElementData["news_category"]) ? $arrElementData["news_category"] : "" ));
+		$strReturn .= $this->objToolkit->formInputDropdown("news_category", $arrCats, $this->getText("commons_category"), (isset($arrElementData["news_category"]) ? $arrElementData["news_category"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("news_detailspage", $this->getText("news_detailspage"), (isset($arrElementData["news_detailspage"]) ? $arrElementData["news_detailspage"] : ""));
 
 		$arrView = array( 0 => $this->getText("news_view_list"),

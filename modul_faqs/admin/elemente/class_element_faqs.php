@@ -44,13 +44,13 @@ class class_element_faqs extends class_element_admin implements interface_admin_
         $arrRawCats = class_modul_faqs_category::getCategories();
         $arrCats = array();
         //addd an "i want all" cat ;)
-        $arrCats["0"] = $this->getText("all_cats");
+        $arrCats["0"] = $this->getText("commons_all_cats");
 
         foreach ($arrRawCats as $objOneCat)
             $arrCats[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputDropdown("faqs_category", $arrCats, $this->getText("faqs_category"), (isset($arrElementData["faqs_category"]) ? $arrElementData["faqs_category"] : "" ));
+		$strReturn .= $this->objToolkit->formInputDropdown("faqs_category", $arrCats, $this->getText("commons_category"), (isset($arrElementData["faqs_category"]) ? $arrElementData["faqs_category"] : "" ));
 
 		//Load the available templates
 		$objFilesystem = new class_filesystem();

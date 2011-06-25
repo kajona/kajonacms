@@ -23,7 +23,20 @@ class class_texte {
 	 */
 	private $strLanguage = "";
 
+    /**
+     * Identifier of the fallback-language, taken into account if loading an entry using the current language failed.
+     * 
+     * @var string 
+     */
 	private $strFallbackLanguage = "en";
+    
+    /**
+     * The commons-name indicates the fake-module-name of lang-files bundled for common usage (in order to 
+     * reduce duplicate lang-entries).
+     * 
+     * @var type 
+     */
+    private $strCommonsName = "commons";
 	private $arrTexts;
 
     /**
@@ -32,7 +45,7 @@ class class_texte {
      * @var array
      */
     private $arrFallbackTextEntrys = array();
-
+    
 
 	private static $objText = null;
 
@@ -107,8 +120,19 @@ class class_texte {
 			$strReturn = $this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText];
 		}
 		else {
-            //Try to find the text using the fallback language
-            $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
+            
+            //try to load the entry in the commons-list
+            if(!isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName]))
+                $this->loadText($this->strCommonsName, $strArea);
+            
+            if(isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText])) {
+                $strReturn = $this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText];
+            }
+            else {
+            
+                //Try to find the text using the fallback language
+                $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
+            }
 		}
 
 		return $strReturn;

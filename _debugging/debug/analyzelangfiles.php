@@ -30,7 +30,7 @@ echo "+-------------------------------------------------------------------------
 echo "parsing lang-files...\n";
 flush();
 
-$strStartFolder = _realpath_."/lang/";
+$strStartFolder = _realpath_."/lang/admin/";
 $arrEntries = array();
 debug_parse_foldercontent($strStartFolder, $arrEntries);
 

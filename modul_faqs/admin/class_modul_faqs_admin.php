@@ -250,7 +250,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("faqs_cat_title"), $this->getParam("faqs_cat_title"));
+				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("commons_category_title"), $this->getParam("faqs_cat_title"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 
@@ -268,7 +268,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("faqs_cat_title"), $objCat->getStrTitle());
+				$strReturn .= $this->objToolkit->formInputText("faqs_cat_title", $this->getText("commons_category_title"), $objCat->getStrTitle());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 
@@ -350,7 +350,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $arrCats = class_modul_faqs_category::getCategories();
 
                 if (count($arrCats) > 0)
-                    $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
+                    $strReturn .= $this->objToolkit->formHeadline($this->getText("commons_categories"));
 
                 foreach ($arrCats as $objOneCat) {
             	   $strReturn .= $this->objToolkit->formInputCheckbox("cat[".$objOneCat->getSystemid()."]", $objOneCat->getStrTitle());
@@ -381,7 +381,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $arrFaqsMember = class_modul_faqs_category::getFaqsMember($this->getSystemid());
 
                 if (count($arrCats) > 0)
-                    $strReturn .= $this->objToolkit->formHeadline($this->getText("faqs_categories"));
+                    $strReturn .= $this->objToolkit->formHeadline($this->getText("commons_categories"));
 
                 foreach ($arrCats as $objOneCat) {
                     $bitChecked = false;

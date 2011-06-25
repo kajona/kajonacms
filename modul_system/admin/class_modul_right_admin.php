@@ -256,7 +256,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strUrlHistory = $this->getHistory(0);
 			//Buliding the right-matrix
 			$arrHistory = explode("&", $strUrlHistory);
-			$arrTemplate["backlink"] = getLinkAdminRaw("".$arrHistory[0]."&".$arrHistory[1], $this->getText("backlink"));
+			$arrTemplate["backlink"] = getLinkAdminRaw("".$arrHistory[0]."&".$arrHistory[1], $this->getText("commons_back"));
 			$arrTemplate["desc"] = $this->getText("desc");
 			$strReturn .= $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
 			//Followed by the form

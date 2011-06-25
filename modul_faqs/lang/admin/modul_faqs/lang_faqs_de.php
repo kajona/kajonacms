@@ -18,8 +18,6 @@ $lang["_faqs_search_resultpage_hint"]    = "Auf dieser Seite erfolgt die Ansicht
 $lang["faq_edit"]                        = "FAQ bearbeiten";
 $lang["faq_rechte"]                      = "Rechte bearbeiten";
 $lang["faqs_answer"]                     = "Antwort:";
-$lang["faqs_cat_title"]                  = "Kategorie-Titel:";
-$lang["faqs_categories"]                 = "Kategorien";
 $lang["faqs_loeschen_frage"]             = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["faqs_question"]                   = "Frage:";
 $lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
@@ -41,7 +39,6 @@ $lang["quickhelp_list"]                  = "Alle FAQs und Kategorien werden in d
 $lang["quickhelp_newCat"]                = "Für eine neue oder bereits vorhanden Kategorie kann momentan lediglich ein Titel vergeben werden.";
 $lang["quickhelp_newFaq"]                = "Beim Bearbeiten oder Anlegen einer FAQ werden deren Grunddaten erfasst. Hierzu gehören die Frage, wie auch die Antwort auf diese Frage. Zusätzlich können die Zugehörigkeiten zu verschiedenen FAQs-Kategorien angegeben werden.";
 $lang["required_faqs_answer"]            = "Antwort";
-$lang["required_faqs_cat_title"]         = "Kategorie-Titel";
 $lang["required_faqs_question"]          = "Frage";
 $lang["speichern"]                       = "Speichern";
 ?>

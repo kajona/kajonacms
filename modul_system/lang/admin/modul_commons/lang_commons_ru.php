@@ -9,7 +9,9 @@
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
 //Kajona Language Editor Core Build 334
 
-//editable entries
-$lang["all_cats"]                        = "All categories";
-$lang["faqs_category"]                   = "Category:";
+$lang["commons_all_cats"] =   	"Все категории";
+$lang["commons_back"] = "Назад";
+$lang["commons_categories"] = "Категории";
+$lang["commons_category_title"] = "Имя категории:";
+$lang["commons_category"] = "Категория:";
 ?>

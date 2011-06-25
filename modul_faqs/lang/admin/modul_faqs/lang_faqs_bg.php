@@ -15,8 +15,6 @@ $lang["_faqs_search_resultpage_hint"]    = "Страницата показва 
 $lang["faq_edit"]                        = "Редактирай Често задавани въпроси";
 $lang["faq_rechte"]                      = "Смени права";
 $lang["faqs_answer"]                     = "Отговор:";
-$lang["faqs_cat_title"]                  = "Име на категория:";
-$lang["faqs_categories"]                 = "Категории";
 $lang["faqs_loeschen_frage"]             = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faqs_question"]                   = "Въпрос:";
 $lang["fehler_recht"]                    = "Няма достатъчно права за тези действия:";
@@ -38,7 +36,6 @@ $lang["quickhelp_list"]                  = "Всички Често Задава
 $lang["quickhelp_newCat"]                = "В момента може само да дадете име на категорията.";
 $lang["quickhelp_newFaq"]                = "Можете да редактирате основна информация за често задавани въпроси, като е създавате или редактирате. Основната информация съдържа въпроси и отговори. Съдържанието на категориите може да бъде променено от тук.";
 $lang["required_faqs_answer"]            = "Отговор";
-$lang["required_faqs_cat_title"]         = "Име на категорията";
 $lang["required_faqs_question"]          = "Въпрос";
 $lang["speichern"]                       = "Запази";
 ?>

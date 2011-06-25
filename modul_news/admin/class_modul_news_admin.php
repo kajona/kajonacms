@@ -452,7 +452,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveCat");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $this->getParam("news_cat_title"));
+				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("commons_category_title"), $this->getParam("news_cat_title"));
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 
@@ -470,7 +470,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveCat"));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("news_cat_title"), $objCat->getStrTitle());
+				$strReturn .= $this->objToolkit->formInputText("news_cat_title", $this->getText("commons_category_title"), $objCat->getStrTitle());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
 				$strReturn .= $this->objToolkit->formClose();
 
@@ -562,7 +562,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 
                 //and the cats
-                $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("commons_categories"));
                 $arrCats = class_modul_news_category::getCategories();
                 foreach ($arrCats as $objOneCat) {
             	   $strReturn .= $this->objToolkit->formInputCheckbox("cat[".$objOneCat->getSystemid()."]", $objOneCat->getStrTitle());
@@ -620,7 +620,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 
                 //and the cats
-                $strReturn .= $this->objToolkit->formHeadline($this->getText("news_categories"));
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("commons_categories"));
                 $arrCats = class_modul_news_category::getCategories();
                 $arrNewsMember = class_modul_news_category::getNewsMember($this->getSystemid());
 
@@ -842,7 +842,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $arrCatsDD = array();
                 foreach ($arrNewsCats as $objOneCat)
                     $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
-                $arrCatsDD["0"] = $this->getText("feed_cat_all");
+                $arrCatsDD["0"] = $this->getText("commons_all_cats");
                 $strReturn .= $this->objToolkit->formInputDropdown("feed_cat", $arrCatsDD, $this->getText("feed_cat"), $this->getParam("feed_cat"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
                 $strReturn .= $this->objToolkit->formInputHidden("save", "1");
@@ -901,7 +901,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $arrCatsDD = array();
                 foreach ($arrNewsCats as $objOneCat)
                     $arrCatsDD[$objOneCat->getSystemid()] = $objOneCat->getStrTitle();
-                $arrCatsDD["0"] = $this->getText("feed_cat_all");
+                $arrCatsDD["0"] = $this->getText("commons_all_cats");
                 $strReturn .= $this->objToolkit->formInputDropdown("feed_cat", $arrCatsDD, $this->getText("feed_cat"), $objFeed->getStrCat());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("speichern"));
                 $strReturn .= $this->objToolkit->formInputHidden("save", "1");

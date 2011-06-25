@@ -18,8 +18,6 @@ $lang["_faqs_search_resultpage_hint"]    = "This page shows the FAQs which where
 $lang["faq_edit"]                        = "Edit FAQ";
 $lang["faq_rechte"]                      = "Change permissions";
 $lang["faqs_answer"]                     = "Answer:";
-$lang["faqs_cat_title"]                  = "Category title:";
-$lang["faqs_categories"]                 = "Categories";
 $lang["faqs_loeschen_frage"]             = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faqs_question"]                   = "Question:";
 $lang["fehler_recht"]                    = "Not enough permissions to perform this action";
@@ -41,7 +39,6 @@ $lang["quickhelp_list"]                  = "All FAQs and categories are listed h
 $lang["quickhelp_newCat"]                = "At the moment you just can define the title of a category.";
 $lang["quickhelp_newFaq"]                = "You can edit the basic data of a FAQ by creating or editing it. The basic data contains the question and the answer. Furthermore the belongings to the categories can be changed here.";
 $lang["required_faqs_answer"]            = "Answer";
-$lang["required_faqs_cat_title"]         = "Category title";
 $lang["required_faqs_question"]          = "Question";
 $lang["speichern"]                       = "Save";
 ?>
