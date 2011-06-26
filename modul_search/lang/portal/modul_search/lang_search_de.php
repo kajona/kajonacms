@@ -15,6 +15,4 @@ $lang["hitlist_text2"]                   = "ergab";
 $lang["hitlist_text3"]                   = "Treffer";
 $lang["searchterm_label"]                = "Suchbegriff";
 $lang["submit_label"]                    = "Suchen";
-$lang["weiter"]                          = "weiter";
-$lang["zurueck"]                         = "zurück";
 ?>

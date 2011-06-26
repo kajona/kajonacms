@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["captcha_label"]                   = "Security code:*";
-$lang["captcha_reload"]                  = "Code not readable?";
 $lang["pr_captcha"]                      = "No valid security code.";
 $lang["pr_completionErrorStatus"]        = "This account can't be activated.";
 $lang["pr_completionSuccess"]            = "Activation succeeded. You can now log in at the portal.";

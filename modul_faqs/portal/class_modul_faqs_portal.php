@@ -170,7 +170,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
             if(!$bitRatingAllowed)
                 $strRatingBarTitle = $this->getText("faqs_rating_voted");
             else
-                $strRatingBarTitle = $this->getText("faqs_rating_permissions");
+                $strRatingBarTitle = $this->getText("commons_error_permissions");
         }
 
         return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,

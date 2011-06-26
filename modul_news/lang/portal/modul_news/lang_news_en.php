@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["backward"]                        = "Backward";
-$lang["forward"]                         = "Forward";
 $lang["news_list_empty"]                 = "No news available.";
 $lang["news_mehr"]                       = "[read more]";
 $lang["news_zurueck"]                    = "Go back";

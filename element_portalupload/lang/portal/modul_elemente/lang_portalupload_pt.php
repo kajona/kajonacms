@@ -15,7 +15,6 @@ $lang["portaluploadFileTitle"]           = "Ficheiro:";
 $lang["portaluploadFilterError"]         = "O filtro não permite este tipo de ficheiros.";
 $lang["portaluploadNotWritableError"]    = "A pasta não permite a escrita.";
 $lang["portaluploadPathError"]           = "Os caminhos configurados não coincidem.";
-$lang["portaluploadPermissionsError"]    = "Não tem permissões suficientes.";
 $lang["portaluploadSubmitTitle"]         = "Carregar";
 $lang["portaluploadSuccess"]             = "Ficheiro carregado com sucesso.";
 ?>

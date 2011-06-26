@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["backward"]                        = "Retroceder";
-$lang["forward"]                         = "Avançar";
 $lang["news_list_empty"]                 = "Não existem notícias disponíveis.";
 $lang["news_mehr"]                       = "[ler mais]";
 $lang["news_zurueck"]                    = "Voltar";

@@ -80,8 +80,8 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	            $arrForm["form_name_label"] = $this->getText("form_name_label");
 	            $arrForm["form_subject_label"] = $this->getText("form_subject_label");
 	            $arrForm["form_message_label"] = $this->getText("form_message_label");
-	            $arrForm["form_captcha_label"] = $this->getText("form_captcha_label");
-	            $arrForm["form_captcha_reload_label"] = $this->getText("form_captcha_reload_label");
+	            $arrForm["form_captcha_label"] = $this->getText("commons_captcha");
+	            $arrForm["form_captcha_reload_label"] = $this->getText("commons_captcha_reload");
 	            $arrForm["form_submit_label"] = $this->getText("form_submit_label");
 
         		$strXMLContent .= $this->fillTemplate($arrForm, $strTemplateID);

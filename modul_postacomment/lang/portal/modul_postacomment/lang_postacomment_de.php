@@ -10,16 +10,11 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["form_captcha_label"]              = "Sicherheits-Code";
-$lang["form_captcha_reload_label"]       = "Code nicht lesbar?";
 $lang["form_message_label"]              = "Nachricht";
 $lang["form_name_label"]                 = "Name";
 $lang["form_subject_label"]              = "Betreff";
 $lang["form_submit_label"]               = "Absenden";
 $lang["postacomment_empty"]              = "Bisher sind noch keine Kommentare vorhanden";
-$lang["postacomment_next"]               = "Weiter";
-$lang["postacomment_prev"]               = "Zurück";
-$lang["postacomment_rating_permissions"] = "Keine ausreichenden Rechte.";
 $lang["postacomment_rating_rate1"]       = "Kommentar mit ";
 $lang["postacomment_rating_rate2"]       = " Punkt(en) bewerten!";
 $lang["postacomment_rating_voted"]       = "Dieser Kommentar wurde bereits bewertet.";

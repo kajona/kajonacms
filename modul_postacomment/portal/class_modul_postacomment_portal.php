@@ -103,7 +103,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
         if($this->getParam("pv") != "")
             $strAdd .= "&pv=".$this->getParam("pv");
 
-		$arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("postacomment_next"), $this->getText("postacomment_prev"), "", $this->getPagename(), $strAdd, "pvPAC");
+		$arrComments = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("commons_next"), $this->getText("commons_back"), "", $this->getPagename(), $strAdd, "pvPAC");
 
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_postacomment/".$this->arrElementData["char1"], "postacomment_post");
@@ -276,7 +276,7 @@ class class_modul_postacomment_portal extends class_portal implements interface_
             if(!$bitRatingAllowed)
                 $strRatingBarTitle = $this->getText("postacomment_rating_voted");
             else
-                $strRatingBarTitle = $this->getText("postacomment_rating_permissions");
+                $strRatingBarTitle = $this->getText("commons_error_permissions");
         }
 
         return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,

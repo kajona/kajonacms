@@ -12,11 +12,8 @@
 //editable entries
 $lang["download_datei_link"]             = "Descarregar";
 $lang["download_ordner_link"]            = "Abrir";
-$lang["download_rating_permissions"]     = "Não tem permissões suficientes.";
 $lang["download_rating_rate1"]           = "Ficheiro com nível de";
 $lang["download_rating_rate2"]           = " ponto(s).";
 $lang["download_rating_voted"]           = "Já votou neste ficheiro.";
 $lang["liste_leer"]                      = "Não existem descargas disponíveis.";
-$lang["weiter"]                          = "próxima";
-$lang["zurueck"]                         = "anterior";
 ?>

@@ -52,8 +52,8 @@
             <div><label for="email">%%lang_email%%</label><input type="text" name="email" id="email" value="%%email%%" class="inputText" /></div><br />
             <div><label for="phone">%%lang_phone%%</label><input type="text" name="phone" id="phone" value="%%phone%%" class="inputText" /></div><br />
             <div><label for="comment">%%lang_comment%%</label><textarea name="comment" id="comment" class="inputTextarea">%%comment%%</textarea></div><br />
-            <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">%%lang_captcha_reload%%</a>)</div><br />
-            <div><label for="form_captcha">%%lang_captcha_label%%</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br />
+            <div><label for="kajonaCaptcha_eventreg"></label><span id="kajonaCaptcha_eventreg"><script type="text/javascript">KAJONA.portal.loadCaptcha('eventreg', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('eventreg', 180); return false;">%%lang_commons_captcha_reload%%</a>)</div><br />
+            <div><label for="form_captcha">%%lang_commons_captcha%%</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br />
             <div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_registerSubmit%%" class="button" /></div><br />
             <input type="hidden" name="submitUserRegistration" value="1" />
         </form>

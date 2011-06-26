@@ -15,6 +15,4 @@ $lang["hitlist_text2"]                   = "encontrou";
 $lang["hitlist_text3"]                   = "resultados";
 $lang["searchterm_label"]                = "Item procura";
 $lang["submit_label"]                    = "Procurar";
-$lang["weiter"]                          = "próxima";
-$lang["zurueck"]                         = "anterior";
 ?>

@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["faqs_rating_permissions"]         = "Нямата достатъчно права.";
 $lang["faqs_rating_rate1"]               = "Оцени ЧЗВ с";
 $lang["faqs_rating_rate2"]               = " точки!";
 $lang["faqs_rating_voted"]               = "Вие сте гласували за тези ЧЗВ";

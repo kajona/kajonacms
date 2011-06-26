@@ -12,11 +12,8 @@
 //editable entries
 $lang["download_datei_link"]             = "Download";
 $lang["download_ordner_link"]            = "Отвори";
-$lang["download_rating_permissions"]     = "Нямате достатъчно права.";
 $lang["download_rating_rate1"]           = "Оцени файла с";
 $lang["download_rating_rate2"]           = " точки!";
 $lang["download_rating_voted"]           = "Вие сте гласували за този файл.";
 $lang["liste_leer"]                      = "Няма налични downloads";
-$lang["weiter"]                          = "напред";
-$lang["zurueck"]                         = "назад";
 ?>

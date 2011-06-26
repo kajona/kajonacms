@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["faqs_rating_permissions"]         = "Not enough permissions.";
 $lang["faqs_rating_rate1"]               = "Rate faq with ";
 $lang["faqs_rating_rate2"]               = " point(s)!";
 $lang["faqs_rating_voted"]               = "You already voted for this faq.";

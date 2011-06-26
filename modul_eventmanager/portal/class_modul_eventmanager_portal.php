@@ -134,7 +134,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
 
                 //Check captachcode
                 if($this->getParam("form_captcha") == "" || $this->getParam("form_captcha") != $this->objSession->getCaptchaCode())
-                    $arrErrors[] = $this->getText("captcha");
+                    $arrErrors[] = $this->getText("commons_captcha");
 
                 if(count($arrErrors) == 0)
                    $bitForm = false;

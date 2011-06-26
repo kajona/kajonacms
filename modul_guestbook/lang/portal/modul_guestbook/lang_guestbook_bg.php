@@ -15,14 +15,10 @@ $lang["eintragen_fehler"]                = "Моля попълнете всич
 $lang["insert_error_email"]              = "Липсва електронна поща";
 $lang["insert_error_name"]               = "Липсва име";
 $lang["insert_error_post"]               = "Липсва коментар";
-$lang["post_captcha_reload_text"]        = "Кодексът не се чете?";
-$lang["post_captcha_text"]               = "Код за сигурност";
 $lang["post_mail_text"]                  = "Електронна поща";
 $lang["post_message_text"]               = "Съобщение";
 $lang["post_name_from"]                  = "от";
 $lang["post_name_text"]                  = "Име";
 $lang["post_page_text"]                  = "Интернет страница";
 $lang["post_submit_text"]                = "Впиши!";
-$lang["weiter"]                          = "напред";
-$lang["zurueck"]                         = "назад";
 ?>

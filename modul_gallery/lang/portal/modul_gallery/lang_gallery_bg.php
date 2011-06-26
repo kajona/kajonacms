@@ -10,10 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["backlink"]                        = "Назад";
-$lang["forwardlink"]                     = "Напред";
 $lang["galerie_ordner_link"]             = "Покажи";
-$lang["gallery_rating_permissions"]      = "Нямата достатъчно права.";
 $lang["gallery_rating_rate1"]            = "Оцени изображението с";
 $lang["gallery_rating_rate2"]            = " точки!";
 $lang["gallery_rating_voted"]            = "Вие сте гласували за това изображение.";

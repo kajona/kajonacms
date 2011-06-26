@@ -10,9 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["captcha"]                         = "Invalid security code provided";
-$lang["captcha_label"]                   = "Security-Code:*";
-$lang["captcha_reload"]                  = "Code not readable?";
 $lang["comment"]                         = "Comment:";
 $lang["currentParticipants"]             = "Current number of participants:";
 $lang["dateTimeFrom"]                    = "From:";

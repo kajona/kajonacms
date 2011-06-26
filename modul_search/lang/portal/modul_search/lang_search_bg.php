@@ -15,6 +15,4 @@ $lang["hitlist_text2"]                   = "намерени";
 $lang["hitlist_text3"]                   = "резултати";
 $lang["searchterm_label"]                = "Търси";
 $lang["submit_label"]                    = "Търсене";
-$lang["weiter"]                          = "напред";
-$lang["zurueck"]                         = "назад";
 ?>

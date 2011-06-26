@@ -14,12 +14,10 @@ $lang["fehler_captcha"]                  = "Please enter the correct security co
 $lang["fehler_email"]                    = "Please provide a valid email address";
 $lang["fehler_nachricht"]                = "Please provide a message";
 $lang["fehler_name"]                     = "Please provide a name";
-$lang["formContact_code"]                = "Security code:*";
 $lang["formContact_email"]               = "Email:*";
 $lang["formContact_errors"]              = "The following errors occured:";
 $lang["formContact_mail_subject"]        = "Message via contact form";
 $lang["formContact_message"]             = "Message:*";
 $lang["formContact_name"]                = "Name:*";
-$lang["formContact_newCode"]             = "Code not readable?";
 $lang["formContact_send"]                = "Send";
 ?>

@@ -10,10 +10,10 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["download_datei_link"]             = "Download";
-$lang["download_ordner_link"]            = "Anzeigen";
-$lang["download_rating_rate1"]           = "Datei mit ";
-$lang["download_rating_rate2"]           = " Punkt(en) bewerten!";
-$lang["download_rating_voted"]           = "Diese Datei wurde bereits bewertet.";
-$lang["liste_leer"]                      = "Keine Downloads vorhanden";
+$lang["commons_error_permissions"] = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
+$lang["commons_next"] = "weiter";
+$lang["commons_back"] = "zurück";
+$lang["commons_captcha_reload"] = "Code nicht lesbar?";
+$lang["commons_captcha"] = "Sicherheits-Code:";
+
 ?>

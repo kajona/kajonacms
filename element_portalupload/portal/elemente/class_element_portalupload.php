@@ -79,7 +79,7 @@ class class_element_portalupload extends class_element_portal implements interfa
     	    }
 	    }
 	    else {
-	        $strReturn .= $this->getText("portaluploadPermissionsError");
+	        $strReturn .= $this->getText("commons_error_permissions");
 	    }
 
 	    return $strReturn;
@@ -144,7 +144,7 @@ class class_element_portalupload extends class_element_portal implements interfa
 
 		}
 		else
-		    $strReturn .= $this->getText("portaluploadPermissionsError");
+		    $strReturn .= $this->getText("commons_error_permissions");
 
 	    return $strReturn;
 	}

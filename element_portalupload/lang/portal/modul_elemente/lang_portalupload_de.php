@@ -15,7 +15,6 @@ $lang["portaluploadFileTitle"]           = "Datei:";
 $lang["portaluploadFilterError"]         = "Der Dateityp ist im Filter nicht zugelassen.";
 $lang["portaluploadNotWritableError"]    = "Ordner nicht beschreibbar.";
 $lang["portaluploadPathError"]           = "Pfade des Elements stimmen nicht überein!";
-$lang["portaluploadPermissionsError"]    = "Keine ausreichenden Rechte.";
 $lang["portaluploadSubmitTitle"]         = "Hochladen";
 $lang["portaluploadSuccess"]             = "Die Datei wurde erfolgreich hochgeladen.";
 ?>

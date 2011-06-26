@@ -95,7 +95,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	    $objArraySectionIterator->setArraySection($this->getArrFiles($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
 
-		$arrObjects = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("weiter"), $this->getText("zurueck"), "openDlFolder", $this->getPagename(), "&systemid=".$this->getSystemid());
+		$arrObjects = $this->objToolkit->simplePager($objArraySectionIterator, $this->getText("commons_next"), $this->getText("commons_back"), "openDlFolder", $this->getPagename(), "&systemid=".$this->getSystemid());
 
 
 
@@ -379,7 +379,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		    if(!$bitRatingAllowed)
 			    $strRatingBarTitle = $this->getText("download_rating_voted");
 			else
-			    $strRatingBarTitle = $this->getText("download_rating_permissions");
+			    $strRatingBarTitle = $this->getText("commons_error_permissions");
 		}
 
 		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,

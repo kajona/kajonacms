@@ -10,12 +10,10 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["captcha"]                         = "Код за сигурност:";
 $lang["fehler_captcha"]                  = "Моля попълнете правилно верификационния код";
 $lang["message"]                         = "Съобщение: ";
 $lang["receiver"]                        = "Електронна поща на получателя:";
 $lang["receiver_name"]                   = "Име на получателя:";
-$lang["reload_captcha"]                  = "Кодексът не се чете?";
 $lang["sender"]                          = "Вашата електронна поща:";
 $lang["sender_name"]                     = "Вашето име: ";
 $lang["tellafriend_receiver"]            = "Моля попълнете електронната поща на получателя";

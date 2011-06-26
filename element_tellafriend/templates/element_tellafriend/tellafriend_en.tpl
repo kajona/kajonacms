@@ -8,8 +8,8 @@
 	<div><label for="tellafriend_receiver">%%lang_receiver%%</label><input type="text" name="tellafriend_receiver" id="tellafriend_receiver" value="%%tellafriend_receiver%%" class="inputText" /></div><br />
 	<div><label for="tellafriend_receiver_name">%%lang_receiver_name%%</label><input type="text" name="tellafriend_receiver_name" id="tellafriend_receiver_name" value="%%tellafriend_receiver_name%%" class="inputText" /></div><br />
 	<div><label for="tellafriend_message">%%lang_message%%</label><textarea name="tellafriend_message" id="tellafriend_message" class="inputTextarea">%%tellafriend_message%%</textarea></div><br /><br />
-	<div><label for="kajonaCaptcha_taf"></label><span id="kajonaCaptcha_taf"><script type="text/javascript">KAJONA.portal.loadCaptcha('taf', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('taf', 180); return false;">%%lang_reload_captcha%%</a>)</div><br />
-	<div><label for="form_captcha">%%lang_captcha%%</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br /><br />
+	<div><label for="kajonaCaptcha_taf"></label><span id="kajonaCaptcha_taf"><script type="text/javascript">KAJONA.portal.loadCaptcha('taf', 180);</script></span> (<a href="#" onclick="KAJONA.portal.loadCaptcha('taf', 180); return false;">%%lang_commons_captcha_reload%%</a>)</div><br />
+	<div><label for="form_captcha">%%commons_captcha%%</label><input type="text" name="form_captcha" id="form_captcha" class="inputText" autocomplete="off" /></div><br /><br />
 	<div><label for="Submit"></label><input type="submit" name="Submit" value="%%lang_submit%%" class="button" /></div><br />
 </form>
 </tellafriend_form>

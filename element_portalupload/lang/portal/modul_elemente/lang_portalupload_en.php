@@ -15,7 +15,6 @@ $lang["portaluploadFileTitle"]           = "File:";
 $lang["portaluploadFilterError"]         = "Filetype not allowed by filter.";
 $lang["portaluploadNotWritableError"]    = "Folder not writeable.";
 $lang["portaluploadPathError"]           = "Paths configured do not match!";
-$lang["portaluploadPermissionsError"]    = "Not enough permissions.";
 $lang["portaluploadSubmitTitle"]         = "Upload";
 $lang["portaluploadSuccess"]             = "File successfully uploaded.";
 ?>

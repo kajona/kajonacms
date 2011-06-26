@@ -104,8 +104,8 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
             $objArraySectionIterator->setArraySection(class_modul_gallery_pic::loadFilesDBSection($this->getSystemid(), false, true, $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
 		    $arrTempImages = $this->objToolkit->simplePager($objArraySectionIterator,
-		                                              $this->getText("forwardlink"),
-		                                              $this->getText("backlink"),
+		                                              $this->getText("commons_next"),
+		                                              $this->getText("commons_back"),
 		                                              $this->getParam("action"),
 		                                              $this->getPagename(),
 		                                              "&systemid=".$this->getSystemid());
@@ -227,7 +227,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$arrImage["pic_url"] = $this->generateImage($objImage->getStrFilename(), $this->arrElementData["gallery_maxh_d"], $this->arrElementData["gallery_maxw_d"], $this->arrElementData["gallery_text"], "10", $this->arrElementData["gallery_text_x"], $this->arrElementData["gallery_text_y"], "dejavusans.ttf", "255,255,255", $this->arrElementData["gallery_overlay"]);
 
 		//previous 3 images
-		$arrImage["backlink"] = ($arrImage["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("backlink"), "detailImage", "", $arrImage["backward_1"] ) : "" );
+		$arrImage["backlink"] = ($arrImage["backward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("commons_back"), "detailImage", "", $arrImage["backward_1"] ) : "" );
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["backward_".$intI] != "") {
                 $objImageBack = new class_modul_gallery_pic($arrImage["backward_".$intI]);
@@ -238,7 +238,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         }
 
         //next 3 images
-        $arrImage["forwardlink"] = ($arrImage["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("forwardlink"), "detailImage", "", $arrImage["forward_1"] ) : "" );
+        $arrImage["forwardlink"] = ($arrImage["forward_1"] != "" ? getLinkPortal($this->getPagename(), "", "",  $this->getText("commons_next"), "detailImage", "", $arrImage["forward_1"] ) : "" );
         for($intI = 1; $intI <= 3; $intI++) {
     		if($arrImage["forward_".$intI] != "") {
                 $objImageFwd = new class_modul_gallery_pic($arrImage["forward_".$intI]);
@@ -628,7 +628,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		    if(!$bitRatingAllowed)
 			    $strRatingBarTitle = $this->getText("gallery_rating_voted");
 			else
-			    $strRatingBarTitle = $this->getText("gallery_rating_permissions");
+			    $strRatingBarTitle = $this->getText("commons_error_permissions");
 		}
 
 		return $this->fillTemplate(array("rating_icons" => $strIcons, "rating_bar_title" => $strRatingBarTitle,

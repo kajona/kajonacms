@@ -45,7 +45,7 @@ class class_toolkit_portal extends class_toolkit {
 	 * 								  [strBack]	= link to the previous page
 	 * 								  [strPages] = Pager ( [0][1] ...)
 	 */
-	public function pager($intNumber, $intPage = 1, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
+	public function pager($intNumber, $intPage = 1, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $arrData = array(), $strAdd = "", $strPvParam = "pv") {
 
         if($intPage <= 0)
             $intPage = 1;
@@ -138,7 +138,7 @@ class class_toolkit_portal extends class_toolkit {
 	 * 								  [strBack]	= link to the previous page
 	 * 								  [strPages] = Pager ( [0][1] ...)
 	 */
-	public function simplePager($objArraySectionIterator, $strForward = "weiter", $strBack = "zurueck", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
+	public function simplePager($objArraySectionIterator, $strForward = "next", $strBack = "back", $strAction = "list", $strPage = "", $strAdd = "", $strPvParam = "pv") {
 
 		$arrReturn = 	array("arrData" 	=> array(),
 							  "strForward" 	=> "",

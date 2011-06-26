@@ -15,7 +15,6 @@ $lang["portaluploadFileTitle"]           = "Файл: ";
 $lang["portaluploadFilterError"]         = "Не разрешен тип на файла.";
 $lang["portaluploadNotWritableError"]    = "Папките не са записваеми";
 $lang["portaluploadPathError"]           = "Оказаните пътища не съвпадат!";
-$lang["portaluploadPermissionsError"]    = "Нямате достатъчно права.";
 $lang["portaluploadSubmitTitle"]         = "Качи";
 $lang["portaluploadSuccess"]             = "Файлът успешно качен.";
 ?>
