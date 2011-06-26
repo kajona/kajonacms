@@ -10,12 +10,8 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["browser"]                         = "Отвори browser";
 $lang["page_element_placeholder_title"]  = "Вътрешно име:";
 $lang["paragraph_content"]               = "Текст";
-$lang["paragraph_image"]                 = "Изображение:";
 $lang["paragraph_link"]                  = "Линк";
-$lang["paragraph_title"]                 = "Име";
 $lang["quickhelp_element_paragraph"]     = "Тук можете да въведете съдържанието на параграфи с помощта на удобен редактор.";
-$lang["required_paragraph_title"]        = "Име";
 ?>

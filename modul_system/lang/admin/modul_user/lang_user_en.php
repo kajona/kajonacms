@@ -20,7 +20,6 @@ $lang["_user_selfedit_hint"]             = "Defines, if the user is allowed to c
 $lang["admin"]                           = "Admin login:";
 $lang["aktiv"]                           = "Active:";
 $lang["email"]                           = "Email:";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["fehler_speichern"]                = "An error occured while saving profile!";
 $lang["gebdatum"]                        = "Date of birth:";
 $lang["group_accept"]                    = "Select group ";
@@ -52,7 +51,6 @@ $lang["login_changeButton"]              = "Change password";
 $lang["login_change_error"]              = "Error processing your request.";
 $lang["login_change_success"]            = "Password changed successfully. You can now proceed to <a href=\"_webpath_/admin\">login</a>.";
 $lang["login_dashboard"]                 = "Welcome page";
-$lang["login_datum"]                     = "Date";
 $lang["login_ip"]                        = "IP-Address";
 $lang["login_loginButton"]               = "Login";
 $lang["login_loginCookiesInfo"]          = "Please allow Cookies for this site and reload the current page to be able to use all functionalities.";

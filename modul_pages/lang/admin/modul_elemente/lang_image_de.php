@@ -10,11 +10,8 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["browser"]                         = "Browser öffnen";
 $lang["element_image_name"]              = "Bild";
-$lang["image_image"]                     = "Bild:";
 $lang["image_link"]                      = "Link:";
-$lang["image_title"]                     = "Titel:";
 $lang["image_x"]                         = "Maximale Breite:";
 $lang["image_xy_hint"]                   = "Bei 0 wird das Bild in den Originalmaßen ausgegeben und nicht skaliert.";
 $lang["image_y"]                         = "Maximale Höhe:";

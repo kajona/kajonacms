@@ -14,6 +14,5 @@ $lang["fehler_captcha"]                  = "Please enter the correct verificatio
 $lang["fehler_email"]                    = "Please provide a valid email address";
 $lang["fehler_nachricht"]                = "Please provide a message";
 $lang["fehler_name"]                     = "Please provide a name";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["fehler_seite"]                    = "Start page not existing";
 ?>

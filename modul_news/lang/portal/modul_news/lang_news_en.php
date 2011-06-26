@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["backward"]                        = "Backward";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["forward"]                         = "Forward";
 $lang["news_list_empty"]                 = "No news available.";
 $lang["news_mehr"]                       = "[read more]";

@@ -228,7 +228,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
     		$strReturn .= $strFaqs;
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -257,7 +257,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
 			}
 			else
-				$strReturn.= $this->getText("fehler_recht");
+				$strReturn.= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Edit
@@ -275,7 +275,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_cat_title");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -302,7 +302,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -322,7 +322,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -365,7 +365,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Rights
@@ -401,7 +401,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("faqs_question");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -440,7 +440,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -469,7 +469,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 			}
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;

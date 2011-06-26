@@ -45,7 +45,7 @@ class class_element_search extends class_element_admin implements interface_admi
 
 		//Build the form
 		$strReturn .= $this->objToolkit->formInputText("search_amount", $this->getText("search_amount"), (isset($arrElementData["search_amount"]) ? $arrElementData["search_amount"] : ""));
-		$strReturn .= $this->objToolkit->formInputPageSelector("search_page", $this->getText("search_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ));
+		$strReturn .= $this->objToolkit->formInputPageSelector("search_page", $this->getText("commons_result_page"), (isset($arrElementData["search_page"]) ? $arrElementData["search_page"] : "" ));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
 		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_search", ".tpl");

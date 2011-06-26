@@ -20,7 +20,6 @@ $lang["_user_selfedit_hint"]             = "Legt fest, ob ein Benutzer seine eig
 $lang["admin"]                           = "Admin-Login:";
 $lang["aktiv"]                           = "Aktiv:";
 $lang["email"]                           = "E-Mail:";
-$lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["fehler_speichern"]                = "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
 $lang["gebdatum"]                        = "Geburtsdatum:";
 $lang["group_accept"]                    = "Gruppe übernehmen";
@@ -52,7 +51,6 @@ $lang["login_changeButton"]              = "Passwort ändern";
 $lang["login_change_error"]              = "Fehler beim Verarbeiten der Anfrage.";
 $lang["login_change_success"]            = "Passwort erfolgreich geändert. Sie können sich nun am System <a href=\"_webpath_/admin\">anmelden</a>.";
 $lang["login_dashboard"]                 = "Startseite";
-$lang["login_datum"]                     = "Datum";
 $lang["login_ip"]                        = "IP-Adresse";
 $lang["login_loginButton"]               = "Anmelden";
 $lang["login_loginCookiesInfo"]          = "Bitte aktivieren Sie Cookies in Ihrem Browser und laden Sie die Seite neu, um alle Funktionen nutzen zu können.";

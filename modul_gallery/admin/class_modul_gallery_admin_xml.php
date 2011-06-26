@@ -71,7 +71,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
             $strReturn .= "<gallery>".$strResult."</gallery>";
         }
         else
-            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .=  "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         class_logger::getInstance()->addLogRow("synced gallery ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
 
@@ -133,7 +133,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
             $strReturn .= "<gallery>".$strResult."</gallery>";
         }
         else
-            $strReturn .=  "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .=  "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         class_logger::getInstance()->addLogRow("synced gallery partially >".$objPic->getStrFilename()."< ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
 

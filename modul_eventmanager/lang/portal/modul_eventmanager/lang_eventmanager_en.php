@@ -19,7 +19,6 @@ $lang["dateTimeFrom"]                    = "From:";
 $lang["dateTimeUntil"]                   = "Until:";
 $lang["detailslink"]                     = "Show details";
 $lang["email"]                           = "Email:*";
-$lang["error_permissions"]               = "Not enough permissions to perform tis action";
 $lang["forename"]                        = "Forename:*";
 $lang["invalidEmailadress"]              = "Invalid emailaddress provided";
 $lang["lastname"]                        = "Lastname:*";

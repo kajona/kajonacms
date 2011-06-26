@@ -53,7 +53,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 
         return $strReturn;
@@ -93,7 +93,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -127,7 +127,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 $strReturn = "<error>".xmlSafeString($this->getText("ordner_anlegen_fehler_l"))."</error>";
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -162,7 +162,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -199,11 +199,11 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 }
             }
             else
-                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+                $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 
         return $strReturn;
@@ -243,11 +243,11 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 }
             }
             else
-                $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+                $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         }
         else
-            $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 
         return $strReturn;
@@ -306,7 +306,7 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 
 		}
 		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("xml_error_permissions"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
 	}

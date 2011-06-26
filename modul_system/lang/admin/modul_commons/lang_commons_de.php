@@ -28,4 +28,17 @@ $lang["commons_module_permissions"] = "Modul-Rechte";
 $lang["commons_hits_header"] = "Hits";
 $lang["commons_no"] = "Nein";
 $lang["commons_yes"] = "Ja";
+
+$lang["commons_create_folder"] = "Neuer Ordner";
+$lang["commons_description"] = "Beschreibung:";
+$lang["commons_date"] = "Datum";
+$lang["commons_delete"] = "Löschen";
+$lang["commons_image"] = "Bild:";
+$lang["commons_language"] = "Sprache";
+$lang["commons_language_field"] = "Sprache:";
+$lang["commons_error_permissions"] = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
+$lang["commons_name"] = "Name:";
+$lang["commons_open_browser"] = "Browser öffnen";
+$lang["commons_result_page"] = "Treffer-Seite:";
+$lang["commons_title"] = "Titel:";
 ?>

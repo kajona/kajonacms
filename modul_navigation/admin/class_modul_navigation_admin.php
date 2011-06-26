@@ -184,7 +184,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     		}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -205,10 +205,10 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strFolderBrowser = getLinkAdminDialog("folderview",
                                                "pagesFolderBrowser",
                                                "&form_element=navigation_folder_i&folder=1",
-                                               $this->getText("browser"),
-                                               $this->getText("browser"),
+                                               $this->getText("commons_open_browser"),
+                                               $this->getText("commons_open_browser"),
                                                "icon_externalBrowser.gif",
-                                               $this->getText("browser"));
+                                               $this->getText("commons_open_browser"));
 
 		//check Rights & mode
 		if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -228,7 +228,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		    //Build the form
 		    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNavi");
 		    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNavi"));
-            $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
+            $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), ($objNavi->getStrName() != "" ? $objNavi->getStrName() : ""));
             $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
             $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $strFolderid);
             $strReturn .= $this->objToolkit->formInputHidden("mode", $strMode);
@@ -239,7 +239,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 		    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -279,7 +279,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -300,18 +300,18 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 //        $strFolderBrowser = getLinkAdminDialog("folderview",
 //                                               "pagesFolderBrowser",
 //                                               "&form_element=navigation_folder_i",
-//                                               $this->getText("browser"),
-//                                               $this->getText("browser"),
+//                                               $this->getText("commons_open_browser"),
+//                                               $this->getText("commons_open_browser"),
 //                                               "icon_externalBrowser.gif",
-//                                               $this->getText("browser"));
+//                                               $this->getText("commons_open_browser"));
 
         $strNodeBrowser = getLinkAdminDialog(  $this->arrModule["modul"],
                                                "navigationPointBrowser",
                                                "&form_element=navigation_parent&systemid=".$this->getPrevId(),
-                                               $this->getText("browser"),
-                                               $this->getText("browser"),
+                                               $this->getText("commons_open_browser"),
+                                               $this->getText("commons_open_browser"),
                                                "icon_externalBrowser.gif",
-                                               $this->getText("browser"));
+                                               $this->getText("commons_open_browser"));
 
         $strFoldername = "";
         if(validateSystemid($this->getParam("navigation_folder_i_id"))) {
@@ -333,12 +333,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
-                $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $this->getParam("navigation_name"));
+                $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), $this->getParam("navigation_name"));
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $this->getParam("navigation_page_i"));
 //                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
 //                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $this->getParam("navigation_folder_i_id"));
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $this->getParam("navigation_page_e"), _filemanager_default_filesrepoid_);
-                $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getText("navigation_image"), $this->getParam("navigation_image"));
+                $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getText("commons_image"), $this->getParam("navigation_image"));
                 $arrTargets = array("_self" => $this->getText("navigation_tagetself"), "_blank" => $this->getText("navigation_tagetblank"));
                 $strReturn .= $this->objToolkit->formInputDropdown("navigation_target", $arrTargets, $this->getText("navigation_target"), $this->getParam("navigation_target"));
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -347,7 +347,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 			}
 			else
-				$strReturn .= $this->obj_texte->get_text($this->modul["modul"], "fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
@@ -369,12 +369,12 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNaviPoint"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
-                $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("navigation_name"), $objPoint->getStrName());
+                $strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), $objPoint->getStrName());
                 $strReturn .= $this->objToolkit->formInputPageSelector("navigation_page_i", $this->getText("navigation_page_i"), $objPoint->getStrPageI());
 //                $strReturn .= $this->objToolkit->formInputText("navigation_folder_i", $this->getText("navigation_folder_i"), $strFoldername, "inputText", $strFolderBrowser, true);
 //                $strReturn .= $this->objToolkit->formInputHidden("navigation_folder_i_id", $objPoint->getStrFolderI());
                 $strReturn .= $this->objToolkit->formInputFileSelector("navigation_page_e", $this->getText("navigation_page_e"), $objPoint->getStrPageE(), _filemanager_default_filesrepoid_);
-                $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getText("navigation_image"), $objPoint->getStrImage());
+                $strReturn .= $this->objToolkit->formInputImageSelector("navigation_image", $this->getText("commons_image"), $objPoint->getStrImage());
 
                 $strReturn .= $this->objToolkit->formInputText("navigation_parent", $this->getText("navigation_parent"), $strParentname, "inputText", $strNodeBrowser, true);
                 $strReturn .= $this->objToolkit->formInputHidden("navigation_parent_id", $objParentPoint->getSystemid());
@@ -387,7 +387,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 			    $strReturn .= $this->objToolkit->setBrowserFocus("navigation_name");
 			}
 			else
-				$strReturn .= $this->obj_texte->get_text($this->modul["modul"], "fehler_recht");
+				$strReturn .= $this->getText($this->modul["modul"], "commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -424,7 +424,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 				$this->setSystemid($objPoint->getSystemid());
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
@@ -445,7 +445,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 					throw new class_exception("Error updating point-object to db", class_exception::$level_ERROR);
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 		}
@@ -478,7 +478,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 

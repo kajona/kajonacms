@@ -13,14 +13,12 @@
 $lang["_guestbook_search_resultpage_"]   = "Страница с резултати:";
 $lang["_guestbook_search_resultpage_hint"] = "В тази страница са постовете намерени чрез 'търсене', съдържат връзки.";
 $lang["edit_post"]                       = "Редактирай";
-$lang["fehler_recht"]                    = "Нямате достатъчно права";
 $lang["gaestebuch_anzeigen"]             = "Прегледай книга за гости";
 $lang["gaestebuch_bearbeiten"]           = "Редактирай книга за гости";
 $lang["gaestebuch_listeleer"]            = "Няма налични книги за гости";
 $lang["gaestebuch_modus_0"]              = "Ограничения за нови коментари";
 $lang["gaestebuch_modus_1"]              = "Без ограничения за нови коментари";
 $lang["guestbook_moderated"]             = "Контрол на коментарите";
-$lang["guestbook_title"]                 = "Име:";
 $lang["loeschen_frage"]                  = "Наистина ли искате да премахнете книгата за гости &quot;<b>%%element_name%%</b>&quot; с всичките и записи?";
 $lang["modul_anlegen"]                   = "Нова книга за гости";
 $lang["modul_titel"]                     = "Книга за гости";
@@ -32,5 +30,4 @@ $lang["quickhelp_editGuestbook"]         = "При създаването или
 $lang["quickhelp_list"]                  = "Всички създадени книги за гости са в този списък.";
 $lang["quickhelp_newGuestbook"]          = "При създаването или редактирането на книга за гости задавате името, в допълнение можете да разрешите незабавното публикуване на новите коментари, в другия случай, новите коментари трябват да бъдат ръчно активирани от администратора.";
 $lang["quickhelp_viewGuestbook"]         = "Този списък съдържа всички постове отговарящи към съответната книга за гости. Постовете могат да бъдат изтривани, активирани и деактивирани.";
-$lang["required_guestbook_title"]        = "Име";
 ?>

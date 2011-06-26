@@ -195,7 +195,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		$strReturn .= $strPostRows;
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -225,7 +225,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 			}
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -245,13 +245,13 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePost", ($this->getParam("pe") == "1" ? "pe=".$this->getParam("pe") : "")));
 
             if(count($this->getValidationErrors()) == 0) {
-                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $objPost->getStrUsername() );
+                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("commons_name"), $objPost->getStrUsername() );
                 $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $objPost->getStrTitle() );
                 $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $objPost->getStrComment() );
             }
             else {
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "savePost");
-                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("postacomment_username"), $this->getParam("postacomment_username") );
+                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("commons_name"), $this->getParam("postacomment_username") );
                 $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $this->getParam("postacomment_title") );
                 $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $this->getParam("postacomment_comment"));
             }
@@ -262,7 +262,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $strReturn .= $this->objToolkit->setBrowserFocus("postacomment_username");
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -286,7 +286,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         	$objPost->setEditDate();
 	    }
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

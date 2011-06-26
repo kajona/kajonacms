@@ -177,7 +177,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -202,7 +202,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formClose();
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -230,7 +230,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -256,7 +256,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -374,7 +374,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->setBrowserFocus("username");
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -450,7 +450,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             return $this->objToolkit->warningBox($this->getText( "user_fehler_name"));
         }
         else
-        return $this->getText( "fehler_recht");
+        return $this->getText( "commons_error_permissions");
 
     }
 
@@ -549,7 +549,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
         }
         else
-            return $this->getText("fehler_recht");
+            return $this->getText("commons_error_permissions");
     }
 
 
@@ -615,7 +615,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -655,7 +655,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->setBrowserFocus("gruppename");
         }
         else
-        $strReturn .= $this->getText("fehler_recht");
+        $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -682,7 +682,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -712,7 +712,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -750,7 +750,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -770,7 +770,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 throw new class_exception($this->getText("mitglied_loeschen_fehler"), class_exception::$level_ERROR);
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -798,7 +798,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->getText("gruppe_loeschen_fehler");
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -834,7 +834,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formClose();
         }
         else
-        $strReturn .= $this->getText("fehler_recht");
+        $strReturn .= $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -864,7 +864,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             return "";
         }
         else
-            return $this->getText("fehler_recht");
+            return $this->getText("commons_error_permissions");
     }
 
 
@@ -901,7 +901,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $arrHeader = array();
             $arrHeader[]	= $this->getText("login_nr");
             $arrHeader[]	= $this->getText("login_user");
-            $arrHeader[]	= $this->getText("login_datum");
+            $arrHeader[]	= $this->getText("commons_date");
             $arrHeader[]	= $this->getText("login_status");
             $arrHeader[]	= $this->getText("login_ip");
             //and fetch the table
@@ -909,7 +909,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $strReturn .= $arrPageViews["pageview"];
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -961,7 +961,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
 

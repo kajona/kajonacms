@@ -161,7 +161,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn .= $this->getText("gaestebuch_listeleer");
 		}
 		else
-		    $strReturn = $this->getText("fehler_recht");
+		    $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -188,7 +188,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				//Create form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveGuestbook");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
-                $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $this->getParam("guestbook_title"));
+                $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("commons_title"), $this->getParam("guestbook_title"));
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $this->getParam("guestbook_moderated"));
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -197,7 +197,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif($strMode == "edit") {
 			//rights
@@ -207,7 +207,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				//Create form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveGuestbook");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGuestbook"));
-                $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("guestbook_title"), $objGuestbook->getGuestbookTitle());
+                $strReturn .= $this->objToolkit->formInputText("guestbook_title", $this->getText("commons_title"), $objGuestbook->getGuestbookTitle());
                 $strReturn .= $this->objToolkit->formInputDropdown("guestbook_moderated", $arrModes, $this->getText("guestbook_moderated"), $objGuestbook->getGuestbookModerated());
 				$strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $objGuestbook->getSystemid());
@@ -217,7 +217,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->setBrowserFocus("guestbook_title");
 			}
 			else
-				$strReturn = $this->objTemplate("fehler_recht");
+				$strReturn = $this->objTemplate("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -240,7 +240,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
@@ -251,7 +251,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 					throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -270,7 +270,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -316,7 +316,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 				$strReturn = $this->getText("post_liste_leer");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -344,7 +344,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $strReturn .= $this->objToolkit->setBrowserFocus("post_text");
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -363,7 +363,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
                 throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -385,7 +385,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 
 		return $strReturn;

@@ -125,7 +125,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 
 		}
 		else
-			$strReturn .= $this->getText("error_permissions");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
     }
@@ -145,7 +145,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("error_permissions");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -170,7 +170,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->setBrowserFocus("tag_name");
 		}
 		else
-			$strReturn = $this->getText("error_permissions");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
     }
@@ -189,7 +189,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
             $objTag->updateObjectToDb();
 		}
 		else
-			$strReturn = $this->getText("error_permissions");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
     }
@@ -224,7 +224,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->getFieldset($this->getText("tagsection_header"), $strTagContent);
         }
         else
-            $strReturn .= $this->getText("error_permissions");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }

@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["backward"]                        = "Назад";
-$lang["fehler_recht"]                    = "Нямате достатъчно права";
 $lang["forward"]                         = "Напред";
 $lang["news_list_empty"]                 = "Няма налични новини.";
 $lang["news_mehr"]                       = "[прочети още]";

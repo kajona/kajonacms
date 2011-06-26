@@ -47,7 +47,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	    $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "listAll", "", $this->getText("modul_liste_alle"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newPage", "&systemid=".$this->getSystemid(), $this->getText("modul_neu"), "", "", true, "adminnavi"));
-        //FIXME: sidler: removed $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), "", "", true, "adminnavi"));
+        //FIXME: sidler: removed $arrReturn[] = array("right", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("commons_create_folder"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
 		$arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "listElements", "", $this->getText("modul_elemente"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("right1", getLinkAdmin($this->arrModule["modul"], "newElement", "", $this->getText("modul_element_neu"), "", "", true, "adminnavi"));
@@ -101,7 +101,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -161,7 +161,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			}
 
 			if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])) && (!validateSystemid($this->getSystemid()) || $this->getSystemid() == $this->getModuleSystemid($this->arrModule["modul"])))
-			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("modul_neu_ordner"), $this->getText("modul_neu_ordner"), "icon_new.gif"), $intI++);
+			    $strFolder .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "newFolder", "&systemid=".$this->getSystemid(), $this->getText("commons_create_folder"), $this->getText("commons_create_folder"), "icon_new.gif"), $intI++);
 
 			if(uniStrlen($strFolder) != 0)
 	  		    $strFolder = $this->objToolkit->listHeader().$strFolder.$this->objToolkit->listFooter();
@@ -257,7 +257,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -337,7 +337,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -379,7 +379,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             unset($arrTemplatesDD[$objMasterPage->getStrTemplate()]);
         }
 
-        $strPagesBrowser = getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false&folder=1&pagealiases=1", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser"));
+        $strPagesBrowser = getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder&pages=1&elements=false&folder=1&pagealiases=1", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser"));
 
         //add a pathnavigation when not in pe mode
         if($this->getParam("pe") != 1) {
@@ -424,7 +424,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 if(!$bitAlias) {
                     $strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $objPage->getStrSeostring());
-                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $objPage->getStrDesc());
+                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("commons_description"), $objPage->getStrDesc());
                     $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $objPage->getStrKeywords());
                 }
 
@@ -493,7 +493,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 }
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		else {
 			//Mode: Create a new Page
@@ -524,7 +524,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
                 if(!$bitAlias) {
                     $strReturn .= $this->objToolkit->formInputText("seostring", $this->getText("seostring"), $this->getParam("seostring"));
-                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("beschreibung"), $this->getParam("beschreibung"));
+                    $strReturn .= $this->objToolkit->formInputTextarea("description", $this->getText("commons_description"), $this->getParam("beschreibung"));
                     $strReturn .= $this->objToolkit->formInputTextarea("keywords", $this->getText("keywords"), $this->getParam("keywords"));
                 }
 
@@ -582,7 +582,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->objToolkit->setBrowserFocus("name");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -636,7 +636,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn .= $this->getText("fehler_name");
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	} //actionSavePage
@@ -697,7 +697,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strReturn = $this->getText("fehler_name");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -732,7 +732,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	} //actionDeletePageFinal
@@ -753,7 +753,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objPage->getPrevId()));
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -786,7 +786,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -822,11 +822,11 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			if($objFolder->getPrevId() != $this->getModuleSystemid("pages")) {
 			    $objFolder2 = new class_modul_pages_folder($objFolder->getPrevId());
 				$strReturn .= $this->objToolkit->formInputHidden("folder_id", $objFolder2->getSystemid());
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")), true);
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), $objFolder2->getStrName(), "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")), true);
 			}
 			else {
 				$strReturn .= $this->objToolkit->formInputHidden("folder_id", "");
-				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+				$strReturn .= $this->objToolkit->formInputText("folder", $this->getText("ordner_name_parent"), "", "inputText", getLinkAdminDialog("folderview", "pagesFolderBrowser", "&form_element=folder", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
 			}
 
 
@@ -837,7 +837,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			$strReturn .= $this->objToolkit->setBrowserFocus("ordner_name");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -862,7 +862,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$objFolder->getPrevId()));
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -887,7 +887,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", "systemid=".$this->getPrevId()));
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -910,7 +910,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				throw new class_exception($this->getText("ordner_loeschen_fehler"), class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1072,7 +1072,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1098,7 +1098,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				//Build the form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
-				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $this->getParam("element_name"));
+				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("commons_name"), $this->getParam("element_name"));
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $this->getParam("element_cachetime"));
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
                 $strReturn .= $this->objToolkit->divider();
@@ -1136,7 +1136,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				//Build the form
 				$strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveElement"));
-				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("element_name"), $objData->getStrName());
+				$strReturn .= $this->objToolkit->formInputText("element_name", $this->getText("commons_name"), $objData->getStrName());
 				$strReturn .= $this->objToolkit->formInputText("element_cachetime", $this->getText("element_cachetime"), $objData->getIntCachetime());
 				$strReturn .= $this->objToolkit->formTextRow($this->getText("element_cachetime_hint"));
                 $strReturn .= $this->objToolkit->divider();
@@ -1169,7 +1169,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 			}
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1206,7 +1206,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1261,7 +1261,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1283,7 +1283,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listElements"));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -1328,7 +1328,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             }
         }
         else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

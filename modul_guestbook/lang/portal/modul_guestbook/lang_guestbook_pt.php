@@ -12,7 +12,6 @@
 //editable entries
 $lang["eintragen"]                       = "Registar";
 $lang["eintragen_fehler"]                = "Por favor introduza todos os valores";
-$lang["fehler_recht"]                    = "Não tem permissões para realizar esta acção";
 $lang["insert_error_email"]              = "Correio electrónico inexistente";
 $lang["insert_error_name"]               = "Nome inexistente";
 $lang["insert_error_post"]               = "Texto da mensagem inexistente";

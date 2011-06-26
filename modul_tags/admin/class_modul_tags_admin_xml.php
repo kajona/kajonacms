@@ -98,7 +98,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("error_permissions"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -126,7 +126,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
             $strReturn .= "</tags>";
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("error_permissions"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -153,7 +153,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
                 $strReturn .= "<error>assignment removal failed</error>";
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("error_permissions"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }

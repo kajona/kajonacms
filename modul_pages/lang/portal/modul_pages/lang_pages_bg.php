@@ -14,6 +14,5 @@ $lang["fehler_captcha"]                  = "Моля попълнете прав
 $lang["fehler_email"]                    = "Моля попълнете съществуваща електронна поща";
 $lang["fehler_nachricht"]                = "Моля напишете съобщение";
 $lang["fehler_name"]                     = "Моля попълнете име";
-$lang["fehler_recht"]                    = "Нямата достатъчно права";
 $lang["fehler_seite"]                    = "Не съществува начална страница";
 ?>

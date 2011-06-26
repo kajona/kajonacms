@@ -306,7 +306,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     		$strReturn .= $strNews;
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -331,7 +331,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 foreach($arrLanguages as $objOneLanguage)
                     $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
 
-                $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
+                $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("commons_language_field"));
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
 				$strReturn .= $this->objToolkit->formClose();
@@ -383,7 +383,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                         if(!in_array($objOneLanguage->getSystemid(), $arrMaintainedLanguages))
                             $arrDropdown[$objOneLanguage->getSystemid()] = $this->getText("lang_".$objOneLanguage->getStrName() , "languages");
 
-                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("languageset_language"));
+                    $strReturn .= $this->objToolkit->formInputDropdown("languageset_language", $arrDropdown, $this->getText("commons_language_field"));
 
 
                     $arrNews = class_modul_news_news::getNewsList();
@@ -401,7 +401,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             }
         }
         else
-            $strReturn .= $this->getText("fehler_recht");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -459,7 +459,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("news_cat_title");
 			}
 			else
-				$strReturn.= $this->getText("fehler_recht");
+				$strReturn.= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Edit
@@ -477,7 +477,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("news_cat_title");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -507,7 +507,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -526,7 +526,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -548,7 +548,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNews");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 				$strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
-                $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $this->getParam("news_title"));
+                $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("commons_title"), $this->getParam("news_title"));
                 //The date selectors, using only dates.
                 //if you want to use dateTime pickers, use s.th. like the line below
                 //$strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), new class_date(), "inputDate", true);
@@ -558,7 +558,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), "");
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), "");
-                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("news_image"), "");
+                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("commons_image"), "");
 
 
                 //and the cats
@@ -577,7 +577,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("news_title");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Rights
@@ -606,7 +606,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveNews");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveNews"));
 			    $strReturn .= $this->objToolkit->formHeadline($this->getText("news_basicdata"));
-                $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("news_title"), $objNews->getStrTitle());
+                $strReturn .= $this->objToolkit->formInputText("news_title", $this->getText("commons_title"), $objNews->getStrTitle());
                 //The date selectors, using only dates.
                 //if you want to use dateTime pickers, use s.th. like the line below
                 //$strReturn .= $this->objToolkit->formDateSingle("start",  $this->getText("start"), $objNews->getIntDateStart() != 0 ? new class_date($objNews->getIntDateStart()) : null, "inputDate", true);
@@ -616,7 +616,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 $strReturn .= $this->objToolkit->formInputTextArea("news_intro", $this->getText("news_intro"), $objNews->getStrIntro());
                 $strReturn .= $this->objToolkit->formWysiwygEditor("news_text", $this->getText("news_text"), $objNews->getStrNewstext());
-                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("news_image"), $objNews->getStrImage());
+                $strReturn .= $this->objToolkit->formInputImageSelector("news_image", $this->getText("commons_image"), $objNews->getStrImage());
 
 
                 //and the cats
@@ -647,7 +647,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$strReturn .= $this->objToolkit->setBrowserFocus("news_title");
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -696,7 +696,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif($this->getParam("mode") == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) {
@@ -736,7 +736,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 			}
 			else
-				$strReturn .= $this->getText("fehler_recht");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -765,7 +765,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			}
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -806,7 +806,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->getText("feed_liste_leer");
         }
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
     }
 
@@ -865,7 +865,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             }
         }
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
     }
 
@@ -924,7 +924,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             }
         }
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
     }
 
@@ -941,7 +941,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
         }
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
     }
 

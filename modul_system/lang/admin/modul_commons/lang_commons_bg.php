@@ -29,4 +29,17 @@ $lang["commons_module_permissions"] = "Модул права";
 $lang["commons_hits_header"] = "Посещения";
 $lang["commons_no"] = "Не";
 $lang["commons_yes"] = "Да";
+
+$lang["commons_create_folder"] = "Създай папка";
+$lang["commons_description"] = "Описание:";
+$lang["commons_date"] = "Дата";
+$lang["commons_delete"] = "Изтрий";
+$lang["commons_image"] = "Изображение:";
+$lang["commons_language"] = "Език";
+$lang["commons_language_field"] = "Език:";
+$lang["commons_error_permissions"] = "Нямате достатъчно права за тези действия";
+$lang["commons_name"] = "Име:";
+$lang["commons_open_browser"] = "Отвори browser";
+$lang["commons_result_page"] = "Страница с резултати:";
+$lang["commons_title"] = "Име:";
 ?>

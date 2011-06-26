@@ -29,4 +29,17 @@ $lang["commons_module_permissions"] = "Module permissions";
 $lang["commons_hits_header"] = "Hits";
 $lang["commons_no"] = "No";
 $lang["commons_yes"] = "Ja";
+
+$lang["commons_create_folder"] = "Create folder";
+$lang["commons_description"] = "Description:";
+$lang["commons_date"] = "Date";
+$lang["commons_delete"] = "Delete";
+$lang["commons_image"] = "Image:";
+$lang["commons_language"] = "Language";
+$lang["commons_language_field"] = "Language:";
+$lang["commons_error_permissions"] = "Not enough permissions to perform this action";
+$lang["commons_name"] = "Name:";
+$lang["commons_open_browser"] = "Open browser";
+$lang["commons_result_page"] = "Result page:";
+$lang["commons_title"] = "Title:";
 ?>

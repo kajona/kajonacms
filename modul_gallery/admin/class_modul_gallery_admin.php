@@ -170,7 +170,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				$strReturn .= $this->getText("galerie_liste_leer");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn.$strJsSyncCode;
 	}
@@ -196,8 +196,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
-                $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $this->getParam("gallery_title"));
-                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("commons_title"), $this->getParam("gallery_title"));
+                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $this->getParam("gallery_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -206,7 +206,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			if($this->objRights->rightRight3($this->getSystemid())) 	{
@@ -215,8 +215,8 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveGallery");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveGallery"));
-                $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("gallery_title"), $objGallery->getStrTitle());
-                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $objGallery->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("gallery_title", $this->getText("commons_title"), $objGallery->getStrTitle());
+                $strReturn .= $this->objToolkit->formInputText("gallery_path", $this->getText("commons_path"), $objGallery->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=gallery_path&folder=/portal/pics", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -225,7 +225,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			    $strReturn .= $this->objToolkit->setBrowserFocus("gallery_title");
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -256,7 +256,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			//Right-Check
@@ -271,7 +271,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -297,7 +297,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -333,7 +333,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			$this->flushCompletePagesCache();
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -368,9 +368,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 				//Build the form
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "editImage");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editImage"));
-                $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("pic_name"), $objImage->getStrName());
+                $strReturn .= $this->objToolkit->formInputText("pic_name", $this->getText("commons_name"), $objImage->getStrName());
                 $strReturn .= $this->objToolkit->formInputTextArea("pic_subtitle", $this->getText("pic_subtitle"), $objImage->getStrSubtitle());
-                $strReturn .= $this->objToolkit->formWysiwygEditor("pic_description", $this->getText("pic_description"), $objImage->getStrDescription(), "minimal");
+                $strReturn .= $this->objToolkit->formWysiwygEditor("pic_description", $this->getText("commons_description"), $objImage->getStrDescription(), "minimal");
 				$strReturn .= $this->objToolkit->formInputHidden("save", "1");
 				$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 				$strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -408,7 +408,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -440,14 +440,14 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
                                 function init_fm_newfolder_dialog() {
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                          '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
+                                                          '".$this->getText("commons_create_folder", "filemanager")."',
                                                           'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'gallery\', \'partialSyncGallery\', \'".$this->getSystemid()."\' ); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
 
                 $strReturn .= "</script>";
                 $strReturn .= $this->objToolkit->jsDialog(1);
-                $strReturn .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen", "filemanager"), "", "", "", "", "", "inputSubmit");
+                $strReturn .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder", "filemanager"), "", "", "", "", "", "inputSubmit");
 
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
@@ -559,7 +559,7 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 			$strReturn .= $this->objToolkit->dragableListFooter($strListID);
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

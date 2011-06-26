@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["header_date"]                     = "Дата";
-$lang["header_language"]                 = "Език";
 $lang["header_query"]                    = "Ключова дума";
 $lang["stats_title"]                     = "Заявки";
 ?>

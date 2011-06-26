@@ -59,7 +59,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";    
 		}
 		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
 	}
@@ -79,7 +79,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             $strReturn .= "</content>";
         }
         else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -227,7 +227,7 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             $strReturn .= "]]></content>";
         }
         else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }

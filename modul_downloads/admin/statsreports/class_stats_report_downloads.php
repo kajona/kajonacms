@@ -85,7 +85,7 @@ class class_stats_report_downloads implements interface_admin_statsreports {
     	$arrHeader = array();
         $arrHeader[0] = "#";
         $arrHeader[1] = $this->objTexts->getText("header_id", "downloads", "admin");
-        $arrHeader[2] = $this->objTexts->getText("header_date", "downloads", "admin");
+        $arrHeader[2] = $this->objTexts->getText("commons_date", "downloads", "admin");
         $arrHeader[3] = $this->objTexts->getText("header_file", "downloads", "admin");
         $arrHeader[4] = $this->objTexts->getText("header_user", "downloads", "admin");
         $arrHeader[5] = $this->objTexts->getText("header_ip", "downloads", "admin");

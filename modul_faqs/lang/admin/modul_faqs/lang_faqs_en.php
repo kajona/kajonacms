@@ -16,7 +16,6 @@ $lang["faq_edit"]                        = "Edit FAQ";
 $lang["faqs_answer"]                     = "Answer:";
 $lang["faqs_loeschen_frage"]             = "Do you really want to delete the FAQ &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faqs_question"]                   = "Question:";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["kat_anzeigen"]                    = "Show category";
 $lang["kat_ausblenden"]                  = "Show/hide categories";
 $lang["kat_bearbeiten"]                  = "Edit category";

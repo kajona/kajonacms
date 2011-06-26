@@ -123,7 +123,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 
 		}
 		else
-		    $strXMLContent = $this->getText("fehler_recht");
+		    $strXMLContent = $this->getText("commons_error_permissions");
 
 	    $strReturn .= $this->createPostCommentXML($strXMLContent);
 

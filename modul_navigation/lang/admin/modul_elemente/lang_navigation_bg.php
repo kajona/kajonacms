@@ -10,9 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["browser"]                         = "Отвори browser";
 $lang["modus_baum"]                      = "Дърво";
 $lang["modus_sitemap"]                   = "Карта на сайта";
 $lang["navigation_mode"]                 = "Режим:";
-$lang["navigation_name"]                 = "Навигация:";
 ?>

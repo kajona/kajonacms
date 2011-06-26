@@ -65,7 +65,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 		    $this->flushCompletePagesCache();
 		}
 		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
 	}
@@ -86,7 +86,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
                 $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";
 	    }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 	    return $strReturn;
 	}
@@ -149,7 +149,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 	    return $strReturn;
     }
@@ -248,7 +248,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -321,7 +321,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
         }
 	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }
@@ -356,7 +356,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 			$strReturn .= "</modules>";
 		}
 		else
-			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+			$strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
 		return $strReturn;
     }
@@ -446,7 +446,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
         }
         else
-			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+			$strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
         
         return $strReturn;
     }

@@ -84,7 +84,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         
 		return $strReturn;
 	}
@@ -113,7 +113,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
         if($strMode == "new") {
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("language_name"));
+                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"));
                 $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -122,13 +122,13 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
             }
             else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
         }
         elseif ($strMode == "edit") {
             $objLanguage = new class_modul_languages_language($this->getSystemid());
             if($objLanguage->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveLanguage"));
-                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("language_name"), $objLanguage->getStrName());
+                $strReturn .= $this->objToolkit->formInputDropdown("language_name", $arrLanguagesDD, $this->getText("commons_language_field"), $objLanguage->getStrName());
                 $strReturn .= $this->objToolkit->formInputDropdown("language_default", $arrDefault, $this->getText("language_default"), $objLanguage->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objLanguage->getSystemid());
@@ -138,7 +138,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
             }
             else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
 
         }
         return $strReturn;
@@ -173,7 +173,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 	        }
 	        else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
 	    }
 	    elseif ($this->getParam("mode") == "edit") {
 	        $objLanguage = new class_modul_languages_language($this->getSystemid());
@@ -203,7 +203,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
             }
             else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
 	    }
         
         return $strReturn;
@@ -236,7 +236,7 @@ class class_modul_languages_admin extends class_admin implements interface_admin
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
-		    $strReturn = $this->getText("fehler_recht");
+		    $strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 

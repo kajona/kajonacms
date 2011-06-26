@@ -44,9 +44,9 @@ class class_element_paragraph extends class_element_admin implements interface_a
 
 		$strReturn = "";
 
-		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("paragraph_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
+		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 		$strReturn .= $this->objToolkit->formWysiwygEditor("paragraph_content", $this->getText("paragraph_content"), (isset($arrElementData["paragraph_content"]) ? $arrElementData["paragraph_content"] : ""));
-		$strReturn .= $this->objToolkit->formInputImageSelector("paragraph_image", $this->getText("paragraph_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""));
+		$strReturn .= $this->objToolkit->formInputImageSelector("paragraph_image", $this->getText("commons_image"), (isset($arrElementData["paragraph_image"]) ? $arrElementData["paragraph_image"] : ""));
 		$strReturn .= $this->objToolkit->formInputPageSelector("paragraph_link", $this->getText("paragraph_link"), (isset($arrElementData["paragraph_link"]) ? $arrElementData["paragraph_link"] : ""));
 
         //load templates

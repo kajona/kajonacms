@@ -95,7 +95,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 		if($this->getParam("changemodule") != "")
 			$strSystemID = $this->getModuleSystemid($this->getParam("changemodule"));
 		if($strSystemID == "")
-			return $this->getText("fehler_recht");
+			return $this->getText("commons_error_permissions");
 
 		if($this->objRights->rightRight($strSystemID)) {
 			//Get Rights
@@ -295,7 +295,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strReturn .= "<script type=\"text/javascript\">KAJONA.admin.checkRightMatrix();</script>";
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -387,7 +387,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			    throw new class_exception($this->getText("fehler_setzen"), class_exception::$level_ERROR);
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 }

@@ -13,9 +13,7 @@
 $lang["calendar_filter_event"]           = "Veranstaltungen";
 $lang["calendar_type_event"]             = "Veranstaltung";
 $lang["change_object_participant"]       = "Teilnehmer";
-$lang["error_permissions"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["event_delete_question"]           = "Möchten Sie die Veranstaltung &quot;<b>%%element_name%%</b>&quot; mit allen Teilnehmern wirklich löschen?";
-$lang["event_description"]               = "Beschreibung:";
 $lang["event_edit"]                      = "Veranstaltung bearbeiten";
 $lang["event_end"]                       = "Enddatum:";
 $lang["event_limitparticipants"]         = "Anzahl Teilnehmer limitieren:";
@@ -27,7 +25,6 @@ $lang["event_maxparticipants_hint"]      = "Nur relevant, wenn Anmeldung verfüg
 $lang["event_participant"]               = "Teilnehmer";
 $lang["event_registration"]              = "Anmeldung verfügbar:";
 $lang["event_start"]                     = "Startdatum:";
-$lang["event_title"]                     = "Titel:";
 $lang["event_yesno_0"]                   = "Nein";
 $lang["event_yesno_1"]                   = "Ja";
 $lang["list_empty"]                      = "Keine Veranstaltungen angelegt";

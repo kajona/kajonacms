@@ -13,9 +13,7 @@
 $lang["calendar_filter_event"]           = "Events";
 $lang["calendar_type_event"]             = "Event";
 $lang["change_object_participant"]       = "Participant";
-$lang["error_permissions"]               = "Not enough permissions to perform this action";
 $lang["event_delete_question"]           = "Do you really want to delete the event &quot;<b>%%element_name%%</b>&quot; with all participants?";
-$lang["event_description"]               = "Description:";
 $lang["event_edit"]                      = "Edit event";
 $lang["event_end"]                       = "Enddate:";
 $lang["event_limitparticipants"]         = "Limit number of participants:";
@@ -27,7 +25,6 @@ $lang["event_maxparticipants_hint"]      = "Only relevant if registration requir
 $lang["event_participant"]               = "Participants";
 $lang["event_registration"]              = "Registration required:";
 $lang["event_start"]                     = "Startdate:";
-$lang["event_title"]                     = "Title:";
 $lang["event_yesno_0"]                   = "No";
 $lang["event_yesno_1"]                   = "Yes";
 $lang["list_empty"]                      = "No events available";

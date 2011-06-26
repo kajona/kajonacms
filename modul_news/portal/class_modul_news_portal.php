@@ -187,10 +187,10 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				class_modul_pages_portal::registerAdditionalTitle($objNews->getStrTitle());
 			}
 			else
-                $strReturn = $this->getText("fehler_recht");
+                $strReturn = $this->getText("commons_error_permissions");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 

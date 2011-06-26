@@ -132,7 +132,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -160,8 +160,8 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveEvent");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveEvent"));
 
-                $strReturn .= $this->objToolkit->formInputText("event_title", $this->getText("event_title"), $this->getParam("event_title"));
-                $strReturn .= $this->objToolkit->formWysiwygEditor("event_description", $this->getText("event_description"), $this->getParam("event_description"), "minimalimage");
+                $strReturn .= $this->objToolkit->formInputText("event_title", $this->getText("commons_title"), $this->getParam("event_title"));
+                $strReturn .= $this->objToolkit->formWysiwygEditor("event_description", $this->getText("commons_description"), $this->getParam("event_description"), "minimalimage");
                 $strReturn .= $this->objToolkit->formInputText("event_location", $this->getText("event_location"), $this->getParam("event_location"));
                 $strReturn .= $this->objToolkit->formInputDropdown("event_registration", $arrDDYesNo, $this->getText("event_registration"), $this->getParam("event_registration"));
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("event_limitparticipants_hint"));
@@ -180,7 +180,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 				$strReturn .= $this->objToolkit->setBrowserFocus("event_title");
 			}
 			else
-				$strReturn .= $this->getText("error_permissions");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Rights
@@ -190,8 +190,8 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveEvent"));
 
 
-                $strReturn .= $this->objToolkit->formInputText("event_title", $this->getText("event_title"), $objEvent->getStrTitle());
-                $strReturn .= $this->objToolkit->formWysiwygEditor("event_description", $this->getText("event_description"), $objEvent->getStrDescription(), "minimalimage");
+                $strReturn .= $this->objToolkit->formInputText("event_title", $this->getText("commons_title"), $objEvent->getStrTitle());
+                $strReturn .= $this->objToolkit->formWysiwygEditor("event_description", $this->getText("commons_description"), $objEvent->getStrDescription(), "minimalimage");
                 $strReturn .= $this->objToolkit->formInputText("event_location", $this->getText("event_location"), $objEvent->getStrLocation());
                 $strReturn .= $this->objToolkit->formInputDropdown("event_registration", $arrDDYesNo, $this->getText("event_registration"), $objEvent->getIntRegistrationRequired());
                 $strReturn .= $this->objToolkit->formTextRow($this->getText("event_limitparticipants_hint"));
@@ -210,7 +210,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 				$strReturn .= $this->objToolkit->setBrowserFocus("eventmanager_title");
 			}
 			else
-				$strReturn .= $this->getText("error_permissions");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -267,7 +267,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 
         }
         else
-            $strReturn .= $this->getText("error_permissions");
+            $strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -288,7 +288,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
 		}
 		else
-			$strReturn .= $this->getText("error_permissions");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 
 		return $strReturn;
@@ -379,7 +379,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
     		$strReturn .= $strParticipants;
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -421,7 +421,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 				$strReturn .= $this->objToolkit->setBrowserFocus("answer_title");
 			}
 			else
-				$strReturn .= $this->getText("error_permissions");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			//Rights
@@ -445,7 +445,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
 				$strReturn .= $this->objToolkit->setBrowserFocus("eventmanager_title");
 			}
 			else
-				$strReturn .= $this->getText("error_permissions");
+				$strReturn .= $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -490,7 +490,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
             $this->flushCompletePagesCache();
         }
         else
-            $strReturn .= $this->getText("error_permissions");
+            $strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -513,7 +513,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listParticipants", "&systemid=".$strPrev));
 		}
 		else
-			$strReturn .= $this->getText("error_permissions");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -527,7 +527,7 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
             $strReturn .= $objSystemAdmin->actionGenericChangelog($this->getSystemid(), $this->arrModule["modul"], "showHistory");
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }

@@ -48,7 +48,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		}
 
 		if($this->getSystemid() == "")
-		    return $this->getText("fehler_recht");
+		    return $this->getText("commons_error_permissions");
 
 		if($strAction == "")
 			$strAction = "list";
@@ -246,7 +246,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     						$strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
 
 							//Rights - could be used, but not up to now not needed, so not yet implemented completely
-							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->obj_texte->get_text($this->modul["modul"], "element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
+							//$strActions .= $this->objToolkit->listButton(get_link_admin("rechte", "aendern", "&systemid=".$element_hier["systemid"], "", $this->getText("element_rechte"), getRightsImageAdminName($objOneElementOnPage->getSystemid())));
 
 							//Put all Output together
 							$strOutputAtPlaceholder .= $this->objToolkit->listRow2($objOneElementOnPage->getStrName() . " (".$objOneElementOnPage->getStrReadableName() . ") - ".$objOneElementOnPage->getStrTitle(), $strActions, $intI++, "", $objOneElementOnPage->getSystemid());
@@ -333,7 +333,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 
 		} else {
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		}
 
 		return $strReturn;
@@ -365,7 +365,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		$strReturn = $objElement->actionEdit("new");
 		}
 		else
-		    $strReturn .= $this->getText("fehler_recht");
+		    $strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -404,7 +404,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
     		}
 		}
 		else
-		    $strReturn .= $this->getText("fehler_recht");
+		    $strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -609,10 +609,10 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 			$strReturn .= $this->objToolkit->warningBox($strQuestion
 			             ." <br /><a href=\"".getLinkAdminHref("pages_content", "deleteElementFinal", "systemid=".$this->getSystemid().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe")))."\">"
-			             .$this->getText("element_loeschen_link"));
+			             .$this->getText("commons_delete"));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -647,7 +647,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -814,7 +814,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 

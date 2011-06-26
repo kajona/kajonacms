@@ -21,7 +21,6 @@ $lang["column2"]                         = "Spalte 2";
 $lang["column3"]                         = "Spalte 3";
 $lang["editWidget"]                      = "Widget bearbeiten";
 $lang["errorSavingWidget"]               = "Fehler beim Speichern des Widgets";
-$lang["fehler_recht"]                    = "Keine ausreichende Rechte";
 $lang["modul_titel"]                     = "Übersicht";
 $lang["moduleRights"]                    = "Rechte";
 $lang["module_calendar"]                 = "Kalender";

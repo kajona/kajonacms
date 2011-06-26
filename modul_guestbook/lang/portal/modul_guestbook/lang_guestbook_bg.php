@@ -12,7 +12,6 @@
 //editable entries
 $lang["eintragen"]                       = "Впиши";
 $lang["eintragen_fehler"]                = "Моля попълнете всички полета";
-$lang["fehler_recht"]                    = "Нямате достатъчно права";
 $lang["insert_error_email"]              = "Липсва електронна поща";
 $lang["insert_error_name"]               = "Липсва име";
 $lang["insert_error_post"]               = "Липсва коментар";

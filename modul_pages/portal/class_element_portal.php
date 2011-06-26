@@ -279,13 +279,13 @@ abstract class class_element_portal extends class_portal {
                 //standard: pages_content.
                 if($strModule == "pages_content") {
                     $strDeleteUrl = getLinkAdminHref("pages_content", "deleteElement", "&systemid=".$strSystemid.$strAdminLangParam."&pe=1");
-                    $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin")."</a>";
+                    $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("commons_delete", "pages", "admin")."</a>";
                 }
                 else {
                     //Use Module-config to generate link
                     if(isset($arrConfig["pe_action_delete"]) && $arrConfig["pe_action_delete"] != "") {
                         $strDeleteUrl = getLinkAdminHref($strModule, $arrConfig["pe_action_delete"], $arrConfig["pe_action_edit_params"].$strAdminLangParam."&pe=1");
-                        $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_delete", "pages", "admin")."</a>";
+                        $strDeleteLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strDeleteUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("commons_delete", "pages", "admin")."</a>";
                     }
                 }
 

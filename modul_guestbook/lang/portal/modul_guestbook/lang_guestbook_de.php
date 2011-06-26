@@ -12,7 +12,6 @@
 //editable entries
 $lang["eintragen"]                       = "Eintragen";
 $lang["eintragen_fehler"]                = "Bitte alle Felder ausfüllen";
-$lang["fehler_recht"]                    = "Keine Rechte für diese Aktion";
 $lang["insert_error_email"]              = "Fehlende E-Mailadresse";
 $lang["insert_error_name"]               = "Fehlender Name";
 $lang["insert_error_post"]               = "Fehlender Text";

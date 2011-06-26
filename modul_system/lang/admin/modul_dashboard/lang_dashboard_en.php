@@ -21,7 +21,6 @@ $lang["column2"]                         = "Column 2";
 $lang["column3"]                         = "Column 3";
 $lang["editWidget"]                      = "Edit widget";
 $lang["errorSavingWidget"]               = "Error saving the widget";
-$lang["fehler_recht"]                    = "Not enough permissions";
 $lang["modul_titel"]                     = "Overview";
 $lang["moduleRights"]                    = "Permissions";
 $lang["module_calendar"]                 = "Calendar";

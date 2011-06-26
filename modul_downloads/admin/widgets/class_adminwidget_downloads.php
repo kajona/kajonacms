@@ -57,7 +57,7 @@ class class_adminwidget_downloads extends class_adminwidget implements interface
         $arrLogs = $objLogbook->getLogbookSection(0, $intMaxNumber-1);    
         
         //print headers
-        $strReturn .= $this->widgetText($this->getText("downloads_head_date")."&nbsp;&nbsp;".$this->getText("downloads_head_file"));
+        $strReturn .= $this->widgetText($this->getText("commons_date")."&nbsp;&nbsp;".$this->getText("downloads_head_file"));
         
         foreach ($arrLogs as $arrOneLogRow) {
             $strReturn .= $this->widgetText(timeToString($arrOneLogRow["downloads_log_date"]));

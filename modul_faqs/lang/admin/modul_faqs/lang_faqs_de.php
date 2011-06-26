@@ -16,7 +16,6 @@ $lang["faq_edit"]                        = "FAQ bearbeiten";
 $lang["faqs_answer"]                     = "Antwort:";
 $lang["faqs_loeschen_frage"]             = "Möchten Sie die FAQ &quot;<b>%%element_name%%</b>&quot; wirklich löschen?";
 $lang["faqs_question"]                   = "Frage:";
-$lang["fehler_recht"]                    = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["kat_anzeigen"]                    = "Kategorie anzeigen";
 $lang["kat_ausblenden"]                  = "Kategorien ein-/ausblenden";
 $lang["kat_bearbeiten"]                  = "Kategorie bearbeiten";

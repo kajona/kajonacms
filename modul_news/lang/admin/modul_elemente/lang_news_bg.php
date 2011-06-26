@@ -12,7 +12,6 @@
 //editable entries
 $lang["aktuell"]                         = "Последни новини";
 $lang["archiv"]                          = "Архив новини";
-$lang["browser"]                         = "Отвори browser";
 $lang["detail"]                          = "Детайли";
 $lang["news_amount"]                     = "Брой новини за страница:";
 $lang["news_detailspage"]                = "Страница с детайли:";

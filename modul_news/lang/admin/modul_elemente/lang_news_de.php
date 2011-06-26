@@ -12,7 +12,6 @@
 //editable entries
 $lang["aktuell"]                         = "Aktuelle News";
 $lang["archiv"]                          = "News-Archiv";
-$lang["browser"]                         = "Browser öffnen";
 $lang["detail"]                          = "Detail";
 $lang["news_amount"]                     = "Anzahl News pro Seite:";
 $lang["news_detailspage"]                = "Detail-Seite:";

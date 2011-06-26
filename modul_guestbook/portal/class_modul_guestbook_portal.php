@@ -176,7 +176,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 

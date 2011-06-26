@@ -37,9 +37,9 @@ class class_element_image extends class_element_admin implements interface_admin
 	 */
 	public function getEditForm($arrElementData) {
 		$strReturn = "";
-		$strReturn .= $this->objToolkit->formInputText("image_title", $this->getText("image_title"), (isset($arrElementData["image_title"]) ? $arrElementData["image_title"] : "" ));
+		$strReturn .= $this->objToolkit->formInputText("image_title", $this->getText("commons_title"), (isset($arrElementData["image_title"]) ? $arrElementData["image_title"] : "" ));
 		$strReturn .= $this->objToolkit->formInputPageSelector("image_link", $this->getText("image_link"), (isset($arrElementData["image_link"]) ? $arrElementData["image_link"] : "" ));
-		$strReturn .= $this->objToolkit->formInputImageSelector("image_image", $this->getText("image_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : "" ));
+		$strReturn .= $this->objToolkit->formInputImageSelector("image_image", $this->getText("commons_image"), (isset($arrElementData["image_image"]) ? $arrElementData["image_image"] : "" ));
 
 		$strXY = $this->objToolkit->formTextRow($this->getText("image_xy_hint"));
 		$strXY .= $this->objToolkit->formInputText("image_x", $this->getText("image_x"), (isset($arrElementData["image_x"]) ? $arrElementData["image_x"] : "" ));

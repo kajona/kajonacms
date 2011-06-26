@@ -14,6 +14,5 @@ $lang["fehler_captcha"]                  = "Por favor introduza um código de ve
 $lang["fehler_email"]                    = "Por favor introduza um correio electrónico válido";
 $lang["fehler_nachricht"]                = "Por favor introduza uma mensagem";
 $lang["fehler_name"]                     = "Por favor, introduza um nome";
-$lang["fehler_recht"]                    = "Não tem permissões para realizar esta acção";
 $lang["fehler_seite"]                    = "Página inicial não existente";
 ?>

@@ -19,7 +19,6 @@ $lang["dateTimeFrom"]                    = "Von:";
 $lang["dateTimeUntil"]                   = "Bis:";
 $lang["detailslink"]                     = "Details anzeigen";
 $lang["email"]                           = "E-Mail:*";
-$lang["error_permissions"]               = "Keine ausreichenden Rechte um diese Aktion durchzuführen";
 $lang["forename"]                        = "Vorname:*";
 $lang["invalidEmailadress"]              = "Fehlerhafte E-Mailadresse angegeben";
 $lang["lastname"]                        = "Nachname:*";

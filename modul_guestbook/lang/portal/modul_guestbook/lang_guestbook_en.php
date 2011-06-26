@@ -12,7 +12,6 @@
 //editable entries
 $lang["eintragen"]                       = "Sign";
 $lang["eintragen_fehler"]                = "Please provide all values";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["insert_error_email"]              = "Missin eMail adress";
 $lang["insert_error_name"]               = "Missing name";
 $lang["insert_error_post"]               = "Missing post";

@@ -151,7 +151,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 				$strReturn .= $this->objToolkit->getTextRow($this->getText("liste_leer_archive"));
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn.$strJsSyncCode;
 	}
@@ -185,14 +185,14 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                                 function init_fm_newfolder_dialog() {
                                     jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader", "filemanager")."');
                                     jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                          '".$this->getText("ordner_anlegen_dialogButton", "filemanager")."',
+                                                          '".$this->getText("commons_create_folder", "filemanager")."',
                                                           'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$objFmRepo->getSystemid()."\', \'".$strFmFolder."\', \'downloads\', \'partialSyncArchive\', \'".$this->getSystemid()."\'); jsDialog_1.hide();');
                                             jsDialog_1.init(); }\n
                               ";
 
                 $strReturn .= "</script>";
                 $strReturn .= $this->objToolkit->jsDialog(1);
-                $strReturn .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen", "filemanager"), "", "", "", "", "", "inputSubmit");
+                $strReturn .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder", "filemanager"), "", "", "", "", "", "inputSubmit");
 
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadSystemid", $objFmRepo->getSystemid());
 				$strReturn .= $this->objToolkit->formInputHidden("flashuploadFolder", $strFmFolder);
@@ -287,7 +287,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -312,7 +312,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 		    }
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -336,8 +336,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveArchive");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
-                $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $this->getParam("archive_title"));
-                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("commons_path"), $this->getParam("archive_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("commons_title"), $this->getParam("archive_title"));
+                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("commons_path"), $this->getParam("archive_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", "0");
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -346,7 +346,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->setBrowserFocus("archive_title");
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		elseif ($strMode == "edit") {
 			if($this->objRights->rightEdit($this->getSystemid())) 	{
@@ -355,8 +355,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    //Build a form
 			    $strReturn .= $this->objToolkit->getValidationErrors($this, "saveArchive");
 			    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "saveArchive"));
-                $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("archive_title"), $objArchive->getTitle());
-                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("commons_path"), $objArchive->getPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+                $strReturn .= $this->objToolkit->formInputText("archive_title", $this->getText("commons_title"), $objArchive->getTitle());
+                $strReturn .= $this->objToolkit->formInputText("archive_path", $this->getText("commons_path"), $objArchive->getPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=archive_path&folder=/portal/downloads", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
 			    $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
 			    $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -365,7 +365,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			    $strReturn .= $this->objToolkit->setBrowserFocus("archive_title");
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -395,7 +395,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		elseif ($this->getParam("mode") == "edit") {
 			//Right-Check
@@ -411,7 +411,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
-				$strReturn = $this->getText("fehler_recht");
+				$strReturn = $this->getText("commons_error_permissions");
 		}
 		return $strReturn;
 	}
@@ -447,7 +447,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			$this->flushCompletePagesCache();
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -480,8 +480,8 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "editFile");
 				$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref("downloads", "editFile"));
-                $strReturn .= $this->objToolkit->formInputText("downloads_name", $this->getText("downloads_name"), $objFile->getName());
-                $strReturn .= $this->objToolkit->formWysiwygEditor("downloads_description", $this->getText("downloads_description"), $objFile->getDescription(), "minimal");
+                $strReturn .= $this->objToolkit->formInputText("downloads_name", $this->getText("commons_name"), $objFile->getName());
+                $strReturn .= $this->objToolkit->formWysiwygEditor("downloads_description", $this->getText("commons_description"), $objFile->getDescription(), "minimal");
                 if($objFile->getType() == 0)
                     $strReturn .= $this->objToolkit->formInputText("downloads_max_kb", $this->getText("downloads_max_kb"), $objFile->getMaxKb());
                 else
@@ -507,7 +507,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -547,7 +547,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
 			//Create a data-table
 			$arrHeader = array();
             $arrHeader[0] = $this->getText("header_id");
-            $arrHeader[1] = $this->getText("header_date");
+            $arrHeader[1] = $this->getText("commons_date");
             $arrHeader[2] = $this->getText("header_file");
             $arrHeader[3] = $this->getText("header_user");
             $arrHeader[4] = $this->getText("header_ip");
@@ -555,7 +555,7 @@ class class_modul_downloads_admin extends class_admin implements interface_admin
             $strReturn .= $arrPageViews["pageview"];
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

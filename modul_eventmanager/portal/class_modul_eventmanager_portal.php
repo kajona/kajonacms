@@ -97,7 +97,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
             $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -225,7 +225,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
 
         }
         else
-            $strReturn = $this->getText("error_permissions");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -249,7 +249,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
 
         }
         else
-            $strMessage = $this->getText("error_permissions");
+            $strMessage = $this->getText("commons_error_permissions");
 
         $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_register_message");
         $strReturn = $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);

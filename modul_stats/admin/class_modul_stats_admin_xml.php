@@ -101,7 +101,7 @@ class class_modul_stats_admin_xml extends class_admin implements interface_xml_a
             }
         }
 		else
-			$strReturn .= "<error>".xmlSafeString($this->getText("fehler_recht"))."</error>";
+			$strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
 
         return $strReturn;
     }

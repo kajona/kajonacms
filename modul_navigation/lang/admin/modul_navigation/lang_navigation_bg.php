@@ -10,8 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["browser"]                         = "Отвори browser";
-$lang["fehler_recht"]                    = "Нямате достатъчно права";
 $lang["liste_leer"]                      = "Няма налична навигация";
 $lang["modul_anlegen"]                   = "Създай навигация";
 $lang["modul_anlegenpunkt"]              = "Създай връзка в навигацията";
@@ -20,9 +18,7 @@ $lang["navigation_anzeigen"]             = "Покажи връзките в н�
 $lang["navigation_bearbeiten"]           = "Редактирай навигация";
 $lang["navigation_erf_loeschen"]         = "Навигацията беше изтрита успешно";
 $lang["navigation_erfolg"]               = "Навигацията беше създадена успешно";
-$lang["navigation_image"]                = "Изображение";
 $lang["navigation_loeschen_frage"]       = "Наистина ли искате да премахнете навигацията &quot;<b>%%element_name%%</b>&quot; със всички връзки?";
-$lang["navigation_name"]                 = "Име:";
 $lang["navigation_page_e"]               = "Външен връзки / Картотекирам";
 $lang["navigation_page_i"]               = "Страница";
 $lang["navigation_tagetblank"]           = "_blank (отваря се в нов прозорец)";

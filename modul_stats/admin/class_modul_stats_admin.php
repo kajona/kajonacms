@@ -160,7 +160,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
             }
         }
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }

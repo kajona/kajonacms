@@ -143,7 +143,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$strReturn .= $this->getText("liste_leer");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -164,7 +164,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $objRepo->deleteRepo();
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -191,8 +191,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//create the form
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $this->getParam("filemanager_name"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $this->getParam("filemanager_name"));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -216,7 +216,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			}
 		}
 		else
-		  $strReturn = $this->getText("fehler_recht");
+		  $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -245,8 +245,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "editRepo");
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("filemanager_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("browser"), $this->getText("browser"), "icon_externalBrowser.gif", $this->getText("browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $objRepo->getStrName());
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -275,7 +275,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -323,7 +323,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             $strActions = "";
             if($this->objRights->rightRight1($this->getSystemid())) {
                 $strActions .= $this->generateNewFolderDialogCode();
-                $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
+                $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
                 $strActions .= $this->actionUploadFile();
             }
             $strActions .= $this->generateRenameFileDialogCode();
@@ -423,7 +423,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	  		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
 		}
 		else
-			$this->getText("fehler_recht");
+			$this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -466,7 +466,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				$strReturn .= $this->getText("liste_leer");
     		}
     		else
-    			$strReturn = $this->getText("fehler_recht");
+    			$strReturn = $this->getText("commons_error_permissions");
 		}
 		else {
     		if($this->objRights->rightView($this->getSystemid())) {
@@ -484,7 +484,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $strActions = "";
                 if($strAddonAction == "") {
                     $strActions .= $this->generateNewFolderDialogCode();
-                    $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("ordner_anlegen"), "", "", "", "", "", "inputSubmit");
+                    $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
                     $strActions .= $this->actionUploadFile();
                 }
 
@@ -573,7 +573,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
           		$strReturn .= $this->objToolkit->dataTable($arrHeader, $arrFilesTemplate);
     		}
     		else
-    			$this->getText("fehler_recht");
+    			$this->getText("commons_error_permissions");
 		}
 
 		return $strReturn;
@@ -593,7 +593,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$strReturn .= $this->getText("datei_loeschen_fehler");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -613,7 +613,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				$strReturn .= $this->getText("ordner_loeschen_fehler");
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -633,7 +633,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                         function init_fm_newfolder_dialog() {
                             jsDialog_1.setTitle('".$this->getText("ordner_anlegen_dialogHeader")."');
                             jsDialog_1.setContent('".uniStrReplace(array("\r\n", "\n"), "", addslashes($strDialog))."',
-                                                  '".$this->getText("ordner_anlegen_dialogButton")."',
+                                                  '".$this->getText("commons_create_folder")."',
                                                   'javascript:KAJONA.admin.filemanager.createFolder(\'folderName\', \'".$this->getSystemid()."\', \'".$this->strFolderOld."\', \'\', \'\' ); jsDialog_1.hide();');
                                     jsDialog_1.init(); }\n
                       ";
@@ -723,7 +723,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			}
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

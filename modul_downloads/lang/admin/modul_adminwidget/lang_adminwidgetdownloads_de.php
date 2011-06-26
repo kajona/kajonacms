@@ -10,7 +10,6 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["downloads_head_date"]             = "Datum";
 $lang["downloads_head_file"]             = "Datei";
 $lang["downloads_name"]                  = "Downloads";
 $lang["downloads_nrOfEntries"]           = "Anzahl letzter Downloads:";

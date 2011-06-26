@@ -16,7 +16,6 @@ $lang["faq_edit"]                        = "Редактирай Често за
 $lang["faqs_answer"]                     = "Отговор:";
 $lang["faqs_loeschen_frage"]             = "Наистина ли искате да изтрийте 'Често задавани въпроси' &quot;<b>%%element_name%%</b>&quot;?";
 $lang["faqs_question"]                   = "Въпрос:";
-$lang["fehler_recht"]                    = "Няма достатъчно права за тези действия:";
 $lang["kat_anzeigen"]                    = "Покажи категория";
 $lang["kat_ausblenden"]                  = "Покажи/скрий категориите";
 $lang["kat_bearbeiten"]                  = "Редактирай категории";

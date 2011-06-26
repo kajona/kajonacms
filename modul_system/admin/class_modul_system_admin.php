@@ -162,7 +162,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->dragableListFooter($strListId);
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -187,7 +187,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $strReturn .= $this->objToolkit->formClose();
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -208,7 +208,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             
         }
         else
-            return $this->getText("fehler_recht");
+            return $this->getText("commons_error_permissions");
 
     }
 
@@ -273,7 +273,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     		$strReturn .= $strPHP.$strServer.$strDB.$strGD;
         }
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 		return $strReturn;
 	}
 
@@ -355,7 +355,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             }
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 
@@ -474,7 +474,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
         }
         else
-            $strReturn = $this->getText("fehler_recht");
+            $strReturn = $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -581,7 +581,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -623,7 +623,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -654,7 +654,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             $arrData = array();
             $arrHeader = array();
-            $arrHeader[] = $this->getText("change_date");
+            $arrHeader[] = $this->getText("commons_date");
             $arrHeader[] = $this->getText("change_user");
             if($strSystemid == "")
                 $arrHeader[] = $this->getText("change_module");
@@ -698,7 +698,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -774,7 +774,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             }
         }
         else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
         return $strReturn;
     }
 
@@ -820,7 +820,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
 		}
 		else
-			$strReturn = $this->getText("fehler_recht");
+			$strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -847,7 +847,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         if($strMode == "new") {
             if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"]))) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("aspect_name"), $this->getParam("aspect_name"));
+                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $this->getParam("aspect_name"));
                 $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $this->getParam("aspect_default"));
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
@@ -856,23 +856,23 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
             }
             else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
         }
         elseif ($strMode == "edit") {
             $objAspect = new class_modul_system_aspect($this->getSystemid());
             if($objAspect->rightEdit()) {
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveAspect"));
-                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("aspect_name"), $objAspect->getStrName());
+                $strReturn .= $this->objToolkit->formInputText("aspect_name", $this->getText("commons_name"), $objAspect->getStrName());
                 $strReturn .= $this->objToolkit->formInputDropdown("aspect_default", $arrDefault, $this->getText("aspect_default"), $objAspect->getBitDefault());
                 $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
                 $strReturn .= $this->objToolkit->formInputHidden("systemid", $objAspect->getSystemid());
                 $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
                 $strReturn .= $this->objToolkit->formClose();
 
-                $strReturn .= $this->objToolkit->setBrowserFocus("language_name");
+                $strReturn .= $this->objToolkit->setBrowserFocus("aspect_name");
             }
             else
-			    $strReturn = $this->getText("fehler_recht");
+			    $strReturn = $this->getText("commons_error_permissions");
 
         }
         return $strReturn;
@@ -905,7 +905,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
         }
         else
-            return $this->getText("fehler_recht");
+            return $this->getText("commons_error_permissions");
 	}
 
 	/**
@@ -922,7 +922,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "aspects"));
         }
         else
-		    return $this->getText("fehler_recht");
+		    return $this->getText("commons_error_permissions");
 	}
 
 
@@ -967,7 +967,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
         }
         else
-		    return $this->getText("fehler_recht");
+		    return $this->getText("commons_error_permissions");
 
         return $strReturn;
     }

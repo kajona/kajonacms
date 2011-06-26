@@ -10,7 +10,5 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["browser"]                         = "Открыть браузер";
 $lang["search_amount"]                   = "Количество хитов на странице:";
-$lang["search_page"]                     = "Страница результата:";
 ?>

@@ -11,8 +11,6 @@
 
 //editable entries
 $lang["header_amount"]                   = "Anzahl";
-$lang["header_date"]                     = "Datum";
-$lang["header_language"]                 = "Sprache";
 $lang["header_query"]                    = "Suchbegriff";
 $lang["stats_title"]                     = "Suchanfragen";
 ?>

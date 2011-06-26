@@ -11,12 +11,10 @@
 
 //editable entries
 $lang["button_add"]                      = "Add";
-$lang["error_permissions"]               = "Not enough permissions to perform this action.";
 $lang["list_tags_empty"]                 = "No tags available.";
 $lang["modul_titel"]                     = "Tags";
 $lang["required_tag_name"]               = "Tag-Name";
 $lang["tag_assignments"]                 = "Assignments";
-$lang["tag_delete"]                      = "Delete";
 $lang["tag_delete_question"]             = "Do you really want to delete the tag &quot;<b>%%element_name%%</b>&quot;?";
 $lang["tag_edit"]                        = "Edit";
 $lang["tag_name"]                        = "Tag-Name:";

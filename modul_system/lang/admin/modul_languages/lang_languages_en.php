@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["delete_question"]                 = "Do you really want to delete the language &quot;<b>%%element_name%%</b>&quot;?";
-$lang["fehler_recht"]                    = "Not enough permissions to perform this action";
 $lang["lang_ar"]                         = "Arabic";
 $lang["lang_bg"]                         = "Bulgarian";
 $lang["lang_cs"]                         = "Czech";
@@ -48,8 +47,6 @@ $lang["language_bearbeiten"]             = "Edit language";
 $lang["language_default"]                = "Default language:";
 $lang["language_existing"]               = "The language already exists";
 $lang["language_isDefault"]              = "Default language";
-$lang["language_name"]                   = "Language:";
-$lang["language_status"]                 = "Change status (is ";
 $lang["liste_leer"]                      = "No languages available";
 $lang["modul_anlegen"]                   = "Create language";
 $lang["modul_titel"]                     = "Languages";

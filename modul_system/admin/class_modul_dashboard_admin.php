@@ -76,7 +76,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
 	    }
 	    else
-	        $strReturn = $this->getText("fehler_recht");
+	        $strReturn = $this->getText("commons_error_permissions");
 
 	    return $strReturn;
 	}
@@ -259,7 +259,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
         }
 	    else
-	        $strReturn = $this->getText("fehler_recht");
+	        $strReturn = $this->getText("commons_error_permissions");
         
         return $strReturn;
     }
@@ -350,7 +350,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 
 	    }
 	    else
-	        $strReturn = $this->getText("fehler_recht");
+	        $strReturn = $this->getText("commons_error_permissions");
 
 	    return $strReturn;
 	}
@@ -371,7 +371,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}
@@ -415,7 +415,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 			}
 		}
 		else
-			$strReturn .= $this->getText("fehler_recht");
+			$strReturn .= $this->getText("commons_error_permissions");
 
 		return $strReturn;
 	}

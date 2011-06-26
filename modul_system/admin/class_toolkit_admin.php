@@ -921,7 +921,7 @@ class class_toolkit_admin extends class_toolkit {
         //create the list-button and the js code to show the dialog
         $strButton = getLinkAdminManual("href=\"#\" onclick=\"javascript:jsDialog_1.setTitle('".class_carrier::getInstance()->getObjText()->getText("dialog_deleteHeader", "system", "admin")."'); jsDialog_1.setContent('".$strQuestion."', '".class_carrier::getInstance()->getObjText()->getText("dialog_deleteButton", "system", "admin")."',  '".$strLinkHref."'); jsDialog_1.init(); return false;\"",
                                          "",
-                                         class_carrier::getInstance()->getObjText()->getText("deleteButton", "system", "admin"),
+                                         class_carrier::getInstance()->getObjText()->getText("commons_delete", "system", "admin"),
                                          "icon_ton.gif" );
 
         return $this->listButton($strButton).$strDialog;
@@ -1779,7 +1779,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["strTagId"] = $strTagId;
         $arrTemplate["strTargetSystemid"] = $strTargetid;
         $arrTemplate["strAttribute"] = $strAttribute;
-        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjText()->getText("tag_delete", "tags", "admin"));
+        $arrTemplate["deleteIcon"] = getImageAdmin("icon_ton.gif", class_carrier::getInstance()->getObjText()->getText("commons_delete", "tags", "admin"));
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
     }
 

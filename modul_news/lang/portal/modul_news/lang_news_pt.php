@@ -11,7 +11,6 @@
 
 //editable entries
 $lang["backward"]                        = "Retroceder";
-$lang["fehler_recht"]                    = "Não tem permissões para realizar esta acção";
 $lang["forward"]                         = "Avançar";
 $lang["news_list_empty"]                 = "Não existem notícias disponíveis.";
 $lang["news_mehr"]                       = "[ler mais]";
