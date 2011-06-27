@@ -1981,12 +1981,14 @@ KAJONA.admin.contextMenu = {
 };
 
 
-KAJONA.admin.openPrintView = function() {
+KAJONA.admin.openPrintView = function(strUrlToLoad) {
     var intWidth = YAHOO.util.Dom.getViewportWidth() * 0.8;
     var intHeight = YAHOO.util.Dom.getViewportHeight() * 0.9;
     
-    KAJONA.admin.folderview.dialog.setContentIFrame(location.href.replace(/#/g, '')+"&printView=1"); 
-    //KAJONA.admin.folderview.dialog.setTitle("TBD"); 
+    if(strUrlToLoad == null)
+        strUrlToLoad = location.href;
+    
+    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad.replace(/#/g, '')+"&printView=1"); 
     KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
 };
 
