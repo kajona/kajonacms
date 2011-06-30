@@ -229,7 +229,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
     		//Load all news, maybe using a filterid
 		    $objNews = new class_modul_news_news();
-    		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
+    		if($this->getParam("filterId") != "" && validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator($objNews->getNewsCount($this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     			$objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

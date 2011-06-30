@@ -98,7 +98,10 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tmove SecOne as child to 221\n";
-        $objSystemCommon->setPrevId($strThird221, $strSecOne);
+        $objTempCommons = new class_modul_system_common($strSecOne);
+        $objTempCommons->setStrPrevId($strThird221);
+        $objTempCommons->updateObjectToDb();
+        //$objSystemCommon->setPrevId($strThird221, $strSecOne);
         echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, false, true);
@@ -141,7 +144,10 @@ class class_test_rights extends class_testbase {
 
 
         echo "\tsetting 211 as parent node for third11\n";
-        $objSystemCommon->setPrevId($strThird211, $strThirdOne1);
+        $objTempCommons = new class_modul_system_common($strThirdOne1);
+        $objTempCommons->setStrPrevId($strThird211);
+        $objTempCommons->updateObjectToDb();
+        //$objSystemCommon->setPrevId($strThird211, $strThirdOne1);
         echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true);
         $this->checkNodeRights($strSecOne, false, true);
@@ -165,8 +171,14 @@ class class_test_rights extends class_testbase {
 
 
         echo "\trebuilding initial tree structure\n";
-        $objSystemCommon->setPrevId($strRootId, $strSecOne); //SecOne still inheriting
-        $objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
+        $objTempCommons = new class_modul_system_common($strSecOne);
+        $objTempCommons->setStrPrevId($strRootId);
+        $objTempCommons->updateObjectToDb();
+        //$objSystemCommon->setPrevId($strRootId, $strSecOne); //SecOne still inheriting
+        $objTempCommons = new class_modul_system_common($strThirdOne1);
+        $objTempCommons->setStrPrevId($strSecOne);
+        $objTempCommons->updateObjectToDb();
+        //$objSystemCommon->setPrevId($strSecOne, $strThirdOne1);
         $objRights->setInherited(true, $strThirdOne1);
         echo "\tchecking node rights\n";
         $this->checkNodeRights($strRootId, true, true); 

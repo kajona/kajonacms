@@ -376,8 +376,8 @@ class class_installer_system extends class_installer_base implements interface_i
 		//Number of rows in the login-log
 		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
         //Systemid of guest-user & admin group
-        $strGuestID = $this->generateSystemid();
-        $strAdminID = $this->generateSystemid();
+        $strGuestID = generateSystemid();
+        $strAdminID = generateSystemid();
         $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         //And the default skin

@@ -108,6 +108,7 @@ class class_modul_pages_element extends class_model implements interface_model  
                             WHERE element_id= ?";
             return $this->objDB->_pQuery($strQuery, array( $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), $this->getIntCachetime(), $this->getIntRepeat(), $this->getStrVersion(), $this->getSystemid()));
         }
+        
     }
 
     /**

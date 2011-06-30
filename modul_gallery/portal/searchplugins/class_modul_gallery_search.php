@@ -96,11 +96,11 @@ class class_modul_gallery_search extends class_portal implements interface_searc
 	 * @return bool true, if the post is visible
 	 */
 	private function checkLanguage($arrOnePic) {
-        $bitReturn = true;
 
         //Loop upwards to find the matching dl-repo
         $strPrevId = $arrOnePic["system_prev_id"];
         $intCount = 0;
+        $intGalleryID = "";
         while($intCount == 0) {
             $strQuery = "SELECT COUNT(*)
                            FROM "._dbprefix_."gallery_gallery
@@ -108,7 +108,8 @@ class class_modul_gallery_search extends class_portal implements interface_searc
             $arrRow = $this->objDB->getRow($strQuery);
             $intCount = $arrRow["COUNT(*)"];
             $intGalleryID = $strPrevId;
-            $strPrevId = $this->getPrevId($strPrevId);
+            $objCommons = new class_modul_system_common($strPrevId);
+            $strPrevId = $objCommons->getStrPrevId();
         }
 
 

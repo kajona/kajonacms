@@ -130,7 +130,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
         $strQuery =
         "INSERT INTO ".$this->arrModule["table"]."
 		(stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
-		('".$this->generateSystemid()."', '".$this->objDB->dbsafeString($strIp)."', ".$this->objDB->dbsafeString($intDate).",
+		('".generateSystemid()."', '".$this->objDB->dbsafeString($strIp)."', ".$this->objDB->dbsafeString($intDate).",
 		 '".$this->objDB->dbsafeString($strPage)."', '".$this->objDB->dbsafeString($strReferer)."', '".$this->objDB->dbsafeString($strBrowser)."',
 		 '".$this->objDB->dbsafeString($strSession)."', '".$this->objDB->dbsafeString($strLanguage)."')";
 

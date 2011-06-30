@@ -66,7 +66,7 @@ class class_modul_system_common extends class_model implements interface_model  
      *
      */
     protected function updateStateToDb() {
-
+        return true;
     }
 
     /**

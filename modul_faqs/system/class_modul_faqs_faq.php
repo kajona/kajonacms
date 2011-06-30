@@ -94,7 +94,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (faqsmem_id, faqsmem_faq, faqsmem_category) VALUES
-                            ('".dbsafeString($this->generateSystemid())."', '".dbsafeString($this->getSystemid())."',
+                            ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."',
                              '".dbsafeString($strCatID)."')";
 
                 if(!$this->objDB->_query($strQuery))

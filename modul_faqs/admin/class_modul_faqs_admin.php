@@ -182,7 +182,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
 
     		//Load all faqs, maybe using a filterid
-    		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId")))
+    		if($this->getParam("filterId") != "" && validateSystemid($this->getParam("filterId")))
     			$arrFaqs = class_modul_faqs_faq::getFaqsList($this->getParam("filterId"));
     		else
     			$arrFaqs = class_modul_faqs_faq::getFaqsList();

@@ -152,9 +152,8 @@ class class_lockmanager  {
      * @return string
      */
     private function getLockId() {
-        $arrSystemrecord = $this->objSystemCommon->getSystemRecord();
-        if(isset($arrSystemrecord["system_lock_id"]) && $arrSystemrecord["system_lock_id"] != "")
-            return $arrSystemrecord["system_lock_id"];
+        if($this->objSystemCommon->getStrLockId() != "")
+            return $this->objSystemCommon->getStrLockId();
         else
             return "0";
     }

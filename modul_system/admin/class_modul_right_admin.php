@@ -104,20 +104,20 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$arrGroups = class_modul_user_group::getAllGroups();
 
 			//Determin name of the record
-			$arrSystemRecord = $this->getSystemRecord($strSystemID);
-			if($arrSystemRecord["system_comment"] == "")
+            $objCommon = new class_modul_system_common($strSystemID);
+			if($objCommon->getStrRecordComment() == "")
 				$strTitle = $this->getText("titel_leer");
 			else
-				$strTitle = $arrSystemRecord["system_comment"] . " ";
+				$strTitle = $objCommon->getStrRecordComment() . " ";
 			$strUrlHistory = $this->getHistory(0);
 
 			//Load the rights header-row
-			if($arrSystemRecord["system_module_nr"] == 0)
+			if($objCommon->getIntModuleNr() == 0)
 			    $strModule = "system";
-            else if(defined("_pages_folder_id_") && $arrSystemRecord["system_module_nr"] == _pages_folder_id_)
+            else if(defined("_pages_folder_id_") && $objCommon->getIntModuleNr() == _pages_folder_id_)
                 $strModule = "pages";
 			else {
-			    $strTempId = class_modul_system_module::getModuleIdByNr($arrSystemRecord["system_module_nr"]);
+			    $strTempId = class_modul_system_module::getModuleIdByNr($objCommon->getIntModuleNr());
 			    $objModule = new class_modul_system_module($strTempId);
 			    $strModule = $objModule->getStrName();
 			}
@@ -266,7 +266,8 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $strSystemID);
 
 			//place all inheritance-rights as hidden-fields to support the change-js script
-            $strPrevId = $this->getPrevId($strSystemID);
+            $objCommons = new class_modul_system_common($strSystemID);
+            $strPrevId = $objCommons->getPrevId();
             $arrRightsInherited = $this->objRights->getArrayRights($strPrevId);
 
             foreach ($arrRightsInherited as $strRightName => $arrRightsPerAction) {

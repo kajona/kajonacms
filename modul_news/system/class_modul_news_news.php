@@ -129,7 +129,7 @@ class class_modul_news_news extends class_model implements interface_model  {
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."',
+                            ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."',
                              '".$this->objDB->dbsafeString($strCatID)."')";
                 if(!$this->objDB->_query($strQuery))
                     return false;
@@ -172,7 +172,7 @@ class class_modul_news_news extends class_model implements interface_model  {
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            ('".$this->objDB->dbsafeString($this->generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($strCatID)."')";
+                            ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($strCatID)."')";
                 if(!$this->objDB->_query($strQuery))
                     $bitReturn = false;
             }

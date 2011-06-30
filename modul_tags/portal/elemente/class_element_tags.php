@@ -58,17 +58,16 @@ class class_element_tags extends class_element_portal implements interface_porta
                 //render the links - if possible
                 foreach($arrAssignments as $arrOneAssignment) {
                     $objRecord = new class_modul_system_common($arrOneAssignment["tags_systemid"]);
-                    $arrRecord = $objRecord->getSystemRecord();
-                    if($arrRecord["system_module_nr"] == _pages_modul_id_) {
-                        $objPage = new class_modul_pages_page($arrRecord["system_id"]);
+                    if($objRecord->getIntModuleNr() == _pages_modul_id_) {
+                        $objPage = new class_modul_pages_page($objRecord->getSystemid());
                         $strLink = getLinkPortal($objPage->getStrName(), "", "_self", $objPage->getStrBrowsername(), "", "&highlight=".urlencode($objTag->getStrName()), "", "", $arrOneAssignment["tags_attribute"]);
 
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
                     }
 
-                    if(class_modul_system_module::getModuleByName("news") != null && $arrRecord["system_module_nr"] == _news_modul_id_) {
-                        $objNews = new class_modul_news_news($arrRecord["system_id"]);
-                        $strLink = getLinkPortal(_news_search_resultpage_, "", "_self", $objNews->getStrTitle(), "newsDetail", "&highlight=".urlencode($objTag->getStrName()), $arrRecord["system_id"], "", "", $objNews->getStrTitle());
+                    if(class_modul_system_module::getModuleByName("news") != null && $objRecord->getIntModuleNr() == _news_modul_id_) {
+                        $objNews = new class_modul_news_news($objRecord->getSystemid());
+                        $strLink = getLinkPortal(_news_search_resultpage_, "", "_self", $objNews->getStrTitle(), "newsDetail", "&highlight=".urlencode($objTag->getStrName()), $objRecord->getSystemid(), "", "", $objNews->getStrTitle());
                         $strLinks .= $this->fillTemplate(array("taglink" => $strLink), $strTemplateTaglinkID);
                     }
 

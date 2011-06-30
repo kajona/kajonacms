@@ -431,10 +431,10 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				if($objPage->getPrevId() != $this->getModuleSystemid($this->arrModule["modul"]) ) {
 
                     //check if folder or page given as prev-id
-                    $arrRecord = $this->getSystemRecord($objPage->getPrevId());
+                    $objSystemCommons = new class_modul_system_common($objPage->getPrevId());
                     $strFoldername = "";
                     $strFolderid = "";
-                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                    if($objSystemCommons->getIntModuleNr() == _pages_folder_id_) {
                         $objFolder = new class_modul_pages_folder($objPage->getPrevId());
                         $strFoldername = $objFolder->getStrName();
                         $strFolderid = $objFolder->getSystemid();
@@ -532,9 +532,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $strFolder = "";
                 //initial prev-id
                 if($this->getSystemid() != "") {
-
-                    $arrRecord = $this->getSystemRecord();
-                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                    $objCommon = new class_modul_system_common($this->getSystemid());
+                    if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                         $objFolder = new class_modul_pages_folder($this->getSystemid());
                         $strFolder = $objFolder->getStrName();
                         $strFolderid = $objFolder->getSystemid();
@@ -548,9 +547,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				}
                 //maybe overriden manually / by page-reload
 				if($this->getParam("folder_id") != "") {
-
-                    $arrRecord = $this->getSystemRecord($this->getParam("folder_id"));
-                    if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+                    $objCommon = new class_modul_system_common($this->getParam("folder_id"));
+                    if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                         $objFolder = new class_modul_pages_folder($this->getParam("folder_id"));
                         $strFolder = $objFolder->getStrName();
                         $strFolderid = $objFolder->getSystemid();
@@ -926,12 +924,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		//Link to root-folder
         $arrPathLinks[] = getLinkAdmin("pages", "list", "", "&nbsp;/&nbsp;");
 		foreach($arrPath as $strOneFolderID) {
-            $arrRecord = $this->getSystemRecord($strOneFolderID);
-            if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+            $objCommon = new class_modul_system_common($strOneFolderID);
+            if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                 $objFolder = new class_modul_pages_folder($strOneFolderID);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
             }
-            if($arrRecord["system_module_nr"] == _pages_modul_id_) {
+            if($objCommon->getIntModuleNr() == _pages_modul_id_) {
                 $objPage = new class_modul_pages_page($strOneFolderID);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneFolderID."&unlockid=".$this->getSystemid(), $objPage->getStrBrowsername());
             }

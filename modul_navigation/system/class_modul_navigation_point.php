@@ -154,10 +154,9 @@ class class_modul_navigation_point extends class_model implements interface_mode
 
         //split modes  - regular navigation or generated out of the pages / folders
         $objCommon = new class_modul_system_common($strSystemid);
-        $arrSystemrecord = $objCommon->getSystemRecord($strSystemid);
 
         //current node is a navigation-node
-        if($arrSystemrecord["system_module_nr"] == _navigation_modul_id_) {
+        if($objCommon->getIntModuleNr() == _navigation_modul_id_) {
             
             //check where the point links to - navigation-point or pages-entry
             $objNavigationPoint = new class_modul_navigation_point($strSystemid);
@@ -168,7 +167,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 $arrReturn = self::getNaviLayer($strSystemid, true);
         }
         //current node belongs to pages
-        else if($arrSystemrecord["system_module_nr"] == _pages_folder_id_ || $arrSystemrecord["system_module_nr"] == _pages_modul_id_) {
+        else if($objCommon->getIntModuleNr() == _pages_folder_id_ || $objCommon->getIntModuleNr() == _pages_modul_id_) {
             //load the page-level below
             $arrReturn = self::loadPageLevelToNavigationNodes($strSystemid);
         }
@@ -263,6 +262,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 
                     $objPoint = new class_modul_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
+                    $objPoint->setIntRecordStatus(1);
                     
                     //if in alias mode, then check what type of target is requested
                     if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {

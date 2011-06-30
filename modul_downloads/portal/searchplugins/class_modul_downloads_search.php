@@ -109,7 +109,8 @@ class class_modul_downloads_search extends class_portal implements interface_sea
             $arrRow = $this->objDB->getRow($strQuery);
             $intCount = $arrRow["COUNT(*)"];
             $intArchiveID = $strPrevId;
-            $strPrevId = $this->getPrevId($strPrevId);
+            $objCommons = new class_modul_system_common($strPrevId);
+            $strPrevId = $objCommons->getStrPrevId();
         }
 
 

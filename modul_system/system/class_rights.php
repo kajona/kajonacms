@@ -168,8 +168,8 @@ class class_rights {
 	        $arrRights["inherit"] = 0;
 
             
-        $objCommon = new class_modul_system_common();
-        $strPrevSystemid = $objCommon->getPrevId($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+        $strPrevSystemid = $objCommon->getPrevId();
 
 
         //separate the two possible modes: inheritance or no inheritance

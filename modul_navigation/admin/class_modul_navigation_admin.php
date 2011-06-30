@@ -137,7 +137,9 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
                 $strListID = generateSystemid();
     			$strNaviReturn .= $this->objToolkit->dragableListHeader($strListID);
     			//Link one level up
-    			$strPrevID = $this->getPrevId($this->getSystemid());
+                $objCommons = new class_modul_system_common($this->getSystemid());
+                $strPrevID = $objCommons->getStrPrevId();
+                
     			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_treeLevelUp.gif"));
     			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
                 //And loop through the regular points

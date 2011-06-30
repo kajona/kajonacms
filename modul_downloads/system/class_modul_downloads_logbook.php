@@ -74,7 +74,7 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 	                   (downloads_log_id, downloads_log_date, downloads_log_file, downloads_log_user, downloads_log_ip) VALUES
 	                   (?, ?, ?, ?, ?)";
 
-		$objDB->_pQuery($strQuery, array($objRoot->generateSystemid(), (int)time(), basename($objFile->getFilename()),
+		$objDB->_pQuery($strQuery, array(generateSystemid(), (int)time(), basename($objFile->getFilename()),
                       class_carrier::getInstance()->getObjSession()->getUsername(), getServer("REMOTE_ADDR")) );
 
 		$strQuery = "UPDATE "._dbprefix_."downloads_file SET downloads_hits = downloads_hits+1 WHERE downloads_id= ?";

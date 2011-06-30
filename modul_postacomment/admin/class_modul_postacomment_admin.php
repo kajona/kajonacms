@@ -127,7 +127,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
     		//Load all posts
 		    $objPost = new class_modul_postacomment_post();
 
-    		if($this->getParam("filterId") != "" && $this->validateSystemid($this->getParam("filterId"))) {
+    		if($this->getParam("filterId") != "" && validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(false, $this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
     			$objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));

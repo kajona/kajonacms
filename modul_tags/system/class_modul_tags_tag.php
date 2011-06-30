@@ -336,8 +336,8 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
             return true;
 
         //check that systemid isn't the id of a tag to avoid recursions
-        $arrRecordModulId = $this->getSystemRecord($strSystemid);
-        if(isset($arrRecordModulId["system_modul_nr"]) && $arrRecordModulId["system_module_nr"] == _tags_modul_id_)
+        $objCommon = new class_modul_system_common($strSystemid);
+        if($objCommon->getIntModuleNr() == _tags_modul_id_)
             return true;
             
         //delete memberships. Fire a plain query, faster then searching.

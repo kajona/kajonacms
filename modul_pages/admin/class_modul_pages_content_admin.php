@@ -467,7 +467,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		// ************************************* Edit the current Element *******************************
 
 		//check, if the element isn't locked
-		$strPageSystemid = $this->getPrevId($this->getSystemid());
+        $objCommons = new class_modul_system_common($this->getSystemid());
+		$strPageSystemid = $objCommons->getPrevId();
 
         $objLockmanager = new class_lockmanager($this->getSystemid());
 
@@ -831,16 +832,16 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$arrPathLinks[] = getLinkAdmin("pages", "list", "&unlockid=".$this->getSystemid(), "&nbsp;/&nbsp;", " / ");
 
 		foreach($arrPath as $strOneSystemid) {
-			$arrRecord = $this->getSystemRecord($strOneSystemid);
+            $objCommon = new class_modul_system_common($strOneSystemid);
 			//Skip Elements: No sense to show in path-navigations
-			if($arrRecord["system_module_nr"] == _pages_content_modul_id_)
+			if($objCommon->getIntModuleNr() == _pages_content_modul_id_)
 				continue;
 
-            if($arrRecord["system_module_nr"] == _pages_folder_id_) {
+            if($objCommon->getIntModuleNr() == _pages_folder_id_) {
                 $objFolder = new class_modul_pages_folder($strOneSystemid);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objFolder->getStrName());
             }
-            if($arrRecord["system_module_nr"] == _pages_modul_id_) {
+            if($objCommon->getIntModuleNr() == _pages_modul_id_) {
                 $objPage = new class_modul_pages_page($strOneSystemid);
                 $arrPathLinks[] = getLinkAdmin("pages", "list", "&systemid=".$strOneSystemid."&unlockid=".$this->getSystemid(), $objPage->getStrBrowsername());
             }

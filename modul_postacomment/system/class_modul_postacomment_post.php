@@ -218,8 +218,8 @@ class class_modul_postacomment_post extends class_model implements interface_mod
         if(class_modul_system_module::getModuleByName("postacomment") == null)
             return true;
         //check that systemid isn't the id of a comment to avoid recursions
-        $arrRecordModulId = $this->getSystemRecord($strSystemid);
-        if(isset($arrRecordModulId["system_modul_nr"]) && $arrRecordModulId["system_module_nr"] == _postacomment_modul_id_)
+        $objCommon = new class_modul_system_common($strSystemid);
+        if($objCommon->getIntModuleNr() == _postacomment_modul_id_)
             return true;
             
         //ok, so search for a records matching

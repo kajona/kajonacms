@@ -218,8 +218,8 @@ class class_modul_rating_rate extends class_model implements interface_model  {
             return true;
 
         //check that systemid isn't the id of a rating to avoid recursions
-        $arrRecordModulId = $this->getSystemRecord($strSystemid);
-        if(isset($arrRecordModulId["system_modul_nr"]) && $arrRecordModulId["system_module_nr"] == _rating_modul_id_)
+        $objCommon = new class_modul_system_common($strSystemid);
+        if($objCommon->getIntModuleNr() == _rating_modul_id_)
             return true;
 
         //ok, so delete matching records

@@ -124,7 +124,7 @@ abstract class class_admin {
 		$this->objText = $objCarrier->getObjText();
 		$this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
-		$this->objSystemCommon = new class_modul_system_common();
+		$this->objSystemCommon = new class_modul_system_common($strSystemid);
 
 		//Setting template area LATERON THE SKIN IS BEING SET HERE
 		$this->setTemplateArea("");
@@ -217,24 +217,12 @@ abstract class class_admin {
 	 * @final
 	 */
 	public final function setSystemid($strID) {
-		if($this->validateSystemid($strID)) {
+		if(validateSystemid($strID)) {
 			$this->strSystemid = $strID;
 			return true;
 		}
 		else
 			return false;
-	}
-
-	/**
-	 * Checks a systemid for the correct syntax
-	 *
-	 * @param string $strtID
-	 * @return bool
-	 * @see functions.php
-	 * @final
-	 */
-	public final function validateSystemid($strID) {
-	    return validateSystemid($strID);
 	}
 
 	/**
@@ -245,17 +233,6 @@ abstract class class_admin {
 	 */
 	public final function getSystemid() {
 		return $this->strSystemid;
-	}
-
-	/**
-	 * Generates a new SystemID
-	 *
-	 * @return string The new SystemID
-	 * @see functions.php
-	 * @final
-	 */
-	public final function generateSystemid() {
-		return generateSystemid();
 	}
 
 	/**
@@ -277,7 +254,8 @@ abstract class class_admin {
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->setStatus($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->setStatus();
 	}
 
 	/**
@@ -289,7 +267,8 @@ abstract class class_admin {
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "0" || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getStatus($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getStatus();
 	}
 
 	/**
@@ -301,7 +280,8 @@ abstract class class_admin {
 	public function getLastEditUser($strSystemid = "") {
 		if($strSystemid == 0 || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getLastEditUser($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getLastEditUser();
 	}
 
 	/**
@@ -313,7 +293,8 @@ abstract class class_admin {
 	public function getEditDate($strSystemid = "") 	{
 		if($strSystemid == 0  || $strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getEditDate($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getEditDate();
 	}
 
 	/**
@@ -325,7 +306,8 @@ abstract class class_admin {
 	public function setEditDate($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->setEditDate($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->setEditDate();
 	}
 
 	/**
@@ -337,7 +319,8 @@ abstract class class_admin {
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getPrevId($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getPrevId();
 
 	}
 
@@ -378,20 +361,6 @@ abstract class class_admin {
 		$this->objSystemCommon->setAbsolutePosition($strIdToSet, $intPosition);
         $this->flushCompletePagesCache();
 	}
-
-
-	/**
-	 * Return a complete SystemRecord
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getSystemRecord($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-	    return $this->objSystemCommon->getSystemRecord($strSystemid);
-	}
-
 
 	/**
 	 * Returns the data for a registered module
@@ -475,7 +444,7 @@ abstract class class_admin {
             return "";
     }
 
-// --- HistoryMethods -----------------------------------------------------------------------------------
+    // --- HistoryMethods -----------------------------------------------------------------------------------
 
 	/**
 	 * Holds the last 5 URLs the user called in the Session
@@ -523,9 +492,9 @@ abstract class class_admin {
 			return "History error!"	;
 	}
 
-// --- TextMethods --------------------------------------------------------------------------------------
+    // --- TextMethods --------------------------------------------------------------------------------------
 
-/**
+    /**
 	 * Used to get Text out of Textfiles
 	 *
 	 * @param string $strName
@@ -598,7 +567,7 @@ abstract class class_admin {
 
 
 
-// --- OutputMethods ------------------------------------------------------------------------------------
+    // --- OutputMethods ------------------------------------------------------------------------------------
 
 	/**
 	 * Basic controller method invoking all further methods in order to generate an admin view.
@@ -761,44 +730,46 @@ abstract class class_admin {
 		if($this->objSession->isLoggedin()) {
 		    $arrItems = $this->getOutputModuleNavi();
 		    $arrFinalItems = array();
+            
+            $objModule = class_modul_system_module::getModuleByName($this->arrModule["modul"]);
 		    //build array of final items
 		    foreach($arrItems as $arrOneItem) {
 		        $bitAdd = false;
 		        switch ($arrOneItem[0]) {
 		        	case "view":
-                        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightView())
                             $bitAdd = true;
 		        		break;
 		        	case "edit":
-                        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightEdit())
                             $bitAdd = true;
 		        		break;
 		        	case "delete":
-                        if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightDelete())
                             $bitAdd = true;
 		        		break;
 		        	case "right":
-                        if($this->objRights->rightRight($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight())
                             $bitAdd = true;
 		        		break;
 		        	case "right1":
-                        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight1())
                             $bitAdd = true;
 		        		break;
 		        	case "right2":
-                        if($this->objRights->rightRight2($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight2())
                             $bitAdd = true;
 		        		break;
 		        	case "right3":
-                        if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight3())
                             $bitAdd = true;
 		        		break;
 		        	case "right4":
-                        if($this->objRights->rightRight4($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight4())
                             $bitAdd = true;
 		        		break;
 		        	case "right5":
-                        if($this->objRights->rightRight5($this->getModuleSystemid($this->arrModule["modul"])))
+                        if($objModule->rightRight5())
                             $bitAdd = true;
 		        		break;
 		        	case "":

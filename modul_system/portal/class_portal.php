@@ -116,7 +116,7 @@ abstract class class_portal  {
 	    $this->objText = $objCarrier->getObjText();
 	    $this->objTemplate = $objCarrier->getObjTemplate();
 		$this->objRights = $objCarrier->getObjRights();
-		$this->objSystemCommon = new class_modul_system_common();
+		$this->objSystemCommon = new class_modul_system_common($strSystemid);
 
 		//Setting template area
 		$this->objTemplate->setArea($this->strArea);
@@ -238,24 +238,12 @@ abstract class class_portal  {
 	 * @final
 	 */
 	public final function setSystemid($strID) {
-		if($this->validateSystemid($strID)) {
+		if(validateSystemid($strID)) {
 			$this->strSystemid = $strID;
 			return true;
 		}
 		else
 			return false;
-	}
-
-	/**
-	 * Checks a systemid for the correct syntax
-	 *
-	 * @param string $strtID
-	 * @return bool
-	 * @final
-     * @deprecated use validateSytemid directly
-	 */
-	public final function validateSystemid($strID) {
-	    return validateSystemid($strID);
 	}
 
 	/**
@@ -268,15 +256,6 @@ abstract class class_portal  {
 		return $this->strSystemid;
 	}
 
-	/**
-	 * Generates a new SystemID
-	 *
-	 * @return string The new SystemID
-	 * @final
-	 */
-	public final function generateSystemid() {
-		return generateSystemid();
-	}
 
 	/**
 	 * Returns the current instance of the class_rights
@@ -296,7 +275,8 @@ abstract class class_portal  {
 	public function setStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        return $this->objSystemCommon->setStatus($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+        return $objCommon->setStatus();
 	}
 
 	/**
@@ -308,7 +288,8 @@ abstract class class_portal  {
 	public function getStatus($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getStatus($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getStatus();
 	}
 
 	/**
@@ -320,7 +301,8 @@ abstract class class_portal  {
 	public function getLastEditUser($strSystemid = "") {
 		if($strSystemid == 0)
 			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getLastEditUser($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+		return $objCommon->getLastEditUser();
 	}
 
 	/**
@@ -332,7 +314,8 @@ abstract class class_portal  {
 	public function getEditDate($strSystemid = "") 	{
 		if($strSystemid == 0)
 			$strSystemid = $this->getSystemid();
-        return $this->objSystemCommon->getEditDate($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+        return $objCommon->getEditDate();
 	}
 
 	/**
@@ -344,7 +327,8 @@ abstract class class_portal  {
 	public function setEditDate($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        return $this->objSystemCommon->setEditDate($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+        return $objCommon->setEditDate();
 	}
 
 	/**
@@ -356,19 +340,8 @@ abstract class class_portal  {
 	public function getPrevId($strSystemid = "") {
 		if($strSystemid == "")
 			$strSystemid = $this->getSystemid();
-        return $this->objSystemCommon->getPrevId($strSystemid);
-	}
-
-	/**
-	 * Return a complete SystemRecord
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getSystemRecord($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-		return $this->objSystemCommon->getSystemRecord($strSystemid);
+        $objCommon = new class_modul_system_common($strSystemid);
+        return $objCommon->getPrevId();
 	}
 
 	/**
@@ -567,10 +540,6 @@ abstract class class_portal  {
     		//Standard
     		if($this->getParam("page") != "") {
     			$strReturn = $this->getParam("page");
-    		}
-    		//For backwards-compatibility
-    		elseif ($this->getParam("seite") != "")	{
-    			$strReturn = $this->getParam("seite");
     		}
     		//Use the page set in the configs
     		else {

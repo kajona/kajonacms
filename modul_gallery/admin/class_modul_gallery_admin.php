@@ -478,8 +478,9 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
 			$strListID = generateSystemid();
 			$strReturn .= $this->objToolkit->dragableListHeader($strListID);
-			//maybe, a link one level up is neede
-			$strTemp = $this->getPrevId($this->getSystemid());
+			//maybe, a link one level up is needed
+            $objCommons = new class_modul_system_common($this->getSystemid());
+			$strTemp = $objCommons->getStrPrevId();
 			$intI = 0;
 			if($strTemp != "0" && $strTemp != $this->getModuleSystemid($this->arrModule["modul"])) {
 				$strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showGallery", "&systemid=".$strTemp.$this->strPeAddon, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderClosed.gif"), $intI++);
