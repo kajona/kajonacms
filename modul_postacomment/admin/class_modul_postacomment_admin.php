@@ -283,7 +283,6 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         	$objPost->setStrTitle($this->getParam("postacomment_title"));
         	if(!$objPost->updateObjectToDb())
         	    throw new class_exception("Error saving post to db", class_exception::$level_ERROR);
-        	$objPost->setEditDate();
 	    }
 		else
 			$strReturn .= $this->getText("commons_error_permissions");

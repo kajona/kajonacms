@@ -319,19 +319,6 @@ abstract class class_portal  {
 	}
 
 	/**
-	 * Sets the current date as the edit-date of a system record
-	 *
-	 * @param string $strSystemid
-	 * @return bool
-	 */
-	public function setEditDate($strSystemid = "") {
-		if($strSystemid == "")
-			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
-        return $objCommon->setEditDate();
-	}
-
-	/**
 	 * Gets the Prev-ID of a record
 	 *
 	 * @param string $strSystemid

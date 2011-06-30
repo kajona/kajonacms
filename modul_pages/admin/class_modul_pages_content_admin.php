@@ -547,8 +547,9 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
 				    return "Element returned error saving to database!!!";
 			}
-			//Edit Date & unlock
-			$this->setEditDate($strPageSystemid);
+			//Edit Date of page & unlock
+            $objCommons = new class_modul_system_common($strPageSystemid);
+            $objCommons->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 			//And update the internal comment and language
 			$objElementData->setStrTitle($this->getParam("page_element_placeholder_title"));

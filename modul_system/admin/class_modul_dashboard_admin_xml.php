@@ -55,7 +55,6 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 		    $objWidget->setStrColumn($strNewColumn);
 		    $objWidget->updateObjectToDb();
 		        
-		    $this->setEditDate($this->getSystemid());    
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";    
 		}
 		else

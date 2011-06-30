@@ -1412,25 +1412,6 @@ abstract class class_root {
         return $this->getStrLmUser();
 	}
 
-    /**
-     * Sets the name of the user last editing the current record
-     *
-     * @param string $strSystemid
-     * @return string $strUserid
-     * @deprecated called automatically
-     * @todo remove, empty logic
-     */
-    public function setLastEditUser($strSystemid = "", $strUserid = "") {
-        if($strSystemid != "")
-            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
-        if($strUserid == "")
-            $strUserid = $this->objSession->getUserID();
-        
-        $this->setStrLmUser($strUserid);
-        return $this->updateSystemrecord();
-    }
-    
     public function setStrLmUser($strLmUser) {
         $this->strLmUser = $strLmUser;
     }
@@ -1449,24 +1430,6 @@ abstract class class_root {
         return $this->getStrLmTime();
 	}
 
-
-	/**
-	 * Sets the current date as the edit-date of a system record.
-	 * Updates the last-edit-user, too
-	 *
-	 * @param string $strSystemid
-     * @deprecated called automatically
-	 * @return bool
-     * @todo remove logic, empty call
-	 */
-	public function setEditDate($strSystemid = "") {
-        if($strSystemid != "")
-            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
-        $this->setStrLmTime(time());
-        return $this->updateSystemrecord();
-	}
-    
     public function getStrLmTime() {
         return $this->strLmTime;
     }

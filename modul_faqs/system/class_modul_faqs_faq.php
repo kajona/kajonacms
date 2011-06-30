@@ -77,7 +77,6 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
      */
     protected function updateStateToDb($bitMemberships = true) {
         class_logger::getInstance()->addLogRow("updated faq ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->setEditDate();
         //Update all needed tables
         //faqs
         $strQuery = "UPDATE ".$this->arrModule["table"]."
