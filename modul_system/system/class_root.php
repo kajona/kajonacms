@@ -170,9 +170,6 @@ abstract class class_root {
 
 		//GET / POST / FILE Params
 		$this->arrParams = getAllPassedParams();
-        //TODO: could be removed? now handled by internal-init 
-//        $this->setSystemid($strSystemid);
-
 
 		//Generating all the needed objects. For this we use our cool cool carrier-object
 		//take care of loading just the necessary objects
@@ -297,7 +294,6 @@ abstract class class_root {
 
                         if(!$this->objDB->_pQuery($strQuery, array($this->getStrSystemid()) ))
                             $bitCommit = false;
-
                     }
                 }
 
@@ -360,7 +356,8 @@ abstract class class_root {
      * @abstract
      * @todo will become abstract before 3.3.0, please update your implementations of interface_model
      */
-    protected function updateStateToDb() {}
+    protected function updateStateToDb() {
+    }
 
     /**
      * Returns the tables being used to store the current objects' state.
@@ -372,7 +369,8 @@ abstract class class_root {
      * @abstract
      * @todo will become abstract before 3.3.0, please update your implementations of interface_model
      */
-    protected function getObjectTables() {}
+    protected function getObjectTables() {
+    }
 
     /**
      * Returns a human-readable description of the current record.
@@ -382,7 +380,8 @@ abstract class class_root {
      * @abstract
      * @todo will become abstract before 3.3.0, please update your implementations of interface_model
      */
-    protected function getObjectDescription() {}
+    protected function getObjectDescription() {
+    }
     
     /**
      * Updates the current record to the database and saves all relevant fields.
@@ -476,7 +475,16 @@ abstract class class_root {
         
 		//Send the query to the db
 		$this->objDB->_pQuery($strQuery, array(
-            $strSystemId, $strPrevId, (int)$intModulNr, $this->objSession->getUserID(), class_date::getCurrentTimestamp(), $this->objSession->getUserID(), time(), (int)$intStatus, $strComment, (int)($intSiblings+1)
+            $strSystemId, 
+            $strPrevId, 
+            (int)$intModulNr, 
+            $this->objSession->getUserID(), 
+            class_date::getCurrentTimestamp(), 
+            $this->objSession->getUserID(), 
+            time(), 
+            (int)$intStatus, 
+            $strComment, 
+            (int)($intSiblings+1)
         ));
 
 		//Do we need a Rights-Record?
@@ -716,7 +724,7 @@ abstract class class_root {
         return false;
     }
 
-// --- SystemID & System-Table Methods ------------------------------------------------------------------
+    // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
 
     /**
@@ -1324,24 +1332,24 @@ abstract class class_root {
 	 * @param string $strSystemid If not given, the current objects' systemid is used
 	 * @return bool
      * @deprecated should be removed
-	 */
-//	public function setPrevId($strNewPrevId, $strSystemid = "") {
-//        if($strSystemid != "")
-//            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-//        
-//        $strOldPrevid = $this->getStrPrevId();
-//        
-//        $this->setStrPrevId($strNewPrevId);
-//        $this->updateObjectToDb();
-//        
-//        if($strNewPrevId != $strOldPrevid) {
-//            $this->objDB->flushQueryCache();
-//            $this->objRights->flushRightsCache();
-//            $this->objRights->rebuildRightsStructure($strSystemid);
-//        }
-//        
-//		return true;
-//	}
+	 *
+	public function setPrevId($strNewPrevId, $strSystemid = "") {
+        if($strSystemid != "")
+            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
+        
+        $strOldPrevid = $this->getStrPrevId();
+        
+        $this->setStrPrevId($strNewPrevId);
+        $this->updateObjectToDb();
+        
+        if($strNewPrevId != $strOldPrevid) {
+            $this->objDB->flushQueryCache();
+            $this->objRights->flushRightsCache();
+            $this->objRights->rebuildRightsStructure($strSystemid);
+        }
+        
+		return true;
+	}*/
 
     public function getStrPrevId() {
         return $this->strPrevId;
