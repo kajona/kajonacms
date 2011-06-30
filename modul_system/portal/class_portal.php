@@ -306,19 +306,6 @@ abstract class class_portal  {
 	}
 
 	/**
-	 * Returns the time the record was last edited
-	 *
-	 * @param string $strSystemid
-	 * @return int
-	 */
-	public function getEditDate($strSystemid = "") 	{
-		if($strSystemid == 0)
-			$strSystemid = $this->getSystemid();
-        $objCommon = new class_modul_system_common($strSystemid);
-        return $objCommon->getEditDate();
-	}
-
-	/**
 	 * Gets the Prev-ID of a record
 	 *
 	 * @param string $strSystemid

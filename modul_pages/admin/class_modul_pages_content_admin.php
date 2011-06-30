@@ -153,7 +153,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             if(_system_changehistory_enabled_ != "false")
                 $arrTemplate["lastuser"] .= " (".getLinkAdmin("pages", "showHistory", "&systemid=".$this->getSystemid(), $this->getText("show_history")).")";
 
-			$arrTemplate["lastedit"] = timeToString($objPage->getEditDate());
+			$arrTemplate["lastedit"] = timeToString($objPage->getIntLmTime());
 			$strReturn .= $this->objToolkit->getPageInfobox($arrTemplate);
 
             //try to load template, otherwise abort

@@ -39,7 +39,7 @@ class class_element_lastmodified extends class_element_portal implements interfa
 		$strReturn = "";
         //load the current page
         $objPage = class_modul_pages_page::getPageByName($this->getPagename());
-        $strReturn .= $this->getText("lastmodified").timeToString($objPage->getEditDate());
+        $strReturn .= $this->getText("lastmodified").timeToString($objPage->getIntLmTime());
 		return $strReturn;
 	}
 

@@ -113,7 +113,7 @@ abstract class class_root {
      * @todo migrate to long-timestamp
      * @var int
      */
-    private $strLmTime;
+    private $intLmTime;
     /**
      * The id of the user locking the current record, emtpy otherwise
      * @var string 
@@ -221,7 +221,7 @@ abstract class class_root {
                 $this->setIntSort($arrRow["system_sort"]);
                 $this->setStrOwner($arrRow["system_owner"]);
                 $this->setStrLmUser($arrRow["system_lm_user"]);
-                $this->setStrLmTime($arrRow["system_lm_time"]);
+                $this->setIntLmTime($arrRow["system_lm_time"]);
                 $this->setStrLockId($arrRow["system_lock_id"]);
                 $this->setIntLockTime($arrRow["system_lock_time"]);
                 $this->intRecordStatus = $arrRow["system_status"];
@@ -1416,26 +1416,12 @@ abstract class class_root {
         $this->strLmUser = $strLmUser;
     }
 
-    
-    /**
-	 * Returns the time the record was last edited
-	 *
-	 * @param string $strSystemid
-	 * @return int
-	 */
-	public function getEditDate($strSystemid = "") 	{
-        if($strSystemid != "")
-            throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
-        return $this->getStrLmTime();
-	}
-
-    public function getStrLmTime() {
-        return $this->strLmTime;
+    public function getIntLmTime() {
+        return $this->intLmTime;
     }
 
-    public function setStrLmTime($strLmTime) {
-        $this->strLmTime = $strLmTime;
+    public function setIntLmTime($strLmTime) {
+        $this->intLmTime = $strLmTime;
     }
 
     public function getStrLockId() {

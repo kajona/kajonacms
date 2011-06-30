@@ -364,7 +364,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                 $arrPeContents["pe_status_page_val"] = $objPageData->getStrName();
     		    $arrPeContents["pe_status_status_val"] = ($objPageData->getStatus() == 1 ? "active" : "inactive" );
     		    $arrPeContents["pe_status_autor_val"] = $objPageData->getLastEditUser();
-    		    $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getEditDate(), false);
+    		    $arrPeContents["pe_status_time_val"] = timeToString($objPageData->getIntLmTime(), false);
     		    $arrPeContents["pe_dialog_close_warning"] = $this->getText("pe_dialog_close_warning", "pages", "admin");
 
                 //Add an iconbar

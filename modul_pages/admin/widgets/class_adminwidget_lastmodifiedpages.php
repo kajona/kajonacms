@@ -55,7 +55,7 @@ class class_adminwidget_lastmodifiedpages extends class_adminwidget implements i
         foreach($arrRecords as $objSingleRecord) {
             $objPage = new class_modul_pages_page($objSingleRecord->getSystemid());
             $strReturn .= $this->widgetText(getLinkAdmin("pages_content", "list", "&systemid=".$objPage->getSystemid(), $objPage->getStrName()) );
-            $strReturn .= $this->widgetText("&nbsp; &nbsp; ".timeToString($objPage->getEditDate())."");
+            $strReturn .= $this->widgetText("&nbsp; &nbsp; ".timeToString($objPage->getIntLmTime())."");
         }
 
         return $strReturn;
