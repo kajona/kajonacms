@@ -36,7 +36,7 @@ class class_modul_dashboard_admin extends class_admin implements interface_admin
 	}
 
 
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("moduleRights"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");

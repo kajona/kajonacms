@@ -11,6 +11,7 @@
  * Downloads Portal. Generates a list of available downloads
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_portal extends class_portal implements interface_portal {
 	/**
@@ -21,7 +22,6 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	public function __construct($arrElementData) {
         $arrModul = array();
 		$arrModul["name"] 				= "modul_downloads";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["table2"] 			= _dbprefix_."downloads_file";
 		$arrModul["table"] 			    = _dbprefix_."downloads_archive";
 		$arrModul["table3"] 			= _dbprefix_."downloads_logs";
@@ -29,26 +29,20 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 		$arrModul["modul"] 			    = "downloads";
 
 		parent::__construct($arrModul, $arrElementData);
+        
+        if($this->getAction() == "openDlFolder")
+            $this->setAction("list");
 	}
 
-	/**
-	 * Action-block, controling the behaviour of the class
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-		$strAction = "";
-
-		if($this->getParam("action") != "")
-		    $strAction = $this->getParam("action");
-
-        if($strAction == "detailDownload")
-            $strReturn = $this->actionDetailDownload();
-        else
-            $strReturn = $this->actionList();
-
-
+	
+    
+    /**
+     * Adds the portaleditor code for the whole element
+     * 
+     * @param string $strReturn
+     * @return string 
+     */
+    private function addPortalEditorCode($strReturn) {
         $arrPeConfig = array(
                               "pe_module" => "downloads",
                               "pe_action_edit" => "showArchive",
@@ -60,27 +54,28 @@ class class_modul_downloads_portal extends class_portal implements interface_por
                             );
 
         //open a subfolder?
-        if($strAction == "openDlFolder" && validateSystemid($this->getSystemid()))
+        if($this->getParam("action") == "openDlFolder" && validateSystemid($this->getSystemid()))
             $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
 
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["download_id"], $arrPeConfig);
 
 		return $strReturn;
+    }
 
-	}
-
-//---Aktionsfunktionen-----------------------------------------------------------------------------------
+    //---Aktionsfunktionen-----------------------------------------------------------------------------------
+    
+    
 
 	/**
 	 * Creates a list of files & folders
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 
 		//systemid passed?
-		if( !validateSystemid($this->getSystemid() ) || $this->getAction() != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
+		if( !validateSystemid($this->getSystemid() ) || $this->getParam("action") != "openDlFolder" || ! $this->checkSystemidBelongsToCurrentTree() ) {
             if(isset($this->arrElementData["download_id"]))
                 $this->setSystemid($this->arrElementData["download_id"]);
 		}
@@ -186,6 +181,8 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 			$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 		}
 
+        $strReturn = $this->addPortalEditorCode($strReturn);
+        
 		return $strReturn;
 	}
 
@@ -196,7 +193,7 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 	 *
 	 * @return string
 	 */
-	private function actionDetailDownload() {
+	protected function actionDetailDownload() {
 		$strReturn = "";
 		//Load record
 		$objFile = new class_modul_downloads_file($this->getSystemid());
@@ -263,11 +260,13 @@ class class_modul_downloads_portal extends class_portal implements interface_por
 
         //add the filename to the title
         class_modul_pages_portal::registerAdditionalTitle($objFile->getName());
+        
+        $strReturn = $this->addPortalEditorCode($strReturn);
 
 		return $strReturn;
 	}
 
-//---Pfadfunktionen--------------------------------------------------------------------------------------
+    //---Pfadfunktionen--------------------------------------------------------------------------------------
 
 	/**
 	 * Generates a small pathnavigation

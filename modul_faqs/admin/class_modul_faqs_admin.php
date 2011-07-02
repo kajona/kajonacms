@@ -12,6 +12,7 @@
  * Admin class of the faqs-module. Responsible for editing faqs and organizing them in categories
  *
  * @package modul_faqs
+ * @author sidler@mulchprod.de
  */
 class class_modul_faqs_admin extends class_admin implements interface_admin {
 
@@ -20,8 +21,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_faqs";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _faqs_modul_id_;
 		$arrModul["table"] 			    = _dbprefix_."faqs";
 		$arrModul["table2"]			    = _dbprefix_."faqs_category";
@@ -33,80 +34,12 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
 	}
 
-	/**
-	 * Action block to control the class
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-	    if($strAction == "")
-	       $strAction = "list";
-
-	    try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-    		if($strAction == "newCat")
-    			$strReturn = $this->actionNewCat("new");
-    		if($strAction == "editCat")
-    			$strReturn = $this->actionNewCat("edit");
-    		if($strAction == "saveCat") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveCat();
-    			    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewCat("new");
-    		        else
-    		            $strReturn = $this->actionNewCat("edit");
-    		    }
-    		}
-    		if($strAction == "deleteCat") {
-    			$strReturn = $this->actionDeleteCategory();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-    		if($strAction == "newFaq")
-    			$strReturn = $this->actionNewFaq("new");
-    		if($strAction == "editFaq")
-    			$strReturn = $this->actionNewFaq("edit");
-    		if($strAction == "saveFaq") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveFaq();
-    			    if($strReturn == "")
-                       $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else  {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewFaq("new");
-    		        else
-    		            $strReturn = $this->actionNewFaq("edit");
-    		    }
-    		}
-    		if($strAction == "deleteFaq") {
-    			$strReturn = $this->actionDeleteFaq();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-	    }
-	    catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
 
 	public function getOutputContent() {
 		return $this->strOutput;
 	}
 
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -141,7 +74,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -233,15 +166,20 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 		return $strReturn;
 	}
 
-// -- faqs-Kategorien -----------------------------------------------------------------------------------
+    // -- faqs-Kategorien -----------------------------------------------------------------------------------
 
+    
+    protected function actionEditCat() {
+        return $this->actionNewCat("edit");
+    }
+    
 	/**
 	 * Show the form to create or edit a faqs cat
 	 *
 	 * @param string $strMode
 	 * @return string
 	 */
-	private function actionNewCat($strMode = "new") {
+	protected function actionNewCat($strMode = "new") {
 		$strReturn = "";
 		//Mode?
 		if($strMode == "new") {
@@ -285,8 +223,15 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveCat() {
+	protected function actionSaveCat() {
 		$strReturn = "";
+        
+        if(!$this->validateForm()) {
+            if($this->getParam("mode") == "new")
+                return $this->actionNewCat("new");
+            else
+                return $this->actionNewCat("edit");
+        }
 
         $objCat = null;
 		if($this->getParam("mode") == "new" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -300,6 +245,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
             $objCat->setStrTitle($this->getParam("faqs_cat_title"));
             if(!$objCat->updateObjectToDb($this->getModuleSystemid($this->arrModule["modul"])))
                 throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
             $strReturn .= $this->getText("commons_error_permissions");
@@ -313,13 +260,15 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteCategory() {
+	protected function actionDeleteCat() {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
             $objCat = new class_modul_faqs_category($this->getSystemid());
             if(!$objCat->deleteCategory())
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn .= $this->getText("commons_error_permissions");
@@ -330,13 +279,16 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 
 // --- Faqs-Funktionen ----------------------------------------------------------------------------------
 
+    protected function actionEditFaq() {
+        return $this->actionNewFaq("edit");
+    }
 	/**
 	 * Shows the form to edit oder create a faq
 	 *
 	 * @param string $strMode new || edit
 	 * @return string
 	 */
-	private function actionNewFaq($strMode = "new") {
+	protected function actionNewFaq($strMode = "new") {
 		$strReturn = "";
 		if($strMode == "new") {
 			//Form to create new faq
@@ -412,9 +364,16 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveFaq() {
+	protected function actionSaveFaq() {
 		$strReturn = "";
 
+        if(!$this->validateForm()) {
+            if($this->getParam("mode") == "new")
+                return $this->actionNewFaq("new");
+            else
+                return $this->actionNewFaq("edit");
+        }
+        
         $objFaq = null;
 		if($this->getParam("mode") == "new" && $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             $objFaq = new class_modul_faqs_faq();
@@ -438,6 +397,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
             $objFaq->setArrCats($arrCats);
             if(!$objFaq->updateObjectToDb( $this->getModuleSystemid($this->arrModule["modul"]) ) )
                 throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
         else
             $strReturn .= $this->getText("commons_error_permissions");
@@ -450,7 +411,7 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteFaq() {
+	protected function actionDeleteFaq() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -466,6 +427,8 @@ class class_modul_faqs_admin extends class_admin implements interface_admin {
                 $objFaq = new class_modul_faqs_faq($this->getSystemid());
 			    if(!$objFaq->deleteFaq())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else

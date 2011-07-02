@@ -114,7 +114,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		return $this->getText("modul_titel") . " (".$objPage->getStrName().")";
 	}
 
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    return array();
 	}
 

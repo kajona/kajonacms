@@ -11,6 +11,7 @@
  * Portal-Class to provide a simple contact-form
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_formular_kontakt extends class_portal implements interface_portal {
 	private $arrError	= array();
@@ -23,7 +24,6 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "formular_kontakt";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "elemente";
 
@@ -39,39 +39,15 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 		parent::__construct($arrModule, $arrElementData);
 	}
 
-	/**
-	 * Action-Block to control the behaviour
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		$strAction = "";
+	
 
-		if($this->getParam("action") != "")
-			$strAction = $this->getParam("action");
-
-		if ($strAction == "sendForm") {
-			if($this->validate())
-				$strReturn = $this->actionSendForm();
-			else
-				$strReturn = $this->actionForm();
-		}
-        else
-            $strReturn	= $this->actionForm();
-
-		return $strReturn;
-
-	}
-
-//---Aktionsfunktionen-----------------------------------------------------------------------------------
 
 	/**
 	 * Loads the form specified by the template set in the header-infos
 	 *
 	 * @return string
 	 */
-	private function actionForm() {
+	protected function actionList() {
 		$strReturn = "";
 
 		//any errors to print?
@@ -132,7 +108,12 @@ class class_formular_kontakt extends class_portal implements interface_portal {
 	 *
 	 * @return string Error or success-message
 	 */
-	private function actionSendForm() {
+	protected function actionSendForm() {
+        
+        
+        if(!$this->validate())
+            return $this->actionList();
+        
 		$strReturn = "";
 		//Mail-Object
 		$objEmail = new class_mail();

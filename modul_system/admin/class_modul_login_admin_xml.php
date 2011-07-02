@@ -25,24 +25,8 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
         
 		parent::__construct($arrModule);
 
-	}
-
-	/**
-     *
-     * @param string $strAction
-     * @return string
-     */
-	public function action($strAction = "") {
-		if($strAction == "")
-			$strAction = "login";
-		$strReturn = "";
-
-		if($strAction == "login")
-			$strReturn = $this->actionLogin();
-		elseif ($strAction == "logout")
-		    $strReturn = $this->actionLogout();
-
-		return $strReturn;
+        if($this->getAction() == "list")
+            $this->setAction("login");
 	}
 
 	
@@ -50,7 +34,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
      * Logs the current user into the system
      * @return string
      */
-	private function actionLogin() {
+	protected function actionLogin() {
 
 		if($this->objSession->login($this->getParam("username"), $this->getParam("password"))) {
 		    //user allowed to access admin?
@@ -71,7 +55,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 	 *
      * @return string
 	 */
-	private function actionLogout() {
+	protected function actionLogout() {
 		$this->objSession->logout();
         return "<message>".xmlSafeString($this->getText("logout_xml", "system"))."</message>";
 	}

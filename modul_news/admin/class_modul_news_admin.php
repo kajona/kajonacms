@@ -12,6 +12,7 @@
  * Admin class of the news-module. Responsible for editing news, organizing them in categories and creating feeds
  *
  * @package modul_news
+ * @author sidler@mulchprod.de
  */
 class class_modul_news_admin extends class_admin implements interface_admin {
 
@@ -22,136 +23,20 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 				= "modul_news";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
-		$arrModul["table"] 			    = _dbprefix_."news";
-		$arrModul["table2"]			    = _dbprefix_."news_category";
-		$arrModul["table3"]			    = _dbprefix_."news_member";
-		$arrModul["table4"]			    = _dbprefix_."news_feed";
 		$arrModul["modul"]				= "news";
 
 		//Base class
 		parent::__construct($arrModul);
 
+        
+        if($this->getParam("adminunlockid") != "") {
+            $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
+            $objLockmanager->unlockRecord(true);
+        }
 	}
 
-	/**
-	 * Action block to control the class
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-	    if($strAction == "")
-	       $strAction = "list";
-
-	    try {
-
-            if($this->getParam("adminunlockid") != "") {
-                $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
-                $objLockmanager->unlockRecord(true);
-            }
-
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-    		if($strAction == "newCat")
-    			$strReturn = $this->actionNewCat("new");
-    		if($strAction == "editCat")
-    			$strReturn = $this->actionNewCat("edit");
-    		if($strAction == "saveCat") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveCat();
-    			    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewCat("new");
-    		        else
-    		            $strReturn = $this->actionNewCat("edit");
-    		    }
-    		}
-    		if($strAction == "deleteCat") {
-    			$strReturn = $this->actionDeleteCategory();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-    		if($strAction == "newNews")
-    			$strReturn = $this->actionNewNews("new");
-    		if($strAction == "editNews")
-    			$strReturn = $this->actionNewNews("edit");
-    		if($strAction == "saveNews") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveNews();
-    			    if($strReturn == "")
-                       $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else  {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewNews("new");
-    		        else
-    		            $strReturn = $this->actionNewNews("edit");
-    		    }
-    		}
-    		if($strAction == "deleteNews") {
-    			$strReturn = $this->actionDeleteNews();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-    		if($strAction == "newsFeed")
-    		    $strReturn = $this->actionListNewsFeed();
-
-    		if($strAction == "newNewsFeed") {
-    		    $strReturn .= $this->actionCreateNewsFeed();
-    		    if($strReturn == "")
-    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
-    		}
-
-    		if($strAction == "editNewsFeed") {
-    		    $strReturn .= $this->actionEditNewsFeed();
-    		    if($strReturn == "")
-    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
-    		}
-
-    		if($strAction == "deleteNewsFeed") {
-    		    $strReturn .= $this->actionDeleteNewsFeed();
-    		    if($strReturn == "")
-    		        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "newsFeed"));
-    		}
-
-            if($strAction == "editLanguageset") {
-                $strReturn .= $this->actionEditLanguageset();
-            }
-            if($strAction == "assignToLanguageset") {
-                $this->actionAssignToLanguageset();
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
-            }
-	        if($strAction == "removeFromLanguageset") {
-                $this->actionRemoveFromLanguageset();
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
-            }
-	        if($strAction == "addNewsToLanguageset") {
-                $this->actionAddNewsToLanguageset();
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
-            }
-
-	    }
-	    catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
-
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -159,7 +44,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newNews", "", $this->getText("modul_anlegen"), "", "", true, "adminnavi"));
 	    $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newCat", "", $this->getText("commons_create_category"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("", "");
-	    $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "newsFeed", "", $this->getText("modul_list_feed"), "", "", true, "adminnavi"));
+	    $arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "listNewsFeed", "", $this->getText("modul_list_feed"), "", "", true, "adminnavi"));
 		$arrReturn[] = array("right2", getLinkAdmin($this->arrModule["modul"], "newNewsFeed", "", $this->getText("modul_new_feed"), "", "", true, "adminnavi"));
 		return $arrReturn;
 	}
@@ -192,7 +77,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -229,6 +114,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
     		//Load all news, maybe using a filterid
 		    $objNews = new class_modul_news_news();
+            $objArraySectionIterator = null;
     		if($this->getParam("filterId") != "" && validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator($objNews->getNewsCount($this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -315,7 +201,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     /**
      * @return string
      */
-    private function actionEditLanguageset() {
+    protected function actionEditLanguageset() {
         $strReturn = "";
 
         if($this->objRights->rightEdit($this->getSystemid())) {
@@ -406,7 +292,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-    private function actionAddNewsToLanguageset() {
+    protected function actionAddNewsToLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             //load the languageset for the current systemid
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
@@ -414,10 +300,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             if($objLanguageset != null && $objTargetLanguage->getStrName() != "") {
                 $objLanguageset->setSystemidForLanguageid($this->getParam("languageset_news"), $objTargetLanguage->getSystemid());
             }
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
 
-    private function actionAssignToLanguageset() {
+    protected function actionAssignToLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
             $objTargetLanguage = new class_modul_languages_language($this->getParam("languageset_language"));
@@ -425,25 +313,35 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objLanguageset = new class_modul_languages_languageset();
                 $objLanguageset->setSystemidForLanguageid($this->getSystemid(), $objTargetLanguage->getSystemid());
             }
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
 
-    private function actionRemoveFromLanguageset() {
+    protected function actionRemoveFromLanguageset() {
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objLanguageset = class_modul_languages_languageset::getLanguagesetForSystemid($this->getSystemid());
             if($objLanguageset != null) {
                 $objLanguageset->removeSystemidFromLanguageeset($this->getSystemid());
             }
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
 
-	/**
+    
+    protected function actionEditCat() {
+        return $this->actionNewCat("edit");
+    }
+
+
+    /**
 	 * Show the form to create or edit a news cat
 	 *
 	 * @param string $strMode
 	 * @return string
 	 */
-	private function actionNewCat($strMode = "new") {
+	protected function actionNewCat($strMode = "new") {
 		$strReturn = "";
 		//Mode?
 		if($strMode == "new") {
@@ -487,8 +385,16 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveCat() {
+	protected function actionSaveCat() {
 		$strReturn = "";
+        
+        if(!$this->validateForm()) {
+            if($this->getParam("mode") == "new")
+                return $this->actionNewCat("new");
+            else
+                return $this->actionNewCat("edit");
+        }
+        
 		if($this->getParam("mode") == "new") {
 			//Check rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -496,6 +402,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $objNews->setStrTitle($this->getParam("news_cat_title"));
 			    if(!$objNews->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		elseif($this->getParam("mode") == "edit") {
@@ -505,6 +413,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$objNews->setStrTitle($this->getParam("news_cat_title"));
 				if(!$objNews->updateObjectToDb())
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn .= $this->getText("commons_error_permissions");
@@ -517,13 +427,15 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteCategory() {
+	protected function actionDeleteCat() {
 		$strReturn = "";
 		//Check rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
             $objCat = new class_modul_news_category($this->getSystemid());
            if(!$objCat->deleteCategory())
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+           
+           $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn .= $this->getText("commons_error_permissions");
@@ -534,13 +446,17 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 // --- News-Funktionen ----------------------------------------------------------------------------------
 
+    protected function actionEditNews() {
+        return $this->actionNewNews("edit");
+    }
+    
 	/**
 	 * Shows the form to edit oder create news
 	 *
 	 * @param string $strMode new || edit
 	 * @return string
 	 */
-	private function actionNewNews($strMode = "new") {
+	protected function actionNewNews($strMode = "new") {
 		$strReturn = "";
 		if($strMode == "new") {
 			//Form to create new news
@@ -658,8 +574,16 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveNews() {
+	protected function actionSaveNews() {
 		$strReturn = "";
+        
+        if(!$this->validateForm()) {
+            if($this->getParam("mode") == "new")
+                return $this->actionNewNews("new");
+            else
+                return $this->actionNewNews("edit");
+        }
+            
 		if($this->getParam("mode") == "new") {
 			//Check rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -693,6 +617,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objNews->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 			}
 			else
@@ -733,6 +659,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 
                 $objNews->getLockManager()->unlockRecord();
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 			}
 			else
@@ -746,7 +674,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteNews() {
+	protected function actionDeleteNews() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -762,6 +690,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews = new class_modul_news_news($this->getSystemid());
 			    if(!$objNews->deleteNews())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
@@ -772,14 +702,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	}
 
 
-// --- News Feeds ---------------------------------------------------------------------------------------
+    // --- News Feeds ---------------------------------------------------------------------------------------
 
     /**
      * Shows a list of all views currently available
      *
      * @return string
      */
-    private function actionListNewsFeed() {
+    protected function actionListNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             $arrFeeds = class_modul_news_feed::getAllFeeds();
@@ -815,7 +745,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *
      * @return string "" in case of success
      */
-    private function actionCreateNewsFeed() {
+    protected function actionNewNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             //Form validation
@@ -827,8 +757,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             //Save or edit?
             if($this->getParam("save") != "1") {
                 //Form
-                if(!$bitValidate)
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "newNewsFeed");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "newNewsFeed");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $this->getParam("feed_title"));
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $this->getParam("feed_urltitle"));
@@ -861,6 +790,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
 
             }
         }
@@ -874,7 +805,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *
      * @return string, "" in case of success
      */
-    private function actionEditNewsFeed() {
+    protected function actionEditNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             $bitValidate = true;
@@ -886,8 +817,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             if($this->getParam("save") != "1") {
                 $objFeed = new class_modul_news_feed($this->getSystemid());
                 //Form
-                if(!$bitValidate)
-                    $strReturn .= $this->objToolkit->getValidationErrors($this, "editNewsFeed");
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "editNewsFeed");
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editNewsFeed"));
                 $strReturn .= $this->objToolkit->formInputText("feed_title", $this->getText("feed_title"), $objFeed->getStrTitle());
                 $strReturn .= $this->objToolkit->formInputText("feed_urltitle", $this->getText("feed_urltitle"), $objFeed->getStrUrlTitle());
@@ -921,6 +851,8 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
             }
         }
 		else
@@ -932,12 +864,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      * Shows the warning or deletes a feed
      *
      */
-    private function actionDeleteNewsFeed() {
+    protected function actionDeleteNewsFeed() {
         $strReturn = "";
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             $objFeed = new class_modul_news_feed($this->getSystemid());
             if(!$objFeed->deleteNewsFeed())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
 
         }
 		else

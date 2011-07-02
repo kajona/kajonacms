@@ -13,6 +13,7 @@
  * Serves xml-requests, e.g. syncing a gallery
  *
  * @package modul_gallery
+ * @author sidler@mulchprod.de
  */
 class class_modul_gallery_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -23,31 +24,11 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_gallery";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _gallery_modul_id_;
 		$arrModul["modul"]			= "gallery";
 
 		//base class
 		parent::__construct($arrModul);
-	}
-
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "syncGallery")
-            $strReturn .= $this->actionSyncGallery();
-        else if($strAction == "massSyncGallery")
-            $strReturn .= $this->actionMassSyncGallery();
-        else if($strAction == "partialSyncGallery")
-            $strReturn .= $this->actionPartialSyncGallery();
-
-
-        return $strReturn;
 	}
 
 
@@ -58,7 +39,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
 	 *
 	 * @return string
 	 */
-	private function actionSyncGallery() {
+	protected function actionSyncGallery() {
 		$strReturn = "";
 		$strResult = "";
 
@@ -83,7 +64,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
      *
      * @return string
      */
-    private function actionMassSyncGallery() {
+    protected function actionMassSyncGallery() {
         $strReturn = "";
         $strResult = "";
 
@@ -112,7 +93,7 @@ class class_modul_gallery_admin_xml extends class_admin implements interface_xml
      *
      * @return string
      */
-    private function actionPartialSyncGallery() {
+    protected function actionPartialSyncGallery() {
         $strReturn = "";
 		$strResult = "";
 

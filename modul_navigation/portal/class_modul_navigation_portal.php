@@ -20,6 +20,7 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_navigation_portal extends class_portal implements interface_portal {
+    
 	private $strCurrentSite = "";
 	private $arrTree = array();
 	private $intLevelMax = 0;
@@ -49,36 +50,35 @@ class class_modul_navigation_portal extends class_portal implements interface_po
         $arrModul["modul"]          = "navigation";
 		$arrModul["name"] 			= "modul_navigation";
 		$arrModul["moduleId"] 		= _navigation_modul_id_;
-		$arrModul["table"]		    = _dbprefix_."navigation";
 
 		parent::__construct($arrModul, $arrElementData);
 
 		//Determin the current site to load
 		$this->strCurrentSite = $this->getPagename();
-	}
-
-    /**
-     * Action Block to decide further actions
-     *
-     * @return string
-     */
-	public function action($strAction = "") {
-		$strReturn = "";
-
+        
         //init with the current navigation, required in all cases
         $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
         $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
-
-//        foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $objOneNode)
-//                $this->printTreeLevel(1, $objOneNode);
-
-
-
-		//Which kind of navigation do we want to load?
+        
+        
+        //Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
-			$strReturn = $this->loadNavigationTree();
+			$this->setAction("navigationTree");
 		if($this->arrElementData["navigation_mode"] == "sitemap")
-			$strReturn = $this->loadNavigationSitemap();
+			$this->setAction("navigationSitemap");
+	}
+
+    /**
+     * Adds the code to load the portaleditor
+     * 
+     * @param string $strReturn
+     * @return string 
+     */
+	private function addPortaleditorCode($strReturn) {
+
+        //        foreach($this->arrTempNodes[$this->arrElementData["navigation_id"]]["subnodes"] as $objOneNode)
+        //                $this->printTreeLevel(1, $objOneNode);
+
 
         //Add pe code
         $arrPeConfig = array(
@@ -92,6 +92,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                             );
         
         //only add the code, if not auto-generated
+        $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
         if(!validateSystemid($objNavigation->getStrFolderId()))
             $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["navigation_id"], $arrPeConfig);
 
@@ -106,7 +107,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 *
 	 * @return string
 	 */
-	private function loadNavigationTree() {
+	protected function actionNavigationTree() {
 		$strReturn = "";
         $objPagePointData = $this->searchPageInNavigationTree($this->strCurrentSite, $this->arrElementData["navigation_id"]);
         $strStack = $this->getActiveIdStack($objPagePointData);
@@ -153,6 +154,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
             $strReturn = $this->objTemplate->getTemplate();
         }
 
+        $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 
 	}
@@ -230,7 +232,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 *
 	 * @return string
 	 */
-	private function loadNavigationSitemap() {
+	protected function actionNavigationSitemap() {
 		$strReturn = "";
 		//check rights on the navigation
 		if($this->objRights->rightView($this->arrElementData["navigation_id"]) && $this->getStatus($this->arrElementData["navigation_id"]) == 1) {
@@ -240,6 +242,8 @@ class class_modul_navigation_portal extends class_portal implements interface_po
             //build the navigation
             $strReturn = $this->sitemapRecursive(1, $this->arrTempNodes[$this->arrElementData["navigation_id"]], $strStack);
 		}
+        
+        $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 	}
 

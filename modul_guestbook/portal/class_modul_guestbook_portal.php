@@ -25,53 +25,13 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_guestbook";
-		$arrModule["table"] 	    	= _dbprefix_."guestbook_book";
-		$arrModule["table2"] 			= _dbprefix_."guestbook_post";
 		$arrModule["moduleId"] 			= _guestbook_modul_id_;
 		$arrModule["modul"] 			= "guestbook";
 
         parent::__construct($arrModule, $arrElementData);
 	}
 
-	/**
-	 * Action-block, controling the behaviour of the class
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		$strAction = "list";
-
-		if($this->getParam("action") != "")
-		    $strAction = $this->getParam("action");
-
-		if($strAction == "insertGuestbook")
-			$strReturn = $this->actionInsert();
-		else if($strAction == "saveGuestbook") {
-			if($this->validateData()) {
-			    try {
-				    $strReturn = $this->actionSave();
-				    if($strReturn == "")
-				        $this->portalReload(getLinkPortalHref($this->getPagename()));
-			    }
-			    catch (class_exception $objException) {
-			        $objException->processException();
-			        $strReturn = "An internal error occured: ".$objException->getMessage();
-			    }
-			}
-			else {
-				$this->setParam("eintragen_fehler", $this->getText("eintragen_fehler"));
-				$strReturn = $this->actionInsert($this->getAllParams());
-			}
-		}
-		else
-		    $strReturn = parent::action($strAction);
-
-		return $strReturn;
-
-	}
-
-//---Aktionsfunktionen-----------------------------------------------------------------------------------
+	
 
 	/**
 	 * Returns a list of all posts in the current gb
@@ -124,7 +84,7 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 * @param mixed $arrTemplate values to fill in
 	 * @return string
 	 */
-	protected function actionInsert($arrTemplateOld = array()) {
+	protected function actionInsertGuestbook($arrTemplateOld = array()) {
 		$strReturn = "";
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_guestbook/".$this->arrElementData["guestbook_template"], "entry_form");
 
@@ -154,8 +114,13 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 	 *
 	 * @return string "" in case of success
 	 */
-	protected function actionSave() {
+	protected function actionSaveGuestbook() {
 		$strReturn = "";
+        
+        if(!$this->validateData()) {
+            $this->setParam("eintragen_fehler", $this->getText("eintragen_fehler"));
+            return $this->actionInsertGuestbook($this->getAllParams());
+        }
 
 		//check rights
 		if($this->objRights->rightRight1($this->arrElementData["guestbook_id"])) {
@@ -173,6 +138,8 @@ class class_modul_guestbook_portal extends class_portal implements interface_por
 
 			//Flush the page from cache
             $this->flushPageFromPagesCache($this->getPagename());
+            
+            $this->portalReload(getLinkPortalHref($this->getPagename()));
 
 		}
 		else

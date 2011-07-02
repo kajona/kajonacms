@@ -29,33 +29,21 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 		parent::__construct($arrModul, $arrElementData);
 
+        if($this->getAction() == "imageFolder")
+            $this->setAction("list");
+        
+        
+        if($this->arrElementData["gallery_mode"] == 1)
+            $this->setAction("random");
 	}
 
-	/**
-	 * Action-block, controling the behaviour of the class
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-		$strAction = "";
-
-		if($this->getParam("action") != "")
-		    $strAction = $this->getParam("action");
-
-		if($strAction == "detailImage") {
-			if($this->checkIfRequestedIdIsInElementsTree())
-			    $strReturn = $this->actionDetailImage();
-			else
-			    $strReturn = $this->actionList();
-		}
-		elseif($strAction == "imageFolder")
-		    $strReturn = $this->actionList();
-		elseif($this->arrElementData["gallery_mode"] == 1)
-		    $strReturn .= $this->actionRandom();
-		else
-		    $strReturn .= $this->actionList();
-
+    /**
+     * Adds to code to enable to portaleditor
+     * 
+     * @param string $strReturn
+     * @return string 
+     */
+	private function addPortaleditorCode($strReturn) {
 
         $arrPeConfig = array(
                               "pe_module" => "gallery",
@@ -68,7 +56,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                             );
 
         //open a subfolder?
-        if($strAction == "imageFolder" && validateSystemid($this->getSystemid()))
+        if($this->getParam("action") == "imageFolder" && validateSystemid($this->getSystemid()))
             $arrPeConfig["pe_action_edit_params"] = "&systemid=".$this->getSystemid();
 
         $strReturn = class_element_portal::addPortalEditorCode($strReturn, $this->arrElementData["gallery_id"], $arrPeConfig);
@@ -77,14 +65,14 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 
 	}
 
-//---Listenfunktionen------------------------------------------------------------------------------------
+    //---Listenfunktionen------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a list of thumbnails
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 
 		//Determin the prev_id to load
@@ -203,10 +191,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_gallery/".$this->arrElementData["gallery_template"], "list");
 		$arrTemplate["pathnavigation"] = $this->generatePathnavi();
 		$strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
+        
+        $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 	}
 
-//---Detailfunktionen------------------------------------------------------------------------------------
+    //---Detailfunktionen------------------------------------------------------------------------------------
 
 	/**
 	 * Prints a image as a detailed-view
@@ -215,7 +205,12 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
      * @param bool $bitRegisterAdditionalTitle
 	 * @return string
 	 */
-	private function actionDetailImage($bitRegisterAdditionalTitle = true) {
+	protected function actionDetailImage($bitRegisterAdditionalTitle = true) {
+        
+        if(!$this->checkIfRequestedIdIsInElementsTree())
+            return $this->actionList();
+            
+        
 		$strReturn = "";
 		//Load record
 		$objImage = new class_modul_gallery_pic($this->getSystemid());
@@ -283,17 +278,19 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
 		//Update view counter
 		$objImage->setIntHits($objImage->getIntHits()+1);
 		$objImage->updateObjectToDb(false);
+        
+        $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 	}
 
-//---Random----------------------------------------------------------------------------------------------
+    //---Random----------------------------------------------------------------------------------------------
 
     /**
      * Selects a random image out of the selected gallery and creates a detail-view
      *
      * @return string
      */
-    private function actionRandom() {
+    protected function actionRandom() {
         //Fetch all images of the selected category
         $arrRandom = array();
         $arrRandom = $this->loadImagesRecursive($this->arrElementData["gallery_id"]);
@@ -307,7 +304,9 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         if(isset($arrRandom[$intRand]))
             $this->setSystemid($arrRandom[$intRand]);
         //and load all
-        return $this->actionDetailImage(false);
+        $strReturn = $this->actionDetailImage(false);
+        $strReturn = $this->addPortaleditorCode($strReturn);
+        return $strReturn;
     }
 
     /**
@@ -334,7 +333,7 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
         return $arrRandom;
     }
 
-//---Bildfunktionen--------------------------------------------------------------------------------------
+    //---Bildfunktionen--------------------------------------------------------------------------------------
 
 	/**
 	 * Generates an image an returns the complete html-image-tag. Uses caching!
@@ -469,7 +468,6 @@ class class_modul_gallery_portal extends class_portal implements interface_porta
                 $objData = new class_modul_gallery_pic($objData->getPrevId());
                 if($objData->getStrName() == "") {
                     $objData = new class_modul_gallery_gallery($this->arrElementData["gallery_id"]);
-                    $bitGalStart = true;
                 }
 
                 $arrTemplate["pathnavigation_point"] = getLinkPortal($this->getPagename(), "", "_self", $objData->getStrName(), "imageFolder", "", $objData->getSystemid());

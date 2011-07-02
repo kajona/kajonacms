@@ -24,7 +24,6 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_gallery";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _gallery_modul_id_;
 		$arrModule["table"] 			= _dbprefix_."gallery_gallery";
 		$arrModule["table2"]			= _dbprefix_."gallery_pic";
@@ -34,27 +33,15 @@ class class_modul_gallery_admin extends class_admin implements interface_admin  
 
         if($this->getParam("pe") == "1")
             $this->strPeAddon = "&pe=1";
-	}
-
-	/**
-	 * Action-block. Controlles the further behaviour of the class
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-
+        
+        
         //sync?
         if($this->getParam("resync") == "true") {
             $this->actionSyncInternal();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "showGallery", "&systemid=".$this->getSystemid()));
         }
-
-        $strReturn = parent::action($strAction);
-
-
-		$this->strOutput = $strReturn;
 	}
+
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();

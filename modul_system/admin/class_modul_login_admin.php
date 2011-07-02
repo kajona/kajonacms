@@ -25,14 +25,10 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		//Base-Class...
 		parent::__construct($arrModule);
 
+        if($this->getAction() == "list")
+            $this->setAction("login");
 	}
 
-    public function action($strAction = "") {
-        if($strAction == "")
-            $strAction = "login";
-
-        parent::action($strAction);
-    }
 
 	/**
 	 * Creates a small login-field

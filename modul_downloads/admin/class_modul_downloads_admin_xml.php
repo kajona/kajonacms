@@ -13,6 +13,7 @@
  * Serves xml-requests, e.g. syncing an archive
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_modul_downloads_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -23,33 +24,12 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_downloads";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _downloads_modul_id_;
 		$arrModul["modul"]			= "downloads";
 
 		//base class
 		parent::__construct($arrModul);
 	}
-
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction) {
-        $strReturn = "";
-        if($strAction == "syncArchive")
-            $strReturn .= $this->actionSyncArchive();
-        else if($strAction == "massSyncArchive")
-            $strReturn .= $this->actionMassSyncArchive();
-        else if($strAction == "partialSyncArchive")
-            $strReturn .= $this->actionPartialSyncArchive();
-
-
-        return $strReturn;
-	}
-
 
 
 
@@ -58,7 +38,7 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 	 *
 	 * @return string
 	 */
-	private function actionSyncArchive() {
+	protected function actionSyncArchive() {
 		$strReturn = "";
 		$strResult = "";
 
@@ -83,7 +63,7 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
      *
      * @return string
      */
-    private function actionMassSyncArchive() {
+    protected function actionMassSyncArchive() {
         $strReturn = "";
         $strResult = "";
 
@@ -113,7 +93,7 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 	 *
 	 * @return string
 	 */
-	private function actionPartialSyncArchive() {
+	protected function actionPartialSyncArchive() {
 		$strReturn = "";
 		$strResult = "";
 

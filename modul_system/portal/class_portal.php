@@ -226,6 +226,16 @@ abstract class class_portal  {
 	public final function getAction() {
 	    return (string)$this->strAction;
 	}
+    
+    /**
+	 * sets the action used for the current request
+	 *
+     * @param string $strAction
+	 * @return string
+	 */
+	public final function setAction($strAction) {
+	    $this->strAction = $strAction;
+	}
 
 // --- SystemID & System-Table Methods ------------------------------------------------------------------
 

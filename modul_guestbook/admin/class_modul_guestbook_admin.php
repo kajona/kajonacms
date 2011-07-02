@@ -11,6 +11,7 @@
  * Admin class to handle all guestbook-stuff like creating guestbook, deleting posts, ...
  *
  * @package modul_guestbook
+ * @author sidler@mulchprod.de
  */
 class class_modul_guestbook_admin extends class_admin implements interface_admin  {
 	/**
@@ -20,7 +21,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 				= "modul_guestbook";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _guestbook_modul_id_;
 		$arrModul["table"] 			    = _dbprefix_."guestbook_book";
 		$arrModul["table2"]       		= _dbprefix_."guestbook_post";
@@ -30,75 +30,9 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 		parent::__construct($arrModul);
 	}
 
-	/**
-	 * Action-block to decide what actions to load
-	 *
-	 * @param unknown_type $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-        if($strAction == "")
-            $strAction = "list";
+	
 
-        try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-
-    		if($strAction == "newGuestbook")
-    			$strReturn = $this->actionNewGuestbook("new");
-    		if($strAction == "editGuestbook")
-    			$strReturn = $this->actionNewGuestbook("edit");
-    		if($strAction == "saveGuestbook") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSaveGuestbook();
-    			    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		    }
-    		    else {
-    		        if($this->getParam("mode") == "new")
-    		            $strReturn = $this->actionNewGuestbook("new");
-    		        else
-    		            $strReturn = $this->actionNewGuestbook("edit");
-    		    }
-    		}
-    		if($strAction == "viewGuestbook")
-    			$strReturn = $this->actionViewGuestbook();
-    		if($strAction == "deleteGuestbook") {
-    			$strReturn = $this->actionDeleteGuestbook();
-    			if($strReturn == "")
-    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-    		if($strAction == "deletePost") {
-    			$strReturn = $this->actionDeletePost();
-    			if($strReturn == "")
-    			   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getSystemid()));
-    		}
-            if($strAction == "editPost") {
-                $strReturn = $this->actionEditPost();
-                if($strReturn == "")
-                   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getSystemid()));
-            }
-            if($strAction == "updatePostcontent") {
-                $strReturn = $this->updatePostcontent();
-                if($strReturn == "")
-                   $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getPrevId()));
-            }
-
-        }
-        catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
-
-	public function getOutputModuleNavi() {
+	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
@@ -127,7 +61,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		//Check the rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -169,13 +103,17 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 // --- Gaestebuchverwaltung -----------------------------------------------------------------------------
 
+    protected function actionEditGuestbook() {
+        return $this->actionNewGuestbook("edit");
+    }
+    
 	/**
 	 * Returns the form to edit or create a guestbook
 	 *
 	 * @param string $strMode new || edit
 	 * @return string
 	 */
-	public function actionNewGuestbook($strMode = "new") {
+	protected function actionNewGuestbook($strMode = "new") {
 		$strReturn = "";
 		//Needed anytime
 		$arrModes = array( 0 => $this->getText("gaestebuch_modus_0"),
@@ -227,8 +165,16 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	public function actionSaveGuestbook() {
+	protected function actionSaveGuestbook() {
 		$strReturn = "";
+        
+        if(!$this->validateForm()) {
+            if($this->getParam("mode") == "new")
+                return $this->actionNewGuestbook("new");
+            else
+                return $this->actionNewGuestbook("edit");
+        }
+        
 		//Create or edit?
 		if($this->getParam("mode") == "new") {
 			//Check rights
@@ -238,6 +184,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			    $objGuestbook->setGuestbookModerated($this->getParam("guestbook_moderated"));
 			    if(!$objGuestbook->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn .= $this->getText("commons_error_permissions");
@@ -249,6 +197,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 			    $objGB->setGuestbookTitle($this->getParam("guestbook_title"));
 				if(!$objGB->updateObjectToDb())
 					throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
 				$strReturn = $this->getText("commons_error_permissions");
@@ -261,12 +211,14 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	public function actionDeleteGuestbook() {
+	protected function actionDeleteGuestbook() {
 		$strReturn = "";
 		if($this->objRights->rightDelete($this->getSystemid())) {
             $objGB = new class_modul_guestbook_guestbook($this->getSystemid());
             if(!$objGB->deleteGuestbook())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 		}
 		else
@@ -274,14 +226,15 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 		return $strReturn;
 	}
-// --- Posts-Verwaltung ---------------------------------------------------------------------------------
+    
+    // --- Posts-Verwaltung ---------------------------------------------------------------------------------
 
 	/**
 	 * Returns a list of all posts belonging to the selected guestbook
 	 *
 	 * @return string
 	 */
-	public function actionViewGuestbook() {
+	protected function actionViewGuestbook() {
 		$strReturn = "";
 		if($this->objRights->rightView($this->getSystemid())) {
 
@@ -326,7 +279,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 * @return string
 	 */
-    private function actionEditPost(){
+    protected function actionEditPost(){
         $strReturn = "";
 
         //check rights
@@ -354,13 +307,15 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
      *
      * @return string "" in case of success
      */
-    private function updatePostcontent(){
+    protected function actionUpdatePostcontent(){
         $strReturn = "";
         if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_guestbook_post($this->getSystemid());
             $objPost->setGuestbookPostText(processWysiwygHtmlContent($this->getParam("post_text")));
             if(!$objPost->updateObjectToDb())
                 throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getPrevId()));
         }
         else
             $strReturn = $this->getText("commons_error_permissions");
@@ -372,7 +327,7 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 	 *
 	 * @return string "" in case of success
 	 */
-	public function actionDeletePost() {
+	protected function actionDeletePost() {
 		$strReturn = "";
 		if($this->objRights->rightDelete($this->getSystemid())) {
             //Delete from module-table
@@ -382,6 +337,8 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
             $this->setSystemid($strPrevID);
             if(!$bitDelete)
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "viewGuestbook", "systemid=".$this->getSystemid()));
 
 		}
 		else
@@ -389,19 +346,6 @@ class class_modul_guestbook_admin extends class_admin implements interface_admin
 
 
 		return $strReturn;
-	}
-
-
-// --- Helferfunktionen ---------------------------------------------------------------------------------
-
-	/**
-	 * Loads one guestbook
-	 *
-	 * @param string $strSystemid
-	 * @return mixed
-	 */
-	public function getGuestbook($strSystemid) {
-	     return new class_modul_guestbook_guestbook($strSystemid);
 	}
 
 

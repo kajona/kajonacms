@@ -11,6 +11,7 @@
  * Portal-class of the faqs. Handles the printing of faqs lists / detail
  *
  * @package modul_faqs
+ * @author sidler@mulchprod.de
  */
 class class_modul_faqs_portal extends class_portal implements interface_portal {
 	/**
@@ -21,7 +22,6 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_faqs";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["table"] 			= _dbprefix_."faqs";
 		$arrModule["table2"]			= _dbprefix_."faqs_category";
 		$arrModule["table3"]			= _dbprefix_."faqs_member";
@@ -31,21 +31,9 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 		parent::__construct($arrModule, $arrElementData);
 	}
 
-	/**
-	 * Action-Block, decides what to do
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
+	
 
-		$strReturn = $this->actionList();
-
-		return $strReturn;
-
-	}
-
-//--- Lists ---------------------------------------------------------------------------------------------
+    //--- Lists ---------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns a list of faqs.
@@ -53,7 +41,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 
 		//load categories
@@ -74,6 +62,7 @@ class class_modul_faqs_portal extends class_portal implements interface_portal {
 		foreach ($arrCategories as $objCategory) {
 
     		//Load faqs
+            $arrFaqs = array();
     		if(!is_object($objCategory) && $objCategory == 1) {
     		    $arrFaqs = class_modul_faqs_faq::loadListFaqsPortal(1);
     		    $objCategory = new class_modul_faqs_category();
