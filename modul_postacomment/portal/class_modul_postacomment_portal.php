@@ -11,11 +11,11 @@
  * Portal-class of the postacomment. Handles the printing of postacomment lists / detail
  *
  * @package modul_postacomment
+ * @author sidler@mulchprod.de
  */
 class class_modul_postacomment_portal extends class_portal implements interface_portal {
 
     private $strErrors = "";
-
     private $strPagefilter = null;
 
 	/**
@@ -26,49 +26,19 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_postacomment";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["table"] 			= _dbprefix_."postacomment";
 		$arrModule["moduleId"] 			= _postacomment_modul_id_;
 		$arrModule["modul"]				= "postacomment";
 
 		parent::__construct($arrModule, $arrElementData);
 	}
 
-	/**
-	 * Action-Block, decides what to do
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		$strAction = "";
-
-		if($this->getParam("action") != "postComment")
-		    $strAction = "list";
-		else
-		    $strAction = "postComment";
-
-		if ($strAction == "postComment") {
-		    if($this->validateForm()) {
-			    $strReturn .= $this->actionPostComment();
-			    //load the page before
-			    $this->portalReload(_indexpath_."?".$this->getHistory(0));
-		    }
-		}
-
-		//the list should be loaded in every case
-	    $strReturn = $this->actionList();
-
-		return $strReturn;
-
-	}
 
 	/**
 	 * Returns a list of comments.
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		$strPosts = "";
 		$strForm = "";
@@ -181,7 +151,6 @@ class class_modul_postacomment_portal extends class_portal implements interface_
         $arrTemplate["postacomment_systemid"] = $this->getSystemid();
         $arrTemplate["postacomment_list"] = $strPosts;
 
-
         $strReturn .= $this->fillTemplate($arrTemplate, $strTemplateID);
 
 		return $strReturn;
@@ -192,7 +161,11 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 	 * Saves a post to the databases
 	 *
 	 */
-	private function actionPostComment() {
+	protected function actionPostComment() {
+        
+        if(!$this->validateForm()) {
+            return $this->actionList();
+        }
 
 	    //pageid or systemid to filter?
 	    if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -215,6 +188,8 @@ class class_modul_postacomment_portal extends class_portal implements interface_
 		    $objPost->updateObjectToDb();
 
             $this->flushPageFromPagesCache($this->getPagename());
+            
+            $this->portalReload(_indexpath_."?".$this->getHistory(0));
 	    }
 	}
 

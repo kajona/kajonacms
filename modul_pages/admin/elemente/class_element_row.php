@@ -42,7 +42,7 @@ class class_element_row extends class_element_admin implements interface_admin_e
 	 */
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
-		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("paragraph_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
+		$strReturn .= $this->objToolkit->formInputText("paragraph_title", $this->getText("commons_title"), (isset($arrElementData["paragraph_title"]) ? $arrElementData["paragraph_title"] : ""));
 
         //load templates
 		$objFilesystem = new class_filesystem();

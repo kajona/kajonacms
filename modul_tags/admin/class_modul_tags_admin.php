@@ -13,6 +13,7 @@
  * create the form to tag content.
  *
  * @package modul_tags
+ * @author sidler@mulchprod.de
  */
 class class_modul_tags_admin extends class_admin implements interface_admin {
 
@@ -23,57 +24,23 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_tags";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _tags_modul_id_;
-		$arrModule["table"] 		    = _dbprefix_."tags_tag";
 		$arrModule["modul"]				= "tags";
 
 		//base class
 		parent::__construct($arrModule);
 	}
 
-	/**
-	 * Action-block invoking all later actions
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-        if($strAction == "")
-            $strAction = "list";
+	
 
-        if($strAction == "list")
-            $strReturn .= $this->actionList();
-        else if($strAction == "deleteTag") {
-    			$strReturn = $this->actionDeleteTag();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-        }
-        else if($strAction == "editTag")
-            $strReturn = $this->actionEditTag();
-        else if($strAction == "saveTag") {
-            if($this->validateForm()) {
-                $strReturn = $this->actionSaveTag();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-            }
-            else
-                $strReturn = $this->actionEditTag();
-        }
-
-		$this->strOutput = $strReturn;
-	}
-
-    public function  getRequiredFields() {
+    public function getRequiredFields() {
         if($this->getAction() == "saveTag")
             return array("tag_name" => "string");
         else
             parent::getRequiredFields();
     }
 
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
+	
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -84,7 +51,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
         return $arrReturn;
 	}
 
-    private function actionList() {
+    protected function actionList() {
         $strReturn = "";
 		//Check the rights
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -136,13 +103,15 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteTag() {
+	protected function actionDeleteTag() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
             $objTag = new class_modul_tags_tag($this->getSystemid());
             if(!$objTag->deleteTag())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn .= $this->getText("commons_error_permissions");
@@ -155,7 +124,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
      * Generates the form to edit an existing tag
      * @return string
      */
-    private function actionEditTag() {
+    protected function actionEditTag() {
         $strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid()) ) {
             $objTag = new class_modul_tags_tag($this->getSystemid());
@@ -180,13 +149,19 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
      * Saves the passed tag-data back to the database.
      * @return string "" in case of success
      */
-    private function actionSaveTag() {
+    protected function actionSaveTag() {
+        
+        if(!$this->validateForm()) 
+            return $this->actionEditTag();
+            
         $strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
 			//Collect data to save to db
 			$objTag = new class_modul_tags_tag($this->getSystemid());
 			$objTag->setStrName($this->getParam("tag_name"), true);
             $objTag->updateObjectToDb();
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");

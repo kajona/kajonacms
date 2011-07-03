@@ -11,6 +11,7 @@
  * Portal-Class of the search module. Does all the searching in the database
  *
  * @package modul_search
+ * @author sidler@mulchprod.de
  */
 class class_modul_search_portal extends class_portal implements interface_portal {
 	private $strSearchterm = "";
@@ -23,7 +24,6 @@ class class_modul_search_portal extends class_portal implements interface_portal
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_search";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _suche_modul_id_;
 		$arrModule["modul"] 			= "search";
 
@@ -33,36 +33,15 @@ class class_modul_search_portal extends class_portal implements interface_portal
 			$this->strSearchterm = htmlToString(urldecode($this->getParam("searchterm")), true);
 		}
 	}
+	
 
-	/**
-	 * Action-Block to manage the class-behaviour
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		$strAction= "";
-
-		if($this->getParam("action") != "")
-		    $strAction = $this->getParam("action");
-
-		if($strAction == "search")
-			$strReturn = $this->actionSearch();
-		else
-		    $strReturn = $this->actionForm();
-
-		return $strReturn;
-
-	}
-
-// --- Suchformular -------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a search form using the template specified in the admin
 	 *
 	 * @return string
 	 */
-	private function actionForm() {
+	protected function actionList() {
 
 		$strTemplateID = $this->objTemplate->readTemplate("/modul_search/".$this->arrElementData["search_template"], "search_form");
 
@@ -84,12 +63,12 @@ class class_modul_search_portal extends class_portal implements interface_portal
 	 *
 	 * @return string
 	 */
-	private function actionSearch() {
+	protected function actionSearch() {
 		$strReturn = "";
 		//Read the config
         $arrTemplate = array();
 		$arrTemplate["hitlist"] = "";
-		$strReturn .= $this->actionForm();
+		$strReturn .= $this->actionList();
         $objSearchCommons = new class_modul_search_commons();
         $arrHitsSorted = $objSearchCommons->doSearch($this->strSearchterm);
 

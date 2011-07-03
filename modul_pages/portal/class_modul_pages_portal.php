@@ -25,19 +25,16 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		$arrModul["modul"]			= "pages";
 
 		parent::__construct($arrModul);
+        
+        $this->setAction("generatePage");
 
 	}
     
-    public function action($strAction = "") {
-        $this->generatePage();
-        return $this->strOutput;
-    }
-
 	/**
 	 * Handles the loading of a page, more in a functional than in an oop style
 	 *
 	 */
-	public function generatePage() {
+	protected function actionGeneratePage() {
 
 		//Determin the pagename
 		$strPagename = $this->getPagename();
@@ -45,27 +42,16 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		//Load the data of the page
         $objPageData = class_modul_pages_page::getPageByName($strPagename);
         
-        
 
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
         if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
 			$bitErrorpage = true;
         
-        //validate internal redirects
-        //FIXME: may be removed again
-//        if($objPageData->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
-//            $strPagename = $objPageData->getStrAlias();
-//            $objPageData = class_modul_pages_page::getPageByName($strPagename);
-//            
-//            if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
-//                $bitErrorpage = true;
-//        }
 
 		//but: if count != 0 && preview && rights:
 		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
 			$bitErrorpage = false;
-
 
 
 		//check, if the template could be loaded
@@ -436,7 +422,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
             $strPageContent = $strHeader.$strPageContent;
         }
 
-		$this->strOutput = $strPageContent;
+		return $strPageContent;
 	}
 
 	/**

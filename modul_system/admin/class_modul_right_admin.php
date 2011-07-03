@@ -16,7 +16,6 @@
  */
 class class_modul_right_admin extends class_admin implements interface_admin {
 
-	private $strTemp = "";
 	/**
 	 * Contructor
 	 *
@@ -30,61 +29,22 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 		parent::__construct($arrModul);
 		$this->setStrTextBase("system");
 
+        if($this->getAction() == "list")
+            $this->setAction("change");
 	}
 
-	/**
-	 * Action-block. Decides, what to do
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-		if($strAction == "")
-			$strAction = "change";
-
-		try {
-    		if($strAction == "change")
-    			$strReturn = $this->actionChange();
-
-    		if($strAction == "saverights") {
-    			$strReturn = $this->actionSaveRights();
-    			if($strReturn == "") {
-    				//Redirecting
-    				$strUrlHistory = $this->getHistory(0);
-    				$arrHistory = explode("&", $strUrlHistory);
-    				if($arrHistory[1] != "module=rights") {
-    					$this->adminReload(_indexpath_."?".$this->getHistory(0));
-    				}
-    			}
-    		}
-		}
-		catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-		$this->strTemp = $strReturn;
-	}
-
-
-	public function getOutputContent() {
-		return $this->strTemp;
-	}
 
     protected function getOutputModuleTitle() {
         return $this->getText("moduleRightsTitle");
     }
 
 
-
-//*"*******************************************************************************************************
-//--Rechte-Verwaltung--------------------------------------------------------------------------------------
-
 	/**
 	 * Returns a form to modify the rights
 	 *
 	 * @return string
 	 */
-	private function actionChange() {
+	protected function actionChange() {
 
 		$strReturn = "";
 		$strSystemID = "";
@@ -305,7 +265,7 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveRights() {
+	protected function actionSaveRights() {
 		$strReturn = "";
 		//Collecting & sorting the passed values
 		$strSystemid = $this->getSystemid();
@@ -382,6 +342,14 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 
 			//Pass to right-class
 			if($this->objRights->setRights($arrReturn, $strSystemid ))	{
+                
+                //Redirecting
+                $strUrlHistory = $this->getHistory(0);
+                $arrHistory = explode("&", $strUrlHistory);
+                if($arrHistory[1] != "module=rights") {
+                    $this->adminReload(_indexpath_."?".$this->getHistory(0));
+                }
+                    
 				return "";
 			}
 			else

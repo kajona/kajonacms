@@ -128,7 +128,8 @@ class class_request_dispatcher {
                     }
                     else {
                         $objConcreteModule = $objModuleRequested->getAdminInstanceOfConcreteModule();
-                        $objConcreteModule->action($strAction);
+                        //$objConcreteModule->action($strAction);
+                        $objConcreteModule->action(); //FIXME: action always set via the internal handler?
                         $strReturn = $objConcreteModule->getModuleOutput();
                         
                         //React, if admin was opened by the portaleditor
@@ -216,6 +217,8 @@ class class_request_dispatcher {
                 }
             }
             else {
+                if($strModule == "pages")
+                    $strAction = ""; //FIXME: action always set via the internal handler?
                 $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
                 $strReturn = $objModuleRequested->action($strAction);
             }

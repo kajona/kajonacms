@@ -12,6 +12,7 @@
  * Serves xml-requests, e.g. saves a sent comment
  *
  * @package modul_postacomment
+ * @author sidler@mulchprod.de
  */
 class class_modul_postacomment_portal_xml extends class_portal implements interface_xml_portal {
 
@@ -25,26 +26,10 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_postacomment";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _postacomment_modul_id_;
 		$arrModule["modul"]				= "postacomment";
 
 		parent::__construct($arrModule, array());
-	}
-
-
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "savepost")
-            $strReturn .= $this->actionSavePost();
-
-        return $strReturn;
 	}
 
 
@@ -54,7 +39,7 @@ class class_modul_postacomment_portal_xml extends class_portal implements interf
 	 *
 	 * @return string
 	 */
-	private function actionSavePost() {
+	protected function actionSavePost() {
 	    $strReturn = "";
 
 	    $strXMLContent = "";

@@ -12,6 +12,7 @@
  * This class provides the user and groupmanagement
  *
  * @package modul_user
+ * @author sidler@mulchprod.de
  */
 class class_modul_user_admin extends class_admin implements interface_admin {
 
@@ -25,10 +26,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     public function __construct() {
         $arrModul = array();
         $arrModul["name"] 			= "modul_user";
-        $arrModul["author"] 		= "sidler@mulchprod.de";
         $arrModul["moduleId"] 		= _user_modul_id_;
         $arrModul["modul"]			= "user";
-        $arrModul["table"]			= _dbprefix_."user";
 
         //base class
         parent::__construct($arrModul);

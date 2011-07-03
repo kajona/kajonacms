@@ -82,31 +82,10 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         //stats may consume a lot of memory, increase max mem limit
         if (class_carrier::getInstance()->getObjConfig()->getPhpIni("memory_limit") < 30)
 			@ini_set("memory_limit", "60M");
-	}
-
-	/**
-	 * Action-block invoking all later actions
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		if($strAction == "")
-		    $strAction = "statsCommon";
-
-        //In every case, we should generate the date-selector
-        $strReturn .= $this->processDates();
-
-        //And now we have to load the requested plugin
-        $strReturn .= $this->loadRequestedPlugin($strAction);
         
-		$this->strOutput = $strReturn;
+        $this->setAction("list");
 	}
 
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -128,7 +107,21 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 	}
 
 
-// --- Allgemein ----------------------------------------------------------------------------------------
+    // --- commons ----------------------------------------------------------------------------------------
+    
+    protected function actionList() {
+        //In every case, we should generate the date-selector
+        $strReturn = $this->processDates();
+
+        $strAction = $this->getParam("action");
+        if($strAction == "")
+		    $strAction = "statsCommon";
+        
+        //And now we have to load the requested plugin
+        $strReturn .= $this->loadRequestedPlugin($strAction);
+        
+        return $strReturn;
+    }
 
     /**
      * Loads the given plugin, i.e. the given report.
@@ -141,8 +134,6 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            
-            
             
             $objFilesystem = new class_filesystem();
             $arrPlugins = $objFilesystem->getFilelist(_adminpath_."/statsreports", ".php");
@@ -167,7 +158,7 @@ class class_modul_stats_admin extends class_admin implements interface_admin {
 
 
 
-// --- Datumsfunktionen ---------------------------------------------------------------------------------
+    // --- date handling ---------------------------------------------------------------------------------
 
     /**
      * Creates a small form to set the date-intervall of the current report

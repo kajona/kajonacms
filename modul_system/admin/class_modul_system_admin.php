@@ -12,6 +12,7 @@
  * Class to handle infos about the system and to set systemwide properties
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_admin extends class_admin implements interface_admin {
 
@@ -25,25 +26,15 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"]		 		= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["modul"]				= "system";
-		$arrModul["table"]				= _dbprefix_."system_module";
 
 		parent::__construct($arrModul);
+        
+        if($this->getAction() == "list")
+            $this->setAction("moduleList");
 	}
 
-	/**
-	 * Overwrites the default fallback action
-	 *
-	 * @param stirng $strAction
-	 */
-	public function action($strAction = "") {
-		if($strAction == "")
-			$strAction = "moduleList";
-
-        parent::action($strAction);
-	}
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();

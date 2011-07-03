@@ -12,6 +12,7 @@
  * Admin class of the postacomment-module. Responsible for listing posts and organizing them
  *
  * @package modul_postacomment
+ * @author sidler@mulchprod.de
  */
 class class_modul_postacomment_admin extends class_admin implements interface_admin {
 
@@ -20,61 +21,16 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 *
 	 */
 	public function __construct() {
+        $arrModul = array();
 		$arrModul["name"] 				= "modul_postacomment";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _postacomment_modul_id_;
-		$arrModul["table"] 			    = _dbprefix_."postacomment";
 		$arrModul["modul"]				= "postacomment";
 
 		//Base class
 		parent::__construct($arrModul);
 	}
 
-	/**
-	 * Action block to control the class
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-	    if($strAction == "")
-	       $strAction = "list";
-
-	    try {
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-
-    		if($strAction == "editPost")
-    			$strReturn = $this->actionEditPost();
-    		if($strAction == "savePost") {
-    		    if($this->validateForm()) {
-    			    $strReturn = $this->actionSavePost();
-    			    if($strReturn == "") {
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getParam("pe") == "1" ? "peClose=".$this->getParam("pe") : "")));
-    			    }
-    		    }
-    		    else {
-   		            $strReturn = $this->actionEditPost();
-    		    }
-    		}
-    		if($strAction == "deletePost") {
-    			$strReturn = $this->actionDeletePost();
-    			if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-	    }
-	    catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
-	}
-
-	public function getOutputContent() {
-		return $this->strOutput;
-	}
+	
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -104,7 +60,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strReturn = "";
@@ -125,8 +81,7 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
             $strReturn .= $this->objToolkit->divider();
 
     		//Load all posts
-		    $objPost = new class_modul_postacomment_post();
-
+            $objArraySectionIterator = null;
     		if($this->getParam("filterId") != "" && validateSystemid($this->getParam("filterId"))) {
     			$objArraySectionIterator = new class_array_section_iterator(class_modul_postacomment_post::getNumberOfPostsAvailable(false, $this->getParam("filterId")));
     			$objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -206,22 +161,23 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 *
 	 * @return string, "" in case of success
 	 */
-	private function actionDeletePost() {
+	protected function actionDeletePost() {
 	    $strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			if($this->getParam("postacommentDeleteFinal") == "") {
 			    $objPost = new class_modul_postacomment_post($this->getSystemid());
-				$strName = $objPost->getStrTitle();
 				$strReturn .= $this->objToolkit->warningBox($objPost->getStrTitle().$this->getText("postacomment_delete_question")
 				               ."<br /><a href=\""._indexpath_."?admin=1&amp;module=".$this->arrModule["modul"]."&amp;action=deletePost&amp;systemid="
 				               .$this->getSystemid().($this->getParam("pe") == "" ? "" : "&amp;peClose=".$this->getParam("pe"))."&amp;postacommentDeleteFinal=1\">"
-				               .$this->getText("postacomment_delete_link"));
+				               .$this->getText("commons_delete"));
 			}
 			elseif($this->getParam("postacommentDeleteFinal") == "1") {
                 $objPost = new class_modul_postacomment_post($this->getSystemid());
 			    if(!$objPost->deletePost())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
+                
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
 		else
@@ -236,25 +192,17 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionEditPost() {
+	protected function actionEditPost() {
 	    $strReturn = "";
 	    //Rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
             $objPost = new class_modul_postacomment_post($this->getSystemid());
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "savePost", ($this->getParam("pe") == "1" ? "pe=".$this->getParam("pe") : "")));
-
-            if(count($this->getValidationErrors()) == 0) {
-                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("commons_name"), $objPost->getStrUsername() );
-                $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $objPost->getStrTitle() );
-                $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $objPost->getStrComment() );
-            }
-            else {
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "savePost");
-                $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("commons_name"), $this->getParam("postacomment_username") );
-                $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $this->getParam("postacomment_title") );
-                $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $this->getParam("postacomment_comment"));
-            }
+            $strReturn .= $this->objToolkit->getValidationErrors($this, "savePost");
+            $strReturn .= $this->objToolkit->formInputText("postacomment_username", $this->getText("commons_name"), $this->getParam("postacomment_username") != "" ?  $this->getParam("postacomment_username") : $objPost->getStrUsername());
+            $strReturn .= $this->objToolkit->formInputText("postacomment_title", $this->getText("postacomment_title"), $this->getParam("postacomment_title") != "" ? $this->getParam("postacomment_title") : $objPost->getStrTitle() );
+            $strReturn .= $this->objToolkit->formInputTextArea("postacomment_comment", $this->getText("postacomment_comment"), $this->getParam("postacomment_comment") != "" ? $this->getParam("postacomment_comment") : $objPost->getStrComment());
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
@@ -273,8 +221,12 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
 	 *
 	 * @return string, "" in case of success
 	 */
-	private function actionSavePost() {
+	protected function actionSavePost() {
 
+        if(!$this->validateForm()) {
+            return $this->actionEditPost();
+        }
+        
 	    $strReturn = "";
 	    if($this->objRights->rightEdit($this->getSystemid())) {
         	$objPost = new class_modul_postacomment_post($this->getSystemid());
@@ -283,6 +235,8 @@ class class_modul_postacomment_admin extends class_admin implements interface_ad
         	$objPost->setStrTitle($this->getParam("postacomment_title"));
         	if(!$objPost->updateObjectToDb())
         	    throw new class_exception("Error saving post to db", class_exception::$level_ERROR);
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list", ($this->getParam("pe") == "1" ? "peClose=".$this->getParam("pe") : "")));
 	    }
 		else
 			$strReturn .= $this->getText("commons_error_permissions");

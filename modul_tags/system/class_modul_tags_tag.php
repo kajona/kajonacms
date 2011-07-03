@@ -102,7 +102,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
 
         //delete the record itself
         $strQuery2 = "DELETE FROM "._dbprefix_."tags_tag WHERE tags_tag_id=?";
-	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, $this->getSystemid()))    {
+	    if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid())) )    {
 	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }

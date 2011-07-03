@@ -16,6 +16,7 @@
  *
  * @package modul_tags
  * @since 3.3.1.1
+ * @author sidler@mulchprod.de
  */
 class class_modul_tags_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -26,7 +27,6 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 	public function __construct() {
         $arrModul = array();
 		$arrModul["name"] 			= "modul_tags";
-		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _tags_modul_id_;
 		$arrModul["modul"]			= "tags";
 
@@ -34,33 +34,13 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 		parent::__construct($arrModul);
 	}
 
-	/**
-	 * Actionblock. Controls the further behaviour.
-	 *
-	 * @param string $strAction
-	 * @return string
-	 */
-	public function action($strAction = "") {
-        $strReturn = "";
-        if($strAction == "saveTag")
-            $strReturn = $this->actionSaveTag();
-        else if($strAction == "tagList")
-            $strReturn = $this->actionTagList();
-        else if($strAction == "removeTag")
-            $strReturn = $this->actionRemoveTag();
-        else if($strAction == "getTagsByFilter")
-            $strReturn = $this->actionGetTagsByFilter();
-
-
-        return $strReturn;
-	}
-
+	
     /**
      * Creates a new tag (if not already existing) and assigns the tag to the passed systemrecord
      *
      * @return string
      */
-    private function actionSaveTag() {
+    protected function actionSaveTag() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strTagname = $this->getParam("tagname");
@@ -108,7 +88,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
      *
      * @return string
      */
-    private function actionTagList() {
+    protected function actionTagList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
@@ -137,7 +117,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
      *
      * @return string
      */
-    private function actionRemoveTag() {
+    protected function actionRemoveTag() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strTargetSystemid = $this->getParam("targetid");
@@ -169,7 +149,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
      *
      * @return string
      */
-    private function actionGetTagsByFilter() {
+    protected function actionGetTagsByFilter() {
         $strReturn = "<tags>";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
              $strFilter = $this->getParam("filter");

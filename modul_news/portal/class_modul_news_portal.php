@@ -11,8 +11,10 @@
  * Portal-class of the news. Handles thd printing of news lists / detail
  *
  * @package modul_news
+ * @author sidler@mulchprod.de
  */
 class class_modul_news_portal extends class_portal implements interface_portal {
+    
 	/**
 	 * Constructor
 	 *
@@ -21,38 +23,18 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	public function __construct($arrElementData) {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_news";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
-		$arrModule["table"] 			= _dbprefix_."news";
-		$arrModule["table2"]			= _dbprefix_."news_category";
-		$arrModule["table3"]			= _dbprefix_."news_member";
 		$arrModule["moduleId"] 			= _news_modul_id_;
 		$arrModule["modul"]				= "news";
 
 		parent::__construct($arrModule, $arrElementData);
-	}
-
-	/**
-	 * Action-Block, decides what to do
-	 *
-	 * @return string
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		$strAction = "";
-
-		if($this->getParam("action") != "")
-		    $strAction = $this->getParam("action");
-
-		if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1)
-			$strReturn = $this->actionNewsdetail();
+        
+        $strAction = $this->getParam("action");
+        if ($strAction == "newsDetail" && $this->arrElementData["news_view"] == 1)
+            $this->setAction("newsDetail");
 		elseif($this->arrElementData["news_view"] == 0 || $strAction == "newsList")
-		    $strReturn = $this->actionList();
-
-		return $strReturn;
-
+		    $this->setAction("newsList");
 	}
 
-//---Aktionsfunktionen-----------------------------------------------------------------------------------
 
 	/**
 	 * Returns a list of news.
@@ -60,7 +42,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function actionList() {
+	protected function actionNewsList() {
 		$strReturn = "";
 		//Load news using the correct filter
 		$strFilterId = "";
@@ -148,7 +130,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 	 *
 	 * @return string
 	 */
-	public function actionNewsdetail() {
+	protected function actionNewsDetail() {
 		$strReturn = "";
 		if($this->objRights->rightView($this->getSystemid())) {
 			//Load record
@@ -164,6 +146,7 @@ class class_modul_news_portal extends class_portal implements interface_portal {
 				$arrNews["news_text"] = $objNews->getStrNewstext();
 
 	            //load template section with or without image?
+                $strTemplateID = "";
                 if($objNews->getStrImage() != "") {
                     $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_detail_image");
                     $arrNews["news_image"] = urlencode($objNews->getStrImage());
@@ -234,7 +217,6 @@ class class_modul_news_portal extends class_portal implements interface_portal {
      */
     private function isPostacommentOnTemplate($strTemplate) {
         $strTemplateID = $this->objTemplate->readTemplate("/modul_news/".$this->arrElementData["news_template"], "news_list");
-        $arrElements = $this->objTemplate->getElements($strTemplateID);
 
         return $this->objTemplate->containesPlaceholder($strTemplateID, "news_commentlist") || $this->objTemplate->containesPlaceholder($strTemplateID, "news_nrofcomments");
     }

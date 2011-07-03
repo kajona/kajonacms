@@ -13,6 +13,7 @@
  * given page.
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_content_admin extends class_admin implements interface_admin {
 	/**
@@ -22,22 +23,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_pages_elemente";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "pages";
 
 		//Calling the base class
 		parent::__construct($arrModule);
-	}
-
-	/**
-	 * Action-Block
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-		$strReturn = "";
-		//If theres anything to unlock, do it now
+        
+        //If theres anything to unlock, do it now
 		if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
             $objLockmanager->unlockRecord();
@@ -46,67 +38,25 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
             $objLockmanager->unlockRecord(true);
 		}
-
-		if($this->getSystemid() == "")
-		    return $this->getText("commons_error_permissions");
-
-		if($strAction == "")
-			$strAction = "list";
-
-		try {
-
-    		if($strAction == "list")
-    			$strReturn = $this->actionList();
-    		if($strAction == "newElement")
-    			$strReturn = $this->actionNewElement();
-    		if($strAction == "editElement")
-    			$strReturn = $this->actionEditElement();
-    		if($strAction == "saveElement") {
-    			$strReturn = $this->actionSaveElement();
-    			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
-    		}
-    		if($strAction == "deleteElement")
-    			$strReturn = $this->actionDeleteElement();
-    		if($strAction == "deleteElementFinal") {
-    			$strReturn = $this->actionDeleteElementFinal();
-    			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getParam("deleteid").($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    		}
-    		if($strAction == "elementSortUp") {
-    			$strReturn = $this->actionShiftElement("up");
-    			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    		}
-    		if($strAction == "elementSortDown") {
-    			$strReturn = $this->actionShiftElement("down");
-    			if($strReturn == "")
-    				$this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-    		}
-            if($strAction == "copyElement") {
-                $strReturn = $this->actionCopyElement();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
-            }
-
-    		//add a pathnavigation when not in pe mode
-    		if($this->getParam("pe") != 1) {
-    		    $strReturn = $this->getPathNavigation().$strReturn;
-    		}
-
-		}
-		catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-
-		$this->strOutput = $strReturn;
 	}
 
+    /**
+     * Adds the global path-navigation to the output created by the module
+     * 
+     * @return string
+     * @overwrites
+     */
 	public function getOutputContent() {
+        if($this->getParam("pe") != 1) {
+            $this->strOutput = $this->getPathNavigation().$this->strOutput;
+        }
 		return $this->strOutput;
 	}
 
+    /**
+     * Adds the current page-name to the module-title
+     * @return string 
+     */
 	public function getOutputModuleTitle() {
 		$objPage = new class_modul_pages_page($this->getSystemid());
 		if($objPage->getStrName() == "")
@@ -124,7 +74,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionList() {
+	protected function actionList() {
 		$strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
             //get infos about the page
@@ -238,9 +188,6 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 							//The Icons to sort the list and to copy the element
     		    			$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "copyElement", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_copy"), "icon_copy.gif"));
-							//$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortUp", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_hoch"), "icon_arrowUp.gif"));
-							//$strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "elementSortDown", "&systemid=".$objOneElementOnPage->getSystemid(), "", $this->getText("element_runter"), "icon_arrowDown.gif"));
-
 
 							//The status-icons
     						$strActions .= $this->objToolkit->listStatusButton($objOneElementOnPage->getSystemid());
@@ -344,12 +291,11 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionNewElement($bitShowErrors = false) {
+	protected function actionNewElement($bitShowErrors = false) {
 		$strReturn = "";
         //check rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
     		//OK, here we go. So, what information do we have?
-    		$strParentPageSystemID = $this->getSystemid();
     		$strPlaceholderElement = $this->getParam("element");
     		//Now, load all infos about the requested element
     		$objElement = class_modul_pages_element::getElement($strPlaceholderElement);
@@ -376,7 +322,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionEditElement($bitShowErrors = false) {
+	protected function actionEditElement($bitShowErrors = false) {
 		$strReturn = "";
 		//check rights
 		if($this->objRights->rightEdit($this->getSystemid())) {
@@ -414,7 +360,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionSaveElement() {
+	protected function actionSaveElement() {
 		$strReturn = "";
 		//There are two modes - edit an new
 		//The element itself just knows the edit mode, so in case of new, we have to create a dummy element - before
@@ -587,6 +533,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//Loading the data of the corresp site
 			$objPage = new class_modul_pages_page($this->getPrevId());
 			$this->flushPageFromPagesCache($objPage->getStrName());
+            
+            $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
 
 		}
 		else  {
@@ -601,7 +549,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 *
 	 * @return string
 	 */
-	private function actionDeleteElement() {
+	protected function actionDeleteElement() {
 		$strReturn = "";
 		//Rights?
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -625,7 +573,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	 * @param string $strSystemid
 	 * @return string, "" in case of success
 	 */
-	public function actionDeleteElementFinal($strSystemid = "") {
+	protected function actionDeleteElementFinal($strSystemid = "") {
 		$strReturn = "";
 
 		if($strSystemid == "")
@@ -641,8 +589,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			    if(!class_modul_pages_pageelement::deletePageElement($strSystemid))
 			        throw new class_exception("Error deleting element from db", class_exception::$level_ERROR);
 
-				//save the prev_id
-				$this->setParam("deleteid", $strPrevId);
+                $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$strPrevId.($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 			}
 			else  {
 				$strReturn .= $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
@@ -655,32 +602,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 	}
 
 
-	/**
-	 * Shifts an element up or down
-	 * This is a special implementation, because we don't have the usual system_prev_id relations
-	 * Note: Could be optimized!
-	 *
-	 * @param string $strMode up || down
-	 * @param string $strSystemid
-	 * @return string "" in case of success
-	 */
-	private function actionShiftElement($strMode = "up", $strSystemid = "") {
-		$strReturn = "";
-		//Load the current Element
-		if($strSystemid == "")
-		    $strSystemid = $this->getSystemid();
-		//Create the objecet
-		$objElement = new class_modul_pages_pageelement($strSystemid);
-		return $objElement->setPosition($strSystemid, $strMode);
-	}
-
     /**
      * Provides a form to set up the params needed to copy a single element from one placeholder to another.
      * Collects the target language, the target page and the target placeholder, invokes the copy-procedure.
      *
      * @return string, "" in case of success
      */
-    private function actionCopyElement() {
+    protected function actionCopyElement() {
         $strReturn = "";
 
         if($this->objRights->rightEdit($this->getSystemid())) {
@@ -807,6 +735,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                 if($objNewElement->updateObjectToDb()) {
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
+                    
+                    $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                 }
                 else
                     throw new class_exception("Error copying the pageelement ".$objSourceElement->getSystemid(), class_exception::$level_ERROR);

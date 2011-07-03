@@ -612,6 +612,7 @@ abstract class class_admin {
      * into the response.
 	 *
 	 * @return string
+     * @deprecated handled by the internal action()
 	 */
 	protected function getOutputContent() {
 	    return $this->strOutput;
