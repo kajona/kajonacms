@@ -8,15 +8,22 @@
 ********************************************************************************************************/
 
 /**
- * Model for a user-group
- * Groups are not represented in the system-table
+ * Model for a user-group, can be based on any type of usersource
+ * Groups are NOT represented in the system-table.
  *
  * @package modul_user
  * @author sidler@mulchprod.de
  */
 class class_modul_user_group extends class_model implements interface_model  {
 
+    private $strSubsystem = "kajona";
     private $strName = "";
+    
+    /**
+     *
+     * @var interface_usersources_group
+     */
+    private $objSourceGroup;
 
 
     /**
@@ -28,8 +35,6 @@ class class_modul_user_group extends class_model implements interface_model  {
         $arrModul = array();
         $arrModul["name"] 				= "modul_user";
 		$arrModul["moduleId"] 			= _user_modul_id_;
-		$arrModul["table"]       		= _dbprefix_."user_group";
-		$arrModul["table2"]       		= _dbprefix_."user_group_members";
 		$arrModul["modul"]				= "user";
 
 		//base class
@@ -53,7 +58,7 @@ class class_modul_user_group extends class_model implements interface_model  {
      * @return string
      */
     protected function getObjectDescription() {
-        return "user group ".$this->getStrName();
+        return "user group ".$this->getStrSystemid();
     }
 
     /**
@@ -66,6 +71,7 @@ class class_modul_user_group extends class_model implements interface_model  {
 
         if(count($arrRow) > 0) {
             $this->setStrName($arrRow["group_name"]);
+            $this->setStrSubsystem($arrRow["group_subsystem"]);
         }
     }
 
@@ -77,20 +83,33 @@ class class_modul_user_group extends class_model implements interface_model  {
     public function updateObjectToDb($strPrevId = false) {
         //mode-splitting
         if($this->getSystemid() == "") {
-            class_logger::getInstance()->addLogRow("saved new group ".$this->getStrName(), class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("saved new group subsystem ".$this->getStrSubsystem()." / ".$this->getStrSystemid(), class_logger::$levelInfo);
             $strGrId = generateSystemid();
             $this->setSystemid($strGrId);
             $strQuery = "INSERT INTO "._dbprefix_."user_group
-                          (group_id, group_name) VALUES
-                          (?, ?)";
-            return $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrName()));
+                          (group_id, group_subsystem, group_name) VALUES
+                          (?, ?, ?)";
+            
+            
+            $bitReturn = $this->objDB->_pQuery($strQuery, array($strGrId, $this->getStrSubsystem(), $this->getStrName()));
+            
+            //create the new instance on the remote-system
+            $objSources = new class_modul_user_sourcefactory();
+            $objProvider = $objSources->getUsersource($this->getStrSubsystem());
+            $objTargetGroup = $objProvider->getNewGroup();
+            $objTargetGroup->updateObjectToDb();
+            $objTargetGroup->setNewRecordId($this->getSystemid());
+            $this->objDB->flushQueryCache();
+            
+            return $bitReturn;
         }
         else {
             class_logger::getInstance()->addLogRow("updated group ".$this->getStrName(), class_logger::$levelInfo);
             $strQuery = "UPDATE "._dbprefix_."user_group
-                            SET group_name=?
+                            SET group_subsystem=?,
+                                group_name=?
                             WHERE group_id=?";
-            return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
+            return $this->objDB->_pQuery($strQuery, array($this->getStrSubsystem(), $this->getStrName(), $this->getSystemid()));
         }
     }
 
@@ -103,7 +122,7 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 * @static
 	 */
 	public static function getAllGroups($intStart = false, $intEnd = false) {
-		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group";
+		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group ORDER BY group_name";
         
         if($intStart !== false && $intEnd !== false)
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array(), $intStart, $intEnd);
@@ -117,21 +136,6 @@ class class_modul_user_group extends class_model implements interface_model  {
 	}
     
     /**
-     * Loads a group by its name, returns null of not found
-     * @param string $strName
-     * @return class_modul_user_group 
-     */
-    public static function getGroupByName($strName) {
-		$strQuery = "SELECT group_id FROM "._dbprefix_."user_group WHERE group_name = ?";
-        
-        $arrIds = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
-		if(isset($arrIds["group_id"]) && validateSystemid($arrIds["group_id"]))
-            return new class_modul_user_group($arrIds["group_id"]);
-
-		return null;
-	}
-
-    /**
      * Fetches the number of groups available
      * @return int
      */
@@ -140,6 +144,104 @@ class class_modul_user_group extends class_model implements interface_model  {
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }
+    
+    /**
+     * Returns the number of members of the current group.
+     * @return int
+     */
+    public function getNumberOfMembers() {
+        $this->loadSourceObject();
+        return $this->objSourceGroup->getNumberOfMembers();
+    }
+
+	/**
+	 * Deletes the given group
+	 *
+	 * @return bool
+	 */
+	public function deleteGroup() {
+	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
+        
+        //Delete related group
+        $this->getObjSourceGroup()->deleteGroup();
+        
+        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
+        $bitReturn = $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        $this->doAdditionalCleanupsOnDeletion($this->getSystemid());
+        return $bitReturn;
+	}
+
+    /**
+     * Loads the mapped source-object
+     */
+    private function loadSourceObject() {
+        if($this->objSourceGroup == null) {
+            $objUsersources = new class_modul_user_sourcefactory();
+            $this->setObjSourceGroup($objUsersources->getSourceGroup($this));
+        }
+    }
+    
+    /**
+     * Loads a group by its name, returns null of not found
+     * @param string $strName
+     * @return class_modul_user_group 
+     * 
+     */
+    public static function getGroupByName($strName) {
+		$objFactory = new class_modul_user_sourcefactory();
+        return $objFactory->getGroupByName($strName);
+	}
+	
+
+    // --- GETTERS / SETTERS --------------------------------------------------------------------------------
+    public function getStrSubsystem() {
+        return $this->strSubsystem;
+    }
+
+    public function setStrSubsystem($strSubsystem) {
+        $this->strSubsystem = $strSubsystem;
+    }
+
+    /**
+     *
+     * @return interface_usersources_group
+     */
+    public function getObjSourceGroup() {
+        $this->loadSourceObject();
+        return $this->objSourceGroup;
+    }
+
+    public function setObjSourceGroup($objSourceGroup) {
+        $this->objSourceGroup = $objSourceGroup;
+    }
+
+    public function getStrName() {
+        return $this->strName;
+    }
+
+    public function setStrName($strName) {
+        $this->strName = $strName;
+    }
+
+            
+    
+    
+    //REMOVALS
+    
+    /**
+	 * Adds the given user to the groupsids passed
+	 *
+	 * @param class_modul_user_user $objUser
+	 * @param array $arrWantedGroupIds
+     * @deprecated
+     * FIXME remove
+	 */
+	public static function addUserToGroups($objUser, $arrWantedGroupIds) {
+	    throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
+	}
+    
+    
+
 
 	/**
 	 * Gets all Members off the specified group
@@ -151,10 +253,11 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 * @static
      * @deprecated will be replaces by class_modul_user_group::getAllMembers()
      * @see class_modul_user_group::getAllMembers()
+     * 
+     * FIXME remove
 	 */
 	public static function getGroupMembers($strGroupId, $intStart = false, $intEnd = false) {
-		$objGroup = new class_modul_user_group($strGroupId);
-		return $objGroup->getAllMembers($intStart, $intEnd);
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
     /**
@@ -164,24 +267,12 @@ class class_modul_user_group extends class_model implements interface_model  {
      * @param int $intEnd
 	 * @return class_modul_user_user
      * @see class_modul_user_group::getGroupMembers
+     * @deprecated
+     * 
+     * FIXME remove
      */
     public function getAllMembers($intStart = false, $intEnd = false) {
-        $strQuery = "SELECT user_id FROM "._dbprefix_."user,
-									"._dbprefix_."user_group_members
-								WHERE group_member_group_id=?
-									AND user_id = group_member_user_id
-                                  ORDER BY user_name ASC  ";
-
-        if($intStart !== false && $intEnd !== false)
-            $arrIds = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
-        else
-            $arrIds = $this->objDB->getPArray($strQuery, array($this->getSystemid()));
-
-		$arrReturn = array();
-		foreach($arrIds as $arrOneId)
-		    $arrReturn[] = new class_modul_user_user($arrOneId["user_id"]);
-
-		return $arrReturn;
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
     }
 
     /**
@@ -189,15 +280,13 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 *
 	 * @param string $strGroupId
 	 * @return int
+     * @deprecated
 	 * @static
+     * 
+     * FIXME remove
 	 */
 	public static function getGroupMembersCount($strGroupId) {
-		$strQuery = "SELECT COUNT(*) FROM "._dbprefix_."user,
-									"._dbprefix_."user_group_members
-								WHERE group_member_group_id=?
-									AND user_id = group_member_user_id";
-		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strGroupId));
-        return $arrRow["COUNT(*)"];
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
 	/**
@@ -205,16 +294,12 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 *
 	 * @param class_modul_user_user $objUserid
 	 * @return bool
+     * @deprecated
+     * 
+     * FIXME remove
 	 */
 	public function isUserMemberInGroup($objUser) {
-	    if($objUser->getSystemid() == "" )
-	       return false;
-	    $strQuery = "SELECT COUNT(*)
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id=?
-						AND group_member_group_id=?";
-	    $arrRow = $this->objDB->getPRow($strQuery, array($objUser->getSystemid(), $this->getSystemid())   );
-	    return ($arrRow["COUNT(*)"] != 0);
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 	
 	/**
@@ -222,21 +307,12 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 *
 	 * @param string $strUserId
 	 * @return array
+     * @deprecated
+     * 
+     * FIXME remove
 	 */
 	public static function getAllGroupIdsForUser($strUserId) {
-	    if($strUserId == "")
-	       return array(_guests_group_id_);
-	       
-	    $strQuery = "SELECT group_member_group_id 
-						FROM "._dbprefix_."user_group_members
-						WHERE group_member_user_id=?";
-						
-	    $arrGroups = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUserId));
-	    $arrReturn = array();
-	    foreach ($arrGroups as $arrOneGroup)
-	        $arrReturn[] = $arrOneGroup["group_member_group_id"];
-	       
-	    return $arrReturn;   
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
     /**
@@ -244,20 +320,24 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 *
 	 * @param string $strUserId
 	 * @return string
+     * @deprecated
+     * 
+     * FIXME remove
 	 */
 	public static function getAllGroupIdsForUserAsString($strUserId) {
-        $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserId);
-	    return implode(",", $arrGroups);
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
 	/**
 	 * Deletes all users from the current group
 	 *
 	 * @return bool
+     * @deprecated
+     * 
+     * FIXME remove
 	 */
     public function deleteAllUsersFromCurrentGroup() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_members WHERE group_member_group_id=?";
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
 	/**
@@ -265,48 +345,12 @@ class class_modul_user_group extends class_model implements interface_model  {
 	 *
 	 * @param class_modul_user_user $objUser
 	 * @return bool
+     * @deprecated
+     * FIXME remove
 	 */
 	public function deleteUserFromCurrentGroup($objUser) {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_members
-						WHERE group_member_group_id=?
-						AND group_member_user_id=?";
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
+        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
-	/**
-	 * Deletes the given group
-	 *
-	 * @return bool
-	 */
-	public function deleteGroup() {
-	    class_logger::getInstance()->addLogRow("deleted group with id ".$this->getSystemid(), class_logger::$levelInfo);
-        $this->deleteAllUsersFromCurrentGroup();
-        $strQuery = "DELETE FROM "._dbprefix_."user_group WHERE group_id=?";
-        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
-	}
-
-	/**
-	 * Adds the given user to the groupsids passed
-	 *
-	 * @param class_modul_user_user $objUser
-	 * @param array $arrWantedGroupIds
-	 */
-	public static function addUserToGroups($objUser, $arrWantedGroupIds) {
-	    foreach($arrWantedGroupIds as $strOneGroupId) {
-    	    $strQuery = "INSERT INTO "._dbprefix_."user_group_members
-						   (group_member_group_id, group_member_user_id) VALUES
-							(?, ?)";
-    		class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strOneGroupId, $objUser->getSystemid()));
-	    }
-	}
-
-// --- GETTERS / SETTERS --------------------------------------------------------------------------------
-    public function getStrName() {
-        return $this->strName;
-    }
-
-    public function setStrName($strName) {
-        $this->strName = $strName;
-    }
 }
 ?>

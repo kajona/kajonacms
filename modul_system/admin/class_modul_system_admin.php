@@ -91,8 +91,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
     protected function actionModuleStatus() {
         //status: for setting the status of modules, you have to be member of the admin-group
         $objUser = new class_modul_user_user($this->objSession->getUserID());
-        $objAdminGroup = new class_modul_user_group(_admins_group_id_);
-        if($this->objRights->rightEdit($this->getSystemid()) && $objAdminGroup->isUserMemberInGroup($objUser)) {
+        $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
+        if($this->objRights->rightEdit($this->getSystemid()) &&  in_array(_admins_group_id_, $arrGroups)) {
             $this->setStatus();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
         }
@@ -135,8 +135,8 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                     */
                     //status: for setting the status of modules, you have to be member of the admin-group
                     $objUser = new class_modul_user_user($this->objSession->getUserID());
-                    $objAdminGroup = new class_modul_user_group(_admins_group_id_);
-		   		    if($this->objRights->rightEdit($intModuleSystemID) && $objAdminGroup->isUserMemberInGroup($objUser)) {
+                    $arrGroups = $objUser->getObjSourceUser()->getGroupIdsForUser();
+                    if($this->objRights->rightEdit($objSingleModule->getSystemid()) && in_array(_admins_group_id_, $arrGroups)) {
 		   		        if($objSingleModule->getStrName() == "system")
 		   			        $strActions .= $this->objToolkit->listButton(getLinkAdmin("system", "moduleList", "", "", $this->getText("modul_status_system"), "icon_enabled.gif"));
 		   		        else if($objSingleModule->getStatus() == 0)

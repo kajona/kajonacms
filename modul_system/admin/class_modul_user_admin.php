@@ -15,6 +15,8 @@
  * @author sidler@mulchprod.de
  */
 class class_modul_user_admin extends class_admin implements interface_admin {
+    
+    private $STR_FILTER_SESSION_KEY = "USERLIST_FILTER_SESSION_KEY";
 
     //languages, the admin area could display (texts)
     protected $arrLanguages = array();
@@ -33,62 +35,24 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         parent::__construct($arrModul);
 
         $this->arrLanguages = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
+        
+        //backwards compatibility
+        if($this->getAction() == "edit")
+            $this->setAction("editUser");
+        
+        if($this->getParam("doFilter") != "") {
+            $this->objSession->setSession($this->STR_FILTER_SESSION_KEY, $this->getParam("userlist_filter"));
+            $this->setParam("pv", 1);
+        }
     }
 
-    /**
-	 * Action-Block, decides what to do
-	 *
-	 * @param string $strAction
-	 */
-    public function action($strAction = "") {
-        if($strAction == "")
-            $strAction = "list";
-
-        $strReturn = "";
-        try {
-            if($strAction == "save") {
-                if($this->validateForm() & $this->checkAdditionalNewData()) {
-                    $strReturn = $this->actionSave();
-                    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-                }
-                else {
-                    $strReturn = $this->actionNew("new");
-                }
-            }
-            else if($strAction == "saveedit") {
-                if($this->validateForm() & $this->checkAdditionalEditData()) {
-                    $strReturn = $this->actionSaveEdit();
-                    if($strReturn == "")
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-                }
-                else {
-                    $strReturn = $this->actionNew("edit");
-                }
-            }
-            else if($strAction == "membershipsave") {
-                $strReturn = $this->actionSaveMembership();
-                if($strReturn == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-            }
-            else
-                $strReturn = parent::action($strAction);
-
-        }
-        catch (class_exception $objException) {
-            $objException->processException();
-            $strReturn .= "An internal error occured: ".$objException->getMessage();
-        }
-
-        $this->strOutput = $strReturn;
-    }
 
     protected function getOutputModuleNavi() {
         $arrReturn = array();
         $arrReturn[] = array("right", getLinkAdmin("right", "change", "&changemodule=".$this->arrModule["modul"],  $this->getText("commons_module_permissions"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("view", getLinkAdmin($this->arrModule["modul"], "list", "", $this->getText("user_liste"), "", "", true, "adminnavi"));
-        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), "", "", true, "adminnavi"));
+        $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getText("user_anlegen"), "", "", true, "adminnavi"));
         $arrReturn[] = array("", "");
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupList", "", $this->getText("gruppen_liste"), "", "", true, "adminnavi"));
         $arrReturn[] = array("edit", getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), "", "", true, "adminnavi"));
@@ -101,25 +65,74 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     public function getRequiredFields() {
         $strAction = $this->getAction();
         $arrReturn = array();
-        if($strAction == "save") {
-            $arrReturn["username"] = "string";
-            $arrReturn["email"] = "email";
-            $arrReturn["passwort"] = "string";
-            $arrReturn["passwort2"] = "string";
+        if($strAction == "saveUser") {
+            
+            if($this->getSystemid() != "" && $this->getSystemid() != $this->objSession->getUserID())
+                $arrReturn["user_username"] = "string";
+            
+            //merge with fields from source
+            $objBlankUser = null;
+            if($this->getSystemid() != "") {
+                $objUser = new class_modul_user_user($this->getSystemid());
+                $objBlankUser = $objUser->getObjSourceUser();
+            }
+            else {
+                $objUsersources = new class_modul_user_sourcefactory();
+                $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
+                $objBlankUser = $objSubsystem->getNewUser();
+            }
+            if($objBlankUser != null) {
+                $arrFields = $objBlankUser->getEditFormEntries();
+                /* @var $objOneField class_usersources_form_entry */
+                foreach($arrFields as $objOneField) {
+                    if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                        $arrReturn["user_".$objOneField->getStrName()] = "date";
+                    
+                    else if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                        $arrReturn["user_".$objOneField->getStrName()] = "email";
+                    
+                    else if($objOneField->getBitRequired() )
+                        $arrReturn["user_".$objOneField->getStrName()] = "string";
+                    
+                }
+            }
+            
         }
-        if($strAction == "saveedit") {
-            //$arrReturn["username"] = "string";
-            $arrReturn["email"] = "email";
-        }
-        if($strAction == "groupsave" || $strAction == "groupsaveedit") {
-            $arrReturn["gruppename"] = "string";
+        if($strAction == "groupSave" ) {
+            $arrReturn["group_name"] = "string";
+            
+            //merge with fields from source
+            $objBlankGroup = null;
+            if($this->getSystemid() != "") {
+                $objUser = new class_modul_user_group($this->getSystemid());
+                $objBlankGroup = $objUser->getObjSourceGroup();
+            }
+            else {
+                $objUsersources = new class_modul_user_sourcefactory();
+                $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
+                $objBlankGroup = $objSubsystem->getNewGroup();
+            }
+            if($objBlankGroup != null) {
+                $arrFields = $objBlankGroup->getEditFormEntries();
+                /* @var $objOneField class_usersources_form_entry */
+                foreach($arrFields as $objOneField) {
+                    if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                        $arrReturn["group_".$objOneField->getStrName()] = "date";
+                    
+                    else if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                        $arrReturn["group_".$objOneField->getStrName()] = "email";
+                    
+                    else if($objOneField->getBitRequired() )
+                        $arrReturn["group_".$objOneField->getStrName()] = "string";
+                    
+                }
+            }
         }
 
         return $arrReturn;
     }
 
-//*"*****************************************************************************************************
-//--USER-Mgmt--------------------------------------------------------------------------------------------
+    //--USER-Mgmt----------------------------------------------------------------------------------------
 
 
     /**
@@ -130,49 +143,64 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     protected function actionList() {
         $strReturn = "";
         if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+            $strReturn = "";
+            
+            //add a filter-form
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"]), "list");
+            $strReturn .= $this->objToolkit->formInputText("userlist_filter", $this->getText("user_username"), $this->objSession->getSession($this->STR_FILTER_SESSION_KEY));
+            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("userlist_filter"));
+            $strReturn .= $this->objToolkit->formInputHidden("doFilter", "1");
+            $strReturn .= $this->objToolkit->formClose();
+            $strReturn .= $this->objToolkit->divider();
 
-            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers());
+            $objArraySectionIterator = new class_array_section_iterator(class_modul_user_user::getNumberOfUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY)));
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
             $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-            $objArraySectionIterator->setArraySection(class_modul_user_user::getAllUsers($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+            $objArraySectionIterator->setArraySection(class_modul_user_user::getAllUsers($this->objSession->getSession($this->STR_FILTER_SESSION_KEY), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
     		$arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "list");
             $arrUsers = $arrPageViews["elements"];
 
-            $strReturn = $this->objToolkit->listHeader();
-
+            $strReturn .= $this->objToolkit->listHeader();
+            $objUsersources = new class_modul_user_sourcefactory();
 
             $intI = 0;
+            /* @var $objOneUser class_modul_user_user */
             foreach ($arrUsers as $objOneUser) 	{
                 $strActions = "";
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "edit", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
-                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "membership", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "editUser", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_bearbeiten"), "icon_pencil.gif"));
+                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objOneUser->getStrSubsystem())->getMembersEditable())
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
 
-                if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && checkEmailaddress($objOneUser->getStrEmail()))
-                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
+                if($objOneUser->getObjSourceUser()->isEditable() &&   $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && checkEmailaddress($objOneUser->getStrEmail()))
+                    $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
 
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
                     $strActions .= $this->objToolkit->listDeleteButton($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename()." ".$objOneUser->getStrName() .")", $this->getText("user_loeschen_frage"),
-                                   getLinkAdminHref($this->arrModule["modul"], "deleteFinal", "&userid=".$objOneUser->getSystemid()));
-                //new 2.1: the status icon
+                                   getLinkAdminHref($this->arrModule["modul"], "deleteUser", "&systemid=".$objOneUser->getSystemid()));
+                
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
                     if($objOneUser->getIntActive() == 1)
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_active"), "icon_enabled.gif"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_active"), "icon_enabled.gif"));
                     else
-                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "status", "&userid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "setUserStatus", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_inactive"), "icon_disabled.gif"));
                 }
                 if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"])))
-                    $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin());
+                    $strCenter = $this->getText("user_logins")." ".$objOneUser->getIntLogins()." ".$this->getText("user_lastlogin")." ".timeToString($objOneUser->getIntLastLogin(), false);
                 else
                     $strCenter = "";
                 
+                if(count($objUsersources->getArrUsersources()) > 1)
+                    $strCenter = $this->getText("user_list_source")." ".$objOneUser->getStrSubsystem()." ".$strCenter;
+                
                 $strReturn .= $this->objToolkit->listRow3($objOneUser->getStrUsername(). " (".$objOneUser->getStrForename() . " " . $objOneUser->getStrName().")", $strCenter, $strActions, getImageAdmin("icon_user.gif"), $intI++);
             }
+            
             //And one row to create a new one
             if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-                $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "new", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_new.gif")), "", $intI++);
+                $strReturn .= $this->objToolkit->listRow3("", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "newUser", "", $this->getText("user_anlegen"), $this->getText("user_anlegen"), "icon_new.gif")), "", $intI++);
+            
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
@@ -190,13 +218,13 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
 
-            $objUser = new class_modul_user_user($this->getParam("userid"));
+            $objUser = new class_modul_user_user($this->getSystemid());
 
             $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "sendPasswordFinal"));
             $strReturn .= $this->objToolkit->getTextRow($this->getText("user_resend_password_hint"));
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("username")." ".$objUser->getStrUsername());
-            $strReturn .= $this->objToolkit->formTextRow($this->getText("email")." ".$objUser->getStrEmail());
-            $strReturn .= $this->objToolkit->formInputHidden("userid", $this->getParam("userid"));
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("user_username")." ".$objUser->getStrUsername());
+            $strReturn .= $this->objToolkit->formTextRow($this->getText("user_email")." ".$objUser->getStrEmail());
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
@@ -208,12 +236,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     protected function actionSendPasswordFinal() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objUser = new class_modul_user_user($this->getParam("userid"));
+            $objUser = new class_modul_user_user($this->getSystemid());
 
             //add a one-time token and reset the password
             $strToken = generateSystemid();
-
-            $objUser->setStrPass("");
             $objUser->setStrAuthcode($strToken);
             $objUser->updateObjectToDb();
 
@@ -238,19 +264,19 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      *
      * @return string "" in case of success
      */
-    protected function actionStatus() {
+    protected function actionSetUserStatus() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $objUser = new class_modul_user_user($this->getParam("userid"));
+            $objUser = new class_modul_user_user($this->getSystemid());
             if($objUser->getIntActive() == 1)
                 $objUser->setIntActive(0);
             else
                 $objUser->setIntActive(1);
-            $objUser->setStrPass("");
+            
             if($objUser->updateObjectToDb())
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
             else
-                throw new class_exception("Error updating user ".$this->getParam("userid"), class_exception::$level_ERROR);
+                throw new class_exception("Error updating user ".$this->getSystemid(), class_exception::$level_ERROR);
 
             
         }
@@ -260,296 +286,324 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return $strReturn;
     }
 
-    protected function actionEdit() {
-        return $this->actionNew("edit");
+    protected function actionEditUser() {
+        return $this->actionNewUser("edit");
     }
     /**
 	 * Creates a new user or edits a already existing one
 	 *
 	 * @return string
 	 */
-    protected function actionNew($strAction = "new") {
+    protected function actionNewUser($strAction = "new") {
         $strReturn = "";
-        $bitSelf = false;
-        //Right: Right Edit or edit your own profile
-        $bitRight = false;
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $bitRight = true;
-        //Own profile?
-        if(!$bitRight && $this->getParam("userid")!= "") {
-            if($this->getParam("userid") == $this->objSession->getUserID() && _user_selfedit_ == "true") {
-                $bitRight = true;
-                $bitSelf = true;
-            }
-        }
-
-        if($bitRight) {
-            //Collecting all skins to offer them
-            $objFilesystem = new class_filesystem();
-            $arrSkins = $objFilesystem->getCompleteList(_skinpath_, array(), array(), array(".", ".."), true, false);
-            $arrSkinsTemp = $arrSkins["folders"];
-            $arrSkins = array();
-            foreach ($arrSkinsTemp as $strSkin)
-                $arrSkins[$strSkin]	= $strSkin;
-
-            //Fetching languages
-            $arrLang = array();
-            foreach ($this->arrLanguages as $strLanguage)
-                $arrLang[$strLanguage] = $this->getText("lang_".$strLanguage);
-            //Start the form
-            if($strAction == "new") {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "save"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "save");
-            }
-            else {
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveedit"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveedit");
-            }
-
-            if($this->getParam("userid") != "") {
-                $objUser = new class_modul_user_user($this->getParam("userid"));
-
-                //Form filled with the data
-                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
-                if(!$bitSelf)
-                    $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), ($this->getParam("username") != "" ? $this->getParam("username") : $objUser->getStrUsername()) );
-                $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
-                $strReturn .= $this->objToolkit->formInputPassword("passwort2", $this->getText("passwort2"));
-                $strReturn .= $this->objToolkit->formInputText("email", $this->getText("email"), ($this->getParam("email") != "" ? $this->getParam("email") : $objUser->getStrEmail() ));
-                $strReturn .= $this->objToolkit->formInputText("vorname", $this->getText("vorname") , ($this->getParam("vorname") != "" ? $this->getParam("vorname") : $objUser->getStrForename() ));
-                $strReturn .= $this->objToolkit->formInputText("nachname", $this->getText("nachname"), ($this->getParam("nachname") != "" ? $this->getParam("nachname") : $objUser->getStrName() ));
-                $strReturn .= $this->objToolkit->formInputText("strasse", $this->getText("strasse"), ($this->getParam("strasse") != "" ? $this->getParam("strasse") : $objUser->getStrStreet() ));
-                $strReturn .= $this->objToolkit->formInputText("plz", $this->getText("plz"), ($this->getParam("plz") != "" ? $this->getParam("plz") : $objUser->getStrPostal()));
-                $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), ($this->getParam("ort") != "" ? $this->getParam("ort") : $objUser->getStrCity()));
-                $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), ($this->getParam("tel") != "" ? $this->getParam("tel") : $objUser->getStrTel()));
-                $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), ($this->getParam("handy") != "" ? $this->getParam("handy") : $objUser->getStrMobile() ));
-
-                //Create the matching date
-                $objDate = null;
-                if($objUser->getLongDate() > 0)
-                    $objDate = new class_date($objUser->getLongDate());
-
-                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), $objDate);//("gebdatum", $this->getText("gebdatum"), ($this->getParam("gebdatum") != "" ? $this->getParam("gebdatum") : $objUser->getStrDate() ));
-                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
-                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
-                if(!$bitSelf) {
-                    $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("admin"), ( issetPost("skin") ? ($this->getParam("adminlogin") != "" ? true : false ) :  $objUser->getIntAdmin() ));
-                    $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), ( issetPost("skin") ? ($this->getParam("portal") != "" ? true : false) : $objUser->getIntPortal() ));
-                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), ( issetPost("skin") ?  ($this->getParam("aktiv") != "" ? true : false ) : $objUser->getIntActive() ));
+        
+        //parse userid-param to remain backwards compatible
+        if($this->getParam("systemid") == "" && validateSystemid($this->getParam("userid")))
+            $this->setSystemid($this->getParam("userid"));
+        
+        //load a few default values
+        //languages
+        $arrLang = array();
+        foreach ($this->arrLanguages as $strLanguage)
+            $arrLang[$strLanguage] = $this->getText("lang_".$strLanguage);
+        
+        //skins
+        $objFilesystem = new class_filesystem();
+        $arrSkinsTemp = $objFilesystem->getCompleteList(_skinpath_, array(), array(), array(".", ".."), true, false);
+        $arrSkinsTemp = $arrSkinsTemp["folders"];
+        $arrSkins = array();
+        foreach ($arrSkinsTemp as $strSkin)
+            $arrSkins[$strSkin]	= $strSkin;
+        
+        //access to usersources
+        $objUsersources = new class_modul_user_sourcefactory();
+        
+        
+        if($strAction == "new") {
+            //easy one - provide the form to create a new user. validate if there are multiple user-sources available 
+            //for creating new users
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                return $this->getText("commons_error_permissions");
+            
+            if($this->getParam("usersource") == "" || $objUsersources->getUsersource($this->getParam("usersource")) == null) {
+                $arrSubsystems = $objUsersources->getArrUsersources();
+                
+                $arrDD = array();
+                foreach($arrSubsystems as $strOneName) {
+                    $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
+                    if($objConcreteSubsystem->getCreationOfUsersAllowed())
+                        $arrDD[$strOneName] = $strOneName;
                 }
-                $strReturn .= $this->objToolkit->formInputHidden("userid", $objUser->getSystemid());
-                if($bitSelf)
-                    $strReturn .= $this->objToolkit->formInputHidden("modus", "selfedit");
+                
+                if(count($arrDD) > 1) {
+                    $strReturn  = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newUser"));
+                    $strReturn .= $this->objToolkit->formInputDropdown("usersource", $arrDD, $this->getText("user_usersource"));
+                    $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                    $strReturn .= $this->objToolkit->formClose();
+                    
+                    return $strReturn;
+                }
+                else
+                    $this->setParam("usersource", array_pop($arrDD));
+                    
             }
-            else {
-                //Blank form
+            
+            //here we go, the source is set up, create the form
+            $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
+            $objBlankUser = $objSubsystem->getNewUser();
+            if($objBlankUser != null) {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveUser");
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
-                $strReturn .= $this->objToolkit->formInputText("username", $this->getText("username"), $this->getParam("username"));
-                $strReturn .= $this->objToolkit->formInputPassword("passwort", $this->getText("passwort"));
-                $strReturn .= $this->objToolkit->formInputPassword("passwort2", $this->getText("passwort2"));
-                $strReturn .= $this->objToolkit->formInputText("email", $this->getText("email"), $this->getParam("email"));
-                $strReturn .= $this->objToolkit->formInputText("vorname", $this->getText("vorname"), $this->getParam("vorname"));
-                $strReturn .= $this->objToolkit->formInputText("nachname", $this->getText("nachname"), $this->getParam("nachname"));
-                $strReturn .= $this->objToolkit->formInputText("strasse", $this->getText("strasse"), $this->getParam("strasse"));
-                $strReturn .= $this->objToolkit->formInputText("plz", $this->getText("plz"), $this->getParam("plz"));
-                $strReturn .= $this->objToolkit->formInputText("ort", $this->getText("ort"), $this->getParam("ort"));
-                $strReturn .= $this->objToolkit->formInputText("tel", $this->getText("tel"), $this->getParam("tel"));
-                $strReturn .= $this->objToolkit->formInputText("handy", $this->getText("handy"), $this->getParam("handy"));
-                $strReturn .= $this->objToolkit->formDateSingle("gebdatum", $this->getText("gebdatum"), null);
+                //globally required
+                $strReturn .= $this->objToolkit->formInputText("user_username", $this->getText("user_username"), $this->getParam("user_username"));
+                
+                if($objBlankUser->isEditable()) {
+                    //Fetch the fields from the source
+                    $arrFields = $objBlankUser->getEditFormEntries();
+                    /* @var $objOneField class_usersources_form_entry */
+                    foreach($arrFields as $objOneField) {
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                            $strReturn .= $this->objToolkit->formDateSingle("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
+                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
+                            $strReturn .= $this->objToolkit->formInputTextArea("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
+                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()) );
+                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName()."2", $this->getText("user_".$objOneField->getStrName()."2") );
+                        }
+                    }
+                }
+                
+                //system-internal fields
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
-                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
-                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("language"), $this->getParam("language"));
-                $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("admin"), ($this->getParam("adminlogin") != "" ? true : false ));
-                $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("portal"), ($this->getParam("portal") != "" ? true : false ));
-                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("aktiv"), ($this->getParam("aktiv") != "" ? true : false ));
-                $strReturn .= $this->objToolkit->formInputHidden("userid");
+                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("user_skin"), ($this->getParam("skin") != "" ? $this->getParam("skin") : _admin_skin_default_));
+                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("user_language"), $this->getParam("language"));
+                $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("user_admin"), ($this->getParam("adminlogin") != "" ? true : false ));
+                $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("user_portal"), ($this->getParam("portal") != "" ? true : false ));
+                $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("user_aktiv"), ($this->getParam("aktiv") != "" ? true : false ));
+                
+                $strReturn .= $this->objToolkit->formInputHidden("systemid");
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
+                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
 
             }
-            //End the form
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
-
-            $strReturn .= $this->objToolkit->setBrowserFocus("username");
         }
-        else
-            $strReturn .= $this->getText("commons_error_permissions");
+        else {
+            //editing a user. this could be in two modes - globally, or in selfedit mode
+            $bitSelfedit = false;
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+                
+                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true")
+                    $bitSelfedit = true;
+                else
+                    return $this->getText("commons_error_permissions");
+            }
+            
+            
+            $objUser = new class_modul_user_user($this->getSystemid());
+            $objSourceUser = $objUsersources->getSourceUser($objUser);
+            $this->setParam("usersource", $objUser->getStrSubsystem());
+            if($objSourceUser != null) {
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveUser"));
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "saveUser");
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
+                //globally required
+                if(!$bitSelfedit)
+                    $strReturn .= $this->objToolkit->formInputText("user_username", $this->getText("user_username"), $this->getParam("user_username") != "" ? $this->getParam("user_username") : $objUser->getStrUsername() );
+                
+                //Fetch the fields from the source
+                if($objSourceUser->isEditable()) {
+                    $arrFields = $objSourceUser->getEditFormEntries();
+                    /* @var $objOneField class_usersources_form_entry */
+                    foreach($arrFields as $objOneField) {
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                            $strReturn .= $this->objToolkit->formDateSingle("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
 
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
+                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                            $strReturn .= $this->objToolkit->formInputText("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()), $this->getParam("user_".$objOneField->getStrName()) != "" ? $this->getParam("user_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
+                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName(), $this->getText("user_".$objOneField->getStrName()) );
+                            $strReturn .= $this->objToolkit->formInputPassword("user_".$objOneField->getStrName()."2", $this->getText("user_".$objOneField->getStrName()."2") );
+                        }
+                    }
+                }
+                
+                //system-internal fields
+                $strReturn .= $this->objToolkit->formHeadline($this->getText("user_system"));
+                $strReturn .= $this->objToolkit->formInputDropdown("skin", $arrSkins, $this->getText("user_skin"),   ($this->getParam("skin") != "" ? $this->getParam("skin") :     ($objUser->getStrAdminskin() != "" ? $objUser->getStrAdminskin() : _admin_skin_default_)   )  );
+                $strReturn .= $this->objToolkit->formInputDropdown("language", $arrLang, $this->getText("user_language"), ($this->getParam("language") != "" ? $this->getParam("language") : $objUser->getStrAdminlanguage() ));
+                if(!$bitSelfedit) {
+                    $strReturn .= $this->objToolkit->formInputCheckbox("adminlogin", $this->getText("user_admin"), ( issetPost("skin") ? ($this->getParam("adminlogin") != "" ? true : false ) :  $objUser->getIntAdmin() ));
+                    $strReturn .= $this->objToolkit->formInputCheckbox("portal", $this->getText("user_portal"), ( issetPost("skin") ? ($this->getParam("portal") != "" ? true : false) : $objUser->getIntPortal() ));
+                    $strReturn .= $this->objToolkit->formInputCheckbox("aktiv", $this->getText("user_aktiv"), ( issetPost("skin") ?  ($this->getParam("aktiv") != "" ? true : false ) : $objUser->getIntActive() ));
+                }
+                
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
+
+            }
+        }
+        
+        
+        return $strReturn;
+        
+    }
+
+    
+    /**
+     * Stores the submitted data to the backend / the loginprovider
+     * @return string 
+     */
+    protected function actionSaveUser() {
+        $strReturn = "";
+        
+        
+        $objUsersources = new class_modul_user_sourcefactory();
+        $strPasswordKey = "";
+        $objSubsystem = $objUsersources->getUsersource($this->getParam("usersource"));
+        $objBlankUser = $objSubsystem->getNewUser();
+        if($objBlankUser != null) {
+            $arrFields = $objBlankUser->getEditFormEntries();
+            /* @var $objOneField class_usersources_form_entry */
+            foreach($arrFields as $objOneField) {
+                if($objOneField->getBitRequired() && $objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD)
+                    $strPasswordKey = "user_".$objOneField->getStrName();
+            }
+        }
+        
+        if(!$this->validateForm() 
+                | ($this->getParam("mode") == "new" && !$this->checkAdditionalNewData($strPasswordKey)) 
+                | ($this->getParam("mode") == "edit" && !$this->checkAdditionalEditData($strPasswordKey)) ) {
+            return $this->actionNewUser($this->getParam("mode"));
+        }
+        
+        if($this->getParam("mode") == "new") {
+            
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                return $this->getText("commons_error_permissions");
+            
+            //create a new user and pass all relevant data
+           
+            $objUser = new class_modul_user_user();
+            
+            $objUser->setStrUsername($this->getParam("user_username"));
+            $objUser->setIntActive(($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0);
+            $objUser->setIntAdmin(($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0);
+            $objUser->setIntPortal(($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0);
+            $objUser->setStrAdminskin($this->getParam("skin"));
+            $objUser->setStrAdminlanguage($this->getParam("language"));
+            $objUser->setStrSubsystem($this->getParam("usersource"));
+            
+            $objUser->updateObjectToDb();
+            
+            $objSourceUser = $objUser->getObjSourceUser();
+            //pass fields to new source-object
+            $arrSourceFields = $objSourceUser->getEditFormEntries();
+            foreach($arrSourceFields as $objOneField) {
+                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
+                    $strName = "user_".$objOneField->getStrName();
+                    if($this->getParam($strName."_year") != "") {
+                        $objDate = new class_date();
+                        $objDate->generateDateFromParams($strName, $this->getAllParams());
+                        $objOneField->setStrValue($objDate->getLongTimestamp());
+                    }
+                }
+                else {
+                    $objOneField->setStrValue($this->getParam("user_".$objOneField->getStrName()));
+                }
+            }
+            
+            $objSourceUser->setEditFormEntries($arrSourceFields);
+            $objSourceUser->updateObjectToDb();
+            
+            //intial dashboard widgets
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+        }
+        else if($this->getParam("mode") == "edit") {
+            
+            $bitSelfedit = false;
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+                
+                if($this->getSystemid() == $this->objSession->getUserID() && _user_selfedit_ == "true")
+                    $bitSelfedit = true;
+                else
+                    return $this->getText("commons_error_permissions");
+            }
+            
+            //create a new user and pass all relevant data
+            $objUser = new class_modul_user_user($this->getSystemid());
+            
+            if(!$bitSelfedit) {
+                $objUser->setStrUsername($this->getParam("user_username"));
+                $objUser->setIntActive(($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0);
+                $objUser->setIntAdmin(($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0);
+                $objUser->setIntPortal(($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0);
+            }
+            $objUser->setStrAdminskin($this->getParam("skin"));
+            $objUser->setStrAdminlanguage($this->getParam("language"));
+            
+            $objUser->updateObjectToDb();
+            
+            $objSourceUser = $objUser->getObjSourceUser();
+            //pass fields to new source-object
+            $arrSourceFields = $objSourceUser->getEditFormEntries();
+            foreach($arrSourceFields as $objOneField) {
+                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
+                    $strName = "user_".$objOneField->getStrName();
+                    if($this->getParam($strName."_year") != "") {
+                        $objDate = new class_date();
+                        $objDate->generateDateFromParams($strName, $this->getAllParams());
+                        $objOneField->setStrValue($objDate->getLongTimestamp());
+                    }
+                }
+                else {
+                    $objOneField->setStrValue($this->getParam("user_".$objOneField->getStrName()));
+                }
+            }
+            
+            $objSourceUser->setEditFormEntries($arrSourceFields);
+            $objSourceUser->updateObjectToDb();
+            
+            //Reset the admin-skin cookie to force the new skin
+            $objCookie = new class_cookie();
+            //flush the db-cache
+            $this->objDB->flushQueryCache();
+            $this->objSession->resetUser();
+            //and update the cookie
+            $objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
+            //update language set before
+            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
+            
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
+        }
+        
+        
+        
         return $strReturn;
     }
-
-    /**
-	 * Creates a new User in the database, values in $arrParams
-	 *
-	 * @return string
-	 */
-    protected function actionSave() {
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))	{
-            if($this->getParam("username") != "" && $this->getParam("username") != " ") {
-                if($this->checkUsernameNotExisting($this->getParam("username")) ) {
-                    //Passwoerter gleich?
-                    if($this->checkPasswords($this->getParam("passwort"), $this->getParam("passwort2"))) {
-                        //valid Email address specified?
-                        if(checkEmailaddress($this->getParam("email"))) {
-                            //Collecting remaining data
-                            $intActive = ($this->getParam("aktiv") != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
-                            $intAdmin = ($this->getParam("adminlogin") != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
-                            $intPortal = ($this->getParam("portal") != "" && $this->getParam("portal") == "checked") ?  1 :  0;
-
-
-                            //build date
-                            $objDate = new class_date();
-                            if($this->getParam("gebdatum_year") != "" || $this->getParam("gebdatum_month") != "" || $this->getParam("gebdatum_day") != "" )
-                                $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
-                            else
-                                $objDate->setLongTimestamp("00000000000000");
-
-                            $objUser = new class_modul_user_user("");
-                            $objUser->setStrUsername($this->getParam("username"));
-                            $objUser->setStrPass($this->getParam("passwort"));
-                            $objUser->setStrEmail($this->getParam("email"));
-                            $objUser->setStrForename($this->getParam("vorname"));
-                            $objUser->setStrName($this->getParam("nachname"));
-                            $objUser->setStrStreet($this->getParam("strasse"));
-                            $objUser->setStrPostal($this->getParam("plz"));
-                            $objUser->setStrCity($this->getParam("ort"));
-                            $objUser->setStrTel($this->getParam("tel"));
-                            $objUser->setStrMobile($this->getParam("handy"));
-                            $objUser->setLongDate($objDate->getLongTimestamp());
-                            $objUser->setStrAdminlanguage($this->getParam("language"));
-                            $objUser->setIntActive($intActive);
-                            $objUser->setIntAdmin($intAdmin);
-                            $objUser->setIntPortal($intPortal);
-                            $objUser->setStrAdminskin($this->getParam("skin"));
-
-                            if(!$objUser->updateObjectToDb()) {
-                                throw new class_exception($this->getText("fehler_speichern"), class_exception::$level_ERROR);
-                            }
-                            else {
-                                //try to create a default-dashboard
-                                $objDashboard = new class_modul_dashboard_widget();
-                                $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
-                                return "";
-                            }
-
-                        }
-                        else {
-                            return $this->objToolkit->warningBox($this->getText( "user_fehler_mail"));
-                        }
-                    }
-                    else {
-                        return $this->objToolkit->warningBox($this->getText( "user_fehler_pass"));
-                    }
-                }
-                else {
-                    return $this->objToolkit->warningBox($this->getText( "user_fehler_namedoppelt"));
-                }
-            }
-            else
-            return $this->objToolkit->warningBox($this->getText( "user_fehler_name"));
-        }
-        else
-        return $this->getText( "commons_error_permissions");
-
-    }
-
-    /**
-	 * saves a modified user in db, values passed in arrParam
-	 *
-	 * @return string "" if successfull
-	 */
-    protected function actionSaveEdit() {
-        //Rights: Own profile or have the needed rights
-        $bitRight = false;
-        $bitSelfedit = false;
-        if($this->getParam("username") == "")
-        $this->setParam("username",  "");
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $bitRight = true;
-        //Own Profile?
-        if(!$bitRight && $this->getParam("userid") != ""  && $this->getParam("modus") == "selfedit") {
-            if($this->getParam("userid") == $this->objSession->getUserID() && _user_selfedit_ == "true") {
-                $bitRight = true;
-                $bitSelfedit = true;
-            }
-        }
-
-        if($bitRight) {
-            if(($this->getParam("username") != "" && $this->getParam("username") != " ") || $bitSelfedit) {
-                if($this->getParam("passwort") == $this->getParam("passwort2")) {
-                    //Email-Vorhanden?
-                    if(checkEmailaddress($this->getParam("email"))) {
-                        //Saving to database
-                        //build date
-                        $objDate = new class_date();
-                        if($this->getParam("gebdatum_year") != "" || $this->getParam("gebdatum_month") != "" || $this->getParam("gebdatum_day") != "" )
-                                $objDate->generateDateFromParams("gebdatum", $this->getAllParams());
-                            else
-                                $objDate->setLongTimestamp("00000000000000");
-
-                        $intActive = (($this->getParam("aktiv")) != "" && $this->getParam("aktiv") == "checked") ?  1 :  0;
-                        $intAdmin = (($this->getParam("adminlogin")) != "" && $this->getParam("adminlogin") == "checked") ?  1 :  0;
-                        $intPortal = (($this->getParam("portal")) != "" && $this->getParam("portal") == "checked") ?  1 :  0;
-                        $objUser = new class_modul_user_user($this->getParam("userid"));
-
-                        //init with values independent from states
-                        $objUser->setStrEmail($this->getParam("email"));
-                        $objUser->setStrForename($this->getParam("vorname"));
-                        $objUser->setStrName($this->getParam("nachname"));
-                        $objUser->setStrStreet($this->getParam("strasse"));
-                        $objUser->setStrPostal($this->getParam("plz"));
-                        $objUser->setStrCity($this->getParam("ort"));
-                        $objUser->setStrTel($this->getParam("tel"));
-                        $objUser->setStrMobile($this->getParam("handy"));
-                        $objUser->setLongDate($objDate->getLongTimestamp());
-                        $objUser->setStrAdminskin($this->getParam("skin"));
-                        $objUser->setStrAdminlanguage($this->getParam("language"));
-
-
-                        if(trim($this->getParam("passwort")) != "" && $this->getParam("passwort") != " ") {
-                            $objUser->setStrPass($this->getParam("passwort"));
-                        }
-
-
-                        if(!$bitSelfedit) {
-                            $objUser->setStrUsername($this->getParam("username"));
-                            $objUser->setIntActive($intActive);
-                            $objUser->setIntAdmin($intAdmin);
-                            $objUser->setIntPortal($intPortal);
-
-                        }
-
-                        if($objUser->updateObjectToDb()) {
-                        	//Reset the admin-skin cookie to force the new skin
-				    	    $objCookie = new class_cookie();
-				    	    //flush the db-cache
-				    	    $this->objDB->flushQueryCache();
-				    	    $this->objSession->resetUser();
-				    	    //and update the cookie
-				    		$objCookie->setCookie("adminskin", $this->objSession->getAdminSkin(false));
-				    		//update language set before
-                            $objCookie->setCookie("adminlanguage", $this->objSession->getAdminLanguage(false));
-
-                            return "";
-                        }
-                        else
-                            throw new class_exception($this->getText("user_fehler"), class_exception::$level_ERROR);
-                    }
-                    else {
-                        return $this->objToolkit->warningBox($this->getText("user_fehler_mail"));
-                    }
-                }
-                else {
-                    return $this->objToolkit->warningBox($this->getText("user_fehler_pass"));
-                }
-            }
-            else {
-                return $this->objToolkit->warningBox($this->getText("user_fehler_name"));
-            }
-        }
-        else
-            return $this->getText("commons_error_permissions");
-    }
+    
+    
 
 
     /**
@@ -557,19 +611,17 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    protected function actionDeleteFinal() {
+    protected function actionDeleteUser() {
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
-            $strUserid = $this->getParam("userid");
             //The user itself
-            $objUser = new class_modul_user_user($strUserid);
+            $objUser = new class_modul_user_user($this->getSystemid());
             $objUser->deleteUser();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
         return $this->getText("user_loeschen_fehler");
     }
 
-//*"*****************************************************************************************************
-//--group-managment--------------------------------------------------------------------------------------
+    //--group-managment----------------------------------------------------------------------------------
 
     /**
 	 * Returns the list of all current groups
@@ -590,27 +642,38 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
             $strReturn = $this->objToolkit->listHeader();
 
+            $objUsersources = new class_modul_user_sourcefactory();
             $intI = 0;
+            /* @var $objSingleGroup class_modul_user_group */
             foreach($arrGroups as $objSingleGroup) {
                 $strAction = "";
                 if($objSingleGroup->getSystemid() != _guests_group_id_  && $objSingleGroup->getSystemid() != _admins_group_id_) {
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
-                    $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
-                                  getLinkAdminHref($this->arrModule["modul"], "groupdeletefinal", "&groupid=".$objSingleGroup->getSystemid()));
+                    
+                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) )
+                        $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
+                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable())
+                        $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+                    if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])) )
+                        $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
+                                  getLinkAdminHref($this->arrModule["modul"], "groupDelete", "&systemid=".$objSingleGroup->getSystemid()));
                 }
                 else {
+                    
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
-                    $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&groupid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
+                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable())
+                        $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                 }
 
-                //get the number of users per group
-                $intNrOfUsers = count(class_modul_user_group::getGroupMembers($objSingleGroup->getSystemid()));
-                $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_group.gif"), $objSingleGroup->getStrName()." (".$intNrOfUsers.")", $strAction, $intI++);
+                $strCenter = "";
+                if(count($objUsersources->getArrUsersources()) > 1)
+                    $strCenter = $this->getText("user_list_source")." ".$objSingleGroup->getStrSubsystem()." ".$strCenter;
+                
+                $strReturn .= $this->objToolkit->listRow3($objSingleGroup->getStrName()." (".$objSingleGroup->getNumberOfMembers().")", $strCenter, $strAction, getImageAdmin("icon_group.gif"), $intI++);
             }
-            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
-            $strReturn .= $this->objToolkit->listRow2Image("","" , getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_new.gif"), $intI++);
+            if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) )
+                $strReturn .= $this->objToolkit->listRow3("", "", getLinkAdmin($this->arrModule["modul"], "groupNew", "", $this->getText("gruppen_anlegen"), $this->getText("gruppen_anlegen"), "icon_new.gif"), "", $intI++);
+            
             $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
         }
         else
@@ -621,7 +684,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
 
     protected function actionGroupEdit() {
-        return $this->actionGroupNew();
+        return $this->actionGroupNew("edit");
     }
 
     /**
@@ -629,32 +692,124 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string
 	 */
-    protected function actionGroupNew() {
+    protected function actionGroupNew($strMode = "new") {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+            
+            $objUsersources = new class_modul_user_sourcefactory();
+            
+        
+            if($strMode == "new") {
+                
+                if($this->getParam("usersource") == "" || $objUsersources->getUsersource($this->getParam("usersource")) == null) {
+                    $arrSubsystems = $objUsersources->getArrUsersources();
 
-            if($this->getParam("groupid") != "" || $this->getParam("gruppeid") != "") {
-                if($this->getParam("groupid") == "" && $this->getParam("gruppeid") != "")
-                $this->setParam("groupid", $this->getParam("gruppeid"));
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupsaveedit");
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsaveedit"));
-                $objGroup = new class_modul_user_group($this->getParam("groupid"));
-                $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), $objGroup->getStrName());
-                $strReturn .= $this->objToolkit->formInputHidden("gruppeid", $objGroup->getSystemid());
+                    $arrDD = array();
+                    foreach($arrSubsystems as $strOneName) {
+                        $objConcreteSubsystem = $objUsersources->getUsersource($strOneName);
+                        if($objConcreteSubsystem->getCreationOfGroupsAllowed())
+                            $arrDD[$strOneName] = $strOneName;
+                    }
+
+                    if(count($arrDD) > 1) {
+                        $strReturn  = $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupNew"));
+                        $strReturn .= $this->objToolkit->formInputDropdown("usersource", $arrDD, $this->getText("group_usersource"));
+                        $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                        $strReturn .= $this->objToolkit->formClose();
+
+                        return $strReturn;
+                    }
+                    else
+                        $this->setParam("usersource", array_pop($arrDD));
+                }
+                
+                $objSource = $objUsersources->getUsersource($this->getParam("usersource"));
+                $objNewGroup = $objSource->getNewGroup();
+                
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupSave");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
+                $strReturn .= $this->objToolkit->formInputText("group_name", $this->getText("group_name"), $this->getParam("group_name"));
+                
+                //load the elements provided by the login-provider
+                
+                //Fetch the fields from the source
+                if($objNewGroup->isEditable()) {
+                    $arrFields = $objNewGroup->getEditFormEntries();
+                    /* @var $objOneField class_usersources_form_entry */
+                    foreach($arrFields as $objOneField) {
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                            $strReturn .= $this->objToolkit->formDateSingle("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
+                            $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
+                            $strReturn .= $this->objToolkit->formInputTextArea("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                            $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
+                            $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()) );
+                            $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName()."2", $this->getText("group_".$objOneField->getStrName()."2") );
+                        }
+                    }
+                }
+                
+                $strReturn .= $this->objToolkit->formInputHidden("systemid");
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "new");
+                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
+                
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
             }
+
             else {
-                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupsave");
-                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupsave"));
-                $strReturn .= $this->objToolkit->formInputText("gruppename", $this->getText("gruppe"), "");
-                $strReturn .= $this->objToolkit->formInputHidden("gruppeid");
-            }
-            $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-            $strReturn .= $this->objToolkit->formClose();
+                
+                $objNewGroup = new class_modul_user_group($this->getSystemid());
+                $this->setParam("usersource", $objNewGroup->getStrSubsystem());
+                
+                $strReturn .= $this->objToolkit->getValidationErrors($this, "groupSave");
+                $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "groupSave"));
+                $strReturn .= $this->objToolkit->formInputText("group_name", $this->getText("group_name"), $this->getParam("group_name") != "" ? $this->getParam("group_name") : $objNewGroup->getStrName());
+                
+                //load the elements provided by the login-provider
+                
+                //Fetch the fields from the source
+                if($objNewGroup->isEditable()) {
+                    $arrFields = $objNewGroup->getObjSourceGroup()->getEditFormEntries();
+                    /* @var $objOneField class_usersources_form_entry */
+                    foreach($arrFields as $objOneField) {
+                        if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE)
+                            $strReturn .= $this->objToolkit->formDateSingle("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $objOneField->getStrValue() != "" ? new class_date($objOneField->getStrValue()) : null );
 
-            $strReturn .= $this->objToolkit->setBrowserFocus("gruppename");
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_TEXT)
+                            $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_LONGTEXT)
+                            $strReturn .= $this->objToolkit->formInputTextArea("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_EMAIL)
+                            $strReturn .= $this->objToolkit->formInputText("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()), $this->getParam("group_".$objOneField->getStrName()) != "" ? $this->getParam("group_".$objOneField->getStrName()) : $objOneField->getStrValue() );
+
+                        else if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_PASSWORD) {
+                            $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName(), $this->getText("group_".$objOneField->getStrName()) );
+                            $strReturn .= $this->objToolkit->formInputPassword("group_".$objOneField->getStrName()."2", $this->getText("group_".$objOneField->getStrName()."2") );
+                        }
+                    }
+                }
+                
+                $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
+                $strReturn .= $this->objToolkit->formInputHidden("mode", "edit");
+                $strReturn .= $this->objToolkit->formInputHidden("usersource", $this->getParam("usersource"));
+                
+                $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
+                $strReturn .= $this->objToolkit->formClose();
+            }
+            
         }
         else
-        $strReturn .= $this->getText("commons_error_permissions");
+            $strReturn .= $this->getText("commons_error_permissions");
 
         return $strReturn;
     }
@@ -666,54 +821,84 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 */
     protected function actionGroupSave() {
         if(!$this->validateForm())
-            return $this->actionGroupNew();
-            
-        $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if($this->getParam("gruppename") != "" && $this->getParam("gruppename") != " ") {
-                $strName = $this->getParam("gruppename");
-                $objGroup = new class_modul_user_group("");
-                $objGroup->setStrName($strName);
-                if($objGroup->updateObjectToDb())
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
-                else
-                    throw new class_exception($this->getText("gruppe_anlegen_fehler"), class_exception::$level_ERROR);
-            }
-        }
-        else
-            $strReturn .= $this->getText("commons_error_permissions");
-        return $strReturn;
-    }
-
-    /**
-	 * Saves an group edited
-	 *
-	 * @return string "" in case of success
-	 */
-    protected function actionGroupSaveEdit() {
-        if(!$this->validateForm())
-            return $this->actionGroupNew();
+            return $this->actionGroupNew($this->getParam("mode"));
         
-        $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if($this->getParam("gruppename") != "" && $this->getParam("gruppename") != " ") {
-                $objGroup = new class_modul_user_group($this->getParam("gruppeid"));
-                $objGroup->setStrName($this->getParam("gruppename"));
-                if($objGroup->updateObjectToDb()) {
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
+        
+        
+        if($this->getParam("mode") == "new") {
+            
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                return $this->getText("commons_error_permissions");
+            
+            //create a new group and pass all relevant data
+           
+            $objGroup = new class_modul_user_group();
+            $objGroup->setStrName($this->getParam("group_name"));
+            $objGroup->setStrSubsystem($this->getParam("usersource"));
+            $objGroup->updateObjectToDb();
+            
+            $objSourceGroup = $objGroup->getObjSourceGroup();
+            //pass fields to new source-object
+            $arrSourceFields = $objSourceGroup->getEditFormEntries();
+            foreach($arrSourceFields as $objOneField) {
+                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
+                    $strName = "group_".$objOneField->getStrName();
+                    if($this->getParam($strName."_year") != "") {
+                        $objDate = new class_date();
+                        $objDate->generateDateFromParams($strName, $this->getAllParams());
+                        $objOneField->setStrValue($objDate->getLongTimestamp());
+                    }
                 }
                 else {
-                    throw new class_exception($this->getText("gruppe_anlegen_fehler"), class_exception::$level_ERROR);
+                    $objOneField->setStrValue($this->getParam("group_".$objOneField->getStrName()));
                 }
             }
-            else {
-                throw new class_exception($this->getText("gruppe_anlegen_fehler_name"), class_exception::$level_ERROR);
-            }
+            
+            $objSourceGroup->setEditFormEntries($arrSourceFields);
+            $objSourceGroup->updateObjectToDb();
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
+            return;
         }
-        else
-            $strReturn .= $this->getText("commons_error_permissions");
-        return $strReturn;
+        else {
+            
+            if(!$this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])))
+                return $this->getText("commons_error_permissions");
+            
+            //create a new group and pass all relevant data
+           
+            $objGroup = new class_modul_user_group($this->getSystemid());
+            $objGroup->setStrName($this->getParam("group_name"));
+            $objGroup->updateObjectToDb();
+            
+            $objSourceGroup = $objGroup->getObjSourceGroup();
+            //pass fields to new source-object
+            $arrSourceFields = $objSourceGroup->getEditFormEntries();
+            foreach($arrSourceFields as $objOneField) {
+                if($objOneField->getIntType() == class_usersources_form_entry::$INT_TYPE_DATE) {
+                    $strName = "group_".$objOneField->getStrName();
+                    if($this->getParam($strName."_year") != "") {
+                        $objDate = new class_date();
+                        $objDate->generateDateFromParams($strName, $this->getAllParams());
+                        $objOneField->setStrValue($objDate->getLongTimestamp());
+                    }
+                }
+                else {
+                    $objOneField->setStrValue($this->getParam("group_".$objOneField->getStrName()));
+                }
+            }
+            
+            $objSourceGroup->setEditFormEntries($arrSourceFields);
+            $objSourceGroup->updateObjectToDb();
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
+            return;
+        }
+        
+        
     }
+
+    
 
     /**
 	 * Returns a list of users beloning to a specified group
@@ -723,26 +908,29 @@ class class_modul_user_admin extends class_admin implements interface_admin {
     protected function actionGroupMember() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            if($this->getParam("groupid") != "") {
-            	$objGroup = new class_modul_user_group($this->getParam("groupid"));
+            if($this->getSystemid() != "") {
+            	$objGroup = new class_modul_user_group($this->getSystemid());
+                $objSourceGroup = $objGroup->getObjSourceGroup();
             	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
 
 
-
-                $objArraySectionIterator = new class_array_section_iterator(class_modul_user_group::getGroupMembersCount($this->getParam("groupid")));
+                $objArraySectionIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
                 $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
                 $objArraySectionIterator->setPageNumber((int)($this->getParam("pv") != "" ? $this->getParam("pv") : 1));
-                $objArraySectionIterator->setArraySection(class_modul_user_group::getGroupMembers($this->getParam("groupid"), $objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
+                $objArraySectionIterator->setArraySection($objSourceGroup->getUserIdsForGroup($objArraySectionIterator->calculateStartPos(), $objArraySectionIterator->calculateEndPos()));
 
-                $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "groupid=".$this->getParam("groupid"));
+                $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, "user", "groupMember", "system=".$this->getSystemid());
                 $arrMembers = $arrPageViews["elements"];
 
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
-                foreach ($arrMembers as $objSingleMember) {
+                foreach ($arrMembers as $strSingleMemberId) {
+                    
+                    $objSingleMember = new class_modul_user_user($strSingleMemberId);
+                    
                     $strAction = $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
                                  ,$this->getText("mitglied_loeschen_frage")
-                                 ,getLinkAdminHref($this->arrModule["modul"], "groupmemberdeletefinal", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
+                                 ,getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
@@ -759,14 +947,15 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    protected function actionGroupMemberDeleteFinal() {
+    protected function actionGroupMemberDelete() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))	{
             $objGroup = new class_modul_user_group($this->getParam("groupid"));
-            if($objGroup->deleteUserFromCurrentGroup(new class_modul_user_user($this->getParam("userid"))))
-                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupMember", "groupid=".$this->getParam("groupid")));
+            $objUser = new class_modul_user_user($this->getParam("userid"));
+            if($objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser()))
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupMember", "systemid=".$this->getParam("groupid")));
             else
-                throw new class_exception($this->getText("mitglied_loeschen_fehler"), class_exception::$level_ERROR);
+                throw new class_exception($this->getText("member_delete_error"), class_exception::$level_ERROR);
         }
         else
             $strReturn .= $this->getText("commons_error_permissions");
@@ -780,21 +969,17 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    protected function actionGroupDeleteFinal() {
+    protected function actionGroupDelete() {
         $strReturn = "";
         if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"]))) {
             //Delete memberships
-            $objGroup = new class_modul_user_group($this->getParam("groupid"));
-            if($objGroup->deleteAllUsersFromCurrentGroup()) {
-                //delete group
-                if($objGroup->deleteGroup()) {
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
-                }
-                else
-                    throw new class_exception($this->getText("gruppe_loeschen_fehler"), class_exception::$level_ERROR);
+            $objGroup = new class_modul_user_group($this->getSystemid());
+            //delete group
+            if($objGroup->deleteGroup()) {
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "groupList"));
             }
             else
-                $strReturn .= $this->getText("gruppe_loeschen_fehler");
+                throw new class_exception($this->getText("gruppe_loeschen_fehler"), class_exception::$level_ERROR);
         }
         else
             $strReturn .= $this->getText("commons_error_permissions");
@@ -806,21 +991,25 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return unknown
 	 */
-    protected function actionMembership() {
+    protected function actionEditMemberships() {
         $strReturn = "";
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
             //open the form
-            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "membershipsave"));
+            $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "saveMembership"));
             //Create a list of checkboxes
-            $objUser = new class_modul_user_user($this->getParam("userid"));
+            $objUser = new class_modul_user_user($this->getSystemid());
 
-            $strReturn .= $this->objToolkit->formInputHidden("userid", $this->getParam("userid"));
             $strReturn .= $this->objToolkit->formHeadline($this->getText("user_memberships")."\"".$objUser->getStrUsername()."\"");
 
-            //Collect groups
-            $arrGroups = class_modul_user_group::getAllGroups();
-            foreach($arrGroups as $objSingleGroup) {
-                if($objSingleGroup->isUserMemberInGroup($objUser)) {
+            //Collect groups from the same source
+            $objUsersources = new class_modul_user_sourcefactory();
+            $objSourcesytem = $objUsersources->getUsersource($objUser->getStrSubsystem());
+            
+            $arrGroups = $objSourcesytem->getAllGroupIds();
+            $arrUserGroups = $objUser->getArrGroupIds();
+            foreach($arrGroups as $strSingleGroup) {
+                $objSingleGroup = new class_modul_user_group($strSingleGroup);
+                if(in_array($strSingleGroup, $arrUserGroups)) {
                     //user in group, checkbox checked
                     $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName(), true);
                 }
@@ -829,6 +1018,8 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     $strReturn .= $this->objToolkit->formInputCheckbox($objSingleGroup->getSystemid(), $objSingleGroup->getStrName());
                 }
             }
+            
+            $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
             $strReturn .= $this->objToolkit->formClose();
         }
@@ -843,24 +1034,44 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 	 *
 	 * @return string "" in case of success
 	 */
-    private function actionSaveMembership() {
+    protected function actionSaveMembership() {
         if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
-            //Get all Groups
-            $arrGroups = class_modul_user_group::getAllGroups();
-            //In general, we have the case that a user is in one or two groups, so its ok to delete all memberships and save the new memberships
-            //So: Delete old memberships
-            $objCurUser = new class_modul_user_user($this->getParam("userid"));
-            $objCurUser->deleteAllUserMemberships();
-
+            
+            $objUser = new class_modul_user_user($this->getSystemid());
+            $objUsersources = new class_modul_user_sourcefactory();
+            $objSourcesytem = $objUsersources->getUsersource($objUser->getStrSubsystem());
+            
+            $arrGroups = $objSourcesytem->getAllGroupIds();
+            $arrUserGroups = $objUser->getArrGroupIds();
+            
             //Searching for groups to enter
-            $arrGroupsWanted = array();
-            foreach ($arrGroups as $objSingleGroup) {
-                if($this->getParam($objSingleGroup->getSystemid()) != "") {
-                    $arrGroupsWanted[] = $objSingleGroup->getSystemid();
+            foreach ($arrGroups as $strSingleGroup) {
+                if($this->getParam($strSingleGroup) != "") {
+                    
+                    //add the user to this group
+                    if(!in_array($strSingleGroup, $arrUserGroups)) {
+                        $objGroup = new class_modul_user_group($strSingleGroup);
+                        $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
+                    }
+                    else {
+                        //user is already in the group, remove the marker
+                        foreach($arrUserGroups as $strKey => $strValue)
+                            if($strValue == $strSingleGroup)
+                                $arrUserGroups[$strKey] = null;
+                    }
+                    
                 }
             }
-            class_modul_user_group::addUserToGroups($objCurUser, $arrGroupsWanted);
-            return "";
+            
+            //loop the users' list in order to remove unwanted relations
+            foreach($arrUserGroups as $strValue) {
+                if(validateSystemid($strValue)) {
+                    $objGroup = new class_modul_user_group($strValue);
+                    $objGroup->getObjSourceGroup()->removeMember($objUser->getObjSourceUser());
+                }
+            }
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
         else
             return $this->getText("commons_error_permissions");
@@ -941,12 +1152,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             else {
                 //show members of group
-                $arrUsers = class_modul_user_group::getGroupMembers($this->getSystemid());
+                $objGroup = new class_modul_user_group($this->getSystemid());
+                $arrUsers = $objGroup->getObjSourceGroup()->getUserIdsForGroup();
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
 
                 $strReturn .= $this->objToolkit->listRow2Image("", "", getLinkAdmin($this->arrModule["modul"], "userBrowser", "&form_element=".$this->getParam("form_element")."&filter=".$this->getParam("filter")."&allowGroup=".$this->getParam("allowGroup"), $this->getText("user_list_parent"), $this->getText("user_list_parent"), "icon_folderActionLevelup.gif"), $intI++);
-                foreach($arrUsers as $objSingleUser) {
+                foreach($arrUsers as $strSingleUser) {
+                    $objSingleUser = new class_modul_user_user($strSingleUser);
 
                     $strAction = "";
                     if($this->getParam("filter") == "current" && $objSingleUser->getSystemid() == $this->objSession->getUserID())
@@ -976,7 +1189,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
      * @return bool
      */
     protected function checkPasswords($strPass1, $strPass2) {
-        return ($strPass1 == $strPass2 && uniStrlen($strPass1) > 2);
+        return ($strPass1 == $strPass2);
     }
 
     /**
@@ -990,21 +1203,31 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         return (count($arrUsers) == 0);
     }
 
-    protected function checkAdditionalNewData() {
-        $bitPass = $this->checkPasswords($this->getParam("passwort"), $this->getParam("passwort2"));
+    protected function checkAdditionalNewData($strPasswordKey) {
+        $bitPass = $strPasswordKey == "" || $this->checkPasswords($this->getParam($strPasswordKey), $this->getParam($strPasswordKey."2"));
         if(!$bitPass)
-            $this->addValidationError("passwort", $this->getText("required_password_equal"));
-        $bitUsername = $this->checkUsernameNotExisting($this->getParam("username"));
+            $this->addValidationError("user_password", $this->getText("required_password_equal"));
+        
+        $bitUsername = $this->checkUsernameNotExisting($this->getParam("user_username"));
         if(!$bitUsername)
-            $this->addValidationError("username", $this->getText("required_user_existing"));
+            $this->addValidationError("user_username", $this->getText("required_user_existing"));
 
         return $bitPass && $bitUsername;
     }
 
-    protected function checkAdditionalEditData() {
-        $bitPass = ($this->getParam("passwort") == $this->getParam("passwort2"));
+    protected function checkAdditionalEditData($strPasswordKey) {
+        $bitPass = $this->checkPasswords($this->getParam($strPasswordKey), $this->getParam($strPasswordKey."2"));
         if(!$bitPass)
             $this->addValidationError("passwort", $this->getText("required_password_equal"));
+        
+        $arrUsers = class_modul_user_user::getAllUsersByName($this->getParam("user_username"));
+        if(count($arrUsers) > 0) {
+            $objUser = $arrUsers[0];
+            if($objUser->getSystemid() != $this->getSystemid()) {
+                $this->addValidationError("user_username", $this->getText("required_user_existing"));
+                $bitPass = false;
+            }
+        }
 
         return $bitPass;
     }

@@ -20,7 +20,7 @@ class class_test_rights extends class_testbase {
         //create a new user & group to be used during testing
         echo "\tcreating a test user\n";
         $objUser = new class_modul_user_user();
-        $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
+        //$objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
         $strUsername = "user_".generateSystemid();
         $objUser->setStrUsername($strUsername);
         $objUser->updateObjectToDb();
@@ -35,7 +35,7 @@ class class_test_rights extends class_testbase {
         echo "\tid of group: ".$objGroup->getSystemid()."\n";
 
         echo "\tadding user to group\n";
-        class_modul_user_group::addUserToGroups($objUser, array($objGroup->getSystemid()));
+        $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 
         echo "\tcreating node-tree\n";
         $strRootId = $objSystemCommon->createSystemRecord(0, "autotest 0");

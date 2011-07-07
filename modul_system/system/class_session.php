@@ -32,6 +32,11 @@ final class class_session {
 	 * @var class_modul_system_session
 	 */
 	private $objInternalSession = null;
+    
+    /**
+     *
+     * @var class_modul_user_user 
+     */
 	private $objUser = null;
 
 
@@ -312,7 +317,7 @@ final class class_session {
      * @see class_session::login($strName, $strPass)
      * @return bool
      */
-    public function loginUser($objUser) {
+    public function loginUser(class_modul_user_user $objUser) {
         return $this->internalLoginHelper($objUser);
     }
 
@@ -322,29 +327,23 @@ final class class_session {
 	 * and the user is active
 	 *
 	 * @param string $strName
-	 * @param string $tsrPass
+	 * @param string $strPassword
 	 * @return bool
 	 */
-	public function login($strName, $strPass) {
+	public function login($strName, $strPassword) {
 	    $bitReturn = false;
 		//How many users are out there with this username and being active?
-		$arrUsers = class_modul_user_user::getAllUsersByName($strName);
+        $objUsersources = new class_modul_user_sourcefactory();
+        try {
+            if($objUsersources->authenticateUser($strName, $strPassword)) {
+                $objUser = $objUsersources->getUserByUsername($strName);
+                $bitReturn = $this->internalLoginHelper($objUser);
+            }
+        }
+        catch(class_authentication_exception $objEx) {
+            $bitReturn = false;
+        }
 
-		if(count($arrUsers) != 0) {
-			foreach ($arrUsers as $objOneUser)  {
-                //Revalidate username
-				if($objOneUser->getStrUsername() == $strName) {
-					if($this->checkPassword($strPass, $objOneUser->getStrPass())) {
-                        $bitReturn = $this->internalLoginHelper($objOneUser);
-					}
-				}
-			}
-
-		}
-		else {
-			//No matching username found
-			$bitReturn = false;
-		}
 
 		if($bitReturn === false) {
 		    class_logger::getInstance()->addLogRow("Unsuccessfull login attempt by user ".$strName, class_logger::$levelInfo);
@@ -360,27 +359,26 @@ final class class_session {
      * @param class_modul_user_user $objUser
      * @return bool
      */
-    private function internalLoginHelper($objUser) {
+    private function internalLoginHelper(class_modul_user_user $objUser) {
 
         $bitReturn = false;
 
         if($objUser->getIntActive() == 1) {
+            
             $objUser->setIntLogins($objUser->getIntLogins()+1);
             $objUser->setIntLastLogin(time());
-            //Set pass = "" to avoid update conflicts
-            $objUser->setStrPass("");
-            //No htmlentitiesencoding here !!!
-            $objUser->updateObjectToDb(false);
+            $objUser->updateObjectToDb();
 
             $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
             $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
-            $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($objUser->getSystemid()));
+            
+            $strGroups = implode(",", $objUser->getArrGroupIds());
             $this->getObjInternalSession()->setStrGroupids($strGroups);
             $this->getObjInternalSession()->updateObjectToDb();
             $this->objUser = $objUser;
 
             //Drop a line to the logger
-            class_logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in", class_logger::$levelInfo);
+            class_logger::getInstance()->addLogRow("User: ".$objUser->getStrUsername()." successfully logged in, login provider: ".$objUser->getStrSubsystem(), class_logger::$levelInfo);
             class_modul_user_log::generateLog();
 
             //right now we have the time to do a few cleanups...
@@ -538,6 +536,8 @@ final class class_session {
 	 *
 	 * @param string $strPassword
 	 * @return string
+     * @deprecated
+     * FIXME remove
 	 */
 	public function encryptPassword($strPassword) {
 	    return sha1($strPassword);
@@ -550,6 +550,8 @@ final class class_session {
 	 * @param string $strPlainPassword
 	 * @param string $strEncryptedPassword
 	 * @return bool
+     * @deprecated
+     * FIXME remove
 	 */
 	private function checkPassword($strPlainPassword, $strEncryptedPassword) {
 	    //md5
@@ -590,8 +592,14 @@ final class class_session {
 	            return;
 	        
 	    }
-	    
-        $strGroups = implode(",", class_modul_user_group::getAllGroupIdsForUser($this->getUserID()));
+
+        //try to load the matching groups
+        $strGroups = _guests_group_id_;
+        if(validateSystemid($this->getUserID())) {
+            $this->objUser = new class_modul_user_user($this->getUserID());
+            $strGroups = implode(",", $this->objUser->getArrGroupIds() );
+        }
+        
         $objSession = new class_modul_system_session();
         $objSession->setStrPHPSessionId($this->getSessionId());
         $objSession->setStrUserid($this->getUserID());
@@ -603,8 +611,6 @@ final class class_session {
         $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());
         $this->objInternalSession = $objSession;
         
-        if($this->getUserID() != "")
-	       $this->objUser = new class_modul_user_user($this->getUserID());
 	}
 
     private function getObjInternalSession() {

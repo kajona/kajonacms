@@ -123,9 +123,14 @@
 
         //---SYSTEM CLASSES------------------------------------------------------------------------------
         //db-drivers
-        //system-classes
         if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
             if(require(_systempath_."/db/".$strClassName.".php"))
+                return;
+        }
+        
+        //usersources
+        if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
+            if(require(_systempath_."/usersources/".$strClassName.".php"))
                 return;
         }
 

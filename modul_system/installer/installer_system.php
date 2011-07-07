@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.4.0.1";
+		$arrModul["version"] 			= "3.4.0.2";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -175,17 +175,8 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		$arrFields = array();
 		$arrFields["user_id"] 			= array("char20", false);
-		$arrFields["user_username"]		= array("char254", true);
-		$arrFields["user_pass"] 		= array("char254", true);
-		$arrFields["user_email"] 		= array("char254", true);
-		$arrFields["user_forename"] 	= array("char254", true);
-		$arrFields["user_name"] 		= array("char254", true);
-		$arrFields["user_street"] 		= array("char254", true);
-		$arrFields["user_postal"] 		= array("char254", true);
-		$arrFields["user_city"] 		= array("char254", true);
-		$arrFields["user_tel"] 			= array("char254", true);
-		$arrFields["user_mobile"] 		= array("char254", true);
-		$arrFields["user_date"] 		= array("long", true);
+		$arrFields["user_username"]	    = array("char254", true);
+		$arrFields["user_subsystem"]	= array("char254", true);
 		$arrFields["user_logins"] 		= array("int", true);
 		$arrFields["user_lastlogin"] 	= array("int", true);
 		$arrFields["user_active"] 		= array("int", true);
@@ -198,26 +189,56 @@ class class_installer_system extends class_installer_base implements interface_i
 		if(!$this->objDB->createTable("user", $arrFields, array("user_id")))
 			$strReturn .= "An error occured! ...\n";
 
+        // User table kajona subsystem  -----------------------------------------------------------------
+		$strReturn .= "Installing table user_kajona...\n";
+
+		$arrFields = array();
+		$arrFields["user_id"] 			= array("char20", false);
+		$arrFields["user_pass"] 		= array("char254", true);
+		$arrFields["user_email"] 		= array("char254", true);
+		$arrFields["user_forename"] 	= array("char254", true);
+		$arrFields["user_name"] 		= array("char254", true);
+		$arrFields["user_street"] 		= array("char254", true);
+		$arrFields["user_postal"] 		= array("char254", true);
+		$arrFields["user_city"] 		= array("char254", true);
+		$arrFields["user_tel"] 			= array("char254", true);
+		$arrFields["user_mobile"] 		= array("char254", true);
+		$arrFields["user_date"] 		= array("long", true);
+
+		if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
+			$strReturn .= "An error occured! ...\n";
 
 		// User group table -----------------------------------------------------------------------------
 		$strReturn .= "Installing table user_group...\n";
 
 		$arrFields = array();
 		$arrFields["group_id"] 			= array("char20", false);
-		$arrFields["group_name"]		= array("char254", true);
+		$arrFields["group_name"]	    = array("char254", true);
+		$arrFields["group_subsystem"]	= array("char254", true);
+        
+        if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
+			$strReturn .= "An error occured! ...\n";
 
-		if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
+        
+        $strReturn .= "Installing table user_group_kajona...\n";
+        
+		$arrFields = array();
+		$arrFields["group_id"] 			= array("char20", false);
+		$arrFields["group_desc"]		= array("char254", true);
+        
+
+		if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		// User group_members table ---------------------------------------------------------------------
-		$strReturn .= "Installing table user_group_members...\n";
+		$strReturn .= "Installing table user_group_kajona_members...\n";
 
 		$arrFields = array();
-		$arrFields["group_member_group_id"] 	= array("char20", false);
-		$arrFields["group_member_user_id"]		= array("char20", false);
+		$arrFields["group_member_group_kajona_id"]      = array("char20", false);
+		$arrFields["group_member_user_kajona_id"]		= array("char20", false);
 
-		if(!$this->objDB->createTable("user_group_members", $arrFields, array("group_member_group_id", "group_member_user_id")))
+		if(!$this->objDB->createTable("user_group_kajona_members", $arrFields, array("group_member_group_kajona_id", "group_member_user_kajona_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -375,11 +396,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
 		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
-        //Systemid of guest-user & admin group
-        $strGuestID = generateSystemid();
-        $strAdminID = generateSystemid();
-        $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
-        $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v3", class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
@@ -426,6 +443,24 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
+        
+        //Creating the admin & guest groups
+        $objAdminGroup = new class_modul_user_group();
+        $objAdminGroup->setStrName("Admins");
+        $objAdminGroup->updateObjectToDb();
+        $strReturn .= "Registered Group Admins...\n";
+        
+        $objGuestGroup = new class_modul_user_group();
+        $objGuestGroup->setStrName("Guests");
+        $objGuestGroup->updateObjectToDb();
+        $strReturn .= "Registered Group Guests...\n";
+        
+        //Systemid of guest-user & admin group
+        $strGuestID = $objGuestGroup->getSystemid();
+        $strAdminID = $objAdminGroup->getSystemid();
+        $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
 		//BUT: We have to modify the right-record of the system
@@ -450,19 +485,10 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->objRights->rebuildRightsStructure();
         $strReturn .= "Rebuilded rights structures...\n";
 
-		//Creating the admin & guest groups
-		$strQuery = "INSERT INTO "._dbprefix_."user_group
-						(group_id, group_name) VALUES
-						('".$strAdminID."', 'Admins')";
-		$this->objDB->_query($strQuery);
-		$strReturn .= "Registered Group Admins...\n";
-		$strQuery = "INSERT INTO "._dbprefix_."user_group
-						(group_id, group_name) VALUES
-						('".$strGuestID."', 'Guests')";
-		$this->objDB->_query($strQuery);
-		$strReturn .= "Registered Group Guests...\n";
-
 		//Creating an admin-user
+        $strUsername = "admin";
+        $strPassword = "kajona";
+        $strEmail = "";
 		//Login-Data given from installer?
 		if($this->objSession->getSession("install_username") !== false && $this->objSession->getSession("install_username") != "" &&
 		   $this->objSession->getSession("install_password") !== false && $this->objSession->getSession("install_password") != "")
@@ -471,26 +497,23 @@ class class_installer_system extends class_installer_base implements interface_i
             $strPassword = dbsafeString($this->objSession->getSession("install_password"));
             $strEmail = dbsafeString($this->objSession->getSession("install_email"));
 		}
-		else {
-            $strUsername = "admin";
-            $strPassword = "kajona";
-            $strEmail = "";
-		}
 
 		//the admin-language
 		$strAdminLanguage = $this->objSession->getAdminLanguage();
-
-		$strUserID = generateSystemid();
-		$strQuery = "INSERT INTO "._dbprefix_."user
-						(user_id, user_username, user_pass, user_email, user_admin, user_active, user_admin_language) VALUES
-						('".$strUserID."', '".$strUsername."', '".$this->objSession->encryptPassword($strPassword)."', '".$strEmail."', 1, 1, '".dbsafeString($strAdminLanguage)."')";
-		$this->objDB->_query($strQuery);
+        
+        $objUser = new class_modul_user_user();
+        $objUser->setStrUsername($strUsername);
+        $objUser->setIntActive(1);
+        $objUser->setIntAdmin(1);
+        $objUser->setStrAdminlanguage($strAdminLanguage);
+        $objUser->updateObjectToDb();
+        $objUser->getObjSourceUser()->setStrPass($strPassword);
+        $objUser->getObjSourceUser()->setStrEmail($strEmail);
+        $objUser->getObjSourceUser()->updateObjectToDb();
 		$strReturn .= "Created User Admin: <strong>Username: ".$strUsername.", Password: ***********</strong> ...\n";
+        
 		//The Admin should belong to the admin-Group
-		$strQuery = "INSERT INTO "._dbprefix_."user_group_members
-					(group_member_group_id, group_member_user_id) VALUES
-					('".$strAdminID."','".$strUserID."')";
-		$this->objDB->_query($strQuery);
+        $objAdminGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 		$strReturn .= "Registered Admin in Admin-Group...\n";
 
         //creating a new default-aspect
@@ -502,7 +525,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		//try to create a default-dashboard for the admin
         $objDashboard = new class_modul_dashboard_widget();
-        $objDashboard->createInitialWidgetsForUser($strUserID);
+        $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
 
         //create a default language
 		$strReturn .= "Creating new default-language\n";
@@ -650,6 +673,12 @@ class class_installer_system extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
+            $this->objDB->flushQueryCache();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0.1") {
+            $strReturn .= $this->update_3401_3402();
             $this->objDB->flushQueryCache();
         }
         
@@ -1250,18 +1279,108 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
     
-     private function update_340_3401() {
-        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
+    private function update_3401_3402() {
+        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
         
-        $strReturn .= "Deleting system_output_gzip constant... \n";
-        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
-        if(!$this->objDB->_pQuery($strQuery, array("_system_output_gzip_")))
+        $strReturn .= "Installing kajona-user-subsystem user-table...\n";
+		$arrFields = array();
+		$arrFields["user_id"] 			= array("char20", false);
+		$arrFields["user_pass"] 		= array("char254", true);
+		$arrFields["user_email"] 		= array("char254", true);
+		$arrFields["user_forename"] 	= array("char254", true);
+		$arrFields["user_name"] 		= array("char254", true);
+		$arrFields["user_street"] 		= array("char254", true);
+		$arrFields["user_postal"] 		= array("char254", true);
+		$arrFields["user_city"] 		= array("char254", true);
+		$arrFields["user_tel"] 			= array("char254", true);
+		$arrFields["user_mobile"] 		= array("char254", true);
+		$arrFields["user_date"] 		= array("long", true);
+
+		if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
+			$strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Installing kajona-user-subsystem group-table...\n";
+        $arrFields = array();
+		$arrFields["group_id"] 			= array("char20", false);
+		$arrFields["group_desc"]		= array("char254", true);
+
+		if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
+			$strReturn .= "An error occured! ...\n";
+        
+        
+        $strReturn .= "Updating kajona-user-subsystem members-table...\n";
+        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_members")." TO ".$this->objDB->encloseTableName(_dbprefix_."user_group_kajona_members")."";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_kajona_members")."
+                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        
+        $strReturn .= "Migrating current groups to new kajona-user-subsystems...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."user_group ORDER BY group_id DESC";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona 
+                                        (group_id) VALUES (?) ";
+            $this->objDB->_pQuery($strQuery, array($arrOneRow["group_id"]));
+        }
+        
+        $strReturn .= "Migrating current users to new kajona-user-subsystems...\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."user ORDER BY user_id DESC";
+        $arrRows = $this->objDB->getPArray($strQuery, array());
+        foreach($arrRows as $arrOneRow) {
+            $strQuery = "INSERT INTO "._dbprefix_."user_kajona 
+                                        (user_id, user_pass, user_email, user_forename, user_name, 
+                                        user_street, user_postal, user_city, user_tel, user_mobile, user_date) VALUES 
+                                        (?,?,?,?,?,?,?,?,?,?,?) ";
+            $this->objDB->_pQuery($strQuery, array(
+                $arrOneRow["user_id"], $arrOneRow["user_pass"], $arrOneRow["user_email"],
+                $arrOneRow["user_forename"], $arrOneRow["user_name"], $arrOneRow["user_street"], $arrOneRow["user_postal"],
+                $arrOneRow["user_city"], $arrOneRow["user_tel"], $arrOneRow["user_mobile"], $arrOneRow["user_date"]));
+            
+        }
+        
+        $strReturn .= "Updating old user-tables...\n";
+		$strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
+                    ADD ".$this->objDB->encloseColumnName("user_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
+                    DROP ".$this->objDB->encloseColumnName("user_pass").",
+                    DROP ".$this->objDB->encloseColumnName("user_email").",
+                    DROP ".$this->objDB->encloseColumnName("user_forename").",
+                    DROP ".$this->objDB->encloseColumnName("user_name").",
+                    DROP ".$this->objDB->encloseColumnName("user_street").",
+                    DROP ".$this->objDB->encloseColumnName("user_postal").",
+                    DROP ".$this->objDB->encloseColumnName("user_city").",
+                    DROP ".$this->objDB->encloseColumnName("user_tel").",
+                    DROP ".$this->objDB->encloseColumnName("user_mobile").",
+                    DROP ".$this->objDB->encloseColumnName("user_date")." ";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+ 
+        $strReturn .= "Updating old group-tables...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")."
+                    ADD ".$this->objDB->encloseColumnName("group_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Reassigning current users to kajona usersubsystem...\n";
+        $strQuery = "UPDATE "._dbprefix_."user SET user_subsystem = ?";
+        if(!$this->objDB->_pQuery($strQuery, array('kajona')))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Reassigning current groups to kajona usersubsystem...\n";
+        $strQuery = "UPDATE "._dbprefix_."user_group SET group_subsystem = ?";
+        if(!$this->objDB->_pQuery($strQuery, array('kajona')))
             $strReturn .= "An error occured! ...\n";
         
         $strReturn .= "Updating module-versions...\n";
-        $this->updateModuleVersion("", "3.4.0.1");
+        $this->updateModuleVersion("", "3.4.0.2");
         $strReturn .= "Updating element-versions...\n";
-        $this->updateElementVersion("languageswitch", "3.4.0.1");
+        $this->updateElementVersion("languageswitch", "3.4.0.2");
         return $strReturn;
     }
 }

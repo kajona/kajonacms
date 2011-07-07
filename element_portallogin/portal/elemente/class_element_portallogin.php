@@ -286,62 +286,72 @@ class class_element_portallogin extends class_element_portal implements interfac
 
             
             $objUser = new class_modul_user_user($this->objSession->getUserID());
+            if($objUser->getObjSourceUser()->isEditable() && $objUser->getStrSubsystem() == "kajona" && $objUser->getObjSourceUser() instanceof class_usersources_user_kajona) {
+                
+                
 
-            $arrTemplate["username"] = $objUser->getStrUsername();
-            $arrTemplate["email"] = $objUser->getStrEmail();
-            $arrTemplate["forename"] = $objUser->getStrForename();
-            $arrTemplate["name"] = $objUser->getStrName();
+                $arrTemplate["username"] = $objUser->getStrUsername();
+                $arrTemplate["email"] = $objUser->getObjSourceUser()->getStrEmail();
+                $arrTemplate["forename"] = $objUser->getObjSourceUser()->getStrForename();
+                $arrTemplate["name"] = $objUser->getObjSourceUser()->getStrName();
 
-            $arrTemplate["street"] = $objUser->getStrStreet();
-            $arrTemplate["postal"] = $objUser->getStrPostal();
-            $arrTemplate["city"] = $objUser->getStrCity();
-            $arrTemplate["phone"] = $objUser->getStrTel();
-            $arrTemplate["mobile"] = $objUser->getStrMobile();
+                $arrTemplate["street"] = $objUser->getObjSourceUser()->getStrStreet();
+                $arrTemplate["postal"] = $objUser->getObjSourceUser()->getStrPostal();
+                $arrTemplate["city"] = $objUser->getObjSourceUser()->getStrCity();
+                $arrTemplate["phone"] = $objUser->getObjSourceUser()->getStrTel();
+                $arrTemplate["mobile"] = $objUser->getObjSourceUser()->getStrMobile();
 
-            $objDate = new class_date($objUser->getLongDate());
+                $objDate = new class_date($objUser->getObjSourceUser()->getLongDate());
 
-            $arrTemplate["date_day"] = $objDate->getIntDay();
-            $arrTemplate["date_month"] = $objDate->getIntMonth();
-            $arrTemplate["date_year"] = $objDate->getIntYear();
+                $arrTemplate["date_day"] = $objDate->getIntDay();
+                $arrTemplate["date_month"] = $objDate->getIntMonth();
+                $arrTemplate["date_year"] = $objDate->getIntYear();
 
 
 
-            $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
+                $arrTemplate["formaction"] = getLinkPortalHref($this->getPagename(), "", "portalEditProfile");
 
-            $arrTemplate["formErrors"] = "";
-            if(count($arrErrors) > 0) {
-                foreach ($arrErrors as $strOneError) {
-                    $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
-                    $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                $arrTemplate["formErrors"] = "";
+                if(count($arrErrors) > 0) {
+                    foreach ($arrErrors as $strOneError) {
+                        $strErrTemplate = $this->objTemplate->readTemplate("/element_portallogin/".$this->arrElementData["portallogin_template"], "errorRow");
+                        $arrTemplate["formErrors"] .= "".$this->fillTemplate(array("error" => $strOneError), $strErrTemplate);
+                    }
                 }
-            }
 
-    	    return $this->fillTemplate($arrTemplate, $strTemplateID);
+                return $this->fillTemplate($arrTemplate, $strTemplateID);
+            }
+            else
+                return "Login provider not supported.";
 	    }
 	    else {
             $objUser = new class_modul_user_user($this->objSession->getUserID());
+            
+            if($objUser->getObjSourceUser() instanceof class_usersources_user_kajona) {
 
-            $objUser->setStrEmail($this->getParam("email"));
-            $objUser->setStrForename($this->getParam("forename"));
-            $objUser->setStrName($this->getParam("name"));
-            $objUser->setStrPass($this->getParam("password"));
+                $objUser->getObjSourceUser()->setStrEmail($this->getParam("email"));
+                $objUser->getObjSourceUser()->setStrForename($this->getParam("forename"));
+                $objUser->getObjSourceUser()->setStrName($this->getParam("name"));
+                $objUser->getObjSourceUser()->setStrPass($this->getParam("password"));
 
-            if($this->arrElementData["portallogin_editmode"] == 1) {
-                $objUser->setStrStreet($this->getParam("street"));
-                $objUser->setStrPostal($this->getParam("postal"));
-                $objUser->setStrCity($this->getParam("city"));
-                $objUser->setStrTel($this->getParam("phone"));
-                $objUser->setStrMobile($this->getParam("mobile"));
+                if($this->arrElementData["portallogin_editmode"] == 1) {
+                    $objUser->getObjSourceUser()->setStrStreet($this->getParam("street"));
+                    $objUser->getObjSourceUser()->setStrPostal($this->getParam("postal"));
+                    $objUser->getObjSourceUser()->setStrCity($this->getParam("city"));
+                    $objUser->getObjSourceUser()->setStrTel($this->getParam("phone"));
+                    $objUser->getObjSourceUser()->setStrMobile($this->getParam("mobile"));
 
-                $objDate = new class_date();
-                $objDate->setIntDay($this->getParam("date_day"));
-                $objDate->setIntMonth($this->getParam("date_month"));
-                $objDate->setIntYear($this->getParam("date_year"));
+                    $objDate = new class_date();
+                    $objDate->setIntDay($this->getParam("date_day"));
+                    $objDate->setIntMonth($this->getParam("date_month"));
+                    $objDate->setIntYear($this->getParam("date_year"));
 
-                $objUser->setLongDate($objDate->getLongTimestamp());
+                    $objUser->getObjSourceUser()->setLongDate($objDate->getLongTimestamp());
+                }
+
+                $objUser->getObjSourceUser()->updateObjectToDb();
+            
             }
-
-            $objUser->updateObjectToDb();
             $this->portalReload(getLinkPortalHref($this->getPagename()));
 
 	    }

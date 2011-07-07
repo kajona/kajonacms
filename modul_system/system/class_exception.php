@@ -173,4 +173,14 @@ class class_exception extends Exception {
         $this->intErrorlevel = $intErrorlevel;
     }
 }
+
+
+//bad coding-style, but define a few more specific exceptions for special cases
+class class_authentication_exception extends class_exception {
+    
+}
+
+class class_io_exception extends class_exception {
+    
+}
 ?>

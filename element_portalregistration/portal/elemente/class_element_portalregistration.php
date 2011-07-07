@@ -66,7 +66,6 @@ class class_element_portalregistration extends class_element_portal implements i
 	       if($objUser->getStrEmail() != "") {
                if($objUser->getIntActive() == 0 && $objUser->getIntLogins() == 0 && $objUser->getStrAuthcode() == $this->getParam("authcode")  && $objUser->getStrAuthcode() != "") {
 	               $objUser->setIntActive(1);
-	               $objUser->setStrPass("");
                    $objUser->setStrAuthcode("");
 	               if($objUser->updateObjectToDb()) {
 	                   $strReturn .= $this->getText("pr_completionSuccess");
@@ -122,7 +121,6 @@ class class_element_portalregistration extends class_element_portal implements i
     	    $strTemplateID = $this->objTemplate->readTemplate("/element_portalregistration/".$this->arrElementData["portalregistration_template"], "portalregistration_userdataform");
             $arrTemplate = array();
             
-            $objUser = new class_modul_user_user($this->objSession->getUserID());
             
             $arrTemplate["username"] = $this->getParam("username");
             $arrTemplate["email"] = $this->getParam("email");
@@ -144,10 +142,6 @@ class class_element_portalregistration extends class_element_portal implements i
 	        //create new user, inactive
 	        $objUser = new class_modul_user_user();
 	        $objUser->setStrUsername($this->getParam("username"));
-	        $objUser->setStrEmail($this->getParam("email"));
-	        $objUser->setStrForename($this->getParam("forename"));
-	        $objUser->setStrName($this->getParam("name"));
-	        $objUser->setStrPass($this->getParam("password"));
 	        $objUser->setIntActive(0);
 	        $objUser->setIntAdmin(0);
 	        $objUser->setIntPortal(1);
@@ -156,10 +150,21 @@ class class_element_portalregistration extends class_element_portal implements i
 	        
 	        
 	        if($objUser->updateObjectToDb()) {
+                
+                $objSourceuser = $objUser->getObjSourceUser();
+                $objSourceuser->setField("email", $this->getParam("email"));
+                $objSourceuser->setField("forename", $this->getParam("forename"));
+                $objSourceuser->setField("name", $this->getParam("name"));
+                $objSourceuser->setField("password", $this->getParam("password"));
+                $objSourceuser->updateObjectToDb();
+	        
+                
 	        	//group assignments
-                class_modul_user_group::addUserToGroups($objUser,array($this->arrElementData["portalregistration_group"]));
+                $objGroup = new class_modul_user_group($this->arrElementData["portalregistration_group"]);
+                $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
                 //and to the guests to avoid conflicts
-                class_modul_user_group::addUserToGroups($objUser,array(_guests_group_id_));
+                $objGroup = new class_modul_user_group(_guests_group_id_);
+                $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 	        	//create a mail to allow the user to activate itself
 	        	
                 $strMailContent = $this->getText("pr_email_body");

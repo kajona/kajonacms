@@ -25,7 +25,7 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 		//Base-Class...
 		parent::__construct($arrModule);
 
-        if($this->getAction() == "list")
+        if($this->getAction() != "pwdReset" || $this->getAction() != "adminLogin" || $this->getAction() != "adminLogout")
             $this->setAction("login");
 	}
 

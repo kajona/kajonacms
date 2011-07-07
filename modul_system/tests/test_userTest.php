@@ -28,7 +28,7 @@ class class_test_user extends class_testbase  {
         $arrUsersCreated = array();
         for($intI =0; $intI < 100; $intI++) {
             $objUser = new class_modul_user_user();
-            $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
+           // $objUser->setStrEmail(generateSystemid()."@".generateSystemid()."de");
             $strUsername = "user_".generateSystemid();
             $objUser->setStrUsername($strUsername);
             $objUser->updateObjectToDb();
@@ -63,7 +63,8 @@ class class_test_user extends class_testbase  {
 
         echo "\tdeleting users created...\n";
         foreach($arrUsersCreated as $strOneUser) {
-                $objUser = new class_modul_user_user($strOneUser);
+            echo "\t\tdeleting user ".$strOneUser."...\n";
+            $objUser = new class_modul_user_user($strOneUser);
             $objUser->deleteUser();
             $objDB->flushQueryCache();
         }
@@ -95,19 +96,21 @@ class class_test_user extends class_testbase  {
         for ($intI = 0; $intI <= 100; $intI++) {
             $objUser = new class_modul_user_user();
             $objUser->setStrUsername("AUTOTESTUSER_".$intI);
-            $objUser->setStrEmail("autotest_".$intI."@kajona.de");
+            //$objUser->setStrEmail("autotest_".$intI."@kajona.de");
             $objUser->updateObjectToDb();
             //add user to group
-            class_modul_user_group::addUserToGroups($objUser, array($objGroup->getSystemid()));
-            $arrUsersInGroup = class_modul_user_group::getGroupMembers($objGroup->getSystemid());
-            $this->assertTrue($objGroup->isUserMemberInGroup($objUser), __FILE__." checkUserInGroup");
+            $objGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
+            $arrUsersInGroup = $objGroup->getObjSourceGroup()->getUserIdsForGroup(); 
+            $this->assertTrue(in_array($objUser->getSystemid(), $arrUsersInGroup), __FILE__." checkUserInGroup");
             $this->assertEquals(count($arrUsersInGroup), 1+$intI, __FILE__." checkNrOfUsersInGroup");
             $objDB->flushQueryCache();
         }
 
         echo "\tdeleting groups & users\n";
-        foreach(class_modul_user_group::getGroupMembers($objGroup->getSystemid()) as $objOneUser)
+        foreach($objGroup->getObjSourceGroup()->getUserIdsForGroup() as $strOneUser) {
+            $objOneUser = new class_modul_user_user($strOneUser);
             $objOneUser->deleteUser();
+        }
         $objGroup->deleteGroup();
 
 

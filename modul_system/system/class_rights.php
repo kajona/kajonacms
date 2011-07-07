@@ -303,8 +303,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else 
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
         
@@ -340,8 +342,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -378,8 +382,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -416,8 +422,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -455,8 +463,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -493,8 +503,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -531,8 +543,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -568,8 +582,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 
@@ -606,8 +622,10 @@ class class_rights {
                 $arrGroups = $this->objSession->getGroupIdsAsArray();
             }
         }
-        else
-            $arrGroups = class_modul_user_group::getAllGroupIdsForUser($strUserid);
+        else {
+            $objUser = new class_modul_user_user($strUserid);
+            $arrGroups = $objUser->getArrGroupIds();
+        }
 
 		$arrRights = $this->getArrayRights($strSystemid);
 

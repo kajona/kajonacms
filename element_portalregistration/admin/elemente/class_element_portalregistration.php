@@ -63,7 +63,8 @@ class class_element_portalregistration extends class_element_admin implements in
 		$arrGroups = class_modul_user_group::getAllGroups();
 		$arrGroupsDD = array();
 		foreach ($arrGroups as $objOneGroup) {
-			$arrGroupsDD[$objOneGroup->getSystemid()] = $objOneGroup->getStrName();
+            if($objOneGroup->getStrSubsystem() == "kajona")
+                $arrGroupsDD[$objOneGroup->getSystemid()] = $objOneGroup->getStrName();
 		}
 
 		$strReturn .= $this->objToolkit->formInputDropdown("portalregistration_group", $arrGroupsDD, $this->getText("portalregistration_group"), (isset($arrElementData["portalregistration_group"]) ? $arrElementData["portalregistration_group"] : "" ));
