@@ -81,5 +81,10 @@ interface interface_usersources_user {
      * @return void
      */
     public function setNewRecordId($strId);
+    
+    /**
+     * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
+     */
+    public function isPasswortResetable();
 }
 ?>

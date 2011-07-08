@@ -192,6 +192,13 @@ class class_usersources_user_kajona extends class_model implements interface_mod
         $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona_members WHERE group_member_user_kajona_id=?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
+    
+    /**
+     * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
+     */
+    public function isPasswortResetable() {
+        return true;
+    }
 
     /**
 	 * Returns the list of editable fields

@@ -45,6 +45,13 @@ class class_usersources_user_debug extends class_model implements interface_mode
     }
     
     /**
+     * Indicates if the current users' password may be reset, e.g. via a password-forgotten mail
+     */
+    public function isPasswortResetable() {
+        return false;
+    }
+    
+    /**
      * Passes a new system-id to the object.
      * This id has to be used for newly created objects,
      * otherwise the mapping of kajona-users to users in the

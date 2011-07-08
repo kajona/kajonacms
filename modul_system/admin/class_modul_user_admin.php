@@ -173,7 +173,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objOneUser->getStrSubsystem())->getMembersEditable())
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "editMemberships", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_zugehoerigkeit"), "icon_group.gif"));
 
-                if($objOneUser->getObjSourceUser()->isEditable() &&   $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && checkEmailaddress($objOneUser->getStrEmail()))
+                if($objOneUser->getObjSourceUser()->isEditable() && $objOneUser->getObjSourceUser()->isPasswortResetable() &&   $this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && checkEmailaddress($objOneUser->getStrEmail()))
                     $strActions .= $this->objToolkit->listButton(getLinkAdmin("user", "sendPassword", "&systemid=".$objOneUser->getSystemid(), "", $this->getText("user_password_resend"), "icon_mail.gif"));
 
                 if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])))
