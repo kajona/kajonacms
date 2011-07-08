@@ -110,8 +110,11 @@ class class_element_portallogin extends class_element_portal implements interfac
 
                 if($strPass1 == $strPass2 && checkText($strPass1, 3, 200)) {
 
-                    
-                    $objUser->setStrPass($strPass1);
+                    if($objUser->getObjSourceUser()->isPasswortResetable() && method_exists($objUser->getObjSourceUser(), "setStrPass")) {
+                        $objUser->getObjSourceUser()->setStrPass($strPass1);
+                        $objUser->getObjSourceUser()->updateObjectToDb();
+                    }
+                        
                     $objUser->setStrAuthcode("");
                     $objUser->updateObjectToDb();
                     
@@ -164,15 +167,14 @@ class class_element_portallogin extends class_element_portal implements interfac
 
         if($this->getParam("reset") != "" && getPost("reset") != "") {
             //try to load the user
-            $arrUser = class_modul_user_user::getAllUsersByName($this->getParam("portallogin_username"), true);
-            if(count($arrUser) == 1) {
-                $objUser = $arrUser[0];
+            $objSubsystem = new class_modul_user_sourcefactory();
+            $objUser = $objSubsystem->getUserByUsername($this->getParam("portallogin_username"));
+            if($objUser != null) {
 
                 if($objUser->getStrEmail() != "" && checkEmailaddress($objUser->getStrEmail()) && $objUser->getIntPortal() == 1) {
 
                     //generate an authcode and save it with the user
                     $strAuthcode = generateSystemid();
-                    $objUser->setStrPass("");
                     $objUser->setStrAuthcode($strAuthcode);
                     $objUser->updateObjectToDb();
 
