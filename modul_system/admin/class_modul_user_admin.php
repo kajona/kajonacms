@@ -67,7 +67,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
         $arrReturn = array();
         if($strAction == "saveUser") {
             
-            if($this->getSystemid() != "" && $this->getSystemid() != $this->objSession->getUserID())
+            if($this->getSystemid() == "" || $this->getSystemid() != $this->objSession->getUserID())
                 $arrReturn["user_username"] = "string";
             
             //merge with fields from source
