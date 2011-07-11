@@ -8,22 +8,24 @@
 ********************************************************************************************************/
 
 /**
- * Class to manage and access Config-Values
+ * Class to manage and access config-values
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_config {
 	private $arrConfig = null;
 	private $arrDebug = null;
 	private $arrModul = null;
 
-	private static $objConfig = null;
+	private static $arrInstances = array();
 
 	/**
 	 * Just an ordinary constructor
 	 *
+     * @param string $strConfigFile the config-file to parse
 	 */
-	private function __construct() 	{
+	private function __construct($strConfigFile = "config.php") 	{
 		$this->arrModul["name"] 		= "config";
 		$this->arrModul["author"] 		= "sidler@mulchprod.de";
 
@@ -38,27 +40,29 @@ class class_config {
 		$this->arrDebug = $debug;
 
 		//Now we have to set up some more constants...
-		define("_dbprefix_" , 		$this->getConfig("dbprefix"));
-		define("_systempath_" , 	_realpath_ . $this->getConfig("dirsystem"));
-		define("_portalpath_" , 	_realpath_ . $this->getConfig("dirportal"));
-		define("_adminpath_" , 		_realpath_ . $this->getConfig("diradmin"));
-		define("_templatepath_" , 	_realpath_ . $this->getConfig("dirtemplates"));
-		define("_langpath_" , 		_realpath_ . $this->getConfig("dirlang"));
-		define("_skinpath_" , 		_adminpath_ . $this->getConfig("dirskins"));
-		define("_indexpath_",		_webpath_."/index.php");
-		define("_xmlpath_",         _webpath_."/xml.php");
-		define("_dblog_", 			$this->getDebug("dblog"));
-		define("_timedebug_", 		$this->getDebug("time"));
-		define("_dbnumber_", 		$this->getDebug("dbnumber"));
-		define("_templatenr_", 		$this->getDebug("templatenr"));
-		define("_memory_",          $this->getDebug("memory"));
-		define("_cache_",           $this->getDebug("cache"));
+        if($strConfigFile == "config.php") {
+            define("_dbprefix_" , 		$this->getConfig("dbprefix"));
+            define("_systempath_" , 	_realpath_ . $this->getConfig("dirsystem"));
+            define("_portalpath_" , 	_realpath_ . $this->getConfig("dirportal"));
+            define("_adminpath_" , 		_realpath_ . $this->getConfig("diradmin"));
+            define("_templatepath_" , 	_realpath_ . $this->getConfig("dirtemplates"));
+            define("_langpath_" , 		_realpath_ . $this->getConfig("dirlang"));
+            define("_skinpath_" , 		_adminpath_ . $this->getConfig("dirskins"));
+            define("_indexpath_",		_webpath_."/index.php");
+            define("_xmlpath_",         _webpath_."/xml.php");
+            define("_dblog_", 			$this->getDebug("dblog"));
+            define("_timedebug_", 		$this->getDebug("time"));
+            define("_dbnumber_", 		$this->getDebug("dbnumber"));
+            define("_templatenr_", 		$this->getDebug("templatenr"));
+            define("_memory_",          $this->getDebug("memory"));
+            define("_cache_",           $this->getDebug("cache"));
 
-        
-        if($this->getConfig("images_cachepath") != "")
-            define("_images_cachepath_", $this->getConfig("images_cachepath"));
-        else
-            define("_images_cachepath_", "/portal/pics/cache/");
+
+            if($this->getConfig("images_cachepath") != "")
+                define("_images_cachepath_", $this->getConfig("images_cachepath"));
+            else
+                define("_images_cachepath_", "/portal/pics/cache/");
+        }
 
 	}
 
@@ -87,14 +91,15 @@ class class_config {
 	/**
 	 * Using a singleton to get an instance
 	 *
+     * @param string $strConfigFile the config-file to parse
 	 * @return class_config
 	 */
-	public static function getInstance() {
-		if(self::$objConfig == null) {
-			self::$objConfig = new class_config();
+	public static function getInstance($strConfigFile = "config.php") {
+		if(!isset(self::$arrInstances[$strConfigFile])) {
+			self::$arrInstances[$strConfigFile] = new class_config($strConfigFile);
 		}
 
-		return self::$objConfig;
+		return self::$arrInstances[$strConfigFile];
 	}
 
 	/**
