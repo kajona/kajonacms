@@ -33,7 +33,7 @@ class class_config {
 		$debug = array();
 
 		//Include the config-File
-		if(!@include(_realpath_."/system/config/config.php"))
+		if(!@include(_realpath_."/system/config/".$strConfigFile))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;
