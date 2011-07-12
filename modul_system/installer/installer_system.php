@@ -523,10 +523,6 @@ class class_installer_system extends class_installer_base implements interface_i
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
 
-		//try to create a default-dashboard for the admin
-        $objDashboard = new class_modul_dashboard_widget();
-        $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
-
         //create a default language
 		$strReturn .= "Creating new default-language\n";
         $objLanguage = new class_modul_languages_language();

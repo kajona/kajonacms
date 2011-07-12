@@ -20,6 +20,7 @@ $lang["_user_selfedit_hint"]             = "Defines, if the user is allowed to c
 $lang["fehler_speichern"]                = "An error occured while saving profile!";
 $lang["group_accept"]                    = "Select group ";
 $lang["group_desc"]                      = "Description:";
+$lang["group_dn"]                        = "Distinguished-Name in the directory:";
 $lang["group_memberlist"]                = "Members of group ";
 $lang["group_name"]                      = "Group title:";
 $lang["group_usersource"]                = "Group-Source:";

@@ -533,10 +533,6 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             $objSourceUser->setEditFormEntries($arrSourceFields);
             $objSourceUser->updateObjectToDb();
             
-            //intial dashboard widgets
-            $objDashboard = new class_modul_dashboard_widget();
-            $objDashboard->createInitialWidgetsForUser($objUser->getSystemid());
-            
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
         }
         else if($this->getParam("mode") == "edit") {
@@ -776,7 +772,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 //load the elements provided by the login-provider
                 
                 //Fetch the fields from the source
-                if($objNewGroup->isEditable()) {
+                if($objNewGroup->getObjSourceGroup()->isEditable()) {
                     $arrFields = $objNewGroup->getObjSourceGroup()->getEditFormEntries();
                     /* @var $objOneField class_usersources_form_entry */
                     foreach($arrFields as $objOneField) {

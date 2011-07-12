@@ -123,6 +123,10 @@ class class_modul_user_user extends class_model implements interface_model  {
             $objTargetUser->setNewRecordId($this->getSystemid());
             $this->objDB->flushQueryCache();
             
+            //intial dashboard widgets
+            $objDashboard = new class_modul_dashboard_widget();
+            $objDashboard->createInitialWidgetsForUser($this->getSystemid());
+            
             return $bitReturn;
         }
         else {
@@ -144,6 +148,13 @@ class class_modul_user_user extends class_model implements interface_model  {
             class_logger::getInstance()->addLogRow("updated userfor subsystem ".$this->getStrSubsystem()." / ".$this->getStrUsername(), class_logger::$levelInfo);
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
+    }
+    
+    protected function onInsertToDb() {
+            
+                            
+
+        parent::onInsertToDb();
     }
 
    

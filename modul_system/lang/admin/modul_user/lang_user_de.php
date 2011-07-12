@@ -20,6 +20,7 @@ $lang["_user_selfedit_hint"]             = "Legt fest, ob ein Benutzer seine eig
 $lang["fehler_speichern"]                = "Beim Speichern des Benutzers ist ein Fehler aufgetreten!";
 $lang["group_accept"]                    = "Gruppe übernehmen";
 $lang["group_desc"]                      = "Beschreibung:";
+$lang["group_dn"]                        = "Distinguished-Name im Verzeichnis:";
 $lang["group_memberlist"]                = "Mitglieder der Gruppe ";
 $lang["group_name"]                      = "Gruppen-Name:";
 $lang["group_usersource"]                = "Gruppenquelle:";
