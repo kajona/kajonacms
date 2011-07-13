@@ -88,6 +88,9 @@ default:
     $config['cache_texts']          = false;                                   //caches read lang files with the users' session. Enable only on productive 
                                                                                //environments. Could consume up a lot of ram.
 
+    $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers 
+                                                                               //are queried in the order of appereance. The list is comma-separated, no blanks allowed.
+
 //--system settings--------------------------------------------------------------------------------------
 
     $debug = array();
