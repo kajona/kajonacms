@@ -419,7 +419,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->formHeadline($this->getText("user_personaldata"));
                 //globally required
                 if(!$bitSelfedit)
-                    $strReturn .= $this->objToolkit->formInputText("user_username", $this->getText("user_username"), $this->getParam("user_username") != "" ? $this->getParam("user_username") : $objUser->getStrUsername() );
+                    $strReturn .= $this->objToolkit->formInputText("user_username", $this->getText("user_username"), $this->getParam("user_username") != "" ? $this->getParam("user_username") : $objUser->getStrUsername(), "inputText", "", ($bitSelfedit ) );
                 
                 //Fetch the fields from the source
                 if($objSourceUser->isEditable()) {
@@ -647,7 +647,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                     
                     if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) )
                         $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupEdit", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_bearbeiten"), "icon_pencil.gif"));
-                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable())
+                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) )
                         $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     if($this->objRights->rightDelete($this->getModuleSystemid($this->arrModule["modul"])) )
                         $strAction .= $this->objToolkit->listDeleteButton($objSingleGroup->getStrName(), $this->getText("gruppe_loeschen_frage"),
@@ -656,7 +656,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 else {
                     
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_pencilDisabled.gif", $this->getText("gruppe_bearbeiten_x")));
-                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) && $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable())
+                    if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"])) /*&& $objUsersources->getUsersource($objSingleGroup->getStrSubsystem())->getMembersEditable()*/)
                         $strAction .= $this->objToolkit->listButton(getLinkAdmin("user", "groupMember", "&systemid=".$objSingleGroup->getSystemid(), "", $this->getText("gruppe_mitglieder"), "icon_group.gif"));
                     $strAction .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("gruppe_loeschen_x")));
                 }
@@ -908,7 +908,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             	$objGroup = new class_modul_user_group($this->getSystemid());
                 $objSourceGroup = $objGroup->getObjSourceGroup();
             	$strReturn .= $this->objToolkit->formHeadline($this->getText("group_memberlist")."\"".$objGroup->getStrName()."\"");
-
+                $objUsersources = new class_modul_user_sourcefactory();
 
                 $objArraySectionIterator = new class_array_section_iterator($objSourceGroup->getNumberOfMembers());
                 $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -921,12 +921,14 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                 $strReturn .= $this->objToolkit->listHeader();
                 $intI = 0;
                 foreach ($arrMembers as $strSingleMemberId) {
-                    
                     $objSingleMember = new class_modul_user_user($strSingleMemberId);
                     
-                    $strAction = $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
+                    $strAction = "";
+                    if( $objUsersources->getUsersource($objGroup->getStrSubsystem())->getMembersEditable() ) {
+                        $strAction .= $this->objToolkit->listDeleteButton($objSingleMember->getStrUsername()." (".$objSingleMember->getStrForename() ." ". $objSingleMember->getStrName() .")"
                                  ,$this->getText("mitglied_loeschen_frage")
                                  ,getLinkAdminHref($this->arrModule["modul"], "groupMemberDelete", "&groupid=".$objGroup->getSystemid()."&userid=".$objSingleMember->getSystemid()));
+                    }
                     $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_user.gif"), $objSingleMember->getStrUsername(), $strAction, $intI++);
                 }
                 $strReturn .= $this->objToolkit->listFooter().$arrPageViews["pageview"];
