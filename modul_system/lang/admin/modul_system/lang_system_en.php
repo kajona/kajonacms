@@ -255,6 +255,7 @@ $lang["systemtask_group_database"]       = "Database";
 $lang["systemtask_group_default"]        = "Miscellaneous";
 $lang["systemtask_group_pages"]          = "Pages";
 $lang["systemtask_group_stats"]          = "Stats";
+$lang["systemtask_group_ldap"]          = "Ldap";
 $lang["systemtask_progress"]             = "Progress:";
 $lang["systemtask_run"]                  = "Execute";
 $lang["systemtask_runningtask"]          = "Task:";
