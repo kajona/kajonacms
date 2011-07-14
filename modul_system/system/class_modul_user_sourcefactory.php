@@ -41,7 +41,7 @@ class class_modul_user_sourcefactory {
     public function getGroupByName($strName) {
         
         //validate if a group with the given name is available
-        $strQuery = "SELECT group_id FROM "._dbprefix_."group where group_name = ?";
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group where group_name = ?";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strName));
         
         if(isset($arrRow["group_id"]) && validateSystemid($arrRow["group_id"])) {
