@@ -195,7 +195,7 @@ class class_db {
 		}
 
 		if(!$bitReturn)
-		    $this->getError($strQuery);
+		    $this->getError($strQuery."\r\n params: ".implode(", ", $arrParams));
 
 		return $bitReturn;
 	}
@@ -322,7 +322,7 @@ class class_db {
 		$arrReturn = array();
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArray($strQuery, $this->dbsafeParams($arrParams));
@@ -444,7 +444,7 @@ class class_db {
 		}
 
 		if(_dblog_)
-			$this->writeDbLog($strQuery." ".implode(", ", $arrParams));
+			$this->writeDbLog($strQuery."\r\n params: ".implode(", ", $arrParams));
 
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
@@ -653,7 +653,7 @@ class class_db {
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
         		foreach($arrTemp as $arrTable) {
-        			if(uniStrpos($arrTable["name"], _dbprefix_) !== false) {
+        			if(uniStripos($arrTable["name"], _dbprefix_) !== false) {
         				if($bitAll)
         					$arrReturn[] =  $arrTable;
         				else

@@ -20,7 +20,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0";
+		$arrModule["version"] 		= "3.4.0.1";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -77,7 +77,7 @@ class class_installer_element_portallogin extends class_installer_base implement
 		$strReturn = "";
 
        	//Table for page-element
-		$strReturn .= "Installing formular-element table...\n";
+		$strReturn .= "Installing element_plogin-element table...\n";
 
 		$arrFields = array();
 		$arrFields["content_id"] 				= array("char20", false);
@@ -89,7 +89,7 @@ class class_installer_element_portallogin extends class_installer_base implement
         $arrFields["portallogin_pwdforgot"]     = array("char254", true);
         $arrFields["portallogin_editmode"]      = array("int", true);
 
-		if(!$this->objDB->createTable("element_portallogin", $arrFields, array("content_id")))
+		if(!$this->objDB->createTable("element_plogin", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		//Register the element
@@ -154,6 +154,11 @@ class class_installer_element_portallogin extends class_installer_base implement
             $strReturn .= $this->postUpdate_331_340();
             $this->objDB->flushQueryCache();
         }
+        
+        if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.4.0") {
+            $strReturn .= $this->postUpdate_340_3401();
+            $this->objDB->flushQueryCache();
+        }
 
         return $strReturn;
     }
@@ -207,6 +212,18 @@ class class_installer_element_portallogin extends class_installer_base implement
     public function postUpdate_331_340() {
         $strReturn = "Updating element portallogin to 3.4.0...\n";
         $this->updateElementVersion("portallogin", "3.4.0");
+        return $strReturn;
+    }
+    
+    public function postUpdate_340_3401() {
+        $strReturn = "Updating element portallogin to 3.4.0.1...\n";
+        
+        
+        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_portallogin")." TO ".$this->objDB->encloseTableName(_dbprefix_."element_plogin")."";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $this->updateElementVersion("portallogin", "3.4.0.1");
         return $strReturn;
     }
 }

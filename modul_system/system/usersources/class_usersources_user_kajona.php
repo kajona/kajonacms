@@ -189,7 +189,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 	 * @static
 	 */
 	private function deleteAllUserMemberships() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona_members WHERE group_member_user_kajona_id=?";
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_user_kajona_id=?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
     
@@ -230,7 +230,7 @@ class class_usersources_user_kajona extends class_model implements interface_mod
 	public function getGroupIdsForUser() {
         $strQuery = "SELECT group_id 
                        FROM "._dbprefix_."user_group,
-                            "._dbprefix_."user_group_kajona_members
+                            "._dbprefix_."user_kajona_members
                       WHERE group_member_user_kajona_id= ?
                         AND group_id = group_member_group_kajona_id
                    ORDER BY group_name ASC  ";

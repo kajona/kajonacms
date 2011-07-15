@@ -220,8 +220,8 @@ class class_modul_languages_language extends class_model implements interface_mo
                         WHERE pageproperties_language = ?";
         
         $strQuery2 = "UPDATE "._dbprefix_."page_element
-                        SET page_element_placeholder_language = ?
-                        WHERE page_element_placeholder_language = ?";
+                        SET page_element_ph_language = ?
+                        WHERE page_element_ph_language = ?";
         
         $bitCommit = ($this->objDB->_pQuery($strQuery1, array($this->getStrName(), $strSourceLanguage)) && $this->objDB->_pQuery($strQuery2, array($this->getStrName(), $strSourceLanguage)));
         

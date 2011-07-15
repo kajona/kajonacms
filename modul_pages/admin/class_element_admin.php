@@ -89,11 +89,11 @@ abstract class class_element_admin extends class_admin {
             $bitShow = true;
         }
 
-        $strInternalTitle = (isset($arrElementData["page_element_placeholder_title"]) ? $arrElementData["page_element_placeholder_title"] : "");
+        $strInternalTitle = (isset($arrElementData["page_element_ph_title"]) ? $arrElementData["page_element_ph_title"] : "");
         if($strInternalTitle != "")
             $bitShow = true;
 
-		$strSystemFields .= $this->objToolkit->formInputText("page_element_placeholder_title", $this->getText("page_element_placeholder_title", "pages"), $strInternalTitle);
+		$strSystemFields .= $this->objToolkit->formInputText("page_element_ph_title", $this->getText("page_element_ph_title", "pages"), $strInternalTitle);
 
         $strSystemFields .= $this->objToolkit->formDateSingle("start", $this->getText("page_element_start", "pages"), $objStartDate);
 		$strSystemFields .= $this->objToolkit->formDateSingle("end", $this->getText("page_element_end", "pages"), $objEndDate);
@@ -116,9 +116,9 @@ abstract class class_element_admin extends class_admin {
 
 		//Language is placed right here instead as a hidden field
 		if($strMode == "edit")
-		    $strReturn .= $this->objToolkit->formInputHidden("page_element_placeholder_language", $arrElementData["page_element_placeholder_language"]);
+		    $strReturn .= $this->objToolkit->formInputHidden("page_element_ph_language", $arrElementData["page_element_ph_language"]);
 		else
-		    $strReturn .= $this->objToolkit->formInputHidden("page_element_placeholder_language", $this->getLanguageToWorkOn());
+		    $strReturn .= $this->objToolkit->formInputHidden("page_element_ph_language", $this->getLanguageToWorkOn());
 
 		$strReturn .= $this->objToolkit->formInputHidden("placeholder", $this->getParam("placeholder"));
 		$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
@@ -154,7 +154,7 @@ abstract class class_element_admin extends class_admin {
     					 	  "._dbprefix_."system
     					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
-    					 WHERE element_name = page_element_placeholder_element
+    					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = content_id
     					   AND system_id = content_id
     					   AND system_id = '".dbsafeString($this->getSystemid())."'";
@@ -166,7 +166,7 @@ abstract class class_element_admin extends class_admin {
     					 	  "._dbprefix_."system
     					 LEFT JOIN "._dbprefix_."system_date
     					    ON (system_id = system_date_id)
-    					 WHERE element_name = page_element_placeholder_element
+    					 WHERE element_name = page_element_ph_element
     					   AND page_element_id = system_id
     					   AND system_id = '".dbsafeString($this->getSystemid())."'";
 

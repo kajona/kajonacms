@@ -24,7 +24,7 @@ class class_element_portallogin extends class_element_portal implements interfac
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"]		    = _dbprefix_."element_portallogin";
+		$arrModule["table"]		    = _dbprefix_."element_plogin";
 		$arrModule["modul"]		    = "elemente";
 
 		parent::__construct($arrModule, $objElementData);

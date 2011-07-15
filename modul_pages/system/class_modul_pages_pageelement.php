@@ -80,17 +80,17 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						  LEFT JOIN "._dbprefix_."system_date
 						    ON (system_id = system_date_id)
 						 WHERE system_id= ?
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 		if(count($arrRow) > 1) {
-    		$this->setStrPlaceholder($arrRow["page_element_placeholder_placeholder"]);
-    		$this->setStrName($arrRow["page_element_placeholder_name"]);
-    		$this->setStrElement($arrRow["page_element_placeholder_element"]);
-    		$this->setStrTitle($arrRow["page_element_placeholder_title"]);
-    		$this->setStrLanguage($arrRow["page_element_placeholder_language"]);
+    		$this->setStrPlaceholder($arrRow["page_element_ph_placeholder"]);
+    		$this->setStrName($arrRow["page_element_ph_name"]);
+    		$this->setStrElement($arrRow["page_element_ph_element"]);
+    		$this->setStrTitle($arrRow["page_element_ph_title"]);
+    		$this->setStrLanguage($arrRow["page_element_ph_language"]);
     		$this->setStrClassAdmin($arrRow["element_class_admin"]);
             $this->setStrClassPortal($arrRow["element_class_portal"]);
             $this->setIntCachetime($arrRow["element_cachetime"]);
@@ -150,11 +150,11 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE "._dbprefix_."page_element
-							SET page_element_placeholder_title = ?,
-							    page_element_placeholder_language = ?,
-							    page_element_placeholder_placeholder = ?,
-							    page_element_placeholder_name = ?,
-							    page_element_placeholder_element = ?
+							SET page_element_ph_title = ?,
+							    page_element_ph_language = ?,
+							    page_element_ph_placeholder = ?,
+							    page_element_ph_name = ?,
+							    page_element_ph_element = ?
 							WHERE page_element_id= ? ";
         return $this->objDB->_pQuery($strQuery, array( $this->getStrTitle(false), $this->getStrLanguage(), $this->getStrPlaceholder(), $this->getStrName(), $this->getStrElement(), $this->getSystemid()  ));
     }
@@ -183,15 +183,15 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
         //save data as foreign data of the new record
         $strQuery = "INSERT INTO ".$this->arrModule["table"]."
-        			(page_element_id, page_element_placeholder_placeholder, page_element_placeholder_name, page_element_placeholder_element, page_element_placeholder_title, page_element_placeholder_language) VALUES
+        			(page_element_id, page_element_ph_placeholder, page_element_ph_name, page_element_ph_element, page_element_ph_title, page_element_ph_language) VALUES
         			( ?, ?, ?, ?, ?, ?)";
 
         if(!$this->objDB->_pQuery($strQuery, array( $strIdOfNewPageelement,
-                                                    $arrCurrentElement["page_element_placeholder_placeholder"],
-                                                    $arrCurrentElement["page_element_placeholder_name"],
-                                                    $arrCurrentElement["page_element_placeholder_element"],
-                                                    $arrCurrentElement["page_element_placeholder_title"],
-                                                    $arrCurrentElement["page_element_placeholder_language"]))) {
+                                                    $arrCurrentElement["page_element_ph_placeholder"],
+                                                    $arrCurrentElement["page_element_ph_name"],
+                                                    $arrCurrentElement["page_element_ph_element"],
+                                                    $arrCurrentElement["page_element_ph_title"],
+                                                    $arrCurrentElement["page_element_ph_language"]))) {
             $this->objDB->transactionRollback();
             return null;
         }
@@ -308,11 +308,11 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						      LEFT JOIN "._dbprefix_."system_date
 						        ON (system_id = system_date_id)
 						 WHERE system_prev_id= ?
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						   AND page_element_placeholder_language = ?
+						   AND page_element_ph_language = ?
 						   " . $strAnd."
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
         //since theres the time as an parameter, theres no need for querying the cache...
@@ -341,9 +341,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
 						 WHERE system_prev_id=?
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPageId));
@@ -386,12 +386,12 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
                               LEFT JOIN "._dbprefix_."system_date
                                 ON (system_id = system_date_id)
                          WHERE system_prev_id= ?
-                           AND page_element_placeholder_element = element_name
+                           AND page_element_ph_element = element_name
                            AND system_id = page_element_id
-                           AND page_element_placeholder_language = ?
-                           AND page_element_placeholder_placeholder = ?
+                           AND page_element_ph_language = ?
+                           AND page_element_ph_placeholder = ?
                            " . $strAnd."
-                         ORDER BY page_element_placeholder_placeholder ASC,
+                         ORDER BY page_element_ph_placeholder ASC,
                                 system_sort ASC";
 
         $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
@@ -420,10 +420,10 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
 						 WHERE system_prev_id= ?
-						   AND page_element_placeholder_element = element_name
-                           AND page_element_placeholder_language = ?
+						   AND page_element_ph_element = element_name
+                           AND page_element_ph_language = ?
 						   AND system_id = page_element_id
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
 		$arrElementsOnPage = $this->objDB->getPArray($strQuery, array( $this->getPrevId(), $this->getStrLanguage() ), false);
@@ -431,7 +431,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		//Iterate over all elements to sort out
 		$arrElementsOnPlaceholder = array();
 		foreach($arrElementsOnPage as $strKey => $arrOneElementOnPage) {
-			if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_placeholder_placeholder"])
+			if($this->getStrPlaceholder() == $arrOneElementOnPage["page_element_ph_placeholder"])
 				$arrElementsOnPlaceholder[] = $arrOneElementOnPage;
 		}
 
@@ -646,13 +646,13 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 	public static function assignNullElements($strTargetLanguage) {
         //Load all non-assigned props
         $strQuery = "SELECT page_element_id FROM "._dbprefix_."page_element
-                     WHERE page_element_placeholder_language = '' OR page_element_placeholder_language IS NULL";
+                     WHERE page_element_ph_language = '' OR page_element_ph_language IS NULL";
         $arrElementIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 
         foreach ($arrElementIds as $arrOneId) {
             $strId = $arrOneId["page_element_id"];
             $strUpdate = "UPDATE "._dbprefix_."page_element
-                          SET page_element_placeholder_language = ?
+                          SET page_element_ph_language = ?
                           WHERE page_element_id = ?";
 
             if(!class_carrier::getInstance()->getObjDB()->_pQuery($strUpdate, array( $strTargetLanguage, $strId ) ))
@@ -684,9 +684,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
 						 WHERE system_prev_id= ?
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
 		        $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $objOnePage->getSystemid() ) );

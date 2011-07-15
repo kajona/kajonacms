@@ -143,11 +143,11 @@
 
 //--_page_element----------------------------------------------------------------------------------------
 	page_element_id							= Table primary key
-	page_element_placeholder_placeholder	= Complete name of the placeholder
+	page_element_ph_placeholder	= Complete name of the placeholder
 	page_element_placeholder_name 			= Name of the placeholder
-	page_element_placeholder_element		= Element of the placeholder
-	page_element_placeholder_title			= Internal title of the placeholder
-	page_element_placeholder_language       = Language of the placholders' content
+	page_element_ph_element		= Element of the placeholder
+	page_element_ph_title			= Internal title of the placeholder
+	page_element_ph_language       = Language of the placholders' content
 
 //--_navigation------------------------------------------------------------------------------------------
 	navigation_id			= Table primary key

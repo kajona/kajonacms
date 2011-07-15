@@ -393,6 +393,9 @@ abstract class class_root {
      */
     protected final function updateSystemrecord() {
         
+        if(!validateSystemid($this->getSystemid()))
+            return true;
+        
         class_logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", class_logger::$levelInfo);
         
         $strQuery = "UPDATE "._dbprefix_."system 
@@ -411,14 +414,14 @@ abstract class class_root {
         
         $bitReturn = $this->objDB->_pQuery($strQuery, array(
                     $this->getStrPrevId(),
-                    $this->getIntModuleNr(),
-                    $this->getIntSort(),
+                    (int)$this->getIntModuleNr(),
+                    (int)$this->getIntSort(),
                     $this->getStrOwner(),
                     $this->objSession->getUserID(),
                     time(),
                     $this->getStrLockId(),
-                    $this->getIntLockTime(),
-                    $this->getIntRecordStatus(),
+                    (int)$this->getIntLockTime(),
+                    (int)$this->getIntRecordStatus(),
                     $this->getStrRecordComment(),
                     $this->getLongCreateDate(),
                     $this->getSystemid()

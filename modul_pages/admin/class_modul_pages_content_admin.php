@@ -392,7 +392,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			$objPageElement->setStrName($strPlaceholderName);
 			$objPageElement->setStrPlaceholder($strPlaceholder);
 			$objPageElement->setStrElement($strPlaceholderElement);
-            $objPageElement->setStrLanguage($this->getParam("page_element_placeholder_language"));
+            $objPageElement->setStrLanguage($this->getParam("page_element_ph_language"));
 			if(!$objPageElement->updateObjectToDb($this->getSystemid()))
 			    throw new class_exception("Error saving new element-object to db", class_exception::$level_ERROR);
 			$strElementSystemId = $objPageElement->getSystemid();
@@ -498,8 +498,8 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $objCommons->updateObjectToDb();
 			$objLockmanager->unlockRecord();
 			//And update the internal comment and language
-			$objElementData->setStrTitle($this->getParam("page_element_placeholder_title"));
-			$objElementData->setStrLanguage($this->getParam("page_element_placeholder_language"));
+			$objElementData->setStrTitle($this->getParam("page_element_ph_title"));
+			$objElementData->setStrLanguage($this->getParam("page_element_ph_language"));
 			//placeholder to update?
 			if($this->getParam("placeholder") != "")
 			    $objElementData->setStrPlaceholder($this->getParam("placeholder"));

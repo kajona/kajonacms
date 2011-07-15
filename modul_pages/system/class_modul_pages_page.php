@@ -313,10 +313,10 @@ class class_modul_pages_page extends class_model implements interface_model, int
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
 						 WHERE system_prev_id=? 
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
 						   ".( $bitJustActive ? "AND system_status = 1 " : "")."
-						   AND page_element_placeholder_language = ?";
+						   AND page_element_ph_language = ?";
 		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->getStrLanguage() ));
 		return $arrRow["COUNT(*)"];
 	}

@@ -39,14 +39,15 @@ abstract class class_element_portal extends class_portal {
 		parent::__construct($arrModule);
 
 		//Load the data of the current Element and merge it
+        //FIXME: this should be done via lazy loading!
 		$arrTemp = $this->getElementContent($objElementData->getSystemid());
 		$this->setSystemid($objElementData->getSystemid());
 		$this->arrElementData = $arrTemp;
 		//merge the attributes of $objElementData to the array
-		$this->arrElementData["page_element_placeholder_placeholder"] = $objElementData->getStrPlaceholder();
-		$this->arrElementData["page_element_placeholder_name"] = $objElementData->getStrName();
-		$this->arrElementData["page_element_placeholder_element"] = $objElementData->getStrElement();
-		$this->arrElementData["page_element_placeholder_title"] = $objElementData->getStrTitle(false);
+		$this->arrElementData["page_element_ph_placeholder"] = $objElementData->getStrPlaceholder();
+		$this->arrElementData["page_element_ph_name"] = $objElementData->getStrName();
+		$this->arrElementData["page_element_ph_element"] = $objElementData->getStrElement();
+		$this->arrElementData["page_element_ph_title"] = $objElementData->getStrTitle(false);
 
         $this->objElementData = $objElementData;
 	}

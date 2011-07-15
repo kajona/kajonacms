@@ -122,7 +122,7 @@ class class_modul_downloads_search extends class_portal implements interface_sea
                         AND content_id = page_element_id
                         AND content_id = system_id
                         AND system_status = 1
-                        AND page_element_placeholder_language = '".dbsafeString($this->getPortalLanguage())."' " ;
+                        AND page_element_ph_language = '".dbsafeString($this->getPortalLanguage())."' " ;
 
         $arrRow = $this->objDB->getRow($strQuery);
 

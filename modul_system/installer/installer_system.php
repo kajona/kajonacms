@@ -232,13 +232,13 @@ class class_installer_system extends class_installer_base implements interface_i
 
 
 		// User group_members table ---------------------------------------------------------------------
-		$strReturn .= "Installing table user_group_kajona_members...\n";
+		$strReturn .= "Installing table user_kajona_members...\n";
 
 		$arrFields = array();
 		$arrFields["group_member_group_kajona_id"]      = array("char20", false);
 		$arrFields["group_member_user_kajona_id"]		= array("char20", false);
 
-		if(!$this->objDB->createTable("user_group_kajona_members", $arrFields, array("group_member_group_kajona_id", "group_member_user_kajona_id")))
+		if(!$this->objDB->createTable("user_kajona_members", $arrFields, array("group_member_group_kajona_id", "group_member_user_kajona_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
@@ -1305,11 +1305,11 @@ class class_installer_system extends class_installer_base implements interface_i
         
         
         $strReturn .= "Updating kajona-user-subsystem members-table...\n";
-        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_members")." TO ".$this->objDB->encloseTableName(_dbprefix_."user_group_kajona_members")."";
+        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_members")." TO ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
         
-        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_kajona_members")."
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."
                     CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
                     CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL";
         if(!$this->objDB->_query($strQuery))

@@ -42,7 +42,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
         $arrModul["name"] 				= "modul_eventmanager";
 		$arrModul["moduleId"] 			= _eventmanager_modul_id_;
 		$arrModul["modul"]				= "eventmanager";
-		$arrModul["table"]				= _dbprefix_."eventmanager_participant";
+		$arrModul["table"]				= _dbprefix_."em_participant";
 
 		//base class
 		parent::__construct($arrModul, $strSystemid);
@@ -57,7 +57,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
      * @return array
      */
     protected function getObjectTables() {
-        return array(_dbprefix_."eventmanager_participant" => "eventmanager_participant_id");
+        return array(_dbprefix_."em_participant" => "em_pt_id");
     }
 
     /**
@@ -77,17 +77,17 @@ class class_modul_eventmanager_participant extends class_model implements interf
         $strQuery = "SELECT * 
                        FROM ".$this->arrModule["table"].",
                             "._dbprefix_."system
-				      WHERE eventmanager_participant_id = ?
-                        AND system_id=eventmanager_participant_id";
+				      WHERE em_pt_id = ?
+                        AND system_id=em_pt_id";
 
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         if(count($arrRow) > 0) {
-            $this->setStrForename($arrRow["eventmanager_participant_forename"]);
-            $this->setStrLastname($arrRow["eventmanager_participant_lastname"]);
-            $this->setStrEmail($arrRow["eventmanager_participant_email"]);
-            $this->setStrPhone($arrRow["eventmanager_participant_phone"]);
-            $this->setStrComment($arrRow["eventmanager_participant_comment"]);
+            $this->setStrForename($arrRow["em_pt_forename"]);
+            $this->setStrLastname($arrRow["em_pt_lastname"]);
+            $this->setStrEmail($arrRow["em_pt_email"]);
+            $this->setStrPhone($arrRow["em_pt_phone"]);
+            $this->setStrComment($arrRow["em_pt_comment"]);
 
             $this->strOldForename = $this->strForename;
             $this->strOldLastname = $this->strLastname;
@@ -110,12 +110,12 @@ class class_modul_eventmanager_participant extends class_model implements interf
         $objChanges->createLogEntry($this, $this->strActionEdit);
 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET eventmanager_participant_forename =?,
-                            eventmanager_participant_lastname =?,
-                            eventmanager_participant_email =?,
-                            eventmanager_participant_phone =?,
-                            eventmanager_participant_comment =?
-					  WHERE eventmanager_participant_id =?";
+                        SET em_pt_forename =?,
+                            em_pt_lastname =?,
+                            em_pt_email =?,
+                            em_pt_phone =?,
+                            em_pt_comment =?
+					  WHERE em_pt_id =?";
 
 		return $this->objDB->_pQuery($strQuery, array(
             $this->getStrForename(),
@@ -139,9 +139,9 @@ class class_modul_eventmanager_participant extends class_model implements interf
 		$strQuery = "SELECT system_id 
                        FROM "._dbprefix_."eventmanager_participant,
 						     "._dbprefix_."system
-				      WHERE system_id = eventmanager_participant_id
+				      WHERE system_id = em_pt_id
                         AND system_prev_id = ?
-                   ORDER BY eventmanager_participant_email ASC, eventmanager_participant_lastname ASC";
+                   ORDER BY em_pt_email ASC, em_pt_lastname ASC";
 
         if($intStart != null && $intEnd != null)
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strEventId), $intStart, $intEnd);
@@ -163,9 +163,9 @@ class class_modul_eventmanager_participant extends class_model implements interf
 		$strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."eventmanager_participant,
 						     "._dbprefix_."system
-				      WHERE system_id = eventmanager_participant_id
+				      WHERE system_id = em_pt_id
                         AND system_prev_id = ?
-                   ORDER BY eventmanager_participant_email ASC, eventmanager_participant_lastname ASC";
+                   ORDER BY em_pt_email ASC, em_pt_lastname ASC";
 
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strEventId));
         return $arrRow["COUNT(*)"];
@@ -180,7 +180,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
 	 */
 	public function deleteParticipant() {
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
-        $strQuery = "DELETE FROM "._dbprefix_."eventmanager_participant WHERE eventmanager_participant_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."eventmanager_participant WHERE em_pt_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($this->deleteSystemRecord($this->getSystemid())) {
                 $this->unsetSystemid();

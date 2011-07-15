@@ -107,7 +107,7 @@ class class_modul_filemanager_repo extends class_model implements interface_mode
         $objDB = class_carrier::getInstance()->getObjDB();
 
 
-        $strQuery = "SELECT system_id FROM "._dbprefix_."filemanager AS file, "._dbprefix_."system AS system
+        $strQuery = "SELECT system_id FROM "._dbprefix_."filemanager AS filem, "._dbprefix_."system AS system
 						WHERE system_id = filemanager_id
                     ".(!$bitLoadForeign || $bitLoadForeign == "false" ? " AND (filemanager_foreign_id IS NULL OR filemanager_foreign_id = '')" : "")."";
         $arrIds = $objDB->getPArray($strQuery, array());

@@ -27,8 +27,8 @@ class class_modul_eventmanager_admin extends class_admin implements interface_ad
         $arrModule = array();
 		$arrModule["name"] 				= "modul_eventmanager";
 		$arrModule["moduleId"] 			= _eventmanager_modul_id_;
-		$arrModule["table"] 		    = _dbprefix_."eventmanager_event";
-		$arrModule["table2"]			= _dbprefix_."eventmanager_participant";
+		$arrModule["table"] 		    = _dbprefix_."em_event";
+		$arrModule["table2"]			= _dbprefix_."em_participant";
 		$arrModule["modul"]				= "eventmanager";
 
 		//Base class

@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0";
+		$arrModule["version"] 		= "3.4.0.1";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -99,7 +99,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["pageproperties_language"] 	= array("char20", true);
 		$arrFields["pageproperties_alias"] 	    = array("char254", true);
 
-		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language")))
+		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id"), array("pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
 
 		//elementtable-----------------------------------------------------------------------------------
@@ -123,11 +123,11 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 		$arrFields = array();
 		$arrFields["page_element_id"] 					= array("char20", false);
-		$arrFields["page_element_placeholder_placeholder"]=array("char254", true);
-		$arrFields["page_element_placeholder_name"] 	= array("char254", true);
-		$arrFields["page_element_placeholder_element"]	= array("char254", true);
-		$arrFields["page_element_placeholder_title"] 	= array("char254", true);
-		$arrFields["page_element_placeholder_language"] = array("char20", true);
+		$arrFields["page_element_ph_placeholder"]       = array("char254", true);
+		$arrFields["page_element_ph_name"]              = array("char254", true);
+		$arrFields["page_element_ph_element"]           = array("char254", true);
+		$arrFields["page_element_ph_title"]             = array("char254", true);
+		$arrFields["page_element_ph_language"]          = array("char20", true);
 
 		if(!$this->objDB->createTable("page_element", $arrFields, array("page_element_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -367,6 +367,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.9") {
             $strReturn .= $this->update_3319_340();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_3401();
         }
 
         return $strReturn."\n\n";
@@ -737,6 +742,28 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.0");
         $this->updateElementVersion("paragraph", "3.4.0");
         $this->updateElementVersion("image", "3.4.0");
+        return $strReturn;
+    }
+    
+    private function update_340_3401() {
+        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
+        
+        $strReturn .= "Updating page_element-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."page_element")."
+                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_placeholder")." ".$this->objDB->encloseColumnName("page_element_ph_placeholder")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_name")." ".$this->objDB->encloseColumnName("page_element_ph_name")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_element")." ".$this->objDB->encloseColumnName("page_element_ph_element")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_title")." ".$this->objDB->encloseColumnName("page_element_ph_title")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("page_element_placeholder_language")." ".$this->objDB->encloseColumnName("page_element_ph_language")." ".$this->objDB->getDatatype("char20")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0.1");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.0.1");
+        $this->updateElementVersion("paragraph", "3.4.0.1");
+        $this->updateElementVersion("image", "3.4.0.1");
         return $strReturn;
     }
 }

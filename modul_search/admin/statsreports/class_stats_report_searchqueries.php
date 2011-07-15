@@ -99,7 +99,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 
 			$arrLogs[$intKey][0] = $intI;
             $arrLogs[$intKey][1] = $arrOneLog["search_log_query"];
-            $arrLogs[$intKey][2] = $arrOneLog["number"];
+            $arrLogs[$intKey][2] = $arrOneLog["hits"];
         }
 
     	//Create a data-table
@@ -126,7 +126,7 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         
 		$intCount = 1;
 		foreach ($arrQueries as  $arrOneQuery) {
-		    $arrGraphData[$intCount] = $arrOneQuery["number"];
+		    $arrGraphData[$intCount] = $arrOneQuery["hits"];
             $arrLabels[$intCount] = $arrOneQuery["search_log_query"];
 
 		    if($intCount++ >= 9)
@@ -156,12 +156,12 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 
 
     private function getTopQueries($intStart = false, $intEnd = false) {
-        $strQuery = "SELECT search_log_query, COUNT(*) as number
+        $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM ".$this->arrModule["table"]."
 					  WHERE search_log_date >= ".(int)$this->intDateStart."
 					    AND search_log_date <= ".(int)$this->intDateEnd."
-				   GROUP BY search_log_query
-				   ORDER BY number DESC, search_log_date DESC";
+				   GROUP BY search_log_query, hits
+				   ORDER BY hits DESC, search_log_date DESC";
 
         if($intStart !== false && $intEnd !== false)
             $arrReturn = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);

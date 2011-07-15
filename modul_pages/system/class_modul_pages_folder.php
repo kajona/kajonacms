@@ -216,7 +216,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 						WHERE system.system_prev_id=?
 							AND system.system_module_nr=?
 							AND system.system_id = page.page_id
-							ORDER BY system_sort ASC";
+						ORDER BY system.system_sort ASC ";
 
 		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array( $strFolderid, _pages_modul_id_ ) );
 		$arrReturn = array();

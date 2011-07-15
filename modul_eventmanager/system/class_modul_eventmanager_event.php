@@ -49,7 +49,7 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
         $arrModul["name"] 				= "modul_eventmanager";
 		$arrModul["moduleId"] 			= _eventmanager_modul_id_;
 		$arrModul["modul"]				= "eventmanager";
-		$arrModul["table"]				= _dbprefix_."eventmanager_event";
+		$arrModul["table"]				= _dbprefix_."em_event";
 
 		//base class
 		parent::__construct($arrModul, $strSystemid);
@@ -64,7 +64,7 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
      * @return array
      */
     protected function getObjectTables() {
-        return array(_dbprefix_."eventmanager_event" => "eventmanager_event_id");
+        return array(_dbprefix_."em_event" => "em_ev_id");
     }
 
     /**
@@ -84,18 +84,18 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
                         FROM ".$this->arrModule["table"].",
                              "._dbprefix_."system,
                              "._dbprefix_."system_date
-	                   WHERE eventmanager_event_id = ?
+	                   WHERE em_ev_id = ?
                          AND system_id = system_date_id
-                         AND system_id = eventmanager_event_id ";
+                         AND system_id = em_ev_id ";
 
          $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
          if(count($arrRow) > 0) {
-             $this->setStrTitle($arrRow["eventmanager_event_title"]);
-             $this->setStrDescription($arrRow["eventmanager_event_description"]);
-             $this->setStrLocation($arrRow["eventmanager_event_location"]);
-             $this->setIntRegistrationRequired($arrRow["eventmanager_event_participant_registration"]);
-             $this->setIntLimitGiven($arrRow["eventmanager_event_participant_limit"]);
-             $this->setIntParticipantsLimit($arrRow["eventmanager_event_participant_max"]);
+             $this->setStrTitle($arrRow["em_ev_title"]);
+             $this->setStrDescription($arrRow["em_ev_description"]);
+             $this->setStrLocation($arrRow["em_ev_location"]);
+             $this->setIntRegistrationRequired($arrRow["em_ev_participant_registration"]);
+             $this->setIntLimitGiven($arrRow["em_ev_participant_limit"]);
+             $this->setIntParticipantsLimit($arrRow["em_ev_participant_max"]);
 
              if($arrRow["system_date_start"] > 0)
                  $this->setObjStartDate(new class_date($arrRow["system_date_start"]));
@@ -131,13 +131,13 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
         $this->updateDateRecord($this->getSystemid(), $this->getObjStartDate(), $this->getObjEndDate());
 
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET eventmanager_event_title = ?,
-                            eventmanager_event_description = ?,
-                            eventmanager_event_location = ?,
-                            eventmanager_event_participant_registration = ?,
-                            eventmanager_event_participant_limit = ?,
-                            eventmanager_event_participant_max = ?
-                      WHERE eventmanager_event_id = ?";
+                        SET em_ev_title = ?,
+                            em_ev_description = ?,
+                            em_ev_location = ?,
+                            em_ev_participant_registration = ?,
+                            em_ev_participant_limit = ?,
+                            em_ev_participant_max = ?
+                      WHERE em_ev_id = ?";
         
         return $this->objDB->_pQuery($strQuery, array(
             $this->getStrTitle(),
@@ -172,7 +172,7 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
         }
 
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
-        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE eventmanager_event_id = ?";
+        $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE em_ev_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($this->deleteSystemRecord($this->getSystemid()))
                 return true;
@@ -200,14 +200,14 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
         }
 
         $strQuery = "SELECT system_id
-                       FROM "._dbprefix_."eventmanager_event,
+                       FROM "._dbprefix_."em_event,
                             "._dbprefix_."system,
                             "._dbprefix_."system_date
-                      WHERE system_id = eventmanager_event_id
+                      WHERE system_id = em_ev_id
                         AND system_id = system_date_id
                         ".$strAddon."
                         ".($bitOnlyActive ? " AND system_status = 1 " : "")."    
-                      ORDER BY system_date_start ".($intOrder == "1" ? " ASC " : " DESC ").", eventmanager_event_title ASC";
+                      ORDER BY system_date_start ".($intOrder == "1" ? " ASC " : " DESC ").", em_ev_title ASC";
         $arrQuery = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
         $arrReturn = array();
@@ -223,12 +223,12 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
      */
     public static function getAllEventsCount() {
         $strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."eventmanager_event,
+                       FROM "._dbprefix_."em_event,
                             "._dbprefix_."system,
                             "._dbprefix_."system_date
-                      WHERE system_id = eventmanager_event_id
+                      WHERE system_id = em_ev_id
                         AND system_id = system_date_id
-                      ORDER BY system_date_start DESC, eventmanager_event_title ASC";
+                      ORDER BY system_date_start DESC, em_ev_title ASC";
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
         return $arrRow["COUNT(*)"];
     }

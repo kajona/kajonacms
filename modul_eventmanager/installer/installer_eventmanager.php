@@ -16,7 +16,7 @@ class class_installer_eventmanager extends class_installer_base implements inter
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.4.0";
+		$arrModule["version"] 		  = "3.4.0.1";
 		$arrModule["name"] 			  = "eventmanager";
 		$arrModule["name_lang"] 	  = "Module Eventmanager";
 		$arrModule["moduleId"] 		  = _eventmanager_modul_id_;
@@ -45,31 +45,31 @@ class class_installer_eventmanager extends class_installer_base implements inter
 		//Tabellen anlegen
 
 		//eventmanager cat-------------------------------------------------------------------------------------
-		$strReturn .= "Installing table eventmanager_event...\n";
+		$strReturn .= "Installing table em_event...\n";
 
 		$arrFields = array();
-		$arrFields["eventmanager_event_id"]                        = array("char20", false);
-		$arrFields["eventmanager_event_title"]                     = array("char254", true);
-		$arrFields["eventmanager_event_description"]               = array("text", true);
-		$arrFields["eventmanager_event_location"]                  = array("char254", true);
-		$arrFields["eventmanager_event_participant_registration"]  = array("int", true);
-		$arrFields["eventmanager_event_participant_limit"]         = array("int", true);
-		$arrFields["eventmanager_event_participant_max"]           = array("int", true);
+		$arrFields["em_ev_id"]                        = array("char20", false);
+		$arrFields["em_ev_title"]                     = array("char254", true);
+		$arrFields["em_ev_description"]               = array("text", true);
+		$arrFields["em_ev_location"]                  = array("char254", true);
+		$arrFields["em_ev_participant_registration"]  = array("int", true);
+		$arrFields["em_ev_participant_limit"]         = array("int", true);
+		$arrFields["em_ev_participant_max"]           = array("int", true);
 
-		if(!$this->objDB->createTable("eventmanager_event", $arrFields, array("eventmanager_event_id")))
+		if(!$this->objDB->createTable("em_event", $arrFields, array("em_ev_id")))
 			$strReturn .= "An error occured! ...\n";
 
-        $strReturn .= "Installing table eventmanager_participant...\n";
+        $strReturn .= "Installing table em_participant...\n";
 
 		$arrFields = array();
-		$arrFields["eventmanager_participant_id"]           = array("char20", false);
-		$arrFields["eventmanager_participant_forename"]     = array("char254", true);
-		$arrFields["eventmanager_participant_lastname"]     = array("char254", true);
-		$arrFields["eventmanager_participant_email"]        = array("char254", true);
-		$arrFields["eventmanager_participant_phone"]        = array("char254", true);
-		$arrFields["eventmanager_participant_comment"]      = array("text", true);
+		$arrFields["em_pt_id"]           = array("char20", false);
+		$arrFields["em_pt_forename"]     = array("char254", true);
+		$arrFields["em_pt_lastname"]     = array("char254", true);
+		$arrFields["em_pt_email"]        = array("char254", true);
+		$arrFields["em_pt_phone"]        = array("char254", true);
+		$arrFields["em_pt_comment"]      = array("text", true);
 
-		if(!$this->objDB->createTable("eventmanager_participant", $arrFields, array("eventmanager_participant_id")))
+		if(!$this->objDB->createTable("em_participant", $arrFields, array("em_pt_id")))
 			$strReturn .= "An error occured! ...\n";
 
 		
@@ -131,6 +131,11 @@ class class_installer_eventmanager extends class_installer_base implements inter
             $strReturn .= $this->update_3318_340();
         }
         
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_3401();
+        }
+        
         return $strReturn."\n\n";
 	}
     
@@ -151,6 +156,48 @@ class class_installer_eventmanager extends class_installer_base implements inter
         $this->updateModuleVersion("eventmanager", "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("eventmanager", "3.4.0");
+        return $strReturn;
+    }
+    
+    
+    private function update_340_3401() {
+        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
+        
+        $strReturn .= "Updating eventmanager_event-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."eventmanager_event")."
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_id")." ".$this->objDB->encloseColumnName("em_ev_id")." ".$this->objDB->getDatatype("char20")." NOT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_title")." ".$this->objDB->encloseColumnName("em_ev_title")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_description")." ".$this->objDB->encloseColumnName("em_e_description")." ".$this->objDB->getDatatype("text")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_location")." ".$this->objDB->encloseColumnName("em_ev_location")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_participant_registration")." ".$this->objDB->encloseColumnName("em_ev_participant_registration")." ".$this->objDB->getDatatype("int")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_participant_limit")." ".$this->objDB->encloseColumnName("em_ev_participant_limit")." ".$this->objDB->getDatatype("int")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_event_participant_max")." ".$this->objDB->encloseColumnName("em_ev_participant_max")." ".$this->objDB->getDatatype("int")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating eventmanager_participant-table...\n";
+        $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."eventmanager_participant")."
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_id")." ".$this->objDB->encloseColumnName("em_pt_id")." ".$this->objDB->getDatatype("char20")." NOT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_forename")." ".$this->objDB->encloseColumnName("em_pt_forename")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_lastname")." ".$this->objDB->encloseColumnName("em_pt_lastname")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_email")." ".$this->objDB->encloseColumnName("em_pt_email")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_phone")." ".$this->objDB->encloseColumnName("em_pt_phone")." ".$this->objDB->getDatatype("char254")." NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("eventmanager_participant_comment")." ".$this->objDB->encloseColumnName("em_pt_comment")." ".$this->objDB->getDatatype("text")." NULL";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."eventmanager_event")." TO ".$this->objDB->encloseTableName(_dbprefix_."em_event")."";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."eventmanager_participant")." TO ".$this->objDB->encloseTableName(_dbprefix_."em_participant")."";
+        if(!$this->objDB->_query($strQuery))
+            $strReturn .= "An error occured! ...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("eventmanager", "3.4.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("eventmanager", "3.4.0.1");
         return $strReturn;
     }
 

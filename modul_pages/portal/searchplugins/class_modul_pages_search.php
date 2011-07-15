@@ -90,14 +90,14 @@ class class_modul_pages_search extends class_portal implements interface_search_
 						      "._dbprefix_."system
 						 WHERE system_prev_id = page_id
 						   AND pageproperties_id = page_id
-						   AND page_element_placeholder_element = element_name
+						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
-						   AND page_element_placeholder_language = '".dbsafeString($this->getPortalLanguage())."'
+						   AND page_element_ph_language = '".dbsafeString($this->getPortalLanguage())."'
 						   AND pageproperties_language = '".dbsafeString($this->getPortalLanguage())."'
 						   AND content_id = page_element_id
 						   AND system_status = 1
 						   AND   ".$strWhere."
-						 ORDER BY page_element_placeholder_placeholder ASC,
+						 ORDER BY page_element_ph_placeholder ASC,
 						 		system_sort ASC";
 
 			$arrPages = $this->objDB->getArray($strQuery);

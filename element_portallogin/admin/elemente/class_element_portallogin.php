@@ -25,7 +25,7 @@ class class_element_portallogin extends class_element_admin implements interface
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _pages_elemente_modul_id_;
-		$arrModule["table"] 		= _dbprefix_."element_portallogin";
+		$arrModule["table"] 		= _dbprefix_."element_plogin";
 		$arrModule["modul"]			= "elemente";
 
 		$arrModule["tableColumns"]   = "portallogin_template|char,portallogin_error|char,portallogin_success|char,portallogin_logout_success|char,portallogin_profile|char,portallogin_pwdforgot|char,portallogin_editmode|number";

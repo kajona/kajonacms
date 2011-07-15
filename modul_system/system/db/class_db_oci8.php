@@ -4,27 +4,31 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*	$Id$	                                    *
+*	$Id: class_db_oci8.php 3701 2011-03-29 10:35:12Z sidler $	                                        *
 ********************************************************************************************************/
 
 /**
- * db-driver for postgres using the php-postgres-interface
+ * db-driver for oracle using the ovi8-interface
  *
  * @package modul_system
  * @author sidler@mulchprod.de
+ * @since 3.4.1
  */
-class class_db_postgres implements interface_db_driver {
+class class_db_oci8 implements interface_db_driver {
 
-    private $linkDB;						//DB-Link
+    private $linkDB;                              //DB-Link
     private $strHost = "";
     private $strUsername = "";
     private $strPass = "";
     private $strDbName = "";
     private $intPort = "";
+    
     private $strDumpBin = "pg_dump";              //Binary to dump db (if not in path, add the path here)
-    private $strRestoreBin = "psql";          //Binary to restore db (if not in path, add the path here)
+    private $strRestoreBin = "psql";              //Binary to restore db (if not in path, add the path here)
 
     private $arrStatementsCache = array();
+    
+    private $bitTxOpen = false;
 
    /**
      * This method makes sure to connect to the database properly
@@ -39,7 +43,7 @@ class class_db_postgres implements interface_db_driver {
      */
     public function dbconnect($strHost, $strUsername, $strPass, $strDbName, $intPort) {
         if($intPort == "")
-			$intPort = "5432";
+			$intPort = "1521";
 
 		//save connection-details
 		$this->strHost = $strHost;
@@ -48,10 +52,10 @@ class class_db_postgres implements interface_db_driver {
 		$this->strDbName = $strDbName;
 		$this->intPort = $intPort;
 
-		$this->linkDB = @pg_connect("host='".$strHost."' port='".$intPort."' dbname='".$strDbName."' user='".$strUsername."' password='".$strPass."'");
+		$this->linkDB = oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
+        
 				
 		if($this->linkDB !== false) {
-			$this->_query("SET client_encoding='UTF8'");
 			return true;
 		}
 		else {
@@ -63,7 +67,7 @@ class class_db_postgres implements interface_db_driver {
      * Closes the connection to the database
      */
     public function dbclose() {
-        @pg_close($this->linkDB);
+        oci_close($this->linkDB);
     }
 
     /**
@@ -73,8 +77,12 @@ class class_db_postgres implements interface_db_driver {
      * @return bool
      */
     public function _query($strQuery) {
-		$bitReturn = @pg_query($this->linkDB, $strQuery);
-        return $bitReturn !== false;
+        $objStatement = $this->getParsedStatement($strQuery);
+        
+        $bitAddon = OCI_COMMIT_ON_SUCCESS;
+        if($this->bitTxOpen)
+            $bitAddon = OCI_NO_AUTO_COMMIT;
+        return oci_execute($objStatement, $bitAddon) !== false;
     }
 
     /**
@@ -88,11 +96,17 @@ class class_db_postgres implements interface_db_driver {
      */
     public function _pQuery($strQuery, $arrParams) {
         $strQuery = $this->processQuery($strQuery);
-        $strName = $this->getPreparedStatementName($strQuery);
-        if($strName === false)
+        $objStatement = $this->getParsedStatement($strQuery);
+        if($objStatement === false)
             return false;
+        
+        foreach($arrParams as $intPos => $strValue)
+            oci_bind_by_name($objStatement, ":".($intPos+1), $arrParams[$intPos]);
 
-        return @pg_execute($this->linkDB, $strName, $arrParams) !== false ;
+        $bitAddon = OCI_COMMIT_ON_SUCCESS;
+        if($this->bitTxOpen)
+            $bitAddon = OCI_NO_AUTO_COMMIT;
+        return oci_execute($objStatement, $bitAddon) !== false ;
     }
 
     /**
@@ -104,15 +118,18 @@ class class_db_postgres implements interface_db_driver {
     public function getArray($strQuery) {
         $arrReturn = array();
         $intCounter = 0;
-		$resultSet = @pg_query($this->linkDB, $strQuery);
+        $objStatement = $this->getParsedStatement($strQuery);
+        
+        $bitAddon = OCI_COMMIT_ON_SUCCESS;
+        if($this->bitTxOpen)
+            $bitAddon = OCI_NO_AUTO_COMMIT;
+		$resultSet = oci_execute($objStatement, $bitAddon);
+        
 		if(!$resultSet)
 			return false;
-		while($arrRow = @pg_fetch_array($resultSet)) {
-			//conversions to remain compatible:
-			//   count --> COUNT(*)
-			if(isset($arrRow["count"]))
-				$arrRow["COUNT(*)"] = $arrRow["count"];
-				
+        
+		while($arrRow = oci_fetch_array($objStatement, OCI_BOTH+OCI_RETURN_NULLS)) {
+            $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -132,18 +149,24 @@ class class_db_postgres implements interface_db_driver {
         $intCounter = 0;
         
         $strQuery = $this->processQuery($strQuery);
-        $strName = $this->getPreparedStatementName($strQuery);
-        if($strName === false)
-            return false;
-
-        $resultSet = @pg_execute($this->linkDB, $strName, $arrParams);
+        $objStatement = $this->getParsedStatement($strQuery);
         
-        while($arrRow = @pg_fetch_array($resultSet)) {
-			//conversions to remain compatible:
-			//   count --> COUNT(*)
-			if(isset($arrRow["count"]))
-				$arrRow["COUNT(*)"] = $arrRow["count"];
+        if($objStatement === false)
+            return false;
+        
+        foreach($arrParams as $intPos => $strValue)
+            oci_bind_by_name($objStatement, ":".($intPos+1), $arrParams[$intPos]);
 
+        $bitAddon = OCI_COMMIT_ON_SUCCESS;
+        if($this->bitTxOpen)
+            $bitAddon = OCI_NO_AUTO_COMMIT;
+        $resultSet = oci_execute($objStatement, $bitAddon);
+        
+        if(!$resultSet)
+			return false;
+        
+        while($arrRow = oci_fetch_array($objStatement, OCI_BOTH+OCI_RETURN_NULLS)) {
+            $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
 		return $arrReturn;
@@ -162,7 +185,8 @@ class class_db_postgres implements interface_db_driver {
         //calculate the end-value: 
         $intEnd = $intEnd - $intStart +1;
         //add the limits to the query
-        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
+        //$strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
+        //FIXME
         //and load the array
         return $this->getArray($strQuery);
     }
@@ -184,7 +208,8 @@ class class_db_postgres implements interface_db_driver {
         //calculate the end-value:
         $intEnd = $intEnd - $intStart +1;
         //add the limits to the query
-        $strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
+        //$strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
+        //FIXME
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
@@ -196,7 +221,7 @@ class class_db_postgres implements interface_db_driver {
      * @return string
      */
     public function getError() {
-		$strError = @pg_last_error($this->linkDB);
+		$strError = oci_error($this->linkDB);
 		return $strError;
     }
 
@@ -207,16 +232,16 @@ class class_db_postgres implements interface_db_driver {
      */
     public function getTables() {
 		$arrTemp = $this->getArray(
-				"SELECT *, table_name as name 
-				   FROM information_schema.tables 
-				   ");
+				"SELECT table_name AS name FROM ALL_tables");
 
-        $arrReturn = array();
-        foreach($arrTemp as $arrOneRow) {
-            if(uniStrpos($arrOneRow["name"], _dbprefix_) !== false)
-                $arrReturn[] = $arrOneRow;
-        }
+//        $arrReturn = array();
+//        foreach($arrTemp as $arrOneRow) {
+//            if(uniStripos($arrOneRow["name"], _dbprefix_) !== false)
+//                $arrReturn[] = $arrOneRow;
+//        }
 
+        foreach($arrTemp as $intKey => $strValue)
+            $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
 		return $arrTemp;
     }
     
@@ -230,11 +255,7 @@ class class_db_postgres implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("
-			        	SELECT *  
-						FROM information_schema.columns 
-						WHERE table_name = '".dbsafeString($strTableName)."'"
-        );
+        $arrTemp = $this->getArray("select column_name, data_type from user_tab_columns where table_name='".dbsafeString($strTableName)."'");
         
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
@@ -268,25 +289,25 @@ class class_db_postgres implements interface_db_driver {
         $strReturn = "";
         
         if($strType == "int")
-            $strReturn .= " INT ";
+            $strReturn .= " NUMBER(19,0) ";
         elseif($strType == "long")
-            $strReturn .= " BIGINT ";
+            $strReturn .= " NUMBER(19, 0) ";
         elseif($strType == "double")
-            $strReturn .= " NUMERIC ";   
+            $strReturn .= " FLOAT (24) ";   
         elseif($strType == "char10")
-            $strReturn .= " VARCHAR( 10 ) "; 
+            $strReturn .= " VARCHAR2( 10 ) "; 
         elseif($strType == "char20")
-            $strReturn .= " VARCHAR( 20 ) ";
+            $strReturn .= " VARCHAR2( 20 ) ";
         elseif($strType == "char100")
-            $strReturn .= " VARCHAR( 100 ) ";    
+            $strReturn .= " VARCHAR2( 100 ) ";    
         elseif($strType == "char254")
-            $strReturn .= " VARCHAR( 254 ) ";
+            $strReturn .= " VARCHAR2( 254 ) ";
         elseif($strType == "char500")
-            $strReturn .= " VARCHAR( 500 ) ";
+            $strReturn .= " VARCHAR2( 500 ) ";
         elseif($strType == "text")
-            $strReturn .= " TEXT ";
+            $strReturn .= " VARCHAR2( 4000 ) ";
         elseif($strType == "longtext")
-            $strReturn .= " TEXT ";
+            $strReturn .= " CLOB ";
         else
             $strReturn .= " VARCHAR( 254 ) ";
             
@@ -328,7 +349,7 @@ class class_db_postgres implements interface_db_driver {
     			return true;
     	}
     	
-    	//build the mysql code
+    	//build the oracle code
     	$strQuery .= "CREATE TABLE "._dbprefix_.$strName." ( \n";
     	
     	//loop the fields
@@ -354,10 +375,22 @@ class class_db_postgres implements interface_db_driver {
     	}
 
     	//primary keys
-    	$strQuery .= " PRIMARY KEY ( ".implode(" , ", $arrKeys)." ) \n";
+        $strQuery .= " CONSTRAINT pk_".  generateSystemid()." primary key ( ".implode(" , ", $arrKeys)." ) \n";
     	
     	
     	$strQuery .= ") ";
+        
+        
+        
+//        $arrStack = debug_backtrace();
+//		$strText = date("G:i:s, d-m-y"). "\t\t".
+//		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
+//		                 "\r\n"
+//		              . $strQuery. "\r\n\r\n\r\n";
+//		$handle = fopen(_systempath_."/debug/dblog.log", "a");
+//		fwrite($handle, $strText);
+//		fclose($handle);
+    	  
         $bitCreate = $this->_query($strQuery);
         
         if($bitCreate && count($arrIndices) > 0) {
@@ -373,9 +406,7 @@ class class_db_postgres implements interface_db_driver {
      *
      */
     public function transactionBegin() {
-        //Autocommit 0 setzten
-		$strQuery = "BEGIN";
-		$this->_query($strQuery);
+		$this->bitTxOpen = true;
     }
 
     /**
@@ -383,8 +414,9 @@ class class_db_postgres implements interface_db_driver {
      *
      */
     public function transactionCommit() {
-        $str_query = "COMMIT";
-		$this->_query($str_query);
+
+        oci_commit($this->linkDB);
+        $this->bitTxOpen = false;
     }
 
     /**
@@ -392,17 +424,15 @@ class class_db_postgres implements interface_db_driver {
      *
      */
     public function transactionRollback() {
-        $strQuery = "ROLLBACK";
-		$this->_query($strQuery);
+        oci_rollback($this->linkDB);
+        $this->bitTxOpen = false;
     }
 
     public function getDbInfo() {
-    	$arrInfo = @pg_version($this->linkDB);
         $arrReturn = array();
-        $arrReturn["dbdriver"] = "postgres-extension";
-        $arrReturn["dbserver"] = "postgres ".$arrInfo["server"];
-        $arrReturn["dbclient"] = $arrInfo["client"];
-        $arrReturn["dbconnection"] = $arrInfo["protocol"];
+        $arrReturn["dbdriver"] = "oci8-oracle-extension";
+        $arrReturn["dbserver"] = oci_server_version($this->linkDB);
+        $arrReturn["dbclient"] = function_exists("oci_client_version") ? oci_client_version($this->linkDB) : "";
         return $arrReturn;
     }
     
@@ -479,7 +509,8 @@ class class_db_postgres implements interface_db_driver {
     }
 
     /**
-     * Transforms the query into a valid postgres-syntax
+     * Transforms the prepared statemnt into a valid oracle syntax.
+     * This is done by repling the ?-chars by :x entries.
      *
      * @param string $strQuery
      * @return string
@@ -488,7 +519,7 @@ class class_db_postgres implements interface_db_driver {
         $intCount = 1;
         while(uniStrpos($strQuery, "?") !== false) {
             $intPos = uniStrpos($strQuery, "?");
-            $strQuery = substr($strQuery, 0, $intPos)."$".$intCount++.substr($strQuery, $intPos+1);
+            $strQuery = substr($strQuery, 0, $intPos).":".$intCount++.substr($strQuery, $intPos+1);
         }
         return $strQuery;
     }
@@ -501,17 +532,54 @@ class class_db_postgres implements interface_db_driver {
      * @return ressource
      * @since 3.4
      */
-    private function getPreparedStatementName($strQuery) {
+    private function getParsedStatement($strQuery) {
+        
+        if(uniStripos($strQuery, "select") !== false) {
+            $strQuery = uniStrReplace(array(" as ", " AS "), array(" ", " "), $strQuery);
+        }
+        
+//        $arrStack = debug_backtrace();
+//		$strText = date("G:i:s, d-m-y"). "\t\t".
+//		                  $arrStack[2]["file"]."\t Row ".$arrStack[2]["line"].", function ".$arrStack[2]["function"]."".
+//		                 "\r\n"
+//		              . $strQuery. "\r\n\r\n\r\n";
+//		$handle = fopen(_systempath_."/debug/dblog.log", "a");
+//		fwrite($handle, $strText);
+//		fclose($handle);
+        
+        
         $strSum = md5($strQuery);
-        if(in_array($strSum, $this->arrStatementsCache))
-            return $strSum;
+        if(array_key_exists($strSum, $this->arrStatementsCache))
+            return $this->arrStatementsCache[$strSum];
+        
+        $objStatement = oci_parse($this->linkDB, $strQuery);
 
-        if(@pg_prepare($this->linkDB, $strSum, $strQuery))
-            $this->arrStatementsCache[] = $strSum;
+        if($objStatement)
+            $this->arrStatementsCache[$strSum] = $objStatement;
         else
             return false;
 
-        return $strSum;
+        return $objStatement;
+    }
+    
+    /**
+     * convertes a result-row. changes all keys to lower-case keys again
+     * 
+     * @param array $arrRow
+     * @return array 
+     */
+    private function parseResultRow(array $arrRow) {
+        $arrRow = array_change_key_case($arrRow, CASE_LOWER);
+        if(isset($arrRow["count(*)"]))
+            $arrRow["COUNT(*)"] = $arrRow["count(*)"];
+        
+        foreach($arrRow as $intKey => $mixedValue) {
+            if(is_object($mixedValue)) {
+                $arrRow[$intKey] = $mixedValue->load();
+                $mixedValue->free();
+            }
+        }
+        return $arrRow;
     }
 
 }

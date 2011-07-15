@@ -476,10 +476,10 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
            //loop elements to remove navigation-elements. to do so, get the current elements-name (maybe the user renamed the default "navigation")
            foreach($arrElementsTemplate as $arrPlaceholder) {
-               if($arrPlaceholder["placeholder"] != $this->arrElementData["page_element_placeholder_placeholder"]) {
+               if($arrPlaceholder["placeholder"] != $this->arrElementData["page_element_ph_placeholder"]) {
                   //loop the elements-list
                   foreach($arrPlaceholder["elementlist"] as $arrOneElement) {
-                      if($arrOneElement["element"] == $this->arrElementData["page_element_placeholder_element"]) {
+                      if($arrOneElement["element"] == $this->arrElementData["page_element_ph_element"]) {
 
                           //seems as we have a navigation-element different than the current one.
                           //check, if the element is installed on the current page

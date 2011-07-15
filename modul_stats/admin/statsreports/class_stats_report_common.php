@@ -131,7 +131,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 * @return int
 	 */
 	public function getHitsForOnePeriod($intStart, $intEnd) {
-		$strQuery = "SELECT stats_date, COUNT(*) as number
+		$strQuery = "SELECT stats_date, COUNT(*) as hits
 						FROM ".$this->arrModule["table"]."
 						WHERE stats_date >= ".(int)$intStart."
 								AND stats_date <= ".(int)$intEnd."
@@ -149,12 +149,12 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 */
 	public function getVisitors() {
 		$intReturn = 0;
-		$strQuery = "SELECT COUNT(DISTINCT stats_ip,  stats_browser) as number
+		$strQuery = "SELECT COUNT(DISTINCT stats_ip) as hits
 						FROM ".$this->arrModule["table"]."
 						WHERE stats_date >= ".(int)$this->intDateStart."
-								AND stats_date <= ".(int)$this->intDateEnd."";
+						  AND stats_date <= ".(int)$this->intDateEnd."";
 		$arrVisitor = $this->objDB->getRow($strQuery);
-		$intReturn = $arrVisitor["number"];
+		$intReturn = $arrVisitor["hits"];
 		return $intReturn;
 	}
 
@@ -170,7 +170,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 						FROM ".$this->arrModule["table"]."
 						WHERE stats_date >= ".(int)$intStart."
 								AND stats_date <= ".(int)$intEnd."
-						GROUP BY stats_ip, stats_browser
+						GROUP BY stats_ip, stats_browser, stats_date
 						ORDER BY stats_date ASC";
 		$arrTemp = $this->objDB->getArray($strQuery);
 		return $arrTemp;
@@ -274,7 +274,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
 			foreach($arrHitsTotal as $arrOneKey => $arrOneHit) {
 			    if($arrOneHit["stats_date"] >= $intStart && $arrOneHit["stats_date"] < ($intStart+24*60*60*$this->intInterval)) {
-			        $arrHits[$intCount] += $arrOneHit["number"];
+			        $arrHits[$intCount] += $arrOneHit["hits"];
 			    }
 			}
 

@@ -326,7 +326,14 @@ class class_db_sqlite3 implements interface_db_driver {
     	
     	$strQuery .= ") ";
             
-        return $this->_query($strQuery);
+        $bitCreate = $this->_query($strQuery);
+        
+        if($bitCreate && count($arrIndices) > 0) {
+            $strQuery = "CREATE INDEX ix_".generateSystemid()." ON "._dbprefix_.$strName." ( ".  implode(", ", $arrIndices).") ";
+            $bitCreate = $bitCreate && $this->_query($strQuery);
+        }
+        
+        return $bitCreate;
     }
 
 

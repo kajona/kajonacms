@@ -124,7 +124,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	public function getUserIdsForGroup($intStart = null, $intEnd = null) {
         $strQuery = "SELECT k_user.user_id FROM "._dbprefix_."user_kajona as k_user,
                                          "._dbprefix_."user as user,
-									     "._dbprefix_."user_group_kajona_members
+									     "._dbprefix_."user_kajona_members
 								   WHERE group_member_group_kajona_id= ?
 								  	 AND k_user.user_id = group_member_user_kajona_id
                                      AND k_user.user_id = user.user_id
@@ -148,7 +148,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      */
     public function getNumberOfMembers() {
 		$strQuery = "SELECT COUNT(*) 
-                       FROM "._dbprefix_."user_group_kajona_members
+                       FROM "._dbprefix_."user_kajona_members
 					   WHERE group_member_group_kajona_id= ?";
 		$arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($this->getSystemid()));
         return $arrRow["COUNT(*)"];
@@ -173,7 +173,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	 * @return bool
 	 */
     private function deleteAllUsersFromCurrentGroup() {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona_members WHERE group_member_group_kajona_id=?";
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members WHERE group_member_group_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
@@ -182,7 +182,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	 * @param interface_usersources_user $objUser
 	 */
 	public function addMember(interface_usersources_user $objUser) {
-         $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona_members
+         $strQuery = "INSERT INTO "._dbprefix_."user_kajona_members
                        (group_member_group_kajona_id, group_member_user_kajona_id) VALUES
                          (?, ?)";
     	 return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
@@ -203,7 +203,7 @@ class class_usersources_group_kajona extends class_model implements interface_mo
 	 * @param interface_usersources_user $objUser
 	 */
     public function removeMember(interface_usersources_user $objUser) {
-        $strQuery = "DELETE FROM "._dbprefix_."user_group_kajona_members
+        $strQuery = "DELETE FROM "._dbprefix_."user_kajona_members
 						WHERE group_member_group_kajona_id=?
 						  AND group_member_user_kajona_id=?";
         return $this->objDB->_pQuery($strQuery, array($this->getSystemid(), $objUser->getSystemid()));
