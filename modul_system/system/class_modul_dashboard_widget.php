@@ -107,9 +107,25 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
 
         return false;
     }
-
-
+    
     /**
+     * Implementing callback to react on user-delete events
+     * 
+     * @param string $strSystemid 
+     * @return bool
+     */
+    public function doAdditionalCleanupsOnDeletion($strSystemid) {
+        $strQuery = "SELECT dashboard_id FROM ".$this->arrModule["table"]." WHERE dashboard_user = ?";
+        $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
+        foreach($arrRows as $arrOneRow) {
+            $objWidget = new class_modul_dashboard_widget($arrOneRow["dashboard_id"]);
+            $objWidget->deleteObjectFromDb();
+        }
+        
+        return true;
+    }
+
+        /**
      * Looks up the widgets placed in a given column and
      * returns a list of instances
      *

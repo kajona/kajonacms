@@ -101,6 +101,8 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         return false;
     }
     
+    
+    
     /**
      * Looks up all widgets available in the filesystem.
      * ATTENTION: returns the class-name representation of a file, NOT the filename itself.

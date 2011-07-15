@@ -149,14 +149,6 @@ class class_modul_user_user extends class_model implements interface_model  {
             return $this->objDB->_pQuery($strQuery, $arrParams);
         }
     }
-    
-    protected function onInsertToDb() {
-            
-                            
-
-        parent::onInsertToDb();
-    }
-
    
 
     /**
