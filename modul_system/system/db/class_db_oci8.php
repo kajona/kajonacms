@@ -16,15 +16,16 @@
  */
 class class_db_oci8 implements interface_db_driver {
 
-    private $linkDB;                              //DB-Link
+    private $linkDB;                             //DB-Link
     private $strHost = "";
     private $strUsername = "";
     private $strPass = "";
     private $strDbName = "";
     private $intPort = "";
     
-    private $strDumpBin = "pg_dump";              //Binary to dump db (if not in path, add the path here)
-    private $strRestoreBin = "psql";              //Binary to restore db (if not in path, add the path here)
+    private $strDumpBin = "exp";              // Binary to dump db (if not in path, add the path here)
+                                              // /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/
+    private $strRestoreBin = "imp";              //Binary to restore db (if not in path, add the path here)
 
     private $arrStatementsCache = array();
     
@@ -257,12 +258,6 @@ class class_db_oci8 implements interface_db_driver {
 		$arrTemp = $this->getArray(
 				"SELECT table_name AS name FROM ALL_TABLES");
 
-//        $arrReturn = array();
-//        foreach($arrTemp as $arrOneRow) {
-//            if(uniStripos($arrOneRow["name"], _dbprefix_) !== false)
-//                $arrReturn[] = $arrOneRow;
-//        }
-
         foreach($arrTemp as $intKey => $strValue)
             $arrTemp[$intKey]["name"] = uniStrtolower($strValue["name"]);
 		return $arrTemp;
@@ -492,8 +487,7 @@ class class_db_oci8 implements interface_db_driver {
     public function dbExport($strFilename, $arrTables) {
     	
         $strFilename = _realpath_.$strFilename;
-        $strTables = "-t ".implode(" -t ", $arrTables);
-        $strParamPass = "";
+        $strTables = implode(",", $arrTables);
 
         /*
         if ($this->strPass != "") {
@@ -501,7 +495,8 @@ class class_db_oci8 implements interface_db_driver {
         }
 		*/
 
-        $strCommand = $this->strDumpBin." --clean -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$strTables." ".$this->strDbName." > \"".$strFilename."\"";
+        $strCommand = $this->strDumpBin." ".$this->strUsername."/".$this->strPass." CONSISTENT=n TABLES=".$strTables." FILE='".$strFilename."'";
+        class_logger::getInstance()->addLogRow("dump command: ".$strCommand, class_logger::$levelInfo);
 		//Now do a systemfork
 		$intTemp = "";
 		$strResult = system($strCommand, $intTemp);
@@ -518,13 +513,12 @@ class class_db_oci8 implements interface_db_driver {
     public function dbImport($strFilename) {
     	
         $strFilename = _realpath_.$strFilename;
-        $strParamPass = "";
 		/*
         if ($this->strPass != "") {
             $strParamPass = " -p".$this->strPass;
         }
 		*/
-        $strCommand = $this->strRestoreBin." -q -h".$this->strHost." -U".$this->strUsername.$strParamPass." -p".$this->intPort." ".$this->strDbName." < \"".$strFilename."\"";
+        $strCommand = $this->strRestoreBin." ".$this->strUsername."/".$this->strPass." FILE='".$strFilename."'";
         $intTemp = "";
         $strResult = system($strCommand, $intTemp);
         class_logger::getInstance()->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
