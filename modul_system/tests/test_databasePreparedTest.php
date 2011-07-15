@@ -12,8 +12,8 @@ class class_test_databasePrepared extends class_testbase  {
         echo "testing database...\n";
         echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
 
-        $strQuery = "DROP TABLE IF EXISTS "._dbprefix_."temp_autotest";
-        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
+//        $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
+//        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
 
         echo "\tcreating a new table...\n";
 

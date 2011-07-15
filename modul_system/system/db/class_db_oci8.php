@@ -56,6 +56,7 @@ class class_db_oci8 implements interface_db_driver {
         
 				
 		if($this->linkDB !== false) {
+            oci_set_client_info($this->linkDB, "Kajona CMS");
 			return true;
 		}
 		else {
@@ -82,7 +83,9 @@ class class_db_oci8 implements interface_db_driver {
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
-        return oci_execute($objStatement, $bitAddon) !== false;
+        $bitResult = oci_execute($objStatement, $bitAddon);
+        oci_free_statement($objStatement);
+        return $bitResult;
     }
 
     /**
@@ -106,7 +109,9 @@ class class_db_oci8 implements interface_db_driver {
         $bitAddon = OCI_COMMIT_ON_SUCCESS;
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
-        return oci_execute($objStatement, $bitAddon) !== false ;
+        $bitResult = oci_execute($objStatement, $bitAddon) ;
+        oci_free_statement($objStatement);
+        return $bitResult;
     }
 
     /**
@@ -132,6 +137,8 @@ class class_db_oci8 implements interface_db_driver {
             $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
+        
+        oci_free_statement($objStatement);
 		return $arrReturn;
     }
 
@@ -169,6 +176,7 @@ class class_db_oci8 implements interface_db_driver {
             $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
+        oci_free_statement($objStatement);
 		return $arrReturn;
     }
 
@@ -182,11 +190,18 @@ class class_db_oci8 implements interface_db_driver {
      * @return array
      */
     public function getArraySection($strQuery, $intStart, $intEnd) {
-        //calculate the end-value: 
-        $intEnd = $intEnd - $intStart +1;
-        //add the limits to the query
-        //$strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
-        //FIXME
+        //array-counters to real-counters
+        $intStart++;
+        $intEnd++;
+        
+        //modify the query
+        $strQuery = "SELECT * FROM (
+             SELECT a.*, ROWNUM rnum FROM 
+                ( ".$strQuery.") a 
+             WHERE ROWNUM <= ".$intEnd."       
+        )    
+        WHERE rnum >= ".$intStart;
+        
         //and load the array
         return $this->getArray($strQuery);
     }
@@ -206,10 +221,18 @@ class class_db_oci8 implements interface_db_driver {
      */
     public function getPArraySection($strQuery, $arrParams, $intStart, $intEnd) {
         //calculate the end-value:
-        $intEnd = $intEnd - $intStart +1;
-        //add the limits to the query
-        //$strQuery .= " LIMIT  ".$intEnd." OFFSET ".$intStart;
-        //FIXME
+        //array-counters to real-counters
+        $intStart++;
+        $intEnd++;
+        
+        //modify the query
+        $strQuery = "SELECT * FROM (
+             SELECT a.*, ROWNUM rnum FROM 
+                ( ".$strQuery.") a 
+             WHERE ROWNUM <= ".$intEnd."       
+        )    
+        WHERE rnum >= ".$intStart;
+        
         //and load the array
         return $this->getPArray($strQuery, $arrParams);
     }
@@ -232,7 +255,7 @@ class class_db_oci8 implements interface_db_driver {
      */
     public function getTables() {
 		$arrTemp = $this->getArray(
-				"SELECT table_name AS name FROM ALL_tables");
+				"SELECT table_name AS name FROM ALL_TABLES");
 
 //        $arrReturn = array();
 //        foreach($arrTemp as $arrOneRow) {
@@ -255,12 +278,12 @@ class class_db_oci8 implements interface_db_driver {
      */
     public function getColumnsOfTable($strTableName) {
         $arrReturn = array();
-        $arrTemp = $this->getArray("select column_name, data_type from user_tab_columns where table_name='".dbsafeString($strTableName)."'");
+        $arrTemp = $this->getPArray("select column_name, data_type from user_tab_columns where table_name=?", array(strtoupper($strTableName)));
         
         foreach ($arrTemp as $arrOneColumn) {
             $arrReturn[] = array(
-                        "columnName" => $arrOneColumn["column_name"],
-                        "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : $arrOneColumn["data_type"]),
+                        "columnName" => strtolower($arrOneColumn["column_name"]),
+                        "columnType" => ($arrOneColumn["data_type"] == "integer" ? "int" : strtolower($arrOneColumn["data_type"])),
             );
             
         }
@@ -548,16 +571,16 @@ class class_db_oci8 implements interface_db_driver {
 //		fclose($handle);
         
         
-        $strSum = md5($strQuery);
-        if(array_key_exists($strSum, $this->arrStatementsCache))
-            return $this->arrStatementsCache[$strSum];
+//        $strSum = md5($strQuery);
+//        if(array_key_exists($strSum, $this->arrStatementsCache))
+//            return $this->arrStatementsCache[$strSum];
         
         $objStatement = oci_parse($this->linkDB, $strQuery);
 
-        if($objStatement)
-            $this->arrStatementsCache[$strSum] = $objStatement;
-        else
-            return false;
+//        if($objStatement)
+//            $this->arrStatementsCache[$strSum] = $objStatement;
+//        else
+//            return false;
 
         return $objStatement;
     }

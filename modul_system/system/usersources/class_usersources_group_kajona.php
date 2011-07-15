@@ -123,12 +123,12 @@ class class_usersources_group_kajona extends class_model implements interface_mo
      */
 	public function getUserIdsForGroup($intStart = null, $intEnd = null) {
         $strQuery = "SELECT k_user.user_id FROM "._dbprefix_."user_kajona as k_user,
-                                         "._dbprefix_."user as user,
+                                         "._dbprefix_."user as user2,
 									     "._dbprefix_."user_kajona_members
 								   WHERE group_member_group_kajona_id= ?
 								  	 AND k_user.user_id = group_member_user_kajona_id
-                                     AND k_user.user_id = user.user_id
-                                   ORDER BY user.user_username ASC  ";
+                                     AND k_user.user_id = user2.user_id
+                                   ORDER BY user2.user_username ASC  ";
 
         if($intStart != null && $intEnd != null)
             $arrIds = $this->objDB->getPArraySection($strQuery, array($this->getSystemid()), $intStart, $intEnd);
