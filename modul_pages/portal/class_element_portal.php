@@ -40,7 +40,7 @@ abstract class class_element_portal extends class_portal {
 
 		//Load the data of the current Element and merge it
         //FIXME: this should be done via lazy loading!
-		$arrTemp = $this->getElementContent($objElementData->getSystemid());
+		$arrTemp = array(); 
 		$this->setSystemid($objElementData->getSystemid());
 		$this->arrElementData = $arrTemp;
 		//merge the attributes of $objElementData to the array
@@ -81,6 +81,10 @@ abstract class class_element_portal extends class_portal {
 	 * @return string
 	 */
 	public function getElementOutput() {
+        
+        //load the data from the database
+        $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
+        
 	    if(_pages_portaleditor_ == "true") {
 	        //Check needed rights
 	        if($this->objRights->rightEdit($this->getSystemid())) {
