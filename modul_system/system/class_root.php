@@ -482,6 +482,8 @@ abstract class class_root {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
+        
+        $strComment = uniStrTrim($strComment, 253);
 
 
 		//So, lets generate the record
@@ -1646,6 +1648,8 @@ abstract class class_root {
 
     public function setStrRecordComment($strRecordComment) {
         $this->internalInit($this->strSystemid);
+        if(uniStrlen($strRecordComment) > 254)
+            $strRecordComment = uniStrTrim($strRecordComment, 250);
         $this->strRecordComment = $strRecordComment;
     }
 
