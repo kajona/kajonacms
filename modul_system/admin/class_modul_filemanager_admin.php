@@ -12,6 +12,7 @@
  * Admin-Parts of the filemanager
  *
  * @package modul_filemanager
+ * @author sidler@mulchprod.de
  */
 class class_modul_filemanager_admin extends class_admin implements  interface_admin {
 	private $strFolder;
@@ -25,54 +26,12 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	public function __construct() {
         $arrModule = array();
 		$arrModule["name"] 				= "modul_filemanager";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _filemanager_modul_id_;
 		$arrModule["modul"]				= "filemanager";
-		$arrModule["table"]		     	= _dbprefix_."filemanager";
 		//base class
 		parent::__construct($arrModule);
-		$this->strAction = $this->getAction();
+		
 		$this->getCurrentFolder();
-	}
-
-	/**
-	 * Decides which method is to be loaded
-	 *
-	 * @param string $strAction
-	 */
-	public function action($strAction = "") {
-	    $strReturn = "";
-        if($strAction == "")
-            $strAction = "list";
-
-        try {
-
-    		if($strAction == "openFolder" || $strAction == "renameFile" || $strAction == "deleteFile"
-    		   || $strAction == "deleteFolder" || $strAction == "uploadFile"
-    		   || $strAction == "imageDetail" ) {
-    			$strReturn = $this->actionFolderContent();
-               }
-
-
-    		else if($strAction == "deleteRepo") {
-    			$strReturn = $this->actionDeleteRepo();
-    			if($strReturn == "")
-    			    $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
-    		}
-
-            else
-                $strReturn = parent::action();
-        }
-        catch (class_exception $objException) {
-		    $objException->processException();
-		    $strReturn = "An internal error occured: ".$objException->getMessage();
-		}
-		$this->strOutput = $strReturn;
-	}
-
-
-	public function getOutputContent() {
-		return $this->strOutput;
 	}
 
 	protected function getOutputModuleNavi() {
@@ -156,12 +115,14 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteRepo() {
+	protected function actionDeleteRepo() {
 		$strReturn = "";
 
 		if($this->objRights->rightDelete($this->getSystemid())) {
             $objRepo = new class_modul_filemanager_repo($this->getSystemid());
             $objRepo->deleteRepo();
+            
+            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");
@@ -281,39 +242,26 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	}
 
 
+    
+    
+    
+    protected function actionUploadFile() {
+        return $this->actionOpenFolder();
+    }
+    
 	/**
 	 * Loads the content of a folder
 	 * If requested, loads subactions,too
 	 *
 	 * @return string
 	 */
-	private function actionFolderContent() {
+	protected function actionOpenFolder() {
 		$strReturn = "";
 		if($this->objRights->rightView($this->getSystemid())) {
 			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 			//Load the files
 			$objFilesystem = new class_filesystem();
             $strExtra = "";
-            //React on request passed. Do this before loading the filelist, cause subactions could modify it
-		   	if($this->strAction == "renameFile") {
-		   		$strExtra .= $this->actionRenameFile();
-                if($strExtra == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
-		   	}
-		   	elseif($this->strAction == "deleteFile") {
-		   		$strExtra .= $this->actionDeleteFile();
-                if($strExtra == "") {
-                    if($this->getParam("galleryId") != "")
-                        $this->adminReload(getLinkAdminHref("gallery", "showGallery", "systemid=".$this->getParam("galleryId")."&resync=true"));
-                    else
-                        $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
-                }
-		   	}
-		   	elseif($this->strAction == "deleteFolder") {
-		   		$strExtra .= $this->actionDeleteFolder();
-                if($strExtra == "")
-                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
-		   	}
 
 		   	//ok, load the list using the repo-data
 		   	$arrViewFilter = array();
@@ -324,7 +272,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
             if($this->objRights->rightRight1($this->getSystemid())) {
                 $strActions .= $this->generateNewFolderDialogCode();
                 $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
-                $strActions .= $this->actionUploadFile();
+                $strActions .= $this->actionUploadFileInternal();
             }
             $strActions .= $this->generateRenameFileDialogCode();
 
@@ -584,13 +532,20 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteFile() {
+	protected function actionDeleteFile() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
 			$objFilesystem = new class_filesystem();
 			if(!$objFilesystem->fileDelete($this->strFolder."/".$this->getParam("file")))
 				$strReturn .= $this->getText("datei_loeschen_fehler");
+            else {
+                if($this->getParam("galleryId") != "")
+                    $this->adminReload(getLinkAdminHref("gallery", "showGallery", "systemid=".$this->getParam("galleryId")."&resync=true"));
+                else
+                    $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
+            }
+            
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");
@@ -603,7 +558,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string "" in case of success
 	 */
-	private function actionDeleteFolder() {
+	protected function actionDeleteFolder() {
 		$strReturn = "";
 		//Rights
 		if($this->objRights->rightDelete($this->getSystemid())) {
@@ -611,6 +566,8 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
 			if(!$objFilesystem->folderDelete($this->strFolder."/".$this->getParam("delFolder")))
 				$strReturn .= $this->getText("ordner_loeschen_fehler");
+            else
+                $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "openFolder", "systemid=".$this->getSystemid()."&folder=".$this->getParam("folder")));
 		}
 		else
 			$strReturn = $this->getText("commons_error_permissions");
@@ -679,7 +636,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 *
 	 * @return string
 	 */
-	private function actionUploadFile() {
+	private function actionUploadFileInternal() {
 		$strReturn = "";
 		if($this->objRights->rightRight1($this->getSystemid())) {
 			//Upload-Form
@@ -872,7 +829,6 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 * @return string
 	 */
 	private function generatePathNavi($strPath) {
-        $strReturn = "";
         $arrPaths = array();
         $objRepo = new class_modul_filemanager_repo($this->getSystemid());
 

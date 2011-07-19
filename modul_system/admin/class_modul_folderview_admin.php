@@ -39,6 +39,9 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
 	public function action($strAction = "") {
 		$strReturn = "";
 
+        if($strAction == "")
+            $strAction = $this->getParam("action");
+        
 		//The common list. Used to select files or folders.
 		if($strAction == "list") {
             $strElement = "bild";
