@@ -16,7 +16,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0.1";
+		$arrModule["version"] 		= "3.4.0.2";
 		$arrModule["name"] 			= "pages";
 		$arrModule["name2"] 		= "pages_content";
 		$arrModule["name3"] 		= "folderview";
@@ -372,6 +372,11 @@ class class_installer_pages extends class_installer_base implements interface_in
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
+        }
+        
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0.1") {
+            $strReturn .= $this->update_3401_3402();
         }
 
         return $strReturn."\n\n";
@@ -764,6 +769,27 @@ class class_installer_pages extends class_installer_base implements interface_in
         $this->updateElementVersion("row", "3.4.0.1");
         $this->updateElementVersion("paragraph", "3.4.0.1");
         $this->updateElementVersion("image", "3.4.0.1");
+        return $strReturn;
+    }
+    
+    private function update_3401_3402() {
+        $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
+        
+        $strReturn .= "Deleting process-xml class...\n";
+        $objFilesystem = new class_filesystem();
+        if(!$objFilesystem->fileDelete("/admin/class_modul_pages_admin_xml.php"))
+            $strReturn .= "Deletion of /admin/class_modul_pages_admin_xml.php failed!\n";
+        
+        $objModule = class_modul_system_module::getModuleByName($this->arrModule["name"]);
+        $objModule->setStrXmlNameAdmin("");
+        $objModule->updateObjectToDb();
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0.2");
+        $strReturn .= "Updating element-version...\n";
+        $this->updateElementVersion("row", "3.4.0.2");
+        $this->updateElementVersion("paragraph", "3.4.0.2");
+        $this->updateElementVersion("image", "3.4.0.2");
         return $strReturn;
     }
 }

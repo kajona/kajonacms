@@ -1471,6 +1471,85 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $strReturn;
 	}
+    
+    // --- xml ------------------------------------------------------------------------------------------
+    /**
+	 * Creates a list of sites reduced to match the filter passed.
+     * Used e.g. by the page-selector.
+     * @xml
+	 *
+	 * @return string
+	 */
+	protected function actionGetPagesByFilter() {
+		$strReturn = "";
+        $strFilter = $this->getParam("filter");
+        $arrPages = class_modul_pages_page::getAllPages(0, 0, $strFilter);
+
+        $strReturn .= "<pages>\n";
+        foreach ($arrPages as $objOnePage) {
+            if($objOnePage->rightView()) {
+                $strReturn .= "  <page>\n";
+                $strReturn .= "    <title>".xmlSafeString($objOnePage->getStrName())."</title>\n";
+                $strReturn .= "  </page>\n";
+            }
+        }
+        $strReturn .= "</pages>\n";
+		return $strReturn;
+	}
+
+    /**
+     * Fetches all child-nodes (folders and pages) of the passed node.
+     * Used by the tree-view in module-pages.
+     *
+     * @return string
+     * @since 3.3.0
+     * @xml
+     */
+    protected function actionGetChildNodes() {
+        $strReturn = "";
+
+        $strReturn .= "<entries>";
+
+        $arrFolder = class_modul_pages_folder::getFolderList($this->getSystemid());
+        foreach ($arrFolder as $objSingleEntry) {
+                if($objSingleEntry->rightView()) {
+                    if($objSingleEntry instanceof class_modul_pages_folder) {
+                        $strReturn .= "<folder>";
+                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
+                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
+                        $strReturn .= "<link>".getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid())."</link>";
+                        $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
+                        $strReturn .= "</folder>";
+                    }
+                }
+            }
+
+
+        $arrPages = class_modul_pages_folder::getPagesInFolder($this->getSystemid());
+        if(count($arrPages) > 0) {
+            foreach ($arrPages as $objSingleEntry) {
+                if($objSingleEntry->rightView()) {
+                    if($objSingleEntry instanceof class_modul_pages_page) {
+                        $strReturn .= "<page>";
+                        $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrBrowsername())."</name>";
+                        $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
+                        if($objSingleEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS)
+                            $strReturn .= "<link></link>";
+                        else
+                            $strReturn .= "<link>".getLinkAdminHref("pages", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
+
+                        $strReturn .= "<type>".$objSingleEntry->getIntType()."</type>";
+                        $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
+                        $strReturn .= "</page>";
+                    }
+
+                }
+            }
+        }
+        $strReturn .= "</entries>";
+
+        return $strReturn;
+    }
 
 }
 
