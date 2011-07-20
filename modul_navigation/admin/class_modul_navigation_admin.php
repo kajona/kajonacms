@@ -572,6 +572,36 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 
 
 
+    /**
+     * Fetches all child-nodes of the passed node.
+     * Used by the tree-view in module-navigation admin view.
+     *
+     * @return string
+     * @since 3.3.0
+     * @xml
+     */
+    protected function actionGetChildNodes() {
+        $strReturn = " ";
+
+        $strReturn .= "<subnodes>";
+        $arrNavigations = class_modul_navigation_point::getNaviLayer($this->getSystemid());
+
+        if(count($arrNavigations) > 0) {
+            foreach ($arrNavigations as $objSinglePoint) {
+                if($objSinglePoint->rightView()) {
+                    $strReturn .= "<point>";
+                    $strReturn .= "<name>".xmlSafeString($objSinglePoint->getStrName())."</name>";
+                    $strReturn .= "<systemid>".$objSinglePoint->getSystemid()."</systemid>";
+                    $strReturn .= "<link>".getLinkAdminHref("navigation", "list", "&systemid=".$objSinglePoint->getSystemid())."</link>";
+                    $strReturn .= "<isleaf>".(count(class_modul_navigation_point::getNaviLayer($objSinglePoint->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
+                    $strReturn .= "</point>";
+                }
+            }
+        }
+
+        $strReturn .= "</subnodes>";
+        return $strReturn;
+    }
 
 
 
