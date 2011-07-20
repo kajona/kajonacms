@@ -85,7 +85,7 @@ $lang["ordner_name_parent"]              = "Übergeordneter Ordner:";
 $lang["page_alias"]                      = "Verweis auf:";
 $lang["page_alias_hint"]                 = "Verweise beginnend mit http oder https werden als externe Links verarbeitet, anderenfalls wird die entsprechende interne Seite geladen";
 $lang["page_element_end"]                = "Anzeigezeitraum Ende:";
-$lang["page_element_ph_title"]  = "Interner Titel:";
+$lang["page_element_ph_title"]           = "Interner Titel:";
 $lang["page_element_start"]              = "Anzeigezeitraum Start:";
 $lang["page_element_system_folder"]      = "Optionale Felder";
 $lang["page_folder_name"]                = "Übergeordnete Seite / Ordner:";
@@ -138,10 +138,10 @@ $lang["required_ordner_name"]            = "Name des übergeordneten Ordners / S
 $lang["seite_bearbeiten"]                = "Seite bearbeiten";
 $lang["seite_copy"]                      = "Seite kopieren";
 $lang["seite_inhalte"]                   = "Seiteninhalte bearbeiten";
-$lang["seite_oeffnen"]                   = "Seitenelemente anzeigen";
 $lang["seite_loeschen"]                  = "Seite löschen";
 $lang["seite_loeschen_erfolg"]           = "Seite erfolgreich gelöscht";
 $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darunter angelegten Seiten werden ebenfalls gelöscht!";
+$lang["seite_oeffnen"]                   = "Seitenelemente anzeigen";
 $lang["select_page"]                     = "Seite auswählen";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Änderungshistorie anzeigen";
@@ -151,6 +151,20 @@ $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
+
+$lang["systemtask_pageexport_name"]      = "Seite exportieren";
+$lang["systemtask_pageexport_success"]      = "Export der Seite war erfolgreich. Die Seite wurde unter dem folgenden Dateinamen abelegt. Bitte die Datei schnellstmöglich vom System entfernen.<br />";
+$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
+$lang["systemtask_pageexport_page"]      = "Zu exportierende Seite:";
+
+$lang["systemtask_pageimport_name"]      = "Seite importieren";
+$lang["systemtask_pageimport_file"]      = "Zu importierende Datei:";
+$lang["systemtask_pageimport_errorupload"]      = "Fehler beim Hochladen der Datei.";
+$lang["systemtask_pageimport_errortype"]      = "Hochgeladene Datei ist keine xml-Datei.";
+$lang["systemtask_pageimport_success"]      = "Seite erfolgreich importiert.";
+$lang["systemtask_pageimport_replace"]      = "Bestehende Seite ersetzen:";
+
+
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

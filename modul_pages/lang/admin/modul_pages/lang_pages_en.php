@@ -85,7 +85,7 @@ $lang["ordner_name_parent"]              = "Parent folder:";
 $lang["page_alias"]                      = "Link-target:";
 $lang["page_alias_hint"]                 = "Links starting with http or https are treatet as external links, otherwise the matching internal site is being loaded.";
 $lang["page_element_end"]                = "Display period end:";
-$lang["page_element_ph_title"]  = "Internal title:";
+$lang["page_element_ph_title"]           = "Internal title:";
 $lang["page_element_start"]              = "Display period start:";
 $lang["page_element_system_folder"]      = "Optional fields";
 $lang["page_folder_name"]                = "Superior page / folder:";
@@ -137,11 +137,11 @@ $lang["required_name"]                   = "Name of the page";
 $lang["required_ordner_name"]            = "Name of the superior page / folder";
 $lang["seite_bearbeiten"]                = "Edit page";
 $lang["seite_copy"]                      = "Copy page";
-$lang["seite_oeffnen"]                   = "Show pageelements";
 $lang["seite_inhalte"]                   = "Edit page content";
 $lang["seite_loeschen"]                  = "Delete page";
 $lang["seite_loeschen_erfolg"]           = "Page was delete successfully";
 $lang["seite_loeschen_frage"]            = "Do you really want to delete the page &quot;<b>%%element_name%%</b>&quot;? All pages and folders below the current page are delete, too.";
+$lang["seite_oeffnen"]                   = "Show pageelements";
 $lang["select_page"]                     = "Select a page";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Show Changehistory";
@@ -151,6 +151,19 @@ $lang["templateNotLoaded"]               = "ATTENTION: No template was selected 
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
+
+$lang["systemtask_pageexport_name"]      = "Export page";
+$lang["systemtask_pageexport_success"]      = "Page exported successfully. The document was saved as following. Please remove the file as soon as possible.<br />";
+$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
+$lang["systemtask_pageexport_page"]      = "Page to export:";
+
+$lang["systemtask_pageimport_name"]      = "Import page";
+$lang["systemtask_pageimport_file"]      = "File to import:";
+$lang["systemtask_pageimport_errorupload"]      = "Error while uploading the file.";
+$lang["systemtask_pageimport_errortype"]      = "Uploaded file not a xml file.";
+$lang["systemtask_pageimport_success"]      = "Page imported successfully.";
+$lang["systemtask_pageimport_replace"]      = "Replace existing page:";
+
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");
