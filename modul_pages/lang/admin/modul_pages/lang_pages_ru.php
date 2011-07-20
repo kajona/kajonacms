@@ -115,6 +115,7 @@ $lang["required_name"]                   = "Имя страницы";
 $lang["required_ordner_name"]            = "Имя папки";
 $lang["seite_bearbeiten"]                = "Изменить страницу";
 $lang["seite_copy"]                      = "Скопировать страницу";
+$lang["seite_oeffnen"]                   = "Показать элементы страницы";
 $lang["seite_inhalte"]                   = "Изменить содержание страницы";
 $lang["seite_loeschen_erfolg"]           = "Страница успешно удалена";
 $lang["seite_loeschen_frage"]            = "Вы действительно хотите удалить страницу &quot;<b>%%element_name%%</b>&quot;?";

@@ -138,6 +138,7 @@ $lang["required_ordner_name"]            = "Name des übergeordneten Ordners / S
 $lang["seite_bearbeiten"]                = "Seite bearbeiten";
 $lang["seite_copy"]                      = "Seite kopieren";
 $lang["seite_inhalte"]                   = "Seiteninhalte bearbeiten";
+$lang["seite_oeffnen"]                   = "Seitenelemente anzeigen";
 $lang["seite_loeschen"]                  = "Seite löschen";
 $lang["seite_loeschen_erfolg"]           = "Seite erfolgreich gelöscht";
 $lang["seite_loeschen_frage"]            = "Möchten Sie die Seite &quot;<b>%%element_name%%</b>&quot; wirklich löschen? Alle darunter angelegten Seiten werden ebenfalls gelöscht!";

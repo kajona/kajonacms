@@ -137,6 +137,7 @@ $lang["required_name"]                   = "Name of the page";
 $lang["required_ordner_name"]            = "Name of the superior page / folder";
 $lang["seite_bearbeiten"]                = "Edit page";
 $lang["seite_copy"]                      = "Copy page";
+$lang["seite_oeffnen"]                   = "Show pageelements";
 $lang["seite_inhalte"]                   = "Edit page content";
 $lang["seite_loeschen"]                  = "Delete page";
 $lang["seite_loeschen_erfolg"]           = "Page was delete successfully";
