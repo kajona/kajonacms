@@ -74,7 +74,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         return (count($this->arrValidationErrors) == 0);
     }
 
-// --- List-Functions -----------------------------------------------------------------------------------
+    // --- List-Functions -----------------------------------------------------------------------------------
 
     protected function actionNaviPointMoveUp() {
         $this->setPositionAndReload($this->getSystemid(), "upwards");
@@ -204,7 +204,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	protected function actionNewNavi($strMode = "new") {
 		$strReturn = "";
 
-        $strFolderBrowser = getLinkAdminDialog("folderview",
+        $strFolderBrowser = getLinkAdminDialog("pages",
                                                "pagesFolderBrowser",
                                                "&form_element=navigation_folder_i&folder=1",
                                                $this->getText("commons_open_browser"),
@@ -298,14 +298,6 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
 	 */
 	protected function actionNewNaviPoint($strMode = "new") {
 		$strReturn = "";
-
-//        $strFolderBrowser = getLinkAdminDialog("folderview",
-//                                               "pagesFolderBrowser",
-//                                               "&form_element=navigation_folder_i",
-//                                               $this->getText("commons_open_browser"),
-//                                               $this->getText("commons_open_browser"),
-//                                               "icon_externalBrowser.gif",
-//                                               $this->getText("commons_open_browser"));
 
         $strNodeBrowser = getLinkAdminDialog(  $this->arrModule["modul"],
                                                "navigationPointBrowser",
@@ -517,6 +509,27 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
             }
 		}
 
+        $strReturn .= $this->objToolkit->listFooter();
+		return $strReturn;
+	}
+    
+    /**
+	 * Returns a list of available navigations
+	 *
+	 */
+	protected function actionNavigationBrowser() {
+		$strReturn = "";
+		$intCounter = 1;
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+		//Load all navis
+		$arrNavis = class_modul_navigation_tree::getAllNavis();
+
+
+		$strReturn .= $this->objToolkit->listHeader();
+		foreach($arrNavis as $objOnenavigation) {
+		    $strAction = $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("navigation_point_accept")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['navigation_name', '".$objOnenavigation->getStrName()."'], ['navigation_id', '".$objOnenavigation->getSystemid()."']]);\">".getImageAdmin("icon_accept.gif"));
+			$strReturn .= $this->objToolkit->listRow2($objOnenavigation->getStrName(), $strAction, $intCounter++);
+		}
         $strReturn .= $this->objToolkit->listFooter();
 		return $strReturn;
 	}

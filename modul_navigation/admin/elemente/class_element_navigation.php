@@ -51,7 +51,7 @@ class class_element_navigation extends class_element_admin implements interface_
 		  $strNaviName = "";
 
 		//Build the form
-		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("folderview", "navigationBrowser", "", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")), true);
+		$strReturn .= $this->objToolkit->formInputText("navigation_name", $this->getText("commons_name"), $strNaviName, "inputText", getLinkAdminDialog("navigation", "navigationBrowser", "", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")), true);
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
