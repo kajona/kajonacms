@@ -262,7 +262,7 @@ function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEnco
     $strLink = "";
     
     //add print-view param?
-    if(getGet("printView") != "")
+    if(getGet("printView") != "" || getPost("printView") != "")
         $strParams .= "&printView=1";
     
     //systemid in params?
