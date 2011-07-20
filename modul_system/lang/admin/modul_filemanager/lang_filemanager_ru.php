@@ -73,7 +73,6 @@ $lang["repo_oeffnen"]                    = "Показать папку";
 $lang["rotateImageLeft"]                 = "Повернуть на 90° направо";
 $lang["rotateImageRight"]                = "Повернуть на 90° налево";
 $lang["seite_oeffnen"]                   = "Показать элементы страницы";
-$lang["seite_uebernehmen"]               = "Применить страницу";
 $lang["showPreview"]                     = "Показать размер предпросмотра";
 $lang["showRealsize"]                    = "Показать размер оригинала";
 $lang["upload_erfolg"]                   = "Файл успешно загружен<br />";

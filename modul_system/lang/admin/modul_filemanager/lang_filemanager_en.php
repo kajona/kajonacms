@@ -78,7 +78,6 @@ $lang["repo_oeffnen"]                    = "Show folder";
 $lang["rotateImageLeft"]                 = "Rotate 90° to the right";
 $lang["rotateImageRight"]                = "Rotate 90° to the left";
 $lang["seite_oeffnen"]                   = "Show pageelements";
-$lang["seite_uebernehmen"]               = "Apply page";
 $lang["showPreview"]                     = "Show preview size";
 $lang["showRealsize"]                    = "Show original size";
 $lang["upload_erfolg"]                   = "File was uploaded successfully<br />";

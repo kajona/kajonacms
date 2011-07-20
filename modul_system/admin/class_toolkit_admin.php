@@ -176,7 +176,7 @@ class class_toolkit_admin extends class_toolkit {
                 ".$strTemplateInit."
                 language : '".$strLanguage."',
                 filebrowserBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "browserChooser", "&form_element=ckeditor"))."',
-                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("folderview", "list", "systemid="._filemanager_default_imagesrepoid_."&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1"))."'
+                filebrowserImageBrowseUrl : '".uniStrReplace("&amp;", "&", getLinkAdminHref("filemanager", "folderContentFolderviewMode", "systemid="._filemanager_default_imagesrepoid_."&suffix=.jpg|.gif|.png&form_element=ckeditor&bit_link=1"))."'
 	        };
             CKEDITOR.replace('".$strName."', ckeditorConfig);
         ";
@@ -309,7 +309,7 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = $strValue;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog("folderview",
+        $arrTemplate["opener"] = getLinkAdminDialog("pages",
                                                    "pagesFolderBrowser",
                                                    "&pages=1&form_element=".$strName.(!$bitElements ? "&elements=false" : ""),
                                                    class_carrier::getInstance()->getObjText()->getText("select_page", "pages", "admin"),
@@ -360,8 +360,8 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.3.4
      */
     public function formInputFileSelector($strName, $strTitle = "", $strValue = "", $strRepositoryId = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("folderview",
-										"list",
+        $strOpener = getLinkAdminDialog("filemanager",
+										"folderContentFolderviewMode",
 										"&form_element=".$strName."&systemid=".$strRepositoryId,
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
@@ -385,8 +385,8 @@ class class_toolkit_admin extends class_toolkit {
      * @since 3.4.0
      */
     public function formInputImageSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText") {
-        $strOpener = getLinkAdminDialog("folderview",
-										"list",
+        $strOpener = getLinkAdminDialog("filemanager",
+										"folderContentFolderviewMode",
 										"&form_element=".$strName."&systemid="._filemanager_default_imagesrepoid_,
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),
 										class_carrier::getInstance()->getObjText()->getText("filebrowser", "system", "admin"),

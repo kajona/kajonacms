@@ -17,7 +17,6 @@
 class class_modul_filemanager_admin extends class_admin implements  interface_admin {
 	private $strFolder;
 	private $strFolderOld;
-	private $strAction;
 
 	/**
 	 * Constructor
@@ -153,7 +152,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 $strReturn .= $this->objToolkit->getValidationErrors($this, "newRepo");
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "newRepo", "repoSaveNew=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $this->getParam("filemanager_name"));
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $this->getParam("filemanager_path"), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $this->getParam("filemanager_upload_filter"));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -207,7 +206,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 				//create the form
     			$strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "editRepo", "repoSaveEdit=1"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_name", $this->getText("commons_name"), $objRepo->getStrName());
-    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog("folderview", "folderList", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
+    			$strReturn .= $this->objToolkit->formInputText("filemanager_path", $this->getText("commons_path"), $objRepo->getStrPath(), "inputText", getLinkAdminDialog($this->arrModule["modul"], "folderListFolderview", "&form_element=filemanager_path&folder=/portal", $this->getText("commons_open_browser"), $this->getText("commons_open_browser"), "icon_externalBrowser.gif", $this->getText("commons_open_browser")));
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_upload_filter_h"));
     			$strReturn .= $this->objToolkit->formInputText("filemanager_upload_filter", $this->getText("filemanager_upload_filter"), $objRepo->getStrUploadFilter());
     			$strReturn .= $this->objToolkit->formTextRow($this->getText("filemanager_view_filter_h"));
@@ -386,9 +385,20 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	 * @param string $strTargetfield
 	 * @return string
 	 */
-	public function actionFolderContentFolderviewMode($strTargetfield) {
+	protected function actionFolderContentFolderviewMode() {
 		$strReturn = "";
+        
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
+        //so we don't have to pass through the param with all requests
+	    if ($this->getParam("CKEditorFuncNum") != "") {
+            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+        }
+        
+        
+        $strTargetfield = $this->getParam("form_element");
 
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        
 		//list repos or contents?
 		if($this->getSystemid() == "") {
             if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -401,7 +411,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     				if($this->objRights->rightView($objOneRepo->getSystemid())) {
                         $strActions = "";
     			   		if($this->objRights->rightView($objOneRepo->getSystemid()))
-    			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+    			   			$strActions .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$objOneRepo->getSystemid(), "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
 
     			   		$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), $objOneRepo->getStrName(), $strActions, $intI++);
     				}
@@ -433,7 +443,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
                 if($strAddonAction == "") {
                     $strActions .= $this->generateNewFolderDialogCode();
                     $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
-                    $strActions .= $this->actionUploadFile();
+                    $strActions .= $this->actionUploadFileInternal();
                 }
 
     		   	//Building a status-bar, using the toolkit
@@ -459,16 +469,16 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
           		if($this->strFolderOld != "") {
           			$strFolderNew = uniSubstr($this->strFolder, 0, uniStrrpos($this->strFolder, "/"));
           			$strFolderNew = str_replace($objRepo->getStrPath(), "", $strFolderNew);
-                        $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+                        $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid().($strFolderNew != "" ? "&folder=".$strFolderNew : ""), "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
           		}
           		else {
           		    //Link up to repo list
-          		    $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
+          		    $strReturn .= $this->objToolkit->listRow3("..", "", $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield, "", $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif")), getImageAdmin("icon_folderOpen.gif"), $intI++);
           		}
         		if(count($arrFiles["folders"]) > 0) {
         			foreach($arrFiles["folders"] as $strFolder) {
                             $strAction = "";
-        	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin("folderview", "list", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
+        	   			$strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderContentFolderviewMode", "&form_element=".$strTargetfield."&systemid=".$this->getSystemid()."&folder=".$this->strFolderOld."/".$strFolder, "", $this->getText("repo_oeffnen"), "icon_folderActionOpen.gif"));
         	   			$strReturn .= $this->objToolkit->listRow3($strFolder, (_filemanager_foldersize_ != "false" ? bytesToString($objFilesystem->folderSize($this->strFolder."/".$strFolder, $arrViewFilter)) : ""), $strAction, getImageAdmin("icon_folderOpen.gif"), $intI++);
         			}
         		}
@@ -499,6 +509,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 
                         //add image.php if it's an image and file will be passed to CKEditor
                         //further processing is done in processWysiwygHtmlContent() when saving the content edited via CKEditor
+                        $strValue = "";
                         if ($bitImage && $strTargetfield == "ckeditor") {
         	   			     $strValue = _webpath_."/image.php?image=".$strFolder."/".$arrOneFile["filename"];
                         } else {
@@ -527,6 +538,89 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 		return $strReturn;
 	}
 
+    
+    /**
+     * Generates a view to browse the filesystem directly
+     * @return string
+     */
+    protected function actionFolderListFolderview() {
+        
+        $this->setArrModuleEntry("template", "/folderview.tpl");
+        $strReturn = "";
+        
+        //param inits
+        $strFolder = "/portal/pics";
+        if($this->getParam("folder") != "")
+            $strFolder = $this->getParam("folder");
+
+        $arrSuffix = array();
+        if($this->getParam("suffix") != "")
+            $arrSuffix = explode("|", $this->getParam("suffix"));
+
+        $arrExclude = array();
+        if($this->getParam("exclude") != "")
+            $arrExclude = explode("|", $this->getParam("exclude"));
+
+        $bitFolder = true;
+        if($this->getParam("bit_folder") != "")
+            $bitFolder = $this->getParam("bit_folder");
+
+        $bitFile = true;
+        if($this->getParam("bit_file") != "")
+            $bitFile = $this->getParam("bit_file");
+
+        $arrExcludeFolder = array(0 => ".", 1 => "..");
+        if($this->getParam("exclude_folder") != "")
+            $arrExcludeFolder = explode("|", $this->getParam("exclude_folder"));
+
+        $strFormElement = "bild";
+        if($this->getParam("form_element") != "")
+            $strFormElement = $this->getParam("form_element");
+        
+
+        
+        //if set, save CKEditors CKEditorFuncNum parameter to read it again in KAJONA.admin.folderview.selectCallback()
+        //so we don't have to pass through the param with all requests
+	    if ($this->getParam("CKEditorFuncNum") != "") {
+            $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
+        }
+        
+        $objFilesystem = new class_filesystem();
+		$arrContent = $objFilesystem->getCompleteList($strFolder, $arrSuffix, $arrExclude, $arrExcludeFolder, $bitFolder, false);
+
+		$strReturn .= $this->objToolkit->listHeader();
+		$strReturn .= $this->objToolkit->listRow2($this->getText("commons_path"), $strFolder, 1);
+		$strReturn .= $this->objToolkit->listRow2($this->getText("ordner_anz"), $arrContent["nrFolders"], 1);
+		$strReturn .= $this->objToolkit->listFooter();
+		$strReturn .= $this->objToolkit->divider();
+
+        $intCounter = 0;
+		//Show Folders
+		//Folder to jump one back up
+		$arrFolderStart = array("/portal");
+		$bitHit = false;
+		if(!in_array($strFolder, $arrFolderStart) && $bitHit == false) {
+			$strReturn .= $this->objToolkit->listHeader();
+			$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".uniSubstr($strFolder, 0, uniStrrpos($strFolder, "/"))."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_folderActionLevelup.gif"));
+			$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif"), "..", $strAction, $intCounter++);
+			$bitHit = true;
+		}
+		if($arrContent["nrFolders"] != 0) {
+			if(!$bitHit)
+				$strReturn .= $this->objToolkit->listHeader();
+			$bitHit = true;
+			foreach($arrContent["folders"] as $strFolderCur) {
+				$strAction = $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "folderListFolderview", "&folder=".$strFolder."/".$strFolderCur."&suffix=".implode("|", $arrSuffix)."&exclude=".implode("|", $arrExclude)."&bit_folder=".$bitFolder."&bit_file=".$bitFile."&form_element=".$strFormElement, $this->getText("ordner_oeffnen"), $this->getText("ordner_oeffnen"), "icon_folderActionOpen.gif"));
+				$strAction .= $this->objToolkit->listButton("<a href=\"#\" title=\"".$this->getText("ordner_uebernehmen")."\" onmouseover=\"KAJONA.admin.tooltip.add(this);\" onclick=\"KAJONA.admin.folderview.selectCallback([['".$strFormElement."', '".$strFolder."/".$strFolderCur."']]);\">".getImageAdmin("icon_accept.gif"));
+				$strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_folderOpen.gif", "Ordner"), $strFolderCur, $strAction, $intCounter++);
+			}
+		}
+		if($bitHit)
+		  $strReturn .= $this->objToolkit->listFooter();
+        
+        return $strReturn;
+    }
+    
 	/**
 	 * Shows the form to delete a file / deletes a file
 	 *
@@ -797,7 +891,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 	}
 
 
-// --- Helferfunktionen ---------------------------------------------------------------------------------
+    // --- Helferfunktionen ---------------------------------------------------------------------------------
 
 
 	/**

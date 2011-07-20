@@ -81,7 +81,6 @@ $lang["repo_loeschen_frage"]             = "Möchten Sie das Repository &quot;<b
 $lang["repo_oeffnen"]                    = "Ordner öffnen";
 $lang["rotateImageRight"]                = "Um 90° nach rechts drehen";
 $lang["seite_oeffnen"]                   = "Seitenelemente anzeigen";
-$lang["seite_uebernehmen"]               = "Seite übernehmen";
 $lang["showPreview"]                     = "Vorschaugröße anzeigen";
 $lang["showRealsize"]                    = "Originalgröße anzeigen";
 $lang["upload_erfolg"]                   = "Datei erfolgreich hochgeladen<br />";
