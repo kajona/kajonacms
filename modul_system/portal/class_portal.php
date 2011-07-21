@@ -138,7 +138,7 @@ abstract class class_portal  {
 		//set the correct language
         $objLanguage = new class_modul_languages_language();
         //set current language to the texts-object
-        class_texte::getInstance()->setStrTextLanguage($objLanguage->getStrPortalLanguage());
+        $this->objText->setStrTextLanguage($objLanguage->getStrPortalLanguage());
 
 	}
 
