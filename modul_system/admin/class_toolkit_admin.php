@@ -346,6 +346,80 @@ class class_toolkit_admin extends class_toolkit {
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
+    
+    
+    /**
+     * Returns a regular text-input field
+     *
+     * @param string $strName
+     * @param string $strTitle
+     * @param string $strValue
+     * @param string $strClass
+     * @param bool $bitUser
+     * @param bool $bitGroup
+     * @param bool $bitBlockCurrentUser
+     * @return string
+     */
+    public function formInputUserSelector($strName, $strTitle = "", $strValue = "", $strClass = "inputText", $bitUser = true, $bitGroups = false, $bitBlockCurrentUser = false) {
+        $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "input_userselector");
+        $arrTemplate = array();
+        $arrTemplate["name"] = $strName;
+        $arrTemplate["value"] = $strValue;
+        $arrTemplate["title"] = $strTitle;
+        $arrTemplate["class"] = $strClass;
+        $arrTemplate["opener"] = getLinkAdminDialog("user", 
+                                              "userBrowser", 
+                                               "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""), 
+                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"), 
+                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"), 
+                                               "icon_externalBrowser.gif", 
+                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"));
+
+        $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
+
+        $arrTemplate["ajaxScript"] = "
+	        <script type=\"text/javascript\">
+	            KAJONA.admin.loader.loadAutocompleteBase(function () {
+	                var userDataSource = new YAHOO.util.XHRDataSource(KAJONA_WEBPATH+\"/xml.php\");
+	                userDataSource.responseType = YAHOO.util.XHRDataSource.TYPE_XML;
+	                userDataSource.responseSchema = {
+	                    resultNode : \"user\",
+	                    fields : [\"title\", \"icon\", \"systemid\"]
+	                };
+
+	                var userautocomplete = new YAHOO.widget.AutoComplete(\"".$strName."\", \"".$strName."_container\", userDataSource, {
+	                    queryMatchCase: false,
+	                    allowBrowserAutocomplete: false,
+	                    useShadow: false
+	                });
+	                userautocomplete.generateRequest = function(sQuery) {
+	                    return \"?admin=1&module=user&action=getUserByFilter&user=".
+                                    ($bitUser ? "true" : "false")."&group=".
+                                    ($bitGroups ? "true" : "false").
+                                    ($bitBlockCurrentUser ? "&block=current" : "")."&filter=\" + sQuery ;
+	                };
+                    
+                    userautocomplete.formatResult = function(oResultData, sQuery, sResultMatch) {
+                        var sOutput = \"<span class='userSelectorAC' style='background-image: url(\"+oResultData[1]+\"); '>\"+sResultMatch+\"</span>\";
+                        var sMarkup = (sResultMatch) ? sOutput : \"\";
+                        return sMarkup;
+                    };
+                    
+                    var itemSelectHandler = function(sType, aArgs) {
+                        var oData = aArgs[2]; // object literal of data for the result
+                        if(document.getElementById('".$strName."_id') != null)
+                            document.getElementById('".$strName."_id').value=oData[2];
+                    };
+                    userautocomplete.itemSelectEvent.subscribe(itemSelectHandler);
+
+	                //keep a reference to the autocomplete widget, maybe we want to attach some listeners later
+	                KAJONA.admin.".$strJsVarName." = userautocomplete;
+	            });
+	        </script>
+        ";
+
+        return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
+    }
 
    /**
      * Returns a regular text-input field with a file browser button.

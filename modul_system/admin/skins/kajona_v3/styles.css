@@ -1209,6 +1209,10 @@ div.percentBeam {
 	white-space: nowrap;
 }
 
+.ac_container_user .yui-ac-content li {
+    line-height: 22px;
+}
+
 .ac_container .yui-ac-content li:hover {
 	background-color: #f0f0f0;
 
@@ -1219,6 +1223,14 @@ div.percentBeam {
 	background-color: #f0f0f0;
 	color: #000000;
 	cursor: pointer;
+}
+
+.ac_container span.userSelectorAC {
+    background-repeat: no-repeat;
+    padding-left: 25px;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    background-position: left center;
 }
 
 /* F L A S H U P L O A D */

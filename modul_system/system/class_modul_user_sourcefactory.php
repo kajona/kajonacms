@@ -53,6 +53,25 @@ class class_modul_user_sourcefactory {
     }
     
     /**
+     * Returns a list of groups matching the passed query-term.
+     * 
+     * @param string $strName 
+     * @return class_modul_user_group or null
+     */
+    public function getGrouplistByQuery($strName) {
+        
+        //validate if a group with the given name is available
+        $strQuery = "SELECT group_id FROM "._dbprefix_."user_group where group_name LIKE ?";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strName."%"));
+        
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] = new class_modul_user_group($arrOneRow["group_id"]);
+        }
+        return $arrReturn;
+    }
+    
+    /**
      * Tries to find an user identified by its name in the configured subsystems.
      * If given, the first match is returned.
      * Please note that the leightweight object is returned!
@@ -79,6 +98,27 @@ class class_modul_user_sourcefactory {
         
         //nothing found
         return null;
+    }
+    
+    /**
+     * Creates a list of all users matching the current query.
+     * Only active users may be returned!
+     * 
+     * @param string $strQuery 
+     * @return class_modul_user_user 
+     */
+    public function getUserlistByUserquery($strParam) {
+        
+        //validate if a group with the given name is available
+        $strQuery = "SELECT user_id FROM "._dbprefix_."user where user_username LIKE ? AND user_active = 1";
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strParam."%"));
+        
+        $arrReturn = array();
+        foreach($arrRows as $arrOneRow) {
+            $arrReturn[] =  new class_modul_user_user($arrOneRow["user_id"]);
+        }
+        
+        return $arrReturn;
     }
 
 

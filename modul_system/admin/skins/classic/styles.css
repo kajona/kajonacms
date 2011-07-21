@@ -670,10 +670,21 @@ a.inputSubmit {
     white-space:nowrap;
 }
 
+.ac_container_user .yui-ac-content li {
+    line-height: 22px;
+}
 
 /* styles for highlighted result item */
 .ac_container .yui-ac-content li.yui-ac-highlight {
 	background-color: #CFD0FF;
+}
+
+.ac_container span.userSelectorAC {
+    background-repeat: no-repeat;
+    padding-left: 25px;
+    padding-top: 4px;
+    padding-bottom: 3px;
+    background-position: left center;
 }
 
 

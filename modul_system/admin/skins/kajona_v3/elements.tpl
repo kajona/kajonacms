@@ -325,6 +325,14 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 %%ajaxScript%%
 </input_pageselector>
 
+<input_userselector>
+  <div class="ac_container ac_container_user">
+     <div><label for="%%name%%">%%title%% </label><input name="%%name%%" value="%%value%%" type="text" id="%%name%%" class="%%class%%" %%readonly%% /> %%opener%%</div>
+     <div id="%%name%%_container" class="ac_results"></div>
+  </div><br />
+%%ajaxScript%%
+</input_userselector>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements

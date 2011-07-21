@@ -394,6 +394,22 @@ have a surrounding div with class "ac_container" and a div with id "%%name%%_con
 %%ajaxScript%%
 </input_pageselector>
 
+
+<input_userselector>
+<table width="90%" cellpadding="2" cellspacing="0">
+	<tr>
+		<td width="30%" class="listecontent" align="right">%%title%%</td>
+		<td>
+		  <div class="ac_container ac_container_user">
+		     <input name="%%name%%" type="text" id="%%name%%" value="%%value%%" class="%%class%%" /> %%opener%%
+		     <div id="%%name%%_container" class="ac_results"></div>
+		  </div>
+		</td>
+	</tr>
+</table>
+%%ajaxScript%%    
+</input_userselector>
+
 ---------------------------------------------------------------------------------------------------------
 -- MISC ELEMENTS ----------------------------------------------------------------------------------------
 Used to fold elements / hide/unhide elements

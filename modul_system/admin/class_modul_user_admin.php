@@ -1177,7 +1177,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
     }
 
-//--- helpers--------------------------------------------------------------------------------------------
+    //--- helpers--------------------------------------------------------------------------------------------
 
     /**
      * Checks, if two passwords are equal
@@ -1229,6 +1229,78 @@ class class_modul_user_admin extends class_admin implements interface_admin {
 
         return $bitPass;
     }
+    
+    //--- xml -------------------------------------------------------------------------------------------
+    
+    /**
+     * Returns a list of users and/or groups matching the passed query.
+     * 
+     * @return string 
+     * @xml
+     */
+    protected function actionGetUserByFilter() {
+        $strReturn = "";
+        
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        
+            $strFilter = $this->getParam("filter");
 
+            $arrElements = array();
+            $objSource = new class_modul_user_sourcefactory();
+
+            if($this->getParam("user") == "true") {
+                $arrElements = $objSource->getUserlistByUserquery($strFilter);
+            }
+            
+            if($this->getParam("group") == "true") {
+                $arrElements = array_merge($arrElements, $objSource->getGrouplistByQuery($strFilter));
+            }
+            
+            usort($arrElements, array("class_modul_user_admin", "sortUserAndGroups"));
+
+            $strReturn .= "<result>\n";
+            foreach ($arrElements as $objOneElement) {
+                
+                if($this->getParam("block") == "current" && $objOneElement->getSystemid() == $this->objSession->getUserID())
+                    continue;    
+                        
+                if($objOneElement instanceof class_modul_user_user) {
+                    $strReturn .= "  <user>\n";
+                    $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrUsername())."</title>\n";
+                    $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
+                    $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_user.gif")."</icon>\n";
+                    $strReturn .= "  </user>\n";
+                }
+                else if($objOneElement instanceof class_modul_user_group) {
+                    $strReturn .= "  <user>\n";
+                    $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrName())."</title>\n";
+                    $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
+                    $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_group.gif")."</icon>\n";
+                    $strReturn .= "  </user>\n";
+                }
+            }
+            $strReturn .= "</result>\n";
+        }
+        else
+            $strReturn .= "<error>".$this->getText("commons_error_permissions")."</error>";
+		return $strReturn;
+    }
+
+    
+    public static function sortUserAndGroups($objA, $objB) {
+        $strA = "";
+        $strB = "";
+        if($objA instanceof class_modul_user_user)
+            $strA = $objA->getStrUsername();
+        else
+            $strA = $objA->getStrName();
+        
+        if($objB instanceof class_modul_user_user)
+            $strB = $objB->getStrUsername();
+        else
+            $strB = $objB->getStrName();
+        
+        return strcmp(strtolower($strA), strtolower($strB));
+    }
 }
 ?>
