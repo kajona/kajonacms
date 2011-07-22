@@ -38,7 +38,7 @@ class class_test_databasePrepared extends class_testbase  {
                 VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            $this->assertTrue($objDB->_pQuery($strQuery, array(generateSystemid(), "123456".$intI, "23.45".$intI, $intI, "char20".$intI, "char100".$intI, "char254".$intI, "char500".$intI, "text".$intI)), "testDataBase insert");
+            $this->assertTrue($objDB->_pQuery($strQuery, array(generateSystemid(),  ("123456".$intI), ("23.45".$intI), $intI, "char20".$intI, "char100".$intI, "char254".$intI, "char500".$intI, "text".$intI)), "testDataBase insert");
         }
 
 

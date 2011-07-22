@@ -52,6 +52,9 @@ class class_db_oci8 implements interface_db_driver {
 		$this->strPass = $strPass;
 		$this->strDbName = $strDbName;
 		$this->intPort = $intPort;
+        
+        //try to set the NLS_LANG env attribute
+        putenv("NLS_LANG=American_America.UTF8");
 
 		$this->linkDB = oci_connect($strUsername, $strPass, $strHost.":".$intPort."/".$strDbName, "AL32UTF8");
         
