@@ -79,18 +79,20 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($this->strIndexID);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Willkommen'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Willkommen";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Welcome'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Welcome";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -103,29 +105,33 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($this->strIndexID);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Herzlichen Glückwunsch!',
-                                paragraph_content ='Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
-                                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>',
-                                paragraph_image = '/portal/pics/upload/samples/P3197800.JPG'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Herzlichen Glückwunsch!";
+            $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
+                            Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
+            $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+            $arrParams[] = $strElementId;
+
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Congratulations!',
-                                    paragraph_content ='This installation of Kajona was successful. Have fun using Kajona!<br />
-                                                     For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>',
-                                    paragraph_image = '/portal/pics/upload/samples/P3197800.JPG'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Congratulations!";
+            $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona!<br />
+                             For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
+            $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+            $arrParams[] = $strElementId;
         }
 
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?,
+                                paragraph_content =  ?,
+                                paragraph_image = ?
+                            WHERE content_id = ?";
 
-        if($this->objDB->_query($strQuery))
+        if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
-
 
 
         $strReturn .= "Creating master-page\n";
@@ -165,18 +171,20 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strErrorPageId);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Fehler'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Fehler";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Error'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Error";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery,$arrParams))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -189,28 +197,27 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strErrorPageId);
         $strElementId = $objPagelement->getSystemid();
 
-
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = 'Ein Fehler ist aufgetreten',
-                           paragraph_content ='Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />
-                                           Bitte versuchen Sie die letzte Aktion erneut.'
-                      WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Ein Fehler ist aufgetreten";
+            $arrParams[] = "Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />Bitte versuchen Sie die letzte Aktion erneut.";
+            $arrParams[] = $strElementId;
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'An error occured',
-                                    paragraph_content ='Maybe the requested page doesn\'t exist anymore.<br />
-                                                    Please try it again later.'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "An error occured";
+            $arrParams[] = "Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.";
+            $arrParams[] = $strElementId;
         }
+        
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                    SET paragraph_title = ?,
+                        paragraph_content = ?
+                    WHERE content_id = ?";
 
-        if($this->objDB->_query($strQuery))
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
-
-
 
 
 
@@ -234,18 +241,21 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strImprintPageId);
         $strElementId = $objPagelement->getSystemid();
+        
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Impressum'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Impressum";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Imprint'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Imprint";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -258,37 +268,38 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strImprintPageId);
         $strElementId = $objPagelement->getSystemid();
 
-
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = 'Impressum',
-                           paragraph_content ='Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
-                                           Nachname, Name<br />
-                                           Straße und Hausnummer<br />
-                                           PLZ, Ort<br />
-                                           Telefon<br />
-                                           E-Mail<br />
-                                           <br />
-                                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />
-                                           '
-                      WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Impressum";
+            $arrParams[] = "Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
+                           Nachname, Name<br />
+                           Straße und Hausnummer<br />
+                           PLZ, Ort<br />
+                           Telefon<br />
+                           E-Mail<br />
+                           <br />
+                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
+            $arrParams[] = $strElementId;
+            
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = 'Imprint',
-                           paragraph_content ='Please provide your contact details.<br />
-                                           Name, Forename<br />
-                                           Street<br />
-                                           Zip, City<br />
-                                           Phone<br />
-                                           Mail<br />
-                                           <br />
-                                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />
-                                           '
-                      WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Imprint";
+            $arrParams[] = "Please provide your contact details.<br />
+                           Name, Forename<br />
+                           Street<br />
+                           Zip, City<br />
+                           Phone<br />
+                           Mail<br />
+                           <br />
+                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                    SET paragraph_title = ?,
+                       paragraph_content = ?
+                  WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
@@ -316,18 +327,21 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strSamplePageId);
         $strElementId = $objPagelement->getSystemid();
+        
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Beispielseite 1'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Beispielseite 1";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Sample page 1'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Sample page 1";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -340,25 +354,29 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strSamplePageId);
         $strElementId = $objPagelement->getSystemid();
 
-
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-							SET paragraph_title = 'Standard-Absatz',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-								paragraph_image = '/portal/pics/upload/samples/IMG_3000.JPG',
-								paragraph_link = 'http://www.kajona.de/'
-						 	WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Standard-Absatz";
+            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+            $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+            $arrParams[] = "http://www.kajona.de/";
+            $arrParams[] = $strElementId;
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_paragraph
-							SET paragraph_title = 'Standard paragraph',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
-								paragraph_image = '/portal/pics/upload/samples/IMG_3000.JPG',
-                                paragraph_link = 'http://www.kajona.de/'
-							WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Standard paragraph";
+            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+            $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+            $arrParams[] = "http://www.kajona.de/";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?,
+                            paragraph_content = ?,
+                            paragraph_image = ?,
+                            paragraph_link = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
@@ -371,6 +389,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
        $strReturn .= "Creating sample subpage...\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("subpage_1");
+        
         if($this->strContentLanguage == "de")
             $objPage->setStrBrowsername("Beispiel-Unterseite 1");
         else
@@ -388,18 +407,21 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strSampleSubPageId);
         $strElementId = $objPagelement->getSystemid();
+        
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Beispiel-Unterseite 1'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Beispiel-Unterseite 1";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Sample subpage 1'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Sample subpage 1";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -413,20 +435,23 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-							SET paragraph_title = 'Standard-Absatz auf Unterseite',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-						 	WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Standard-Absatz auf Unterseite";
+            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+            $arrParams[] = $strElementId;
         }
         else {
-             $strQuery = "UPDATE "._dbprefix_."element_paragraph
-							SET paragraph_title = 'Standard paragraph on subpage',
-								paragraph_content ='Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'
-							WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "Standard paragraph on subpage";
+            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?,
+                            paragraph_content = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";

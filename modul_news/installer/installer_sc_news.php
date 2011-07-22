@@ -74,15 +74,15 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $objPagelement->updateObjectToDb($this->strIndexID);
                 $strElementId = $objPagelement->getSystemid();
                 $strQuery = "UPDATE "._dbprefix_."element_news
-                                SET news_category='".dbsafeString($strCategoryID)."',
-                                    news_view = '0',
-                                    news_mode = '0',
-                                    news_order = '0',
-                                    news_amount = '10',
-                                    news_detailspage = 'newsdetails',
-                                    news_template = 'demo.tpl'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-                if($this->objDB->_query($strQuery))
+                                SET news_category=?,
+                                    news_view = ?,
+                                    news_mode = ?,
+                                    news_order = ?,
+                                    news_amount = ?,
+                                    news_detailspage = ?,
+                                    news_template = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array($strCategoryID, 0, 0, 0, 10, "newsdetails", "demo.tpl", $strElementId)))
                     $strReturn .= "Newselement created.\n";
                 else
                     $strReturn .= "Error creating newselement.\n";
@@ -105,15 +105,15 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_news
-                            SET news_category='".dbsafeString($strCategoryID)."',
-                                news_view = '1',
-                                news_mode = '0',
-                                news_order = '0',
-                                news_amount = '20',
-                                news_detailspage = 'index',
-                                news_template = 'demo.tpl'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
+                            SET news_category=?,
+                                news_view = ?,
+                                news_mode = ?,
+                                news_order = ?,
+                                news_amount = ?,
+                                news_detailspage = ?,
+                                news_template = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($strCategoryID, 1, 0, 0, 20, "index", "demo.tpl", $strElementId)))
                 $strReturn .= "Newselement created.\n";
             else
                 $strReturn .= "Error creating newselement.\n";
@@ -125,13 +125,13 @@ class class_installer_sc_news implements interface_sc_installer  {
             $objPagelement->setStrElement("row");
             $objPagelement->updateObjectToDb($strNewsdetailsId);
             $strElementId = $objPagelement->getSystemid();
-             $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'News'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-                if($this->objDB->_query($strQuery))
-                    $strReturn .= "Headline element created.\n";
-                else
-                    $strReturn .= "Error creating headline element.\n";
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("News", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
 
             $strReturn .= "Creating news-feed\n";
             $objNewsFeed = new class_modul_news_feed();
@@ -153,26 +153,6 @@ class class_installer_sc_news implements interface_sc_installer  {
 
             $strReturn .= "Creating navigation entries...\n";
 
-//            //navigations installed?
-//	        try {
-//	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//	        }
-//	        catch (class_exception $objException) {
-//	            $objModule = null;
-//	        }
-//	        if($objModule != null) {
-//
-//	            $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	            $strTreeId = $objNavi->getSystemid();
-//
-//	            $objNaviPoint = new class_modul_navigation_point();
-//	            $objNaviPoint->setStrName("News");
-//	            $objNaviPoint->setStrPageI("index");
-//	            $objNaviPoint->updateObjectToDb($strTreeId);
-//	            $strNewsPointID = $objNaviPoint->getSystemid();
-//	            $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//
-//	        }
         return $strReturn;
     }
 

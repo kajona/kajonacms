@@ -62,9 +62,9 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
              $strQuery = "UPDATE "._dbprefix_."element_universal
-                                SET char1 = 'tags.tpl'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-                if($this->objDB->_query($strQuery))
+                                SET char1 = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array("tags.tpl", $strElementId)))
                     $strReturn .= "Tags element created.\n";
                 else
                     $strReturn .= "Error creating tags element.\n";
@@ -77,49 +77,16 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
 
-            if($this->strContentLanguage == "de") {
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Tags'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-            }
-            else {
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Tags'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-            }
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
 
-            if($this->objDB->_query($strQuery))
+            if($this->objDB->_pQuery($strQuery, array("Tags", $strElementId)))
                 $strReturn .= "Headline element created.\n";
             else
                 $strReturn .= "Error creating headline element.\n";
 
             $strReturn .= "Creating navigation point.\n";
-
-//            //navigations installed?
-//	        try {
-//	            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//	        }
-//	        catch (class_exception $objException) {
-//	            $objModule = null;
-//	        }
-//	        if($objModule != null) {
-//
-//		        $arrNavis = class_modul_navigation_tree::getAllNavis();
-//		        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//		        $strTreeId = $objNavi->getSystemid();
-//
-//		        $objNaviPoint = new class_modul_navigation_point();
-//		        if($this->strContentLanguage == "de") {
-//		            $objNaviPoint->setStrName("Tags");
-//		        }
-//		        else {
-//		        	$objNaviPoint->setStrName("Tags");
-//		        }
-//
-//		        $objNaviPoint->setStrPageI("tags");
-//		        $objNaviPoint->updateObjectToDb($strTreeId);
-//		        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//            }
 
         return $strReturn;
     }

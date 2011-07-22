@@ -47,16 +47,6 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strTreeId = $objNaviTree->getSystemid();
         $strReturn .= "ID of new navigation-tree: ".$strTreeId."\n";
 
-//        $strReturn .= "Creating navigation points\n";
-//        $objNaviPoint = new class_modul_navigation_point();
-//        $objNaviPoint->setStrName("Page 1");
-//        $objNaviPoint->setStrPageI("page_1");
-//        $objNaviPoint->updateObjectToDb($strTreeId);
-//        $strNaviPointID = $objNaviPoint->getSystemid();
-//        $objNaviPoint = new class_modul_navigation_point();
-//        $objNaviPoint->setStrName("Subpage 1");
-//        $objNaviPoint->setStrPageI("subpage_1");
-//        $objNaviPoint->updateObjectToDb($strNaviPointID);
 
         $strReturn .= "Creating new portalnavigation-tree\n";
         $objNaviTree = new class_modul_navigation_tree();
@@ -84,11 +74,11 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($this->strMasterID);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_navigation
-                            SET navigation_id='".dbsafeString($strTreeId)."',
-                                navigation_template = 'mainnavi.tpl',
-                                navigation_mode = 'tree'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
+                            SET navigation_id= ?,
+                                navigation_template = ?,
+                                navigation_mode = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", "tree", $strElementId)))
                 $strReturn .= "Navigation element created.\n";
             else
                 $strReturn .= "Error creating navigation element.\n";
@@ -103,11 +93,11 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($this->strMasterID);
             $strElementId = $objPagelement->getSystemid();
             $strQuery = "UPDATE "._dbprefix_."element_navigation
-                            SET navigation_id='".dbsafeString($strTreePortalId)."',
-                                navigation_template = 'portalnavi.tpl',
-                                navigation_mode = 'tree'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
+                            SET navigation_id= ?,
+                                navigation_template = ?,
+                                navigation_mode = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", "tree", $strElementId)))
                 $strReturn .= "Navigation element created.\n";
             else
                 $strReturn .= "Error creating navigation element.\n";
@@ -131,11 +121,11 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strSitemapId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_navigation
-                        SET navigation_id='".dbsafeString($strTreeId)."',
-                            navigation_template = 'sitemap.tpl',
-                            navigation_mode = 'sitemap'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                        SET navigation_id=?,
+                            navigation_template = ?,
+                            navigation_mode = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", "sitemap", $strElementId)))
             $strReturn .= "Sitemapelement created.\n";
         else
             $strReturn .= "Error creating sitemapelement.\n";
@@ -148,9 +138,9 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strSitemapId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = 'Sitemap'
-                      WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                        SET paragraph_title = ?
+                      WHERE content_id = ? ";
+        if($this->objDB->_pQuery($strQuery, array("Sitemap", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";

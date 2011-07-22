@@ -80,13 +80,13 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strFaqsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_faqs
-                        SET faqs_category=0,
-                            faqs_template = 'demo_foldable.tpl'
-                      WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
-                $strReturn .= "faqselement created.\n";
-            else
-                $strReturn .= "Error creating faqselement.\n";
+                        SET faqs_category= ?,
+                            faqs_template = ?
+                      WHERE content_id = ? ";
+        if($this->objDB->_pQuery($strQuery, array(0, "demo_foldable.tpl", $strElementId)))
+            $strReturn .= "faqselement created.\n";
+        else
+            $strReturn .= "Error creating faqselement.\n";
 
         $strReturn .= "Adding headline-element to new page\n";
         $objPagelement = new class_modul_pages_pageelement();
@@ -96,34 +96,13 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strFaqsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                         SET paragraph_title = 'FAQs'
-                       WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                         SET paragraph_title = ?
+                       WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("FAQs", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
 
-//        $strReturn .= "Creating navigation entries...\n";
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        $objNaviPoint->setStrName("FAQs");
-//	        $objNaviPoint->setStrPageI("faqs");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strfaqsPointID = $objNaviPoint->getSystemid();
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
         return $strReturn;
     }
 

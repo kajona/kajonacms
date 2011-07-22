@@ -61,11 +61,11 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strGuestbookpageID);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_guestbook
-                        SET guestbook_id='".dbsafeString($strGuestbookID)."',
-                            guestbook_template = 'guestbook.tpl',
-                            guestbook_amount = '5'
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                        SET guestbook_id = ?,
+                            guestbook_template = ?,
+                            guestbook_amount = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array($strGuestbookID, "guestbook.tpl", 5, $strElementId)))
             $strReturn .= "Guestbookelement created.\n";
         else
             $strReturn .= "Error creating Guestbookelement.\n";
@@ -77,36 +77,15 @@ class class_installer_sc_guestbook implements interface_sc_installer  {
         $objPagelement->setStrElement("row");
         $objPagelement->updateObjectToDb($strGuestbookpageID);
         $strElementId = $objPagelement->getSystemid();
-         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Guestbook'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-            if($this->objDB->_query($strQuery))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("Guestbook", $strElementId)))
+            $strReturn .= "Headline element created.\n";
+        else
+            $strReturn .= "Error creating headline element.\n";
 
-//        $strReturn .= "Creating Navigation-Entry...\n";
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        if($this->strContentLanguage == "de")
-//	            $objNaviPoint->setStrName("Gästebuch");
-//	        else
-//	            $objNaviPoint->setStrName("Guestbook");
-//	        $objNaviPoint->setStrPageI("guestbook");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
+
         return $strReturn;
     }
 

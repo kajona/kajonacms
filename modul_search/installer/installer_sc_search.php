@@ -67,11 +67,11 @@ class class_installer_sc_search implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
              $strQuery = "UPDATE "._dbprefix_."element_search
-                                SET search_template = 'search_results.tpl',
-                                    search_amount = 6,
-                                    search_page = ''
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
-                if($this->objDB->_query($strQuery))
+                                SET search_template = ?,
+                                    search_amount = ?,
+                                    search_page = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array("search_results.tpl", 6, "", $strElementId)))
                     $strReturn .= "Search element created.\n";
                 else
                     $strReturn .= "Error creating search element.\n";
@@ -84,18 +84,19 @@ class class_installer_sc_search implements interface_sc_installer  {
             $objPagelement->updateObjectToDb($strSearchresultsId);
             $strElementId = $objPagelement->getSystemid();
 
+            $arrParams = array();
             if($this->strContentLanguage == "de") {
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Suchergebnisse'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+                $arrParams = array("Suchergebnisse", $strElementId);
             }
             else {
-                $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = 'Search results'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+                $arrParams = array("Search results", $strElementId);
             }
 
-            if($this->objDB->_query($strQuery))
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            
+            if($this->objDB->_pQuery($strQuery, $arrParams))
                 $strReturn .= "Headline element created.\n";
             else
                 $strReturn .= "Error creating headline element.\n";

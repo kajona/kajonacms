@@ -68,21 +68,21 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_gallery
-                        SET gallery_id = '".dbsafeString($strGalleryID)."',
-                            gallery_mode = 0,
-                            gallery_template = 'gallery_imagelightbox.tpl',
-                            gallery_maxh_p = 110,
-                            gallery_maxh_d = 600,
-                            gallery_maxw_p = 150,
-                            gallery_maxw_d = 600,
-                            gallery_maxh_m = 45,
-                            gallery_maxw_m = 70,
-                            gallery_imagesperpage = 0,
-                            gallery_text = '(c) kajona.de',
-                            gallery_text_x = 5,
-                            gallery_text_y = 15
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                        SET gallery_id = ?,
+                            gallery_mode = ?,
+                            gallery_template = ?,
+                            gallery_maxh_p = ?,
+                            gallery_maxh_d = ?,
+                            gallery_maxw_p = ?,
+                            gallery_maxw_d = ?,
+                            gallery_maxh_m = ?,
+                            gallery_maxw_m = ?,
+                            gallery_imagesperpage = ?,
+                            gallery_text = ?,
+                            gallery_text_x = ?,
+                            gallery_text_y = ?
+                        WHERE content_id = ? ";
+        if($this->objDB->_pQuery($strQuery, array($strGalleryID, 0, "gallery_imagelightbox.tpl", 110, 600, 150, 600, 45, 70, 0, "(c) kajona.de", 5, 15, $strElementId)))
             $strReturn .= "Gallery element created.\n";
         else
             $strReturn .= "Error creating Gallery element.\n";
@@ -97,9 +97,9 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Gallery'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("Gallery", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -113,45 +113,28 @@ class class_installer_sc_gallery implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strGalleryPageId);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = '',
-                                paragraph_content ='Alle Beispielbilder &copy; by kajona.de'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "";
+            $arrParams[] = "Alle Beispielbilder &copy; by kajona.de";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = '',
-                                    paragraph_content ='All sample images &copy; by kajona.de'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "";
+            $arrParams[] = "All sample images &copy; by kajona.de";
+            $arrParams[] = $strElementId;
         }
 
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?,
+                                paragraph_content = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
 
 
-
-//        $strReturn .= "Creating Navigation-Entry...\n";
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        $objNaviPoint->setStrName("Gallery");
-//	        $objNaviPoint->setStrPageI("gallery");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
         return $strReturn;
     }
 

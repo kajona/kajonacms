@@ -69,14 +69,13 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strDownloadsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_downloads
-                        SET download_id = '".dbsafeString($strDownloadsID)."',
-                            download_template = 'downloads.tpl'
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                        SET download_id = ?,
+                            download_template = ?
+                        WHERE content_id = ? ";
+        if($this->objDB->_pQuery($strQuery, array($strDownloadsID, "downloads.tpl", $strElementId)))
             $strReturn .= "downloads element created.\n";
         else
             $strReturn .= "Error creating downloads element.\n";
-
 
 
         $strReturn .= "Adding headline-element to new page\n";
@@ -87,33 +86,14 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strDownloadsPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Downloads'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("Downloads", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
 
 
-
-//        $strReturn .= "Creating Navigation-Entry...\n";
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        $objNaviPoint->setStrName("Downloads");
-//	        $objNaviPoint->setStrPageI("downloads");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
         return $strReturn;
     }
 

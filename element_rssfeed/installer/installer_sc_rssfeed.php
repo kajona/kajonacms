@@ -57,23 +57,20 @@ class class_installer_sc_rssfeed implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strPageId);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_universal
-                        SET char1 = 'rssfeed.tpl',
-                            ".$this->objDB->encloseColumnName("int1")." = 10,
-                            char2 = 'http://www.kajona.de/kajona_news.rss'
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news.rss", $strElementId);
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_universal
-                        SET char1 = 'rssfeed.tpl',
-                            ".$this->objDB->encloseColumnName("int1")." = 10,
-                            char2 = 'http://www.kajona.de/kajona_news_en.rss'
-                        WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news_en.rss", $strElementId);
         }
 
-        
-        if($this->objDB->_query($strQuery))
+        $strQuery = "UPDATE "._dbprefix_."element_universal
+                        SET char1 = ?,
+                            ".$this->objDB->encloseColumnName("int1")." = ?,
+                            char2 = ?
+                        WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Rssfeed element created.\n";
         else
             $strReturn .= "Error creating Rssfeed element.\n";
@@ -88,33 +85,13 @@ class class_installer_sc_rssfeed implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strPageId);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Rssfeed'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("Rssfeed", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
 
-
-//        $strReturn .= "Creating Navigation-Entry...\n";
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        $objNaviPoint->setStrName("Rssfeed");
-//	        $objNaviPoint->setStrPageI("rssfeed");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
         return $strReturn;
     }
 

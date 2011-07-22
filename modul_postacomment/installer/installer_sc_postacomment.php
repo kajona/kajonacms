@@ -53,10 +53,10 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $strElementId = $objPagelement->getSystemid();
 
         $strQuery = "UPDATE "._dbprefix_."element_universal
-	                        SET char1 ='postacomment_classic.tpl'
-	                        WHERE content_id = '".dbsafeString($strElementId)."'";
+	                        SET char1 = ?
+	                        WHERE content_id = ?";
 
-        if($this->objDB->_query($strQuery))
+        if($this->objDB->_pQuery($strQuery, array("postacomment_classic.tpl", $strElementId)))
             $strReturn .= "Postacomment element created.\n";
         else
             $strReturn .= "Error creating Postacomment element.\n";
@@ -69,9 +69,9 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
         $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = 'Postacomment Sample'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
-        if($this->objDB->_query($strQuery))
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+        if($this->objDB->_pQuery($strQuery, array("Postacomment Sample", $strElementId)))
             $strReturn .= "Headline element created.\n";
         else
             $strReturn .= "Error creating headline element.\n";
@@ -84,47 +84,31 @@ class class_installer_sc_postacomment implements interface_sc_installer  {
         $objPagelement->updateObjectToDb($strPostacommentPageID);
         $strElementId = $objPagelement->getSystemid();
 
+        $arrParams = array();
         if($this->strContentLanguage == "de") {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = '',
-                                paragraph_content ='Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden. Um die Ajax-Funktionen dieses Moduls
-                                                zu nutzen, kann über die Administration das Template des Postacomment-Seitenelements verändert werden.'
-                            WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "";
+            $arrParams[] = "Über das unten stehende Formular kann dieser Seite ein Kommentar hinzugefügt werden. Um die Ajax-Funktionen dieses Moduls 
+                            zu nutzen, kann über die Administration das Template des Postacomment-Seitenelements verändert werden.";
+            $arrParams[] = $strElementId;
         }
         else {
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = '',
-                                    paragraph_content ='By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
-                                                    switch the template to be used by the postacomment-pageelement by using the admin-backend.'
-                                WHERE content_id = '".dbsafeString($strElementId)."'";
+            $arrParams[] = "";
+            $arrParams[] = "By using the form below, comments may be added to the current page. To make use of the ajax-features of this module,
+                            switch the template to be used by the postacomment-pageelement by using the admin-backend.";
+            $arrParams[] = $strElementId;
         }
-
-        if($this->objDB->_query($strQuery))
+        
+        $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content = ?
+                              WHERE content_id = ? ";
+        
+        if($this->objDB->_pQuery($strQuery, $arrParams))
             $strReturn .= "Paragraph element created.\n";
         else
             $strReturn .= "Error creating paragraph element.\n";
 
-        $strReturn .= "Creating Navigation-Entry...\n";
-
-//        //navigations installed?
-//        try {
-//            $objModule = class_modul_system_module::getModuleByName("navigation", true);
-//        }
-//        catch (class_exception $objException) {
-//            $objModule = null;
-//        }
-//        if($objModule != null) {
-//
-//	        $arrNavis = class_modul_navigation_tree::getAllNavis();
-//	        $objNavi = class_modul_navigation_tree::getNavigationByName("mainnavigation");
-//	        $strTreeId = $objNavi->getSystemid();
-//
-//	        $objNaviPoint = new class_modul_navigation_point();
-//	        $objNaviPoint->setStrName("Postacomment");
-//	        $objNaviPoint->setStrPageI("postacomment");
-//	        $objNaviPoint->updateObjectToDb($strTreeId);
-//	        $strReturn .= "ID of new navigation point: ".$objNaviPoint->getSystemid()."\n";
-//        }
+       
         return $strReturn;
     }
 

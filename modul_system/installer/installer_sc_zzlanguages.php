@@ -47,9 +47,9 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
                 $strReturn .= "Setting languageswitch template...\n";
                 $strQuery = "UPDATE "._dbprefix_."element_universal
-	                        SET char1 = 'languageswitch.tpl'
-	                        WHERE content_id = '".dbsafeString($strElementId)."'";
-                $this->objDB->_query($strQuery);
+	                        SET char1 = ?
+	                        WHERE content_id = ? ";
+                $this->objDB->_pQuery($strQuery, array("languageswitch.tpl", $strElementId));
          }    
 
         
