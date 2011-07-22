@@ -73,7 +73,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 
 
 		//register the module
-		$this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal.php", "class_modul_navigation_admin.php", $this->arrModule["version"] , true, "", "class_modul_navigation_admin_xml.php");
+		$this->registerModule("navigation", _navigation_modul_id_, "class_modul_navigation_portal.php", "class_modul_navigation_admin.php", $this->arrModule["version"] , true);
 
 		return $strReturn;
 
