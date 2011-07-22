@@ -69,7 +69,7 @@ class class_db_oci8 implements interface_db_driver {
      * Closes the connection to the database
      */
     public function dbclose() {
-        oci_close($this->linkDB);
+        @oci_close($this->linkDB);
     }
 
     /**
@@ -85,7 +85,7 @@ class class_db_oci8 implements interface_db_driver {
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
         $bitResult = oci_execute($objStatement, $bitAddon);
-        oci_free_statement($objStatement);
+        @oci_free_statement($objStatement);
         return $bitResult;
     }
 
@@ -111,7 +111,7 @@ class class_db_oci8 implements interface_db_driver {
         if($this->bitTxOpen)
             $bitAddon = OCI_NO_AUTO_COMMIT;
         $bitResult = oci_execute($objStatement, $bitAddon) ;
-        oci_free_statement($objStatement);
+        @oci_free_statement($objStatement);
         return $bitResult;
     }
 
@@ -139,7 +139,7 @@ class class_db_oci8 implements interface_db_driver {
 			$arrReturn[$intCounter++] = $arrRow;
 		}
         
-        oci_free_statement($objStatement);
+        @oci_free_statement($objStatement);
 		return $arrReturn;
     }
 
@@ -177,7 +177,7 @@ class class_db_oci8 implements interface_db_driver {
             $arrRow = $this->parseResultRow($arrRow);
 			$arrReturn[$intCounter++] = $arrRow;
 		}
-        oci_free_statement($objStatement);
+        @oci_free_statement($objStatement);
 		return $arrReturn;
     }
 
@@ -432,7 +432,6 @@ class class_db_oci8 implements interface_db_driver {
      *
      */
     public function transactionCommit() {
-
         oci_commit($this->linkDB);
         $this->bitTxOpen = false;
     }

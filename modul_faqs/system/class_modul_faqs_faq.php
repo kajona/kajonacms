@@ -11,6 +11,7 @@
  * Model for a faq itself
  *
  * @package modul_faqs
+ * @author sidler@mulchprod.de
  */
 class class_modul_faqs_faq extends class_model implements interface_model, interface_sortable_rating  {
 
@@ -27,7 +28,6 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_faqs";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _faqs_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."faqs";
 		$arrModul["table2"]       		= _dbprefix_."faqs_member";
@@ -63,9 +63,9 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
      */
     public function initObject() {
          $strQuery = "SELECT * FROM ".$this->arrModule["table"]."
-	                   WHERE faqs_id = '".dbsafeString($this->getSystemid())."'";
+	                   WHERE faqs_id = ? ";
 
-         $arrRow = $this->objDB->getRow($strQuery);
+         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
          $this->setStrAnswer($arrRow["faqs_answer"]);
          $this->setStrQuestion($arrRow["faqs_question"]);
     }
@@ -80,23 +80,21 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
         //Update all needed tables
         //faqs
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET faqs_answer = '".dbsafeString($this->getStrAnswer(), false)."',
-                            faqs_question = '".dbsafeString($this->getStrQuestion(), true)."'
+                        SET faqs_answer = ?,
+                            faqs_question = ?
                        WHERE faqs_id = '".dbsafeString($this->getSystemid())."'";
-        $this->objDB->_query($strQuery);
+        $this->objDB->_pQuery($strQuery, array($this->getStrAnswer(), $this->getStrQuestion(), $this->getSystemid()), array(false));
 
         //delete all relations
         if($bitMemberships) {
             class_modul_faqs_category::deleteFaqsMemberships($this->getSystemid());
-            $arrParams = $this->getAllParams();
             //insert all memberships
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (faqsmem_id, faqsmem_faq, faqsmem_category) VALUES
-                            ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."',
-                             '".dbsafeString($strCatID)."')";
+                            (?, ?, ?";
 
-                if(!$this->objDB->_query($strQuery))
+                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID)))
                     return false;
             }
         }
@@ -114,6 +112,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 	 */
 	public static function getFaqsList($strFilter = "") {
         $strQuery = "";
+        $arrParams = array();
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."faqs,
@@ -121,8 +120,10 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 							      "._dbprefix_."faqs_member
 							WHERE system_id = faqs_id
 							  AND faqs_id = faqsmem_faq
-							  AND faqsmem_category = '".dbsafeString($strFilter)."'
+							  AND faqsmem_category = ?
 							ORDER BY faqs_question ASC";
+            
+            $arrParams[] = $strFilter;
 		}
 		else {
 			$strQuery = "SELECT system_id
@@ -132,7 +133,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 							ORDER BY faqs_question ASC";
 		}
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_faqs_faq($arrOneId["system_id"]);
@@ -149,10 +150,10 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 	public function deleteFaq() {
 	    class_logger::getInstance()->addLogRow("deleted faq ".$this->getObjectDescription(), class_logger::$levelInfo);
 	    //Delete memberships
-	    if(class_modul_faqs_category::deleteFaqsMemberships($strSystemid)) {
-			$strQuery = "DELETE FROM "._dbprefix_."faqs WHERE faqs_id = '".dbsafeString($this->getSystemid())."'";
+	    if(class_modul_faqs_category::deleteFaqsMemberships($this->getSystemid())) {
+			$strQuery = "DELETE FROM "._dbprefix_."faqs WHERE faqs_id = ?";
             
-			if($this->objDB->_query($strQuery)) {
+			if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 			    if($this->deleteSystemRecord($this->getSystemid()))
 			        return true;
 			}
@@ -171,6 +172,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
 	public static function loadListFaqsPortal($strCat) {
 		$arrReturn = array();
         $strQuery = "";
+        $arrParams = array();
 		if($strCat == 1) {
 		    $strQuery = "SELECT system_id
     						FROM "._dbprefix_."faqs,
@@ -186,11 +188,12 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
     		                     "._dbprefix_."system
     		                WHERE system_id = faqs_id
     		                  AND faqs_id = faqsmem_faq
-    		                  AND faqsmem_category = '".dbsafeString($strCat)."'
+    		                  AND faqsmem_category = ?
     		                  AND system_status = 1
     						ORDER BY faqs_question ASC";
+            $arrParams[] = $strCat;
 		}
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_faqs_faq($arrOneId["system_id"]);
