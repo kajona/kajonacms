@@ -498,7 +498,7 @@ class class_db_oci8 implements interface_db_driver {
         class_logger::getInstance()->addLogRow("dump command: ".$strCommand, class_logger::$levelInfo);
 		//Now do a systemfork
 		$intTemp = "";
-		$strResult = system($strCommand, $intTemp);
+		system($strCommand, $intTemp);
         class_logger::getInstance()->addLogRow($this->strDumpBin." exited with code ".$intTemp, class_logger::$levelInfo);
         return $intTemp == 0;
     }
@@ -519,7 +519,7 @@ class class_db_oci8 implements interface_db_driver {
 		*/
         $strCommand = $this->strRestoreBin." ".$this->strUsername."/".$this->strPass." FILE='".$strFilename."'";
         $intTemp = "";
-        $strResult = system($strCommand, $intTemp);
+        system($strCommand, $intTemp);
         class_logger::getInstance()->addLogRow($this->strRestoreBin." exited with code ".$intTemp, class_logger::$levelInfo);
 	    return $intTemp == 0;
     }

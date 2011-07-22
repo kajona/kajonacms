@@ -82,7 +82,7 @@ class class_modul_faqs_faq extends class_model implements interface_model, inter
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                         SET faqs_answer = ?,
                             faqs_question = ?
-                       WHERE faqs_id = '".dbsafeString($this->getSystemid())."'";
+                       WHERE faqs_id = ?";
         $this->objDB->_pQuery($strQuery, array($this->getStrAnswer(), $this->getStrQuestion(), $this->getSystemid()), array(false));
 
         //delete all relations

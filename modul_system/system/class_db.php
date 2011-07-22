@@ -653,7 +653,7 @@ class class_db {
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
         		foreach($arrTemp as $arrTable) {
-        			if(uniStripos($arrTable["name"], _dbprefix_) !== false) {
+        			if(uniStripos($arrTable["name"], _dbprefix_) !== false && uniStripos($arrTable["name"], _dbprefix_) == 0 ) {
         				if($bitAll)
         					$arrReturn[] =  $arrTable;
         				else
