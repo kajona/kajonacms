@@ -108,7 +108,7 @@ class class_xml_parser {
                     //Maybe there are some Attributes..
                     if($domNode->hasAttributes()) {
                         $arrAttributes = $domNode->attributes;
-                        foreach($arrAttributes as $strIndex => $objAttribute) {
+                        foreach($arrAttributes as $objAttribute) {
                             $arrPointer['attributes'][$objAttribute->name] = $objAttribute->value;
                         }
                     }

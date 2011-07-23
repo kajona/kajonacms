@@ -38,8 +38,6 @@ abstract class class_element_portal extends class_portal {
 
 		parent::__construct($arrModule);
 
-		//Load the data of the current Element and merge it
-        //FIXME: this should be done via lazy loading!
 		$arrTemp = array(); 
 		$this->setSystemid($objElementData->getSystemid());
 		$this->arrElementData = $arrTemp;
@@ -81,7 +79,7 @@ abstract class class_element_portal extends class_portal {
 	 * @return string
 	 */
 	public function getElementOutput() {
-        
+        $strReturn = "";
         //load the data from the database
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
         

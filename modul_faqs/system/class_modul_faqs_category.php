@@ -152,7 +152,7 @@ class class_modul_faqs_category extends class_model implements interface_model  
         $strQuery2 = "DELETE FROM "._dbprefix_."faqs_member WHERE faqsmem_category = '".dbsafeString($this->getSystemid())."'";
 
         if($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2)) {
-            if($this->deleteSystemRecord($strSystemid)) {
+            if($this->deleteSystemRecord($this->getSystemid())) {
                 $this->unsetSystemid();
                 return true;
             }

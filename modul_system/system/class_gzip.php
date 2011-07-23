@@ -15,9 +15,6 @@
  */
 class class_gzip {
 
-    private $strSourcefile;
-
-
 	/**
 	 * Constructor
 	 *
@@ -100,7 +97,6 @@ class class_gzip {
 
                 if($objTargetPointer = fopen($strTargetFilename, "wb")) {
                     //Loop over filecontent
-                    $strContent = "";
                     while(!gzeof($objSourcePointer)) {
                         fwrite($objTargetPointer, gzread($objSourcePointer,  1024 * 512));
                         //$strContent .= gzread($objSourcePointer,  1024 * 512);

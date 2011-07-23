@@ -107,7 +107,8 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		                   AND folderproperties_language=?";
 		$arrCountRow = $this->objDB->getPRow($strCountQuery, array($this->getSystemid(), $this->getStrLanguage() ));
 
-
+        $strQuery = "";
+        $arrParams = array();
 		if((int)$arrCountRow["COUNT(*)"] >= 1) {
 		    //Already existing, updating properties
     		$strQuery = "UPDATE  ".$this->arrModule["table"]."

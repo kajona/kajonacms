@@ -149,7 +149,6 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	 */
 	public function deleteNewsFeed() {
 	    class_logger::getInstance()->addLogRow("deleted newsfeed ".$this->getSystemid(), class_logger::$levelInfo);
-	    $objRoot = new class_modul_system_common();
 	    $strQuery = "DELETE FROM "._dbprefix_."news_feed
                              WHERE news_feed_id = '".dbsafeString($this->getSystemid())."'";
         if($this->objDB->_query($strQuery)) {

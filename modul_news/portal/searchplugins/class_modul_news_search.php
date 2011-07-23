@@ -146,7 +146,6 @@ class class_modul_news_search extends class_portal implements interface_search_p
 	 * @return bool true, if the hit is visible
 	 */
 	private function checkLanguage($arrOneNews) {
-        $bitReturn = true;
 
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_news,

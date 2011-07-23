@@ -13,7 +13,6 @@ class class_test_csv extends class_testbase  {
         //test code
         $strFile = "/portal/downloads/public/testCsv.csv";
 
-        $arrCsvHeader = array("c1", "c2", "c3");
         $arrValues = array(
                             array("v11", "v21", "v31"),
                             array("v12", "v22", "v32"),

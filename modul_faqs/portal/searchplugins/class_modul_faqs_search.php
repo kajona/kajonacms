@@ -95,8 +95,6 @@ class class_modul_faqs_search extends class_portal implements interface_search_p
 	 * @return bool true, if the post is visible
 	 */
 	private function checkLanguage($arrOneFaq) {
-        $bitReturn = true;
-
         //if theres an element showing all cats, everything is donw
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_faqs,

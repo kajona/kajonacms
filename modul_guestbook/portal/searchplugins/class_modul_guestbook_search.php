@@ -116,9 +116,6 @@ class class_modul_guestbook_search extends class_portal implements interface_sea
 	 * @return bool true, if the post is visible
 	 */
 	private function checkLanguage($arrPost) {
-        $bitReturn = true;
-
-
         $strQuery = "SELECT COUNT(*)
                        FROM "._dbprefix_."element_guestbook,
                             "._dbprefix_."page_element,

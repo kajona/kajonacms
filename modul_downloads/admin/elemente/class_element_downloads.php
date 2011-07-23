@@ -41,7 +41,6 @@ class class_element_downloads extends class_element_admin implements interface_a
 	public function getEditForm($arrElementData)	{
 		$strReturn = "";
 		//Load all archives
-        $objDownloads = new class_modul_downloads_admin();
         $arrObjArchs = class_modul_downloads_archive::getAllArchives();
         $arrArchives = array();
         foreach ($arrObjArchs as $objOneArchive)

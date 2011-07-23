@@ -104,8 +104,6 @@ class class_modul_search_commons extends class_model implements interface_model 
 	    $arrSearchtermPlugin[] = " LIKE ('%".dbsafeString($strSearchterm, false)."%')  ";
 	    $arrSearchtermPlugin[] = " LIKE ('%".dbsafeString(html_entity_decode($strSearchterm, ENT_COMPAT, "UTF-8"), false)."%')  ";
         $arrHits = array();
-		//Read the config
-		$arrSearch = array();
 
 		//Search for search-plugins
 		$objFilesystem = new class_filesystem();

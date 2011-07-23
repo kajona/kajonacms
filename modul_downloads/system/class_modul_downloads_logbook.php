@@ -68,7 +68,6 @@ class class_modul_downloads_logbook extends class_model implements interface_mod
 	 * @static
 	 */
 	public static function generateDlLog($objFile) {
-	    $objRoot = new class_modul_system_common();
 	    $objDB = class_carrier::getInstance()->getObjDB();
 	    $strQuery = "INSERT INTO "._dbprefix_."downloads_log
 	                   (downloads_log_id, downloads_log_date, downloads_log_file, downloads_log_user, downloads_log_ip) VALUES
