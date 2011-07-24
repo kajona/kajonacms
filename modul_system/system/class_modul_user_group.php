@@ -312,7 +312,7 @@ class class_modul_user_group extends class_model implements interface_model  {
      * FIXME remove
 	 */
 	public static function getAllGroupIdsForUser($strUserId) {
-        throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
+        //throw new class_exception("method ".__METHOD__." not supported", class_exception::$level_FATALERROR);
 	}
 
     /**
