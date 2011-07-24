@@ -68,7 +68,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
         return $arrReturn;
     }
 
-// --- ListenFunktionen ---------------------------------------------------------------------------------
+    // --- ListenFunktionen -----------------------------------------------------------------------------
 
 
 	/**
@@ -879,6 +879,75 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		return $strReturn;
     }
 
+    /**
+     * Returns a xml-based representation of all categories available
+     * Return format:
+     * <categories>
+     *    <category>
+     *        <title></title>
+     *        <systemid></systemid>
+     *    </category>
+     * </categories>
+     * 
+     * @return string
+     * @xml
+     */
+    protected function actionListCategories() {
+		$strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+    		$arrCategories = class_modul_news_category::getCategories();
+            $strReturn .= "<categories>\n";
+            foreach($arrCategories as $objOneCategory) {
+                if($objOneCategory->rightView()) {
+                    $strReturn .= " <category>\n";
+                    $strReturn .= "   <title>".xmlSafeString($objOneCategory->getStrTitle())."</title>";
+                    $strReturn .= "   <systemid>".$objOneCategory->getSystemid()."</systemid>";
+                    $strReturn .= " </category>\n";
+                }
+            }
+            $strReturn .= "</categories>\n";
+        }
+        else
+            $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
+
+		return $strReturn;
+	}
+    
+    /**
+     * Returns a xml-based representation of all news available.
+     * In this case only a limited set of attributes is returned, namely the title and the
+     * systemid of each entry.
+     * Return format:
+     * <newslist>
+     *    <news>
+     *        <title></title>
+     *        <systemid></systemid>
+     *    </news>
+     * </newslist>
+     * 
+     * @return string
+     * @xml
+     */
+    protected function actionListNews() {
+		$strReturn = "";
+        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+    		$arrNews = class_modul_news_news::getNewsList();
+            $strReturn .= "<newslist>\n";
+            foreach($arrNews as $objOneNews) {
+                if($objOneNews->rightView()) {
+                    $strReturn .= " <news>\n";
+                    $strReturn .= "   <title>".xmlSafeString($objOneNews->getStrTitle())."</title>";
+                    $strReturn .= "   <systemid>".$objOneNews->getSystemid()."</systemid>";
+                    $strReturn .= " </news>\n";
+                }
+            }
+            $strReturn .= "</newslist>\n";
+        }
+        else
+            $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
+
+		return $strReturn;
+	}
 
 }
 
