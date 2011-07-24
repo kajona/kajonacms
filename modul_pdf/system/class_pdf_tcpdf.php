@@ -99,6 +99,7 @@ class class_pdf_tcpdf extends TCPDF {
     }
 
     public function setBitFooter($bitFooter) {
+        $this->setPrintFooter($bitFooter);
         $this->bitFooter = $bitFooter;
     }
 
@@ -107,6 +108,7 @@ class class_pdf_tcpdf extends TCPDF {
     }
 
     public function setObjHeader($objHeader) {
+        $this->setPrintHeader($objHeader);
         $this->objHeader = $objHeader;
     }
 

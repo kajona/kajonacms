@@ -277,6 +277,13 @@ class class_pdf {
     public function setDrawColor($intR, $intG, $intB) {
         $this->objPdf->SetDrawColor($intR, $intG, $intB);
     }
+    
+    /**
+     * Sets a text color
+     */
+    public function setTextColor($intR, $intG, $intB) {
+        $this->objPdf->SetTextColor($intR, $intG, $intB);
+    }
 
     /**
      * Returns the current instance of the internal PDF-engine. Use this method
