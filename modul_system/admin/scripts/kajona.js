@@ -244,7 +244,6 @@ KAJONA.util.Loader = function (strScriptBase) {
 		//check own JS/CSS files, if they are already loaded or requested
 		if (YAHOO.lang.isArray(arrFiles)) {
 			for (var i = 0; i < arrFiles.length; i++) {
-
 				if (!(arrFiles[i] in arrLoadedModules)) {
 					arrFilesToWaitFor.push(arrFiles[i]);
 					if (!(arrFiles[i] in arrRequestedModules)) {
