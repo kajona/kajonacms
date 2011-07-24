@@ -1275,6 +1275,22 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
     
+     private function update_340_3401() {
+        $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
+        
+        $strReturn .= "Deleting system_output_gzip constant... \n";
+        $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
+        if(!$this->objDB->_pQuery($strQuery, array("_system_output_gzip_")))
+            $strReturn .= "An error occured! ...\n";
+        
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.0.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.0.1");
+        return $strReturn;
+    }
+
+    
     private function update_3401_3402() {
         $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
         
