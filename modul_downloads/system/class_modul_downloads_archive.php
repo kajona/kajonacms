@@ -115,7 +115,6 @@ class class_modul_downloads_archive extends class_model implements interface_mod
 	/**
 	 * Deletes an archive and all childs recursive
 	 *
-	 * @param string $strPrevId
 	 * @param bool $bitIgnoreRights
 	 * @return bool
 	 */
