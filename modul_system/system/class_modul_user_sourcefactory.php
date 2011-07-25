@@ -179,7 +179,7 @@ class class_modul_user_sourcefactory {
      * @return interface_usersources_usersource or null if not existing, an exception is raised, too.
 	 */
 	public function getUsersource($strName) {
-        
+        $strName = trim($strName);
         if($strName == "")
             throw new class_exception("login provider ".$strName." not existing", class_exception::$level_ERROR);
         
