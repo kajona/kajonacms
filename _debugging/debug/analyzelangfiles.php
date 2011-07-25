@@ -4,7 +4,7 @@
 *   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
 *       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
 *-------------------------------------------------------------------------------------------------------*
-*   $Id: filetrimcheck.php 3530 2011-01-06 12:30:26Z sidler $                                           *
+*   $Id$                                           *
 ********************************************************************************************************/
 
 header("Content-Type: text/html; charset=utf-8");
