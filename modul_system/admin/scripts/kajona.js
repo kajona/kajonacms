@@ -535,14 +535,23 @@ KAJONA.admin.folderview = {
 	/**
 	 * To be called when the user selects an page/folder/file out of a folderview dialog/popup
 	 * Detects if the folderview is embedded in a dialog or popup to find the right context
+     * 
+     * @param {Array} arrTargetsValues
+     * @param {function} objCallback
 	 */
-	selectCallback: function (arrTargetsValues) {
+	selectCallback: function (arrTargetsValues, objCallback) {
 		if (window.opener) {
 			window.opener.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
 		} else if (parent) {
 			parent.KAJONA.admin.folderview.fillFormFields(arrTargetsValues);
 		}
-		this.close();
+        
+        if (YAHOO.lang.isFunction(objCallback)) {
+			objCallback();
+		}
+        
+        this.close();
+        
 	},
 	
 	/**
