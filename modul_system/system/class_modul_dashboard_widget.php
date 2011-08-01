@@ -11,6 +11,7 @@
  * Class to represent a single adminwidget
  *
  * @package modul_dashboard
+ * @author sidler@mulchprod.de
  */
 class class_modul_dashboard_widget extends class_model implements interface_model {
 
@@ -28,7 +29,6 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_dashboard";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]              = _dbprefix_."dashboard";
 		$arrModul["modul"]              = "dashboard";
@@ -62,9 +62,9 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
         						   "._dbprefix_."system
         				WHERE system_id = dashboard_id
-        				  AND system_id = '".dbsafeString($this->getSystemid())."'";
+        				  AND system_id = ?";
 
-        $arrRow = $this->objDB->getRow($strQuery);
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrRow) > 0) {
             $this->setStrUser($arrRow["dashboard_user"]);
             $this->setStrColumn($arrRow["dashboard_column"]);
@@ -80,12 +80,12 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
     protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                   SET dashboard_user = '".dbsafeString($this->getStrUser())."',
-                       dashboard_column = '".dbsafeString($this->getStrColumn())."',
-                       dashboard_widgetid = '".dbsafeString($this->getStrWidgetId())."',
-                       dashboard_aspect = '".dbsafeString($this->getStrAspect())."'
-                 WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                   SET dashboard_user = ?,
+                       dashboard_column = ?,
+                       dashboard_widgetid = ?,
+                       dashboard_aspect = ?
+                 WHERE dashboard_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrUser(), $this->getStrColumn(), $this->getStrWidgetId(), $this->getStrAspect(), $this->getSystemid()));
     }
 
     /**
@@ -98,8 +98,8 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
             class_logger::getInstance()->addLogRow("deleted dashboardentry ".$this->getSystemid(), class_logger::$levelInfo);
     	    $objRoot = new class_modul_system_common();
     	    $strQuery = "DELETE FROM ".$this->arrModule["table"]."
-                                 WHERE dashboard_id = '".dbsafeString($this->getSystemid())."'";
-            if($this->objDB->_query($strQuery)) {
+                                 WHERE dashboard_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
                 if($objRoot->deleteSystemRecord($this->getSystemid()))
                     return true;
             }
@@ -125,7 +125,7 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
         return true;
     }
 
-        /**
+    /**
      * Looks up the widgets placed in a given column and
      * returns a list of instances
      *
@@ -134,19 +134,24 @@ class class_modul_dashboard_widget extends class_model implements interface_mode
      */
     public function getWidgetsForColumn($strColumn, $strAspectFilter = "") {
 
+        $arrParams = array();
+        $arrParams[] = $this->objSession->getUserID();
+        $arrParams[] = $strColumn;
         if($strAspectFilter != "") {
-            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE '%".dbsafeString($strAspectFilter)."%')";
+            $arrParams[] = "%".$strAspectFilter."%";
+            $strAspectFilter = " AND (dashboard_aspect = '' OR dashboard_aspect IS NULL OR dashboard_aspect LIKE ? )";
         }
 
         $strQuery = "SELECT system_id
         			  FROM ".$this->arrModule["table"].",
         			  	   "._dbprefix_."system
-        			 WHERE dashboard_user = '".dbsafeString($this->objSession->getUserID())."'
-        			   AND dashboard_column = '".dbsafeString($strColumn)."'
+        			 WHERE dashboard_user = ?
+        			   AND dashboard_column = ?
         			   AND dashboard_id = system_id
                        ".$strAspectFilter."
         	     ORDER BY system_sort ASC ";
-        $arrRows = $this->objDB->getArray($strQuery);
+        
+        $arrRows = $this->objDB->getPArray($strQuery, $arrParams);
         $arrReturn = array();
         if(count($arrRows) > 0) {
             foreach ($arrRows as $arrOneRow) {
