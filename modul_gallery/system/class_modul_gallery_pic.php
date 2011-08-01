@@ -11,6 +11,7 @@
  * Model for pic & folders of the gallery
  *
  * @package modul_gallery
+ * @author sidler@mulchprod.de
  */
 class class_modul_gallery_pic extends class_model implements interface_model, interface_sortable_rating {
     private $strName = "";
@@ -28,8 +29,8 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
      * @param string $strSystemid (use "" on new objects)
      */
     public function __construct($strSystemid = "") {
+        $arrModul = array();
         $arrModul["name"] 				= "modul_gallery";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _gallery_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."gallery_pic";
 		$arrModul["modul"]				= "gallery";
@@ -64,8 +65,8 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 						FROM ".$this->arrModule["table"].",
 						     "._dbprefix_."system
 						WHERE pic_id = system_id
-						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-		$arrRow = $this->objDB->getRow($strQuery);
+						AND system_id = ?";
+		$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 		if(count($arrRow) > 0) {
     		$this->setStrName($arrRow["pic_name"]);
     		$this->setStrFilename($arrRow["pic_filename"]);
@@ -79,15 +80,16 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 
     protected function updateStateToDb($bitHtmlEntities = true) {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
-                        pic_name = '".$this->objDB->dbsafeString($this->getStrName(), $bitHtmlEntities)."',
-                        pic_filename = '".$this->objDB->dbsafeString($this->getStrFilename(), $bitHtmlEntities)."',
-                        pic_description = '".$this->objDB->dbsafeString($this->getStrDescription(), false)."',
-                        pic_subtitle = '".$this->objDB->dbsafeString($this->getStrSubtitle(), $bitHtmlEntities)."',
-                        pic_size = '".(int)$this->getIntSize()."',
-                        pic_hits = '".(int)$this->getIntHits()."',
-                        pic_type = '".(int)$this->getIntType()."'
-                     WHERE pic_id = '".$this->objDB->dbsafeString($this->getSystemid(), $bitHtmlEntities)."' ";
-        return $this->objDB->_query($strQuery);
+                        pic_name = ?,
+                        pic_filename = ?,
+                        pic_description = ?,
+                        pic_subtitle = ?,
+                        pic_size = ?,
+                        pic_hits = ?,
+                        pic_type = ?
+                     WHERE pic_id = ? ";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrFilename(), $this->getStrDescription(), 
+                            $this->getStrSubtitle(), $this->getIntSize(), $this->getIntHits(), $this->getIntType(), $this->getSystemid()), array(true, true, false));
     }
 
     
@@ -105,13 +107,13 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system,
 		                      "._dbprefix_."gallery_pic
 					WHERE system_id = pic_id
-					  AND system_prev_id = '".dbsafeString($strPrevID)."'
+					  AND system_prev_id = ?
 						".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
 						".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
 						ORDER BY system_sort ASC,
 							pic_type DESC,
 							pic_name ASC";
-        $arrIds  = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+        $arrIds  = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPrevID));
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
@@ -135,13 +137,13 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
         $strQuery = "SELECT system_id FROM "._dbprefix_."system,
                               "._dbprefix_."gallery_pic
                     WHERE system_id = pic_id
-                      AND system_prev_id = '".dbsafeString($strPrevID)."'
+                      AND system_prev_id = ?
                         ".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
                         ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
                         ORDER BY system_sort ASC,
                             pic_type DESC,
                             pic_name ASC";
-        $arrIds  = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+        $arrIds  = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strPrevID), $intStart, $intEnd);
 
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
@@ -163,10 +165,10 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system,
                               "._dbprefix_."gallery_pic
                     WHERE system_id = pic_id
-                      AND system_prev_id = '".dbsafeString($strPrevID)."'
+                      AND system_prev_id = ?
                         ".(!$bitFilesOnly ? "" : "AND pic_type = 0 ")."
                         ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."";
-        $arrIds  = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrIds  = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strPrevID));
         return $arrIds["COUNT(*)"];
     }
 
@@ -182,12 +184,12 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		$strQuery= "SELECT system_id FROM "._dbprefix_."system,
 		                           "._dbprefix_."gallery_pic
 		              WHERE system_id = pic_id
-		                AND system_prev_id = '".dbsafeString($strPrevid)."'
+		                AND system_prev_id = ?
                         ".(!$bitActiveOnly ? "" : "AND system_status = 1 ")."
 		                AND pic_type = 1
 		                ORDER BY system_sort ASC,
                             pic_name ASC";
-		$arrIds  = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds  = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strPrevid));
         $arrReturn = array();
         foreach($arrIds as $arrOneId) {
             $arrReturn[] = new class_modul_gallery_pic($arrOneId["system_id"]);
@@ -206,8 +208,8 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 		$bitReturn = false;
 		//Delete from module-table
 		$strQuery = "DELETE FROM "._dbprefix_."gallery_pic
-						WHERE pic_id='".dbsafeString($this->getSystemid())."'";
-		if($this->objDB->_query($strQuery)) {
+						WHERE pic_id= ?";
+		if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 		    if($this->deleteSystemRecord($this->getSystemid())) {
 			    $bitReturn = true;
 		    }
@@ -225,11 +227,11 @@ class class_modul_gallery_pic extends class_model implements interface_model, in
 	 * @return mixed
 	 */
 	public static function syncRecursive($strPrevID, $strPath, $bitRecursive = true) {
+        $arrReturn = array();
 	    $arrReturn["insert"] = 0;
 	    $arrReturn["delete"] = 0;
 	    $arrReturn["update"] = 0;
 
-	    $objRoot = new class_modul_system_common();
 	    $objDB = class_carrier::getInstance()->getObjDB();
 
 	    //Load the files in the DB

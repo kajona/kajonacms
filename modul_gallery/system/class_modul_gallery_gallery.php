@@ -11,6 +11,7 @@
  * Model for glleries itself
  *
  * @package modul_gallery
+ * @author sidler@mulchprod.de
  */
 class class_modul_gallery_gallery extends class_model implements interface_model  {
 
@@ -28,7 +29,6 @@ class class_modul_gallery_gallery extends class_model implements interface_model
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_gallery";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _gallery_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."gallery_gallery";
 		$arrModul["modul"]				= "gallery";
@@ -67,9 +67,9 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 						".$this->arrModule["table"].",
 						"._dbprefix_."system
 						WHERE gallery_id = system_id
-						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'
+						AND system_id = ?
 						ORDER BY gallery_title ASC";
-        $arrRow =  $this->objDB->getRow($strQuery);
+        $arrRow =  $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrRow) > 1) {
             $this->setStrPath($arrRow["gallery_path"]);
             $this->setStrTitle($arrRow["gallery_title"]);
@@ -83,11 +83,11 @@ class class_modul_gallery_gallery extends class_model implements interface_model
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-					SET gallery_path='".$this->objDB->dbsafeString($this->getStrPath())."',
-					    gallery_title='".$this->objDB->dbsafeString($this->getStrTitle())."'
-					WHERE gallery_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
+					SET gallery_path=?,
+					    gallery_title=?
+					WHERE gallery_id=?";
 
-		if($this->objDB->_query($strQuery)) {
+		if($this->objDB->_pQuery($strQuery, array($this->getStrPath(), $this->getStrTitle(), $this->getSystemid()))) {
             //update the filemanager-repo
             $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
             $objRepo->setStrPath($this->getStrPath());
@@ -127,7 +127,7 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 						WHERE gallery_id = system_id
 						ORDER BY gallery_title ASC";
 		$objDB = class_carrier::getInstance()->getObjDB();
-        $arrIds = $objDB->getArray($strQuery);
+        $arrIds = $objDB->getPArray($strQuery, array());
         $arrReturn = array();
         foreach ($arrIds as $arrOneRecord) {
         	$arrReturn[] = new class_modul_gallery_gallery($arrOneRecord["system_id"]);
@@ -146,8 +146,8 @@ class class_modul_gallery_gallery extends class_model implements interface_model
 	    class_logger::getInstance()->addLogRow("deleted gallery ".$this->getSystemid(), class_logger::$levelInfo);
 
 	    $strQuery = "DELETE FROM "._dbprefix_."gallery_gallery
-					WHERE gallery_id='".dbsafeString($this->getSystemid())."'";
-	    if($this->objDB->_query($strQuery)) {
+					WHERE gallery_id= ?";
+	    if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 	        if($this->deleteSystemRecord($this->getSystemid())) {
                 //and delete the filemanager repo
                 $objRepo = class_modul_filemanager_repo::getRepoForForeignId($this->getSystemid());
