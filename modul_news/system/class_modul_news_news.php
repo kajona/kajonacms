@@ -204,9 +204,10 @@ class class_modul_news_news extends class_model implements interface_model  {
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
-							  AND newsmem_category = ?
+							  AND newsmem_category = '".dbsafeString($strFilter)."'
 							ORDER BY system_date_start DESC";
-            $arrParams[] = $strFilter;
+            //$arrParams = array(dbsafeString($strFilter));
+            //FIXME: fails as prepated statement on sqlite. why?
 		}
 		else {
 			$strQuery = "SELECT system_id
