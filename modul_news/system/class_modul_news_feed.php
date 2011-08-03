@@ -195,9 +195,10 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
 							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
 							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
-							  AND newsmem_category = ?
+							  AND newsmem_category = '".dbsafeString($strFilter)."'
 							ORDER BY system_date_start DESC";
-            $arrParams[] = $strFilter;
+            //$arrParams[] = $strFilter;
+            //FIXME: fails as prepated statement on sqlite. why?
 		}
 		else {
 			$strQuery = "SELECT *
