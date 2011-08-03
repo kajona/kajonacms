@@ -11,6 +11,7 @@
  * Class to provide methods used by the system for db tasks as a db check
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_worker extends class_model implements interface_model  {
 
@@ -24,7 +25,6 @@ class class_modul_system_worker extends class_model implements interface_model  
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= "";
 		$arrModul["modul"]				= "system";
@@ -84,7 +84,7 @@ class class_modul_system_worker extends class_model implements interface_model  
                          AND system_prev_id = '0' 
                          AND system_id != '0'";
         
-        $arrReturn = $this->objDB->getArray($strQuery);
+        $arrReturn = $this->objDB->getPArray($strQuery, array());
     
         return $arrReturn;
     }
@@ -103,14 +103,14 @@ class class_modul_system_worker extends class_model implements interface_model  
         $strQuery = "SELECT system_id, system_prev_id, system_comment
                        FROM "._dbprefix_."system
                       WHERE system_id != '0'";
-        $arrRecords = $this->objDB->getArray($strQuery, false);
+        $arrRecords = $this->objDB->getPArray($strQuery, array(), false);
         //Check every record for its prev_id. To get valid results, flush the db-cache
         $this->objDB->flushQueryCache();
         foreach ($arrRecords as $arrOneRecord) {
             $strQuery = "SELECT COUNT(*) as number
                            FROM "._dbprefix_."system
-                          WHERE system_id = '".dbsafeString($arrOneRecord["system_prev_id"])."'";
-            $arrRow = $this->objDB->getRow($strQuery);
+                          WHERE system_id = ?";
+            $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRecord["system_prev_id"]));
             if($arrRow["number"] == "0") {
                 $arrReturn[$arrOneRecord["system_id"]] = $arrOneRecord["system_comment"];
             }
@@ -131,7 +131,7 @@ class class_modul_system_worker extends class_model implements interface_model  
                        LEFT JOIN "._dbprefix_."system
                         ON (right_id = system_id)
                        WHERE system_id IS NULL ";
-        $arrReturn = $this->objDB->getArray($strQuery);
+        $arrReturn = $this->objDB->getPArray($strQuery, array());
 
         return $arrReturn;
     }
@@ -149,7 +149,7 @@ class class_modul_system_worker extends class_model implements interface_model  
                        LEFT JOIN "._dbprefix_."system
                         ON (system_date_id = system_id)
                        WHERE system_id IS NULL ";
-        $arrReturn = $this->objDB->getArray($strQuery);
+        $arrReturn = $this->objDB->getPArray($strQuery, array());
 
         return $arrReturn;
     }

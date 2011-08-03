@@ -11,6 +11,7 @@
  * This class contains a few methods used by the search as little helpers
  *
  * @package modul_search
+ * @author sidler@mulchprod.de
  */
 class class_modul_search_commons extends class_model implements interface_model  {
     
@@ -23,7 +24,6 @@ class class_modul_search_commons extends class_model implements interface_model 
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_search";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _suche_modul_id_;
 		$arrModul["table"]       		= "";
 		$arrModul["modul"]				= "search";

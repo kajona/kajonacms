@@ -532,40 +532,6 @@ final class class_session {
     }
 
 	/**
-	 * Encrypts a password using the current hashing-algorithm
-	 *
-	 * @param string $strPassword
-	 * @return string
-     * @deprecated
-     * FIXME remove
-	 */
-	public function encryptPassword($strPassword) {
-	    return sha1($strPassword);
-	}
-
-	/**
-	 * Validates a password. Takes a plaintext password and an encrypted one and compares them.
-	 * The functions takes care of using the correct hashing-algorithm
-	 *
-	 * @param string $strPlainPassword
-	 * @param string $strEncryptedPassword
-	 * @return bool
-     * @deprecated
-     * FIXME remove
-	 */
-	private function checkPassword($strPlainPassword, $strEncryptedPassword) {
-	    //md5
-        if((int)strlen($strEncryptedPassword) == 32)
-            return $strEncryptedPassword == md5($strPlainPassword);
-
-        //sha1
-        if((int)strlen($strEncryptedPassword) == 40)
-            return $strEncryptedPassword == sha1($strPlainPassword);
-
-	    return false;
-	}
-	
-	/**
 	 * Initializes the internal kajona session
 	 *
 	 */

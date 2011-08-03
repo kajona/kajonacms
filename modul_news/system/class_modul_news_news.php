@@ -11,6 +11,7 @@
  * Model for a news itself
  *
  * @package modul_news
+ * @author sidler@mulchprod.de
  */
 class class_modul_news_news extends class_model implements interface_model  {
 
@@ -36,7 +37,6 @@ class class_modul_news_news extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_news";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."news";
 		$arrModul["table2"]       		= _dbprefix_."news_member";
@@ -75,8 +75,8 @@ class class_modul_news_news extends class_model implements interface_model  {
 	                "._dbprefix_."system, "._dbprefix_."system_date
 	                WHERE system_id = news_id
 	                  AND system_id = system_date_id
-	                  AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-         $arrRow = $this->objDB->getRow($strQuery);
+	                  AND system_id = ?";
+         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
          $this->setStrImage($arrRow["news_image"]);
          $this->setStrIntro($arrRow["news_intro"]);
          $this->setStrNewstext($arrRow["news_text"]);
@@ -114,13 +114,14 @@ class class_modul_news_news extends class_model implements interface_model  {
 
         //news
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                        SET news_title = '".$this->objDB->dbsafeString($this->getStrTitle(), $this->bitTitleChanged)."',
-                            news_intro = '".$this->objDB->dbsafeString($this->getStrIntro(), false)."',
-                            news_text = '".$this->objDB->dbsafeString($this->getStrNewstext(), false)."',
-                            news_image = '".$this->objDB->dbsafeString($this->getStrImage())."',
-                            news_hits = ".$this->objDB->dbsafeString($this->getIntHits())."
-                       WHERE news_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $this->objDB->_query($strQuery);
+                        SET news_title = ?,
+                            news_intro = ?,
+                            news_text = ?,
+                            news_image = ?,
+                            news_hits = ?
+                       WHERE news_id = ?";
+        $this->objDB->_pQuery($strQuery, array($this->getStrTitle(), $this->getStrIntro(), $this->getStrNewstext(), 
+                 $this->getStrImage(), $this->getIntHits(), $this->getSystemid()), array($this->bitTitleChanged, false, false));
 
         //delete all relations & set them up again
         if(is_array($this->arrCats)) {
@@ -129,9 +130,8 @@ class class_modul_news_news extends class_model implements interface_model  {
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."',
-                             '".$this->objDB->dbsafeString($strCatID)."')";
-                if(!$this->objDB->_query($strQuery))
+                            (?, ?, ?)";
+                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID)))
                     return false;
             }
         }
@@ -172,8 +172,8 @@ class class_modul_news_news extends class_model implements interface_model  {
             foreach($this->arrCats as $strCatID => $strValue) {
                 $strQuery = "INSERT INTO ".$this->arrModule["table2"]."
                             (newsmem_id, newsmem_news, newsmem_category) VALUES
-                            ('".$this->objDB->dbsafeString(generateSystemid())."', '".$this->objDB->dbsafeString($this->getSystemid())."', '".$this->objDB->dbsafeString($strCatID)."')";
-                if(!$this->objDB->_query($strQuery))
+                            (?, ?, ?)";
+                if(!$this->objDB->_pQuery($strQuery, array(generateSystemid(), $this->getSystemid(), $strCatID)))
                     $bitReturn = false;
             }
         }
@@ -194,6 +194,7 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 */
 	public static function getNewsList($strFilter = "", $intStart = false, $intEnd = false) {
         $strQuery = "";
+        $arrParams = array();
 		if($strFilter != "") {
 			$strQuery = "SELECT system_id
 							FROM "._dbprefix_."news,
@@ -203,8 +204,9 @@ class class_modul_news_news extends class_model implements interface_model  {
 							WHERE system_id = news_id
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
-							  AND newsmem_category = '".dbsafeString($strFilter)."'
+							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
+            $arrParams[] = $strFilter;
 		}
 		else {
 			$strQuery = "SELECT system_id
@@ -217,9 +219,9 @@ class class_modul_news_news extends class_model implements interface_model  {
 		}
 
 		if($intEnd === false && $intStart === false)
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 		else
-		    $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+		    $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -238,17 +240,19 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 */
 	public function getNewsCount($strFilter = "") {
         $strQuery = "";
+        $arrParams = array();
         if($strFilter != "") {
 			$strQuery = "SELECT COUNT(*)
 							FROM "._dbprefix_."news_member
-							WHERE newsmem_category = '".dbsafeString($strFilter)."'";
+							WHERE newsmem_category = ?";
+            $arrParams[] = $strFilter;
 		}
 		else {
 			$strQuery = "SELECT COUNT(*)
 							FROM "._dbprefix_."news";
 		}
 
-		$arrRow = $this->objDB->getRow($strQuery);
+		$arrRow = $this->objDB->getPRow($strQuery, $arrParams);
 		return $arrRow["COUNT(*)"];
 	}
 
@@ -261,8 +265,8 @@ class class_modul_news_news extends class_model implements interface_model  {
 	    class_logger::getInstance()->addLogRow("deleted news ".$this->getSystemid(), class_logger::$levelInfo);
 	    //Delete memberships
 	    if(class_modul_news_category::deleteNewsMemberships($this->getSystemid())) {
-			$strQuery = "DELETE FROM "._dbprefix_."news WHERE news_id = '".dbsafeString($this->getSystemid())."'";
-			if($this->objDB->_query($strQuery)) {
+			$strQuery = "DELETE FROM "._dbprefix_."news WHERE news_id = ? ";
+			if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
 			    if($this->deleteSystemRecord($this->getSystemid()))
 			        return true;
 			}
@@ -298,16 +302,18 @@ class class_modul_news_news extends class_model implements interface_model  {
 	public static function loadListNewsPortal($intMode, $strCat = 0, $intOrder = 0, $intStart = false, $intEnd = false) {
 		$arrReturn = array();
         $strOrder = "";
-        $strOneCat = "";
+        $strTime = "";
+        $strQuery = "";
+        $arrParams = array();
 		$longNow = class_date::getCurrentTimestamp();
 		//Get Timeintervall
 		if($intMode == "0") {
 			//Regular news
-			$strTime  = "AND (system_date_special IS NULL OR (system_date_special > ".$longNow." OR system_date_special = 0))";
+			$strTime  = "AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))";
 		}
 		elseif($intMode == "1") {
 			//Archivnews
-			$strTime = "AND (system_date_special < ".$longNow." AND system_date_special IS NOT NULL AND system_date_special != 0)";
+			$strTime = "AND (system_date_special < ? AND system_date_special IS NOT NULL AND system_date_special != 0)";
 		}
 		else
 			$strTime = "";
@@ -330,12 +336,18 @@ class class_modul_news_news extends class_model implements interface_model  {
                             WHERE system_id = news_id
                               AND system_id = system_date_id
                               AND news_id = newsmem_news
-                              AND newsmem_category = '".dbsafeString($strCat)."'
+                              AND newsmem_category = ?
                               AND system_status = 1
-                              AND (system_date_start IS NULL or(system_date_start < ".$longNow." OR system_date_start = 0))
+                              AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 ".$strTime."
-                              AND (system_date_end IS NULL or (system_date_end > ".$longNow." OR system_date_end = 0))
+                              AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start ".$strOrder;
+            $arrParams[] = $strCat;
+            $arrParams[] = $longNow;
+            if($strTime != "")
+                $arrParams[] = $longNow;
+            $arrParams[] = $longNow;
+            
         }
         else {
              $strQuery = "SELECT system_id
@@ -345,16 +357,21 @@ class class_modul_news_news extends class_model implements interface_model  {
                             WHERE system_id = news_id
                               AND system_id = system_date_id
                               AND system_status = 1
-                              AND (system_date_start IS NULL or(system_date_start < ".$longNow." OR system_date_start = 0))
+                              AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
                                 ".$strTime."
-                              AND (system_date_end IS NULL or (system_date_end > ".$longNow." OR system_date_end = 0))
+                              AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
                             ORDER BY system_date_start ".$strOrder;
+             
+            $arrParams[] = $longNow;
+            if($strTime != "")
+                $arrParams[] = $longNow;
+            $arrParams[] = $longNow;
         }
 
         if($intStart !== false && $intEnd !== false)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
             
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
@@ -369,8 +386,8 @@ class class_modul_news_news extends class_model implements interface_model  {
 	 * @return unknown
 	 */
 	public function increaseHits() {
-	    $strQuery = "UPDATE ".$this->arrModule["table"]." SET news_hits = ".($this->getIntHits()+1)." WHERE news_id='".$this->objDB->dbsafeString($this->getSystemid())."'";
-		return $this->objDB->_query($strQuery);
+	    $strQuery = "UPDATE ".$this->arrModule["table"]." SET news_hits = ? WHERE news_id= ? ";
+		return $this->objDB->_pQuery($strQuery, array($this->getIntHits()+1, $this->getSystemid()));
 	}
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------

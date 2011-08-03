@@ -11,6 +11,7 @@
  * Model for a element assigned to a page. NOT the raw-element!
  *
  * @package modul_pages
+ * @author sidler@mulchprod.de
  */
 class class_modul_pages_pageelement extends class_model implements interface_model  {
 
@@ -37,7 +38,6 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $arrModule = array();
         $arrModule["name"] 				= "modul_pages_content";
-		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["table"]       		= _dbprefix_."page_element";
 		$arrModule["modul"]				= "pages_content";

@@ -11,6 +11,7 @@
  * Model for comment itself
  *
  * @package modul_postacomment
+ * @author sidler@mulchprod.de
  */
 class class_modul_postacomment_post extends class_model implements interface_model, interface_sortable_rating  {
 
@@ -30,7 +31,6 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_postacomment";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _postacomment_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."postacomment";
 		$arrModul["modul"]				= "postacomment";
@@ -66,8 +66,8 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     public function initObject() {
         $strQuery = "SELECT * 
 		   			 FROM ".$this->arrModule["table"]."
-					 WHERE postacomment_id = '".$this->getSystemid()."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+					 WHERE postacomment_id = ? ";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         $this->setStrTitle($arrRow["postacomment_title"]);
         $this->setStrComment($arrRow["postacomment_comment"]);
         $this->setStrUsername($arrRow["postacomment_username"]);
@@ -85,15 +85,16 @@ class class_modul_postacomment_post extends class_model implements interface_mod
     protected function updateStateToDb() {
         
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
-                    	postacomment_date		= '".dbsafeString($this->getIntDate())."',
-                    	postacomment_page		= '".dbsafeString($this->getStrAssignedPage())."',
-						postacomment_language	= '".dbsafeString($this->getStrAssignedLanguage())."',
-                    	postacomment_systemid	= '".dbsafeString($this->getStrAssignedSystemid())."',
-                    	postacomment_username	= '".dbsafeString($this->getStrUsername())."',
-                    	postacomment_title		= '".dbsafeString($this->getStrTitle())."',
-	                	postacomment_comment	= '".dbsafeString($this->getStrComment())."'
-					WHERE postacomment_id = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                    	postacomment_date		= ?,
+                    	postacomment_page		= ?,
+						postacomment_language	= ?,
+                    	postacomment_systemid	= ?,
+                    	postacomment_username	= ?,
+                    	postacomment_title		= ?,
+	                	postacomment_comment	= ?
+					WHERE postacomment_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getIntDate(), $this->getStrAssignedPage(), $this->getStrAssignedLanguage(), $this->getStrAssignedSystemid(), 
+                                                    $this->getStrUsername(), $this->getStrTitle(), $this->getStrComment(), $this->getSystemid()));
     }
 
     /**
@@ -109,16 +110,22 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      */
     public static function loadPostList($bitJustActive = true, $strPagefilter = "", $strSystemidfilter = "", $strLanguagefilter = "", $intStart = false, $intEnd = false) {
         $arrReturn = array();
-        
+        $arrParams = array();
         $strFilter = "";
-        if($strPagefilter != "")
-            $strFilter .= " AND postacomment_page = '".dbsafeString($strPagefilter)."' ";
+        if($strPagefilter != "") {
+            $strFilter .= " AND postacomment_page = ? ";
+            $arrParams[] = $strPagefilter;
+        }
 
-        if($strSystemidfilter !== false)
-            $strFilter .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
+        if($strSystemidfilter !== false) {
+            $strFilter .= " AND postacomment_systemid = ? ";
+            $arrParams[] = $strSystemidfilter;
+        }
             
-        if($strLanguagefilter != "") //check against '' to remain backwards-compatible
-            $strFilter .= " AND (postacomment_language = '".dbsafeString($strLanguagefilter)."' OR postacomment_language = '')";
+        if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
+            $strFilter .= " AND (postacomment_language = ? OR postacomment_language = '')";
+            $arrParams[] = $strLanguagefilter;
+        }
         if($bitJustActive)
             $strFilter .= " AND system_status = 1 ";        
         
@@ -132,9 +139,9 @@ class class_modul_postacomment_post extends class_model implements interface_mod
 							  postacomment_date DESC";
 
         if($intStart !== false && $intEnd !== false)
-            $arrComments = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, $intStart, $intEnd);
+            $arrComments = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, $intStart, $intEnd);
         else    
-            $arrComments = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrComments = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
         if(count($arrComments) > 0) {
             foreach($arrComments as $arrOneComment)
                 $arrReturn[] = new class_modul_postacomment_post($arrOneComment["system_id"]);
@@ -153,20 +160,28 @@ class class_modul_postacomment_post extends class_model implements interface_mod
      */
     public static function getNumberOfPostsAvailable($bitJustActive = true, $strPageid = "", $strSystemidfilter = false, $strLanguagefilter = "") {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."postacomment, "._dbprefix_."system WHERE system_id = postacomment_id ";
+        $arrParams = array();
         
-        if($strPageid != "")
-            $strQuery .= " AND postacomment_page='".dbsafeString($strPageid)."'";
+        if($strPageid != "") {
+            $strQuery .= " AND postacomment_page= ?";
+            $arrParams[] = $strPageid;
+        }
         
-        if($bitJustActive)
+        if($bitJustActive) {
             $strQuery .= " AND system_status = 1 ";
+        }
 
-        if($strSystemidfilter !== false)
-            $strQuery .= " AND postacomment_systemid = '".dbsafeString($strSystemidfilter)."' ";
+        if($strSystemidfilter !== false) {
+            $strQuery .= " AND postacomment_systemid = ? ";
+            $arrParams[] = $strSystemidfilter;
+        }
 
-        if($strLanguagefilter != "") //check against '' to remain backwards-compatible
-            $strQuery .= " AND (postacomment_language = '".dbsafeString($strLanguagefilter)."' OR postacomment_language = '')";
+        if($strLanguagefilter != "") {//check against '' to remain backwards-compatible
+            $strQuery .= " AND (postacomment_language = ? OR postacomment_language = '')";
+            $arrParams[] = $strLanguagefilter;
+        }
 
-        $arrRow = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+        $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
     
@@ -184,8 +199,8 @@ class class_modul_postacomment_post extends class_model implements interface_mod
 		$objDB->transactionBegin();
 		$bitCommit = false;
 
-        $strQuery = "DELETE FROM "._dbprefix_."postacomment WHERE postacomment_id='".dbsafeString($this->getSystemid())."'";
-	    if($this->objDB->_query($strQuery))    {
+        $strQuery = "DELETE FROM "._dbprefix_."postacomment WHERE postacomment_id= ?";
+	    if($this->objDB->_pQuery($strQuery, array($this->getSystemid())))    {
 	        if($this->deleteSystemRecord($this->getSystemid())) {
 	            $bitCommit = true;
 	        }

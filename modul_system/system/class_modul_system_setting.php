@@ -12,6 +12,7 @@
  * Setting are not represented by a record in the system-table
  *
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_setting extends class_model implements interface_model, interface_versionable  {
 
@@ -64,7 +65,6 @@ class class_modul_system_setting extends class_model implements interface_model,
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."system_config";
 		$arrModul["modul"]				= "system";

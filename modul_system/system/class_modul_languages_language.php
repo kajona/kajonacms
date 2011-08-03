@@ -11,6 +11,7 @@
  * Model for a language
  *
  * @package modul_languages
+ * @author sidler@mulchprod.de
  */
 class class_modul_languages_language extends class_model implements interface_model  {
 
@@ -27,7 +28,6 @@ class class_modul_languages_language extends class_model implements interface_mo
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_languages";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."languages";
 		$arrModul["modul"]				= "languages";

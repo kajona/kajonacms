@@ -11,6 +11,7 @@
  * Class to represent a single adminwidget
  * 
  * @package modul_system
+ * @author sidler@mulchprod.de
  */
 class class_modul_system_adminwidget extends class_model implements interface_model {
     
@@ -26,7 +27,6 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_system";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]              = _dbprefix_."adminwidget";
 		$arrModul["modul"]              = "system";

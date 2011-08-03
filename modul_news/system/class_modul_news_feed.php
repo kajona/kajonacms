@@ -11,6 +11,7 @@
  * Model for a newsfeed itself
  *
  * @package modul_news
+ * @author sidler@mulchprod.de
  */
 class class_modul_news_feed extends class_model implements interface_model  {
 
@@ -31,7 +32,6 @@ class class_modul_news_feed extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_news";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."news_feed";
 		$arrModul["modul"]				= "news";
@@ -70,8 +70,8 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	                   FROM ".$this->arrModule["table"].",
 	                        "._dbprefix_."system
 	                   WHERE news_feed_id = system_id
-	                     AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-	    $arrRow = $this->objDB->getRow($strQuery);
+	                     AND system_id = ? ";
+	    $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 	    $this->setStrTitle($arrRow["news_feed_title"]);
 	    $this->setStrUrlTitle($arrRow["news_feed_urltitle"]);
 	    $this->setStrLink($arrRow["news_feed_link"]);
@@ -90,16 +90,17 @@ class class_modul_news_feed extends class_model implements interface_model  {
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                   SET news_feed_title = '".$this->objDB->dbsafeString($this->getStrTitle())."',
-                       news_feed_urltitle = '".$this->objDB->dbsafeString($this->getStrUrlTitle())."',
-                       news_feed_link = '".$this->objDB->dbsafeString($this->getStrLink())."',
-                       news_feed_desc = '".$this->objDB->dbsafeString($this->getStrDesc())."',
-                       news_feed_page = '".$this->objDB->dbsafeString($this->getStrPage())."',
-                       news_feed_cat = '".$this->objDB->dbsafeString($this->getStrCat())."',
-                       news_feed_hits = '".$this->objDB->dbsafeString($this->getIntHits())."',
-                       news_feed_amount = '".$this->objDB->dbsafeString($this->getIntAmount())."'
-                 WHERE news_feed_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                   SET news_feed_title = ?,
+                       news_feed_urltitle = ?,
+                       news_feed_link = ?,
+                       news_feed_desc = ?,
+                       news_feed_page = ?,
+                       news_feed_cat = ?,
+                       news_feed_hits = ?,
+                       news_feed_amount = ?
+                 WHERE news_feed_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrTitle(), $this->getStrUrlTitle(), $this->getStrLink(), $this->getStrDesc(),
+                                                    $this->getStrPage(), $this->getStrCat(), $this->getIntHits(), $this->getIntAmount(), $this->getSystemid()));
     }
 
     /**
@@ -113,7 +114,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	                   FROM "._dbprefix_."news_feed,
 	                        "._dbprefix_."system
 	                   WHERE news_feed_id = system_id";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_news_feed($arrOneId["system_id"]);
@@ -133,8 +134,8 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	                   FROM "._dbprefix_."news_feed,
 	                        "._dbprefix_."system
 	                   WHERE news_feed_id = system_id
-	                     AND news_feed_urltitle = '".dbsafeString($strFeedTitle)."'";
-	    $arrOneId = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+	                     AND news_feed_urltitle = ? ";
+	    $arrOneId = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array($strFeedTitle));
 	    if(isset($arrOneId["system_id"]))
 		    return new class_modul_news_feed($arrOneId["system_id"]);
 		else
@@ -150,8 +151,8 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	public function deleteNewsFeed() {
 	    class_logger::getInstance()->addLogRow("deleted newsfeed ".$this->getSystemid(), class_logger::$levelInfo);
 	    $strQuery = "DELETE FROM "._dbprefix_."news_feed
-                             WHERE news_feed_id = '".dbsafeString($this->getSystemid())."'";
-        if($this->objDB->_query($strQuery)) {
+                             WHERE news_feed_id = ? ";
+        if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($this->deleteSystemRecord($this->getSystemid()))
                 return true;
         }
@@ -164,8 +165,8 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	 * @return bool
 	 */
 	public function incrementNewsCounter() {
-	    $strQuery = "UPDATE "._dbprefix_."news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+	    $strQuery = "UPDATE "._dbprefix_."news_feed SET news_feed_hits = news_feed_hits+1 WHERE news_feed_id = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
 	}
 
 	/**
@@ -180,6 +181,7 @@ class class_modul_news_feed extends class_model implements interface_model  {
 	public static function getNewsList($strFilter = "", $intAmount = 0) {
         $strQuery = "";
 	    $intNow = class_date::getCurrentTimestamp();
+        $arrParams = array($intNow, $intNow, $intNow);
 		if($strFilter != "") {
 			$strQuery = "SELECT *
 							FROM  "._dbprefix_."news,
@@ -190,11 +192,12 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							  AND news_id = newsmem_news
 							  AND news_id = system_date_id
 							  AND system_status = 1
-							  AND (system_date_special IS NULL OR (system_date_special > ".$intNow." OR system_date_special = 0))
-							  AND (system_date_start IS NULL or(system_date_start < ".$intNow." OR system_date_start = 0))
-							  AND (system_date_end IS NULL or (system_date_end > ".$intNow." OR system_date_end = 0))
-							  AND newsmem_category = '".dbsafeString($strFilter)."'
+							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
+							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
+							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
+							  AND newsmem_category = ?
 							ORDER BY system_date_start DESC";
+            $arrParams[] = $strFilter;
 		}
 		else {
 			$strQuery = "SELECT *
@@ -204,16 +207,16 @@ class class_modul_news_feed extends class_model implements interface_model  {
 							WHERE system_id = news_id
 							  AND system_id = system_date_id
 							  AND system_status = 1
-							  AND (system_date_special IS NULL OR (system_date_special > ".$intNow." OR system_date_special = 0))
-							  AND (system_date_start IS NULL or(system_date_start < ".$intNow." OR system_date_start = 0))
-							  AND (system_date_end IS NULL or (system_date_end > ".$intNow." OR system_date_end = 0))
+							  AND (system_date_special IS NULL OR (system_date_special > ? OR system_date_special = 0))
+							  AND (system_date_start IS NULL or(system_date_start < ? OR system_date_start = 0))
+							  AND (system_date_end IS NULL or (system_date_end > ? OR system_date_end = 0))
 							ORDER BY system_date_start DESC";
 		}
 
         if($intAmount > 0)
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArraySection($strQuery, 0, $intAmount-1);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, $arrParams, 0, $intAmount-1);
         else
-            $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+            $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

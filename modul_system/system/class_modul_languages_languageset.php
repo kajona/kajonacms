@@ -21,6 +21,7 @@
  * factory methods.
  *
  * @package modul_languages
+ * @author sidler@mulchprod.de
  */
 class class_modul_languages_languageset extends class_model implements interface_model {
 
@@ -35,7 +36,6 @@ class class_modul_languages_languageset extends class_model implements interface
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_languages";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _languages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."languages_languageset";
 		$arrModul["modul"]				= "languages";

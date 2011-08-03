@@ -11,6 +11,7 @@
  * Model for rating itself
  *
  * @package modul_rating
+ * @author sidler@mulchprod.de
  */
 class class_modul_rating_rate extends class_model implements interface_model  {
 
@@ -35,7 +36,6 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_rating";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _rating_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."rating";
 		$arrModul["table2"]             = _dbprefix_."rating_history";
@@ -72,9 +72,9 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     public function initObject() {
         $strQuery = "SELECT *
 		   			 FROM ".$this->arrModule["table"]."
-					 WHERE rating_id = '".$this->getSystemid()."'";
+					 WHERE rating_id = ? ";
 
-        $arrRow = $this->objDB->getRow($strQuery);
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrRatingSystemid($arrRow["rating_systemid"]);
         $this->setStrRatingChecksum($arrRow["rating_checksum"]);
@@ -90,12 +90,12 @@ class class_modul_rating_rate extends class_model implements interface_model  {
     protected function updateStateToDb() {
 
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
-                    	rating_systemid		= '".dbsafeString($this->getStrRatingSystemid())."',
-                    	rating_checksum		= '".dbsafeString($this->getStrRatingChecksum())."',
-						rating_rate	        = '".dbsafeString($this->getFloatRating())."',
-                    	rating_hits         = ".dbsafeString($this->getIntHits())."
-					WHERE rating_id         = '".dbsafeString($this->getSystemid())."'";
-        return $this->objDB->_query($strQuery);
+                    	rating_systemid		= ?,
+                    	rating_checksum		= ?,
+						rating_rate	        = ?,
+                    	rating_hits         = ?
+					WHERE rating_id         = ?";
+        return $this->objDB->_pQuery($strQuery, array($this->getStrRatingSystemid(), $this->getStrRatingChecksum(), $this->getFloatRating(), $this->getIntHits(), $this->getSystemid()));
     }
 
 
@@ -124,9 +124,8 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //if($this->objSession->getUserID() != "") {
         	$strInsert = "INSERT INTO ".$this->objDB->encloseTableName($this->arrModule["table2"])."
         	              (rating_history_id, rating_history_rating, rating_history_user, rating_history_timestamp, rating_history_value) VALUES
-        	              ('".dbsafeString(generateSystemid())."', '".dbsafeString($this->getSystemid())."', '".dbsafeString($this->objSession->getUserID())."',
-        	               '".(int)time()."', '".dbsafeString($floatRatingOriginal)."')";
-        	$this->objDB->_query($strInsert);
+        	              (?, ?, ?, ?, ?)";
+        	$this->objDB->_pQuery($strInsert, array(generateSystemid(), $this->getSystemid(), $this->objSession->getUserID(), (int)time(), $floatRatingOriginal));
         //}
 
         //and save it in a cookie
@@ -155,10 +154,10 @@ class class_modul_rating_rate extends class_model implements interface_model  {
 
     	if($this->objSession->getUserID() != "") {
 	    	$strQuery = "SELECT COUNT(*) FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
-	    	               WHERE rating_history_rating = '".dbsafeString($this->getSystemid())."'
-	    	                 AND rating_history_user = '".dbsafeString($this->objSession->getUserID())."'";
+	    	               WHERE rating_history_rating = ?
+	    	                 AND rating_history_user = ?";
 
-	    	$arrRow = $this->objDB->getRow($strQuery);
+	    	$arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid(), $this->objSession->getUserID() ));
     	}
 
     	if($arrRow["COUNT(*)"] == 0) {
@@ -186,11 +185,14 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      * @return class_modul_rating_rate
      */
     public static function getRating($strSystemid, $strChecksum = "") {
+        $arrParams = array($strSystemid);
+        if($strChecksum != "")
+            $arrParams[] = $strChecksum;
     	$strQuery = "SELECT rating_id
                      FROM "._dbprefix_."rating
-                     WHERE rating_systemid = '".dbsafeString($strSystemid)."'
-                     ".($strChecksum != "" ? " AND rating_checksum = '".dbsafeString($strChecksum)."'" : "" )."";
-    	$arrMatches = class_carrier::getInstance()->getObjDB()->getRow($strQuery);
+                     WHERE rating_systemid = ?
+                     ".($strChecksum != "" ? " AND rating_checksum = ? " : "" )."";
+    	$arrMatches = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
 
     	if(isset($arrMatches["rating_id"]))
     		return new class_modul_rating_rate($arrMatches["rating_id"]);
@@ -226,18 +228,18 @@ class class_modul_rating_rate extends class_model implements interface_model  {
         //fetch the matching ids..
         $strQuery = "SELECT rating_id
                      FROM ".$this->arrModule["table"]."
-                     WHERE rating_systemid = '".dbsafeString($strSystemid)."'";
-        $arrRows = $this->objDB->getArray($strQuery);
+                     WHERE rating_systemid = ? ";
+        $arrRows = $this->objDB->getPArray($strQuery, array($strSystemid));
 
         if(count($arrRows) > 0) {
         	foreach ($arrRows as $arrOneRow) {
-        		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id='".dbsafeString($arrOneRow["rating_id"])."'";
-        		$bitReturn &= $this->objDB->_query($strQuery);
+        		$strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE rating_id= ?";
+        		$bitReturn &= $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
         		$bitReturn &= $this->deleteSystemRecord($arrOneRow["rating_id"]);
 
         		//delete the entries from the history-table
-        		$strQuery = "DELETE FROM ".$this->arrModule["table2"]." WHERE rating_history_rating='".dbsafeString($arrOneRow["rating_id"])."'";
-        		$bitReturn &= $this->objDB->_query($strQuery);
+        		$strQuery = "DELETE FROM ".$this->arrModule["table2"]." WHERE rating_history_rating=? ";
+        		$bitReturn &= $this->objDB->_pQuery($strQuery, array($arrOneRow["rating_id"]));
         	}
         }
 
@@ -259,10 +261,10 @@ class class_modul_rating_rate extends class_model implements interface_model  {
      */
     public function getRatingHistoryAsArray() {
     	$strQuery = "SELECT * FROM ".$this->objDB->encloseTableName($this->arrModule["table2"])."
-    	             WHERE ".$this->objDB->encloseColumnName("rating_history_rating")." = '".dbsafeString($this->getSystemid())."'
+    	             WHERE ".$this->objDB->encloseColumnName("rating_history_rating")." = ?
     	             ORDER BY ".$this->objDB->encloseColumnName("rating_history_timestamp")." ASC";
 
-    	return $this->objDB->getArray($strQuery);
+    	return $this->objDB->getPArray($strQuery, array($this->getSystemid()));
     }
 
 

@@ -11,6 +11,7 @@
  * Model for a newscategory
  *
  * @package modul_news
+ * @author sidler@mulchprod.de
  */
 class class_modul_news_category extends class_model implements interface_model  {
 
@@ -25,7 +26,6 @@ class class_modul_news_category extends class_model implements interface_model  
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_news";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _news_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."news_category";
 		$arrModul["table2"]       		= _dbprefix_."news_member";
@@ -63,8 +63,8 @@ class class_modul_news_category extends class_model implements interface_model  
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
 						"._dbprefix_."system
 						WHERE system_id = news_cat_id
-						AND system_id = '".$this->objDB->dbsafeString($this->getSystemid())."'";
-        $arrRow = $this->objDB->getRow($strQuery);
+						AND system_id = ? ";
+        $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
 
         $this->setStrTitle($arrRow["news_cat_title"]);
     }
@@ -76,9 +76,9 @@ class class_modul_news_category extends class_model implements interface_model  
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]."
-                    SET news_cat_title ='".$this->objDB->dbsafeString($this->getStrTitle())."'
-					  WHERE news_cat_id ='".$this->objDB->dbsafeString($this->getSystemid())."'";
-		return $this->objDB->_query($strQuery);
+                    SET news_cat_title = ?
+					  WHERE news_cat_id = ?";
+		return $this->objDB->_pQuery($strQuery, array($this->getStrTitle(), $this->getSystemid()));
     }
 
 
@@ -94,7 +94,7 @@ class class_modul_news_category extends class_model implements interface_model  
 						WHERE system_id = news_cat_id
 						ORDER BY news_cat_title";
 
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_news_category($arrOneId["system_id"]);
@@ -112,8 +112,8 @@ class class_modul_news_category extends class_model implements interface_model  
 	 */
 	public static function getNewsMember($strSystemid) {
 	    $strQuery = "SELECT newsmem_category as system_id FROM "._dbprefix_."news_member
-	                   WHERE newsmem_news = '".dbsafeString($strSystemid)."'";
-	    $arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+	                   WHERE newsmem_news = ? ";
+	    $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strSystemid));
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_news_category($arrOneId["system_id"]);
@@ -129,8 +129,8 @@ class class_modul_news_category extends class_model implements interface_model  
 	 */
 	public static function deleteNewsMemberships($strSystemid) {
 	    $strQuery = "DELETE FROM "._dbprefix_."news_member
-	                  WHERE newsmem_news = '".dbsafeString($strSystemid)."'";
-        return class_carrier::getInstance()->getObjDB()->_query($strQuery);
+	                  WHERE newsmem_news = ?";
+        return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($strSystemid));
 	}
 
 	/**
@@ -142,9 +142,9 @@ class class_modul_news_category extends class_model implements interface_model  
 	public function deleteCategory() {
 	    class_logger::getInstance()->addLogRow("deleted newscat ".$this->getSystemid(), class_logger::$levelInfo);
 	    //start by deleting from members an cat table
-        $strQuery1 = "DELETE FROM "._dbprefix_."news_category WHERE news_cat_id = '".dbsafeString($this->getSystemid())."'";
-        $strQuery2 = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = '".dbsafeString($this->getSystemid())."'";
-        if($this->objDB->_query($strQuery1) && $this->objDB->_query($strQuery2)) {
+        $strQuery1 = "DELETE FROM "._dbprefix_."news_category WHERE news_cat_id = ?";
+        $strQuery2 = "DELETE FROM "._dbprefix_."news_member WHERE newsmem_category = ?";
+        if($this->objDB->_pQuery($strQuery1, array($this->getSystemid())) && $this->objDB->_pQuery($strQuery2, array($this->getSystemid()))) {
             if($this->deleteSystemRecord($this->getSystemid()))
                 return true;
         }

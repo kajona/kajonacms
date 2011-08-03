@@ -11,6 +11,7 @@
  * Model for a stats-worker
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_modul_stats_worker extends class_model implements interface_model  {
 
@@ -22,7 +23,6 @@ class class_modul_stats_worker extends class_model implements interface_model  {
     public function __construct($strSystemid = "") {
         $arrModul = array();
         $arrModul["name"] 				= "modul_stats";
-		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _stats_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."stats_data";
 		$arrModul["modul"]				= "stats";
@@ -83,7 +83,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                         AND stats_hostname != 'na'
                       GROUP BY stats_ip";
 
-        return $this->objDB->getArray($strQuery);
+        return $this->objDB->getPArray($strQuery, array());
     }
 
     /**
@@ -95,9 +95,9 @@ class class_modul_stats_worker extends class_model implements interface_model  {
      */
     public function hostnameLookupSaveHostname($strHostname, $strIP) {
         $strQuery = "UPDATE "._dbprefix_."stats_data
-                                    SET stats_hostname = '".$this->objDB->dbsafeString($strHostname)."'
-                                  WHERE stats_ip = '".$this->objDB->dbsafeString($strIP)."'";
-        return $this->objDB->_query($strQuery);
+                                    SET stats_hostname = ?
+                                  WHERE stats_ip = ? ";
+        return $this->objDB->_pQuery($strQuery, array($strHostname, $strIP));
     }
 
     /**
@@ -110,7 +110,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
         $strQuery = "UPDATE "._dbprefix_."stats_data
                         SET stats_hostname = ''
                       WHERE stats_hostname = 'na'";
-        return $this->objDB->_query($strQuery);
+        return $this->objDB->_pQuery($strQuery, array());
     }
 
     /**
@@ -130,11 +130,10 @@ class class_modul_stats_worker extends class_model implements interface_model  {
         $strQuery =
         "INSERT INTO ".$this->arrModule["table"]."
 		(stats_id, stats_ip, stats_date, stats_page, stats_referer, stats_browser, stats_session, stats_language) VALUES
-		('".generateSystemid()."', '".$this->objDB->dbsafeString($strIp)."', ".$this->objDB->dbsafeString($intDate).",
-		 '".$this->objDB->dbsafeString($strPage)."', '".$this->objDB->dbsafeString($strReferer)."', '".$this->objDB->dbsafeString($strBrowser)."',
-		 '".$this->objDB->dbsafeString($strSession)."', '".$this->objDB->dbsafeString($strLanguage)."')";
+		(?, ?, ?, ?, ?, ?, ?, ?)";
 
-		return $this->objDB->_query($strQuery);
+		return $this->objDB->_pQuery($strQuery, array(generateSystemid(), $strIp, $intDate,
+                                    $strPage, $strReferer, $strBrowser, $strSession, $strLanguage));
     }
 
 
@@ -150,7 +149,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                             OR stats_hostname = ''
                         AND stats_hostname != 'na'";
 
-        $arrTemp = $this->objDB->getRow($strQuery);
+        $arrTemp = $this->objDB->getPRow($strQuery, array());
         return $arrTemp["anzahl"];
     }
     
@@ -169,7 +168,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                         AND ip2c_name != 'na' */
                    GROUP BY stats_ip";
     	
-    	return $this->objDB->getArraySection($strQuery, 0, 11);
+    	return $this->objDB->getPArraySection($strQuery, array(), 0, 11);
         
     }
 
@@ -188,7 +187,7 @@ class class_modul_stats_worker extends class_model implements interface_model  {
                         AND ip2c_name != 'na' */
                    GROUP BY stats_ip) as derived";
 
-    	$arrTemp = $this->objDB->getRow($strQuery);
+    	$arrTemp = $this->objDB->getPRow($strQuery, array());
         return $arrTemp["number"];
 
     }
@@ -203,111 +202,9 @@ class class_modul_stats_worker extends class_model implements interface_model  {
     public function saveIp2CountryRecord($strIp, $strCountry) {
     	$strQuery = "INSERT INTO "._dbprefix_."stats_ip2country
     	               (ip2c_ip, ip2c_name) VALUES 
-    	               ('".dbsafeString($strIp)."', '".dbsafeString($strCountry)."')";
+    	               (?, ?)";
     	
-    	return $this->objDB->_query($strQuery);
-    }
-    
-    
-    /**
-     * Imports data into the database given as a csv-file
-     *
-     * @param string $strFilename
-     * @return bool
-     * @deprecated will be removed in future releases
-     */
-    public function importFromCSV($strFilename) {
-        
-        //create mapping-array
-        $arrMapping = array(
-            "stats_ip" => "stats_ip",
-            "stats_hostname" => "stats_hostname",
-            "stats_date" => "stats_date",
-            "stats_page" => "stats_page",
-            "stats_language" => "stats_language",
-            "stats_referer" => "stats_referer",
-            "stats_browser" => "stats_browser",
-            "stats_session" => "stats_session",
-        );
-        
-        //run the transformation
-        try {
-            $objCsv = new class_csv();
-            $objCsv->setArrMapping($arrMapping);
-            $objCsv->setStrFilename("/system/dbdumps/".$strFilename);
-            $objCsv->createArrayFromFile();
-            $arrData = $objCsv->getArrData();
-            
-            //insert data in table
-            foreach($arrData as $arrOneRow) {
-                $this->createStatsEntry($arrOneRow["stats_ip"], $arrOneRow["stats_date"], $arrOneRow["stats_page"], $arrOneRow["stats_referer"],
-                                        $arrOneRow["stats_browser"], $arrOneRow["stats_language"], $arrOneRow["stats_session"]);
-            }
-            return true;
-        }
-        catch (class_exception $objException) {
-            $objException->processException();
-        }
-        return false;
-    }
-    
-    /**
-     * Exports data from the database into a csv-file.
-     * If the data was exported successfully, the rows
-     * are deleted from the database.
-     *
-     * @param string $strFilename
-     * @param int $intStart
-     * @param int $intEnd
-     * @return bool
-     * @deprecated will be removed in future releases
-     * @todo remove, deprecated code
-     */
-    public function exportDataToCsv($strFilename, $intStart, $intEnd) {
-        
-        $strFilename = uniStrReplace(".csv", "", $strFilename);
-        
-        //select data to export
-        $strQuery = "SELECT * 
-                     FROM ".$this->arrModule["table"]."
-                     WHERE stats_date >= ".dbsafeString($intStart)."
-                       AND stats_date <= ".dbsafeString($intEnd)."
-                  ORDER BY stats_date ASC ";
-        $arrRows = $this->objDB->getArray($strQuery);
-        
-        //create mapping-array
-        $arrMapping = array(
-            "stats_ip" => "stats_ip",
-            "stats_hostname" => "stats_hostname",
-            "stats_date" => "stats_date",
-            "stats_page" => "stats_page",
-            "stats_language" => "stats_language",
-            "stats_referer" => "stats_referer",
-            "stats_browser" => "stats_browser",
-            "stats_session" => "stats_session",
-        );
-        
-        try {
-            $objCsv = new class_csv();
-            $objCsv->setArrData($arrRows);
-            $objCsv->setArrMapping($arrMapping);
-            $objCsv->setStrFilename("/system/dbdumps/stats_".$strFilename.".csv");
-            
-            if($objCsv->writeArrayToFile()) {
-                //export succeeded, delete rows from table
-                $strQuery = " DELETE FROM ".$this->arrModule["table"]."
-                                    WHERE stats_date >= ".dbsafeString($intStart)."
-                                      AND stats_date <= ".dbsafeString($intEnd)."";
-                if($this->objDB->_query($strQuery))
-                    return true;
-                else 
-                    return false;    
-            }
-        }
-        catch (class_exception $objException) {
-            $objException->processException();
-        }
-        return false;
+    	return $this->objDB->_pQuery($strQuery, array($strIp, $strCountry));
     }
 
 }
