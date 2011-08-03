@@ -91,6 +91,7 @@ class class_pdf_tcpdf extends TCPDF {
     }
 
     public function setBitHeader($bitHeader) {
+        $this->setPrintHeader($bitHeader);
         $this->bitHeader = $bitHeader;
     }
 
@@ -108,7 +109,6 @@ class class_pdf_tcpdf extends TCPDF {
     }
 
     public function setObjHeader($objHeader) {
-        $this->setPrintHeader($objHeader);
         $this->objHeader = $objHeader;
     }
 
