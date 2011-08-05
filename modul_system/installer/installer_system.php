@@ -460,6 +460,9 @@ class class_installer_system extends class_installer_base implements interface_i
         $strAdminID = $objAdminGroup->getSystemid();
         $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
+        //may be used by othter parts of the process
+        define("_guests_group_id_", $strGuestID);
+        define("_admins_group_id_", $strAdminID);
         
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
