@@ -5,6 +5,14 @@ require_once (dirname(__FILE__)."/../system/class_testbase.php");
 class class_test_databasePrepared extends class_testbase  {
 
 
+    public function tearDown() {
+        $this->flushDBCache();
+        if(in_array(_dbprefix_."temp_autotest", class_carrier::getInstance()->getObjDB()->getTables())) {
+            $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
+            class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array());
+        }
+    }
+    
     public function test() {
     
         $objDB = class_carrier::getInstance()->getObjDB();
@@ -12,8 +20,6 @@ class class_test_databasePrepared extends class_testbase  {
         echo "testing database...\n";
         echo "current driver: ".class_carrier::getInstance()->getObjConfig()->getConfig("dbdriver")."\n";
 
-//        $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
-//        $this->assertTrue($objDB->_pQuery($strQuery, array()), "testDataBase dropTable");
 
         echo "\tcreating a new table...\n";
 
@@ -77,6 +83,16 @@ class class_test_databasePrepared extends class_testbase  {
         $intI = 1;
         foreach($arrRow as $arrSingleRow)
             $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection content");
+        
+        $this->flushDBCache();
+        echo "\tgetArraySection param test\n";
+        $strQuery = "SELECT * FROM "._dbprefix_."temp_autotest WHERE temp_char10 LIKE ? ORDER BY temp_long ASC";
+        $arrRow = $objDB->getPArraySection($strQuery, array("%"), 0, 9);
+        $this->assertEquals(count($arrRow) , 10, "testDataBase getArraySection param count");
+
+        $intI = 1;
+        foreach($arrRow as $arrSingleRow)
+            $this->assertEquals($arrSingleRow["temp_char10"] , $intI++, "testDataBase getArraySection param content");
 
 
         echo "\tgetArray test 2 params\n";

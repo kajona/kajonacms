@@ -43,6 +43,8 @@ class class_db_sqlite3 implements interface_db_driver {
             $this->linkDB = new SQLite3(_realpath_.$this->strDbFile);
             $this->_query('PRAGMA encoding = "UTF-8"');
             $this->_query('PRAGMA short_column_names = ON');
+            if(method_exists($this->linkDB, "busyTimeout"))
+                $this->linkDB->busyTimeout(5000);
         }
         catch (Exception $e) {
             throw new class_exception("Error connecting to database: ".$e, class_exception::$level_FATALERROR);
@@ -202,7 +204,7 @@ class class_db_sqlite3 implements interface_db_driver {
         //add the limits to the query
         $strQuery .= " LIMIT ".$intStart.", ".$intEnd;
         //and load the array
-        return $this->getArray($strQuery, $arrParams);
+        return $this->getPArray($strQuery, $arrParams);
     }
     
 

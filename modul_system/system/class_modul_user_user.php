@@ -161,11 +161,14 @@ class class_modul_user_user extends class_model implements interface_model  {
      */
     public static function getAllUsers($strUsernameFilter = "", $intStart = false, $intEnd = false) {
         $strQuery = "SELECT user_id FROM "._dbprefix_."user WHERE user_username LIKE ? ORDER BY user_username, user_subsystem ASC";
+        
+            
 
         if($intStart !== false && $intEnd !== false)
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArraySection($strQuery, array($strUsernameFilter."%"), $intStart, $intEnd);
         else
             $arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array($strUsernameFilter."%"));
+        
 
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)

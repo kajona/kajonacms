@@ -4,6 +4,14 @@ require_once (dirname(__FILE__)."/../system/class_testbase.php");
 
 class class_test_database extends class_testbase  {
 
+    public function tearDown() {
+        $this->flushDBCache();
+        if(in_array(_dbprefix_."temp_autotest", class_carrier::getInstance()->getObjDB()->getTables())) {
+            $strQuery = "DROP TABLE "._dbprefix_."temp_autotest";
+            class_carrier::getInstance()->getObjDB()->_query($strQuery);
+        }
+    }
+    
 
     public function test() {
     
