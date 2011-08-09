@@ -202,8 +202,8 @@ class class_modul_system_module extends class_model implements interface_model  
 
         $arrParams = array();
         if($strAspectFilter != "") {
-            $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE ? )";
             $arrParams[] = "%".$strAspectFilter."%";
+            $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE ? )";
         }
 
 	    //Loading all Modules
