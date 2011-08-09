@@ -138,7 +138,7 @@ function getServer($strKey) {
  * @return array
  */
 function getAllPassedParams() {
-    return array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
+    return class_carrier::getAllParams();
 }
 
 /**
@@ -793,6 +793,7 @@ function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = 
  */
 function splitUpLink($strLink) {
     //use regex to get href and name
+    $arrHits = array();
     preg_match("/<a href=\"([^\"]+)\"\s+(.*)>(.*)<\/a>/i", $strLink, $arrHits);
     $arrReturn = array();
     $arrReturn["link"] = $strLink;

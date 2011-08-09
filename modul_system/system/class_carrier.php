@@ -13,6 +13,12 @@
  * @package modul_system
  */
 class class_carrier {
+    
+    /**
+     * Internal array of all params passed globally to the script
+     * @var array 
+     */
+    private static $arrParams = null;
 
     private $arrModule;
 	private $objDB = null;
@@ -199,6 +205,17 @@ class class_carrier {
 			return $this->objToolkitPortal;
 		}
 	}
+    
+    /**
+     * Returns all params passed to the system, including $_GET, $_POST; $_FILES
+     * @return array 
+     */
+    public static function getAllParams() {
+        if(self::$arrParams == null)
+            self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
+            
+        return self::$arrParams;
+    }
 
 }
 ?>
