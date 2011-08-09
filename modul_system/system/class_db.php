@@ -24,6 +24,7 @@ class class_db {
     private $arrModule;
 	private $objConfig = NULL;				    //Config-Objekt
 	private $arrQueryCache = array();		    //Array to cache queries
+    private $arrTablesCache = array();
 	private $intNumber = 0;					    //Number of queries send to database
 	private $intNumberCache = 0;			    //Number of queries returned from cache
 
@@ -617,6 +618,11 @@ class class_db {
         
 		$arrReturn = array();
 		if($this->objDbDriver != null) {
+            
+            if($bitAll && isset($this->arrTablesCache["all"]))
+                return $this->arrTablesCache["all"];
+            else if(isset($this->arrTablesCache["filtered"]))
+                return $this->arrTablesCache["filtered"];
 
             //increase global counter
             $this->intNumber++;
@@ -649,11 +655,13 @@ class class_db {
 
             if($bitCache)
                 $this->arrQueryCache[$strQueryMd5] = $arrTemp;
-
+            
+            
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
         		foreach($arrTemp as $arrTable) {
-        			if(uniStripos($arrTable["name"], _dbprefix_) !== false && uniStripos($arrTable["name"], _dbprefix_) == 0 ) {
+                    $intPos = uniStripos($arrTable["name"], _dbprefix_);
+        			if($intPos !== false && $intPos == 0 ) {
         				if($bitAll)
         					$arrReturn[] =  $arrTable;
         				else
@@ -669,6 +677,11 @@ class class_db {
     					$arrReturn[] =  $arrTable["name"];
     		    }
     		}
+            
+            if($bitAll)
+                $this->arrTablesCache["all"] = $arrReturn;
+            else
+                $this->arrTablesCache["filtered"] = $arrReturn;
 		}
 
         
@@ -966,6 +979,7 @@ class class_db {
 	public function flushQueryCache() {
         //class_logger::getInstance()->addLogRow("Flushing query cache", class_logger::$levelInfo);
 	    $this->arrQueryCache = array();
+        $this->arrTablesCache = array();
 	}
 
 	/**

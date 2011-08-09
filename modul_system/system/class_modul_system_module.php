@@ -72,10 +72,10 @@ class class_modul_system_module extends class_model implements interface_model  
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].", "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
         $arrRow = array();
-		$arrModules = $this->objDB->getArray($strQuery);
+		$arrModules = $this->objDB->getPArray($strQuery, array());
 
 		foreach($arrModules as $arrOneModule) {
-		    if($arrOneModule["module_id"] == $this->objDB->dbsafeString($this->getSystemid()))
+		    if($arrOneModule["module_id"] == $this->getSystemid())
 		       $arrRow = $arrOneModule;
 		}
 
@@ -98,18 +98,19 @@ class class_modul_system_module extends class_model implements interface_model  
      */
     protected function updateStateToDb() {
         $strQuery = "UPDATE ".$this->arrModule["table"]." SET
-					  module_name ='".dbsafeString($this->getStrName())."',
-					  module_filenameportal ='".dbsafeString($this->getStrNamePortal())."',
-					  module_xmlfilenameportal ='".dbsafeString($this->getStrXmlNamePortal())."',
-					  module_filenameadmin ='".dbsafeString($this->getStrNameAdmin())."',
-					  module_xmlfilenameadmin ='".dbsafeString($this->getStrXmlNameAdmin())."',
-					  module_version ='".dbsafeString($this->getStrVersion())."',
-					  module_date ='".dbsafeString($this->getIntDate())."',
-					  module_navigation ='".dbsafeString($this->getIntNavigation())."',
-					  module_aspect='".dbsafeString($this->getStrAspect())."'
-					WHERE module_id = '".dbsafeString($this->getSystemid())."'
+					  module_name =?,
+					  module_filenameportal =?,
+					  module_xmlfilenameportal =?,
+					  module_filenameadmin =?,
+					  module_xmlfilenameadmin =?,
+					  module_version =?,
+					  module_date =?,
+					  module_navigation =?,
+					  module_aspect=?
+					WHERE module_id = ?
 					";
-        return$this->objDB->_query($strQuery);
+        return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(), 
+                                            $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getStrAspect(), $this->getSystemid()));
     }
 
     /**
@@ -124,7 +125,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		                    "._dbprefix_."system
 		              WHERE module_id = system_id
 		           ORDER BY system_sort ASC, system_comment ASC";
-		$arrIds = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrIds = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
 		$arrReturn = array();
 		foreach($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_system_module($arrOneId["module_id"]);
@@ -145,7 +146,7 @@ class class_modul_system_module extends class_model implements interface_model  
             return null;
 
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_name"] == $strName)
@@ -176,7 +177,7 @@ class class_modul_system_module extends class_model implements interface_model  
 	 */
 	public static function getModuleIdByNr($strNr) {
 		$strQuery = "SELECT * FROM "._dbprefix_."system_module, "._dbprefix_."system WHERE system_id=module_id ORDER BY module_nr";
-		$arrModules = class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		$arrModules = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrRow = array();
 		foreach($arrModules as $arrOneModule) {
 		    if($arrOneModule["module_nr"] == $strNr)
@@ -199,8 +200,10 @@ class class_modul_system_module extends class_model implements interface_model  
 	 */
 	public static function getModulesInNaviAsArray($strAspectFilter = "") {
 
+        $arrParams = array();
         if($strAspectFilter != "") {
-            $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE '%".dbsafeString($strAspectFilter)."%')";
+            $strAspectFilter = " AND (module_aspect = '' OR module_aspect IS NULL OR module_aspect LIKE ? )";
+            $arrParams[] = "%".$strAspectFilter."%";
         }
 
 	    //Loading all Modules
@@ -212,7 +215,7 @@ class class_modul_system_module extends class_model implements interface_model  
 		                AND module_id = system_id
                             ".$strAspectFilter."
 		              ORDER BY system_sort ASC, system_comment ASC";
-		return class_carrier::getInstance()->getObjDB()->getArray($strQuery);
+		return class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
 	}
 
     /**

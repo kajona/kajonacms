@@ -262,7 +262,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 
                     $objPoint = new class_modul_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
-                    $objPoint->setIntRecordStatus(1);
+                    $objPoint->setIntRecordStatus(1, false);
                     
                     //if in alias mode, then check what type of target is requested
                     if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {

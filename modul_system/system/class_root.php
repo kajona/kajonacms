@@ -1602,14 +1602,21 @@ abstract class class_root {
         return  $this->additionalCallsOnStatuschange($strSystemid);
 	}
 
-    public function setIntRecordStatus($intRecordStatus) {
+    /**
+     * Sets the internal status. Triggers a db-update and fires a status-changed event
+     * 
+     * @param int $intRecordStatus
+     * @param bool $bitFireStatusChangeEvent 
+     */
+    public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
         $this->internalInit($this->strSystemid);
         $intPrevStatus = $this->intRecordStatus;
         $this->intRecordStatus = $intRecordStatus;
         
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
             $this->updateSystemrecord();
-            $this->additionalCallsOnStatuschange($this->getSystemid());
+            if($bitFireStatusChangeEvent)
+                $this->additionalCallsOnStatuschange($this->getSystemid());
         }
         
     }
