@@ -781,5 +781,29 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
 
+    
+    /**
+     * Sorts the current element upwards
+     */
+    protected function actionElementSortUp() {
+        //Create the objecet
+		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+		$objElement->setPosition($this->getSystemid(), "up");
+        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+
+    }
+    
+    /**
+     * Sorts the current element downwards
+     */
+    protected function actionElementSortDown() {
+        //Create the objecet
+		$objElement = new class_modul_pages_pageelement($this->getSystemid());
+		$objElement->setPosition($this->getSystemid(), "down");
+        $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
+    }
+    
+    
+
 }
 ?>
