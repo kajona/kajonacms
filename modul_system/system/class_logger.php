@@ -129,7 +129,21 @@ final class class_logger {
      * @return string
      */
     public function getLogFileContent() {
-        return @file_get_contents(_systempath_."/debug/".$this->strFilename);
+        $objFile = new class_filesystem();
+        $objFile->openFilePointer("/system/debug/".$this->strFilename, "r");
+        return $objFile->readLastLinesFromFile(25);
+    }
+    
+    
+    /**
+     * Returns the complete log-file as one string
+     *
+     * @return string
+     */
+    public function getPhpLogFileContent() {
+        $objFile = new class_filesystem();
+        $objFile->openFilePointer("/system/debug/php.log", "r");
+        return $objFile->readLastLinesFromFile(25);
     }
 }
 

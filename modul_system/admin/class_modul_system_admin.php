@@ -590,18 +590,16 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         //check needed rights
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
             $strLogContent = class_logger::getInstance()->getLogFileContent();
-            $strPhpLogContent = "";
-            if(is_file(_systempath_."/debug/php.log"))
-                $strPhpLogContent = file_get_contents(_systempath_."/debug/php.log");
+            $strPhpLogContent = class_logger::getInstance()->getPhpLogFileContent();
 
-            if(uniStrlen($strLogContent) != 0) {
+            if($strLogContent != "") {
                 //create columns with same width
                 $strLogContent = str_replace(array("INFO", "ERROR"), array("INFO   ", "ERROR  "), $strLogContent);
                 $arrLogEntries = explode("\n", $strLogContent);
                 //Reverse array
                 $arrLogEntries = array_reverse($arrLogEntries);
                 //and print the log to buffer
-                $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 100);
+                $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 25);
             }
             else
                 $strReturn .= $this->getText("log_empty");
@@ -609,7 +607,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
             if($strPhpLogContent != "") {
                 $arrLogEntries = explode("\r", $strPhpLogContent);
                 $arrLogEntries = array_reverse($arrLogEntries);
-                $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 100);
+                $strReturn .= $this->objToolkit->getPreformatted($arrLogEntries, 25);
             }
 
         }

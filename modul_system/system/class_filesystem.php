@@ -424,6 +424,36 @@ class class_filesystem {
 
         return $strContent;
     }
+    
+    /**
+     * Reads a section from the end of a file.
+     * This is done with pointers, reducing the amounf of memory consumed.
+     * 
+     * @param int $intNrOfLines
+     * @return string 
+     */
+    public function readLastLinesFromFile($intNrOfLines = 10) {
+        $strReturn = "";
+        $intCursor = -1;
+        $intLinesRead = 0;
+        
+        if($this->objFilePointer != null) {
+            @fseek($this->objFilePointer, $intCursor, SEEK_END);
+            $strChar = @fgetc($this->objFilePointer);
+            
+            while($strChar !== false && $intLinesRead <= $intNrOfLines) {
+                $strReturn = $strChar . $strReturn;
+                
+                @fseek($this->objFilePointer, $intCursor--, SEEK_END);
+                $strChar = fgetc($this->objFilePointer);
+                
+                if($strChar == "\n")
+                    $intLinesRead++;
+            }
+        }
+        
+        return $strReturn;
+    }
 
 	/**
 	 * Checks if a file or folder is writeable
