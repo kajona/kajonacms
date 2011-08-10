@@ -253,7 +253,19 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strPages .= $this->getText("liste_seiten_leer");
 
             $strPathNavi = $this->generateFolderNavigation();
-			$strReturn .= $strPathNavi."<br /><br />".$this->generateTreeView($strFolder.$strPages);
+            
+            
+            //if languages are installed, present a language switch right here
+            if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
+                $arrToolbarEntries = array();
+                $objLanguages = new class_modul_languages_admin();
+                $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
+                $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
+            }
+            else
+                $strPathNavi .= "<br /><br />";
+            
+			$strReturn .= $strPathNavi.$this->generateTreeView($strFolder.$strPages);
 
 		}
 		else
@@ -334,6 +346,17 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			if(count($arrPages) == 0)
 				$strReturn .= $this->getText("liste_seiten_leer");
+            
+            //if languages are installed, present a language switch right here
+            $strPathNavi = "";
+            if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
+                $arrToolbarEntries = array();
+                $objLanguages = new class_modul_languages_admin();
+                $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
+                $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
+            }
+            
+            $strReturn = $strPathNavi.$strReturn;
 
 		}
 		else
