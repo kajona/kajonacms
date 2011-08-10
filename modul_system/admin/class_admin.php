@@ -207,7 +207,7 @@ abstract class class_admin {
 	}
 
 
-// --- SystemID & System-Table Methods ------------------------------------------------------------------
+    // --- SystemID & System-Table Methods ------------------------------------------------------------------
 
 	/**
 	 * Sets the current SystemID
@@ -515,7 +515,7 @@ abstract class class_admin {
 	}
 
 
-// --- PageCache Features -------------------------------------------------------------------------------
+    // --- PageCache Features -------------------------------------------------------------------------------
 
 	/**
 	 * Deletes the complete Pages-Cache
@@ -641,7 +641,7 @@ abstract class class_admin {
                 $objElement = class_modul_pages_element::getElement($strPlaceholderElement);
             }
             //Load the class to create an instance
-            include_once(_adminpath_."/elemente/".$objElement->getStrClassAdmin());
+            include_once _adminpath_."/elemente/".$objElement->getStrClassAdmin();
             //Build the class-name
             $strElementClass = str_replace(".php", "", $objElement->getStrClassAdmin());
             //and finally create the object
@@ -711,47 +711,47 @@ abstract class class_admin {
 		    foreach($arrItems as $arrOneItem) {
 		        $bitAdd = false;
 		        switch ($arrOneItem[0]) {
-		        	case "view":
-                        if($objModule->rightView())
-                            $bitAdd = true;
-		        		break;
-		        	case "edit":
-                        if($objModule->rightEdit())
-                            $bitAdd = true;
-		        		break;
-		        	case "delete":
-                        if($objModule->rightDelete())
-                            $bitAdd = true;
-		        		break;
-		        	case "right":
-                        if($objModule->rightRight())
-                            $bitAdd = true;
-		        		break;
-		        	case "right1":
-                        if($objModule->rightRight1())
-                            $bitAdd = true;
-		        		break;
-		        	case "right2":
-                        if($objModule->rightRight2())
-                            $bitAdd = true;
-		        		break;
-		        	case "right3":
-                        if($objModule->rightRight3())
-                            $bitAdd = true;
-		        		break;
-		        	case "right4":
-                        if($objModule->rightRight4())
-                            $bitAdd = true;
-		        		break;
-		        	case "right5":
-                        if($objModule->rightRight5())
-                            $bitAdd = true;
-		        		break;
-		        	case "":
-		        	    $bitAdd = true;
-		        	    break;
-		        	default:
-		        		break;
+            	case "view":
+                    if($objModule->rightView())
+                        $bitAdd = true;
+	        		break;
+	        	case "edit":
+                    if($objModule->rightEdit())
+                        $bitAdd = true;
+                    break;
+                case "delete":
+                    if($objModule->rightDelete())
+                        $bitAdd = true;
+                    break;
+                case "right":
+                    if($objModule->rightRight())
+                        $bitAdd = true;
+                    break;
+                case "right1":
+                    if($objModule->rightRight1())
+                        $bitAdd = true;
+                    break;
+                case "right2":
+                    if($objModule->rightRight2())
+                        $bitAdd = true;
+                    break;
+                case "right3":
+                    if($objModule->rightRight3())
+                        $bitAdd = true;
+                    break;
+                case "right4":
+                    if($objModule->rightRight4())
+                        $bitAdd = true;
+                    break;
+                case "right5":
+                    if($objModule->rightRight5())
+                        $bitAdd = true;
+                    break;
+                case "":
+                    $bitAdd = true;
+                    break;
+                default:
+                    break;
 		        }
 
 		        if($bitAdd || $arrOneItem[1] == "")
@@ -848,7 +848,7 @@ abstract class class_admin {
     }
 
     
-//--- FORM-Validation -----------------------------------------------------------------------------------
+    //--- FORM-Validation -----------------------------------------------------------------------------------
 
     /**
      * Method used to validate posted form-values.
@@ -907,7 +907,7 @@ abstract class class_admin {
                 }
             }
             else {
-               $arrReturn[$strFieldname] = "No or unknown validation-type for ".$strFieldname." given";
+                $arrReturn[$strFieldname] = "No or unknown validation-type for ".$strFieldname." given";
             }
 
             if($bitAdd) {
