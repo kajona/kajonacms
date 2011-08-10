@@ -286,7 +286,7 @@ class class_request_dispatcher {
      */
     private function getDebugInfo() {
         $strDebug = "";
-        if(_xmlLoader_ === false && (_timedebug_ || _dbnumber_ || _templatenr_ || _memory_)) {
+        if(_timedebug_ || _dbnumber_ || _templatenr_ || _memory_) {
 
 			$strDebug .= "<pre>Kajona Debug: ";
 
@@ -323,6 +323,9 @@ class class_request_dispatcher {
     		}
 
 			$strDebug .= "</pre>\n";
+            
+            if(_xmlLoader_ === true)
+                $strDebug = "<!-- ".$strDebug ." -->";
 		}
         
         return $strDebug;

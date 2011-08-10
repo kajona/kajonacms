@@ -24,6 +24,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
     private $bitDefault = false;
 
     private static $STR_SESSION_ASPECT_KEY = "STR_SESSION_ASPECT_KEY";
+    private static $STR_SESSION_ASPECT_OBJECT = "STR_SESSION_ASPECT_OBJECT";
 
     /**
      * Constructor to create a valid object
@@ -262,7 +263,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
 
         //aspect registered in session?
         if(validateSystemid(class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY))) {
-            return new class_modul_system_aspect(class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY));
+            return class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_OBJECT);
         }
         else {
             return class_modul_system_aspect::getDefaultAspect();
@@ -284,13 +285,15 @@ class class_modul_system_aspect extends class_model implements interface_model  
     }
 
     /**
-     * Saves an aspect id as the current active one.
+     * Saves an aspect id as the current active one - but only if the previous one was changed
      *
      * @param string $strAspectId
      */
     public static function setCurrentAspectId($strAspectId) {
-        if(validateSystemid($strAspectId))
+        if(validateSystemid($strAspectId) && $strAspectId != class_carrier::getInstance()->getObjSession()->getSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY) ) {
             class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_KEY, $strAspectId);
+            class_carrier::getInstance()->getObjSession()->setSession(class_modul_system_aspect::$STR_SESSION_ASPECT_OBJECT, new class_modul_system_aspect($strAspectId));
+        }
     }
 
 
