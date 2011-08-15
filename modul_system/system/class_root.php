@@ -1596,10 +1596,10 @@ abstract class class_root {
                 $intNewStatus = 0;
         }
 		
-        $this->setIntRecordStatus($intNewStatus);
+        $bitReturn = $this->setIntRecordStatus($intNewStatus);
         $this->updateSystemrecord();
         
-        return  $this->additionalCallsOnStatuschange($strSystemid);
+        return $bitReturn;
 	}
 
     /**
@@ -1613,11 +1613,15 @@ abstract class class_root {
         $intPrevStatus = $this->intRecordStatus;
         $this->intRecordStatus = $intRecordStatus;
         
+        $bitReturn = true;
+        
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
             $this->updateSystemrecord();
             if($bitFireStatusChangeEvent)
-                $this->additionalCallsOnStatuschange($this->getSystemid());
+                $bitReturn = $this->additionalCallsOnStatuschange($this->getSystemid());
         }
+        
+        return $bitReturn;
         
     }
     

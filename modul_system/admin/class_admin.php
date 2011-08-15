@@ -921,7 +921,7 @@ abstract class class_admin {
 
         }
         $this->arrValidationErrors = array_merge($this->arrValidationErrors, $arrReturn);
-        return (count($arrReturn) == 0);
+        return (count($this->arrValidationErrors) == 0);
     }
 
     /**
