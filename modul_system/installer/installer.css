@@ -351,3 +351,19 @@ table.moduleRowTable {
 table.moduleRowTable:hover {
 	background-color: #f0f0f0;
 }
+
+#dbInfo .red {
+    border: 1px solid #FC1F1B;
+    background-color: #FFDEDD;
+    color: inherit;
+    padding: 3px ;
+    margin: 5px 0px;
+}
+
+#dbInfo .green {
+    border: 1px solid #299B39;
+    background-color: #DCF2DF;
+    color: inherit;
+    padding: 3px;
+    margin: 5px 0px;
+}

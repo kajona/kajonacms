@@ -178,13 +178,32 @@ class class_installer {
         if(!isset($_POST["write"])) {
 
             //check for available modules
+            $strMysqliInfo = ""; $strSqlite3Info = ""; $strPostgresInfo = ""; $strOci8Info = "";
             $arrDrivers = array();
-            if(in_array("mysqli", get_loaded_extensions()))
-                $arrDrivers[] = "mysqli";
-            if(in_array("pgsql", get_loaded_extensions()))
-                $arrDrivers[] = "postgres";
-            if(in_array("sqlite3", get_loaded_extensions()))
-                $arrDrivers[] = "sqlite3";
+            if(in_array("mysqli", get_loaded_extensions())) {
+                $strMysqliInfo = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."</div>";
+            }
+            else {
+                $strMysqliInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." mysqli</div>";
+            }
+            if(in_array("pgsql", get_loaded_extensions())) {
+                $strPostgresInfo = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."</div>";
+            }
+            else {
+                $strPostgresInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." postgres</div>";
+            }
+            if(in_array("sqlite3", get_loaded_extensions())) {
+                $strSqlite3Info = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."<br />".$this->getText("installer_dbdriver_sqlite3")."</div>";
+            }
+            else {
+                $strSqlite3Info = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." sqlite3</div>";
+            }
+            if(in_array("oci8", get_loaded_extensions())) {
+                $strOci8Info = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."<br />".$this->getText("installer_dbdriver_oci8")."</div>";
+            }
+            else {
+                $strOci8Info = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." oci8</div>";
+            }
 
             //configwizard_form
             $strTemplateID = $this->objTemplates->readTemplate("installer/installer.tpl", "configwizard_form", true);
@@ -198,7 +217,11 @@ class class_installer {
                                                                   "config_dbname"  => $this->getText("installer_config_dbname"),
                                                                   "config_prefix"  => $this->getText("installer_config_dbprefix"),
                                                                   "config_save"  => $this->getText("installer_config_write"),
-                                                                  "config_driverinfo" => $this->getText("installer_config_dbdriverinfo").implode(", ", $arrDrivers)
+                                                                  "config_driverinfo" => $this->getText("installer_config_dbdriverinfo").implode(", ", $arrDrivers),
+                                                                  "mysqliInfo" => $strMysqliInfo,
+                                                                  "sqlite3Info" => $strSqlite3Info,
+                                                                  "postgresInfo" => $strPostgresInfo,
+                                                                  "oci8Info" => $strOci8Info
 	        ), $strTemplateID);
 	        $this->strBackwardLink = $this->getBackwardLink(_webpath_."/installer/installer.php");
 

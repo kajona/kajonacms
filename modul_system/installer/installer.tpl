@@ -73,17 +73,89 @@ systemlogDiv.scrollTop = systemlogDiv.scrollHeight;
 <configwizard_form>
 %%config_intro%%
 
+<script type="text/javascript">
+function switchDriver() {
+    var strValue = document.getElementById('driver').value;
+    
+    var strMysqliInfo = '%%mysqliInfo%%';
+    var strPostgresInfo = '%%postgresInfo%%';
+    var strSqlite3Info = '%%sqlite3Info%%';
+    var strOci8Info = '%%oci8Info%%';
+    
+    if(strValue == "mysqli") {
+        document.getElementById('dbInfo').innerHTML = strMysqliInfo;
+    }
+    else if(strValue == "sqlite3") {
+        document.getElementById('dbInfo').innerHTML = strSqlite3Info;
+    }
+    else if(strValue == "postgres") {
+        document.getElementById('dbInfo').innerHTML = strPostgresInfo;
+    }
+    else if(strValue == "oci8") {
+        document.getElementById('dbInfo').innerHTML = strOci8Info;
+    }
+    
+    if(strValue == "sqlite3") {
+        document.getElementById('username').value = 'n.a.';
+        document.getElementById('password').value = 'n.a.';
+        document.getElementById('port').value = 'n.a.';
+        document.getElementById('hostname').value = 'n.a.';
+        
+        document.getElementById('username').style.backgroundColor = '#cccccc';
+        document.getElementById('username').style.backgroundImage = 'none';
+        document.getElementById('password').style.backgroundColor = '#cccccc';
+        document.getElementById('password').style.backgroundImage = 'none';
+        document.getElementById('port').style.backgroundColor = '#cccccc';
+        document.getElementById('port').style.backgroundImage = 'none';
+        document.getElementById('hostname').style.backgroundColor = '#cccccc';
+        document.getElementById('hostname').style.backgroundImage = 'none';
+        
+        document.getElementById('username').readOnly = true;
+        document.getElementById('password').readOnly = true;
+        document.getElementById('port').readOnly = true;
+        document.getElementById('hostname').readOnly = true;
+        
+    }
+    else {
+        
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+        document.getElementById('port').value = '';
+        document.getElementById('hostname').value = 'localhost';
+        
+        document.getElementById('username').style.backgroundColor = '';
+        document.getElementById('username').style.backgroundImage = '';
+        document.getElementById('password').style.backgroundColor = '';
+        document.getElementById('password').style.backgroundImage = '';
+        document.getElementById('port').style.backgroundColor = '';
+        document.getElementById('port').style.backgroundImage = '';
+        document.getElementById('hostname').style.backgroundColor = '';
+        document.getElementById('hostname').style.backgroundImage = '';
+        
+        document.getElementById('username').readOnly = false;
+        document.getElementById('password').readOnly = false;
+        document.getElementById('port').readOnly = false;
+        document.getElementById('hostname').readOnly = false;
+    }
+}    
+</script>
+
 <form action="_webpath_/installer/installer.php" method="POST">
 <input type="hidden" name="write" value="true" />
+<div id="dbInfo">
+    %%mysqliInfo%%
+</div>
 <div><label for="hostname">%%config_hostname%%</label><input type="text" name="hostname" id="hostname" value="localhost" class="inputText" /></div><br />
 <div><label for="username">%%config_username%%</label><input type="text" name="username" id="username" class="inputText" /></div><br />
 <div><label for="password">%%config_password%%</label><input type="password" name="password" id="password" class="inputText" /></div><br />
 <div><label for="dbname">%%config_dbname%%</label><input type="text" name="dbname" id="dbname" class="inputText" /></div><br />
 <div><label for="dbprefix">%%config_prefix%%</label><input type="text" name="dbprefix" id="dbprefix" value="kajona_" class="inputText" /></div><br />
-<div><label for="driver">%%config_driver%%</label><select name="driver" id="driver" class="inputDropdown">
-                <option value="mysqli" selected="selected">mysqli</option>
-                <option value="postgres">postgres</option>
-                <option value="sqlite3">sqlite 3</option>
+<div><label for="driver">%%config_driver%%</label><select name="driver" id="driver" class="inputDropdown" onchange="switchDriver();">
+                <option value="mysqli" selected="selected">MySQL</option>
+                <option value="mysqli">MariaDB</option>
+                <option value="postgres">PostgreSQL</option>
+                <option value="sqlite3">SQLite 3</option>
+                <option value="oci8">Oracle (oci8)</option>
              </select></div><br />
 <div><label for="driver"></label>%%config_driverinfo%%</div><br />
 <div><label for="port">%%config_port%%</label><input type="text" name="port" id="port" class="inputText" /></div><br />
