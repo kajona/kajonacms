@@ -63,14 +63,24 @@ class class_element_languageswitch extends class_element_portal implements inter
                 if($objLanguageset != null) {
                     $strTargetSystemid = $objLanguageset->getSystemidForLanguageid($objOneLanguage->getSystemid());
                 }
+                
+                //the languaswitch is content aware. check if the target id is a news-entry
+                $strSeoAddon = "";
+                if($strTargetSystemid != null && defined("_news_modul_id_")) {
+                    $objCommon = new class_modul_system_common($strTargetSystemid);
+                    if($objCommon->getIntModuleNr() == _news_modul_id_) {
+                        $objNews = new class_modul_news_news($strTargetSystemid);
+                        $strSeoAddon = $objNews->getStrTitle();
+                    }
+                }
 
                 //and the link
                 $arrTemplate = array();
                 if($strTargetSystemid == null) {
-                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName());
+                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", "", "", "", $objOneLanguage->getStrName(), $strSeoAddon);
                 }
                 else {
-                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName());
+                    $arrTemplate["href"] = getLinkPortalHref($objPage->getStrName(), "", $this->getAction(), "", $strTargetSystemid, $objOneLanguage->getStrName(), $strSeoAddon);
                 }
                 
                 $arrTemplate["langname_short"] = $objOneLanguage->getStrName();

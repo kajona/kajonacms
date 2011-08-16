@@ -15,6 +15,12 @@
  */
 class class_modul_pages_portal extends class_portal implements interface_portal {
 
+    /**
+     * Static field storing the last registered page-title. Modules may register additional page-titles in order
+     * to have them places as the current page-title. Since this is a single field, the last module wins in case of
+     * multiple entries.
+     * @var string 
+     */
     private static $strAdditionalTitle = "";
 
 	public function __construct($arrElementData) {
@@ -428,13 +434,15 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 	/**
 	 * Sets the passed text as an additional title information.
 	 * If set, the separator placeholder from global_includes.php will be included, too.
+     * Modules may register additional page-titles in order to have them places as the current page-title. 
+     * Since this is a single field, the last module wins in case of multiple entries.
+     * 
 	 * @param string $strTitle
 	 * @return void
 	 */
 	public static function registerAdditionalTitle($strTitle) {
 		self::$strAdditionalTitle = $strTitle."%%kajonaTitleSeparator%%";
 	}
-
 
     private function generateHash2Sum() {
         $strGuestId = "";

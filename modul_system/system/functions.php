@@ -709,6 +709,11 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
 
             //used later to add seo-relevant keywords
             $objPage = class_modul_pages_page::getPageByName($strPageI);
+            if($strLanguage != "") {
+                $objPage->setStrLanguage($strLanguage);
+                $objPage->initObject();
+            }
+            
             $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
             if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                 $strAddKeys .= "__";

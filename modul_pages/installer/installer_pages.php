@@ -99,7 +99,7 @@ class class_installer_pages extends class_installer_base implements interface_in
 		$arrFields["pageproperties_language"] 	= array("char20", true);
 		$arrFields["pageproperties_alias"] 	    = array("char254", true);
 
-		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id"), array("pageproperties_language")))
+		if(!$this->objDB->createTable("page_properties", $arrFields, array("pageproperties_id", "pageproperties_language"), array("pageproperties_language")))
 			$strReturn .= "An error occured! ...\n";
 
 		//elementtable-----------------------------------------------------------------------------------
