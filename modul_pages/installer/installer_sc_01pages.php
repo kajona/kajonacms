@@ -72,67 +72,70 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($this->strIndexID);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($this->strIndexID);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Willkommen";
-            $arrParams[] = $strElementId;
-        }
-        else {
-            $arrParams[] = "Welcome";
-            $arrParams[] = $strElementId;
-        }
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Willkommen";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Welcome";
+                $arrParams[] = $strElementId;
+            }
 
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                            WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($this->strIndexID);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($this->strIndexID);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Herzlichen Glückwunsch!";
-            $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
-                            Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-            $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Herzlichen Glückwunsch!";
+                $arrParams[] = "Diese Installation von Kajona war erfolgreich. Wir wünschen viel Spaß mit Kajona V3.<br />
+                                Für weitere Informationen und Support besuchen Sie unsere Webseite: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
+                $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+                $arrParams[] = $strElementId;
 
+            }
+            else {
+                $arrParams[] = "Congratulations!";
+                $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona!<br />
+                                 For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
+                $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content =  ?,
+                                    paragraph_image = ?
+                                WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
         }
-        else {
-            $arrParams[] = "Congratulations!";
-            $arrParams[] = "This installation of Kajona was successful. Have fun using Kajona!<br />
-                             For further information, support or proposals, please visit our website: <a href=\"http://www.kajona.de\">www.kajona.de</a>";
-            $arrParams[] = "/portal/pics/upload/samples/P3197800.JPG";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?,
-                                paragraph_content =  ?,
-                                paragraph_image = ?
-                            WHERE content_id = ?";
-
-        if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
-
 
         $strReturn .= "Creating master-page\n";
         $objPage = new class_modul_pages_page();
@@ -164,61 +167,65 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strErrorPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strErrorPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Fehler";
-            $arrParams[] = $strElementId;
-        }
-        else {
-            $arrParams[] = "Error";
-            $arrParams[] = $strElementId;
-        }
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Fehler";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Error";
+                $arrParams[] = $strElementId;
+            }
 
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery,$arrParams))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery,$arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+
+        }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($strErrorPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($strErrorPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Ein Fehler ist aufgetreten";
-            $arrParams[] = "Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />Bitte versuchen Sie die letzte Aktion erneut.";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Ein Fehler ist aufgetreten";
+                $arrParams[] = "Während Ihre Anfrage ist leider ein Fehler aufgetreten.<br />Bitte versuchen Sie die letzte Aktion erneut.";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "An error occured";
+                $arrParams[] = "Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?,
+                            paragraph_content = ?
+                        WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
         }
-        else {
-            $arrParams[] = "An error occured";
-            $arrParams[] = "Maybe the requested page doesn\'t exist anymore.<br />Please try it again later.";
-            $arrParams[] = $strElementId;
-        }
-        
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                    SET paragraph_title = ?,
-                        paragraph_content = ?
-                    WHERE content_id = ?";
-
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
-
 
 
         $strReturn .= "Creating imprint-site...\n";
@@ -235,76 +242,80 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strImprintPageId);
-        $strElementId = $objPagelement->getSystemid();
-        
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Impressum";
-            $arrParams[] = $strElementId;
-        }
-        else {
-            $arrParams[] = "Imprint";
-            $arrParams[] = $strElementId;
-        }
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strImprintPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Headline element created.\n";
-        else
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Impressum";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Imprint";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
             $strReturn .= "Error creating headline element.\n";
+        
+        }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($strImprintPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($strImprintPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Impressum";
-            $arrParams[] = "Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
-                           Nachname, Name<br />
-                           Straße und Hausnummer<br />
-                           PLZ, Ort<br />
-                           Telefon<br />
-                           E-Mail<br />
-                           <br />
-                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
-            $arrParams[] = $strElementId;
-            
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Impressum";
+                $arrParams[] = "Bitte tragen Sie hier Ihre Kontaktdaten ein.<br />
+                               Nachname, Name<br />
+                               Straße und Hausnummer<br />
+                               PLZ, Ort<br />
+                               Telefon<br />
+                               E-Mail<br />
+                               <br />
+                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
+                $arrParams[] = $strElementId;
+
+            }
+            else {
+                $arrParams[] = "Imprint";
+                $arrParams[] = "Please provide your contact details.<br />
+                               Name, Forename<br />
+                               Street<br />
+                               Zip, City<br />
+                               Phone<br />
+                               Mail<br />
+                               <br />
+                               Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                        SET paragraph_title = ?,
+                           paragraph_content = ?
+                      WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
+
         }
-        else {
-            $arrParams[] = "Imprint";
-            $arrParams[] = "Please provide your contact details.<br />
-                           Name, Forename<br />
-                           Street<br />
-                           Zip, City<br />
-                           Phone<br />
-                           Mail<br />
-                           <br />
-                           Site powered by <a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\">Kajona³</a><br /><a href=\"http://www.kajona.de\" target=\"_blank\" title=\"Kajona³ CMS - empowering your content\"><img src=\"portal/pics/kajona/kajona_poweredby.png\" alt=\"Kajona³\" /></a><br />";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                    SET paragraph_title = ?,
-                       paragraph_content = ?
-                  WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
-
-
 
 
         $strReturn .= "Creating sample page...\n";
@@ -321,68 +332,72 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strSamplePageId);
-        $strElementId = $objPagelement->getSystemid();
         
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Beispielseite 1";
-            $arrParams[] = $strElementId;
-        }
-        else {
-            $arrParams[] = "Sample page 1";
-            $arrParams[] = $strElementId;
-        }
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strSamplePageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Beispielseite 1";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Sample page 1";
+                $arrParams[] = $strElementId;
+            }
 
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+
+        }
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($strSamplePageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($strSamplePageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Standard-Absatz";
-            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-            $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
-            $arrParams[] = "http://www.kajona.de/";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Standard-Absatz";
+                $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+                $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+                $arrParams[] = "http://www.kajona.de/";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Standard paragraph";
+                $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+                $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
+                $arrParams[] = "http://www.kajona.de/";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?,
+                                paragraph_content = ?,
+                                paragraph_image = ?,
+                                paragraph_link = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
+
+
         }
-        else {
-            $arrParams[] = "Standard paragraph";
-            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-            $arrParams[] = "/portal/pics/upload/samples/IMG_3000.JPG";
-            $arrParams[] = "http://www.kajona.de/";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?,
-                            paragraph_content = ?,
-                            paragraph_image = ?,
-                            paragraph_link = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
-
-
-
 
 
 
@@ -401,60 +416,66 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strSampleSubPageId);
-        $strElementId = $objPagelement->getSystemid();
         
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Beispiel-Unterseite 1";
-            $arrParams[] = $strElementId;
-        }
-        else {
-            $arrParams[] = "Sample subpage 1";
-            $arrParams[] = $strElementId;
-        }
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strSampleSubPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Beispiel-Unterseite 1";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Sample subpage 1";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        
+        }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($strSampleSubPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($strSampleSubPageId);
+            $strElementId = $objPagelement->getSystemid();
 
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "Standard-Absatz auf Unterseite";
-            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "Standard-Absatz auf Unterseite";
+                $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "Standard paragraph on subpage";
+                $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?,
+                                paragraph_content = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
         }
-        else {
-            $arrParams[] = "Standard paragraph on subpage";
-            $arrParams[] = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?,
-                            paragraph_content = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
 
         return $strReturn;
     }

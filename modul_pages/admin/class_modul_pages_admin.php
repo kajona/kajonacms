@@ -1540,7 +1540,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                         $strReturn .= "<folder>";
                         $strReturn .= "<name>".xmlSafeString($objSingleEntry->getStrName())."</name>";
                         $strReturn .= "<systemid>".$objSingleEntry->getSystemid()."</systemid>";
-                        $strReturn .= "<link>".getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid())."</link>";
+                        $strReturn .= "<link>".getLinkAdminHref("pages", "list", "systemid=".$objSingleEntry->getSystemid(), false)."</link>";
                         $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";
                         $strReturn .= "</folder>";
                     }
@@ -1559,7 +1559,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                         if($objSingleEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS)
                             $strReturn .= "<link></link>";
                         else
-                            $strReturn .= "<link>".getLinkAdminHref("pages", "list", "&systemid=".$objSingleEntry->getSystemid())."</link>";
+                            $strReturn .= "<link>".getLinkAdminHref("pages", "list", "&systemid=".$objSingleEntry->getSystemid(), false)."</link>";
 
                         $strReturn .= "<type>".$objSingleEntry->getIntType()."</type>";
                         $strReturn .= "<isleaf>".(count(class_modul_pages_folder::getPagesAndFolderList($objSingleEntry->getSystemid())) == 0 ? "true" : "false")."</isleaf>";

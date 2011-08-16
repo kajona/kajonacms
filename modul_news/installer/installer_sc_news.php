@@ -41,32 +41,34 @@ class class_installer_sc_news implements interface_sc_installer  {
             $this->strIndexID = $objIndex->getSystemid();
 
         $strReturn .= "Creating new category...\n";
-            $objNewsCategory = new class_modul_news_category();
-            $objNewsCategory->setStrTitle("TOP-News");
-            $objNewsCategory->updateObjectToDb();
-            $strCategoryID = $objNewsCategory->getSystemid();
-            $strReturn .= "ID of new category: ".$strCategoryID."\n";
-            $strReturn .= "Creating news\n";
-            $objNews = new class_modul_news_news();
+        $objNewsCategory = new class_modul_news_category();
+        $objNewsCategory->setStrTitle("TOP-News");
+        $objNewsCategory->updateObjectToDb();
+        $strCategoryID = $objNewsCategory->getSystemid();
+        $strReturn .= "ID of new category: ".$strCategoryID."\n";
+        $strReturn .= "Creating news\n";
+        $objNews = new class_modul_news_news();
 
-            if($this->strContentLanguage == "de") {
-                $objNews->setStrTitle("Kajona wurde erfolgreich installiert");
-                $objNews->setStrNewstext("Eine weitere Installation von Kajona V3 war erfolgreich. Für weitere Infomationen zu Kajona besuchen Sie www.kajona.de.");
-                $objNews->setStrIntro("Kajona wurde erfolgreich installiert...");
-            }
-            else {
-                $objNews->setStrTitle("Installation was successful");
-                $objNews->setStrNewstext("Another installation of Kajona was successful. For further information, support or proposals, please visit our website: www.kajona.de");
-                $objNews->setStrIntro("Kajona installed successfully...");
-            }
+        if($this->strContentLanguage == "de") {
+            $objNews->setStrTitle("Kajona wurde erfolgreich installiert");
+            $objNews->setStrNewstext("Eine weitere Installation von Kajona V3 war erfolgreich. Für weitere Infomationen zu Kajona besuchen Sie www.kajona.de.");
+            $objNews->setStrIntro("Kajona wurde erfolgreich installiert...");
+        }
+        else {
+            $objNews->setStrTitle("Installation was successful");
+            $objNews->setStrNewstext("Another installation of Kajona was successful. For further information, support or proposals, please visit our website: www.kajona.de");
+            $objNews->setStrIntro("Kajona installed successfully...");
+        }
 
-            $objNews->setIntDateStart(class_date::getCurrentTimestamp());
-            $objNews->setArrCats(array($strCategoryID => 1));
-            $objNews->updateObjectToDb();
-            $strNewsId = $objNews->getSystemid();
-            $strReturn .= "ID of new news: ".$strNewsId."\n";
-            $strReturn .= "Adding news element to the index-page...\n";
-            if($this->strIndexID != "") {
+        $objNews->setIntDateStart(class_date::getCurrentTimestamp());
+        $objNews->setArrCats(array($strCategoryID => 1));
+        $objNews->updateObjectToDb();
+        $strNewsId = $objNews->getSystemid();
+        $strReturn .= "ID of new news: ".$strNewsId."\n";
+        $strReturn .= "Adding news element to the index-page...\n";
+        if($this->strIndexID != "") {
+            
+            if(class_modul_pages_element::getElement("news") != null) {
                 $objPagelement = new class_modul_pages_pageelement();
                 $objPagelement->setStrPlaceholder("news_news");
                 $objPagelement->setStrName("news");
@@ -87,17 +89,20 @@ class class_installer_sc_news implements interface_sc_installer  {
                 else
                     $strReturn .= "Error creating newselement.\n";
             }
-            $strReturn .= "Creating news-detail\n";
-            $objPage = new class_modul_pages_page();
-            $objPage->setStrName("newsdetails");
-            $objPage->setStrBrowsername("News");
-            $objPage->setStrTemplate("kajona_demo.tpl");
-            //set language to "" - being update by the languages sc installer later
-            $objPage->setStrLanguage("");
-            $objPage->updateObjectToDb();
-            $strNewsdetailsId = $objPage->getSystemid();
-            $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
-            $strReturn .= "Adding newsdetails to new page\n";
+        }
+        $strReturn .= "Creating news-detail\n";
+        $objPage = new class_modul_pages_page();
+        $objPage->setStrName("newsdetails");
+        $objPage->setStrBrowsername("News");
+        $objPage->setStrTemplate("kajona_demo.tpl");
+        //set language to "" - being update by the languages sc installer later
+        $objPage->setStrLanguage("");
+        $objPage->updateObjectToDb();
+        $strNewsdetailsId = $objPage->getSystemid();
+        $strReturn .= "ID of new page: ".$strNewsdetailsId."\n";
+        $strReturn .= "Adding newsdetails to new page\n";
+        
+        if(class_modul_pages_element::getElement("news") != null) {
             $objPagelement = new class_modul_pages_pageelement();
             $objPagelement->setStrPlaceholder("news_news");
             $objPagelement->setStrName("news");
@@ -117,8 +122,12 @@ class class_installer_sc_news implements interface_sc_installer  {
                 $strReturn .= "Newselement created.\n";
             else
                 $strReturn .= "Error creating newselement.\n";
+        
+        }
 
-            $strReturn .= "Adding headline-element to new page\n";
+        $strReturn .= "Adding headline-element to new page\n";
+        
+        if(class_modul_pages_element::getElement("row") != null) {
             $objPagelement = new class_modul_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
             $objPagelement->setStrName("headline");
@@ -133,25 +142,27 @@ class class_installer_sc_news implements interface_sc_installer  {
             else
                 $strReturn .= "Error creating headline element.\n";
 
-            $strReturn .= "Creating news-feed\n";
-            $objNewsFeed = new class_modul_news_feed();
-            $objNewsFeed->setStrTitle("kajona³ news");
-            $objNewsFeed->setStrUrlTitle("kajona_news");
-            $objNewsFeed->setStrLink("http://www.kajona.de");
+        }
 
-            if($this->strContentLanguage == "de")
-                $objNewsFeed->setStrDesc("Dies ist ein Kajona³ demo news feed");
-            else
-                $objNewsFeed->setStrDesc("This is a Kajona³ demo news feed");
+        $strReturn .= "Creating news-feed\n";
+        $objNewsFeed = new class_modul_news_feed();
+        $objNewsFeed->setStrTitle("kajona³ news");
+        $objNewsFeed->setStrUrlTitle("kajona_news");
+        $objNewsFeed->setStrLink("http://www.kajona.de");
 
-            $objNewsFeed->setStrPage($objPage->getStrName());
-            $objNewsFeed->setStrCat("0");
-            $objNewsFeed->setIntAmount(25);
-            $objNewsFeed->updateObjectToDb();
-            $strNewsFeedId = $objNewsFeed->getSystemid();
-            $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
+        if($this->strContentLanguage == "de")
+            $objNewsFeed->setStrDesc("Dies ist ein Kajona³ demo news feed");
+        else
+            $objNewsFeed->setStrDesc("This is a Kajona³ demo news feed");
 
-            $strReturn .= "Creating navigation entries...\n";
+        $objNewsFeed->setStrPage($objPage->getStrName());
+        $objNewsFeed->setStrCat("0");
+        $objNewsFeed->setIntAmount(25);
+        $objNewsFeed->updateObjectToDb();
+        $strNewsFeedId = $objNewsFeed->getSystemid();
+        $strReturn .= "ID of new news-feed: ".$strNewsFeedId."\n";
+
+        $strReturn .= "Creating navigation entries...\n";
 
         return $strReturn;
     }

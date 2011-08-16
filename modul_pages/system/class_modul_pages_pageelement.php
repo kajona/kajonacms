@@ -114,6 +114,9 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
 
         $objElementdefinitionToCreate = class_modul_pages_element::getElement($this->getStrElement());
+        if($objElementdefinitionToCreate == null)
+            return false;
+        
         include_once(_adminpath_."/elemente/".$objElementdefinitionToCreate->getStrClassAdmin());
         //Build the class-name
         $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());

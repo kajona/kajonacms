@@ -60,46 +60,52 @@ class class_installer_sc_search implements interface_sc_installer  {
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding search-element to new page\n";
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("results_search");
-            $objPagelement->setStrName("results");
-            $objPagelement->setStrElement("search");
-            $objPagelement->updateObjectToDb($strSearchresultsId);
-            $strElementId = $objPagelement->getSystemid();
-             $strQuery = "UPDATE "._dbprefix_."element_search
-                                SET search_template = ?,
-                                    search_amount = ?,
-                                    search_page = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array("search_results.tpl", 6, "", $strElementId)))
-                    $strReturn .= "Search element created.\n";
-                else
-                    $strReturn .= "Error creating search element.\n";
-
-            $strReturn .= "Adding headline-element to new page\n";
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strSearchresultsId);
-            $strElementId = $objPagelement->getSystemid();
-
-            $arrParams = array();
-            if($this->strContentLanguage == "de") {
-                $arrParams = array("Suchergebnisse", $strElementId);
-            }
-            else {
-                $arrParams = array("Search results", $strElementId);
-            }
-
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                                SET paragraph_title = ?
-                                WHERE content_id = ?";
             
-            if($this->objDB->_pQuery($strQuery, $arrParams))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
+            if(class_modul_pages_element::getElement("search") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("results_search");
+                $objPagelement->setStrName("results");
+                $objPagelement->setStrElement("search");
+                $objPagelement->updateObjectToDb($strSearchresultsId);
+                $strElementId = $objPagelement->getSystemid();
+                 $strQuery = "UPDATE "._dbprefix_."element_search
+                                    SET search_template = ?,
+                                        search_amount = ?,
+                                        search_page = ?
+                                    WHERE content_id = ?";
+                    if($this->objDB->_pQuery($strQuery, array("search_results.tpl", 6, "", $strElementId)))
+                        $strReturn .= "Search element created.\n";
+                    else
+                        $strReturn .= "Error creating search element.\n";
+            }
+            
+            
+            $strReturn .= "Adding headline-element to new page\n";
+            if(class_modul_pages_element::getElement("row") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("headline_row");
+                $objPagelement->setStrName("headline");
+                $objPagelement->setStrElement("row");
+                $objPagelement->updateObjectToDb($strSearchresultsId);
+                $strElementId = $objPagelement->getSystemid();
+
+                $arrParams = array();
+                if($this->strContentLanguage == "de") {
+                    $arrParams = array("Suchergebnisse", $strElementId);
+                }
+                else {
+                    $arrParams = array("Search results", $strElementId);
+                }
+
+                $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                    SET paragraph_title = ?
+                                    WHERE content_id = ?";
+
+                if($this->objDB->_pQuery($strQuery, $arrParams))
+                    $strReturn .= "Headline element created.\n";
+                else
+                    $strReturn .= "Error creating headline element.\n";
+            }
 
             $strReturn .= "Creating navigation point.\n";
 

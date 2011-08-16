@@ -47,97 +47,101 @@ class class_installer_sc_formular implements interface_sc_installer  {
         $strReturn .= "Adding pagelement to new page\n";
 
         $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("formular_form|tellafriend");
-        $objPagelement->setStrName("formular");
-        $objPagelement->setStrElement("form");
-        $objPagelement->updateObjectToDb($strPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("form") != null) {
+            $objPagelement->setStrPlaceholder("formular_form|tellafriend");
+            $objPagelement->setStrName("formular");
+            $objPagelement->setStrElement("form");
+            $objPagelement->updateObjectToDb($strPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "class_formular_kontakt.php";
-            $arrParams[] = _system_admin_email_;
-            $arrParams[] = "contact.tpl";
-            $arrParams[] = "Es ist ein Fehler aufgetreten.";
-            $arrParams[] = "Vielen Dank für die Nachricht!";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "class_formular_kontakt.php";
+                $arrParams[] = _system_admin_email_;
+                $arrParams[] = "contact.tpl";
+                $arrParams[] = "Es ist ein Fehler aufgetreten.";
+                $arrParams[] = "Vielen Dank für die Nachricht!";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "class_formular_kontakt.php";
+                $arrParams[] = _system_admin_email_;
+                $arrParams[] = "contact.tpl";
+                $arrParams[] = "An error occured.";
+                $arrParams[] = "Thank you for your message.";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_formular
+                        SET formular_class = ?,
+                            formular_email = ?,
+                            formular_template = ?,
+                            formular_error = ?,
+                            formular_success = ?
+                        WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Contact element created.\n";
+            else
+                $strReturn .= "Error creating Contact element.\n";
+
         }
-        else {
-            $arrParams[] = "class_formular_kontakt.php";
-            $arrParams[] = _system_admin_email_;
-            $arrParams[] = "contact.tpl";
-            $arrParams[] = "An error occured.";
-            $arrParams[] = "Thank you for your message.";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_formular
-                    SET formular_class = ?,
-                        formular_email = ?,
-                        formular_template = ?,
-                        formular_error = ?,
-                        formular_success = ?
-                    WHERE content_id = ?";
-        
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Contact element created.\n";
-        else
-            $strReturn .= "Error creating Contact element.\n";
-
 
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                            WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, array("Contact", $strElementId)))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("Contact", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
 
-
+        }
 
         $strReturn .= "Adding paragraph-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("text_paragraph");
-        $objPagelement->setStrName("text");
-        $objPagelement->setStrElement("paragraph");
-        $objPagelement->updateObjectToDb($strPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("paragraph") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("text_paragraph");
+            $objPagelement->setStrName("text");
+            $objPagelement->setStrElement("paragraph");
+            $objPagelement->updateObjectToDb($strPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams[] = "";
-            $arrParams[] = "Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
-                            Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />";
-            $arrParams[] = "";
-            $arrParams[] = $strElementId;
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams[] = "";
+                $arrParams[] = "Hinweis: Das Formular sendet per default die Anfragen an die E-Mail Adresse des Administrators.<br />
+                                Um diese Adresse zu ändern öffnen Sie bitte die Seite in der Administration und bearbeiten das Seitenelement &quot;Formular&quot;.<br /><br />";
+                $arrParams[] = "";
+                $arrParams[] = $strElementId;
+            }
+            else {
+                $arrParams[] = "";
+                $arrParams[] = "Note: By default, the form sends the messages to the administators email-address.<br />
+                               To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />";
+                $arrParams[] = "";
+                $arrParams[] = $strElementId;
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?,
+                                    paragraph_content = ?,
+                                    paragraph_image = ?
+                                WHERE content_id = ?";
+
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
+                $strReturn .= "Paragraph element created.\n";
+            else
+                $strReturn .= "Error creating paragraph element.\n";
         }
-        else {
-            $arrParams[] = "";
-            $arrParams[] = "Note: By default, the form sends the messages to the administators email-address.<br />
-                           To change this address, open the current page using the administration and edit the page-element &quot;form&quot;.<br /><br />";
-            $arrParams[] = "";
-            $arrParams[] = $strElementId;
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?,
-                                paragraph_content = ?,
-                                paragraph_image = ?
-                            WHERE content_id = ?";
-
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Paragraph element created.\n";
-        else
-            $strReturn .= "Error creating paragraph element.\n";
-
         return $strReturn;
     }
 

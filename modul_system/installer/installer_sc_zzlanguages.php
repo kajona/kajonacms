@@ -33,9 +33,10 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
             $this->strMasterID = $objMaster->getSystemid();
             
         if($this->strMasterID != "") {
-                $strReturn .= "Adding languageswitch to master page\n";
-                $strReturn .= "ID of master page: ".$this->strMasterID."\n";
-    
+            $strReturn .= "Adding languageswitch to master page\n";
+            $strReturn .= "ID of master page: ".$this->strMasterID."\n";
+
+            if(class_modul_pages_element::getElement("languageswitch") != null) {
                 $objPagelement = new class_modul_pages_pageelement();
                 $objPagelement->setStrPlaceholder("masterlanguageswitch_languageswitch");
                 $objPagelement->setStrName("masterswitch");
@@ -47,9 +48,10 @@ class class_installer_sc_zzlanguages implements interface_sc_installer  {
 
                 $strReturn .= "Setting languageswitch template...\n";
                 $strQuery = "UPDATE "._dbprefix_."element_universal
-	                        SET char1 = ?
-	                        WHERE content_id = ? ";
+                            SET char1 = ?
+                            WHERE content_id = ? ";
                 $this->objDB->_pQuery($strQuery, array("languageswitch.tpl", $strElementId));
+            }
          }    
 
         

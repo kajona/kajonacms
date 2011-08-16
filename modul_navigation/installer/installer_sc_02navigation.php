@@ -67,40 +67,45 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
             $strReturn .= "Adding mainnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("mastermainnavi_navigation");
-            $objPagelement->setStrName("mastermainnavi");
-            $objPagelement->setStrElement("navigation");
-            $objPagelement->updateObjectToDb($this->strMasterID);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_navigation
-                            SET navigation_id= ?,
-                                navigation_template = ?,
-                                navigation_mode = ?
-                            WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", "tree", $strElementId)))
-                $strReturn .= "Navigation element created.\n";
-            else
-                $strReturn .= "Error creating navigation element.\n";
+            if(class_modul_pages_element::getElement("navigation") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("mastermainnavi_navigation");
+                $objPagelement->setStrName("mastermainnavi");
+                $objPagelement->setStrElement("navigation");
+                $objPagelement->updateObjectToDb($this->strMasterID);
+                $strElementId = $objPagelement->getSystemid();
+                $strQuery = "UPDATE "._dbprefix_."element_navigation
+                                SET navigation_id= ?,
+                                    navigation_template = ?,
+                                    navigation_mode = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array($strTreeId, "mainnavi.tpl", "tree", $strElementId)))
+                    $strReturn .= "Navigation element created.\n";
+                else
+                    $strReturn .= "Error creating navigation element.\n";
+            }
 
             $strReturn .= "Adding portalnavigation to master page\n";
             $strReturn .= "ID of master page: ".$this->strMasterID."\n";
 
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
-            $objPagelement->setStrName("masterportalnavi");
-            $objPagelement->setStrElement("navigation");
-            $objPagelement->updateObjectToDb($this->strMasterID);
-            $strElementId = $objPagelement->getSystemid();
-            $strQuery = "UPDATE "._dbprefix_."element_navigation
-                            SET navigation_id= ?,
-                                navigation_template = ?,
-                                navigation_mode = ?
-                            WHERE content_id = ?";
-            if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", "tree", $strElementId)))
-                $strReturn .= "Navigation element created.\n";
-            else
-                $strReturn .= "Error creating navigation element.\n";
+            if(class_modul_pages_element::getElement("navigation") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("masterportalnavi_navigation");
+                $objPagelement->setStrName("masterportalnavi");
+                $objPagelement->setStrElement("navigation");
+                $objPagelement->updateObjectToDb($this->strMasterID);
+                $strElementId = $objPagelement->getSystemid();
+                $strQuery = "UPDATE "._dbprefix_."element_navigation
+                                SET navigation_id= ?,
+                                    navigation_template = ?,
+                                    navigation_mode = ?
+                                WHERE content_id = ?";
+                if($this->objDB->_pQuery($strQuery, array($strTreePortalId, "portalnavi.tpl", "tree", $strElementId)))
+                    $strReturn .= "Navigation element created.\n";
+                else
+                    $strReturn .= "Error creating navigation element.\n";
+            
+            }
         }
 
         $strReturn .= "Creating simple sitemap...\n";
@@ -114,36 +119,42 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strSitemapId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSitemapId."\n";
         $strReturn .= "Adding sitemap to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("sitemap_navigation");
-        $objPagelement->setStrName("sitemap");
-        $objPagelement->setStrElement("navigation");
-        $objPagelement->updateObjectToDb($strSitemapId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_navigation
-                        SET navigation_id=?,
-                            navigation_template = ?,
-                            navigation_mode = ?
-                            WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", "sitemap", $strElementId)))
-            $strReturn .= "Sitemapelement created.\n";
-        else
-            $strReturn .= "Error creating sitemapelement.\n";
+        
+        if(class_modul_pages_element::getElement("navigation") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("sitemap_navigation");
+            $objPagelement->setStrName("sitemap");
+            $objPagelement->setStrElement("navigation");
+            $objPagelement->updateObjectToDb($strSitemapId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_navigation
+                            SET navigation_id=?,
+                                navigation_template = ?,
+                                navigation_mode = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array($strTreeId, "sitemap.tpl", "sitemap", $strElementId)))
+                $strReturn .= "Sitemapelement created.\n";
+            else
+                $strReturn .= "Error creating sitemapelement.\n";
+        
+        }
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strSitemapId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                        SET paragraph_title = ?
-                      WHERE content_id = ? ";
-        if($this->objDB->_pQuery($strQuery, array("Sitemap", $strElementId)))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strSitemapId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                            SET paragraph_title = ?
+                          WHERE content_id = ? ";
+            if($this->objDB->_pQuery($strQuery, array("Sitemap", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
         $strReturn .= "Creating navigation points\n";
         $objNaviPoint = new class_modul_navigation_point();

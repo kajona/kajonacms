@@ -55,38 +55,43 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding tags-element to new page\n";
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");
-            $objPagelement->setStrName("mixed3");
-            $objPagelement->setStrElement("tags");
-            $objPagelement->updateObjectToDb($strSearchresultsId);
-            $strElementId = $objPagelement->getSystemid();
-             $strQuery = "UPDATE "._dbprefix_."element_universal
-                                SET char1 = ?
-                                WHERE content_id = ?";
-                if($this->objDB->_pQuery($strQuery, array("tags.tpl", $strElementId)))
-                    $strReturn .= "Tags element created.\n";
-                else
-                    $strReturn .= "Error creating tags element.\n";
+            
+            if(class_modul_pages_element::getElement("tags") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");
+                $objPagelement->setStrName("mixed3");
+                $objPagelement->setStrElement("tags");
+                $objPagelement->updateObjectToDb($strSearchresultsId);
+                $strElementId = $objPagelement->getSystemid();
+                 $strQuery = "UPDATE "._dbprefix_."element_universal
+                                    SET char1 = ?
+                                    WHERE content_id = ?";
+                    if($this->objDB->_pQuery($strQuery, array("tags.tpl", $strElementId)))
+                        $strReturn .= "Tags element created.\n";
+                    else
+                        $strReturn .= "Error creating tags element.\n";
+
+            }
 
             $strReturn .= "Adding headline-element to new page\n";
-            $objPagelement = new class_modul_pages_pageelement();
-            $objPagelement->setStrPlaceholder("headline_row");
-            $objPagelement->setStrName("headline");
-            $objPagelement->setStrElement("row");
-            $objPagelement->updateObjectToDb($strSearchresultsId);
-            $strElementId = $objPagelement->getSystemid();
+            if(class_modul_pages_element::getElement("row") != null) {
+                $objPagelement = new class_modul_pages_pageelement();
+                $objPagelement->setStrPlaceholder("headline_row");
+                $objPagelement->setStrName("headline");
+                $objPagelement->setStrElement("row");
+                $objPagelement->updateObjectToDb($strSearchresultsId);
+                $strElementId = $objPagelement->getSystemid();
 
-            $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                            WHERE content_id = ?";
+                $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, array("Tags", $strElementId)))
-                $strReturn .= "Headline element created.\n";
-            else
-                $strReturn .= "Error creating headline element.\n";
+                if($this->objDB->_pQuery($strQuery, array("Tags", $strElementId)))
+                    $strReturn .= "Headline element created.\n";
+                else
+                    $strReturn .= "Error creating headline element.\n";
+            }
 
-            $strReturn .= "Creating navigation point.\n";
 
         return $strReturn;
     }

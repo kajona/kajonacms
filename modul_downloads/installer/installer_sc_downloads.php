@@ -63,35 +63,39 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $strReturn .= "Adding pagelement to new page\n";
 
         $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("dl1_downloads");
-        $objPagelement->setStrName("dl1");
-        $objPagelement->setStrElement("downloads");
-        $objPagelement->updateObjectToDb($strDownloadsPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_downloads
-                        SET download_id = ?,
-                            download_template = ?
-                        WHERE content_id = ? ";
-        if($this->objDB->_pQuery($strQuery, array($strDownloadsID, "downloads.tpl", $strElementId)))
-            $strReturn .= "downloads element created.\n";
-        else
-            $strReturn .= "Error creating downloads element.\n";
+        if(class_modul_pages_element::getElement("downloads") != null) {
+            $objPagelement->setStrPlaceholder("dl1_downloads");
+            $objPagelement->setStrName("dl1");
+            $objPagelement->setStrElement("downloads");
+            $objPagelement->updateObjectToDb($strDownloadsPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_downloads
+                            SET download_id = ?,
+                                download_template = ?
+                            WHERE content_id = ? ";
+            if($this->objDB->_pQuery($strQuery, array($strDownloadsID, "downloads.tpl", $strElementId)))
+                $strReturn .= "downloads element created.\n";
+            else
+                $strReturn .= "Error creating downloads element.\n";
+        }
 
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strDownloadsPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                            WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, array("Downloads", $strElementId)))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strDownloadsPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("Downloads", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
 
         return $strReturn;

@@ -73,35 +73,40 @@ class class_installer_sc_faqs implements interface_sc_installer  {
 
         $strReturn .= "ID of new page: ".$strFaqsPageId."\n";
         $strReturn .= "Adding faqs-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("faqs_faqs");
-        $objPagelement->setStrName("faqs");
-        $objPagelement->setStrElement("faqs");
-        $objPagelement->updateObjectToDb($strFaqsPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_faqs
-                        SET faqs_category= ?,
-                            faqs_template = ?
-                      WHERE content_id = ? ";
-        if($this->objDB->_pQuery($strQuery, array(0, "demo_foldable.tpl", $strElementId)))
-            $strReturn .= "faqselement created.\n";
-        else
-            $strReturn .= "Error creating faqselement.\n";
+        if(class_modul_pages_element::getElement("faqs") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("faqs_faqs");
+            $objPagelement->setStrName("faqs");
+            $objPagelement->setStrElement("faqs");
+            $objPagelement->updateObjectToDb($strFaqsPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_faqs
+                            SET faqs_category= ?,
+                                faqs_template = ?
+                          WHERE content_id = ? ";
+            if($this->objDB->_pQuery($strQuery, array(0, "demo_foldable.tpl", $strElementId)))
+                $strReturn .= "faqselement created.\n";
+            else
+                $strReturn .= "Error creating faqselement.\n";
+        }
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strFaqsPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                         SET paragraph_title = ?
-                       WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, array("FAQs", $strElementId)))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+        
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strFaqsPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                             SET paragraph_title = ?
+                           WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("FAQs", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
         return $strReturn;
     }

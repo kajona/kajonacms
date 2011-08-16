@@ -50,47 +50,50 @@ class class_installer_sc_rssfeed implements interface_sc_installer  {
         $strReturn .= "ID of new page: ".$strPageId."\n";
         $strReturn .= "Adding pagelement to new page\n";
 
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker");
-        $objPagelement->setStrName("mixed");
-        $objPagelement->setStrElement("rssfeed");
-        $objPagelement->updateObjectToDb($strPageId);
-        $strElementId = $objPagelement->getSystemid();
+        if(class_modul_pages_element::getElement("rssfeed") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("mixed_rssfeed|tagto|imagelightbox|portallogin|portalregistration|lastmodified|rendertext|tagcloud|downloadstoplist|textticker");
+            $objPagelement->setStrName("mixed");
+            $objPagelement->setStrElement("rssfeed");
+            $objPagelement->updateObjectToDb($strPageId);
+            $strElementId = $objPagelement->getSystemid();
 
-        $arrParams = array();
-        if($this->strContentLanguage == "de") {
-            $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news.rss", $strElementId);
+            $arrParams = array();
+            if($this->strContentLanguage == "de") {
+                $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news.rss", $strElementId);
+            }
+            else {
+                $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news_en.rss", $strElementId);
+            }
+
+            $strQuery = "UPDATE "._dbprefix_."element_universal
+                            SET char1 = ?,
+                                ".$this->objDB->encloseColumnName("int1")." = ?,
+                                char2 = ?
+                            WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, $arrParams))
+                $strReturn .= "Rssfeed element created.\n";
+            else
+                $strReturn .= "Error creating Rssfeed element.\n";
+
         }
-        else {
-            $arrParams = array("rssfeed.tpl", 10, "http://www.kajona.de/kajona_news_en.rss", $strElementId);
-        }
-
-        $strQuery = "UPDATE "._dbprefix_."element_universal
-                        SET char1 = ?,
-                            ".$this->objDB->encloseColumnName("int1")." = ?,
-                            char2 = ?
-                        WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, $arrParams))
-            $strReturn .= "Rssfeed element created.\n";
-        else
-            $strReturn .= "Error creating Rssfeed element.\n";
-
-
 
         $strReturn .= "Adding headline-element to new page\n";
-        $objPagelement = new class_modul_pages_pageelement();
-        $objPagelement->setStrPlaceholder("headline_row");
-        $objPagelement->setStrName("headline");
-        $objPagelement->setStrElement("row");
-        $objPagelement->updateObjectToDb($strPageId);
-        $strElementId = $objPagelement->getSystemid();
-        $strQuery = "UPDATE "._dbprefix_."element_paragraph
-                            SET paragraph_title = ?
-                            WHERE content_id = ?";
-        if($this->objDB->_pQuery($strQuery, array("Rssfeed", $strElementId)))
-            $strReturn .= "Headline element created.\n";
-        else
-            $strReturn .= "Error creating headline element.\n";
+        if(class_modul_pages_element::getElement("row") != null) {
+            $objPagelement = new class_modul_pages_pageelement();
+            $objPagelement->setStrPlaceholder("headline_row");
+            $objPagelement->setStrName("headline");
+            $objPagelement->setStrElement("row");
+            $objPagelement->updateObjectToDb($strPageId);
+            $strElementId = $objPagelement->getSystemid();
+            $strQuery = "UPDATE "._dbprefix_."element_paragraph
+                                SET paragraph_title = ?
+                                WHERE content_id = ?";
+            if($this->objDB->_pQuery($strQuery, array("Rssfeed", $strElementId)))
+                $strReturn .= "Headline element created.\n";
+            else
+                $strReturn .= "Error creating headline element.\n";
+        }
 
         return $strReturn;
     }
