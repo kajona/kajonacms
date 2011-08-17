@@ -322,7 +322,7 @@ class class_db_oci8 implements interface_db_driver {
         elseif($strType == "char100")
             $strReturn .= " VARCHAR2( 100 ) ";    
         elseif($strType == "char254")
-            $strReturn .= " VARCHAR2( 254 ) ";
+            $strReturn .= " VARCHAR2( 280 ) ";
         elseif($strType == "char500")
             $strReturn .= " VARCHAR2( 500 ) ";
         elseif($strType == "text")
