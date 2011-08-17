@@ -66,8 +66,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         }
 
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb();
         $this->strIndexID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strIndexID."\n";
@@ -142,8 +140,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $objPage->setStrName("master");
         $objPage->setStrBrowsername("master");
         $objPage->setStrTemplate("master.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strSystemFolderID);
         $this->strMasterID = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$this->strMasterID."\n";
@@ -160,8 +156,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
 
 
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strSystemFolderID);
         $strErrorPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strErrorPageId."\n";
@@ -236,8 +230,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $objPage->setStrBrowsername("Imprint");
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strSystemFolderID);
         $strImprintPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strImprintPageId."\n";
@@ -326,8 +318,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $objPage->setStrBrowsername("Sample page 1");
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strMainnavigationFolderID);
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
@@ -410,8 +400,6 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         else
             $objPage->setStrBrowsername("Sample subpage 1");
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strSamplePageId);
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";

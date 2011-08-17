@@ -54,8 +54,6 @@ class class_installer_sc_downloads implements interface_sc_installer  {
         $objPage->setStrName("downloads");
         $objPage->setStrBrowsername("Downloads");
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strNaviFolderId);
 
         $strDownloadsPageId = $objPage->getSystemid();

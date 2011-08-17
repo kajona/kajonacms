@@ -65,8 +65,6 @@ class class_installer_sc_faqs implements interface_sc_installer  {
         $objPage->setStrName("faqs");
         $objPage->setStrBrowsername("FAQs");
         $objPage->setStrTemplate("kajona_demo.tpl");
-        //set language to "" - being update by the languages sc installer later
-        $objPage->setStrLanguage("");
         $objPage->updateObjectToDb($strNaviFolderId);
 
         $strFaqsPageId = $objPage->getSystemid();

@@ -48,8 +48,6 @@ class class_installer_sc_tags implements interface_sc_installer  {
             else
                 $objPage->setStrBrowsername("Tags");
 
-            //set language to "" - being update by the languages sc installer later
-            $objPage->setStrLanguage("");
             $objPage->setStrTemplate("kajona_demo.tpl");
             $objPage->updateObjectToDb($strNaviFolderId);
             $strSearchresultsId = $objPage->getSystemid();
