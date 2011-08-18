@@ -30,15 +30,6 @@ KAJONA.admin.dragndroplistDashboard = {};
 
 	//Basic functions
 	KAJONA.admin.dragndroplistDashboard.DDApp = {
-		
-		safeInit : function() {
-			if(typeof YAHOO == "undefined") {
-                window.setTimeout(KAJONA.admin.dragndroplistDashboard.DDApp.safeInit(), 1000);
-                return;
-            }
-            
-            KAJONA.admin.dragndroplistDashboard.DDApp.init();
-		},
 	
     	init: function() {
 		   //iterate over all lists available
@@ -223,6 +214,4 @@ KAJONA.admin.dragndroplistDashboard = {};
 	    
 	});
 
-	//and init the app
-	KAJONA.admin.dragndroplistDashboard.DDApp.safeInit();
 })();

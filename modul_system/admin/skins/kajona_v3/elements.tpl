@@ -26,7 +26,9 @@ Loads the yui-script-helper and adds the table to the drag-n-dropable tables get
 <dragable_list_header>
 <script type="text/javascript">
 	KAJONA.admin.loader.loadDragNDropBase(function () {
-		KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_tr.js");
+		KAJONA.admin.loader.loadDragNDropBase(function() {
+            KAJONA.admin.dragndroplist.DDApp.init();
+        }, "dragdrophelper_tr.js");
 	});
 	if(arrayTableIds == null) {
         var arrayTableIds = new Array("%%listid%%");
@@ -892,7 +894,9 @@ The language switch surrounds the buttons
 	<br />
 	<script type="text/javascript">
 	    KAJONA.admin.loader.loadDragNDropBase(function () {
-	        KAJONA.admin.loader.loadDragNDropBase(null, "dragdrophelper_li.js");
+	        KAJONA.admin.loader.loadDragNDropBase(function() {
+                KAJONA.admin.dragndroplistDashboard.DDApp.init();
+            }, "dragdrophelper_li.js");
 	    });
     	if(arrayListIds == null) {
             var arrayListIds = new Array("%%column_id%%");
