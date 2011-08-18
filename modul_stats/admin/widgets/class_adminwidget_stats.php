@@ -21,7 +21,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
     public function __construct() {
         parent::__construct();
         //register the fields to be persisted and loaded
-        $this->setPersistenceKeys(array("current", "day", "last", "nrLast"));
+        $this->setPersistenceKeys(array("current", "day", "last", "nrLast", "chart"));
     }
     
     /**
@@ -33,6 +33,7 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
     public function getEditForm() {
         $strReturn = "";
         $strReturn .= $this->objToolkit->formInputCheckbox("current", $this->getText("stats_current"), $this->getFieldValue("current"));
+        $strReturn .= $this->objToolkit->formInputCheckbox("chart", $this->getText("stats_chart"), $this->getFieldValue("chart"));
         $strReturn .= $this->objToolkit->formInputCheckbox("day", $this->getText("stats_day"), $this->getFieldValue("day"));
         $strReturn .= $this->objToolkit->formInputCheckbox("last", $this->getText("stats_last"), $this->getFieldValue("last"));
         $strReturn .= $this->objToolkit->formInputText("nrLast", $this->getText("stats_nrLast"), $this->getFieldValue("nrLast"));
@@ -55,14 +56,58 @@ class class_adminwidget_stats extends class_adminwidget implements interface_adm
             
             $strReturn .= $this->widgetSeparator();
         }
+        if($this->getFieldValue("chart") == "checked") {
+            //load the last view days
+            $objDate = new class_date();
+            $objDate->setIntHour(0); 
+            $objDate->setIntMin(0);
+            $objDate->setIntSec(0);
+            
+            $arrHits = array();
+            $arrLabels = array();
+            for($intI = 0; $intI<3; $intI++) {
+                $objEndDate = clone $objDate;
+                $objEndDate->setNextDay();
+                $objStatsCommon->setStartDate($objDate->getTimeInOldStyle());
+                $objStatsCommon->setEndDate($objEndDate->getTimeInOldStyle());
+                
+                $arrHits[] = $objStatsCommon->getHits();
+                $arrLabels[] = $objDate->getIntDay();
+                
+                $objDate->setPreviousDay();
+            }
+            
+            $arrHits = array_reverse($arrHits);
+            $arrLabels = array_reverse($arrLabels);
+            
+            
+            $strReturn .= $this->widgetText($this->getText("stats_hits"));
+            
+            $objChart = class_graph_factory::getGraphInstance();
+            $objChart->setArrXAxisTickLabels($arrLabels);
+            $objChart->addLinePlot($arrHits, "");
+            $objChart->setBitRenderLegend(false);
+            $objChart->setIntHeight(120);
+            $objChart->setIntWidth(200);
+            $objChart->setStrXAxisTitle("");
+            $objChart->setStrYAxisTitle("");
+            $objChart->saveGraph(_images_cachepath_."statswidget.png");
+
+            $strReturn .= "<img src=\""._webpath_._images_cachepath_."statswidget.png\" />";
+        }
         if($this->getFieldValue("day") == "checked") {
             //current day:
-            $intDay = strtotime(strftime("%Y-%m-%d",time()));
             //pass date to commons-object
-            $objStatsCommon->setStartDate($intDay);
-            $objStatsCommon->setEndDate($intDay+86400);
+            $objDate = new class_date();
+            $objDate->setIntHour(0);
+            $objDate->setIntMin(0);
+            $objDate->setIntSec(0);
+            $strReturn .= $this->widgetText(dateToString($objDate, false));
             
-            $strReturn .= $this->widgetText(timeToString($intDay, false));
+            $objStatsCommon->setStartDate($objDate->getTimeInOldStyle());
+            $objDate->setNextDay();
+            $objStatsCommon->setEndDate($objDate->getTimeInOldStyle());
+            
             $strReturn .= $this->widgetText($this->getText("stats_hits").$objStatsCommon->getHits());
             $strReturn .= $this->widgetText($this->getText("stats_visitors").$objStatsCommon->getVisitors());
             
