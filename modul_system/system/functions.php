@@ -799,7 +799,7 @@ function getLinkPortalPopup($strPageI, $strPageE, $strAction = "", $strParams = 
 function splitUpLink($strLink) {
     //use regex to get href and name
     $arrHits = array();
-    preg_match("/<a href=\"([^\"]+)\"\s+(.*)>(.*)<\/a>/i", $strLink, $arrHits);
+    preg_match("/<a href=\"([^\"]+)\"\s+([^>]*)>(.*)<\/a>/i", $strLink, $arrHits);
     $arrReturn = array();
     $arrReturn["link"] = $strLink;
     $arrReturn["name"] = isset($arrHits[3]) ? $arrHits[3] : "" ;
