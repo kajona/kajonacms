@@ -948,6 +948,64 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
+    
+    /**
+     * Returns a xml-based representation of a single news.
+     * Return format:
+     *    <news>
+     *        <title></title>
+     *        <systemid></systemid>
+     *        <intro></intro>
+     *        <text></text>
+     *        <image></image>
+     *    </news>
+     * 
+     * @return string 
+     * @xml
+     */
+    protected function actionNewsDetails() {
+        $strReturn = "";
+        $objNews = new class_modul_news_news($this->getSystemid());
+        if($objNews->rightView()) {
+            $strReturn .= " <news>\n";
+            $strReturn .= "   <title>".xmlSafeString($objNews->getStrTitle())."</title>";
+            $strReturn .= "   <systemid>".$objNews->getSystemid()."</systemid>";
+            $strReturn .= "   <intro>".xmlSafeString($objNews->getStrIntro())."</intro>";
+            $strReturn .= "   <text>".xmlSafeString($objNews->getStrNewstext())."</text>";
+            $strReturn .= "   <image>".xmlSafeString($objNews->getStrImage())."</image>";
+            $strReturn .= " </news>\n";
+        }
+        else
+            $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
+
+		return $strReturn;
+    }
+    
+    /**
+     * Saves newscontent as passed by post-paras via an xml-request.
+     * Params expected are: newstitle, newsintro, newsimage, newstext
+     * 
+     * @return string 
+     * @xml
+     */
+    protected function actionUpdateNewsXml() {
+        $strReturn = "";
+        $objNews = new class_modul_news_news($this->getSystemid());
+        if($objNews->rightEdit()) {
+            $objNews->setStrTitle($this->getParam("newstitle"));
+            $objNews->setStrIntro($this->getParam("newsintro"));
+            $objNews->setStrImage($this->getParam("newsimage"));
+            $objNews->setStrNewstext($this->getParam("newstext"));
+            if($objNews->updateObjectToDb())
+                $strReturn = "<success></success>";
+            else
+                $strReturn = "<error></error>";
+        }
+        else
+            $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
+
+		return $strReturn;
+    }
 
 }
 
