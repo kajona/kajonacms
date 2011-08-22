@@ -1910,6 +1910,8 @@ class class_toolkit_admin extends class_toolkit {
         //process rows
         $strCurrentId = class_modul_system_aspect::getCurrentAspectId();
         $arrAspects = class_modul_system_aspect::getAllAspects(true);
+        
+        $intNrOfAspects = 0;
         foreach($arrAspects as $objSingleAspect) {
             if($objSingleAspect->rightView()) {
                 $arrSubtemplate = array();
@@ -1919,10 +1921,11 @@ class class_toolkit_admin extends class_toolkit {
                 $arrSubtemplate["selected"] = $strCurrentId == $objSingleAspect->getSystemid() ? "selected=\"selected\"" : "";
 
                 $arrTemplate["options"] .= $this->objTemplate->fillTemplate($arrSubtemplate, $strTemplateRowID);
+                $intNrOfAspects++;
             }
         }
 
-        if($arrTemplate["options"] == "")
+        if($arrTemplate["options"] == "" || $intNrOfAspects < 2)
             return "";
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
