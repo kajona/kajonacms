@@ -32,26 +32,8 @@ class class_modul_system_common extends class_model implements interface_model  
 		//base class
 		parent::__construct($arrModule, $strSystemid);
 
-		//init current object
-		if($strSystemid != "")
-		    $this->initObject();
     }
 
-    /**
-     * @see class_model::getObjectTables();
-     * @return array
-     */
-    protected function getObjectTables() {
-        return array();
-    }
-
-    /**
-     * @see class_model::getObjectDescription();
-     * @return string
-     */
-    protected function getObjectDescription() {
-        return "";
-    }
 
     /**
      * Initalises the current object, if a systemid was given
@@ -61,13 +43,6 @@ class class_modul_system_common extends class_model implements interface_model  
 
     }
 
-    /**
-     * Updates the current object to the database
-     *
-     */
-    protected function updateStateToDb() {
-        return true;
-    }
 
     /**
      * Deletes an entry from the dates-records

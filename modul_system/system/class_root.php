@@ -370,6 +370,7 @@ abstract class class_root {
      * @todo will become abstract before 3.3.0, please update your implementations of interface_model
      */
     protected function updateStateToDb() {
+        return true;
     }
 
     /**
@@ -394,6 +395,7 @@ abstract class class_root {
      * @todo will become abstract before 3.3.0, please update your implementations of interface_model
      */
     protected function getObjectDescription() {
+        return $this->getStrRecordComment();
     }
     
     /**
