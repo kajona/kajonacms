@@ -492,6 +492,8 @@ class class_toolkit_admin extends class_toolkit {
      * @param string $strName
      * @param string $strTitle
      * @param string $strValue
+     * @param string $strClass = inputTextarea
+     * @param bool $bitReadonly
      * @return string
      */
     public function formInputTextArea($strName, $strTitle = "", $strValue = "", $strClass = "inputTextarea", $bitReadonly = false) {
