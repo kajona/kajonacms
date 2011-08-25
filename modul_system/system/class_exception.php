@@ -84,6 +84,18 @@ class class_exception extends Exception {
             	}
             }
             $strMailtext .= "\n\n";
+            $strMailtext .= "Last actions called:\n";
+            $strMailtext .= "Admin:\n";
+            $arrHistory = class_carrier::getInstance()->getObjSession()->getSession("adminHistory");
+            if(is_array($arrHistory))
+                foreach($arrHistory as $intIndex => $strOneUrl)
+                    $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
+            $strMailtext .= "Portal:\n";
+            $arrHistory = class_carrier::getInstance()->getObjSession()->getSession("portalHistory");
+            if(is_array($arrHistory))
+                foreach($arrHistory as $intIndex => $strOneUrl)
+                    $strMailtext .= " #".$intIndex.": ".$strOneUrl."\n";
+            $strMailtext .= "\n\n";
             $strMailtext .= "If you don't know what to do, feel free to open a ticket.\n\n";
             $strMailtext .= "For more help visit http://www.kajona.de.\n\n";
 
@@ -92,7 +104,7 @@ class class_exception extends Exception {
             $objMail->setSender(_system_admin_email_);
             $objMail->setText($strMailtext);
             $objMail->addTo(_system_admin_email_);
-            $bitSend = $objMail->sendMail();
+            $objMail->sendMail();
         }
 
         if($this->intErrorlevel == class_exception::$level_FATALERROR) {

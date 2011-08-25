@@ -114,7 +114,7 @@ class class_db_mysqli implements interface_db_driver {
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
             }
 
-            $bitReturn = mysqli_stmt_execute($objStatement);
+            $bitReturn = @mysqli_stmt_execute($objStatement);
             //mysqli_stmt_close($objStatement);
         }
         
@@ -542,7 +542,8 @@ class class_db_mysqli implements interface_db_driver {
             return $this->arrStatementsCache[$strName];
 
         $objStatement = mysqli_stmt_init($this->linkDB);
-        mysqli_stmt_prepare($objStatement , $strQuery);
+        if(!mysqli_stmt_prepare($objStatement , $strQuery))
+            return false;
 
         $this->arrStatementsCache[$strName] = $objStatement;
 
