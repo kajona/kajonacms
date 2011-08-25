@@ -587,11 +587,14 @@ abstract class class_admin {
 
     /**
      * Validates if the requested module is valid for the current aspect.
-     * If necessary, the current aspect is updated,
+     * If necessary, the current aspect is updated.
      *
      * @return void
      */
     private function validateAndUpdateCurrentAspect() {
+        if(_xmlLoader_ === true || $this->arrModule["template"] == "/folderview.tpl")
+            return;
+        
         $arrModule = $this->getModuleData($this->arrModule["modul"]);
         $strCurrentAspect = class_modul_system_aspect::getCurrentAspectId();
         if(isset($arrModule["module_aspect"]) && $arrModule["module_aspect"] != "") {
