@@ -48,8 +48,9 @@ class class_element_portalupload extends class_element_portal implements interfa
 	private function uploadForm($formErrors = "") {
 	    $strReturn = "";
 	    //validate the rights
-	    $objFilemanagerRepo = new class_modul_filemanager_repo($this->arrElementData["char3"]);
-	    $objDownloadsRepo = new class_modul_downloads_archive($this->arrElementData["char2"]);
+	    $objDownloadsRepo =  new class_modul_downloads_archive($this->arrElementData["char2"]);
+	    $objFilemanagerRepo = class_modul_filemanager_repo::getRepoForForeignId($objDownloadsRepo->getSystemid());
+        
 
 	    if($objFilemanagerRepo->rightRight1()) {
 
@@ -90,8 +91,8 @@ class class_element_portalupload extends class_element_portal implements interfa
 	    $strReturn = "";
 
 	    //prepare the folder to be used as a target-folder for the upload
-	    $objFilemanagerRepo = new class_modul_filemanager_repo($this->arrElementData["char3"]);
 	    $objDownloadsRepo = new class_modul_downloads_archive($this->arrElementData["char2"]);
+	    $objFilemanagerRepo = class_modul_filemanager_repo::getRepoForForeignId($objDownloadsRepo->getSystemid());
 
 	    //add a special subfolder?
 	    $strPath = $objDownloadsRepo->getPath();
@@ -123,6 +124,7 @@ class class_element_portalupload extends class_element_portal implements interfa
                         //upload was successfull. try to sync the downloads-archive.
                         if($objDownloadsRepo->rightRight1()) {
                             class_modul_downloads_file::syncRecursive($objDownloadsRepo->getSystemid(), $objDownloadsRepo->getPath());
+                            
                             //reload the site to display the new file
 							$this->portalReload(getLinkPortalHref($this->getPagename(), "", $this->getAction(), "uploadSuccess=1", $this->getSystemid()));
                         }

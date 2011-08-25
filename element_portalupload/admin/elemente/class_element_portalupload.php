@@ -27,7 +27,7 @@ class class_element_portalupload extends class_element_admin implements interfac
 		$arrModule["table"] 		= _dbprefix_."element_universal";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]   = "char1|char,char2|char,char3|char";
+		$arrModule["tableColumns"]   = "char1|char,char2|char";
 
 		parent::__construct($arrModule);
 	}
@@ -42,11 +42,8 @@ class class_element_portalupload extends class_element_admin implements interfac
 		$strReturn = "";
 
 		//load the arrays of download-archives and filemanager repos available
-		$arrFmRepos = array();
-		$arrDlArchives = array();
-		if(!$this->getPossibleValues($arrDlArchives, $arrFmRepos)) {
-		    $strReturn .= $this->objToolkit->warningBox($this->getText("portalupload_matchwarning"));
-		}
+		$arrDlArchives = class_modul_downloads_archive::getAllArchives();
+		
 
 		//Build the form
 		//Load the available templates
@@ -67,12 +64,6 @@ class class_element_portalupload extends class_element_admin implements interfac
 			}
 		}
 
-		$arrFmDD = array();
-		if(count($arrFmRepos) > 0) {
-			foreach($arrFmRepos as $objOneRepo) {
-				$arrFmDD[$objOneRepo->getSystemid()] = $objOneRepo->getStrName();
-			}
-		}
 
 
 		if(count($arrTemplates) == 1)
@@ -81,36 +72,16 @@ class class_element_portalupload extends class_element_admin implements interfac
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
         
 		$strReturn .= $this->objToolkit->formInputDropdown("char2", $arrDlDD, $this->getText("portalupload_download"), (isset($arrElementData["char2"]) ? $arrElementData["char2"] : "" ));
-		$strReturn .= $this->objToolkit->formInputDropdown("char3", $arrFmDD, $this->getText("portalupload_filemanager"), (isset($arrElementData["char3"]) ? $arrElementData["char3"] : "" ));
 
 		$strReturn .= $this->objToolkit->setBrowserFocus("char1");
 
 		return $strReturn;
 	}
 
-	private function getPossibleValues(&$arrDlArchives, &$arrFmRepos) {
-	    $bitReturn = false;
-
-	    $arrDlArchivesAvailable = class_modul_downloads_archive::getAllArchives();
-	    $arrFmReposAvailable = class_modul_filemanager_repo::getAllRepos();
-
-	    foreach($arrDlArchivesAvailable as $objOneArchive) {
-	        foreach($arrFmReposAvailable as $objOneRepo) {
-	            if($objOneArchive->getPath() == $objOneRepo->getStrPath()) {
-	                if(!in_array($objOneArchive, $arrDlArchives))
-	                   $arrDlArchives[] = $objOneArchive;
-	                if(!in_array($objOneRepo, $arrFmRepos))
-	                   $arrFmRepos[] = $objOneRepo;
-
-	                $bitReturn = true;
-	            }
-	        }
-	    }
-	    return $bitReturn;
-	}
+	
 
     public function getRequiredFields() {
-        return array("char1" => "string", "char2" => "string", "char3" => "string");
+        return array("char1" => "string", "char2" => "string");
     }
 }
 ?>
