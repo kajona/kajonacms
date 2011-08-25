@@ -1250,6 +1250,8 @@ KAJONA.admin.ajax = {
 
                             intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                             var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
+                            
+                            strName = strName.replace(/&amp;/g, '&', strName);
 
                             var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
                             tempNode.systemid = strSystemid;
@@ -1277,6 +1279,8 @@ KAJONA.admin.ajax = {
                             
                             intTemp = strSinglePage.indexOf("<type>")+6;
                             var intType = strSinglePage.substr(intTemp, strSinglePage.indexOf("</type>")-intTemp);
+                            
+                            strName = strName.replace(/&amp;/g, '&', strName);
 
                             tempNode = new YAHOO.widget.TextNode({label:strName, href:strLink}, node);
                             tempNode.systemid = strSystemid;
@@ -1336,6 +1340,8 @@ KAJONA.admin.ajax = {
                         
                         intTemp = strSingleFolder.indexOf("<isleaf>")+8;
                         var strLeaf = strSingleFolder.substr(intTemp, strSingleFolder.indexOf("</isleaf>")-intTemp);
+
+                        strName = strName.replace(/&amp;/g, '&', strName);
 
                         var tempNode = new YAHOO.widget.TextNode( {label:strName, href:strLink}, node);
                         tempNode.systemid = strSystemid;
