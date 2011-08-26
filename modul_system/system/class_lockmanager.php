@@ -48,6 +48,7 @@ class class_lockmanager  {
 
 		if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array(class_carrier::getInstance()->getObjSession()->getUserID(), time(), $this->strSystemid ))) {
             class_carrier::getInstance()->getObjDB()->flushQueryCache();
+            $this->objSystemCommon = new class_modul_system_common($this->strSystemid);
             return true;
         }
 
@@ -79,6 +80,7 @@ class class_lockmanager  {
                             WHERE system_id=? ";
             if(class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strSystemid))) {
                 class_carrier::getInstance()->getObjDB()->flushQueryCache();
+                $this->objSystemCommon = new class_modul_system_common($this->strSystemid);
                 return true;
             }
         }
