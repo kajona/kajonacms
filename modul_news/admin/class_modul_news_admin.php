@@ -958,6 +958,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *        <intro></intro>
      *        <text></text>
      *        <image></image>
+     *        <categories></categories>
+     *        <startdate></startdate>
+     *        <enddate></enddate>
+     *        <archivedate></archivedate>
      *    </news>
      * 
      * @return string 
@@ -966,6 +970,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     protected function actionNewsDetails() {
         $strReturn = "";
         $objNews = new class_modul_news_news($this->getSystemid());
+        $arrCats = class_modul_news_category::getNewsMember($objNews->getSystemid());
+        
+        array_walk($arrCats, function(&$objValue) { $objValue = $objValue->getSystemid(); } );
+        
+        $objStartDate = new class_date($objNews->getIntDateStart());
+        $objEndDate = new class_date($objNews->getIntDateEnd());
+        $objArchiveDate = new class_date($objNews->getIntDateSpecial());
+        
         if($objNews->rightView()) {
             $strReturn .= " <news>\n";
             $strReturn .= "   <title>".xmlSafeString($objNews->getStrTitle())."</title>";
@@ -973,6 +985,10 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $strReturn .= "   <intro>".xmlSafeString($objNews->getStrIntro())."</intro>";
             $strReturn .= "   <text>".xmlSafeString($objNews->getStrNewstext())."</text>";
             $strReturn .= "   <image>".xmlSafeString($objNews->getStrImage())."</image>";
+            $strReturn .= "   <categories>".xmlSafeString(implode(",", $arrCats))."</categories>";
+            $strReturn .= "   <startdate>".xmlSafeString($objStartDate->getTimeInOldStyle())."</startdate>";
+            $strReturn .= "   <enddate>".xmlSafeString($objEndDate->getTimeInOldStyle())."</enddate>";
+            $strReturn .= "   <archivedate>".xmlSafeString($objArchiveDate->getTimeInOldStyle())."</archivedate>";
             $strReturn .= " </news>\n";
         }
         else
@@ -983,7 +999,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     
     /**
      * Saves newscontent as passed by post-paras via an xml-request.
-     * Params expected are: newstitle, newsintro, newsimage, newstext
+     * Params expected are: newstitle, newsintro, newsimage, newstext, categories, startdate, enddate, archivedate
      * 
      * @return string 
      * @xml
@@ -991,15 +1007,39 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     protected function actionUpdateNewsXml() {
         $strReturn = "";
         $objNews = new class_modul_news_news($this->getSystemid());
-        if($objNews->rightEdit()) {
+        if($objNews->rightEdit() || $this->getSystemid() == "") {
+            
+            $arrCats = array();
+            foreach(explode(",", $this->getParam("categories")) as $strCatId) {
+                $arrCats[$strCatId] = "c";
+            }
+            
             $objNews->setStrTitle($this->getParam("newstitle"));
             $objNews->setStrIntro($this->getParam("newsintro"));
             $objNews->setStrImage($this->getParam("newsimage"));
             $objNews->setStrNewstext($this->getParam("newstext"));
+            
+            if($this->getParam("startdate") > 0) {
+                $objDate = new class_date($this->getParam("startdate"));
+                $objNews->setIntDateStart($objDate->getLongTimestamp());
+            }
+            
+            if($this->getParam("enddate") > 0) {
+                $objDate = new class_date($this->getParam("enddate"));
+                $objNews->setIntDateEnd($objDate->getLongTimestamp());
+            }
+            
+            if($this->getParam("archivedate") > 0) {
+                $objDate = new class_date($this->getParam("archivedate"));
+                $objNews->setIntDateSpecial($objDate->getLongTimestamp());
+            }
+            
+            $objNews->setArrCats($arrCats);
             if($objNews->updateObjectToDb())
                 $strReturn = "<success></success>";
             else
                 $strReturn = "<error></error>";
+            
         }
         else
             $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
