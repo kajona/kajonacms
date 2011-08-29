@@ -1266,7 +1266,7 @@ class class_modul_user_admin extends class_admin implements interface_admin {
                         
                 if($objOneElement instanceof class_modul_user_user) {
                     $strReturn .= "  <user>\n";
-                    $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrUsername())."</title>\n";
+                    $strReturn .= "    <title>".xmlSafeString($objOneElement->getStrUsername(). " (".$objOneElement->getStrName().", ".$objOneElement->getStrForename()." )")."</title>\n";
                     $strReturn .= "    <systemid>".xmlSafeString($objOneElement->getSystemid())."</systemid>\n";
                     $strReturn .= "    <icon>".xmlSafeString(_skinwebpath_."/pics/icon_user.gif")."</icon>\n";
                     $strReturn .= "  </user>\n";
