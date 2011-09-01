@@ -74,7 +74,7 @@ class class_wadlgenerator  {
             $this->strMethods .= "    <representation \n";
             $this->strMethods .= "      mediaType=\"".$arrSingleRepresentation[0]."\"\n";
             $this->strMethods .= "      element=\"".$arrSingleRepresentation[1]."\"\n";
-            $this->strMethods .= "    />";
+            $this->strMethods .= "    />\n";
         }
         
         
@@ -88,7 +88,7 @@ class class_wadlgenerator  {
             if(isset($arrSingleParam[3]))
                 $this->strMethods .= "      fixed=\"".$arrSingleParam[3]."\"\n";
             
-            $this->strMethods .= "    />";
+            $this->strMethods .= "    />\n";
         }
         $this->strMethods .= "   </request>\n";
         $this->strMethods .= "   <response>\n";
@@ -97,7 +97,7 @@ class class_wadlgenerator  {
             $this->strMethods .= "    <representation \n";
             $this->strMethods .= "      mediaType=\"".$arrSingleRepresentation[0]."\"\n";
             $this->strMethods .= "      element=\"".$arrSingleRepresentation[1]."\"\n";
-            $this->strMethods .= "    />";
+            $this->strMethods .= "    />\n";
         }
         $this->strMethods .= "   </response>\n";
         $this->strMethods .= "  </method>\n";
@@ -142,7 +142,7 @@ class class_wadlgenerator  {
         if(count($this->arrGrammars) > 0) {
             $strReturn .= " <grammars>\n";
             foreach($this->arrGrammars as $strOneGrammar)
-                $strReturn .= "   <include href=\"".$strOneGrammar."\" />";
+                $strReturn .= "   <include href=\"".$strOneGrammar."\" />\n";
             $strReturn .= " </grammars>\n";
         }
         
