@@ -50,8 +50,10 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 
             $strReturn .= "<archive>".$strResult."</archive>";
         }
-        else
-            $strReturn .=  "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         class_logger::getInstance()->addLogRow("synced archive ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
 
@@ -113,8 +115,10 @@ class class_modul_downloads_admin_xml extends class_admin implements interface_x
 
             $strReturn .= "<archive>".$strResult."</archive>";
         }
-        else
-            $strReturn .=  "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         class_logger::getInstance()->addLogRow("synced archive partially >".$objFile->getFilename()."< ".$this->getSystemid().": ".$strResult, class_logger::$levelInfo);
 
