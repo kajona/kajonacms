@@ -58,7 +58,13 @@ class class_http_statuscodes {
           
     
     
-     
+   
+    /**
+     * Status code (500) indicating an error on the serverside. The request was ok but the server encountered an error.
+     *
+     * @var int
+     */
+    public static  $strSC_INTERNAL_SERVER_ERROR = "HTTP/1.0 500 Internal Server Error";
           
 
 }

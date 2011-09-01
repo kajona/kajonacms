@@ -1,0 +1,16 @@
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<!-- 
+    (c) 2004-2006 by MulchProductions, www.mulchprod.de
+    (c) 2007-2011 by Kajona, www.kajona.de
+    Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt 
+-->
+
+	<xs:complexType name="message">
+		<xs:choice>
+			<xs:element name="success" type="xs:string" />
+			<xs:element name="error" type="xs:string" /> 
+		</xs:choice>
+	</xs:complexType>
+
+</xs:schema>

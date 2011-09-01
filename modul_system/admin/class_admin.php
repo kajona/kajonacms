@@ -833,6 +833,11 @@ abstract class class_admin {
                 $objAnnotations = new class_annotations(get_class($this));
                 if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && substr(get_class($this), -3) != "xml")
                     throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
+                
+                if($this->arrModule["modul"] != $this->getParam("module")) {
+                    header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                    throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
+                }
             }
             
             

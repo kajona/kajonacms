@@ -27,10 +27,10 @@
 
 
 # xml rewriting. source: /xml/admin/module/action/systemid/
-#RewriteRule !^xml/admin/ - [S=4]
-#RewriteRule ^xml/admin/([a-z\_]+)/([a-zA-Z]*)/([0-9a-z]*)/ xml.php?admin=1&module=$1&action=$2&systemid=$3 [QSA,L]
-#RewriteRule ^xml/admin/([a-z\_]+)/([a-zA-Z]*)/  xml.php?admin=1&module=$1&action=$2 [QSA,L]
-#RewriteRule ^xml/admin/([a-z\_]+)/  xml.php?admin=1&module=$1 [QSA,L]
+#RewriteRule !^xml/admin/ - [S=3]
+#RewriteRule ^xml/admin/([a-z\_]+)/([a-zA-Z]*)/([0-9a-z]*) xml.php?admin=1&module=$1&action=$2&systemid=$3 [QSA,L]
+#RewriteRule ^xml/admin/([a-z\_]+)/([a-zA-Z]*)  xml.php?admin=1&module=$1&action=$2 [QSA,L]
+#RewriteRule ^xml/admin/([a-z\_]+)  xml.php?admin=1&module=$1 [QSA,L]
 
 # source: /admin/module/action/systemid
 #RewriteRule !^admin/  - [S=4]

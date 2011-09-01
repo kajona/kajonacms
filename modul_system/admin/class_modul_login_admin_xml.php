@@ -47,7 +47,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 		}
 		else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
-			return "<error>".xmlSafeString($this->getText("login_xml_error", "system"))."</error>";
+			return "<message><error>".xmlSafeString($this->getText("login_xml_error", "system"))."</error></message>";
 		}
 	}
 
@@ -58,7 +58,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 	 */
 	protected function actionLogout() {
 		$this->objSession->logout();
-        return "<message>".xmlSafeString($this->getText("logout_xml", "system"))."</message>";
+        return "<message><success>".xmlSafeString($this->getText("logout_xml", "system"))."</success></message>";
 	}
     
     
@@ -69,10 +69,18 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
      */
     protected function actionWADL() {
         $objWadl = new class_wadlgenerator("admin", "login");
-        $objWadl->addMethod(true, "login", array(
-            array("username", "xsd:string", true),
-            array("password", "xsd:string", true)
-        ));
+        $objWadl->addIncludeGrammars("message.xsd");
+        
+        $objWadl->addMethod(
+                true, "login", 
+                array(
+                    array("username", "xsd:string", true),
+                    array("password", "xsd:string", true)
+                ), 
+                array(), 
+                array(
+                    array("application/xml", "message")
+                ));
         
         $objWadl->addMethod(true, "logout", array());
         return $objWadl->getDocument();
