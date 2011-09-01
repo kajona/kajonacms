@@ -66,8 +66,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setAbsolutePosOk")."</message>";
 		    $this->flushCompletePagesCache();
 		}
-		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+		else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
 	}
@@ -87,8 +89,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
     	    else
                 $strReturn .= "<error>".$this->getSystemid()." - ".$this->getText("setStatusError")."</error>";
 	    }
-	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+	    else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 	    return $strReturn;
 	}
@@ -150,8 +154,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             }
 
         }
-	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+	    else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 	    return $strReturn;
     }
@@ -249,8 +255,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
 
         }
-	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+	    else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -322,8 +330,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $strReturn .= "</info>";
 
         }
-	    else
-	        $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+	    else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -357,8 +367,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 
 			$strReturn .= "</modules>";
 		}
-		else
-			$strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+		else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 		return $strReturn;
     }
@@ -447,8 +459,10 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             
 
         }
-        else
-			$strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
         
         return $strReturn;
     }

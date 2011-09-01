@@ -57,8 +57,10 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 		        
 		    $strReturn .= "<message>".$this->getSystemid()." - ".$this->getText("setDashboardPosition")."</message>";    
 		}
-		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+		else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+		    $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
 	}
@@ -77,8 +79,10 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
             $strReturn .= "<![CDATA[". $objConcreteWidget->generateWidgetOutput() ."]]>";
             $strReturn .= "</content>";
         }
-        else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+		    $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -225,8 +229,10 @@ class class_modul_dashboard_admin_xml extends class_admin implements interface_x
 
             $strReturn .= "]]></content>";
         }
-        else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+		    $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }

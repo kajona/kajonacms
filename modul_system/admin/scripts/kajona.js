@@ -675,7 +675,7 @@ KAJONA.admin.statusDisplay = {
 	 */
 	displayXMLMessage : function(message) {
 		//decide, whether to show an error or a message, message only in debug mode
-		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0) {
+		if(message.indexOf("<message>") != -1 && KAJONA_DEBUG > 0 && message.indexOf("<error>") == -1) {
 			var intStart = message.indexOf("<message>")+9;
 			var responseText = message.substr(intStart, message.indexOf("</message>")-intStart);
 			this.messageOK(responseText);

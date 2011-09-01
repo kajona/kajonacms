@@ -52,8 +52,10 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
 			else
                 $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 
         return $strReturn;
@@ -92,8 +94,10 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 $strReturn = "<error>an error occured</error>";
 
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -120,14 +124,20 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 if($objFilesystem->folderCreate($objFmRepo->getStrPath()."/".$strFolder)) {
                     $strReturn = "<message>".xmlSafeString($this->getText("ordner_anlegen_erfolg"))."</message>";
                 }
-                else
-                    $strReturn = "<error>".xmlSafeString($this->getText("order_anlegen_fehler"))."</error>";
+                else {
+                    header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                    $strReturn = "<message><error>".xmlSafeString($this->getText("order_anlegen_fehler"))."</error></message>";
+                }
             }
-            else
-                $strReturn = "<error>".xmlSafeString($this->getText("ordner_anlegen_fehler_l"))."</error>";
+            else {
+                header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                $strReturn = "<message><error>".xmlSafeString($this->getText("ordner_anlegen_fehler_l"))."</error></message>";
+            }
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -153,16 +163,21 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                 class_logger::getInstance()->addLogRow("deleted folder ".$objFmRepo->getStrPath()."/".$strFolder, class_logger::$levelInfo);
                 if($objFilesystem->folderDelete($objFmRepo->getStrPath()."/".$strFolder))
                     $strReturn .= "<message>".xmlSafeString($this->getText("datei_loeschen_erfolg"))."</message>";
-                else
-                    $strReturn .= "<error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error>";
+                else {
+                    header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                    $strReturn .= "<message><error>".xmlSafeString($this->getText("datei_loeschen_fehler"))."</error></message>";
+                }
             }
             else {
-                $strReturn .= "<error>".xmlSafeString($this->getText("ordner_loeschen_fehler_l"))."</error>";
+                header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                $strReturn .= "<message><error>".xmlSafeString($this->getText("ordner_loeschen_fehler_l"))."</error></message>";
             }
 
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
     }
@@ -198,12 +213,16 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                         class_logger::getInstance()->addLogRow("error rotating file ".$strFile, class_logger::$levelWarning);
                 }
             }
-            else
-                $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+            else {
+                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+            }
 
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 
         return $strReturn;
@@ -242,12 +261,16 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                         class_logger::getInstance()->addLogRow("error cropping file ".$strFile, class_logger::$levelWarning);
                 }
             }
-            else
-                $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+            else {
+                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+                $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+            }
 
         }
-        else
-            $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+        else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
 
         return $strReturn;
@@ -293,20 +316,25 @@ class class_modul_filemanager_admin_xml extends class_admin implements interface
                         class_logger::getInstance()->addLogRow("uploaded file ".$strTarget, class_logger::$levelInfo);
                     }
                     else
-                        $strReturn .= "<error>".$this->getText("xmlupload_error_copyUpload")."</error>";
+                        $strReturn .= "<message><error>".$this->getText("xmlupload_error_copyUpload")."</error></message>";
                 }
                 else {
                     @unlink($arrSource["tmp_name"]);
-                    $strReturn .= "<error>".$this->getText("xmlupload_error_filter")."</error>";
+                    header(class_http_statuscodes::$strSC_BADREQUEST);
+                    $strReturn .= "<message><error>".$this->getText("xmlupload_error_filter")."</error></message>";
                 }
             }
-            else
-                $strReturn .= "<error>".xmlSafeString($this->getText("xmlupload_error_notWritable"))."</error>";
+            else {
+                header(class_http_statuscodes::$strSC_INTERNAL_SERVER_ERROR);
+                $strReturn .= "<message><error>".xmlSafeString($this->getText("xmlupload_error_notWritable"))."</error></message>";
+            }
 
 
 		}
-		else
-		    $strReturn .= "<error>".xmlSafeString($this->getText("commons_error_permissions"))."</error>";
+		else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 
         return $strReturn;
 	}

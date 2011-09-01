@@ -1281,8 +1281,10 @@ class class_modul_user_admin extends class_admin implements interface_admin {
             }
             $strReturn .= "</result>\n";
         }
-        else
-            $strReturn .= "<error>".$this->getText("commons_error_permissions")."</error>";
+        else{
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+            $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
+        }
 		return $strReturn;
     }
 
