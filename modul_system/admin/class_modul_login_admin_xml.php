@@ -69,7 +69,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
      */
     protected function actionWADL() {
         $objWadl = new class_wadlgenerator("admin", "login");
-        $objWadl->addIncludeGrammars("message.xsd");
+        $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
         
         $objWadl->addMethod(
                 true, "login", 
