@@ -46,6 +46,7 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 			return "<message><success>".xmlSafeString($this->getText("login_xml_succeess", "system"))."</success></message>";
 		}
 		else {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
 			return "<error>".xmlSafeString($this->getText("login_xml_error", "system"))."</error>";
 		}
 	}
@@ -59,6 +60,23 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 		$this->objSession->logout();
         return "<message>".xmlSafeString($this->getText("logout_xml", "system"))."</message>";
 	}
+    
+    
+    /**
+     * Generates the wadl file for the current module
+     * 
+     * @xml
+     */
+    protected function actionWADL() {
+        $objWadl = new class_wadlgenerator("admin", "login");
+        $objWadl->addMethod(true, "login", array(
+            array("username", "xsd:string", true),
+            array("password", "xsd:string", true)
+        ));
+        
+        $objWadl->addMethod(true, "logout", array());
+        return $objWadl->getDocument();
+    }
 
 
 }

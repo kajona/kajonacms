@@ -844,8 +844,10 @@ abstract class class_admin {
             if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "")
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
             
-            if(get_class($this) == "class_modul_login_admin_xml")
+            if(get_class($this) == "class_modul_login_admin_xml") {
+                header(class_http_statuscodes::$strSC_UNAUTHORIZED);
                 throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
+            }
             
             throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
         }

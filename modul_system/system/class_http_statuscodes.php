@@ -16,6 +16,21 @@ class class_http_statuscodes {
 
     
     /**
+     * Status code (400) indicating a malformed request
+     *
+     * @var int
+     */
+    public static  $strSC_BADREQUEST = "HTTP/1.0 400 Bad Request";
+    
+    /**
+     * Status code (401) indicating authentication is possible but has failed or not yet been provided.
+     *
+     * @var int
+     */
+    public static  $strSC_UNAUTHORIZED = "HTTP/1.0 401 Unauthorized";
+    
+    
+    /**
      * Status code (403) indicating the server understood the request but refused to fulfill it.
      *
      * @var int

@@ -52,8 +52,10 @@ class class_xml {
         $objDispatcher = new class_request_dispatcher();
         $strContent = $objDispatcher->processRequest(_admin_, $strModule, $strAction, $strLanguageParam);
         
-        if($strContent == "")
+        if($strContent == "") {
+            header(class_http_statuscodes::$strSC_BADREQUEST);
             $strContent = "<error>An error occured, malformed request</error>";
+        }
 
         $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
         return $strContent;
