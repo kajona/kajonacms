@@ -497,6 +497,19 @@ class class_installer_system extends class_installer_base implements interface_i
             $strPassword = dbsafeString($this->objSession->getSession("install_password"));
             $strEmail = dbsafeString($this->objSession->getSession("install_email"));
 		}
+        
+        //create a default language
+		$strReturn .= "Creating new default-language\n";
+        $objLanguage = new class_modul_languages_language();
+
+        if($this->strContentLanguage == "de")
+            $objLanguage->setStrName("de");
+        else
+            $objLanguage->setStrName("en");
+
+        $objLanguage->setBitDefault(true);
+        $objLanguage->updateObjectToDb();
+        $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
 
 		//the admin-language
 		$strAdminLanguage = $this->objSession->getAdminLanguage();
@@ -523,18 +536,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
 
-        //create a default language
-		$strReturn .= "Creating new default-language\n";
-        $objLanguage = new class_modul_languages_language();
-
-        if($this->strContentLanguage == "de")
-            $objLanguage->setStrName("de");
-        else
-           $objLanguage->setStrName("en");
-
-        $objLanguage->setBitDefault(true);
-        $objLanguage->updateObjectToDb();
-        $strReturn .= "ID of new language: ".$objLanguage->getSystemid()."\n";
+        
 
 		return $strReturn;
 	}
