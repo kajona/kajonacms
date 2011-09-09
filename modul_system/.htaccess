@@ -15,13 +15,13 @@
 # enable only in case of errors
 #RewriteBase /
 
-# skip all requests not ending with .html or .rss - they don't have any rewrite rules (little performance tweak)
-#RewriteRule !\.(html|rss)$ - [L]
-
 # enable these two lines and insert your domain to prevent duplicate content in search engines (SEO)
 # but don't enable on your local machine - otherwise you'll always be redirected to the live server
 #RewriteCond %{HTTP_HOST} !^www.yourdomain.com$ [NC]
 #RewriteRule ^(.*)$ http://www.yourdomain.com/$1 [L,R=301]
+
+# skip all requests not ending with .html or .rss - they don't have any rewrite rules (little performance tweak)
+#RewriteRule !\.(html|rss)$ - [L]
 
 ######################################## ADMIN REWRITING ##################################################
 
