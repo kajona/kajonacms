@@ -156,17 +156,22 @@ class class_modul_downloads_file extends class_model implements interface_model,
     * @return mixed
     * @static
     */
-	public static function getFolderLevel($strPrevId) {
+	public static function getFolderLevel($strPrevId, $strPathFilter = "") {
+        $arrParams = array($strPrevId);
+        if($strPathFilter != "")
+            $arrParams[] = $strPathFilter;
+        
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system,
 		                           "._dbprefix_."downloads_file
 						WHERE system_id = downloads_id
 						AND system_prev_id= ?
+                        ".($strPathFilter != "" ? "AND downloads_filename = ? " : "")."
 						AND downloads_type = 1
 						ORDER BY system_sort";
 
 		$objDB = class_carrier::getInstance()->getObjDB();
 
-		$arrIds =  $objDB->getPArray($strQuery, array($strPrevId));
+		$arrIds =  $objDB->getPArray($strQuery, $arrParams);
 		$arrReturn = array();
 		foreach ($arrIds as $arrOneId)
 		    $arrReturn[] = new class_modul_downloads_file($arrOneId["system_id"]);
