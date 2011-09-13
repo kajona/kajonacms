@@ -2002,7 +2002,14 @@ KAJONA.admin.openPrintView = function(strUrlToLoad) {
     if(strUrlToLoad == null)
         strUrlToLoad = location.href;
     
-    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad.replace(/#/g, '')+"&printView=1"); 
+    strUrlToLoad = strUrlToLoad.replace(/#/g, '')+"&printView=1";
+    
+    if(strUrlToLoad.indexOf('html&')) {
+        strUrlToLoad = strUrlToLoad.replace(/html&/g, 'html?');
+    }
+    
+    KAJONA.admin.folderview.dialog.setContentIFrame(strUrlToLoad); 
+    
     KAJONA.admin.folderview.dialog.init(intWidth+"px", intHeight+"px"); return false;
 };
 
