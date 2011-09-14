@@ -148,8 +148,11 @@ abstract class class_portal  {
      * This method triggers the internal processing.
      * It may be overridden if required, e.g. to implement your own action-handling.
      * By default, the method to be called is set up out of the action-param passed.
-     * Example: The action requested is names "newPage". Therefore, the framework tries to
-     * call actionNewPage(). If now method matching the schema is found, an exception is being thrown.
+     * Example: The action requested is named "newPage". Therefore, the framework tries to
+     * call actionNewPage(). If now method matching the schema is found, nothing is done.
+     * <b> Please note that this is differnt from the admin-handling! </b> In the case of admin-classes, 
+     * an exception is thrown. But since there could be many modules on a single page, not each module
+     * may be triggered.
      *
      *
      * @param string $strAction
@@ -178,8 +181,16 @@ abstract class class_portal  {
             $this->strOutput = $this->$strMethodName();
         }
         else {
-            $objReflection = new ReflectionClass($this);
-            throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
+            
+            //try to load the list-method
+            $strListMethodName = "actionList";
+            if(method_exists($this, $strListMethodName)) {
+                $this->strOutput = $this->$strListMethodName();
+            }
+            else {
+                $objReflection = new ReflectionClass($this);
+                throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
+            }
         }
 
         return $this->strOutput;
