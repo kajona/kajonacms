@@ -623,9 +623,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightView() {
+    public function rightView() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightView($this->getSystemid());
         }
@@ -637,9 +636,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightEdit() {
+    public function rightEdit() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightEdit($this->getSystemid());
         }
@@ -651,9 +649,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightDelete() {
+    public function rightDelete() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightDelete($this->getSystemid());
         }
@@ -665,9 +662,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight() {
+    public function rightRight() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight($this->getSystemid());
         }
@@ -679,9 +675,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight1() {
+    public function rightRight1() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight1($this->getSystemid());
         }
@@ -693,9 +688,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight2() {
+    public function rightRight2() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight2($this->getSystemid());
         }
@@ -707,9 +701,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight3() {
+    public function rightRight3() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight3($this->getSystemid());
         }
@@ -721,9 +714,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight4() {
+    public function rightRight4() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight4($this->getSystemid());
         }
@@ -735,9 +727,8 @@ abstract class class_root {
      * Systemid MUST be given, otherwise false
      *
      * @return bool
-     * @final
      */
-    public final function rightRight5() {
+    public function rightRight5() {
         if($this->getSystemid() != "") {
             return $this->objRights->rightRight5($this->getSystemid());
         }
