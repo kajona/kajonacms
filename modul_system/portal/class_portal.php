@@ -150,7 +150,7 @@ abstract class class_portal  {
      * By default, the method to be called is set up out of the action-param passed.
      * Example: The action requested is named "newPage". Therefore, the framework tries to
      * call actionNewPage(). If now method matching the schema is found, nothing is done.
-     * <b> Please note that this is differnt from the admin-handling! </b> In the case of admin-classes, 
+     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes, 
      * an exception is thrown. But since there could be many modules on a single page, not each module
      * may be triggered.
      *
