@@ -438,13 +438,13 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
     		   	if($objRepo->getStrViewFilter() != "")
     		   		$arrViewFilter = explode(",", $objRepo->getStrViewFilter());
 
-    		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
                 $strActions = "";
                 if($strAddonAction == "") {
                     $strActions .= $this->generateNewFolderDialogCode();
                     $strActions .= getLinkAdminManual("href=\"javascript:init_fm_newfolder_dialog();\"", $this->getText("commons_create_folder"), "", "", "", "", "", "inputSubmit");
                     $strActions .= $this->actionUploadFileInternal();
                 }
+    		   	$arrFiles = $objFilesystem->getCompleteList($this->strFolder, $arrViewFilter, array(".svn"), array(".svn", ".", ".."));
 
     		   	//Building a status-bar, using the toolkit
     		   	$arrInfobox = array();
@@ -736,7 +736,7 @@ class class_modul_filemanager_admin extends class_admin implements  interface_ad
 			//Upload-Form
 			$objRepo = new class_modul_filemanager_repo($this->getSystemid());
 
-    	    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], "uploadFile", "datei_upload_final=1"), "formUpload", "multipart/form-data");
+    	    $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($this->arrModule["modul"], $this->getAction(), "datei_upload_final=1"), "formUpload", "multipart/form-data");
 			$strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
 			$strReturn .= $this->objToolkit->formInputHidden("folder", $this->strFolderOld);
 
