@@ -760,13 +760,16 @@ abstract class class_root {
 
 	            $strClassname = uniStrReplace(".php", "", $strOneFile);
 	            //create instance
-	            $objModel = new $strClassname;
-	            if ($objModel instanceof class_root) {
-	                if(method_exists($objModel, "doAdditionalActionsOnStatusChange")) {
-	                    class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional actions on statuschange", class_logger::$levelInfo);
-	                    $bitReturn &= $objModel->doAdditionalActionsOnStatusChange($strSystemid);
-	                }
-	            }
+                $objClass = new ReflectionClass($strClassname);
+                if(!$objClass->isAbstract()) {
+                    $objModel = new $strClassname;
+                    if ($objModel instanceof class_root) {
+                        if(method_exists($objModel, "doAdditionalActionsOnStatusChange")) {
+                            class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional actions on statuschange", class_logger::$levelInfo);
+                            $bitReturn &= $objModel->doAdditionalActionsOnStatusChange($strSystemid);
+                        }
+                    }
+                }
 	        }
 	    }
 
@@ -1120,13 +1123,16 @@ abstract class class_root {
 
 	            $strClassname = uniStrReplace(".php", "", $strOneFile);
 	            //create instance
-	            $objModel = new $strClassname;
-	            if ($objModel instanceof class_root) {
-	                if(method_exists($objModel, "doAdditionalCleanupsOnDeletion")) {
-	                    class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional deletions", class_logger::$levelInfo);
-	                    $bitReturn &= $objModel->doAdditionalCleanupsOnDeletion($strSystemid);
-	                }
-	            }
+                $objClass = new ReflectionClass($strClassname);
+                if(!$objClass->isAbstract()) {
+                    $objModel = new $strClassname;
+                    if ($objModel instanceof class_root) {
+                        if(method_exists($objModel, "doAdditionalCleanupsOnDeletion")) {
+                            class_logger::getInstance()->addLogRow("calling ".$strClassname." for additional deletions", class_logger::$levelInfo);
+                            $bitReturn &= $objModel->doAdditionalCleanupsOnDeletion($strSystemid);
+                        }
+                    }
+                }
 	        }
 	    }
 
