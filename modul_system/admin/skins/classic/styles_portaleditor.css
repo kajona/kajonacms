@@ -45,6 +45,16 @@
     width: 100%;
 }
 
+.pe_inactiveElement {
+    border: 1px solid #333333;
+    border-radius: 2px;
+    padding: 3px;
+    margin: 2px 0 2px 0px;
+    background-color: #cccccc;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
 /* P O R T A L E D I T O R   C O N T A I N E R */
 .peContainerOut {
 	display: inline !important;

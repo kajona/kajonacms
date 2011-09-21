@@ -270,6 +270,20 @@ class class_toolkit_portal extends class_toolkit {
         return $strReturn;
     }
 
+    
+    /**
+     * Creates the portaleditor toolbar at top of the page
+     *
+     * @param array $arrContent
+     * @return string
+     */
+    public function getPeInactiveElement($arrContent) {
+        $strAdminSkin = class_carrier::getInstance()->getObjSession()->getAdminSkin();
+        $strTemplateID = $this->objTemplate->readTemplate("/admin/skins/".$strAdminSkin."/elements.tpl", "pe_inactiveElement", true);
+		$strReturn = $this->objTemplate->fillTemplate($arrContent, $strTemplateID);
+
+		return $strReturn;
+    }
 
 }
 ?>

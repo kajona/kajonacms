@@ -917,6 +917,10 @@ Displays the new element button
     </script>
 </pe_actionNewWrapper>
 
+<pe_inactiveElement>
+    <div class="pe_inactiveElement">%%title%%</div>
+</pe_inactiveElement>
+
 ---------------------------------------------------------------------------------------------------------
 -- LANGUAGES --------------------------------------------------------------------------------------------
 

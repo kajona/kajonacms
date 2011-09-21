@@ -134,12 +134,19 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		//If we reached up till here, we can begin loading the elements to fill
 		$arrElementsOnPage = array();
 
-	    $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
+        if($bitPeRequested)
+            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), false, $this->getPortalLanguage());
+        else
+            $arrElementsOnPage = class_modul_pages_pageelement::getElementsOnPage($objPageData->getSystemid(), true, $this->getPortalLanguage());
 		//If theres a master-page, load elements on that, too
 		$objMasterData = class_modul_pages_page::getPageByName("master");
         $bitEditPermissionOnMasterPage = false;
 		if($objMasterData->getStrName() != "") {
-			$arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
+            $arrElementsOnMaster = array();
+            if($bitPeRequested)
+                $arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), false, $this->getPortalLanguage());
+            else
+                $arrElementsOnMaster = class_modul_pages_pageelement::getElementsOnPage($objMasterData->getSystemid(), true, $this->getPortalLanguage());
 			//and merge them
 			$arrElementsOnPage = array_merge($arrElementsOnPage, $arrElementsOnMaster);
             if($objMasterData->rightEdit())
@@ -209,11 +216,18 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
             //cache-handling. load element from cache.
             //if the element is re-generated, save it back to cache.
             if(_pages_cacheenabled_ == "true" && $this->getParam("preview") != "1" && !$bitErrorpage) {
-
+                $strElementOutput = "";
                 //if the portaleditor is disabled, do the regular cache lookups in storage. otherwise regenerate again and again :)
                 if($bitPeRequested) {
                     //pe is enabled --> regenerate the funky contents
-                    $strElementOutput = $objElement->getElementOutput();
+                    if($objElement->getStatus() == 0) {
+                        $arrPeElement = array();
+                        $arrPeElement["title"] = $this->getText("pe_inactiveElement", "pages", "admin"). " (".$objOneElementOnPage->getStrElement().")";
+                        $strElementOutput = $this->objToolkit->getPeInactiveElement($arrPeElement);
+                        $strElementOutput = class_element_portal::addPortalEditorSetActiveCode($strElementOutput, $objElement->getSystemid(), array());
+                    }
+                    else
+                        $strElementOutput = $objElement->getElementOutput();
                 }
                 else {
                     //pe not to be taken into account --> full support of caching
