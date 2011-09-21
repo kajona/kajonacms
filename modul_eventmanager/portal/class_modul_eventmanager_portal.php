@@ -42,32 +42,78 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
 		$strReturn = "";
         $strEvents = "";
 
-        $arrEvents = class_modul_eventmanager_event::getAllEvents(null, null, null, null, true, $this->arrElementData["int1"]);
-        $strEventTemplateID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_list_entry");
-        foreach($arrEvents as $objOneEvent) {
-            if($objOneEvent->rightView()) {
-                $arrTemplate = array();
-                $arrTemplate["dateTimeFrom"] = dateToString($objOneEvent->getObjStartDate(), true);
-                $arrTemplate["dateFrom"] = dateToString($objOneEvent->getObjStartDate(), false);
-                $arrTemplate["dateTimeUntil"] = dateToString($objOneEvent->getObjEndDate(), true);
-                $arrTemplate["dateUntil"] = dateToString($objOneEvent->getObjEndDate(), false);
-                $arrTemplate["title"] = $objOneEvent->getStrTitle();
-                $arrTemplate["description"] = $objOneEvent->getStrDescription();
-                $arrTemplate["location"] = $objOneEvent->getStrLocation();
-                $arrTemplate["detailsLinkHref"] = getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid());
-
-                if($objOneEvent->getIntRegistrationRequired() == "1" && $objOneEvent->rightRight1())
-                    $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objOneEvent->getSystemid());
-
-                $strEvents .= $this->fillTemplate($arrTemplate, $strEventTemplateID);
-            }
+        //switch between calendar and list-modes
+        if($this->arrElementData["int2"] == "0") {
+            //calendar mode
+            $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_calendar");
+            $arrTemplate = array();
+            $arrTemplate["cal_eventsource"] = _xmlpath_."?module=eventmanager&action=getJsonEvents&page=".$this->getPagename();
+            $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
         }
+        else {
+            //list based mode
+            $arrEvents = class_modul_eventmanager_event::getAllEvents(null, null, null, null, true, $this->arrElementData["int1"]);
+            $strEventTemplateID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_list_entry");
+            foreach($arrEvents as $objOneEvent) {
+                if($objOneEvent->rightView()) {
+                    $arrTemplate = array();
+                    $arrTemplate["dateTimeFrom"] = dateToString($objOneEvent->getObjStartDate(), true);
+                    $arrTemplate["dateFrom"] = dateToString($objOneEvent->getObjStartDate(), false);
+                    $arrTemplate["dateTimeUntil"] = dateToString($objOneEvent->getObjEndDate(), true);
+                    $arrTemplate["dateUntil"] = dateToString($objOneEvent->getObjEndDate(), false);
+                    $arrTemplate["title"] = $objOneEvent->getStrTitle();
+                    $arrTemplate["description"] = $objOneEvent->getStrDescription();
+                    $arrTemplate["location"] = $objOneEvent->getStrLocation();
+                    $arrTemplate["detailsLinkHref"] = getLinkPortalHref($this->getPagename(), "", "eventDetails", "", $objOneEvent->getSystemid());
 
-        $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_list");
-        $strReturn .= $this->fillTemplate(array("events" => $strEvents), $strWrapperID);
+                    if($objOneEvent->getIntRegistrationRequired() == "1" && $objOneEvent->rightRight1())
+                        $arrTemplate["registerLinkHref"] = getLinkPortalHref($this->getPagename(), "", "registerForEvent", "", $objOneEvent->getSystemid());
+
+                    $strEvents .= $this->fillTemplate($arrTemplate, $strEventTemplateID);
+                }
+            }
+
+            $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_list");
+            $strReturn .= $this->fillTemplate(array("events" => $strEvents), $strWrapperID);
+        }
         
 		return $strReturn;
 	}
+    
+    /**
+     * 
+     * @xml
+     * @return string
+     */
+    protected function actionGetJsonEvents() {
+        $strReturn = "";
+        
+        $arrPrintableEvents = array();
+        class_xml::setBitSuppressXmlHeader(true);
+        
+        $objStartDate = null; $objEndDate = null;
+        if($this->getParam("start") != "" && $this->getParam("end") != "") {
+            $objStartDate = new class_date($this->getParam("start"));
+            $objEndDate = new class_date($this->getParam("end"));
+        }
+        
+        $arrEvents = class_modul_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
+        foreach($arrEvents as $objOneEvent) {
+            if($objOneEvent->rightView()) {
+                $arrSingleEvent = array();
+                $arrSingleEvent["id"] = $objOneEvent->getSystemid();
+                $arrSingleEvent["title"] = $objOneEvent->getStrTitle();
+                $arrSingleEvent["start"] = $objOneEvent->getObjStartDate()->getTimeInOldStyle();
+                $arrSingleEvent["end"] = $objOneEvent->getObjEndDate()->getTimeInOldStyle();
+                $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid()));
+                $arrPrintableEvents[] = $arrSingleEvent;
+            }
+        }
+        
+        $strReturn = json_encode($arrPrintableEvents);
+        return $strReturn;
+    }
+    
 
     /**
      * Creates a view of all event-details

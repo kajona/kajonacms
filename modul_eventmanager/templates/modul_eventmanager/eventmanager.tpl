@@ -1,4 +1,33 @@
 
+
+<event_calendar>
+    <script type='text/javascript'>
+
+            KAJONA.portal.loader.load(
+                null,
+            	[KAJONA_WEBPATH+"/portal/scripts/jquery/jquery-1.5.2.min.js",
+            	 KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.min.js",
+            	 KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.css"],
+                 function() {
+                     $(document).ready(function() {
+                        // page is now ready, initialize the calendar...
+                        $('#eventmanagerCalendar').fullCalendar({
+                            buttonText: {
+                                today: '%%lang_cal_today%%'
+                            },
+                            events: "%%cal_eventsource%%",
+                            firstDay : 1
+                        })
+
+                    });
+                 }
+                 
+            );
+    </script>       
+    <div id="eventmanagerCalendar"></div>
+</event_calendar>
+
+
 <!-- available placeholders: folderlist, filelist, pathnavigation, link_back, link_pages, link_forward -->
 <event_list>
     <div>

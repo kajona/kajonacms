@@ -137,7 +137,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
      */
 	public static function getAllParticipants($strEventId, $intStart = null, $intEnd = null) {
 		$strQuery = "SELECT system_id 
-                       FROM "._dbprefix_."eventmanager_participant,
+                       FROM "._dbprefix_."em_participant,
 						     "._dbprefix_."system
 				      WHERE system_id = em_pt_id
                         AND system_prev_id = ?
@@ -161,7 +161,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
      */
     public static function getAllParticipantsCount($strEventId) {
 		$strQuery = "SELECT COUNT(*)
-                       FROM "._dbprefix_."eventmanager_participant,
+                       FROM "._dbprefix_."em_participant,
 						     "._dbprefix_."system
 				      WHERE system_id = em_pt_id
                         AND system_prev_id = ?
@@ -180,7 +180,7 @@ class class_modul_eventmanager_participant extends class_model implements interf
 	 */
 	public function deleteParticipant() {
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
-        $strQuery = "DELETE FROM "._dbprefix_."eventmanager_participant WHERE em_pt_id = ?";
+        $strQuery = "DELETE FROM "._dbprefix_."em_participant WHERE em_pt_id = ?";
         if($this->objDB->_pQuery($strQuery, array($this->getSystemid()))) {
             if($this->deleteSystemRecord($this->getSystemid())) {
                 $this->unsetSystemid();

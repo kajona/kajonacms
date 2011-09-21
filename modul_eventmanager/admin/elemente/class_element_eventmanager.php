@@ -28,7 +28,7 @@ class class_element_eventmanager extends class_element_admin implements interfac
 		$arrModule["table"] 		= _dbprefix_."element_universal";
 		$arrModule["modul"]			= "elemente";
 
-		$arrModule["tableColumns"]  = "char1|char,int1|number";
+		$arrModule["tableColumns"]  = "char1|char,int1|number,int2|number";
 
 		parent::__construct($arrModule);
 	}
@@ -58,12 +58,19 @@ class class_element_eventmanager extends class_element_admin implements interfac
         else
             $strReturn .= $this->objToolkit->formInputDropdown("char1", $arrTemplatesDD, $this->getText("template"), (isset($arrElementData["char1"]) ? $arrElementData["char1"] : "" ));
 
+        $arrModeDD = array(
+            "0" => $this->getText("eventmanager_mode_calendar"),
+            "1" => $this->getText("eventmanager_mode_list")
+        );
+        $strReturn .= $this->objToolkit->formInputDropdown("int2", $arrModeDD, $this->getText("eventmanager_mode"), (isset($arrElementData["int2"]) ? $arrElementData["int2"] : "" ));
+        
         $arrOrderDD = array(
             "0" => $this->getText("eventmanager_order_desc"),
             "1" => $this->getText("eventmanager_order_asc")
         );
         
-        $strReturn .= $this->objToolkit->formInputDropdown("int1", $arrOrderDD, $this->getText("eventmanager_order"), $arrElementData["int1"]);
+        $strReturn .= $this->objToolkit->formTextRow($this->getText("eventmanager_order_hint"));
+        $strReturn .= $this->objToolkit->formInputDropdown("int1", $arrOrderDD, $this->getText("eventmanager_order"), (isset($arrElementData["int1"]) ? $arrElementData["int1"] : "" ));
 
        
 		$strReturn .= $this->objToolkit->setBrowserFocus("int1");

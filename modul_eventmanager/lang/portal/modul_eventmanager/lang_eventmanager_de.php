@@ -32,4 +32,6 @@ $lang["registerMailBodyIntro"]           = "Bitte bestätigen Sie die Anmeldung 
 $lang["registerMailSubject"]             = "Bitte bestätigen Sie ihre Anmeldung";
 $lang["registerSubmit"]                  = "Anmelden";
 $lang["registerlink"]                    = "Anmelden";
+
+$lang["cal_today"]                       = "Heute";
 ?>

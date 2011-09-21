@@ -187,6 +187,8 @@ class class_modul_eventmanager_event extends class_model implements interface_mo
      * @param int $intEnd
      * @param class_date $objStartDate
      * @param class_Date $objEndDate
+     * @param bool $bitOnlyActive
+     * @param int $intOrder
      * @return class_modul_eventmanager_event
      */
     public static function getAllEvents($intStart = null, $intEnd = null, class_date $objStartDate = null, class_date $objEndDate = null, $bitOnlyActive = false, $intOrder = 0) {
