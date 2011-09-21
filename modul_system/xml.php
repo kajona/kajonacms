@@ -30,6 +30,8 @@ else
  */
 class class_xml {
     
+    private static $bitSuppressXmlHeader = false;
+    
     public function __construct() {
 		class_carrier::getInstance();
     }
@@ -56,10 +58,21 @@ class class_xml {
             header(class_http_statuscodes::$strSC_BADREQUEST);
             $strContent = "<error>An error occured, malformed request</error>";
         }
-
-        $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
+        
+        if(!self::$bitSuppressXmlHeader)
+            $strContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n".$strContent;
         return $strContent;
     }
+    
+    /**
+     * If set to true, the output will be sent without the mandatory xml-head-element
+     * @param bool $bitSuppressXmlHeader 
+     */
+    public static function setBitSuppressXmlHeader($bitSuppressXmlHeader) {
+        self::$bitSuppressXmlHeader = $bitSuppressXmlHeader;
+    }
+
+
 
 }
 

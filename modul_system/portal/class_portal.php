@@ -182,6 +182,11 @@ abstract class class_portal  {
         }
         else {
             
+            if(_xmlLoader_ === true) {
+                $objReflection = new ReflectionClass($this);
+                throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
+            }
+            
             //try to load the list-method
             $strListMethodName = "actionList";
             if(method_exists($this, $strListMethodName)) {
