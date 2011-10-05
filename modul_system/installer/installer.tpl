@@ -139,7 +139,7 @@ function switchDriver() {
     }
 }    
 </script>
-
+<br />
 <form action="_webpath_/installer/installer.php" method="POST">
 <input type="hidden" name="write" value="true" />
 <div id="dbInfo">
@@ -157,7 +157,6 @@ function switchDriver() {
                 <option value="sqlite3">SQLite 3</option>
                 <option value="oci8">Oracle (oci8)</option>
              </select></div><br />
-<div><label for="driver"></label>%%config_driverinfo%%</div><br />
 <div><label for="port">%%config_port%%</label><input type="text" name="port" id="port" class="inputText" /></div><br />
 <div><label for="port"></label>%%config_portinfo%%</div><br />
 <div><label for="submit"></label><input type="submit" value="%%config_save%%" class="inputSubmit" /></div><br />

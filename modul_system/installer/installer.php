@@ -179,17 +179,10 @@ class class_installer {
 
             //check for available modules
             $strMysqliInfo = ""; $strSqlite3Info = ""; $strPostgresInfo = ""; $strOci8Info = "";
-            $arrDrivers = array();
-            if(in_array("mysqli", get_loaded_extensions())) {
-                $strMysqliInfo = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."</div>";
-            }
-            else {
+            if(!in_array("mysqli", get_loaded_extensions())) {
                 $strMysqliInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." mysqli</div>";
             }
-            if(in_array("pgsql", get_loaded_extensions())) {
-                $strPostgresInfo = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."</div>";
-            }
-            else {
+            if(!in_array("pgsql", get_loaded_extensions())) {
                 $strPostgresInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." postgres</div>";
             }
             if(in_array("sqlite3", get_loaded_extensions())) {
@@ -217,7 +210,6 @@ class class_installer {
                                                                   "config_dbname"  => $this->getText("installer_config_dbname"),
                                                                   "config_prefix"  => $this->getText("installer_config_dbprefix"),
                                                                   "config_save"  => $this->getText("installer_config_write"),
-                                                                  "config_driverinfo" => $this->getText("installer_config_dbdriverinfo").implode(", ", $arrDrivers),
                                                                   "mysqliInfo" => $strMysqliInfo,
                                                                   "sqlite3Info" => $strSqlite3Info,
                                                                   "postgresInfo" => $strPostgresInfo,
