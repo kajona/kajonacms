@@ -70,7 +70,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 
 	public function getReport() {
 	    $strReturn = "";
-        
+
         //Create Data-table
         $arrHeader = array();
 
@@ -99,7 +99,7 @@ class class_stats_report_common implements interface_admin_statsreports {
         $arrValues[5][] = $this->objTexts->getText("anzahl_online", "stats", "admin");
         $arrValues[5][] = $this->getNumberOfCurrentUsers();
 
-        
+
         $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrValues);
 
 		return $strReturn;
@@ -158,7 +158,7 @@ class class_stats_report_common implements interface_admin_statsreports {
 		return $intReturn;
 	}
 
-    
+
 
 	/**
 	 * Returns the number of visitors
@@ -243,9 +243,9 @@ class class_stats_report_common implements interface_admin_statsreports {
 		$arrHits = array();
 		$arrUser = array();
 		$arrTickLabels = array();
-		
+
 		$intDaysPerLoad = 10;
-		
+
         //create tick labels
         $intCount = 0;
         $intStart = $this->intDateStart;
@@ -294,9 +294,9 @@ class class_stats_report_common implements interface_admin_statsreports {
 		if($intCount > 1) {
 
             $objChart2 = class_graph_factory::getGraphInstance();
-            $objChart2->setStrGraphTitle("Number of hits");
-            $objChart2->setStrXAxisTitle("Date");
-            $objChart2->setStrYAxisTitle("Hits");
+            $objChart2->setStrGraphTitle($this->objTexts->getText("graph_hitsPerDay", "stats", "admin"));
+            $objChart2->setStrXAxisTitle($this->objTexts->getText("graph_date", "stats", "admin"));
+            $objChart2->setStrYAxisTitle($this->objTexts->getText("graph_hits", "stats", "admin"));
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
             $objChart2->setArrXAxisTickLabels($arrTickLabels);
@@ -306,9 +306,9 @@ class class_stats_report_common implements interface_admin_statsreports {
     		$objChart2->saveGraph($strImagePath1);
 
             $objChart3 = class_graph_factory::getGraphInstance();
-            $objChart3->setStrGraphTitle("Number of visits");
-            $objChart3->setStrXAxisTitle("Date");
-            $objChart3->setStrYAxisTitle("Visits");
+            $objChart3->setStrGraphTitle($this->objTexts->getText("graph_visitorsPerDay", "stats", "admin"));
+            $objChart3->setStrXAxisTitle($this->objTexts->getText("graph_date", "stats", "admin"));
+            $objChart3->setStrYAxisTitle($this->objTexts->getText("graph_visitors", "stats", "admin"));
             $objChart3->setIntWidth(715);
             $objChart3->setIntHeight(200);
             $objChart3->setArrXAxisTickLabels($arrTickLabels);
@@ -320,7 +320,7 @@ class class_stats_report_common implements interface_admin_statsreports {
             $this->objDB->flushQueryCache();
 
             return array((_webpath_.$strImagePath1), (_webpath_.$strImagePath2));
-		
+
 		}
 		else
 		  return "";
