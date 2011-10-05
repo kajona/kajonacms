@@ -253,8 +253,8 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strPages .= $this->getText("liste_seiten_leer");
 
             $strPathNavi = $this->generateFolderNavigation();
-            
-            
+
+
             //if languages are installed, present a language switch right here
             if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
                 $arrToolbarEntries = array();
@@ -264,7 +264,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
             }
             else
                 $strPathNavi .= "<br /><br />";
-            
+
 			$strReturn .= $strPathNavi.$this->generateTreeView($strFolder.$strPages);
 
 		}
@@ -346,7 +346,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 			if(count($arrPages) == 0)
 				$strReturn .= $this->getText("liste_seiten_leer");
-            
+
             //if languages are installed, present a language switch right here
             $strPathNavi = "";
             if(count(class_modul_languages_language::getAllLanguages(true)) > 1) {
@@ -355,7 +355,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 $arrToolbarEntries[] = $objLanguages->getLanguageSwitch();
                 $strPathNavi .= $this->objToolkit->getContentToolbar($arrToolbarEntries);
             }
-            
+
             $strReturn = $strPathNavi.$strReturn;
 
 		}
@@ -1356,7 +1356,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
     // -- Helferfunktionen ------------------------------------------------------------------------------
-    
+
 
     /**
      * Checks, if a new element already exists
@@ -1372,7 +1372,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
         else
             return false;
     }
-    
+
     // --- Folderview -----------------------------------------------------------------------------------
 
     /**
@@ -1383,13 +1383,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	protected function actionPagesFolderBrowser() {
 		$strReturn = "";
 		$intCounter = 1;
-        
+
         $this->setArrModuleEntry("template", "/folderview.tpl");
-        
+
         if ($this->getParam("CKEditorFuncNum") != "") {
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
-        
+
         //param init
         $bitPages = ($this->getParam("pages") != "" ? true : false);
         $bitPageAliases = ($this->getParam("pagealiases") != "" ? true : false);
@@ -1473,7 +1473,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 		//Load the list of pagelements available on the page
 		if($strPageid != "0") {
 		    $strReturn .= $this->objToolkit->divider();
-            $arrPageelements = class_modul_pages_pageelement::getElementsOnPage($strPageid, true, $this->objSession->getAdminLanguage());
+            $arrPageelements = class_modul_pages_pageelement::getElementsOnPage($strPageid, true, $this->getLanguageToWorkOn());
             $objPage = new class_modul_pages_page($strPageid);
             if(count($arrPageelements) > 0) {
                 $strReturn .= $this->objToolkit->listHeader();
@@ -1494,7 +1494,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 		return $strReturn;
 	}
-    
+
     // --- xml ------------------------------------------------------------------------------------------
     /**
 	 * Creates a list of sites reduced to match the filter passed.
