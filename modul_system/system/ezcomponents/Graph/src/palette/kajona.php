@@ -13,7 +13,7 @@ class ezcGraphPaletteKajona extends ezcGraphPalette
      *
      * @var ezcGraphColor
      */
-    protected $axisColor = '#2E3436';
+    protected $axisColor = '#AFAFAF';
 
     /**
      * Array with colors for datasets
@@ -32,7 +32,7 @@ class ezcGraphPaletteKajona extends ezcGraphPalette
     protected $dataSetSymbol = array(
         ezcGraph::NO_SYMBOL,
     );
-   
+
     /**
      * Name of font to use
      *

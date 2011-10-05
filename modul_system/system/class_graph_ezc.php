@@ -16,7 +16,7 @@ spl_autoload_register( array( 'ezcBase', 'autoload' ) );
  * This class could be used to create graphs based on the ez components API.
  * ezc renders charts on the serverside and passes them back as images, including full support
  * of SVG images.
- * 
+ *
  * @package modul_system
  * @since 3.4
  * @author sidler@mulchprod.de
@@ -32,13 +32,13 @@ class class_graph_ezc implements interface_graph {
     private $intHeight = 200;
 
     private $strBackgroundColor = "#FFFFFF";
-    private $strTitleBackgroundColor = "#CCCCCC";
+    private $strTitleBackgroundColor = "#FFFFFF";
     private $strFontColor = "#6F6F6F";
     private $strTitleFontColor = "#000000";
 
     private $bitRenderLegend = true;
     private $bitLegendPositionBottom = false;
-    private $strFont = "/fonts/dejavusans.ttf"; 
+    private $strFont = "/fonts/dejavusans.ttf";
 
     private $intXAxisAngle = 0;
     private $arrXAxisLabels = array();
@@ -48,7 +48,7 @@ class class_graph_ezc implements interface_graph {
 
     private $intMaxValue = 0;
     private $intMinValue = 0;
-    
+
 
 
 	//---------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ class class_graph_ezc implements interface_graph {
         $this->arrDataSets[$strLegend] = array("data" => new ezcGraphArrayDataSet($arrEntries));
         if($bitWriteValues)
             $this->arrDataSets[$strLegend]["data"]->highlight = true;
-        
+
 	}
 
 
@@ -145,7 +145,7 @@ class class_graph_ezc implements interface_graph {
 	 *  $objGraph->setStrYAxisTitle("y-axis");
 	 *  $objGraph->setStrGraphTitle("Test Graph");
 	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");  
+	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
 	 *
 	 * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
@@ -177,7 +177,7 @@ class class_graph_ezc implements interface_graph {
 
 	}
 
-    
+
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
      * Add a set of linePlot to a graph to get more then one line.
@@ -200,14 +200,14 @@ class class_graph_ezc implements interface_graph {
     public function addLinePlot($arrValues, $strLegend) {
         if($this->intCurrentGraphMode > 0) {
             //in bar mode, its ok. just place on top
-            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR) 
+            if($this->intCurrentGraphMode != $this->GRAPH_TYPE_LINE && $this->intCurrentGraphMode != $this->GRAPH_TYPE_BAR)
                 throw new class_exception("Chart already initialized", class_exception::$level_ERROR);
         }
 
 
         if($this->intCurrentGraphMode < 0)
             $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
-        
+
         $arrEntries = array();
         $intCounter = 0;
         foreach($arrValues as $strValue) {
@@ -219,7 +219,7 @@ class class_graph_ezc implements interface_graph {
 
             if($strValue < 0)
                 $strValue *= -2;
-            
+
             if($strValue > $this->intMaxValue)
                 $this->intMaxValue = $strValue;
 
@@ -328,17 +328,18 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->renderer = new ezcGraphRenderer3d();
             else
                 $this->objGraph->renderer = new ezcGraphRenderer2d();
-            
+
             $this->objGraph->palette = $objPalette;
 
             $this->objGraph->options->fillLines = 245;
             $this->objGraph->options->highlightLines = true;
+            $this->objGraph->options->lineThickness = 3;
         }
 
         //data sets
 
         foreach($this->arrDataSets as $strName => $arrSet) {
-            
+
             $this->objGraph->data[$strName] = $arrSet["data"];
             if(isset($arrSet["symbol"]))
                 $this->objGraph->data[$strName]->symbol = $arrSet["symbol"];
@@ -359,13 +360,13 @@ class class_graph_ezc implements interface_graph {
         //set the font properties
         $this->objGraph->options->font = _systempath_.$this->strFont;
         $this->objGraph->options->font->color = $this->strFontColor;
-        $this->objGraph->options->font->maxFontSize = 10;
+        $this->objGraph->options->font->maxFontSize = 9;
 
         //$this->objGraph->options->font->minFontSize = 5;
         if($this->strGraphTitle != "") {
             $this->objGraph->title->padding = 1;
             $this->objGraph->title->margin = 2;
-            $this->objGraph->title->font->maxFontSize = 12;
+            $this->objGraph->title->font->maxFontSize = 9;
             $this->objGraph->title->font->color = $this->strTitleFontColor;
             $this->objGraph->title->background = $this->strTitleBackgroundColor;
         }
@@ -382,7 +383,7 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->legend->position = ezcGraph::RIGHT;
 
             $this->objGraph->legend->margin = 1;
-            $this->objGraph->legend->padding = 1;
+            $this->objGraph->legend->padding = 4;
 
             //legend rendering
             $this->objGraph->renderer->options->legendSymbolGleam = .1;
@@ -407,10 +408,12 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
+            $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 5;
+            $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 5;
 
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
-            
+
             if($intMaxValue <= 0 && $intMinValue < 0)
                 $this->objGraph->yAxis->max = 0;
 
@@ -424,10 +427,10 @@ class class_graph_ezc implements interface_graph {
                 $this->objGraph->yAxis->majorStep = ceil($intTotal / 5);
                 $this->objGraph->yAxis->minorStep = ceil($intTotal / 5)*0.5;
             }
-            
+
         }
 
-        
+
 
 
         //choose the renderer based on the extensions available
@@ -565,7 +568,7 @@ class class_graph_ezc implements interface_graph {
         $this->arrXAxisLabels = $arrMadeUpLabels;
         $this->intMaxLabelCount = $intNrOfWrittenLabels;
 
-        
+
     }
 
     /**
@@ -586,13 +589,13 @@ class class_graph_ezc implements interface_graph {
 
     /**
      * Sets if to render a legend or not
-     * 
+     *
      * @param bool $bitRenderLegend
      */
     public function setBitRenderLegend($bitRenderLegend) {
         $this->bitRenderLegend = $bitRenderLegend;
     }
-    
+
     /**
      * Set the font to be used in the chart
      *
@@ -650,7 +653,7 @@ class class_graph_ezc implements interface_graph {
     /**
      * By default, the legend is rendered at the right side of the chart.
      * Using this setter, the legend may be shifted to the bottom.
-     * 
+     *
      * @param bool $bitLegendPositionBottom
      */
     public function setBitLegendPositionBottom($bitLegendPositionBottom) {
