@@ -121,7 +121,6 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
         $arrQueries = $this->getTopQueries();
 
 		$arrGraphData = array();
-		$arrPlots = array();
 		$arrLabels = array();
         
 		$intCount = 1;
@@ -160,8 +159,8 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 					  FROM ".$this->arrModule["table"]."
 					  WHERE search_log_date >= ".(int)$this->intDateStart."
 					    AND search_log_date <= ".(int)$this->intDateEnd."
-				   GROUP BY search_log_query, hits
-				   ORDER BY hits DESC, search_log_date DESC";
+				   GROUP BY search_log_query
+				   ORDER BY hits DESC";
 
         if($intStart !== false && $intEnd !== false)
             $arrReturn = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
