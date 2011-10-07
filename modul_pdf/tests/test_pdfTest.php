@@ -78,7 +78,7 @@ class class_test_pdf extends class_testbase  {
 
         $objPdf->savePdf($strFile);
 
-        echo "\tsaved pdf to <a href=\""._webpath_.$strFile.">"._webpath_.$strFile."</a>\n";
+        echo "\tsaved pdf to <a href=\""._webpath_.$strFile."\">"._webpath_.$strFile."</a>\n";
     }
 
 }

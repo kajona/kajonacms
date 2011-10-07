@@ -33,8 +33,9 @@ for ($i = 0; $i < ob_get_level(); $i++) { ob_end_flush(); }
     ob_implicit_flush(1);
 
 echo "Please note: Running tests manually does not replace running them via\n";
-echo "             the autotest-framework!\n";
-echo "             Some tests require a clean install to run properly.\n\n";
+echo "             the build-system or an IDE! The autotest-file simulates only parts of \n";
+echo "             PHPUnit and is no real replacement.\n";
+echo "             Some tests require a full PHPUnit environment to run properly.\n\n";
 echo "searching tests available...\n";
 
 $objFilesystem = new class_filesystem();
@@ -61,13 +62,16 @@ if(issetPost("dotest")) {
     if(substr($strFilename, 0, 5) == "test_" && substr($strFilename, -4) == ".php") {
         echo " \n\nfound test-script ".$strFilename." \n";
         include_once _realpath_."/tests/".$strFilename;
-        $strClassName = "class_".str_replace(".php", "", $strFilename);
-        $objTest = new $strClassName();
-        if($objTest instanceof interface_testable) {
-            echo " invoking test() on instance of ".$strClassName."\n\n\n\n";
-            $objTest->test();
+        $arrClasses = get_php_classes(file_get_contents(_realpath_."/tests/".$strFilename));
+        foreach($arrClasses as $strClassName) {
+            if(uniStripos($strClassName, "test") !== false) {
+                $objTest = new $strClassName();
+                if($objTest instanceof class_testbase) {
+                    echo " invoking kajonaTestTrigger() on instance of ".$strClassName."\n\n\n\n";
+                    $objTest->kajonaTestTrigger();
+                }
+            }
         }
-
         class_assertions::printStatistics();
         echo "time needed: ".round(((time()-$intStart)/60), 3)." min\n\n\n";
 
@@ -75,6 +79,23 @@ if(issetPost("dotest")) {
 
 		
 }
+
+function get_php_classes($php_code) {
+  $classes = array();
+  $tokens = token_get_all($php_code);
+  $count = count($tokens);
+  for ($i = 2; $i < $count; $i++) {
+    if (   $tokens[$i - 2][0] == T_CLASS
+        && $tokens[$i - 1][0] == T_WHITESPACE
+        && $tokens[$i][0] == T_STRING) {
+
+        $class_name = $tokens[$i][1];
+        $classes[] = $class_name;
+    }
+  }
+  return $classes;
+}
+
 
 
 echo "\n\n";
@@ -86,9 +107,7 @@ echo "</pre>";
 
 
 // --- tools needed to run tests ------------------------------------------------------------------------
-interface interface_testable {
-    function test();
-}
+
 
 class class_assertions {
     private static $nrOfFailures = 0;
@@ -169,6 +188,7 @@ final class class_testLogger {
     public static $levelInfo = 2;
     private static $objInstance = null;
     private $intLogLevel = 0;
+    
     private function __construct() {
         $this->intLogLevel = 2;
     }
@@ -203,6 +223,58 @@ final class class_testLogger {
 
 }
 
+class PHPUnit_Framework_TestCase {
+ 
+    
+    public function kajonaTestTrigger() {
+        //setUp
+        $this->setUp();
+        
+        //loop test methods
+        $objReflection = new ReflectionClass($this);
+        $arrMethods = $objReflection->getMethods();
+        
+        foreach($arrMethods as $objOneMethod) {
+            if(uniStrpos($objOneMethod->getName(), "test") !== false) {
+                echo "calling ".$objOneMethod->getName()."...\n";
+                $objOneMethod->invoke($this);
+            }
+        }
+        
+        //tearDown
+        $this->tearDown();
+    }
+    
+    public function assertTrue($mixedVal, $strComment = "") {
+        class_assertions::assertTrue($mixedVal, $strComment);
+    }
+    
+    public function assertNull($mixedVal, $strComment = "") {
+        class_assertions::assertTrue($mixedVal === null, $strComment);
+    }
+    
+    public function assertNotNull($mixedVal, $strComment = "") {
+        class_assertions::assertTrue($mixedVal !== null, $strComment);
+    }
+    
+    public function assertEquals($mixedVal1, $mixedVal2, $strComment = "") {
+        class_assertions::assertEqual($mixedVal1, $mixedVal2, $strComment);
+    }
+    
+    public function assertNotEquals($mixedVal1, $mixedVal2, $strComment = "") {
+        class_assertions::assertNotEqual($mixedVal1, $mixedVal2, $strComment);
+    }
+    
+    public function assertFileExists($strFile, $strComment = "") {
+        class_assertions::assertTrue(is_file($strFile), $strComment);
+    }
+    
+    protected function setUp() {
+    }
+    
+    protected function tearDown() {
+    }
+}
 
 
 ?>

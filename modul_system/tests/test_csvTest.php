@@ -52,7 +52,7 @@ class class_test_csv extends class_testbase  {
         $arrValuesFromCsv = $objCsv->getArrData();
         $this->assertEquals(count(array_diff($arrValues, $arrValuesFromCsv)), 0, __FILE__." checkCsvEncloserCreateArrayFromFile");
 
-        echo "\tsaved generated CSV file to <a href=\""._webpath_.$strFile.">"._webpath_.$strFile."</a>\n";
+        echo "\tsaved generated CSV file to <a href=\""._webpath_.$strFile."\">"._webpath_.$strFile."</a>\n";
 
     }
 
