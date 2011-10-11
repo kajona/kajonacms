@@ -199,6 +199,52 @@ class class_modul_system_changelog extends class_model implements interface_mode
         return $arrRow["COUNT(*)"];
     }
    
+    
+     /**
+     * Creates the list of logentries, based on a flexible but specific filter-list
+     *
+     * @param type $strSystemidFilter
+     * @param type $strActionFilter
+     * @param type $strPropertyFilter
+     * @param type $strOldvalueFilter
+     * @param type $strNewvalueFilter
+     * @return class_changelog_container 
+     */
+    public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
+        $strQuery = "SELECT *
+                       FROM "._dbprefix_."changelog
+                      ".($strSystemidFilter !== null ? " WHERE change_systemid = ? ": "")."
+                      ".($strActionFilter !== null ? " WHERE change_action = ? ": "")."
+                      ".($strPropertyFilter !== null ? " WHERE 	change_property = ? ": "")."
+                      ".($strOldvalueFilter !== null ? " WHERE change_oldvalue = ? ": "")."
+                      ".($strNewvalueFilter !== null ? " WHERE change_newvalue = ? ": "")."
+                   ORDER BY change_date DESC";
+
+        $arrParams = array();
+        if($strSystemidFilter !== null)
+            $arrParams[] = $strSystemidFilter;
+        
+        if($strActionFilter !== null)
+            $arrParams[] = $strActionFilter;
+        
+        if($strPropertyFilter !== null)
+            $arrParams[] = $strPropertyFilter;
+        
+        if($strOldvalueFilter !== null)
+            $arrParams[] = $strOldvalueFilter;
+        
+        if($strNewvalueFilter !== null)
+            $arrParams[] = $strNewvalueFilter;
+
+        $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, $arrParams);
+
+        $arrReturn = array();
+        foreach($arrRows as $arrRow)
+            $arrReturn[] = new class_changelog_container($arrRow["change_date"], $arrRow["change_systemid"], $arrRow["change_user"],
+                           $arrRow["change_class"], $arrRow["change_action"], $arrRow["change_property"], $arrRow["change_oldvalue"], $arrRow["change_newvalue"]);
+
+        return $arrReturn;
+    }
 }
 
 
