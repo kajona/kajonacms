@@ -171,6 +171,11 @@ form br {
 	clear: both;
 }
 
+form input[readOnly] {
+    background: #E6E6E6;
+    color: #c2c2c2;
+}
+
 .inputText, .inputTextShort, .inputDate {
 	background-image: url(pics/forms_input_back.png);
 	background-repeat: repeat-x;
@@ -352,18 +357,16 @@ table.moduleRowTable:hover {
 	background-color: #f0f0f0;
 }
 
-#dbInfo .red {
-    border: 1px solid #FC1F1B;
-    background-color: #FFDEDD;
-    color: inherit;
-    padding: 3px ;
-    margin: 5px 0px;
+#dbInfo .error {
+    background: url("pics/error.png") no-repeat scroll 5px 5px #FFDEDD;
+    color: red;
+    margin: 5px 0;
+    padding: 5px 5px 6px 25px;
 }
 
-#dbInfo .green {
-    border: 1px solid #299B39;
-    background-color: #DCF2DF;
-    color: inherit;
-    padding: 3px;
-    margin: 5px 0px;
+#dbInfo .info {
+    background: url("pics/info.png") no-repeat scroll 5px 5px #d4e5ff;
+    color: blue;
+    margin: 5px 0;
+    padding: 5px 5px 6px 25px;
 }

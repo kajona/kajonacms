@@ -100,37 +100,16 @@ function switchDriver() {
         document.getElementById('password').value = 'n.a.';
         document.getElementById('port').value = 'n.a.';
         document.getElementById('hostname').value = 'n.a.';
-        
-        document.getElementById('username').style.backgroundColor = '#cccccc';
-        document.getElementById('username').style.backgroundImage = 'none';
-        document.getElementById('password').style.backgroundColor = '#cccccc';
-        document.getElementById('password').style.backgroundImage = 'none';
-        document.getElementById('port').style.backgroundColor = '#cccccc';
-        document.getElementById('port').style.backgroundImage = 'none';
-        document.getElementById('hostname').style.backgroundColor = '#cccccc';
-        document.getElementById('hostname').style.backgroundImage = 'none';
-        
+
         document.getElementById('username').readOnly = true;
         document.getElementById('password').readOnly = true;
         document.getElementById('port').readOnly = true;
         document.getElementById('hostname').readOnly = true;
-        
-    }
-    else {
-        
+    } else {
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
         document.getElementById('port').value = '';
         document.getElementById('hostname').value = 'localhost';
-        
-        document.getElementById('username').style.backgroundColor = '';
-        document.getElementById('username').style.backgroundImage = '';
-        document.getElementById('password').style.backgroundColor = '';
-        document.getElementById('password').style.backgroundImage = '';
-        document.getElementById('port').style.backgroundColor = '';
-        document.getElementById('port').style.backgroundImage = '';
-        document.getElementById('hostname').style.backgroundColor = '';
-        document.getElementById('hostname').style.backgroundImage = '';
         
         document.getElementById('username').readOnly = false;
         document.getElementById('password').readOnly = false;

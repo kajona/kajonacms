@@ -137,11 +137,16 @@ class class_installer {
 	    $strReturn .= $this->getText("installer_phpcheck_lang");
 
 	    //link to different languages
-	    foreach (explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs")) as $strOneLang) {
-            $strReturn .= "<a href=\""._webpath_."/installer/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjText()->getText("lang_".$strOneLang, "user", "admin")."</a><br />";
+	    $arrLangs = explode(",", class_carrier::getInstance()->getObjConfig()->getConfig("adminlangs"));
+	    $intLangCount = 1;
+	    foreach ($arrLangs as $strOneLang) {
+            $strReturn .= "<a href=\""._webpath_."/installer/installer.php?language=".$strOneLang."\">".class_carrier::getInstance()->getObjText()->getText("lang_".$strOneLang, "user", "admin")."</a>";
+            if ($intLangCount++ < count($arrLangs)) {
+                $strReturn .= " | ";
+            }
 	    }
 
-	    $strReturn .= $this->getText("installer_phpcheck_intro2");
+	    $strReturn .= "<br />".$this->getText("installer_phpcheck_intro2");
 
 	    foreach ($arrFilesAndFolders as $strOneFile) {
     	    $strReturn .= $this->getText("installer_phpcheck_folder").$strOneFile."...<br />";
@@ -180,22 +185,22 @@ class class_installer {
             //check for available modules
             $strMysqliInfo = ""; $strSqlite3Info = ""; $strPostgresInfo = ""; $strOci8Info = "";
             if(!in_array("mysqli", get_loaded_extensions())) {
-                $strMysqliInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." mysqli</div>";
+                $strMysqliInfo = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." mysqli</div>";
             }
             if(!in_array("pgsql", get_loaded_extensions())) {
-                $strPostgresInfo = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." postgres</div>";
+                $strPostgresInfo = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." postgres</div>";
             }
             if(in_array("sqlite3", get_loaded_extensions())) {
-                $strSqlite3Info = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."<br />".$this->getText("installer_dbdriver_sqlite3")."</div>";
+                $strSqlite3Info = "<div class=\"info\">".$this->getText("installer_dbdriver_sqlite3")."</div>";
             }
             else {
-                $strSqlite3Info = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." sqlite3</div>";
+                $strSqlite3Info = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." sqlite3</div>";
             }
             if(in_array("oci8", get_loaded_extensions())) {
-                $strOci8Info = "<div class=\"green\">".$this->getText("installer_dbdriver_available")."<br />".$this->getText("installer_dbdriver_oci8")."</div>";
+                $strOci8Info = "<div class=\"info\">".$this->getText("installer_dbdriver_oci8")."</div>";
             }
             else {
-                $strOci8Info = "<div class=\"red\">".$this->getText("installer_dbdriver_na")." oci8</div>";
+                $strOci8Info = "<div class=\"error\">".$this->getText("installer_dbdriver_na")." oci8</div>";
             }
 
             //configwizard_form
