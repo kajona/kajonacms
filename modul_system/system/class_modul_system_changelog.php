@@ -211,13 +211,22 @@ class class_modul_system_changelog extends class_model implements interface_mode
      * @return class_changelog_container 
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
+        
+        $arrWhere = array();
+        if($strSystemidFilter !== null) 
+            $arrWhere[] = " change_systemid = ? ";
+        if($strActionFilter !== null) 
+            $arrWhere[] = " change_action = ? ";
+        if($strPropertyFilter !== null) 
+            $arrWhere[] = " change_property = ? ";
+        if($strOldvalueFilter !== null) 
+            $arrWhere[] = " change_oldvalue = ? ";
+        if($strNewvalueFilter !== null) 
+            $arrWhere[] = " change_newvalue = ? ";
+        
         $strQuery = "SELECT *
                        FROM "._dbprefix_."changelog
-                      ".($strSystemidFilter !== null ? " WHERE change_systemid = ? ": "")."
-                      ".($strActionFilter !== null ? " WHERE change_action = ? ": "")."
-                      ".($strPropertyFilter !== null ? " WHERE 	change_property = ? ": "")."
-                      ".($strOldvalueFilter !== null ? " WHERE change_oldvalue = ? ": "")."
-                      ".($strNewvalueFilter !== null ? " WHERE change_newvalue = ? ": "")."
+                      ".(count($arrWhere) > 0 ? " WHERE ".implode("AND", $arrWhere) : "")."
                    ORDER BY change_date DESC";
 
         $arrParams = array();
@@ -284,6 +293,10 @@ final class class_changelog_container {
             return null;
     }
 
+    /**
+     *
+     * @return class_date
+     */
     public function getObjDate() {
         return $this->objDate;
     }
