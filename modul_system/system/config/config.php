@@ -89,7 +89,7 @@ default:
                                                                                //environments. Could consume up a lot of ram.
 
     $config['loginproviders']       = "kajona";                                //A chain of login-providers, each implementing a single usersource. The providers 
-                                                                               //are queried in the order of appereance. The list is comma-separated, no blanks allowed.
+                                                                               //are queried in the order of appearance. The list is comma-separated, no blanks allowed.
 
 //--system settings--------------------------------------------------------------------------------------
 
