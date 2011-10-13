@@ -57,7 +57,7 @@ class class_date {
      * @return string
      */
     public function __toString() {
-        return $this->longTimestamp;
+        return $this->longTimestamp."";
     }
 
     /**
