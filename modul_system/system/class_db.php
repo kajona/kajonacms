@@ -387,7 +387,7 @@ class class_db {
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getArraySection($strQuery, $intStart, $intEnd);
     		if($arrReturn === false) {
-    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
+    		    $this->getError($strQuery);
     		    return array();
     		}
     		if($bitCache)
@@ -450,7 +450,7 @@ class class_db {
 		if($this->objDbDriver != null) {
     		$arrReturn = $this->objDbDriver->getPArraySection($strQuery, $this->dbsafeParams($arrParams), $intStart, $intEnd);
     		if($arrReturn === false) {
-    		    $this->getError($strQuery);
+    		    $this->getError($strQuery."\nparams: ".implode(", ", $arrParams));
     		    return array();
     		}
     		if($bitCache)
