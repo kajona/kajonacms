@@ -113,6 +113,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
         }
         
         $strReturn = json_encode($arrPrintableEvents);
+        header("Content-type: application/json");
         return $strReturn;
     }
     
