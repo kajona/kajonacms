@@ -3,7 +3,7 @@
 <event_calendar>
     <script type='text/javascript'>
         KAJONA.portal.loader.load(null,
-            [KAJONA_WEBPATH+"/portal/scripts/jquery/jquery-1.6.4.min.js",
+            [KAJONA_WEBPATH+"/portal/scripts/jquery/jquery.min.js",
              KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.min.js",
              KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.css"],
              function() {
