@@ -36,14 +36,15 @@ class class_installer_sc_eventmanager implements interface_sc_installer  {
         
         $objEvent->setObjStartDate(new class_date());
         $objEvent->setObjEndDate(new class_date(time()+3600));
+        $objEvent->setIntRegistrationRequired(1);
 
         if($this->strContentLanguage == "de") {
         	$objEvent->setStrTitle("Start der neuen Webseite mit Kajona");
-        	$objEvent->setStrDescription("Die neue Webseite startet!<br />Als Basis dafür kommt das freie Open Source Content Management System Kajona, <a href=\"http://www.kajona.de\">http://www.kajona.de</a>, zum Einsatz.");
+        	$objEvent->setStrDescription("Die neue Webseite ist online!<br />Als Basis dafür kommt das freie Open Source Content Management System <a href=\"http://www.kajona.de\">Kajona</a>, zum Einsatz.");
         }
         else {
             $objEvent->setStrTitle("Launch of the new website");
-        	$objEvent->setStrDescription("The new website is available!<br />The page is based on Kajona, <a href=\"http://www.kajona.de\">http://www.kajona.de</a>, a free opne source content management system.");
+        	$objEvent->setStrDescription("The new website is available!<br />The page is based on <a href=\"http://www.kajona.de\">Kajona</a>, a free open source content management system.");
         }
 
         $strReturn .= "Saving event...\n";

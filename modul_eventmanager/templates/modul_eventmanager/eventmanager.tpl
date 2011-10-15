@@ -2,28 +2,22 @@
 
 <event_calendar>
     <script type='text/javascript'>
-
-            KAJONA.portal.loader.load(
-                null,
-            	[KAJONA_WEBPATH+"/portal/scripts/jquery/jquery-1.5.2.min.js",
-            	 KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.min.js",
-            	 KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.css"],
-                 function() {
-                     $(document).ready(function() {
-                        // page is now ready, initialize the calendar...
-                        $('#eventmanagerCalendar').fullCalendar({
-                            buttonText: {
-                                today: '%%lang_cal_today%%'
-                            },
-                            events: "%%cal_eventsource%%",
-                            firstDay : 1
-                        })
-
-                    });
-                 }
-                 
-            );
-    </script>       
+        KAJONA.portal.loader.load(null,
+            [KAJONA_WEBPATH+"/portal/scripts/jquery/jquery-1.6.4.min.js",
+             KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.min.js",
+             KAJONA_WEBPATH+"/portal/scripts/fullcalendar/fullcalendar.css"],
+             function() {
+                 //files are loaded, initialize the calendar...
+                 $('#eventmanagerCalendar').fullCalendar({
+                     buttonText: {
+                         today: '%%lang_cal_today%%'
+                     },
+                     events: "%%cal_eventsource%%",
+                     firstDay: 1
+                 })
+             } 
+        );
+    </script>
     <div id="eventmanagerCalendar"></div>
 </event_calendar>
 
@@ -47,7 +41,7 @@
     </tr>
 </event_list_entry>
 
-<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, maximumParticipants -->
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLink, registerLinkHref, maximumParticipants -->
 <event_details>
     <div>
         <h2>%%title%%</h2>
@@ -58,10 +52,15 @@
             <tr><td>%%lang_dateTimeUntil%%</td><td>%%dateTimeUntil%%</td></tr>
             <tr><td>%%lang_maximumParticipants%%</td><td>%%maximumParticipants%%</td></tr>
             <tr><td>%%lang_currentParticipants%%</td><td>%%currentParticipants%%</td></tr>
-            <tr><td></td><td><a href="%%registerLinkHref%%">%%lang_registerlink%%</a></td></tr>
         </table>
+        %%registerLink%%
     </div>
 </event_details>
+
+<!-- available placeholders: title, description, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, registerLinkHref, maximumParticipants -->
+<event_details_registerlink>
+    <a href="%%registerLinkHref%%">%%lang_registerlink%%</a>
+</event_details_registerlink>
 
 <!-- available placeholders: title, location, dateTimeFrom, dateFrom, dateTimeUntil, dateUntil, formaction -->
 <!-- expected form-fields: forename, lastname, email, phone, comment, form_captcha -->
