@@ -12,6 +12,7 @@
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topreferers implements interface_admin_statsreports {
 
@@ -30,8 +31,6 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topreferers";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -117,22 +116,27 @@ class class_stats_report_topreferers implements interface_admin_statsreports {
 	public function getTopReferer() {
 	    //Build excluded domains
 	    $arrBlocked = explode(",", _stats_exclusionlist_);
+        
+        $arrParams =  array("%".str_replace("%", "\%", _webpath_)."%", $this->intDateStart, $this->intDateEnd);
 
 	    $strExclude = "";
-			foreach($arrBlocked as $strBlocked)
-			    if($strBlocked != "")
-			        $strExclude .= " AND stats_referer NOT LIKE '%".str_replace("%", "\%", $strBlocked)."%' \n";
+        foreach($arrBlocked as $strBlocked) {
+            if($strBlocked != "") {
+                $strExclude .= " AND stats_referer NOT LIKE ? \n";
+                $arrParams[] = "%".str_replace("%", "\%", $strBlocked)."%";
+            }
+        }
 
 		$strQuery = "SELECT stats_referer as referer, count(*) as anzahl
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_referer NOT LIKE '%".str_replace("%", "\%", _webpath_)."%'
-							AND stats_date >= ".(int)$this->intDateStart."
-							AND stats_date <= ".(int)$this->intDateEnd."
+						WHERE stats_referer NOT LIKE ?
+							AND stats_date >= ?
+							AND stats_date <= ?
 							".$strExclude."
 						GROUP BY referer
 						ORDER BY anzahl desc";
 
-		return $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
+		return $this->objDB->getPArraySection($strQuery, $arrParams, 0, _stats_nrofrecords_ -1);
 	}
 
 	public function getReportGraph() {

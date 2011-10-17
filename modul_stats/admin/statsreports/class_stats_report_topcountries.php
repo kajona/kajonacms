@@ -11,6 +11,7 @@
  * This plugin creates a list of countries the visitors come from
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topcountries implements interface_admin_statsreports {
 
@@ -32,8 +33,6 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topcountries";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["table2"] 		    = _dbprefix_."stats_ip2country";
@@ -124,20 +123,20 @@ class class_stats_report_topcountries implements interface_admin_statsreports {
 
 		$strQuery = "SELECT stats_ip, count(*) as anzahl
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-						  AND stats_date <= ".(int)$this->intDateEnd."
+						WHERE stats_date >= ?
+						  AND stats_date <= ?
 						GROUP BY stats_ip";
 
-		$arrTemp = $this->objDB->getArray($strQuery);
+		$arrTemp = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
 		$intCounter = 0;
 		foreach ($arrTemp as $arrOneRecord) {
 
 		    $strQuery = "SELECT ip2c_name as country_name
 						   FROM ".$this->arrModule["table2"]."
-						  WHERE ip2c_ip = '".$arrOneRecord["stats_ip"]."'";
+						  WHERE ip2c_ip = ?";
 
-		    $arrRow = $this->objDB->getRow($strQuery);
+		    $arrRow = $this->objDB->getPRow($strQuery, array($arrOneRecord["stats_ip"]));
 
             if(!isset($arrRow["country_name"]))
                 $arrRow["country_name"] = "n.a.";

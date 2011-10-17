@@ -399,6 +399,8 @@ class class_graph_ezc implements interface_graph {
             if($this->intXAxisAngle != 0) {
                 $this->objGraph->xAxis->axisLabelRenderer = new ezcGraphAxisRotatedLabelRenderer();
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;
+                
+                $this->objGraph->xAxis->axisSpace = .2;
             }
 
             if($this->intMaxLabelCount > 1)

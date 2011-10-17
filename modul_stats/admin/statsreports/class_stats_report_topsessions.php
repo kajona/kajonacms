@@ -12,6 +12,7 @@
  * This plugin creates a view showing infos about the sessions
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topsessions implements interface_admin_statsreports {
 
@@ -21,6 +22,11 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
 
 	private $objTexts;
 	private $objToolkit;
+    
+    /**
+     *
+     * @var class_db
+     */
 	private $objDB;
 
 	private $arrModule;
@@ -30,8 +36,6 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topsessions";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -129,13 +133,13 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
                               COUNT(*) as anzahl
                      FROM ".$this->arrModule["table"]."
                      WHERE stats_session != ''
-                       AND stats_date >= ".(int)$this->intDateStart."
-					   AND stats_date <= ".(int)$this->intDateEnd."
+                       AND stats_date >= ?
+					   AND stats_date <= ?
                      GROUP BY stats_session
                      ".$strOrder."
                      ";
 
-        $arrSessions = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
+        $arrSessions = $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $thid->intDateEnd), 0, _stats_nrofrecords_ -1);
 
         $intI = 0;
         foreach($arrSessions as $intKey => $arrOneSession) {
@@ -153,10 +157,10 @@ class class_stats_report_topsessions implements interface_admin_statsreports {
             //and fetch all pages
             $strQuery = "SELECT stats_page
                            FROM ".$this->arrModule["table"]."
-                          WHERE stats_session='".$strSessionID."'
+                          WHERE stats_session= ?
                           ORDER BY stats_date ASC";
 
-            $arrPages = $this->objDB->getArray($strQuery);
+            $arrPages = $this->objDB->getPArray($strQuery, array($strSessionID));
 
             $strDetails .= $this->objTexts->getText("top_session_detail_verlauf", "stats", "admin");
             foreach($arrPages as $arrOnePage)

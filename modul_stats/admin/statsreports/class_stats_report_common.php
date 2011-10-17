@@ -11,6 +11,7 @@
  * This plugin creates a view common numbers, such as "user online" or "total pagehits"
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_common implements interface_admin_statsreports {
 
@@ -30,8 +31,6 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_common";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -114,10 +113,10 @@ class class_stats_report_common implements interface_admin_statsreports {
 		$intReturn = 0;
 		$strQuery = "SELECT count(*)
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-								AND stats_date <= ".(int)$this->intDateEnd."";
+						WHERE stats_date >= ?
+						  AND stats_date <= ?";
 
-		$arrRow = $this->objDB->getRow($strQuery);
+		$arrRow = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
 		$intReturn = $arrRow["count(*)"];
 
 		return $intReturn;
@@ -133,12 +132,12 @@ class class_stats_report_common implements interface_admin_statsreports {
 	public function getHitsForOnePeriod($intStart, $intEnd) {
 		$strQuery = "SELECT stats_date, COUNT(*) as hits
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$intStart."
-								AND stats_date <= ".(int)$intEnd."
+						WHERE stats_date >= ?
+								AND stats_date <= ?
 						GROUP BY stats_date
 						ORDER BY stats_date ASC";
 
-		$arrTemp = $this->objDB->getArray($strQuery);
+		$arrTemp = $this->objDB->getPArray($strQuery, array($intStart, $intEnd));
 		return $arrTemp;
 	}
 
@@ -149,12 +148,16 @@ class class_stats_report_common implements interface_admin_statsreports {
 	 */
 	public function getVisitors() {
 		$intReturn = 0;
-		$strQuery = "SELECT COUNT(DISTINCT stats_ip) as hits
+
+        $strQuery = "SELECT stats_ip , stats_browser, stats_date
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-						  AND stats_date <= ".(int)$this->intDateEnd."";
-		$arrVisitor = $this->objDB->getRow($strQuery);
-		$intReturn = $arrVisitor["hits"];
+						WHERE stats_date >= ?
+								AND stats_date <= ?
+						GROUP BY stats_ip, stats_browser
+						ORDER BY stats_date ASC";
+        
+		$arrRows = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
+		$intReturn = count($arrRows);
 		return $intReturn;
 	}
 
@@ -168,11 +171,11 @@ class class_stats_report_common implements interface_admin_statsreports {
 	private function getVisitorsForOnePeriod($intStart, $intEnd) {
 		$strQuery = "SELECT stats_ip , stats_browser, stats_date
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$intStart."
-								AND stats_date <= ".(int)$intEnd."
-						GROUP BY stats_ip, stats_browser, stats_date
+						WHERE stats_date >= ?
+								AND stats_date <= ?
+						GROUP BY stats_ip, stats_browser
 						ORDER BY stats_date ASC";
-		$arrTemp = $this->objDB->getArray($strQuery);
+		$arrTemp = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 		return $arrTemp;
 	}
 
@@ -200,10 +203,10 @@ class class_stats_report_common implements interface_admin_statsreports {
 	public function getNumberOfCurrentUsers() {
 		$strQuery = "SELECT stats_ip, stats_browser, count(*)
 					  FROM ".$this->arrModule["table"]."
-					  WHERE stats_date >= ".(int)(time() - _stats_duration_online_)."
+					  WHERE stats_date >= ?
 					  GROUP BY stats_ip, stats_browser";
 
-		$arrRow = $this->objDB->getArray($strQuery);
+		$arrRow = $this->objDB->getPArray($strQuery, array(time() - _stats_duration_online_));
 
 		return count($arrRow);
 	}
@@ -220,11 +223,11 @@ class class_stats_report_common implements interface_admin_statsreports {
                             stats_session
                      FROM ".$this->arrModule["table"]."
                      WHERE stats_session != ''
-                       AND stats_date >= ".(int)$this->intDateStart."
-					   AND stats_date <= ".(int)$this->intDateEnd."
+                       AND stats_date >= ?
+					   AND stats_date <= ?
                      GROUP BY stats_session";
 
-        $arrSessions = $this->objDB->getArray($strQuery);
+        $arrSessions = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
         $intTime = 0;
         foreach($arrSessions as $arrOneSession)
             $intTime += $arrOneSession["dauer"];
@@ -293,29 +296,29 @@ class class_stats_report_common implements interface_admin_statsreports {
 		//create a graph ->line-graph
 		if($intCount > 1) {
 
+            $objChart1 = class_graph_factory::getGraphInstance();
+            $objChart1->setStrGraphTitle($this->objTexts->getText("graph_hitsPerDay", "stats", "admin"));
+            $objChart1->setStrXAxisTitle($this->objTexts->getText("graph_date", "stats", "admin"));
+            $objChart1->setStrYAxisTitle($this->objTexts->getText("graph_hits", "stats", "admin"));
+            $objChart1->setIntWidth(715);
+            $objChart1->setIntHeight(200);
+            $objChart1->setArrXAxisTickLabels($arrTickLabels);
+            $objChart1->addLinePlot($arrHits, "Hits");
+            $objChart1->setBitRenderLegend(false);
+            $strImagePath1 = _images_cachepath_."stats_common_1.png";
+    		$objChart1->saveGraph($strImagePath1);
+
             $objChart2 = class_graph_factory::getGraphInstance();
-            $objChart2->setStrGraphTitle($this->objTexts->getText("graph_hitsPerDay", "stats", "admin"));
+            $objChart2->setStrGraphTitle($this->objTexts->getText("graph_visitorsPerDay", "stats", "admin"));
             $objChart2->setStrXAxisTitle($this->objTexts->getText("graph_date", "stats", "admin"));
-            $objChart2->setStrYAxisTitle($this->objTexts->getText("graph_hits", "stats", "admin"));
+            $objChart2->setStrYAxisTitle($this->objTexts->getText("graph_visitors", "stats", "admin"));
             $objChart2->setIntWidth(715);
             $objChart2->setIntHeight(200);
             $objChart2->setArrXAxisTickLabels($arrTickLabels);
-            $objChart2->addLinePlot($arrHits, "Hits");
+            $objChart2->addLinePlot($arrUser, "Visitors/Day");
             $objChart2->setBitRenderLegend(false);
-            $strImagePath1 = _images_cachepath_."stats_common_1.png";
-    		$objChart2->saveGraph($strImagePath1);
-
-            $objChart3 = class_graph_factory::getGraphInstance();
-            $objChart3->setStrGraphTitle($this->objTexts->getText("graph_visitorsPerDay", "stats", "admin"));
-            $objChart3->setStrXAxisTitle($this->objTexts->getText("graph_date", "stats", "admin"));
-            $objChart3->setStrYAxisTitle($this->objTexts->getText("graph_visitors", "stats", "admin"));
-            $objChart3->setIntWidth(715);
-            $objChart3->setIntHeight(200);
-            $objChart3->setArrXAxisTickLabels($arrTickLabels);
-            $objChart3->addLinePlot($arrUser, "Visitors/Day");
-            $objChart3->setBitRenderLegend(false);
             $strImagePath2 = _images_cachepath_."stats_common_2.png";
-    		$objChart3->saveGraph($strImagePath2);
+    		$objChart2->saveGraph($strImagePath2);
 
             $this->objDB->flushQueryCache();
 

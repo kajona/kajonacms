@@ -11,6 +11,7 @@
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_toppages implements interface_admin_statsreports {
 
@@ -30,8 +31,6 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_toppages";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -112,12 +111,12 @@ class class_stats_report_toppages implements interface_admin_statsreports {
 	public function getTopPages() {
 		$strQuery = "SELECT stats_page as name, count(*) as anzahl, stats_language as language
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-								AND stats_date <= ".(int)$this->intDateEnd."
+						WHERE stats_date >= ?
+								AND stats_date <= ?
 						GROUP BY stats_page, stats_language
 							ORDER BY anzahl desc";
 
-		return $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
+		return $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ -1);
 	}
 
 	public function getReportGraph() {

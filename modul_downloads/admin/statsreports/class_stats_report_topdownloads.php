@@ -11,6 +11,7 @@
  * This plugin show the list of top download, served by the downloads-module
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topdownloads implements interface_admin_statsreports {
 
@@ -30,8 +31,6 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topdownloads";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _downloads_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."downloads_log";
 		$this->arrModule["modul"]			= "downloads";
@@ -97,12 +96,12 @@ class class_stats_report_topdownloads implements interface_admin_statsreports {
 	private function getLogbookData() {
 		$strQuery = "SELECT COUNT(*) as amount, downloads_log_file
 					  FROM ".$this->arrModule["table"]."
-					  WHERE downloads_log_date >= ".(int)$this->intDateStart."
-							AND downloads_log_date <= ".(int)$this->intDateEnd."
+					  WHERE downloads_log_date >= ?
+				        AND downloads_log_date <= ?
 					  GROUP BY downloads_log_file
 					  ORDER BY amount DESC";
 
-		return $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_ -1);
+		return $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_ -1);
 	}
 
 	public function getReportGraph() {

@@ -11,6 +11,7 @@
  * This plugin shows the list of queries performed by the local searchengine
  *
  * @package modul_search
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_searchqueries implements interface_admin_statsreports {
 
@@ -34,8 +35,6 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_seachqueries";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _suche_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."search_log";
 		$this->arrModule["modul"]			= "search";
@@ -157,15 +156,15 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     private function getTopQueries($intStart = false, $intEnd = false) {
         $strQuery = "SELECT search_log_query, COUNT(*) as hits
 					  FROM ".$this->arrModule["table"]."
-					  WHERE search_log_date >= ".(int)$this->intDateStart."
-					    AND search_log_date <= ".(int)$this->intDateEnd."
+					  WHERE search_log_date >= ?
+					    AND search_log_date <= ?
 				   GROUP BY search_log_query
 				   ORDER BY hits DESC";
 
         if($intStart !== false && $intEnd !== false)
-            $arrReturn = $this->objDB->getArraySection($strQuery, $intStart, $intEnd);
+            $arrReturn = $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $this->intDateEnd), $intStart, $intEnd);
         else
-            $arrReturn = $this->objDB->getArraySection($strQuery, 0, _stats_nrofrecords_-1);
+            $arrReturn = $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $this->intDateEnd), 0, _stats_nrofrecords_-1);
 
 		return $arrReturn;
     }
@@ -173,10 +172,10 @@ class class_stats_report_searchqueries implements interface_admin_statsreports {
     private function getTopQueriesCount() {
         $strQuery = "SELECT COUNT(DISTINCT(search_log_query)) as total
 					  FROM ".$this->arrModule["table"]."
-					  WHERE search_log_date >= ".(int)$this->intDateStart."
-					    AND search_log_date <= ".(int)$this->intDateEnd."";
+					  WHERE search_log_date >= ?
+					    AND search_log_date <= ?";
 
-        $arrReturn = $this->objDB->getRow($strQuery);
+        $arrReturn = $this->objDB->getPRow($strQuery, array($this->intDateStart, $this->intDateEnd));
 		return $arrReturn["total"];
     }
 

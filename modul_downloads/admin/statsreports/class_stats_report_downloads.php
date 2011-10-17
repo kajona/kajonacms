@@ -11,6 +11,7 @@
  * This plugin show the list of download, served by the downloads-module
  *
  * @package modul_downloads
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_downloads implements interface_admin_statsreports {
 
@@ -29,8 +30,6 @@ class class_stats_report_downloads implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_downloads";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _downloads_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."downloads_log";
 		$this->arrModule["modul"]			= "downloads";
@@ -102,20 +101,20 @@ class class_stats_report_downloads implements interface_admin_statsreports {
 	private function getLogbookData() {
 		$strQuery = "SELECT *
 					  FROM ".$this->arrModule["table"]."
-					  WHERE downloads_log_date >= ".(int)$this->intDateStart."
-							AND downloads_log_date <= ".(int)$this->intDateEnd."
+					  WHERE downloads_log_date >= ?
+							AND downloads_log_date <= ?
 					  ORDER BY downloads_log_date DESC";
 
-		$arrReturn = $this->objDB->getArraySection($strQuery, 0, (_stats_nrofrecords_-1));
+		$arrReturn = $this->objDB->getPArraySection($strQuery, array($this->intDateStart, $this->intDateEnd), 0, (_stats_nrofrecords_-1));
 
 		foreach ($arrReturn as &$arrOneRow) {
     		//Load hostname, if available. faster, then mergin per LEFT JOIN
     		$arrOneRow["stats_hostname"] = null;
     		$strQuery = "SELECT stats_hostname
     		             FROM "._dbprefix_."stats_data
-    		             WHERE stats_ip = '".dbsafeString($arrOneRow["downloads_log_ip"])."'
+    		             WHERE stats_ip = ?
     		             GROUP BY stats_hostname";
-    		$arrRow = $this->objDB->getRow($strQuery);
+    		$arrRow = $this->objDB->getPRow($strQuery, array($arrOneRow["downloads_log_ip"]));
     		if(isset($arrRow["stats_hostname"]))
     		    $arrOneRow["stats_hostname"] = $arrRow["stats_hostname"];
 

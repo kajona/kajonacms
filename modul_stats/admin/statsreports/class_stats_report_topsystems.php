@@ -12,6 +12,7 @@
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topsystems implements interface_admin_statsreports {
 
@@ -35,8 +36,6 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topsystems";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -140,10 +139,10 @@ class class_stats_report_topsystems implements interface_admin_statsreports {
 		//load Data
 		$strQuery = "SELECT stats_browser, count(*) as anzahl
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-							AND stats_date <= ".(int)$this->intDateEnd."
+						WHERE stats_date >= ?
+							AND stats_date <= ?
 						GROUP BY stats_browser";
-		$arrBrowser = $this->objDB->getArray($strQuery);
+		$arrBrowser = $this->objDB->getPArray($strQuery, array($this->intDateStart, $this->intDateEnd));
 
 
 		$arrBrowserGiven = &$this->arrBrowserGiven;

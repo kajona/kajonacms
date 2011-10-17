@@ -12,6 +12,7 @@
  * This plugin creates a view common numbers, such as "user online" oder "total pagehits"
  *
  * @package modul_stats
+ * @author sidler@mulchprod.de
  */
 class class_stats_report_topqueries implements interface_admin_statsreports {
 
@@ -30,8 +31,6 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 	 *
 	 */
 	public function __construct($objDB, $objToolkit, $objTexts) {
-		$this->arrModule["name"] 			= "modul_stats_reports_topqueries";
-		$this->arrModule["author"] 			= "sidler@mulchprod.de";
 		$this->arrModule["moduleId"] 		= _stats_modul_id_;
 		$this->arrModule["table"] 		    = _dbprefix_."stats_data";
 		$this->arrModule["modul"]			= "stats";
@@ -110,19 +109,25 @@ class class_stats_report_topqueries implements interface_admin_statsreports {
 	    //Load all records in the passed interval
 	    $arrBlocked = explode(",", _stats_exclusionlist_);
 
+        $arrParams =  array($this->intDateStart, $this->intDateEnd);
+
 	    $strExclude = "";
-			foreach($arrBlocked as $strBlocked)
-			    $strExclude .= " AND stats_referer NOT LIKE '%".str_replace("%", "\%", dbsafeString($strBlocked))."%' \n";
+        foreach($arrBlocked as $strBlocked) {
+            if($strBlocked != "") {
+                $strExclude .= " AND stats_referer NOT LIKE ? \n";
+                $arrParams[] = "%".str_replace("%", "\%", $strBlocked)."%";
+            }
+        }
 
 		$strQuery = "SELECT stats_referer
 						FROM ".$this->arrModule["table"]."
-						WHERE stats_date >= ".(int)$this->intDateStart."
-						  AND stats_date <= ".(int)$this->intDateEnd."
+						WHERE stats_date >= ?
+						  AND stats_date <= ?
 						  AND stats_referer != ''
 						  AND stats_referer IS NOT NULL
 						    ".$strExclude."
 						ORDER BY stats_date desc";
-		$arrRecords =  $this->objDB->getArray($strQuery);
+		$arrRecords =  $this->objDB->getPArray($strQuery, $arrParams);
 
 		$arrHits = array();
 		//Suchpatterns: q=, query=
