@@ -408,8 +408,11 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
-            $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 5;
-            $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 5;
+            if($this->strXAxisTitle != "")
+                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 5;
+            
+            if($this->strYAxisTitle != "")
+                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 5;
 
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
