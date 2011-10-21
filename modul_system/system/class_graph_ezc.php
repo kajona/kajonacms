@@ -382,8 +382,8 @@ class class_graph_ezc implements interface_graph {
             else
                 $this->objGraph->legend->position = ezcGraph::RIGHT;
 
-            $this->objGraph->legend->margin = 1;
-            $this->objGraph->legend->padding = 4;
+            $this->objGraph->legend->margin = 2;
+            $this->objGraph->legend->padding = 1.5;
 
             //legend rendering
             $this->objGraph->renderer->options->legendSymbolGleam = .1;
@@ -411,10 +411,10 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
             if($this->strXAxisTitle != "")
-                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 5;
+                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 4;
             
             if($this->strYAxisTitle != "")
-                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 5;
+                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 4;
 
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
