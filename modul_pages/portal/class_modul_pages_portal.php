@@ -375,15 +375,15 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 
                 //Add an iconbar
     		    $arrPeContents["pe_iconbar"] = "";
-    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_edit"), $this->getText("pe_icon_edit", "pages", "admin"), "icon_pencil.gif");
+    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getText("pe_icon_edit"), $this->getText("pe_icon_edit", "pages", "admin"), "icon_pencil.gif");
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
 //    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages", "editPage", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_page"), $this->getText("pe_icon_page", "pages", "admin"), "icon_page.gif");
                 
-                $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&pe=1");
+                $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_page.gif", $this->getText("pe_icon_page", "pages", "admin"))."</a>";
                 
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
-                $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&pe=1");
+                $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_new.gif", $this->getText("pe_icon_new", "pages", "admin"))."</a>";
                     
                 
