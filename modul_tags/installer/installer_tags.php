@@ -16,7 +16,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.4.0";
+		$arrModule["version"] 		  = "3.4.1";
 		$arrModule["name"] 			  = "tags";
 		$arrModule["name_lang"] 	  = "Module Tags";
 		$arrModule["moduleId"] 		  = _tags_modul_id_;
@@ -29,7 +29,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 	public function getNeededModules() {
 	    return array("system");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.3.1.8";
 	}
@@ -59,7 +59,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		$arrFields = array();
 		$arrFields["tags_tag_id"] 		= array("char20", false);
 		$arrFields["tags_tag_name"] 	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("tags_tag", $arrFields, array("tags_tag_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -78,9 +78,9 @@ class class_installer_tags extends class_installer_base implements interface_ins
 		//register the module
 		$this->registerModule("tags",
                                  _tags_modul_id_,
-                                 "", 
+                                 "",
                                  "class_modul_tags_admin.php",
-                                 $this->arrModule["version"], 
+                                 $this->arrModule["version"],
                                  true,
                                  "",
                                  "class_modul_tags_admin_xml.php");
@@ -128,22 +128,28 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.1") {
             $strReturn .= $this->update_3311_3318();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_340();
             $this->objDB->flushQueryCache();
         }
-	   
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_341();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
-	
+
     private function update_3311_3318() {
         $strReturn = "Updating 3.3.1.1 to 3.3.1.8...\n";
 
@@ -153,7 +159,7 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $this->updateElementVersion("tags", "3.3.1.8");
         return $strReturn;
     }
-	
+
     private function update_3318_340() {
         $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
 
@@ -161,6 +167,16 @@ class class_installer_tags extends class_installer_base implements interface_ins
         $this->updateModuleVersion($this->arrModule["name"], "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("tags", "3.4.0");
+        return $strReturn;
+    }
+
+    private function update_340_341() {
+        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion($this->arrModule["name"], "3.4.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("tags", "3.4.1");
         return $strReturn;
     }
 

@@ -20,7 +20,7 @@ class class_installer_element_portallogin extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0.1";
+		$arrModule["version"] 		= "3.4.1";
 		$arrModule["name"] 			= "element_portallogin";
 		$arrModule["name_lang"] 	= "Element Portallogin";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -129,7 +129,7 @@ class class_installer_element_portallogin extends class_installer_base implement
             $strReturn .= $this->postUpdate_3209_321();
             $this->objDB->flushQueryCache();
         }
-        
+
         if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.2.1") {
             $strReturn .= $this->postUpdate_321_3291();
             $this->objDB->flushQueryCache();
@@ -154,9 +154,14 @@ class class_installer_element_portallogin extends class_installer_base implement
             $strReturn .= $this->postUpdate_331_340();
             $this->objDB->flushQueryCache();
         }
-        
+
         if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.4.0") {
             $strReturn .= $this->postUpdate_340_3401();
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_modul_pages_element::getElement("portallogin")->getStrVersion() == "3.4.0.1") {
+            $strReturn .= $this->postUpdate_3401_341();
             $this->objDB->flushQueryCache();
         }
 
@@ -214,16 +219,22 @@ class class_installer_element_portallogin extends class_installer_base implement
         $this->updateElementVersion("portallogin", "3.4.0");
         return $strReturn;
     }
-    
+
     public function postUpdate_340_3401() {
         $strReturn = "Updating element portallogin to 3.4.0.1...\n";
-        
-        
+
+
         $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."element_portallogin")." TO ".$this->objDB->encloseTableName(_dbprefix_."element_plogin")."";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
+
         $this->updateElementVersion("portallogin", "3.4.0.1");
+        return $strReturn;
+    }
+
+    public function postUpdate_3401_341() {
+        $strReturn = "Updating element portallogin to 3.4.1...\n";
+        $this->updateElementVersion("portallogin", "3.4.1");
         return $strReturn;
     }
 }

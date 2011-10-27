@@ -20,7 +20,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0";
+		$arrModule["version"] 		= "3.4.1";
 		$arrModule["name"] 			= "element_tellafriend";
 		$arrModule["name_lang"] 	= "Element tellafriend";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -30,7 +30,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.4.0";
 	}
@@ -78,13 +78,13 @@ class class_installer_element_tellafriend extends class_installer_base implement
 
 		//Table for page-element
 		$strReturn .= "Installing tellafriend-element table...\n";
-		
+
 		$arrFields = array();
 		$arrFields["content_id"] 			= array("char20", false);
 		$arrFields["tellafriend_template"] 	= array("char254", true);
 		$arrFields["tellafriend_error"] 	= array("char254", true);
 		$arrFields["tellafriend_success"] 	= array("char254", true);
-		
+
 		if(!$this->objDB->createTable("element_tellafriend", $arrFields, array("content_id")))
 			$strReturn .= "An error occured! ...\n";
 
@@ -141,6 +141,11 @@ class class_installer_element_tellafriend extends class_installer_base implement
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("tellafriend")->getStrVersion() == "3.4.0") {
+            $strReturn .= $this->postUpdate_340_341();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -165,6 +170,12 @@ class class_installer_element_tellafriend extends class_installer_base implement
     public function postUpdate_331_340() {
         $strReturn = "Updating element tellafriend to 3.4.0...\n";
         $this->updateElementVersion("tellafriend", "3.4.0");
+        return $strReturn;
+    }
+
+    public function postUpdate_340_341() {
+        $strReturn = "Updating element tellafriend to 3.4.1...\n";
+        $this->updateElementVersion("tellafriend", "3.4.1");
         return $strReturn;
     }
 }

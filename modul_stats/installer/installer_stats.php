@@ -21,7 +21,7 @@ class class_installer_stats extends class_installer_base implements interface_in
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0";
+		$arrModule["version"] 		= "3.4.1";
 		$arrModule["name"] 			= "stats";
 		$arrModule["name_lang"] 	= "Module Stats";
 		$arrModule["moduleId"] 		= _stats_modul_id_;
@@ -126,20 +126,25 @@ class class_installer_stats extends class_installer_base implements interface_in
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3318();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_3319();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.9") {
             $strReturn .= $this->update_3319_340();
+        }
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_341();
         }
 
         return $strReturn."\n\n";
@@ -179,14 +184,14 @@ class class_installer_stats extends class_installer_base implements interface_in
         $this->updateModuleVersion("stats", "3.3.1");
         return $strReturn;
     }
-    
+
     private function update_331_3318() {
         $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.3.1.8");
         return $strReturn;
     }
-    
+
     private function update_3318_3319() {
         $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
         $strReturn .= "Registering admin xml handler...\n";
@@ -202,6 +207,13 @@ class class_installer_stats extends class_installer_base implements interface_in
         $strReturn = "Updating 3.3.1.9 to 3.4.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("stats", "3.4.0");
+        return $strReturn;
+    }
+
+    private function update_340_341() {
+        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("stats", "3.4.1");
         return $strReturn;
     }
 

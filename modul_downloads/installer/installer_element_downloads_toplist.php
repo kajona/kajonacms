@@ -20,7 +20,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
      */
     public function __construct() {
         $arrModule = array();
-        $arrModule["version"]       = "3.4.0";
+        $arrModule["version"]       = "3.4.1";
         $arrModule["name"]          = "element_downloads_toplist";
         $arrModule["name_lang"]     = "Element downloads_toplist";
         $arrModule["nummer2"]       = _pages_content_modul_id_;
@@ -30,7 +30,7 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
     public function getNeededModules() {
         return array("system", "pages", "downloads", "rating");
     }
-    
+
     public function getMinSystemVersion() {
         return "3.4.0";
     }
@@ -136,6 +136,11 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
             $this->objDB->flushQueryCache();
         }
 
+        if(class_modul_pages_element::getElement("downloadstoplist")->getStrVersion() == "3.4.0") {
+            $strReturn .= $this->postUpdate_340_341();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn;
     }
 
@@ -171,6 +176,12 @@ class class_installer_element_downloads_toplist extends class_installer_base imp
     public function postUpdate_331_340() {
         $strReturn = "Updating element downloadstoplist to 3.4.0...\n";
         $this->updateElementVersion("downloadstoplist", "3.4.0");
+        return $strReturn;
+    }
+
+    public function postUpdate_340_341() {
+        $strReturn = "Updating element downloadstoplist to 3.4.1...\n";
+        $this->updateElementVersion("downloadstoplist", "3.4.1");
         return $strReturn;
     }
 }

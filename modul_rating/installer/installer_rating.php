@@ -16,7 +16,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.4.0";
+		$arrModule["version"] 		  = "3.4.1";
 		$arrModule["name"] 			  = "rating";
 		$arrModule["name_lang"]       = "Module Ratings";
 		$arrModule["moduleId"] 		  = _rating_modul_id_;
@@ -28,7 +28,7 @@ class class_installer_rating extends class_installer_base implements interface_i
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.3.1.8";
 	}
@@ -50,11 +50,11 @@ class class_installer_rating extends class_installer_base implements interface_i
 		$arrFields["rating_checksum"] 	= array("char254", true);
 		$arrFields["rating_rate"]       = array("double", true);
 		$arrFields["rating_hits"]       = array("int", true);
-		
+
 		if(!$this->objDB->createTable("rating", $arrFields, array("rating_id")))
 			$strReturn .= "An error occured! ...\n";
-			
-			
+
+
 		$strReturn .= "Installing table rating_history...\n";
 
         $arrFields = array();
@@ -63,20 +63,20 @@ class class_installer_rating extends class_installer_base implements interface_i
         $arrFields["rating_history_user"]   = array("char20", true);
         $arrFields["rating_history_timestamp"]= array("int", true);
         $arrFields["rating_history_value"]  = array("double", true);
-        
-        if(!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id")))
-            $strReturn .= "An error occured! ...\n";	
 
-        
+        if(!$this->objDB->createTable("rating_history", $arrFields, array("rating_history_id")))
+            $strReturn .= "An error occured! ...\n";
+
+
 		//register the module
-		$strSystemID = $this->registerModule("rating", 
-		                                     _rating_modul_id_, 
-		                                     "", 
-		                                     "", 
-		                                     $this->arrModule["version"], 
-		                                     false, 
+		$strSystemID = $this->registerModule("rating",
+		                                     _rating_modul_id_,
+		                                     "",
+		                                     "",
+		                                     $this->arrModule["version"],
+		                                     false,
 		                                     "class_modul_rating_portal_xml.php");
-		                                     
+
         $strReturn .= "Module registered. Module-ID: ".$strSystemID." \n";
 		return $strReturn;
 
@@ -93,7 +93,7 @@ class class_installer_rating extends class_installer_base implements interface_i
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -118,25 +118,30 @@ class class_installer_rating extends class_installer_base implements interface_i
         if($arrModul["module_version"] == "3.3.0") {
             $strReturn .= $this->update_330_3301();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3318();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_340();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_341();
+        }
+
         return $strReturn."\n\n";
 	}
-	
+
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9..\n";
         $strReturn .= "Updating module-versions...\n";
@@ -202,20 +207,27 @@ class class_installer_rating extends class_installer_base implements interface_i
         $this->updateModuleVersion("rating", "3.3.1");
         return $strReturn;
     }
-    
+
     private function update_331_3318() {
         $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("rating", "3.3.1.8");
         return $strReturn;
     }
-    
+
     private function update_3318_340() {
         $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("rating", "3.4.0");
         return $strReturn;
     }
-	
+
+    private function update_340_341() {
+        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("rating", "3.4.1");
+        return $strReturn;
+    }
+
 }
 ?>

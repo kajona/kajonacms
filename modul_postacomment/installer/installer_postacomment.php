@@ -16,7 +16,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.4.0";
+		$arrModule["version"] 		  = "3.4.1";
 		$arrModule["name"] 			  = "postacomment";
 		$arrModule["name_lang"] 	  = "Module Postacomment";
 		$arrModule["moduleId"] 		  = _postacomment_modul_id_;
@@ -28,7 +28,7 @@ class class_installer_postacomment extends class_installer_base implements inter
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.3.1.8";
 	}
@@ -58,25 +58,25 @@ class class_installer_postacomment extends class_installer_base implements inter
 		$arrFields["postacomment_username"] = array("char254", true);
 		$arrFields["postacomment_title"] 	= array("char254", true);
 		$arrFields["postacomment_comment"] 	= array("text", true);
-		
+
 		if(!$this->objDB->createTable("postacomment", $arrFields, array("postacomment_id")))
 			$strReturn .= "An error occured! ...\n";
 
 
 		//register the module
-		$strSystemID = $this->registerModule("postacomment", 
-		                                     _postacomment_modul_id_, 
-		                                     "class_modul_postacomment_portal.php", 
-		                                     "class_modul_postacomment_admin.php", 
-		                                     $this->arrModule["version"], 
-		                                     true, 
+		$strSystemID = $this->registerModule("postacomment",
+		                                     _postacomment_modul_id_,
+		                                     "class_modul_postacomment_portal.php",
+		                                     "class_modul_postacomment_admin.php",
+		                                     $this->arrModule["version"],
+		                                     true,
 		                                     "class_modul_postacomment_portal_xml.php");
 
 		//modify default rights to allow guests to post
 		$strReturn .= "Modifying modules' rights node...\n";
 		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right1");
 		$this->objRights->addGroupToRight(_guests_group_id_, $strSystemID, "right2");
-		
+
 		$strReturn .= "Registering system-constants...\n";
 
 		return $strReturn;
@@ -121,7 +121,7 @@ class class_installer_postacomment extends class_installer_base implements inter
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
 
         $strReturn .= "Version found:\n\t Module: ".$arrModul["module_name"].", Version: ".$arrModul["module_version"]."\n\n";
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.2.0") {
             $strReturn .= $this->update_320_3209();
@@ -151,20 +151,25 @@ class class_installer_postacomment extends class_installer_base implements inter
         if($arrModul["module_version"] == "3.3.0.1") {
             $strReturn .= $this->update_3301_331();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1") {
             $strReturn .= $this->update_331_3318();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_340();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_341();
+        }
+
         return $strReturn."\n\n";
 	}
-	
+
     private function update_320_3209() {
         $strReturn = "Updating 3.2.0 to 3.2.0.9..\n";
         $strReturn .= "Updating module-versions...\n";
@@ -249,7 +254,7 @@ class class_installer_postacomment extends class_installer_base implements inter
         $this->updateElementVersion("postacomment", "3.3.1");
         return $strReturn;
     }
-    
+
     private function update_331_3318() {
         $strReturn = "Updating 3.3.1 to 3.3.1.8...\n";
         $strReturn .= "Updating module-versions...\n";
@@ -258,13 +263,22 @@ class class_installer_postacomment extends class_installer_base implements inter
         $this->updateElementVersion("postacomment", "3.3.1.8");
         return $strReturn;
     }
-    
+
     private function update_3318_340() {
         $strReturn = "Updating 3.3.1.8 to 3.4.0...\n";
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("postacomment", "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("postacomment", "3.4.0");
+        return $strReturn;
+    }
+
+    private function update_340_341() {
+        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("postacomment", "3.4.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("postacomment", "3.4.1");
         return $strReturn;
     }
 

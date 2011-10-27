@@ -16,7 +16,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
 
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		  = "3.4.0";
+		$arrModule["version"] 		  = "3.4.1";
 		$arrModule["name"] 			  = "faqs";
 		$arrModule["name_lang"] 	  = "Module FAQs";
 		$arrModule["moduleId"] 		  = _faqs_modul_id_;
@@ -178,6 +178,11 @@ class class_installer_faqs extends class_installer_base implements interface_ins
             $strReturn .= $this->update_3318_340();
         }
 
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0") {
+            $strReturn .= $this->update_340_341();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -268,7 +273,7 @@ class class_installer_faqs extends class_installer_base implements interface_ins
                       WHERE element_class_admin = 'class_element_faqs.php'";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("faqs", "3.3.0.1");
         $strReturn .= "Updating element-versions...\n";
@@ -303,6 +308,16 @@ class class_installer_faqs extends class_installer_base implements interface_ins
         $this->updateModuleVersion("faqs", "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("faqs", "3.4.0");
+        return $strReturn;
+    }
+
+    private function update_340_341() {
+        $strReturn = "Updating 3.4.0 to 3.4.1...\n";
+
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("faqs", "3.4.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("faqs", "3.4.1");
         return $strReturn;
     }
 

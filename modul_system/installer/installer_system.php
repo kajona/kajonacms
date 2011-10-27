@@ -19,7 +19,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 	public function __construct() {
         $arrModul = array();
-		$arrModul["version"] 			= "3.4.0.2";
+		$arrModul["version"] 			= "3.4.1";
 		$arrModul["name"] 				= "system";
 		$arrModul["name_lang"] 			= "System kernel";
 		$arrModul["moduleId"] 			= _system_modul_id_;
@@ -215,17 +215,17 @@ class class_installer_system extends class_installer_base implements interface_i
 		$arrFields["group_id"] 			= array("char20", false);
 		$arrFields["group_name"]	    = array("char254", true);
 		$arrFields["group_subsystem"]	= array("char254", true);
-        
+
         if(!$this->objDB->createTable("user_group", $arrFields, array("group_id")))
 			$strReturn .= "An error occured! ...\n";
 
-        
+
         $strReturn .= "Installing table user_group_kajona...\n";
-        
+
 		$arrFields = array();
 		$arrFields["group_id"] 			= array("char20", false);
 		$arrFields["group_desc"]		= array("char254", true);
-        
+
 
 		if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
 			$strReturn .= "An error occured! ...\n";
@@ -396,7 +396,7 @@ class class_installer_system extends class_installer_base implements interface_i
 		$strReturn .= "Registering system-constants...\n";
 		//Number of rows in the login-log
 		$this->registerConstant("_user_log_nrofrecords_", "50", 1, _user_modul_id_);
-        
+
         //And the default skin
         $this->registerConstant("_admin_skin_default_", "kajona_v3", class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
 
@@ -439,28 +439,28 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->registerConstant("_system_browser_cachebuster_", 0, class_modul_system_setting::$int_TYPE_INT, _system_modul_id_);
         //3.4: Adding constant _system_graph_type_ indicating the chart-engine to use
         $this->registerConstant("_system_graph_type_", "ezc", class_modul_system_setting::$int_TYPE_STRING, _system_modul_id_);
-        //3.4: Enabling or disabling the internal changehistory 
+        //3.4: Enabling or disabling the internal changehistory
         $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
 
-        
+
         //Creating the admin & guest groups
         $objAdminGroup = new class_modul_user_group();
         $objAdminGroup->setStrName("Admins");
         $objAdminGroup->updateObjectToDb();
         $strReturn .= "Registered Group Admins...\n";
-        
+
         $objGuestGroup = new class_modul_user_group();
         $objGuestGroup->setStrName("Guests");
         $objGuestGroup->updateObjectToDb();
         $strReturn .= "Registered Group Guests...\n";
-        
+
         //Systemid of guest-user & admin group
         $strGuestID = $objGuestGroup->getSystemid();
         $strAdminID = $objAdminGroup->getSystemid();
         $this->registerConstant("_guests_group_id_", $strGuestID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
         $this->registerConstant("_admins_group_id_", $strAdminID, class_modul_system_setting::$int_TYPE_STRING, _user_modul_id_);
-        
+
         //Create an root-record for the tree
         $this->createSystemRecord(0, "System Rights Root", true, _system_modul_id_, "0");
 		//BUT: We have to modify the right-record of the system
@@ -497,7 +497,7 @@ class class_installer_system extends class_installer_base implements interface_i
             $strPassword = dbsafeString($this->objSession->getSession("install_password"));
             $strEmail = dbsafeString($this->objSession->getSession("install_email"));
 		}
-        
+
         //create a default language
 		$strReturn .= "Creating new default-language\n";
         $objLanguage = new class_modul_languages_language();
@@ -513,7 +513,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		//the admin-language
 		$strAdminLanguage = $this->objSession->getAdminLanguage();
-        
+
         $objUser = new class_modul_user_user();
         $objUser->setStrUsername($strUsername);
         $objUser->setIntActive(1);
@@ -524,7 +524,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $objUser->getObjSourceUser()->setStrEmail($strEmail);
         $objUser->getObjSourceUser()->updateObjectToDb();
 		$strReturn .= "Created User Admin: <strong>Username: ".$strUsername.", Password: ***********</strong> ...\n";
-        
+
 		//The Admin should belong to the admin-Group
         $objAdminGroup->getObjSourceGroup()->addMember($objUser->getObjSourceUser());
 		$strReturn .= "Registered Admin in Admin-Group...\n";
@@ -536,7 +536,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
 
-        
+
 
 		return $strReturn;
 	}
@@ -643,13 +643,13 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_3314_3315();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.5") {
             $strReturn .= $this->update_3315_3318();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.8") {
             $strReturn .= $this->update_3318_3319();
@@ -661,25 +661,31 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= $this->update_3319_33110();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.3.1.10") {
             $strReturn .= $this->update_33110_340();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0") {
             $strReturn .= $this->update_340_3401();
             $this->objDB->flushQueryCache();
         }
-        
+
         $arrModul = $this->getModuleData($this->arrModule["name"], false);
         if($arrModul["module_version"] == "3.4.0.1") {
             $strReturn .= $this->update_3401_3402();
             $this->objDB->flushQueryCache();
         }
-        
+
+        $arrModul = $this->getModuleData($this->arrModule["name"], false);
+        if($arrModul["module_version"] == "3.4.0.2") {
+            $strReturn .= $this->update_3402_341();
+            $this->objDB->flushQueryCache();
+        }
+
         return $strReturn."\n\n";
 	}
 
@@ -1125,7 +1131,7 @@ class class_installer_system extends class_installer_base implements interface_i
                     CHANGE ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->encloseColumnName("cache_content")." ".$this->objDB->getDatatype("longtext")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
-        
+
 
         $strReturn .= "Installing table aspects...\n";
 
@@ -1142,7 +1148,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $objAspect->setStrName("default");
         $objAspect->setBitDefault(true);
         $objAspect->updateObjectToDb();
-        
+
         $strDefaultAspectId = $objAspect->getSystemid();
 
         $strReturn .= "Altering module-table...\n";
@@ -1150,7 +1156,7 @@ class class_installer_system extends class_installer_base implements interface_i
                      ADD ".$this->objDB->encloseColumnName("module_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Altering dashboard-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."dashboard")."
                      ADD ".$this->objDB->encloseColumnName("dashboard_aspect")." ".$this->objDB->getDatatype("char254")." NULL DEFAULT NULL ";
@@ -1213,7 +1219,7 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.3.1.5");
         return $strReturn;
     }
-    
+
     private function update_3315_3318() {
         $strReturn = "Updating 3.3.1.5 to 3.3.1.8...\n";
 
@@ -1223,10 +1229,10 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.3.1.8");
         return $strReturn;
     }
-    
+
     private function update_3318_3319() {
         $strReturn = "Updating 3.3.1.8 to 3.3.1.9...\n";
-        
+
         $this->registerConstant("_system_changehistory_enabled_", "false", class_modul_system_setting::$int_TYPE_BOOL, _system_modul_id_);
 
         $strReturn .= "Updating module-versions...\n";
@@ -1235,28 +1241,28 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.3.1.9");
         return $strReturn;
     }
-    
+
     private function update_3319_33110() {
         $strReturn = "Updating 3.3.1.9 to 3.3.1.10...\n";
-        
+
         $strReturn .= "Altering changehistory-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."changelog")."
                      ADD ".$this->objDB->encloseColumnName("change_system_previd")." ".$this->objDB->getDatatype("char20")." NULL DEFAULT NULL ";
         if(!$this->objDB->_query($strQuery))
              $strReturn .= "An error occured! ...\n";
-        
-        
+
+
         $strReturn .= "Altering rights-table...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."system_right")."
-                    CHANGE ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->encloseColumnName("right_view")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL,
                     CHANGE ".$this->objDB->encloseColumnName("right_edit")." ".$this->objDB->encloseColumnName("right_edit")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
-                    CHANGE ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
-                    CHANGE ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->encloseColumnName("right_delete")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL,
+                    CHANGE ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->encloseColumnName("right_right")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL,
                     CHANGE ".$this->objDB->encloseColumnName("right_right1")." ".$this->objDB->encloseColumnName("right_right1")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
                     CHANGE ".$this->objDB->encloseColumnName("right_right2")." ".$this->objDB->encloseColumnName("right_right2")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
                     CHANGE ".$this->objDB->encloseColumnName("right_right3")." ".$this->objDB->encloseColumnName("right_right3")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
                     CHANGE ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->encloseColumnName("right_right4")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL ,
-                    CHANGE ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL"; 
+                    CHANGE ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->encloseColumnName("right_right5")." ".$this->objDB->getDatatype("text")." NULL DEFAULT NULL";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
 
@@ -1266,25 +1272,25 @@ class class_installer_system extends class_installer_base implements interface_i
         $this->updateElementVersion("languageswitch", "3.3.1.10");
         return $strReturn;
     }
-    
+
     private function update_33110_340() {
         $strReturn = "Updating 3.3.1.10 to 3.4.0...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.0");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.0");
         return $strReturn;
     }
-    
+
      private function update_340_3401() {
         $strReturn = "Updating 3.4.0 to 3.4.0.1...\n";
-        
+
         $strReturn .= "Deleting system_output_gzip constant... \n";
         $strQuery = "DELETE FROM "._dbprefix_."system_config WHERE system_config_name = ?";
         if(!$this->objDB->_pQuery($strQuery, array("_system_output_gzip_")))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.0.1");
         $strReturn .= "Updating element-versions...\n";
@@ -1292,10 +1298,10 @@ class class_installer_system extends class_installer_base implements interface_i
         return $strReturn;
     }
 
-    
+
     private function update_3401_3402() {
         $strReturn = "Updating 3.4.0.1 to 3.4.0.2...\n";
-        
+
         $strReturn .= "Installing kajona-user-subsystem user-table...\n";
 		$arrFields = array();
 		$arrFields["user_id"] 			= array("char20", false);
@@ -1312,7 +1318,7 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("user_kajona", $arrFields, array("user_id")))
 			$strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Installing kajona-user-subsystem group-table...\n";
         $arrFields = array();
 		$arrFields["group_id"] 			= array("char20", false);
@@ -1320,47 +1326,47 @@ class class_installer_system extends class_installer_base implements interface_i
 
 		if(!$this->objDB->createTable("user_group_kajona", $arrFields, array("group_id")))
 			$strReturn .= "An error occured! ...\n";
-        
-        
+
+
         $strReturn .= "Updating kajona-user-subsystem members-table...\n";
         $strQuery = "RENAME TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group_members")." TO ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."
-                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
+                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL,
                     CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
-        
+
+
         $strReturn .= "Migrating current groups to new kajona-user-subsystems...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."user_group ORDER BY group_id DESC";
         $arrRows = $this->objDB->getPArray($strQuery, array());
         foreach($arrRows as $arrOneRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona 
+            $strQuery = "INSERT INTO "._dbprefix_."user_group_kajona
                                         (group_id) VALUES (?) ";
             $this->objDB->_pQuery($strQuery, array($arrOneRow["group_id"]));
         }
-        
+
         $strReturn .= "Migrating current users to new kajona-user-subsystems...\n";
         $strQuery = "SELECT * FROM "._dbprefix_."user ORDER BY user_id DESC";
         $arrRows = $this->objDB->getPArray($strQuery, array());
         foreach($arrRows as $arrOneRow) {
-            $strQuery = "INSERT INTO "._dbprefix_."user_kajona 
-                                        (user_id, user_pass, user_email, user_forename, user_name, 
-                                        user_street, user_postal, user_city, user_tel, user_mobile, user_date) VALUES 
+            $strQuery = "INSERT INTO "._dbprefix_."user_kajona
+                                        (user_id, user_pass, user_email, user_forename, user_name,
+                                        user_street, user_postal, user_city, user_tel, user_mobile, user_date) VALUES
                                         (?,?,?,?,?,?,?,?,?,?,?) ";
             $this->objDB->_pQuery($strQuery, array(
                 $arrOneRow["user_id"], $arrOneRow["user_pass"], $arrOneRow["user_email"],
                 $arrOneRow["user_forename"], $arrOneRow["user_name"], $arrOneRow["user_street"], $arrOneRow["user_postal"],
                 $arrOneRow["user_city"], $arrOneRow["user_tel"], $arrOneRow["user_mobile"], $arrOneRow["user_date"]));
-            
+
         }
-        
+
         $strReturn .= "Updating old user-tables...\n";
 		$strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user")."
-                    ADD ".$this->objDB->encloseColumnName("user_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL, 
+                    ADD ".$this->objDB->encloseColumnName("user_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL,
                     DROP ".$this->objDB->encloseColumnName("user_pass").",
                     DROP ".$this->objDB->encloseColumnName("user_email").",
                     DROP ".$this->objDB->encloseColumnName("user_forename").",
@@ -1373,28 +1379,37 @@ class class_installer_system extends class_installer_base implements interface_i
                     DROP ".$this->objDB->encloseColumnName("user_date")." ";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
- 
+
+
         $strReturn .= "Updating old group-tables...\n";
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_group")."
                     ADD ".$this->objDB->encloseColumnName("group_subsystem")." ".$this->objDB->getDatatype("char254")." NOT NULL";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Reassigning current users to kajona usersubsystem...\n";
         $strQuery = "UPDATE "._dbprefix_."user SET user_subsystem = ?";
         if(!$this->objDB->_pQuery($strQuery, array('kajona')))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Reassigning current groups to kajona usersubsystem...\n";
         $strQuery = "UPDATE "._dbprefix_."user_group SET group_subsystem = ?";
         if(!$this->objDB->_pQuery($strQuery, array('kajona')))
             $strReturn .= "An error occured! ...\n";
-        
+
         $strReturn .= "Updating module-versions...\n";
         $this->updateModuleVersion("", "3.4.0.2");
         $strReturn .= "Updating element-versions...\n";
         $this->updateElementVersion("languageswitch", "3.4.0.2");
+        return $strReturn;
+    }
+
+    private function update_3402_341() {
+        $strReturn = "Updating 3.4.0.2 to 3.4.1...\n";
+        $strReturn .= "Updating module-versions...\n";
+        $this->updateModuleVersion("", "3.4.1");
+        $strReturn .= "Updating element-versions...\n";
+        $this->updateElementVersion("languageswitch", "3.4.1");
         return $strReturn;
     }
 }

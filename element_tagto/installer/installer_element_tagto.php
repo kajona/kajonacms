@@ -20,7 +20,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
      */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["version"] 		= "3.4.0";
+		$arrModule["version"] 		= "3.4.1";
 		$arrModule["name"] 			= "element_tagto";
 		$arrModule["name_lang"] 	= "Element tagto";
 		$arrModule["nummer2"] 		= _pages_content_modul_id_;
@@ -30,7 +30,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.4.0";
 	}
@@ -85,7 +85,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 		}
 		catch (class_exception $objEx)  {
 		}
-        
+
 		if($objElement == null) {
 		    $objElement = new class_modul_pages_element();
 		    $objElement->setStrName("tagto");
@@ -128,9 +128,14 @@ class class_installer_element_tagto extends class_installer_base implements inte
             $strReturn .= $this->postUpdate_3301_331();
             $this->objDB->flushQueryCache();
         }
-        
+
         if(class_modul_pages_element::getElement("tagto")->getStrVersion() == "3.3.1") {
             $strReturn .= $this->postUpdate_331_340();
+            $this->objDB->flushQueryCache();
+        }
+
+        if(class_modul_pages_element::getElement("tagto")->getStrVersion() == "3.4.0") {
+            $strReturn .= $this->postUpdate_340_341();
             $this->objDB->flushQueryCache();
         }
 
@@ -170,6 +175,12 @@ class class_installer_element_tagto extends class_installer_base implements inte
     public function postUpdate_331_340() {
         $strReturn = "Updating element tagto to 3.4.0...\n";
         $this->updateElementVersion("tagto", "3.4.0");
+        return $strReturn;
+    }
+
+    public function postUpdate_340_341() {
+        $strReturn = "Updating element tagto to 3.4.1...\n";
+        $this->updateElementVersion("tagto", "3.4.1");
         return $strReturn;
     }
 }
