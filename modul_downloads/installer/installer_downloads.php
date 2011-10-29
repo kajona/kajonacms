@@ -28,7 +28,7 @@ class class_installer_downloads extends class_installer_base implements interfac
 	}
 
     public function getMinSystemVersion() {
-	    return "3.3.1.8";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
