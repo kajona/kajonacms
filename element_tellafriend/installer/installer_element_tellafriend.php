@@ -32,7 +32,7 @@ class class_installer_element_tellafriend extends class_installer_base implement
 	}
 
     public function getMinSystemVersion() {
-	    return "3.4.0";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
