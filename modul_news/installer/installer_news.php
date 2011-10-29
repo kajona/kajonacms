@@ -28,7 +28,7 @@ class class_installer_news extends class_installer_base implements interface_ins
 	}
 
     public function getMinSystemVersion() {
-	    return "3.3.1.8";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
