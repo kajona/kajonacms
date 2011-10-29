@@ -1334,8 +1334,8 @@ class class_installer_system extends class_installer_base implements interface_i
             $strReturn .= "An error occured! ...\n";
 
         $strQuery = "ALTER TABLE ".$this->objDB->encloseTableName(_dbprefix_."user_kajona_members")."
-                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL,
-                    CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char254")." NOT NULL";
+                    CHANGE ".$this->objDB->encloseColumnName("group_member_group_id")." ".$this->objDB->encloseColumnName("group_member_group_kajona_id")." ".$this->objDB->getDatatype("char20")." NOT NULL,
+                    CHANGE ".$this->objDB->encloseColumnName("group_member_user_id")." ".$this->objDB->encloseColumnName("group_member_user_kajona_id")." ".$this->objDB->getDatatype("char20")." NOT NULL";
         if(!$this->objDB->_query($strQuery))
             $strReturn .= "An error occured! ...\n";
 
