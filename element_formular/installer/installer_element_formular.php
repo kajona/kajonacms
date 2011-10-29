@@ -32,7 +32,7 @@ class class_installer_element_formular extends class_installer_base implements i
 	}
 
     public function getMinSystemVersion() {
-	    return "3.4.0";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
