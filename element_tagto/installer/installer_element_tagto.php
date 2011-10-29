@@ -32,7 +32,7 @@ class class_installer_element_tagto extends class_installer_base implements inte
 	}
 
     public function getMinSystemVersion() {
-	    return "3.4.0";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
