@@ -42,7 +42,7 @@ class class_installer_gallery extends class_installer_base implements interface_
 	}
 
     public function getMinSystemVersion() {
-	    return "3.3.1.8";
+	    return "3.4.1";
 	}
 
     public function install() {
