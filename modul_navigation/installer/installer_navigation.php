@@ -28,7 +28,7 @@ class class_installer_navigation extends class_installer_base implements interfa
 	}
 
     public function getMinSystemVersion() {
-	    return "3.3.1.8";
+	    return "3.4.1";
 	}
 
 	public function hasPostInstalls() {
