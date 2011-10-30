@@ -10,10 +10,9 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-
-$lang["commons_error_permissions"] = "Нямате достатъчно права за тези действия";
-$lang["commons_next"] = "напред";
-$lang["commons_back"] = "назад";
-$lang["commons_captcha_reload"] = "Кодексът не се чете?";
-$lang["commons_captcha"] = "Код за сигурност:";
+$lang["commons_back"]                    = "назад";
+$lang["commons_captcha"]                 = "Код за сигурност:";
+$lang["commons_captcha_reload"]          = "Кодексът не се чете?";
+$lang["commons_error_permissions"]       = "Нямате достатъчно права за тези действия";
+$lang["commons_next"]                    = "напред";
 ?>

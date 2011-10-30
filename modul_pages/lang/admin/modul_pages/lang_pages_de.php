@@ -102,17 +102,17 @@ $lang["pe_enable"]                       = "Den Portaleditor aktivieren";
 $lang["pe_icon_edit"]                    = "Seite in der Administration öffnen";
 $lang["pe_icon_new"]                     = "Neue Seite anlegen";
 $lang["pe_icon_page"]                    = "Grunddaten der Seite bearbeiten";
+$lang["pe_inactiveElement"]              = "Deaktiviertes Element";
 $lang["pe_new"]                          = "Neues Element an Platzhalter:";
 $lang["pe_new_old"]                      = "Anlegen";
+$lang["pe_setactive"]                    = "Aktivieren";
+$lang["pe_setinactive"]                  = "Deaktivieren";
 $lang["pe_shiftDown"]                    = "Nach unten";
 $lang["pe_shiftUp"]                      = "Nach oben";
 $lang["pe_status_autor"]                 = "Letzter Autor:";
 $lang["pe_status_page"]                  = "Seite:";
 $lang["pe_status_status"]                = "Status:";
 $lang["pe_status_time"]                  = "Letzte Änderung:";
-$lang["pe_setinactive"]                  = "Deaktivieren";
-$lang["pe_setactive"]                    = "Aktivieren";
-$lang["pe_inactiveElement"]              = "Deaktiviertes Element";
 $lang["plNew"]                           = "Neuer Platzhalter:";
 $lang["plRename"]                        = "Anpassen";
 $lang["plToUpdate"]                      = "Alter Platzhalter:";
@@ -149,25 +149,21 @@ $lang["select_page"]                     = "Seite auswählen";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Änderungshistorie anzeigen";
 $lang["submit_change"]                   = "Ändern";
+$lang["systemtask_pageexport_error"]     = "Error while exporting the page.";
+$lang["systemtask_pageexport_name"]      = "Seite exportieren";
+$lang["systemtask_pageexport_page"]      = "Zu exportierende Seite:";
+$lang["systemtask_pageexport_success"]   = "Export der Seite war erfolgreich. Die Seite wurde unter dem folgenden Dateinamen abelegt. Bitte die Datei schnellstmöglich vom System entfernen.<br />";
+$lang["systemtask_pageimport_errortype"] = "Hochgeladene Datei ist keine xml-Datei.";
+$lang["systemtask_pageimport_errorupload"] = "Fehler beim Hochladen der Datei.";
+$lang["systemtask_pageimport_file"]      = "Zu importierende Datei:";
+$lang["systemtask_pageimport_name"]      = "Seite importieren";
+$lang["systemtask_pageimport_replace"]   = "Bestehende Seite ersetzen:";
+$lang["systemtask_pageimport_success"]   = "Seite erfolgreich importiert.";
 $lang["template"]                        = "Template:";
 $lang["templateNotLoaded"]               = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt oder es konnte nicht geladen werden!";
 $lang["templateNotSelectedBefore"]       = "ACHTUNG: Für diese Seite wurde noch kein Template gewählt!";
 $lang["updatePlaceholder"]               = "Platzhalter anpassen";
 $lang["warning_elementsremaining"]       = "ACHTUNG<br />Im System befinden sich Seitenelemente, die keinem Platzhalter zugeordnet werden können. Dies kann der Fall sein, wenn ein Platzhalter im Template umbenannt oder gelöscht wurde. Um Platzhalter auch im System umzubenennen, können Sie die Funktion \"Platzhalter anpassen\" verwenden. Eine Liste der betroffenen Elemente befindet sich unter dieser Warnung.";
-
-$lang["systemtask_pageexport_name"]      = "Seite exportieren";
-$lang["systemtask_pageexport_success"]      = "Export der Seite war erfolgreich. Die Seite wurde unter dem folgenden Dateinamen abelegt. Bitte die Datei schnellstmöglich vom System entfernen.<br />";
-$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
-$lang["systemtask_pageexport_page"]      = "Zu exportierende Seite:";
-
-$lang["systemtask_pageimport_name"]      = "Seite importieren";
-$lang["systemtask_pageimport_file"]      = "Zu importierende Datei:";
-$lang["systemtask_pageimport_errorupload"]      = "Fehler beim Hochladen der Datei.";
-$lang["systemtask_pageimport_errortype"]      = "Hochgeladene Datei ist keine xml-Datei.";
-$lang["systemtask_pageimport_success"]      = "Seite erfolgreich importiert.";
-$lang["systemtask_pageimport_replace"]      = "Bestehende Seite ersetzen:";
-
-
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "Elemente", 5 => "Ordner", 6 => "Platzhalter", 7 => "", 8 => "");

@@ -7,7 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Секунди";
@@ -33,8 +33,8 @@ $lang["filtern"]                         = "Филтрирай";
 $lang["graph_date"]                      = "дата";
 $lang["graph_hits"]                      = "Посещения";
 $lang["graph_hitsPerDay"]                = "Попадения на ден";
-$lang["graph_visitorsPerDay"]            = "Посетителите на ден";
 $lang["graph_visitors"]                  = "посетители";
+$lang["graph_visitorsPerDay"]            = "Посетителите на ден";
 $lang["import_failure"]                  = "Възникна грешка при внасянето.";
 $lang["import_filename"]                 = "Файл:";
 $lang["import_success"]                  = "Внасянето беше успешно.";

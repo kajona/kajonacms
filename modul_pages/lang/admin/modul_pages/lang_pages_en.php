@@ -102,17 +102,17 @@ $lang["pe_enable"]                       = "Set portaleditor active";
 $lang["pe_icon_edit"]                    = "Open page in administration";
 $lang["pe_icon_new"]                     = "Create new page";
 $lang["pe_icon_page"]                    = "Edit page details";
+$lang["pe_inactiveElement"]              = "Inactive element";
 $lang["pe_new"]                          = "New element at placeholder:";
 $lang["pe_new_old"]                      = "Create";
+$lang["pe_setactive"]                    = "Set active";
+$lang["pe_setinactive"]                  = "Set inactive";
 $lang["pe_shiftDown"]                    = "Shift down";
 $lang["pe_shiftUp"]                      = "Shift up";
 $lang["pe_status_autor"]                 = "Last author:";
 $lang["pe_status_page"]                  = "Page:";
 $lang["pe_status_status"]                = "Status:";
 $lang["pe_status_time"]                  = "Last modification:";
-$lang["pe_setinactive"]                  = "Set inactive";
-$lang["pe_setactive"]                    = "Set active";
-$lang["pe_inactiveElement"]              = "Inactive element";
 $lang["plNew"]                           = "New placeholder:";
 $lang["plRename"]                        = "Update";
 $lang["plToUpdate"]                      = "Old placeholder:";
@@ -149,24 +149,21 @@ $lang["select_page"]                     = "Select a page";
 $lang["seostring"]                       = "SEO-URL-Keywords:";
 $lang["show_history"]                    = "Show Changehistory";
 $lang["submit_change"]                   = "Change";
+$lang["systemtask_pageexport_error"]     = "Error while exporting the page.";
+$lang["systemtask_pageexport_name"]      = "Export page";
+$lang["systemtask_pageexport_page"]      = "Page to export:";
+$lang["systemtask_pageexport_success"]   = "Page exported successfully. The document was saved as following. Please remove the file as soon as possible.<br />";
+$lang["systemtask_pageimport_errortype"] = "Uploaded file not a xml file.";
+$lang["systemtask_pageimport_errorupload"] = "Error while uploading the file.";
+$lang["systemtask_pageimport_file"]      = "File to import:";
+$lang["systemtask_pageimport_name"]      = "Import page";
+$lang["systemtask_pageimport_replace"]   = "Replace existing page:";
+$lang["systemtask_pageimport_success"]   = "Page imported successfully.";
 $lang["template"]                        = "Template:";
 $lang["templateNotLoaded"]               = "ATTENTION: No template was selected for this page or it couldn't be loaded!";
 $lang["templateNotSelectedBefore"]       = "ATTENTION: No template was selected for this page!";
 $lang["updatePlaceholder"]               = "Update placeholder";
 $lang["warning_elementsremaining"]       = "ATTENTION<br />There are pageelements in the system which can't be assigned to any placeholder provided by the template. This can happen, if a placeholder was renamed or removed from the template. To rename a placeholder in the system, you can use the function \"Update placeholder\". A list of the elements follows after this warning.";
-
-$lang["systemtask_pageexport_name"]      = "Export page";
-$lang["systemtask_pageexport_success"]      = "Page exported successfully. The document was saved as following. Please remove the file as soon as possible.<br />";
-$lang["systemtask_pageexport_error"]      = "Error while exporting the page.";
-$lang["systemtask_pageexport_page"]      = "Page to export:";
-
-$lang["systemtask_pageimport_name"]      = "Import page";
-$lang["systemtask_pageimport_file"]      = "File to import:";
-$lang["systemtask_pageimport_errorupload"]      = "Error while uploading the file.";
-$lang["systemtask_pageimport_errortype"]      = "Uploaded file not a xml file.";
-$lang["systemtask_pageimport_success"]      = "Page imported successfully.";
-$lang["systemtask_pageimport_replace"]      = "Replace existing page:";
-
 
 //non-editable entries
 $lang["permissions_header"]              = array(0 => "View", 1 => "Edit", 2 => "Delete", 3 => "Permissions", 4 => "Elements",  5 => "Folder", 6 => "Placeholders", 7 => "", 8 => "");

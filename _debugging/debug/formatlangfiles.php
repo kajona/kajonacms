@@ -44,7 +44,7 @@ if(issetPost("format")) {
     $intTemp = "";
     $arrOuput = array();
     exec($strJavaCommand, $arrOuput, $intTemp);
-    
+
     echo  "\n\texit code: ".$intTemp."\n\n";
     foreach($arrOuput as $strOneLine)
         echo "\t".$strOneLine."\n";

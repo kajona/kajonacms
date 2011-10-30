@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["stats_chart"]                     = "Chart:";
 $lang["stats_current"]                   = "Live-Infos:";
 $lang["stats_day"]                       = "Day-based values:";
-$lang["stats_chart"]                       = "Chart:";
 $lang["stats_hits"]                      = "Hits: ";
 $lang["stats_ip"]                        = "IP";
 $lang["stats_last"]                      = "Latest visits:";

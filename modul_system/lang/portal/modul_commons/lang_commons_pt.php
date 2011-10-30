@@ -10,9 +10,9 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
-$lang["commons_error_permissions"] = "Não tem permissões suficientes para executar esta acção";
-$lang["commons_next"] = "próxima";
-$lang["commons_back"] = "anterior";
-$lang["commons_captcha_reload"] = "O código não é legível?";
-$lang["commons_captcha"] = "Código de segurança:";
+$lang["commons_back"]                    = "anterior";
+$lang["commons_captcha"]                 = "Código de segurança:";
+$lang["commons_captcha_reload"]          = "O código não é legível?";
+$lang["commons_error_permissions"]       = "Não tem permissões suficientes para executar esta acção";
+$lang["commons_next"]                    = "próxima";
 ?>

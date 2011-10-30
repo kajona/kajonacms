@@ -11,10 +11,10 @@
 
 //editable entries
 $lang["commons_back"]                    = "Anterior";
-$lang["commons_save"] = "Guardar";
-$lang["commons_module_permissions"] = "Permissões do Módulo";
-$lang["commons_no"] = "Não";
-$lang["commons_yes"] = "Sim";
-$lang["commons_delete"] = "Eliminar";
-$lang["commons_error_permissions"] = "Não tem permissões suficientes para executar esta acção";
+$lang["commons_delete"]                  = "Eliminar";
+$lang["commons_error_permissions"]       = "Não tem permissões suficientes para executar esta acção";
+$lang["commons_module_permissions"]      = "Permissões do Módulo";
+$lang["commons_no"]                      = "Não";
+$lang["commons_save"]                    = "Guardar";
+$lang["commons_yes"]                     = "Sim";
 ?>

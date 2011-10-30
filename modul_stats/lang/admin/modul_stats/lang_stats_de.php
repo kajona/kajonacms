@@ -7,10 +7,7 @@
 *	$Id$					    *
 ********************************************************************************************************/
 //Edited with Kajona Language Editor GUI, see www.kajona.de and www.mulchprod.de for more information
-//Kajona Language Editor Core Build 293
-
-//non-editable entries
-$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
+//Kajona Language Editor Core Build 337
 
 //editable entries
 $lang["_stats_duration_online_"]         = "Anzahl Sekunden:";
@@ -36,8 +33,8 @@ $lang["filtern"]                         = "Filtern";
 $lang["graph_date"]                      = "Datum";
 $lang["graph_hits"]                      = "Zugriffe";
 $lang["graph_hitsPerDay"]                = "Seitenzugriffe pro Tag";
-$lang["graph_visitorsPerDay"]            = "Einzelne Besucher pro Tag";
 $lang["graph_visitors"]                  = "Besucher";
+$lang["graph_visitorsPerDay"]            = "Einzelne Besucher pro Tag";
 $lang["import_failure"]                  = "Der Import wurde nicht erfolgreich abgeschlossen.";
 $lang["import_filename"]                 = "Datei:";
 $lang["import_success"]                  = "Der Import der Daten war erfolgreich.";
@@ -96,4 +93,7 @@ $lang["worker_intro"]                    = "Hier können verschiedene Wartungs-T
 $lang["worker_lookupReset_end"]          = "Vorgang abgeschlossen. Alle fehlerhaften Hostnames wurden zurückgesetzt.";
 $lang["worker_lookup_end"]               = "Vorgang abgeschlossen. Alle Adressen wurden ausgewertet.";
 $lang["worker_run"]                      = "Ausführen";
+
+//non-editable entries
+$lang["permissions_header"]              = array(0 => "Anzeigen", 1 => "Bearbeiten", 2 => "Löschen", 3 => "Rechte", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 ?>

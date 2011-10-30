@@ -10,6 +10,7 @@
 //Kajona Language Editor Core Build 337
 
 //editable entries
+$lang["cal_today"]                       = "Heute";
 $lang["comment"]                         = "Bemerkung:";
 $lang["currentParticipants"]             = "Aktuelle Teilnehmerzahl:";
 $lang["dateTimeFrom"]                    = "Von:";
@@ -32,6 +33,4 @@ $lang["registerMailBodyIntro"]           = "Bitte bestätigen Sie die Anmeldung 
 $lang["registerMailSubject"]             = "Bitte bestätigen Sie ihre Anmeldung";
 $lang["registerSubmit"]                  = "Anmelden";
 $lang["registerlink"]                    = "Anmelden";
-
-$lang["cal_today"]                       = "Heute";
 ?>
