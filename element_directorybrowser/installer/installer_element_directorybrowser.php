@@ -30,7 +30,7 @@ class class_installer_element_directorybrowser extends class_installer_base impl
 	public function getNeededModules() {
 	    return array("system", "pages");
 	}
-	
+
     public function getMinSystemVersion() {
 	    return "3.3.1.8";
 	}
@@ -111,6 +111,6 @@ class class_installer_element_directorybrowser extends class_installer_base impl
 
         return $strReturn;
     }
-    
+
 }
 ?>

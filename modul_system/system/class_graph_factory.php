@@ -20,7 +20,7 @@ class class_graph_factory {
 
     public static $STR_TYPE_EZC = "CHART_TYPE_EZC";
     public static $STR_TYPE_PCHART = "CHART_TYPE_PCHART";
-    
+
 
     /**
      * Creates a graph-instance either based on the current config or

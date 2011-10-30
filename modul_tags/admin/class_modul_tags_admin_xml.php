@@ -34,7 +34,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 		parent::__construct($arrModul);
 	}
 
-	
+
     /**
      * Creates a new tag (if not already existing) and assigns the tag to the passed systemrecord
      *
@@ -67,10 +67,10 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
                 //add the connection itself
                 if(!$objTag->assignToSystemrecord($strSystemid, $strAttribute))
                     $bitError = true;
-                
+
                 $this->objDB->flushQueryCache();
             }
-            
+
             if(!$bitError)
                 $strReturn .= "<success>assignment succeeded</success>";
             else

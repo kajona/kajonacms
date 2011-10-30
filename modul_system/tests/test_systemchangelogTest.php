@@ -12,10 +12,10 @@ require_once (dirname(__FILE__)."/../system/interface_versionable.php");
 class test_systemchangelogTest extends class_testbase {
 
     public function testChangelog() {
-        
-        
+
+
         class_carrier::getInstance()->getObjDB()->flushQueryCache();
-        
+
 
         $objSystemCommon = new class_modul_system_common();
 
@@ -39,8 +39,8 @@ class test_systemchangelogTest extends class_testbase {
         $this->assertEquals(2, count(class_modul_system_changelog::getLogEntries($strSystemid)));
 
         $objSystemCommon->deleteSystemRecord($strSystemid);
-        
-        
+
+
 
 
     }
@@ -56,7 +56,7 @@ class dummyObject implements interface_versionable {
     public function getSystemid() {
         return $this->strSystemid;
     }
-    
+
     public function getPrevid() {
         return "";
     }
