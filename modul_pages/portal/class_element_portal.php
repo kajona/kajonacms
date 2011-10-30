@@ -38,7 +38,7 @@ abstract class class_element_portal extends class_portal {
 
 		parent::__construct($arrModule);
 
-		$arrTemp = array(); 
+		$arrTemp = array();
 		$this->setSystemid($objElementData->getSystemid());
 		$this->arrElementData = $arrTemp;
 		//merge the attributes of $objElementData to the array
@@ -82,26 +82,39 @@ abstract class class_element_portal extends class_portal {
         $strReturn = "";
         //load the data from the database
         $this->arrElementData = array_merge($this->getElementContent($this->objElementData->getSystemid()), $this->arrElementData);
-        
-	    if(_pages_portaleditor_ == "true") {
-	        //Check needed rights
-	        if($this->objRights->rightEdit($this->getSystemid())) {
-	            $arrConfig = array();
-	            $arrConfig["pe_module"] = "";
-	            $arrConfig["pe_action"] = "";
 
-	            if(isset($this->arrModule["pe_module"]))
-	                $arrConfig["pe_module"] = $this->arrModule["pe_module"];
-	            if(isset($this->arrModule["pe_action"]))
-	                $arrConfig["pe_action"] = $this->arrModule["pe_action"];
+        //wrap all in a try catch block
+        try {
 
-		        $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig);
-	        }
-		    else
-		        $strReturn = $this->loadData();
-	    }
-	    else
-	       $strReturn = $this->loadData();
+            if(_pages_portaleditor_ == "true") {
+                //Check needed rights
+                if($this->objRights->rightEdit($this->getSystemid())) {
+                    $arrConfig = array();
+                    $arrConfig["pe_module"] = "";
+                    $arrConfig["pe_action"] = "";
+
+                    if(isset($this->arrModule["pe_module"]))
+                        $arrConfig["pe_module"] = $this->arrModule["pe_module"];
+                    if(isset($this->arrModule["pe_action"]))
+                        $arrConfig["pe_action"] = $this->arrModule["pe_action"];
+
+                    $strReturn = $this->addPortalEditorCode($this->loadData(), $this->getSystemid(), $arrConfig);
+                }
+                else
+                    $strReturn = $this->loadData();
+            }
+            else
+               $strReturn = $this->loadData();
+            }
+        catch (class_exception $objEx) {
+            //an error occured during content generation. redirect to error page
+            $objEx->processException();
+            //if available, show the error-page. on debugging-environments, the exception processing already die()d the process.
+            if($this->getPagename() != _pages_errorpage_)
+                $this->portalReload(getLinkPortalHref(_pages_errorpage_));
+
+            $strReturn = $objEx->getMessage();
+        }
 
 	    //add an anchor to jump to, but exclude navigation-elements
 	    $strReturn = $this->getAnchorTag().$strReturn;
@@ -323,7 +336,7 @@ abstract class class_element_portal extends class_portal {
                         $strShiftDownLink = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strShiftDownUrl."'); return false;\">".class_carrier::getInstance()->getObjText()->getText("pe_shiftDown", "pages", "admin")."</a>";
                     }
                 }
-                
+
                 //---------------------------------------------------
                 //link to set element inactive
                 $strSetInactiveLink = "";
@@ -355,8 +368,8 @@ abstract class class_element_portal extends class_portal {
             $strReturn = $strContent;
         return $strReturn;
 	}
-    
-    
+
+
     public static function addPortalEditorSetActiveCode($strContent, $strSystemid, $arrConfig) {
         $strReturn = "";
 

@@ -150,7 +150,7 @@ abstract class class_portal  {
      * By default, the method to be called is set up out of the action-param passed.
      * Example: The action requested is named "newPage". Therefore, the framework tries to
      * call actionNewPage(). If now method matching the schema is found, nothing is done.
-     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes, 
+     * <b> Please note that this is different from the admin-handling! </b> In the case of admin-classes,
      * an exception is thrown. But since there could be many modules on a single page, not each module
      * may be triggered.
      *
@@ -170,23 +170,23 @@ abstract class class_portal  {
         $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
 
         if(method_exists($this, $strMethodName)) {
-            
+
             if(_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
                 $objAnnotations = new class_annotations(get_class($this));
                 if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml")  && substr(get_class($this), -3) != "xml")
                     throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
             }
-            
+
             $this->strOutput = $this->$strMethodName();
         }
         else {
-            
+
             if(_xmlLoader_ === true) {
                 $objReflection = new ReflectionClass($this);
                 throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
             }
-            
+
             //try to load the list-method
             $strListMethodName = "actionList";
             if(method_exists($this, $strListMethodName)) {
@@ -194,7 +194,7 @@ abstract class class_portal  {
             }
             else {
                 $objReflection = new ReflectionClass($this);
-                throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
+                throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_ERROR);
             }
         }
 
@@ -203,11 +203,11 @@ abstract class class_portal  {
 
 
     /**
-	 * Writes a value to the params-array
-	 *
-	 * @param string $strName Key
-	 * @param mixed $mixedValue Value
-	 */
+     * Writes a value to the params-array
+     *
+     * @param string $strKey Key
+     * @param mixed $mixedValue Value
+     */
 	public function setParam($strKey, $mixedValue) {
 		$this->arrParams[$strKey] = $mixedValue;
 	}
@@ -242,7 +242,7 @@ abstract class class_portal  {
 	public final function getAction() {
 	    return (string)$this->strAction;
 	}
-    
+
     /**
 	 * sets the action used for the current request
 	 *
@@ -562,7 +562,7 @@ abstract class class_portal  {
 	public function getModuleOutput() {
 		return $this->strOutput;
 	}
-	
+
     /**
      * Use this method to do a header-redirect to a specific url.
      * <b>Use ONLY this method and DO NOT use header("Location: ...");</b>

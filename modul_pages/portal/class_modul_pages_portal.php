@@ -19,7 +19,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
      * Static field storing the last registered page-title. Modules may register additional page-titles in order
      * to have them places as the current page-title. Since this is a single field, the last module wins in case of
      * multiple entries.
-     * @var string 
+     * @var string
      */
     private static $strAdditionalTitle = "";
 
@@ -31,14 +31,15 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		$arrModul["modul"]			= "pages";
 
 		parent::__construct($arrModul);
-        
+
         $this->setAction("generatePage");
 
 	}
-    
+
 	/**
 	 * Handles the loading of a page, more in a functional than in an oop style
 	 *
+     * @return string the generated page
 	 */
 	protected function actionGeneratePage() {
 
@@ -47,13 +48,13 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 
 		//Load the data of the page
         $objPageData = class_modul_pages_page::getPageByName($strPagename);
-        
+
 
 		//check, if the page is enabled and if the rights are given, or if we want to load a preview of a page
 		$bitErrorpage = false;
         if($objPageData->getStrName() == "" || ($objPageData->getStatus() != 1 || !$this->objRights->rightView($objPageData->getSystemid())))
 			$bitErrorpage = true;
-        
+
 
 		//but: if count != 0 && preview && rights:
 		if($bitErrorpage && $objPageData->getStrName() != "" && $this->getParam("preview") == "1" && $this->objRights->rightEdit($objPageData->getSystemid()))
@@ -79,8 +80,8 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 			//user is not allowed to view the page
 			if($objPageData->getStrName() != "" && !$this->objRights->rightView($objPageData->getSystemid()))
 			    header(class_http_statuscodes::$strSC_FORBIDDEN);
-            
-            
+
+
             //check, if the page may be loaded using the default-language
             $strPreviousLang = $this->getPortalLanguage();
             $objDefaultLang = class_modul_languages_language::getDefaultLanguage();
@@ -88,7 +89,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                 class_logger::getInstance()->addLogRow("Requested page ".$strPagename." not existing in language ".$this->getPortalLanguage().", switch to fallback lang", class_logger::$levelWarning);
                 $objDefaultLang->setStrPortalLanguage($objDefaultLang->getStrName());
                 $objPageData = class_modul_pages_page::getPageByName($strPagename);
-                
+
                 try {
                     $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
                 }
@@ -100,7 +101,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
             }
             else
                 $strPagename = _pages_errorpage_;
-            
+
 
 			$objPageData = class_modul_pages_page::getPageByName($strPagename);
 
@@ -378,16 +379,16 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
     		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages_content", "list", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage, $this->getText("pe_icon_edit"), $this->getText("pe_icon_edit", "pages", "admin"), "icon_pencil.gif");
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
 //    		    $arrPeContents["pe_iconbar"] .= getLinkAdmin("pages", "editPage", "&systemid=".$objPageData->getSystemid(), $this->getText("pe_icon_page"), $this->getText("pe_icon_page", "pages", "admin"), "icon_page.gif");
-                
+
                 $strEditUrl = getLinkAdminHref("pages", "editPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_page.gif", $this->getText("pe_icon_page", "pages", "admin"))."</a>";
-                
+
     		    $arrPeContents["pe_iconbar"] .= "&nbsp;";
                 $strEditUrl = getLinkAdminHref("pages", "newPage", "&systemid=".$objPageData->getSystemid()."&language=".$strPortalLanguage."&pe=1");
                 $arrPeContents["pe_iconbar"] .= "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.openDialog('".$strEditUrl."'); return false;\">".getImageAdmin("icon_new.gif", $this->getText("pe_icon_new", "pages", "admin"))."</a>";
-                    
-                
-                
+
+
+
     		    $arrPeContents["pe_disable"] = "<a href=\"#\" onclick=\"KAJONA.admin.portaleditor.switchEnabled(false); return false;\" title=\"\">".getNoticeAdminWithoutAhref($this->getText("pe_disable", "pages", "admin"), "icon_enabled.gif")."</a>";
 
     		    //Load YUI and portaleditor javascript (even if it's maybe already loaded in portal)
@@ -448,9 +449,9 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 	/**
 	 * Sets the passed text as an additional title information.
 	 * If set, the separator placeholder from global_includes.php will be included, too.
-     * Modules may register additional page-titles in order to have them places as the current page-title. 
+     * Modules may register additional page-titles in order to have them places as the current page-title.
      * Since this is a single field, the last module wins in case of multiple entries.
-     * 
+     *
 	 * @param string $strTitle
 	 * @return void
 	 */

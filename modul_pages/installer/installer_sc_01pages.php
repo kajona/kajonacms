@@ -215,7 +215,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                             paragraph_content = ?
                         WHERE content_id = ?";
 
-            if($this->objDB->_pQuery($strQuery, $arrParams))
+            if($this->objDB->_pQuery($strQuery, $arrParams, array(true, false)))
                 $strReturn .= "Paragraph element created.\n";
             else
                 $strReturn .= "Error creating paragraph element.\n";
@@ -259,7 +259,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $strReturn .= "Headline element created.\n";
             else
             $strReturn .= "Error creating headline element.\n";
-        
+
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
@@ -322,7 +322,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strSamplePageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSamplePageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        
+
         if(class_modul_pages_element::getElement("row") != null) {
             $objPagelement = new class_modul_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
@@ -394,7 +394,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
        $strReturn .= "Creating sample subpage...\n";
         $objPage = new class_modul_pages_page();
         $objPage->setStrName("subpage_1");
-        
+
         if($this->strContentLanguage == "de")
             $objPage->setStrBrowsername("Beispiel-Unterseite 1");
         else
@@ -404,7 +404,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
         $strSampleSubPageId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSampleSubPageId."\n";
         $strReturn .= "Adding headline-element to new page\n";
-        
+
         if(class_modul_pages_element::getElement("row") != null) {
             $objPagelement = new class_modul_pages_pageelement();
             $objPagelement->setStrPlaceholder("headline_row");
@@ -430,7 +430,7 @@ class class_installer_sc_01pages implements interface_sc_installer  {
                 $strReturn .= "Headline element created.\n";
             else
                 $strReturn .= "Error creating headline element.\n";
-        
+
         }
 
         $strReturn .= "Adding paragraph-element to new page\n";
