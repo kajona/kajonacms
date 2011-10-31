@@ -29,7 +29,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 		//Base class
 		parent::__construct($arrModul);
 
-        
+
         if($this->getParam("adminunlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("adminunlockid"));
             $objLockmanager->unlockRecord(true);
@@ -300,7 +300,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             if($objLanguageset != null && $objTargetLanguage->getStrName() != "") {
                 $objLanguageset->setSystemidForLanguageid($this->getParam("languageset_news"), $objTargetLanguage->getSystemid());
             }
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
@@ -313,7 +313,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objLanguageset = new class_modul_languages_languageset();
                 $objLanguageset->setSystemidForLanguageid($this->getSystemid(), $objTargetLanguage->getSystemid());
             }
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
@@ -324,12 +324,12 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             if($objLanguageset != null) {
                 $objLanguageset->removeSystemidFromLanguageeset($this->getSystemid());
             }
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "editLanguageset", "&systemid=".$this->getSystemid()));
         }
     }
 
-    
+
     protected function actionEditCat() {
         return $this->actionNewCat("edit");
     }
@@ -387,14 +387,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionSaveCat() {
 		$strReturn = "";
-        
+
         if(!$this->validateForm()) {
             if($this->getParam("mode") == "new")
                 return $this->actionNewCat("new");
             else
                 return $this->actionNewCat("edit");
         }
-        
+
 		if($this->getParam("mode") == "new") {
 			//Check rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -402,7 +402,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 			    $objNews->setStrTitle($this->getParam("news_cat_title"));
 			    if(!$objNews->updateObjectToDb())
 			        throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
@@ -413,7 +413,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 				$objNews->setStrTitle($this->getParam("news_cat_title"));
 				if(!$objNews->updateObjectToDb())
 				    throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 			else
@@ -434,7 +434,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $objCat = new class_modul_news_category($this->getSystemid());
            if(!$objCat->deleteCategory())
                throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-           
+
            $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
@@ -449,7 +449,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
     protected function actionEditNews() {
         return $this->actionNewNews("edit");
     }
-    
+
 	/**
 	 * Shows the form to edit oder create news
 	 *
@@ -576,14 +576,14 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 	 */
 	protected function actionSaveNews() {
 		$strReturn = "";
-        
+
         if(!$this->validateForm()) {
             if($this->getParam("mode") == "new")
                 return $this->actionNewNews("new");
             else
                 return $this->actionNewNews("edit");
         }
-            
+
 		if($this->getParam("mode") == "new") {
 			//Check rights
 			if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
@@ -617,7 +617,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objNews->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 			}
@@ -659,7 +659,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
 
                 $objNews->getLockManager()->unlockRecord();
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 
 			}
@@ -690,7 +690,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
                 $objNews = new class_modul_news_news($this->getSystemid());
 			    if(!$objNews->deleteNews())
 			        throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 			}
 		}
@@ -790,7 +790,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error saving object to db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
 
             }
@@ -851,7 +851,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
                 if(!$objFeed->updateObjectToDb())
                     throw new class_exception("Error updating object to db", class_exception::$level_ERROR);
-                
+
                 $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
             }
         }
@@ -870,7 +870,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
             $objFeed = new class_modul_news_feed($this->getSystemid());
             if(!$objFeed->deleteNewsFeed())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "listNewsFeed"));
 
         }
@@ -888,7 +888,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *        <systemid></systemid>
      *    </category>
      * </categories>
-     * 
+     *
      * @return string
      * @xml
      */
@@ -912,7 +912,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
-    
+
     /**
      * Returns a xml-based representation of all news available.
      * In this case only a limited set of attributes is returned, namely the title and the
@@ -924,7 +924,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *        <systemid></systemid>
      *    </news>
      * </newslist>
-     * 
+     *
      * @return string
      * @xml
      */
@@ -948,7 +948,7 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
 	}
-    
+
     /**
      * Returns a xml-based representation of a single news.
      * Return format:
@@ -963,21 +963,24 @@ class class_modul_news_admin extends class_admin implements interface_admin {
      *        <enddate></enddate>
      *        <archivedate></archivedate>
      *    </news>
-     * 
-     * @return string 
+     *
+     * @return string
      * @xml
      */
     protected function actionNewsDetails() {
         $strReturn = "";
         $objNews = new class_modul_news_news($this->getSystemid());
         $arrCats = class_modul_news_category::getNewsMember($objNews->getSystemid());
-        
-        array_walk($arrCats, function(&$objValue) { $objValue = $objValue->getSystemid(); } );
-        
+
+        //FIXME: reenable for v4, php >= 5.3
+        //array_walk($arrCats, function(&$objValue) { $objValue = $objValue->getSystemid(); } );
+        foreach($arrCats as &$objCat)
+            $objCat = $objCat->getSystemid();
+
         $objStartDate = new class_date($objNews->getIntDateStart());
         $objEndDate = new class_date($objNews->getIntDateEnd());
         $objArchiveDate = new class_date($objNews->getIntDateSpecial());
-        
+
         if($objNews->rightView()) {
             $strReturn .= " <news>\n";
             $strReturn .= "   <title>".xmlSafeString($objNews->getStrTitle())."</title>";
@@ -996,50 +999,50 @@ class class_modul_news_admin extends class_admin implements interface_admin {
 
 		return $strReturn;
     }
-    
+
     /**
      * Saves newscontent as passed by post-paras via an xml-request.
      * Params expected are: newstitle, newsintro, newsimage, newstext, categories, startdate, enddate, archivedate
-     * 
-     * @return string 
+     *
+     * @return string
      * @xml
      */
     protected function actionUpdateNewsXml() {
         $strReturn = "";
         $objNews = new class_modul_news_news($this->getSystemid());
         if($objNews->rightEdit() || $this->getSystemid() == "") {
-            
+
             $arrCats = array();
             foreach(explode(",", $this->getParam("categories")) as $strCatId) {
                 $arrCats[$strCatId] = "c";
             }
-            
+
             $objNews->setStrTitle($this->getParam("newstitle"));
             $objNews->setStrIntro($this->getParam("newsintro"));
             $objNews->setStrImage($this->getParam("newsimage"));
             $objNews->setStrNewstext($this->getParam("newstext"));
-            
+
             if($this->getParam("startdate") > 0) {
                 $objDate = new class_date($this->getParam("startdate"));
                 $objNews->setIntDateStart($objDate->getLongTimestamp());
             }
-            
+
             if($this->getParam("enddate") > 0) {
                 $objDate = new class_date($this->getParam("enddate"));
                 $objNews->setIntDateEnd($objDate->getLongTimestamp());
             }
-            
+
             if($this->getParam("archivedate") > 0) {
                 $objDate = new class_date($this->getParam("archivedate"));
                 $objNews->setIntDateSpecial($objDate->getLongTimestamp());
             }
-            
+
             $objNews->setArrCats($arrCats);
             if($objNews->updateObjectToDb())
                 $strReturn = "<success></success>";
             else
                 $strReturn = "<error></error>";
-            
+
         }
         else
             $strReturn = "<error>".$this->getText("commons_error_permissions")."</error>";
