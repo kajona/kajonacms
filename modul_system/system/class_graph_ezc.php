@@ -399,7 +399,7 @@ class class_graph_ezc implements interface_graph {
             if($this->intXAxisAngle != 0) {
                 $this->objGraph->xAxis->axisLabelRenderer = new ezcGraphAxisRotatedLabelRenderer();
                 $this->objGraph->xAxis->axisLabelRenderer->angle = $this->intXAxisAngle;
-                
+
                 $this->objGraph->xAxis->axisSpace = .2;
             }
 
@@ -410,11 +410,12 @@ class class_graph_ezc implements interface_graph {
             $this->objGraph->xAxis->label = $this->strXAxisTitle;
             $this->objGraph->yAxis->label = $this->strYAxisTitle;
 
-            if($this->strXAxisTitle != "")
-                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 4;
-            
-            if($this->strYAxisTitle != "")
-                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 4;
+            //FIXME: removed due to rendering exceptions
+//            if($this->strXAxisTitle != "")
+//                $this->objGraph->xAxis->axisLabelRenderer->labelPadding = 4;
+//
+//            if($this->strYAxisTitle != "")
+//                $this->objGraph->yAxis->axisLabelRenderer->labelPadding = 4;
 
             $intMaxValue = $this->intMaxValue;
             $intMinValue = $this->intMinValue;
