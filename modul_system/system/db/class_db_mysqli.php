@@ -24,6 +24,8 @@ class class_db_mysqli implements interface_db_driver {
     private $strRestoreBin = "mysql";               //Binary to dump db (if not in path, add the path here)
     private $arrStatementsCache = array();
 
+    private $strErrorMessage = "";
+
    /**
      * This method makes sure to connect to the database properly
      *
@@ -66,7 +68,7 @@ class class_db_mysqli implements interface_db_driver {
 			throw new class_exception("Error connecting to database", class_exception::$level_FATALERROR);
 		}
     }
-    
+
     /**
      * Closes the connection to the database
      */
@@ -94,7 +96,7 @@ class class_db_mysqli implements interface_db_driver {
      * @return bool
      * @since 3.4
      */
-    public function _pQuery($strQuery, $arrParams) { 
+    public function _pQuery($strQuery, $arrParams) {
         $objStatement = $this->getPreparedStatement($strQuery);
         $bitReturn = false;
         if($objStatement !== false) {
@@ -108,7 +110,7 @@ class class_db_mysqli implements interface_db_driver {
 
                 $strTypes .= $strType;
             }
-            
+
             if(count($arrParams) > 0) {
                 $arrParams = array_merge(array($strTypes), $arrParams);
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
@@ -117,7 +119,7 @@ class class_db_mysqli implements interface_db_driver {
             $bitReturn = @mysqli_stmt_execute($objStatement);
             //mysqli_stmt_close($objStatement);
         }
-        
+
         return $bitReturn;
     }
 
@@ -163,7 +165,7 @@ class class_db_mysqli implements interface_db_driver {
 
                 $strTypes .= $strType;
             }
-            
+
             if(count($arrParams) > 0) {
                 $arrParams = array_merge(array($strTypes), $arrParams);
                 call_user_func_array(array($objStatement, 'bind_param'), $this->refValues($arrParams));
@@ -247,7 +249,9 @@ class class_db_mysqli implements interface_db_driver {
      * @return string
      */
     public function getError() {
-		$strError = @mysqli_error($this->linkDB);
+		$strError = $this->strErrorMessage. " ".@mysqli_error($this->linkDB);
+        $this->strErrorMessage = "";
+
 		return $strError;
     }
 
@@ -263,7 +267,7 @@ class class_db_mysqli implements interface_db_driver {
 		}
 		return $arrTemp;
     }
-    
+
     /**
      * Looks up the columns of the given table.
      * Should return an array for each row consting of:
@@ -283,7 +287,7 @@ class class_db_mysqli implements interface_db_driver {
         }
         return $arrReturn;
     }
-    
+
     /**
      * Returns the db-specific datatype for the kajona internal datatype.
      * Currently, this are
@@ -297,25 +301,25 @@ class class_db_mysqli implements interface_db_driver {
      *      char500
      *      text
      *      longtext
-     * 
+     *
      * @param string $strType
      * @return string
      */
     public function getDatatype($strType) {
     	$strReturn = "";
-    	
+
         if($strType == "int")
             $strReturn .= " INT ";
         elseif($strType == "long")
             $strReturn .= " BIGINT ";
         elseif($strType == "double")
-            $strReturn .= " DOUBLE ";    
+            $strReturn .= " DOUBLE ";
         elseif($strType == "char10")
-            $strReturn .= " VARCHAR( 10 ) "; 
+            $strReturn .= " VARCHAR( 10 ) ";
         elseif($strType == "char20")
             $strReturn .= " VARCHAR( 20 ) ";
         elseif($strType == "char100")
-            $strReturn .= " VARCHAR( 100 ) ";    
+            $strReturn .= " VARCHAR( 100 ) ";
         elseif($strType == "char254")
             $strReturn .= " VARCHAR( 254 ) ";
         elseif($strType == "char500")
@@ -326,8 +330,8 @@ class class_db_mysqli implements interface_db_driver {
             $strReturn .= " LONGTEXT ";
         else
             $strReturn .= " VARCHAR( 254 ) ";
-            
-        return $strReturn;    
+
+        return $strReturn;
     }
 
     /**
@@ -357,19 +361,19 @@ class class_db_mysqli implements interface_db_driver {
      */
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
     	$strQuery = "";
-    	
+
     	//build the mysql code
     	$strQuery .= "CREATE TABLE IF NOT EXISTS `"._dbprefix_.$strName."` ( \n";
-    	
+
     	//loop the fields
     	foreach($arrFields as $strFieldName => $arrColumnSettings) {
     		$strQuery .= " `".$strFieldName."` ";
-    		
+
     		$strQuery .= $this->getDatatype($arrColumnSettings[0]);
-    		
-    		//any default?	
+
+    		//any default?
     		if(isset($arrColumnSettings[2]))
-    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";	
+    				$strQuery .= "DEFAULT ".$arrColumnSettings[2]." ";
 
     		//nullable?
     		if($arrColumnSettings[1] === true) {
@@ -377,27 +381,27 @@ class class_db_mysqli implements interface_db_driver {
     		}
     		else {
     			$strQuery .= " NOT NULL , \n";
-    		}	
-    				
+    		}
+
     	}
 
     	//primary keys
     	$strQuery .= " PRIMARY KEY ( `".implode("` , `", $arrKeys)."` ) \n";
-    	
+
     	if(count($arrIndices) > 0) {
             foreach($arrIndices as $strOneIndex) {
                 $strQuery .= ", INDEX ( `".$strOneIndex."` ) \n ";
             }
         }
-    	
-    	
+
+
     	$strQuery .= ") ";
-    	
+
         if(!$bitTxSafe)
             $strQuery .= " ENGINE = myisam CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
-        else    
+        else
             $strQuery .= " ENGINE = innodb CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
-            
+
         return $this->_query($strQuery);
     }
 
@@ -443,7 +447,7 @@ class class_db_mysqli implements interface_db_driver {
         $arrReturn["dbconnection"] = mysqli_get_host_info($this->linkDB);
         return $arrReturn;
     }
-    
+
 	/**
      * Allows the db-driver to add database-specific surrounding to column-names.
      * E.g. needed by the mysql-drivers
@@ -454,7 +458,7 @@ class class_db_mysqli implements interface_db_driver {
     public function encloseColumnName($strColumn) {
     	return "`".$strColumn."`";
     }
-    
+
     /**
      * Allows the db-driver to add database-specific surrounding to table-names.
      *
@@ -464,7 +468,7 @@ class class_db_mysqli implements interface_db_driver {
     public function encloseTableName($strTable) {
         return "`".$strTable."`";
     }
-    
+
 
 //--- DUMP & RESTORE ------------------------------------------------------------------------------------
 
@@ -542,8 +546,10 @@ class class_db_mysqli implements interface_db_driver {
             return $this->arrStatementsCache[$strName];
 
         $objStatement = mysqli_stmt_init($this->linkDB);
-        if(!mysqli_stmt_prepare($objStatement , $strQuery))
+        if(!mysqli_stmt_prepare($objStatement , $strQuery)) {
+            $this->strErrorMessage = $objStatement->error;
             return false;
+        }
 
         $this->arrStatementsCache[$strName] = $objStatement;
 
