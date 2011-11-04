@@ -62,6 +62,7 @@ class class_array_section_iterator extends class_array_iterator {
     /**
      * calculates the start-pos of the current array-section
      *
+     * @return int
      */
     public function calculateStartPos() {
         return (($this->intPageNumber * $this->intElementsPerPage) - $this->intElementsPerPage);
@@ -111,6 +112,7 @@ class class_array_section_iterator extends class_array_iterator {
     /**
      * Returns the elements placed on the given page
      *
+     * @param int $intPageNumber
      * @return array
      */
     public function getElementsOnPage($intPageNumber) {
@@ -129,6 +131,6 @@ class class_array_section_iterator extends class_array_iterator {
         return $arrReturn;
     }
 
-    
+
 }
 ?>

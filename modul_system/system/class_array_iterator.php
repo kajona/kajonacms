@@ -15,16 +15,18 @@
  */
 class class_array_iterator implements interface_iterator {
 
-    private $arrElements = array();
+    protected $arrElements = array();
     private $arrModule = array();
-    private $intArrCursor = 0;
+    protected $intArrCursor = 0;
 
     protected $intElementsPerPage = 100;
 
-	/**
-	 * Constructor
-	 *
-	 */
+    /**
+     * Constructor
+     * @param $arrElements
+     * @return \class_array_iterator
+     *
+     */
 	public function __construct($arrElements) {
 		$this->arrModule["name"] 		= "class_array_iterator";
 		$this->arrModule["author"] 		= "sidler@mulchprod.de";
