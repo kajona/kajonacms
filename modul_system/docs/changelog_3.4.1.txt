@@ -1,3 +1,41 @@
+
+Kajona V 3.4.1 FINAL; Revision 4133 - 4174
+
+Module Eventmanager
+NEW: added template section "event_details_registerlink" in modul_eventmanager so the register link will only be visible if the event allows registrations and the user has the permission to do so
+BUG: modul_eventmanager didn't use SEO features
+BUG: modul_eventmanager sent text/xml content type instead of application/json
+
+Module LDAP
+NEW: moved module ldap from playground to trunk
+
+Module News
+BUG: disabled a closure since not support by php < 5.3. will be renabled for kajona 3.4
+
+Module Pages
+BUG: wrong link in toolbar when editing page properties
+BUG: portal language has to be passed to portal editor admin links
+BUG: slightly modified error-handling. if an exception is thrown during the generation of page-elements, the error-page is shown for errors. this redirect can be disabled during development by setting the config.phps' debug-entry "debuglevel".
+
+Module Samplecontent
+BUG: samplecontent installer missed to escape br on error-page
+
+Module Stats
+NEW: migrated stats-queries to prepared statements
+BUG: fixed error in stats-common report query
+BUG: charts could crash in rare cases due to an excessive padding. quick fix for 3.x series, v4 will be based on client side charts.
+
+Module System
+NEW: added application/json to content types to get compressed by apache mod_deflate
+NEW: included jQuery 1.6.4 for the use in the portal. Will replace YUI with Kajona 3.5/4.0
+BUG: padding to axis label is onlay added when label is not empty
+BUG: mysqli-driver missed to add a detailed error-description in case of compile-errors for prepared statements
+BUG: fixed the modifier of class_array_iterators' member vars so that they may be used by subclasses
+
+Module User
+NEW: The Kajona-User-Subsystem allows logins with older, md5-hashed passwords
+
+
 Kajona V 3.4.1 BETA "connectivity"; Revision 3913 - 4132
 
 Element Directorybrowser
