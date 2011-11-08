@@ -78,27 +78,27 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
             $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_list");
             $strReturn .= $this->fillTemplate(array("events" => $strEvents), $strWrapperID);
         }
-        
+
 		return $strReturn;
 	}
-    
+
     /**
-     * 
+     *
      * @xml
      * @return string
      */
     protected function actionGetJsonEvents() {
         $strReturn = "";
-        
+
         $arrPrintableEvents = array();
         class_xml::setBitSuppressXmlHeader(true);
-        
+
         $objStartDate = null; $objEndDate = null;
         if($this->getParam("start") != "" && $this->getParam("end") != "") {
             $objStartDate = new class_date($this->getParam("start"));
             $objEndDate = new class_date($this->getParam("end"));
         }
-        
+
         $arrEvents = class_modul_eventmanager_event::getAllEvents(null, null, $objStartDate, $objEndDate);
         foreach($arrEvents as $objOneEvent) {
             if($objOneEvent->rightView()) {
@@ -106,17 +106,17 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
                 $arrSingleEvent["id"] = $objOneEvent->getSystemid();
                 $arrSingleEvent["title"] = $objOneEvent->getStrTitle();
                 $arrSingleEvent["start"] = $objOneEvent->getObjStartDate()->getTimeInOldStyle();
-                $arrSingleEvent["end"] = $objOneEvent->getObjEndDate()->getTimeInOldStyle();
+                $arrSingleEvent["end"] = $objOneEvent->getObjEndDate() != null ? $objOneEvent->getObjEndDate()->getTimeInOldStyle() : "";
                 $arrSingleEvent["url"] = uniStrReplace("&amp;", "&", getLinkPortalHref($this->getParam("page"), "", "eventDetails", "", $objOneEvent->getSystemid(), "", $objOneEvent->getStrTitle()));
                 $arrPrintableEvents[] = $arrSingleEvent;
             }
         }
-        
+
         $strReturn = json_encode($arrPrintableEvents);
         header("Content-type: application/json");
         return $strReturn;
     }
-    
+
 
     /**
      * Creates a view of all event-details
@@ -146,7 +146,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
             }
             $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_details");
             $strReturn .= $this->fillTemplate($arrTemplate, $strWrapperID);
-            
+
             class_modul_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
         }
         else
@@ -246,7 +246,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
                     $objParticipant->setStatus("", "0");
 
                     $objMail = new class_mail();
-                    
+
                     $objMail->setSubject($this->getText("registerMailSubject"));
 
                     $strBody = $this->getText("registerMailBodyIntro");
@@ -275,7 +275,7 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
                 $strWrapperID = $this->objTemplate->readTemplate("/modul_eventmanager/".$this->arrElementData["char1"], "event_register_message");
                 $strReturn .= $this->fillTemplate(array("title" => $objEvent->getStrTitle(), "message" => $strMessage), $strWrapperID);
             }
-            
+
             class_modul_pages_portal::registerAdditionalTitle($objEvent->getStrTitle());
         }
         else
@@ -311,6 +311,6 @@ class class_modul_eventmanager_portal extends class_portal implements interface_
 
         return $strReturn;
     }
-    
+
 }
 ?>
