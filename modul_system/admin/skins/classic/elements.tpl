@@ -841,6 +841,12 @@ pe_status_page, pe_status_status, pe_status_autor, pe_status_time
 pe_status_page_val, pe_status_status_val, pe_status_autor_val, pe_status_time_val
 pe_iconbar, pe_disable
 <pe_toolbar>
+    <style type="text/css">
+        .peButtonNew {
+            display: none;
+        }
+    </style>
+        
     <div class="peDialog" id="peDialog">
         <div class="hd" id="peDialog_title">PORTALEDITOR<div class="close"><a href="#" onclick="KAJONA.admin.portaleditor.closeDialog(); return false;">X</a></div></div>
         <div class="bd" id="peDialog_content">
@@ -908,7 +914,7 @@ Code to add single elements to portaleditors new element menu (will be inserted 
 
 Displays the new element button
 <pe_actionNewWrapper>
-    <a href="#" class="peButtonNew" style="display: none;" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
+    <a href="#" class="peButtonNew" onclick="KAJONA.admin.portaleditor.showNewElementMenu('%%placeholder%%', this); return false;" title="%%label%% %%placeholderName%%" onmouseover="KAJONA.admin.tooltip.add(this);"><img src="_skinwebpath_/pics/icon_new.gif" alt="" /></a>
     <div id="menuContainer_%%placeholder%%" class="yui-skin-sam"></div>
     <script type="text/javascript">
         KAJONA.admin.portaleditor.addNewElements("%%placeholder%%", "%%placeholderName%%", [
