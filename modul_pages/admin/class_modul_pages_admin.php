@@ -188,9 +188,13 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
 
                         if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                            $objTargetPage = class_modul_pages_page::getPageByName($objOneEntry->getStrAlias());
+
                             //Split up rights
                             if($this->objRights->rightEdit($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                            if($this->objRights->rightEdit($objTargetPage->getStrSystemid()))
+                                $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                             if($this->objRights->rightView($strSystemid))
                                 $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages", "list", "&systemid=".$objOneEntry->getSystemid(), "", $this->getText("page_sublist"), "icon_treeBranchOpen.gif"));
                             if($this->objRights->rightDelete($strSystemid))
@@ -299,8 +303,12 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 				$strActions = "";
 
                 if($objPage->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
+                    $objTargetPage = class_modul_pages_page::getPageByName($objPage->getStrAlias());
+
                     if($this->objRights->rightEdit($objPage->getSystemid()))
                         $strActions.= $this->objToolkit->listButton(getLinkAdmin("pages", "editAlias", "&systemid=".$objPage->getSystemid(), "", $this->getText("seite_bearbeiten"), "icon_page.gif"));
+                    if($this->objRights->rightEdit($objTargetPage->getStrSystemid()))
+                        $strActions .= $this->objToolkit->listButton(getLinkAdmin("pages_content", "list", "&systemid=".$objTargetPage->getStrSystemid(), "", $this->getText("seite_inhalte"), "icon_pencil.gif"));
                     if($this->objRights->rightDelete($objPage->getSystemid())) {
                         if(count(class_modul_pages_folder::getPagesAndFolderList($objPage->getSystemid())) != 0)
                             $strActions .= $this->objToolkit->listButton(getImageAdmin("icon_tonDisabled.gif", $this->getText("page_loschen_leer")));
