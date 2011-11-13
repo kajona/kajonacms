@@ -12,11 +12,11 @@
  *
  */
 
- 
+
 //---The Path on the filesystem------------------------------------------------------------------------------
 	//Determing the current path on the filesystem. Use the dirname of the current file, cut "/system"
 	define("_realpath_",  substr(dirname(__FILE__), 0, -7));
-    
+
 //--- Loader preconfiguration
     if(!defined("_xmlLoader_"))
         define("_xmlLoader_", false);
@@ -25,7 +25,7 @@
 
     //Setting up the default timezone, determined by the server / environment
 	@date_default_timezone_set(date_default_timezone_get());
-	
+
 	//Functions to have fun & check for mb-string
 	if(!@include_once(_realpath_."/system/functions.php"))
 		rawIncludeError("./system/functions.php");
@@ -77,79 +77,83 @@
 		rawIncludeError("carrier-class");
 
 //---Autoloader for classes------------------------------------------------------------------------------
-
-    function __autoload($strClassName) {
-
-        //---ADMIN CLASSES-------------------------------------------------------------------------------
-        //adminwidgets
-        if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
-            if(require(_adminpath_."/widgets/".$strClassName.".php"))
-                return;
-        }
-
-        //systemtasks
-        if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
-            if(require(_adminpath_."/systemtasks/".$strClassName.".php"))
-                return;
-        }
-
-        //statsreports
-        if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
-            if(require(_adminpath_."/statsreports/".$strClassName.".php"))
-                return;
-        }
-
-        //admin classes
-        //TODO: wtf? why strpos needed? whats wrong with that regex?
-        if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
-            if(require(_adminpath_."/".$strClassName.".php"))
-                return;
-        }
+    include_once (dirname(__FILE__)."/class_classloader.php");
+    spl_autoload_register(array (new class_classloader(), "loadClass"));
 
 
-        //---PORTAL CLASSES------------------------------------------------------------------------------
 
-        //search plugins
-        if(preg_match("/interface_search(.*)/", $strClassName)) {
-            if(require(_portalpath_."/searchplugins/".$strClassName.".php"))
-                return;
-        }
 
-        //portal classes
-        if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
-            if(require(_portalpath_."/".$strClassName.".php"))
-                return;
-        }
+//    function __autoload($strClassName) {
+//
+//        //---ADMIN CLASSES-------------------------------------------------------------------------------
+//        //adminwidgets
+//        if(preg_match("/(class|interface)_adminwidget(.*)/", $strClassName)) {
+//            if(require(_adminpath_."/widgets/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //systemtasks
+//        if(preg_match("/(class|interface)(.*)systemtask(.*)/", $strClassName)) {
+//            if(require(_adminpath_."/systemtasks/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //statsreports
+//        if(preg_match("/(class)_(.*)stats_report(.*)/", $strClassName)) {
+//            if(require(_adminpath_."/statsreports/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //admin classes
+//        //TODO: wtf? why strpos needed? whats wrong with that regex?
+//        if(preg_match("/(class|interface)_(.*)admin(_xml)?/", $strClassName) && !strpos($strClassName, "adminwidget")) {
+//            if(require(_adminpath_."/".$strClassName.".php"))
+//                return;
+//        }
+//
+//
+//        //---PORTAL CLASSES------------------------------------------------------------------------------
+//
+//        //search plugins
+//        if(preg_match("/interface_search(.*)/", $strClassName)) {
+//            if(require(_portalpath_."/searchplugins/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //portal classes
+//        if(preg_match("/(class|interface)_(.*)portal(.*)/", $strClassName)) {
+//            if(require(_portalpath_."/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //---SYSTEM CLASSES------------------------------------------------------------------------------
+//        //db-drivers
+//        if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
+//            if(require(_systempath_."/db/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //usersources
+//        if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
+//            if(require(_systempath_."/usersources/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //workflows
+//        if(preg_match("/class_workflow_(.*)/", $strClassName)) {
+//            if(require(_systempath_."/workflows/".$strClassName.".php"))
+//                return;
+//        }
+//
+//        //system-classes
+//        if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
+//            if(require(_systempath_."/".$strClassName.".php"))
+//                return;
+//        }
+//
+//    }
 
-        //---SYSTEM CLASSES------------------------------------------------------------------------------
-        //db-drivers
-        if(preg_match("/(class|interface)_db_(.*)/", $strClassName)) {
-            if(require(_systempath_."/db/".$strClassName.".php"))
-                return;
-        }
-        
-        //usersources
-        if(preg_match("/(class|interface)_usersources_(.*)/", $strClassName)) {
-            if(require(_systempath_."/usersources/".$strClassName.".php"))
-                return;
-        }
 
-        //workflows
-        if(preg_match("/class_workflow_(.*)/", $strClassName)) {
-            if(require(_systempath_."/workflows/".$strClassName.".php"))
-                return;
-        }
-
-        //system-classes
-        if(preg_match("/(class|interface)_(.*)/", $strClassName)) {
-            if(require(_systempath_."/".$strClassName.".php"))
-                return;
-        }
-
-    }
-
-    if(function_exists("spl_autoload_register"))
-        spl_autoload_register("__autoload");
 
 
 ?>

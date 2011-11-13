@@ -135,6 +135,8 @@ class class_copy2project {
             $strSource = $this->strBasePath."/".$_POST["targetModule"]."".$strOneFile;
             $strTarget = $this->strBasePath."/".$this->strSystemFolderName."".$strOneFile;
 
+            chmod($strTarget, 0777);     
+
             echo $strOneFile."\n";
             echo "\t".$strTarget." to ".$strSource."\n";
 
