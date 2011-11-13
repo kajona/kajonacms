@@ -67,7 +67,7 @@ abstract class class_element_admin extends class_admin {
 		//validation errors?
         if($this->bitDoValidation)
             $this->validateForm();
-        
+
         $strReturn .= $this->objToolkit->getValidationErrors($this, "saveElement");
 
 
@@ -144,7 +144,7 @@ abstract class class_element_admin extends class_admin {
 	 *
 	 * @return mixed
 	 */
-	protected final function loadElementData() {
+	public final function loadElementData() {
 	    //Element-Table given?
 	    if($this->arrModule["table"] != "") {
     		$strQuery = "SELECT *

@@ -26,9 +26,12 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$arrModule["moduleId"] 			= _pages_content_modul_id_;
 		$arrModule["modul"]				= "pages";
 
+        if(_xmlLoader_)
+            $arrModule["modul"]				= "pages_content"; //FIXME: ugly hack
+
 		//Calling the base class
 		parent::__construct($arrModule);
-        
+
         //If theres anything to unlock, do it now
 		if($this->getParam("unlockid") != "") {
             $objLockmanager = new class_lockmanager($this->getParam("unlockid"));
@@ -42,7 +45,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
     /**
      * Adds the global path-navigation to the output created by the module
-     * 
+     *
      * @return string
      * @overwrites
      */
@@ -55,7 +58,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
     /**
      * Adds the current page-name to the module-title
-     * @return string 
+     * @return string
      */
 	public function getOutputModuleTitle() {
 		$objPage = new class_modul_pages_page($this->getSystemid());
@@ -440,6 +443,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 
 			//check, if we could save the data, so the element needn't to
 			//woah, we are soooo great
+            //FIXME in eigene methode auslagern
 			$strElementTableColumns = $objElement->getArrModule("tableColumns");
 			if($strElementTableColumns != "") {
 
@@ -485,13 +489,13 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                         $this->objDB->transactionCommit();
                 }
                 else
-                    return "Element has invalid tableRows value!!!";
+                    throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
 			}
 			else {
 			    //To remain backwards-compatible:
 			    //Call the save-method of the element instead or if the element wants to update its data specially
 			    if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
-				    return "Element returned error saving to database!!!";
+                    throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
 			}
 			//Edit Date of page & unlock
             $objCommons = new class_modul_system_common($strPageSystemid);
@@ -533,12 +537,122 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 			//Loading the data of the corresp site
 			$objPage = new class_modul_pages_page($this->getPrevId());
 			$this->flushPageFromPagesCache($objPage->getStrName());
-            
+
             $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId()));
 
 		}
 		else  {
 			$strReturn = $this->objToolkit->warningBox($this->getText("ds_gesperrt"));
+		}
+		return $strReturn;
+	}
+
+    /**
+	 * Updates a single field of an element already existing.
+	 *
+	 * @return string "" in case of success
+     * @xml
+     */
+	protected function actionUpdateElementField() {
+		$strReturn = "";
+		//check, if the element isn't locked
+        $objCommons = new class_modul_system_common($this->getSystemid());
+		$strPageSystemid = $objCommons->getPrevId();
+
+        $objLockmanager = new class_lockmanager($this->getSystemid());
+
+		if($objLockmanager->isLockedByCurrentUser() && $objCommons->rightEdit()) {
+			//Load the data of the current element
+			$objElementData = new class_modul_pages_pageelement($this->getSystemid());
+			//Load the class to create an object
+			include_once(_adminpath_."/elemente/".$objElementData->getStrClassAdmin());
+			//Build the class-name
+			$strElementClass = str_replace(".php", "", $objElementData->getStrClassAdmin());
+			//and finally create the object
+            /** @var class_element_admin $objElement  */
+			$objElement = new $strElementClass();
+            $arrElementData = $objElement->loadElementData();
+
+            //see if we could set the param to the element
+            if($this->getParam("field") != "") {
+                $arrElementData[$this->getParam("field")] = $this->getParam("value");
+            }
+
+            //pass the data to the element, maybe the element wants to update some data
+            $objElement->setArrParamData($arrElementData);
+            $objElement->doBeforeSaveToDb();
+
+			//check, if we could save the data, so the element needn't to
+			//woah, we are soooo great
+            //FIXME: in eigene methode aulagern
+			$strElementTableColumns = $objElement->getArrModule("tableColumns");
+			if($strElementTableColumns != "") {
+
+			    //open new tx
+			    $this->objDB->transactionBegin();
+
+                $arrElementParams = $objElement->getArrParamData();
+
+                $arrTableRows = explode(",", $strElementTableColumns);
+                if(count($arrTableRows) > 0) {
+                    $arrInserts = array();
+                    foreach($arrTableRows as $strOneTableColumnConf) {
+
+                        //explode to get tableColumnName and tableColumnDatatype
+                        //currently, datatypes are 'number' and 'char' -> casts!
+                        $arrTemp = explode("|", $strOneTableColumnConf);
+                        $strTableColumnName = $arrTemp[0];
+                        $strTableColumnDatatype = $arrTemp[1];
+
+                        $strColumnValue = "";
+                        if(isset($arrElementParams[$strTableColumnName]))
+                            $strColumnValue = $arrElementParams[$strTableColumnName];
+
+                        if ($strTableColumnDatatype == "number")
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = ".(int)$this->objDB->dbsafeString($strColumnValue)." ";
+                        elseif ($strTableColumnDatatype == "char")
+                            $arrInserts[] = " ".$this->objDB->encloseColumnName($strTableColumnName)." = '".$this->objDB->dbsafeString($strColumnValue)."' ";
+                    }
+
+                    $strRowUpdates = implode(", ", $arrInserts);
+                    $strUpdateQuery =
+                    " UPDATE ".$objElement->getTable()." SET "
+                      .$strRowUpdates.
+                    " WHERE content_id='".$this->getSystemid()."'";
+
+                    if(!$this->objDB->_query($strUpdateQuery)) {
+                        $strReturn .= "Error updating element data.";
+                        $this->objDB->transactionRollback();
+                    }
+                    else
+                        $this->objDB->transactionCommit();
+                }
+                else
+                    throw new class_exception("Element has invalid tableRows value!!!", class_exception::$level_ERROR);
+			}
+			else {
+			    //To remain backwards-compatible:
+			    //Call the save-method of the element instead or if the element wants to update its data specially
+			    if(method_exists($objElement, "actionSave") && !$objElement->actionSave($this->getSystemid()))
+				    throw new class_exception("Element returned error saving to database!!!", class_exception::$level_ERROR);
+			}
+			//Edit Date of page & unlock
+            $objCommons = new class_modul_system_common($strPageSystemid);
+            $objCommons->updateObjectToDb();
+			$objLockmanager->unlockRecord();
+
+            //allow the element to run actions after saving
+            $objElement->doAfterSaveToDb();
+
+			//Loading the data of the corresp site
+			$objPage = new class_modul_pages_page($this->getPrevId());
+			$this->flushPageFromPagesCache($objPage->getStrName());
+
+            $strReturn = "<message><success>update succeeded</success></message>";
+		}
+		else  {
+            header(class_http_statuscodes::$strSC_UNAUTHORIZED);
+			$strReturn = "<message><error>".$this->getText("ds_gesperrt").".".$this->getText("commons_error_permissions")."</error></message>";
 		}
 		return $strReturn;
 	}
@@ -735,7 +849,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
                 if($objNewElement->updateObjectToDb()) {
                     $this->setSystemid($objNewElement->getSystemid());
                     $strReturn = "";
-                    
+
                     $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
                 }
                 else
@@ -781,7 +895,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		return $this->objToolkit->getPathNavigation($arrPathLinks);
 	}
 
-    
+
     /**
      * Sorts the current element upwards
      */
@@ -792,7 +906,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
 
     }
-    
+
     /**
      * Sorts the current element downwards
      */
@@ -802,7 +916,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
 		$objElement->setPosition($this->getSystemid(), "down");
         $this->adminReload(getLinkAdminHref("pages_content", "list", "systemid=".$this->getPrevId().($this->getParam("pe") == "" ? "" : "&peClose=".$this->getParam("pe"))));
     }
-    
+
     /**
      * Sorts the current element upwards
      */

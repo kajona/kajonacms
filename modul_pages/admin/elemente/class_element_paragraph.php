@@ -84,11 +84,11 @@ class class_element_paragraph extends class_element_admin implements interface_a
 
 		//and save to database
 		$strQuery = "UPDATE ".$this->arrModule["table"]." SET
-				paragraph_title = '".dbsafeString($this->getParam("paragraph_title"))."',
+				paragraph_title = '".dbsafeString($this->arrParamData["paragraph_title"])."',
 				paragraph_content = '".dbsafeString($strContent, false)."',
-				paragraph_link = '".dbsafeString($this->getParam("paragraph_link"))."',
+				paragraph_link = '".dbsafeString($this->arrParamData["paragraph_link"])."',
 				paragraph_image = '".dbsafeString($strImage)."',
-				paragraph_template = '".dbsafeString($this->getParam("paragraph_template"))."'
+				paragraph_template = '".dbsafeString($this->arrParamData["paragraph_template"])."'
 				WHERE content_id='".dbsafeString($strSystemid)."'";
 
 		if($this->objDB->_query($strQuery))
