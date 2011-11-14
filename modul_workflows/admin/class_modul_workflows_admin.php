@@ -35,7 +35,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
             $this->setAction("myList");
 	}
 
-	
+
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -58,7 +58,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 	 */
 	protected function actionList() {
 		$strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
             $strWorkflows = "";
             $intI = 0;
 
@@ -72,9 +72,10 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 
     	    $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "list");
             $arrWorkflows = $arrPageViews["elements"];
-            
+
+            /** @var class_modul_workflows_workflow $objOneWorkflow */
 			foreach($arrWorkflows as $objOneWorkflow) {
-			    if($this->objRights->rightView($objOneWorkflow->getSystemid())) {
+			    if($objOneWorkflow->rightView()) {
 
                     $strAction = "";
 
@@ -94,18 +95,15 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
                     if($strStatusIcon != "")
                         $strAction .= $this->objToolkit->listButton($strStatusIcon);
 
-                    if($this->objRights->rightView($objOneWorkflow->getSystemid()))
-    		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=".$objOneWorkflow->getSystemid(), "", $this->getText("workflow_details"), "icon_lens.gif"));
+                    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "showDetails", "&systemid=".$objOneWorkflow->getSystemid(), "", $this->getText("workflow_details"), "icon_lens.gif"));
 
-    		   		if($this->objRights->rightDelete($objOneWorkflow->getSystemid()))
+    		   		if($objOneWorkflow->rightDelete())
     		   		    $strAction .= $this->objToolkit->listDeleteButton(
     		   		           $objOneWorkflow->getObjWorkflowHandler()->getStrName()." ".dateToString($objOneWorkflow->getObjTriggerDate()), $this->getText("workflow_delete_question"),
 				               getLinkAdminHref($this->arrModule["modul"], "deleteWorkflow", "&systemid=".$objOneWorkflow->getSystemid())
     		   		    );
-//    		   		if($this->objRights->rightEdit($objOneWorkflow->getSystemid())) {
-//                        $strAction .= $this->objToolkit->listStatusButton($objOneWorkflow->getSystemid());
-//                    }
-    				if($this->objRights->rightRight($objOneWorkflow->getSystemid()))
+
+    				if($objOneWorkflow->rightRight())
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin("right", "change", "&systemid=".$objOneWorkflow->getSystemid(), "", $this->getText("commons_edit_permissions"), getRightsImageAdminName($objOneWorkflow->getSystemid())));
 
     		   		$strWorkflows .= $this->objToolkit->listRow2Image(getImageAdmin("icon_workflow.gif"), $objOneWorkflow->getObjWorkflowHandler()->getStrName()." ".dateToString($objOneWorkflow->getObjTriggerDate()), $strAction, $intI++);
@@ -134,12 +132,12 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 	 */
 	protected function actionMyList() {
 		$strReturn = "";
-        if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightView()) {
             $strWorkflows = "";
             $intI = 0;
 
             $strReturn .= $this->objToolkit->formHeadline($this->getText("header_list_my"));
-            
+
     		//Load all workflows
             $objArraySectionIterator = new class_array_section_iterator(class_modul_workflows_workflow::getPendingWorkflowsForUserCount( array_merge(array( $this->objSession->getUserID() ), $this->objSession->getGroupIdsAsArray()) ));
             $objArraySectionIterator->setIntElementsPerPage(_admin_nr_of_rows_);
@@ -149,8 +147,9 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
     	    $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "myList");
             $arrWorkflows = $arrPageViews["elements"];
 
+            /** @var class_modul_workflows_workflow $objOneWorkflow */
 			foreach($arrWorkflows as $objOneWorkflow) {
-			    if($this->objRights->rightView($objOneWorkflow->getSystemid()) || count(array_diff(array_merge(array( $this->objSession->getUserID() ), $this->objSession->getGroupIdsAsArray()), explode(",", $objOneWorkflow->getStrResponsible()))) > 0  ) {
+			    if($objOneWorkflow->rightView() || count(array_diff(array_merge(array( $this->objSession->getUserID() ), $this->objSession->getGroupIdsAsArray()), explode(",", $objOneWorkflow->getStrResponsible()))) > 0  ) {
 
                     $strAction = "";
 
@@ -170,7 +169,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
                     if($strStatusIcon != "")
                         $strAction .= $this->objToolkit->listButton($strStatusIcon);
 
-    				
+
 
     		   		$strWorkflows .= $this->objToolkit->listRow2Image(getImageAdmin("icon_workflow.gif"), $objOneWorkflow->getObjWorkflowHandler()->getStrName()." ".dateToString($objOneWorkflow->getObjTriggerDate()), $strAction, $intI++);
 
@@ -198,8 +197,8 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 	protected function actionDeleteWorkflow() {
 		$strReturn = "";
 		//Rights
-		if($this->objRights->rightDelete($this->getSystemid())) {
-            $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        if($objWorkflow->rightDelete()) {
             if(!$objWorkflow->deleteWorkflow())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
 
@@ -219,9 +218,8 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
     protected function actionShowDetails() {
         $strReturn = "";
 		//Rights
-		if($this->objRights->rightEdit($this->getSystemid())) {
-            $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
-
+        $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        if($objWorkflow->rightEdit()) {
 
             $intI = 0;
             $strReturn .= $this->objToolkit->formHeadline($this->getText("workflow_general"));
@@ -233,8 +231,6 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_trigger"), dateToString($objWorkflow->getObjTriggerdate()), $intI++);
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_runs"), $objWorkflow->getIntRuns(), $intI++);
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_status"), $this->getText("workflow_status_".$objWorkflow->getIntState()), $intI++);
-
-           
 
             $strResponsible = "";
             foreach(explode(",", $objWorkflow->getStrResponsible()) as $strOneId) {
@@ -274,7 +270,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_date1"), $objWorkflow->getLongDate1(), $intI++);
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_date2"), $objWorkflow->getLongDate2(), $intI++);
-            
+
             $strReturn .= $this->objToolkit->listRow2($this->getText("workflow_text"), $objWorkflow->getStrText(), $intI++);
 
 
@@ -297,7 +293,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionTriggerWorkflows() {
         $strReturn = "";
-        if($this->objRights->rightEdit($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightEdit()) {
             $objWorkflowController = new class_modul_workflows_controller();
             $objWorkflowController->scheduleWorkflows();
             $objWorkflowController->runWorkflows();
@@ -318,12 +314,12 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionShowUi() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getSystemid())) {
-            $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        if($objWorkflow->rightView()) {
 
             $arrIdsToCheck = array_merge(array( $this->objSession->getUserID() ), $this->objSession->getGroupIdsAsArray());
             $arrIdsOfTask = explode(",", $objWorkflow->getStrResponsible());
-            
+
             //ui given? current user responsible?
             if($objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" ||
                     //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
@@ -353,12 +349,12 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionSaveUi() {
         $strReturn = "";
-        if($this->objRights->rightView($this->getSystemid())) {
-            $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        $objWorkflow = new class_modul_workflows_workflow($this->getSystemid());
+        if($objWorkflow->rightView()) {
 
             $arrIdsToCheck = array_merge(array( $this->objSession->getUserID() ), $this->objSession->getGroupIdsAsArray());
             $arrIdsOfTask = explode(",", $objWorkflow->getStrResponsible());
-            
+
             //ui given? current user responsible?
             if($objWorkflow->getObjWorkflowHandler()->providesUserInterface() && ($objWorkflow->getStrResponsible() == "" ||
                    //magic: the difference of the tasks' ids and the users' ids should be less than the count of the task-ids - then at least one id matches
@@ -392,7 +388,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionListHandlers() {
 		$strReturn = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             class_modul_workflows_handler::synchronizeHandlerList();
 
@@ -410,16 +406,17 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
     	    $arrPageViews = $this->objToolkit->getSimplePageview($objArraySectionIterator, $this->arrModule["modul"], "listHandlers");
             $arrWorkflowsHandler = $arrPageViews["elements"];
 
+            /** @var class_modul_workflows_handler $objOneWorkflowHandler */
 			foreach($arrWorkflowsHandler as $objOneWorkflowHandler) {
-			    if($this->objRights->rightRight1($objOneWorkflowHandler->getSystemid())) {
+			    if($this->getObjModule()->rightRight1()) {
 
                     $strAction = "";
 
-                    if($this->objRights->rightRight1($objOneWorkflowHandler->getSystemid())) {
+                    if($objOneWorkflowHandler->rightRight1()) {
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "editHandler", "&systemid=".$objOneWorkflowHandler->getSystemid(), "", $this->getText("workflow_handler_edit"), "icon_pencil.gif"));
     		   		    $strAction .= $this->objToolkit->listButton(getLinkAdmin($this->arrModule["modul"], "instantiateHandler", "&systemid=".$objOneWorkflowHandler->getSystemid(), "", $this->getText("workflow_handler_instantiate"), "icon_workflowNew.gif"));
                     }
-                    
+
     		   		$strWorkflows .= $this->objToolkit->listRow3($objOneWorkflowHandler->getObjInstanceOfHandler()->getStrName(), $objOneWorkflowHandler->getStrHandlerClass(), $strAction, getImageAdmin("icon_workflow.gif"), $intI++);
 
 			    }
@@ -444,7 +441,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionEditHandler() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             $objHandler = new class_modul_workflows_handler($this->getSystemid());
             $arrNames = $objHandler->getObjInstanceOfHandler()->getConfigValueNames();
@@ -473,7 +470,7 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
      */
     protected function actionSaveHandler() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             $objHandler = new class_modul_workflows_handler($this->getSystemid());
             $objHandler->setStrConfigVal1($this->getParam("handler_val1"));
@@ -490,12 +487,12 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 
 		return $strReturn;
     }
-    
-    
-    
+
+
+
     protected function actionInstantiateHandler() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             $objHandler = new class_modul_workflows_handler($this->getSystemid());
             $strReturn .= $this->objToolkit->formHeadline($objHandler->getObjInstanceOfHandler()->getStrName(). " (".$objHandler->getStrHandlerClass().")");
@@ -505,30 +502,30 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
             $strReturn .= $this->objToolkit->formInputHidden("instance_responsible_id", "");
             $strReturn .= $this->objToolkit->formInputHidden("systemid", $this->getSystemid());
             $strReturn .= $this->objToolkit->formInputSubmit($this->getText("commons_save"));
-            
+
         }
         else
             $strReturn = $this->getText("commons_error_permissions");
 
 		return $strReturn;
     }
-    
-    
+
+
     protected function actionStartInstance() {
         $strReturn = "";
-        if($this->objRights->rightRight1($this->getModuleSystemid($this->arrModule["modul"]))) {
+        if($this->getObjModule()->rightRight1()) {
 
             $objHandler = new class_modul_workflows_handler($this->getSystemid());
-            
+
             $objWorkflow = new class_modul_workflows_workflow();
             $objWorkflow->setStrClass($objHandler->getStrHandlerClass());
             $objWorkflow->setStrAffectedSystemid($this->getParam("instance_systemid"));
             $objWorkflow->setStrResponsible($this->getParam("instance_responsible_id"));
-            
+
             $objWorkflow->updateObjectToDb();
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "list"));
-            
+
 
         }
         else
@@ -536,9 +533,9 @@ class class_modul_workflows_admin extends class_admin implements interface_admin
 
 		return $strReturn;
     }
-    
-    
-    
+
+
+
 }
 
 ?>

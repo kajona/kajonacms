@@ -66,6 +66,13 @@ abstract class class_admin {
 	 */
 	private $objSystemCommon = null;
 
+    /**
+     * Instance of the current modules' definition
+     *
+     * @var class_modul_system_module
+     */
+    private $objModule = null;
+
 	private   $strAction;			        //current action to perform (GET/POST)
 	private   $strSystemid;			        //current systemid
 	private   $arrParams;			        //array containing other GET / POST / FILE variables
@@ -91,7 +98,7 @@ abstract class class_admin {
 		$arrModul["p_nummer"] 			= _system_modul_id_;
 
 		//default-template: main.tpl
-		if(!key_exists("template", $arrModul)) 
+		if(!key_exists("template", $arrModul))
 		    $arrModul["template"] 		= "/main.tpl";
 
 		//Registering Area
@@ -126,6 +133,7 @@ abstract class class_admin {
 		$this->objRights = $objCarrier->getObjRights();
 		$this->objSystemCommon = new class_modul_system_common($strSystemid);
 
+
 		//Setting template area LATERON THE SKIN IS BEING SET HERE
 		$this->setTemplateArea("");
 
@@ -143,7 +151,7 @@ abstract class class_admin {
 		$this->objText->setStrTextLanguage($this->objSession->getAdminLanguage(true));
 
 		$this->strTextBase = $this->arrModule["modul"];
-        
+
         //define the print-view, if requested
         if($this->getParam("printView") != "")
              $this->arrModule["template"] = "/print.tpl";
@@ -594,7 +602,7 @@ abstract class class_admin {
     private function validateAndUpdateCurrentAspect() {
         if(_xmlLoader_ === true || $this->arrModule["template"] == "/folderview.tpl")
             return;
-        
+
         $arrModule = $this->getModuleData($this->arrModule["modul"]);
         $strCurrentAspect = class_modul_system_aspect::getCurrentAspectId();
         if(isset($arrModule["module_aspect"]) && $arrModule["module_aspect"] != "") {
@@ -708,7 +716,7 @@ abstract class class_admin {
 		if($this->objSession->isLoggedin()) {
 		    $arrItems = $this->getOutputModuleNavi();
 		    $arrFinalItems = array();
-            
+
             $objModule = class_modul_system_module::getModuleByName($this->arrModule["modul"]);
 		    //build array of final items
 		    foreach($arrItems as $arrOneItem) {
@@ -809,14 +817,14 @@ abstract class class_admin {
      * call actionNewPage(). If no method matching the schema is found, an exception is being thrown.
      * The actions' output is saved back to self::strOutput and, in is returned in addition.
      * Returning the content is only implemented to remain backwards compatible with older implementations.
-     * 
+     *
      *
      * @param string $strAction
      * @return string
      * @since 3.4
      */
     public function action($strAction = "") {
-        
+
         if($strAction == "")
             $strAction = $this->strAction;
         else
@@ -824,23 +832,23 @@ abstract class class_admin {
 
         //search for the matching method - build method name
         $strMethodName = "action".uniStrtoupper($strAction[0]).uniSubstr($strAction, 1);
-        
+
         if(method_exists($this, $strMethodName)) {
-            
+
             //validate the loading channel - xml or regular
             if(_xmlLoader_ === true) {
                 //check it the method is allowed for xml-requests
                 $objAnnotations = new class_annotations(get_class($this));
                 if(!$objAnnotations->hasMethodAnnotation($strMethodName, "@xml") && substr(get_class($this), -3) != "xml")
                     throw new class_exception("called method ".$strMethodName." not allowed for xml-requests", class_exception::$level_FATALERROR);
-                
+
                 if($this->arrModule["modul"] != $this->getParam("module")) {
                     header(class_http_statuscodes::$strSC_UNAUTHORIZED);
                     throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
                 }
             }
-            
-            
+
+
             $this->strOutput = $this->$strMethodName();
         }
         else {
@@ -848,19 +856,19 @@ abstract class class_admin {
             //if the pe was requested and the current module is a login-module, there are unsufficient permsissions given
             if($this->arrModule["template"] == "/login.tpl" && $this->getParam("pe") != "")
                 throw new class_exception("You have to be logged in to use the portal editor!!!", class_exception::$level_ERROR);
-            
+
             if(get_class($this) == "class_modul_login_admin_xml") {
                 header(class_http_statuscodes::$strSC_UNAUTHORIZED);
                 throw new class_exception("you are not authorized/authenticated to call this action", class_exception::$level_FATALERROR);
             }
-            
+
             throw new class_exception("called method ".$strMethodName." not existing for class ".$objReflection->getName(), class_exception::$level_FATALERROR);
         }
 
         return $this->strOutput;
     }
 
-    
+
     //--- FORM-Validation -----------------------------------------------------------------------------------
 
     /**
@@ -990,6 +998,18 @@ abstract class class_admin {
         return $this->objSystemCommon->getStrAdminLanguageToWorkOn();
     }
 
+    /**
+     * Returns the current instance of class_modul_system_module, based on the current subclass.
+     * Lazy-loading, so loaded on first access.
+     * @return class_modul_system_module|null
+     */
+    protected function getObjModule() {
+
+        if($this->objModule == null)
+            $this->objModule = class_modul_system_module::getModuleByName($this->arrModule["modul"]);
+
+        return $this->objModule;
+    }
 }
 
 ?>
