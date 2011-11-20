@@ -1,0 +1,152 @@
+
+Kajona V 3.4.1 FINAL; Revision 4133 - 4174
+
+Module Eventmanager
+NEW: added template section "event_details_registerlink" in modul_eventmanager so the register link will only be visible if the event allows registrations and the user has the permission to do so
+BUG: modul_eventmanager didn't use SEO features
+BUG: modul_eventmanager sent text/xml content type instead of application/json
+
+Module LDAP
+NEW: moved module ldap from playground to trunk
+
+Module News
+BUG: disabled a closure since not support by php < 5.3. will be renabled for kajona 3.4
+
+Module Pages
+BUG: wrong link in toolbar when editing page properties
+BUG: portal language has to be passed to portal editor admin links
+BUG: slightly modified error-handling. if an exception is thrown during the generation of page-elements, the error-page is shown for errors. this redirect can be disabled during development by setting the config.phps' debug-entry "debuglevel".
+
+Module Samplecontent
+BUG: samplecontent installer missed to escape br on error-page
+
+Module Stats
+NEW: migrated stats-queries to prepared statements
+BUG: fixed error in stats-common report query
+BUG: charts could crash in rare cases due to an excessive padding. quick fix for 3.x series, v4 will be based on client side charts.
+
+Module System
+NEW: added application/json to content types to get compressed by apache mod_deflate
+NEW: included jQuery 1.6.4 for the use in the portal. Will replace YUI with Kajona 3.5/4.0
+BUG: padding to axis label is onlay added when label is not empty
+BUG: mysqli-driver missed to add a detailed error-description in case of compile-errors for prepared statements
+BUG: fixed the modifier of class_array_iterators' member vars so that they may be used by subclasses
+
+Module User
+NEW: The Kajona-User-Subsystem allows logins with older, md5-hashed passwords
+
+
+Kajona V 3.4.1 BETA "connectivity"; Revision 3913 - 4132
+
+Element Directorybrowser
+NEW: moved directorybrowser from playground to trunk
+
+Element Portalupload
+NEW: the portalupload-element no longer requires a downloads-archive and a filemanger-repo, the downloads-archive is sufficient. the internal, hidden filemanager-repo is used for uploads instead.
+
+Systemtask Pageexport / Pageimport
+NEW: moved pageimport/export from playground to trunk
+
+Module Dashboard
+BUG: a single users widgets are deleted from the database as soon as the user gets deleted, too
+
+Module Eventmanager
+NEW: the eventmanager supports a calendar-based view, based on the FullCalendar (http://arshaw.com/fullcalendar/) (#645)
+NEW: added a samplecontent installer for module eventmanager
+
+Module Navigations
+BUG: systemtask "validate navigations" skips auto-generated navigations (#646)
+
+Module News
+NEW: added actionListCategories and actionListNews to the news-admin-class, accessible via xml
+NEW: the languageswitch includes the news-title as seo-keywords when switching the language on news-details (#628)
+NEW: updated the news-methods to be able to handle androids REST-requests
+
+Module Pages
+NEW: the portaleditor allows to set page-elements active or inactive. Therefore inactive elements are rendered on pages, too, as soon as the portaleditor is enabled. (#610)
+NEW: made class_modul_pages_portal conform to all portal-classes (implementing interface_portal)
+NEW: various performance-improvements. page-generation (portal & backend) may be up to 30% faster.
+NEW: added the language-switcher to the admin-pages-list (was visible only on the pages-content list) (#634)
+BUG: fixed portaleditor in IE
+BUG: fixed method signatures to match strict standards
+BUG: Pages folderview uses wrong page language when showing elements (#653)
+
+Module PDF
+NEW: Updated tcpdf to 5.9.103
+NEW: class_pdf::setTextColor(R,G,B)
+
+Module Stats
+NEW: the stats-adminwidget renders a small chart, too
+i18n for stats graph (#621)
+BUG: query to determin top-searchterms was erroneous (#655)
+
+Module System
+Core:
+NEW: class_modul_system_changelog::getSpecificEntries(), used to fetch records from the change-table filtered and limited by specific values
+NEW: hacked a simple emulation of phpunit into autotest.php. simple tests may be run by browser again, complex ones won't be supported and should be run by phpunit out of your favorite IDE.
+NEW: class_root loads details only on request (lazy loading). reduces the total number of queries significantly
+NEW: added the config-option "loginproviders". can be used to activate additional login-providers. If not present, the system will use "kajona" as the fallback value.
+NEW: class_config supports the handling of multiple config-files
+NEW: xml-methods are no longer neccessarily defined in an _xml class. in addition, methods callable via the xml-interface can be marked with an @xml annotation. if given, the method is executable by an xml-call
+NEW: added xml-annotation action loading to class_portal
+NEW: added xml-annotation action loading to class_admin
+NEW: class_request_dispatcher. harmonizes duplicate code in xml.php and index.php. may be refactored to a complete chaining-system in the future (compare java servlets)
+NEW: constant _xmlLoader_ is set transparently, no need to set manually
+NEW: removed system-setting _system_output_gzip_ - gzipping should be handled by apache rather than the system, much more error-safe
+NEW: class_csv can skip the headers during export
+NEW: massive internal api-changes. many methods located at class_model are moved to class_root. to be compatible with the logic of other model-classes, class_root now holds its properties like other value-objects and stores them back to the database as expected (by using a single update). reorganized a lof of low-level api-calls at class_admin / class_portal in order to be compatible with the new class_root. class_root is getting more strict concerning OO-patterns, so for many use-cases an instance of class_modul_system_common should be used in order to modify a system-record without its matching model-class-instance.
+NEW: when calling the xml-interface, the mandatory <xml>-header may be suppressed by calling class_xml::setBitSuppressXmlHeader(true)
+NEW: the mail sent in case of an exception contains the last urls called by the user (admin & portal)
+NEW: added a first and still unfinished version of an oracle driver. therefore some of the db-parts had to be migrated to comply with the 30-char limit of table-names and column-names
+NEW: when checking for registered subscribers of delete- and status-change-events, the system valdiates if the class to check is not abstract. this allows model-classes to be abstract, e.g. for common base-classes.
+NEW: passed env-params are stored with class_carrier as a static var. this reduces the number of array_merge calls when calling getAllPassedParams().
+NEW: debug-information are sent on xml-requests, too
+NEW: the current aspect is cached, this boosts performance
+NEW: added  class_wadlgenerator, is capable of generating a wadl-document required by REST-clients. class_modul_login_admin_xml makes use of this class
+NEW: added more http-statuscodes, the xml-classes make more use of different statuscodes in order to pass more informations to the clients
+NEW: added rewrite-rules for xml-requests to the .htaccess file. the wadls generated are capable of using full url-rewriting, other xml-handlers may follow. schema: /xml/[admin/]/module/action/systemid/
+NEW / BUG: class_filesystem now provides the method readLastLinesFromFile() in order to explicitely read the end of a file. otherwise tail-like operation may have lead to a out of memory error. adopted to admin-log viewer and admin-widget. (#632)
+NEW: included jQuery 1.6.4 for the use in the portal. Will replace YUI with Kajona 3.5/4.0
+BUG: fixed the index-creation for the sqlite3- and the postgresql-drivers
+BUG: fixed some cases where the xmlLoader constant was checked erroneous
+BUG: fixed method signatures to match strict standards
+BUG: class_db checks dbprefix' position, too - and not only the existance
+BUG: sqlite-driver used a wrong fetch-method for prepared-statements triggered by getArraySection() (only when using a special set of params)
+BUG: setting a records' status could have fired the status changed event twice
+BUG: a records comment (system-table) could get lost in case of xml-setAbsolutePosition-calls
+BUG: the mysqli-driver handles compile-errors of prepared-statements as expected (returns false instead of triggering a php-warning)
+BUG: lockmanager missed to unlock records in rare cases
+BUG: fixed rendering of x-axis labels for line-charts rendered by the ez components chart engine
+BUG: the redirect-rules are checked before skipping all non-html & rss feeds. Otherwise the root-page (http://ddd.dd/) was skipped, too. (#564)
+BUG: prepared-statement params missed to be included in debug-prints when calling pArraySection
+
+Toolkits:
+NEW: class_toolkit::registerMenu(), used to generate a java-script based menu for given items in the generated dom-tree
+NEW: backend: the url-addon "printView" forces the system to load the skin using the template print.tpl. usefull if you want to provide print-view of the current backend-view
+NEW: a fake-module "modul_commons" is introduced into the admin-lang section. the module should contain a list of lang-entries used multiple times in order to reduce duplicate lang-entries. adopted the new entries to some modules.
+NEW: class_folderview_admin is now reduced to a minimal implementation. all methods have been moved to its base-implementations / modules. reduces fragmentation and increases maintainability. (#620)
+NEW: added a new toolkit-field getFormUserSelector, used to select a user or a group. supports autocomplete out of the box.
+NEW: updated YUI to 2.9.0
+NEW: admin-js method selectCallback() takes an optional second callback-param. the callback is trigger between the passing of form-fields and the closing of the dialog
+NEW: drag n drop handlers are initialized by their loader-callbacks instead of an internal safe-init method
+BUG: drag&drop didn't work in IE9 (dirty HACK, the problem seems to be in KAJONA.admin.loader.load() -> http://trace.kajona.de/view.php?id=636) (#633)
+BUG: validation-errors set manually are no longer ignored on form-validation
+BUG: getLinkPortalHref() now takes the target-language into account when searching for seo-keywords (#628)
+BUG: splitUpLink() failed in case of nested tags
+BUG: in case of only a single aspect available, the aspect-chooser was rendered, too
+BUG: when uploading a file in folderview mode using the fallback-upload (no flash), the folderview-param was lost on reload
+
+Installer:
+NEW: the installer checks the availability of the db-driver selected
+BUG: sample-content installers failed in some cases, especially when trying to install non-existant elements (#638)
+BUG: fixed the language-handling of the samplecontent installers. avoids problems with null-primary keys
+BUG: during installation, the default-language is set before the current admin-language is read in order to pass it to the user created by the installer
+
+Module Tags
+BUG: fixed tags samplecontent installer
+BUG: deleting a tag failed in some cases
+
+Module User
+NEW: introducing the new user-subsystem. provides a flexible way of handling different-login providers.
+NEW: added ldap-support to the user-subsystem, but still in playground-repository
+NEW: when creating a new user, the dashboard-widgets are created by the user-class itself and not by the calling class

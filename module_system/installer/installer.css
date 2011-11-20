@@ -1,0 +1,372 @@
+body {
+	margin: 0 5px 20px 0;
+	padding: 0px;
+	background: #FFFFFF;
+	background-image: url(pics/back.png);
+	background-repeat: repeat-x;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+	text-align: center;
+}
+
+a, a:link, a:visited {
+     text-decoration: underline;
+     color: #575757;
+}
+
+a:hover, a:active, a:focus {
+     text-decoration: underline;
+     color: #000000;
+}
+
+img {
+	border: none;
+}
+
+table {
+	border: none;
+}
+
+td {
+	text-align: left;
+	vertical-align: top;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+}
+
+
+/* L A Y O U T */
+#installerBox {
+	margin: 0 auto 0 auto;
+	padding-top: 10px;
+	width: 873px;
+	text-align: left;
+}
+
+#installerBox .logo {
+	background: url(pics/kajona_logo.png) top left no-repeat;
+	width: 178px;
+	height: 51px;
+}
+
+#installerBox .topRight {
+	background: url(pics/installer_box_topright.png) top right no-repeat;
+	margin: 0 0 0 48px;
+	padding: 0;
+	width: 625px;
+}
+
+#installerBox .topLeft {
+	background: url(pics/installer_box_topleft.png) top left no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#installerBox .bottomRight {
+	background: url(pics/installer_box_bottomright.png) bottom right no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#installerBox .bottomLeft {
+	background: url(pics/installer_box_bottomleft.png) bottom left no-repeat;
+	margin: 0;
+	padding: 0;
+}
+
+#installerBox .content {
+	margin: 0;
+	padding: 13px 20px 20px 20px;
+	min-height: 250px;
+}
+
+#installerBox .content p {
+	margin: 0;
+	padding: 0;
+}
+
+#installerBox .content p.error {
+	color: #ff0000;
+	margin-top: 10px;
+}
+
+#installerBox .progressContainer {
+	width: 200px;
+	margin-left: 622px;
+	position: absolute;
+	top: 120px;
+}
+
+#installerBox .progressContainer div {
+	height: 22px;
+	margin-bottom: 2px;
+	padding-left: 30px;
+	line-height: 22px;
+	background-image: url(pics/progress_bg.png);
+	background-position: left top;
+}
+
+#installerBox .progressContainer div.current {
+	color: #000000;
+	background-position: left center;
+}
+
+#installerBox .progressContainer div.done {
+	background-position: left bottom;
+}
+
+#installerBox .copyright {
+	text-align: right;
+	color: #c2c2c2;
+	margin-right: 10px;
+	width: 665px;
+}
+
+#installerBox .copyright a, #installerBox .copyright a:link, #installerBox .copyright a:visited {
+	 text-align: right;
+     text-decoration: none;
+     color: #c2c2c2;
+}
+
+#installerBox .copyright a:hover, #installerBox .copyright a:active, #installerBox .copyright a:focus {
+     text-decoration: none;
+     color: #575757;
+}
+
+
+/* H E A D L I N E S */
+h1 {
+	text-align: right;
+	color: #c2c2c2;
+	font-size: 22px;
+	font-weight: normal;
+	margin-top: 0px;
+	padding-right: 45px;
+}
+
+h2 {
+	color: #575757;
+	font-size: 11px;
+	font-weight: bold;
+	margin-top: 13px;
+}
+
+
+/* F O R M S */
+form label {
+	display: block;
+	float: left;
+	width: 30%;
+	height: 19px;
+	padding: 3px 0 0 0;
+}
+
+* html form label {
+	height: 22px;
+}
+
+form br {
+	clear: both;
+}
+
+form input[readOnly] {
+    background: #E6E6E6;
+    color: #c2c2c2;
+}
+
+.inputText, .inputTextShort, .inputDate {
+	background-image: url(pics/forms_input_back.png);
+	background-repeat: repeat-x;
+	padding: 2px 0 0 4px;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 180px;
+	height: 16px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+}
+
+* html .inputText, * html .inputTextShort, * html .inputDate {
+	height: 20px;
+}
+
+.inputTextShort {
+	width: 120px;
+}
+
+.inputDate {
+	width: 30px;
+}
+
+* html .inputDate {
+	width: 35px;
+}
+
+.inputTextarea {
+	background-image: url(pics/forms_input_back.png);
+	background-repeat: repeat-x;
+	padding: 1px 0 0 4px;
+	margin: 0 3px 4px 0;
+	display: block;
+	float: left;
+	width: 180px;
+	height: 50px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+}
+
+.inputWysiwyg {
+	float: left;
+}
+
+.inputDropdown {
+	background-image: url(pics/forms_input_back.png);
+	background-repeat: repeat-x;
+	padding: 1px 0 0 0;
+	margin: 0 3px 0 0;
+	display: block;
+	float: left;
+	width: 186px;
+	height: 18px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+}
+
+* html .inputDropdown {
+	height: 20px;
+	width: 180px;
+}
+
+.inputText:focus, .inputTextShort:focus, .inputTextarea:focus, .inputDropdown:focus, .inputDate:focus {
+	color: #000000;
+}
+
+.inputSubmit, .inputSubmitShort {
+	background-color: #ffffff;
+	background-image: url(pics/forms_button_back.png);
+	background-repeat: repeat-x;
+	background-position: left center;
+	padding: 1px 0 3px 15px;
+	margin: 8px 0 0 0;
+	display: block;
+	float: left;
+	width: 186px;
+	height: 20px;
+	border: 1px solid #c2c2c2;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #575757;
+	text-align: left;
+	cursor: pointer;
+}
+
+* html .inputSubmit {
+	width: 180px;
+}
+
+.inputSubmitShort {
+	width: 126px;
+}
+
+* html .inputSubmitShort {
+	width: 120px;
+}
+
+.inputSubmit:hover, .inputSubmitShort:hover, .inputSubmit:focus, .inputSubmitShort:focus {
+	color: #000000;
+}
+
+form .formText {
+    padding-top: 3px;
+}
+
+form .formText .spacer {
+    float: left;
+    width: 30%;
+    height: 11px;
+}
+
+form .formText .text {
+    float: left;
+    width: 70%;
+}
+
+
+
+/* P R E F O R M A T T E D */
+.preText {
+	border: 1px solid #575757;
+	margin: 10px 0 10px 0;
+	background-color: #EDEDED;
+	padding: 8px;
+	overflow: auto;
+	max-height: 100px;
+}
+
+.preText pre {
+	margin: 0;
+	padding-bottom: 8px;
+}
+
+
+/* P E R C E N T  B E A M */
+div.percentBeamText {
+	width: 50px;
+	height: 15px;
+	float: left;
+    white-space: nowrap;
+}
+
+div.percentBeam {
+	height: 10px;
+	padding-top: 5px;
+	border-left: 1px solid #737373;
+	border-right: 1px solid #737373;
+	float: right;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.installable {
+	cursor: pointer;
+}
+
+table.moduleRowTable {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #c2c2c2;
+	padding: 4px 0 4px 0;
+}
+
+table.moduleRowTable:hover {
+	background-color: #f0f0f0;
+}
+
+#dbInfo .error {
+    background: url("pics/error.png") no-repeat scroll 5px 5px #FFDEDD;
+    color: red;
+    margin: 5px 0;
+    padding: 5px 5px 6px 25px;
+}
+
+#dbInfo .info {
+    background: url("pics/info.png") no-repeat scroll 5px 5px #d4e5ff;
+    color: blue;
+    margin: 5px 0;
+    padding: 5px 5px 6px 25px;
+}

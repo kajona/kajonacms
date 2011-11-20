@@ -1,0 +1,291 @@
+
+/*"******************************************************************************************************
+*   (c) 2004-2006 by MulchProductions, www.mulchprod.de                                                 *
+*   (c) 2007-2011 by Kajona, www.kajona.de                                                              *
+*       Published under the GNU LGPL v2.1, see /system/licence_lgpl.txt                                 *
+*-------------------------------------------------------------------------------------------------------*
+*	$Id$	                                    *
+********************************************************************************************************/
+
+
+/* T O O L T I P */
+.kajonaAdminTooltip {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #000000;
+    font-size: 10px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #000099;
+    padding: 4px;
+    max-width: 200px;
+}
+
+
+
+/* P O R T A L E D I T O R  E N A B L E   B U T T O N */
+#peEnableButton {
+    z-index: 1000;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+}
+
+
+/* P O R T A L E D I T O R   T O O L B A R */
+
+#pe_classicskin {
+	display: block !important;
+    white-space: nowrap;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    border: none; 
+    background-color: #EFEFEF; 
+    z-index: 1000; 
+    width: 100%;
+}
+
+.pe_inactiveElement {
+    border: 1px solid #333333;
+    border-radius: 2px;
+    padding: 3px;
+    margin: 2px 0 2px 0px;
+    background-color: #cccccc;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+}
+
+/* P O R T A L E D I T O R   C O N T A I N E R */
+.peContainerOut {
+	display: inline !important;
+	border: none !important;
+}
+
+.peContainerHover {
+	display: block !important;
+	outline: 1px solid #cccccc !important;
+	background-color: #EFEFEF !important;
+}
+
+.peContainerHover .menuHover {
+	position: absolute !important;
+	border: none !important;
+	display: block !important;
+    margin: -17px 0 0 -1px !important;
+}
+
+/* for nested containers */
+.peContainerHover .peContainerHover .menuHover {
+    margin: -1px 0 0 -1px !important;
+}
+
+.peContainerHover .menuHover .actions {
+	border: 1px solid black !important;
+	display: block !important;
+    background-color: #ffffff !important;
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    text-align: left !important;
+    padding: 1px 3px 2px 3px !important;
+    text-transform: none !important;
+    line-height: 14px !important;
+}
+
+.peContainerHover .menuHover .actions a, .peContainerHover .menuHover .actions a:link, .peContainerHover .menuHover .actions a:visited,
+.peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+    background: none !important;
+    padding: 0 2px 0 2px !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 14px !important;
+    border: none !important;
+    outline: none !important;
+    display: inline !important;
+    width: auto !important;
+    height: auto !important;
+    text-shadow: none !important;
+}
+
+.peContainerHover .menuHover .actions a:hover, .peContainerHover .menuHover .actions a:active, .peContainerHover .menuHover .actions a:focus {
+    text-decoration: underline !important;
+}
+
+#pe_classicskin img {
+	border: none !important;
+}
+
+
+.peButtonNew {
+    margin-bottom: 2px !important;
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.peButtonNew img {
+    width: 20px !important;
+    height: 20px !important;
+    border: none !important;
+}
+
+
+/* DIALOG */
+.peDialog {
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    width: 730px;
+    outline: none;
+    background: url(loading.gif) center center no-repeat #ffffff;
+    text-align: left;
+    border: 1px solid #000099 !important;
+}
+
+.peDialog .hd {
+    background-color: #CFD7FF;
+    height: 17px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 11px;
+    padding-top: 3px;
+}
+
+.peDialog .hd .close {
+    right: 0;
+    top: 0;
+    position: absolute;
+    font-weight: bold;
+}
+
+.peDialog .hd .close a {
+    display: block;
+    padding: 3px 6px 3px 6px;
+}
+
+.peDialog .bd {
+    padding: 5px 10px 10px 10px;
+    height: 450px;
+}
+
+.peDialog .bd iframe {
+    border: none;
+}
+
+.peDialog .yui-resize-handle-br {
+    right: 0;
+    bottom: 0;
+    height: 8px;
+    width: 8px;
+    position: absolute;
+    background-image: url(../../scripts/yui/resize/assets/skins/sam/layout_sprite.png);
+    background-repeat: no-repeat;
+    background-position: -22px -62px;
+    cursor: se-resize;
+}
+
+#peDialog_c.hide-scrollbars .yui-resize .bd {
+    overflow: hidden;
+}
+
+#peDialog_c.show-scrollbars .yui-resize .bd {
+    overflow: auto;
+}
+
+
+.yui-overlay,
+.yui-panel-container {
+    visibility:hidden;
+    position:absolute;
+    z-index: 2;
+}
+
+.mask {
+    z-index: 1; 
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.2;
+    opacity:.20;
+    filter: alpha(opacity=20);
+    background-color:#000000;
+}
+
+.yui-panel-container.show-scrollbars {
+    overflow: visible;
+}
+
+.yui-panel-container.show-scrollbars .underlay {
+    overflow: auto;
+}
+
+.yui-panel {
+    visibility:hidden;
+    border-collapse:separate;
+    position:relative;
+    left:0;
+    top:0;
+    border:none;
+    z-index:1;
+    overflow:hidden;
+}
+
+
+
+
+/* MenuBar style rules */
+.yui-skin-sam {
+    font-family: Verdana, Arial, Helvetica, sans-serif !important;
+    font-size: 11px !important;
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-weight: normal !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: 14px !important;
+    border: none !important;
+    outline: none !important;
+    width: auto !important;
+    height: auto !important;
+    text-align: left !important;
+}
+
+.yui-skin-sam .yuimenu .bd {
+    border: solid 1px #000099 !important;
+}
+
+.yui-skin-sam .yuimenu {
+    font-size: 11px !important;
+    padding: 12px 0 0 12px;
+ }
+
+.yui-skin-sam .yuimenu h6 { 
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 1px 0 0 0;
+    color: #a4a4a4;
+    font-size: 11px !important;
+}
+
+.yui-skin-sam .yuimenuitemlabel {
+    color: #575757 !important;
+    cursor: pointer !important;
+    outline: none !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected {
+    background-color: #f0f0f0 !important;
+}
+
+.yui-skin-sam .yuimenuitem-selected .yuimenuitemlabel{
+    color: #000000 !important;
+}
