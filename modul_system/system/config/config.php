@@ -29,7 +29,7 @@ case "vserver":
     $config['dbusername']           = "kajona";                                //Username
     $config['dbpassword']           = "kajona";                                //Password
     $config['dbname']               = "kajona";                                //Database name
-    $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3
+    $config['dbdriver']             = "mysqli";                                //DB-Driver, one of:  mysqli, postgres, sqlite3, oci8
     $config['dbprefix']             = "kajona_";                               //table-prefix
     $config['dbport']               = "";                                      //Database port, default: ""
 
@@ -45,7 +45,7 @@ default:
     $config['dbusername']           = "%%defaultusername%%";                   //Username
     $config['dbpassword']           = "%%defaultpassword%%";                   //Password
     $config['dbname']               = "%%defaultdbname%%";                     //Database name
-    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3
+    $config['dbdriver']             = "%%defaultdriver%%";                     //DB-Driver, one of: mysqli, postgres, sqlite3, oci8
     $config['dbprefix']             = "%%defaultprefix%%";                     //table-prefix
     $config['dbport']               = "%%defaultport%%";                       //Database port, default: ""
 
@@ -74,7 +74,7 @@ default:
 
     $config["images_cachepath"]     = "/portal/pics/cache/";                   //Path used to store the cached and manipulated images
 
-    $config['adminlangs']           = "de,en,pt,ru,bg";                        //Available languages for the administration
+    $config['adminlangs']           = "de,en,pt,ru,bg,sv";                     //Available languages for the administration
 
     $config['admintoolkit']         = "class_toolkit_admin";                   //The admin-toolkit class to use. If you created your own implementation, 
                                                                                //e.g. by extending the Kajona-class, set the name of the class here.

@@ -43,6 +43,7 @@ $lang["lang_en"]                         = "Englisch";
 $lang["lang_fr"]                         = "Französisch";
 $lang["lang_pt"]                         = "Portugiesisch";
 $lang["lang_ru"]                         = "Russisch";
+$lang["lang_sv"]                         = "Schwedisch";
 $lang["log"]                             = "Log: ";
 $lang["login_changeButton"]              = "Passwort ändern";
 $lang["login_change_error"]              = "Fehler beim Verarbeiten der Anfrage.";
