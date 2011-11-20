@@ -76,19 +76,26 @@ function rawIncludeError($strFileMissed) {
 	}
 
 //---Include Section 2-----------------------------------------------------------------------------------
-	//Modul-Constants
-	foreach(scandir(_realpath_."/system/config/") as $strDirEntry ) {
-	   if(preg_match("/modul\_([a-z])+\_id\.php/", $strDirEntry))
-	       @include_once(_realpath_."/system/config/".$strDirEntry);
+	//Module-Constants
+	foreach(scandir(_realpath_."/") as $strDirEntry ) {
+        if(is_dir(_realpath_."/".$strDirEntry."/system/config/")) {
+            foreach(scandir(_realpath_."/".$strDirEntry."/system/config/") as $strModuleEntry ) {
+                if(preg_match("/modul\_([a-z])+\_id\.php/", $strModuleEntry))
+                    @include_once(_realpath_."/".$strDirEntry."/system/config/".$strModuleEntry);
+            }
+        }
+
 	}
 
-	//The Carrier-Class
-	if(!@include_once(_realpath_."/module_system/system/class_carrier.php"))
-		rawIncludeError("carrier-class");
 
-//---Autoloader for classes------------------------------------------------------------------------------
+    //---Autoloader for classes--------------------------------------------------------------------------
     include_once (_realpath_."/module_system/system/class_classloader.php");
-    spl_autoload_register(array (new class_classloader(), "loadClass"));
+    spl_autoload_register(array (class_classloader::getInstance(), "loadClass"));
+
+    //The Carrier-Class
+    if(!@include_once(_realpath_."/module_system/system/class_carrier.php"))
+        rawIncludeError("carrier-class");
+
 
 
 ?>
