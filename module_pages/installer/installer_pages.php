@@ -10,7 +10,7 @@
 /**
  * Installer of the pages-module
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_installer_pages extends class_installer_base implements interface_installer {
 

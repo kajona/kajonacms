@@ -10,7 +10,7 @@
 /**
  * Admin class to handle the paragraphs
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_paragraph extends class_element_admin implements interface_admin_element {
 

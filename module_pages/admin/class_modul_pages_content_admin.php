@@ -12,7 +12,7 @@
  * This class is used to edit the content of a page. So, to create / delete / modify elements on a
  * given page.
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_content_admin extends class_admin implements interface_admin {
@@ -112,7 +112,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             //try to load template, otherwise abort
             $strTemplateID = null;
 			try {
-                $strTemplateID = $this->objTemplate->readTemplate("templates/modul_pages/".$objPage->getStrTemplate(), "", true, true);
+                $strTemplateID = $this->objTemplate->readTemplate("templates/module_pages/".$objPage->getStrTemplate(), "", true, true);
 			} catch (class_exception $objException) {
                 $strReturn .= $this->getText("templateNotLoaded")."<br />";
             }
@@ -772,7 +772,7 @@ class class_modul_pages_content_admin extends class_admin implements interface_a
             $strTemplate = $objPage->getStrTemplate();
 
             //load the placeholders
-            $strTemplateId = $this->objTemplate->readTemplate("/templates/modul_pages/".$strTemplate, "", true);
+            $strTemplateId = $this->objTemplate->readTemplate("/templates/module_pages/".$strTemplate, "", true);
             $arrPlaceholders = $this->objTemplate->getElements($strTemplateId);
             $arrPlaceholdersDD = array();
 

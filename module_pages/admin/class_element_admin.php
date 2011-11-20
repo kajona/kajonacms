@@ -11,7 +11,7 @@
 /**
  * The base class for all page-elements
  *
- * @package modul_pages
+ * @package module_pages
  * @abstract
  */
 abstract class class_element_admin extends class_admin {

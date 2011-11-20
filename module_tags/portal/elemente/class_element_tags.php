@@ -10,7 +10,7 @@
 /**
  * Loads the tags currently available in the system and renders them
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_tags extends class_element_portal implements interface_portal_element {
 
@@ -40,19 +40,19 @@ class class_element_tags extends class_element_portal implements interface_porta
 
 
         $arrTags = class_modul_tags_tag::getTagsWithAssignments();
-        
+
         //load the template
         $strTemplateWrapperID = $this->objTemplate->readTemplate("/element_tags/".$this->arrElementData["char1"], "tags");
         $strTemplateTagID = $this->objTemplate->readTemplate("/element_tags/".$this->arrElementData["char1"], "tagname");
         $strTemplateTaglinkID = $this->objTemplate->readTemplate("/element_tags/".$this->arrElementData["char1"], "taglink");
-        
-        
+
+
         $strTags = "";
         foreach($arrTags as $objTag) {
             if($objTag->rightView()) {
 
                 $arrAssignments = $objTag->getListOfAssignments();
-                
+
 
                 $strLinks = "";
                 //render the links - if possible
@@ -81,7 +81,7 @@ class class_element_tags extends class_element_portal implements interface_porta
                 $strTags .= $this->fillTemplate($arrTemplate, $strTemplateTagID);
             }
         }
-        
+
         $strReturn = $this->fillTemplate(array("tags" => $strTags), $strTemplateWrapperID);
 
 		return $strReturn;

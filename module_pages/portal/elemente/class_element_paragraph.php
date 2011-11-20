@@ -10,7 +10,7 @@
 /**
  * Portal-Part of the paragraph
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_paragraph extends class_element_portal implements  interface_portal_element {
 
@@ -70,7 +70,7 @@ class class_element_paragraph extends class_element_portal implements  interface
 			else
 			    $this->arrElementData["paragraph_link"] = getLinkPortalHref("", $this->arrElementData["paragraph_link"]);
 		}
-		
+
 		if($this->arrElementData["paragraph_title"] != "") {
 			$strTemplateTitleID = $this->objTemplate->readTemplate("/element_paragraph/".$strTemplate, "paragraph_title_tag");
 			$this->arrElementData["paragraph_title_tag"] = $this->fillTemplate($this->arrElementData, $strTemplateTitleID);

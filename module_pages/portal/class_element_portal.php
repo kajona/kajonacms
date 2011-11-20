@@ -10,7 +10,7 @@
 /**
  * Base Class for all portal-elements
  *
- * @package modul_pages
+ * @package module_pages
  * @abstract
  */
 abstract class class_element_portal extends class_portal {

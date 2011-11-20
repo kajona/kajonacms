@@ -470,7 +470,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
        $objMasterPageData = class_modul_pages_page::getPageByName("master");
        if($objPageData != null) {
            //analyze the placeholders on the page, faster than iterating the the elements available in the db
-           $strTemplateId = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate());
+           $strTemplateId = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate());
            $arrElementsTemplate = $this->objTemplate->getElements($strTemplateId);
            $arrElementsTemplate = array_merge($this->objTemplate->getElements($strTemplateId, 0), $this->objTemplate->getElements($strTemplateId, 1));
 

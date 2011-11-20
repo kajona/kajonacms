@@ -698,7 +698,7 @@ abstract class class_admin {
 			}
 			//NOTE: Some special Modules need other highlights
 			if($this->arrModule["name"] == "modul_pages_elemente")
-			    $strCurrent = "modul_pages";
+			    $strCurrent = "module_pages";
 			else
 			    $strCurrent = $this->arrModule["name"];
 

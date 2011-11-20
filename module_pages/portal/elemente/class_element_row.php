@@ -10,7 +10,7 @@
 /**
  * Portal-Part of the row-element
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_row extends class_element_portal implements  interface_portal_element {
 

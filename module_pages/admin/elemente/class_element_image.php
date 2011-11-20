@@ -10,7 +10,7 @@
 /**
  * Class to handle the admin-part of the element
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_image extends class_element_admin implements interface_admin_element {
 

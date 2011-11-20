@@ -10,7 +10,7 @@
 /**
  * Installer of the pages samplecontent
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_installer_sc_01pages implements interface_sc_installer  {
 

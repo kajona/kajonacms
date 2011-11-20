@@ -10,11 +10,11 @@
 /**
  * Model for a page
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_page extends class_model implements interface_model, interface_versionable  {
-    
+
     public static $INT_TYPE_PAGE = 0;
     public static $INT_TYPE_ALIAS = 1;
 
@@ -49,7 +49,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_pages";
+        $arrModul["name"] 				= "module_pages";
 		$arrModul["moduleId"] 			= _pages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."page";
 		$arrModul["table2"]       		= _dbprefix_."page_properties";
@@ -152,7 +152,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 		//Create the system-record
 		if(_pages_newdisabled_ == "true")
             $this->setStatus();
-		
+
         return true;
     }
 
@@ -246,16 +246,16 @@ class class_modul_pages_page extends class_model implements interface_model, int
 	 */
 	public static function getAllPages($intStart = 0, $intEnd = 0, $strFilter = "", $bitIncludeAlias = true) {
         $arrParams = array();
-        
+
         if($strFilter != "")
             $arrParams[] = $strFilter."%";
-        
+
 		$strQuery = "SELECT system_id
 					FROM "._dbprefix_."page,
 					"._dbprefix_."system
 					WHERE system_id = page_id
 					".($strFilter != "" ? " AND page_name like ? " : "" )."
-                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")."    
+                    ".($bitIncludeAlias ? "" : " AND page_type = 0 ")."
 					ORDER BY page_name ASC";
 
 		if($intStart == 0 && $intEnd == 0)
@@ -312,7 +312,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
 						 FROM "._dbprefix_."page_element,
 						      "._dbprefix_."element,
 						      "._dbprefix_."system
-						 WHERE system_prev_id=? 
+						 WHERE system_prev_id=?
 						   AND page_element_ph_element = element_name
 						   AND system_id = page_element_id
 						   ".( $bitJustActive ? "AND system_status = 1 " : "")."
@@ -345,21 +345,21 @@ class class_modul_pages_page extends class_model implements interface_model, int
      * @return bool
      */
 	public function deletePage() {
-        
+
         $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
             if($objOneElement instanceof class_modul_pages_page)
                 $objOneElement->deletePage();
-            
+
             if($objOneElement instanceof class_modul_pages_folder)
                 $objOneElement->deleteFolder();
         }
-        
-        
-        
+
+
+
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
-        
+
 	    class_logger::getInstance()->addLogRow("deleted ".$this->getObjectDescription(), class_logger::$levelInfo);
 
 	    //Get all Elements belonging to this page
@@ -574,7 +574,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
             return $this->getText("seite_bearbeiten", "pages", "admin");
         else if($strAction == $this->strActionDelete)
             return $this->getText("seite_loeschen", "pages", "admin");
-        
+
         return $strAction;
     }
 
@@ -677,7 +677,7 @@ class class_modul_pages_page extends class_model implements interface_model, int
     public function setStrLanguage($strLanguage) {
         $this->strLanguage = $strLanguage;
     }
-    
+
     public function getIntType() {
         return $this->intType;
     }

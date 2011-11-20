@@ -10,7 +10,7 @@
 /**
  * Portal-Class of the picture element
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_element_image extends class_element_portal implements interface_portal_element  {
 

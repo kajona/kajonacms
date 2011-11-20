@@ -11,7 +11,7 @@
  * Handles the loading of the pages - loads the elements, passes control to them and returns the complete
  * page ready for output
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_modul_pages_portal extends class_portal implements interface_portal {
 
@@ -25,7 +25,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 
 	public function __construct($arrElementData) {
         $arrModul = array();
-		$arrModul["name"] 			= "modul_pages";
+		$arrModul["name"] 			= "module_pages";
 		$arrModul["author"] 		= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 		= _pages_modul_id_;
 		$arrModul["modul"]			= "pages";
@@ -63,7 +63,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 
 		//check, if the template could be loaded
 		try {
-		    $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+		    $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
 		}
 		catch (class_exception $objException) {
             $bitErrorpage = true;
@@ -91,7 +91,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
                 $objPageData = class_modul_pages_page::getPageByName($strPagename);
 
                 try {
-                    $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+                    $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
                 }
                 catch (class_exception $objException) {
                     $strPagename = _pages_errorpage_;
@@ -156,7 +156,7 @@ class class_modul_pages_portal extends class_portal implements interface_portal 
 		}
 
 		//Load the template from the filesystem to get the placeholders
-        $strTemplateID = $this->objTemplate->readTemplate("/modul_pages/".$objPageData->getStrTemplate(), "", false, true);
+        $strTemplateID = $this->objTemplate->readTemplate("/module_pages/".$objPageData->getStrTemplate(), "", false, true);
         //bit include the masters-elements!!
         $arrRawPlaceholders = array_merge($this->objTemplate->getElements($strTemplateID, 0), $this->objTemplate->getElements($strTemplateID, 1));
 

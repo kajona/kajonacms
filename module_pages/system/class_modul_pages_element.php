@@ -10,8 +10,8 @@
 /**
  * Model for a element. This is the "raw"-element, not the element on a page
  * Elements DON'T have systemids!
- * 
- * @package modul_pages
+ *
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_element extends class_model implements interface_model  {
@@ -30,7 +30,7 @@ class class_modul_pages_element extends class_model implements interface_model  
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_pages";
+        $arrModul["name"] 				= "module_pages";
 		$arrModul["moduleId"] 			= _pages_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."element";
 		$arrModul["modul"]				= "pages";
@@ -80,7 +80,7 @@ class class_modul_pages_element extends class_model implements interface_model  
         $this->setSystemid($arrRow["element_id"]);
     }
 
-    
+
     /**
      * Updates the current object to the database
      * @overwrites class_model::updateObjectToDb()
@@ -108,7 +108,7 @@ class class_modul_pages_element extends class_model implements interface_model  
                             WHERE element_id= ?";
             return $this->objDB->_pQuery($strQuery, array( $this->getStrName(), $this->getStrClassPortal(), $this->getStrClassAdmin(), $this->getIntCachetime(), $this->getIntRepeat(), $this->getStrVersion(), $this->getSystemid()));
         }
-        
+
     }
 
     /**
@@ -175,7 +175,7 @@ class class_modul_pages_element extends class_model implements interface_model  
     }
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
-    
+
     public function getStrName() {
         return $this->strName;
     }
@@ -205,7 +205,7 @@ class class_modul_pages_element extends class_model implements interface_model  
         return $strName;
     }
 
-   
+
     public function setStrName($strName) {
         $this->strName = $strName;
     }

@@ -15,7 +15,7 @@
  *
  * e.g: $arrSearch["pages_elements"]["table_to_search"][] = "row_to_search"
  *
- * @package modul_pages
+ * @package module_pages
  */
 class class_modul_pages_search extends class_portal implements interface_search_plugin  {
 
@@ -179,7 +179,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
 		    //Build an or-statemement out of the columns
             foreach ($this->arrSearchterm as $strOneSeachterm)
                 $arrWhere[] = "tags_tag_name ".$strOneSeachterm;
-            
+
 		    $strWhere = "( ".implode(" OR ", $arrWhere). " ) ";
 
             $strQuery = "SELECT page_name, pageproperties_browsername, pageproperties_description
@@ -198,7 +198,7 @@ class class_modul_pages_search extends class_portal implements interface_search_
                            AND ".$strWhere."
                            AND tags_attribute = '".  dbsafeString($this->getPortalLanguage())."'  ";
 
-           
+
             $arrPages = $this->objDB->getArray($strQuery);
 
             //register the found pages

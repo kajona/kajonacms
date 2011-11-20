@@ -10,7 +10,7 @@
 /**
  * Interface for the portal-classes of page-elements
  *
- * @package modul_pages
+ * @package module_pages
  */
 interface interface_portal_element {
 

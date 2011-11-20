@@ -13,7 +13,7 @@
  * This class handles the admin-sided management of the pages
  * In this case, that are only the pages NOT yet the content
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_admin extends class_admin implements interface_admin  {
@@ -24,7 +24,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 			= "modul_pages";
+		$arrModule["name"] 			= "module_pages";
 		$arrModule["moduleId"] 		= _pages_modul_id_;
 		$arrModule["modul"]			= "pages";
 
@@ -397,7 +397,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
 
         //Load all the Templates available
         $objFilesystem = new class_filesystem();
-        $arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
+        $arrTemplates = $objFilesystem->getFilelist("/templates/module_pages", ".tpl");
 
         $arrTemplatesDD = array();
         if(count($arrTemplates) > 0)
@@ -1333,7 +1333,7 @@ class class_modul_pages_admin extends class_admin implements interface_admin  {
                 //fetch available templates
                 //Load the available templates
 				$objFilesystem = new class_filesystem();
-				$arrTemplates = $objFilesystem->getFilelist("/templates/modul_pages", ".tpl");
+				$arrTemplates = $objFilesystem->getFilelist("/templates/module_pages", ".tpl");
 				$arrTemplatesDD = array();
                 $arrTemplatesDD[-1] = $this->getText("plUpdateAll");
 				if(count($arrTemplates) > 0) {

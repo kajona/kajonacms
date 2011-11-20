@@ -11,7 +11,7 @@
  * This class manages all stuff related with folders, used by pages. Folders just exist in the database,
  * not in the filesystem
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_folder extends class_model implements interface_model, interface_versionable  {
@@ -23,7 +23,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
     private $strLanguage = "";
 
     private $strOldName = "";
-    
+
     /**
      * Constructor to create a valid object
      *
@@ -31,7 +31,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_pages";
+        $arrModul["name"] 				= "module_pages";
 		$arrModul["moduleId"] 			= _pages_folder_id_;
 		$arrModul["modul"]				= "pages";
         $arrModul["table"]       		= _dbprefix_."page_folderproperties";
@@ -128,7 +128,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		}
 
         return $this->objDB->_pQuery($strQuery, $arrParams) ;
-        
+
     }
 
     /**
@@ -141,7 +141,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	public static function getFolderList($strSystemid = "") {
 		if(!validateSystemid($strSystemid))
 			$strSystemid = class_modul_system_module::getModuleByName("pages")->getSystemid();
-            
+
 		//Get all folders
 		$strQuery = "SELECT system_id FROM "._dbprefix_."system
 		              WHERE system_module_nr=?
@@ -210,7 +210,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	public static function getPagesInFolder($strFolderid = "") {
 		if(!validateSystemid($strFolderid))
 			$strFolderid = class_modul_system_module::getModuleByName("pages")->getSystemid();
-            
+
 		$strQuery = "SELECT system_id
 						FROM "._dbprefix_."page as page,
 							 "._dbprefix_."system as system
@@ -256,7 +256,7 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 		return $arrReturn;
     }
 
-	
+
 
 	/**
 	 * Deletes a folder from the systems,
@@ -265,20 +265,20 @@ class class_modul_pages_folder extends class_model implements interface_model, i
 	 * @return bool
 	 */
 	public function deleteFolder() {
-        
+
         //scan subfolders
         $arrSubElements = class_modul_pages_folder::getPagesAndFolderList($this->getSystemid());
         foreach($arrSubElements as $objOneElement) {
             if($objOneElement instanceof class_modul_pages_page)
                 $objOneElement->deletePage();
-            
+
             if($objOneElement instanceof class_modul_pages_folder)
                 $objOneElement->deleteFolder();
         }
-        
+
         $objChanges = new class_modul_system_changelog();
         $objChanges->createLogEntry($this, $this->strActionDelete);
-        
+
 	    class_logger::getInstance()->addLogRow("deleted folder ".$this->getSystemid(), class_logger::$levelInfo);
         //delete the folder-properties
         $strQuery = "DELETE FROM "._dbprefix_."page_folderproperties WHERE folderproperties_id = ?";

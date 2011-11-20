@@ -10,7 +10,7 @@
 /**
  * Model for a element assigned to a page. NOT the raw-element!
  *
- * @package modul_pages
+ * @package module_pages
  * @author sidler@mulchprod.de
  */
 class class_modul_pages_pageelement extends class_model implements interface_model  {
@@ -116,7 +116,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $objElementdefinitionToCreate = class_modul_pages_element::getElement($this->getStrElement());
         if($objElementdefinitionToCreate == null)
             return false;
-        
+
         include_once(_adminpath_."/elemente/".$objElementdefinitionToCreate->getStrClassAdmin());
         //Build the class-name
         $strElementClass = str_replace(".php", "", $objElementdefinitionToCreate->getStrClassAdmin());
@@ -139,12 +139,12 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
         $this->objDB->flushQueryCache();
 
-        
+
 
         return true;
     }
 
-  
+
     /**
      * Updates the current object to the database
      * currently just updateing the internal title and the language
@@ -179,8 +179,8 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         //start by making a copy of the sysrecords, attaching them to the new page
         $objCommon = new class_modul_system_common($this->getSystemid());
         $objCommon->copyCurrentSystemrecord($strIdOfNewPageelement, $strNewPage);
-        
-        
+
+
         //fetch data of the current element
         $arrCurrentElement = $this->objDB->getPRow("SELECT * FROM ".$this->arrModule["table"]." WHERE page_element_id = ?", array( $this->getSystemid() ));
 
@@ -260,14 +260,14 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 
         //create an instance of the new element and return it
         $objNewElement = new class_modul_pages_pageelement($strIdOfNewPageelement);
-        
+
         //adopt the new sort id, since page-elements have a special order at each placeholder
         //As a special feature, we set the element as the last
         $strQuery = "UPDATE "._dbprefix_."system SET system_sort = ? WHERE system_id = ?";
         $this->objDB->flushQueryCache();
         $this->objDB->_pQuery($strQuery, array(count($objNewElement->getSortedElementsAtPlaceholder())-1 , $strIdOfNewPageelement ));
 
-        
+
         return $objNewElement;
     }
 
@@ -292,7 +292,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
         $longToday = $objDate->getLongTimestamp();
 
         $arrParams = array($strPageId, $strLanguage);
-        
+
 
         $strAnd = "";
         if($bitJustActive) {
@@ -377,7 +377,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
             $strAnd = "AND system_status = 1
                        AND ( system_date_start IS null OR (system_date_start = 0 OR system_date_start <= ?))
                        AND ( system_date_end IS null OR (system_date_end = 0 OR system_date_end >= ? )) ";
-            
+
             $arrParams[] = time();
             $arrParams[] = time();
         }
@@ -489,7 +489,7 @@ class class_modul_pages_pageelement extends class_model implements interface_mod
 		if($bitSortUp) {
 			//move the record to be shifted to the wanted pos
 			$strQuery = "UPDATE "._dbprefix_."system
-								SET system_sort= ? 
+								SET system_sort= ?
 								WHERE system_id= ? ";
 			$this->objDB->_pQuery($strQuery, array((int)$intPosition, $this->getSystemid() ) );
 
