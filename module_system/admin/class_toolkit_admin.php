@@ -11,7 +11,7 @@
 /**
  * Admin-Part of the toolkit-classes
  *
- * @package modul_system
+ * @package module_system
  */
 class class_toolkit_admin extends class_toolkit {
 
@@ -346,8 +346,8 @@ class class_toolkit_admin extends class_toolkit {
 
         return $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID, true);
     }
-    
-    
+
+
     /**
      * Returns a regular text-input field
      *
@@ -367,12 +367,12 @@ class class_toolkit_admin extends class_toolkit {
         $arrTemplate["value"] = $strValue;
         $arrTemplate["title"] = $strTitle;
         $arrTemplate["class"] = $strClass;
-        $arrTemplate["opener"] = getLinkAdminDialog("user", 
-                                              "userBrowser", 
-                                               "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""), 
-                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"), 
-                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"), 
-                                               "icon_externalBrowser.gif", 
+        $arrTemplate["opener"] = getLinkAdminDialog("user",
+                                              "userBrowser",
+                                               "&form_element=".$strName.($bitGroups ? "&allowGroup=1" : "").($bitBlockCurrentUser ? "&filter=current" : ""),
+                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"),
+                                               class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"),
+                                               "icon_externalBrowser.gif",
                                                class_carrier::getInstance()->getObjText()->getText("user_browser", "user", "admin"));
 
         $strJsVarName = uniStrReplace(array("[", "]"), array("", ""), $strName);
@@ -398,13 +398,13 @@ class class_toolkit_admin extends class_toolkit {
                                     ($bitGroups ? "true" : "false").
                                     ($bitBlockCurrentUser ? "&block=current" : "")."&filter=\" + sQuery ;
 	                };
-                    
+
                     userautocomplete.formatResult = function(oResultData, sQuery, sResultMatch) {
                         var sOutput = \"<span class='userSelectorAC' style='background-image: url(\"+oResultData[1]+\"); '>\"+sResultMatch+\"</span>\";
                         var sMarkup = (sResultMatch) ? sOutput : \"\";
                         return sMarkup;
                     };
-                    
+
                     var itemSelectHandler = function(sType, aArgs) {
                         var oData = aArgs[2]; // object literal of data for the result
                         if(document.getElementById('".$strName."_id') != null)
@@ -989,7 +989,7 @@ class class_toolkit_admin extends class_toolkit {
     public function listDeleteButton($strElementName, $strQuestion, $strLinkHref) {
         //place it into a standard-js-dialog
         $strDialog = $this->jsDialog(1);
-        
+
         $strElementName = uniStrReplace(array('\''), array('\\\''), $strElementName);
 
         $strQuestion = uniStrReplace("%%element_name%%", htmlToString($strElementName, true), $strQuestion);
@@ -1912,7 +1912,7 @@ class class_toolkit_admin extends class_toolkit {
         //process rows
         $strCurrentId = class_modul_system_aspect::getCurrentAspectId();
         $arrAspects = class_modul_system_aspect::getAllAspects(true);
-        
+
         $intNrOfAspects = 0;
         foreach($arrAspects as $objSingleAspect) {
             if($objSingleAspect->rightView()) {
@@ -2085,7 +2085,7 @@ class class_toolkit_admin extends class_toolkit {
             $strId = generateSystemid();
         return $this->objTemplate->fillTemplate(array("content" => $strContent, "class" => $strClass, "systemid" => $strId, "highlightid" =>$strHighlightId), $strTemplateID);
     }
-    
+
     //---contect menues ---------------------------------------------------------------------------------
 
     /**
@@ -2093,19 +2093,19 @@ class class_toolkit_admin extends class_toolkit {
      * Each entry is an array with the keys
      *   array("name" => "xx", "onclick" => "xx");
      * A menu may be shown by calling
-     * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this) 
+     * KAJONA.admin.contextMenu.showElementMenu('$strIdentifier', this)
      * whereas this is the js-element the menu should be attached to.
-     * 
+     *
      * @since 3.4.1
-     * @param string $strIdentifier 
+     * @param string $strIdentifier
      * @param string $arrEntries
-     * @return string 
+     * @return string
      */
     public function registerMenu($strIdentifier, $arrEntries) {
         $strEntries = "";
         foreach($arrEntries as $arrOneEntry)
             $strEntries .= "{elementName:'".$arrOneEntry["name"]."', elementAction:'".uniStrReplace("'", "\'", $arrOneEntry["onclick"])."'},";
-        
+
         $strTemplateID = $this->objTemplate->readTemplate("/elements.tpl", "contextmenu_wrapper");
         $arrTemplate = array();
         $arrTemplate["id"] = $strIdentifier;
