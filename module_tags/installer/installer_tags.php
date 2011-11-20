@@ -10,7 +10,7 @@
 /**
  * Class providing an install for the tags module
  *
- * @package modul_tags
+ * @package module_tags
  */
 class class_installer_tags extends class_installer_base implements interface_installer {
 

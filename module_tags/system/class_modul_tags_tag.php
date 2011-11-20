@@ -14,13 +14,13 @@
  * - Acting as a wrapper to all tag-handling related methods such as assigning a tag
  *
  *
- * @package modul_tags
+ * @package module_tags
  * @author sidler@mulchprod.de
  * @since 3.4
  */
 class class_modul_tags_tag extends class_model implements interface_model, interface_sortable_rating  {
 
-    private $strName;  
+    private $strName;
 
     /**
      * Constructor to create a valid object
@@ -29,7 +29,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_tags";
+        $arrModul["name"] 				= "module_tags";
 		$arrModul["moduleId"] 			= _tags_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."tags_tag";
 		$arrModul["modul"]				= "tags";
@@ -63,7 +63,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      *
      */
     public function initObject() {
-        $strQuery = "SELECT * 
+        $strQuery = "SELECT *
 		   			 FROM ".$this->arrModule["table"]."
 					 WHERE tags_tag_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -76,14 +76,14 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
      * @return bool
      */
     protected function updateStateToDb() {
-        
-        $strQuery = "UPDATE ".$this->arrModule["table"]." SET 
+
+        $strQuery = "UPDATE ".$this->arrModule["table"]." SET
                     	    tags_tag_name = ?
 					  WHERE tags_tag_id = ?";
         return $this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getSystemid()));
     }
 
-    
+
     /**
      * Deletes the tag with the given systemid from the system
      *
@@ -176,7 +176,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
             $strWhere = "AND tags_attribute = ?";
             $arrParams[] = $strAttribute;
         }
-        
+
         $strQuery = "SELECT DISTINCT(tags_tagid)
                        FROM "._dbprefix_."tags_member,
                             "._dbprefix_."tags_tag
@@ -246,7 +246,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
                         AND tags_tag_id = system_id
                         AND system_status = 1
                    ORDER BY tags_tag_name ASC";
-        
+
         $arrRows = class_carrier::getInstance()->getObjDB()->getPArray($strQuery, array());
         $arrReturn = array();
         foreach($arrRows as $arrSingleRow) {
@@ -284,7 +284,7 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
     public function assignToSystemrecord($strTargetSystemid, $strAttribute = null) {
         if($strAttribute == null)
             $strAttribute = "";
-        
+
         $this->objDB->flushQueryCache();
 
         //check of not already set
@@ -323,11 +323,11 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
 
     /**
      * Searches for tags assigned to the systemid to be deleted.
-     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid) 
+     * Overwrites class_model::doAdditionalCleanupsOnDeletion($strSystemid)
      *
      * @param string $strSystemid
      * @return bool
-     * 
+     *
      */
     public function doAdditionalCleanupsOnDeletion($strSystemid) {
         $bitReturn = true;
@@ -339,15 +339,15 @@ class class_modul_tags_tag extends class_model implements interface_model, inter
         $objCommon = new class_modul_system_common($strSystemid);
         if($objCommon->getIntModuleNr() == _tags_modul_id_)
             return true;
-            
+
         //delete memberships. Fire a plain query, faster then searching.
         $strQuery = "DELETE FROM "._dbprefix_."tags_member WHERE tags_systemid=?";
         $bitReturn = $this->objDB->_pQuery($strQuery, array($strSystemid));
 
         return $bitReturn;
     }
-    
-    
+
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
 

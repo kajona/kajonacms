@@ -11,7 +11,7 @@
 /**
  * Interface of the tags samplecontent
  *
- * @package modul_tags
+ * @package module_tags
  */
 class class_installer_sc_tags implements interface_sc_installer  {
 
@@ -53,7 +53,7 @@ class class_installer_sc_tags implements interface_sc_installer  {
             $strSearchresultsId = $objPage->getSystemid();
             $strReturn .= "ID of new page: ".$strSearchresultsId."\n";
             $strReturn .= "Adding tags-element to new page\n";
-            
+
             if(class_modul_pages_element::getElement("tags") != null) {
                 $objPagelement = new class_modul_pages_pageelement();
                 $objPagelement->setStrPlaceholder("mixed3_flash|mediaplayer|tags|eventmanager");

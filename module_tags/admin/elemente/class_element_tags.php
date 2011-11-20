@@ -11,7 +11,7 @@
 /**
  * Class to handle the admin-stuff of the tags-element
  *
- * @package modul_tags
+ * @package module_tags
  *
  */
 class class_element_tags extends class_element_admin implements interface_admin_element {

@@ -12,7 +12,7 @@
  * No classical functionality, rather a list of helper-methods, e.g. in order to
  * create the form to tag content.
  *
- * @package modul_tags
+ * @package module_tags
  * @author sidler@mulchprod.de
  */
 class class_modul_tags_admin extends class_admin implements interface_admin {
@@ -23,7 +23,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 				= "modul_tags";
+		$arrModule["name"] 				= "module_tags";
 		$arrModule["moduleId"] 			= _tags_modul_id_;
 		$arrModule["modul"]				= "tags";
 
@@ -31,7 +31,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
 		parent::__construct($arrModule);
 	}
 
-	
+
 
     public function getRequiredFields() {
         if($this->getAction() == "saveTag")
@@ -40,7 +40,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
             parent::getRequiredFields();
     }
 
-	
+
 
 	protected function getOutputModuleNavi() {
 	    $arrReturn = array();
@@ -110,7 +110,7 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
             $objTag = new class_modul_tags_tag($this->getSystemid());
             if(!$objTag->deleteTag())
                 throw new class_exception("Error deleting object from db", class_exception::$level_ERROR);
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else
@@ -150,17 +150,17 @@ class class_modul_tags_admin extends class_admin implements interface_admin {
      * @return string "" in case of success
      */
     protected function actionSaveTag() {
-        
-        if(!$this->validateForm()) 
+
+        if(!$this->validateForm())
             return $this->actionEditTag();
-            
+
         $strReturn = "";
 		if($this->objRights->rightEdit($this->getSystemid())) {
 			//Collect data to save to db
 			$objTag = new class_modul_tags_tag($this->getSystemid());
 			$objTag->setStrName($this->getParam("tag_name"), true);
             $objTag->updateObjectToDb();
-            
+
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"]));
 		}
 		else

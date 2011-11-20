@@ -14,7 +14,7 @@
  * and loading the list of tags.
  * Provides capabilities to search tags, too.
  *
- * @package modul_tags
+ * @package module_tags
  * @since 3.3.1.1
  * @author sidler@mulchprod.de
  */
@@ -26,7 +26,7 @@ class class_modul_tags_admin_xml extends class_admin implements interface_xml_ad
 	 */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 			= "modul_tags";
+		$arrModul["name"] 			= "module_tags";
 		$arrModul["moduleId"] 		= _tags_modul_id_;
 		$arrModul["modul"]			= "tags";
 
