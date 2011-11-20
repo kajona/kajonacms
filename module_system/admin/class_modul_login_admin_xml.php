@@ -12,7 +12,7 @@
  * In order to login, create a request schemed like xml.php?admin=1&module=login&action=login
  * Attach the params username, password either via GET params, or even better by POST params).
  *
- * @package modul_system
+ * @package module_system
  */
 class class_modul_login_admin_xml extends class_admin implements interface_xml_admin  {
 
@@ -22,14 +22,14 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 		$arrModule["author"] 		= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 		= _user_modul_id_;
 		$arrModule["modul"]			= "login";
-        
+
 		parent::__construct($arrModule);
 
         if($this->getAction() == "list")
             $this->setAction("login");
 	}
 
-	
+
     /**
      * Logs the current user into the system
      * @return string
@@ -60,28 +60,28 @@ class class_modul_login_admin_xml extends class_admin implements interface_xml_a
 		$this->objSession->logout();
         return "<message><success>".xmlSafeString($this->getText("logout_xml", "system"))."</success></message>";
 	}
-    
-    
+
+
     /**
      * Generates the wadl file for the current module
-     * 
+     *
      * @xml
      */
     protected function actionWADL() {
         $objWadl = new class_wadlgenerator("admin", "login");
         $objWadl->addIncludeGrammars("http://apidocs.kajona.de/xsd/message.xsd");
-        
+
         $objWadl->addMethod(
-                true, "login", 
+                true, "login",
                 array(
                     array("username", "xsd:string", true),
                     array("password", "xsd:string", true)
-                ), 
-                array(), 
+                ),
+                array(),
                 array(
                     array("application/xml", "message")
                 ));
-        
+
         $objWadl->addMethod(true, "logout", array());
         return $objWadl->getDocument();
     }

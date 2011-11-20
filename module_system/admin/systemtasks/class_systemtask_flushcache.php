@@ -10,7 +10,7 @@
 /**
  * Flushes the entries from the systemwide cache
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_flushcache extends class_systemtask_base implements interface_admin_systemtask {
 

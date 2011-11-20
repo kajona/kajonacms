@@ -9,7 +9,7 @@
 /**
  * This class does all the template stuff as loading, parsing, etc..
  *
- * @package modul_system
+ * @package module_system
  */
 class class_template {
 	private $arrModul = array();

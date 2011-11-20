@@ -12,7 +12,7 @@
  * An instance of this class is used by the admin & portal object to invoke common database based methods.
  * Change with care!
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 abstract class class_root {
@@ -71,14 +71,14 @@ abstract class class_root {
 
 
     //--- fields to be synchronized with the database ---
-    
+
     /**
-     * Boolean indicator to trigger the loading of the current records details. 
+     * Boolean indicator to trigger the loading of the current records details.
      * If not accessed, they won't be loaded: lazy loading.
      * @var bool
      */
     private $bitDetailsLoaded = false;
-    
+
     /**
      * The records current systemid
      * @var string
@@ -91,7 +91,7 @@ abstract class class_root {
     private $strPrevId = -1;
     /**
      * The old prev-id, used to track hierarchical changes -> requires a rebuild of the rights-table
-     * @var type 
+     * @var type
      */
     private $strOldPrevId = -1;
     /**
@@ -111,7 +111,7 @@ abstract class class_root {
     private $strOwner;
     /**
      * The id of the user last who did the last changes to the current record
-     * @var type 
+     * @var type
      */
     private $strLmUser;
     /**
@@ -123,14 +123,14 @@ abstract class class_root {
     private $intLmTime;
     /**
      * The id of the user locking the current record, emtpy otherwise
-     * @var string 
+     * @var string
      */
     private $strLockId;
     /**
      * Time the current locking was triggered
      * ATTENTION: time() based, so 32 bit integer
      * @todo migrate to long-timestamp
-     * @var int 
+     * @var int
      */
     private $intLockTime;
     /**
@@ -140,7 +140,7 @@ abstract class class_root {
     private $intRecordStatus;
     /**
      * Human readable comment describing the current record
-     * @var type 
+     * @var type
      */
     private $strRecordComment;
     /**
@@ -148,10 +148,10 @@ abstract class class_root {
      * @var long
      */
     private $longCreateDate;
-    
+
     //---
-    
-    
+
+
 	/**
 	 * Constructor
 	 *
@@ -196,32 +196,32 @@ abstract class class_root {
 
 		//And keep the action
 		$this->strAction = $this->getParam("action");
-        
+
         $this->strSystemid = $strSystemid;
 	}
-    
+
     /**
      * Inits the current record with the system-fields
      * @todo: add dates?
-     * @param type $strSystemid 
+     * @param type $strSystemid
      */
     private function internalInit($strSystemid) {
-        
+
         if($this->bitDetailsLoaded == true)
             return;
-        
-        
+
+
         if(validateSystemid($strSystemid)) {
-            
+
             $this->bitDetailsLoaded = true;
-            
+
             $this->strSystemid = $strSystemid;
-            
-            $strQuery = "SELECT * 
+
+            $strQuery = "SELECT *
                            FROM "._dbprefix_."system
                           WHERE system_id = ? ";
             $arrRow = $this->objDB->getPRow($strQuery, array($strSystemid));
-            
+
             if(count($arrRow) > 3) {
                 //$this->setStrSystemid($arrRow["system_id"]);
                 $this->strPrevId =$arrRow["system_prev_id"];
@@ -235,14 +235,14 @@ abstract class class_root {
                 $this->intRecordStatus = $arrRow["system_status"];
                 $this->strRecordComment = $arrRow["system_comment"];
                 $this->longCreateDate = $arrRow["system_create_date"];
-                
+
                 $this->strOldPrevId = $this->strPrevId;
-                
-                
+
+
             }
         }
     }
-    
+
     /**
      * Forces to reinit the object from the database
      *
@@ -252,7 +252,7 @@ abstract class class_root {
         $this->internalInit($this->getStrSystemid());
         $this->initObject();
     }
-    
+
     // --- DATABASE-SYNCHRONIZATION -------------------------------------------------------------------------
 
     /**
@@ -331,7 +331,7 @@ abstract class class_root {
 
         //new comment?
         $this->setStrRecordComment($this->getObjectDescription());
-            
+
         //save back to the database
         $bitCommit = $bitCommit && $this->updateSystemrecord();
 
@@ -397,36 +397,36 @@ abstract class class_root {
     protected function getObjectDescription() {
         return $this->getStrRecordComment();
     }
-    
+
     /**
      * Updates the current record to the database and saves all relevant fields.
      * Please note that this method is triggered internally.
-     * 
+     *
      * @return bool
      * @final
-     * @since 3.4.1 
+     * @since 3.4.1
      */
     protected final function updateSystemrecord() {
-        
+
         if(!validateSystemid($this->getSystemid()))
             return true;
-        
+
         class_logger::getInstance()->addLogRow("updated systemrecord ".$this->getStrSystemid()." data", class_logger::$levelInfo);
-        
-        $strQuery = "UPDATE "._dbprefix_."system 
+
+        $strQuery = "UPDATE "._dbprefix_."system
                         SET system_prev_id = ?,
-                            system_module_nr = ?, 	
-                            system_sort = ?, 	
-                            system_owner = ?, 	
-                            system_lm_user = ?, 	
-                            system_lm_time = ?, 	
-                            system_lock_id = ?, 	
-                            system_lock_time = ?, 	
-                            system_status = ?, 	
-                            system_comment = ?, 	
+                            system_module_nr = ?,
+                            system_sort = ?,
+                            system_owner = ?,
+                            system_lm_user = ?,
+                            system_lm_time = ?,
+                            system_lock_id = ?,
+                            system_lock_time = ?,
+                            system_status = ?,
+                            system_comment = ?,
                             system_create_date = ?
                       WHERE system_id = ? ";
-        
+
         $bitReturn = $this->objDB->_pQuery($strQuery, array(
                     $this->getStrPrevId(),
                     (int)$this->getIntModuleNr(),
@@ -441,18 +441,18 @@ abstract class class_root {
                     $this->getLongCreateDate(),
                     $this->getSystemid()
         ));
-        
+
         $this->objDB->flushQueryCache();
-        
+
         if($this->strOldPrevId != $this->strPrevId) {
             $this->objDB->flushQueryCache();
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($this->getSystemid());
         }
-        
+
         return $bitReturn;
     }
-    
+
 
 	/**
 	 * Generates a new SystemRecord and, if needed, the corresponding record in the rights-table (here inherintance is default)
@@ -470,9 +470,9 @@ abstract class class_root {
 		//Do we need a new SystemID?
 		if($strSystemId == "")
 			$strSystemId = generateSystemid();
-        
+
         $this->setStrSystemid($strSystemId);
-        
+
 		//Given a ModuleNr?
 		if($intModulNr == "")
 			$intModulNr = $this->arrModule["moduleId"];
@@ -484,7 +484,7 @@ abstract class class_root {
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
-        
+
         $strComment = uniStrTrim($strComment, 253);
 
 
@@ -492,18 +492,18 @@ abstract class class_root {
 		$strQuery = "INSERT INTO "._dbprefix_."system
 					 ( system_id, system_prev_id, system_module_nr, system_owner, system_create_date, system_lm_user, system_lm_time, system_status, system_comment, system_sort) VALUES
 					 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
 		//Send the query to the db
 		$this->objDB->_pQuery($strQuery, array(
-            $strSystemId, 
-            $strPrevId, 
-            (int)$intModulNr, 
-            $this->objSession->getUserID(), 
-            class_date::getCurrentTimestamp(), 
-            $this->objSession->getUserID(), 
-            time(), 
-            (int)$intStatus, 
-            $strComment, 
+            $strSystemId,
+            $strPrevId,
+            (int)$intModulNr,
+            $this->objSession->getUserID(),
+            class_date::getCurrentTimestamp(),
+            $this->objSession->getUserID(),
+            time(),
+            (int)$intStatus,
+            $strComment,
             (int)($intSiblings+1)
         ));
 
@@ -512,14 +512,14 @@ abstract class class_root {
 			$strQuery = "INSERT INTO "._dbprefix_."system_right
 						 (right_id, right_inherit) VALUES
 						 (?, 1)";
-            
+
 			$this->objDB->_pQuery($strQuery, array($strSystemId));
             //update rights to inherit
             $this->objRights->setInherited(true, $strSystemId);
 		}
 
 		class_logger::getInstance()->addLogRow("new system-record created: ".$strSystemId ." (".$strComment.")", class_logger::$levelInfo);
-        
+
         $this->objDB->flushQueryCache();
         $this->internalInit($this->getSystemid());
 
@@ -551,7 +551,7 @@ abstract class class_root {
 
         if($objSpecialDate != null && $objSpecialDate instanceof class_date)
             $intSpecial = $objSpecialDate->getLongTimestamp();
-        
+
 	    $strQuery = "INSERT INTO "._dbprefix_."system_date
 	                  (system_date_id, system_date_start, system_date_end, system_date_special) VALUES
 	                  (?, ?, ?, ?)";
@@ -591,11 +591,11 @@ abstract class class_root {
 	    return $this->objDB->_pQuery($strQuery, array($intStart, $intEnd, $intSpecial, $strSystemid));
 	}
 
-    
 
 
-	
-    
+
+
+
     // --- MISC ---------------------------------------------------------------------------------------------
 
     /**
@@ -614,8 +614,8 @@ abstract class class_root {
     public function doAdditionalActionsOnStatusChange($strSystemid) {
         return true;
 	}
-    
-    
+
+
     // --- RIGHTS-METHODS -----------------------------------------------------------------------------------
 
     /**
@@ -812,7 +812,7 @@ abstract class class_root {
 					 FROM "._dbprefix_."system
 					 WHERE system_prev_id=?
                      ORDER BY system_sort ASC";
-        
+
         $arrReturn = array();
         $arrTemp =  $this->objDB->getPArray($strQuery, array($strSystemid));
 
@@ -885,7 +885,7 @@ abstract class class_root {
 
         //flush the cache
         $this->flushCompletePagesCache();
-        
+
         if($strIdToShift == $this->getSystemid()) {
             $this->objDB->flushQueryCache();
             $this->internalInit($this->getSystemid());
@@ -990,7 +990,7 @@ abstract class class_root {
 
         //flush the cache
         $this->flushCompletePagesCache();
-        
+
         if($strIdToSet == $this->getSystemid()) {
             $this->objDB->flushQueryCache();
             $this->internalInit($this->getSystemid());
@@ -1169,7 +1169,7 @@ abstract class class_root {
 		$strTempId = $strSystemid;
 		while($strTempId != "0" && $strTempId != "" && $strTempId != -1 && $strTempId != $strStopSystemid) {
 			$arrReturn[] = $strTempId;
-            
+
             $objCommon = new class_modul_system_common($strTempId);
 			$strTempId = $objCommon->getPrevId();
 		}
@@ -1262,7 +1262,7 @@ abstract class class_root {
     /**
      * Returns the language to display contents on the portal
      *
-     * @return string 
+     * @return string
      */
     public final function getStrPortalLanguage() {
         $objLanguage = new class_modul_languages_language();
@@ -1277,18 +1277,18 @@ abstract class class_root {
      * Returns the language to display contents or to edit contents on adminside
      * NOTE: THIS ARE THE CONTENTS, NOT THE TEXTS
      *
-     * @return string 
+     * @return string
      */
     public final function getStrAdminLanguageToWorkOn() {
         $objLanguage = new class_modul_languages_language();
         return $objLanguage->getAdminLanguage();
     }
 
-    
-    
-    
+
+
+
     // --- GETTERS / SETTERS ----------------------------------------------------------------------------
-    
+
     /**
 	 * Sets the current SystemID
 	 *
@@ -1299,7 +1299,7 @@ abstract class class_root {
 		if(validateSystemid($strID)) {
             if($this->strSystemid != $strID)
                 $this->bitDetailsLoaded = false;
-            
+
 			$this->strSystemid = $strID;
 			return true;
 		}
@@ -1323,7 +1323,7 @@ abstract class class_root {
 	public function getSystemid() {
 		return $this->strSystemid;
 	}
-    
+
     public function getStrSystemid() {
         return $this->strSystemid;
     }
@@ -1332,11 +1332,11 @@ abstract class class_root {
         if(validateSystemid($strSystemid)) {
             if($this->strSystemid != $strSystemid)
                 $this->bitDetailsLoaded = false;
-            
+
             $this->strSystemid = $strSystemid;
         }
     }
-    
+
     /**
 	 * Gets the Prev-ID of a record
 	 *
@@ -1347,7 +1347,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return $this->getStrPrevId();
 	}
 
@@ -1362,18 +1362,18 @@ abstract class class_root {
 	public function setPrevId($strNewPrevId, $strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         $strOldPrevid = $this->getStrPrevId();
-        
+
         $this->setStrPrevId($strNewPrevId);
         $this->updateObjectToDb();
-        
+
         if($strNewPrevId != $strOldPrevid) {
             $this->objDB->flushQueryCache();
             $this->objRights->flushRightsCache();
             $this->objRights->rebuildRightsStructure($strSystemid);
         }
-        
+
 		return true;
 	}*/
 
@@ -1386,7 +1386,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         $this->strPrevId = $strPrevId;
     }
-    
+
     /**
 	 * Gets the module id / module nr of a systemRecord
 	 *
@@ -1397,7 +1397,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return $this->getIntModuleNr();
 	}
 
@@ -1430,7 +1430,7 @@ abstract class class_root {
 	public function getLastEditUser($strSystemid = "") {
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         if(validateSystemid($this->getStrLmUser())) {
             $objUser = new class_modul_user_user($this->getStrLmUser());
             return $objUser->getStrUsername();
@@ -1438,12 +1438,12 @@ abstract class class_root {
 		else
 		    return "System";
 	}
-    
+
     public function getStrLmUser() {
         $this->internalInit($this->strSystemid);
         return $this->strLmUser;
     }
-    
+
     /**
 	 * Returns the id of the user who last edited the record
 	 *
@@ -1494,7 +1494,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         return $this->longCreateDate;
     }
-    
+
     /**
      * Returns the creation-date of the current record
      *
@@ -1505,7 +1505,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return new class_date($this->getLongCreateDate());
     }
 
@@ -1523,7 +1523,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         $this->strOwner = $strOwner;
     }
-    
+
     /**
      * Gets the id of the user currently being the owner of the record
      *
@@ -1534,7 +1534,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return $this->getStrOwner();
     }
 
@@ -1549,7 +1549,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         $this->setStrOwner($strOwner);
         return $this->updateSystemrecord();
     }
@@ -1558,7 +1558,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         return $this->intRecordStatus;
     }
-    
+
     /**
 	 * Gets the status of a systemRecord
 	 *
@@ -1569,10 +1569,10 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return $this->getIntRecordStatus();
 	}
-    
+
     /**
      * If a defined status is passed, it will be set. Ohterwise, it
 	 * negates the status of a systemRecord.
@@ -1594,36 +1594,36 @@ abstract class class_root {
             else
                 $intNewStatus = 0;
         }
-		
+
         $bitReturn = $this->setIntRecordStatus($intNewStatus);
         $this->updateSystemrecord();
-        
+
         return $bitReturn;
 	}
 
     /**
      * Sets the internal status. Triggers a db-update and fires a status-changed event
-     * 
+     *
      * @param int $intRecordStatus
-     * @param bool $bitFireStatusChangeEvent 
+     * @param bool $bitFireStatusChangeEvent
      */
     public function setIntRecordStatus($intRecordStatus, $bitFireStatusChangeEvent = true) {
         $this->internalInit($this->strSystemid);
         $intPrevStatus = $this->intRecordStatus;
         $this->intRecordStatus = $intRecordStatus;
-        
+
         $bitReturn = true;
-        
+
         if($intPrevStatus != $intRecordStatus && $intPrevStatus != -1) {
             $this->updateSystemrecord();
             if($bitFireStatusChangeEvent)
                 $bitReturn = $this->additionalCallsOnStatuschange($this->getSystemid());
         }
-        
+
         return $bitReturn;
-        
+
     }
-    
+
     /**
 	 * Gets comment saved with the record
 	 *
@@ -1634,7 +1634,7 @@ abstract class class_root {
         $this->internalInit($this->strSystemid);
         if($strSystemid != "")
             throw new class_exception("unsupported param @ ".__METHOD__, class_exception::$level_FATALERROR);
-        
+
         return $this->getStrRecordComment();
 	}
 
@@ -1704,7 +1704,7 @@ abstract class class_root {
 	public final function getAction() {
 	    return (string)$this->strAction;
 	}
-    
+
     /**
 	 * Returns the current instance of the class_rights
 	 *
@@ -1713,7 +1713,7 @@ abstract class class_root {
 	public function getObjRights() {
 	    return $this->objRights;
 	}
-    
+
     /**
      * Returns an instance of the lockmanager, initialized
      * with the current systemid.
@@ -1723,7 +1723,7 @@ abstract class class_root {
     public function getLockManager() {
         return new class_lockmanager($this->getSystemid());
     }
-    
+
 
 }
 ?>

@@ -10,7 +10,7 @@
 /**
  * Restores the database from the filesystem using the current db-driver
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_dbimport extends class_systemtask_base implements interface_admin_systemtask {
 
@@ -29,7 +29,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
     public function getGroupIdentifier() {
         return "database";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
@@ -37,7 +37,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
     public function getStrInternalTaskName() {
         return "dbimport";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
@@ -45,7 +45,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
     public function getStrTaskName() {
         return $this->getText("systemtask_dbimport_name");
     }
-    
+
     /**
      * @see interface_admin_systemtask::executeTask()
      * @return string
@@ -59,7 +59,7 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
 
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
     	$strReturn = "";
@@ -71,13 +71,13 @@ class class_systemtask_dbimport extends class_systemtask_base implements interfa
             $arrOptions[$strOneFile] = $strOneFile;
 
         $strReturn .= $this->objToolkit->formInputDropdown("dbImportFile", $arrOptions, $this->getText("systemtask_dbimport_file"));
-         
+
         return $strReturn;
     }
-    
+
     /**
      * @see interface_admin_systemtask::getSubmitParams()
-     * @return string 
+     * @return string
      */
     public function getSubmitParams() {
         return "&dbImportFile=".$this->getParam("dbImportFile");

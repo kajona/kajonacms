@@ -9,27 +9,27 @@
 
 /**
  * Objects to be sortable by the rating have to implement this interface.
- * E.g. needed to create top-lists. 
+ * E.g. needed to create top-lists.
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_sortable_rating {
 
 
 	/**
 	 * Returns the rating for the current object
-	 * 
+	 *
 	 * @return float
 	 */
 	public function getFloatRating();
-	
+
 	/**
 	 * Returns the number of ratings the current file received
-	 * 
+	 *
 	 * @return int
 	 */
 	public function getIntRatingHits();
-	
+
 
 }
 ?>

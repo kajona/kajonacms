@@ -2,7 +2,7 @@
 /**
  * Default color palette, parametrized for kajona @ ez components.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4
  */

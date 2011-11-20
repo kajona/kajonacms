@@ -10,7 +10,7 @@
 /**
  * Resizes and compresses all uploaded pictures in /portal/pics/upload to save disk space
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_compresspicuploads extends class_systemtask_base implements interface_admin_systemtask {
 
@@ -32,15 +32,15 @@ class class_systemtask_compresspicuploads extends class_systemtask_base implemen
         @ini_set("max_execution_time", "3600");
     }
 
-    
+
     /**
      * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string 
+     * @return string
      */
     public function getGroupIdentifier() {
         return "";
     }
-    
+
 
     /**
      * @see interface_admin_systemtask::getStrInternalTaskName()

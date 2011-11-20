@@ -14,7 +14,7 @@
  * still be accessible directly due to sufficient permissions.
  * This means aspects are rather some kind of view-filter then business-logic filters.
  *
- * @package modul_system
+ * @package module_system
  * @since 3.4
  * @author sidler@mulchprod.de
  */
@@ -33,7 +33,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."aspects";
 		$arrModul["modul"]				= "system";
@@ -55,7 +55,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
         return array(_dbprefix_."aspects" => "aspect_id");
     }
 
-    
+
     /**
      * @see class_model::getObjectDescription();
      * @return string
@@ -94,7 +94,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
         if(count($arrObjAspects) == 0 ) {
         	$this->setBitDefault(1);
         }
-        
+
         $strQuery = "UPDATE ".$this->arrModule["table"]."
                         SET aspect_name = ?,
                             aspect_default = ?
@@ -139,7 +139,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array());
 
         return (int)$arrRow["COUNT(*)"];
-    	
+
     }
 
 
@@ -191,8 +191,8 @@ class class_modul_system_aspect extends class_model implements interface_model  
 			return false;
 		}
     }
-    
-    
+
+
 
     /**
      * Returns the default aspect, defined in the admin.
@@ -245,7 +245,7 @@ class class_modul_system_aspect extends class_model implements interface_model  
         }
     }
 
-  
+
     /**
      * Returns the aspect currently selected by the user.
      * If no aspect was selected before, the default aspect is returned instead.
@@ -311,10 +311,10 @@ class class_modul_system_aspect extends class_model implements interface_model  
     public function getStrName() {
         return $this->strName;
     }
-    
+
     public function getBitDefault() {
         return $this->bitDefault;
     }
-  
+
 }
 ?>

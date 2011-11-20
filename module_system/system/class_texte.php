@@ -11,7 +11,7 @@
 /**
  * Class managing access to textfiles
  *
- * @package modul_system
+ * @package module_system
  */
 class class_texte {
 	private $arrModul;
@@ -25,16 +25,16 @@ class class_texte {
 
     /**
      * Identifier of the fallback-language, taken into account if loading an entry using the current language failed.
-     * 
-     * @var string 
+     *
+     * @var string
      */
 	private $strFallbackLanguage = "en";
-    
+
     /**
-     * The commons-name indicates the fake-module-name of lang-files bundled for common usage (in order to 
+     * The commons-name indicates the fake-module-name of lang-files bundled for common usage (in order to
      * reduce duplicate lang-entries).
-     * 
-     * @var type 
+     *
+     * @var type
      */
     private $strCommonsName = "commons";
 	private $arrTexts;
@@ -45,7 +45,7 @@ class class_texte {
      * @var array
      */
     private $arrFallbackTextEntrys = array();
-    
+
 
 	private static $objText = null;
 
@@ -120,16 +120,16 @@ class class_texte {
 			$strReturn = $this->arrTexts[$strArea.$this->strLanguage][$strModule][$strText];
 		}
 		else {
-            
+
             //try to load the entry in the commons-list
             if(!isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName]))
                 $this->loadText($this->strCommonsName, $strArea);
-            
+
             if(isset($this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText])) {
                 $strReturn = $this->arrTexts[$strArea.$this->strLanguage][$this->strCommonsName][$strText];
             }
             else {
-            
+
                 //Try to find the text using the fallback language
                 $strReturn = $this->loadFallbackPlaceholder($strModule, $strArea, $strText);
             }

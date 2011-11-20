@@ -13,7 +13,7 @@
  * Since Kajona 3.4.1 this class is deprecated. All methods have been moved to the appropriate source-modules.
  * It only remaines as a switch between different browsers.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @deprecated
  */
@@ -45,7 +45,7 @@ class class_modul_folderview_admin extends class_admin  implements interface_adm
         if ($this->getParam("CKEditorFuncNum") != "") {
             $strReturn .= "<script type=\"text/javascript\">window.opener.KAJONA.admin.folderview.selectCallbackCKEditorFuncNum = ".(int)$this->getParam("CKEditorFuncNum").";</script>";
         }
-        
+
 		$intCounter = 1;
         $strReturn .= $this->objToolkit->listHeader();
 

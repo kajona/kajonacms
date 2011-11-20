@@ -39,10 +39,10 @@
  * So make sure to pass the later operations as an additional cache param when creating an instance of class_image:
  * $objImage = new class_image($strInlayText.$intTextXPos.$intTextYPos).
  * This guarantees a valid cachename based on both operations, the resizing and the text-overlay.
- * 
+ *
  * A hint regarding overlays: Right now, only PNGs are supported for transparent overlays. GIFs are no longer supported.
  *
- * @package modul_system
+ * @package module_system
  */
 class class_image {
 	private $arrModul;
@@ -664,7 +664,7 @@ class class_image {
 		//load the other image into the system using another instance
 		$objOverlayImage = new class_image();
 		if($objOverlayImage->loadImage($strImage)) {
-            
+
             imagealphablending($this->objImage,true);
 		    //merge pics
             $objOverlayResource = $objOverlayImage->getImageResource();

@@ -11,7 +11,7 @@
 /**
  * Dumps the database to the filesystem using the current db-driver
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_dbdump extends class_systemtask_base implements interface_admin_systemtask {
 
@@ -25,10 +25,10 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
 	public function __construct() {
 		parent::__construct();
     }
-    
+
     /**
      * @see interface_admin_systemtask::getGroupIdenitfier()
-     * @return string 
+     * @return string
      */
     public function getGroupIdentifier() {
         return "database";
@@ -41,7 +41,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     public function getStrInternalTaskName() {
     	return "dbdump";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
@@ -49,7 +49,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     public function getStrTaskName() {
     	return $this->getText("systemtask_dbexport_name");
     }
-    
+
     /**
      * @see interface_admin_systemtask::executeTask()
      * @return string
@@ -68,7 +68,7 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
 
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
         $strReturn = "";
@@ -84,6 +84,6 @@ class class_systemtask_dbdump extends class_systemtask_base implements interface
     public function getSubmitParams() {
         return "&excludeTables=".$this->getParam("dbExcludeTables");
     }
-    
+
 }
 ?>

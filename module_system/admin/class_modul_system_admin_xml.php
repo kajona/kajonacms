@@ -12,7 +12,7 @@
  * admin-class of the system-module
  * Serves xml-requests, mostly general requests e.g. changing a records status or position in a list
  *
- * @package modul_system
+ * @package module_system
  */
 class class_modul_system_admin_xml extends class_admin implements interface_xml_admin {
 
@@ -24,7 +24,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
 	 */
 	public function __construct() {
         $arrModule = array();
-		$arrModule["name"] 				= "modul_system";
+		$arrModule["name"] 				= "module_system";
 		$arrModule["author"] 			= "sidler@mulchprod.de";
 		$arrModule["moduleId"] 			= _system_modul_id_;
 		$arrModule["modul"]				= "system";
@@ -51,7 +51,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             $objCommon = new class_modul_system_common($this->getSystemid());
             //store edit date
             $objCommon->updateObjectToDb();
-            
+
             if($objCommon->getRecordModuleNr() == _pages_content_modul_id_ && $intNewPos != "") {
                 $objElement = new class_modul_pages_pageelement($this->getSystemid());
                 $objElement->setAbsolutePosition($this->getSystemid(), $intNewPos);
@@ -176,12 +176,12 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      *      <content></content>
      *   </entry>
      * </entries>
-     * 
+     *
      * @return string
      */
     protected function actionSystemLog() {
         $strReturn = "";
-        
+
         if($this->objRights->rightRight3($this->getModuleSystemid($this->arrModule["modul"]))) {
 
 
@@ -192,7 +192,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             //read the last few lines
             $objFile = new class_filesystem();
             $arrDetails = $objFile->getFileDetails("/system/debug/systemlog.log");
-            
+
             $intOffset = 0;
             $bitSkip = false;
             if($arrDetails["filesize"] > 20000) {
@@ -276,7 +276,7 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      *      </entry>
      *    </infoset>
      * </info>
-     * 
+     *
      * @return string
      */
     protected function actionSystemInfo() {
@@ -347,12 +347,12 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
      *      <version></version>
      *    <module>
      * </modules>
-     * 
+     *
      * @return string
      */
     protected function actionModuleList() {
         $strReturn = "";
-		
+
 		if($this->objRights->rightView($this->getModuleSystemid($this->arrModule["modul"]))) {
 
             $strReturn .= "<modules>";
@@ -456,14 +456,14 @@ class class_modul_system_admin_xml extends class_admin implements interface_xml_
             }
 
             $strReturn .= "</sessions>";
-            
+
 
         }
         else {
             header(class_http_statuscodes::$strSC_UNAUTHORIZED);
             $strReturn .= "<message><error>".xmlSafeString($this->getText("commons_error_permissions"))."</error></message>";
         }
-        
+
         return $strReturn;
     }
 }

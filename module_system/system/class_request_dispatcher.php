@@ -10,16 +10,16 @@
 /**
  * The request-dispatcher is called by all external request-entries and acts as a controller.
  * It dispatches the requests to the matching modules and areas, taking care of login-status and more.
- * 
  *
- * @package modul_system
+ *
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4.1
  */
 class class_request_dispatcher {
 
     private $arrTimestampStart;
-    
+
     /**
      *
      * @var class_session
@@ -36,33 +36,33 @@ class class_request_dispatcher {
 
     /**
      * Global controller entry, triggers all further actions, splits up admin- and portal loading
-     * 
+     *
      * @param bool $bitAdmin
      * @param string $strModule
      * @param string $strAction
      * @param string $strLanguageParam
-     * @return string 
+     * @return string
      */
     public function processRequest($bitAdmin, $strModule, $strAction, $strLanguageParam) {
         $strReturn = "";
-        
+
         if($bitAdmin)
             $strReturn = $this->processAdminRequest($strModule, $strAction, $strLanguageParam);
         else
             $strReturn = $this->processPortalRequest($strModule, $strAction, $strLanguageParam);
-        
+
         $strReturn = $this->cleanupOutput($strReturn);
-        
+
         $strReturn = $this->getDebugInfo().$strReturn;
-        
+
         $this->sendConditionalGetHeaders($strReturn);
-        
+
         return $strReturn;
     }
-    
+
     /**
      * Processes an admin-request
-     *  
+     *
      * @param string $strModule
      * @param string $strAction
      * @param string $strLanguageParam
@@ -71,7 +71,7 @@ class class_request_dispatcher {
     private function processAdminRequest($strModule, $strAction, $strLanguageParam) {
         $strReturn = "";
         $bitLogin = false;
-        
+
         //validate https status
         if(_admin_only_https_ == "true") {
             //check which headers to compare
@@ -88,7 +88,7 @@ class class_request_dispatcher {
                     header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 else
                     header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                
+
                 die("Reloading using https...");
 		    }
             //value of header correct?
@@ -98,22 +98,22 @@ class class_request_dispatcher {
                     header("Location: ".uniStrReplace("http:", "https:", _xmlpath_)."?".getServer("QUERY_STRING"));
                 else
                     header("Location: ".uniStrReplace("http:", "https:", _indexpath_)."?".getServer("QUERY_STRING"));
-                
+
                 die("Reloading using https...");
             }
 		}
-        
+
         //process language-param
         $objLanguage = new class_modul_languages_language();
         $objLanguage->setStrAdminLanguageToWorkOn($strLanguageParam);
-        
+
         //validate login-status / process login-request
         if($strModule != "login" && $this->objSession->isLoggedin() ) {
             if($this->objSession->isAdmin()) {
                 //try to load the module
                 $objModuleRequested = class_modul_system_module::getModuleByName($strModule);
                 if($objModuleRequested != null) {
-                    
+
                     if(_xmlLoader_) { //FIXME: will be removed
                         if($objModuleRequested->getStrXmlNameAdmin() != "") {
                             $strClassname = str_replace(".php", "", $objModuleRequested->getStrXmlNameAdmin());
@@ -131,7 +131,7 @@ class class_request_dispatcher {
                         //$objConcreteModule->action($strAction);
                         $objConcreteModule->action(); //FIXME: action always set via the internal handler?
                         $strReturn = $objConcreteModule->getModuleOutput();
-                        
+
                         //React, if admin was opened by the portaleditor
                         if(getPost("peClose") == "1" || getGet("peClose") == "1") {
                             if(getGet("peRefreshPage") != "")
@@ -139,9 +139,9 @@ class class_request_dispatcher {
                             else
                                 $strReturn = "<html><head></head><body onload=\"parent.location.reload();\"></body></html>";
                         }
-                        
+
                     }
-                    
+
                 }
                 else
                     throw new class_exception("Requested module ".$strModule." not existing", class_exception::$level_FATALERROR);
@@ -151,11 +151,11 @@ class class_request_dispatcher {
         }
         else {
             $bitLogin = true;
-            
+
             if($strModule != "login")
                 $strAction = "";
         }
-        
+
         if($bitLogin) {
             //FIXME: xml-annotations
             if(_xmlLoader_) {
@@ -167,17 +167,17 @@ class class_request_dispatcher {
                 $objLogin->action($strAction);
                 $strReturn = $objLogin->getModuleOutput();
             }
-            
+
         }
-        
+
         return $strReturn;
-        
+
     }
-    
-    
+
+
     /**
      * Processes a portal-request
-     *  
+     *
      * @param string $strModule
      * @param string $strAction
      * @param string $strLanguageParam
@@ -185,32 +185,32 @@ class class_request_dispatcher {
      */
     private function processPortalRequest($strModule, $strAction, $strLanguageParam) {
         $strReturn = "";
-        
+
         //process language-param
         if(class_modul_system_module::getModuleByName("languages") != null) {
             $objLanguage = new class_modul_languages_language();
             $objLanguage->setStrPortalLanguage($strLanguageParam);
         }
-        
+
         //process stats request
         $objStats = class_modul_system_module::getModuleByName("stats");
         if($objStats != null) {
             $objStats = $objStats->getPortalInstanceOfConcreteModule();
             $objStats->insertStat();
-        }        
-        
-        
-        
+        }
+
+
+
         //Load the portal parts
         $objModule = class_modul_system_module::getModuleByName($strModule);
         if($objModule != null) {
-        
+
             if(_xmlLoader_) { //FIXME: will be removed
                 if($objModule->getStrXmlNamePortal() != "") {
                     $strClassname = str_replace(".php", "", $objModule->getStrXmlNamePortal());
                     $objModuleRequested = new $strClassname();
                     $strReturn = $objModuleRequested->action($strAction);
-                } 
+                }
                 else {
                     $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
                     $strReturn = $objModuleRequested->action($strAction);
@@ -222,30 +222,30 @@ class class_request_dispatcher {
                 $objModuleRequested = $objModule->getPortalInstanceOfConcreteModule();
                 $strReturn = $objModuleRequested->action($strAction);
             }
-            
-            
+
+
         }
         else {
-            
+
             if(_xmlLoader_ === false) {
                 if(count(class_carrier::getInstance()->getObjDB()->getTables()) == 0 && file_exists(_realpath_."/installer/installer.php")) {
                     header("Location: "._webpath_."/installer/installer.php");
                     throw new class_exception("Module Pages not installed, redirect to installer", class_exception::$level_ERROR);
                 }
             }
-            
+
             throw new class_exception("module ".$strModule." not installed!", class_exception::$level_FATALERROR);
         }
-                    
-        
+
+
         return $strReturn;
     }
-    
+
     /**
      * Strips unused contents from the generated output, e.g. placeholders
-     * 
+     *
      * @param string $strContent
-     * @return string 
+     * @return string
      */
     private function cleanupOutput($strContent) {
         $objTemplate = class_carrier::getInstance()->getObjTemplate();
@@ -254,18 +254,18 @@ class class_request_dispatcher {
         $objTemplate->deletePlaceholder();
         $strContent = $objTemplate->getTemplate();
         $strContent = str_replace("\%\%", "%%", $strContent);
-        
+
         return $strContent;
     }
-    
-    
+
+
     /**
      * Sends conditional get headers and tries to match sent ones.
      *
-     * @param string $strContent 
+     * @param string $strContent
      */
     private function sendConditionalGetHeaders($strContent) {
-        
+
         //check headers, maybe execution could be terminated right here
 	    //yes, this doesn't save us from generating the page, but the traffic towards the client can be reduced
         if(checkConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent))) {
@@ -277,12 +277,12 @@ class class_request_dispatcher {
         if(strpos(getServer("HTTP_USER_AGENT"), "IE") === false)
             sendConditionalGetHeaders(md5($_SERVER["REQUEST_URI"].$this->objSession->getSessionId().$strContent));
     }
-  
-    
+
+
     /**
      * Generates debugging-infos, but only in non-xml mode
-     * 
-     * @return string 
+     *
+     * @return string
      */
     private function getDebugInfo() {
         $strDebug = "";
@@ -323,11 +323,11 @@ class class_request_dispatcher {
     		}
 
 			$strDebug .= "</pre>\n";
-            
+
             if(_xmlLoader_ === true)
                 $strDebug = "<!-- ".$strDebug ." -->";
 		}
-        
+
         return $strDebug;
     }
 

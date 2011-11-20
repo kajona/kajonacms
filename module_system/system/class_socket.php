@@ -20,7 +20,7 @@
  *   echo $objSocket->read();
  *   $objSocket->close();
  *
- * @package modul_system
+ * @package module_system
  */
 class class_socket {
 
@@ -108,7 +108,7 @@ class class_socket {
     public function __construct($strHostname, $intPort) {
         $this->intPort = $intPort;
         $this->strHostname = $strHostname;
-        
+
         //initial constants
         $bitSupportEnabled = true;
         //if(!defined("AF_INET"))

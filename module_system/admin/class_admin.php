@@ -10,7 +10,7 @@
 /**
  * The Base-Class for all other admin-classes
  *
- * @package modul_system
+ * @package module_system
  */
 abstract class class_admin {
 

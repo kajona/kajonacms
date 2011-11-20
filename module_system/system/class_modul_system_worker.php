@@ -10,7 +10,7 @@
 /**
  * Class to provide methods used by the system for db tasks as a db check
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_worker extends class_model implements interface_model  {
@@ -24,7 +24,7 @@ class class_modul_system_worker extends class_model implements interface_model  
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= "";
 		$arrModul["modul"]				= "system";
@@ -68,11 +68,11 @@ class class_modul_system_worker extends class_model implements interface_model  
     protected function updateStateToDb() {
 
     }
-    
+
     /**
      * Checks if there are more nodes on the first level
      * then modules installed.
-     * 
+     *
      * @return array
      */
     public function checkFirstLevelNodeConsistency() {
@@ -80,15 +80,15 @@ class class_modul_system_worker extends class_model implements interface_model  
                        FROM "._dbprefix_."system
                        LEFT JOIN "._dbprefix_."system_module
                         ON (system_id = module_id)
-                       WHERE module_id IS NULL 
-                         AND system_prev_id = '0' 
+                       WHERE module_id IS NULL
+                         AND system_prev_id = '0'
                          AND system_id != '0'";
-        
+
         $arrReturn = $this->objDB->getPArray($strQuery, array());
-    
+
         return $arrReturn;
     }
-    
+
 
     /**
      * Checks, if all system records use a valid system_prev_id

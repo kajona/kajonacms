@@ -13,7 +13,7 @@
  *
  * @author sidler@mulchprod.de
  * @since 3.4
- * @package modul_system
+ * @package module_system
  */
 class class_graph_factory {
     //put your code here

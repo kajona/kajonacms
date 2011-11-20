@@ -12,11 +12,11 @@
  * Please be aware that all logic located in this class will be moved to class_root. This means that this
  * class will become useless. It will remain for API-compatibility but without any logic.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
- * @deprectated this class will be removed from future releases, all logic will be moved to class root. 
- *              
- * 
+ * @deprectated this class will be removed from future releases, all logic will be moved to class root.
+ *
+ *
  */
 class class_model extends class_root {
 

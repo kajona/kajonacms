@@ -10,19 +10,19 @@
 /**
  * Class to handle all the right-stuff concerning system-records
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_rights {
-	private $arrModule = null;				
-	
+	private $arrModule = null;
+
 	/**
 	 * class_db
 	 *
 	 * @var class_db
 	 */
-	private $objDb = null;					
-	
+	private $objDb = null;
+
 	/**
 	 * Session instance
 	 *
@@ -60,7 +60,7 @@ class class_rights {
 	}
 
 
-	
+
 
     /**
      * Helper, shouldn't be called in regular cases.
@@ -167,7 +167,7 @@ class class_rights {
 	    if($strSystemid == "" || $strSystemid == "0")
 	        $arrRights["inherit"] = 0;
 
-            
+
         $objCommon = new class_modul_system_common($strSystemid);
         $strPrevSystemid = $objCommon->getPrevId();
 
@@ -180,7 +180,7 @@ class class_rights {
         }
 
         $bitReturn &= $this->writeSingleRecord($strSystemid, $arrRights);
-        
+
         //load all child records in order to update them, too.
         $arrChilds = $objCommon->getChildNodesAsIdArray($strSystemid);
         foreach($arrChilds as $strOneChildId) {
@@ -203,9 +203,9 @@ class class_rights {
 
     /**
      * Looks up, whether a record intherits its' rights or not.
-     * If not, false is being returned, if the record inherits the rights from another 
+     * If not, false is being returned, if the record inherits the rights from another
      * record, true is returned instead.
-     * 
+     *
      * @return bool
      */
 	public function isInherited($strSystemid) {
@@ -242,7 +242,7 @@ class class_rights {
 							AND right_id = system_id ";
 
         $arrRow = $this->objDb->getPRow($strQuery, array($strSystemid));
-        
+
         $arrRights = array();
         $arrRights["view"]   = isset($arrRow["right_view"]) ? $arrRow["right_view"] : "";
         $arrRights["edit"]   = isset($arrRow["right_edit"]) ? $arrRow["right_edit"] : "";
@@ -309,7 +309,7 @@ class class_rights {
         }
 
 		$arrRights = $this->getArrayRights($strSystemid);
-        
+
 		if($strUserid != "") {
 			foreach($arrGroups as $strGroup) {
 				if(in_array($strGroup, $arrRights["view"]))
@@ -404,7 +404,7 @@ class class_rights {
 		}
 		return $bitReturn;
 	}
-    
+
 
 	/**
 	 * Checks if the user has the right to edit the rights of the record
@@ -694,7 +694,7 @@ class class_rights {
 
 	    $this->objDb->flushQueryCache();
         $this->arrRightsCache = array();
-                
+
 	    //Load the current rights
 	    $arrRights = $this->getArrayRights($strSystemid, false);
 
@@ -718,7 +718,7 @@ class class_rights {
 
 	    //and save the row
 	    $bitReturn = $this->setRights($arrRights, $strSystemid);
-	    
+
 	    return $bitReturn;
 	}
 
@@ -777,7 +777,7 @@ class class_rights {
         $this->arrRightsCache = array();
     }
 
-} 
+}
 
 
 ?>

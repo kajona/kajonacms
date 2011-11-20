@@ -12,7 +12,7 @@
  * BaseClass for admin / portal tookits
  * Toolkits are there to serve small patterns used time by time
  *
- * @package modul_system
+ * @package module_system
  */
 class class_toolkit  {
 	protected $arrModul = array();

@@ -11,7 +11,7 @@
 /**
  * Flushes all images saved to the cache
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_flushpiccache extends class_systemtask_base implements interface_admin_systemtask {
 
@@ -30,7 +30,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     public function getGroupIdentifier() {
         return "cache";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
@@ -38,7 +38,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     public function getStrInternalTaskName() {
     	return "flushpiccache";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
@@ -46,7 +46,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     public function getStrTaskName() {
     	return $this->getText("systemtask_flushpiccache_name");
     }
-    
+
     /**
      * @see interface_admin_systemtask::executeTask()
      * @return string
@@ -62,7 +62,7 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
     		if($objFilesystem->fileDelete(_images_cachepath_."/".$strOneFile))
     		  $intFilesDeleted++;
     	}
-    	
+
     	//build the return string
     	$strReturn .= $this->getText("systemtask_flushpiccache_done");
     	$strReturn .= $this->getText("systemtask_flushpiccache_deleted").$intFilesDeleted;
@@ -72,11 +72,11 @@ class class_systemtask_flushpiccache extends class_systemtask_base implements in
 
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
     	return "";
     }
-    
+
 }
 ?>

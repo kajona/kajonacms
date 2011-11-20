@@ -24,7 +24,7 @@
  * $objMail->addAttachement("/portal/pics/kajona/kajona_poweredby.png", "", true);
  * $objMail->sendMail();
  *
- * @package modul_system
+ * @package module_system
  */
 class class_mail {
 
@@ -199,10 +199,10 @@ class class_mail {
                     if(checkEmailaddress($objUser->getStrEmail()))
                         $this->strSender = $objUser->getStrEmail();
                 }
-                
+
             }
 
-            if($this->strSender == "") 
+            if($this->strSender == "")
                 $this->strSender = _system_admin_email_;
 
 			if($this->strSender != "") {

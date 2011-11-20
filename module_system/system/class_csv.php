@@ -12,7 +12,7 @@
  * class_csv, used to access data stored in csv-files.
  * This class can either be used to write to csv-files or to read from csv-files
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_csv {
@@ -154,7 +154,7 @@ class class_csv {
             }
             else
                 $objFilesystem->openFilePointer($this->strFilename);
-            
+
 	        //the first row should contain the row-names
             if(!$bitExcludeHeaders) {
                 $strRow = "";
@@ -175,7 +175,7 @@ class class_csv {
                 else
                     $objFilesystem->writeToFile($strRow);
             }
-            
+
 	        //iterate over the data array to write it to the file
 	        foreach ($this->arrData as $arrOneRow) {
 	            $strRow = "";
@@ -221,7 +221,7 @@ class class_csv {
 	}
 
 
-    
+
 
 	/**
 	 * Set the type of delimiter of the source or target file
@@ -299,8 +299,8 @@ class class_csv {
     /**
      * Sets the nr of rows from top to be skipped during import.
      * Use this setting if there are additional headers in the import-file
-     * 
-     * @param int $intImportRowOffset 
+     *
+     * @param int $intImportRowOffset
      */
     public function setIntImportRowOffset($intImportRowOffset) {
         $this->intImportRowOffset = $intImportRowOffset;

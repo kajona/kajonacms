@@ -11,7 +11,7 @@
  * Interface for all iterators
  * An iterator is used to walk over a collection of elements
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_iterator {
 

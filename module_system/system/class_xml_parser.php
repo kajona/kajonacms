@@ -11,7 +11,7 @@
  * Class to handle xml-files,
  * parsing them using a dom parser
  *
- * @package modul_system
+ * @package module_system
  */
 class class_xml_parser {
 
@@ -97,7 +97,7 @@ class class_xml_parser {
 		while($domNode != null) {
 			switch($domNode->nodeType) {
 				case XML_TEXT_NODE:
-                case XML_CDATA_SECTION_NODE:    
+                case XML_CDATA_SECTION_NODE:
 				//Here we have a text node, so get the value if it isn't empty
 				if(trim($domNode->nodeValue))
                     $arrPointer['value'] = trim($domNode->nodeValue);

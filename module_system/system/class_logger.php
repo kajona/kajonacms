@@ -11,7 +11,7 @@
  * The class_logger provides a small and fast logging-engine to generate a debug logfile.
  * The granularity of the logging is defined in the config.php
  *
- * @package modul_system
+ * @package module_system
  */
 final class class_logger {
 
@@ -133,8 +133,8 @@ final class class_logger {
         $objFile->openFilePointer("/system/debug/".$this->strFilename, "r");
         return $objFile->readLastLinesFromFile(25);
     }
-    
-    
+
+
     /**
      * Returns the complete log-file as one string
      *

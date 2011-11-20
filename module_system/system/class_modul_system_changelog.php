@@ -15,7 +15,7 @@
  * system-table. This means there are no common system-id relations.
  * Have a look at the memento pattern by Gamma et al. to get a glance at the conecptional behaviour.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @see class_logger
  */
@@ -28,7 +28,7 @@ class class_modul_system_changelog extends class_model implements interface_mode
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."changelog";
 		$arrModul["modul"]				= "system";
@@ -77,15 +77,15 @@ class class_modul_system_changelog extends class_model implements interface_mode
      */
     public function createLogEntry(interface_versionable $objSourceModel, $strAction, $bitForceEntry = false) {
         $bitReturn = true;
-        
+
         if(!$objSourceModel instanceof interface_versionable) {
             throw new class_exception("object passed to create changelog not implementing interface_versionable", class_logger::$levelWarning);
             return true;
         }
-        
+
         if(!defined("_system_changehistory_enabled_") || _system_changehistory_enabled_ == "false")
             return true;
-        
+
         //changes require at least kajona 3.3.1.10
         $arrModul = $this->getModuleData("system", false);
         if(version_compare($arrModul["module_version"], "3.3.1.10") < 0)
@@ -94,15 +94,15 @@ class class_modul_system_changelog extends class_model implements interface_mode
         $arrChanges = $objSourceModel->getChangedFields($strAction);
         if(is_array($arrChanges) && in_array($this->arrModule["table"], $this->objDB->getTables())) {
             foreach($arrChanges as $arrChangeSet) {
-                
+
                 $strOldvalue = "";
                 if(isset($arrChangeSet["oldvalue"]))
                     $strOldvalue = $arrChangeSet["oldvalue"];
-                
+
                 $strNewvalue = "";
                 if(isset($arrChangeSet["newvalue"]))
                     $strNewvalue = $arrChangeSet["newvalue"];
-                
+
                 $strProperty= $arrChangeSet["property"];
 
                 if($strOldvalue instanceof class_date)
@@ -198,8 +198,8 @@ class class_modul_system_changelog extends class_model implements interface_mode
         $arrRow = class_carrier::getInstance()->getObjDB()->getPRow($strQuery, $arrParams);
         return $arrRow["COUNT(*)"];
     }
-   
-    
+
+
      /**
      * Creates the list of logentries, based on a flexible but specific filter-list
      *
@@ -208,22 +208,22 @@ class class_modul_system_changelog extends class_model implements interface_mode
      * @param type $strPropertyFilter
      * @param type $strOldvalueFilter
      * @param type $strNewvalueFilter
-     * @return class_changelog_container 
+     * @return class_changelog_container
      */
     public static function getSpecificEntries($strSystemidFilter = null, $strActionFilter = null, $strPropertyFilter = null, $strOldvalueFilter = null, $strNewvalueFilter = null) {
-        
+
         $arrWhere = array();
-        if($strSystemidFilter !== null) 
+        if($strSystemidFilter !== null)
             $arrWhere[] = " change_systemid = ? ";
-        if($strActionFilter !== null) 
+        if($strActionFilter !== null)
             $arrWhere[] = " change_action = ? ";
-        if($strPropertyFilter !== null) 
+        if($strPropertyFilter !== null)
             $arrWhere[] = " change_property = ? ";
-        if($strOldvalueFilter !== null) 
+        if($strOldvalueFilter !== null)
             $arrWhere[] = " change_oldvalue = ? ";
-        if($strNewvalueFilter !== null) 
+        if($strNewvalueFilter !== null)
             $arrWhere[] = " change_newvalue = ? ";
-        
+
         $strQuery = "SELECT *
                        FROM "._dbprefix_."changelog
                       ".(count($arrWhere) > 0 ? " WHERE ".implode("AND", $arrWhere) : "")."
@@ -232,16 +232,16 @@ class class_modul_system_changelog extends class_model implements interface_mode
         $arrParams = array();
         if($strSystemidFilter !== null)
             $arrParams[] = $strSystemidFilter;
-        
+
         if($strActionFilter !== null)
             $arrParams[] = $strActionFilter;
-        
+
         if($strPropertyFilter !== null)
             $arrParams[] = $strPropertyFilter;
-        
+
         if($strOldvalueFilter !== null)
             $arrParams[] = $strOldvalueFilter;
-        
+
         if($strNewvalueFilter !== null)
             $arrParams[] = $strNewvalueFilter;
 

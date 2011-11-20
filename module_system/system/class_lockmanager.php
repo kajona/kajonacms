@@ -11,7 +11,7 @@
  * The lockmanager takes care of locking and unlocking systemrecords.
  * It provides the methods to check if a record is locked or not.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.3.0
  */
@@ -73,8 +73,8 @@ class class_lockmanager  {
 	public function unlockRecord($bitForceUnlock = false)	{
         if($this->isLockedByCurrentUser() ||
             ($bitForceUnlock && class_carrier::getInstance()->getObjRights()->userIsAdmin(class_carrier::getInstance()->getObjSession()->getUserID()) )) {
-            
-            
+
+
             $strQuery = "UPDATE "._dbprefix_."system
                             SET system_lock_id='0'
                             WHERE system_id=? ";
@@ -160,6 +160,6 @@ class class_lockmanager  {
             return "0";
     }
 
-} 
+}
 
 ?>

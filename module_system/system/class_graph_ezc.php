@@ -17,7 +17,7 @@ spl_autoload_register( array( 'ezcBase', 'autoload' ) );
  * ezc renders charts on the serverside and passes them back as images, including full support
  * of SVG images.
  *
- * @package modul_system
+ * @package module_system
  * @since 3.4
  * @author sidler@mulchprod.de
  */

@@ -11,7 +11,7 @@
 /**
  * Runs a few kajona-specific checks to ensure the db-integrity
  *
- * @package modul_system
+ * @package module_system
  */
 class class_systemtask_dbconsistency extends class_systemtask_base implements interface_admin_systemtask {
 
@@ -30,7 +30,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function getGroupIdentifier() {
         return "database";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrInternalTaskName()
      * @return string
@@ -38,7 +38,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function getStrInternalTaskName() {
         return "dbconsistency";
     }
-    
+
     /**
      * @see interface_admin_systemtask::getStrTaskName()
      * @return string
@@ -46,7 +46,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
     public function getStrTaskName() {
         return $this->getText("systemtask_dbconsistency_name");
     }
-    
+
     /**
      * @see interface_admin_systemtask::executeTask()
      * @return string
@@ -75,7 +75,7 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_firstlevel_ok"), "", $intI++);
             $strReturn .= $this->objToolkit->listFooter();
         }
-        
+
         //Check system_prev_id => system_id relations
         $arrCorruptedRecords = $objWorker->checkSystemTableCurPrevRelations();
 
@@ -133,18 +133,18 @@ class class_systemtask_dbconsistency extends class_systemtask_base implements in
             $strReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_enabled.gif"), $this->getText("systemtask_dbconsistency_date_ok"), "", $intI++);
             $strReturn .= $this->objToolkit->listFooter();
         }
-        
+
         return $strReturn;
-    	
+
     }
 
     /**
      * @see interface_admin_systemtask::getAdminForm()
-     * @return string 
+     * @return string
      */
     public function getAdminForm() {
         return "";
     }
-    
+
 }
 ?>

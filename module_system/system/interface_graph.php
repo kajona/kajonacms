@@ -16,7 +16,7 @@
  * @author sidler@mulchprod.de
  * @since 3.4
  * @see class_graph_factory
- * @package modul_system
+ * @package module_system
  */
 interface interface_graph {
 

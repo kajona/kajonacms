@@ -10,7 +10,7 @@
 /**
  * Interface for all installers
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_sc_installer {
 
@@ -21,24 +21,24 @@ interface interface_sc_installer {
      * @return String
      */
     public function install();
-    
+
     /**
      * Passes the db object
      *
      * @param class_db $objDb
      */
     public function setObjDb($objDb);
-    
+
     /**
      * Passes the portal language
      *
      * @param string $strContentlanguage
      */
     public function setStrContentlanguage($strContentlanguage);
-    
+
     /**
      * Returns the assigned module
-     * 
+     *
      * @return string
      */
     public function getCorrespondingModule();

@@ -10,7 +10,7 @@
 /**
  * Interface for all model-classes
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_model {
 

@@ -10,7 +10,7 @@
 /**
  * Class to manage and access config-values
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_config {
@@ -33,7 +33,8 @@ class class_config {
 		$debug = array();
 
 		//Include the config-File
-		if(!@include(_realpath_."/system/config/".$strConfigFile))
+        //FIXME: add auto-resolve
+		if(!@include(_realpath_."/module_system/system/config/".$strConfigFile))
 			die("Error reading config-file!");
 
 		$this->arrConfig = $config;
@@ -42,12 +43,12 @@ class class_config {
 		//Now we have to set up some more constants...
         if($strConfigFile == "config.php") {
             define("_dbprefix_" , 		$this->getConfig("dbprefix"));
-            define("_systempath_" , 	_realpath_ . $this->getConfig("dirsystem"));
-            define("_portalpath_" , 	_realpath_ . $this->getConfig("dirportal"));
-            define("_adminpath_" , 		_realpath_ . $this->getConfig("diradmin"));
-            define("_templatepath_" , 	_realpath_ . $this->getConfig("dirtemplates"));
-            define("_langpath_" , 		_realpath_ . $this->getConfig("dirlang"));
-            define("_skinpath_" , 		_adminpath_ . $this->getConfig("dirskins"));
+            define("_systempath_" , 	$this->getConfig("dirsystem"));
+            define("_portalpath_" , 	$this->getConfig("dirportal"));
+            define("_adminpath_" , 		$this->getConfig("diradmin"));
+            define("_templatepath_" , 	$this->getConfig("dirtemplates"));
+            define("_langpath_" , 		$this->getConfig("dirlang"));
+            define("_skinpath_" , 		$this->getConfig("dirskins"));
             define("_indexpath_",		_webpath_."/index.php");
             define("_xmlpath_",         _webpath_."/xml.php");
             define("_dblog_", 			$this->getDebug("dblog"));
@@ -72,7 +73,7 @@ class class_config {
      * <b>Attention:</b> Use this method only, of you know what you do!
      * This method allows access to those values even before the kernel started.
      * In nearly all cases the access via the instance-object is sufficient!
-     * 
+     *
      * @param string $strEntryName
      * @return string
      * @since 3.4.0
@@ -147,13 +148,13 @@ class class_config {
 	public function getPhpIni($strKey) {
 		return ini_get($strKey);
 	}
-	
+
 	/**
 	 * Returns the max upload size in bytes
 	 *
 	 * @return int
 	 */
-	public function getPhpMaxUploadSize() {    
+	public function getPhpMaxUploadSize() {
 	    if(phpSizeToBytes($this->getPhpIni("post_max_size")) > phpSizeToBytes($this->getPhpIni("upload_max_filesize")))
             return phpSizeToBytes($this->getPhpIni("upload_max_filesize"));
         else

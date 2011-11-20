@@ -13,7 +13,7 @@
  * Please DO NOT throw a "plain" exception, otherwise logging and error-handling
  * will not work properly!
  *
- * @package modul_system
+ * @package module_system
  */
 class class_exception extends Exception {
 
@@ -189,10 +189,10 @@ class class_exception extends Exception {
 
 //bad coding-style, but define a few more specific exceptions for special cases
 class class_authentication_exception extends class_exception {
-    
+
 }
 
 class class_io_exception extends class_exception {
-    
+
 }
 ?>

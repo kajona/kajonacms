@@ -14,8 +14,8 @@ require_once(_systempath_."/pChart/pData.class");
 /**
  * This class could be used to create graphs based on the pChart API.
  * pChart renders charts on the serverside and passes them back as images.
- * 
- * @package modul_system
+ *
+ * @package module_system
  * @since 3.3.0
  * @author sidler@mulchprod.de
  */
@@ -40,7 +40,7 @@ class class_graph_pchart implements interface_graph {
     private $bitAdditionalDatasetAdded = false;
     private $bitScaleFromAdditionalDataset = false;
 
-    private $strFont = "/fonts/dejavusans.ttf"; 
+    private $strFont = "/fonts/dejavusans.ttf";
     private $arrDefaultColorPalette = array();
 
     private $intLegendBreakCount = 15;
@@ -49,7 +49,7 @@ class class_graph_pchart implements interface_graph {
     private $intXAxisAngle = 0;
 
     private $arrValueSeriesToRender = array();
-    
+
 
 
 	//---------------------------------------------------------------------------------------------------
@@ -124,12 +124,12 @@ class class_graph_pchart implements interface_graph {
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_BAR;
         $strInternalSerieName = generateSystemid();
-        
+
         $this->objDataset->AddPoint($arrValues, $strInternalSerieName);
         $this->objDataset->AddSerie($strInternalSerieName);
         if($bitWriteValues)
             $this->arrValueSeriesToRender[] = $strInternalSerieName;
-        
+
         $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strInternalSerieName);
 	}
 
@@ -144,7 +144,7 @@ class class_graph_pchart implements interface_graph {
 	 *  $objGraph->setStrYAxisTitle("y-axis");
 	 *  $objGraph->setStrGraphTitle("Test Graph");
 	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 1");
-	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");  
+	 *  $objGraph->addStackedBarChartSet(array(1,2,4,5) "serie 2");
 	 *
 	 * @param array $arrValues see the example above for the internal array-structure
      * @param string $strLegend
@@ -158,14 +158,14 @@ class class_graph_pchart implements interface_graph {
 
 		$this->intCurrentGraphMode = $this->GRAPH_TYPE_STACKEDBAR;
         $strSerieName = generateSystemid();
-        
+
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
-        
+
         $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
 	}
 
-    
+
     /**
      * Registers a new plot to the current graph. Works in line-plot-mode only.
      * Add a set of linePlot to a graph to get more then one line.
@@ -209,14 +209,14 @@ class class_graph_pchart implements interface_graph {
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_LINE;
-        
+
         $strSerieName = generateSystemid();
-        
+
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
-        
+
         $this->objDataset->SetSerieName($this->stripLegend($strLegend), $strSerieName);
- 
+
 
 
     }
@@ -241,20 +241,20 @@ class class_graph_pchart implements interface_graph {
         }
 
         $this->intCurrentGraphMode = $this->GRAPH_TYPE_PIE;
-        
+
         $strSerieName = generateSystemid();
-        
+
         $this->objDataset->AddPoint($arrValues, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
-        
+
         $strSerieName = generateSystemid();
-        
+
         foreach($arrLegends as &$strValue)
             $strValue = $this->stripLegend($strValue);
-        
+
         $this->objDataset->AddPoint($arrLegends, $strSerieName);
         $this->objDataset->AddSerie($strSerieName);
-       
+
         $this->objDataset->SetAbsciseLabelSerie($strSerieName);
 
     }
@@ -271,11 +271,11 @@ class class_graph_pchart implements interface_graph {
 
         // Initialize the graph
         $this->objChart = new pChart($this->intWidth, $this->intHeight);
-        
+
         //set the color palette to be used
         foreach($this->arrDefaultColorPalette as $intKey => $strCurrentColor) {
             $arrCurColor = hex2rgb($strCurrentColor);
-            $this->objChart->setColorPalette($intKey, $arrCurColor[0], $arrCurColor[1], $arrCurColor[2]);  
+            $this->objChart->setColorPalette($intKey, $arrCurColor[0], $arrCurColor[1], $arrCurColor[2]);
         }
 
         //calculate all needed params, draw that funky shit
@@ -299,7 +299,7 @@ class class_graph_pchart implements interface_graph {
         $intTopMargin = 15;
         $intBottomMargin = 30;
         $intLeftMargin = 40;
-        
+
         $intLegendWidth = 0;
         if($this->bitRenderLegend)
             $intLegendWidth = 120;
@@ -314,16 +314,16 @@ class class_graph_pchart implements interface_graph {
             $intLeftStart += 15;
             //$intWidth -= 15; //TODO: why not needed?
         }
-        
-        
-               
+
+
+
         if($this->strXAxisTitle != "")
             $intHeight -=15;
         if($this->strGraphTitle != "") {
             //$intHeight -= 12; //TODO: why not needed???
             $intTopStart += 12;
         }
-         
+
         if($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
             $this->objChart->setGraphArea($intLeftStart, $intTopStart, $intWidth, $intHeight);
             $arrPaneBackground = hex2rgb($this->strGraphBackgroundColor);
@@ -334,20 +334,20 @@ class class_graph_pchart implements interface_graph {
         $this->objChart->setFontProperties(_systempath_.$this->strFont, 8);
 
         //set up the axis-titles
-        if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR || 
-           $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR || 
+        if($this->intCurrentGraphMode == $this->GRAPH_TYPE_BAR ||
+           $this->intCurrentGraphMode == $this->GRAPH_TYPE_STACKEDBAR ||
            $this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE) {
-               
-           
+
+
             if($this->strXAxisTitle != "")
                 $this->objDataset->SetXAxisName($this->strXAxisTitle);
             if($this->strYAxisTitle != "")
                 $this->objDataset->SetYAxisName($this->strYAxisTitle);
-            
+
         }
 
 
- 
+
         //the x- and y axis, in- / exclusive margins
         if($this->bitAdditionalDatasetAdded && $this->bitScaleFromAdditionalDataset)
             $this->objChart->drawScale($this->objAdditionalDataset->GetData(), $this->objAdditionalDataset->GetDataDescription(), SCALE_START0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
@@ -357,7 +357,7 @@ class class_graph_pchart implements interface_graph {
             $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_ADDALLSTART0, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, true);
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_LINE)
             $this->objChart->drawScale($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), SCALE_NORMAL, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], TRUE, $this->intXAxisAngle, 1, false);
-        
+
         //the background grid
         if($this->intCurrentGraphMode != $this->GRAPH_TYPE_PIE) {
             $arrGridColor = hex2rgb($this->strGridColor);
@@ -392,11 +392,11 @@ class class_graph_pchart implements interface_graph {
 
             //the zero-line
             $this->objChart->setFontProperties(_systempath_.$this->strFont, 6);
-            $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE); 
-            $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);  
+            $this->objChart->drawTreshold(0, 143,55,72, TRUE, TRUE);
+            $this->objChart->drawStackedBarGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), 75);
         }
         else if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) {
-            
+
             $this->objChart->drawPieGraph($this->objDataset->GetData(),$this->objDataset->GetDataDescription(), ceil($this->intWidth/2)-20, ceil($this->intHeight/2) , ceil($intHeight/2)+20, PIE_PERCENTAGE, TRUE,50,20,5);
         }
 
@@ -404,15 +404,15 @@ class class_graph_pchart implements interface_graph {
         if(count($this->arrValueSeriesToRender) > 0) {
             $this->objChart->writeValues($this->objDataset->GetData(), $this->objDataset->GetDataDescription(), $this->arrValueSeriesToRender);
         }
-        
-        
-        
+
+
+
         // Finish the graph
         $this->objChart->setFontProperties(_systempath_.$this->strFont, 7);
-        
+
         //set up the legend
         if($this->bitRenderLegend) {
-            if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE) 
+            if($this->intCurrentGraphMode == $this->GRAPH_TYPE_PIE)
                 $this->objChart->drawPieLegend($this->intWidth-$intLegendWidth-$intRightMargin+10-$this->intLegendAdditionalMargin, $intTopStart, $this->objDataset->GetData(), $this->objDataset->GetDataDescription(),255,255,255);
             else {
                 $arrLegend = $this->objDataset->GetDataDescription();
@@ -433,7 +433,7 @@ class class_graph_pchart implements interface_graph {
             $this->objChart->drawTitle(0, $intTopMargin, $this->strGraphTitle, $arrFontColors[0], $arrFontColors[1], $arrFontColors[2], $this->intWidth, 10);
         }
 
-        
+
     }
 
     /**
@@ -466,19 +466,19 @@ class class_graph_pchart implements interface_graph {
 
 	/**
 	 * Inserts a line-break to long legend-values
-	 * 
+	 *
 	 * @param $strLegend
 	 * @return string
 	 */
 	private function stripLegend($strLegend) {
 	    $intStart = $this->intLegendBreakCount;
-	    
+
 	    while(uniStrlen($strLegend) > $intStart) {
 	        $strLegend = uniSubstr($strLegend, 0, $intStart)."\n".uniSubstr($strLegend, $intStart);
 	        $intStart += $this->intLegendBreakCount;
 	    }
-	        
-	    return $strLegend;    
+
+	    return $strLegend;
 	}
 
 
@@ -565,7 +565,7 @@ class class_graph_pchart implements interface_graph {
      */
     public function setArrXAxisTickLabels($arrXAxisTickLabels, $intNrOfWrittenLabels = 12) {
         $strSerieName = generateSystemid();
-        
+
         if(count($arrXAxisTickLabels) > $intNrOfWrittenLabels) {
             //not more than 12 labels
             $intCounter = ceil( count($arrXAxisTickLabels) / $intNrOfWrittenLabels);
@@ -580,7 +580,7 @@ class class_graph_pchart implements interface_graph {
         }
         else
             $arrMadeUpLabels = $arrXAxisTickLabels;
-        
+
         $this->objDataset->AddPoint($arrMadeUpLabels, $strSerieName);
         $this->objDataset->SetAbsciseLabelSerie($strSerieName);
 
@@ -601,13 +601,13 @@ class class_graph_pchart implements interface_graph {
 
     /**
      * Sets if to render a legend or not
-     * 
+     *
      * @param bool $bitRenderLegend
      */
     public function setBitRenderLegend($bitRenderLegend) {
         $this->bitRenderLegend = $bitRenderLegend;
     }
-    
+
     /**
      * Set the font to be used in the chart
      *
@@ -628,7 +628,7 @@ class class_graph_pchart implements interface_graph {
 
     /**
      * Set the array of colors to be used within the charts
-     * 
+     *
      * @param $arrColorPalette
      */
     public function setArrColorPalette($arrColorPalette) {

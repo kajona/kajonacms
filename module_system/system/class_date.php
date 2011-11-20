@@ -15,7 +15,7 @@
  * a long value not being limited by the 32 bit time() boundaries (> 1970 && < 2038).
  * Use this class only in cases the other way won't work, so e.g. for birthdays.
  *
- * @package modul_system
+ * @package module_system
  */
 class class_date {
 
@@ -24,7 +24,7 @@ class class_date {
     private $strParseFormat = "YmdHis";
 
     private $longTimestamp;
-    
+
 
     private $arrModul;
 
@@ -78,7 +78,7 @@ class class_date {
      * If a single field is not found, 00 is inserted instead.
      *
      * @param string $strFieldname
-     * @param array $arrParams 
+     * @param array $arrParams
      */
     public function generateDateFromParams($strFieldname, $arrParams) {
         $intYear = "0000";
@@ -183,7 +183,7 @@ class class_date {
             $intYear = "20".$intYear;
         if(uniStrlen($intYear) == 1)
             $intYear = "200".$intYear;
-            
+
         $strYear = sprintf("%04s", $intYear);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strYear, 0, 4);
     }
@@ -196,7 +196,7 @@ class class_date {
     public function setIntMonth($intMonth) {
         if($intMonth < 1 || $intMonth > 12)
             return;
-            
+
         $strMonth = sprintf("%02s", $intMonth);
         $this->longTimestamp = substr_replace($this->longTimestamp, $strMonth, 4, 2);
     }
@@ -327,7 +327,7 @@ class class_date {
     }
 
 
-	
-} 
+
+}
 
 ?>

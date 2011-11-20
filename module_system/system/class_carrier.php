@@ -10,13 +10,13 @@
 /**
  * Heart of the system - granting access to all needed objects e.g. the database or the session-object
  *
- * @package modul_system
+ * @package module_system
  */
 class class_carrier {
-    
+
     /**
      * Internal array of all params passed globally to the script
-     * @var array 
+     * @var array
      */
     private static $arrParams = null;
 
@@ -79,7 +79,7 @@ class class_carrier {
 	public function getObjDB() {
 		//Do we have to generate the object?
 		if($this->objDB == null) {
-		    require_once(_realpath_."/system/class_db.php");
+		    //require_once(_realpath_."/modul_system/system/class_db.php");
 		    $this->objDB = class_db::getInstance();
 			//Now we have to set up the database connection
             //SIR 2010/03: connection is established on request, lazy loading
@@ -98,8 +98,6 @@ class class_carrier {
 	public function getObjRights() {
 		//Do we have to generate the object?
 		if($this->objRights == null) {
-			//Include the class
-			require_once(_realpath_."/system/class_rights.php");
 			$this->objRights = class_rights::getInstance();
 		}
 		return $this->objRights;
@@ -114,12 +112,10 @@ class class_carrier {
 	public function getObjConfig() {
 		//Do we have to generate the object?
 		if($this->objConfig == null) {
-			//Include the class
-			require_once(_realpath_."/system/class_config.php");
 			$this->objConfig = class_config::getInstance();
 
 			//Loading the config-Files
-			//Invokation removed, all configs from database
+			//Invocation removed, all configs from database
 			//$this->objConfig->loadConfigsFilesystem();
 		}
 		return $this->objConfig;
@@ -134,8 +130,6 @@ class class_carrier {
 	public function getObjSession() {
 		//Do we have to generate the object?
 		if($this->objSession == null) {
-			//Include the class
-			require_once(_realpath_."/system/class_session.php");
 			$this->objSession = class_session::getInstance();
 		}
 		return $this->objSession;
@@ -151,8 +145,6 @@ class class_carrier {
 	public function getObjTemplate() {
 		//Do we have to generate the object?
 		if($this->objTemplate == null) {
-			//Include the class
-			require_once(_realpath_."/system/class_template.php");
 			$this->objTemplate = class_template::getInstance();
 		}
 		return $this->objTemplate;
@@ -167,8 +159,6 @@ class class_carrier {
 	public function getObjText() {
 		//Do we have to generate the object?
 		if($this->objText == null) {
-			//Include the class
-			require_once(_realpath_."/system/class_texte.php");
 			$this->objText = class_texte::getInstance();
 		}
 		return $this->objText;
@@ -205,15 +195,15 @@ class class_carrier {
 			return $this->objToolkitPortal;
 		}
 	}
-    
+
     /**
      * Returns all params passed to the system, including $_GET, $_POST; $_FILES
-     * @return array 
+     * @return array
      */
     public static function getAllParams() {
         if(self::$arrParams == null)
             self::$arrParams = array_merge(getArrayGet(), getArrayPost(), getArrayFiles());
-            
+
         return self::$arrParams;
     }
 

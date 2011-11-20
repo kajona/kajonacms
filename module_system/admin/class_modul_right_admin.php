@@ -11,7 +11,7 @@
 /**
  * This class handles the adminside of right-management
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_right_admin extends class_admin implements interface_admin {
@@ -342,14 +342,14 @@ class class_modul_right_admin extends class_admin implements interface_admin {
 
 			//Pass to right-class
 			if($this->objRights->setRights($arrReturn, $strSystemid ))	{
-                
+
                 //Redirecting
                 $strUrlHistory = $this->getHistory(0);
                 $arrHistory = explode("&", $strUrlHistory);
                 if($arrHistory[1] != "module=rights") {
                     $this->adminReload(_indexpath_."?".$this->getHistory(0));
                 }
-                    
+
 				return "";
 			}
 			else

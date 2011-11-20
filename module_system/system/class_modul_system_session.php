@@ -11,14 +11,14 @@
  * Model for a single session. Session are managed by class_session, so there should be no need
  * to create instances directly.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_session extends class_model implements interface_model  {
 
     public static $LOGINSTATUS_LOGGEDIN = "loggedin";
     public static $LOGINSTATUS_LOGGEDOUT = "loggedout";
-    
+
     private $strPHPSessionId = "";
     private $strUserid = "";
     private $strGroupids = "";
@@ -26,11 +26,11 @@ class class_modul_system_session extends class_model implements interface_model 
     private $strLoginprovider = "";
     private $strLasturl = "";
     private $strLoginstatus = "";
-    
+
     private $bitValid = false;
-    
-    
-    
+
+
+
 
     /**
      * Constructor to create a valid object
@@ -39,13 +39,13 @@ class class_modul_system_session extends class_model implements interface_model 
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."session";
 		$arrModul["modul"]				= "system";
 
 		$this->strLoginstatus = self::$LOGINSTATUS_LOGGEDOUT;
-		
+
 		//base class
 		parent::__construct($arrModul, $strSystemid);
 
@@ -59,7 +59,7 @@ class class_modul_system_session extends class_model implements interface_model 
      *
      */
     public function initObject() {
-        
+
         class_logger::getInstance()->addLogRow("init session ".$this->getSystemid(), class_logger::$levelInfo);
         $strQuery = "SELECT * FROM "._dbprefix_."session WHERE session_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
@@ -72,7 +72,7 @@ class class_modul_system_session extends class_model implements interface_model 
             $this->setStrLoginstatus($arrRow["session_loginstatus"]) ;
             $this->setStrLoginprovider($arrRow["session_loginprovider"]) ;
             $this->setStrLasturl($arrRow["session_lasturl"]) ;
-            
+
             $this->bitValid = true;
         }
     }
@@ -154,8 +154,8 @@ class class_modul_system_session extends class_model implements interface_model 
         $strQuery = "DELETE FROM ".$this->arrModule["table"]." WHERE session_id = ?";
 		return $this->objDB->_pQuery($strQuery, array($this->getSystemid()));
     }
-    
-    
+
+
     /**
      * Returns, if available, the internal session-object for the passed internal session-id
      *
@@ -166,11 +166,11 @@ class class_modul_system_session extends class_model implements interface_model 
         $objSession = new class_modul_system_session($strSessionid);
         if($objSession->isSessionValid())
             return $objSession;
-        else 
-            return null;    
+        else
+            return null;
     }
-    
-    
+
+
     /**
      * Returns, if available, the internal session-object for the passed internal session-id
      *
@@ -190,8 +190,8 @@ class class_modul_system_session extends class_model implements interface_model 
         $arrReturn = array();
         foreach($arrIds as $arrOneId)
             $arrReturn[] = new class_modul_system_session($arrOneId["session_id"]);
-            
-        return $arrReturn;    
+
+        return $arrReturn;
     }
 
     /**
@@ -205,7 +205,7 @@ class class_modul_system_session extends class_model implements interface_model 
         $arrRow =  class_carrier::getInstance()->getObjDB()->getPRow($strQuery, array(time()));
         return $arrRow["COUNT(*)"];
     }
-    
+
 
     /**
      * Returns if the current user has logged in or not
@@ -215,10 +215,10 @@ class class_modul_system_session extends class_model implements interface_model 
     public function isLoggedIn() {
         if($this->isSessionValid() && $this->getStrLoginstatus() == self::$LOGINSTATUS_LOGGEDIN)
             return true;
-        else 
-            return false;    
+        else
+            return false;
     }
-    
+
     /**
      * Deletes all invalid session-entries from the database
      *
@@ -228,11 +228,11 @@ class class_modul_system_session extends class_model implements interface_model 
         $strSql = "DELETE FROM "._dbprefix_."session WHERE session_releasetime < ?";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strSql, array(time() ));
     }
-    
+
     public function isSessionValid() {
-        return $this->bitValid && $this->getIntReleasetime() > time();        
+        return $this->bitValid && $this->getIntReleasetime() > time();
     }
-    
+
 
 // --- GETTERS / SETTERS --------------------------------------------------------------------------------
     public function setStrPHPSessionId($strPHPSessId) {
@@ -242,10 +242,10 @@ class class_modul_system_session extends class_model implements interface_model 
         $this->strUserid = $strUserid;
     }
     public function setStrGroupids($strGroupids) {
-        $this->strGroupids = $strGroupids;        
+        $this->strGroupids = $strGroupids;
     }
     public function setIntReleasetime($intReleasetime) {
-        $this->intReleasetime = $intReleasetime;        
+        $this->intReleasetime = $intReleasetime;
     }
     public function setStrLoginprovider($strLoginprovider) {
         $this->strLoginprovider = $strLoginprovider;
@@ -257,7 +257,7 @@ class class_modul_system_session extends class_model implements interface_model 
     public function setStrLoginstatus($strLoginstatus) {
         $this->strLoginstatus = $strLoginstatus;
     }
-    
+
     public function getStrPHPSessionId() {
         return $this->strPHPSessionId;
     }
@@ -265,10 +265,10 @@ class class_modul_system_session extends class_model implements interface_model 
         return $this->strUserid;
     }
     public function getStrGroupids() {
-        return $this->strGroupids;        
+        return $this->strGroupids;
     }
     public function getIntReleasetime() {
-        return $this->intReleasetime;        
+        return $this->intReleasetime;
     }
     public function getStrLoginprovider() {
         return $this->strLoginprovider;
@@ -279,7 +279,7 @@ class class_modul_system_session extends class_model implements interface_model 
     public function getStrLoginstatus() {
         return $this->strLoginstatus;
     }
-    
-    
+
+
 }
 ?>

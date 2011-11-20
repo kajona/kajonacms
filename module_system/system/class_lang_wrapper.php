@@ -11,7 +11,7 @@
 /**
  * Class managing access to textfiles
  *
- * @package modul_system
+ * @package module_system
  */
 class class_lang_wrapper {
     /**

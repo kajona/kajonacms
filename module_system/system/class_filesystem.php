@@ -10,7 +10,7 @@
 /**
  * Class handling communication with the filesystem, e.g. to read directories
  *
- * @package modul_system
+ * @package module_system
  */
 class class_filesystem {
 	private $arrModul;
@@ -160,7 +160,7 @@ class class_filesystem {
 		if(is_file($strFile)) {
 			//Filename
 		    $arrReturn["filename"] = basename($strFile);
-		
+
 			//Type
 			$intTemp = uniStrrpos($strFile, ".");
 			if($intTemp !== false)
@@ -386,7 +386,7 @@ class class_filesystem {
 
     /**
      * Sets the current filepointer to a given offset
-     * 
+     *
      * @param int $intOffset
      */
     public function setFilePointerOffset($intOffset) {
@@ -424,34 +424,34 @@ class class_filesystem {
 
         return $strContent;
     }
-    
+
     /**
      * Reads a section from the end of a file.
      * This is done with pointers, reducing the amounf of memory consumed.
-     * 
+     *
      * @param int $intNrOfLines
-     * @return string 
+     * @return string
      */
     public function readLastLinesFromFile($intNrOfLines = 10) {
         $strReturn = "";
         $intCursor = -1;
         $intLinesRead = 0;
-        
+
         if($this->objFilePointer != null) {
             @fseek($this->objFilePointer, $intCursor, SEEK_END);
             $strChar = @fgetc($this->objFilePointer);
-            
+
             while($strChar !== false && $intLinesRead <= $intNrOfLines) {
                 $strReturn = $strChar . $strReturn;
-                
+
                 @fseek($this->objFilePointer, $intCursor--, SEEK_END);
                 $strChar = fgetc($this->objFilePointer);
-                
+
                 if($strChar == "\n")
                     $intLinesRead++;
             }
         }
-        
+
         return $strReturn;
     }
 

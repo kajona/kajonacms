@@ -11,7 +11,7 @@
  * This class provides a wrapper to gzip functionalities.
  * It can be used to create compressed versions of files
  *
- * @package modul_system
+ * @package module_system
  */
 class class_gzip {
 

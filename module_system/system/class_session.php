@@ -10,32 +10,32 @@
 /**
  * Manages all those session stuff as logins or logouts and access to session vars
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 final class class_session {
 
 	private $objDB;
 	private $strKey;
-	
+
 	private $arrRequestArray;
-	
+
 	public static $intScopeSession = 1;
 	public static $intScopeRequest = 2;
 
 	private static $objSession = null;
     private $bitLazyLoaded = false;
-	
+
 	/**
 	 * Instance of internal kajona-session
 	 *
 	 * @var class_modul_system_session
 	 */
 	private $objInternalSession = null;
-    
+
     /**
      *
-     * @var class_modul_user_user 
+     * @var class_modul_user_user
      */
 	private $objUser = null;
 
@@ -50,7 +50,7 @@ final class class_session {
 		$this->sessionStart();
 		$this->arrRequestArray = array();
 	}
-	
+
 	/**
 	 * Returns one instance of the Session-Object, using a singleton pattern
 	 *
@@ -79,7 +79,7 @@ final class class_session {
 		}
 		else
 			$bitReturn = true;
-			
+
 		return $bitReturn;
 	}
 
@@ -92,10 +92,10 @@ final class class_session {
 	 * @return bool
 	 */
 	public function setSession($strKey, $strValue, $intSessionScope = 1) 	{
-		
+
 		if($intSessionScope == class_session::$intScopeRequest) {
 		    $this->arrRequestArray[$strKey] = $strValue;
-		    return true;	
+		    return true;
 		}
 		else {
             //yes, it is wanted to have only one =. The condition checks the assignment.
@@ -128,7 +128,7 @@ final class class_session {
 	    $this->setSession("kajonaCaptchaCode", "");
 	    if($strCode == "")
 	       $strCode = generateSystemid();
-	       
+
 	    return $strCode;
 	}
 
@@ -171,7 +171,7 @@ final class class_session {
 	 * Deletes a value from the session
 	 *
 	 * @param string $strKey
-	 * 
+	 *
 	 */
 	public function sessionUnset($strKey) {
 		if($this->sessionIsset($strKey))
@@ -186,9 +186,9 @@ final class class_session {
 	public function isLoggedin() {
 		if($this->getObjInternalSession() != null)
 		    return $this->getObjInternalSession()->isLoggedIn();
-		else 
-		    return false;    
-		  
+		else
+		    return false;
+
 	}
 
 	/**
@@ -364,14 +364,14 @@ final class class_session {
         $bitReturn = false;
 
         if($objUser->getIntActive() == 1) {
-            
+
             $objUser->setIntLogins($objUser->getIntLogins()+1);
             $objUser->setIntLastLogin(time());
             $objUser->updateObjectToDb();
 
             $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDIN);
             $this->getObjInternalSession()->setStrUserid($objUser->getSystemid());
-            
+
             $strGroups = implode(",", $objUser->getArrGroupIds());
             $this->getObjInternalSession()->setStrGroupids($strGroups);
             $this->getObjInternalSession()->updateObjectToDb();
@@ -401,7 +401,7 @@ final class class_session {
 	 */
 	public function logout() {
 	    class_logger::getInstance()->addLogRow("User: ".$this->getUsername()." successfully logged out", class_logger::$levelInfo);
-	    
+
 	    $this->getObjInternalSession()->setStrLoginstatus(class_modul_system_session::$LOGINSTATUS_LOGGEDOUT);
 	    $this->getObjInternalSession()->updateObjectToDb();
 	    $this->getObjInternalSession()->deleteObject();
@@ -451,7 +451,7 @@ final class class_session {
 		}
 		return $strUserid;
 	}
-	
+
 	/**
 	 * Returns an instance of the current user or null of not given
 	 *
@@ -460,24 +460,24 @@ final class class_session {
 	private function getUser() {
 	    if($this->objUser != null)
 	       return $this->objUser;
-	       
-	    if($this->getUserID() != "") {  
+
+	    if($this->getUserID() != "") {
 	       $this->objUser = new class_modul_user_user($this->getUserID());
 	       return $this->objUser;
 	    }
-	       
-	    return null;   
+
+	    return null;
 	}
-	
+
 	/**
 	 * Resets the internal reference to the current user, e.g. to load new values from the database
 	 */
 	public function resetUser() {
-	    if($this->getUserID() != "") {  
+	    if($this->getUserID() != "") {
            $this->objUser = new class_modul_user_user($this->getUserID());
         }
 	}
-	
+
 	/**
 	 * Returns the groups the user is member in as a string
 	 *
@@ -493,7 +493,7 @@ final class class_session {
 		}
 		return $strGroupids;
 	}
-	
+
 	/**
 	 * Returns the groups the user is member in as an array
 	 *
@@ -538,25 +538,25 @@ final class class_session {
 	public function initInternalSession() {
 
         $this->bitLazyLoaded = true;
-	    
+
 	    $arrTables = $this->objDB->getTables();
         if(!in_array(_dbprefix_."session", $arrTables))
             return;
-	    
+
 	    if($this->getSession("KAJONA_INTERNAL_SESSID") !== false) {
 	        $this->objInternalSession = class_modul_system_session::getSessionById($this->getSession("KAJONA_INTERNAL_SESSID"));
-	        
+
 	        if($this->objInternalSession!= null && $this->objInternalSession->isSessionValid()) {
     	        $this->objInternalSession->setIntReleasetime(time()+_system_release_time_);
     	        $this->objInternalSession->setStrLasturl(getServer("QUERY_STRING"));
     	        $this->objInternalSession->updateObjectToDb();
 	        }
-	        else 
+	        else
 	           $this->objInternalSession = null;
-	        
-	        if($this->objInternalSession != null) 
+
+	        if($this->objInternalSession != null)
 	            return;
-	        
+
 	    }
 
         //try to load the matching groups
@@ -565,7 +565,7 @@ final class class_session {
             $this->objUser = new class_modul_user_user($this->getUserID());
             $strGroups = implode(",", $this->objUser->getArrGroupIds() );
         }
-        
+
         $objSession = new class_modul_system_session();
         $objSession->setStrPHPSessionId($this->getSessionId());
         $objSession->setStrUserid($this->getUserID());
@@ -573,10 +573,10 @@ final class class_session {
         $objSession->setIntReleasetime(time()+_system_release_time_);
         $objSession->setStrLasturl(getServer("QUERY_STRING"));
         $objSession->updateObjectToDb();
-        
+
         $this->setSession("KAJONA_INTERNAL_SESSID", $objSession->getSystemid());
         $this->objInternalSession = $objSession;
-        
+
 	}
 
     private function getObjInternalSession() {
@@ -584,7 +584,7 @@ final class class_session {
         //lazy loading
         if($this->objInternalSession == null && !$this->bitLazyLoaded)
             $this->initInternalSession();
-        
+
         return $this->objInternalSession;
     }
 
@@ -592,7 +592,7 @@ final class class_session {
         return $this->bitLazyLoaded;
     }
 
-    
+
 
 }
 

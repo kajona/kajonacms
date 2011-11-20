@@ -14,11 +14,11 @@
  * Since Kajona 3.4 this interface no longer defines action() since the controller
  * part moved to the base-classes
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_xml {
 
-	
+
 
 
 }

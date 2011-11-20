@@ -9,9 +9,9 @@
 
 /**
  * This class is a wrapper to phps' integrated zip-archive methods and objects.
- * It depends on the zip-library provided by php. 
+ * It depends on the zip-library provided by php.
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.4.0
  */
@@ -19,10 +19,10 @@ class class_zip {
 
     /**
      *
-     * @var class ZipArchive 
+     * @var class ZipArchive
      */
     private $objArchive = null;
-    
+
 	/**
 	 * Constructor
 	 *
@@ -30,18 +30,18 @@ class class_zip {
 	public function __construct() {
 		$this->arrModul["name"] 		= "class_zip";
 		$this->arrModul["moduleId"]		= _system_modul_id_;
-        
+
         if(!class_exists("ZipArchive"))
             throw new class_exception("current installation has no support for ZipArchive", class_exception::$level_ERROR);
-        
+
         $this->objArchive = new ZipArchive();
 	}
 
 	/**
      * Sets and opens the filename of the zip-archive to be used
-     * 
+     *
      * @param string $strFilename
-     * @return bool 
+     * @return bool
      */
     public function openArchiveForWriting($strFilename) {
         return $this->objArchive->open(_realpath_.$strFilename, ZipArchive::OVERWRITE);
@@ -50,34 +50,34 @@ class class_zip {
     /**
      * Adds a file to the zip-archive.
      * The second, optional param indicates the filename inside the archive
-     * 
+     *
      * @param type $strSourceFile
-     * @param type $strTargetFile 
+     * @param type $strTargetFile
      * @return bool
      */
     public function addFile($strSourceFile, $strTargetFile = "") {
-        
+
         $strSourceFile = uniStrReplace(_realpath_, "", $strSourceFile);
-        
+
         if($strTargetFile == "")
             $strTargetFile = $strSourceFile;
-        
+
         $strTargetFile = ltrim($strTargetFile, "/");
-        
-        
-        
+
+
+
         if(file_exists(_realpath_.$strSourceFile))
             return $this->objArchive->addFile(_realpath_.$strSourceFile, $strTargetFile);
         else
             return false;
-        
+
     }
-    
+
     /**
      * Traverses the folder and adds the folder recursively.
-     * 
+     *
      * @param string $strFolder
-     * @return bool 
+     * @return bool
      */
     public function addFolder($strFolder) {
         $bitReturn = true;
@@ -87,23 +87,23 @@ class class_zip {
             foreach($arrFiles["files"] as $arrOneFile) {
                 $bitReturn = $bitReturn && $this->addFile($arrOneFile["filepath"]);
             }
-            
+
             foreach($arrFiles["folders"] as $strOneFolder) {
                 $bitReturn = $bitReturn && $this->addFolder($strFolder."/".$strOneFolder);
             }
-            
+
             return $bitReturn;
-            
+
         }
-        
+
         return false;
     }
-    
+
     /**
      * Extracts all files in the archive to the folder given.
-     * 
+     *
      * @param string $strSourceArchive
-     * @param string $strTarget 
+     * @param string $strTarget
      * @return bool
      */
     public function extractArchive($strSourceArchive, $strTarget) {
@@ -112,10 +112,10 @@ class class_zip {
         $this->objArchive->close();
         return $bitReturn;
     }
-    
+
     /**
      * Finalizes the current archive and closes all file-handles
-     * @return bool 
+     * @return bool
      */
     public function closeArchive() {
         return $this->objArchive->close();

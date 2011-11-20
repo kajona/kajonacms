@@ -10,7 +10,7 @@
 /**
  * Class to provide methods used by the system for general issues
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_common extends class_model implements interface_model  {
@@ -24,7 +24,7 @@ class class_modul_system_common extends class_model implements interface_model  
      */
     public function __construct($strSystemid = "") {
         $arrModule = array();
-        $arrModule["name"] 				= "modul_system";
+        $arrModule["name"] 				= "module_system";
 		$arrModule["moduleId"] 			= _system_modul_id_;
 		$arrModule["table"]       		= "";
 		$arrModule["modul"]				= "system";
@@ -78,7 +78,7 @@ class class_modul_system_common extends class_model implements interface_model  
         }
         return $this->objDB->_pQuery($strQuery, array($intSpecialDate, $this->getSystemid()));
     }
-    
+
     /**
      * Sets the start date of the current systemid
      *
@@ -93,7 +93,7 @@ class class_modul_system_common extends class_model implements interface_model  
         $arrRow = $this->objDB->getPRow("SELECT COUNT(*) FROM "._dbprefix_."system_date WHERE system_date_id = ?", array($this->getSystemid()), 0, false);
         if((int)$arrRow["COUNT(*)"] == 0) {
             $strQuery = "INSERT INTO "._dbprefix_."system_date
-            				(system_date_start, system_date_id) VALUES 
+            				(system_date_start, system_date_id) VALUES
             				(?, ?)";
         }
         else {
@@ -141,7 +141,7 @@ class class_modul_system_common extends class_model implements interface_model  
         else
             return null;
     }
-    
+
     /**
      * Copys the current systemrecord as a new one.
      * Includes the rights-record, if given, and the date-record, if given
@@ -156,22 +156,22 @@ class class_modul_system_common extends class_model implements interface_model  
         $arrSystemRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system WHERE system_id= ?", array($this->getSystemid()));
         $arrRightsRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_right WHERE right_id= ?", array($this->getSystemid()));
         $arrDateRow = $this->objDB->getPRow("SELECT * FROM "._dbprefix_."system_date WHERE system_date_id= ?", array($this->getSystemid()));
-        
+
         if($strNewSystemPrevId == "") {
-            $strNewSystemPrevId = $arrSystemRow["system_prev_id"]; 
+            $strNewSystemPrevId = $arrSystemRow["system_prev_id"];
         }
-        
+
         //determin the correct new sort-id - append by default
         $strQuery = "SELECT COUNT(*) FROM "._dbprefix_."system WHERE system_prev_id = ?";
         $arrRow = $this->objDB->getPRow($strQuery, array($strNewSystemPrevId), 0, false);
         $intSiblings = $arrRow["COUNT(*)"];
-        
+
         $this->objDB->transactionBegin();
         //start by inserting the new systemrecords
         $strQuerySystem = "INSERT INTO "._dbprefix_."system
         (system_id, system_prev_id, system_module_nr, system_sort, system_owner, system_create_date, system_lm_user, system_lm_time, system_lock_id, system_lock_time, system_status, system_comment) VALUES
         	(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
+
         if($this->objDB->_pQuery($strQuerySystem, array(
                 $strNewSystemid,
                 $strNewSystemPrevId,
@@ -186,12 +186,12 @@ class class_modul_system_common extends class_model implements interface_model  
                 $arrSystemRow["system_status"],
                 $arrSystemRow["system_comment"]
             ))) {
-            
+
             if(count($arrRightsRow) > 0) {
-                $strQueryRights = "INSERT INTO "._dbprefix_."system_right 
-                (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES 
+                $strQueryRights = "INSERT INTO "._dbprefix_."system_right
+                (right_id, right_inherit, right_view, right_edit, right_delete, right_right, right_right1, right_right2, right_right3, right_right4, right_right5) VALUES
                 (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                
+
                 if(!$this->objDB->_pQuery($strQueryRights, array(
                     $strNewSystemid,
                     $arrRightsRow["right_inherit"],
@@ -206,27 +206,27 @@ class class_modul_system_common extends class_model implements interface_model  
                     $arrRightsRow["right_right5"]
                 ))) {
                     $this->objDB->transactionRollback();
-                    return false;            
+                    return false;
                 }
             }
-            
+
             if(count($arrDateRow) > 0) {
                 $strQueryDate = "INSERT INTO "._dbprefix_."system_date
-                (system_date_id, system_date_start, system_date_end, system_date_special ) VALUES 
+                (system_date_id, system_date_start, system_date_end, system_date_special ) VALUES
                 (?, ?, ?, ?)";
-                
+
                 if(!$this->objDB->_pQuery($strQueryDate, array($strNewSystemid, $arrDateRow["system_date_start"], $arrDateRow["system_date_end"], $arrDateRow["system_date_special"]) )) {
                     $this->objDB->transactionRollback();
-                    return false;            
+                    return false;
                 }
             }
-            
+
             $this->objDB->transactionCommit();
             return true;
-            
-            
+
+
         }
-        
+
         $this->objDB->transactionRollback();
         return false;
     }

@@ -11,7 +11,7 @@
  * Model for a single system-module
  * Modules are not represented in the system-table directly. so a moduleid is being used instead
  *
- * @package modul_system
+ * @package module_system
  */
 class class_modul_system_module extends class_model implements interface_model  {
 
@@ -34,7 +34,7 @@ class class_modul_system_module extends class_model implements interface_model  
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["author"] 			= "sidler@mulchprod.de";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."system_module";
@@ -109,7 +109,7 @@ class class_modul_system_module extends class_model implements interface_model  
 					  module_aspect=?
 					WHERE module_id = ?
 					";
-        return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(), 
+        return$this->objDB->_pQuery($strQuery, array($this->getStrName(), $this->getStrNamePortal(), $this->getStrXmlNamePortal(), $this->getStrNameAdmin(),
                                             $this->getStrXmlNameAdmin(), $this->getStrVersion(), $this->getIntDate(), $this->getIntNavigation(), $this->getStrAspect(), $this->getSystemid()));
     }
 

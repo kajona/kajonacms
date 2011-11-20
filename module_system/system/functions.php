@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * @package modul_system
+ * @package module_system
  */
 
 //For the sake of different loaders - check again :(
@@ -107,10 +107,10 @@ function issetPost($strKey) {
  * Returns the complete http-post-body as raw-data.
  * Please indicate wheter the source is encoded in "multipart/form-data", in this case
  * the data is read another way internally.
- * 
+ *
  * @param bool $bitMultipart
  * @return string
- * @since 3.4.0 
+ * @since 3.4.0
  */
 function getPostRawData($bitMultipart = false) {
     if($bitMultipart)
@@ -260,11 +260,11 @@ function getLinkAdmin($strModule, $strAction, $strParams = "", $strText ="", $st
  */
 function getLinkAdminHref($strModule, $strAction = "", $strParams = "", $bitEncodedAmpersand = true) {
     $strLink = "";
-    
+
     //add print-view param?
     if(getGet("printView") != "" || getPost("printView") != "")
         $strParams .= "&printView=1";
-    
+
     //systemid in params?
     $strSystemid = "";
     $arrParams = explode("&", $strParams);
@@ -416,7 +416,7 @@ function getLinkAdminDialog($strModule, $strAction, $strParams = "", $strText = 
     //urlencoding
     $strModule = urlencode($strModule);
     $strAction = urlencode($strAction);
-    
+
     if($strOnClick == "")
         $strOnClick = "KAJONA.admin.folderview.dialog.setContentIFrame('".getLinkAdminHref($strModule, $strAction, $strParams)."'); KAJONA.admin.folderview.dialog.setTitle('".$strTitle."'); KAJONA.admin.folderview.dialog.init(); return false;";
 
@@ -713,7 +713,7 @@ function getLinkPortalHref($strPageI, $strPageE = "", $strAction = "", $strParam
                 $objPage->setStrLanguage($strLanguage);
                 $objPage->initObject();
             }
-            
+
             $strAddKeys = $objPage->getStrSeostring().($strSeoAddon != "" && $objPage->getStrSeostring() != "" ? "-" : "").urlSafeString($strSeoAddon);
             if(uniStrlen($strAddKeys) > 0 && uniStrlen($strAddKeys) <=2 )
                 $strAddKeys .= "__";

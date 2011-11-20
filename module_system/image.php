@@ -33,7 +33,7 @@ if(!require_once("./system/bootstrap.php"))
  * The params maxWidth, maxHeight and quality are optional. If fixedWidth and fixedHeight
  * are set, maxWidth and maxHeight won't be used.
  *
- * @package modul_system
+ * @package module_system
  */
 class class_flyimage {
 

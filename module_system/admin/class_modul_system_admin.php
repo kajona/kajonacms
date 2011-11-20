@@ -11,7 +11,7 @@
 /**
  * Class to handle infos about the system and to set systemwide properties
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_admin extends class_admin implements interface_admin {
@@ -25,12 +25,12 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 	 */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"]		 		= "modul_system";
+		$arrModul["name"]		 		= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["modul"]				= "system";
 
 		parent::__construct($arrModul);
-        
+
         if($this->getAction() == "list")
             $this->setAction("moduleList");
 	}
@@ -196,7 +196,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
 
             $objModule->updateObjectToDb();
             $this->adminReload(getLinkAdminHref($this->arrModule["modul"], "moduleList"));
-            
+
         }
         else
             return $this->getText("commons_error_permissions");
@@ -677,7 +677,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
                 $arrRowData[] = $objTarget != null ? $this->objToolkit->getTooltipText(uniStrTrim($objTarget->getPropertyName($objOneEntry->getStrProperty()), 20), $objTarget->getPropertyName($objOneEntry->getStrProperty()) ) : "";
                 $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strOldValue, 20), $strOldValue);
                 $arrRowData[] = $this->objToolkit->getTooltipText(uniStrTrim($strNewValue, 20), $strNewValue);
-                
+
                 $arrData[] = $arrRowData;
             }
             $strReturn .= $this->objToolkit->dataTable($arrHeader, $arrData);
@@ -978,7 +978,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         $objEmail = new class_mail();
 
         $objEmail->setSender($objUser->getStrEmail());
-        
+
         $arrRecipients = explode(",", $this->getParam("mail_recipient"));
         foreach($arrRecipients as $strOneRecipient)
             if(checkEmailaddress($strOneRecipient))
@@ -998,7 +998,7 @@ class class_modul_system_admin extends class_admin implements interface_admin {
         else
             return $this->getText("mail_send_success");
     }
-	
+
 
 //---Helpers---------------------------------------------------------------------------------------------
 

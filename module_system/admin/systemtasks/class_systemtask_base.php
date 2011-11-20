@@ -11,10 +11,10 @@
 /**
  * Base class for all systemtasks. Provides a few methods to be used by the concrete tasks.
  *
- * @package modul_system
+ * @package module_system
  */
 abstract class class_systemtask_base {
-    
+
     private $strTextbase = "system";
 
 	/**
@@ -23,14 +23,14 @@ abstract class class_systemtask_base {
 	 * @var class_db
 	 */
     private $objDB;
-    
+
     /**
      * Instance of class_text
      *
      * @var class_texte
      */
     private $objTexte;
-    
+
     /**
      * Instance of class_toolkit
      *
@@ -67,7 +67,7 @@ abstract class class_systemtask_base {
         $arrModule = array();
         $arrModule["author"]        = "sidler@mulchprod.de";
         $arrModule["moduleId"]      = _system_modul_id_;
-        
+
         //load the external objects
         $this->objDB = class_carrier::getInstance()->getObjDB();
         $this->objTexte = class_carrier::getInstance()->getObjText();
@@ -76,7 +76,7 @@ abstract class class_systemtask_base {
 
 
     }
-    
+
     /**
      * Delegate requests for strings to the text-subsystem
      *
@@ -84,9 +84,9 @@ abstract class class_systemtask_base {
      * @return string
      */
     protected function getText($strTextKey) {
-        return $this->objTexte->getText($strTextKey, $this->strTextbase, "admin");	
+        return $this->objTexte->getText($strTextKey, $this->strTextbase, "admin");
     }
-    
+
     /**
      * Method invoking the hook-methods to generate a form.
      *
@@ -96,7 +96,7 @@ abstract class class_systemtask_base {
     public final function generateAdminForm($strTargetModule = "system", $strTargetAction = "systemTasks") {
     	$strReturn = "";
     	$strFormContent = $this->getAdminForm();
-    	
+
     	if($strFormContent != "") {
             if($this->bitMultipartform)
                 $strReturn .= $this->objToolkit->formHeader(getLinkAdminHref($strTargetModule, $strTargetAction, "task=".$this->getStrInternalTaskName()), "taskParamForm", "multipart/form-data");
@@ -106,21 +106,21 @@ abstract class class_systemtask_base {
             $strReturn .= $this->objToolkit->formInputHidden("execute", "true");
     		$strReturn .= $this->objToolkit->formInputSubmit($this->objTexte->getText("systemtask_run", "system", "admin"));
     		$strReturn .= $this->objToolkit->formClose();
-    		
+
     	}
-    	
+
     	return $strReturn;
     }
-    
+
     /**
      * Sets the current textbase, so a module.
      * If your textfiles are coming along with a module different than module system, pass the name here
      * to enable a proper text-loading.
-     * 
+     *
      * @param string $strModulename
      */
     protected function setStrTextBase($strModulename) {
-        $this->strTextbase = $strModulename;        
+        $this->strTextbase = $strModulename;
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class class_systemtask_base {
     public function getSubmitParams() {
         return "";
     }
-    
+
     /**
      * Empty implementation, oveerride in subclass!
      *
@@ -185,11 +185,11 @@ abstract class class_systemtask_base {
     public function getStrProgressInformation() {
         return $this->strProgressInformation;
     }
-    
+
     /**
      * Delegate to system-kernel, used to read from params.
      * Provides acces to the GET and POST params
-     * 
+     *
      * @param string $strKey
      * @return mixed
      */
@@ -211,7 +211,7 @@ abstract class class_systemtask_base {
     /**
      * Indicates, wether the form to set up the task is a multipart-form or not (e.g.
      * for fileuploads)
-     * 
+     *
      * @param $bitMultipartform bool
      */
     public function setBitMultipartform($bitMultipartform) {

@@ -11,7 +11,7 @@
  * Class to iterator over an array.
  * This class is able to create a pageview-mechanism
  *
- * @package modul_system
+ * @package module_system
  */
 class class_array_section_iterator extends class_array_iterator {
 

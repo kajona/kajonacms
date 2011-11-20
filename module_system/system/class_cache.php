@@ -22,7 +22,7 @@
  *  - content
  *  - leasetime (otherwise the entry will be invalid as soon as saved to the database)
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  * @since 3.3.1
  */
@@ -48,7 +48,7 @@ class class_cache  {
     /**
      * Internal counter of cleanups.
      * If set to true, a cleanup was done and won't be fired again.
-     * 
+     *
      * @var bool
      */
     private static $bitCleanupDone = false;
@@ -84,7 +84,7 @@ class class_cache  {
     /**
      * Tries to load a cached entry.
      * If existing, a valid object is returned.
-     * Otherwise, e.g. if not found or invalid, 
+     * Otherwise, e.g. if not found or invalid,
      * null is returned instead.
      *
      * @param string $strSourceName
@@ -95,7 +95,7 @@ class class_cache  {
      * @return class_cache or null
      */
     public static function getCachedEntry($strSourceName, $strHash1, $strHash2 = null, $strLanguage = null, $bitCreateInstanceOnNotFound = false) {
-        
+
         self::$intRequests++;
 
         //first run - search the internal cache
@@ -121,7 +121,7 @@ class class_cache  {
                 return $objCacheEntry;
             }
         }
-        
+
         //search in the database to find a matching entry
         $strQuery = "SELECT *
                        FROM "._dbprefix_."cache
@@ -150,11 +150,11 @@ class class_cache  {
                     $arrRow["cache_leasetime"],
                     $arrRow["cache_id"]
                 );
-            
+
             self::$intHits++;
             if(_cache_ === true)
                 $objCacheEntry->increaseCacheEntryHits();
-            
+
             return $objCacheEntry;
         }
         else {
@@ -179,9 +179,9 @@ class class_cache  {
      * to increase the time in order to profit from a
      * cached entry.
      * Use the setters to populate the entry with data.
-     * 
+     *
      * @param string $strSourceName
-     * @return class_cache 
+     * @return class_cache
      */
     public static function createNewInstance($strSourceName) {
         return new class_cache($strSourceName, "", "", "", "", time(), null);
@@ -194,7 +194,7 @@ class class_cache  {
      * @return bool
      */
     public function updateObjectToDb() {
-        
+
 
         //run a cleanup
         class_cache::cleanCache();
@@ -285,13 +285,13 @@ class class_cache  {
 
         if(count($arrWhere) > 0)
             $strQuery .= "WHERE ".implode(" AND ", $arrWhere);
-        
+
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, $arrParams);
     }
 
     /**
      * Returns the list of sources currently stored to the cache
-     * @return type 
+     * @return type
      */
     public static function getCacheSources() {
         $strQuery = "SELECT DISTINCT cache_source FROM  "._dbprefix_."cache";
@@ -415,7 +415,7 @@ class class_cache  {
         $strQuery = "UPDATE "._dbprefix_."cache SET cache_hits = cache_hits+1 WHERE cache_id=? ";
         return class_carrier::getInstance()->getObjDB()->_pQuery($strQuery, array($this->strCacheId) );
     }
-	
+
 
    public function getStrSourceName() {
        return $this->strSourceName;
@@ -493,8 +493,8 @@ class class_cache  {
    }
 
 
-   
 
-} 
+
+}
 
 ?>

@@ -14,7 +14,7 @@ require_once(dirname(__FILE__) . "/bootstrap.php");
  * The class_testbase is the common baseclass for all testcases.
  * Triggers the methods required to run proper PHPUnit tests such as starting the system-kernel
  *
- * @package modul_system
+ * @package module_system
  * @since 3.4
  * @author sidler@mulchprod.de
  */

@@ -14,7 +14,7 @@ include_once("../system/bootstrap.php");
  * Loads all subinstallers
  *
  * @author sidler@mulchprod.de
- * @package modul_system
+ * @package module_system
  */
 class class_installer {
 

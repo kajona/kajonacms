@@ -11,17 +11,17 @@
  * Interface to specify the layout of a systemtask.
  * To load a simple systemtask into the system, implement the hook-methods defined in this interface.
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_admin_systemtask {
- 
+
 	/**
 	 * Returns the internal name of the task. This name should correspond with the filename of the task.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getStrInternalTaskName();
-	
+
 	/**
 	 * Returns the human-readable, language-dependent name of the task. This name is displayed in the admin-
 	 * area.
@@ -29,7 +29,7 @@ interface interface_admin_systemtask {
 	 * @return string
 	 */
 	public function getStrTaskName();
-	
+
 	/**
 	 * Starts the execution of the task.
      * The return value can have different meanings. If you return a number between 0 and 100,
@@ -41,7 +41,7 @@ interface interface_admin_systemtask {
 	 * @return string, a number betwenn 0 and 100 to indicate the progress, otherwise a string-based message
 	 */
 	public function executeTask();
-	
+
 	/**
 	 * Uses the commmon toolkit and generates, if needed, the form to be shown right before
 	 * the execution of a task. This can be helpfull to collect data needed to run the task.
@@ -73,7 +73,7 @@ interface interface_admin_systemtask {
      */
     public function getGroupIdentifier();
 
-	
+
 }
 
 ?>

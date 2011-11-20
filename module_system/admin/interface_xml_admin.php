@@ -12,7 +12,7 @@
  * Interface for all xml-admin-classes (modules)
  * Ensures, that all needed methods are being implemented
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_xml_admin extends interface_xml  {
 

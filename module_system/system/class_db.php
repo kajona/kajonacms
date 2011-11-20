@@ -12,12 +12,12 @@
  * CHANGE WITH CARE!
  * Since version 3.4, prepared statments are supported. As a parameter-escaping, only the ? char is allowed,
  * named params are not supported at the moment.
- * Old plain queries are still allows, but will be discontinued around kajona 3.5 / 4.0. Up from kajona > 3.4.0 
+ * Old plain queries are still allows, but will be discontinued around kajona 3.5 / 4.0. Up from kajona > 3.4.0
  * a warning will be generated when using the old apis.
  * When using prepared statements, all escaping is done by the database layer.
  * When using the old, plain queries, you have to escape all embedded arguments yourself by using dbsafeString()
  *
- * @package modul_system
+ * @package module_system
  *
  */
 class class_db {
@@ -102,7 +102,7 @@ class class_db {
 	        class_logger::getInstance()->addLogRow("Rolled back open transactions on deletion of current instance of class_db!", class_logger::$levelWarning);
 	    }
 
-        
+
 	    if($this->objDbDriver !== null && $this->bitConnected) {
             class_logger::getInstance()->addLogRow("closing database-connection", class_logger::$levelInfo);
 	        $this->objDbDriver->dbclose();
@@ -248,7 +248,7 @@ class class_db {
 	public function getArray($strQuery, $bitCache = true) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 		$strQuery = $this->processQuery($strQuery);
 		//Increasing global counter
 		$this->intNumber++;
@@ -351,7 +351,7 @@ class class_db {
     public function getArraySection($strQuery, $intStart, $intEnd, $bitCache = true) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
         $arrReturn = array();
         //param validation
         if((int)$intStart < 0)
@@ -361,7 +361,7 @@ class class_db {
             $intEnd = 0;
         //process query
         $strQuery = $this->processQuery($strQuery);
-        
+
         //Increasing global counter
 		$this->intNumber++;
 
@@ -489,7 +489,7 @@ class class_db {
 	private function getError($strQuery) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
         $strError = "";
 	    if($this->objDbDriver != null) {
 	       $strError = $this->objDbDriver->getError();
@@ -534,7 +534,7 @@ class class_db {
 	public function transactionBegin() {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    if($this->objDbDriver != null) {
 	        //just start a new tx, if no other tx is open
 	        if($this->intNumberOfOpenTransactions == 0)
@@ -553,7 +553,7 @@ class class_db {
 	public function transactionCommit() {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    if($this->objDbDriver != null) {
 
 	        //check, if the current tx is allowed to be commited
@@ -584,7 +584,7 @@ class class_db {
 	public function transactionRollback() {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    if($this->objDbDriver != null) {
 
 		    if($this->intNumberOfOpenTransactions == 1) {
@@ -615,10 +615,10 @@ class class_db {
 	public function getTables($bitAll = false) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 		$arrReturn = array();
 		if($this->objDbDriver != null) {
-            
+
             if($bitAll && isset($this->arrTablesCache["all"]))
                 return $this->arrTablesCache["all"];
             else if(isset($this->arrTablesCache["filtered"]))
@@ -629,7 +629,7 @@ class class_db {
 
             $strFakeQuery = "SELECT ALL TABLES /// KAJONA INTERNAL QUERY";
             $strQueryMd5 = md5($strFakeQuery);
-            
+
             $bitCache = true;
             if(defined("_system_use_dbcache_") && _system_use_dbcache_ == "false")
                 $bitCache = false;
@@ -655,8 +655,8 @@ class class_db {
 
             if($bitCache)
                 $this->arrQueryCache[$strQueryMd5] = $arrTemp;
-            
-            
+
+
     		//Filtering tables not used by this project, if dbprefix was given
     		if(_dbprefix_ != "") {
         		foreach($arrTemp as $arrTable) {
@@ -677,14 +677,14 @@ class class_db {
     					$arrReturn[] =  $arrTable["name"];
     		    }
     		}
-            
+
             if($bitAll)
                 $this->arrTablesCache["all"] = $arrReturn;
             else
                 $this->arrTablesCache["filtered"] = $arrReturn;
 		}
 
-        
+
 
 		return $arrReturn;
 	}
@@ -700,7 +700,7 @@ class class_db {
     public function getColumnsOfTable($strTableName) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
         return $this->objDbDriver->getColumnsOfTable($strTableName);
     }
 
@@ -753,7 +753,7 @@ class class_db {
     public function createTable($strName, $arrFields, $arrKeys, $arrIndices = array(), $bitTxSafe = true) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
         $bitReturn = $this->objDbDriver->createTable($strName, $arrFields, $arrKeys, $arrIndices, $bitTxSafe);
         if(!$bitReturn)
         	$this->getError("");
@@ -771,7 +771,7 @@ class class_db {
 	public function dumpDb($arrTablesToExclude = array()) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    // Check, how many dumps to keep
 	    $objFilesystem = new class_filesystem();
 	    $arrFiles = $objFilesystem->getFilelist("/system/dbdumps/", array(".sql", ".gz"));
@@ -825,7 +825,7 @@ class class_db {
 	public function importDb($strFilename) {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    //gz file?
 	    $bitGzip = false;
 	    if(substr($strFilename, -3) == ".gz") {
@@ -889,7 +889,7 @@ class class_db {
 	public function getDbInfo() {
         if(!$this->bitConnected)
             $this->dbconnect();
-        
+
 	    if($this->objDbDriver != null) {
             return $this->objDbDriver->getDbInfo();
 	    }

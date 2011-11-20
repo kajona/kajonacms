@@ -23,7 +23,7 @@ else
 /**
  * Wrapper class to centralize a method within its namespace
  *
- * @package modul_system
+ * @package module_system
  */
 class class_index  {
 

@@ -12,7 +12,7 @@
  * Portal-Part of the toolkit.
  * Provides a few helpers
  *
- * @package modul_system
+ * @package module_system
  */
 class class_toolkit_portal extends class_toolkit {
 
@@ -238,7 +238,7 @@ class class_toolkit_portal extends class_toolkit {
                 $arrTemplate["actionlinks"] .= $this->objTemplate->fillTemplate($arrRowTemplate, $strTemplateRowID);
             }
         }
-        
+
         $arrTemplate["systemid"] = $strSystemid."_".generateSystemid();
         $arrTemplate["content"] = $strContent;
         $strReturn = $this->objTemplate->fillTemplate($arrTemplate, $strTemplateID);
@@ -270,7 +270,7 @@ class class_toolkit_portal extends class_toolkit {
         return $strReturn;
     }
 
-    
+
     /**
      * Creates the portaleditor toolbar at top of the page
      *

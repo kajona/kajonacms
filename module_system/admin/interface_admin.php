@@ -13,10 +13,10 @@
  * Since Kajona version 3.4 this interface is only a marker since all
  * actions and processing is done within the framework.
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_admin {
-	
+
 
 }
 ?>

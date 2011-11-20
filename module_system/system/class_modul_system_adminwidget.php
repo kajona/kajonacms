@@ -9,16 +9,16 @@
 
 /**
  * Class to represent a single adminwidget
- * 
- * @package modul_system
+ *
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_adminwidget extends class_model implements interface_model {
-    
+
     private $strClass = "";
     private $strContent = "";
-    
-    
+
+
 	/**
      * Constructor to create a valid object
      *
@@ -26,7 +26,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]              = _dbprefix_."adminwidget";
 		$arrModul["modul"]              = "system";
@@ -54,24 +54,24 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     protected function getObjectDescription() {
         return "adminwidget ".$this->getStrClass();
     }
-    
+
     /**
      * Inits the object by loading the values from the db
      *
      */
     public function initObject() {
         $strQuery = "SELECT * FROM ".$this->arrModule["table"].",
-        						   "._dbprefix_."system 
+        						   "._dbprefix_."system
         				WHERE system_id = adminwidget_id
         				  AND system_id = ? ";
-        
+
         $arrRow = $this->objDB->getPRow($strQuery, array($this->getSystemid()));
         if(count($arrRow) > 0) {
             $this->setStrClass($arrRow["adminwidget_class"]);
             $this->setStrContent($arrRow["adminwidget_content"]);
         }
     }
-    
+
     /**
      * Updates the values of the current widget to the db
      * @todo: was dbsafeString($this->getStrContent(), false) / false still required?
@@ -83,7 +83,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
                  WHERE adminwidget_id = ? ";
         return $this->objDB->_pQuery($strQuery, array($this->getStrClass(), $this->getStrContent(), $this->getSystemid()), array(true, false, true) );
     }
-    
+
     /**
      * Deletes the current object from the database
      *
@@ -100,9 +100,9 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         }
         return false;
     }
-    
-    
-    
+
+
+
     /**
      * Looks up all widgets available in the filesystem.
      * ATTENTION: returns the class-name representation of a file, NOT the filename itself.
@@ -111,20 +111,20 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
      */
     public function getListOfWidgetsAvailable() {
         $arrReturn = array();
-        
+
         $objFilesystem = new class_filesystem();
-        
+
         $arrFiles = $objFilesystem->getFilelist("/admin/widgets/", array(".php"));
-        
+
         foreach($arrFiles as $strOneFile) {
             if($strOneFile != "interface_adminwidget.php" && $strOneFile != "class_adminwidget.php") {
                 $arrReturn[] = uniStrReplace(".php", "", $strOneFile);
             }
         }
-        
+
         return $arrReturn;
     }
-    
+
     /**
      * Creates the concrete widget represented by this model-element
      *
@@ -137,7 +137,7 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
         $objWidget->setSystemid($this->getSystemid());
         return $objWidget;
     }
-    
+
 //--- GETTERS / SETTERS ---------------------------------------------------------------------------------
 
     public function setStrClass($strClass) {
@@ -146,14 +146,14 @@ class class_modul_system_adminwidget extends class_model implements interface_mo
     public function setStrContent($strContent) {
         $this->strContent = $strContent;
     }
-    
+
     public function getStrClass() {
         return $this->strClass;
     }
     public function getStrContent() {
         return $this->strContent;
     }
-    
+
 }
 
 

@@ -26,7 +26,7 @@ else
 /**
  * Class handling all requests to be served with xml
  *
- * @package modul_system
+ * @package module_system
  */
 class class_xml {
 

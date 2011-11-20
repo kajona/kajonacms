@@ -7,7 +7,7 @@ require_once (dirname(__FILE__)."/../system/interface_versionable.php");
  * Tests a few aspects of the changelog-component
  *
  * @author sidler@mulchprod.de
- * @package modul_system
+ * @package module_system
  */
 class test_systemchangelogTest extends class_testbase {
 

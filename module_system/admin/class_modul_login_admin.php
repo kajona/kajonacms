@@ -10,7 +10,7 @@
 /**
  * This class shows a little LoginScreen if the user is net yet loggedin
  *
- * @package modul_system
+ * @package module_system
  */
 class class_modul_login_admin extends class_admin implements interface_admin  {
 
@@ -118,11 +118,11 @@ class class_modul_login_admin extends class_admin implements interface_admin  {
 
                         $strReturn .= $this->getText("login_change_success", "user");
                     }
-                    else 
+                    else
                         $strReturn .= $this->getText("login_change_error", "user");
                 }
             }
-            else 
+            else
                 $strReturn .= $this->getText("login_change_error", "user");
 
         }

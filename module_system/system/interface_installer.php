@@ -10,7 +10,7 @@
 /**
  * Interface for all installers
  *
- * @package modul_system
+ * @package module_system
  */
 interface interface_installer {
 
@@ -26,7 +26,7 @@ interface interface_installer {
      *
      */
     public function getNeededModules();
-    
+
     /**
      * Returns the version of the system-module needed as a minimum
      * Return an empty string, if no min version is needed

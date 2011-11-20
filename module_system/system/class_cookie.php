@@ -11,7 +11,7 @@
  * A small class to provide acces to cookies, both ways, reading as writing.
  * Use this class ONLY to access / set cookies!
  *
- * @package modul_system
+ * @package module_system
  */
 class class_cookie {
 

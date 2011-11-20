@@ -11,7 +11,7 @@
 /**
  * Installer for the system-module
  *
- * @package modul_system
+ * @package module_system
  */
 class class_installer_system extends class_installer_base implements interface_installer {
 

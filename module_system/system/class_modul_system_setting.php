@@ -11,7 +11,7 @@
  * Model for a single system-setting
  * Setting are not represented by a record in the system-table
  *
- * @package modul_system
+ * @package module_system
  * @author sidler@mulchprod.de
  */
 class class_modul_system_setting extends class_model implements interface_model, interface_versionable  {
@@ -64,7 +64,7 @@ class class_modul_system_setting extends class_model implements interface_model,
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_system";
+        $arrModul["name"] 				= "module_system";
 		$arrModul["moduleId"] 			= _system_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."system_config";
 		$arrModul["modul"]				= "system";
@@ -125,8 +125,8 @@ class class_modul_system_setting extends class_model implements interface_model,
             return $this->objDB->_pQuery($strQuery, array($this->getStrValue(), $this->getStrName()));
         }
     }
-    
-    
+
+
     /**
      * Renames a constant in the database.
      * @param string $strNewName
@@ -134,11 +134,11 @@ class class_modul_system_setting extends class_model implements interface_model,
      */
     public function renameConstant($strNewName) {
     	class_logger::getInstance()->addLogRow("renamed constant ".$this->getStrName() ." to ".$strNewName, class_logger::$levelInfo);
-        
-    	
+
+
         $strQuery = "UPDATE "._dbprefix_."system_config
                     SET system_config_name = ? WHERE system_config_name = ?";
-        
+
         $bitReturn =  $this->objDB->_pQuery($strQuery, array($strNewName, $this->getStrName()));
         $this->strName = $strNewName;
         return $bitReturn;
@@ -190,7 +190,7 @@ class class_modul_system_setting extends class_model implements interface_model,
 
     public function getChangedFields($strAction) {
         if($strAction == $this->strActionChange) {
-            return array( 
+            return array(
                 array("property" => $this->getStrName(), "oldvalue" => $this->strOldValue, "newvalue" => $this->getStrValue())
             );
         }

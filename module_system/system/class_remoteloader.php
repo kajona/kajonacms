@@ -13,7 +13,7 @@
  * Class providing a wrapper to remote objects. Provides methods to load text-files (e.g. xml-files)
  * from a remote server. Tries to establish a connection via file_get_contents or via sockets.
  *
- * @package modul_system
+ * @package module_system
  */
 class class_remoteloader {
 
@@ -24,14 +24,14 @@ class class_remoteloader {
 	 * @var string
 	 */
 	private $strCacheTable;
-	
+
 	/**
 	 * The protocol to use, e.g. http://
 	 *
 	 * @var string
 	 */
 	private $strProtocolHeader = "http://";
-	
+
 	/**
 	 * The port to open the connection, e.g. 80,
 	 * especially to be used with sockets.
@@ -39,21 +39,21 @@ class class_remoteloader {
 	 * @var unknown_type
 	 */
 	private $intPort = 80;
-	
+
 	/**
 	 * The host to query
 	 *
 	 * @var string
 	 */
 	private $strHost = "";
-	
+
 	/**
 	 * Additional params to add after the port-definition
 	 *
 	 * @var string
 	 */
 	private $strQueryParams = "";
-	
+
 	/**
 	 * The maximum time in seconds a request may be cached.
 	 * Default is set via the system-settings.
@@ -61,7 +61,7 @@ class class_remoteloader {
 	 * @var int
 	 */
 	private $intMaxCachetime = _remoteloader_max_cachetime_;
-	
+
 	/**
 	 * Constructor, as usual ;)
 	 *
@@ -69,47 +69,47 @@ class class_remoteloader {
 	public function __construct() {
 		$this->strCacheTable = _dbprefix_."remoteloader_cache";
 	}
-	
+
 	/**
 	 * Builts the query and tries to get the remote content either by a cache-lookup
 	 * or via a remote-connection. Use $bitForceReload if you want to skip the cache-lookup.
-	 * 
+	 *
 	 * @param bool $bitForceReload
 	 * @return string
 	 * @throws class_exception
 	 */
 	public function getRemoteContent($bitForceReload = false) {
-		
+
 		$strReturn = false;
-		
+
 		//check all needed params
 		if((int)$this->intPort < 0 || $this->strHost == "" || $this->strProtocolHeader == "")
 		    throw new class_exception("Not all needed values given", class_exception::$level_ERROR);
-		
+
 		//first try: load it via the cache
 		if ($bitForceReload === false) {
 		    $strReturn = $this->loadByCache();
-		    
+
 		    //if the cache was succesfull, return
 	        if($strReturn !== false) {
 	            class_logger::getInstance()->addLogRow("remote request found in cache", class_logger::$levelInfo);
 	            return $strReturn;
 	        }
 		}
-				
+
 		//second try: file_get_content
 		if($strReturn === false)
 		    $strReturn = $this->connectByFileGetContents();
-		    
+
 		//third: fsockopen
 		if($strReturn === false)
-		    $strReturn = $this->connectFSockOpen();    
-		    
+		    $strReturn = $this->connectFSockOpen();
+
 		//fourth: curl
 		if($strReturn === false)
 		    $strReturn = $this->connectViaCurl();
 
-        //fifth try: sockets 
+        //fifth try: sockets
 		if($strReturn === false)
 		    $strReturn = $this->connectViaSocket();
 
@@ -119,7 +119,7 @@ class class_remoteloader {
 		//BUT: reduce the max cachetime to a third of its' original value.
 		if($strReturn === false) {
 			$this->intMaxCachetime = (int)($this->intMaxCachetime/3);
-		}    
+		}
 
 		//and save to the cache
 		if($strReturn !== false) {
@@ -133,10 +133,10 @@ class class_remoteloader {
 		}
 
 		class_logger::getInstance()->addLogRow("new remote-request succeeded. protocol: ".$this->strProtocolHeader." host: ".$this->strHost." port: ".$this->intPort." params: ".$this->strQueryParams, class_logger::$levelInfo);
-		
-		return $strReturn;  
+
+		return $strReturn;
 	}
-	
+
 	/**
 	 * Creates a md5 based cache-checksum to identify the query
 	 *
@@ -145,7 +145,7 @@ class class_remoteloader {
 	private function buildCacheChecksum() {
 		return md5($this->strProtocolHeader.$this->strHost.$this->intPort.$this->strQueryParams);
 	}
-	
+
 	/**
 	 * Tries to find a valid cache-entry for the current query
 	 *
@@ -161,7 +161,7 @@ class class_remoteloader {
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Tries to load a remote located content via the built in php-function
 	 * and returns the string
@@ -170,18 +170,18 @@ class class_remoteloader {
 	 */
 	private function connectByFileGetContents() {
 		$strReturn = "";
-		
+
 		if(class_carrier::getInstance()->getObjConfig()->getPhpIni("allow_url_fopen") != 1)
-            return false;		  
-		
+            return false;
+
 		$strReturn = @file_get_contents( $this->strProtocolHeader.
 		                                 $this->strHost.
 		                                ($this->intPort > 0 ? ":".$this->intPort : "" ).
 		                                 $this->strQueryParams);
-		                              
+
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Tries to load a remote located content via the socket-class
 	 * and returns the string
@@ -190,10 +190,10 @@ class class_remoteloader {
 	 */
 	private function connectViaSocket() {
 		$strReturn = "";
-		
+
 		//request in list of supported protocols?
 		if($this->strProtocolHeader == "http://") {
-		
+
 	        try {
 	            $objSocket = new class_socket($this->strHost, ($this->intPort > 0 ? $this->intPort : 80));
 	            $objSocket->connect();
@@ -202,7 +202,7 @@ class class_remoteloader {
 	            $objSocket->writeLimiter();
 	            $strReturn = $objSocket->read();
 	            $objSocket->close();
-	            
+
 	            $strReturn = trim($strReturn);
 	            if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
 	            	$strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
@@ -211,26 +211,26 @@ class class_remoteloader {
 	            if(uniStrpos($strReturn, "<") !== false) {
 	            	$strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
 	            }
-	            
+
 	            //and, if given, remove the last 0
 	            if(uniSubstr($strReturn, -1) == "0")
 	               $strReturn = uniSubstr($strReturn, 0, -1);
-	            
+
 	        }
 	        catch (class_exception $objException) {
 	            //$objException->processException();
 	            $strReturn = false;
 	        }
-	        
+
 		}
 		else {
 			//protocol not supported via sockets
 		    $strReturn = false;
 		}
-        
+
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Tries to load a remote located content via fsockopen
 	 * and returns the string
@@ -239,14 +239,14 @@ class class_remoteloader {
 	 */
 	private function connectFSockOpen() {
 		$strReturn = "";
-		
+
 		//request in list of supported protocols?
 		if($this->strProtocolHeader == "http://" || $this->strProtocolHeader == "https://") {
-		
+
 	        try {
-	           $intErrorNumber = ""; 
+	           $intErrorNumber = "";
 	           $strErrorString = "";
-	           
+
 	           $strProtocolAdd = "";
 	           if($this->strProtocolHeader == "http://")
 	               $strProtocolAdd = "tcp://";
@@ -267,28 +267,28 @@ class class_remoteloader {
     		      }
     		      fclose($objRemoteResource);
     		   }
-    		  
-          	   if ($intErrorNumber!=0) 
+
+          	   if ($intErrorNumber!=0)
           	       return false;
-          	  
+
           	   if(uniStrpos($strReturn, "\r\n\r\n") !== false) {
 	               $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "\r\n\r\n")));
-	           }   
+	           }
 
 	           $strReturn = trim($strReturn);
 	           if(uniStrpos($strReturn, "<") !== false) {
 	           	   $strReturn = trim(uniSubstr($strReturn, uniStrpos($strReturn, "<")));
 	           }
-	            
+
 	           //and, if given, remove the last 0
 	           if(uniSubstr($strReturn, -1) == "0")
 	               $strReturn = uniSubstr($strReturn, 0, -1);
-	               	            
+
 	        }
 	        catch (class_exception $objException) {
 	            $strReturn = false;
 	        }
-	        
+
 		}
 		else {
 			//protocol not supported via fsockopen
@@ -298,11 +298,11 @@ class class_remoteloader {
         //no valid response found
         if (strlen($strReturn)==0)
             $strReturn = false;
-      
-		
+
+
 		return $strReturn;
 	}
-	
+
 	/**
 	 * Tries to load a remote located content via curl extensions
 	 * and returns the string
@@ -314,10 +314,10 @@ class class_remoteloader {
 
 	    if(!function_exists("curl_exec"))
 	        return false;
-	    
+
 	    // create a new curl-handle
         $objHandle = curl_init();
- 
+
         // set the params
         curl_setopt($objHandle, CURLOPT_URL, $this->strProtocolHeader.
 		                                     $this->strHost.
@@ -331,16 +331,16 @@ class class_remoteloader {
         curl_setopt($objHandle, CURLOPT_FOLLOWLOCATION, true);
         //max number of redirects
         curl_setopt($objHandle, CURLOPT_MAXREDIRS, 2);
- 
+
         //and execute...
         $strReturn = curl_exec($objHandle);
- 
+
         //close the handle
-        curl_close($objHandle);   
-	    
+        curl_close($objHandle);
+
 	    return $strReturn;
 	}
-	
+
 	/**
 	 * saves the response from the server to the internal cache
 	 *
@@ -352,11 +352,11 @@ class class_remoteloader {
         $objCache = class_cache::getCachedEntry(__CLASS__, $this->buildCacheChecksum(), "", "", true);
         $objCache->setStrContent($strResponse);
         $objCache->setIntLeasetime(time()+(int)$this->intMaxCachetime);
-        
+
         return $objCache->updateObjectToDb();
-		
+
 	}
-	
+
     /**
      * Deletes all entries currently saved to the cache
      *
@@ -364,10 +364,10 @@ class class_remoteloader {
      */
     public function flushCache() {
         $strQuery = "DELETE FROM ".$this->strCacheTable."";
-        
+
         return class_carrier::getInstance()->getObjDB()->_query($strQuery);
     }
-	
+
 	/**
 	 * Sets the protocol to use. Default is https://.
 	 *
@@ -376,7 +376,7 @@ class class_remoteloader {
 	public function setStrProtocolHeader($strHeader) {
 		$this->strProtocolHeader = $strHeader;
 	}
-	
+
 	/**
 	 * Sets the port to use. Default is 80.
 	 *
@@ -385,7 +385,7 @@ class class_remoteloader {
 	public function setIntPort($intPort) {
 		$this->intPort = (int)$intPort;
 	}
-	
+
 	/**
 	 * Sets the remote host
 	 *
@@ -394,7 +394,7 @@ class class_remoteloader {
 	public function setStrHost($strHost) {
 		$this->strHost = $strHost;
 	}
-	
+
 	/**
 	 * Sets additional query params, e.g. ?param=value&param2=value2 or /index.html
 	 *
@@ -403,7 +403,7 @@ class class_remoteloader {
 	public function setStrQueryParams($strQueryParams) {
 		$this->strQueryParams = $strQueryParams;
 	}
-	
+
 }
 
 
