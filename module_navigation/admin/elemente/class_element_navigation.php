@@ -10,7 +10,7 @@
 /**
  * Admin class of the navigation element
  *
- * @package modul_navigation
+ * @package module_navigation
  *
  */
 class class_element_navigation extends class_element_admin implements interface_admin_element {
@@ -55,7 +55,7 @@ class class_element_navigation extends class_element_admin implements interface_
 		$strReturn .= $this->objToolkit->formInputHidden("navigation_id", (isset($arrElementData["navigation_id"]) ? $arrElementData["navigation_id"] : ""));
 		//Load the available templates
 		$objFilesystem = new class_filesystem();
-		$arrTemplates = $objFilesystem->getFilelist("/templates/modul_navigation", ".tpl");
+		$arrTemplates = $objFilesystem->getFilelist("/templates/module_navigation", ".tpl");
 		$arrTemplatesDD = array();
 		if(count($arrTemplates) > 0) {
 			foreach($arrTemplates as $strTemplate) {

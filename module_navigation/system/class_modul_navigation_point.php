@@ -10,7 +10,7 @@
 /**
  * Model for a navigation point itself
  *
- * @package modul_navigation
+ * @package module_navigation
  * @author sidler@mulchprod.de
  */
 class class_modul_navigation_point extends class_model implements interface_model  {
@@ -29,7 +29,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_navigation";
+        $arrModul["name"] 				= "module_navigation";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."navigation";
 		$arrModul["modul"]				= "navigation";
@@ -157,7 +157,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 
         //current node is a navigation-node
         if($objCommon->getIntModuleNr() == _navigation_modul_id_) {
-            
+
             //check where the point links to - navigation-point or pages-entry
             $objNavigationPoint = new class_modul_navigation_point($strSystemid);
             if($objNavigationPoint->getStrPageI() == "" && validateSystemid($objNavigationPoint->getStrFolderI())) {
@@ -172,7 +172,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
             $arrReturn = self::loadPageLevelToNavigationNodes($strSystemid);
         }
 
-         
+
 
         return $arrReturn;
     }
@@ -248,7 +248,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
 
         $arrPages = class_modul_pages_folder::getPagesAndFolderList($strSourceId);
         $arrReturn = array();
-        
+
         //transform the sublevel
         foreach($arrPages as $objOneEntry) {
             //validate status
@@ -256,14 +256,14 @@ class class_modul_navigation_point extends class_model implements interface_mode
                 continue;
 
             if($objOneEntry instanceof class_modul_pages_page) {
-                
+
                 //validate if the page to be links has a template assigned and at least a single element created
                 if( $objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS || ($objOneEntry->getStrTemplate() != "" && $objOneEntry->getNumberOfElementsOnPage() > 0)) {
-                
+
                     $objPoint = new class_modul_navigation_point();
                     $objPoint->setStrName($objOneEntry->getStrBrowsername() != "" ? $objOneEntry->getStrBrowsername() : $objOneEntry->getStrName());
                     $objPoint->setIntRecordStatus(1, false);
-                    
+
                     //if in alias mode, then check what type of target is requested
                     if($objOneEntry->getIntType() == class_modul_pages_page::$INT_TYPE_ALIAS) {
                         $strAlias = uniStrtolower($objOneEntry->getStrAlias());
@@ -275,7 +275,7 @@ class class_modul_navigation_point extends class_model implements interface_mode
                     }
                     else
                         $objPoint->setStrPageI($objOneEntry->getStrName());
-                    
+
                     $objPoint->setSystemid($objOneEntry->getSystemid());
 
                     $arrReturn[] = $objPoint;

@@ -10,7 +10,7 @@
 /**
  * Installer of the navigation
  *
- * @package modul_navigation
+ * @package module_navigation
  */
 class class_installer_navigation extends class_installer_base implements interface_installer {
 

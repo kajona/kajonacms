@@ -16,11 +16,11 @@
  * Therefore only the nodes in $arrTempNodes may be used. A instantiation via new class_modul_navigation_point()
  * is not recommend since a node created out of the pages will fail to load this way!
  *
- * @package modul_navigation
+ * @package module_navigation
  * @author sidler@mulchprod.de
  */
 class class_modul_navigation_portal extends class_portal implements interface_portal {
-    
+
 	private $strCurrentSite = "";
 	private $arrTree = array();
 	private $intLevelMax = 0;
@@ -35,7 +35,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
      *                                 array("node", "subnodes" => array(...) ),
      *                                  ... )
      *                   );
-     * 
+     *
      * @var array
      */
     private $arrTempNodes = array();
@@ -48,19 +48,19 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	public function __construct($arrElementData) {
         $arrModul = array();
         $arrModul["modul"]          = "navigation";
-		$arrModul["name"] 			= "modul_navigation";
+		$arrModul["name"] 			= "module_navigation";
 		$arrModul["moduleId"] 		= _navigation_modul_id_;
 
 		parent::__construct($arrModul, $arrElementData);
 
 		//Determin the current site to load
 		$this->strCurrentSite = $this->getPagename();
-        
+
         //init with the current navigation, required in all cases
         $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
         $this->arrTempNodes[$this->arrElementData["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
-        
-        
+
+
         //Which kind of navigation do we want to load?
 		if($this->arrElementData["navigation_mode"] == "tree")
 			$this->setAction("navigationTree");
@@ -70,9 +70,9 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
     /**
      * Adds the code to load the portaleditor
-     * 
+     *
      * @param string $strReturn
-     * @return string 
+     * @return string
      */
 	private function addPortaleditorCode($strReturn) {
 
@@ -90,7 +90,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                               "pe_action_delete" => "",
                               "pe_action_delete_params" => ""
                             );
-        
+
         //only add the code, if not auto-generated
         $objNavigation = new class_modul_navigation_tree($this->arrElementData["navigation_id"]);
         if(!validateSystemid($objNavigation->getStrFolderId()))
@@ -98,7 +98,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		return $strReturn;
 	}
-  
+
 
 // --- Tree-Functions -----------------------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 			$strLevel = $arrTree[$intCounter];
 
 			//include into a wrapper?
-			$strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
+			$strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
 			$strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $strLevel), $strLevelTemplateID);
 			if(uniStrlen($strWrappedLevel) > 0)
 			    $strLevel = $strWrappedLevel;
@@ -143,7 +143,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		//and add level 1 wrapper
         if($intCounter != -1) {
-            $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
+            $strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intCounter."_wrapper");
             $strWrappedLevel = $this->fillTemplate(array("level".$intCounter => $arrTree[$intCounter]), $strLevelTemplateID);
             if(uniStrlen($strWrappedLevel) > 0)
                 $arrTree[$intCounter] = $strWrappedLevel;
@@ -171,7 +171,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * @param bool $bitLast
 	 */
 	private function createTree($strStack, $intLevel, $arrNodes, $bitFirst = false, $bitLast = false) {
-        
+
 		//build an array out of the stack
 		$arrStack = explode(",", $strStack);
 
@@ -204,7 +204,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		//Let the childs present themselfes
 		$intNumberOfChilds = count($arrChilds);
-        
+
 		if($intNumberOfChilds > 0) {
 			//First and last are handled special
 			$intJ = 1;
@@ -242,7 +242,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
             //build the navigation
             $strReturn = $this->sitemapRecursive(1, $this->arrTempNodes[$this->arrElementData["navigation_id"]], $strStack);
 		}
-        
+
         $strReturn = $this->addPortaleditorCode($strReturn);
 		return $strReturn;
 	}
@@ -295,7 +295,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 		}
 
 		//wrap into the wrapper-section
-        $strLevelTemplateID = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
+        $strLevelTemplateID = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], "level_".$intLevel."_wrapper");
         $strWrappedLevel = $this->fillTemplate(array("level".$intLevel => $strReturn), $strLevelTemplateID);
         if(uniStrlen($strWrappedLevel) > 0)
             $strReturn = $strWrappedLevel;
@@ -343,7 +343,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
     /**
      * Traverses the internal node-structure in order to build a stack of active nodes
-     * 
+     *
      * @param class_modul_navigation_point $objNodeToSearch
      * @param array $arrNodes
      * @return string
@@ -437,7 +437,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
     /**
      * Internal recursion helper, processes a single level of nodes in oder to
      * search a matching node.
-     * 
+     *
      * @param int $intLevel
      * @param string $strPage page to search
      * @param array $arrNodes
@@ -445,7 +445,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
     private function searchPageInNavigationTreeHelper($intLevel, $strPage, $arrNodes) {
         if(!isset($this->arrNodeTempHelper[$intLevel]))
             $this->arrNodeTempHelper[$intLevel] = array();
-        
+
         if($arrNodes["node"]->getStrPageI() == $strPage)
             $this->arrNodeTempHelper[$intLevel][] = $arrNodes["node"];
 
@@ -460,7 +460,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 	 * This can be usefull to avoid a session-based "opening" of the current tree.
 	 * The user may find it confusing, if the current tree remains opened but he clicked
 	 * a navigation-point of another tree.
-	 * 
+	 *
 	 * @return bool
 	 */
 	private function isPageVisibleInOtherNavigation() {
@@ -501,7 +501,7 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                                   if(!isset($this->arrTempNodes[$arrContent["navigation_id"]])) {
                                       $objNavigation = new class_modul_navigation_tree($arrContent["navigation_id"]);
 
-                                      if($objNavigation->getStatus() == 0) 
+                                      if($objNavigation->getStatus() == 0)
                                           $this->arrTempNodes[$arrContent["navigation_id"]] = array("node" => null, "subnodes" => array());
                                       else
                                           $this->arrTempNodes[$arrContent["navigation_id"]] = $objNavigation->getCompleteNaviStructure();
@@ -509,9 +509,9 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
                                   //search navigation tree
                                   $this->arrNodeTempHelper = array();
-                                  foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan) 
+                                  foreach($this->arrTempNodes[$arrContent["navigation_id"]]["subnodes"] as $objOneNodeToScan)
                                       $this->searchPageInNavigationTreeHelper(0, $this->strCurrentSite, $objOneNodeToScan);
-                                  
+
 
                                   $intMaxLevel = 0;
                                   $objEntry = null;
@@ -521,12 +521,12 @@ class class_modul_navigation_portal extends class_portal implements interface_po
                                           $objEntry = $arrNodes[0];
                                       }
                                   }
-                                  
+
                                   //jepp, page found in another tree, so return true
                                   if($objEntry != null)
                                       return true;
 
-                          	      
+
                           	  }
 
                           }
@@ -575,14 +575,14 @@ class class_modul_navigation_portal extends class_portal implements interface_po
 
 		//Load the correct template
 		$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive").($bitFirst ? "_first" : "").($bitLast ? "_last" : "");
-		$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
+		$strTemplateId = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], $strSection);
 		//Fill the template
 		$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
 		//BUT: if we received an empty string and are in the situation of a first or last point, then maybe the template
 		//     didn't supply a first / last section. so we'll try to load a regular point
 		if($strReturn == "" && ($bitFirst || $bitLast)) {
 			$strSection = "level_".$intLevel."_".($bitActive ? "active" : "inactive");
-			$strTemplateId = $this->objTemplate->readTemplate("/modul_navigation/".$this->arrElementData["navigation_template"], $strSection);
+			$strTemplateId = $this->objTemplate->readTemplate("/module_navigation/".$this->arrElementData["navigation_template"], $strSection);
 			//And fill it once more
 			$strReturn = $this->objTemplate->fillTemplate($arrTemp, $strTemplateId, false);
 		}

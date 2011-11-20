@@ -11,7 +11,7 @@
 /**
  * Admin-class to manage all navigations
  *
- * @package modul_navigation
+ * @package module_navigation
  * @author sidler@mulchprod.de
  */
 class class_modul_navigation_admin extends class_admin implements interface_admin {
@@ -24,7 +24,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
      */
 	public function __construct() {
         $arrModul = array();
-		$arrModul["name"] 				= "modul_navigation";
+		$arrModul["name"] 				= "module_navigation";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;
 		$arrModul["table"]     			= _dbprefix_."navigation";
 		$arrModul["modul"]				= "navigation";
@@ -139,7 +139,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
     			//Link one level up
                 $objCommons = new class_modul_system_common($this->getSystemid());
                 $strPrevID = $objCommons->getStrPrevId();
-                
+
     			$strAction = $this->objToolkit->listButton(getLinkAdmin("navigation", "list", "&systemid=".$strPrevID.$this->strPeAddon, $this->getText("commons_one_level_up"), $this->getText("commons_one_level_up"), "icon_treeLevelUp.gif"));
     			$strNaviReturn .= $this->objToolkit->listRow2Image(getImageAdmin("icon_treeRoot.gif"), "..", $strAction, $intI++);
                 //And loop through the regular points
@@ -512,7 +512,7 @@ class class_modul_navigation_admin extends class_admin implements interface_admi
         $strReturn .= $this->objToolkit->listFooter();
 		return $strReturn;
 	}
-    
+
     /**
 	 * Returns a list of available navigations
 	 *

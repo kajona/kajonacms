@@ -10,7 +10,7 @@
 /**
  * Checkes the existing navigation-points for valid internal links.
  *
- * @package modul_navigation
+ * @package module_navigation
  */
 class class_systemtask_navigationcheck extends class_systemtask_base implements interface_admin_systemtask {
 

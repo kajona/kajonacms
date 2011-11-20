@@ -10,7 +10,7 @@
 /**
  * Model for a navigation tree itself
  *
- * @package modul_navigation
+ * @package module_navigation
  * @author sidler@mulchprod.de
  */
 class class_modul_navigation_tree extends class_model implements interface_model  {
@@ -25,7 +25,7 @@ class class_modul_navigation_tree extends class_model implements interface_model
      */
     public function __construct($strSystemid = "") {
         $arrModul = array();
-        $arrModul["name"] 				= "modul_navigation";
+        $arrModul["name"] 				= "module_navigation";
 		$arrModul["moduleId"] 			= _navigation_modul_id_;
 		$arrModul["table"]       		= _dbprefix_."navigation";
 		$arrModul["modul"]				= "navigation";
@@ -168,8 +168,8 @@ class class_modul_navigation_tree extends class_model implements interface_model
 
         return $arrReturn;
     }
-    
-    
+
+
     /**
 	 * Deletes a navigation / a point and all childs
 	 *

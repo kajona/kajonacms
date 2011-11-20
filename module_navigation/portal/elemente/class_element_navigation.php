@@ -10,7 +10,7 @@
 /**
  * Portal-class of the navigation element, loads the navigation-portal class
  *
- * @package modul_navigation
+ * @package module_navigation
  */
 class class_element_navigation extends class_element_portal implements interface_portal_element {
 
@@ -44,7 +44,7 @@ class class_element_navigation extends class_element_portal implements interface
 
 		return $strReturn;
 	}
-	
+
 	/**
 	 * no anchor here, plz
 	 *
@@ -54,5 +54,5 @@ class class_element_navigation extends class_element_portal implements interface
         return "";
     }
 
-}	 
+}
 ?>

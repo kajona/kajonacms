@@ -10,7 +10,7 @@
 /**
  * Installer of the navigation samplecontent
  *
- * @package modul_navigation
+ * @package module_navigation
  */
 class class_installer_sc_02navigation implements interface_sc_installer  {
 
@@ -104,7 +104,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                     $strReturn .= "Navigation element created.\n";
                 else
                     $strReturn .= "Error creating navigation element.\n";
-            
+
             }
         }
 
@@ -117,7 +117,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
         $strSitemapId = $objPage->getSystemid();
         $strReturn .= "ID of new page: ".$strSitemapId."\n";
         $strReturn .= "Adding sitemap to new page\n";
-        
+
         if(class_modul_pages_element::getElement("navigation") != null) {
             $objPagelement = new class_modul_pages_pageelement();
             $objPagelement->setStrPlaceholder("sitemap_navigation");
@@ -134,7 +134,7 @@ class class_installer_sc_02navigation implements interface_sc_installer  {
                 $strReturn .= "Sitemapelement created.\n";
             else
                 $strReturn .= "Error creating sitemapelement.\n";
-        
+
         }
 
         $strReturn .= "Adding headline-element to new page\n";
