@@ -12,7 +12,7 @@
  * Samplecontent is not installed as a module, it just creates a few default entries
  * for other modules and installes a few sample-templates
  *
- * @package modul_samplecontent
+ * @package module_samplecontent
  */
 class class_installer_samplecontent extends class_installer_base implements interface_installer {
 
