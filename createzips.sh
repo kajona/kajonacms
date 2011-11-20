@@ -2,8 +2,8 @@
 
 
 
-init() 
-{ 
+init()
+{
   echo "deleting target folder temp...";
   if [ -d "$PWD/packages" ]
   then
@@ -21,17 +21,17 @@ init()
       copyRecursive "$PWD/$i" "$PWD/packages/$i"
     fi
   done
-  
+
 }
 
 
-singleZips() 
+singleZips()
 {
   cd "packages"
   echo "single zips @ $PWD...";
   for i in `ls "$PWD"`
   do
-    if [ -d "$PWD/$i" ] 
+    if [ -d "$PWD/$i" ]
     then
 	zip -r "$i" "$i"
     fi
@@ -52,7 +52,7 @@ fullPackage()
       copyRecursive "$PWD/$i" "$PWD/kajona/"
     fi
   done
-  
+
   zip -r kajona-full.zip kajona;
   rm -rf "kajona";
   cd ".."
@@ -60,11 +60,11 @@ fullPackage()
 
 
 litePackage()
-{ 
+{
   cd "packages"
   echo "light package...\n";
   mkdir "kajona";
-  for i in modul_navigation modul_pages modul_samplecontent modul_system
+  for i in modul_navigation modul_pages modul_samplecontent module_system
   do
     if [ -d "$PWD/$i" ] && [ $i != "kajona" ] && [ $i != "_debugging" ]
     then

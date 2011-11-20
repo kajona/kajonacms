@@ -8,7 +8,7 @@
 ********************************************************************************************************/
 
 /**
- * @package modul_system
+ * @package module_system
  *
  */
 
@@ -37,23 +37,23 @@ function rawIncludeError($strFileMissed) {
 	@date_default_timezone_set(date_default_timezone_get());
 
 	//Functions to have fun & check for mb-string
-	if(!@include_once(_realpath_."/modul_system/system/functions.php"))
-		rawIncludeError(_realpath_."/modul_system/system/functions.php");
+	if(!@include_once(_realpath_."/module_system/system/functions.php"))
+		rawIncludeError(_realpath_."/module_system/system/functions.php");
 
 	//Exception-Handler
-	if(!@include_once(_realpath_."/modul_system/system/class_exception.php"))
+	if(!@include_once(_realpath_."/module_system/system/class_exception.php"))
 		rawIncludeError("global exception handler");
 	//register global exception handler for exceptions thrown but not catched (bad style ;) )
 	@set_exception_handler(array("class_exception", "globalExceptionHandler"));
 
 	//Include the logging-engine
-    if(!@include_once(_realpath_."/modul_system/system/class_logger.php"))
+    if(!@include_once(_realpath_."/module_system/system/class_logger.php"))
 		rawIncludeError("logging engine");
 
 
 //---The Path on web-------------------------------------------------------------------------------------
 
-    include_once (_realpath_."/modul_system/system/class_config.php");
+    include_once (_realpath_."/module_system/system/class_config.php");
     $strHeaderName = class_config::readPlainConfigsFromFilesystem("https_header");
     $strHeaderValue = strtolower(class_config::readPlainConfigsFromFilesystem("https_header_value"));
 
@@ -83,11 +83,11 @@ function rawIncludeError($strFileMissed) {
 	}
 
 	//The Carrier-Class
-	if(!@include_once(_realpath_."/modul_system/system/class_carrier.php"))
+	if(!@include_once(_realpath_."/module_system/system/class_carrier.php"))
 		rawIncludeError("carrier-class");
 
 //---Autoloader for classes------------------------------------------------------------------------------
-    include_once (_realpath_."/modul_system/system/class_classloader.php");
+    include_once (_realpath_."/module_system/system/class_classloader.php");
     spl_autoload_register(array (new class_classloader(), "loadClass"));
 
 
